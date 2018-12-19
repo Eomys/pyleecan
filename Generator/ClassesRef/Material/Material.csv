@@ -1,0 +1,9 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+name;;name of the material;;0;str;M400-50A;;;;;;Material;;;VERSION;1;;
+is_isotropic;-;If True, uniformity in all orientations;;0;bool;0;;;;;;;;;;;;
+electrical;;Electrical properties of the material;;0;MatElectrical;;;;;;;;;;;;;
+magnetics;;Magnetic properties of the material;;0;MatMagnetics;;;;;;;;;;;;;
+mechanics;;Mechanics properties of the material;;0;MatMechanics;;;;;;;;;;;;;
+thermics;;Thermics properties of the material;;0;MatThermics;;;;;;;;;;;;;
+economical;;Economical properties of the material;;0;MatEconomical;;;;;;;;;;;;;
+desc;;material description;;0;str;Lamination M400-50A;;;;;;;;;;;;

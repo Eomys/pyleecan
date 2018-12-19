@@ -1,0 +1,9 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+rotor;;Machine's Rotor;;;Lamination;;;;;;;Machine;;build_geometry;VERSION;1;;MachineSync
+stator;;Machine's Stator;;;Lamination;;;;;;;;;check;;;;MachineAsync
+frame;;Machine's Frame;;;Frame;;;;;;;;;comp_masses;;;;MachineSCIM
+shaft;;Machine's Shaft;;;Shaft;;;;;;;;;comp_width_airgap_mag;;;;MachineDFIM
+name;;Name of the machine;;;str;default_machine;;;;;;;;comp_width_airgap_mec;;;;MachineSIPMSM
+desc;;Machine description;;;str;;;;;;;;;get_lamination;;;;MachineIPMSM
+;;;;;;;;;;;;;;get_Rgap_mec;;;;MachineWRSM
+;;;;;;;;;;;;;;plot;;;;MachineSyRM

@@ -1,0 +1,11 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+begin;-;begin point of the arc;;0;complex;0;;;;;;Geometry;Line;check;VERSION;1;An arc between two points (defined by the begin  point and a center and angle);
+center;-;center of the arc;;0;complex;0;;;;;;;;comp_length;;;;
+angle;rad;opening angle of the arc;;0;float;1.57079633;-6.2831853071796;6.2831853071796;;;;;;comp_radius;;;;
+;;;;;;;;;;;;;;discretize;;;;
+;;;;;;;;;;;;;;get_begin;;;;
+;;;;;;;;;;;;;;get_center;;;;
+;;;;;;;;;;;;;;get_end;;;;
+;;;;;;;;;;;;;;get_middle;;;;
+;;;;;;;;;;;;;;rotate;;;;
+;;;;;;;;;;;;;;translate;;;;

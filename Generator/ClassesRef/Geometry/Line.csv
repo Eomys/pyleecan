@@ -1,0 +1,5 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+label;-;the label of the Line (EX: Yoke_side);;0;str;;;;;;;Geometry;;;VERSION;1;Abstract geometry class (A line between two points);Segment
+;;;;;;;;;;;;;;;;;;Arc1
+;;;;;;;;;;;;;;;;;;Arc2
+;;;;;;;;;;;;;;;;;;Arc3

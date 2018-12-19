@@ -1,0 +1,13 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+H0;m;Slot depth;;0;float;3,00E-03;0;;;2;;Slot;HoleMag;build_geometry;VERSION;1;V shape slot for buried magnet;
+W0;m;Slot opening;;0;float;3,00E-03;0;;;2;;;;check;IS_SYMMETRICAL;1;;
+H1;m;Distance from the lamination Bore;;0;float;0;0;;;2;;;;comp_alpha;;;;
+W1;m;Tooth width (at V bottom);;0;float;1,30E-02;0;;;2;;;;comp_mass_magnets;;;;
+H2;m;Additional depth for the magnet;;0;float;2,00E-02;0;;;2;;;;comp_radius;;;;
+W2;m;Distance Magnet to bottom of the V;;0;float;1,00E-02;0;;;2;;;;comp_surface_magnets;;;;
+H3;m;Magnet Height;;0;float;1,00E-02;0;;;2;;;;comp_volume_magnets;;;;
+W3;m;Tooth width (at V top);;0;float;1,00E-02;0;;;2;;;;comp_W5;;;;
+H4;m;Slot top height;;0;float;0;0;;;2;;;;remove_magnet;;;;
+W4;m;Magnet Width;;0;float;1,00E-02;0;;;2;;;;;;;;
+magnet_0;-;First Magnet;;0;Magnet;;;;;;;;;;;;;
+magnet_1;-;Second Magnet;;0;Magnet;;;;;;;;;;;;;

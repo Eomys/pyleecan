@@ -1,0 +1,3 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+Wlam;m;lamination sheet width without insulation [m] (for magnetic loss model);;0;float;5,00E-04;0;;;;;Material;MatMagnetics;;VERSION;1;;
+BH_curve;-;B(H) curve;;0;BHCurve;;;;;;;;;;;;;

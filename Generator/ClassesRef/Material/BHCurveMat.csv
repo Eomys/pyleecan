@@ -1,0 +1,4 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+matrix;-;B(H) matrix value. Every column are B(H) value for a specify frequency;;2;ndarray;;;;;;;Material;BHCurve;comp_B;VERSION;1;B(H) curve defined by a matrix;
+f;;f value for each column of the matrix;;1;ndarray;;;;;;;;;;;;;
+H;;H value for each row of the matrix;;1;ndarray;;;;;;;;;;;;;

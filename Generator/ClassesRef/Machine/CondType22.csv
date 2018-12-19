@@ -1,0 +1,5 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+Sbar;m;Surface of the Slot;;0;float;1,00E-02;0;;;;;Machine;Conductor;comp_active_surface;VERSION;1;;
+;;;;;;;;;;;;;;comp_surface;;;;
+;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;

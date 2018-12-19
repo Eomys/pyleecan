@@ -1,0 +1,62 @@
+# -*- coding: utf-8 -*-
+"""@package find_wind_phase
+@date Created on juil. 02 12:17 2018
+@author franco_i
+"""
+from pyleecan.Methods.Machine import PHASE_COLOR
+
+
+def find_wind_phase_color(label, wind_mat):
+    """Returns Color phase of the Winding surface
+
+    Parameters
+    ----------
+    label : str
+        the label of the surface
+
+    wind_mat : numpy.ndarray
+        A matrix [Nrad,Ntan,Zs,qs] representing the winding
+
+    Returns
+    -------
+    color: str
+        Color of the zone
+
+    """
+    st = label.split("_")
+    Nrad = int(st[1][1:])
+    Ntan = int(st[2][1:])
+    Zs = int(st[3][1:])
+    if wind_mat is not None:
+        color = get_color(wind_mat, Nrad, Ntan, Zs)
+    else:
+        color = PHASE_COLOR[0]
+
+    return color
+
+
+def get_color(wind_mat, Nrad, Ntan, Zs):
+    """Return the color (corresponding phase) for the zone (Nrad,Ntan,Zs)
+
+    Parameters
+    ----------
+    wind_mat : numpy.ndarray
+        A matrix [Nrad,Ntan,Zs,qs] representing the winding
+    Nrad : int
+        Zone radial coordinate
+    Ntan : int
+        Zone tagential coordinate
+    Zs : int
+        Zone slot number coordinate
+
+    Returns
+    -------
+    color: str
+        Color of the zone
+
+    """
+    A = wind_mat[Nrad, Ntan, Zs, :]
+    for zz in range(len(A)):
+        if A[zz] != 0:
+            return PHASE_COLOR[zz]
+    return "w"  # If all the phase are at 0 : the zone is empty => white

@@ -1,0 +1,4 @@
+class WindingError(Exception):
+    """ """
+
+    pass
