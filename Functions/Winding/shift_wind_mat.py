@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """@package Functions.shift_wind_mat
-Shift a Winding matrix fonction
+Shift a Winding matrix function
 @date Created on Tue Dec 16 15:32:54 2014
 @copyright (C) 2014-2015 EOMYS ENGINEERING.
 @author pierre_b

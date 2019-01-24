@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """@package Functions.comp_wind_sym
-computes the winding pattern periodicity and symmetries fonction
+computes the winding pattern periodicity and symmetries function
 @date Created on Tue Dec 23 09:51:35 2014
 @copyright (C) 2014-2015 EOMYS ENGINEERING.
 @author pierre_b
@@ -34,7 +34,7 @@ def comp_wind_sym(wind_mat):
     Nperw = 1  # Number of electrical period of the winding
     Nperslot = 1  # Periodicity of the winding in number of slots
 
-    # Looking for the periodity of each phase
+    # Looking for the periodicity of each phase
     for q in range(0, qs):
         k = 1
         is_sym = False
@@ -60,7 +60,7 @@ def comp_wind_sym(wind_mat):
 
 
 def gcd(a, b):
-    """Return the greater commun diviser of a and b
+    """Return the greatest common divisor of a and b
 
     Parameters
     ----------
@@ -72,7 +72,7 @@ def gcd(a, b):
     Returns
     -------
     gcd : int
-        greater commun diviser of a and b
+        greatest common divisor of a and b
     """
     while b:
         a, b = b, a % b

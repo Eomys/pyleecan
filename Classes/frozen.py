@@ -4,7 +4,7 @@ from numpy import array_equal, ndarray
 
 
 class FrozenClass(object):
-    """A FrozenClass is design to avoid adding or accessing wrong properties
+    """A FrozenClass is designed to avoid adding or accessing wrong properties
     For instance w.wire instead of w.Wwire will throw a Frozen Error
     """
 
@@ -35,7 +35,7 @@ class FrozenClass(object):
         object.__setattr__(self, key, value)
 
     def _freeze(self):
-        """After the call of this fonction, you can't add new properties to
+        """After the call of this function, you can't add new properties to
         this FrozenClass
 
         Parameters
