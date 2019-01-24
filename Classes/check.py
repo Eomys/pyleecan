@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """@package Classes.check
-check fonction for classes
+check function for classes
 @date Created on Wed Nov 05 10:10:34 2014
 @copyright (C) 2014-2015 EOMYS ENGINEERING.
 @author pierre_b
@@ -110,7 +110,7 @@ def check_var(var_name, value, expect_type, Vmin=None, Vmax=None):
 
 
 def check_type(var_name, value, expect_type, type_value):
-    """Check if value has the excpeted type for var_name
+    """Check if value has the expected type for var_name
 
     Parameters
     ----------

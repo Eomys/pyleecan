@@ -1,3 +1,4 @@
 
 *.pyc
 Tests/logtest.txt
+.DS_Store
