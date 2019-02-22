@@ -1,4 +1,4 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
 Zh;-;Number of Hole around the circumference;;0;int;36;0;1000;;3;;Slot;;comp_radius;VERSION;1;Holes for lamination (abstract);HoleMag
 mat_void;-;"Material of the ""void"" part of the hole (Air in general)";;0;Material;;;;;;;;;comp_surface;;;;HoleM50
 ;;;;;;;;;;;;;;get_is_stator;;;;HoleM51

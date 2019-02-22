@@ -1,4 +1,4 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
 name;;name of the material;;0;str;M400-50A;;;;;;Material;;;VERSION;1;;
 is_isotropic;-;If True, uniformity in all orientations;;0;bool;0;;;;;;;;;;;;
 electrical;;Electrical properties of the material;;0;MatElectrical;;;;;;;;;;;;;

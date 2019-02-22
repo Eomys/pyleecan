@@ -1,4 +1,4 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
 ;;;;;;;;;;;;Slot;Slot;comp_angle_wind_eq;VERSION;1;Slot for winding (abstract);SlotW10
 ;;;;;;;;;;;;;;comp_height_wind;;;;SlotW11
 ;;;;;;;;;;;;;;comp_radius_mid_wind;;;;SlotW12

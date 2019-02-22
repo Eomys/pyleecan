@@ -1,4 +1,4 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
 Alpha0;rad;Shift angle of the hole around circumference;;0;float;0;0;6,29;;;;Slot;Hole;build_geometry;VERSION;1;Polar axial ventilation duct;
 D0;m;Height of the hole;;0;float;1;0;;;;;;;check;;;;
 H0;m;Radius of the bottom of Hole;;0;float;1;0;;;;;;;comp_radius;;;;

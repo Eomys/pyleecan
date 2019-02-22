@@ -1,4 +1,4 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
 rho;kg/m^3;mass per unit volume [kg/m3];;0;float;7650;0;;;;;Material;;;VERSION;1;;
 Ex;Pa;"equivalent Young modulus (XY is lamination plane; Z is rotation axis)";;0;float;215000000000;0;;;;;;;;;;;
 Ey;Pa;"equivalent Young modulus (XY is lamination plane; Z is rotation axis)";;0;float;215000000000;0;;;;;;;;;;;

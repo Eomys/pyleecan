@@ -1,4 +1,4 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
 cond_mat;-;Material of the conductor;;0;Material;;;;;;;Machine;;check;VERSION;1;;CondType11
 ins_mat;-;Material of the insulation;;0;Material;;;;;;;;;;;;;CondType12
 ;;;;;;;;;;;;;;;;;;CondType21

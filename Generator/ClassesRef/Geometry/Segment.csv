@@ -1,4 +1,4 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
 begin;-;begin point of the line;;0;complex;0;;;;2;;Geometry;Line;check;VERSION;1;A segment between two points;
 end;-;end point of the line;;0;complex;0;;;;;;;;comp_length;;;;
 ;;;;;;;;;;;;;;discretize;;;;

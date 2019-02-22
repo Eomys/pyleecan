@@ -1,4 +1,4 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
 Wwire;m;cf schematics, single wire diameter without insulation [m];;0;float;1,50E-02;0;;;;;Machine;Conductor;check;VERSION;1;;
 Wins_cond;m;(advanced) cf schematics, winding coil insulation diameter [m];;0;float;1,50E-02;0;;;;;;;comp_active_surface;;;;
 Nwppc;-;cf schematics, winding number of random wires (strands) in parallel per coil;;0;int;1;1;;;;;;;comp_height;;;;

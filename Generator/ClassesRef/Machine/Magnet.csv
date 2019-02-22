@@ -1,4 +1,4 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
 mat_type;;The Magnet material;;0;Material;;;;;;;Machine;;comp_angle_opening;VERSION;1;;MagnetFlat
 type_magnetization;-;Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for HallBach [];;0;int;0;0;5;;1;;;;comp_height;;;;MagnetPolar
 Lmag;-;Magnet axial length;;0;float;0,95;0;;;;;;;comp_mass;;;;MagnetType10
