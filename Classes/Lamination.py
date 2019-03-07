@@ -18,6 +18,7 @@ from pyleecan.Methods.Machine.Lamination.comp_volumes import comp_volumes
 from pyleecan.Methods.Machine.Lamination.get_bore_line import get_bore_line
 from pyleecan.Methods.Machine.Lamination.get_Rbo import get_Rbo
 from pyleecan.Methods.Machine.Lamination.get_Ryoke import get_Ryoke
+from pyleecan.Methods.Machine.Lamination.get_name_phase import get_name_phase
 from pyleecan.Methods.Machine.Lamination.plot import plot
 
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -60,6 +61,8 @@ class Lamination(FrozenClass):
     get_Rbo = get_Rbo
     # cf Methods.Machine.Lamination.get_Ryoke
     get_Ryoke = get_Ryoke
+    # cf Methods.Machine.Lamination.get_name_phase
+    get_name_phase = get_name_phase
     # cf Methods.Machine.Lamination.plot
     plot = plot
 

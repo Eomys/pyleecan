@@ -13,6 +13,7 @@ from pyleecan.Methods.Machine.LamSlotWind.comp_volumes import comp_volumes
 from pyleecan.Methods.Machine.LamSlotWind.get_pole_pair_number import (
     get_pole_pair_number,
 )
+from pyleecan.Methods.Machine.LamSlotWind.get_name_phase import get_name_phase
 from pyleecan.Methods.Machine.LamSlotWind.plot import plot
 from pyleecan.Methods.Machine.LamSlotWind.plot_winding import plot_winding
 
@@ -76,6 +77,8 @@ class LamSlotWind(LamSlot):
     comp_volumes = comp_volumes
     # cf Methods.Machine.LamSlotWind.get_pole_pair_number
     get_pole_pair_number = get_pole_pair_number
+    # cf Methods.Machine.LamSlotWind.get_name_phase
+    get_name_phase = get_name_phase
     # cf Methods.Machine.LamSlotWind.plot
     plot = plot
     # cf Methods.Machine.LamSlotWind.plot_winding
