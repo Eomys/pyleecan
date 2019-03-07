@@ -5,20 +5,23 @@
 """
 
 from unittest import TestCase
-from ddt import ddt, data
 
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
-from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from ddt import data, ddt
+from numpy import array, array_equal, linspace, pi, sqrt, transpose
 from numpy.random import uniform
-from numpy import array_equal, transpose, sqrt, array, pi, linspace
 from numpy.testing import assert_array_almost_equal
+
+from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
 from pyleecan.Methods.Import.ImportGenMatrixSin import (
-    GenSinEmptyError,
     GenSinDimError,
+    GenSinEmptyError,
     GenSinTransposeError,
 )
+from pyleecan.Tests.Methods.Import import test_file
 
 ImportMatrix_test = list()
 mat = uniform(0, 1, (4, 4))
@@ -119,6 +122,61 @@ ImportMatrix_test.append(
     {
         "test_obj": ImportGenMatrixSin(sin_list=sin_list, is_transpose=False),
         "exp": transpose(exp),
+    }
+)
+# Load from xls
+exp = array([0, 1, 2, 3, 4, 5, 6, 7], ndmin=2)
+ImportMatrix_test.append(
+    {
+        "test_obj": ImportMatrixXls(
+            file_path=test_file,
+            sheet="Test1",
+            usecols=None,
+            skiprows=0,
+            is_transpose=False,
+        ),
+        "exp": transpose(exp),
+    }
+)
+# Load from xls skiprow + transpose
+exp = array([2, 3, 4, 5, 6, 7], ndmin=2)
+ImportMatrix_test.append(
+    {
+        "test_obj": ImportMatrixXls(
+            file_path=test_file,
+            sheet="Test1",
+            usecols=None,
+            skiprows=2,
+            is_transpose=True,
+        ),
+        "exp": exp,
+    }
+)
+# Usecols test
+exp = array([[0, 1, 2, 3, 4, 5], [1, 2, 3, 4, 5, 6], [2, 3, 4, 5, 6, 7]])
+ImportMatrix_test.append(
+    {
+        "test_obj": ImportMatrixXls(
+            file_path=test_file,
+            sheet="Test2",
+            usecols="B:G",
+            skiprows=1,
+            is_transpose=False,
+        ),
+        "exp": exp,
+    }
+)
+exp = array([[0, 2, 3], [1, 3, 4], [2, 4, 5]])
+ImportMatrix_test.append(
+    {
+        "test_obj": ImportMatrixXls(
+            file_path=test_file,
+            sheet="Test2",
+            usecols="B,D,E",
+            skiprows=1,
+            is_transpose=False,
+        ),
+        "exp": exp,
     }
 )
 

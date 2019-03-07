@@ -16,6 +16,7 @@ from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
 from pyleecan.Classes.CondType11 import CondType11
 from pyleecan.Classes.CondType12 import CondType12
 from pyleecan.Classes.CondType21 import CondType21
@@ -65,6 +66,13 @@ from pyleecan.Classes.MatMagnet import MatMagnet
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.MatMechanics import MatMechanics
 from pyleecan.Classes.MatThermics import MatThermics
+from pyleecan.Classes.OutElec import OutElec
+from pyleecan.Classes.OutGeo import OutGeo
+from pyleecan.Classes.Output import Output
+from pyleecan.Classes.InCurrent import InCurrent
+from pyleecan.Classes.Input import Input
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.Simulation import Simulation
 from pyleecan.Classes.Hole import Hole
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.HoleM51 import HoleM51
