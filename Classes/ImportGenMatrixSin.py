@@ -6,6 +6,7 @@ from pyleecan.Classes.check import check_init_dict, check_var
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 
 from pyleecan.Methods.Import.ImportGenMatrixSin.get_data import get_data
+from pyleecan.Methods.Import.ImportGenMatrixSin.init_vector import init_vector
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
@@ -18,6 +19,8 @@ class ImportGenMatrixSin(ImportMatrix):
 
     # cf Methods.Import.ImportGenMatrixSin.get_data
     get_data = get_data
+    # cf Methods.Import.ImportGenMatrixSin.init_vector
+    init_vector = init_vector
 
     def __init__(self, sin_list=list(), is_transpose=False, init_dict=None):
         """Constructor of the class. Can be use in two ways :

@@ -12,7 +12,7 @@ from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from numpy.random import uniform
-from numpy import array_equal, transpose, sqrt, array, pi
+from numpy import array_equal, transpose, sqrt, array, pi, linspace
 from numpy.testing import assert_array_almost_equal
 from pyleecan.Methods.Import.ImportGenMatrixSin import (
     GenSinEmptyError,
@@ -134,6 +134,36 @@ class unittest_Import_meth(TestCase):
 
         result = test_dict["test_obj"].get_data()
         assert_array_almost_equal(test_dict["exp"], result)
+
+    def test_ImportGenMatrixSin_init(self):
+        """Check that the ImportGenMatrixSin can be set by list
+        """
+        f = [100, 100, 100]
+        A = [1, 0.5, 2]
+        Phi = linspace(0, 2 * pi, 3, endpoint=False)
+        test_obj = ImportGenMatrixSin(sin_list=[], is_transpose=True)
+        test_obj.init_vector(f=f, A=A, Phi=Phi, N=1024, Tf=2.5)
+
+        self.assertEqual(len(test_obj.sin_list), 3)
+        self.assertEqual(test_obj.sin_list[0].f, 100)
+        self.assertEqual(test_obj.sin_list[1].f, 100)
+        self.assertEqual(test_obj.sin_list[2].f, 100)
+
+        self.assertEqual(test_obj.sin_list[0].A, 1)
+        self.assertEqual(test_obj.sin_list[1].A, 0.5)
+        self.assertEqual(test_obj.sin_list[2].A, 2)
+
+        self.assertEqual(test_obj.sin_list[0].Phi, 0)
+        self.assertEqual(test_obj.sin_list[1].Phi, 2 * pi / 3)
+        self.assertEqual(test_obj.sin_list[2].Phi, 4 * pi / 3)
+
+        self.assertEqual(test_obj.sin_list[0].N, 1024)
+        self.assertEqual(test_obj.sin_list[1].N, 1024)
+        self.assertEqual(test_obj.sin_list[2].N, 1024)
+
+        self.assertEqual(test_obj.sin_list[0].Tf, 2.5)
+        self.assertEqual(test_obj.sin_list[1].Tf, 2.5)
+        self.assertEqual(test_obj.sin_list[2].Tf, 2.5)
 
     def test_ImportGenMatrixSin_Error(self):
         """Check that the ImportGenMatrixSin can detect wrong input

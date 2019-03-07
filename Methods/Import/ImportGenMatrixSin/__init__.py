@@ -21,3 +21,10 @@ class GenSinTransposeError(ImportError):
     """
 
     pass
+
+
+class InitSinMatDimError(ImportError):
+    """Raised when the init_vector is called with wrong arguments
+    """
+
+    pass
