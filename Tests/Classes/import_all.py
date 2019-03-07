@@ -10,6 +10,12 @@ from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.Surface import Surface
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.Trapeze import Trapeze
+from pyleecan.Classes.Import import Import
+from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
+from pyleecan.Classes.ImportMatrix import ImportMatrix
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.CondType11 import CondType11
 from pyleecan.Classes.CondType12 import CondType12
 from pyleecan.Classes.CondType21 import CondType21

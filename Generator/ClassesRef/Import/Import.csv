@@ -1,0 +1,6 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
+;;;;;;;;;;;;Import;;;VERSION;1;Abstract class for Data Import/Generation;ImportMatrix
+;;;;;;;;;;;;;;;;;;ImportMatrixVal
+;;;;;;;;;;;;;;;;;;ImportMatrixXls
+;;;;;;;;;;;;;;;;;;ImportGenVectSin
+;;;;;;;;;;;;;;;;;;ImportGenMatrixSin

@@ -10,7 +10,7 @@ from pyleecan.Generator.read_fct import read_all
 from pyleecan.Generator import MAIN_DIR
 
 # List of the main packages (to sort the classes)
-PACKAGE_LIST = ["Geometry", "Machine", "Material", "Slot"]
+PACKAGE_LIST = ["Geometry", "Machine", "Material", "Slot", "Import"]
 
 
 def generate_code(root_path):

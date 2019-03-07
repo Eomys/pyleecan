@@ -1,0 +1,5 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
+is_transpose;-;1 to transpose the Imported/Generated matrix;;1;bool;0;;;;;;Import;Import;edit_matrix;VERSION;1;Abstract class to Import/Generate 1D or D matrix;ImportMatrixVal
+;;;;;;;;;;;;;;;;;;ImportMatrixXls
+;;;;;;;;;;;;;;;;;;ImportGenVectSin
+;;;;;;;;;;;;;;;;;;ImportGenMatrixSin

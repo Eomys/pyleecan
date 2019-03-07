@@ -1,0 +1,130 @@
+# -*- coding: utf-8 -*-
+"""Warning : this file has been generated, you shouldn't edit it"""
+
+from os import linesep
+from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.ImportMatrix import ImportMatrix
+
+from pyleecan.Methods.Import.ImportGenMatrixSin.get_data import get_data
+
+from pyleecan.Classes.check import InitUnKnowClassError
+from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
+
+
+class ImportGenMatrixSin(ImportMatrix):
+    """To generate a Sinus matrix"""
+
+    VERSION = 1
+
+    # cf Methods.Import.ImportGenMatrixSin.get_data
+    get_data = get_data
+
+    def __init__(self, sin_list=list(), is_transpose=False, init_dict=None):
+        """Constructor of the class. Can be use in two ways :
+        - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
+            for Matrix, None will initialise the property with an empty Matrix
+            for pyleecan type, None will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+
+        ndarray or list can be given for Vector and Matrix
+        object or dict can be given for pyleecan Object"""
+
+        if init_dict is not None:  # Initialisation by dict
+            check_init_dict(init_dict, ["sin_list", "is_transpose"])
+            # Overwrite default value with init_dict content
+            if "sin_list" in list(init_dict.keys()):
+                sin_list = init_dict["sin_list"]
+            if "is_transpose" in list(init_dict.keys()):
+                is_transpose = init_dict["is_transpose"]
+        # Initialisation by argument
+        # sin_list can be None or a list of ImportGenVectSin object
+        self.sin_list = list()
+        if type(sin_list) is list:
+            for obj in sin_list:
+                if obj is None:  # Default value
+                    self.sin_list.append(ImportGenVectSin())
+                elif isinstance(obj, dict):
+                    self.sin_list.append(ImportGenVectSin(init_dict=obj))
+                else:
+                    self.sin_list.append(obj)
+        elif sin_list is None:
+            self.sin_list = list()
+        else:
+            self.sin_list = sin_list
+        # Call ImportMatrix init
+        super(ImportGenMatrixSin, self).__init__(is_transpose=is_transpose)
+        # The class is frozen (in ImportMatrix init), for now it's impossible to
+        # add new properties
+
+    def __str__(self):
+        """Convert this objet in a readeable string (for print)"""
+
+        ImportGenMatrixSin_str = ""
+        # Get the properties inherited from ImportMatrix
+        ImportGenMatrixSin_str += super(ImportGenMatrixSin, self).__str__() + linesep
+        if len(self.sin_list) == 0:
+            ImportGenMatrixSin_str += "sin_list = []"
+        for ii in range(len(self.sin_list)):
+            ImportGenMatrixSin_str += (
+                "sin_list[" + str(ii) + "] = " + str(self.sin_list[ii].as_dict()) + "\n"
+            )
+        return ImportGenMatrixSin_str
+
+    def __eq__(self, other):
+        """Compare two objects (skip parent)"""
+
+        if type(other) != type(self):
+            return False
+
+        # Check the properties inherited from ImportMatrix
+        if not super(ImportGenMatrixSin, self).__eq__(other):
+            return False
+        if other.sin_list != self.sin_list:
+            return False
+        return True
+
+    def as_dict(self):
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
+
+        # Get the properties inherited from ImportMatrix
+        ImportGenMatrixSin_dict = super(ImportGenMatrixSin, self).as_dict()
+        ImportGenMatrixSin_dict["sin_list"] = list()
+        for obj in self.sin_list:
+            ImportGenMatrixSin_dict["sin_list"].append(obj.as_dict())
+        # The class name is added to the dict fordeserialisation purpose
+        # Overwrite the mother class name
+        ImportGenMatrixSin_dict["__class__"] = "ImportGenMatrixSin"
+        return ImportGenMatrixSin_dict
+
+    def _set_None(self):
+        """Set all the properties to None (except pyleecan object)"""
+
+        for obj in self.sin_list:
+            obj._set_None()
+        # Set to None the properties inherited from ImportMatrix
+        super(ImportGenMatrixSin, self)._set_None()
+
+    def _get_sin_list(self):
+        """getter of sin_list"""
+        for obj in self._sin_list:
+            if obj is not None:
+                obj.parent = self
+        return self._sin_list
+
+    def _set_sin_list(self, value):
+        """setter of sin_list"""
+        check_var("sin_list", value, "[ImportGenVectSin]")
+        self._sin_list = value
+
+        for obj in self._sin_list:
+            if obj is not None:
+                obj.parent = self
+
+    # List of sinus vector to generate the matrix lines
+    # Type : [ImportGenVectSin]
+    sin_list = property(
+        fget=_get_sin_list,
+        fset=_set_sin_list,
+        doc=u"""List of sinus vector to generate the matrix lines""",
+    )
