@@ -10,7 +10,7 @@ from numpy import array
 
 
 def comp_surface_num(point_list):
-    """Compute the surface of the Poygon defined by the points
+    """Compute the surface of the Polygon defined by the points
 
     Parameters
     ----------

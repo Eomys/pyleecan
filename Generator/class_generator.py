@@ -121,10 +121,10 @@ def generate_class(gen_dict, class_name, path_to_gen):
     # Class declaration
     if class_dict["mother"] != "":
         class_file.write(
-            "\n\nclass " + class_name + " (" + class_dict["mother"] + "):\n"
+            "\n\nclass " + class_name + "(" + class_dict["mother"] + "):\n"
         )
     else:
-        class_file.write("\n\nclass " + class_name + " (FrozenClass):\n")
+        class_file.write("\n\nclass " + class_name + "(FrozenClass):\n")
 
     # Class Docstring
     if class_dict["desc"] != "":
@@ -306,9 +306,9 @@ def generate_init(gen_dict, class_dict):
             init_MType += TAB3 + prop["name"] + " = " + prop["type"] + "()\n"
         # For check_init_dict
         if check_dict == "":  # First variable
-            check_dict += "'" + prop["name"] + "'"
+            check_dict += '"' + prop["name"] + '"'
         else:
-            check_dict += ", '" + prop["name"] + "'"
+            check_dict += ', "' + prop["name"] + '"'
 
     # Code generation in init_str
     init_str += TAB + "def __init__(self" + arg_list + ", init_dict=None):\n"
@@ -635,7 +635,7 @@ def generate_str(gen_dict, class_dict):
     str_str += (
         TAB2 + '"""Convert this objet in a readeable string ' + '(for print)"""\n\n'
     )
-    str_str += TAB2 + class_name + "_str = ''\n"
+    str_str += TAB2 + class_name + '_str = ""\n'
     if class_dict["mother"] != "":
         str_str += (
             TAB2 + "# Get the properties inherited from " + class_dict["mother"] + "\n"
@@ -683,8 +683,9 @@ def generate_eq(gen_dict, class_dict):
     # Call mother eq
     if class_dict["mother"] != "":
         eq_str += (
-            TAB2
-            + "\n# Check the properties inherited from "
+            "\n"
+            + TAB2
+            + "# Check the properties inherited from "
             + class_dict["mother"]
             + "\n"
         )
@@ -797,7 +798,7 @@ def generate_as_dict(gen_dict, class_dict):
     )
     if class_dict["mother"] != "":
         dict_str += TAB2 + "# Overwrite the mother class name\n"
-    dict_str += TAB2 + class_name + "_dict['__class__'] = '" + class_name + "'\n"
+    dict_str += TAB2 + class_name + '_dict["__class__"] = "' + class_name + '"\n'
     dict_str += TAB2 + "return " + class_name + "_dict\n"
 
     return dict_str
