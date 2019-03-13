@@ -1,0 +1,4 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
+geo;-;Geometry output;;0;OutGeo;;;;;;;Output;;;VERSION;1;Main Output object: gather all the outputs of all the modules;
+elec;-;Electrical module output;;0;OutElec;;;;;;;;;;;;;
+simu;-;Simulation object that generated the Output;;0;Simulation;;;;;;;;;;;;;

@@ -584,7 +584,7 @@ def generate_str(gen_dict, class_dict):
                 + prop["name"]
                 + ")"
             )
-        elif prop["type"] == "ndarray":
+        elif prop["type"] in ["ndarray", "list"]:
             # For Matrix (skip a line then print the matrix)
             # Add => < MyClass_str += "my_var = "+ linesep + str(
             # self.my_var) >to var_str

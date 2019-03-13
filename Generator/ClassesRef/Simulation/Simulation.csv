@@ -1,0 +1,5 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
+name;-;Name of the simulation;;0;str;;;;;;;Simulation;;;VERSION;1;Abstract class for the simulation;Simu1
+desc;-;Simulation description;;0;str;;;;;;;;;;;;;
+machine;-;Machine to simulate;;0;Machine;;;;;;;;;;;;;
+input;-;Input of the simulation;;0;Input;;;;;;;;;;;;;

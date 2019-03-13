@@ -1,0 +1,3 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
+name_phase_stator;-;Name of the phases of the stator;;0;list;None;;;;;;Output;;;VERSION;1;Gather the geometrical and the global outputs;
+name_phase_rotor;-;Name of the phases of the rotor;;0;list;None;;;;;;;;;;;;

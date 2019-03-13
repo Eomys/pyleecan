@@ -159,6 +159,11 @@ def check_type(var_name, value, expect_type, type_value):
             raise CheckTypeError(
                 "For " + var_name + " : String expected, " + type_value + " given"
             )
+    elif expect_type == "list":
+        if not isinstance(value, list):
+            raise CheckTypeError(
+                "For " + var_name + " : list expected, " + type_value + " given"
+            )
     elif expect_type == "int" and type_value == "float":
         if value % 1 != 0:  # If not an Integer
             raise CheckTypeError(
