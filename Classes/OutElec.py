@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import set_array, check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
 from numpy import array
@@ -13,6 +14,9 @@ class OutElec(FrozenClass):
     """Gather the electric module outputs"""
 
     VERSION = 1
+
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

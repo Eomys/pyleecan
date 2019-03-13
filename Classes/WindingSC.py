@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Winding import Winding
 
 from pyleecan.Methods.Machine.WindingSC.comp_connection_mat import comp_connection_mat
@@ -25,6 +26,8 @@ class WindingSC(Winding):
     comp_connection_mat = comp_connection_mat
     # cf Methods.Machine.WindingSC.get_dim_wind
     get_dim_wind = get_dim_wind
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

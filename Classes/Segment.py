@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Line import Line
 
 from pyleecan.Methods.Geometry.Segment.check import check
@@ -38,6 +39,8 @@ class Segment(Line):
     rotate = rotate
     # cf Methods.Geometry.Segment.translate
     translate = translate
+    # save method is available in all object
+    save = save
 
     def __init__(self, begin=0, end=0, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :

@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Methods.Slot.Hole.comp_radius import comp_radius
@@ -33,6 +34,8 @@ class Hole(FrozenClass):
     has_magnet = has_magnet
     # cf Methods.Slot.Hole.plot
     plot = plot
+    # save method is available in all object
+    save = save
 
     def __init__(self, Zh=36, mat_void=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :

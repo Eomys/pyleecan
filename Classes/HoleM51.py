@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.HoleMag import HoleMag
 
 from pyleecan.Methods.Slot.HoleM51.build_geometry import build_geometry
@@ -51,6 +52,8 @@ class HoleM51(HoleMag):
     comp_width = comp_width
     # cf Methods.Slot.HoleM51.remove_magnet
     remove_magnet = remove_magnet
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

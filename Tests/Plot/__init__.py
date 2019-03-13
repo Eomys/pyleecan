@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-save_path = "./pyleecan/Tests/Plot/Result/"
+save_path = "./pyleecan/Tests/Results/Plot"

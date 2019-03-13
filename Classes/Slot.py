@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Methods.Slot.Slot.check import check
@@ -41,6 +42,8 @@ class Slot(FrozenClass):
     is_outwards = is_outwards
     # cf Methods.Slot.Slot.plot
     plot = plot
+    # save method is available in all object
+    save = save
 
     def __init__(self, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :

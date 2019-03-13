@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
 from pyleecan.Methods.Geometry.Trapeze.check import check
@@ -38,6 +39,8 @@ class Trapeze(Surface):
     rotate = rotate
     # cf Methods.Geometry.Trapeze.translate
     translate = translate
+    # save method is available in all object
+    save = save
 
     def __init__(self, height=1, W2=1, W1=1, point_ref=0, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :

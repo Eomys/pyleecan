@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Slot import Slot
 
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -12,6 +13,9 @@ class SlotMag(Slot):
     """Slot for inset and surface magnet (abstract)"""
 
     VERSION = 1
+
+    # save method is available in all object
+    save = save
 
     def __init__(self, W3=0, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :

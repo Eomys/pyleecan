@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -11,6 +12,9 @@ from pyleecan.Classes.check import InitUnKnowClassError
 class MatThermics(FrozenClass):
 
     VERSION = 1
+
+    # save method is available in all object
+    save = save
 
     def __init__(
         self, lambda_x=1, lambda_y=1, lambda_z=1, Cp=1, alpha=0.00393, init_dict=None

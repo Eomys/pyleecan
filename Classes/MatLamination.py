@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -14,6 +15,9 @@ from pyleecan.Classes.BHCurveParam import BHCurveParam
 class MatLamination(MatMagnetics):
 
     VERSION = 1
+
+    # save method is available in all object
+    save = save
 
     def __init__(self, Wlam=0.0005, BH_curve=-1, mur_lin=1, init_dict=None):
         """Constructor of the class. Can be use in two ways :

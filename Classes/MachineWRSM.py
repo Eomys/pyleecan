@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.MachineSync import MachineSync
 
 from pyleecan.Methods.Machine.MachineWRSM.check import check
@@ -28,6 +29,8 @@ class MachineWRSM(MachineSync):
     check = check
     # cf Methods.Machine.MachineWRSM.get_machine_type
     get_machine_type = get_machine_type
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

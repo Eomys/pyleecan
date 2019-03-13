@@ -24,7 +24,7 @@ from pyleecan.Classes.frozen import FrozenClass, FrozenError
 gen_dict = read_all(DOC_DIR)  # dict of class dict
 # Remove one list level (packages Machine, Simulation, Material...)
 class_list = list(gen_dict.values())
-from pyleecan.Tests.Classes.import_all import *
+from pyleecan.Classes.import_all import *
 
 
 @ddt

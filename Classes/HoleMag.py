@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Hole import Hole
 
 from pyleecan.Methods.Slot.HoleMag.has_magnet import has_magnet
@@ -18,6 +19,8 @@ class HoleMag(Hole):
 
     # cf Methods.Slot.HoleMag.has_magnet
     has_magnet = has_magnet
+    # save method is available in all object
+    save = save
 
     def __init__(self, Zh=36, mat_void=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :

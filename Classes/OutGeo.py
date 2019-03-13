@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -12,6 +13,9 @@ class OutGeo(FrozenClass):
     """Gather the geometrical and the global outputs"""
 
     VERSION = 1
+
+    # save method is available in all object
+    save = save
 
     def __init__(self, name_phase_stator=None, name_phase_rotor=None, init_dict=None):
         """Constructor of the class. Can be use in two ways :

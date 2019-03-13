@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Hole import Hole
 
 from pyleecan.Methods.Slot.VentilationPolar.build_geometry import build_geometry
@@ -30,6 +31,8 @@ class VentilationPolar(Hole):
     comp_surface = comp_surface
     # cf Methods.Slot.VentilationPolar.get_center
     get_center = get_center
+    # save method is available in all object
+    save = save
 
     def __init__(self, Alpha0=0, D0=1, H0=1, W1=1, Zh=36, mat_void=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :

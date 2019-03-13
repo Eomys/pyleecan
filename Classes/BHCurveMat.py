@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import set_array, check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.BHCurve import BHCurve
 
 from pyleecan.Methods.Material.BHCurveMat.comp_B import comp_B
@@ -18,6 +19,8 @@ class BHCurveMat(BHCurve):
 
     # cf Methods.Material.BHCurveMat.comp_B
     comp_B = comp_B
+    # save method is available in all object
+    save = save
 
     def __init__(self, matrix=None, f=None, H=None, init_dict=None):
         """Constructor of the class. Can be use in two ways :

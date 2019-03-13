@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.LamSlot import LamSlot
 
 from pyleecan.Methods.Machine.LamSlotWind.build_geometry import build_geometry
@@ -83,6 +84,8 @@ class LamSlotWind(LamSlot):
     plot = plot
     # cf Methods.Machine.LamSlotWind.plot_winding
     plot_winding = plot_winding
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

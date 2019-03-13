@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Magnet import Magnet
 
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -12,6 +13,9 @@ from pyleecan.Classes.Material import Material
 class MagnetPolar(Magnet):
 
     VERSION = 1
+
+    # save method is available in all object
+    save = save
 
     def __init__(self, mat_type=-1, type_magnetization=0, Lmag=0.95, init_dict=None):
         """Constructor of the class. Can be use in two ways :

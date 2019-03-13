@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
 from pyleecan.Methods.Geometry.PolarArc.get_lines import get_lines
@@ -38,6 +39,8 @@ class PolarArc(Surface):
     get_patch = get_patch
     # cf Methods.Geometry.PolarArc.comp_surface
     comp_surface = comp_surface
+    # save method is available in all object
+    save = save
 
     def __init__(self, angle=1, height=1, point_ref=0, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :

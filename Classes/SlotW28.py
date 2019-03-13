@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotWind import SlotWind
 
 from pyleecan.Methods.Slot.SlotW28._comp_point_coordinate import _comp_point_coordinate
@@ -38,6 +39,8 @@ class SlotW28(SlotWind):
     comp_height_wind = comp_height_wind
     # cf Methods.Slot.SlotW28.comp_surface
     comp_surface = comp_surface
+    # save method is available in all object
+    save = save
 
     def __init__(
         self, W0=0.0122, H0=0.001, R1=0.003, W3=0.005, H3=0.003, Zs=36, init_dict=None

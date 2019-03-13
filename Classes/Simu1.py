@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Simulation import Simulation
 
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -23,6 +24,9 @@ class Simu1(Simulation):
     """Five sequential weak coupling multi physics simulation"""
 
     VERSION = 1
+
+    # save method is available in all object
+    save = save
 
     def __init__(self, name="", desc="", machine=-1, input=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :

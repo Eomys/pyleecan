@@ -63,6 +63,8 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write(
             "from pyleecan.Classes.check import check_init_dict, " + "check_var\n"
         )
+    # Save function
+    class_file.write("from pyleecan.Functions.save import save\n")
 
     # Import of the mother_class (FrozenClass by default)
     # All the classes file are in the Classes folder (regardless of their main package)
@@ -142,8 +144,8 @@ def generate_class(gen_dict, class_name, path_to_gen):
             TAB + "# cf Methods." + class_pack + "." + class_name + "." + meth + "\n"
         )
         class_file.write(TAB + meth.split(".")[-1] + " = " + meth.split(".")[-1] + "\n")
-    if len(class_dict["methods"]) > 0:
-        class_file.write("\n")
+    class_file.write(TAB + "# save method is available in all object\n")
+    class_file.write(TAB + "save = save\n\n")
 
     # Add the __init__ method
     if len(class_dict["properties"]) == 0 and class_dict["mother"] == "":

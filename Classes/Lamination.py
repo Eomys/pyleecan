@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Methods.Machine.Lamination.build_geometry import build_geometry
@@ -65,6 +66,8 @@ class Lamination(FrozenClass):
     get_name_phase = get_name_phase
     # cf Methods.Machine.Lamination.plot
     plot = plot
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

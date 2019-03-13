@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Methods.Machine.Magnet.comp_angle_opening import comp_angle_opening
@@ -38,6 +39,8 @@ class Magnet(FrozenClass):
     is_outwards = is_outwards
     # cf Methods.Machine.Magnet.plot
     plot = plot
+    # save method is available in all object
+    save = save
 
     def __init__(self, mat_type=-1, type_magnetization=0, Lmag=0.95, init_dict=None):
         """Constructor of the class. Can be use in two ways :

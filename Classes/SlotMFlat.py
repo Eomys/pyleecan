@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotMag import SlotMag
 
 from pyleecan.Methods.Slot.SlotMFlat.build_geometry import build_geometry
@@ -43,6 +44,8 @@ class SlotMFlat(SlotMag):
     comp_W0m = comp_W0m
     # cf Methods.Slot.SlotMFlat.get_point_bottom
     get_point_bottom = get_point_bottom
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

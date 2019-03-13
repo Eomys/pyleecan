@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotMag import SlotMag
 
 from pyleecan.Methods.Slot.SlotMPolar.build_geometry import build_geometry
@@ -39,6 +40,8 @@ class SlotMPolar(SlotMag):
     comp_surface = comp_surface
     # cf Methods.Slot.SlotMPolar.get_point_bottom
     get_point_bottom = get_point_bottom
+    # save method is available in all object
+    save = save
 
     def __init__(self, W0=0.314, H0=0, magnet=list(), W3=0, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :

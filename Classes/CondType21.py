@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Conductor import Conductor
 
 from pyleecan.Methods.Machine.CondType21.comp_active_surface import comp_active_surface
@@ -29,6 +30,8 @@ class CondType21(Conductor):
     comp_width = comp_width
     # cf Methods.Machine.CondType21.plot
     plot = plot
+    # save method is available in all object
+    save = save
 
     def __init__(
         self, Hbar=0.01, Wbar=0.01, Wins=0, cond_mat=-1, ins_mat=-1, init_dict=None

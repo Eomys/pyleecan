@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.MagnetFlat import MagnetFlat
 
 from pyleecan.Methods.Machine.MagnetType10.build_geometry import build_geometry
@@ -26,6 +27,8 @@ class MagnetType10(MagnetFlat):
     comp_height = comp_height
     # cf Methods.Machine.MagnetType10.comp_surface
     comp_surface = comp_surface
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

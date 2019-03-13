@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 
 from pyleecan.Methods.Import.ImportGenMatrixSin.get_data import get_data
@@ -21,6 +22,8 @@ class ImportGenMatrixSin(ImportMatrix):
     get_data = get_data
     # cf Methods.Import.ImportGenMatrixSin.init_vector
     init_vector = init_vector
+    # save method is available in all object
+    save = save
 
     def __init__(self, sin_list=list(), is_transpose=False, init_dict=None):
         """Constructor of the class. Can be use in two ways :

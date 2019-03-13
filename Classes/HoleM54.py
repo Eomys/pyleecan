@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Hole import Hole
 
 from pyleecan.Methods.Slot.HoleM54.build_geometry import build_geometry
@@ -28,6 +29,8 @@ class HoleM54(Hole):
     comp_radius = comp_radius
     # cf Methods.Slot.HoleM54.comp_surface
     comp_surface = comp_surface
+    # save method is available in all object
+    save = save
 
     def __init__(
         self, H0=0.003, H1=0, W0=0.013, R1=0.02, Zh=36, mat_void=-1, init_dict=None

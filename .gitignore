@@ -2,3 +2,4 @@
 *.pyc
 Tests/logtest.txt
 .DS_Store
+/Tests/Results/Plot

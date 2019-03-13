@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Methods.Machine.Shaft.build_geometry import build_geometry
@@ -23,6 +24,8 @@ class Shaft(FrozenClass):
     comp_mass = comp_mass
     # cf Methods.Machine.Shaft.plot
     plot = plot
+    # save method is available in all object
+    save = save
 
     def __init__(self, Lshaft=0.442, mat_type=-1, Drsh=0.045, init_dict=None):
         """Constructor of the class. Can be use in two ways :

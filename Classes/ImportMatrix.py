@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Import import Import
 
 from pyleecan.Methods.Import.ImportMatrix.edit_matrix import edit_matrix
@@ -17,6 +18,8 @@ class ImportMatrix(Import):
 
     # cf Methods.Import.ImportMatrix.edit_matrix
     edit_matrix = edit_matrix
+    # save method is available in all object
+    save = save
 
     def __init__(self, is_transpose=False, init_dict=None):
         """Constructor of the class. Can be use in two ways :

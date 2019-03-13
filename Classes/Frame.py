@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Methods.Machine.Frame.build_geometry import build_geometry
@@ -35,6 +36,8 @@ class Frame(FrozenClass):
     get_length = get_length
     # cf Methods.Machine.Frame.plot
     plot = plot
+    # save method is available in all object
+    save = save
 
     def __init__(self, Lfra=0.35, Rint=0.2, Rext=0.2, mat_type=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :

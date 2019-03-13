@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotWind import SlotWind
 
 from pyleecan.Methods.Slot.SlotW25._comp_point_coordinate import _comp_point_coordinate
@@ -41,6 +42,8 @@ class SlotW25(SlotWind):
     comp_surface = comp_surface
     # cf Methods.Slot.SlotW25.comp_surface_wind
     comp_surface_wind = comp_surface_wind
+    # save method is available in all object
+    save = save
 
     def __init__(self, W3=0.003, H2=0.003, W4=0.003, H1=0.003, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :

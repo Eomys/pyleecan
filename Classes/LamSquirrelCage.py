@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 
 from pyleecan.Methods.Machine.LamSquirrelCage.build_geometry import build_geometry
@@ -65,6 +66,8 @@ class LamSquirrelCage(LamSlotWind):
     comp_length_ring = comp_length_ring
     # cf Methods.Machine.LamSquirrelCage.plot
     plot = plot
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

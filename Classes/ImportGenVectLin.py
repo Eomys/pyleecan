@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 
 from pyleecan.Methods.Import.ImportGenVectLin.get_data import get_data
@@ -17,6 +18,8 @@ class ImportGenVectLin(ImportMatrix):
 
     # cf Methods.Import.ImportGenVectLin.get_data
     get_data = get_data
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

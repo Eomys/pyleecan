@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.MachineAsync import MachineAsync
 
 from pyleecan.Methods.Machine.MachineDFIM.check import check
@@ -28,6 +29,8 @@ class MachineDFIM(MachineAsync):
     check = check
     # cf Methods.Machine.MachineDFIM.get_machine_type
     get_machine_type = get_machine_type
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

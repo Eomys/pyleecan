@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.LamSlot import LamSlot
 
 from pyleecan.Methods.Machine.LamSlotMag.build_geometry import build_geometry
@@ -67,6 +68,8 @@ class LamSlotMag(LamSlot):
     comp_volumes = comp_volumes
     # cf Methods.Machine.LamSlotMag.plot
     plot = plot
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

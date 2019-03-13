@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Line import Line
 
 from pyleecan.Methods.Geometry.Arc2.check import check
@@ -44,6 +45,8 @@ class Arc2(Line):
     rotate = rotate
     # cf Methods.Geometry.Arc2.translate
     translate = translate
+    # save method is available in all object
+    save = save
 
     def __init__(self, begin=0, center=0, angle=1.57079633, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :

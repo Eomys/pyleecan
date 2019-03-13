@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.MagnetPolar import MagnetPolar
 
 from pyleecan.Methods.Machine.MagnetType11._comp_point_coordinate import (
@@ -31,6 +32,8 @@ class MagnetType11(MagnetPolar):
     comp_height = comp_height
     # cf Methods.Machine.MagnetType11.comp_surface
     comp_surface = comp_surface
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

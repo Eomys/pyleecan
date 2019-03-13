@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Methods.Material.BHCurve.plot import plot
@@ -17,6 +18,8 @@ class BHCurve(FrozenClass):
 
     # cf Methods.Material.BHCurve.plot
     plot = plot
+    # save method is available in all object
+    save = save
 
     def __init__(self, init_dict=None):
         """Constructor of the class. Can be use in two ways :

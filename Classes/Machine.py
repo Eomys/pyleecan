@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Methods.Machine.Machine.build_geometry import build_geometry
@@ -45,6 +46,8 @@ class Machine(FrozenClass):
     get_Rgap_mec = get_Rgap_mec
     # cf Methods.Machine.Machine.plot
     plot = plot
+    # save method is available in all object
+    save = save
 
     def __init__(
         self,

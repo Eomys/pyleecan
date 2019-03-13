@@ -3,6 +3,7 @@
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
 from pyleecan.Classes.Conductor import Conductor
 
 from pyleecan.Methods.Machine.CondType22.comp_active_surface import comp_active_surface
@@ -20,6 +21,8 @@ class CondType22(Conductor):
     comp_active_surface = comp_active_surface
     # cf Methods.Machine.CondType22.comp_surface
     comp_surface = comp_surface
+    # save method is available in all object
+    save = save
 
     def __init__(self, Sbar=0.01, cond_mat=-1, ins_mat=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
