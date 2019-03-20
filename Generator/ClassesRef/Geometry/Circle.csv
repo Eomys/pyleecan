@@ -1,7 +1,7 @@
 Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
 radius;;Radius of the circle;;;float;1;0;;;;;Geometry;Surface;check;VERSION;1;Circle define by  the center of circle(point_ref), the label and the radius;
 center;;center of the Circle;;;complex;0;;;;;;;;comp_length;;;;
-;;;;;;;;;;;;;;comp_surface;;;;
+line_label;;Label to set to the lines;;;str;;;;;;;;;comp_surface;;;;
 ;;;;;;;;;;;;;;discretize;;;;
 ;;;;;;;;;;;;;;get_lines;;;;
 ;;;;;;;;;;;;;;get_patch;;;;

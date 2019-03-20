@@ -21,6 +21,7 @@ from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Arc2 import Arc2
 from pyleecan.Classes.Arc3 import Arc3
+from pyleecan.Classes.Arc import Arc
 
 
 class SurfLine(Surface):
@@ -80,6 +81,7 @@ class SurfLine(Surface):
                         "Arc1": Arc1,
                         "Arc2": Arc2,
                         "Arc3": Arc3,
+                        "Arc": Arc,
                         "Line": Line,
                     }
                     obj_class = obj.get("__class__")

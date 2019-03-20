@@ -1,9 +1,9 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes;;;
-angle;-;Polar angle;;;float;1;0;;;;;Geometry;Surface;get_lines;VERSION;1;PolarArc define by  the center of object(point_ref), the label, the angle and the height;;;;
-height;m;The Heigth of the PolarAngle;;;float;1;0;;;;;;;rotate;;;;;;;
-;;;;;;;;;;;;;;translate;;;;;;;
-;;;;;;;;;;;;;;check;;;;;;;
-;;;;;;;;;;;;;;comp_length;;;;;;;
-;;;;;;;;;;;;;;discretize;;;;;;;
-;;;;;;;;;;;;;;get_patch;;;;;;;
-;;;;;;;;;;;;;;comp_surface;;;;;;;
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
+angle;-;Polar angle;;;float;1;0;;;;;Geometry;Surface;get_lines;VERSION;1;PolarArc define by  the center of object(point_ref), the label, the angle and the height;
+height;m;The Heigth of the PolarAngle;;;float;1;0;;;;;;;rotate;;;;
+;;;;;;;;;;;;;;translate;;;;
+;;;;;;;;;;;;;;check;;;;
+;;;;;;;;;;;;;;comp_length;;;;
+;;;;;;;;;;;;;;discretize;;;;
+;;;;;;;;;;;;;;get_patch;;;;
+;;;;;;;;;;;;;;comp_surface;;;;

@@ -4,7 +4,7 @@
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
 from pyleecan.Functions.save import save
-from pyleecan.Classes.Line import Line
+from pyleecan.Classes.Arc import Arc
 
 from pyleecan.Methods.Geometry.Arc3.check import check
 from pyleecan.Methods.Geometry.Arc3.comp_length import comp_length
@@ -16,11 +16,12 @@ from pyleecan.Methods.Geometry.Arc3.get_end import get_end
 from pyleecan.Methods.Geometry.Arc3.get_middle import get_middle
 from pyleecan.Methods.Geometry.Arc3.rotate import rotate
 from pyleecan.Methods.Geometry.Arc3.translate import translate
+from pyleecan.Methods.Geometry.Arc3.get_angle import get_angle
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
 
-class Arc3(Line):
+class Arc3(Arc):
     """Half circle define by two points"""
 
     VERSION = 1
@@ -45,6 +46,8 @@ class Arc3(Line):
     rotate = rotate
     # cf Methods.Geometry.Arc3.translate
     translate = translate
+    # cf Methods.Geometry.Arc3.get_angle
+    get_angle = get_angle
     # save method is available in all object
     save = save
 
@@ -75,16 +78,16 @@ class Arc3(Line):
         self.begin = begin
         self.end = end
         self.is_trigo_direction = is_trigo_direction
-        # Call Line init
+        # Call Arc init
         super(Arc3, self).__init__(label=label)
-        # The class is frozen (in Line init), for now it's impossible to
+        # The class is frozen (in Arc init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
         Arc3_str = ""
-        # Get the properties inherited from Line
+        # Get the properties inherited from Arc
         Arc3_str += super(Arc3, self).__str__() + linesep
         Arc3_str += "begin = " + str(self.begin) + linesep
         Arc3_str += "end = " + str(self.end) + linesep
@@ -97,7 +100,7 @@ class Arc3(Line):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from Line
+        # Check the properties inherited from Arc
         if not super(Arc3, self).__eq__(other):
             return False
         if other.begin != self.begin:
@@ -112,7 +115,7 @@ class Arc3(Line):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        # Get the properties inherited from Line
+        # Get the properties inherited from Arc
         Arc3_dict = super(Arc3, self).as_dict()
         Arc3_dict["begin"] = self.begin
         Arc3_dict["end"] = self.end
@@ -128,7 +131,7 @@ class Arc3(Line):
         self.begin = None
         self.end = None
         self.is_trigo_direction = None
-        # Set to None the properties inherited from Line
+        # Set to None the properties inherited from Arc
         super(Arc3, self)._set_None()
 
     def _get_begin(self):

@@ -42,7 +42,9 @@ class Circle(Surface):
     # save method is available in all object
     save = save
 
-    def __init__(self, radius=1, center=0, point_ref=0, label="", init_dict=None):
+    def __init__(
+        self, radius=1, center=0, line_label="", point_ref=0, label="", init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -53,12 +55,16 @@ class Circle(Surface):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["radius", "center", "point_ref", "label"])
+            check_init_dict(
+                init_dict, ["radius", "center", "line_label", "point_ref", "label"]
+            )
             # Overwrite default value with init_dict content
             if "radius" in list(init_dict.keys()):
                 radius = init_dict["radius"]
             if "center" in list(init_dict.keys()):
                 center = init_dict["center"]
+            if "line_label" in list(init_dict.keys()):
+                line_label = init_dict["line_label"]
             if "point_ref" in list(init_dict.keys()):
                 point_ref = init_dict["point_ref"]
             if "label" in list(init_dict.keys()):
@@ -66,6 +72,7 @@ class Circle(Surface):
         # Initialisation by argument
         self.radius = radius
         self.center = center
+        self.line_label = line_label
         # Call Surface init
         super(Circle, self).__init__(point_ref=point_ref, label=label)
         # The class is frozen (in Surface init), for now it's impossible to
@@ -78,7 +85,8 @@ class Circle(Surface):
         # Get the properties inherited from Surface
         Circle_str += super(Circle, self).__str__() + linesep
         Circle_str += "radius = " + str(self.radius) + linesep
-        Circle_str += "center = " + str(self.center)
+        Circle_str += "center = " + str(self.center) + linesep
+        Circle_str += 'line_label = "' + str(self.line_label) + '"'
         return Circle_str
 
     def __eq__(self, other):
@@ -94,6 +102,8 @@ class Circle(Surface):
             return False
         if other.center != self.center:
             return False
+        if other.line_label != self.line_label:
+            return False
         return True
 
     def as_dict(self):
@@ -104,6 +114,7 @@ class Circle(Surface):
         Circle_dict = super(Circle, self).as_dict()
         Circle_dict["radius"] = self.radius
         Circle_dict["center"] = self.center
+        Circle_dict["line_label"] = self.line_label
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         Circle_dict["__class__"] = "Circle"
@@ -114,6 +125,7 @@ class Circle(Surface):
 
         self.radius = None
         self.center = None
+        self.line_label = None
         # Set to None the properties inherited from Surface
         super(Circle, self)._set_None()
 
@@ -145,4 +157,19 @@ class Circle(Surface):
     # Type : complex
     center = property(
         fget=_get_center, fset=_set_center, doc=u"""center of the Circle"""
+    )
+
+    def _get_line_label(self):
+        """getter of line_label"""
+        return self._line_label
+
+    def _set_line_label(self, value):
+        """setter of line_label"""
+        check_var("line_label", value, "str")
+        self._line_label = value
+
+    # Label to set to the lines
+    # Type : str
+    line_label = property(
+        fget=_get_line_label, fset=_set_line_label, doc=u"""Label to set to the lines"""
     )

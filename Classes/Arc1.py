@@ -4,7 +4,7 @@
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var
 from pyleecan.Functions.save import save
-from pyleecan.Classes.Line import Line
+from pyleecan.Classes.Arc import Arc
 
 from pyleecan.Methods.Geometry.Arc1.check import check
 from pyleecan.Methods.Geometry.Arc1.comp_length import comp_length
@@ -15,11 +15,12 @@ from pyleecan.Methods.Geometry.Arc1.get_end import get_end
 from pyleecan.Methods.Geometry.Arc1.get_middle import get_middle
 from pyleecan.Methods.Geometry.Arc1.rotate import rotate
 from pyleecan.Methods.Geometry.Arc1.translate import translate
+from pyleecan.Methods.Geometry.Arc1.get_angle import get_angle
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
 
-class Arc1(Line):
+class Arc1(Arc):
     """An arc between two points (defined by a radius)"""
 
     VERSION = 1
@@ -42,6 +43,8 @@ class Arc1(Line):
     rotate = rotate
     # cf Methods.Geometry.Arc1.translate
     translate = translate
+    # cf Methods.Geometry.Arc1.get_angle
+    get_angle = get_angle
     # save method is available in all object
     save = save
 
@@ -70,16 +73,16 @@ class Arc1(Line):
         self.begin = begin
         self.end = end
         self.radius = radius
-        # Call Line init
+        # Call Arc init
         super(Arc1, self).__init__(label=label)
-        # The class is frozen (in Line init), for now it's impossible to
+        # The class is frozen (in Arc init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
         Arc1_str = ""
-        # Get the properties inherited from Line
+        # Get the properties inherited from Arc
         Arc1_str += super(Arc1, self).__str__() + linesep
         Arc1_str += "begin = " + str(self.begin) + linesep
         Arc1_str += "end = " + str(self.end) + linesep
@@ -92,7 +95,7 @@ class Arc1(Line):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from Line
+        # Check the properties inherited from Arc
         if not super(Arc1, self).__eq__(other):
             return False
         if other.begin != self.begin:
@@ -107,7 +110,7 @@ class Arc1(Line):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        # Get the properties inherited from Line
+        # Get the properties inherited from Arc
         Arc1_dict = super(Arc1, self).as_dict()
         Arc1_dict["begin"] = self.begin
         Arc1_dict["end"] = self.end
@@ -123,7 +126,7 @@ class Arc1(Line):
         self.begin = None
         self.end = None
         self.radius = None
-        # Set to None the properties inherited from Line
+        # Set to None the properties inherited from Arc
         super(Arc1, self)._set_None()
 
     def _get_begin(self):

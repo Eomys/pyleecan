@@ -6,6 +6,8 @@ from pyleecan.Classes.check import check_init_dict, check_var
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
+from pyleecan.Methods.Geometry.Surface.draw_FEMM import draw_FEMM
+
 from pyleecan.Classes.check import InitUnKnowClassError
 
 
@@ -14,6 +16,8 @@ class Surface(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Geometry.Surface.draw_FEMM
+    draw_FEMM = draw_FEMM
     # save method is available in all object
     save = save
 

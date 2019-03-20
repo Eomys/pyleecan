@@ -21,7 +21,7 @@ def get_lines(self):
     begin = self.center + self.radius
     end = self.center - self.radius
     # first half-circle
-    line1 = Arc3(begin, end, True)
+    line1 = Arc3(begin, end, True, label=self.line_label)
     # second half-circle
-    line2 = Arc3(end, begin, True)
+    line2 = Arc3(end, begin, True, label=self.line_label)
     return [line1, line2]
