@@ -41,16 +41,16 @@ test_obj.rotor.hole.append(
 )
 test_obj.rotor.hole[0].magnet_0.Lmag = 0.3
 test_obj.rotor.hole[0].magnet_1.Lmag = 0.5
-test_obj.rotor.hole[0].magnet_0.mat_type.mechanics.rho = 1000
-test_obj.rotor.hole[0].magnet_1.mat_type.mechanics.rho = 1000
+test_obj.rotor.hole[0].magnet_0.mat_type.struct.rho = 1000
+test_obj.rotor.hole[0].magnet_1.mat_type.struct.rho = 1000
 test_obj.rotor.axial_vent = list()
 test_obj.rotor.axial_vent.append(VentilationCirc(Zh=8, Alpha0=0, D0=5e-3, H0=40e-3))
 test_obj.rotor.axial_vent.append(
     VentilationCirc(Zh=8, Alpha0=pi / 8, D0=7e-3, H0=40e-3)
 )
-test_obj.rotor.mat_type.mechanics.rho = 7600
+test_obj.rotor.mat_type.struct.rho = 7600
 test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1.2)
-test_obj.shaft.mat_type.mechanics.rho = 5000
+test_obj.shaft.mat_type.struct.rho = 5000
 test_obj.stator = Lamination(
     Rint=0.078, Rext=0.104, is_internal=False, is_stator=True, L1=0.8, Nrvd=0, Kf1=0.95
 )
@@ -60,9 +60,9 @@ test_obj.stator.axial_vent.append(
 test_obj.stator.axial_vent.append(
     VentilationPolar(Zh=8, H0=0.092, D0=0.01, W1=pi / 8, Alpha0=0)
 )
-test_obj.stator.mat_type.mechanics.rho = 8000
+test_obj.stator.mat_type.struct.rho = 8000
 test_obj.frame = Frame(Rint=0.104, Rext=0.114, Lfra=1)
-test_obj.frame.mat_type.mechanics.rho = 4000
+test_obj.frame.mat_type.struct.rho = 4000
 
 M_test.append(
     {

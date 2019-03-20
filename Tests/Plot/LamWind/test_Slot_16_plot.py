@@ -23,9 +23,6 @@ from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
 from pyleecan.Classes.WindingCW2LT import WindingCW2LT
 from pyleecan.Classes.WindingDW2L import WindingDW2L
-from pyleecan.Classes.BHCurveMat import BHCurveMat
-from pyleecan.Classes.BHCurveParam import BHCurveParam
-from pyleecan.Classes.MatLamination import MatLamination
 from pyleecan.Classes.SlotW16 import SlotW16
 
 from pyleecan.Tests.Plot import save_path
@@ -50,11 +47,6 @@ class test_Lam_Wind_16_plot(TestCase):
         test_obj.slot = SlotW16(
             Zs=6, W0=2 * pi / 60, W3=30e-3, H0=10e-3, H2=70e-3, R1=15e-3
         )
-
-        test_obj.mat_type.name = "Param"
-        test_obj.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
-        BH = BHCurveParam(Bmax=1.5, mur_0=8585, mur_1=21.79, a=0.25575)
-        test_obj.mat_type.magnetics.BH_curve = BH
 
         self.test_obj = test_obj
 

@@ -23,4 +23,4 @@ def comp_mass(self):
 
     """
 
-    return self.Lshaft * pi * ((self.Drsh / 2) ** 2) * self.mat_type.mechanics.rho
+    return self.Lshaft * pi * ((self.Drsh / 2) ** 2) * self.mat_type.struct.rho

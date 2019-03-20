@@ -19,7 +19,6 @@ from pyleecan.Classes.Magnet import Magnet
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
-from pyleecan.Classes.MatLamination import MatLamination
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Tests.Plot import save_path
 
@@ -57,7 +56,6 @@ class test_Hole_50_plot(TestCase):
         test_obj.rotor.axial_vent.append(
             VentilationCirc(Zh=8, Alpha0=pi / 8, D0=7e-3, H0=40e-3)
         )
-        test_obj.rotor.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1.2)
 
         test_obj.stator = Lamination(
@@ -69,7 +67,6 @@ class test_Hole_50_plot(TestCase):
         test_obj.stator.axial_vent.append(
             VentilationPolar(Zh=8, H0=0.092, D0=0.01, W1=pi / 8, Alpha0=0)
         )
-        test_obj.stator.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=0.104, Rext=0.114, Lfra=1)
 
         self.test_obj = test_obj

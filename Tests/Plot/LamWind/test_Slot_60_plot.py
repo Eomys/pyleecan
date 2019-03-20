@@ -23,8 +23,6 @@ from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
 from pyleecan.Classes.WindingCW2LT import WindingCW2LT
 from pyleecan.Classes.WindingDW2L import WindingDW2L
-from pyleecan.Classes.BHCurveMat import BHCurveMat
-from pyleecan.Classes.BHCurveParam import BHCurveParam
 from pyleecan.Classes.MatLamination import MatLamination
 from pyleecan.Classes.SlotW60 import SlotW60
 

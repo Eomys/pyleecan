@@ -17,7 +17,6 @@ from pyleecan.Classes.Lamination import Lamination
 from pyleecan.Classes.Machine import Machine
 from pyleecan.Classes.Magnet import Magnet
 from pyleecan.Classes.Shaft import Shaft
-from pyleecan.Classes.MatLamination import MatLamination
 from pyleecan.Classes.HoleM51 import HoleM51
 from pyleecan.Tests.Plot import save_path
 
@@ -49,13 +48,11 @@ class test_Hole_51_plot(TestCase):
                 H2=0.0055,
             )
         )
-        test_obj.rotor.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1.2)
 
         test_obj.stator = Lamination(
             Rint=0.09, Rext=0.12, is_internal=False, is_stator=True, L1=0.9
         )
-        test_obj.stator.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=0.12, Rext=0.12, Lfra=0.7)
         self.test_obj = test_obj
 

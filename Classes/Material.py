@@ -11,8 +11,8 @@ from pyleecan.Classes.MatElectrical import MatElectrical
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.MatLamination import MatLamination
 from pyleecan.Classes.MatMagnet import MatMagnet
-from pyleecan.Classes.MatMechanics import MatMechanics
-from pyleecan.Classes.MatThermics import MatThermics
+from pyleecan.Classes.MatStructural import MatStructural
+from pyleecan.Classes.MatHT import MatHT
 from pyleecan.Classes.MatEconomical import MatEconomical
 
 
@@ -27,11 +27,11 @@ class Material(FrozenClass):
         self,
         name="M400-50A",
         is_isotropic=False,
-        electrical=-1,
-        magnetics=-1,
-        mechanics=-1,
-        thermics=-1,
-        economical=-1,
+        elec=-1,
+        mag=-1,
+        struct=-1,
+        HT=-1,
+        eco=-1,
         desc="Lamination M400-50A",
         init_dict=None,
     ):
@@ -44,90 +44,79 @@ class Material(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if electrical == -1:
-            electrical = MatElectrical()
-        if magnetics == -1:
-            magnetics = MatMagnetics()
-        if mechanics == -1:
-            mechanics = MatMechanics()
-        if thermics == -1:
-            thermics = MatThermics()
-        if economical == -1:
-            economical = MatEconomical()
+        if elec == -1:
+            elec = MatElectrical()
+        if mag == -1:
+            mag = MatMagnetics()
+        if struct == -1:
+            struct = MatStructural()
+        if HT == -1:
+            HT = MatHT()
+        if eco == -1:
+            eco = MatEconomical()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
                 init_dict,
-                [
-                    "name",
-                    "is_isotropic",
-                    "electrical",
-                    "magnetics",
-                    "mechanics",
-                    "thermics",
-                    "economical",
-                    "desc",
-                ],
+                ["name", "is_isotropic", "elec", "mag", "struct", "HT", "eco", "desc"],
             )
             # Overwrite default value with init_dict content
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "is_isotropic" in list(init_dict.keys()):
                 is_isotropic = init_dict["is_isotropic"]
-            if "electrical" in list(init_dict.keys()):
-                electrical = init_dict["electrical"]
-            if "magnetics" in list(init_dict.keys()):
-                magnetics = init_dict["magnetics"]
-            if "mechanics" in list(init_dict.keys()):
-                mechanics = init_dict["mechanics"]
-            if "thermics" in list(init_dict.keys()):
-                thermics = init_dict["thermics"]
-            if "economical" in list(init_dict.keys()):
-                economical = init_dict["economical"]
+            if "elec" in list(init_dict.keys()):
+                elec = init_dict["elec"]
+            if "mag" in list(init_dict.keys()):
+                mag = init_dict["mag"]
+            if "struct" in list(init_dict.keys()):
+                struct = init_dict["struct"]
+            if "HT" in list(init_dict.keys()):
+                HT = init_dict["HT"]
+            if "eco" in list(init_dict.keys()):
+                eco = init_dict["eco"]
             if "desc" in list(init_dict.keys()):
                 desc = init_dict["desc"]
         # Initialisation by argument
         self.parent = None
         self.name = name
         self.is_isotropic = is_isotropic
-        # electrical can be None, a MatElectrical object or a dict
-        if isinstance(electrical, dict):
-            self.electrical = MatElectrical(init_dict=electrical)
+        # elec can be None, a MatElectrical object or a dict
+        if isinstance(elec, dict):
+            self.elec = MatElectrical(init_dict=elec)
         else:
-            self.electrical = electrical
-        # magnetics can be None, a MatMagnetics object or a dict
-        if isinstance(magnetics, dict):
+            self.elec = elec
+        # mag can be None, a MatMagnetics object or a dict
+        if isinstance(mag, dict):
             # Call the correct constructor according to the dict
             load_dict = {
                 "MatLamination": MatLamination,
                 "MatMagnet": MatMagnet,
                 "MatMagnetics": MatMagnetics,
             }
-            obj_class = magnetics.get("__class__")
+            obj_class = mag.get("__class__")
             if obj_class is None:
-                self.magnetics = MatMagnetics(init_dict=magnetics)
+                self.mag = MatMagnetics(init_dict=mag)
             elif obj_class in list(load_dict.keys()):
-                self.magnetics = load_dict[obj_class](init_dict=magnetics)
+                self.mag = load_dict[obj_class](init_dict=mag)
             else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError(
-                    "Unknow class name in init_dict for magnetics"
-                )
+                raise InitUnKnowClassError("Unknow class name in init_dict for mag")
         else:
-            self.magnetics = magnetics
-        # mechanics can be None, a MatMechanics object or a dict
-        if isinstance(mechanics, dict):
-            self.mechanics = MatMechanics(init_dict=mechanics)
+            self.mag = mag
+        # struct can be None, a MatStructural object or a dict
+        if isinstance(struct, dict):
+            self.struct = MatStructural(init_dict=struct)
         else:
-            self.mechanics = mechanics
-        # thermics can be None, a MatThermics object or a dict
-        if isinstance(thermics, dict):
-            self.thermics = MatThermics(init_dict=thermics)
+            self.struct = struct
+        # HT can be None, a MatHT object or a dict
+        if isinstance(HT, dict):
+            self.HT = MatHT(init_dict=HT)
         else:
-            self.thermics = thermics
-        # economical can be None, a MatEconomical object or a dict
-        if isinstance(economical, dict):
-            self.economical = MatEconomical(init_dict=economical)
+            self.HT = HT
+        # eco can be None, a MatEconomical object or a dict
+        if isinstance(eco, dict):
+            self.eco = MatEconomical(init_dict=eco)
         else:
-            self.economical = economical
+            self.eco = eco
         self.desc = desc
 
         # The class is frozen, for now it's impossible to add new properties
@@ -143,19 +132,11 @@ class Material(FrozenClass):
             Material_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Material_str += 'name = "' + str(self.name) + '"' + linesep
         Material_str += "is_isotropic = " + str(self.is_isotropic) + linesep
-        Material_str += (
-            "electrical = " + str(self.electrical.as_dict()) + linesep + linesep
-        )
-        Material_str += (
-            "magnetics = " + str(self.magnetics.as_dict()) + linesep + linesep
-        )
-        Material_str += (
-            "mechanics = " + str(self.mechanics.as_dict()) + linesep + linesep
-        )
-        Material_str += "thermics = " + str(self.thermics.as_dict()) + linesep + linesep
-        Material_str += (
-            "economical = " + str(self.economical.as_dict()) + linesep + linesep
-        )
+        Material_str += "elec = " + str(self.elec.as_dict()) + linesep + linesep
+        Material_str += "mag = " + str(self.mag.as_dict()) + linesep + linesep
+        Material_str += "struct = " + str(self.struct.as_dict()) + linesep + linesep
+        Material_str += "HT = " + str(self.HT.as_dict()) + linesep + linesep
+        Material_str += "eco = " + str(self.eco.as_dict()) + linesep + linesep
         Material_str += 'desc = "' + str(self.desc) + '"'
         return Material_str
 
@@ -168,15 +149,15 @@ class Material(FrozenClass):
             return False
         if other.is_isotropic != self.is_isotropic:
             return False
-        if other.electrical != self.electrical:
+        if other.elec != self.elec:
             return False
-        if other.magnetics != self.magnetics:
+        if other.mag != self.mag:
             return False
-        if other.mechanics != self.mechanics:
+        if other.struct != self.struct:
             return False
-        if other.thermics != self.thermics:
+        if other.HT != self.HT:
             return False
-        if other.economical != self.economical:
+        if other.eco != self.eco:
             return False
         if other.desc != self.desc:
             return False
@@ -189,26 +170,26 @@ class Material(FrozenClass):
         Material_dict = dict()
         Material_dict["name"] = self.name
         Material_dict["is_isotropic"] = self.is_isotropic
-        if self.electrical is None:
-            Material_dict["electrical"] = None
+        if self.elec is None:
+            Material_dict["elec"] = None
         else:
-            Material_dict["electrical"] = self.electrical.as_dict()
-        if self.magnetics is None:
-            Material_dict["magnetics"] = None
+            Material_dict["elec"] = self.elec.as_dict()
+        if self.mag is None:
+            Material_dict["mag"] = None
         else:
-            Material_dict["magnetics"] = self.magnetics.as_dict()
-        if self.mechanics is None:
-            Material_dict["mechanics"] = None
+            Material_dict["mag"] = self.mag.as_dict()
+        if self.struct is None:
+            Material_dict["struct"] = None
         else:
-            Material_dict["mechanics"] = self.mechanics.as_dict()
-        if self.thermics is None:
-            Material_dict["thermics"] = None
+            Material_dict["struct"] = self.struct.as_dict()
+        if self.HT is None:
+            Material_dict["HT"] = None
         else:
-            Material_dict["thermics"] = self.thermics.as_dict()
-        if self.economical is None:
-            Material_dict["economical"] = None
+            Material_dict["HT"] = self.HT.as_dict()
+        if self.eco is None:
+            Material_dict["eco"] = None
         else:
-            Material_dict["economical"] = self.economical.as_dict()
+            Material_dict["eco"] = self.eco.as_dict()
         Material_dict["desc"] = self.desc
         # The class name is added to the dict fordeserialisation purpose
         Material_dict["__class__"] = "Material"
@@ -219,16 +200,16 @@ class Material(FrozenClass):
 
         self.name = None
         self.is_isotropic = None
-        if self.electrical is not None:
-            self.electrical._set_None()
-        if self.magnetics is not None:
-            self.magnetics._set_None()
-        if self.mechanics is not None:
-            self.mechanics._set_None()
-        if self.thermics is not None:
-            self.thermics._set_None()
-        if self.economical is not None:
-            self.economical._set_None()
+        if self.elec is not None:
+            self.elec._set_None()
+        if self.mag is not None:
+            self.mag._set_None()
+        if self.struct is not None:
+            self.struct._set_None()
+        if self.HT is not None:
+            self.HT._set_None()
+        if self.eco is not None:
+            self.eco._set_None()
         self.desc = None
 
     def _get_name(self):
@@ -261,104 +242,96 @@ class Material(FrozenClass):
         doc=u"""If True, uniformity in all orientations""",
     )
 
-    def _get_electrical(self):
-        """getter of electrical"""
-        return self._electrical
+    def _get_elec(self):
+        """getter of elec"""
+        return self._elec
 
-    def _set_electrical(self, value):
-        """setter of electrical"""
-        check_var("electrical", value, "MatElectrical")
-        self._electrical = value
+    def _set_elec(self, value):
+        """setter of elec"""
+        check_var("elec", value, "MatElectrical")
+        self._elec = value
 
-        if self._electrical is not None:
-            self._electrical.parent = self
+        if self._elec is not None:
+            self._elec.parent = self
 
     # Electrical properties of the material
     # Type : MatElectrical
-    electrical = property(
-        fget=_get_electrical,
-        fset=_set_electrical,
-        doc=u"""Electrical properties of the material""",
+    elec = property(
+        fget=_get_elec, fset=_set_elec, doc=u"""Electrical properties of the material"""
     )
 
-    def _get_magnetics(self):
-        """getter of magnetics"""
-        return self._magnetics
+    def _get_mag(self):
+        """getter of mag"""
+        return self._mag
 
-    def _set_magnetics(self, value):
-        """setter of magnetics"""
-        check_var("magnetics", value, "MatMagnetics")
-        self._magnetics = value
+    def _set_mag(self, value):
+        """setter of mag"""
+        check_var("mag", value, "MatMagnetics")
+        self._mag = value
 
-        if self._magnetics is not None:
-            self._magnetics.parent = self
+        if self._mag is not None:
+            self._mag.parent = self
 
     # Magnetic properties of the material
     # Type : MatMagnetics
-    magnetics = property(
-        fget=_get_magnetics,
-        fset=_set_magnetics,
-        doc=u"""Magnetic properties of the material""",
+    mag = property(
+        fget=_get_mag, fset=_set_mag, doc=u"""Magnetic properties of the material"""
     )
 
-    def _get_mechanics(self):
-        """getter of mechanics"""
-        return self._mechanics
+    def _get_struct(self):
+        """getter of struct"""
+        return self._struct
 
-    def _set_mechanics(self, value):
-        """setter of mechanics"""
-        check_var("mechanics", value, "MatMechanics")
-        self._mechanics = value
+    def _set_struct(self, value):
+        """setter of struct"""
+        check_var("struct", value, "MatStructural")
+        self._struct = value
 
-        if self._mechanics is not None:
-            self._mechanics.parent = self
+        if self._struct is not None:
+            self._struct.parent = self
 
-    # Mechanics properties of the material
-    # Type : MatMechanics
-    mechanics = property(
-        fget=_get_mechanics,
-        fset=_set_mechanics,
-        doc=u"""Mechanics properties of the material""",
+    # Structural properties of the material
+    # Type : MatStructural
+    struct = property(
+        fget=_get_struct,
+        fset=_set_struct,
+        doc=u"""Structural properties of the material""",
     )
 
-    def _get_thermics(self):
-        """getter of thermics"""
-        return self._thermics
+    def _get_HT(self):
+        """getter of HT"""
+        return self._HT
 
-    def _set_thermics(self, value):
-        """setter of thermics"""
-        check_var("thermics", value, "MatThermics")
-        self._thermics = value
+    def _set_HT(self, value):
+        """setter of HT"""
+        check_var("HT", value, "MatHT")
+        self._HT = value
 
-        if self._thermics is not None:
-            self._thermics.parent = self
+        if self._HT is not None:
+            self._HT.parent = self
 
-    # Thermics properties of the material
-    # Type : MatThermics
-    thermics = property(
-        fget=_get_thermics,
-        fset=_set_thermics,
-        doc=u"""Thermics properties of the material""",
+    # Heat Transfer properties of the material
+    # Type : MatHT
+    HT = property(
+        fget=_get_HT, fset=_set_HT, doc=u"""Heat Transfer properties of the material"""
     )
 
-    def _get_economical(self):
-        """getter of economical"""
-        return self._economical
+    def _get_eco(self):
+        """getter of eco"""
+        return self._eco
 
-    def _set_economical(self, value):
-        """setter of economical"""
-        check_var("economical", value, "MatEconomical")
-        self._economical = value
+    def _set_eco(self, value):
+        """setter of eco"""
+        check_var("eco", value, "MatEconomical")
+        self._eco = value
 
-        if self._economical is not None:
-            self._economical.parent = self
+        if self._eco is not None:
+            self._eco.parent = self
 
     # Economical properties of the material
     # Type : MatEconomical
-    economical = property(
-        fget=_get_economical,
-        fset=_set_economical,
-        doc=u"""Economical properties of the material""",
+    eco = property(
+        fget=_get_eco, fset=_set_eco, doc=u"""Economical properties of the material"""
     )
 
     def _get_desc(self):

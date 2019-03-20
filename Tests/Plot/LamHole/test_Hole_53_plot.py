@@ -19,7 +19,6 @@ from pyleecan.Classes.Magnet import Magnet
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
-from pyleecan.Classes.MatLamination import MatLamination
 from pyleecan.Classes.HoleM53 import HoleM53
 from pyleecan.Tests.Plot import save_path
 

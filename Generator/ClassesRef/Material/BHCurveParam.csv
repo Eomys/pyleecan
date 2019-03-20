@@ -1,5 +1,0 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-Bmax;T;Max flux density;;0;float;1,5;0;;;;;Material;BHCurve;comp_B;VERSION;1;Analyticaly defined B(H) curve;
-mur_0;-;relative permeability close to H = 0;;0;float;8585;0;;;;;;;;;;;
-mur_1;-;relative permeability when H tends to infinity;;0;float;21,79;0;;;;;;;;;;;
-a;-;shape parameter of the B(H) curve elbow;;0;float;0,255;0;1;;;;;;;;;;

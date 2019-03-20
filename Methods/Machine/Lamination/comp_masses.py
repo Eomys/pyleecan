@@ -21,7 +21,7 @@ def comp_masses(self):
         Lamination mass dictionnary (Mtot, Mlam) [kg]
 
     """
-    rho = self.mat_type.mechanics.rho
+    rho = self.mat_type.struct.rho
     V_dict = self.comp_volumes()
 
     M_dict = dict()

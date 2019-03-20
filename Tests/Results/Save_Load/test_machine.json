@@ -15,44 +15,44 @@
         "is_internal": true,
         "is_stator": true,
         "mat_type": {
+            "HT": {
+                "Cp": 1,
+                "__class__": "MatHT",
+                "alpha": 0.00393,
+                "lambda_x": 1,
+                "lambda_y": 1,
+                "lambda_z": 1
+            },
             "__class__": "Material",
             "desc": "Lamination M400-50A",
-            "economical": {
+            "eco": {
                 "__class__": "MatEconomical",
                 "cost_unit": 0.127,
                 "unit_name": "$"
             },
-            "electrical": {
+            "elec": {
                 "__class__": "MatElectrical",
                 "epsr": 1,
                 "rho": 1
             },
             "is_isotropic": false,
-            "magnetics": {
+            "mag": {
                 "__class__": "MatMagnetics",
                 "mur_lin": 1
             },
-            "mechanics": {
-                "Ex": 215000000000,
-                "Ey": 215000000000,
+            "name": "M400-50A",
+            "struct": {
+                "Ex": 215000000000.0,
+                "Ey": 215000000000.0,
                 "Ez": 80000000000,
                 "Gxy": 0,
                 "Gxz": 2000000000,
                 "Gyz": 2000000000,
-                "__class__": "MatMechanics",
+                "__class__": "MatStructural",
                 "nu_xy": 0.3,
                 "nu_xz": 0.03,
                 "nu_yz": 0.03,
                 "rho": 7650
-            },
-            "name": "M400-50A",
-            "thermics": {
-                "Cp": 1,
-                "__class__": "MatThermics",
-                "alpha": 0.00393,
-                "lambda_x": 1,
-                "lambda_y": 1,
-                "lambda_z": 1
             }
         },
         "slot": {
@@ -68,44 +68,44 @@
                     "Wmag": 0.7853981633974483,
                     "__class__": "MagnetType11",
                     "mat_type": {
+                        "HT": {
+                            "Cp": 1,
+                            "__class__": "MatHT",
+                            "alpha": 0.00393,
+                            "lambda_x": 1,
+                            "lambda_y": 1,
+                            "lambda_z": 1
+                        },
                         "__class__": "Material",
                         "desc": "Lamination M400-50A",
-                        "economical": {
+                        "eco": {
                             "__class__": "MatEconomical",
                             "cost_unit": 0.127,
                             "unit_name": "$"
                         },
-                        "electrical": {
+                        "elec": {
                             "__class__": "MatElectrical",
                             "epsr": 1,
                             "rho": 1
                         },
                         "is_isotropic": false,
-                        "magnetics": {
+                        "mag": {
                             "__class__": "MatMagnetics",
                             "mur_lin": 1
                         },
-                        "mechanics": {
-                            "Ex": 215000000000,
-                            "Ey": 215000000000,
+                        "name": "M400-50A",
+                        "struct": {
+                            "Ex": 215000000000.0,
+                            "Ey": 215000000000.0,
                             "Ez": 80000000000,
                             "Gxy": 0,
                             "Gxz": 2000000000,
                             "Gyz": 2000000000,
-                            "__class__": "MatMechanics",
+                            "__class__": "MatStructural",
                             "nu_xy": 0.3,
                             "nu_xz": 0.03,
                             "nu_yz": 0.03,
                             "rho": 7650
-                        },
-                        "name": "M400-50A",
-                        "thermics": {
-                            "Cp": 1,
-                            "__class__": "MatThermics",
-                            "alpha": 0.00393,
-                            "lambda_x": 1,
-                            "lambda_y": 1,
-                            "lambda_z": 1
                         }
                     },
                     "type_magnetization": 0
@@ -118,44 +118,44 @@
         "Lshaft": 0.65,
         "__class__": "Shaft",
         "mat_type": {
+            "HT": {
+                "Cp": 1,
+                "__class__": "MatHT",
+                "alpha": 0.00393,
+                "lambda_x": 1,
+                "lambda_y": 1,
+                "lambda_z": 1
+            },
             "__class__": "Material",
             "desc": "Lamination M400-50A",
-            "economical": {
+            "eco": {
                 "__class__": "MatEconomical",
                 "cost_unit": 0.127,
                 "unit_name": "$"
             },
-            "electrical": {
+            "elec": {
                 "__class__": "MatElectrical",
                 "epsr": 1,
                 "rho": 1
             },
             "is_isotropic": false,
-            "magnetics": {
+            "mag": {
                 "__class__": "MatMagnetics",
                 "mur_lin": 1
             },
-            "mechanics": {
-                "Ex": 215000000000,
-                "Ey": 215000000000,
+            "name": "M400-50A",
+            "struct": {
+                "Ex": 215000000000.0,
+                "Ey": 215000000000.0,
                 "Ez": 80000000000,
                 "Gxy": 0,
                 "Gxz": 2000000000,
                 "Gyz": 2000000000,
-                "__class__": "MatMechanics",
+                "__class__": "MatStructural",
                 "nu_xy": 0.3,
                 "nu_xz": 0.03,
                 "nu_yz": 0.03,
                 "rho": 7650
-            },
-            "name": "M400-50A",
-            "thermics": {
-                "Cp": 1,
-                "__class__": "MatThermics",
-                "alpha": 0.00393,
-                "lambda_x": 1,
-                "lambda_y": 1,
-                "lambda_z": 1
             }
         }
     },
@@ -172,44 +172,44 @@
         "is_internal": true,
         "is_stator": true,
         "mat_type": {
+            "HT": {
+                "Cp": 1,
+                "__class__": "MatHT",
+                "alpha": 0.00393,
+                "lambda_x": 1,
+                "lambda_y": 1,
+                "lambda_z": 1
+            },
             "__class__": "Material",
             "desc": "Lamination M400-50A",
-            "economical": {
+            "eco": {
                 "__class__": "MatEconomical",
                 "cost_unit": 0.127,
                 "unit_name": "$"
             },
-            "electrical": {
+            "elec": {
                 "__class__": "MatElectrical",
                 "epsr": 1,
                 "rho": 1
             },
             "is_isotropic": false,
-            "magnetics": {
+            "mag": {
                 "__class__": "MatMagnetics",
                 "mur_lin": 1
             },
-            "mechanics": {
-                "Ex": 215000000000,
-                "Ey": 215000000000,
+            "name": "M400-50A",
+            "struct": {
+                "Ex": 215000000000.0,
+                "Ey": 215000000000.0,
                 "Ez": 80000000000,
                 "Gxy": 0,
                 "Gxz": 2000000000,
                 "Gyz": 2000000000,
-                "__class__": "MatMechanics",
+                "__class__": "MatStructural",
                 "nu_xy": 0.3,
                 "nu_xz": 0.03,
                 "nu_yz": 0.03,
                 "rho": 7650
-            },
-            "name": "M400-50A",
-            "thermics": {
-                "Cp": 1,
-                "__class__": "MatThermics",
-                "alpha": 0.00393,
-                "lambda_x": 1,
-                "lambda_y": 1,
-                "lambda_z": 1
             }
         },
         "slot": {
@@ -232,85 +232,85 @@
             "conductor": {
                 "__class__": "Conductor",
                 "cond_mat": {
+                    "HT": {
+                        "Cp": 1,
+                        "__class__": "MatHT",
+                        "alpha": 0.00393,
+                        "lambda_x": 1,
+                        "lambda_y": 1,
+                        "lambda_z": 1
+                    },
                     "__class__": "Material",
                     "desc": "Lamination M400-50A",
-                    "economical": {
+                    "eco": {
                         "__class__": "MatEconomical",
                         "cost_unit": 0.127,
                         "unit_name": "$"
                     },
-                    "electrical": {
+                    "elec": {
                         "__class__": "MatElectrical",
                         "epsr": 1,
                         "rho": 1
                     },
                     "is_isotropic": false,
-                    "magnetics": {
+                    "mag": {
                         "__class__": "MatMagnetics",
                         "mur_lin": 1
                     },
-                    "mechanics": {
-                        "Ex": 215000000000,
-                        "Ey": 215000000000,
+                    "name": "M400-50A",
+                    "struct": {
+                        "Ex": 215000000000.0,
+                        "Ey": 215000000000.0,
                         "Ez": 80000000000,
                         "Gxy": 0,
                         "Gxz": 2000000000,
                         "Gyz": 2000000000,
-                        "__class__": "MatMechanics",
+                        "__class__": "MatStructural",
                         "nu_xy": 0.3,
                         "nu_xz": 0.03,
                         "nu_yz": 0.03,
                         "rho": 7650
-                    },
-                    "name": "M400-50A",
-                    "thermics": {
-                        "Cp": 1,
-                        "__class__": "MatThermics",
-                        "alpha": 0.00393,
-                        "lambda_x": 1,
-                        "lambda_y": 1,
-                        "lambda_z": 1
                     }
                 },
                 "ins_mat": {
+                    "HT": {
+                        "Cp": 1,
+                        "__class__": "MatHT",
+                        "alpha": 0.00393,
+                        "lambda_x": 1,
+                        "lambda_y": 1,
+                        "lambda_z": 1
+                    },
                     "__class__": "Material",
                     "desc": "Lamination M400-50A",
-                    "economical": {
+                    "eco": {
                         "__class__": "MatEconomical",
                         "cost_unit": 0.127,
                         "unit_name": "$"
                     },
-                    "electrical": {
+                    "elec": {
                         "__class__": "MatElectrical",
                         "epsr": 1,
                         "rho": 1
                     },
                     "is_isotropic": false,
-                    "magnetics": {
+                    "mag": {
                         "__class__": "MatMagnetics",
                         "mur_lin": 1
                     },
-                    "mechanics": {
-                        "Ex": 215000000000,
-                        "Ey": 215000000000,
+                    "name": "M400-50A",
+                    "struct": {
+                        "Ex": 215000000000.0,
+                        "Ey": 215000000000.0,
                         "Ez": 80000000000,
                         "Gxy": 0,
                         "Gxz": 2000000000,
                         "Gyz": 2000000000,
-                        "__class__": "MatMechanics",
+                        "__class__": "MatStructural",
                         "nu_xy": 0.3,
                         "nu_xz": 0.03,
                         "nu_yz": 0.03,
                         "rho": 7650
-                    },
-                    "name": "M400-50A",
-                    "thermics": {
-                        "Cp": 1,
-                        "__class__": "MatThermics",
-                        "alpha": 0.00393,
-                        "lambda_x": 1,
-                        "lambda_y": 1,
-                        "lambda_z": 1
                     }
                 }
             },

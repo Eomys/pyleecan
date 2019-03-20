@@ -24,10 +24,7 @@ def comp_mass_magnets(self):
     """
     if self.magnet_0:
         return (
-            self.W0
-            * self.H1
-            * self.magnet_0.Lmag
-            * self.magnet_0.mat_type.mechanics.rho
+            self.W0 * self.H1 * self.magnet_0.Lmag * self.magnet_0.mat_type.struct.rho
         )
     else:
         return 0

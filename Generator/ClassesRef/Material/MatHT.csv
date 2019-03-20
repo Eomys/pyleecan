@@ -1,5 +1,5 @@
 Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-lambda_x;W/K;"thermal conductivity (XY is lamination plane; Z is rotation axis)";;0;float;1;0;;;;;Material;;;VERSION;1;;
+lambda_x;W/K;"thermal conductivity (XY is lamination plane; Z is rotation axis)";;0;float;1;0;;;;;Material;;;VERSION;1;Material Heat Transfer properties;
 lambda_y;W/K;"thermal conductivity (XY is lamination plane; Z is rotation axis)";;0;float;1;0;;;;;;;;;;;
 lambda_z;W/K;"thermal conductivity (XY is lamination plane; Z is rotation axis)";;0;float;1;0;;;;;;;;;;;
 Cp;W/kg/K;specific heat capacity;;0;float;1;0;;;;;;;;;;;

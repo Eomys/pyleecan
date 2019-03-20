@@ -1,7 +1,7 @@
 Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-rho;kg/m^3;mass per unit volume [kg/m3];;0;float;7650;0;;;;;Material;;;VERSION;1;;
-Ex;Pa;"equivalent Young modulus (XY is lamination plane; Z is rotation axis)";;0;float;215000000000;0;;;;;;;;;;;
-Ey;Pa;"equivalent Young modulus (XY is lamination plane; Z is rotation axis)";;0;float;215000000000;0;;;;;;;;;;;
+rho;kg/m^3;mass per unit volume [kg/m3];;0;float;7650;0;;;;;Material;;;VERSION;1;Material Structural properties;
+Ex;Pa;"equivalent Young modulus (XY is lamination plane; Z is rotation axis)";;0;float;2,15E+11;0;;;;;;;;;;;
+Ey;Pa;"equivalent Young modulus (XY is lamination plane; Z is rotation axis)";;0;float;2,15E+11;0;;;;;;;;;;;
 Ez;Pa;"equivalent Young modulus (XY is lamination plane; Z is rotation axis)";;0;float;80000000000;0;;;;;;;;;;;
 nu_xy;-;"equivalent Poisson ratio in the XY plane (XY is lamination plane; Z is rotation axis)";;0;float;0,3;0;;;;;;;;;;;
 nu_xz;-;"equivalent Poisson ratio in the XZ plane (XY is lamination plane; Z is rotation axis)";;0;float;0,03;0;;;;;;;;;;;

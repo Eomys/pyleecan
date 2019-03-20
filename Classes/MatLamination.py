@@ -6,16 +6,22 @@ from pyleecan.Classes.check import check_init_dict, check_var
 from pyleecan.Functions.save import save
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 
+from pyleecan.Methods.Material.MatLamination.get_BH import get_BH
+
 from pyleecan.Classes.check import InitUnKnowClassError
-from pyleecan.Classes.BHCurve import BHCurve
-from pyleecan.Classes.BHCurveMat import BHCurveMat
-from pyleecan.Classes.BHCurveParam import BHCurveParam
+from pyleecan.Classes.ImportMatrix import ImportMatrix
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
+from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
+from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
 
 
 class MatLamination(MatMagnetics):
 
     VERSION = 1
 
+    # cf Methods.Material.MatLamination.get_BH
+    get_BH = get_BH
     # save method is available in all object
     save = save
 
@@ -30,7 +36,7 @@ class MatLamination(MatMagnetics):
         object or dict can be given for pyleecan Object"""
 
         if BH_curve == -1:
-            BH_curve = BHCurve()
+            BH_curve = ImportMatrix()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(init_dict, ["Wlam", "BH_curve", "mur_lin"])
             # Overwrite default value with init_dict content
@@ -42,17 +48,19 @@ class MatLamination(MatMagnetics):
                 mur_lin = init_dict["mur_lin"]
         # Initialisation by argument
         self.Wlam = Wlam
-        # BH_curve can be None, a BHCurve object or a dict
+        # BH_curve can be None, a ImportMatrix object or a dict
         if isinstance(BH_curve, dict):
             # Call the correct constructor according to the dict
             load_dict = {
-                "BHCurveMat": BHCurveMat,
-                "BHCurveParam": BHCurveParam,
-                "BHCurve": BHCurve,
+                "ImportMatrixVal": ImportMatrixVal,
+                "ImportMatrixXls": ImportMatrixXls,
+                "ImportGenVectSin": ImportGenVectSin,
+                "ImportGenMatrixSin": ImportGenMatrixSin,
+                "ImportMatrix": ImportMatrix,
             }
             obj_class = BH_curve.get("__class__")
             if obj_class is None:
-                self.BH_curve = BHCurve(init_dict=BH_curve)
+                self.BH_curve = ImportMatrix(init_dict=BH_curve)
             elif obj_class in list(load_dict.keys()):
                 self.BH_curve = load_dict[obj_class](init_dict=BH_curve)
             else:  # Avoid generation error or wrong modification in json
@@ -139,12 +147,16 @@ class MatLamination(MatMagnetics):
 
     def _set_BH_curve(self, value):
         """setter of BH_curve"""
-        check_var("BH_curve", value, "BHCurve")
+        check_var("BH_curve", value, "ImportMatrix")
         self._BH_curve = value
 
         if self._BH_curve is not None:
             self._BH_curve.parent = self
 
-    # B(H) curve
-    # Type : BHCurve
-    BH_curve = property(fget=_get_BH_curve, fset=_set_BH_curve, doc=u"""B(H) curve""")
+    # B(H) curve (two columns matrix, H and B(H))
+    # Type : ImportMatrix
+    BH_curve = property(
+        fget=_get_BH_curve,
+        fset=_set_BH_curve,
+        doc=u"""B(H) curve (two columns matrix, H and B(H)) """,
+    )

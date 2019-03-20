@@ -51,7 +51,7 @@ class test_Lam_Mag_surface_plot(TestCase):
         test_obj.rotor.slot = SlotMFlat(
             Zs=8, H0=0, W0=2 * pi / 10, W0_is_rad=True, magnet=magnet
         )
-        test_obj.rotor.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
+        test_obj.rotor.mat_type.mag = MatLamination(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=0.55)
 
         test_obj.stator = Lamination(
@@ -63,7 +63,7 @@ class test_Lam_Mag_surface_plot(TestCase):
             Nrvd=0,
             Wrvd=0.05,
         )
-        test_obj.stator.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
+        test_obj.stator.mat_type.mag = MatLamination(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=200e-3, Rext=250e-3, Lfra=0.5)
 
         test_obj.plot()
@@ -103,7 +103,7 @@ class test_Lam_Mag_surface_plot(TestCase):
         )
         magnet = [MagnetType11(Lmag=0.5, Hmag=0.01, Wmag=pi / 8)]
         test_obj.rotor.slot = SlotMPolar(Zs=8, W0=pi / 8, magnet=magnet)
-        test_obj.rotor.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
+        test_obj.rotor.mat_type.mag = MatLamination(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=0.55)
 
         test_obj.stator = LamSlotMag(
@@ -117,7 +117,7 @@ class test_Lam_Mag_surface_plot(TestCase):
         )
         magnet2 = [MagnetType11(Lmag=0.5, Hmag=0.01, Wmag=pi / 4)]
         test_obj.stator.slot = SlotMPolar(Zs=4, W0=pi / 4, magnet=magnet2)
-        test_obj.stator.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
+        test_obj.stator.mat_type.mag = MatLamination(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=200e-3, Rext=200e-3, Lfra=0.5)
 
         test_obj.plot()
@@ -166,7 +166,7 @@ class test_Lam_Mag_surface_plot(TestCase):
 
         magnet = [MagnetType12(Lmag=0.5, Hmag=0.02, Wmag=0.06)]
         test_obj.rotor.slot = SlotMFlat(Zs=8, W0=0.06, magnet=magnet)
-        test_obj.rotor.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
+        test_obj.rotor.mat_type.mag = MatLamination(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=0.55)
 
         test_obj.stator = Lamination(
@@ -178,7 +178,7 @@ class test_Lam_Mag_surface_plot(TestCase):
             Nrvd=2,
             Wrvd=0.05,
         )
-        test_obj.stator.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
+        test_obj.stator.mat_type.mag = MatLamination(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=200e-3, Rext=250e-3, Lfra=0.5)
 
         test_obj.plot()
@@ -212,7 +212,7 @@ class test_Lam_Mag_surface_plot(TestCase):
         )
         magnet = [MagnetType13(Lmag=0.5, Hmag=0.02, Wmag=0.08, Rtop=0.0601)]
         test_obj.rotor.slot = SlotMFlat(Zs=4, W0=0.08, magnet=magnet)
-        test_obj.rotor.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
+        test_obj.rotor.mat_type.mag = MatLamination(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=0.55)
 
         test_obj.stator = Lamination(
@@ -224,7 +224,7 @@ class test_Lam_Mag_surface_plot(TestCase):
             Nrvd=3,
             Wrvd=0.05,
         )
-        test_obj.stator.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
+        test_obj.stator.mat_type.mag = MatLamination(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=200e-3, Rext=250e-3, Lfra=0.5)
 
         test_obj.plot()
@@ -258,7 +258,7 @@ class test_Lam_Mag_surface_plot(TestCase):
         )
         magnet = [MagnetType14(Lmag=0.5, Hmag=0.02, Wmag=0.628, Rtop=0.05)]
         test_obj.rotor.slot = SlotMPolar(Zs=8, W0=0.628, magnet=magnet)
-        test_obj.rotor.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
+        test_obj.rotor.mat_type.mag = MatLamination(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=0.55)
 
         test_obj.stator = Lamination(
@@ -270,7 +270,7 @@ class test_Lam_Mag_surface_plot(TestCase):
             Nrvd=4,
             Wrvd=0.02,
         )
-        test_obj.stator.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
+        test_obj.stator.mat_type.mag = MatLamination(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=200e-3, Rext=250e-3, Lfra=0.5)
 
         test_obj.plot()

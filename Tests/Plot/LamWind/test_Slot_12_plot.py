@@ -23,8 +23,6 @@ from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
 from pyleecan.Classes.WindingCW2LT import WindingCW2LT
 from pyleecan.Classes.WindingDW2L import WindingDW2L
-from pyleecan.Classes.BHCurveMat import BHCurveMat
-from pyleecan.Classes.BHCurveParam import BHCurveParam
 from pyleecan.Classes.MatLamination import MatLamination
 from pyleecan.Classes.SlotW12 import SlotW12
 
@@ -57,7 +55,7 @@ class test_Lam_Wind_12_plot(TestCase):
         test_obj.rotor.winding = WindingUD(
             user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
         )
-        test_obj.rotor.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
+        test_obj.rotor.mat_type.mag = MatLamination(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 
         test_obj.stator = LamSlotWind(
@@ -72,7 +70,7 @@ class test_Lam_Wind_12_plot(TestCase):
         test_obj.stator.slot = SlotW12(Zs=18, R2=25e-3, H0=30e-3, R1=0, H1=150e-3)
         test_obj.stator.winding.Lewout = 60e-3
         test_obj.stator.winding = WindingDW2L(qs=3, p=3)
-        test_obj.stator.mat_type.magnetics = MatLamination(Wlam=0.5e-3)
+        test_obj.stator.mat_type.mag = MatLamination(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=0.8, Rext=0.9, Lfra=1)
 
         test_obj.plot()

@@ -22,4 +22,4 @@ def comp_mass(self):
 
     """
 
-    return self.comp_volume() * self.mat_type.mechanics.rho
+    return self.comp_volume() * self.mat_type.struct.rho
