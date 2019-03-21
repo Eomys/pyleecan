@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import exp, angle, pi
+from numpy import pi, arcsin
 
 
 def get_angle(self, is_deg=False):
@@ -10,7 +10,7 @@ def get_angle(self, is_deg=False):
     ----------
     self : Arc1
         An Arc1 object
-    is_def: bool
+    is_deg: bool
         True to convert to degree
 
     Returns
@@ -18,12 +18,12 @@ def get_angle(self, is_deg=False):
     angle: float
         Angle of the arc
     """
-
-    # Go to center ref with begin on the axis
-    Zc = self.get_center()
-    Z2 = (self.end - Zc) * exp(-1j * angle(self.begin - Zc))
-
+    z_begin = self.begin
+    z_end = self.end
+    alpha = 2 * arcsin(abs(z_end - z_begin) / (2 * self.radius))
+    if self.radius < 0:
+        alpha = -alpha
     if is_deg:
-        return angle(Z2) * 180 / pi
+        return alpha * 180 / pi
     else:
-        return angle(Z2)
+        return alpha

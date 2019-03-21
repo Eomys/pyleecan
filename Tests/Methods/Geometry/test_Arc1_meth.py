@@ -291,6 +291,49 @@ comp_translate_test.append(
     }
 )
 
+get_angle_test = list()
+get_angle_test.append({"begin": 1 + 0j,
+                       "end": 0.5 + 0.5j,
+                       "radius": 1,
+                       "is_deg": True,
+                       "exp_angle": 41.409622109270856})
+get_angle_test.append({"begin": 1 + 0j,
+                       "end": 0 + 1j,
+                       "radius": 1,
+                       "is_deg": True,
+                       "exp_angle": 90.0})
+get_angle_test.append({"begin": 1 + 0j,
+                       "end": -0.5 + 0.5j,
+                       "radius": 1,
+                       "is_deg": True,
+                       "exp_angle": 104.47751218592992})
+get_angle_test.append({"begin": 0 + 1j,
+                       "end": -0.5 + 0.5j,
+                       "radius": 1,
+                       "is_deg": True,
+                       "exp_angle": 41.409622109270856})
+get_angle_test.append({"begin": 0 + 1j,
+                       "end": -0.5 + 0.5j,
+                       "radius": 1,
+                       "is_deg": False,
+                       "exp_angle": 41.409622109270856 * pi / 180})
+get_angle_test.append({"begin": 0 + 1j,
+                       "end": -0.5 - 0.5j,
+                       "radius": 1,
+                       "is_deg": False,
+                       "exp_angle": 104.47751218592992 * pi / 180})
+
+get_angle_test.append({"begin": 1 + 2j,
+                       "end": -2 - 1j,
+                       "radius": -3,
+                       "is_deg": True,
+                       "exp_angle": 90.0})
+get_angle_test.append({"begin": 1 + 2j,
+                       "end": -2 - 1j,
+                       "radius": 3,
+                       "is_deg": False,
+                       "exp_angle": pi/2})
+
 
 @ddt
 class test_Arc1_meth(TestCase):
@@ -431,3 +474,12 @@ class test_Arc1_meth(TestCase):
         self.assertAlmostEqual(abs(arc.begin - test_dict["exp_begin"]), 0, delta=1e-6)
         self.assertAlmostEqual(abs(arc.end - test_dict["exp_end"]), 0, delta=1e-6)
         self.assertAlmostEqual(abs(arc.radius - expect_radius), 0)
+
+    @data(*get_angle_test)
+    def test_get_angle(self, test_dict):
+        """Check that the arc1 computed angle is correct
+        """
+        arc = Arc1(begin=test_dict["begin"], end=test_dict["end"], radius=test_dict["radius"])
+        result = arc.get_angle(test_dict["is_deg"])
+        self.assertAlmostEqual(result, test_dict["exp_angle"])
+

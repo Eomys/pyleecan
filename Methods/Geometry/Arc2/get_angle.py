@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import exp, angle, pi
+from numpy import pi
 
 
 def get_angle(self, is_deg=False):
@@ -10,7 +10,7 @@ def get_angle(self, is_deg=False):
     ----------
     self : Arc2
         An Arc2 object
-    is_def: bool
+    is_deg: bool
         True to convert to degree
 
     Returns

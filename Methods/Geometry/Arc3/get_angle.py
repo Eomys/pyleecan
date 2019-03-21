@@ -10,7 +10,7 @@ def get_angle(self, is_deg=False):
     ----------
     self : Arc3
         An Arc3 object
-    is_def: bool
+    is_deg: bool
         True to convert to degree
 
     Returns
