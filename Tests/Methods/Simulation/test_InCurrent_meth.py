@@ -18,6 +18,7 @@ from pyleecan.Classes.InCurrent import InCurrent
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.Machine import Machine
 from pyleecan.Classes.Simulation import Simulation
+from pyleecan.Classes.Output import Output
 from pyleecan.Methods.Simulation.Input import InputError
 
 InCurrent_Error_test = list()
@@ -189,17 +190,18 @@ class unittest_InCurrent_meth(TestCase):
     def test_InCurrent_Error_test(self, test_dict):
         """Check that the input current raises the correct errors
         """
-
+        output = Output(simu=test_dict["test_obj"])
         with self.assertRaises(
             InputError, msg="Expect: " + test_dict["exp"]
         ) as context:
-            test_dict["test_obj"].input.gen_input()
+            output.simu.input.gen_input()
         self.assertEqual(test_dict["exp"], str(context.exception))
 
     def test_InCurrent_Ok(self):
         """Check that the input current can return a correct output
         """
         test_obj = Simulation(machine=M3)
+        output = Output(simu=test_obj)
         time = ImportGenVectLin(0, 1, 16)
         angle = ImportGenVectLin(0, 2 * pi, 20)
         Is = ImportGenMatrixSin(is_transpose=True)
@@ -232,10 +234,10 @@ class unittest_InCurrent_meth(TestCase):
             time=time, angle=angle, Is=Is, Ir=Ir, angle_rotor=angle_rotor, Nr=Nr
         )
 
-        output = test_obj.input.gen_input()
-        assert_array_almost_equal(output.time, linspace(0, 1, 16))
-        assert_array_almost_equal(output.angle, linspace(0, 2 * pi, 20))
-        assert_array_almost_equal(output.Is, Is_exp)
-        assert_array_almost_equal(output.Ir, Ir_exp)
-        assert_array_almost_equal(output.angle_rotor, linspace(0, 2 * pi, 16))
-        assert_array_almost_equal(output.Nr, ones(16) * 10)
+        test_obj.input.gen_input()
+        assert_array_almost_equal(output.elec.time, linspace(0, 1, 16))
+        assert_array_almost_equal(output.elec.angle, linspace(0, 2 * pi, 20))
+        assert_array_almost_equal(output.elec.Is, Is_exp)
+        assert_array_almost_equal(output.elec.Ir, Ir_exp)
+        assert_array_almost_equal(output.elec.angle_rotor, linspace(0, 2 * pi, 16))
+        assert_array_almost_equal(output.elec.Nr, ones(16) * 10)

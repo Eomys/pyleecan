@@ -13,6 +13,7 @@ from pyleecan.Methods.Machine.LamHole.comp_surfaces import comp_surfaces
 from pyleecan.Methods.Machine.LamHole.comp_volumes import comp_volumes
 from pyleecan.Methods.Machine.LamHole.get_pole_pair_number import get_pole_pair_number
 from pyleecan.Methods.Machine.LamHole.plot import plot
+from pyleecan.Methods.Machine.LamHole.comp_sym import comp_sym
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Hole import Hole
@@ -47,6 +48,8 @@ class LamHole(Lamination):
     get_pole_pair_number = get_pole_pair_number
     # cf Methods.Machine.LamHole.plot
     plot = plot
+    # cf Methods.Machine.LamHole.comp_sym
+    comp_sym = comp_sym
     # save method is available in all object
     save = save
 

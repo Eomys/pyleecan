@@ -8,3 +8,6 @@ winding;;Lamination's Winding;;;Winding;;;;;;;;;check;;;;
 ;;;;;;;;;;;;;;get_name_phase;;;;
 ;;;;;;;;;;;;;;plot;;;;
 ;;;;;;;;;;;;;;plot_winding;;;;
+;;;;;;;;;;;;;;comp_fill_factor;;;;
+;;;;;;;;;;;;;;comp_output_geo;;;;
+;;;;;;;;;;;;;;comp_sym;;;;

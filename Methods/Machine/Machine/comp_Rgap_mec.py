@@ -5,7 +5,7 @@
 """
 
 
-def get_Rgap_mec(self):
+def comp_Rgap_mec(self):
     """Returns the radius of the center of the mecanical airgap
 
     Parameters
@@ -21,4 +21,4 @@ def get_Rgap_mec(self):
     """
     stator = self.stator
     rotor = self.rotor
-    return (stator.comp_mec_radius() + rotor.comp_mec_radius()) / 2
+    return (stator.comp_radius_mec() + rotor.comp_radius_mec()) / 2

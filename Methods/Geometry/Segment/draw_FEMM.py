@@ -67,6 +67,6 @@ def draw_FEMM(
     # add the segment
     femm.mi_addsegment(X1, Y1, X2, Y2)
     # Set property
-    femm.mi_selectsegment(X1, Y1)
+    femm.mi_selectsegment((X1 + X2) / 2, (Y1 + Y2) / 2)
     femm.mi_setsegmentprop(propname, elementsize, automesh, hide, group)
     femm.mi_clearselected()

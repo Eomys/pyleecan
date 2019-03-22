@@ -33,4 +33,4 @@ def get_data(self):
         usecols=self.usecols,
         skiprows=self.skiprows,
     )
-    return self.edit_matrix(df.as_matrix())
+    return self.edit_matrix(df.values)

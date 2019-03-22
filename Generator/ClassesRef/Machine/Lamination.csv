@@ -12,3 +12,4 @@ axial_vent;-;Axial ventilation ducts;;0;[Hole];;;;;;;;;get_Rbo;;;;
 ;;;;;;;;;;;;;;get_Ryoke;;;;
 ;;;;;;;;;;;;;;get_name_phase;;;;
 ;;;;;;;;;;;;;;plot;;;;
+;;;;;;;;;;;;;;comp_output_geo;;;;

@@ -7,6 +7,7 @@ computes the winding pattern periodicity and symmetries function
 """
 
 from numpy import array_equal, roll, squeeze, sum as np_sum
+from numpy.linalg import norm
 
 
 def comp_wind_sym(wind_mat):
@@ -44,8 +45,7 @@ def comp_wind_sym(wind_mat):
                 is_sym = True
             else:
                 k += 1
-        # least common multiple to find common periodicity between different
-        #  phase
+        # least common multiple to find common periodicity between different phase
         Nperslot = lcm(Nperslot, k)
 
     # If Nperslot > Zs no symmetry
@@ -56,7 +56,17 @@ def comp_wind_sym(wind_mat):
         if Nperw % 1 != 0:
             Nperw = 1
 
-    return int(Nperw)
+    # Check for anti symmetries in the elementary winding pattern
+    if (
+        Nperslot % 2 == 0
+        and norm(wind_mat2[0: Nperslot // 2, :] + wind_mat2[Nperslot // 2 :Nperslot, :]) == 0
+    ):
+        is_asym_wind = True
+        Nperw = Nperw * 2
+    else:
+        is_asym_wind = False
+
+    return int(Nperw), is_asym_wind
 
 
 def gcd(a, b):

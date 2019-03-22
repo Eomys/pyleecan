@@ -6,3 +6,4 @@ Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Min
 ;;;;;;;;;;;;;;comp_surfaces;;;;
 ;;;;;;;;;;;;;;comp_volumes;;;;
 ;;;;;;;;;;;;;;plot;;;;
+;;;;;;;;;;;;;;comp_sym;;;;

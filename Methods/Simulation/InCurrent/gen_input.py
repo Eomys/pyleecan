@@ -16,12 +16,6 @@ def gen_input(self):
     ----------
     self : InCurrent
         An InCurrent object
-
-    Returns
-    -------
-    output: OutElec
-        The loaded data
-
     """
 
     output = OutElec()
@@ -114,4 +108,10 @@ def gen_input(self):
                 + str(output.time.shape)
                 + " expected"
             )
-    return output
+
+    if self.parent.parent is None:
+        raise InputError(
+            "ERROR: The Simulation object must be in an Output object to run"
+        )
+    # Save the Output in the correct place
+    self.parent.parent.elec = output

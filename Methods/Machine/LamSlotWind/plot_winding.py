@@ -45,7 +45,7 @@ def plot_winding(self, wind_mat=None, all_slot=False):
     if all_slot:  # Every Slot
         Nplot = Zs
     else:  # Only the needed one (sym)
-        Nperw = comp_wind_sym(wind_mat)  # Symmetry of the winding
+        Nperw = comp_wind_sym(wind_mat)[0]  # Symmetry of the winding
         Nplot = Zs // Nperw
 
     qs = wind_mat.shape[3]  # Number of phase

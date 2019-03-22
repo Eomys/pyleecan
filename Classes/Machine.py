@@ -12,8 +12,14 @@ from pyleecan.Methods.Machine.Machine.comp_masses import comp_masses
 from pyleecan.Methods.Machine.Machine.comp_width_airgap_mag import comp_width_airgap_mag
 from pyleecan.Methods.Machine.Machine.comp_width_airgap_mec import comp_width_airgap_mec
 from pyleecan.Methods.Machine.Machine.get_lamination import get_lamination
-from pyleecan.Methods.Machine.Machine.get_Rgap_mec import get_Rgap_mec
+from pyleecan.Methods.Machine.Machine.comp_Rgap_mec import comp_Rgap_mec
 from pyleecan.Methods.Machine.Machine.plot import plot
+from pyleecan.Methods.Machine.Machine.comp_output_geo import comp_output_geo
+from pyleecan.Methods.Machine.Machine.comp_length_airgap_active import (
+    comp_length_airgap_active,
+)
+from pyleecan.Methods.Machine.Machine.get_surface_airgap import get_surface_airgap
+from pyleecan.Methods.Machine.Machine.comp_sym import comp_sym
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Lamination import Lamination
@@ -42,10 +48,18 @@ class Machine(FrozenClass):
     comp_width_airgap_mec = comp_width_airgap_mec
     # cf Methods.Machine.Machine.get_lamination
     get_lamination = get_lamination
-    # cf Methods.Machine.Machine.get_Rgap_mec
-    get_Rgap_mec = get_Rgap_mec
+    # cf Methods.Machine.Machine.comp_Rgap_mec
+    comp_Rgap_mec = comp_Rgap_mec
     # cf Methods.Machine.Machine.plot
     plot = plot
+    # cf Methods.Machine.Machine.comp_output_geo
+    comp_output_geo = comp_output_geo
+    # cf Methods.Machine.Machine.comp_length_airgap_active
+    comp_length_airgap_active = comp_length_airgap_active
+    # cf Methods.Machine.Machine.get_surface_airgap
+    get_surface_airgap = get_surface_airgap
+    # cf Methods.Machine.Machine.comp_sym
+    comp_sym = comp_sym
     # save method is available in all object
     save = save
 

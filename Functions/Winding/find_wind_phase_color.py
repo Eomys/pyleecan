@@ -28,15 +28,19 @@ def find_wind_phase_color(label, wind_mat):
     Ntan = int(st[2][1:])
     Zs = int(st[3][1:])
     if wind_mat is not None:
-        color = get_color(wind_mat, Nrad, Ntan, Zs)
+        q = get_phase_id(wind_mat, Nrad, Ntan, Zs)
+        if q is None:  # No phase => White
+            color = "w"
+        else:
+            color = PHASE_COLOR[q]
     else:
         color = PHASE_COLOR[0]
 
     return color
 
 
-def get_color(wind_mat, Nrad, Ntan, Zs):
-    """Return the color (corresponding phase) for the zone (Nrad,Ntan,Zs)
+def get_phase_id(wind_mat, Nrad, Ntan, Zs):
+    """Return the id of the corresponding phase for the zone (Nrad,Ntan,Zs)
 
     Parameters
     ----------
@@ -51,12 +55,12 @@ def get_color(wind_mat, Nrad, Ntan, Zs):
 
     Returns
     -------
-    color: str
-        Color of the zone
+    q_id: int
+        Id of the phase
 
     """
     A = wind_mat[Nrad, Ntan, Zs, :]
     for zz in range(len(A)):
         if A[zz] != 0:
-            return PHASE_COLOR[zz]
-    return "w"  # If all the phase are at 0 : the zone is empty => white
+            return zz
+    return None  # If all the phase are at 0 : the zone is empty

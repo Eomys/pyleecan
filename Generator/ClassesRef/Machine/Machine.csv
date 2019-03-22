@@ -5,5 +5,9 @@ frame;;Machine's Frame;;;Frame;;;;;;;;;comp_masses;;;;MachineSCIM
 shaft;;Machine's Shaft;;;Shaft;;;;;;;;;comp_width_airgap_mag;;;;MachineDFIM
 name;;Name of the machine;;;str;default_machine;;;;;;;;comp_width_airgap_mec;;;;MachineSIPMSM
 desc;;Machine description;;;str;;;;;;;;;get_lamination;;;;MachineIPMSM
-;;;;;;;;;;;;;;get_Rgap_mec;;;;MachineWRSM
+;;;;;;;;;;;;;;comp_Rgap_mec;;;;MachineWRSM
 ;;;;;;;;;;;;;;plot;;;;MachineSyRM
+;;;;;;;;;;;;;;comp_output_geo;;;;
+;;;;;;;;;;;;;;comp_length_airgap_active;;;;
+;;;;;;;;;;;;;;get_surface_airgap;;;;
+;;;;;;;;;;;;;;comp_sym;;;;

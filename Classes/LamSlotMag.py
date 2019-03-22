@@ -13,6 +13,7 @@ from pyleecan.Methods.Machine.LamSlotMag.comp_radius_mec import comp_radius_mec
 from pyleecan.Methods.Machine.LamSlotMag.comp_surfaces import comp_surfaces
 from pyleecan.Methods.Machine.LamSlotMag.comp_volumes import comp_volumes
 from pyleecan.Methods.Machine.LamSlotMag.plot import plot
+from pyleecan.Methods.Machine.LamSlotMag.comp_sym import comp_sym
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
@@ -68,6 +69,8 @@ class LamSlotMag(LamSlot):
     comp_volumes = comp_volumes
     # cf Methods.Machine.LamSlotMag.plot
     plot = plot
+    # cf Methods.Machine.LamSlotMag.comp_sym
+    comp_sym = comp_sym
     # save method is available in all object
     save = save
 

@@ -6,3 +6,4 @@ hole;;lamination Hole;;1;[Hole];;;;;;;Machine;Lamination;build_geometry;VERSION;
 ;;;;;;;;;;;;;;comp_volumes;;;;
 ;;;;;;;;;;;;;;get_pole_pair_number;;;;
 ;;;;;;;;;;;;;;plot;;;;
+;;;;;;;;;;;;;;comp_sym;;;;

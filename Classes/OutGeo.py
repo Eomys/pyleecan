@@ -7,6 +7,7 @@ from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Classes.check import InitUnKnowClassError
+from pyleecan.Classes.OutGeoLam import OutGeoLam
 
 
 class OutGeo(FrozenClass):
@@ -17,7 +18,17 @@ class OutGeo(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, name_phase_stator=None, name_phase_rotor=None, init_dict=None):
+    def __init__(
+        self,
+        stator=None,
+        rotor=None,
+        Wgap_mec=None,
+        Wgap_mag=None,
+        Rgap_mec=None,
+        Lgap=None,
+        sym=None,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -27,17 +38,47 @@ class OutGeo(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if stator == -1:
+            stator = OutGeoLam()
+        if rotor == -1:
+            rotor = OutGeoLam()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["name_phase_stator", "name_phase_rotor"])
+            check_init_dict(
+                init_dict,
+                ["stator", "rotor", "Wgap_mec", "Wgap_mag", "Rgap_mec", "Lgap", "sym"],
+            )
             # Overwrite default value with init_dict content
-            if "name_phase_stator" in list(init_dict.keys()):
-                name_phase_stator = init_dict["name_phase_stator"]
-            if "name_phase_rotor" in list(init_dict.keys()):
-                name_phase_rotor = init_dict["name_phase_rotor"]
+            if "stator" in list(init_dict.keys()):
+                stator = init_dict["stator"]
+            if "rotor" in list(init_dict.keys()):
+                rotor = init_dict["rotor"]
+            if "Wgap_mec" in list(init_dict.keys()):
+                Wgap_mec = init_dict["Wgap_mec"]
+            if "Wgap_mag" in list(init_dict.keys()):
+                Wgap_mag = init_dict["Wgap_mag"]
+            if "Rgap_mec" in list(init_dict.keys()):
+                Rgap_mec = init_dict["Rgap_mec"]
+            if "Lgap" in list(init_dict.keys()):
+                Lgap = init_dict["Lgap"]
+            if "sym" in list(init_dict.keys()):
+                sym = init_dict["sym"]
         # Initialisation by argument
         self.parent = None
-        self.name_phase_stator = name_phase_stator
-        self.name_phase_rotor = name_phase_rotor
+        # stator can be None, a OutGeoLam object or a dict
+        if isinstance(stator, dict):
+            self.stator = OutGeoLam(init_dict=stator)
+        else:
+            self.stator = stator
+        # rotor can be None, a OutGeoLam object or a dict
+        if isinstance(rotor, dict):
+            self.rotor = OutGeoLam(init_dict=rotor)
+        else:
+            self.rotor = rotor
+        self.Wgap_mec = Wgap_mec
+        self.Wgap_mag = Wgap_mag
+        self.Rgap_mec = Rgap_mec
+        self.Lgap = Lgap
+        self.sym = sym
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -50,10 +91,13 @@ class OutGeo(FrozenClass):
             OutGeo_str += "parent = None " + linesep
         else:
             OutGeo_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutGeo_str += (
-            "name_phase_stator = " + linesep + str(self.name_phase_stator) + linesep
-        )
-        OutGeo_str += "name_phase_rotor = " + linesep + str(self.name_phase_rotor)
+        OutGeo_str += "stator = " + str(self.stator.as_dict()) + linesep + linesep
+        OutGeo_str += "rotor = " + str(self.rotor.as_dict()) + linesep + linesep
+        OutGeo_str += "Wgap_mec = " + str(self.Wgap_mec) + linesep
+        OutGeo_str += "Wgap_mag = " + str(self.Wgap_mag) + linesep
+        OutGeo_str += "Rgap_mec = " + str(self.Rgap_mec) + linesep
+        OutGeo_str += "Lgap = " + str(self.Lgap) + linesep
+        OutGeo_str += "sym = " + str(self.sym)
         return OutGeo_str
 
     def __eq__(self, other):
@@ -61,9 +105,19 @@ class OutGeo(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.name_phase_stator != self.name_phase_stator:
+        if other.stator != self.stator:
             return False
-        if other.name_phase_rotor != self.name_phase_rotor:
+        if other.rotor != self.rotor:
+            return False
+        if other.Wgap_mec != self.Wgap_mec:
+            return False
+        if other.Wgap_mag != self.Wgap_mag:
+            return False
+        if other.Rgap_mec != self.Rgap_mec:
+            return False
+        if other.Lgap != self.Lgap:
+            return False
+        if other.sym != self.sym:
             return False
         return True
 
@@ -72,8 +126,19 @@ class OutGeo(FrozenClass):
         """
 
         OutGeo_dict = dict()
-        OutGeo_dict["name_phase_stator"] = self.name_phase_stator
-        OutGeo_dict["name_phase_rotor"] = self.name_phase_rotor
+        if self.stator is None:
+            OutGeo_dict["stator"] = None
+        else:
+            OutGeo_dict["stator"] = self.stator.as_dict()
+        if self.rotor is None:
+            OutGeo_dict["rotor"] = None
+        else:
+            OutGeo_dict["rotor"] = self.rotor.as_dict()
+        OutGeo_dict["Wgap_mec"] = self.Wgap_mec
+        OutGeo_dict["Wgap_mag"] = self.Wgap_mag
+        OutGeo_dict["Rgap_mec"] = self.Rgap_mec
+        OutGeo_dict["Lgap"] = self.Lgap
+        OutGeo_dict["sym"] = self.sym
         # The class name is added to the dict fordeserialisation purpose
         OutGeo_dict["__class__"] = "OutGeo"
         return OutGeo_dict
@@ -81,39 +146,129 @@ class OutGeo(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.name_phase_stator = None
-        self.name_phase_rotor = None
+        if self.stator is not None:
+            self.stator._set_None()
+        if self.rotor is not None:
+            self.rotor._set_None()
+        self.Wgap_mec = None
+        self.Wgap_mag = None
+        self.Rgap_mec = None
+        self.Lgap = None
+        self.sym = None
 
-    def _get_name_phase_stator(self):
-        """getter of name_phase_stator"""
-        return self._name_phase_stator
+    def _get_stator(self):
+        """getter of stator"""
+        return self._stator
 
-    def _set_name_phase_stator(self, value):
-        """setter of name_phase_stator"""
-        check_var("name_phase_stator", value, "list")
-        self._name_phase_stator = value
+    def _set_stator(self, value):
+        """setter of stator"""
+        check_var("stator", value, "OutGeoLam")
+        self._stator = value
 
-    # Name of the phases of the stator
-    # Type : list
-    name_phase_stator = property(
-        fget=_get_name_phase_stator,
-        fset=_set_name_phase_stator,
-        doc=u"""Name of the phases of the stator""",
+        if self._stator is not None:
+            self._stator.parent = self
+
+    # Geometry output of the stator
+    # Type : OutGeoLam
+    stator = property(
+        fget=_get_stator, fset=_set_stator, doc=u"""Geometry output of the stator"""
     )
 
-    def _get_name_phase_rotor(self):
-        """getter of name_phase_rotor"""
-        return self._name_phase_rotor
+    def _get_rotor(self):
+        """getter of rotor"""
+        return self._rotor
 
-    def _set_name_phase_rotor(self, value):
-        """setter of name_phase_rotor"""
-        check_var("name_phase_rotor", value, "list")
-        self._name_phase_rotor = value
+    def _set_rotor(self, value):
+        """setter of rotor"""
+        check_var("rotor", value, "OutGeoLam")
+        self._rotor = value
 
-    # Name of the phases of the rotor
-    # Type : list
-    name_phase_rotor = property(
-        fget=_get_name_phase_rotor,
-        fset=_set_name_phase_rotor,
-        doc=u"""Name of the phases of the rotor""",
+        if self._rotor is not None:
+            self._rotor.parent = self
+
+    # Geometry output of the rotor
+    # Type : OutGeoLam
+    rotor = property(
+        fget=_get_rotor, fset=_set_rotor, doc=u"""Geometry output of the rotor"""
+    )
+
+    def _get_Wgap_mec(self):
+        """getter of Wgap_mec"""
+        return self._Wgap_mec
+
+    def _set_Wgap_mec(self, value):
+        """setter of Wgap_mec"""
+        check_var("Wgap_mec", value, "float")
+        self._Wgap_mec = value
+
+    # mechanical airgap width (minimal distance between the lamination including magnet)
+    # Type : float
+    Wgap_mec = property(
+        fget=_get_Wgap_mec,
+        fset=_set_Wgap_mec,
+        doc=u"""mechanical airgap width (minimal distance between the lamination including magnet)""",
+    )
+
+    def _get_Wgap_mag(self):
+        """getter of Wgap_mag"""
+        return self._Wgap_mag
+
+    def _set_Wgap_mag(self, value):
+        """setter of Wgap_mag"""
+        check_var("Wgap_mag", value, "float")
+        self._Wgap_mag = value
+
+    # the magnetic airgap width (distance beetween the two Laminations bore radius)
+    # Type : float
+    Wgap_mag = property(
+        fget=_get_Wgap_mag,
+        fset=_set_Wgap_mag,
+        doc=u"""the magnetic airgap width (distance beetween the two Laminations bore radius)""",
+    )
+
+    def _get_Rgap_mec(self):
+        """getter of Rgap_mec"""
+        return self._Rgap_mec
+
+    def _set_Rgap_mec(self, value):
+        """setter of Rgap_mec"""
+        check_var("Rgap_mec", value, "float")
+        self._Rgap_mec = value
+
+    # radius of the center of the mecanical airgap
+    # Type : float
+    Rgap_mec = property(
+        fget=_get_Rgap_mec,
+        fset=_set_Rgap_mec,
+        doc=u"""radius of the center of the mecanical airgap""",
+    )
+
+    def _get_Lgap(self):
+        """getter of Lgap"""
+        return self._Lgap
+
+    def _set_Lgap(self, value):
+        """setter of Lgap"""
+        check_var("Lgap", value, "float")
+        self._Lgap = value
+
+    # Airgap active length
+    # Type : float
+    Lgap = property(fget=_get_Lgap, fset=_set_Lgap, doc=u"""Airgap active length""")
+
+    def _get_sym(self):
+        """getter of sym"""
+        return self._sym
+
+    def _set_sym(self, value):
+        """setter of sym"""
+        check_var("sym", value, "int")
+        self._sym = value
+
+    # Symmetry factor of the machine (1=full machine, 2 = half,…)
+    # Type : int
+    sym = property(
+        fget=_get_sym,
+        fset=_set_sym,
+        doc=u"""Symmetry factor of the machine (1=full machine, 2 = half,…) """,
     )
