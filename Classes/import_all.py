@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from pyleecan.Classes.Arc import Arc
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Arc2 import Arc2
 from pyleecan.Classes.Arc3 import Arc3
@@ -55,22 +56,23 @@ from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.WindingSC import WindingSC
 from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.Classes.BHCurve import BHCurve
-from pyleecan.Classes.BHCurveMat import BHCurveMat
-from pyleecan.Classes.BHCurveParam import BHCurveParam
 from pyleecan.Classes.MatEconomical import MatEconomical
 from pyleecan.Classes.MatElectrical import MatElectrical
 from pyleecan.Classes.Material import Material
+from pyleecan.Classes.MatHT import MatHT
 from pyleecan.Classes.MatLamination import MatLamination
 from pyleecan.Classes.MatMagnet import MatMagnet
 from pyleecan.Classes.MatMagnetics import MatMagnetics
-from pyleecan.Classes.MatMechanics import MatMechanics
-from pyleecan.Classes.MatThermics import MatThermics
+from pyleecan.Classes.MatStructural import MatStructural
 from pyleecan.Classes.OutElec import OutElec
 from pyleecan.Classes.OutGeo import OutGeo
+from pyleecan.Classes.OutGeoLam import OutGeoLam
+from pyleecan.Classes.OutMag import OutMag
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.InCurrent import InCurrent
 from pyleecan.Classes.Input import Input
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.Magnetics import Magnetics
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Simulation import Simulation
 from pyleecan.Classes.Hole import Hole

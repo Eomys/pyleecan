@@ -6,7 +6,11 @@ from pyleecan.Classes.check import check_init_dict, check_var
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Simulation import Simulation
 
+from pyleecan.Methods.Simulation.Simu1.run import run
+
 from pyleecan.Classes.check import InitUnKnowClassError
+from pyleecan.Classes.Magnetics import Magnetics
+from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Machine import Machine
 from pyleecan.Classes.MachineSync import MachineSync
 from pyleecan.Classes.MachineAsync import MachineAsync
@@ -25,10 +29,12 @@ class Simu1(Simulation):
 
     VERSION = 1
 
+    # cf Methods.Simulation.Simu1.run
+    run = run
     # save method is available in all object
     save = save
 
-    def __init__(self, name="", desc="", machine=-1, input=-1, init_dict=None):
+    def __init__(self, mag=-1, name="", desc="", machine=-1, input=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -38,13 +44,17 @@ class Simu1(Simulation):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if mag == -1:
+            mag = Magnetics()
         if machine == -1:
             machine = Machine()
         if input == -1:
             input = Input()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["name", "desc", "machine", "input"])
+            check_init_dict(init_dict, ["mag", "name", "desc", "machine", "input"])
             # Overwrite default value with init_dict content
+            if "mag" in list(init_dict.keys()):
+                mag = init_dict["mag"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "desc" in list(init_dict.keys()):
@@ -54,6 +64,19 @@ class Simu1(Simulation):
             if "input" in list(init_dict.keys()):
                 input = init_dict["input"]
         # Initialisation by argument
+        # mag can be None, a Magnetics object or a dict
+        if isinstance(mag, dict):
+            # Call the correct constructor according to the dict
+            load_dict = {"MagFEMM": MagFEMM, "Magnetics": Magnetics}
+            obj_class = mag.get("__class__")
+            if obj_class is None:
+                self.mag = Magnetics(init_dict=mag)
+            elif obj_class in list(load_dict.keys()):
+                self.mag = load_dict[obj_class](init_dict=mag)
+            else:  # Avoid generation error or wrong modification in json
+                raise InitUnKnowClassError("Unknow class name in init_dict for mag")
+        else:
+            self.mag = mag
         # Call Simulation init
         super(Simu1, self).__init__(name=name, desc=desc, machine=machine, input=input)
         # The class is frozen (in Simulation init), for now it's impossible to
@@ -65,6 +88,7 @@ class Simu1(Simulation):
         Simu1_str = ""
         # Get the properties inherited from Simulation
         Simu1_str += super(Simu1, self).__str__() + linesep
+        Simu1_str += "mag = " + str(self.mag.as_dict())
         return Simu1_str
 
     def __eq__(self, other):
@@ -76,6 +100,8 @@ class Simu1(Simulation):
         # Check the properties inherited from Simulation
         if not super(Simu1, self).__eq__(other):
             return False
+        if other.mag != self.mag:
+            return False
         return True
 
     def as_dict(self):
@@ -84,6 +110,10 @@ class Simu1(Simulation):
 
         # Get the properties inherited from Simulation
         Simu1_dict = super(Simu1, self).as_dict()
+        if self.mag is None:
+            Simu1_dict["mag"] = None
+        else:
+            Simu1_dict["mag"] = self.mag.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         Simu1_dict["__class__"] = "Simu1"
@@ -92,5 +122,23 @@ class Simu1(Simulation):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
+        if self.mag is not None:
+            self.mag._set_None()
         # Set to None the properties inherited from Simulation
         super(Simu1, self)._set_None()
+
+    def _get_mag(self):
+        """getter of mag"""
+        return self._mag
+
+    def _set_mag(self, value):
+        """setter of mag"""
+        check_var("mag", value, "Magnetics")
+        self._mag = value
+
+        if self._mag is not None:
+            self._mag.parent = self
+
+    # Magnetic module
+    # Type : Magnetics
+    mag = property(fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module""")

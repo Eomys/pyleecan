@@ -77,16 +77,18 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     if sym == 1:  # Complete lamination
         # Create Slot surface
         surf_slot = SurfLine(
-            line_list=line_list,
-            label="Lamination_" + ll + "_bore_" + ls,
-            point_ref=None,
+            line_list=line_list, label="Lamination_" + ll + "_bore_" + ls
         )
+        if self.is_internal:
+            surf_slot.point_ref = Ryoke + (H_yoke / 2)
+        else:
+            surf_slot.point_ref = Ryoke - (H_yoke / 2)
         # Create yoke circle surface
         if Ryoke > 0:
             surf_yoke = Circle(
                 radius=Ryoke,
                 label="Lamination_" + ll + "_yoke_" + ly,
-                point_ref=Ryoke - (H_yoke / 2),
+                line_label=ll + "_Yoke_Radius",
                 center=0,
             )
         # The order matters when plotting
@@ -105,15 +107,11 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             start_angle = angle(line_list[-1].get_end())
             line_list.extend(
                 self.get_bore_line(
-                    start_angle,
-                    start_angle + t_angle / 2,
-                    label="Bore_line",
-                    is_half=True,
+                    start_angle, start_angle + t_angle / 2, label="Bore_line"
                 )
             )
             line_list.insert(
-                0,
-                self.get_bore_line(0, t_angle / 2, label="Bore_line", is_half=True)[0],
+                0, self.get_bore_line(0, t_angle / 2, label="Bore_line")[0]
             )
         # Add the Yoke part
         Zy1 = Ryoke
@@ -125,8 +123,14 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             Segment(Zy1, line_list[0].get_begin(), label=ll + "_Yoke_side")
         )
         # Create a Surface for the slot
+        if self.is_internal:
+            point_ref = (Ryoke + H_yoke / 2) * exp(1j * pi / sym)
+        else:
+            point_ref = (Ryoke - H_yoke / 2) * exp(1j * pi / sym)
         surf_slot = SurfLine(
-            line_list=line_list, label="Lamination_" + ll + "_bore_Ext", point_ref=None
+            line_list=line_list,
+            label="Lamination_" + ll + "_bore_" + ls,
+            point_ref=point_ref,
         )
         surf_list.append(surf_slot)
 

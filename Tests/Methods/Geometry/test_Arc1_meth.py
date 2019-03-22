@@ -292,48 +292,36 @@ comp_translate_test.append(
 )
 
 get_angle_test = list()
-get_angle_test.append({"begin": 1 + 0j,
-                       "end": 0.5 + 0.5j,
+get_angle_test.append({"begin": 1,
+                       "end": 1j,
                        "radius": 1,
                        "is_deg": True,
-                       "exp_angle": 41.409622109270856})
-get_angle_test.append({"begin": 1 + 0j,
-                       "end": 0 + 1j,
+                       "exp_angle": 90})
+get_angle_test.append({"begin": 1j,
+                       "end": 1,
                        "radius": 1,
-                       "is_deg": True,
-                       "exp_angle": 90.0})
-get_angle_test.append({"begin": 1 + 0j,
-                       "end": -0.5 + 0.5j,
-                       "radius": 1,
-                       "is_deg": True,
-                       "exp_angle": 104.47751218592992})
-get_angle_test.append({"begin": 0 + 1j,
-                       "end": -0.5 + 0.5j,
-                       "radius": 1,
-                       "is_deg": True,
-                       "exp_angle": 41.409622109270856})
-get_angle_test.append({"begin": 0 + 1j,
-                       "end": -0.5 + 0.5j,
-                       "radius": 1,
-                       "is_deg": False,
-                       "exp_angle": 41.409622109270856 * pi / 180})
-get_angle_test.append({"begin": 0 + 1j,
-                       "end": -0.5 - 0.5j,
-                       "radius": 1,
-                       "is_deg": False,
-                       "exp_angle": 104.47751218592992 * pi / 180})
-
-get_angle_test.append({"begin": 1 + 2j,
-                       "end": -2 - 1j,
-                       "radius": -3,
                        "is_deg": True,
                        "exp_angle": 90.0})
-get_angle_test.append({"begin": 1 + 2j,
-                       "end": -2 - 1j,
-                       "radius": 3,
+get_angle_test.append({"begin": 1,
+                       "end": 1j,
+                       "radius": -1,
+                       "is_deg": True,
+                       "exp_angle": -90})
+get_angle_test.append({"begin": 0,
+                       "end": -2j-2,
+                       "radius": 2,
                        "is_deg": False,
                        "exp_angle": pi/2})
-
+get_angle_test.append({"begin": 1+1j,
+                       "end": 1-1j,
+                       "radius": -1,
+                       "is_deg": False,
+                       "exp_angle": -pi})
+get_angle_test.append({"begin": 2+1j,
+                       "end": 2-1j,
+                       "radius": -1,
+                       "is_deg": False,
+                       "exp_angle": -pi})
 
 @ddt
 class test_Arc1_meth(TestCase):
