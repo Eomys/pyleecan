@@ -31,8 +31,8 @@ class Magnetics(FrozenClass):
         is_remove_vent=False,
         is_mmfs=True,
         is_mmfr=True,
-        is_stator_linear_BH=False,
-        is_rotor_linear_BH=False,
+        is_stator_linear_BH=0,
+        is_rotor_linear_BH=0,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -243,15 +243,15 @@ class Magnetics(FrozenClass):
 
     def _set_is_stator_linear_BH(self, value):
         """setter of is_stator_linear_BH"""
-        check_var("is_stator_linear_BH", value, "bool")
+        check_var("is_stator_linear_BH", value, "int", Vmin=0, Vmax=2)
         self._is_stator_linear_BH = value
 
-    # 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
-    # Type : bool
+    # 0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)
+    # Type : int, min = 0, max = 2
     is_stator_linear_BH = property(
         fget=_get_is_stator_linear_BH,
         fset=_set_is_stator_linear_BH,
-        doc=u"""1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve""",
+        doc=u"""0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)""",
     )
 
     def _get_is_rotor_linear_BH(self):
@@ -260,13 +260,13 @@ class Magnetics(FrozenClass):
 
     def _set_is_rotor_linear_BH(self, value):
         """setter of is_rotor_linear_BH"""
-        check_var("is_rotor_linear_BH", value, "bool")
+        check_var("is_rotor_linear_BH", value, "int", Vmin=0, Vmax=2)
         self._is_rotor_linear_BH = value
 
-    # 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
-    # Type : bool
+    # 0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)
+    # Type : int, min = 0, max = 2
     is_rotor_linear_BH = property(
         fget=_get_is_rotor_linear_BH,
         fset=_set_is_rotor_linear_BH,
-        doc=u"""1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve""",
+        doc=u"""0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)""",
     )

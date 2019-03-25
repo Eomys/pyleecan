@@ -35,8 +35,8 @@ class MagFEMM(Magnetics):
         is_remove_vent=False,
         is_mmfs=True,
         is_mmfr=True,
-        is_stator_linear_BH=False,
-        is_rotor_linear_BH=False,
+        is_stator_linear_BH=0,
+        is_rotor_linear_BH=0,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :

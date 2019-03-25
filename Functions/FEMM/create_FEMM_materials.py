@@ -75,7 +75,10 @@ def create_FEMM_materials(
     for surf in surf_list:
         label = surf.label
         if "Lamination_Stator_bore" in label:  # Stator
-            mu_is = stator.mat_type.mag.mur_lin  # Relative
+            if is_stator_linear_BH == 2:
+                mu_is = 100000  # Infinite permeability
+            else:
+                mu_is = stator.mat_type.mag.mur_lin  # Relative
             # Check if the property already exist in FEMM
             if "Stator Iron" not in materials:
                 # magnetic permeability
@@ -86,7 +89,10 @@ def create_FEMM_materials(
             prop_dict[label] = "Stator Iron"
         elif "Lamination_Rotor_bore" in label:  # Rotor
             # Initialisation from the rotor of the machine
-            mu_ir = rotor.mat_type.mag.mur_lin  # Relative
+            if is_rotor_linear_BH == 2:
+                mu_ir = 100000  # Infinite permeability
+            else:
+                mu_ir = rotor.mat_type.mag.mur_lin  # Relative
             # Check if the property already exist in FEMM
             if "Rotor Iron" not in materials:
                 # magnetic permeability
@@ -135,10 +141,10 @@ def create_FEMM_materials(
             prop_dict[label] = "<No Mesh>"
 
     # Set Rotor and Stator BH curves (if needed)
-    if not is_stator_linear_BH:
+    if is_stator_linear_BH == 0:
         for ii in range(BHs.shape[0]):
             femm.mi_addbhpoint("Stator Iron", BHs[ii][0], BHs[ii][1])
-    if not is_rotor_linear_BH:
+    if is_rotor_linear_BH == 0:
         for ii in range(BHr.shape[0]):
             femm.mi_addbhpoint("Rotor Iron", BHr[ii][0], BHr[ii][1])
 
