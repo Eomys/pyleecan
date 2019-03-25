@@ -275,21 +275,27 @@ comp_translate_test.append(
 )
 
 get_angle_test = list()
-get_angle_test.append({"begin": 1 + 0j,
-                       "center": 0.5 + 0.5j,
-                       "angle": pi/4,
-                       "is_deg": True,
-                       "exp_angle": 45.0})
-get_angle_test.append({"begin": 1 + 0j,
-                       "center": 0.5 + 0.5j,
-                       "angle": pi/4,
-                       "is_deg": False,
-                       "exp_angle": pi/4})
-get_angle_test.append({"begin": 1 + 0j,
-                       "center": 0,
-                       "angle": pi/3,
-                       "is_deg": True,
-                       "exp_angle": 60.0})
+get_angle_test.append(
+    {
+        "begin": 1 + 0j,
+        "center": 0.5 + 0.5j,
+        "angle": pi / 4,
+        "is_deg": True,
+        "exp_angle": 45.0,
+    }
+)
+get_angle_test.append(
+    {
+        "begin": 1 + 0j,
+        "center": 0.5 + 0.5j,
+        "angle": pi / 4,
+        "is_deg": False,
+        "exp_angle": pi / 4,
+    }
+)
+get_angle_test.append(
+    {"begin": 1 + 0j, "center": 0, "angle": pi / 3, "is_deg": True, "exp_angle": 60.0}
+)
 
 
 @ddt
@@ -461,6 +467,10 @@ class test_Arc2_meth(TestCase):
     def test_get_angle(self, test_dict):
         """Check that the arc2 computed angle is correct
         """
-        arc = Arc2(begin=test_dict["begin"], center=test_dict["center"], angle=test_dict["angle"])
+        arc = Arc2(
+            begin=test_dict["begin"],
+            center=test_dict["center"],
+            angle=test_dict["angle"],
+        )
         result = arc.get_angle(test_dict["is_deg"])
         self.assertAlmostEqual(result, test_dict["exp_angle"])

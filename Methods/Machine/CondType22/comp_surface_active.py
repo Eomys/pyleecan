@@ -7,7 +7,7 @@ Conductor Type 2_2 comp_active_surface method
 """
 
 
-def comp_active_surface(self):
+def comp_surface_active(self):
     """Compute the active surface of the conductor
 
     Parameters

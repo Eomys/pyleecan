@@ -59,7 +59,10 @@ def comp_wind_sym(wind_mat):
     # Check for anti symmetries in the elementary winding pattern
     if (
         Nperslot % 2 == 0
-        and norm(wind_mat2[0: Nperslot // 2, :] + wind_mat2[Nperslot // 2 :Nperslot, :]) == 0
+        and norm(
+            wind_mat2[0 : Nperslot // 2, :] + wind_mat2[Nperslot // 2 : Nperslot, :]
+        )
+        == 0
     ):
         is_asym_wind = True
         Nperw = Nperw * 2

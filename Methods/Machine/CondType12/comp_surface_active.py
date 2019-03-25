@@ -9,7 +9,7 @@ Conductor Type 1_2 comp_active_surface method
 from numpy import pi
 
 
-def comp_active_surface(self):
+def comp_surface_active(self):
     """Compute the active surface of the conductor
 
     Parameters

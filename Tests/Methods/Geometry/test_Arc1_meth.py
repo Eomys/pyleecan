@@ -292,36 +292,25 @@ comp_translate_test.append(
 )
 
 get_angle_test = list()
-get_angle_test.append({"begin": 1,
-                       "end": 1j,
-                       "radius": 1,
-                       "is_deg": True,
-                       "exp_angle": 90})
-get_angle_test.append({"begin": 1j,
-                       "end": 1,
-                       "radius": 1,
-                       "is_deg": True,
-                       "exp_angle": 90.0})
-get_angle_test.append({"begin": 1,
-                       "end": 1j,
-                       "radius": -1,
-                       "is_deg": True,
-                       "exp_angle": -90})
-get_angle_test.append({"begin": 0,
-                       "end": -2j-2,
-                       "radius": 2,
-                       "is_deg": False,
-                       "exp_angle": pi/2})
-get_angle_test.append({"begin": 1+1j,
-                       "end": 1-1j,
-                       "radius": -1,
-                       "is_deg": False,
-                       "exp_angle": -pi})
-get_angle_test.append({"begin": 2+1j,
-                       "end": 2-1j,
-                       "radius": -1,
-                       "is_deg": False,
-                       "exp_angle": -pi})
+get_angle_test.append(
+    {"begin": 1, "end": 1j, "radius": 1, "is_deg": True, "exp_angle": 90}
+)
+get_angle_test.append(
+    {"begin": 1j, "end": 1, "radius": 1, "is_deg": True, "exp_angle": 90.0}
+)
+get_angle_test.append(
+    {"begin": 1, "end": 1j, "radius": -1, "is_deg": True, "exp_angle": -90}
+)
+get_angle_test.append(
+    {"begin": 0, "end": -2j - 2, "radius": 2, "is_deg": False, "exp_angle": pi / 2}
+)
+get_angle_test.append(
+    {"begin": 1 + 1j, "end": 1 - 1j, "radius": -1, "is_deg": False, "exp_angle": -pi}
+)
+get_angle_test.append(
+    {"begin": 2 + 1j, "end": 2 - 1j, "radius": -1, "is_deg": False, "exp_angle": -pi}
+)
+
 
 @ddt
 class test_Arc1_meth(TestCase):
@@ -467,7 +456,8 @@ class test_Arc1_meth(TestCase):
     def test_get_angle(self, test_dict):
         """Check that the arc1 computed angle is correct
         """
-        arc = Arc1(begin=test_dict["begin"], end=test_dict["end"], radius=test_dict["radius"])
+        arc = Arc1(
+            begin=test_dict["begin"], end=test_dict["end"], radius=test_dict["radius"]
+        )
         result = arc.get_angle(test_dict["is_deg"])
         self.assertAlmostEqual(result, test_dict["exp_angle"])
-

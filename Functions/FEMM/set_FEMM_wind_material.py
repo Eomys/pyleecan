@@ -44,5 +44,5 @@ def set_FEMM_wind_material(materials, cname, Jcus, Cduct=None, dwire=None):
         materials.append(cname)
     else:
         # Update existing one (set Jcus only)
-        femm.mi_modifymaterial(cname, 3, Jcus)
+        femm.mi_modifymaterial(cname, 4, Jcus)
     return materials

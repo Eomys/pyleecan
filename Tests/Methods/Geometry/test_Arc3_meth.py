@@ -143,21 +143,28 @@ comp_translate_test.append(
 )
 
 get_angle_test = list()
-get_angle_test.append({"begin": 1 + 0j,
-                       "end": 0.5 + 0.5j,
-                       "direction": True,
-                       "is_deg": True,
-                       "exp_angle": 180.0})
-get_angle_test.append({"begin": 1 + 0j,
-                       "end": 0.5 + 0.5j,
-                       "direction": True,
-                       "is_deg": False,
-                       "exp_angle": pi})
-get_angle_test.append({"begin": 1 + 0j,
-                       "end": 0,
-                       "direction": False,
-                       "is_deg": True,
-                       "exp_angle": -180.0})
+get_angle_test.append(
+    {
+        "begin": 1 + 0j,
+        "end": 0.5 + 0.5j,
+        "direction": True,
+        "is_deg": True,
+        "exp_angle": 180.0,
+    }
+)
+get_angle_test.append(
+    {
+        "begin": 1 + 0j,
+        "end": 0.5 + 0.5j,
+        "direction": True,
+        "is_deg": False,
+        "exp_angle": pi,
+    }
+)
+get_angle_test.append(
+    {"begin": 1 + 0j, "end": 0, "direction": False, "is_deg": True, "exp_angle": -180.0}
+)
+
 
 @ddt
 class test_Arc3_meth(TestCase):
@@ -259,6 +266,10 @@ class test_Arc3_meth(TestCase):
     def test_get_angle(self, test_dict):
         """Check that the arc3 computed angle is correct
         """
-        arc = Arc3(begin=test_dict["begin"], end=test_dict["end"], is_trigo_direction=test_dict["direction"])
+        arc = Arc3(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            is_trigo_direction=test_dict["direction"],
+        )
         result = arc.get_angle(test_dict["is_deg"])
         self.assertAlmostEqual(result, test_dict["exp_angle"])

@@ -7,7 +7,7 @@ from pyleecan.Functions.save import save
 from pyleecan.Classes.Conductor import Conductor
 
 from pyleecan.Methods.Machine.CondType12.check import check
-from pyleecan.Methods.Machine.CondType12.comp_active_surface import comp_active_surface
+from pyleecan.Methods.Machine.CondType12.comp_surface_active import comp_surface_active
 from pyleecan.Methods.Machine.CondType12.comp_height import comp_height
 from pyleecan.Methods.Machine.CondType12.comp_surface import comp_surface
 from pyleecan.Methods.Machine.CondType12.comp_width import comp_width
@@ -23,8 +23,8 @@ class CondType12(Conductor):
 
     # cf Methods.Machine.CondType12.check
     check = check
-    # cf Methods.Machine.CondType12.comp_active_surface
-    comp_active_surface = comp_active_surface
+    # cf Methods.Machine.CondType12.comp_surface_active
+    comp_surface_active = comp_surface_active
     # cf Methods.Machine.CondType12.comp_height
     comp_height = comp_height
     # cf Methods.Machine.CondType12.comp_surface

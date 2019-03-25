@@ -4,7 +4,7 @@ def comp_fill_factor(self):
 
     S_slot_wind = self.slot.comp_surface_wind()
     S_wind_act = (
-        self.winding.conductor.comp_active_surface()
+        self.winding.conductor.comp_surface_active()
         * self.winding.Ntcoil
         * self.winding.Npcpp
     )
