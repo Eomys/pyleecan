@@ -11,21 +11,21 @@ from pyleecan.Functions.FEMM.assign_FEMM_airgap import assign_FEMM_airgap
 from pyleecan.Functions.FEMM.assign_FEMM_no_mesh import assign_FEMM_no_mesh
 
 
-def assign_FEMM_surface(surf, prop, draw_FEMM_param, rotor, stator):
+def assign_FEMM_surface(surf, prop, FEMM_dict, rotor, stator):
     """Assign the property given in parameter to surface having the label given
 
     Parameters
     ----------
-    surf :
+    surf : Surface
         the surface to assign
-    prop :
+    prop : str
         The property to assign in FEMM
-    draw_FEMM_param :
-        Dictionnary containing parameter needed to draw in FEMM
-    rotor :
-        rotor object of the machine
-    stator :
-        stator object of the machine
+    FEMM_dict : dict
+        Dictionnary containing the main parameters of FEMM
+    rotor : Lamination
+        The rotor of the machine
+    stator : Lamination
+        The stator of the machine
 
     Returns
     -------
@@ -33,19 +33,20 @@ def assign_FEMM_surface(surf, prop, draw_FEMM_param, rotor, stator):
     
     """
     label = surf.label
-    point_ref = surf.point_ref
-    if point_ref is not None:
+
+    # point_ref is None => don't assign the surface
+    if surf.point_ref is not None:
         if "Lamination_Stator" in label:  # Stator
-            assign_FEMM_Lamination(surf, prop, draw_FEMM_param)
+            assign_FEMM_Lamination(surf, prop, FEMM_dict)
         elif "Lamination_Rotor" in label:  # Rotor
-            assign_FEMM_Lamination(surf, prop, draw_FEMM_param)
+            assign_FEMM_Lamination(surf, prop, FEMM_dict)
         elif "Ventilation" in label:  # Ventilation
-            assign_FEMM_Ventilation(point_ref, label, prop, draw_FEMM_param)
+            assign_FEMM_Ventilation(surf, prop, FEMM_dict)
         elif "Wind" in label:  # Winding on the Lamination
-            assign_FEMM_Winding(point_ref, label, prop, draw_FEMM_param, rotor, stator)
+            assign_FEMM_Winding(surf, prop, FEMM_dict, rotor, stator)
         elif "Magnet" in label:  # Magnet
-            assign_FEMM_Magnet(surf, prop, draw_FEMM_param)
+            assign_FEMM_Magnet(surf, prop, FEMM_dict)
         elif "Airgap" in label:  # Airgap
-            assign_FEMM_airgap(surf, prop, draw_FEMM_param)
+            assign_FEMM_airgap(surf, prop, FEMM_dict)
         elif "No_mesh" in label:  # Sliding band
             assign_FEMM_no_mesh(surf)

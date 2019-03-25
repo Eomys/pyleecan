@@ -14,15 +14,15 @@ from pyleecan.Functions.FEMM import (
 )
 
 
-def get_element_size(label, draw_FEMM_param):
+def get_element_size(label, FEMM_dict):
     """Returns element parameter FEMM of each part of the machine
 
     Parameters
     ----------
     label : str
         label of the surface to assign
-    draw_FEMM_param : dict
-        Dictionnary containing parameter needed when drawing in FEMM
+    FEMM_dict : dict
+        Dictionnary containing the main parameters of FEMM
 
     Returns
     -------
@@ -34,38 +34,38 @@ def get_element_size(label, draw_FEMM_param):
     E_dict = dict()
     if "Lamination_Stator" in label:  # Stator
         if "bore" in label:
-            E_dict["element_size"] = draw_FEMM_param["elementsize_slotS"]
+            E_dict["element_size"] = FEMM_dict["elementsize_slotS"]
         else:
-            E_dict["element_size"] = draw_FEMM_param["elementsize_yokeS"]
+            E_dict["element_size"] = FEMM_dict["elementsize_yokeS"]
         E_dict["group"] = GROUP_SC
     elif "Lamination_Rotor" in label:  # Rotor
         if "bore" in label:
-            E_dict["element_size"] = draw_FEMM_param["elementsize_slotR"]
+            E_dict["element_size"] = FEMM_dict["elementsize_slotR"]
         else:
-            E_dict["element_size"] = draw_FEMM_param["elementsize_yokeR"]
+            E_dict["element_size"] = FEMM_dict["elementsize_yokeR"]
         E_dict["group"] = GROUP_RC
     elif "Ventilation" in label:  # Ventilation
-        E_dict["element_size"] = draw_FEMM_param["maxelementsize"]
+        E_dict["element_size"] = FEMM_dict["maxelementsize"]
         if label[12] == "S":  # if the Ventilation is on the Stator
             E_dict["group"] = GROUP_SV
         else:  # if the Ventilation is on the Rotor
             E_dict["group"] = GROUP_RV
     elif "Wind" in label:  # Winding on the Lamination
         if label[4] == "S":  # if the winding is on the Stator
-            E_dict["element_size"] = draw_FEMM_param["elementsize_slotS"]
+            E_dict["element_size"] = FEMM_dict["elementsize_slotS"]
             E_dict["group"] = GROUP_SW
         else:  # if the winding is on the Rotor
-            E_dict["element_size"] = draw_FEMM_param["elementsize_slotR"]
+            E_dict["element_size"] = FEMM_dict["elementsize_slotR"]
             E_dict["group"] = GROUP_RW
     elif "Magnet" in label:  # Magnet
         if label[6] == "S":  # if the Magnet is on the Stator
-            E_dict["element_size"] = draw_FEMM_param["elementsize_magnetS"]
+            E_dict["element_size"] = FEMM_dict["elementsize_magnetS"]
             E_dict["group"] = GROUP_SW
         else:  # if the Magnet is on the Rotor
-            E_dict["element_size"] = draw_FEMM_param["elementsize_magnetR"]
+            E_dict["element_size"] = FEMM_dict["elementsize_magnetR"]
             E_dict["group"] = GROUP_RW
     elif "Airgap" in label:
-        E_dict["element_size"] = draw_FEMM_param["elementsize_airgap"]
+        E_dict["element_size"] = FEMM_dict["elementsize_airgap"]
         E_dict["group"] = GROUP_AG
     elif "No_mesh" in label:
         E_dict["element_size"] = 0

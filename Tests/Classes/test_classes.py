@@ -61,6 +61,16 @@ class test_all_Classes(TestCase):
                     + " for property: "
                     + prop["name"],
                 )
+            elif type_name == "dict":
+                # Default value is empty dict
+                self.assertEqual(
+                    result,
+                    {},
+                    msg="Error for class "
+                    + class_dict["name"]
+                    + " for property: "
+                    + prop["name"],
+                )
             elif is_type_list(type_name):  # List of pyleecan type
                 self.assertEqual(
                     result,
@@ -110,6 +120,8 @@ class test_all_Classes(TestCase):
                 d[prop["name"]] = None
             elif prop["type"] in PYTHON_TYPE:
                 d[prop["name"]] = prop["value"]
+            elif prop["type"] == "dict":
+                d[prop["name"]] = {}
             elif is_type_list(prop["type"]):  # List of pyleecan type
                 d[prop["name"]] = list()
             else:  # pyleecan type

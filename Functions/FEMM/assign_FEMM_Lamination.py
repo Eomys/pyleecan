@@ -7,7 +7,7 @@ import femm
 from pyleecan.Functions.FEMM import GROUP_RC, GROUP_SC
 
 
-def assign_FEMM_Lamination(surf, prop, draw_FEMM_param):
+def assign_FEMM_Lamination(surf, prop, FEMM_dict):
     """Assign the property of Lamination
 
     Parameters
@@ -16,8 +16,8 @@ def assign_FEMM_Lamination(surf, prop, draw_FEMM_param):
         The surface to assign
     prop : str
         the property to assign
-    draw_FEMM_param :
-        Dictionnary containing parameter needed to draw in FEMM
+    FEMM_dict : dict
+        Dictionnary containing the main parameters of FEMM
 
     Returns
     -------
@@ -30,22 +30,10 @@ def assign_FEMM_Lamination(surf, prop, draw_FEMM_param):
     femm.mi_selectlabel(point_ref.real, point_ref.imag)
     if "Rotor" in surf.label:  # Lamination is Rotor
         femm.mi_setblockprop(
-            prop,
-            draw_FEMM_param["automesh"],
-            draw_FEMM_param["meshsize_yokeR"],
-            0,
-            0,
-            GROUP_RC,
-            0,
+            prop, FEMM_dict["automesh"], FEMM_dict["meshsize_yokeR"], 0, 0, GROUP_RC, 0
         )
     else:  # Lamination is Stator
         femm.mi_setblockprop(
-            prop,
-            draw_FEMM_param["automesh"],
-            draw_FEMM_param["meshsize_yokeS"],
-            0,
-            0,
-            GROUP_SC,
-            0,
+            prop, FEMM_dict["automesh"], FEMM_dict["meshsize_yokeS"], 0, 0, GROUP_SC, 0
         )
     femm.mi_clearselected()

@@ -8,20 +8,17 @@ import femm
 from pyleecan.Functions.FEMM import GROUP_RW, GROUP_SW
 
 
-def assign_FEMM_Winding(point_ref, label, prop, draw_FEMM_param, rotor, stator):
+def assign_FEMM_Winding(surf, prop, FEMM_dict, rotor, stator):
     """Assign properties to the winding in FEMM
 
     Parameters
     ----------
-    point_ref :
-        the reference point of the surface
-    label :
-        the label of the surface to assign
+    surf : Surface
+        The surface to assign
     prop :
         the property to assign
-    draw_FEMM_param :
-        Dictionnary containing parameter needed to draw in
-        FEMM
+    FEMM_dict : dict
+        Dictionnary containing the main parameters of FEMM
     rotor :
         the rotor object of the machine
     stator :
@@ -32,16 +29,17 @@ def assign_FEMM_Winding(point_ref, label, prop, draw_FEMM_param, rotor, stator):
     None
     
     """
+    point_ref = surf.point_ref
     femm.mi_addblocklabel(point_ref.real, point_ref.imag)
     femm.mi_selectlabel(point_ref.real, point_ref.imag)
-    if "Rotor" in label:  # Winding on the rotor
+    if "Rotor" in surf.label:  # Winding on the rotor
         Clabel = "Circs"
         Ntcoil = rotor.winding.Ntcoil
         if prop[-1] == "+":
             femm.mi_setblockprop(
                 prop,
-                draw_FEMM_param["automesh"],
-                draw_FEMM_param["meshsize_slotR"],
+                FEMM_dict["automesh"],
+                FEMM_dict["meshsize_slotR"],
                 Clabel + prop[2],
                 0,
                 GROUP_RW,
@@ -50,8 +48,8 @@ def assign_FEMM_Winding(point_ref, label, prop, draw_FEMM_param, rotor, stator):
         else:
             femm.mi_setblockprop(
                 prop,
-                draw_FEMM_param["automesh"],
-                draw_FEMM_param["meshsize_slotR"],
+                FEMM_dict["automesh"],
+                FEMM_dict["meshsize_slotR"],
                 Clabel + prop[2],
                 0,
                 GROUP_RW,
@@ -63,8 +61,8 @@ def assign_FEMM_Winding(point_ref, label, prop, draw_FEMM_param, rotor, stator):
         if prop[-1] == "+":
             femm.mi_setblockprop(
                 prop,
-                draw_FEMM_param["automesh"],
-                draw_FEMM_param["meshsize_slotS"],
+                FEMM_dict["automesh"],
+                FEMM_dict["meshsize_slotS"],
                 Clabel + prop[2],
                 0,
                 GROUP_SW,
@@ -73,8 +71,8 @@ def assign_FEMM_Winding(point_ref, label, prop, draw_FEMM_param, rotor, stator):
         else:
             femm.mi_setblockprop(
                 prop,
-                draw_FEMM_param["automesh"],
-                draw_FEMM_param["meshsize_slotS"],
+                FEMM_dict["automesh"],
+                FEMM_dict["meshsize_slotS"],
                 Clabel + prop[2],
                 0,
                 GROUP_SW,

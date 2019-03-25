@@ -17,7 +17,7 @@ from pyleecan.Functions.FEMM import (
     type_yokeS,
 )
 from pyleecan.Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
-from pyleecan.Functions.FEMM.comp_draw_param import comp_draw_param
+from pyleecan.Functions.FEMM.comp_FEMM_dict import comp_FEMM_dict
 from pyleecan.Functions.FEMM.get_element_size import get_element_size
 from pyleecan.Functions.FEMM.create_FEMM_boundary_conditions import (
     create_FEMM_boundary_conditions,
@@ -41,6 +41,7 @@ def draw_FEMM(
     is_rotor_linear_BH=False,
     kgeo_fineness=1,
     kmesh_fineness=1,
+    user_FEMM_dict={},
     path_save="FEMM_model.fem",
 ):
     """Draws and assigns the property of the machine in FEMM
@@ -119,9 +120,10 @@ def draw_FEMM(
         machine.stator.axial_vent = list()
 
     # Computing parameter (element size, arcspan...) needed when drawing machine in FEMM
-    draw_FEMM_param = comp_draw_param(
+    FEMM_dict = comp_FEMM_dict(
         machine, kgeo_fineness, kmesh_fineness, type_calc_leakage
     )
+    FEMM_dict.update(user_FEMM_dict)
 
     # Building geometry of the stator and the rotor
     surf_list = list()
@@ -161,18 +163,18 @@ def draw_FEMM(
     for surf in surf_list:
         label = surf.label
         # Get the correct element size and group according to the label
-        E_dict = get_element_size(label, draw_FEMM_param)
+        E_dict = get_element_size(label, FEMM_dict)
         surf.draw_FEMM(
             nodeprop="None",
-            maxseg=draw_FEMM_param["arcspan"],  # max span of arc element in degrees
+            maxseg=FEMM_dict["arcspan"],  # max span of arc element in degrees
             propname="None",
             elementsize=E_dict["element_size"],
-            automesh=draw_FEMM_param["automesh_segments"],
+            automesh=FEMM_dict["automesh_segments"],
             hide=False,
             group=E_dict["group"],
         )
         assign_FEMM_surface(
-            surf, prop_dict[label], draw_FEMM_param, machine.rotor, machine.stator
+            surf, prop_dict[label], FEMM_dict, machine.rotor, machine.stator
         )
 
     # Save

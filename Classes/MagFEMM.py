@@ -30,6 +30,7 @@ class MagFEMM(Magnetics):
         Kgeo_fineness=1,
         type_calc_leakage=0,
         file_name="",
+        FEMM_dict={},
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_vent=False,
@@ -56,6 +57,7 @@ class MagFEMM(Magnetics):
                     "Kgeo_fineness",
                     "type_calc_leakage",
                     "file_name",
+                    "FEMM_dict",
                     "is_remove_slotS",
                     "is_remove_slotR",
                     "is_remove_vent",
@@ -74,6 +76,8 @@ class MagFEMM(Magnetics):
                 type_calc_leakage = init_dict["type_calc_leakage"]
             if "file_name" in list(init_dict.keys()):
                 file_name = init_dict["file_name"]
+            if "FEMM_dict" in list(init_dict.keys()):
+                FEMM_dict = init_dict["FEMM_dict"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -93,6 +97,7 @@ class MagFEMM(Magnetics):
         self.Kgeo_fineness = Kgeo_fineness
         self.type_calc_leakage = type_calc_leakage
         self.file_name = file_name
+        self.FEMM_dict = FEMM_dict
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -115,7 +120,8 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "Kmesh_fineness = " + str(self.Kmesh_fineness) + linesep
         MagFEMM_str += "Kgeo_fineness = " + str(self.Kgeo_fineness) + linesep
         MagFEMM_str += "type_calc_leakage = " + str(self.type_calc_leakage) + linesep
-        MagFEMM_str += 'file_name = "' + str(self.file_name) + '"'
+        MagFEMM_str += 'file_name = "' + str(self.file_name) + '"' + linesep
+        MagFEMM_str += "FEMM_dict = " + str(self.FEMM_dict)
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -135,6 +141,8 @@ class MagFEMM(Magnetics):
             return False
         if other.file_name != self.file_name:
             return False
+        if other.FEMM_dict != self.FEMM_dict:
+            return False
         return True
 
     def as_dict(self):
@@ -147,6 +155,7 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["Kgeo_fineness"] = self.Kgeo_fineness
         MagFEMM_dict["type_calc_leakage"] = self.type_calc_leakage
         MagFEMM_dict["file_name"] = self.file_name
+        MagFEMM_dict["FEMM_dict"] = self.FEMM_dict
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -159,6 +168,7 @@ class MagFEMM(Magnetics):
         self.Kgeo_fineness = None
         self.type_calc_leakage = None
         self.file_name = None
+        self.FEMM_dict = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -228,4 +238,21 @@ class MagFEMM(Magnetics):
         fget=_get_file_name,
         fset=_set_file_name,
         doc=u"""Name of the file to save the FEMM model""",
+    )
+
+    def _get_FEMM_dict(self):
+        """getter of FEMM_dict"""
+        return self._FEMM_dict
+
+    def _set_FEMM_dict(self, value):
+        """setter of FEMM_dict"""
+        check_var("FEMM_dict", value, "dict")
+        self._FEMM_dict = value
+
+    # To enforce user-defined values for FEMM main parameters
+    # Type : dict
+    FEMM_dict = property(
+        fget=_get_FEMM_dict,
+        fset=_set_FEMM_dict,
+        doc=u"""To enforce user-defined values for FEMM main parameters """,
     )

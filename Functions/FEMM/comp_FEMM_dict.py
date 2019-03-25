@@ -1,0 +1,128 @@
+# -*- coding: utf-8 -*-
+"""@package comp_element_size
+@date Created on août 07 10:53 2018
+@author franco_i
+"""
+
+from pyleecan.Classes.LamSlot import LamSlot
+from pyleecan.Classes.LamSlotMag import LamSlotMag
+
+
+def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
+    """Compute the parameters needed for FEMM simulations
+
+    Parameters
+    ----------
+    machine : Machine
+        The machine to draw
+    Kgeo_fineness : float
+        global coefficient to adjust geometry fineness in FEMM
+        (1 : default ; > 1 : finner ; < 1 : less fine)
+    Kmesh_fineness : float
+        global coefficient to adjust mesh fineness in FEMM
+        (1 :default ; > 1 : finner ; < 1 : less fine)
+    type_calc_leakage : int
+        0 no leakage calculation
+        1 calculation using single slot
+
+    Returns
+    -------
+    FEMM_dict : dict
+        Dictionnary containing the main parameters of FEMM
+    
+    """
+
+    # Recompute because machine may has been modified
+    Hstot = machine.stator.slot.comp_height()
+    Hsy = machine.stator.comp_height_yoke()
+    Wgap_mec = machine.comp_width_airgap_mec()
+    Hrtot = machine.rotor.slot.comp_height()
+    Hry = machine.rotor.comp_height_yoke()
+
+    FEMM_dict = dict()
+    FEMM_dict["is_close_model"] = 0
+
+    FEMM_dict["automesh"] = 0  # 1 to let the solver define the mesh in all
+    # regions(except in the airgap), otherwise meshsize_XXX parameters are used
+    FEMM_dict["automesh_airgap"] = 0  # 1 to let the solver define the mesh in the
+    #  airgap, otherwise meshsize_airgap is used
+    FEMM_dict["automesh_segments"] = 0  # 1 to let the solver define the mesh
+    # points along arcs and segments, otherwise arcspan_XXX and
+    # elementsize_XXX are used
+
+    FEMM_dict["maxsegdeg"] = 1  # max angular width of elementary segment along
+    # arc discretization(default: 1)
+    FEMM_dict["maxelementsize"] = 1  # max length of elementary segment along
+    # segment discretization(1 for automatic meshing) "elementsize" in FEMM doc
+    FEMM_dict["arcspan"] = 1 / Kgeo_fineness  # max span of arc element in degrees
+
+    if type(machine.stator) == LamSlot and Hstot > 0:  # if there is Slot on
+        #  the stator
+        # mesh parameter for stator slot region
+        FEMM_dict["meshsize_slotS"] = Hstot / 10 / Kmesh_fineness
+
+        FEMM_dict["elementsize_slotS"] = Hstot / 10  # max element size in m for
+        # stator slot segments
+    else:
+        FEMM_dict["meshsize_slotS"] = Hsy / 10 / Kmesh_fineness  # mesh parameter
+        # for stator slot region
+        FEMM_dict["elementsize_slotS"] = Hsy / 10  # max element size in m for
+        # stator slot segments
+
+    if Hrtot > 0:
+        FEMM_dict["meshsize_slotR"] = Hrtot / 10 / Kmesh_fineness  # mesh
+        # parameter for rotor slot region
+        FEMM_dict["elementsize_slotR"] = Hrtot / 10  # max element size in m for
+        # stator slot segments
+    else:
+        FEMM_dict["meshsize_slotR"] = Hry / 10 / Kmesh_fineness  # mesh parameter
+        # for rotor slot region
+        FEMM_dict["elementsize_slotR"] = Hsy / 10  # max element size in m for
+        # stator slot segments
+
+    FEMM_dict["meshsize_yokeR"] = Hry / 4 / Kmesh_fineness  # mesh parameter for
+    # rotor yoke region
+    FEMM_dict["elementsize_yokeR"] = Hry / 4  # max element size in m for rotor
+    # yoke segments
+
+    FEMM_dict["meshsize_yokeS"] = Hsy / 4 / Kmesh_fineness  # mesh parameter for
+    # stator yoke region
+    FEMM_dict["elementsize_yokeS"] = Hsy / 4  # max element size in m for stator
+    # yoke segments
+
+    FEMM_dict["meshsize_airgap"] = Wgap_mec / 5 / Kmesh_fineness  # mesh parameter
+    # for airgap region
+
+    FEMM_dict["elementsize_airgap"] = Wgap_mec / 5  # max element size in m for
+    # airgap segments
+
+    if type(machine.stator) == LamSlotMag:
+        Hmag = machine.stator.slot.magnet[0].Hmag
+        FEMM_dict["meshsize_magnetS"] = Hmag / 4 / Kmesh_fineness  # mesh
+        # parameter for magnet region
+        FEMM_dict["elementsize_magnetS"] = Hmag / 4  # max element size in m for
+        # magnet segments
+    else:
+        FEMM_dict["meshsize_magnetS"] = None
+
+    if type(machine.rotor) == LamSlotMag:
+        Hmag = machine.rotor.slot.magnet[0].Hmag
+        FEMM_dict["meshsize_magnetR"] = Hmag / 4 / Kmesh_fineness  # mesh
+        # parameter for magnet region
+        FEMM_dict["elementsize_magnetR"] = Hmag / 4  # max element size in m for
+        # magnet segments
+    else:
+        FEMM_dict["meshsize_magnetR"] = None
+
+    FEMM_dict["meshsize_air"] = Hry / 4 / Kmesh_fineness  # mesh parameter for
+    # basic air regions (ventilation ducts etc)
+    FEMM_dict["meshsize_wedge"] = Hstot / 20 / Kmesh_fineness
+
+    if type_calc_leakage == 1:
+        FEMM_dict["is_close_model"] = 1
+        # mesh parameter for stator slot region
+        FEMM_dict["meshsize_slotS"] = Hstot / 50
+        # % mesh parameter for stator slot region
+        FEMM_dict["meshsize_slotR"] = Hrtot / 50
+
+    return FEMM_dict

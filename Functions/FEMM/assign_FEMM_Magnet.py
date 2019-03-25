@@ -9,18 +9,17 @@ from numpy import angle, pi
 from pyleecan.Functions.FEMM import GROUP_RW, GROUP_SW
 
 
-def assign_FEMM_Magnet(surf, prop, draw_FEMM_param):
-    """Assign the property of Magnet
+def assign_FEMM_Magnet(surf, prop, FEMM_dict):
+    """Assign the property of Magnet in FEMM
 
     Parameters
     ----------
-    surf :
-        the surface of the magnet ro assign
-    prop :
+    surf : Surface
+        the surface of the magnet to assign
+    prop : str
         the property to assign
-    draw_FEMM_param :
-        Dictionnary containing parameter needed
-        to draw in FEMM
+    FEMM_dict : dict
+        Dictionnary containing the main parameters of FEMM
 
     Returns
     -------
@@ -39,8 +38,8 @@ def assign_FEMM_Magnet(surf, prop, draw_FEMM_param):
             if label[-10] == "N":  # North pole magnet
                 femm.mi_setblockprop(
                     prop,
-                    draw_FEMM_param["automesh"],
-                    draw_FEMM_param["meshsize_magnetR"],
+                    FEMM_dict["automesh"],
+                    FEMM_dict["meshsize_magnetR"],
                     0,
                     "theta",
                     GROUP_RW,
@@ -49,8 +48,8 @@ def assign_FEMM_Magnet(surf, prop, draw_FEMM_param):
             else:  # South pole magnet
                 femm.mi_setblockprop(
                     prop,
-                    draw_FEMM_param["automesh"],
-                    draw_FEMM_param["meshsize_magnetR"],
+                    FEMM_dict["automesh"],
+                    FEMM_dict["meshsize_magnetR"],
                     0,
                     "theta+180",
                     GROUP_RW,
@@ -60,8 +59,8 @@ def assign_FEMM_Magnet(surf, prop, draw_FEMM_param):
             if label[-10] == "N":  # North pole magnet
                 femm.mi_setblockprop(
                     prop,
-                    draw_FEMM_param["automesh"],
-                    draw_FEMM_param["meshsize_magnetR"],
+                    FEMM_dict["automesh"],
+                    FEMM_dict["meshsize_magnetR"],
                     0,
                     theta * 180 / pi,
                     GROUP_RW,
@@ -70,8 +69,8 @@ def assign_FEMM_Magnet(surf, prop, draw_FEMM_param):
             else:  # South pole magnet
                 femm.mi_setblockprop(
                     prop,
-                    draw_FEMM_param["automesh"],
-                    draw_FEMM_param["meshsize_magnetR"],
+                    FEMM_dict["automesh"],
+                    FEMM_dict["meshsize_magnetR"],
                     0,
                     theta * 180 / pi + 180,
                     GROUP_RW,
@@ -83,8 +82,8 @@ def assign_FEMM_Magnet(surf, prop, draw_FEMM_param):
             if label[-10] == "N":  # North pole magnet
                 femm.mi_setblockprop(
                     prop,
-                    draw_FEMM_param["automesh"],
-                    draw_FEMM_param["meshsize_magnetS"],
+                    FEMM_dict["automesh"],
+                    FEMM_dict["meshsize_magnetS"],
                     0,
                     "theta",
                     GROUP_SW,
@@ -93,8 +92,8 @@ def assign_FEMM_Magnet(surf, prop, draw_FEMM_param):
             else:  # South pole magnet
                 femm.mi_setblockprop(
                     prop,
-                    draw_FEMM_param["automesh"],
-                    draw_FEMM_param["meshsize_magnetS"],
+                    FEMM_dict["automesh"],
+                    FEMM_dict["meshsize_magnetS"],
                     0,
                     "theta+180",
                     GROUP_SW,
@@ -105,8 +104,8 @@ def assign_FEMM_Magnet(surf, prop, draw_FEMM_param):
             if label[-10] == "N":  # North pole magnet
                 femm.mi_setblockprop(
                     prop,
-                    draw_FEMM_param["automesh"],
-                    draw_FEMM_param["meshsize_magnetS"],
+                    FEMM_dict["automesh"],
+                    FEMM_dict["meshsize_magnetS"],
                     0,
                     theta * 180 / pi,
                     GROUP_SW,
@@ -115,8 +114,8 @@ def assign_FEMM_Magnet(surf, prop, draw_FEMM_param):
             else:  # South pole magnet
                 femm.mi_setblockprop(
                     prop,
-                    draw_FEMM_param["automesh"],
-                    draw_FEMM_param["meshsize_magnetS"],
+                    FEMM_dict["automesh"],
+                    FEMM_dict["meshsize_magnetS"],
                     0,
                     theta * 180 / pi + 180,
                     GROUP_SW,

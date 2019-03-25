@@ -575,7 +575,7 @@ def generate_str(gen_dict, class_dict):
                 + ") + "
                 + """'"'"""
             )
-        elif prop["type"] in ["int", "float", "bool", "complex"]:
+        elif prop["type"] in ["int", "float", "bool", "complex", "dict"]:
             # Add => < MyClass_str += "my_var = "+str(self.my_var) >to var_str
             var_str += (
                 TAB2

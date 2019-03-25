@@ -35,6 +35,8 @@ def find_test_value(prop_dict, return_type):
 
     if return_type == "bool":
         return True
+    if return_type == "dict":
+        return {"test": "Test for a dict", "test2": 5.2}
 
     if return_type == "int":
         if prop_dict["type"] in ["float", "int"]:

@@ -8,7 +8,7 @@ import femm
 from pyleecan.Functions.FEMM import GROUP_AG
 
 
-def assign_FEMM_airgap(surf, prop, draw_FEMM_param):
+def assign_FEMM_airgap(surf, prop, FEMM_dict):
     """Assign properties of the Airgap surface between the stator and the rotor
 
     Parameters
@@ -17,7 +17,7 @@ def assign_FEMM_airgap(surf, prop, draw_FEMM_param):
         the surface to assign
     prop : str
         the property to assign
-    draw_FEMM_param : dict
+    FEMM_dict : dict
         Dictionnary containing the main parameters of FEMM
 
     Returns
@@ -30,8 +30,8 @@ def assign_FEMM_airgap(surf, prop, draw_FEMM_param):
     femm.mi_selectlabel(point_ref.real, point_ref.imag)
     femm.mi_setblockprop(
         prop,
-        draw_FEMM_param["automesh_airgap"],
-        draw_FEMM_param["meshsize_airgap"],
+        FEMM_dict["automesh_airgap"],
+        FEMM_dict["meshsize_airgap"],
         0,
         0,
         GROUP_AG,

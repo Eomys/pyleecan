@@ -155,6 +155,8 @@ def get_value_str(value, type_val):
     elif type_val == "int":
         # For int convert to avoid ".0"
         return str(int(value))
+    elif type_val == "dict":
+        return "{}"
     elif type_val == "bool":
         # change 1 or 0 to True and False
         return str(bool(int(value)))

@@ -8,46 +8,33 @@ import femm
 from pyleecan.Functions.FEMM import GROUP_RV, GROUP_SV
 
 
-def assign_FEMM_Ventilation(point_ref, label, prop, draw_FEMM_param):
+def assign_FEMM_Ventilation(surf, prop, FEMM_dict):
     """Assign property of Ventilation in FEMM
 
     Parameters
     ----------
-    point_ref :
-        the reference point of the surface
-    prop :
-        the property to assign
-    label :
+    surf : Surface
+        Surface to assign
+    label : str 
         the label of the surface to assign
-    draw_FEMM_param :
-        Dictionnary containing parameter needed
-        to draw in FEMM
+    FEMM_dict : dict
+        Dictionnary containing the main parameters of FEMM
 
     Returns
     -------
     None
     
     """
+    point_ref = surf.point_ref
+
     femm.mi_addblocklabel(point_ref.real, point_ref.imag)
     femm.mi_selectlabel(point_ref.real, point_ref.imag)
-    if "Rotor" in label:  # Ventilation on the rotor
+    if "Rotor" in surf.label:  # Ventilation on the rotor
         femm.mi_setblockprop(
-            prop,
-            draw_FEMM_param["automesh"],
-            draw_FEMM_param["meshsize_air"],
-            0,
-            0,
-            GROUP_RV,
-            0,
+            prop, FEMM_dict["automesh"], FEMM_dict["meshsize_air"], 0, 0, GROUP_RV, 0
         )
     else:  # Ventilation on the stator
         femm.mi_setblockprop(
-            prop,
-            draw_FEMM_param["automesh"],
-            draw_FEMM_param["meshsize_air"],
-            0,
-            0,
-            GROUP_SV,
-            0,
+            prop, FEMM_dict["automesh"], FEMM_dict["meshsize_air"], 0, 0, GROUP_SV, 0
         )
     femm.mi_clearselected()

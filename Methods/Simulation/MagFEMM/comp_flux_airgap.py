@@ -5,8 +5,6 @@
 """
 
 from pyleecan.Functions.FEMM.draw_FEMM import draw_FEMM
-from pyleecan.Functions.FEMM.solve_FEMM import solve_FEMM
-from pyleecan.Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
 from pyleecan.Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 import femm
 from numpy import pi, linspace, sin, cos, zeros, transpose
@@ -30,7 +28,7 @@ def comp_flux_airgap(self, output):
         output,
         is_mmfr=self.is_mmfr,
         is_mmfs=self.is_mmfs,
-        j_t0=1,
+        j_t0=0,
         type_calc_leakage=self.type_calc_leakage,
         sym=1,  # output.geo.sym,
         is_remove_vent=self.is_remove_vent,
@@ -40,6 +38,7 @@ def comp_flux_airgap(self, output):
         is_rotor_linear_BH=self.is_rotor_linear_BH,
         kgeo_fineness=1,
         kmesh_fineness=1,
+        user_FEMM_dict = self.FEMM_dict,
         path_save=self.get_path_save(output),
     )
 
