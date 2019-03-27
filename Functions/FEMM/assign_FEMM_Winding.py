@@ -33,7 +33,7 @@ def assign_FEMM_Winding(surf, prop, FEMM_dict, rotor, stator):
     femm.mi_addblocklabel(point_ref.real, point_ref.imag)
     femm.mi_selectlabel(point_ref.real, point_ref.imag)
     if "Rotor" in surf.label:  # Winding on the rotor
-        Clabel = "Circs"
+        Clabel = "Circr"
         Ntcoil = rotor.winding.Ntcoil
         if prop[-1] == "+":
             femm.mi_setblockprop(
@@ -56,7 +56,7 @@ def assign_FEMM_Winding(surf, prop, FEMM_dict, rotor, stator):
                 -Ntcoil,
             )
     else:  # Winding on the stator
-        Clabel = "Circr"
+        Clabel = "Circs"
         Ntcoil = stator.winding.Ntcoil
         if prop[-1] == "+":
             femm.mi_setblockprop(
