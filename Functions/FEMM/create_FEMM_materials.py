@@ -102,7 +102,9 @@ def create_FEMM_materials(
                 materials.append("Rotor Iron")
             prop_dict[label] = "Rotor Iron"
         elif "Airgap" in label:  # Airgap surface
-            femm.mi_addmaterial("Airgap", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
+            if "Airgap" not in materials:
+                femm.mi_addmaterial("Airgap", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
+                materials.append("Airgap")
             prop_dict[label] = "Airgap"
         elif "Ventilation" in label:  # Ventilation
             # Check if the property already exist in FEMM
