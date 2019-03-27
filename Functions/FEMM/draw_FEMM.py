@@ -5,8 +5,6 @@
 """
 
 import femm
-from os import mkdir
-from os.path import join, isdir
 from pyleecan.Classes.Lamination import Lamination
 from pyleecan.Functions.FEMM import (
     hidebc,
@@ -18,13 +16,12 @@ from pyleecan.Functions.FEMM import (
 )
 from pyleecan.Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
 from pyleecan.Functions.FEMM.comp_FEMM_dict import comp_FEMM_dict
-from pyleecan.Functions.FEMM.get_element_size import get_element_size
+from pyleecan.Functions.FEMM.get_mesh_param import get_mesh_param
 from pyleecan.Functions.FEMM.create_FEMM_boundary_conditions import (
     create_FEMM_boundary_conditions,
 )
 from pyleecan.Functions.FEMM.create_FEMM_materials import create_FEMM_materials
 from pyleecan.Functions.FEMM.get_sliding_band import get_sliding_band
-from pyleecan.Classes.Circle import Circle
 
 
 def draw_FEMM(
@@ -32,8 +29,9 @@ def draw_FEMM(
     is_mmfr,
     is_mmfs,
     j_t0,
+    sym,
+    is_antiper,
     type_calc_leakage,
-    sym=1,
     is_remove_vent=False,
     is_remove_slotS=False,
     is_remove_slotR=False,
@@ -45,7 +43,6 @@ def draw_FEMM(
     path_save="FEMM_model.fem",
 ):
     """Draws and assigns the property of the machine in FEMM
-    
     
     Parameters
     ----------
@@ -79,33 +76,23 @@ def draw_FEMM(
         global coefficient to adjust mesh fineness
         in FEMM (1: default ; > 1: finner ; < 1: less fine)
     sym : int
-        the symmetry applied on the stator and the rotor
+        the symmetry applied on the stator and the rotor (take into account antiperiodicity)
+    is_antiper: bool
+        To apply antiperiodicity boundary conditions
 
     Returns
     -------
 
-    circuits : list
-        list the name of the circuits created
+    FEMM_dict : dict
+        Dictionnary containing the main parameters of FEMM (including circuits and materials)
     """
 
     # Initialization from output for readibility
     BHs = output.geo.stator.BH_curve  # Stator B(H) curve
     BHr = output.geo.rotor.BH_curve  # Rotor B(H) curve
-    Wgap_mec = output.geo.Wgap_mec  # Minimum airgap width (including magnet) [m]
-    angle = output.elec.angle  # The angle position vector
     Is = output.elec.Is  # Stator currents waveforms
     Ir = output.elec.Ir  # Rotor currents waveforms
     machine = output.simu.machine
-    Lgap = output.geo.Lgap  # airgap length
-
-    # The package must be initialized with the openfemm command.
-    femm.openfemm()
-
-    # We need to create a new Magnetostatics document to work on.
-    femm.newdocument(0)
-
-    # defining the problem
-    femm.mi_probdef(0, "meters", pbtype, precision)
 
     # Modifiy the machine to match the conditions
     machine = type(machine)(init_dict=machine.as_dict())
@@ -119,13 +106,7 @@ def draw_FEMM(
         machine.rotor.axial_vent = list()
         machine.stator.axial_vent = list()
 
-    # Computing parameter (element size, arcspan...) needed when drawing machine in FEMM
-    FEMM_dict = comp_FEMM_dict(
-        machine, kgeo_fineness, kmesh_fineness, type_calc_leakage
-    )
-    FEMM_dict.update(user_FEMM_dict)
-
-    # Building geometry of the stator and the rotor
+    # Building geometry of the (modified) stator and the rotor
     surf_list = list()
     lam_ext = machine.get_lamination(is_internal=False)
     lam_int = machine.get_lamination(is_internal=True)
@@ -142,6 +123,21 @@ def draw_FEMM(
     # adding External Lamination surface
     surf_list.extend(lam_ext.build_geometry(sym=sym))
 
+    # Computing parameter (element size, arcspan...) needed to define the simulation
+    FEMM_dict = comp_FEMM_dict(
+        machine, kgeo_fineness, kmesh_fineness, type_calc_leakage
+    )
+    FEMM_dict.update(user_FEMM_dict)  # Overwrite some values if needed
+
+    # The package must be initialized with the openfemm command.
+    femm.openfemm()
+
+    # We need to create a new Magnetostatics document to work on.
+    femm.newdocument(0)
+
+    # defining the problem
+    femm.mi_probdef(0, "meters", FEMM_dict["pbtype"], FEMM_dict["precision"])
+
     # Creation of all the materials and circuit in FEMM
     prop_dict, materials, circuits = create_FEMM_materials(
         machine,
@@ -157,21 +153,21 @@ def draw_FEMM(
         is_eddies,
         j_t0,
     )
-    create_FEMM_boundary_conditions(sym=sym, is_antisyma=True)
+    create_FEMM_boundary_conditions(sym=sym, is_antiper=is_antiper)
 
     # Draw and assign all the surfaces of the machine
     for surf in surf_list:
         label = surf.label
         # Get the correct element size and group according to the label
-        E_dict = get_element_size(label, FEMM_dict)
+        mesh_dict = get_mesh_param(label, FEMM_dict)
         surf.draw_FEMM(
             nodeprop="None",
             maxseg=FEMM_dict["arcspan"],  # max span of arc element in degrees
             propname="None",
-            elementsize=E_dict["element_size"],
-            automesh=FEMM_dict["automesh_segments"],
+            elementsize=mesh_dict["element_size"],
+            automesh=mesh_dict["automesh"],
             hide=False,
-            group=E_dict["group"],
+            group=mesh_dict["group"],
         )
         assign_FEMM_surface(
             surf, prop_dict[label], FEMM_dict, machine.rotor, machine.stator
@@ -180,4 +176,8 @@ def draw_FEMM(
     # Save
     femm.mi_saveas(path_save)
     # femm.mi_close()
-    return materials, circuits
+
+    FEMM_dict["materials"] = materials
+    FEMM_dict["circuits"] = circuits
+
+    return FEMM_dict

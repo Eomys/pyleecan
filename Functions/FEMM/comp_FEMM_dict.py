@@ -6,6 +6,16 @@
 
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.LamSlotMag import LamSlotMag
+from pyleecan.Functions.FEMM import acsolver, pbtype, precision, minangle
+from pyleecan.Functions.FEMM import (
+    GROUP_RC,
+    GROUP_RV,
+    GROUP_RW,
+    GROUP_SC,
+    GROUP_SV,
+    GROUP_SW,
+    GROUP_AG,
+)
 
 
 def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
@@ -41,7 +51,13 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
 
     FEMM_dict = dict()
     FEMM_dict["is_close_model"] = 0
+    FEMM_dict["acsolver"] = acsolver
+    FEMM_dict["pbtype"] = pbtype
+    FEMM_dict["precision"] = precision
+    FEMM_dict["minangle"] = minangle
+    FEMM_dict["freqpb"] = 0  # setting 2D magnetostatic problem
 
+    FEMM_dict["smart_mesh"] = 0
     FEMM_dict["automesh"] = 0  # 1 to let the solver define the mesh in all
     # regions(except in the airgap), otherwise meshsize_XXX parameters are used
     FEMM_dict["automesh_airgap"] = 0  # 1 to let the solver define the mesh in the
@@ -56,6 +72,7 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
     # segment discretization(1 for automatic meshing) "elementsize" in FEMM doc
     FEMM_dict["arcspan"] = 1 / Kgeo_fineness  # max span of arc element in degrees
 
+    FEMM_dict["Lfemm"] = (machine.stator.comp_length() + machine.rotor.comp_length())/2
     if type(machine.stator) == LamSlot and Hstot > 0:  # if there is Slot on
         #  the stator
         # mesh parameter for stator slot region
@@ -124,5 +141,15 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
         FEMM_dict["meshsize_slotS"] = Hstot / 50
         # % mesh parameter for stator slot region
         FEMM_dict["meshsize_slotR"] = Hrtot / 50
+
+    # Set groups
+    FEMM_dict["groups"] = dict()
+    FEMM_dict["groups"]["GROUP_RC"] = GROUP_RC
+    FEMM_dict["groups"]["GROUP_RV"] = GROUP_RV
+    FEMM_dict["groups"]["GROUP_RW"] = GROUP_RW
+    FEMM_dict["groups"]["GROUP_SC"] = GROUP_SC
+    FEMM_dict["groups"]["GROUP_SV"] = GROUP_SV
+    FEMM_dict["groups"]["GROUP_SW"] = GROUP_SW
+    FEMM_dict["groups"]["GROUP_AG"] = GROUP_AG
 
     return FEMM_dict
