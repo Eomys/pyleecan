@@ -18,7 +18,6 @@ from pyleecan.Methods.Machine.Machine.comp_output_geo import comp_output_geo
 from pyleecan.Methods.Machine.Machine.comp_length_airgap_active import (
     comp_length_airgap_active,
 )
-from pyleecan.Methods.Machine.Machine.comp_sym import comp_sym
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Lamination import Lamination
@@ -55,8 +54,6 @@ class Machine(FrozenClass):
     comp_output_geo = comp_output_geo
     # cf Methods.Machine.Machine.comp_length_airgap_active
     comp_length_airgap_active = comp_length_airgap_active
-    # cf Methods.Machine.Machine.comp_sym
-    comp_sym = comp_sym
     # save method is available in all object
     save = save
 

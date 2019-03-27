@@ -38,6 +38,12 @@ class MagFEMM(Magnetics):
         is_mmfr=True,
         is_stator_linear_BH=0,
         is_rotor_linear_BH=0,
+        is_symmetry_t=False,
+        sym_t=1,
+        is_antiper_t=False,
+        is_symmetry_a=False,
+        sym_a=1,
+        is_antiper_a=False,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -65,6 +71,12 @@ class MagFEMM(Magnetics):
                     "is_mmfr",
                     "is_stator_linear_BH",
                     "is_rotor_linear_BH",
+                    "is_symmetry_t",
+                    "sym_t",
+                    "is_antiper_t",
+                    "is_symmetry_a",
+                    "sym_a",
+                    "is_antiper_a",
                 ],
             )
             # Overwrite default value with init_dict content
@@ -92,6 +104,18 @@ class MagFEMM(Magnetics):
                 is_stator_linear_BH = init_dict["is_stator_linear_BH"]
             if "is_rotor_linear_BH" in list(init_dict.keys()):
                 is_rotor_linear_BH = init_dict["is_rotor_linear_BH"]
+            if "is_symmetry_t" in list(init_dict.keys()):
+                is_symmetry_t = init_dict["is_symmetry_t"]
+            if "sym_t" in list(init_dict.keys()):
+                sym_t = init_dict["sym_t"]
+            if "is_antiper_t" in list(init_dict.keys()):
+                is_antiper_t = init_dict["is_antiper_t"]
+            if "is_symmetry_a" in list(init_dict.keys()):
+                is_symmetry_a = init_dict["is_symmetry_a"]
+            if "sym_a" in list(init_dict.keys()):
+                sym_a = init_dict["sym_a"]
+            if "is_antiper_a" in list(init_dict.keys()):
+                is_antiper_a = init_dict["is_antiper_a"]
         # Initialisation by argument
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -107,6 +131,12 @@ class MagFEMM(Magnetics):
             is_mmfr=is_mmfr,
             is_stator_linear_BH=is_stator_linear_BH,
             is_rotor_linear_BH=is_rotor_linear_BH,
+            is_symmetry_t=is_symmetry_t,
+            sym_t=sym_t,
+            is_antiper_t=is_antiper_t,
+            is_symmetry_a=is_symmetry_a,
+            sym_a=sym_a,
+            is_antiper_a=is_antiper_a,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties

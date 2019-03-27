@@ -19,7 +19,6 @@ from pyleecan.Methods.Machine.LamSlotWind.plot import plot
 from pyleecan.Methods.Machine.LamSlotWind.plot_winding import plot_winding
 from pyleecan.Methods.Machine.LamSlotWind.comp_fill_factor import comp_fill_factor
 from pyleecan.Methods.Machine.LamSlotWind.comp_output_geo import comp_output_geo
-from pyleecan.Methods.Machine.LamSlotWind.comp_sym import comp_sym
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Winding import Winding
@@ -91,8 +90,6 @@ class LamSlotWind(LamSlot):
     comp_fill_factor = comp_fill_factor
     # cf Methods.Machine.LamSlotWind.comp_output_geo
     comp_output_geo = comp_output_geo
-    # cf Methods.Machine.LamSlotWind.comp_sym
-    comp_sym = comp_sym
     # save method is available in all object
     save = save
 

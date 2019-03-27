@@ -23,7 +23,6 @@ def comp_output_geo(self):
     output.Wgap_mag = self.comp_width_airgap_mag()
     output.Rgap_mec = self.comp_Rgap_mec()
     output.Lgap = self.comp_length_airgap_active()
-    output.sym = self.comp_sym()
 
     output.stator = self.stator.comp_output_geo()
     output.rotor = self.rotor.comp_output_geo()

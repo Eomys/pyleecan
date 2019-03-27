@@ -33,6 +33,12 @@ class Magnetics(FrozenClass):
         is_mmfr=True,
         is_stator_linear_BH=0,
         is_rotor_linear_BH=0,
+        is_symmetry_t=False,
+        sym_t=1,
+        is_antiper_t=False,
+        is_symmetry_a=False,
+        sym_a=1,
+        is_antiper_a=False,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -55,6 +61,12 @@ class Magnetics(FrozenClass):
                     "is_mmfr",
                     "is_stator_linear_BH",
                     "is_rotor_linear_BH",
+                    "is_symmetry_t",
+                    "sym_t",
+                    "is_antiper_t",
+                    "is_symmetry_a",
+                    "sym_a",
+                    "is_antiper_a",
                 ],
             )
             # Overwrite default value with init_dict content
@@ -72,6 +84,18 @@ class Magnetics(FrozenClass):
                 is_stator_linear_BH = init_dict["is_stator_linear_BH"]
             if "is_rotor_linear_BH" in list(init_dict.keys()):
                 is_rotor_linear_BH = init_dict["is_rotor_linear_BH"]
+            if "is_symmetry_t" in list(init_dict.keys()):
+                is_symmetry_t = init_dict["is_symmetry_t"]
+            if "sym_t" in list(init_dict.keys()):
+                sym_t = init_dict["sym_t"]
+            if "is_antiper_t" in list(init_dict.keys()):
+                is_antiper_t = init_dict["is_antiper_t"]
+            if "is_symmetry_a" in list(init_dict.keys()):
+                is_symmetry_a = init_dict["is_symmetry_a"]
+            if "sym_a" in list(init_dict.keys()):
+                sym_a = init_dict["sym_a"]
+            if "is_antiper_a" in list(init_dict.keys()):
+                is_antiper_a = init_dict["is_antiper_a"]
         # Initialisation by argument
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
@@ -81,6 +105,12 @@ class Magnetics(FrozenClass):
         self.is_mmfr = is_mmfr
         self.is_stator_linear_BH = is_stator_linear_BH
         self.is_rotor_linear_BH = is_rotor_linear_BH
+        self.is_symmetry_t = is_symmetry_t
+        self.sym_t = sym_t
+        self.is_antiper_t = is_antiper_t
+        self.is_symmetry_a = is_symmetry_a
+        self.sym_a = sym_a
+        self.is_antiper_a = is_antiper_a
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -101,7 +131,15 @@ class Magnetics(FrozenClass):
         Magnetics_str += (
             "is_stator_linear_BH = " + str(self.is_stator_linear_BH) + linesep
         )
-        Magnetics_str += "is_rotor_linear_BH = " + str(self.is_rotor_linear_BH)
+        Magnetics_str += (
+            "is_rotor_linear_BH = " + str(self.is_rotor_linear_BH) + linesep
+        )
+        Magnetics_str += "is_symmetry_t = " + str(self.is_symmetry_t) + linesep
+        Magnetics_str += "sym_t = " + str(self.sym_t) + linesep
+        Magnetics_str += "is_antiper_t = " + str(self.is_antiper_t) + linesep
+        Magnetics_str += "is_symmetry_a = " + str(self.is_symmetry_a) + linesep
+        Magnetics_str += "sym_a = " + str(self.sym_a) + linesep
+        Magnetics_str += "is_antiper_a = " + str(self.is_antiper_a)
         return Magnetics_str
 
     def __eq__(self, other):
@@ -123,6 +161,18 @@ class Magnetics(FrozenClass):
             return False
         if other.is_rotor_linear_BH != self.is_rotor_linear_BH:
             return False
+        if other.is_symmetry_t != self.is_symmetry_t:
+            return False
+        if other.sym_t != self.sym_t:
+            return False
+        if other.is_antiper_t != self.is_antiper_t:
+            return False
+        if other.is_symmetry_a != self.is_symmetry_a:
+            return False
+        if other.sym_a != self.sym_a:
+            return False
+        if other.is_antiper_a != self.is_antiper_a:
+            return False
         return True
 
     def as_dict(self):
@@ -137,6 +187,12 @@ class Magnetics(FrozenClass):
         Magnetics_dict["is_mmfr"] = self.is_mmfr
         Magnetics_dict["is_stator_linear_BH"] = self.is_stator_linear_BH
         Magnetics_dict["is_rotor_linear_BH"] = self.is_rotor_linear_BH
+        Magnetics_dict["is_symmetry_t"] = self.is_symmetry_t
+        Magnetics_dict["sym_t"] = self.sym_t
+        Magnetics_dict["is_antiper_t"] = self.is_antiper_t
+        Magnetics_dict["is_symmetry_a"] = self.is_symmetry_a
+        Magnetics_dict["sym_a"] = self.sym_a
+        Magnetics_dict["is_antiper_a"] = self.is_antiper_a
         # The class name is added to the dict fordeserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -151,6 +207,12 @@ class Magnetics(FrozenClass):
         self.is_mmfr = None
         self.is_stator_linear_BH = None
         self.is_rotor_linear_BH = None
+        self.is_symmetry_t = None
+        self.sym_t = None
+        self.is_antiper_t = None
+        self.is_symmetry_a = None
+        self.sym_a = None
+        self.is_antiper_a = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -269,4 +331,106 @@ class Magnetics(FrozenClass):
         fget=_get_is_rotor_linear_BH,
         fset=_set_is_rotor_linear_BH,
         doc=u"""0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)""",
+    )
+
+    def _get_is_symmetry_t(self):
+        """getter of is_symmetry_t"""
+        return self._is_symmetry_t
+
+    def _set_is_symmetry_t(self, value):
+        """setter of is_symmetry_t"""
+        check_var("is_symmetry_t", value, "bool")
+        self._is_symmetry_t = value
+
+    # 0 Compute on the complete time vector, 1 compute according to sym_t and is_antiper_t
+    # Type : bool
+    is_symmetry_t = property(
+        fget=_get_is_symmetry_t,
+        fset=_set_is_symmetry_t,
+        doc=u"""0 Compute on the complete time vector, 1 compute according to sym_t and is_antiper_t""",
+    )
+
+    def _get_sym_t(self):
+        """getter of sym_t"""
+        return self._sym_t
+
+    def _set_sym_t(self, value):
+        """setter of sym_t"""
+        check_var("sym_t", value, "int", Vmin=1)
+        self._sym_t = value
+
+    # Number of symmetry for the time vector
+    # Type : int, min = 1
+    sym_t = property(
+        fget=_get_sym_t,
+        fset=_set_sym_t,
+        doc=u"""Number of symmetry for the time vector""",
+    )
+
+    def _get_is_antiper_t(self):
+        """getter of is_antiper_t"""
+        return self._is_antiper_t
+
+    def _set_is_antiper_t(self, value):
+        """setter of is_antiper_t"""
+        check_var("is_antiper_t", value, "bool")
+        self._is_antiper_t = value
+
+    # To add an antiperiodicity to the time vector
+    # Type : bool
+    is_antiper_t = property(
+        fget=_get_is_antiper_t,
+        fset=_set_is_antiper_t,
+        doc=u"""To add an antiperiodicity to the time vector""",
+    )
+
+    def _get_is_symmetry_a(self):
+        """getter of is_symmetry_a"""
+        return self._is_symmetry_a
+
+    def _set_is_symmetry_a(self, value):
+        """setter of is_symmetry_a"""
+        check_var("is_symmetry_a", value, "bool")
+        self._is_symmetry_a = value
+
+    # 0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a
+    # Type : bool
+    is_symmetry_a = property(
+        fget=_get_is_symmetry_a,
+        fset=_set_is_symmetry_a,
+        doc=u"""0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a""",
+    )
+
+    def _get_sym_a(self):
+        """getter of sym_a"""
+        return self._sym_a
+
+    def _set_sym_a(self, value):
+        """setter of sym_a"""
+        check_var("sym_a", value, "int", Vmin=1)
+        self._sym_a = value
+
+    # Number of symmetry for the angle vector
+    # Type : int, min = 1
+    sym_a = property(
+        fget=_get_sym_a,
+        fset=_set_sym_a,
+        doc=u"""Number of symmetry for the angle vector""",
+    )
+
+    def _get_is_antiper_a(self):
+        """getter of is_antiper_a"""
+        return self._is_antiper_a
+
+    def _set_is_antiper_a(self, value):
+        """setter of is_antiper_a"""
+        check_var("is_antiper_a", value, "bool")
+        self._is_antiper_a = value
+
+    # To add an antiperiodicity to the angle vector
+    # Type : bool
+    is_antiper_a = property(
+        fget=_get_is_antiper_a,
+        fset=_set_is_antiper_a,
+        doc=u"""To add an antiperiodicity to the angle vector""",
     )
