@@ -5,3 +5,4 @@ Is;A;Stator currents as a function of time (each column correspond to one phase)
 Ir;A;Rotor currents as a function of time (each column correspond to one phase) to import;;(Nt_tot, qs);ImportMatrix;None;;;;;;;;;;;;
 angle_rotor;rad;Rotor angular position as a function of time (if None computed according to Nr) to import;;Nt_tot;ImportMatrix;None;;;;;;;;;;;;
 Nr;rpm;Rotor speed as a function of time to import;;Nt_tot;ImportMatrix;None;;;;;;;;;;;;
+rot_dir;-;Rotation direction of the rotor 1 trigo, -1 clockwise;;;float;-1;-1;1;;;;;;;;;;

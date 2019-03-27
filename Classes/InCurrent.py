@@ -34,6 +34,7 @@ class InCurrent(Input):
         Ir=None,
         angle_rotor=None,
         Nr=None,
+        rot_dir=-1,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -59,7 +60,7 @@ class InCurrent(Input):
             Nr = ImportMatrix()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict, ["time", "angle", "Is", "Ir", "angle_rotor", "Nr"]
+                init_dict, ["time", "angle", "Is", "Ir", "angle_rotor", "Nr", "rot_dir"]
             )
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
@@ -74,6 +75,8 @@ class InCurrent(Input):
                 angle_rotor = init_dict["angle_rotor"]
             if "Nr" in list(init_dict.keys()):
                 Nr = init_dict["Nr"]
+            if "rot_dir" in list(init_dict.keys()):
+                rot_dir = init_dict["rot_dir"]
         # Initialisation by argument
         # time can be None, a ImportMatrix object or a dict
         if isinstance(time, dict):
@@ -191,6 +194,7 @@ class InCurrent(Input):
                 raise InitUnKnowClassError("Unknow class name in init_dict for Nr")
         else:
             self.Nr = Nr
+        self.rot_dir = rot_dir
         # Call Input init
         super(InCurrent, self).__init__()
         # The class is frozen (in Input init), for now it's impossible to
@@ -209,7 +213,8 @@ class InCurrent(Input):
         InCurrent_str += (
             "angle_rotor = " + str(self.angle_rotor.as_dict()) + linesep + linesep
         )
-        InCurrent_str += "Nr = " + str(self.Nr.as_dict())
+        InCurrent_str += "Nr = " + str(self.Nr.as_dict()) + linesep + linesep
+        InCurrent_str += "rot_dir = " + str(self.rot_dir)
         return InCurrent_str
 
     def __eq__(self, other):
@@ -232,6 +237,8 @@ class InCurrent(Input):
         if other.angle_rotor != self.angle_rotor:
             return False
         if other.Nr != self.Nr:
+            return False
+        if other.rot_dir != self.rot_dir:
             return False
         return True
 
@@ -265,6 +272,7 @@ class InCurrent(Input):
             InCurrent_dict["Nr"] = None
         else:
             InCurrent_dict["Nr"] = self.Nr.as_dict()
+        InCurrent_dict["rot_dir"] = self.rot_dir
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         InCurrent_dict["__class__"] = "InCurrent"
@@ -285,6 +293,7 @@ class InCurrent(Input):
             self.angle_rotor._set_None()
         if self.Nr is not None:
             self.Nr._set_None()
+        self.rot_dir = None
         # Set to None the properties inherited from Input
         super(InCurrent, self)._set_None()
 
@@ -406,4 +415,21 @@ class InCurrent(Input):
         fget=_get_Nr,
         fset=_set_Nr,
         doc=u"""Rotor speed as a function of time to import""",
+    )
+
+    def _get_rot_dir(self):
+        """getter of rot_dir"""
+        return self._rot_dir
+
+    def _set_rot_dir(self, value):
+        """setter of rot_dir"""
+        check_var("rot_dir", value, "float", Vmin=-1, Vmax=1)
+        self._rot_dir = value
+
+    # Rotation direction of the rotor 1 trigo, -1 clockwise
+    # Type : float, min = -1, max = 1
+    rot_dir = property(
+        fget=_get_rot_dir,
+        fset=_set_rot_dir,
+        doc=u"""Rotation direction of the rotor 1 trigo, -1 clockwise""",
     )

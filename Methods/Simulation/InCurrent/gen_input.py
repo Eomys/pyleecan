@@ -109,6 +109,12 @@ def gen_input(self):
                 + " expected"
             )
 
+    if self.rot_dir is None or self.rot_dir not in [-1, 1]:
+        # Enforce default rotation direction
+        output.rot_dir = -1
+    else:
+        output.rot_dir = self.rot_dir
+
     if self.parent.parent is None:
         raise InputError(
             "ERROR: The Simulation object must be in an Output object to run"

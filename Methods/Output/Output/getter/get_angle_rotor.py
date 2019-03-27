@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pyleecan.Methods.Output.Output.getter import GetOutError
-from numpy import pi, cumsum
+from numpy import pi, cumsum, roll
 
 
 def get_angle_rotor(self):
@@ -31,7 +31,15 @@ def get_angle_rotor(self):
             raise GetOutError(
                 "ERROR: Can't compute output.elec.angle_rotor, output.elec.Nr is None"
             )
+        if self.elec.rot_dir is None:
+            raise GetOutError(
+                "ERROR: Can't compute output.elec.angle_rotor, output.elec.rot_dir is None"
+            )
         deltaT = self.elec.time[1] - self.elec.time[0]
         # Convert Nr from [rpm] to [rad/s] (time in [s] and angle_rotor in [rad])
-        self.elec.angle_rotor = cumsum(deltaT * self.elec.Nr * 2 * pi / 60)
+        Ar = cumsum(self.elec.rot_dir * deltaT * self.elec.Nr * 2 * pi / 60)
+        # Enforce first position to 0
+        Ar = roll(Ar, 1)
+        Ar[0] = 0
+        self.elec.angle_rotor = Ar
         return self.elec.angle_rotor
