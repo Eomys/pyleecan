@@ -26,7 +26,6 @@ class OutGeo(FrozenClass):
         Wgap_mag=None,
         Rgap_mec=None,
         Lgap=None,
-        sym=None,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -45,7 +44,7 @@ class OutGeo(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
                 init_dict,
-                ["stator", "rotor", "Wgap_mec", "Wgap_mag", "Rgap_mec", "Lgap", "sym"],
+                ["stator", "rotor", "Wgap_mec", "Wgap_mag", "Rgap_mec", "Lgap"],
             )
             # Overwrite default value with init_dict content
             if "stator" in list(init_dict.keys()):
@@ -60,8 +59,6 @@ class OutGeo(FrozenClass):
                 Rgap_mec = init_dict["Rgap_mec"]
             if "Lgap" in list(init_dict.keys()):
                 Lgap = init_dict["Lgap"]
-            if "sym" in list(init_dict.keys()):
-                sym = init_dict["sym"]
         # Initialisation by argument
         self.parent = None
         # stator can be None, a OutGeoLam object or a dict
@@ -78,7 +75,6 @@ class OutGeo(FrozenClass):
         self.Wgap_mag = Wgap_mag
         self.Rgap_mec = Rgap_mec
         self.Lgap = Lgap
-        self.sym = sym
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -96,8 +92,7 @@ class OutGeo(FrozenClass):
         OutGeo_str += "Wgap_mec = " + str(self.Wgap_mec) + linesep
         OutGeo_str += "Wgap_mag = " + str(self.Wgap_mag) + linesep
         OutGeo_str += "Rgap_mec = " + str(self.Rgap_mec) + linesep
-        OutGeo_str += "Lgap = " + str(self.Lgap) + linesep
-        OutGeo_str += "sym = " + str(self.sym)
+        OutGeo_str += "Lgap = " + str(self.Lgap)
         return OutGeo_str
 
     def __eq__(self, other):
@@ -116,8 +111,6 @@ class OutGeo(FrozenClass):
         if other.Rgap_mec != self.Rgap_mec:
             return False
         if other.Lgap != self.Lgap:
-            return False
-        if other.sym != self.sym:
             return False
         return True
 
@@ -138,7 +131,6 @@ class OutGeo(FrozenClass):
         OutGeo_dict["Wgap_mag"] = self.Wgap_mag
         OutGeo_dict["Rgap_mec"] = self.Rgap_mec
         OutGeo_dict["Lgap"] = self.Lgap
-        OutGeo_dict["sym"] = self.sym
         # The class name is added to the dict fordeserialisation purpose
         OutGeo_dict["__class__"] = "OutGeo"
         return OutGeo_dict
@@ -154,7 +146,6 @@ class OutGeo(FrozenClass):
         self.Wgap_mag = None
         self.Rgap_mec = None
         self.Lgap = None
-        self.sym = None
 
     def _get_stator(self):
         """getter of stator"""
@@ -255,20 +246,3 @@ class OutGeo(FrozenClass):
     # Airgap active length
     # Type : float
     Lgap = property(fget=_get_Lgap, fset=_set_Lgap, doc=u"""Airgap active length""")
-
-    def _get_sym(self):
-        """getter of sym"""
-        return self._sym
-
-    def _set_sym(self, value):
-        """setter of sym"""
-        check_var("sym", value, "int")
-        self._sym = value
-
-    # Symmetry factor of the machine (1=full machine, 2 = half,…)
-    # Type : int
-    sym = property(
-        fget=_get_sym,
-        fset=_set_sym,
-        doc=u"""Symmetry factor of the machine (1=full machine, 2 = half,…) """,
-    )

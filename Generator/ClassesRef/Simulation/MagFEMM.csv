@@ -1,6 +1,6 @@
 Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
 Kmesh_fineness;;"global coefficient to adjust mesh fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)";;0;float;1;;;;;;Simulation;Magnetics;comp_flux_airgap;VERSION;1;Magnetic module: Finite Element model with FEMM;
 Kgeo_fineness;;"global coefficient to adjust geometry fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)";;0;float;1;;;;;;;;get_path_save;;;;
-type_calc_leakage;;0 no leakage calculation, 1 calculation using single slot;;0;int;0;0;1;;;;;;;;;;
+type_calc_leakage;;0 no leakage calculation, 1 calculation using single slot;;0;int;0;0;1;;;;;;solve_FEMM;;;;
 file_name;;Name of the file to save the FEMM model;;0;str;;;;;;;;;;;;;
 FEMM_dict;;To enforce user-defined values for FEMM main parameters ;;0;dict;;;;;;;;;;;;;

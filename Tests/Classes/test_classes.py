@@ -63,9 +63,14 @@ class test_all_Classes(TestCase):
                 )
             elif type_name == "dict":
                 # Default value is empty dict
+                if prop["value"] == "":
+                    value = {}
+                else:
+                    value = prop["value"]
+                print(value)
                 self.assertEqual(
                     result,
-                    {},
+                    value,
                     msg="Error for class "
                     + class_dict["name"]
                     + " for property: "

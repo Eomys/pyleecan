@@ -1,5 +1,2 @@
-
+/Classes/__pycache__/*.pyc
 *.pyc
-Tests/logtest.txt
-.DS_Store
-/Tests/Results/Plot

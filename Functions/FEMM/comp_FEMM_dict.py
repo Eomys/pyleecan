@@ -72,7 +72,9 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
     # segment discretization(1 for automatic meshing) "elementsize" in FEMM doc
     FEMM_dict["arcspan"] = 1 / Kgeo_fineness  # max span of arc element in degrees
 
-    FEMM_dict["Lfemm"] = (machine.stator.comp_length() + machine.rotor.comp_length())/2
+    FEMM_dict["Lfemm"] = (
+        machine.stator.comp_length() + machine.rotor.comp_length()
+    ) / 2
     if type(machine.stator) == LamSlot and Hstot > 0:  # if there is Slot on
         #  the stator
         # mesh parameter for stator slot region

@@ -28,7 +28,6 @@ def draw_FEMM(
     output,
     is_mmfr,
     is_mmfs,
-    j_t0,
     sym,
     is_antiper,
     type_calc_leakage,
@@ -54,8 +53,6 @@ def draw_FEMM(
     is_mmfs : bool
         1 to compute the stator magnetomotive force/stator
         magnetic field
-    j_t0 : int
-        time step for winding current calculation
     type_calc_leakage : int
         0 no leakage calculation
         1 calculation using single slot
@@ -151,7 +148,7 @@ def draw_FEMM(
         is_stator_linear_BH,
         is_rotor_linear_BH,
         is_eddies,
-        j_t0,
+        j_t0=0,
     )
     create_FEMM_boundary_conditions(sym=sym, is_antiper=is_antiper)
 
@@ -173,8 +170,18 @@ def draw_FEMM(
             surf, prop_dict[label], FEMM_dict, machine.rotor, machine.stator
         )
 
-    # Save
-    femm.mi_saveas(path_save)
+    femm.mi_zoomnatural()  # Zoom out
+    femm.mi_probdef(
+        FEMM_dict["freqpb"],
+        "meters",
+        FEMM_dict["pbtype"],
+        FEMM_dict["precision"],
+        FEMM_dict["Lfemm"],
+        FEMM_dict["minangle"],
+        FEMM_dict["acsolver"],
+    )
+    femm.mi_smartmesh(FEMM_dict["smart_mesh"])
+    femm.mi_saveas(path_save)  # Save
     # femm.mi_close()
 
     FEMM_dict["materials"] = materials

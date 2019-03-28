@@ -22,10 +22,16 @@ class OutMag(FrozenClass):
         self,
         time=None,
         angle=None,
-        Br=None,
-        Bt=None,
         Nt_tot=None,
         Na_tot=None,
+        Br=None,
+        Bt=None,
+        Tem=None,
+        Tem_av=None,
+        Tem_rip=None,
+        Phi_wind_stator=None,
+        emf=None,
+        FEMM_dict=None,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -39,33 +45,68 @@ class OutMag(FrozenClass):
 
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict, ["time", "angle", "Br", "Bt", "Nt_tot", "Na_tot"]
+                init_dict,
+                [
+                    "time",
+                    "angle",
+                    "Nt_tot",
+                    "Na_tot",
+                    "Br",
+                    "Bt",
+                    "Tem",
+                    "Tem_av",
+                    "Tem_rip",
+                    "Phi_wind_stator",
+                    "emf",
+                    "FEMM_dict",
+                ],
             )
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
                 angle = init_dict["angle"]
-            if "Br" in list(init_dict.keys()):
-                Br = init_dict["Br"]
-            if "Bt" in list(init_dict.keys()):
-                Bt = init_dict["Bt"]
             if "Nt_tot" in list(init_dict.keys()):
                 Nt_tot = init_dict["Nt_tot"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
+            if "Br" in list(init_dict.keys()):
+                Br = init_dict["Br"]
+            if "Bt" in list(init_dict.keys()):
+                Bt = init_dict["Bt"]
+            if "Tem" in list(init_dict.keys()):
+                Tem = init_dict["Tem"]
+            if "Tem_av" in list(init_dict.keys()):
+                Tem_av = init_dict["Tem_av"]
+            if "Tem_rip" in list(init_dict.keys()):
+                Tem_rip = init_dict["Tem_rip"]
+            if "Phi_wind_stator" in list(init_dict.keys()):
+                Phi_wind_stator = init_dict["Phi_wind_stator"]
+            if "emf" in list(init_dict.keys()):
+                emf = init_dict["emf"]
+            if "FEMM_dict" in list(init_dict.keys()):
+                FEMM_dict = init_dict["FEMM_dict"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
         set_array(self, "time", time)
         # angle can be None, a ndarray or a list
         set_array(self, "angle", angle)
+        self.Nt_tot = Nt_tot
+        self.Na_tot = Na_tot
         # Br can be None, a ndarray or a list
         set_array(self, "Br", Br)
         # Bt can be None, a ndarray or a list
         set_array(self, "Bt", Bt)
-        self.Nt_tot = Nt_tot
-        self.Na_tot = Na_tot
+        # Tem can be None, a ndarray or a list
+        set_array(self, "Tem", Tem)
+        self.Tem_av = Tem_av
+        self.Tem_rip = Tem_rip
+        # Phi_wind_stator can be None, a ndarray or a list
+        set_array(self, "Phi_wind_stator", Phi_wind_stator)
+        # emf can be None, a ndarray or a list
+        set_array(self, "emf", emf)
+        self.FEMM_dict = FEMM_dict
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -80,10 +121,22 @@ class OutMag(FrozenClass):
             OutMag_str += "parent = " + str(type(self.parent)) + " object" + linesep
         OutMag_str += "time = " + linesep + str(self.time) + linesep + linesep
         OutMag_str += "angle = " + linesep + str(self.angle) + linesep + linesep
+        OutMag_str += "Nt_tot = " + str(self.Nt_tot) + linesep
+        OutMag_str += "Na_tot = " + str(self.Na_tot) + linesep
         OutMag_str += "Br = " + linesep + str(self.Br) + linesep + linesep
         OutMag_str += "Bt = " + linesep + str(self.Bt) + linesep + linesep
-        OutMag_str += "Nt_tot = " + str(self.Nt_tot) + linesep
-        OutMag_str += "Na_tot = " + str(self.Na_tot)
+        OutMag_str += "Tem = " + linesep + str(self.Tem) + linesep + linesep
+        OutMag_str += "Tem_av = " + str(self.Tem_av) + linesep
+        OutMag_str += "Tem_rip = " + str(self.Tem_rip) + linesep
+        OutMag_str += (
+            "Phi_wind_stator = "
+            + linesep
+            + str(self.Phi_wind_stator)
+            + linesep
+            + linesep
+        )
+        OutMag_str += "emf = " + linesep + str(self.emf) + linesep + linesep
+        OutMag_str += "FEMM_dict = " + str(self.FEMM_dict)
         return OutMag_str
 
     def __eq__(self, other):
@@ -95,13 +148,25 @@ class OutMag(FrozenClass):
             return False
         if other.angle != self.angle:
             return False
+        if other.Nt_tot != self.Nt_tot:
+            return False
+        if other.Na_tot != self.Na_tot:
+            return False
         if other.Br != self.Br:
             return False
         if other.Bt != self.Bt:
             return False
-        if other.Nt_tot != self.Nt_tot:
+        if other.Tem != self.Tem:
             return False
-        if other.Na_tot != self.Na_tot:
+        if other.Tem_av != self.Tem_av:
+            return False
+        if other.Tem_rip != self.Tem_rip:
+            return False
+        if other.Phi_wind_stator != self.Phi_wind_stator:
+            return False
+        if other.emf != self.emf:
+            return False
+        if other.FEMM_dict != self.FEMM_dict:
             return False
         return True
 
@@ -118,6 +183,8 @@ class OutMag(FrozenClass):
             OutMag_dict["angle"] = None
         else:
             OutMag_dict["angle"] = self.angle.tolist()
+        OutMag_dict["Nt_tot"] = self.Nt_tot
+        OutMag_dict["Na_tot"] = self.Na_tot
         if self.Br is None:
             OutMag_dict["Br"] = None
         else:
@@ -126,8 +193,21 @@ class OutMag(FrozenClass):
             OutMag_dict["Bt"] = None
         else:
             OutMag_dict["Bt"] = self.Bt.tolist()
-        OutMag_dict["Nt_tot"] = self.Nt_tot
-        OutMag_dict["Na_tot"] = self.Na_tot
+        if self.Tem is None:
+            OutMag_dict["Tem"] = None
+        else:
+            OutMag_dict["Tem"] = self.Tem.tolist()
+        OutMag_dict["Tem_av"] = self.Tem_av
+        OutMag_dict["Tem_rip"] = self.Tem_rip
+        if self.Phi_wind_stator is None:
+            OutMag_dict["Phi_wind_stator"] = None
+        else:
+            OutMag_dict["Phi_wind_stator"] = self.Phi_wind_stator.tolist()
+        if self.emf is None:
+            OutMag_dict["emf"] = None
+        else:
+            OutMag_dict["emf"] = self.emf.tolist()
+        OutMag_dict["FEMM_dict"] = self.FEMM_dict
         # The class name is added to the dict fordeserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -137,10 +217,16 @@ class OutMag(FrozenClass):
 
         self.time = None
         self.angle = None
-        self.Br = None
-        self.Bt = None
         self.Nt_tot = None
         self.Na_tot = None
+        self.Br = None
+        self.Bt = None
+        self.Tem = None
+        self.Tem_av = None
+        self.Tem_rip = None
+        self.Phi_wind_stator = None
+        self.emf = None
+        self.FEMM_dict = None
 
     def _get_time(self):
         """getter of time"""
@@ -184,42 +270,6 @@ class OutMag(FrozenClass):
         doc=u"""Magnetic position vector (no symmetry)""",
     )
 
-    def _get_Br(self):
-        """getter of Br"""
-        return self._Br
-
-    def _set_Br(self, value):
-        """setter of Br"""
-        if type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Br", value, "ndarray")
-        self._Br = value
-
-    # Radial airgap flux
-    # Type : ndarray
-    Br = property(fget=_get_Br, fset=_set_Br, doc=u"""Radial airgap flux""")
-
-    def _get_Bt(self):
-        """getter of Bt"""
-        return self._Bt
-
-    def _set_Bt(self, value):
-        """setter of Bt"""
-        if type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Bt", value, "ndarray")
-        self._Bt = value
-
-    # Tanfential airgap flux
-    # Type : ndarray
-    Bt = property(fget=_get_Bt, fset=_set_Bt, doc=u"""Tanfential airgap flux""")
-
     def _get_Nt_tot(self):
         """getter of Nt_tot"""
         return self._Nt_tot
@@ -248,4 +298,143 @@ class OutMag(FrozenClass):
     # Type : int
     Na_tot = property(
         fget=_get_Na_tot, fset=_set_Na_tot, doc=u"""Length of the angle vector"""
+    )
+
+    def _get_Br(self):
+        """getter of Br"""
+        return self._Br
+
+    def _set_Br(self, value):
+        """setter of Br"""
+        if type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("Br", value, "ndarray")
+        self._Br = value
+
+    # Radial airgap flux density
+    # Type : ndarray
+    Br = property(fget=_get_Br, fset=_set_Br, doc=u"""Radial airgap flux density""")
+
+    def _get_Bt(self):
+        """getter of Bt"""
+        return self._Bt
+
+    def _set_Bt(self, value):
+        """setter of Bt"""
+        if type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("Bt", value, "ndarray")
+        self._Bt = value
+
+    # Tangential airgap flux density
+    # Type : ndarray
+    Bt = property(fget=_get_Bt, fset=_set_Bt, doc=u"""Tangential airgap flux density""")
+
+    def _get_Tem(self):
+        """getter of Tem"""
+        return self._Tem
+
+    def _set_Tem(self, value):
+        """setter of Tem"""
+        if type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("Tem", value, "ndarray")
+        self._Tem = value
+
+    # Electromagnetic torque
+    # Type : ndarray
+    Tem = property(fget=_get_Tem, fset=_set_Tem, doc=u"""Electromagnetic torque""")
+
+    def _get_Tem_av(self):
+        """getter of Tem_av"""
+        return self._Tem_av
+
+    def _set_Tem_av(self, value):
+        """setter of Tem_av"""
+        check_var("Tem_av", value, "float")
+        self._Tem_av = value
+
+    # Average Electromagnetic torque
+    # Type : float
+    Tem_av = property(
+        fget=_get_Tem_av, fset=_set_Tem_av, doc=u"""Average Electromagnetic torque"""
+    )
+
+    def _get_Tem_rip(self):
+        """getter of Tem_rip"""
+        return self._Tem_rip
+
+    def _set_Tem_rip(self, value):
+        """setter of Tem_rip"""
+        check_var("Tem_rip", value, "float")
+        self._Tem_rip = value
+
+    # Torque ripple
+    # Type : float
+    Tem_rip = property(fget=_get_Tem_rip, fset=_set_Tem_rip, doc=u"""Torque ripple""")
+
+    def _get_Phi_wind_stator(self):
+        """getter of Phi_wind_stator"""
+        return self._Phi_wind_stator
+
+    def _set_Phi_wind_stator(self, value):
+        """setter of Phi_wind_stator"""
+        if type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("Phi_wind_stator", value, "ndarray")
+        self._Phi_wind_stator = value
+
+    # Stator winding flux
+    # Type : ndarray
+    Phi_wind_stator = property(
+        fget=_get_Phi_wind_stator,
+        fset=_set_Phi_wind_stator,
+        doc=u"""Stator winding flux""",
+    )
+
+    def _get_emf(self):
+        """getter of emf"""
+        return self._emf
+
+    def _set_emf(self, value):
+        """setter of emf"""
+        if type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("emf", value, "ndarray")
+        self._emf = value
+
+    # Electromotive force
+    # Type : ndarray
+    emf = property(fget=_get_emf, fset=_set_emf, doc=u"""Electromotive force""")
+
+    def _get_FEMM_dict(self):
+        """getter of FEMM_dict"""
+        return self._FEMM_dict
+
+    def _set_FEMM_dict(self, value):
+        """setter of FEMM_dict"""
+        check_var("FEMM_dict", value, "dict")
+        self._FEMM_dict = value
+
+    # Dictionnary containing the main FEMM parameter
+    # Type : dict
+    FEMM_dict = property(
+        fget=_get_FEMM_dict,
+        fset=_set_FEMM_dict,
+        doc=u"""Dictionnary containing the main FEMM parameter""",
     )

@@ -5,10 +5,7 @@
 """
 
 from pyleecan.Functions.FEMM.draw_FEMM import draw_FEMM
-from pyleecan.Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
-import femm
-from numpy import pi, linspace, sin, cos, zeros, transpose
-from pyleecan.Functions.FEMM import acsolver, pbtype, precision, minangle
+
 
 def comp_flux_airgap(self, output):
     """Compute using FEMM the flux in the airgap
@@ -35,7 +32,6 @@ def comp_flux_airgap(self, output):
         output,
         is_mmfr=self.is_mmfr,
         is_mmfs=self.is_mmfs,
-        j_t0=0,
         sym=sym,
         is_antiper=self.is_antiper_a,
         type_calc_leakage=self.type_calc_leakage,
@@ -50,49 +46,7 @@ def comp_flux_airgap(self, output):
         path_save=self.get_path_save(output),
     )
 
-    # mi_create_mesh
-    # Compute the data for each time step
-    Br = zeros((output.mag.Nt_tot, output.mag.Na_tot))
-    Bt = zeros((output.mag.Nt_tot, output.mag.Na_tot))
-    angle = output.mag.angle
-    for ii in range(len(output.elec.time)):
-        update_FEMM_simulation(
-            output,
-            FEMM_dict["materials"],
-            FEMM_dict["circuits"],
-            self.is_mmfs,
-            self.is_mmfr,
-            j_t0=ii,
-        )
-        # Run the computation
-        femm.mi_zoomnatural()  # Zoom out
-        femm.mi_probdef(
-            FEMM_dict["freqpb"],
-            "meters",
-            FEMM_dict["pbtype"],
-            FEMM_dict["precision"],
-            FEMM_dict["Lfemm"],
-            FEMM_dict["minangle"],
-            FEMM_dict["acsolver"],
-        )
-        femm.mi_smartmesh(FEMM_dict["smart_mesh"])
-        femm.mi_analyze()
-        femm.mi_loadsolution()
-        # Get the result
-        for jj in range(len(angle)):
-            B = femm.mo_getgapb("bc_ag2", angle[jj] * 180 / pi)
-            Br[ii, jj] = B[0]
-            Bt[ii, jj] = B[1]
-            # B = femm.mo_getb(
-            #     output.geo.Rgap_mec * cos(angle[jj]),
-            #     output.geo.Rgap_mec * sin(angle[jj]),
-            # )
-            # Bx = B[0].real
-            # By = B[1].real
-            # Br[ii, jj] = Bx * cos(angle[jj]) + By * sin(angle[jj])
-            # Bt[ii, jj] = -Bx * sin(angle[jj]) + By * cos(angle[jj])
+    # Solve for all time step and store all the results in output
+    self.solve_FEMM(output, sym, FEMM_dict)
 
-    # Store the results
-    output.mag.Br = Br
-    output.mag.Bt = Bt
-
+    output.mag.FEMM_dict = FEMM_dict

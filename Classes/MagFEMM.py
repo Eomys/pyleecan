@@ -8,6 +8,7 @@ from pyleecan.Classes.Magnetics import Magnetics
 
 from pyleecan.Methods.Simulation.MagFEMM.comp_flux_airgap import comp_flux_airgap
 from pyleecan.Methods.Simulation.MagFEMM.get_path_save import get_path_save
+from pyleecan.Methods.Simulation.MagFEMM.solve_FEMM import solve_FEMM
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -21,6 +22,8 @@ class MagFEMM(Magnetics):
     comp_flux_airgap = comp_flux_airgap
     # cf Methods.Simulation.MagFEMM.get_path_save
     get_path_save = get_path_save
+    # cf Methods.Simulation.MagFEMM.solve_FEMM
+    solve_FEMM = solve_FEMM
     # save method is available in all object
     save = save
 

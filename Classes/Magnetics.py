@@ -8,6 +8,7 @@ from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Methods.Simulation.Magnetics.run import run
 from pyleecan.Methods.Simulation.Magnetics.comp_time_angle import comp_time_angle
+from pyleecan.Methods.Simulation.Magnetics.comp_emf import comp_emf
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -21,6 +22,8 @@ class Magnetics(FrozenClass):
     run = run
     # cf Methods.Simulation.Magnetics.comp_time_angle
     comp_time_angle = comp_time_angle
+    # cf Methods.Simulation.Magnetics.comp_emf
+    comp_emf = comp_emf
     # save method is available in all object
     save = save
 
