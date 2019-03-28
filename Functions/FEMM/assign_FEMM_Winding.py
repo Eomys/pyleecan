@@ -8,7 +8,7 @@ import femm
 from pyleecan.Functions.FEMM import GROUP_RW, GROUP_SW
 
 
-def assign_FEMM_Winding(surf, prop, FEMM_dict, rotor, stator):
+def assign_FEMM_Winding(surf, prop, mesh_dict, rotor, stator):
     """Assign properties to the winding in FEMM
 
     Parameters
@@ -27,55 +27,30 @@ def assign_FEMM_Winding(surf, prop, FEMM_dict, rotor, stator):
     Returns
     -------
     None
-    
     """
+
+    if "Rotor" in surf.label:  # Winding on the rotor
+        Clabel = "Circr" + prop[2]
+        Ntcoil = rotor.winding.Ntcoil
+    else:  # winding on the stator
+        Clabel = "Circs" + prop[2]
+        Ntcoil = stator.winding.Ntcoil
+    if prop[-1] == "-":  # Adapt Ntcoil sign if needed
+        Ntcoil *= -1
+
+    # Select the surface
     point_ref = surf.point_ref
     femm.mi_addblocklabel(point_ref.real, point_ref.imag)
     femm.mi_selectlabel(point_ref.real, point_ref.imag)
-    if "Rotor" in surf.label:  # Winding on the rotor
-        Clabel = "Circr"
-        Ntcoil = rotor.winding.Ntcoil
-        if prop[-1] == "+":
-            femm.mi_setblockprop(
-                prop,
-                FEMM_dict["automesh"],
-                FEMM_dict["meshsize_slotR"],
-                Clabel + prop[2],
-                0,
-                GROUP_RW,
-                Ntcoil,
-            )
-        else:
-            femm.mi_setblockprop(
-                prop,
-                FEMM_dict["automesh"],
-                FEMM_dict["meshsize_slotR"],
-                Clabel + prop[2],
-                0,
-                GROUP_RW,
-                -Ntcoil,
-            )
-    else:  # Winding on the stator
-        Clabel = "Circs"
-        Ntcoil = stator.winding.Ntcoil
-        if prop[-1] == "+":
-            femm.mi_setblockprop(
-                prop,
-                FEMM_dict["automesh"],
-                FEMM_dict["meshsize_slotS"],
-                Clabel + prop[2],
-                0,
-                GROUP_SW,
-                Ntcoil,
-            )
-        else:
-            femm.mi_setblockprop(
-                prop,
-                FEMM_dict["automesh"],
-                FEMM_dict["meshsize_slotS"],
-                Clabel + prop[2],
-                0,
-                GROUP_SW,
-                -Ntcoil,
-            )
-        femm.mi_clearselected()
+
+    # Apply property
+    femm.mi_setblockprop(
+        prop,
+        mesh_dict["automesh"],
+        mesh_dict["meshsize"],
+        Clabel,
+        0,
+        mesh_dict["group"],
+        Ntcoil,
+    )
+    femm.mi_clearselected()

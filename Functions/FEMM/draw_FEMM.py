@@ -167,9 +167,10 @@ def draw_FEMM(
             group=mesh_dict["group"],
         )
         assign_FEMM_surface(
-            surf, prop_dict[label], FEMM_dict, machine.rotor, machine.stator
+            surf, prop_dict[label], mesh_dict, machine.rotor, machine.stator
         )
 
+    # Define the simulation
     femm.mi_zoomnatural()  # Zoom out
     femm.mi_probdef(
         FEMM_dict["freqpb"],

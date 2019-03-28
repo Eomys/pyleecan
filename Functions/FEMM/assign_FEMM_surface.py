@@ -11,7 +11,7 @@ from pyleecan.Functions.FEMM.assign_FEMM_airgap import assign_FEMM_airgap
 from pyleecan.Functions.FEMM.assign_FEMM_no_mesh import assign_FEMM_no_mesh
 
 
-def assign_FEMM_surface(surf, prop, FEMM_dict, rotor, stator):
+def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
     """Assign the property given in parameter to surface having the label given
 
     Parameters
@@ -20,8 +20,8 @@ def assign_FEMM_surface(surf, prop, FEMM_dict, rotor, stator):
         the surface to assign
     prop : str
         The property to assign in FEMM
-    FEMM_dict : dict
-        Dictionnary containing the main parameters of FEMM
+    mesh_dict : dict
+        Dictionnary containing the mesh parameters corresponding to the surface
     rotor : Lamination
         The rotor of the machine
     stator : Lamination
@@ -36,17 +36,15 @@ def assign_FEMM_surface(surf, prop, FEMM_dict, rotor, stator):
 
     # point_ref is None => don't assign the surface
     if surf.point_ref is not None:
-        if "Lamination_Stator" in label:  # Stator
-            assign_FEMM_Lamination(surf, prop, FEMM_dict)
-        elif "Lamination_Rotor" in label:  # Rotor
-            assign_FEMM_Lamination(surf, prop, FEMM_dict)
+        if "Lamination_Stator" in label or "Lamination_Rotor" in label:
+            assign_FEMM_Lamination(surf, prop, mesh_dict)
         elif "Ventilation" in label:  # Ventilation
-            assign_FEMM_Ventilation(surf, prop, FEMM_dict)
+            assign_FEMM_Ventilation(surf, prop, mesh_dict)
         elif "Wind" in label:  # Winding on the Lamination
-            assign_FEMM_Winding(surf, prop, FEMM_dict, rotor, stator)
+            assign_FEMM_Winding(surf, prop, mesh_dict, rotor, stator)
         elif "Magnet" in label:  # Magnet
-            assign_FEMM_Magnet(surf, prop, FEMM_dict)
+            assign_FEMM_Magnet(surf, prop, mesh_dict)
         elif "Airgap" in label:  # Airgap
-            assign_FEMM_airgap(surf, prop, FEMM_dict)
+            assign_FEMM_airgap(surf, prop, mesh_dict)
         elif "No_mesh" in label:  # Sliding band
             assign_FEMM_no_mesh(surf)
