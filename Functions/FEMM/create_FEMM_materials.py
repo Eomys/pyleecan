@@ -138,7 +138,7 @@ def create_FEMM_materials(
             )
             prop_dict[label] = prop
         elif "No_mesh" in label:  # Sliding band
-            prop_dict[label] = None
+            prop_dict[label] = "<No Mesh>"
         elif "yoke" in label:
             prop_dict[label] = "<No Mesh>"
 

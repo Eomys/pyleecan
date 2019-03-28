@@ -3,12 +3,8 @@
 @date Created on août 09 14:12 2018
 @author franco_i
 """
-from pyleecan.Functions.FEMM.assign_FEMM_Lamination import assign_FEMM_Lamination
-from pyleecan.Functions.FEMM.assign_FEMM_Magnet import assign_FEMM_Magnet
-from pyleecan.Functions.FEMM.assign_FEMM_Ventilation import assign_FEMM_Ventilation
-from pyleecan.Functions.FEMM.assign_FEMM_Winding import assign_FEMM_Winding
-from pyleecan.Functions.FEMM.assign_FEMM_airgap import assign_FEMM_airgap
-from pyleecan.Functions.FEMM.assign_FEMM_no_mesh import assign_FEMM_no_mesh
+import femm
+from numpy import angle, pi
 
 
 def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
@@ -33,18 +29,45 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
     
     """
     label = surf.label
+    Clabel = 0  # By default no circuit
+    Ntcoil = 0  # By default no circuit
+    mag = 0  # By default no magnetization
 
     # point_ref is None => don't assign the surface
     if surf.point_ref is not None:
-        if "Lamination_Stator" in label or "Lamination_Rotor" in label:
-            assign_FEMM_Lamination(surf, prop, mesh_dict)
-        elif "Ventilation" in label:  # Ventilation
-            assign_FEMM_Ventilation(surf, prop, mesh_dict)
-        elif "Wind" in label:  # Winding on the Lamination
-            assign_FEMM_Winding(surf, prop, mesh_dict, rotor, stator)
+        # Select the surface
+        point_ref = surf.point_ref
+        femm.mi_addblocklabel(point_ref.real, point_ref.imag)
+        femm.mi_selectlabel(point_ref.real, point_ref.imag)
+
+        # Get circuit or magnetization properties if needed
+        if "Wind" in label:  # If the surface is a winding
+            if "Rotor" in label:  # Winding on the rotor
+                Clabel = "Circr" + prop[2]
+                Ntcoil = rotor.winding.Ntcoil
+            else:  # winding on the stator
+                Clabel = "Circs" + prop[2]
+                Ntcoil = stator.winding.Ntcoil
+            if prop[-1] == "-":  # Adapt Ntcoil sign if needed
+                Ntcoil *= -1
         elif "Magnet" in label:  # Magnet
-            assign_FEMM_Magnet(surf, prop, mesh_dict)
-        elif "Airgap" in label:  # Airgap
-            assign_FEMM_airgap(surf, prop, mesh_dict)
-        elif "No_mesh" in label:  # Sliding band
-            assign_FEMM_no_mesh(surf)
+            if "Radial" in label and label[-10] == "N":  # Radial magnetization
+                mag = "theta"  # North pole magnet
+            elif "Radial" in label:
+                mag = "theta + 180"  # South pole magnet
+            elif "Parallel" in label and label[-10] == "N":
+                mag = angle(point_ref) * 180 / pi  # North pole magnet
+            elif "Parallel" in label:
+                mag = angle(point_ref) * 180 / pi + 180  # South pole magnet
+
+        # Set the surface property
+        femm.mi_setblockprop(
+            prop,
+            mesh_dict["automesh"],
+            mesh_dict["meshsize"],
+            Clabel,
+            mag,
+            mesh_dict["group"],
+            Ntcoil,
+        )
+        femm.mi_clearselected()
