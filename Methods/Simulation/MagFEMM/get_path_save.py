@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from os.path import join, isdir
-from os import mkdir
+from os import makedirs
 
 
 def get_path_save(self, output):
@@ -23,7 +23,7 @@ def get_path_save(self, output):
     path_res = output.get_path_result()
     save_dir = join(path_res, "Femm")
     if not isdir(save_dir):
-        mkdir(save_dir)
+        makedirs(save_dir)
     if self.file_name not in [None, ""]:
         if file_name[-4:] != ".fem":
             file_name = file_name + ".fem"
@@ -37,3 +37,4 @@ def get_path_save(self, output):
         file_name = "FEMM_simulation.fem"
 
     return join(save_dir, file_name)
+    
