@@ -49,6 +49,12 @@ def get_mesh_param(label, FEMM_dict):
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SV"]
         else:  # if the Ventilation is on the Rotor
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RV"]
+    elif "Hole" in label:  # Holes
+        mesh_dict["element_size"] = FEMM_dict["maxelementsize"]
+        if label[4] == "S":  # if the Hole is on the Stator
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SH"]
+        else:  # if the Hole is on the Rotor
+            mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RH"]
     elif "Wind" in label:  # Winding on the Lamination
         if label[4] == "S":  # if the winding is on the Stator
             mesh_dict["element_size"] = FEMM_dict["elementsize_slotS"]

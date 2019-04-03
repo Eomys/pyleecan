@@ -112,6 +112,12 @@ def create_FEMM_materials(
                 femm.mi_addmaterial("Air", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
                 materials.append("Air")
             prop_dict[label] = "Air"
+        elif "Hole" in label:  # Hole
+            # Check if the property already exist in FEMM
+            if "Air" not in materials:
+                femm.mi_addmaterial("Air", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
+                materials.append("Air")
+            prop_dict[label] = "Air"
         elif "Bar" in label:  # Squirrel cage
             prop, materials = create_FEMM_bar(
                 is_mmfr, rotor.mat_type.elec.rho, materials
@@ -127,12 +133,12 @@ def create_FEMM_materials(
                 circuits, label, is_eddies, stator, Is, is_mmfs, j_t0, materials
             )
             prop_dict[label] = prop
-        elif "Magnet" in label and "Rotor" in label:  # Rotor Magnet
+        elif "MagnetR" in label:  # Rotor Magnet
             prop, materials = create_FEMM_magnet(
                 label, is_mmfr, is_eddies, materials, rotor
             )
             prop_dict[label] = prop
-        elif "Magnet" in label and "Stator" in label:  # Stator Magnet
+        elif "MagnetS" in label:  # Stator Magnet
             prop, materials = create_FEMM_magnet(
                 label, is_mmfs, is_eddies, materials, stator
             )
