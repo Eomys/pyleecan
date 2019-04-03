@@ -1,0 +1,3 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
+legend_name;-;Name to use in the legend in case of comparison;;;str;;;;;;;Output;;;VERSION;1;Gather the parameters for the post-processings;
+line_color;-;Color to use in case of comparison;;;str;;;;;;;;;;;;;
