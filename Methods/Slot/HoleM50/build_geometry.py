@@ -112,7 +112,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     if self.H4 > 0:
         curve_list_air.append(Segment(Z11, Z1))
     point_ref = (Z1 + Z2 + Z3 + Z8c + Z9 + Z10 + Z11) / 7
-    S1 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S1 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
     # Magnet_0 surface
     curve_list_mag = list()
@@ -144,7 +144,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list_air.append(Segment(Z8b, Z6))
     point_ref = (Z6 + Z7 + Z8 + Z8b) / 4
 
-    S3 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S3 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
     # Symmetry Air surface (W3) with magnet_1
     curve_list_air = list()
@@ -158,8 +158,8 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     if self.H4 > 0:
         curve_list_air.append(Segment(Z11s, Z1s))
     point_ref = (Z1s + Z2s + Z3s + Z8cs + Z9s + Z10s + Z11) / 7
-
-    S4 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    
+    S4 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
     # magnet_1 surface
     curve_list_mag = list()
@@ -191,7 +191,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list_air.append(Segment(Z8bs, Z6s))
     point_ref = (Z6s + Z7s + Z8s + Z8bs) / 4
 
-    S6 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S6 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
     # Air surface both magnet and W1 = 0 (S6 + S3)
     curve_list_air = list()
@@ -203,7 +203,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list_air.append(Segment(Z8s, Z8b))
     curve_list_air.append(Segment(Z8b, Z6))
     point_ref = (Z6 + Z7 + Z6s + Z8s + Z8bs + Z8b) / 6
-    S7 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S7 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
     # Air surface without magnet_0 and W1 > 0 (S1 + S2 + S3)
     curve_list_air = list()
@@ -223,7 +223,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     if self.H4 > 0:
         curve_list_air.append(Segment(Z11, Z1))
     point_ref = (Z1 + Z2 + Z3 + Z8c + Z9 + Z10 + Z11) / 7
-    S8 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S8 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
     # Air surface without magnet_1 and W1 > 0
     curve_list_air = list()
@@ -243,7 +243,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     if self.H4 > 0:
         curve_list_air.append(Segment(Z11s, Z1s))
     point_ref = (Z1s + Z2s + Z3s + Z8cs + Z9s + Z10s + Z11s) / 7
-    S9 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S9 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
     # Air surface with magnet_0 without magnet_1 and W1 = 0
     # (S4 + S5 + S7)
@@ -266,7 +266,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     if self.H4 > 0:
         curve_list_air.append(Segment(Z11s, Z1s))
     point_ref = (Z1s + Z2s + Z3s + Z8cs + Z9s + Z10s + Z11s) / 7
-    S10 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S10 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
     # Air surface with magnet_1 without magnet_0 and W1 = 0
     # (S1 + S2 + S7)
@@ -289,7 +289,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     if self.H4 > 0:
         curve_list_air.append(Segment(Z11, Z1))
     point_ref = (Z1 + Z2 + Z3 + Z8c + Z9 + Z10 + Z11) / 7
-    S11 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S11 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
     # Air surface without magnet and W1 = 0
     # (S4 + S5 + S7 + S2 + S1)
@@ -324,7 +324,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list_air.append(Segment(Z11, Z1))
 
     point_ref = (Z6 + Z8b + Z7 + Z8 + Z6s + Z8bs) / 6
-    S12 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S12 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
     # Create the surface list by selecting the correct ones
     if self.magnet_0 and self.magnet_1 and self.W1 > 0:

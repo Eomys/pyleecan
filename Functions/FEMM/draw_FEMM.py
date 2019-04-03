@@ -131,6 +131,9 @@ def draw_FEMM(
 
     # We need to create a new Magnetostatics document to work on.
     femm.newdocument(0)
+    
+    # Minimize the main window for faster geometry creation.
+    femm.main_minimize()
 
     # defining the problem
     femm.mi_probdef(0, "meters", FEMM_dict["pbtype"], FEMM_dict["precision"])
@@ -180,7 +183,7 @@ def draw_FEMM(
         FEMM_dict["minangle"],
         FEMM_dict["acsolver"],
     )
-    femm.mi_smartmesh(FEMM_dict["smart_mesh"])
+    femm.smartmesh(FEMM_dict["smart_mesh"])
     femm.mi_saveas(path_save)  # Save
     # femm.mi_close()
 

@@ -6,6 +6,7 @@
 from pyleecan.Functions.FEMM.assign_FEMM_Lamination import assign_FEMM_Lamination
 from pyleecan.Functions.FEMM.assign_FEMM_Magnet import assign_FEMM_Magnet
 from pyleecan.Functions.FEMM.assign_FEMM_Ventilation import assign_FEMM_Ventilation
+from pyleecan.Functions.FEMM.assign_FEMM_Hole import assign_FEMM_Hole
 from pyleecan.Functions.FEMM.assign_FEMM_Winding import assign_FEMM_Winding
 from pyleecan.Functions.FEMM.assign_FEMM_airgap import assign_FEMM_airgap
 from pyleecan.Functions.FEMM.assign_FEMM_no_mesh import assign_FEMM_no_mesh
@@ -42,6 +43,8 @@ def assign_FEMM_surface(surf, prop, FEMM_dict, rotor, stator):
             assign_FEMM_Lamination(surf, prop, FEMM_dict)
         elif "Ventilation" in label:  # Ventilation
             assign_FEMM_Ventilation(surf, prop, FEMM_dict)
+        elif "Hole" in label:  # Ventilation
+            assign_FEMM_Hole(surf, prop, FEMM_dict)
         elif "Wind" in label:  # Winding on the Lamination
             assign_FEMM_Winding(surf, prop, FEMM_dict, rotor, stator)
         elif "Magnet" in label:  # Magnet
