@@ -14,6 +14,7 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
 from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
 from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 
 
 class MatLamination(MatMagnetics):
@@ -56,6 +57,7 @@ class MatLamination(MatMagnetics):
                 "ImportMatrixXls": ImportMatrixXls,
                 "ImportGenVectSin": ImportGenVectSin,
                 "ImportGenMatrixSin": ImportGenMatrixSin,
+                "ImportGenVectLin": ImportGenVectLin,
                 "ImportMatrix": ImportMatrix,
             }
             obj_class = BH_curve.get("__class__")

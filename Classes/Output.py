@@ -18,6 +18,7 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.OutGeo import OutGeo
 from pyleecan.Classes.OutElec import OutElec
 from pyleecan.Classes.OutMag import OutMag
+from pyleecan.Classes.OutPost import OutPost
 
 
 class Output(FrozenClass):
@@ -38,7 +39,9 @@ class Output(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, simu=-1, path_res="", geo=-1, elec=-1, mag=-1, init_dict=None):
+    def __init__(
+        self, simu=-1, path_res="", geo=-1, elec=-1, mag=-1, post=-1, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -56,8 +59,12 @@ class Output(FrozenClass):
             elec = OutElec()
         if mag == -1:
             mag = OutMag()
+        if post == -1:
+            post = OutPost()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["simu", "path_res", "geo", "elec", "mag"])
+            check_init_dict(
+                init_dict, ["simu", "path_res", "geo", "elec", "mag", "post"]
+            )
             # Overwrite default value with init_dict content
             if "simu" in list(init_dict.keys()):
                 simu = init_dict["simu"]
@@ -69,6 +76,8 @@ class Output(FrozenClass):
                 elec = init_dict["elec"]
             if "mag" in list(init_dict.keys()):
                 mag = init_dict["mag"]
+            if "post" in list(init_dict.keys()):
+                post = init_dict["post"]
         # Initialisation by argument
         self.parent = None
         # simu can be None, a Simulation object or a dict
@@ -100,6 +109,11 @@ class Output(FrozenClass):
             self.mag = OutMag(init_dict=mag)
         else:
             self.mag = mag
+        # post can be None, a OutPost object or a dict
+        if isinstance(post, dict):
+            self.post = OutPost(init_dict=post)
+        else:
+            self.post = post
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -116,7 +130,8 @@ class Output(FrozenClass):
         Output_str += 'path_res = "' + str(self.path_res) + '"' + linesep
         Output_str += "geo = " + str(self.geo.as_dict()) + linesep + linesep
         Output_str += "elec = " + str(self.elec.as_dict()) + linesep + linesep
-        Output_str += "mag = " + str(self.mag.as_dict())
+        Output_str += "mag = " + str(self.mag.as_dict()) + linesep + linesep
+        Output_str += "post = " + str(self.post.as_dict())
         return Output_str
 
     def __eq__(self, other):
@@ -133,6 +148,8 @@ class Output(FrozenClass):
         if other.elec != self.elec:
             return False
         if other.mag != self.mag:
+            return False
+        if other.post != self.post:
             return False
         return True
 
@@ -158,6 +175,10 @@ class Output(FrozenClass):
             Output_dict["mag"] = None
         else:
             Output_dict["mag"] = self.mag.as_dict()
+        if self.post is None:
+            Output_dict["post"] = None
+        else:
+            Output_dict["post"] = self.post.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         Output_dict["__class__"] = "Output"
         return Output_dict
@@ -174,6 +195,8 @@ class Output(FrozenClass):
             self.elec._set_None()
         if self.mag is not None:
             self.mag._set_None()
+        if self.post is not None:
+            self.post._set_None()
 
     def _get_simu(self):
         """getter of simu"""
@@ -259,3 +282,19 @@ class Output(FrozenClass):
     # Magnetic module output
     # Type : OutMag
     mag = property(fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module output""")
+
+    def _get_post(self):
+        """getter of post"""
+        return self._post
+
+    def _set_post(self, value):
+        """setter of post"""
+        check_var("post", value, "OutPost")
+        self._post = value
+
+        if self._post is not None:
+            self._post.parent = self
+
+    # Post-Processing settings
+    # Type : OutPost
+    post = property(fget=_get_post, fset=_set_post, doc=u"""Post-Processing settings""")

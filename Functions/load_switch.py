@@ -70,6 +70,7 @@ load_switch = {
     "OutGeo": OutGeo,
     "OutGeoLam": OutGeoLam,
     "OutMag": OutMag,
+    "OutPost": OutPost,
     "Output": Output,
     "InCurrent": InCurrent,
     "Input": Input,
