@@ -1,5 +1,5 @@
 Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-time;s;Magnetic time vector (no symmetry);;Nt_tot;ndarray;None;;;;;;Output;;;VERSION;1;Gather the magnetic module outputs;
+time;s;Magnetic time vector (no symmetry);;Nt_tot;ndarray;None;;;;;;Output;;;VERSION;1;Gather the electric module outputs;
 angle;rad;Magnetic position vector (no symmetry);;Na_tot;ndarray;None;;;;;;;;;;;;
 Nt_tot;-;Length of the time vector;;;int;None;;;;;;;;;;;;
 Na_tot;-;Length of the angle vector;;;int;None;;;;;;;;;;;;

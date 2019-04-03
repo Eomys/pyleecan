@@ -20,6 +20,9 @@ GROUP_SSI = 9  # stator slot isthmus
 GROUP_RSI = 10  # rotor slot isthmus
 GROUP_SN = 11  # stator notches
 GROUP_RN = 12  # rotor notches
+GROUP_SH = 13  # stator hole
+GROUP_RH = 14  # rotor hole
+
 
 # global Values
 pbtype = "planar"  # problem type
