@@ -5,20 +5,13 @@
 """
 
 from pyleecan.Classes.LamSlot import LamSlot
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.HoleM51 import HoleM51
-from pyleecan.Classes.HoleM52 import HoleM52
-from pyleecan.Classes.HoleM53 import HoleM53
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Functions.FEMM import acsolver, pbtype, precision, minangle
 from pyleecan.Functions.FEMM import (
     GROUP_RC,
-	GROUP_RH,
     GROUP_RV,
     GROUP_RW,
     GROUP_SC,
-	GROUP_SH,
     GROUP_SV,
     GROUP_SW,
     GROUP_AG,
@@ -53,10 +46,7 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
     Hstot = machine.stator.slot.comp_height()
     Hsy = machine.stator.comp_height_yoke()
     Wgap_mec = machine.comp_width_airgap_mec()
-    if type(machine.rotor) == LamHole:
-        Hrtot = 0
-    else:
-        Hrtot = machine.rotor.slot.comp_height()
+    Hrtot = machine.rotor.slot.comp_height()
     Hry = machine.rotor.comp_height_yoke()
 
     FEMM_dict = dict()
@@ -140,19 +130,6 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
         # parameter for magnet region
         FEMM_dict["elementsize_magnetR"] = Hmag / 4  # max element size in m for
         # magnet segments
-    elif type(machine.rotor) == LamHole:
-        if type(machine.rotor.hole[0]) == HoleM50:
-            Hmag = machine.rotor.hole[0].H3
-        elif type(machine.rotor.hole[0]) == HoleM51:
-            Hmag = machine.rotor.hole[0].H2
-        elif type(machine.rotor.hole[0]) == HoleM52:
-            Hmag = machine.rotor.hole[0].H1
-        elif type(machine.rotor.hole[0]) == HoleM53:
-            Hmag = machine.rotor.hole[0].H2
-        FEMM_dict["meshsize_magnetR"] = Hmag / 4 / Kmesh_fineness  # mesh
-        # parameter for magnet region
-        FEMM_dict["elementsize_magnetR"] = Hmag / 4  # max element size in m for
-        # magnet segments
     else:
         FEMM_dict["meshsize_magnetR"] = None
 
@@ -170,11 +147,9 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
     # Set groups
     FEMM_dict["groups"] = dict()
     FEMM_dict["groups"]["GROUP_RC"] = GROUP_RC
-    FEMM_dict["groups"]["GROUP_RH"] = GROUP_RH
     FEMM_dict["groups"]["GROUP_RV"] = GROUP_RV
     FEMM_dict["groups"]["GROUP_RW"] = GROUP_RW
     FEMM_dict["groups"]["GROUP_SC"] = GROUP_SC
-    FEMM_dict["groups"]["GROUP_SH"] = GROUP_SH
     FEMM_dict["groups"]["GROUP_SV"] = GROUP_SV
     FEMM_dict["groups"]["GROUP_SW"] = GROUP_SW
     FEMM_dict["groups"]["GROUP_AG"] = GROUP_AG

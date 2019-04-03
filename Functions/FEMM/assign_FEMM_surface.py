@@ -26,7 +26,7 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
     Returns
     -------
     None
-
+    
     """
     label = surf.label
     Clabel = 0  # By default no circuit

@@ -90,7 +90,7 @@ class Machine(FrozenClass):
             )
             # Overwrite default value with init_dict content
             if "rotor" in list(init_dict.keys()):
-                print('Rotor set by init_dict.')
+                rotor = init_dict["rotor"]
             if "stator" in list(init_dict.keys()):
                 stator = init_dict["stator"]
             if "frame" in list(init_dict.keys()):
