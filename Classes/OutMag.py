@@ -11,7 +11,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 
 
 class OutMag(FrozenClass):
-    """Gather the electric module outputs"""
+    """Gather the magnetic module outputs"""
 
     VERSION = 1
 

@@ -31,15 +31,20 @@ def get_angle_rotor(self):
             raise GetOutError(
                 "ERROR: Can't compute output.elec.angle_rotor, output.elec.Nr is None"
             )
-        if self.elec.rot_dir is None:
-            raise GetOutError(
-                "ERROR: Can't compute output.elec.angle_rotor, output.elec.rot_dir is None"
-            )
+        if self.elec.rot_dir is None or self.elec.rot_dir not in [-1, 1]:
+            rot_dir = -1
+        else:
+            rot_dir = self.elec.rot_dir
+        if self.elec.angle_rotor_initial is None:
+            A0 = 0
+        else:
+            A0 = self.elec.angle_rotor_initial
+
         deltaT = self.elec.time[1] - self.elec.time[0]
         # Convert Nr from [rpm] to [rad/s] (time in [s] and angle_rotor in [rad])
-        Ar = cumsum(self.elec.rot_dir * deltaT * self.elec.Nr * 2 * pi / 60)
+        Ar = cumsum(rot_dir * deltaT * self.elec.Nr * 2 * pi / 60)
         # Enforce first position to 0
         Ar = roll(Ar, 1)
         Ar[0] = 0
-        self.elec.angle_rotor = Ar
+        self.elec.angle_rotor = Ar + A0
         return self.elec.angle_rotor

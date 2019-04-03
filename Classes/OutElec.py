@@ -27,6 +27,7 @@ class OutElec(FrozenClass):
         angle_rotor=None,
         Nr=None,
         rot_dir=-1,
+        angle_rotor_initial=0,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -40,7 +41,17 @@ class OutElec(FrozenClass):
 
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict, ["time", "angle", "Is", "Ir", "angle_rotor", "Nr", "rot_dir"]
+                init_dict,
+                [
+                    "time",
+                    "angle",
+                    "Is",
+                    "Ir",
+                    "angle_rotor",
+                    "Nr",
+                    "rot_dir",
+                    "angle_rotor_initial",
+                ],
             )
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
@@ -57,6 +68,8 @@ class OutElec(FrozenClass):
                 Nr = init_dict["Nr"]
             if "rot_dir" in list(init_dict.keys()):
                 rot_dir = init_dict["rot_dir"]
+            if "angle_rotor_initial" in list(init_dict.keys()):
+                angle_rotor_initial = init_dict["angle_rotor_initial"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -72,6 +85,7 @@ class OutElec(FrozenClass):
         # Nr can be None, a ndarray or a list
         set_array(self, "Nr", Nr)
         self.rot_dir = rot_dir
+        self.angle_rotor_initial = angle_rotor_initial
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -92,7 +106,8 @@ class OutElec(FrozenClass):
             "angle_rotor = " + linesep + str(self.angle_rotor) + linesep + linesep
         )
         OutElec_str += "Nr = " + linesep + str(self.Nr) + linesep + linesep
-        OutElec_str += "rot_dir = " + str(self.rot_dir)
+        OutElec_str += "rot_dir = " + str(self.rot_dir) + linesep
+        OutElec_str += "angle_rotor_initial = " + str(self.angle_rotor_initial)
         return OutElec_str
 
     def __eq__(self, other):
@@ -113,6 +128,8 @@ class OutElec(FrozenClass):
         if other.Nr != self.Nr:
             return False
         if other.rot_dir != self.rot_dir:
+            return False
+        if other.angle_rotor_initial != self.angle_rotor_initial:
             return False
         return True
 
@@ -146,6 +163,7 @@ class OutElec(FrozenClass):
         else:
             OutElec_dict["Nr"] = self.Nr.tolist()
         OutElec_dict["rot_dir"] = self.rot_dir
+        OutElec_dict["angle_rotor_initial"] = self.angle_rotor_initial
         # The class name is added to the dict fordeserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -160,6 +178,7 @@ class OutElec(FrozenClass):
         self.angle_rotor = None
         self.Nr = None
         self.rot_dir = None
+        self.angle_rotor_initial = None
 
     def _get_time(self):
         """getter of time"""
@@ -304,4 +323,21 @@ class OutElec(FrozenClass):
         fget=_get_rot_dir,
         fset=_set_rot_dir,
         doc=u"""Rotation direction of the rotor 1 trigo, -1 clockwise""",
+    )
+
+    def _get_angle_rotor_initial(self):
+        """getter of angle_rotor_initial"""
+        return self._angle_rotor_initial
+
+    def _set_angle_rotor_initial(self, value):
+        """setter of angle_rotor_initial"""
+        check_var("angle_rotor_initial", value, "float")
+        self._angle_rotor_initial = value
+
+    # Initial angular position of the rotor at t=0
+    # Type : float
+    angle_rotor_initial = property(
+        fget=_get_angle_rotor_initial,
+        fset=_set_angle_rotor_initial,
+        doc=u"""Initial angular position of the rotor at t=0""",
     )
