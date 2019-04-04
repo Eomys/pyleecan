@@ -38,9 +38,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     """
     if self.get_is_stator():  # check if the slot is on the stator
-        st = "S"
+        st = "Stator"
     else:
-        st = "R"
+        st = "Rotor"
     Rbo = self.get_Rbo()
 
     # comp point coordinate (in complex)
@@ -113,8 +113,23 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list.append(Segment(Z19, Z23))
         curve_list.append(Segment(Z23, Z24))
     point_ref = (Z24 + Z18 + Z19 + Z23) / 4
+    # Defining type of magnetization of the magnet
+    if self.magnet_0.type_magnetization == 0:
+        type_mag = "Radial"
+    else:
+        type_mag = "Parallel"
+    magnet_label = (
+        "Magnet"
+        + st
+        + type_mag
+        + "_N_R0"
+        + "_T"
+        + str(0)
+        + "_S"
+        + str(0)
+                    )
     S2 = SurfLine(
-        line_list=curve_list, label="Magnet" + st + "_N_R0_T0_S0", point_ref=point_ref
+        line_list=curve_list, label=magnet_label, point_ref=point_ref
     )
 
     # Air surface between magnet_0 and magnet_1
@@ -139,8 +154,23 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list.append(Segment(Z13, Z14))
         curve_list.append(Segment(Z14, Z26))
     point_ref = (Z26 + Z1 + Z13 + Z14) / 4
+    # Defining type of magnetization of the magnet
+    if self.magnet_1.type_magnetization == 0:
+        type_mag = "Radial"
+    else:
+        type_mag = "Parallel"
+    magnet_label = (
+        "Magnet"
+        + st
+        + type_mag
+        + "_N_R0"
+        + "_T"
+        + str(1)
+        + "_S"
+        + str(0)
+                    )
     S4 = SurfLine(
-        line_list=curve_list, label="Magnet" + st + "_N_R0_T1_S0", point_ref=point_ref
+        line_list=curve_list, label=magnet_label, point_ref=point_ref
     )
 
     # Air surface between magnet_1 and magnet_2
@@ -165,8 +195,23 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list.append(Segment(Z9, Z3))
         curve_list.append(Segment(Z3, Z4))
     point_ref = (Z4 + Z8 + Z9 + Z3) / 4
+    # Defining type of magnetization of the magnet
+    if self.magnet_2.type_magnetization == 0:
+        type_mag = "Radial"
+    else:
+        type_mag = "Parallel"
+    magnet_label = (
+        "Magnet"
+        + st
+        + type_mag
+        + "_N_R0"
+        + "_T"
+        + str(2)
+        + "_S"
+        + str(0)
+                    )
     S6 = SurfLine(
-        line_list=curve_list, label="Magnet" + st + "_N_R0_T2_S0", point_ref=point_ref
+        line_list=curve_list, label=magnet_label, point_ref=point_ref
     )
 
     # Air surface bore around magnet_2

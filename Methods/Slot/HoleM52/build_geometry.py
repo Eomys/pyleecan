@@ -36,9 +36,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     """
     if self.get_is_stator():  # check if the slot is on the stator
-        st = "S"
+        st = "Stator"
     else:
-        st = "R"
+        st = "Rotor"
     Rbo = self.get_Rbo()
 
     alpha1 = self.comp_alpha()
@@ -81,9 +81,24 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list_mag.append(Segment(Z10, Z6))
         curve_list_mag.append(Segment(Z6, Z4))
     point_ref = (Z11 + Z4 + Z6 + Z10) / 4
+    # Defining type of magnetization of the magnet
+    if self.magnet_0.type_magnetization == 0:
+        type_mag = "Radial"
+    else:
+        type_mag = "Parallel"
+    magnet_label = (
+        "Magnet"
+        + st
+        + type_mag
+        + "_N_R0"
+        + "_T"
+        + str(0)
+        + "_S"
+        + str(0)
+                    )
     S2 = SurfLine(
         line_list=curve_list_mag,
-        label="Magnet" + st + "_N_R0_T0_S0",
+        label=magnet_label,
         point_ref=point_ref,
     )
 
