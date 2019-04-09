@@ -6,7 +6,7 @@ from pyleecan.Classes.check import set_array, check_init_dict, check_var
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from numpy import array
+from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
 
 
@@ -115,17 +115,17 @@ class OutElec(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.time != self.time:
+        if not array_equal(other.time, self.time):
             return False
-        if other.angle != self.angle:
+        if not array_equal(other.angle, self.angle):
             return False
-        if other.Is != self.Is:
+        if not array_equal(other.Is, self.Is):
             return False
-        if other.Ir != self.Ir:
+        if not array_equal(other.Ir, self.Ir):
             return False
-        if other.angle_rotor != self.angle_rotor:
+        if not array_equal(other.angle_rotor, self.angle_rotor):
             return False
-        if other.Nr != self.Nr:
+        if not array_equal(other.Nr, self.Nr):
             return False
         if other.rot_dir != self.rot_dir:
             return False

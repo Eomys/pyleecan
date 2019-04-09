@@ -9,7 +9,7 @@ from pyleecan.Classes.Winding import Winding
 from pyleecan.Methods.Machine.WindingUD.comp_connection_mat import comp_connection_mat
 from pyleecan.Methods.Machine.WindingUD.get_dim_wind import get_dim_wind
 
-from numpy import array
+from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Conductor import Conductor
 from pyleecan.Classes.CondType11 import CondType11
@@ -128,7 +128,7 @@ class WindingUD(Winding):
         # Check the properties inherited from Winding
         if not super(WindingUD, self).__eq__(other):
             return False
-        if other.user_wind_mat != self.user_wind_mat:
+        if not array_equal(other.user_wind_mat, self.user_wind_mat):
             return False
         return True
 

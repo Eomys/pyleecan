@@ -6,7 +6,7 @@ from pyleecan.Classes.check import set_array, check_init_dict, check_var
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from numpy import array
+from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
 
 
@@ -144,27 +144,27 @@ class OutMag(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.time != self.time:
+        if not array_equal(other.time, self.time):
             return False
-        if other.angle != self.angle:
+        if not array_equal(other.angle, self.angle):
             return False
         if other.Nt_tot != self.Nt_tot:
             return False
         if other.Na_tot != self.Na_tot:
             return False
-        if other.Br != self.Br:
+        if not array_equal(other.Br, self.Br):
             return False
-        if other.Bt != self.Bt:
+        if not array_equal(other.Bt, self.Bt):
             return False
-        if other.Tem != self.Tem:
+        if not array_equal(other.Tem, self.Tem):
             return False
         if other.Tem_av != self.Tem_av:
             return False
         if other.Tem_rip != self.Tem_rip:
             return False
-        if other.Phi_wind_stator != self.Phi_wind_stator:
+        if not array_equal(other.Phi_wind_stator, self.Phi_wind_stator):
             return False
-        if other.emf != self.emf:
+        if not array_equal(other.emf, self.emf):
             return False
         if other.FEMM_dict != self.FEMM_dict:
             return False
