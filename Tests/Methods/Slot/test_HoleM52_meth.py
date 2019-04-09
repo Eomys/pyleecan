@@ -111,18 +111,18 @@ class test_holeB52_meth(TestCase):
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].build_geometry()
 
-        self.assertEquals(len(result), 3)
+        self.assertEqual(len(result), 3)
         for surf in result:
             self.assertTrue(type(surf) == SurfLine)
 
         self.assertEqual(result[0].label, "Air")
-        self.assertEquals(len(result[0].line_list), 4)
+        self.assertEqual(len(result[0].line_list), 4)
 
         self.assertEqual(result[1].label, "MagnetR_N_R0_T0_S0")
-        self.assertEquals(len(result[1].line_list), 4)
+        self.assertEqual(len(result[1].line_list), 4)
 
         self.assertEqual(result[2].label, "Air")
-        self.assertEquals(len(result[2].line_list), 4)
+        self.assertEqual(len(result[2].line_list), 4)
 
     @data(*HoleM52_test)
     def test_build_geometry_no_magnet(self, test_dict):
@@ -132,9 +132,9 @@ class test_holeB52_meth(TestCase):
         test_obj.hole[0].magnet_0 = None
         result = test_obj.hole[0].build_geometry()
 
-        self.assertEquals(len(result), 1)
+        self.assertEqual(len(result), 1)
         for surf in result:
             self.assertTrue(type(surf) == SurfLine)
 
         self.assertEqual(result[0].label, "Air")
-        self.assertEquals(len(result[0].line_list), 8)
+        self.assertEqual(len(result[0].line_list), 8)
