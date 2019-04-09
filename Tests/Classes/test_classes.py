@@ -67,7 +67,6 @@ class test_all_Classes(TestCase):
                     value = {}
                 else:
                     value = prop["value"]
-                print(value)
                 self.assertEqual(
                     result,
                     value,
@@ -130,7 +129,6 @@ class test_all_Classes(TestCase):
             elif is_type_list(prop["type"]):  # List of pyleecan type
                 d[prop["name"]] = list()
             else:  # pyleecan type
-                print(prop["name"], prop["type"])
                 d[prop["name"]] = eval(prop["type"] + "().as_dict()")
         d["__class__"] = class_dict["name"]
 
