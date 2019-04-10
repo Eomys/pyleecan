@@ -17,6 +17,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class Hole(FrozenClass):
     """Holes for lamination (abstract)"""
 
@@ -123,9 +124,8 @@ class Hole(FrozenClass):
 
     # Number of Hole around the circumference
     # Type : int, min = 0, max = 1000
-    Zh = property(
-        fget=_get_Zh, fset=_set_Zh, doc=u"""Number of Hole around the circumference"""
-    )
+    Zh = property(fget=_get_Zh, fset=_set_Zh,
+                  doc=u"""Number of Hole around the circumference""")
 
     def _get_mat_void(self):
         """getter of mat_void"""
@@ -138,11 +138,7 @@ class Hole(FrozenClass):
 
         if self._mat_void is not None:
             self._mat_void.parent = self
-
     # Material of the "void" part of the hole (Air in general)
     # Type : Material
-    mat_void = property(
-        fget=_get_mat_void,
-        fset=_set_mat_void,
-        doc=u"""Material of the "void" part of the hole (Air in general)""",
-    )
+    mat_void = property(fget=_get_mat_void, fset=_set_mat_void,
+                        doc=u"""Material of the "void" part of the hole (Air in general)""")

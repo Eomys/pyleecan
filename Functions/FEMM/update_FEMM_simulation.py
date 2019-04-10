@@ -4,10 +4,11 @@
 @author franco_i
 """
 import femm
-from pyleecan.Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
-from pyleecan.Functions.FEMM.comp_FEMM_Jcus import comp_FEMM_Jcus
-from pyleecan.Functions.FEMM.set_FEMM_wind_material import set_FEMM_wind_material
 from numpy import pi
+
+from pyleecan.Functions.FEMM.comp_FEMM_Jcus import comp_FEMM_Jcus
+from pyleecan.Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
+from pyleecan.Functions.FEMM.set_FEMM_wind_material import set_FEMM_wind_material
 
 
 def update_FEMM_simulation(output, materials, circuits, is_mmfs, is_mmfr, j_t0):
@@ -21,7 +22,6 @@ def update_FEMM_simulation(output, materials, circuits, is_mmfs, is_mmfr, j_t0):
         Output object
     """
     angle_rotor = output.get_angle_rotor()
-    angle_rotor[0] = 0
     # Rotor rotation using sliding band
     if output.simu.machine.rotor.is_internal:
         femm.mi_modifyboundprop("bc_ag2", 10, 180 * angle_rotor[j_t0] / pi)

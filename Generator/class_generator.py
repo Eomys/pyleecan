@@ -98,7 +98,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # For Matrix and Vector (numpy) property
     if "ndarray" in import_type_list:
-        class_file.write("from numpy import array\n")
+        class_file.write("from numpy import array, array_equal\n")
         import_type_list.remove("ndarray")
 
     # Import of all needed pyleecan type for property polymorphism
@@ -695,8 +695,21 @@ def generate_eq(gen_dict, class_dict):
         eq_str += TAB3 + "return False\n"
     # Check that all the propoperties (except parent) are equal
     for prop in class_dict["properties"]:
-        eq_str += TAB2 + "if other." + prop["name"] + " != self." + prop["name"] + ":\n"
-        eq_str += TAB3 + "return False\n"
+        if prop["type"] == "ndarray":
+            eq_str += (
+                TAB2
+                + "if not array_equal(other."
+                + prop["name"]
+                + ", self."
+                + prop["name"]
+                + "):\n"
+            )
+            eq_str += TAB3 + "return False\n"
+        else:
+            eq_str += (
+                TAB2 + "if other." + prop["name"] + " != self." + prop["name"] + ":\n"
+            )
+            eq_str += TAB3 + "return False\n"
     eq_str += TAB2 + "return True\n"
 
     return eq_str

@@ -3,3 +3,4 @@ is_transpose;-;1 to transpose the Imported/Generated matrix;;1;bool;0;;;;;;Impor
 ;;;;;;;;;;;;;;;;;;ImportMatrixXls
 ;;;;;;;;;;;;;;;;;;ImportGenVectSin
 ;;;;;;;;;;;;;;;;;;ImportGenMatrixSin
+;;;;;;;;;;;;;;;;;;ImportGenVectLin

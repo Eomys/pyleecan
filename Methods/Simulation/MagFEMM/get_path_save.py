@@ -37,4 +37,3 @@ def get_path_save(self, output):
         file_name = "FEMM_simulation.fem"
 
     return join(save_dir, file_name)
-    

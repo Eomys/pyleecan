@@ -68,6 +68,7 @@ from pyleecan.Classes.OutElec import OutElec
 from pyleecan.Classes.OutGeo import OutGeo
 from pyleecan.Classes.OutGeoLam import OutGeoLam
 from pyleecan.Classes.OutMag import OutMag
+from pyleecan.Classes.OutPost import OutPost
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.InCurrent import InCurrent
 from pyleecan.Classes.Input import Input

@@ -115,6 +115,12 @@ def gen_input(self):
     else:
         output.rot_dir = self.rot_dir
 
+    if self.angle_rotor_initial is None:
+        # Enforce default initial position
+        output.angle_rotor_initial = 0
+    else:
+        output.angle_rotor_initial = self.angle_rotor_initial
+
     if self.parent.parent is None:
         raise InputError(
             "ERROR: The Simulation object must be in an Output object to run"

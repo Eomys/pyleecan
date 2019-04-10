@@ -3,8 +3,9 @@ import matplotlib.pyplot as plt
 from numpy import pi
 
 
-def plot_B_space(self, j_t0=0, is_deg=True):
+def plot_B_space(self, j_t0=0, is_deg=True, out_list=[]):
     """Plot the airgap flux as a function of space
+
     Parameters
     ----------
     self : Output
@@ -13,8 +14,11 @@ def plot_B_space(self, j_t0=0, is_deg=True):
         Index of the time vector to plot
     is_deg : bool
         True to plot in degree, False in rad
+    out_list : list
+        List of Output object to compare
     """
 
+    # Adapt the unit
     if is_deg:
         unit = "[°]"
         angle = self.mag.angle * 180 / pi
@@ -22,7 +26,21 @@ def plot_B_space(self, j_t0=0, is_deg=True):
         unit = "[rad]"
         angle = self.mag.angle
 
+    # Plot the original graph
     fig, axs = plt.subplots(1, 2, constrained_layout=True)
+    axs[0].plot(
+        angle, self.mag.Br[j_t0, :], self.post.line_color, label=self.post.legend_name
+    )
+    axs[0].set_title("Radial Flux")
+    axs[0].set_xlabel("Position " + unit)
+    axs[0].set_ylabel("Flux [T]")
+
+    axs[1].plot(
+        angle, self.mag.Bt[j_t0, :], self.post.line_color, label=self.post.legend_name
+    )
+    axs[1].set_title("Tangential Flux")
+    axs[1].set_xlabel("Position " + unit)
+    axs[1].set_ylabel("Flux [T]")
 
     title = (
         "Airgap total flux density over space time["
@@ -34,14 +52,26 @@ def plot_B_space(self, j_t0=0, is_deg=True):
     fig.canvas.set_window_title(title)
     fig.suptitle(title, fontsize=16)
 
-    axs[0].plot(angle, self.mag.Br[j_t0, :])
-    axs[0].set_title("Radial Flux")
-    axs[0].set_xlabel("Position " + unit)
-    axs[0].set_ylabel("Flux [T]")
+    # Add all the other output to compare (if needed)
+    for out in out_list:
+        if out.mag.Br is not None and out.mag.Br.shape == self.mag.Br.shape:
+            axs[0].plot(
+                angle,
+                out.mag.Br[j_t0, :],
+                out.post.line_color,
+                label=out.post.legend_name,
+            )
+        if out.mag.Bt is not None and out.mag.Bt.shape == self.mag.Bt.shape:
+            axs[1].plot(
+                angle,
+                out.mag.Bt[j_t0, :],
+                out.post.line_color,
+                label=out.post.legend_name,
+            )
 
-    axs[1].plot(angle, self.mag.Bt[j_t0, :])
-    axs[1].set_title("Tangential Flux")
-    axs[1].set_xlabel("Position " + unit)
-    axs[1].set_ylabel("Flux [T]")
+    # Add the legend (if the list is not empty)
+    if out_list:
+        axs[0].legend()
+        axs[1].legend()
 
-    plt.show()
+    fig.show()

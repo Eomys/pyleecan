@@ -6,7 +6,7 @@ from pyleecan.Classes.check import set_array, check_init_dict, check_var
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from numpy import array
+from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
 
 
@@ -18,17 +18,7 @@ class OutElec(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        time=None,
-        angle=None,
-        Is=None,
-        Ir=None,
-        angle_rotor=None,
-        Nr=None,
-        rot_dir=-1,
-        init_dict=None,
-    ):
+    def __init__(self, time=None, angle=None, Is=None, Ir=None, angle_rotor=None, Nr=None, rot_dir=-1, angle_rotor_initial=0, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -39,9 +29,7 @@ class OutElec(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["time", "angle", "Is", "Ir", "angle_rotor", "Nr", "rot_dir"]
-            )
+            check_init_dict(init_dict, ["time", "angle", "Is", "Ir", "angle_rotor", "Nr", "rot_dir", "angle_rotor_initial"])
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
@@ -57,6 +45,8 @@ class OutElec(FrozenClass):
                 Nr = init_dict["Nr"]
             if "rot_dir" in list(init_dict.keys()):
                 rot_dir = init_dict["rot_dir"]
+            if "angle_rotor_initial" in list(init_dict.keys()):
+                angle_rotor_initial = init_dict["angle_rotor_initial"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -72,6 +62,7 @@ class OutElec(FrozenClass):
         # Nr can be None, a ndarray or a list
         set_array(self, "Nr", Nr)
         self.rot_dir = rot_dir
+        self.angle_rotor_initial = angle_rotor_initial
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -88,11 +79,10 @@ class OutElec(FrozenClass):
         OutElec_str += "angle = " + linesep + str(self.angle) + linesep + linesep
         OutElec_str += "Is = " + linesep + str(self.Is) + linesep + linesep
         OutElec_str += "Ir = " + linesep + str(self.Ir) + linesep + linesep
-        OutElec_str += (
-            "angle_rotor = " + linesep + str(self.angle_rotor) + linesep + linesep
-        )
+        OutElec_str += "angle_rotor = " + linesep + str(self.angle_rotor) + linesep + linesep
         OutElec_str += "Nr = " + linesep + str(self.Nr) + linesep + linesep
-        OutElec_str += "rot_dir = " + str(self.rot_dir)
+        OutElec_str += "rot_dir = " + str(self.rot_dir) + linesep
+        OutElec_str += "angle_rotor_initial = " + str(self.angle_rotor_initial)
         return OutElec_str
 
     def __eq__(self, other):
@@ -100,19 +90,21 @@ class OutElec(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.time != self.time:
+        if not array_equal(other.time, self.time):
             return False
-        if other.angle != self.angle:
+        if not array_equal(other.angle, self.angle):
             return False
-        if other.Is != self.Is:
+        if not array_equal(other.Is, self.Is):
             return False
-        if other.Ir != self.Ir:
+        if not array_equal(other.Ir, self.Ir):
             return False
-        if other.angle_rotor != self.angle_rotor:
+        if not array_equal(other.angle_rotor, self.angle_rotor):
             return False
-        if other.Nr != self.Nr:
+        if not array_equal(other.Nr, self.Nr):
             return False
         if other.rot_dir != self.rot_dir:
+            return False
+        if other.angle_rotor_initial != self.angle_rotor_initial:
             return False
         return True
 
@@ -146,6 +138,7 @@ class OutElec(FrozenClass):
         else:
             OutElec_dict["Nr"] = self.Nr.tolist()
         OutElec_dict["rot_dir"] = self.rot_dir
+        OutElec_dict["angle_rotor_initial"] = self.angle_rotor_initial
         # The class name is added to the dict fordeserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -160,6 +153,7 @@ class OutElec(FrozenClass):
         self.angle_rotor = None
         self.Nr = None
         self.rot_dir = None
+        self.angle_rotor_initial = None
 
     def _get_time(self):
         """getter of time"""
@@ -177,9 +171,8 @@ class OutElec(FrozenClass):
 
     # Electrical time vector (no symmetry)
     # Type : ndarray
-    time = property(
-        fget=_get_time, fset=_set_time, doc=u"""Electrical time vector (no symmetry)"""
-    )
+    time = property(fget=_get_time, fset=_set_time,
+                    doc=u"""Electrical time vector (no symmetry)""")
 
     def _get_angle(self):
         """getter of angle"""
@@ -197,11 +190,8 @@ class OutElec(FrozenClass):
 
     # Electrical position vector (no symmetry)
     # Type : ndarray
-    angle = property(
-        fget=_get_angle,
-        fset=_set_angle,
-        doc=u"""Electrical position vector (no symmetry)""",
-    )
+    angle = property(fget=_get_angle, fset=_set_angle,
+                     doc=u"""Electrical position vector (no symmetry)""")
 
     def _get_Is(self):
         """getter of Is"""
@@ -219,11 +209,8 @@ class OutElec(FrozenClass):
 
     # Stator currents as a function of time (each column correspond to one phase)
     # Type : ndarray
-    Is = property(
-        fget=_get_Is,
-        fset=_set_Is,
-        doc=u"""Stator currents as a function of time (each column correspond to one phase)""",
-    )
+    Is = property(fget=_get_Is, fset=_set_Is,
+                  doc=u"""Stator currents as a function of time (each column correspond to one phase)""")
 
     def _get_Ir(self):
         """getter of Ir"""
@@ -241,11 +228,8 @@ class OutElec(FrozenClass):
 
     # Rotor currents as a function of time (each column correspond to one phase)
     # Type : ndarray
-    Ir = property(
-        fget=_get_Ir,
-        fset=_set_Ir,
-        doc=u"""Rotor currents as a function of time (each column correspond to one phase)""",
-    )
+    Ir = property(fget=_get_Ir, fset=_set_Ir,
+                  doc=u"""Rotor currents as a function of time (each column correspond to one phase)""")
 
     def _get_angle_rotor(self):
         """getter of angle_rotor"""
@@ -263,11 +247,8 @@ class OutElec(FrozenClass):
 
     # Rotor angular position as a function of time (if None computed according to Nr)
     # Type : ndarray
-    angle_rotor = property(
-        fget=_get_angle_rotor,
-        fset=_set_angle_rotor,
-        doc=u"""Rotor angular position as a function of time (if None computed according to Nr)""",
-    )
+    angle_rotor = property(fget=_get_angle_rotor, fset=_set_angle_rotor,
+                           doc=u"""Rotor angular position as a function of time (if None computed according to Nr)""")
 
     def _get_Nr(self):
         """getter of Nr"""
@@ -285,9 +266,8 @@ class OutElec(FrozenClass):
 
     # Rotor speed as a function of time
     # Type : ndarray
-    Nr = property(
-        fget=_get_Nr, fset=_set_Nr, doc=u"""Rotor speed as a function of time"""
-    )
+    Nr = property(fget=_get_Nr, fset=_set_Nr,
+                  doc=u"""Rotor speed as a function of time""")
 
     def _get_rot_dir(self):
         """getter of rot_dir"""
@@ -300,8 +280,19 @@ class OutElec(FrozenClass):
 
     # Rotation direction of the rotor 1 trigo, -1 clockwise
     # Type : float, min = -1, max = 1
-    rot_dir = property(
-        fget=_get_rot_dir,
-        fset=_set_rot_dir,
-        doc=u"""Rotation direction of the rotor 1 trigo, -1 clockwise""",
-    )
+    rot_dir = property(fget=_get_rot_dir, fset=_set_rot_dir,
+                       doc=u"""Rotation direction of the rotor 1 trigo, -1 clockwise""")
+
+    def _get_angle_rotor_initial(self):
+        """getter of angle_rotor_initial"""
+        return self._angle_rotor_initial
+
+    def _set_angle_rotor_initial(self, value):
+        """setter of angle_rotor_initial"""
+        check_var("angle_rotor_initial", value, "float")
+        self._angle_rotor_initial = value
+
+    # Initial angular position of the rotor at t=0
+    # Type : float
+    angle_rotor_initial = property(fget=_get_angle_rotor_initial, fset=_set_angle_rotor_initial,
+                                   doc=u"""Initial angular position of the rotor at t=0""")

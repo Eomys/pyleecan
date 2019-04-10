@@ -26,7 +26,7 @@ from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.MatLamination import MatLamination
 from pyleecan.Classes.SlotW23 import SlotW23
 
-from pyleecan.Tests.Plot import save_path
+from pyleecan.Tests import save_plot_path as save_path
 from pyleecan.Tests.Plot.LamWind import wind_mat
 
 

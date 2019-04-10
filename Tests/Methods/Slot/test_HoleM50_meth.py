@@ -147,10 +147,10 @@ class unittest_HoleM50_meth(TestCase):
             self.assertTrue(type(surf) is SurfLine)
 
         self.assertEqual(result[0].label, "Air")
-        self.assertEquals(len(result[0].line_list), 11)
+        self.assertEqual(len(result[0].line_list), 11)
 
         self.assertEqual(result[1].label, "Air")
-        self.assertEquals(len(result[1].line_list), 11)
+        self.assertEqual(len(result[1].line_list), 11)
 
     def test_build_geometry_one_hole_no_mag(self):
         """check that curve_list is correct (one hole no mag)
@@ -181,7 +181,7 @@ class unittest_HoleM50_meth(TestCase):
             self.assertTrue(type(surf) is SurfLine)
 
         self.assertEqual(result[0].label, "Air")
-        self.assertEquals(len(result[0].line_list), 16)
+        self.assertEqual(len(result[0].line_list), 16)
 
     def test_build_geometry_one_hole_with_magnet(self):
         """check that curve_list is correct (one hole)
@@ -211,19 +211,19 @@ class unittest_HoleM50_meth(TestCase):
             self.assertTrue(type(surf) is SurfLine)
 
         self.assertEqual(result[0].label, "Air")
-        self.assertEquals(len(result[0].line_list), 5)
+        self.assertEqual(len(result[0].line_list), 5)
 
         self.assertEqual(result[1].label, "MagnetS_N_R0_T0_S0")
-        self.assertEquals(len(result[1].line_list), 6)
+        self.assertEqual(len(result[1].line_list), 6)
 
         self.assertEqual(result[2].label, "Air")
-        self.assertEquals(len(result[2].line_list), 6)
+        self.assertEqual(len(result[2].line_list), 6)
 
         self.assertEqual(result[3].label, "MagnetS_N_R0_T1_S0")
-        self.assertEquals(len(result[3].line_list), 6)
+        self.assertEqual(len(result[3].line_list), 6)
 
         self.assertEqual(result[4].label, "Air")
-        self.assertEquals(len(result[4].line_list), 5)
+        self.assertEqual(len(result[4].line_list), 5)
 
     def test_build_geometry_two_hole_with_magnet(self):
         """check that curve_list is correct (one hole)
@@ -253,19 +253,19 @@ class unittest_HoleM50_meth(TestCase):
             self.assertTrue(type(surf) is SurfLine)
 
         self.assertEqual(result[0].label, "Air")
-        self.assertEquals(len(result[0].line_list), 7)
+        self.assertEqual(len(result[0].line_list), 7)
 
         self.assertEqual(result[1].label, "MagnetR_N_R0_T0_S0")
-        self.assertEquals(len(result[1].line_list), 6)
+        self.assertEqual(len(result[1].line_list), 6)
 
         self.assertEqual(result[2].label, "Air")
-        self.assertEquals(len(result[2].line_list), 4)
+        self.assertEqual(len(result[2].line_list), 4)
 
         self.assertEqual(result[3].label, "Air")
-        self.assertEquals(len(result[3].line_list), 4)
+        self.assertEqual(len(result[3].line_list), 4)
 
         self.assertEqual(result[4].label, "MagnetR_N_R0_T1_S0")
-        self.assertEquals(len(result[4].line_list), 6)
+        self.assertEqual(len(result[4].line_list), 6)
 
         self.assertEqual(result[5].label, "Air")
-        self.assertEquals(len(result[5].line_list), 7)
+        self.assertEqual(len(result[5].line_list), 7)

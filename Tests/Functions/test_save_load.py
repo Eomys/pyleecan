@@ -21,12 +21,11 @@ from pyleecan.Classes.SlotMPolar import SlotMPolar
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Classes.Shaft import Shaft
-from pyleecan.Tests import TEST_DIR
+from pyleecan.Tests import DATA_DIR, save_load_path as save_path
 from pyleecan.Functions.load import load, LoadMissingFileError, LoadWrongDictClassError
 
-save_dir = join(TEST_DIR, "Results", "Save_Load")
-load_file_1 = join(TEST_DIR, "Data", "test_wrong_slot_load_1.json")
-load_file_2 = join(TEST_DIR, "Data", "test_wrong_slot_load_2.json")
+load_file_1 = join(DATA_DIR, "test_wrong_slot_load_1.json")
+load_file_2 = join(DATA_DIR, "test_wrong_slot_load_2.json")
 
 
 class test_save_load_fct(TestCase):
@@ -47,7 +46,7 @@ class test_save_load_fct(TestCase):
         test_obj.frame = None
 
         # Save Test
-        file_path = join(save_dir, "test_machine.json")
+        file_path = join(save_path, "test_machine.json")
         if isfile(file_path):
             remove(file_path)
         self.assertFalse(isfile(file_path))
@@ -94,11 +93,11 @@ class test_save_load_fct(TestCase):
 
         test_obj = LamSlotWind(L1=0.45)
 
-        file_path = join(save_dir, "LamSlotWind.json")
+        file_path = join(save_path, "LamSlotWind.json")
         if isfile(file_path):
             remove(file_path)
         self.assertFalse(isfile(file_path))
-        test_obj.save(save_dir)
+        test_obj.save(save_path)
         self.assertTrue(isfile(file_path))
 
     def test_save_load_just_name(self):
@@ -123,7 +122,7 @@ class test_save_load_fct(TestCase):
         """Test that the load function can detect missing file
         """
         with self.assertRaises(LoadMissingFileError):
-            load(save_dir)
+            load(save_path)
 
     def test_load_error_missing_class(self):
         """Test that the load function can detect missing __class__

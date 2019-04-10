@@ -16,6 +16,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class VentilationCirc(Hole):
     """Circular axial ventilation duct"""
 
@@ -130,11 +131,8 @@ class VentilationCirc(Hole):
 
     # Shift angle of the holes around circumference
     # Type : float, min = 0, max = 6.29
-    Alpha0 = property(
-        fget=_get_Alpha0,
-        fset=_set_Alpha0,
-        doc=u"""Shift angle of the holes around circumference""",
-    )
+    Alpha0 = property(fget=_get_Alpha0, fset=_set_Alpha0,
+                      doc=u"""Shift angle of the holes around circumference""")
 
     def _get_D0(self):
         """getter of D0"""
@@ -147,7 +145,8 @@ class VentilationCirc(Hole):
 
     # Hole diameters
     # Type : float, min = 0
-    D0 = property(fget=_get_D0, fset=_set_D0, doc=u"""Hole diameters""")
+    D0 = property(fget=_get_D0, fset=_set_D0,
+                  doc=u"""Hole diameters""")
 
     def _get_H0(self):
         """getter of H0"""
@@ -160,4 +159,5 @@ class VentilationCirc(Hole):
 
     # Diameter of the hole centers
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Diameter of the hole centers""")
+    H0 = property(fget=_get_H0, fset=_set_H0,
+                  doc=u"""Diameter of the hole centers""")

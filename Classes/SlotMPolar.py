@@ -8,9 +8,7 @@ from pyleecan.Classes.SlotMag import SlotMag
 
 from pyleecan.Methods.Slot.SlotMPolar.build_geometry import build_geometry
 from pyleecan.Methods.Slot.SlotMPolar.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.SlotMPolar.comp_angle_opening_magnet import (
-    comp_angle_opening_magnet,
-)
+from pyleecan.Methods.Slot.SlotMPolar.comp_angle_opening_magnet import comp_angle_opening_magnet
 from pyleecan.Methods.Slot.SlotMPolar.comp_height import comp_height
 from pyleecan.Methods.Slot.SlotMPolar.comp_surface import comp_surface
 from pyleecan.Methods.Slot.SlotMPolar.get_point_bottom import get_point_bottom
@@ -19,6 +17,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.MagnetPolar import MagnetPolar
 from pyleecan.Classes.MagnetType11 import MagnetType11
 from pyleecan.Classes.MagnetType14 import MagnetType14
+
 
 
 class SlotMPolar(SlotMag):
@@ -77,20 +76,14 @@ class SlotMPolar(SlotMag):
                     self.magnet.append(MagnetPolar())
                 elif isinstance(obj, dict):
                     # Call the correct constructor according to the dict
-                    load_dict = {
-                        "MagnetType11": MagnetType11,
-                        "MagnetType14": MagnetType14,
-                        "MagnetPolar": MagnetPolar,
-                    }
-                    obj_class = obj.get("__class__")
+                    load_dict = {"MagnetType11": MagnetType11, "MagnetType14": MagnetType14, "MagnetPolar": MagnetPolar}
+                    obj_class = obj.get('__class__')
                     if obj_class is None:
                         self.magnet.append(MagnetPolar(init_dict=obj))
                     elif obj_class in list(load_dict.keys()):
                         self.magnet.append(load_dict[obj_class](init_dict=obj))
                     else:  # Avoid generation error or wrong modification in json
-                        raise InitUnKnowClassError(
-                            "Unknow class name in init_dict for magnet"
-                        )
+                        raise InitUnKnowClassError("Unknow class name in init_dict for magnet")
                 else:
                     self.magnet.append(obj)
         elif magnet is None:
@@ -113,9 +106,7 @@ class SlotMPolar(SlotMag):
         if len(self.magnet) == 0:
             SlotMPolar_str += "magnet = []"
         for ii in range(len(self.magnet)):
-            SlotMPolar_str += (
-                "magnet[" + str(ii) + "] = " + str(self.magnet[ii].as_dict()) + "\n"
-            )
+            SlotMPolar_str += "magnet["+str(ii)+"] = "+str(self.magnet[ii].as_dict())+"\n"
         return SlotMPolar_str
 
     def __eq__(self, other):
@@ -172,7 +163,8 @@ class SlotMPolar(SlotMag):
 
     # Slot isthmus width.
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus width.""")
+    W0 = property(fget=_get_W0, fset=_set_W0,
+                  doc=u"""Slot isthmus width.""")
 
     def _get_H0(self):
         """getter of H0"""
@@ -185,7 +177,8 @@ class SlotMPolar(SlotMag):
 
     # Slot isthmus height
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height""")
+    H0 = property(fget=_get_H0, fset=_set_H0,
+                  doc=u"""Slot isthmus height""")
 
     def _get_magnet(self):
         """getter of magnet"""
@@ -202,7 +195,7 @@ class SlotMPolar(SlotMag):
         for obj in self._magnet:
             if obj is not None:
                 obj.parent = self
-
     # List of magnet
     # Type : [MagnetPolar]
-    magnet = property(fget=_get_magnet, fset=_set_magnet, doc=u"""List of magnet""")
+    magnet = property(fget=_get_magnet, fset=_set_magnet,
+                      doc=u"""List of magnet""")

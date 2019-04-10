@@ -8,7 +8,7 @@ from pyleecan.Classes.ImportMatrix import ImportMatrix
 
 from pyleecan.Methods.Import.ImportMatrixVal.get_data import get_data
 
-from numpy import array
+from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
 
 
@@ -65,7 +65,7 @@ class ImportMatrixVal(ImportMatrix):
         # Check the properties inherited from ImportMatrix
         if not super(ImportMatrixVal, self).__eq__(other):
             return False
-        if other.value != self.value:
+        if not array_equal(other.value, self.value):
             return False
         return True
 
@@ -107,4 +107,5 @@ class ImportMatrixVal(ImportMatrix):
 
     # The matrix to return
     # Type : ndarray
-    value = property(fget=_get_value, fset=_set_value, doc=u"""The matrix to return""")
+    value = property(fget=_get_value, fset=_set_value,
+                     doc=u"""The matrix to return""")

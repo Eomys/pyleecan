@@ -17,6 +17,7 @@ from pyleecan.Classes.CondType21 import CondType21
 from pyleecan.Classes.CondType22 import CondType22
 
 
+
 class WindingDW2L(Winding):
     """double layer overlapping integral distributed winding, radial coil superposition """
 
@@ -29,20 +30,7 @@ class WindingDW2L(Winding):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        coil_pitch=5,
-        is_reverse_wind=False,
-        Nslot_shift_wind=0,
-        qs=3,
-        Ntcoil=7,
-        Npcpp=2,
-        type_connection=0,
-        p=3,
-        Lewout=0.015,
-        conductor=-1,
-        init_dict=None,
-    ):
+    def __init__(self, coil_pitch=5, is_reverse_wind=False, Nslot_shift_wind=0, qs=3, Ntcoil=7, Npcpp=2, type_connection=0, p=3, Lewout=0.015, conductor=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -55,21 +43,7 @@ class WindingDW2L(Winding):
         if conductor == -1:
             conductor = Conductor()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "coil_pitch",
-                    "is_reverse_wind",
-                    "Nslot_shift_wind",
-                    "qs",
-                    "Ntcoil",
-                    "Npcpp",
-                    "type_connection",
-                    "p",
-                    "Lewout",
-                    "conductor",
-                ],
-            )
+            check_init_dict(init_dict, ["coil_pitch", "is_reverse_wind", "Nslot_shift_wind", "qs", "Ntcoil", "Npcpp", "type_connection", "p", "Lewout", "conductor"])
             # Overwrite default value with init_dict content
             if "coil_pitch" in list(init_dict.keys()):
                 coil_pitch = init_dict["coil_pitch"]
@@ -94,17 +68,7 @@ class WindingDW2L(Winding):
         # Initialisation by argument
         self.coil_pitch = coil_pitch
         # Call Winding init
-        super(WindingDW2L, self).__init__(
-            is_reverse_wind=is_reverse_wind,
-            Nslot_shift_wind=Nslot_shift_wind,
-            qs=qs,
-            Ntcoil=Ntcoil,
-            Npcpp=Npcpp,
-            type_connection=type_connection,
-            p=p,
-            Lewout=Lewout,
-            conductor=conductor,
-        )
+        super(WindingDW2L, self).__init__(is_reverse_wind=is_reverse_wind, Nslot_shift_wind=Nslot_shift_wind, qs=qs, Ntcoil=Ntcoil, Npcpp=Npcpp, type_connection=type_connection, p=p, Lewout=Lewout, conductor=conductor)
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties
 
@@ -160,8 +124,5 @@ class WindingDW2L(Winding):
 
     # winding coil pitch or coil span expressed in slots (coil_pitch1=Zs/(2p)->full-pitch distributed winding, coil_pitch1<Zs/(2p)->chorded/shorted-pitch distributed winding, coil_pitch1=1->tooth-winding). Coil pitch is sometimes written 1/9 means Input.Magnetics.coil_pitch1=9-1=8
     # Type : int, min = 0, max = 1000
-    coil_pitch = property(
-        fget=_get_coil_pitch,
-        fset=_set_coil_pitch,
-        doc=u"""winding coil pitch or coil span expressed in slots (coil_pitch1=Zs/(2p)->full-pitch distributed winding, coil_pitch1<Zs/(2p)->chorded/shorted-pitch distributed winding, coil_pitch1=1->tooth-winding). Coil pitch is sometimes written 1/9 means Input.Magnetics.coil_pitch1=9-1=8""",
-    )
+    coil_pitch = property(fget=_get_coil_pitch, fset=_set_coil_pitch,
+                          doc=u"""winding coil pitch or coil span expressed in slots (coil_pitch1=Zs/(2p)->full-pitch distributed winding, coil_pitch1<Zs/(2p)->chorded/shorted-pitch distributed winding, coil_pitch1=1->tooth-winding). Coil pitch is sometimes written 1/9 means Input.Magnetics.coil_pitch1=9-1=8""")

@@ -18,7 +18,7 @@ from pyleecan.Classes.Machine import Machine
 from pyleecan.Classes.Magnet import Magnet
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.HoleM54 import HoleM54
-from pyleecan.Tests.Plot import save_path
+from pyleecan.Tests import save_plot_path as save_path
 
 
 class test_Hole_54_plot(TestCase):

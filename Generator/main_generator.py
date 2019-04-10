@@ -38,7 +38,7 @@ def generate_code(root_path):
     load_file = open(join(FUNC_DIR, "load_switch.py"), "w")
     load_file.write("# -*- coding: utf-8 -*-\n")
     load_file.write("from pyleecan.Classes.import_all import *\n\n")
-    load_file.write("load_switch={\n")
+    load_file.write("load_switch = {\n")
 
     # Read all the csv files
     gen_dict = read_all(DOC_DIR)

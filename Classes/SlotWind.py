@@ -89,3 +89,5 @@ class SlotWind(Slot):
 
         # Set to None the properties inherited from Slot
         super(SlotWind, self)._set_None()
+
+
