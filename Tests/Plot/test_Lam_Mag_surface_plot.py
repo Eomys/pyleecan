@@ -27,7 +27,7 @@ from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.MatLamination import MatLamination
 from pyleecan.Classes.SlotMFlat import SlotMFlat
 from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.Tests.Plot import save_path
+from pyleecan.Tests import save_plot_path as save_path
 
 
 class test_Lam_Mag_surface_plot(TestCase):

@@ -69,12 +69,12 @@ class test_HoleM54_meth(TestCase):
         test_obj = LamHole(init_dict=test_dict["test_obj"].as_dict())
         result = test_obj.hole[0].build_geometry()
 
-        self.assertEquals(len(result), 1)
+        self.assertEqual(len(result), 1)
         for surf in result:
             self.assertTrue(type(surf) == SurfLine)
 
         self.assertEqual(result[0].label, "Air")
-        self.assertEquals(len(result[0].line_list), 4)
+        self.assertEqual(len(result[0].line_list), 4)
         self.assertEqual(type(result[0].line_list[0]), Arc1)
         self.assertEqual(type(result[0].line_list[1]), Arc3)
         self.assertEqual(type(result[0].line_list[2]), Arc1)

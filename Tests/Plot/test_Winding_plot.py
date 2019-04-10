@@ -21,7 +21,7 @@ from pyleecan.Classes.WindingCW2LR import WindingCW2LR
 from pyleecan.Classes.WindingSC import WindingSC
 from pyleecan.Classes.SlotW21 import SlotW21
 from pyleecan.Classes.SlotW22 import SlotW22
-from pyleecan.Tests.Plot import save_path
+from pyleecan.Tests import save_plot_path as save_path
 
 
 class test_Winding_plot(TestCase):

@@ -25,7 +25,7 @@ from pyleecan.Classes.WindingCW2LT import WindingCW2LT
 from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.SlotW10 import SlotW10
 
-from pyleecan.Tests.Plot import save_path
+from pyleecan.Tests import save_plot_path as save_path
 from pyleecan.Tests.Plot.LamWind import wind_mat
 
 

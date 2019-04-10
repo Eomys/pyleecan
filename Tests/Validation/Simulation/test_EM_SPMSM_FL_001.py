@@ -2,7 +2,7 @@ from numpy import ones, pi, array
 from unittest import TestCase
 from os.path import join
 import matplotlib.pyplot as plt
-from pyleecan.Tests.Plot import save_path
+from pyleecan.Tests import save_validation_path as save_path
 
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Tests.Validation.Machine.SPMSM_003 import SPMSM_003

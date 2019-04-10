@@ -6,7 +6,7 @@ from pyleecan.Classes.check import set_array, check_init_dict, check_var
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from numpy import array
+from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
 
 
@@ -112,7 +112,7 @@ class OutGeoLam(FrozenClass):
             return False
         if other.name_phase != self.name_phase:
             return False
-        if other.BH_curve != self.BH_curve:
+        if not array_equal(other.BH_curve, self.BH_curve):
             return False
         if other.Ksfill != self.Ksfill:
             return False
