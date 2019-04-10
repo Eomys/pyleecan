@@ -10,7 +10,9 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class MagnetPolar(Magnet):
+    """abstract class of magnets with polar base"""
 
     VERSION = 1
 
@@ -40,9 +42,7 @@ class MagnetPolar(Magnet):
                 Lmag = init_dict["Lmag"]
         # Initialisation by argument
         # Call Magnet init
-        super(MagnetPolar, self).__init__(
-            mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag
-        )
+        super(MagnetPolar, self).__init__(mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag)
         # The class is frozen (in Magnet init), for now it's impossible to
         # add new properties
 
@@ -81,3 +81,5 @@ class MagnetPolar(Magnet):
 
         # Set to None the properties inherited from Magnet
         super(MagnetPolar, self)._set_None()
+
+

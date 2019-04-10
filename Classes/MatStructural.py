@@ -17,20 +17,7 @@ class MatStructural(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        rho=7650,
-        Ex=215000000000.0,
-        Ey=215000000000.0,
-        Ez=80000000000,
-        nu_xy=0.3,
-        nu_xz=0.03,
-        nu_yz=0.03,
-        Gxz=2000000000,
-        Gxy=0,
-        Gyz=2000000000,
-        init_dict=None,
-    ):
+    def __init__(self, rho=7650, Ex=215000000000.0, Ey=215000000000.0, Ez=80000000000, nu_xy=0.3, nu_xz=0.03, nu_yz=0.03, Gxz=2000000000, Gxy=0, Gyz=2000000000, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -41,21 +28,7 @@ class MatStructural(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "rho",
-                    "Ex",
-                    "Ey",
-                    "Ez",
-                    "nu_xy",
-                    "nu_xz",
-                    "nu_yz",
-                    "Gxz",
-                    "Gxy",
-                    "Gyz",
-                ],
-            )
+            check_init_dict(init_dict, ["rho", "Ex", "Ey", "Ez", "nu_xy", "nu_xz", "nu_yz", "Gxz", "Gxy", "Gyz"])
             # Overwrite default value with init_dict content
             if "rho" in list(init_dict.keys()):
                 rho = init_dict["rho"]
@@ -100,9 +73,7 @@ class MatStructural(FrozenClass):
         if self.parent is None:
             MatStructural_str += "parent = None " + linesep
         else:
-            MatStructural_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            MatStructural_str += "parent = " + str(type(self.parent)) + " object" + linesep
         MatStructural_str += "rho = " + str(self.rho) + linesep
         MatStructural_str += "Ex = " + str(self.Ex) + linesep
         MatStructural_str += "Ey = " + str(self.Ey) + linesep
@@ -186,9 +157,8 @@ class MatStructural(FrozenClass):
 
     # mass per unit volume [kg/m3]
     # Type : float, min = 0
-    rho = property(
-        fget=_get_rho, fset=_set_rho, doc=u"""mass per unit volume [kg/m3]"""
-    )
+    rho = property(fget=_get_rho, fset=_set_rho,
+                   doc=u"""mass per unit volume [kg/m3]""")
 
     def _get_Ex(self):
         """getter of Ex"""
@@ -201,11 +171,8 @@ class MatStructural(FrozenClass):
 
     # equivalent Young modulus (XY is lamination plane; Z is rotation axis)
     # Type : float, min = 0
-    Ex = property(
-        fget=_get_Ex,
-        fset=_set_Ex,
-        doc=u"""equivalent Young modulus (XY is lamination plane; Z is rotation axis)""",
-    )
+    Ex = property(fget=_get_Ex, fset=_set_Ex,
+                  doc=u"""equivalent Young modulus (XY is lamination plane; Z is rotation axis)""")
 
     def _get_Ey(self):
         """getter of Ey"""
@@ -218,11 +185,8 @@ class MatStructural(FrozenClass):
 
     # equivalent Young modulus (XY is lamination plane; Z is rotation axis)
     # Type : float, min = 0
-    Ey = property(
-        fget=_get_Ey,
-        fset=_set_Ey,
-        doc=u"""equivalent Young modulus (XY is lamination plane; Z is rotation axis)""",
-    )
+    Ey = property(fget=_get_Ey, fset=_set_Ey,
+                  doc=u"""equivalent Young modulus (XY is lamination plane; Z is rotation axis)""")
 
     def _get_Ez(self):
         """getter of Ez"""
@@ -235,11 +199,8 @@ class MatStructural(FrozenClass):
 
     # equivalent Young modulus (XY is lamination plane; Z is rotation axis)
     # Type : float, min = 0
-    Ez = property(
-        fget=_get_Ez,
-        fset=_set_Ez,
-        doc=u"""equivalent Young modulus (XY is lamination plane; Z is rotation axis)""",
-    )
+    Ez = property(fget=_get_Ez, fset=_set_Ez,
+                  doc=u"""equivalent Young modulus (XY is lamination plane; Z is rotation axis)""")
 
     def _get_nu_xy(self):
         """getter of nu_xy"""
@@ -252,11 +213,8 @@ class MatStructural(FrozenClass):
 
     # equivalent Poisson ratio in the XY plane (XY is lamination plane; Z is rotation axis)
     # Type : float, min = 0
-    nu_xy = property(
-        fget=_get_nu_xy,
-        fset=_set_nu_xy,
-        doc=u"""equivalent Poisson ratio in the XY plane (XY is lamination plane; Z is rotation axis)""",
-    )
+    nu_xy = property(fget=_get_nu_xy, fset=_set_nu_xy,
+                     doc=u"""equivalent Poisson ratio in the XY plane (XY is lamination plane; Z is rotation axis)""")
 
     def _get_nu_xz(self):
         """getter of nu_xz"""
@@ -269,11 +227,8 @@ class MatStructural(FrozenClass):
 
     # equivalent Poisson ratio in the XZ plane (XY is lamination plane; Z is rotation axis)
     # Type : float, min = 0
-    nu_xz = property(
-        fget=_get_nu_xz,
-        fset=_set_nu_xz,
-        doc=u"""equivalent Poisson ratio in the XZ plane (XY is lamination plane; Z is rotation axis)""",
-    )
+    nu_xz = property(fget=_get_nu_xz, fset=_set_nu_xz,
+                     doc=u"""equivalent Poisson ratio in the XZ plane (XY is lamination plane; Z is rotation axis)""")
 
     def _get_nu_yz(self):
         """getter of nu_yz"""
@@ -286,11 +241,8 @@ class MatStructural(FrozenClass):
 
     # equivalent Poisson ratio in the YZ plane (XY is lamination plane; Z is rotation axis)
     # Type : float, min = 0
-    nu_yz = property(
-        fget=_get_nu_yz,
-        fset=_set_nu_yz,
-        doc=u"""equivalent Poisson ratio in the YZ plane (XY is lamination plane; Z is rotation axis)""",
-    )
+    nu_yz = property(fget=_get_nu_yz, fset=_set_nu_yz,
+                     doc=u"""equivalent Poisson ratio in the YZ plane (XY is lamination plane; Z is rotation axis)""")
 
     def _get_Gxz(self):
         """getter of Gxz"""
@@ -303,11 +255,8 @@ class MatStructural(FrozenClass):
 
     # shear modulus in XY plane (XY is lamination plane; Z is rotation axis)
     # Type : float, min = 0
-    Gxz = property(
-        fget=_get_Gxz,
-        fset=_set_Gxz,
-        doc=u"""shear modulus in XY plane (XY is lamination plane; Z is rotation axis)""",
-    )
+    Gxz = property(fget=_get_Gxz, fset=_set_Gxz,
+                   doc=u"""shear modulus in XY plane (XY is lamination plane; Z is rotation axis)""")
 
     def _get_Gxy(self):
         """getter of Gxy"""
@@ -320,11 +269,8 @@ class MatStructural(FrozenClass):
 
     # shear modulus in XZ plane (XY is lamination plane; Z is rotation axis)
     # Type : float, min = 0
-    Gxy = property(
-        fget=_get_Gxy,
-        fset=_set_Gxy,
-        doc=u"""shear modulus in XZ plane (XY is lamination plane; Z is rotation axis)""",
-    )
+    Gxy = property(fget=_get_Gxy, fset=_set_Gxy,
+                   doc=u"""shear modulus in XZ plane (XY is lamination plane; Z is rotation axis)""")
 
     def _get_Gyz(self):
         """getter of Gyz"""
@@ -337,8 +283,5 @@ class MatStructural(FrozenClass):
 
     # shear modulus in YZ plane (XY is lamination plane; Z is rotation axis)
     # Type : float, min = 0
-    Gyz = property(
-        fget=_get_Gyz,
-        fset=_set_Gyz,
-        doc=u"""shear modulus in YZ plane (XY is lamination plane; Z is rotation axis)""",
-    )
+    Gyz = property(fget=_get_Gyz, fset=_set_Gyz,
+                   doc=u"""shear modulus in YZ plane (XY is lamination plane; Z is rotation axis)""")

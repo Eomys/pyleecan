@@ -1,5 +1,5 @@
 Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-rotor;;Machine's Rotor;;;Lamination;;;;;;;Machine;;build_geometry;VERSION;1;;MachineSync
+rotor;;Machine's Rotor;;;Lamination;;;;;;;Machine;;build_geometry;VERSION;1;Abstract class for machines;MachineSync
 stator;;Machine's Stator;;;Lamination;;;;;;;;;check;;;;MachineAsync
 frame;;Machine's Frame;;;Frame;;;;;;;;;comp_masses;;;;MachineSCIM
 shaft;;Machine's Shaft;;;Shaft;;;;;;;;;comp_width_airgap_mag;;;;MachineDFIM

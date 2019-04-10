@@ -16,7 +16,9 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class CondType11(Conductor):
+    """parallel stranded conductor consisting of at least a single rectangular wire"""
 
     VERSION = 1
 
@@ -33,20 +35,7 @@ class CondType11(Conductor):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        Hwire=0.01,
-        Wwire=0.01,
-        Nwppc_rad=1,
-        Nwppc_tan=1,
-        Wins_wire=0,
-        Wins_coil=0,
-        type_winding_shape=0,
-        alpha_ew=58,
-        cond_mat=-1,
-        ins_mat=-1,
-        init_dict=None,
-    ):
+    def __init__(self, Hwire=0.01, Wwire=0.01, Nwppc_rad=1, Nwppc_tan=1, Wins_wire=0, Wins_coil=0, type_winding_shape=0, alpha_ew=58, cond_mat=-1, ins_mat=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -61,21 +50,7 @@ class CondType11(Conductor):
         if ins_mat == -1:
             ins_mat = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "Hwire",
-                    "Wwire",
-                    "Nwppc_rad",
-                    "Nwppc_tan",
-                    "Wins_wire",
-                    "Wins_coil",
-                    "type_winding_shape",
-                    "alpha_ew",
-                    "cond_mat",
-                    "ins_mat",
-                ],
-            )
+            check_init_dict(init_dict, ["Hwire", "Wwire", "Nwppc_rad", "Nwppc_tan", "Wins_wire", "Wins_coil", "type_winding_shape", "alpha_ew", "cond_mat", "ins_mat"])
             # Overwrite default value with init_dict content
             if "Hwire" in list(init_dict.keys()):
                 Hwire = init_dict["Hwire"]
@@ -123,9 +98,7 @@ class CondType11(Conductor):
         CondType11_str += "Nwppc_tan = " + str(self.Nwppc_tan) + linesep
         CondType11_str += "Wins_wire = " + str(self.Wins_wire) + linesep
         CondType11_str += "Wins_coil = " + str(self.Wins_coil) + linesep
-        CondType11_str += (
-            "type_winding_shape = " + str(self.type_winding_shape) + linesep
-        )
+        CondType11_str += "type_winding_shape = " + str(self.type_winding_shape) + linesep
         CondType11_str += "alpha_ew = " + str(self.alpha_ew)
         return CondType11_str
 
@@ -200,11 +173,8 @@ class CondType11(Conductor):
 
     # cf schematics, single wire height without insulation [m]
     # Type : float, min = 0
-    Hwire = property(
-        fget=_get_Hwire,
-        fset=_set_Hwire,
-        doc=u"""cf schematics, single wire height without insulation [m]""",
-    )
+    Hwire = property(fget=_get_Hwire, fset=_set_Hwire,
+                     doc=u"""cf schematics, single wire height without insulation [m]""")
 
     def _get_Wwire(self):
         """getter of Wwire"""
@@ -217,11 +187,8 @@ class CondType11(Conductor):
 
     # cf schematics, single wire width without insulation [m]
     # Type : float, min = 0
-    Wwire = property(
-        fget=_get_Wwire,
-        fset=_set_Wwire,
-        doc=u"""cf schematics, single wire width without insulation [m]""",
-    )
+    Wwire = property(fget=_get_Wwire, fset=_set_Wwire,
+                     doc=u"""cf schematics, single wire width without insulation [m]""")
 
     def _get_Nwppc_rad(self):
         """getter of Nwppc_rad"""
@@ -234,11 +201,8 @@ class CondType11(Conductor):
 
     # cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction
     # Type : int, min = 1
-    Nwppc_rad = property(
-        fget=_get_Nwppc_rad,
-        fset=_set_Nwppc_rad,
-        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction""",
-    )
+    Nwppc_rad = property(fget=_get_Nwppc_rad, fset=_set_Nwppc_rad,
+                         doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction""")
 
     def _get_Nwppc_tan(self):
         """getter of Nwppc_tan"""
@@ -251,11 +215,8 @@ class CondType11(Conductor):
 
     # cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction
     # Type : int, min = 1
-    Nwppc_tan = property(
-        fget=_get_Nwppc_tan,
-        fset=_set_Nwppc_tan,
-        doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction""",
-    )
+    Nwppc_tan = property(fget=_get_Nwppc_tan, fset=_set_Nwppc_tan,
+                         doc=u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction""")
 
     def _get_Wins_wire(self):
         """getter of Wins_wire"""
@@ -268,11 +229,8 @@ class CondType11(Conductor):
 
     # (advanced) cf schematics, winding strand insulation thickness [m]
     # Type : float, min = 0
-    Wins_wire = property(
-        fget=_get_Wins_wire,
-        fset=_set_Wins_wire,
-        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]""",
-    )
+    Wins_wire = property(fget=_get_Wins_wire, fset=_set_Wins_wire,
+                         doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]""")
 
     def _get_Wins_coil(self):
         """getter of Wins_coil"""
@@ -285,11 +243,8 @@ class CondType11(Conductor):
 
     # (advanced) cf schematics, winding coil insulation  thickness [m]
     # Type : float, min = 0
-    Wins_coil = property(
-        fget=_get_Wins_coil,
-        fset=_set_Wins_coil,
-        doc=u"""(advanced) cf schematics, winding coil insulation  thickness [m]""",
-    )
+    Wins_coil = property(fget=_get_Wins_coil, fset=_set_Wins_coil,
+                         doc=u"""(advanced) cf schematics, winding coil insulation  thickness [m]""")
 
     def _get_type_winding_shape(self):
         """getter of type_winding_shape"""
@@ -302,11 +257,8 @@ class CondType11(Conductor):
 
     # type of winding shape for end winding length calculation\n0 for hairpin windings\n1 for normal windings
     # Type : int, min = 0, max = 1
-    type_winding_shape = property(
-        fget=_get_type_winding_shape,
-        fset=_set_type_winding_shape,
-        doc=u"""type of winding shape for end winding length calculation\n0 for hairpin windings\n1 for normal windings""",
-    )
+    type_winding_shape = property(fget=_get_type_winding_shape, fset=_set_type_winding_shape,
+                                  doc=u"""type of winding shape for end winding length calculation\n0 for hairpin windings\n1 for normal windings""")
 
     def _get_alpha_ew(self):
         """getter of alpha_ew"""
@@ -319,8 +271,5 @@ class CondType11(Conductor):
 
     # angle of winding overhang hairpin coils [deg]
     # Type : float, min = 0, max = 180
-    alpha_ew = property(
-        fget=_get_alpha_ew,
-        fset=_set_alpha_ew,
-        doc=u"""angle of winding overhang hairpin coils [deg]""",
-    )
+    alpha_ew = property(fget=_get_alpha_ew, fset=_set_alpha_ew,
+                        doc=u"""angle of winding overhang hairpin coils [deg]""")

@@ -21,15 +21,7 @@ class ImportGenVectLin(ImportMatrix):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        start=0,
-        stop=1,
-        num=100,
-        endpoint=True,
-        is_transpose=False,
-        init_dict=None,
-    ):
+    def __init__(self, start=0, stop=1, num=100, endpoint=True, is_transpose=False, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -40,9 +32,7 @@ class ImportGenVectLin(ImportMatrix):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["start", "stop", "num", "endpoint", "is_transpose"]
-            )
+            check_init_dict(init_dict, ["start", "stop", "num", "endpoint", "is_transpose"])
             # Overwrite default value with init_dict content
             if "start" in list(init_dict.keys()):
                 start = init_dict["start"]
@@ -131,9 +121,8 @@ class ImportGenVectLin(ImportMatrix):
 
     # Begin point of the linspace
     # Type : float
-    start = property(
-        fget=_get_start, fset=_set_start, doc=u"""Begin point of the linspace"""
-    )
+    start = property(fget=_get_start, fset=_set_start,
+                     doc=u"""Begin point of the linspace""")
 
     def _get_stop(self):
         """getter of stop"""
@@ -146,9 +135,8 @@ class ImportGenVectLin(ImportMatrix):
 
     # End point of the linspace
     # Type : float
-    stop = property(
-        fget=_get_stop, fset=_set_stop, doc=u"""End point of the linspace"""
-    )
+    stop = property(fget=_get_stop, fset=_set_stop,
+                    doc=u"""End point of the linspace""")
 
     def _get_num(self):
         """getter of num"""
@@ -161,9 +149,8 @@ class ImportGenVectLin(ImportMatrix):
 
     # Number of value in the linspace
     # Type : float
-    num = property(
-        fget=_get_num, fset=_set_num, doc=u"""Number of value in the linspace"""
-    )
+    num = property(fget=_get_num, fset=_set_num,
+                   doc=u"""Number of value in the linspace""")
 
     def _get_endpoint(self):
         """getter of endpoint"""
@@ -176,8 +163,5 @@ class ImportGenVectLin(ImportMatrix):
 
     # If True, stop is the last sample. Otherwise, it is not included
     # Type : bool
-    endpoint = property(
-        fget=_get_endpoint,
-        fset=_set_endpoint,
-        doc=u"""If True, stop is the last sample. Otherwise, it is not included""",
-    )
+    endpoint = property(fget=_get_endpoint, fset=_set_endpoint,
+                        doc=u"""If True, stop is the last sample. Otherwise, it is not included""")

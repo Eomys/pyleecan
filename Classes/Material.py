@@ -16,6 +16,7 @@ from pyleecan.Classes.MatHT import MatHT
 from pyleecan.Classes.MatEconomical import MatEconomical
 
 
+
 class Material(FrozenClass):
 
     VERSION = 1
@@ -23,18 +24,7 @@ class Material(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        name="M400-50A",
-        is_isotropic=False,
-        elec=-1,
-        mag=-1,
-        struct=-1,
-        HT=-1,
-        eco=-1,
-        desc="Lamination M400-50A",
-        init_dict=None,
-    ):
+    def __init__(self, name="M400-50A", is_isotropic=False, elec=-1, mag=-1, struct=-1, HT=-1, eco=-1, desc="Lamination M400-50A", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -55,10 +45,7 @@ class Material(FrozenClass):
         if eco == -1:
             eco = MatEconomical()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["name", "is_isotropic", "elec", "mag", "struct", "HT", "eco", "desc"],
-            )
+            check_init_dict(init_dict, ["name", "is_isotropic", "elec", "mag", "struct", "HT", "eco", "desc"])
             # Overwrite default value with init_dict content
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
@@ -88,12 +75,8 @@ class Material(FrozenClass):
         # mag can be None, a MatMagnetics object or a dict
         if isinstance(mag, dict):
             # Call the correct constructor according to the dict
-            load_dict = {
-                "MatLamination": MatLamination,
-                "MatMagnet": MatMagnet,
-                "MatMagnetics": MatMagnetics,
-            }
-            obj_class = mag.get("__class__")
+            load_dict = {"MatLamination": MatLamination, "MatMagnet": MatMagnet, "MatMagnetics": MatMagnetics}
+            obj_class = mag.get('__class__')
             if obj_class is None:
                 self.mag = MatMagnetics(init_dict=mag)
             elif obj_class in list(load_dict.keys()):
@@ -223,7 +206,8 @@ class Material(FrozenClass):
 
     # name of the material
     # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""name of the material""")
+    name = property(fget=_get_name, fset=_set_name,
+                    doc=u"""name of the material""")
 
     def _get_is_isotropic(self):
         """getter of is_isotropic"""
@@ -236,11 +220,8 @@ class Material(FrozenClass):
 
     # If True, uniformity in all orientations
     # Type : bool
-    is_isotropic = property(
-        fget=_get_is_isotropic,
-        fset=_set_is_isotropic,
-        doc=u"""If True, uniformity in all orientations""",
-    )
+    is_isotropic = property(fget=_get_is_isotropic, fset=_set_is_isotropic,
+                            doc=u"""If True, uniformity in all orientations""")
 
     def _get_elec(self):
         """getter of elec"""
@@ -253,12 +234,10 @@ class Material(FrozenClass):
 
         if self._elec is not None:
             self._elec.parent = self
-
     # Electrical properties of the material
     # Type : MatElectrical
-    elec = property(
-        fget=_get_elec, fset=_set_elec, doc=u"""Electrical properties of the material"""
-    )
+    elec = property(fget=_get_elec, fset=_set_elec,
+                    doc=u"""Electrical properties of the material""")
 
     def _get_mag(self):
         """getter of mag"""
@@ -271,12 +250,10 @@ class Material(FrozenClass):
 
         if self._mag is not None:
             self._mag.parent = self
-
     # Magnetic properties of the material
     # Type : MatMagnetics
-    mag = property(
-        fget=_get_mag, fset=_set_mag, doc=u"""Magnetic properties of the material"""
-    )
+    mag = property(fget=_get_mag, fset=_set_mag,
+                   doc=u"""Magnetic properties of the material""")
 
     def _get_struct(self):
         """getter of struct"""
@@ -289,14 +266,10 @@ class Material(FrozenClass):
 
         if self._struct is not None:
             self._struct.parent = self
-
     # Structural properties of the material
     # Type : MatStructural
-    struct = property(
-        fget=_get_struct,
-        fset=_set_struct,
-        doc=u"""Structural properties of the material""",
-    )
+    struct = property(fget=_get_struct, fset=_set_struct,
+                      doc=u"""Structural properties of the material""")
 
     def _get_HT(self):
         """getter of HT"""
@@ -309,12 +282,10 @@ class Material(FrozenClass):
 
         if self._HT is not None:
             self._HT.parent = self
-
     # Heat Transfer properties of the material
     # Type : MatHT
-    HT = property(
-        fget=_get_HT, fset=_set_HT, doc=u"""Heat Transfer properties of the material"""
-    )
+    HT = property(fget=_get_HT, fset=_set_HT,
+                  doc=u"""Heat Transfer properties of the material""")
 
     def _get_eco(self):
         """getter of eco"""
@@ -327,12 +298,10 @@ class Material(FrozenClass):
 
         if self._eco is not None:
             self._eco.parent = self
-
     # Economical properties of the material
     # Type : MatEconomical
-    eco = property(
-        fget=_get_eco, fset=_set_eco, doc=u"""Economical properties of the material"""
-    )
+    eco = property(fget=_get_eco, fset=_set_eco,
+                   doc=u"""Economical properties of the material""")
 
     def _get_desc(self):
         """getter of desc"""
@@ -345,4 +314,5 @@ class Material(FrozenClass):
 
     # material description
     # Type : str
-    desc = property(fget=_get_desc, fset=_set_desc, doc=u"""material description""")
+    desc = property(fget=_get_desc, fset=_set_desc,
+                    doc=u"""material description""")

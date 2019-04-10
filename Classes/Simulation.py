@@ -20,6 +20,7 @@ from pyleecan.Classes.Input import Input
 from pyleecan.Classes.InCurrent import InCurrent
 
 
+
 class Simulation(FrozenClass):
     """Abstract class for the simulation"""
 
@@ -60,18 +61,8 @@ class Simulation(FrozenClass):
         # machine can be None, a Machine object or a dict
         if isinstance(machine, dict):
             # Call the correct constructor according to the dict
-            load_dict = {
-                "MachineSync": MachineSync,
-                "MachineAsync": MachineAsync,
-                "MachineSCIM": MachineSCIM,
-                "MachineDFIM": MachineDFIM,
-                "MachineSIPMSM": MachineSIPMSM,
-                "MachineIPMSM": MachineIPMSM,
-                "MachineWRSM": MachineWRSM,
-                "MachineSyRM": MachineSyRM,
-                "Machine": Machine,
-            }
-            obj_class = machine.get("__class__")
+            load_dict = {"MachineSync": MachineSync, "MachineAsync": MachineAsync, "MachineSCIM": MachineSCIM, "MachineDFIM": MachineDFIM, "MachineSIPMSM": MachineSIPMSM, "MachineIPMSM": MachineIPMSM, "MachineWRSM": MachineWRSM, "MachineSyRM": MachineSyRM, "Machine": Machine}
+            obj_class = machine.get('__class__')
             if obj_class is None:
                 self.machine = Machine(init_dict=machine)
             elif obj_class in list(load_dict.keys()):
@@ -84,7 +75,7 @@ class Simulation(FrozenClass):
         if isinstance(input, dict):
             # Call the correct constructor according to the dict
             load_dict = {"InCurrent": InCurrent, "Input": Input}
-            obj_class = input.get("__class__")
+            obj_class = input.get('__class__')
             if obj_class is None:
                 self.input = Input(init_dict=input)
             elif obj_class in list(load_dict.keys()):
@@ -166,7 +157,8 @@ class Simulation(FrozenClass):
 
     # Name of the simulation
     # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""Name of the simulation""")
+    name = property(fget=_get_name, fset=_set_name,
+                    doc=u"""Name of the simulation""")
 
     def _get_desc(self):
         """getter of desc"""
@@ -179,7 +171,8 @@ class Simulation(FrozenClass):
 
     # Simulation description
     # Type : str
-    desc = property(fget=_get_desc, fset=_set_desc, doc=u"""Simulation description""")
+    desc = property(fget=_get_desc, fset=_set_desc,
+                    doc=u"""Simulation description""")
 
     def _get_machine(self):
         """getter of machine"""
@@ -192,12 +185,10 @@ class Simulation(FrozenClass):
 
         if self._machine is not None:
             self._machine.parent = self
-
     # Machine to simulate
     # Type : Machine
-    machine = property(
-        fget=_get_machine, fset=_set_machine, doc=u"""Machine to simulate"""
-    )
+    machine = property(fget=_get_machine, fset=_set_machine,
+                       doc=u"""Machine to simulate""")
 
     def _get_input(self):
         """getter of input"""
@@ -210,9 +201,7 @@ class Simulation(FrozenClass):
 
         if self._input is not None:
             self._input.parent = self
-
     # Input of the simulation
     # Type : Input
-    input = property(
-        fget=_get_input, fset=_set_input, doc=u"""Input of the simulation"""
-    )
+    input = property(fget=_get_input, fset=_set_input,
+                     doc=u"""Input of the simulation""")

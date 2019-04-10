@@ -17,7 +17,9 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class CondType12(Conductor):
+    """parallel stranded conductor consisting of at least a single round wire"""
 
     VERSION = 1
 
@@ -36,17 +38,7 @@ class CondType12(Conductor):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        Wwire=0.015,
-        Wins_cond=0.015,
-        Nwppc=1,
-        Wins_wire=0,
-        Kwoh=0.5,
-        cond_mat=-1,
-        ins_mat=-1,
-        init_dict=None,
-    ):
+    def __init__(self, Wwire=0.015, Wins_cond=0.015, Nwppc=1, Wins_wire=0, Kwoh=0.5, cond_mat=-1, ins_mat=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -61,18 +53,7 @@ class CondType12(Conductor):
         if ins_mat == -1:
             ins_mat = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "Wwire",
-                    "Wins_cond",
-                    "Nwppc",
-                    "Wins_wire",
-                    "Kwoh",
-                    "cond_mat",
-                    "ins_mat",
-                ],
-            )
+            check_init_dict(init_dict, ["Wwire", "Wins_cond", "Nwppc", "Wins_wire", "Kwoh", "cond_mat", "ins_mat"])
             # Overwrite default value with init_dict content
             if "Wwire" in list(init_dict.keys()):
                 Wwire = init_dict["Wwire"]
@@ -171,11 +152,8 @@ class CondType12(Conductor):
 
     # cf schematics, single wire diameter without insulation [m]
     # Type : float, min = 0
-    Wwire = property(
-        fget=_get_Wwire,
-        fset=_set_Wwire,
-        doc=u"""cf schematics, single wire diameter without insulation [m]""",
-    )
+    Wwire = property(fget=_get_Wwire, fset=_set_Wwire,
+                     doc=u"""cf schematics, single wire diameter without insulation [m]""")
 
     def _get_Wins_cond(self):
         """getter of Wins_cond"""
@@ -188,11 +166,8 @@ class CondType12(Conductor):
 
     # (advanced) cf schematics, winding coil insulation diameter [m]
     # Type : float, min = 0
-    Wins_cond = property(
-        fget=_get_Wins_cond,
-        fset=_set_Wins_cond,
-        doc=u"""(advanced) cf schematics, winding coil insulation diameter [m]""",
-    )
+    Wins_cond = property(fget=_get_Wins_cond, fset=_set_Wins_cond,
+                         doc=u"""(advanced) cf schematics, winding coil insulation diameter [m]""")
 
     def _get_Nwppc(self):
         """getter of Nwppc"""
@@ -205,11 +180,8 @@ class CondType12(Conductor):
 
     # cf schematics, winding number of random wires (strands) in parallel per coil
     # Type : int, min = 1
-    Nwppc = property(
-        fget=_get_Nwppc,
-        fset=_set_Nwppc,
-        doc=u"""cf schematics, winding number of random wires (strands) in parallel per coil""",
-    )
+    Nwppc = property(fget=_get_Nwppc, fset=_set_Nwppc,
+                     doc=u"""cf schematics, winding number of random wires (strands) in parallel per coil""")
 
     def _get_Wins_wire(self):
         """getter of Wins_wire"""
@@ -222,11 +194,8 @@ class CondType12(Conductor):
 
     # (advanced) cf schematics, winding strand insulation thickness [m]
     # Type : float, min = 0
-    Wins_wire = property(
-        fget=_get_Wins_wire,
-        fset=_set_Wins_wire,
-        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]""",
-    )
+    Wins_wire = property(fget=_get_Wins_wire, fset=_set_Wins_wire,
+                         doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]""")
 
     def _get_Kwoh(self):
         """getter of Kwoh"""
@@ -239,8 +208,5 @@ class CondType12(Conductor):
 
     # winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)
     # Type : float, min = 0
-    Kwoh = property(
-        fget=_get_Kwoh,
-        fset=_set_Kwoh,
-        doc=u"""winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)""",
-    )
+    Kwoh = property(fget=_get_Kwoh, fset=_set_Kwoh,
+                    doc=u"""winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)""")
