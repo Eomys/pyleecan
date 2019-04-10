@@ -1,4 +1,4 @@
 Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-Wmag;m;magnet bottom width [m];;0;float;2,00E-03;0;;;;;Machine;MagnetFlat;build_geometry;VERSION;1;single magnet with curved-top shape and rectangular base;
+Wmag;m;magnet bottom width [m];;0;float;2,00E-03;0;;;;;Machine;MagnetFlat;build_geometry;VERSION;1;single magnet with rectangular base and curved-top shape;
 Hmag;m;magnet radial height [m];;0;float;1,00E-03;0;;;1;;;;comp_height;IS_FLAT_BOT;1;;
 Rtop;m;radius of the circular top shape [m];;0;float;5,00E-02;0;;;;;;;comp_surface;IS_FLAT_TOP;0;;

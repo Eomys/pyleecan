@@ -10,6 +10,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 
 
 class MatElectrical(FrozenClass):
+    """material electrical properties"""
 
     VERSION = 1
 
@@ -48,9 +49,7 @@ class MatElectrical(FrozenClass):
         if self.parent is None:
             MatElectrical_str += "parent = None " + linesep
         else:
-            MatElectrical_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            MatElectrical_str += "parent = " + str(type(self.parent)) + " object" + linesep
         MatElectrical_str += "rho = " + str(self.rho) + linesep
         MatElectrical_str += "epsr = " + str(self.epsr)
         return MatElectrical_str
@@ -94,7 +93,8 @@ class MatElectrical(FrozenClass):
 
     # Resistivity at 20°C
     # Type : float, min = 0
-    rho = property(fget=_get_rho, fset=_set_rho, doc=u"""Resistivity at 20°C""")
+    rho = property(fget=_get_rho, fset=_set_rho,
+                   doc=u"""Resistivity at 20°C""")
 
     def _get_epsr(self):
         """getter of epsr"""
@@ -107,6 +107,5 @@ class MatElectrical(FrozenClass):
 
     # Relative dielectric constant
     # Type : float, min = 0
-    epsr = property(
-        fget=_get_epsr, fset=_set_epsr, doc=u"""Relative dielectric constant"""
-    )
+    epsr = property(fget=_get_epsr, fset=_set_epsr,
+                    doc=u"""Relative dielectric constant""")

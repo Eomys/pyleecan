@@ -24,6 +24,7 @@ from pyleecan.Classes.Input import Input
 from pyleecan.Classes.InCurrent import InCurrent
 
 
+
 class Simu1(Simulation):
     """Five sequential weak coupling multi physics simulation"""
 
@@ -68,7 +69,7 @@ class Simu1(Simulation):
         if isinstance(mag, dict):
             # Call the correct constructor according to the dict
             load_dict = {"MagFEMM": MagFEMM, "Magnetics": Magnetics}
-            obj_class = mag.get("__class__")
+            obj_class = mag.get('__class__')
             if obj_class is None:
                 self.mag = Magnetics(init_dict=mag)
             elif obj_class in list(load_dict.keys()):
@@ -138,7 +139,7 @@ class Simu1(Simulation):
 
         if self._mag is not None:
             self._mag.parent = self
-
     # Magnetic module
     # Type : Magnetics
-    mag = property(fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module""")
+    mag = property(fget=_get_mag, fset=_set_mag,
+                   doc=u"""Magnetic module""")

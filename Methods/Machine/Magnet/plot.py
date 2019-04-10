@@ -32,7 +32,7 @@ def plot(self, fig=None, display_field=False):
     None
     """
 
-    surf_list = self.build_geometry(Rbo)
+    surf_list = self.build_geometry()
     patches = list()
     for surf in surf_list:
         patches.append(surf.get_patch(color=MAGNET_COLOR))

@@ -14,7 +14,9 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class Shaft(FrozenClass):
+    """machine shaft"""
 
     VERSION = 1
 
@@ -121,11 +123,8 @@ class Shaft(FrozenClass):
 
     # length of the rotor shaft [m] (used for weight & cost estimation only)
     # Type : float, min = 0, max = 100
-    Lshaft = property(
-        fget=_get_Lshaft,
-        fset=_set_Lshaft,
-        doc=u"""length of the rotor shaft [m] (used for weight & cost estimation only)""",
-    )
+    Lshaft = property(fget=_get_Lshaft, fset=_set_Lshaft,
+                      doc=u"""length of the rotor shaft [m] (used for weight & cost estimation only)""")
 
     def _get_mat_type(self):
         """getter of mat_type"""
@@ -138,12 +137,10 @@ class Shaft(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
-
     # Shaft's Material
     # Type : Material
-    mat_type = property(
-        fget=_get_mat_type, fset=_set_mat_type, doc=u"""Shaft's Material"""
-    )
+    mat_type = property(fget=_get_mat_type, fset=_set_mat_type,
+                        doc=u"""Shaft's Material""")
 
     def _get_Drsh(self):
         """getter of Drsh"""
@@ -156,8 +153,5 @@ class Shaft(FrozenClass):
 
     # diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses
     # Type : float, min = 0, max = 8
-    Drsh = property(
-        fget=_get_Drsh,
-        fset=_set_Drsh,
-        doc=u"""diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses""",
-    )
+    Drsh = property(fget=_get_Drsh, fset=_set_Drsh,
+                    doc=u"""diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses""")

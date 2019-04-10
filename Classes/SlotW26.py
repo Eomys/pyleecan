@@ -145,7 +145,8 @@ class SlotW26(SlotWind):
 
     # Slot isthmus width.
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus width.""")
+    W0 = property(fget=_get_W0, fset=_set_W0,
+                  doc=u"""Slot isthmus width.""")
 
     def _get_H0(self):
         """getter of H0"""
@@ -158,7 +159,8 @@ class SlotW26(SlotWind):
 
     # Slot isthmus height.
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height.""")
+    H0 = property(fget=_get_H0, fset=_set_H0,
+                  doc=u"""Slot isthmus height.""")
 
     def _get_H1(self):
         """getter of H1"""
@@ -169,9 +171,10 @@ class SlotW26(SlotWind):
         check_var("H1", value, "float", Vmin=0)
         self._H1 = value
 
-    # Slot depth
+    # Slot depth 
     # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Slot depth """)
+    H1 = property(fget=_get_H1, fset=_set_H1,
+                  doc=u"""Slot depth """)
 
     def _get_R1(self):
         """getter of R1"""
@@ -184,4 +187,5 @@ class SlotW26(SlotWind):
 
     # Slot edge radius
     # Type : float, min = 0
-    R1 = property(fget=_get_R1, fset=_set_R1, doc=u"""Slot edge radius""")
+    R1 = property(fget=_get_R1, fset=_set_R1,
+                  doc=u"""Slot edge radius""")
