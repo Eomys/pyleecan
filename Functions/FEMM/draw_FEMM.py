@@ -131,9 +131,8 @@ def draw_FEMM(
 
     # We need to create a new Magnetostatics document to work on.
     femm.newdocument(0)
-    
+
     # Minimize the main window for faster geometry creation.
-    femm.mi_minimize()
     femm.main_minimize()
 
     # defining the problem

@@ -8,6 +8,7 @@ def comp_FEMM_torque(FEMM_dict, sym=1):
     # Select rotor groups
     mo_seteditmode("area")
     mo_groupselectblock(FEMM_dict["groups"]["GROUP_RC"])
+    mo_groupselectblock(FEMM_dict["groups"]["GROUP_RH"])
     mo_groupselectblock(FEMM_dict["groups"]["GROUP_RW"])
     # sym = 2 => Only half the machine
     return sym * mo_blockintegral(22)

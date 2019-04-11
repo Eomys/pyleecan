@@ -14,11 +14,11 @@ from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Functions.FEMM import acsolver, pbtype, precision, minangle
 from pyleecan.Functions.FEMM import (
     GROUP_RC,
-	GROUP_RH,
+    GROUP_RH,
     GROUP_RV,
     GROUP_RW,
     GROUP_SC,
-	GROUP_SH,
+    GROUP_SH,
     GROUP_SV,
     GROUP_SW,
     GROUP_AG,

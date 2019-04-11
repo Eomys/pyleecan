@@ -60,7 +60,7 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
         elif "Ventilation" in label:
             prop = "Air"
         elif "Hole" in label:
-            prop = "Air"
+            prop = label
         # Set the surface property
         femm.mi_setblockprop(
             prop,
@@ -70,5 +70,5 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
             mag,
             mesh_dict["group"],
             Ntcoil,
-)
+        )
         femm.mi_clearselected()

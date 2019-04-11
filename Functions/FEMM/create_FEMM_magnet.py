@@ -3,9 +3,14 @@
 @date Created on août 09 17:40 2018
 @author franco_i
 @TODO: it would be better to have the magnets as input instead of the lamination
+@TODO: decision about the magnet renaming, remove for the moment
 """
 import femm
 from pyleecan.Classes.LamHole import LamHole
+from pyleecan.Classes.HoleM50 import HoleM50
+from pyleecan.Classes.HoleM51 import HoleM51
+from pyleecan.Classes.HoleM52 import HoleM52
+from pyleecan.Classes.HoleM53 import HoleM53
 
 
 def create_FEMM_magnet(label, is_mmf, is_eddies, materials, lam):
@@ -30,27 +35,49 @@ def create_FEMM_magnet(label, is_mmf, is_eddies, materials, lam):
         property, materials
     
     """
+    # some if's and else's to find the correct material parameter from magnet label
     if type(lam) == LamHole:
-        if "T0" in label:
-            rho = lam.hole[0].magnet_0.mat_type.elec.rho  # Resistivity at 20°C
-            Hcm = lam.hole[0].magnet_0.mat_type.mag.Hc  # Magnet coercitivity field
-            mur = lam.hole[0].magnet_0.mat_type.mag.mur_lin
-            pole_mag = label[6:9] + "_0"
-        elif "T1" in label:
-            rho = lam.hole[0].magnet_1.mat_type.elec.rho  # Resistivity at 20°C
-            Hcm = lam.hole[0].magnet_1.mat_type.mag.Hc  # Magnet coercitivity field
-            mur = lam.hole[0].magnet_1.mat_type.mag.mur_lin
-            pole_mag = label[6:9] + "_1"
+        if (type(lam.hole[0]) == HoleM50) or (type(lam.hole[0]) == HoleM53):
+            if lam.hole[0].magnet_0:
+                if "T0" in label:
+                    magnet = lam.hole[0].magnet_0
+                elif "T1" in label:
+                    magnet = lam.hole[0].magnet_1
+            else:
+                if "T0" in label:
+                    magnet = lam.hole[0].magnet_1
+        if type(lam.hole[0]) == HoleM51:
+            if lam.hole[0].magnet_0 and lam.hole[0].magnet_1:
+                if "T0" in label:
+                    magnet = lam.hole[0].magnet_0
+                elif "T1" in label:
+                    magnet = lam.hole[0].magnet_1
+                elif "T2" in label:
+                    magnet = lam.hole[0].magnet_2
+            elif lam.hole[0].magnet_0 and not lam.hole[0].magnet_1:
+                if "T0" in label:
+                    magnet = lam.hole[0].magnet_0
+                elif "T1" in label:
+                    magnet = lam.hole[0].magnet_2
+            elif not lam.hole[0].magnet_0 and lam.hole[0].magnet_1:
+                if "T0" in label:
+                    magnet = lam.hole[0].magnet_1
+                elif "T1" in label:
+                    magnet = lam.hole[0].magnet_2
+            else:
+                if "T0" in label:
+                    magnet = lam.hole[0].magnet_2
     else:
-        rho = lam.slot.magnet[int(label[-4])].mat_type.elec.rho  # Resistivity at 20°C
-        Hcm = lam.slot.magnet[int(label[-4])].mat_type.mag.Hc  # Magnet coercitivity field
-        mur = lam.slot.magnet[int(label[-4])].mat_type.mag.mur_lin
-        pole_mag = "_" + label[12] + "_" + label[-4]
-        
-    prop = "Magnet" + pole_mag
-    if prop not in materials:
+        magnet = lam.slot.magnet[int(label[-4])]
+        # pole_mag = "_" + label[12] + "_" + label[-4]
+
+    rho = magnet.mat_type.elec.rho  # Resistivity at 20°C
+    Hcm = magnet.mat_type.mag.Hc  # Magnet coercitivity field
+    mur = magnet.mat_type.mag.mur_lin
+
+    if label not in materials:
         femm.mi_addmaterial(
-            prop,
+            label,
             mur,
             mur,
             is_mmf * Hcm,
@@ -65,6 +92,6 @@ def create_FEMM_magnet(label, is_mmf, is_eddies, materials, lam):
             0,
             0,
         )
-        materials.append(prop)
+        materials.append(label)
 
-    return prop, materials
+    return label, materials
