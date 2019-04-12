@@ -51,7 +51,7 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
 
     # Recompute because machine may has been modified
     Hsy = machine.stator.comp_height_yoke()
-    Hstot = machine.stator.Rext - machine.stator.Rint - Hry  # Works with holes and slot
+    Hstot = machine.stator.Rext - machine.stator.Rint - Hsy  # Works with holes and slot
     Wgap_mec = machine.comp_width_airgap_mec()
     Hry = machine.rotor.comp_height_yoke()
     Hrtot = machine.rotor.Rext - machine.rotor.Rint - Hry  # Works with holes and slot
@@ -125,14 +125,7 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
         FEMM_dict["elementsize_magnetR"] = Hmag / 4  # max element size in m for
         # magnet segments
     elif type(machine.rotor) == LamHole:
-        if type(machine.rotor.hole[0]) == HoleM50:
-            Hmag = machine.rotor.hole[0].H3
-        elif type(machine.rotor.hole[0]) == HoleM51:
-            Hmag = machine.rotor.hole[0].H2
-        elif type(machine.rotor.hole[0]) == HoleM52:
-            Hmag = machine.rotor.hole[0].H1
-        elif type(machine.rotor.hole[0]) == HoleM53:
-            Hmag = machine.rotor.hole[0].H2
+        Hmag = machine.rotor.hole[0].get_height_magnet()
         FEMM_dict["meshsize_magnetR"] = Hmag / 4 / Kmesh_fineness  # mesh
         # parameter for magnet region
         FEMM_dict["elementsize_magnetR"] = Hmag / 4  # max element size in m for

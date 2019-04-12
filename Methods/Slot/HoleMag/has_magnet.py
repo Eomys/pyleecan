@@ -5,6 +5,7 @@ Hole has_magnet methods
 @copyright (C) 2015-2016 EOMYS ENGINEERING.
 @author pierre_b
 @todo unittest it
+@todo not always true, at least with HoleM54
 """
 
 
