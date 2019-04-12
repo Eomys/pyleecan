@@ -48,6 +48,8 @@ simu.mag = MagFEMM(
 # Copy the simu and activate the symmetry
 simu_sym = Simu1(init_dict=simu.as_dict())
 simu_sym.mag.is_symmetry_a = True
+simu_sym.mag.sym_a = 4
+simu_sym.mag.is_antiper_a = False
 
 
 class test_EM_IPMSM_FL_001(TestCase):
