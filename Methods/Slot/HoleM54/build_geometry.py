@@ -55,7 +55,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Arc1(begin=Z3, end=Z4, radius=self.R1 + self.H1))
     curve_list.append(Arc3(begin=Z4, end=Z1, is_trigo_direction=True))
 
-    surf_list.append(SurfLine(line_list=curve_list, label="Air", point_ref=Zref))
+    surf_list.append(
+        SurfLine(line_list=curve_list, label="HoleRotor_R0_T0_S0", point_ref=Zref)
+    )
 
     # Apply the transformations
     for surf in surf_list:

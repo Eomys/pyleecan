@@ -38,9 +38,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     """
     if self.get_is_stator():  # check if the slot is on the stator
-        st = "S"
+        st = "Stator"
     else:
-        st = "R"
+        st = "Rotor"
     Rbo = self.get_Rbo()
 
     # comp point coordinate (in complex)
@@ -100,7 +100,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z23, Z19))
     curve_list.append(Segment(Z19, Z21))
     point_ref = (Z21 + Z22 + Z23 + Z19) / 4
-    S1 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+    S1 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
     # Surface for magnet_0
     curve_list = list()
@@ -113,9 +113,16 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list.append(Segment(Z19, Z23))
         curve_list.append(Segment(Z23, Z24))
     point_ref = (Z24 + Z18 + Z19 + Z23) / 4
-    S2 = SurfLine(
-        line_list=curve_list, label="Magnet" + st + "_N_R0_T0_S0", point_ref=point_ref
-    )
+    # Defining type of magnetization of the magnet
+    if self.magnet_0:
+        if self.magnet_0.type_magnetization == 0:
+            type_mag = "Radial"
+        else:
+            type_mag = "Parallel"
+    else:
+        type_mag = "None"
+    magnet_label = "Magnet" + st + type_mag + "_N"
+    S2 = SurfLine(line_list=curve_list, label=magnet_label, point_ref=point_ref)
 
     # Air surface between magnet_0 and magnet_1
     curve_list = list()
@@ -126,7 +133,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z16, Z18))
     curve_list.append(Segment(Z18, Z24))
     point_ref = (Z25 + Z16) / 2
-    S3 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+    S3 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
     # Surface for magnet_1
     curve_list = list()
@@ -139,9 +146,16 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list.append(Segment(Z13, Z14))
         curve_list.append(Segment(Z14, Z26))
     point_ref = (Z26 + Z1 + Z13 + Z14) / 4
-    S4 = SurfLine(
-        line_list=curve_list, label="Magnet" + st + "_N_R0_T1_S0", point_ref=point_ref
-    )
+    # Defining type of magnetization of the magnet
+    if self.magnet_1:
+        if self.magnet_1.type_magnetization == 0:
+            type_mag = "Radial"
+        else:
+            type_mag = "Parallel"
+    else:
+        type_mag = "None"
+    magnet_label = "Magnet" + st + type_mag + "_N"
+    S4 = SurfLine(line_list=curve_list, label=magnet_label, point_ref=point_ref)
 
     # Air surface between magnet_1 and magnet_2
     curve_list = list()
@@ -152,7 +166,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z11, Z13))
     curve_list.append(Segment(Z13, Z1))
     point_ref = (Z11 + Z2) / 2
-    S5 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+    S5 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
     # Surface for magnet_2
     curve_list = list()
@@ -165,9 +179,16 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list.append(Segment(Z9, Z3))
         curve_list.append(Segment(Z3, Z4))
     point_ref = (Z4 + Z8 + Z9 + Z3) / 4
-    S6 = SurfLine(
-        line_list=curve_list, label="Magnet" + st + "_N_R0_T2_S0", point_ref=point_ref
-    )
+    # Defining type of magnetization of the magnet
+    if self.magnet_2:
+        if self.magnet_2.type_magnetization == 0:
+            type_mag = "Radial"
+        else:
+            type_mag = "Parallel"
+    else:
+        type_mag = "None"
+    magnet_label = "Magnet" + st + type_mag + "_N"
+    S6 = SurfLine(line_list=curve_list, label=magnet_label, point_ref=point_ref)
 
     # Air surface bore around magnet_2
     curve_list = list()
@@ -176,7 +197,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z8, Z4))
     curve_list.append(Segment(Z4, Z5))
     point_ref = (Z4 + Z5 + Z6 + Z8) / 4
-    S7 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+    S7 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
     # Air surface bore around magnet_2 (no magnet_2 and magnet_1)
     curve_list = list()
@@ -187,7 +208,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z1, Z2))
     curve_list.append(Segment(Z2, Z5))
     point_ref = (Z2 + Z11) / 2
-    S8 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+    S8 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
     # Air surface bore around magnet_0 (no magnet_0 and magnet_1)
     curve_list = list()
@@ -198,7 +219,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z14, Z16))
     curve_list.append(Segment(Z16, Z21))
     point_ref = (Z25 + Z16) / 2
-    S9 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+    S9 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
     # Air surface bore around magnet_1 (no magnet_1 and magnet_0 and magnet_2)
     curve_list = list()
@@ -211,7 +232,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z16, Z18))
     curve_list.append(Segment(Z18, Z24))
     point_ref = (Z1 + Z13) / 2
-    S10 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+    S10 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
     # Air surface bore around magnet_1 (no magnet_1 and no magnet_0 and magnet_2)
     curve_list = list()
@@ -224,7 +245,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z11, Z16))
     curve_list.append(Segment(Z16, Z21))
     point_ref = (Z1 + Z13) / 2
-    S11 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+    S11 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
     # Air surface bore around magnet_1 (no magnet_1 and magnet_0 and no magnet_2)
     curve_list = list()
@@ -237,7 +258,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z25, Z2))
     curve_list.append(Segment(Z2, Z5))
     point_ref = (Z1 + Z13) / 2
-    S12 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+    S12 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
     # Air surface No magnet
     curve_list = list()
@@ -250,24 +271,56 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list.append(Segment(Z25, Z2))
     curve_list.append(Segment(Z2, Z5))
     point_ref = (Z1 + Z13) / 2
-    S13 = SurfLine(line_list=curve_list, label="Air", point_ref=point_ref)
+    S13 = SurfLine(line_list=curve_list, label="Hole" + st, point_ref=point_ref)
 
     # Create the surface list by selecting the correct ones
     if self.magnet_0 and self.magnet_1 and self.magnet_2:
+        S1.label = S1.label + "_R0_T0_S0"  # Hole
+        S3.label = S3.label + "_R0_T1_S0"  # Hole
+        S5.label = S5.label + "_R0_T2_S0"  # Hole
+        S7.label = S7.label + "_R0_T3_S0"  # Hole
+        S2.label = S2.label + "_R0_T0_S0"  # Magnet
+        S4.label = S4.label + "_R0_T1_S0"  # Magnet
+        S6.label = S6.label + "_R0_T2_S0"  # Magnet
         surf_list = [S1, S2, S3, S4, S5, S6, S7]
     elif not self.magnet_0 and self.magnet_1 and self.magnet_2:
+        S9.label = S9.label + "_R0_T0_S0"  # Hole
+        S5.label = S5.label + "_R0_T1_S0"  # Hole
+        S7.label = S7.label + "_R0_T2_S0"  # Hole
+        S4.label = S4.label + "_R0_T0_S0"  # Magnet
+        S6.label = S6.label + "_R0_T1_S0"  # Magnet
         surf_list = [S9, S4, S5, S6, S7]
     elif self.magnet_0 and not self.magnet_1 and self.magnet_2:
+        S1.label = S1.label + "_R0_T0_S0"  # Hole
+        S10.label = S10.label + "_R0_T1_S0"  # Hole
+        S7.label = S7.label + "_R0_T2_S0"  # Hole
+        S2.label = S2.label + "_R0_T0_S0"  # Magnet
+        S6.label = S6.label + "_R0_T1_S0"  # Magnet
         surf_list = [S1, S2, S10, S6, S7]
     elif not self.magnet_0 and not self.magnet_1 and self.magnet_2:
+        S11.label = S11.label + "_R0_T0_S0"  # Hole
+        S7.label = S7.label + "_R0_T1_S0"  # Hole
+        S6.label = S6.label + "_R0_T0_S0"  # Magnet
         surf_list = [S11, S6, S7]
     elif self.magnet_0 and self.magnet_1 and not self.magnet_2:
+        S1.label = S1.label + "_R0_T0_S0"  # Hole
+        S3.label = S3.label + "_R0_T1_S0"  # Hole
+        S8.label = S8.label + "_R0_T2_S0"  # Hole
+        S2.label = S2.label + "_R0_T0_S0"  # Magnet
+        S4.label = S4.label + "_R0_T1_S0"  # Magnet
         surf_list = [S1, S2, S3, S4, S8]
     elif not self.magnet_0 and self.magnet_1 and not self.magnet_2:
+        S9.label = S9.label + "_R0_T0_S0"  # Hole
+        S8.label = S8.label + "_R0_T1_S0"  # Hole
+        S4.label = S4.label + "_R0_T0_S0"  # Magnet
         surf_list = [S9, S4, S8]
     elif self.magnet_0 and not self.magnet_1 and not self.magnet_2:
+        S1.label = S1.label + "_R0_T0_S0"  # Hole
+        S12.label = S12.label + "_R0_T1_S0"  # Hole
+        S2.label = S2.label + "_R0_T0_S0"  # Magnet
         surf_list = [S1, S2, S12]
     elif not self.magnet_0 and not self.magnet_1 and not self.magnet_2:
+        S13.label = S13.label + "_R0_T0_S0"  # Hole
         surf_list = [S13]
 
     for surf in surf_list:

@@ -73,7 +73,8 @@ class test_HoleM54_meth(TestCase):
         for surf in result:
             self.assertTrue(type(surf) == SurfLine)
 
-        self.assertEqual(result[0].label, "Air")
+        self.assertEqual(result[0].label[:4], "Hole")
+        self.assertEqual(result[0].label[-9:], "_R0_T0_S0")
         self.assertEqual(len(result[0].line_list), 4)
         self.assertEqual(type(result[0].line_list[0]), Arc1)
         self.assertEqual(type(result[0].line_list[1]), Arc3)

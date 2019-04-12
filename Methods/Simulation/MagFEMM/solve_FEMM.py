@@ -43,7 +43,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         for jj in range(Na_tot):
             Br[ii, jj], Bt[ii, jj] = femm.mo_getgapb("bc_ag2", angle[jj] * 180 / pi)
         # Compute the torque
-        Tem[ii] = comp_FEMM_torque(FEMM_dict, sym=1)
+        Tem[ii] = comp_FEMM_torque(FEMM_dict, sym=sym)
         # Phi_wind computation
         Phi_wind_stator[ii, :] = comp_FEMM_Phi_wind(
             qs, Npcpp, is_stator=True, Lfemm=FEMM_dict["Lfemm"], L1=L1, sym=sym

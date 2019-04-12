@@ -36,9 +36,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     """
     if self.get_is_stator():  # check if the slot is on the stator
-        st = "S"
+        st = "Stator"
     else:
-        st = "R"
+        st = "Rotor"
     Rbo = self.get_Rbo()
 
     alpha1 = self.comp_alpha()
@@ -68,7 +68,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list_air.append(Segment(Z3, Z11))
     curve_list_air.append(Segment(Z11, Z1))
     point_ref = (Z1 + Z2 + Z3 + Z11) / 4
-    S1 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S1 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
     # Creation of the magnet curve
     curve_list_mag = list()
@@ -81,11 +81,16 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list_mag.append(Segment(Z10, Z6))
         curve_list_mag.append(Segment(Z6, Z4))
     point_ref = (Z11 + Z4 + Z6 + Z10) / 4
-    S2 = SurfLine(
-        line_list=curve_list_mag,
-        label="Magnet" + st + "_N_R0_T0_S0",
-        point_ref=point_ref,
-    )
+    # Defining type of magnetization of the magnet
+    if self.magnet_0:
+        if self.magnet_0.type_magnetization == 0:
+            type_mag = "Radial"
+        else:
+            type_mag = "Parallel"
+    else:
+        type_mag = "None"
+    magnet_label = "Magnet" + st + type_mag + "_N"
+    S2 = SurfLine(line_list=curve_list_mag, label=magnet_label, point_ref=point_ref)
 
     # Creation of the second air curve
     curve_list_air = list()
@@ -94,7 +99,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list_air.append(Segment(Z9, Z10))
     curve_list_air.append(Segment(Z10, Z7))
     point_ref = (Z7 + Z8 + Z9 + Z10) / 4
-    S3 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S3 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
     # Area with no magnet (S1 + S2 + S3)
     curve_list_air = list()
@@ -109,11 +114,15 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list_air.append(Segment(Z8, Z9))
     curve_list_air.append(Segment(Z9, Z1))
     point_ref = (Z11 + Z4 + Z6 + Z10) / 4
-    S4 = SurfLine(line_list=curve_list_air, label="Air", point_ref=point_ref)
+    S4 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
     if self.magnet_0:
+        S1.label = S1.label + "_R0_T0_S0"  # Hole
+        S3.label = S3.label + "_R0_T1_S0"  # Hole
+        S2.label = S2.label + "_R0_T0_S0"  # Magnet
         surf_list = [S1, S2, S3]
     else:
+        S4.label = S4.label + "_R0_T0_S0"  # Hole
         surf_list = [S4]
 
     # Apply the transformations

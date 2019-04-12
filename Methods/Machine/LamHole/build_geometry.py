@@ -33,11 +33,19 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         list of surfaces needed to draw the lamination
 
     """
+
     # Lamination label
     if self.is_stator:
-        label = "Lamination_Stator_"
+        label = "Lamination_Stator"
     else:
-        label = "Lamination_Rotor_"
+        label = "Lamination_Rotor"
+
+    if self.is_internal:
+        ls = "_bore_"  # label for the bore
+        ly = "_yoke_"  # label for the yoke
+    else:
+        ls = "_yoke_"
+        ly = "_bore_"
 
     ref_point = (self.Rint + (self.Rext - self.Rint) / 2) * exp(1j * pi / sym)
 
@@ -45,11 +53,18 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
     # Lamination surface(s)
     if sym == 1:  # Complete lamination
         surf_list.append(
-            Circle(radius=self.Rext, label=label + "Ext", point_ref=ref_point, center=0)
+            Circle(
+                radius=self.Rext,
+                label=label + ls + "Ext",
+                point_ref=ref_point,
+                center=0,
+            )
         )
         if self.Rint > 0:
             surf_list.append(
-                Circle(radius=self.Rint, label=label + "Int", point_ref=0, center=0)
+                Circle(
+                    radius=self.Rint, label=label + ly + "Int", point_ref=0, center=0
+                )
             )
     else:  # Symmetry lamination
         begin = self.Rext
@@ -64,7 +79,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         if self.Rint > 0:
             line_list.append(Arc1(Z_end, Z_begin, -self.Rint))
         surf_list.append(
-            SurfLine(line_list=line_list, label=label + "Ext", point_ref=ref_point)
+            SurfLine(line_list=line_list, label=label + ls + "Ext", point_ref=ref_point)
         )
 
     # Holes surface(s)
@@ -79,11 +94,15 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         for ii in range(Zh // sym):
             for surf in surf_hole:
                 new_surf = type(surf)(init_dict=surf.as_dict())
-                # changing the hole reference number
-                new_surf.label = new_surf.label[:-1] + str(ii)
+                if "Hole" in surf.label:
+                    # changing the hole reference number
+                    new_surf.label = new_surf.label[:-1] + str(ii)
                 if "Magnet" in surf.label and ii % 2 != 0:  # if the surf is Magnet
-                    # Changing the pole of the magnet
+                    # Changing the pole of the magnet (before reference number )
                     new_surf.label = new_surf.label[:-10] + "S" + new_surf.label[-9:]
+                if "Magnet" in surf.label:
+                    # changing the magnet reference number
+                    new_surf.label = new_surf.label[:-1] + str(ii)
                 new_surf.rotate(ii * angle)
                 surf_list.append(new_surf)
 

@@ -9,7 +9,6 @@ from numpy import angle, pi
 
 def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
     """Assign the property given in parameter to surface having the label given
-
     Parameters
     ----------
     surf : Surface
@@ -22,7 +21,6 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
         The rotor of the machine
     stator : Lamination
         The stator of the machine
-
     Returns
     -------
     None
@@ -51,15 +49,18 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
             if prop[-1] == "-":  # Adapt Ntcoil sign if needed
                 Ntcoil *= -1
         elif "Magnet" in label:  # Magnet
-            if "Radial" in label and label[-10] == "N":  # Radial magnetization
+            if "Radial" in label and "_N_" in label:  # Radial magnetization
                 mag = "theta"  # North pole magnet
             elif "Radial" in label:
                 mag = "theta + 180"  # South pole magnet
-            elif "Parallel" in label and label[-10] == "N":
+            elif "Parallel" in label and "_N_" in label:
                 mag = angle(point_ref) * 180 / pi  # North pole magnet
             elif "Parallel" in label:
                 mag = angle(point_ref) * 180 / pi + 180  # South pole magnet
-
+        elif "Ventilation" in label:
+            prop = "Air"
+        elif "Hole" in label:
+            prop = label
         # Set the surface property
         femm.mi_setblockprop(
             prop,
