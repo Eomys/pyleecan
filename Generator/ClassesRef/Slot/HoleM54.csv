@@ -3,3 +3,4 @@ H0;m;Hole depth;;0;float;3,00E-03;0;;;2;;Slot;Hole;build_geometry;VERSION;1;Arc 
 H1;m;Hole width;;0;float;0;0;;;2;;;;check;IS_SYMMETRICAL;1;;
 W0;rad;Hole angular width;;0;float;1,30E-02;0;;;2;;;;comp_radius;;;;
 R1;m;Hole radius;;0;float;2,00E-02;0;;;2;;;;comp_surface;;;;
+;;;;;;;;;;;;;;get_height_magnet;;;;

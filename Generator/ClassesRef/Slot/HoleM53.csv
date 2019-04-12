@@ -6,6 +6,6 @@ H2;m;Magnet Height;;0;float;2,00E-02;0;;;2;;;;comp_radius;;;;
 W2;m;Distance Magnet to bottom of the V;;0;float;1,00E-02;0;;;2;;;;comp_surface_magnets;;;;
 H3;m;Additional depth for the magnet;;0;float;1,00E-02;0;;;2;;;;comp_volume_magnets;;;;
 W3;m;Magnet Width;;0;float;1,00E-02;0;;;2;;;;comp_W5;;;;
-W4;rad;Slot angle;;0;float;1,00E-02;0;;;2;;;;remove_magnet;;;;
-magnet_0;-;First Magnet;;0;Magnet;;;;;;;;;;;;;
+W4;rad;Slot angle;;0;float;1,00E-02;0;;;2;;;;get_height_magnet;;;;
+magnet_0;-;First Magnet;;0;Magnet;;;;;;;;;remove_magnet;;;;
 magnet_1;-;Second Magnet;;0;Magnet;;;;;;;;;;;;;
