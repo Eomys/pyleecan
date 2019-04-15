@@ -3,6 +3,24 @@ from femm import mo_getcircuitproperties
 
 
 def comp_FEMM_Phi_wind(qs, Npcpp, is_stator, Lfemm, L1, sym, is_rescale_flux=True):
+    """Compure the total fluxlinkage of the winding phases
+
+    Parameters
+    ----------
+    qs              : number of phases
+    Npcpp           : number of parallel circuits per phase (maximum 2p)
+    is_stator       : True if windings are stator windings
+    Lfemm           : lenght of FEMM model
+    L1              : actual lenght for rescaling fluxlinkage 
+    sym             : symmetry factor (ie. 1 = full machine, 2 = half machine ...)
+    is_rescale_flux : True if rescaling should be applied
+
+    Returns
+    -------
+    Phi_wind        : float (1x3 ndarray)
+        fluxlinkage of the winding phases [Vs]
+
+    """
     Phi_wind = zeros((1, qs))
 
     if is_stator:
