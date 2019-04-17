@@ -96,6 +96,9 @@ stator.winding.conductor.cond_mat = Copper1
 rotor.hole[0].magnet_0.mat_type = Magnet3
 rotor.hole[0].magnet_1.mat_type = Magnet3
 
+rotor.hole[0].magnet_0.type_magnetization = 1
+rotor.hole[0].magnet_1.type_magnetization = 1
+
 IPMSM_xxx = MachineIPMSM(
     name="IPMSM", stator=stator, rotor=rotor, shaft=shaft, frame=frame
 )

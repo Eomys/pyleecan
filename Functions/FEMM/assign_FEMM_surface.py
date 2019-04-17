@@ -62,14 +62,14 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
                 ) * alpha_p
 
                 # HoleM50 or HoleM53
-                if (type(lam.hole[0]) == HoleM50) or (type(lam.hole[0]) == HoleM53):
+                if (type(rotor.hole[0]) == HoleM50) or (type(rotor.hole[0]) == HoleM53):
                     if "_T0_" in label:
                         mag = mag_0 + rotor.hole[0].comp_alpha() * 180 / pi
                     else:
                         mag = mag_0 - rotor.hole[0].comp_alpha() * 180 / pi
 
                 # HoleM51
-                if type(lam.hole[0]) == HoleM51:
+                if type(rotor.hole[0]) == HoleM51:
                     if "_T0_" in label:
                         mag = mag_0 + rotor.hole[0].comp_alpha() * 180 / pi
                     elif "_T1_" in label:
@@ -78,7 +78,7 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
                         mag = mag_0 - rotor.hole[0].comp_alpha() * 180 / pi
 
                 # HoleM52
-                if type(lam.hole[0]) == HoleM52:
+                if type(rotor.hole[0]) == HoleM52:
                     mag = mag_0
 
                 # modifiy magnetisation of south poles
