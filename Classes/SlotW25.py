@@ -145,8 +145,7 @@ class SlotW25(SlotWind):
 
     # Teeth bottom width
     # Type : float, min = 0
-    W3 = property(fget=_get_W3, fset=_set_W3,
-                  doc=u"""Teeth bottom width""")
+    W3 = property(fget=_get_W3, fset=_set_W3, doc=u"""Teeth bottom width""")
 
     def _get_H2(self):
         """getter of H2"""
@@ -159,8 +158,7 @@ class SlotW25(SlotWind):
 
     # Slot bottom height
     # Type : float, min = 0
-    H2 = property(fget=_get_H2, fset=_set_H2,
-                  doc=u"""Slot bottom height""")
+    H2 = property(fget=_get_H2, fset=_set_H2, doc=u"""Slot bottom height""")
 
     def _get_W4(self):
         """getter of W4"""
@@ -173,8 +171,7 @@ class SlotW25(SlotWind):
 
     # Teeth top width
     # Type : float, min = 0
-    W4 = property(fget=_get_W4, fset=_set_W4,
-                  doc=u"""Teeth top width""")
+    W4 = property(fget=_get_W4, fset=_set_W4, doc=u"""Teeth top width""")
 
     def _get_H1(self):
         """getter of H1"""
@@ -187,5 +184,4 @@ class SlotW25(SlotWind):
 
     # Slot top height
     # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1,
-                  doc=u"""Slot top height""")
+    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Slot top height""")

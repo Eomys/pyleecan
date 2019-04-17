@@ -27,7 +27,28 @@ class MagFEMM(Magnetics):
     # save method is available in all object
     save = save
 
-    def __init__(self, Kmesh_fineness=1, Kgeo_fineness=1, type_calc_leakage=0, file_name="", FEMM_dict={}, is_remove_slotS=False, is_remove_slotR=False, is_remove_vent=False, is_mmfs=True, is_mmfr=True, is_stator_linear_BH=0, is_rotor_linear_BH=0, is_symmetry_t=False, sym_t=1, is_antiper_t=False, is_symmetry_a=False, sym_a=1, is_antiper_a=False, init_dict=None):
+    def __init__(
+        self,
+        Kmesh_fineness=1,
+        Kgeo_fineness=1,
+        type_calc_leakage=0,
+        file_name="",
+        FEMM_dict={},
+        is_remove_slotS=False,
+        is_remove_slotR=False,
+        is_remove_vent=False,
+        is_mmfs=True,
+        is_mmfr=True,
+        is_stator_linear_BH=0,
+        is_rotor_linear_BH=0,
+        is_symmetry_t=False,
+        sym_t=1,
+        is_antiper_t=False,
+        is_symmetry_a=False,
+        sym_a=1,
+        is_antiper_a=False,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -38,7 +59,29 @@ class MagFEMM(Magnetics):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["Kmesh_fineness", "Kgeo_fineness", "type_calc_leakage", "file_name", "FEMM_dict", "is_remove_slotS", "is_remove_slotR", "is_remove_vent", "is_mmfs", "is_mmfr", "is_stator_linear_BH", "is_rotor_linear_BH", "is_symmetry_t", "sym_t", "is_antiper_t", "is_symmetry_a", "sym_a", "is_antiper_a"])
+            check_init_dict(
+                init_dict,
+                [
+                    "Kmesh_fineness",
+                    "Kgeo_fineness",
+                    "type_calc_leakage",
+                    "file_name",
+                    "FEMM_dict",
+                    "is_remove_slotS",
+                    "is_remove_slotR",
+                    "is_remove_vent",
+                    "is_mmfs",
+                    "is_mmfr",
+                    "is_stator_linear_BH",
+                    "is_rotor_linear_BH",
+                    "is_symmetry_t",
+                    "sym_t",
+                    "is_antiper_t",
+                    "is_symmetry_a",
+                    "sym_a",
+                    "is_antiper_a",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "Kmesh_fineness" in list(init_dict.keys()):
                 Kmesh_fineness = init_dict["Kmesh_fineness"]
@@ -83,7 +126,21 @@ class MagFEMM(Magnetics):
         self.file_name = file_name
         self.FEMM_dict = FEMM_dict
         # Call Magnetics init
-        super(MagFEMM, self).__init__(is_remove_slotS=is_remove_slotS, is_remove_slotR=is_remove_slotR, is_remove_vent=is_remove_vent, is_mmfs=is_mmfs, is_mmfr=is_mmfr, is_stator_linear_BH=is_stator_linear_BH, is_rotor_linear_BH=is_rotor_linear_BH, is_symmetry_t=is_symmetry_t, sym_t=sym_t, is_antiper_t=is_antiper_t, is_symmetry_a=is_symmetry_a, sym_a=sym_a, is_antiper_a=is_antiper_a)
+        super(MagFEMM, self).__init__(
+            is_remove_slotS=is_remove_slotS,
+            is_remove_slotR=is_remove_slotR,
+            is_remove_vent=is_remove_vent,
+            is_mmfs=is_mmfs,
+            is_mmfr=is_mmfr,
+            is_stator_linear_BH=is_stator_linear_BH,
+            is_rotor_linear_BH=is_rotor_linear_BH,
+            is_symmetry_t=is_symmetry_t,
+            sym_t=sym_t,
+            is_antiper_t=is_antiper_t,
+            is_symmetry_a=is_symmetry_a,
+            sym_a=sym_a,
+            is_antiper_a=is_antiper_a,
+        )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
 
@@ -159,8 +216,11 @@ class MagFEMM(Magnetics):
 
     # global coefficient to adjust mesh fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)
     # Type : float
-    Kmesh_fineness = property(fget=_get_Kmesh_fineness, fset=_set_Kmesh_fineness,
-                              doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)""")
+    Kmesh_fineness = property(
+        fget=_get_Kmesh_fineness,
+        fset=_set_Kmesh_fineness,
+        doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)""",
+    )
 
     def _get_Kgeo_fineness(self):
         """getter of Kgeo_fineness"""
@@ -173,8 +233,11 @@ class MagFEMM(Magnetics):
 
     # global coefficient to adjust geometry fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)
     # Type : float
-    Kgeo_fineness = property(fget=_get_Kgeo_fineness, fset=_set_Kgeo_fineness,
-                             doc=u"""global coefficient to adjust geometry fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)""")
+    Kgeo_fineness = property(
+        fget=_get_Kgeo_fineness,
+        fset=_set_Kgeo_fineness,
+        doc=u"""global coefficient to adjust geometry fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)""",
+    )
 
     def _get_type_calc_leakage(self):
         """getter of type_calc_leakage"""
@@ -187,8 +250,11 @@ class MagFEMM(Magnetics):
 
     # 0 no leakage calculation, 1 calculation using single slot
     # Type : int, min = 0, max = 1
-    type_calc_leakage = property(fget=_get_type_calc_leakage, fset=_set_type_calc_leakage,
-                                 doc=u"""0 no leakage calculation, 1 calculation using single slot""")
+    type_calc_leakage = property(
+        fget=_get_type_calc_leakage,
+        fset=_set_type_calc_leakage,
+        doc=u"""0 no leakage calculation, 1 calculation using single slot""",
+    )
 
     def _get_file_name(self):
         """getter of file_name"""
@@ -201,8 +267,11 @@ class MagFEMM(Magnetics):
 
     # Name of the file to save the FEMM model
     # Type : str
-    file_name = property(fget=_get_file_name, fset=_set_file_name,
-                         doc=u"""Name of the file to save the FEMM model""")
+    file_name = property(
+        fget=_get_file_name,
+        fset=_set_file_name,
+        doc=u"""Name of the file to save the FEMM model""",
+    )
 
     def _get_FEMM_dict(self):
         """getter of FEMM_dict"""
@@ -213,7 +282,10 @@ class MagFEMM(Magnetics):
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 
-    # To enforce user-defined values for FEMM main parameters 
+    # To enforce user-defined values for FEMM main parameters
     # Type : dict
-    FEMM_dict = property(fget=_get_FEMM_dict, fset=_set_FEMM_dict,
-                         doc=u"""To enforce user-defined values for FEMM main parameters """)
+    FEMM_dict = property(
+        fget=_get_FEMM_dict,
+        fset=_set_FEMM_dict,
+        doc=u"""To enforce user-defined values for FEMM main parameters """,
+    )

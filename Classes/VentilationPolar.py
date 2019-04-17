@@ -16,7 +16,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
-
 class VentilationPolar(Hole):
     """Polar axial ventilation duct"""
 
@@ -139,8 +138,11 @@ class VentilationPolar(Hole):
 
     # Shift angle of the hole around circumference
     # Type : float, min = 0, max = 6.29
-    Alpha0 = property(fget=_get_Alpha0, fset=_set_Alpha0,
-                      doc=u"""Shift angle of the hole around circumference""")
+    Alpha0 = property(
+        fget=_get_Alpha0,
+        fset=_set_Alpha0,
+        doc=u"""Shift angle of the hole around circumference""",
+    )
 
     def _get_D0(self):
         """getter of D0"""
@@ -153,8 +155,7 @@ class VentilationPolar(Hole):
 
     # Height of the hole
     # Type : float, min = 0
-    D0 = property(fget=_get_D0, fset=_set_D0,
-                  doc=u"""Height of the hole""")
+    D0 = property(fget=_get_D0, fset=_set_D0, doc=u"""Height of the hole""")
 
     def _get_H0(self):
         """getter of H0"""
@@ -167,8 +168,7 @@ class VentilationPolar(Hole):
 
     # Radius of the bottom of Hole
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0,
-                  doc=u"""Radius of the bottom of Hole""")
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Radius of the bottom of Hole""")
 
     def _get_W1(self):
         """getter of W1"""
@@ -181,5 +181,4 @@ class VentilationPolar(Hole):
 
     # Hole angular width
     # Type : float, min = 0, max = 6.29
-    W1 = property(fget=_get_W1, fset=_set_W1,
-                  doc=u"""Hole angular width""")
+    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Hole angular width""")

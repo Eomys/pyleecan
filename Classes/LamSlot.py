@@ -49,7 +49,6 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 
 
-
 class LamSlot(Lamination):
     """Lamination with empty Slot"""
 
@@ -72,7 +71,21 @@ class LamSlot(Lamination):
     # save method is available in all object
     save = save
 
-    def __init__(self, slot=-1, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), init_dict=None):
+    def __init__(
+        self,
+        slot=-1,
+        L1=0.35,
+        mat_type=-1,
+        Nrvd=0,
+        Wrvd=0,
+        Kf1=0.95,
+        is_internal=True,
+        Rint=0,
+        Rext=1,
+        is_stator=True,
+        axial_vent=list(),
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -87,7 +100,22 @@ class LamSlot(Lamination):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["slot", "L1", "mat_type", "Nrvd", "Wrvd", "Kf1", "is_internal", "Rint", "Rext", "is_stator", "axial_vent"])
+            check_init_dict(
+                init_dict,
+                [
+                    "slot",
+                    "L1",
+                    "mat_type",
+                    "Nrvd",
+                    "Wrvd",
+                    "Kf1",
+                    "is_internal",
+                    "Rint",
+                    "Rext",
+                    "is_stator",
+                    "axial_vent",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "slot" in list(init_dict.keys()):
                 slot = init_dict["slot"]
@@ -115,8 +143,30 @@ class LamSlot(Lamination):
         # slot can be None, a Slot object or a dict
         if isinstance(slot, dict):
             # Call the correct constructor according to the dict
-            load_dict = {"SlotMFlat": SlotMFlat, "SlotMPolar": SlotMPolar, "SlotW10": SlotW10, "SlotW11": SlotW11, "SlotW12": SlotW12, "SlotW13": SlotW13, "SlotW14": SlotW14, "SlotW15": SlotW15, "SlotW16": SlotW16, "SlotW21": SlotW21, "SlotW22": SlotW22, "SlotW23": SlotW23, "SlotW24": SlotW24, "SlotW25": SlotW25, "SlotW26": SlotW26, "SlotW27": SlotW27, "SlotW28": SlotW28, "SlotW29": SlotW29, "SlotW60": SlotW60, "SlotW61": SlotW61, "Slot": Slot}
-            obj_class = slot.get('__class__')
+            load_dict = {
+                "SlotMFlat": SlotMFlat,
+                "SlotMPolar": SlotMPolar,
+                "SlotW10": SlotW10,
+                "SlotW11": SlotW11,
+                "SlotW12": SlotW12,
+                "SlotW13": SlotW13,
+                "SlotW14": SlotW14,
+                "SlotW15": SlotW15,
+                "SlotW16": SlotW16,
+                "SlotW21": SlotW21,
+                "SlotW22": SlotW22,
+                "SlotW23": SlotW23,
+                "SlotW24": SlotW24,
+                "SlotW25": SlotW25,
+                "SlotW26": SlotW26,
+                "SlotW27": SlotW27,
+                "SlotW28": SlotW28,
+                "SlotW29": SlotW29,
+                "SlotW60": SlotW60,
+                "SlotW61": SlotW61,
+                "Slot": Slot,
+            }
+            obj_class = slot.get("__class__")
             if obj_class is None:
                 self.slot = Slot(init_dict=slot)
             elif obj_class in list(load_dict.keys()):
@@ -126,7 +176,18 @@ class LamSlot(Lamination):
         else:
             self.slot = slot
         # Call Lamination init
-        super(LamSlot, self).__init__(L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent)
+        super(LamSlot, self).__init__(
+            L1=L1,
+            mat_type=mat_type,
+            Nrvd=Nrvd,
+            Wrvd=Wrvd,
+            Kf1=Kf1,
+            is_internal=is_internal,
+            Rint=Rint,
+            Rext=Rext,
+            is_stator=is_stator,
+            axial_vent=axial_vent,
+        )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
 
@@ -186,7 +247,7 @@ class LamSlot(Lamination):
 
         if self._slot is not None:
             self._slot.parent = self
+
     # lamination Slot
     # Type : Slot
-    slot = property(fget=_get_slot, fset=_set_slot,
-                    doc=u"""lamination Slot""")
+    slot = property(fget=_get_slot, fset=_set_slot, doc=u"""lamination Slot""")

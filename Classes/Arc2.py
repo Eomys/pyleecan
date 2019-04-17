@@ -143,8 +143,9 @@ class Arc2(Arc):
 
     # begin point of the arc
     # Type : complex
-    begin = property(fget=_get_begin, fset=_set_begin,
-                     doc=u"""begin point of the arc""")
+    begin = property(
+        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the arc"""
+    )
 
     def _get_center(self):
         """getter of center"""
@@ -157,8 +158,7 @@ class Arc2(Arc):
 
     # center of the arc
     # Type : complex
-    center = property(fget=_get_center, fset=_set_center,
-                      doc=u"""center of the arc""")
+    center = property(fget=_get_center, fset=_set_center, doc=u"""center of the arc""")
 
     def _get_angle(self):
         """getter of angle"""
@@ -171,5 +171,6 @@ class Arc2(Arc):
 
     # opening angle of the arc
     # Type : float, min = -6.2831853071796, max = 6.2831853071796
-    angle = property(fget=_get_angle, fset=_set_angle,
-                     doc=u"""opening angle of the arc""")
+    angle = property(
+        fget=_get_angle, fset=_set_angle, doc=u"""opening angle of the arc"""
+    )

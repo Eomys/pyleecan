@@ -15,7 +15,9 @@ from pyleecan.Methods.Machine.Machine.get_lamination import get_lamination
 from pyleecan.Methods.Machine.Machine.comp_Rgap_mec import comp_Rgap_mec
 from pyleecan.Methods.Machine.Machine.plot import plot
 from pyleecan.Methods.Machine.Machine.comp_output_geo import comp_output_geo
-from pyleecan.Methods.Machine.Machine.comp_length_airgap_active import comp_length_airgap_active
+from pyleecan.Methods.Machine.Machine.comp_length_airgap_active import (
+    comp_length_airgap_active,
+)
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Lamination import Lamination
@@ -26,7 +28,6 @@ from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
-
 
 
 class Machine(FrozenClass):
@@ -57,7 +58,16 @@ class Machine(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, rotor=-1, stator=-1, frame=-1, shaft=-1, name="default_machine", desc="", init_dict=None):
+    def __init__(
+        self,
+        rotor=-1,
+        stator=-1,
+        frame=-1,
+        shaft=-1,
+        name="default_machine",
+        desc="",
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -76,7 +86,9 @@ class Machine(FrozenClass):
         if shaft == -1:
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["rotor", "stator", "frame", "shaft", "name", "desc"])
+            check_init_dict(
+                init_dict, ["rotor", "stator", "frame", "shaft", "name", "desc"]
+            )
             # Overwrite default value with init_dict content
             if "rotor" in list(init_dict.keys()):
                 rotor = init_dict["rotor"]
@@ -95,8 +107,15 @@ class Machine(FrozenClass):
         # rotor can be None, a Lamination object or a dict
         if isinstance(rotor, dict):
             # Call the correct constructor according to the dict
-            load_dict = {"LamHole": LamHole, "LamSlot": LamSlot, "LamSlotWind": LamSlotWind, "LamSlotMag": LamSlotMag, "LamSquirrelCage": LamSquirrelCage, "Lamination": Lamination}
-            obj_class = rotor.get('__class__')
+            load_dict = {
+                "LamHole": LamHole,
+                "LamSlot": LamSlot,
+                "LamSlotWind": LamSlotWind,
+                "LamSlotMag": LamSlotMag,
+                "LamSquirrelCage": LamSquirrelCage,
+                "Lamination": Lamination,
+            }
+            obj_class = rotor.get("__class__")
             if obj_class is None:
                 self.rotor = Lamination(init_dict=rotor)
             elif obj_class in list(load_dict.keys()):
@@ -108,8 +127,15 @@ class Machine(FrozenClass):
         # stator can be None, a Lamination object or a dict
         if isinstance(stator, dict):
             # Call the correct constructor according to the dict
-            load_dict = {"LamHole": LamHole, "LamSlot": LamSlot, "LamSlotWind": LamSlotWind, "LamSlotMag": LamSlotMag, "LamSquirrelCage": LamSquirrelCage, "Lamination": Lamination}
-            obj_class = stator.get('__class__')
+            load_dict = {
+                "LamHole": LamHole,
+                "LamSlot": LamSlot,
+                "LamSlotWind": LamSlotWind,
+                "LamSlotMag": LamSlotMag,
+                "LamSquirrelCage": LamSquirrelCage,
+                "Lamination": Lamination,
+            }
+            obj_class = stator.get("__class__")
             if obj_class is None:
                 self.stator = Lamination(init_dict=stator)
             elif obj_class in list(load_dict.keys()):
@@ -221,10 +247,10 @@ class Machine(FrozenClass):
 
         if self._rotor is not None:
             self._rotor.parent = self
+
     # Machine's Rotor
     # Type : Lamination
-    rotor = property(fget=_get_rotor, fset=_set_rotor,
-                     doc=u"""Machine's Rotor""")
+    rotor = property(fget=_get_rotor, fset=_set_rotor, doc=u"""Machine's Rotor""")
 
     def _get_stator(self):
         """getter of stator"""
@@ -237,10 +263,10 @@ class Machine(FrozenClass):
 
         if self._stator is not None:
             self._stator.parent = self
+
     # Machine's Stator
     # Type : Lamination
-    stator = property(fget=_get_stator, fset=_set_stator,
-                      doc=u"""Machine's Stator""")
+    stator = property(fget=_get_stator, fset=_set_stator, doc=u"""Machine's Stator""")
 
     def _get_frame(self):
         """getter of frame"""
@@ -253,10 +279,10 @@ class Machine(FrozenClass):
 
         if self._frame is not None:
             self._frame.parent = self
+
     # Machine's Frame
     # Type : Frame
-    frame = property(fget=_get_frame, fset=_set_frame,
-                     doc=u"""Machine's Frame""")
+    frame = property(fget=_get_frame, fset=_set_frame, doc=u"""Machine's Frame""")
 
     def _get_shaft(self):
         """getter of shaft"""
@@ -269,10 +295,10 @@ class Machine(FrozenClass):
 
         if self._shaft is not None:
             self._shaft.parent = self
+
     # Machine's Shaft
     # Type : Shaft
-    shaft = property(fget=_get_shaft, fset=_set_shaft,
-                     doc=u"""Machine's Shaft""")
+    shaft = property(fget=_get_shaft, fset=_set_shaft, doc=u"""Machine's Shaft""")
 
     def _get_name(self):
         """getter of name"""
@@ -285,8 +311,7 @@ class Machine(FrozenClass):
 
     # Name of the machine
     # Type : str
-    name = property(fget=_get_name, fset=_set_name,
-                    doc=u"""Name of the machine""")
+    name = property(fget=_get_name, fset=_set_name, doc=u"""Name of the machine""")
 
     def _get_desc(self):
         """getter of desc"""
@@ -299,5 +324,4 @@ class Machine(FrozenClass):
 
     # Machine description
     # Type : str
-    desc = property(fget=_get_desc, fset=_set_desc,
-                    doc=u"""Machine description""")
+    desc = property(fget=_get_desc, fset=_set_desc, doc=u"""Machine description""")

@@ -18,7 +18,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
-
 class Frame(FrozenClass):
     """machine frame"""
 
@@ -143,8 +142,7 @@ class Frame(FrozenClass):
 
     # frame length [m]
     # Type : float, min = 0
-    Lfra = property(fget=_get_Lfra, fset=_set_Lfra,
-                    doc=u"""frame length [m]""")
+    Lfra = property(fget=_get_Lfra, fset=_set_Lfra, doc=u"""frame length [m]""")
 
     def _get_Rint(self):
         """getter of Rint"""
@@ -157,8 +155,7 @@ class Frame(FrozenClass):
 
     # frame internal radius
     # Type : float, min = 0
-    Rint = property(fget=_get_Rint, fset=_set_Rint,
-                    doc=u"""frame internal radius""")
+    Rint = property(fget=_get_Rint, fset=_set_Rint, doc=u"""frame internal radius""")
 
     def _get_Rext(self):
         """getter of Rext"""
@@ -171,8 +168,7 @@ class Frame(FrozenClass):
 
     # Frame external radius
     # Type : float, min = 0
-    Rext = property(fget=_get_Rext, fset=_set_Rext,
-                    doc=u"""Frame external radius""")
+    Rext = property(fget=_get_Rext, fset=_set_Rext, doc=u"""Frame external radius""")
 
     def _get_mat_type(self):
         """getter of mat_type"""
@@ -185,7 +181,9 @@ class Frame(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     # Frame material
     # Type : Material
-    mat_type = property(fget=_get_mat_type, fset=_set_mat_type,
-                        doc=u"""Frame material""")
+    mat_type = property(
+        fget=_get_mat_type, fset=_set_mat_type, doc=u"""Frame material"""
+    )

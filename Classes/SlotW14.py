@@ -45,7 +45,16 @@ class SlotW14(SlotWind):
     # save method is available in all object
     save = save
 
-    def __init__(self, W0=0.0122, H0=0.001, H1=0.0015, H3=0.0122, W3=0.0122, Zs=36, init_dict=None):
+    def __init__(
+        self,
+        W0=0.0122,
+        H0=0.001,
+        H1=0.0015,
+        H3=0.0122,
+        W3=0.0122,
+        Zs=36,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -153,8 +162,7 @@ class SlotW14(SlotWind):
 
     # Slot isthmus width.
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0,
-                  doc=u"""Slot isthmus width.""")
+    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus width.""")
 
     def _get_H0(self):
         """getter of H0"""
@@ -167,8 +175,7 @@ class SlotW14(SlotWind):
 
     # Slot isthmus height.
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0,
-                  doc=u"""Slot isthmus height.""")
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height.""")
 
     def _get_H1(self):
         """getter of H1"""
@@ -181,8 +188,7 @@ class SlotW14(SlotWind):
 
     # Slot intermediate height.
     # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1,
-                  doc=u"""Slot intermediate height.""")
+    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Slot intermediate height.""")
 
     def _get_H3(self):
         """getter of H3"""
@@ -195,8 +201,7 @@ class SlotW14(SlotWind):
 
     # Tooth height
     # Type : float, min = 0
-    H3 = property(fget=_get_H3, fset=_set_H3,
-                  doc=u"""Tooth height""")
+    H3 = property(fget=_get_H3, fset=_set_H3, doc=u"""Tooth height""")
 
     def _get_W3(self):
         """getter of W3"""
@@ -209,5 +214,4 @@ class SlotW14(SlotWind):
 
     # Tooth width
     # Type : float, min = 0
-    W3 = property(fget=_get_W3, fset=_set_W3,
-                  doc=u"""Tooth width""")
+    W3 = property(fget=_get_W3, fset=_set_W3, doc=u"""Tooth width""")

@@ -132,9 +132,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # Defining type of magnetization of the magnet
     if self.magnet_0:
         if self.magnet_0.type_magnetization == 0:
-            type_mag = "Radial"
+            type_mag = "_Radial"
         else:
-            type_mag = "Parallel"
+            type_mag = "_Parallel"
     else:
         type_mag = "None"
     magnet_label = "HoleMagnet" + st + type_mag + "_N_R0_T0_S0"
@@ -184,9 +184,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # Defining type of magnetization of the magnet
     if self.magnet_1:
         if self.magnet_1.type_magnetization == 0:
-            type_mag = "Radial"
+            type_mag = "_Radial"
         else:
-            type_mag = "Parallel"
+            type_mag = "_Parallel"
     else:
         type_mag = "None"
     magnet_label = "HoleMagnet" + st + type_mag + "_N_R0_T1_S0"

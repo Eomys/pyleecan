@@ -132,31 +132,31 @@ class test_holeM51_meth(TestCase):
         for surf in result:
             self.assertTrue(type(surf) == SurfLine)
 
-        self.assertEqual(result[0].label[:4], "Hole")
+        self.assertEqual(result[0].label[:5], "Hole_")
         self.assertEqual(result[0].label[-9:], "_R0_T0_S0")
         self.assertEqual(len(result[0].line_list), 4)
 
-        self.assertEqual(result[1].label[:6], "Magnet")
+        self.assertEqual(result[1].label[:11], "HoleMagnet_")
         self.assertEqual(result[1].label[-11:], "_N_R0_T0_S0")
         self.assertEqual(len(result[1].line_list), 4)
 
-        self.assertEqual(result[2].label[:4], "Hole")
+        self.assertEqual(result[2].label[:5], "Hole_")
         self.assertEqual(result[2].label[-9:], "_R0_T1_S0")
         self.assertEqual(len(result[2].line_list), 6)
 
-        self.assertEqual(result[3].label[:6], "Magnet")
+        self.assertEqual(result[3].label[:11], "HoleMagnet_")
         self.assertEqual(result[3].label[-11:], "_N_R0_T1_S0")
         self.assertEqual(len(result[3].line_list), 4)
 
-        self.assertEqual(result[4].label[:4], "Hole")
+        self.assertEqual(result[4].label[:5], "Hole_")
         self.assertEqual(result[4].label[-9:], "_R0_T2_S0")
         self.assertEqual(len(result[4].line_list), 6)
 
-        self.assertEqual(result[5].label[:6], "Magnet")
+        self.assertEqual(result[5].label[:11], "HoleMagnet_")
         self.assertEqual(result[5].label[-11:], "_N_R0_T2_S0")
         self.assertEqual(len(result[5].line_list), 4)
 
-        self.assertEqual(result[6].label[:4], "Hole")
+        self.assertEqual(result[6].label[:5], "Hole_")
         self.assertEqual(result[6].label[-9:], "_R0_T3_S0")
         self.assertEqual(len(result[6].line_list), 4)
 
@@ -174,6 +174,6 @@ class test_holeM51_meth(TestCase):
         for surf in result:
             self.assertTrue(type(surf) == SurfLine)
 
-        self.assertEqual(result[0].label[:4], "Hole")
+        self.assertEqual(result[0].label[:5], "Hole_")
         self.assertEqual(result[0].label[-9:], "_R0_T0_S0")
         self.assertEqual(len(result[0].line_list), 8)

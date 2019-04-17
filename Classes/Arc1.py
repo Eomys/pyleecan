@@ -140,8 +140,9 @@ class Arc1(Arc):
 
     # begin point of the arc
     # Type : complex
-    begin = property(fget=_get_begin, fset=_set_begin,
-                     doc=u"""begin point of the arc""")
+    begin = property(
+        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the arc"""
+    )
 
     def _get_end(self):
         """getter of end"""
@@ -154,8 +155,7 @@ class Arc1(Arc):
 
     # end point of the arc
     # Type : complex
-    end = property(fget=_get_end, fset=_set_end,
-                   doc=u"""end point of the arc""")
+    end = property(fget=_get_end, fset=_set_end, doc=u"""end point of the arc""")
 
     def _get_radius(self):
         """getter of radius"""
@@ -168,5 +168,6 @@ class Arc1(Arc):
 
     # Radius of the arc (can be + or -)
     # Type : float
-    radius = property(fget=_get_radius, fset=_set_radius,
-                      doc=u"""Radius of the arc (can be + or -)""")
+    radius = property(
+        fget=_get_radius, fset=_set_radius, doc=u"""Radius of the arc (can be + or -)"""
+    )

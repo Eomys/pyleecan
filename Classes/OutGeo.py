@@ -10,7 +10,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.OutGeoLam import OutGeoLam
 
 
-
 class OutGeo(FrozenClass):
     """Gather the geometrical and the global outputs"""
 
@@ -19,7 +18,16 @@ class OutGeo(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, stator=None, rotor=None, Wgap_mec=None, Wgap_mag=None, Rgap_mec=None, Lgap=None, init_dict=None):
+    def __init__(
+        self,
+        stator=None,
+        rotor=None,
+        Wgap_mec=None,
+        Wgap_mag=None,
+        Rgap_mec=None,
+        Lgap=None,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -34,7 +42,10 @@ class OutGeo(FrozenClass):
         if rotor == -1:
             rotor = OutGeoLam()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["stator", "rotor", "Wgap_mec", "Wgap_mag", "Rgap_mec", "Lgap"])
+            check_init_dict(
+                init_dict,
+                ["stator", "rotor", "Wgap_mec", "Wgap_mag", "Rgap_mec", "Lgap"],
+            )
             # Overwrite default value with init_dict content
             if "stator" in list(init_dict.keys()):
                 stator = init_dict["stator"]
@@ -147,10 +158,12 @@ class OutGeo(FrozenClass):
 
         if self._stator is not None:
             self._stator.parent = self
+
     # Geometry output of the stator
     # Type : OutGeoLam
-    stator = property(fget=_get_stator, fset=_set_stator,
-                      doc=u"""Geometry output of the stator""")
+    stator = property(
+        fget=_get_stator, fset=_set_stator, doc=u"""Geometry output of the stator"""
+    )
 
     def _get_rotor(self):
         """getter of rotor"""
@@ -163,10 +176,12 @@ class OutGeo(FrozenClass):
 
         if self._rotor is not None:
             self._rotor.parent = self
+
     # Geometry output of the rotor
     # Type : OutGeoLam
-    rotor = property(fget=_get_rotor, fset=_set_rotor,
-                     doc=u"""Geometry output of the rotor""")
+    rotor = property(
+        fget=_get_rotor, fset=_set_rotor, doc=u"""Geometry output of the rotor"""
+    )
 
     def _get_Wgap_mec(self):
         """getter of Wgap_mec"""
@@ -179,8 +194,11 @@ class OutGeo(FrozenClass):
 
     # mechanical airgap width (minimal distance between the lamination including magnet)
     # Type : float
-    Wgap_mec = property(fget=_get_Wgap_mec, fset=_set_Wgap_mec,
-                        doc=u"""mechanical airgap width (minimal distance between the lamination including magnet)""")
+    Wgap_mec = property(
+        fget=_get_Wgap_mec,
+        fset=_set_Wgap_mec,
+        doc=u"""mechanical airgap width (minimal distance between the lamination including magnet)""",
+    )
 
     def _get_Wgap_mag(self):
         """getter of Wgap_mag"""
@@ -193,8 +211,11 @@ class OutGeo(FrozenClass):
 
     # the magnetic airgap width (distance beetween the two Laminations bore radius)
     # Type : float
-    Wgap_mag = property(fget=_get_Wgap_mag, fset=_set_Wgap_mag,
-                        doc=u"""the magnetic airgap width (distance beetween the two Laminations bore radius)""")
+    Wgap_mag = property(
+        fget=_get_Wgap_mag,
+        fset=_set_Wgap_mag,
+        doc=u"""the magnetic airgap width (distance beetween the two Laminations bore radius)""",
+    )
 
     def _get_Rgap_mec(self):
         """getter of Rgap_mec"""
@@ -207,8 +228,11 @@ class OutGeo(FrozenClass):
 
     # radius of the center of the mecanical airgap
     # Type : float
-    Rgap_mec = property(fget=_get_Rgap_mec, fset=_set_Rgap_mec,
-                        doc=u"""radius of the center of the mecanical airgap""")
+    Rgap_mec = property(
+        fget=_get_Rgap_mec,
+        fset=_set_Rgap_mec,
+        doc=u"""radius of the center of the mecanical airgap""",
+    )
 
     def _get_Lgap(self):
         """getter of Lgap"""
@@ -221,5 +245,4 @@ class OutGeo(FrozenClass):
 
     # Airgap active length
     # Type : float
-    Lgap = property(fget=_get_Lgap, fset=_set_Lgap,
-                    doc=u"""Airgap active length""")
+    Lgap = property(fget=_get_Lgap, fset=_set_Lgap, doc=u"""Airgap active length""")
