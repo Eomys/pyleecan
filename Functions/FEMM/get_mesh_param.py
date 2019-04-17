@@ -47,7 +47,7 @@ def get_mesh_param(label, FEMM_dict):
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SV"]
         else:  # if the Ventilation is on the Rotor
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RV"]
-    elif "Hole" in label:  # Hole
+    elif "Hole" in label and not "Magnet" in label:  # Hole
         mesh_dict["element_size"] = FEMM_dict["maxelementsize"]
         mesh_dict["meshsize"] = FEMM_dict["meshsize_air"]
         if label[4] == "S":  # if the Hole is on the Stator

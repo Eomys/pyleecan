@@ -113,7 +113,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
             type_mag = "Parallel"
     else:
         type_mag = "None"
-    magnet_label = "Magnet" + st + type_mag + "_N"
+    magnet_label = "HoleMagnet" + st + type_mag + "_N_R0_T0_S0"
     S2 = SurfLine(line_list=curve_list_mag, label=magnet_label, point_ref=point_ref)
 
     # Air suface with magnet_0 and W1 > 0
@@ -159,7 +159,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
             type_mag = "Parallel"
     else:
         type_mag = "None"
-    magnet_label = "Magnet" + st + type_mag + "_N"
+    magnet_label = "HoleMagnet" + st + type_mag + "_N_R0_T1_S0"
     S5 = SurfLine(line_list=curve_list_mag, label=magnet_label, point_ref=point_ref)
 
     # Air suface with magnet_1 and W1 > 0
@@ -301,38 +301,29 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         S3.label = S3.label + "_R0_T1_S0"  # Hole
         S6.label = S6.label + "_R0_T2_S0"  # Hole
         S4.label = S4.label + "_R0_T3_S0"  # Hole
-        S2.label = S2.label + "_R0_T0_S0"  # Magnet
-        S5.label = S5.label + "_R0_T1_S0"  # Magnet
         surf_list = [S1, S2, S3, S6, S5, S4]
     elif self.magnet_0 and self.magnet_1 and self.W1 == 0:
         S1.label = S1.label + "_R0_T0_S0"  # Hole
         S7.label = S7.label + "_R0_T1_S0"  # Hole
         S4.label = S4.label + "_R0_T2_S0"  # Hole
-        S2.label = S2.label + "_R0_T0_S0"  # Magnet
-        S5.label = S5.label + "_R0_T1_S0"  # Magnet
         surf_list = [S1, S2, S7, S5, S4]
     elif self.magnet_0 and not self.magnet_1 and self.W1 > 0:
         S1.label = S1.label + "_R0_T0_S0"  # Hole
         S3.label = S3.label + "_R0_T1_S0"  # Hole
         S9.label = S9.label + "_R0_T2_S0"  # Hole
-        S2.label = S2.label + "_R0_T0_S0"  # Magnet
         surf_list = [S1, S2, S3, S9]
     elif self.magnet_0 and not self.magnet_1 and self.W1 == 0:
         S1.label = S1.label + "_R0_T0_S0"  # Hole
         S10.label = S10.label + "_R0_T1_S0"  # Hole
-        S2.label = S2.label + "_R0_T0_S0"  # Magnet
         surf_list = [S1, S2, S10]
     elif not self.magnet_0 and self.magnet_1 and self.W1 > 0:
         S8.label = S8.label + "_R0_T0_S0"  # Hole
         S6.label = S6.label + "_R0_T1_S0"  # Hole
         S4.label = S4.label + "_R0_T2_S0"  # Hole
-        S2.label = S2.label + "_R0_T0_S0"  # Magnet
-        S5.label = S5.label + "_R0_T1_S0"  # Magnet
         surf_list = [S8, S6, S5, S4]
     elif not self.magnet_0 and self.magnet_1 and self.W1 == 0:
         S11.label = S11.label + "_R0_T0_S0"  # Hole
         S4.label = S4.label + "_R0_T2_S0"  # Hole
-        S5.label = S5.label + "_R0_T0_S0"  # Magnet
         surf_list = [S11, S5, S4]
     elif not self.magnet_0 and not self.magnet_1 and self.W1 > 0:
         S8.label = S8.label + "_R0_T0_S0"  # Hole
