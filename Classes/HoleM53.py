@@ -8,6 +8,7 @@ from pyleecan.Classes.HoleMag import HoleMag
 
 from pyleecan.Methods.Slot.HoleM53.build_geometry import build_geometry
 from pyleecan.Methods.Slot.HoleM53.check import check
+from pyleecan.Methods.Slot.HoleM53.comp_alpha import comp_alpha
 from pyleecan.Methods.Slot.HoleM53.comp_mass_magnets import comp_mass_magnets
 from pyleecan.Methods.Slot.HoleM53.comp_radius import comp_radius
 from pyleecan.Methods.Slot.HoleM53.comp_surface_magnets import comp_surface_magnets
@@ -38,6 +39,8 @@ class HoleM53(HoleMag):
     build_geometry = build_geometry
     # cf Methods.Slot.HoleM53.check
     check = check
+    # cf Methods.Slot.HoleM53.comp_alpha
+    comp_alpha = comp_alpha
     # cf Methods.Slot.HoleM53.comp_mass_magnets
     comp_mass_magnets = comp_mass_magnets
     # cf Methods.Slot.HoleM53.comp_radius
