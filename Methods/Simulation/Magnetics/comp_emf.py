@@ -1,4 +1,4 @@
-from numpy import diff, zeros
+from numpy import diff, zeros, newaxis
 
 from pyleecan.Methods.Simulation.Input import InputError
 
@@ -22,7 +22,7 @@ def comp_emf(self):
     qs = output.simu.machine.stator.winding.qs
 
     emf = zeros((Nt_tot, qs))
-    emf[:-1, :] = diff(Phi_wind, 1, 0) / diff(time, 1, 0)
+    emf[:-1, :] = diff(Phi_wind, 1, 0) / diff(time, 1, 0)[:, newaxis]
     # We approximate the Phi_wind to be periodic to compute the last value
     # And we assume time to be a linspace
     emf[-1] = (Phi_wind[0] - Phi_wind[-1]) / (time[1] - time[0])

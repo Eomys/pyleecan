@@ -6,7 +6,6 @@
 """
 import femm
 from numpy import angle, pi, floor_divide
-from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.HoleM51 import HoleM51
 from pyleecan.Classes.HoleM52 import HoleM52
@@ -55,40 +54,33 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
             if prop[-1] == "-":  # Adapt Ntcoil sign if needed
                 Ntcoil *= -1
         elif "Magnet" in label:  # Magnet
-            if type(rotor) == LamHole:
+            if "Hole" in label and "Parallel" in label:
                 # calculate pole angle and angle of pole middle
                 alpha_p = 360 / rotor.hole[0].Zh
                 mag_0 = (
                     floor_divide(angle(point_ref, deg=True), alpha_p) + 0.5
                 ) * alpha_p
+
                 # HoleM50 or HoleM53
-                if (type(rotor.hole[0]) == HoleM50) or (type(rotor.hole[0]) == HoleM53):
-                    if "Parallel" in label:
-                        if rotor.hole[0].magnet_0 and "_T0_" in label:
-                            mag = mag_0 + rotor.hole[0].comp_alpha() * 180 / pi
-                        else:
-                            mag = mag_0 - rotor.hole[0].comp_alpha() * 180 / pi
+                if (type(lam.hole[0]) == HoleM50) or (type(lam.hole[0]) == HoleM53):
+                    if "_T0_" in label:
+                        mag = mag_0 + rotor.hole[0].comp_alpha() * 180 / pi
+                    else:
+                        mag = mag_0 - rotor.hole[0].comp_alpha() * 180 / pi
+
                 # HoleM51
-                if type(rotor.hole[0]) == HoleM51:
-                    if "Parallel" in label:
-                        if "_T0_" in label:
-                            if rotor.hole[0].magnet_0:
-                                mag = mag_0 + rotor.hole[0].comp_alpha() * 180 / pi
-                            elif rotor.hole[0].magnet_1:
-                                mag = mag_0
-                            else:
-                                mag = mag_0 - rotor.hole[0].comp_alpha() * 180 / pi
-                        elif "_T1_" in label:
-                            if rotor.hole[0].magnet_1:
-                                mag = mag_0
-                            else:
-                                mag = mag_0 - rotor.hole[0].comp_alpha() * 180 / pi
-                        else:
-                            mag = mag_0 - rotor.hole[0].comp_alpha() * 180 / pi
-                # HoleM52
-                if type(rotor.hole[0]) == HoleM52:
-                    if "Parallel" in label:
+                if type(lam.hole[0]) == HoleM51:
+                    if "_T0_" in label:
+                        mag = mag_0 + rotor.hole[0].comp_alpha() * 180 / pi
+                    elif "_T1_" in label:
                         mag = mag_0
+                    else:
+                        mag = mag_0 - rotor.hole[0].comp_alpha() * 180 / pi
+
+                # HoleM52
+                if type(lam.hole[0]) == HoleM52:
+                    mag = mag_0
+
                 # modifiy magnetisation of south poles
                 if "_S_" in label:
                     mag = mag + 180
