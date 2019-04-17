@@ -38,9 +38,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     """
     if self.get_is_stator():  # check if the slot is on the stator
-        st = "Stator"
+        st = "_Stator"
     else:
-        st = "Rotor"
+        st = "_Rotor"
     Rbo = self.get_Rbo()
 
     Z7 = Rbo - self.H0 - 1j * self.W1 / 2
