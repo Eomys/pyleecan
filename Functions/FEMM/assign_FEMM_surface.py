@@ -10,6 +10,7 @@ from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.HoleM51 import HoleM51
 from pyleecan.Classes.HoleM52 import HoleM52
 from pyleecan.Classes.HoleM53 import HoleM53
+from pyleecan.Methods import NotImplementedYetError
 
 
 def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
@@ -36,6 +37,12 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
     Ntcoil = 0  # By default no circuit
     mag = 0  # By default no magnetization
 
+    # Select the lamination according to the label
+    if "Rotor" in label:
+        lam = rotor
+    else:
+        lam = stator
+
     # point_ref is None => don't assign the surface
     if surf.point_ref is not None:
         # Select the surface
@@ -47,52 +54,55 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
         if "Wind" in label:  # If the surface is a winding
             if "Rotor" in label:  # Winding on the rotor
                 Clabel = "Circr" + prop[2]
-                Ntcoil = rotor.winding.Ntcoil
             else:  # winding on the stator
                 Clabel = "Circs" + prop[2]
-                Ntcoil = stator.winding.Ntcoil
+            Ntcoil = lam.winding.Ntcoil
             if prop[-1] == "-":  # Adapt Ntcoil sign if needed
                 Ntcoil *= -1
-        elif "Magnet" in label:  # Magnet
-            if "Hole" in label and "Parallel" in label:
+        elif "HoleMagnet" in label:  # LamHole
+            if "Parallel" in label:
                 # calculate pole angle and angle of pole middle
-                alpha_p = 360 / rotor.hole[0].Zh
+                alpha_p = 360 / lam.hole[0].Zh
                 mag_0 = (
                     floor_divide(angle(point_ref, deg=True), alpha_p) + 0.5
                 ) * alpha_p
 
                 # HoleM50 or HoleM53
-                if (type(rotor.hole[0]) == HoleM50) or (type(rotor.hole[0]) == HoleM53):
+                if (type(lam.hole[0]) == HoleM50) or (type(lam.hole[0]) == HoleM53):
                     if "_T0_" in label:
-                        mag = mag_0 + rotor.hole[0].comp_alpha() * 180 / pi
+                        mag = mag_0 + lam.hole[0].comp_alpha() * 180 / pi
                     else:
-                        mag = mag_0 - rotor.hole[0].comp_alpha() * 180 / pi
+                        mag = mag_0 - lam.hole[0].comp_alpha() * 180 / pi
 
                 # HoleM51
-                if type(rotor.hole[0]) == HoleM51:
+                if type(lam.hole[0]) == HoleM51:
                     if "_T0_" in label:
-                        mag = mag_0 + rotor.hole[0].comp_alpha() * 180 / pi
+                        mag = mag_0 + lam.hole[0].comp_alpha() * 180 / pi
                     elif "_T1_" in label:
                         mag = mag_0
                     else:
-                        mag = mag_0 - rotor.hole[0].comp_alpha() * 180 / pi
+                        mag = mag_0 - lam.hole[0].comp_alpha() * 180 / pi
 
                 # HoleM52
-                if type(rotor.hole[0]) == HoleM52:
+                if type(lam.hole[0]) == HoleM52:
                     mag = mag_0
 
                 # modifiy magnetisation of south poles
                 if "_S_" in label:
                     mag = mag + 180
             else:
-                if "Radial" in label and "_N_" in label:  # Radial magnetization
-                    mag = "theta"  # North pole magnet
-                elif "Radial" in label:
-                    mag = "theta + 180"  # South pole magnet
-                elif "Parallel" in label and "_N_" in label:
-                    mag = angle(point_ref) * 180 / pi  # North pole magnet
-                elif "Parallel" in label:
-                    mag = angle(point_ref) * 180 / pi + 180  # South pole magnet
+                raise NotImplementedYetError(
+                    "Only parallele magnetization are available for HoleMagnet"
+                )
+        elif "Magnet" in label:  # LamSlotMag
+            if "Radial" in label and "_N_" in label:  # Radial magnetization
+                mag = "theta"  # North pole magnet
+            elif "Radial" in label:
+                mag = "theta + 180"  # South pole magnet
+            elif "Parallel" in label and "_N_" in label:
+                mag = angle(point_ref) * 180 / pi  # North pole magnet
+            elif "Parallel" in label:
+                mag = angle(point_ref) * 180 / pi + 180  # South pole magnet
         elif "Ventilation" in label:
             prop = "Air"
         elif "Hole" in label:
