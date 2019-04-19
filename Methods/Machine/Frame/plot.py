@@ -13,7 +13,7 @@ from pyleecan.Functions.init_fig import init_fig
 from pyleecan.Methods.Machine import FRAME_COLOR
 
 
-def plot(self, fig=None, sym=1, alpha=0, delta=0):
+def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False):
     """Plot the Frame in a matplotlib fig
 
     Parameters
@@ -28,6 +28,8 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
+    is_edge_only: bool
+        To plot transparent Patches
 
     Returns
     -------
@@ -42,9 +44,11 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0):
         patches = list()
         for surf in surf_list:
             if surf.label is not None and surf.label == "Frame":
-                patches.append(surf.get_patch(color=FRAME_COLOR))
+                patches.append(
+                    surf.get_patch(color=FRAME_COLOR, is_edge_only=is_edge_only)
+                )
             else:
-                patches.append(surf.get_patch())
+                patches.append(surf.get_patch(is_edge_only=is_edge_only))
 
         axes.set_xlabel("(m)")
         axes.set_ylabel("(m)")
@@ -58,8 +62,9 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0):
         axes.set_xlim(-Lim, Lim, auto=True)
         axes.set_ylim(-Lim, Lim, auto=True)
 
-        patch_leg.append(Patch(color=FRAME_COLOR))
-        label_leg.append("Frame")
+        if not is_edge_only:
+            patch_leg.append(Patch(color=FRAME_COLOR))
+            label_leg.append("Frame")
+            axes.legend(patch_leg, label_leg)
 
-        axes.legend(patch_leg, label_leg)
         fig.show()

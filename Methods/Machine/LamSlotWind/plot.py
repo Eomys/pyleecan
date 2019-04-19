@@ -15,7 +15,9 @@ from pyleecan.Methods.Machine import PHASE_COLOR, PHASE_NAME, ROTOR_COLOR, STATO
 from pyleecan.Classes.WindingSC import WindingSC
 
 
-def plot(self, fig=None, plot_winding=True, sym=1, alpha=0, delta=0):
+def plot(
+    self, fig=None, plot_winding=True, sym=1, alpha=0, delta=0, is_edge_only=False
+):
     """Plot the Lamination in a matplotlib fig
 
     Parameters
@@ -33,6 +35,8 @@ def plot(self, fig=None, plot_winding=True, sym=1, alpha=0, delta=0):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
+    is_edge_only: bool
+        To plot transparent Patches
 
     Returns
     -------
@@ -61,12 +65,12 @@ def plot(self, fig=None, plot_winding=True, sym=1, alpha=0, delta=0):
         qs = 1  # getting number of surface in winding Zone in the Slot
     for surf in surf_list:
         if surf.label is not None and "Ext" in surf.label:
-            patches.append(surf.get_patch(color_lam))
+            patches.append(surf.get_patch(color_lam, is_edge_only=is_edge_only))
         elif ("Wind" in surf.label or "Bare" in surf.label) and plot_winding:
             color = find_wind_phase_color(wind_mat=wind_mat, label=surf.label)
-            patches.append(surf.get_patch(color=color))
+            patches.append(surf.get_patch(color=color, is_edge_only=is_edge_only))
         else:
-            patches.append(surf.get_patch())
+            patches.append(surf.get_patch(is_edge_only=is_edge_only))
 
     # Display the result
     (fig, axes, patch_leg, label_leg) = init_fig(fig)
@@ -83,19 +87,20 @@ def plot(self, fig=None, plot_winding=True, sym=1, alpha=0, delta=0):
     axes.set_ylim(-Lim, Lim)
 
     # Add the legend
-    if self.is_stator:
-        patch_leg.append(Patch(color=STATOR_COLOR))
-        label_leg.append("Stator")
-        axes.set_title("Stator with Winding")
-    else:
-        patch_leg.append(Patch(color=ROTOR_COLOR))
-        label_leg.append("Rotor")
-        axes.set_title("Rotor with Winding")
-    for ii in range(qs):
-        if not ("Phase " + PHASE_NAME[ii] in label_leg):
-            # Avoid adding twice the same label
-            index = ii % len(PHASE_COLOR)
-            patch_leg.append(Patch(color=PHASE_COLOR[index]))
-            label_leg.append("Phase " + PHASE_NAME[ii])
-    legend(patch_leg, label_leg)
+    if not is_edge_only:
+        if self.is_stator:
+            patch_leg.append(Patch(color=STATOR_COLOR))
+            label_leg.append("Stator")
+            axes.set_title("Stator with Winding")
+        else:
+            patch_leg.append(Patch(color=ROTOR_COLOR))
+            label_leg.append("Rotor")
+            axes.set_title("Rotor with Winding")
+        for ii in range(qs):
+            if not ("Phase " + PHASE_NAME[ii] in label_leg):
+                # Avoid adding twice the same label
+                index = ii % len(PHASE_COLOR)
+                patch_leg.append(Patch(color=PHASE_COLOR[index]))
+                label_leg.append("Phase " + PHASE_NAME[ii])
+        legend(patch_leg, label_leg)
     fig.show()

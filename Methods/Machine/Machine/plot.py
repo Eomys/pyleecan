@@ -8,7 +8,7 @@ Machine plot method
 from matplotlib.pyplot import axis, subplots
 
 
-def plot(self, sym=1, alpha=0, delta=0):
+def plot(self, sym=1, alpha=0, delta=0, is_edge_only=False, comp_machine=None):
     """Plot the Machine in a matplotlib fig
 
     Parameters
@@ -21,6 +21,10 @@ def plot(self, sym=1, alpha=0, delta=0):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
+    is_edge_only: bool
+        To plot transparent Patches
+    comp_machine : Machine
+        A machine to plot in transparency on top of the self machine
 
     Returns
     -------
@@ -33,23 +37,42 @@ def plot(self, sym=1, alpha=0, delta=0):
     # Get the patches to display from corresponding plot
     # The order in the list matters (largest to smallest)
     if self.frame is not None:
-        self.frame.plot(fig, sym=sym, alpha=alpha, delta=delta)  # Frame
+        self.frame.plot(
+            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=is_edge_only
+        )  # Frame
         Wfra = self.frame.comp_height_eq()
     else:
         Wfra = 0
 
     if self.rotor.is_internal:
-        self.stator.plot(fig, sym=sym, alpha=alpha, delta=delta)  # Stator
-        self.rotor.plot(fig, sym=sym, alpha=alpha, delta=delta)  # Rotor
+        self.stator.plot(
+            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=is_edge_only
+        )  # Stator
+        self.rotor.plot(
+            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=is_edge_only
+        )  # Rotor
 
         if self.rotor.Rint > 0:  # Add the shaft only for internal rotor
-            self.shaft.plot(fig, sym=sym, alpha=alpha, delta=delta)
+            self.shaft.plot(
+                fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=is_edge_only
+            )
         Lim = (self.stator.Rext + Wfra) * 1.5  # Axes limit for plot
     else:
-        self.rotor.plot(fig, sym=sym, alpha=alpha, delta=delta)  # Rotor
-        self.stator.plot(fig, sym=sym, alpha=alpha, delta=delta)  # Stator
+        self.rotor.plot(
+            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=is_edge_only
+        )  # Rotor
+        self.stator.plot(
+            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=is_edge_only
+        )  # Stator
         Lim = (self.rotor.Rext + Wfra) * 1.5  # Axes limit for plot
 
+    if comp_machine is not None:
+        comp_machine.rotor.plot(
+            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=True
+        )
+        comp_machine.stator.plot(
+            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=True
+        )
     axes.set_xlabel("(m)")
     axes.set_ylabel("(m)")
     axes.set_title("Machine")

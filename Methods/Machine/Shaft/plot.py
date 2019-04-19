@@ -13,7 +13,7 @@ from pyleecan.Functions.init_fig import init_fig
 from pyleecan.Methods.Machine import SHAFT_COLOR
 
 
-def plot(self, fig=None, sym=1, alpha=0, delta=0):
+def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False):
     """Plot the Shaft in a matplotlib fig
 
     Parameters
@@ -29,6 +29,8 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
+    is_edge_only: bool
+        To plot transparent Patches
 
     Returns
     -------
@@ -40,7 +42,7 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0):
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
     for surf in surf_list:
-        patches.append(surf.get_patch(color=SHAFT_COLOR))
+        patches.append(surf.get_patch(color=SHAFT_COLOR, is_edge_only=is_edge_only))
     axes.set_xlabel("(m)")
     axes.set_ylabel("(m)")
     axes.set_title("Shaft")
@@ -53,8 +55,10 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0):
     axes.set_xlim(-Lim, Lim)
     axes.set_ylim(-Lim, Lim)
 
-    patch_leg.append(Patch(color=SHAFT_COLOR))
-    label_leg.append("Shaft")
+    # Add legend
+    if not is_edge_only:
+        patch_leg.append(Patch(color=SHAFT_COLOR))
+        label_leg.append("Shaft")
 
-    legend(patch_leg, label_leg)
+        legend(patch_leg, label_leg)
     fig.show()

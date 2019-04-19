@@ -16,6 +16,8 @@ VENT_COLOR = "w"
 VENT_EDGE = "k"
 PATCH_COLOR = "w"
 PATCH_EDGE = "K"
+PATCH_COLOR_ALPHA = (0, 0, 0, 0)
+PATCH_EDGE_ALPHA = (1, 0, 0, 1)
 # Winding Phase
 # PHASE_COLOR = ["r", "c", "y","#994499", "#FF00F0",'m','k','b','g']
 PHASE_COLOR = [

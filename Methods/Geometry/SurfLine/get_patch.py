@@ -1,20 +1,26 @@
 # -*- coding: utf-8 -*-
 from matplotlib.patches import Polygon
-from pyleecan.Methods.Machine import PATCH_COLOR, PATCH_EDGE
+from pyleecan.Methods.Machine import (
+    PATCH_COLOR,
+    PATCH_EDGE,
+    PATCH_COLOR_ALPHA,
+    PATCH_EDGE_ALPHA,
+)
 
 
-def get_patch(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE):
+def get_patch(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False):
     """Returns the PolarArc Patch to be display in matplotlib
 
     Parameters
     ----------
     self : SurfLine
         a SurfLine object
-
     color :
         the color of the patch (Default value = PATCH_COLOR)
     edgecolor :
         the edge color of the patch (Default value = PATCH_EDGE)
+    is_edge_only: bool
+        To set the transparancy of the face color to 0 and 1 for the edge color
 
     Returns
     -------
@@ -25,6 +31,10 @@ def get_patch(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE):
     # check if the SurfLine is correct
     self.check()
     line_list = self.get_lines()
+
+    if is_edge_only:
+        color = PATCH_COLOR_ALPHA
+        edgecolor = PATCH_EDGE_ALPHA
 
     if len(line_list) == 0:
         return Polygon([], facecolor=color, edgecolor=edgecolor)

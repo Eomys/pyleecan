@@ -13,7 +13,7 @@ from pyleecan.Functions.init_fig import init_fig
 from pyleecan.Methods.Machine import MAGNET_COLOR, ROTOR_COLOR, STATOR_COLOR
 
 
-def plot(self, fig=None, is_magnet=True, sym=1, alpha=0, delta=0):
+def plot(self, fig=None, is_magnet=True, sym=1, alpha=0, delta=0, is_edge_only=False):
     """Plot a Lamination with Magnets in a matplotlib fig
 
     Parameters
@@ -31,6 +31,8 @@ def plot(self, fig=None, is_magnet=True, sym=1, alpha=0, delta=0):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
+    is_edge_only: bool
+        To plot transparent Patches
 
     Returns
     -------
@@ -51,11 +53,13 @@ def plot(self, fig=None, is_magnet=True, sym=1, alpha=0, delta=0):
     patches = list()
     for surf in surf_list:
         if "Ext" in surf.label:
-            patches.append(surf.get_patch(color=lam_color))
+            patches.append(surf.get_patch(color=lam_color, is_edge_only=is_edge_only))
         elif "Magnet" in surf.label:
-            patches.append(surf.get_patch(color=MAGNET_COLOR))
+            patches.append(
+                surf.get_patch(color=MAGNET_COLOR, is_edge_only=is_edge_only)
+            )
         else:
-            patches.append(surf.get_patch())
+            patches.append(surf.get_patch(is_edge_only=is_edge_only))
     # Display the result
     (fig, axes, patch_leg, label_leg) = init_fig(fig)
     axes.set_xlabel("(m)")
@@ -72,14 +76,15 @@ def plot(self, fig=None, is_magnet=True, sym=1, alpha=0, delta=0):
     axes.set_ylim(-Lim, Lim)
 
     # Add the legend
-    if self.is_stator:
-        patch_leg.append(Patch(color=STATOR_COLOR))
-        label_leg.append("Stator")
-        axes.set_title("Stator with Magnet")
-    else:
-        patch_leg.append(Patch(color=ROTOR_COLOR))
-        label_leg.append("Rotor")
-        axes.set_title("Rotor with Magnet")
+    if not is_edge_only:
+        if self.is_stator:
+            patch_leg.append(Patch(color=STATOR_COLOR))
+            label_leg.append("Stator")
+            axes.set_title("Stator with Magnet")
+        else:
+            patch_leg.append(Patch(color=ROTOR_COLOR))
+            label_leg.append("Rotor")
+            axes.set_title("Rotor with Magnet")
 
-    legend(patch_leg, label_leg)
+        legend(patch_leg, label_leg)
     fig.show()

@@ -14,7 +14,9 @@ from pyleecan.Functions.init_fig import init_fig
 from pyleecan.Methods.Machine import BAR_COLOR, SCR_COLOR
 
 
-def plot(self, fig=None, plot_winding=False, sym=1, alpha=0, delta=0):
+def plot(
+    self, fig=None, plot_winding=False, sym=1, alpha=0, delta=0, is_edge_only=False
+):
     """Plot the Lamination in a matplotlib fig
 
     Parameters
@@ -32,6 +34,8 @@ def plot(self, fig=None, plot_winding=False, sym=1, alpha=0, delta=0):
         Angle for rotation [rad]
     delta : complex
         Complex value for translation
+    is_edge_only: bool
+        To plot transparent Patches
 
     Returns
     -------
@@ -42,7 +46,12 @@ def plot(self, fig=None, plot_winding=False, sym=1, alpha=0, delta=0):
     (fig, axes, patch_leg, label_leg) = init_fig(fig)
     # Plot the lamination
     super(type(self), self).plot(
-        fig, plot_winding=False, sym=sym, alpha=alpha, delta=delta
+        fig,
+        plot_winding=False,
+        sym=sym,
+        alpha=alpha,
+        delta=delta,
+        is_edge_only=is_edge_only,
     )
 
     # Plot the winding if needed

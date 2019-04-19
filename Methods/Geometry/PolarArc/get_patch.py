@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 from matplotlib.patches import Polygon
 
-from pyleecan.Methods.Machine import PATCH_COLOR, PATCH_EDGE
+from pyleecan.Methods.Machine import (
+    PATCH_COLOR,
+    PATCH_EDGE,
+    PATCH_COLOR_ALPHA,
+    PATCH_EDGE_ALPHA,
+)
 
 
-def get_patch(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE):
+def get_patch(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False):
     """Returns the PolarArc Patch to be display in matplotlib
     Parameters
     ----------
@@ -14,6 +19,8 @@ def get_patch(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE):
         The color of the patch (Default value = PATCH_COLOR)
     edgecolor :
         The color of the edgecolor (Default value = PATCH_EDGE)
+    is_edge_only: bool
+        To set the transparancy of the face color to 0 and 1 for the edge color
 
     Returns
     -------
@@ -23,6 +30,10 @@ def get_patch(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE):
 
     # check if the PolarArc is correct
     self.check()
+
+    if is_edge_only:
+        color = PATCH_COLOR_ALPHA
+        edgecolor = PATCH_EDGE_ALPHA
 
     line_list = self.get_lines()
     Z_list = list()
