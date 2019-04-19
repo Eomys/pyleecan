@@ -9,6 +9,8 @@ from pyleecan.Classes.Input import Input
 from pyleecan.Methods.Simulation.InCurrent.gen_input import gen_input
 
 from pyleecan.Classes.check import InitUnKnowClassError
+from pyleecan.Classes.Import import Import
+from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
@@ -49,17 +51,17 @@ class InCurrent(Input):
         object or dict can be given for pyleecan Object"""
 
         if time == -1:
-            time = ImportMatrix()
+            time = Import()
         if angle == -1:
-            angle = ImportMatrix()
+            angle = Import()
         if Is == -1:
-            Is = ImportMatrix()
+            Is = Import()
         if Ir == -1:
-            Ir = ImportMatrix()
+            Ir = Import()
         if angle_rotor == -1:
-            angle_rotor = ImportMatrix()
+            angle_rotor = Import()
         if Nr == -1:
-            Nr = ImportMatrix()
+            Nr = Import()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
                 init_dict,
@@ -92,100 +94,110 @@ class InCurrent(Input):
             if "angle_rotor_initial" in list(init_dict.keys()):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
         # Initialisation by argument
-        # time can be None, a ImportMatrix object or a dict
+        # time can be None, a Import object or a dict
         if isinstance(time, dict):
             # Call the correct constructor according to the dict
             load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
                 "ImportMatrixVal": ImportMatrixVal,
                 "ImportMatrixXls": ImportMatrixXls,
                 "ImportGenVectSin": ImportGenVectSin,
                 "ImportGenMatrixSin": ImportGenMatrixSin,
                 "ImportGenVectLin": ImportGenVectLin,
-                "ImportMatrix": ImportMatrix,
+                "Import": Import,
             }
             obj_class = time.get("__class__")
             if obj_class is None:
-                self.time = ImportMatrix(init_dict=time)
+                self.time = Import(init_dict=time)
             elif obj_class in list(load_dict.keys()):
                 self.time = load_dict[obj_class](init_dict=time)
             else:  # Avoid generation error or wrong modification in json
                 raise InitUnKnowClassError("Unknow class name in init_dict for time")
         else:
             self.time = time
-        # angle can be None, a ImportMatrix object or a dict
+        # angle can be None, a Import object or a dict
         if isinstance(angle, dict):
             # Call the correct constructor according to the dict
             load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
                 "ImportMatrixVal": ImportMatrixVal,
                 "ImportMatrixXls": ImportMatrixXls,
                 "ImportGenVectSin": ImportGenVectSin,
                 "ImportGenMatrixSin": ImportGenMatrixSin,
                 "ImportGenVectLin": ImportGenVectLin,
-                "ImportMatrix": ImportMatrix,
+                "Import": Import,
             }
             obj_class = angle.get("__class__")
             if obj_class is None:
-                self.angle = ImportMatrix(init_dict=angle)
+                self.angle = Import(init_dict=angle)
             elif obj_class in list(load_dict.keys()):
                 self.angle = load_dict[obj_class](init_dict=angle)
             else:  # Avoid generation error or wrong modification in json
                 raise InitUnKnowClassError("Unknow class name in init_dict for angle")
         else:
             self.angle = angle
-        # Is can be None, a ImportMatrix object or a dict
+        # Is can be None, a Import object or a dict
         if isinstance(Is, dict):
             # Call the correct constructor according to the dict
             load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
                 "ImportMatrixVal": ImportMatrixVal,
                 "ImportMatrixXls": ImportMatrixXls,
                 "ImportGenVectSin": ImportGenVectSin,
                 "ImportGenMatrixSin": ImportGenMatrixSin,
                 "ImportGenVectLin": ImportGenVectLin,
-                "ImportMatrix": ImportMatrix,
+                "Import": Import,
             }
             obj_class = Is.get("__class__")
             if obj_class is None:
-                self.Is = ImportMatrix(init_dict=Is)
+                self.Is = Import(init_dict=Is)
             elif obj_class in list(load_dict.keys()):
                 self.Is = load_dict[obj_class](init_dict=Is)
             else:  # Avoid generation error or wrong modification in json
                 raise InitUnKnowClassError("Unknow class name in init_dict for Is")
         else:
             self.Is = Is
-        # Ir can be None, a ImportMatrix object or a dict
+        # Ir can be None, a Import object or a dict
         if isinstance(Ir, dict):
             # Call the correct constructor according to the dict
             load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
                 "ImportMatrixVal": ImportMatrixVal,
                 "ImportMatrixXls": ImportMatrixXls,
                 "ImportGenVectSin": ImportGenVectSin,
                 "ImportGenMatrixSin": ImportGenMatrixSin,
                 "ImportGenVectLin": ImportGenVectLin,
-                "ImportMatrix": ImportMatrix,
+                "Import": Import,
             }
             obj_class = Ir.get("__class__")
             if obj_class is None:
-                self.Ir = ImportMatrix(init_dict=Ir)
+                self.Ir = Import(init_dict=Ir)
             elif obj_class in list(load_dict.keys()):
                 self.Ir = load_dict[obj_class](init_dict=Ir)
             else:  # Avoid generation error or wrong modification in json
                 raise InitUnKnowClassError("Unknow class name in init_dict for Ir")
         else:
             self.Ir = Ir
-        # angle_rotor can be None, a ImportMatrix object or a dict
+        # angle_rotor can be None, a Import object or a dict
         if isinstance(angle_rotor, dict):
             # Call the correct constructor according to the dict
             load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
                 "ImportMatrixVal": ImportMatrixVal,
                 "ImportMatrixXls": ImportMatrixXls,
                 "ImportGenVectSin": ImportGenVectSin,
                 "ImportGenMatrixSin": ImportGenMatrixSin,
                 "ImportGenVectLin": ImportGenVectLin,
-                "ImportMatrix": ImportMatrix,
+                "Import": Import,
             }
             obj_class = angle_rotor.get("__class__")
             if obj_class is None:
-                self.angle_rotor = ImportMatrix(init_dict=angle_rotor)
+                self.angle_rotor = Import(init_dict=angle_rotor)
             elif obj_class in list(load_dict.keys()):
                 self.angle_rotor = load_dict[obj_class](init_dict=angle_rotor)
             else:  # Avoid generation error or wrong modification in json
@@ -194,20 +206,22 @@ class InCurrent(Input):
                 )
         else:
             self.angle_rotor = angle_rotor
-        # Nr can be None, a ImportMatrix object or a dict
+        # Nr can be None, a Import object or a dict
         if isinstance(Nr, dict):
             # Call the correct constructor according to the dict
             load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
                 "ImportMatrixVal": ImportMatrixVal,
                 "ImportMatrixXls": ImportMatrixXls,
                 "ImportGenVectSin": ImportGenVectSin,
                 "ImportGenMatrixSin": ImportGenMatrixSin,
                 "ImportGenVectLin": ImportGenVectLin,
-                "ImportMatrix": ImportMatrix,
+                "Import": Import,
             }
             obj_class = Nr.get("__class__")
             if obj_class is None:
-                self.Nr = ImportMatrix(init_dict=Nr)
+                self.Nr = Import(init_dict=Nr)
             elif obj_class in list(load_dict.keys()):
                 self.Nr = load_dict[obj_class](init_dict=Nr)
             else:  # Avoid generation error or wrong modification in json
@@ -329,14 +343,14 @@ class InCurrent(Input):
 
     def _set_time(self, value):
         """setter of time"""
-        check_var("time", value, "ImportMatrix")
+        check_var("time", value, "Import")
         self._time = value
 
         if self._time is not None:
             self._time.parent = self
 
     # Electrical time vector (no symmetry) to import
-    # Type : ImportMatrix
+    # Type : Import
     time = property(
         fget=_get_time,
         fset=_set_time,
@@ -349,14 +363,14 @@ class InCurrent(Input):
 
     def _set_angle(self, value):
         """setter of angle"""
-        check_var("angle", value, "ImportMatrix")
+        check_var("angle", value, "Import")
         self._angle = value
 
         if self._angle is not None:
             self._angle.parent = self
 
     # Electrical position vector (no symmetry) to import
-    # Type : ImportMatrix
+    # Type : Import
     angle = property(
         fget=_get_angle,
         fset=_set_angle,
@@ -369,14 +383,14 @@ class InCurrent(Input):
 
     def _set_Is(self, value):
         """setter of Is"""
-        check_var("Is", value, "ImportMatrix")
+        check_var("Is", value, "Import")
         self._Is = value
 
         if self._Is is not None:
             self._Is.parent = self
 
     # Stator currents as a function of time (each column correspond to one phase) to import
-    # Type : ImportMatrix
+    # Type : Import
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
@@ -389,14 +403,14 @@ class InCurrent(Input):
 
     def _set_Ir(self, value):
         """setter of Ir"""
-        check_var("Ir", value, "ImportMatrix")
+        check_var("Ir", value, "Import")
         self._Ir = value
 
         if self._Ir is not None:
             self._Ir.parent = self
 
     # Rotor currents as a function of time (each column correspond to one phase) to import
-    # Type : ImportMatrix
+    # Type : Import
     Ir = property(
         fget=_get_Ir,
         fset=_set_Ir,
@@ -409,14 +423,14 @@ class InCurrent(Input):
 
     def _set_angle_rotor(self, value):
         """setter of angle_rotor"""
-        check_var("angle_rotor", value, "ImportMatrix")
+        check_var("angle_rotor", value, "Import")
         self._angle_rotor = value
 
         if self._angle_rotor is not None:
             self._angle_rotor.parent = self
 
     # Rotor angular position as a function of time (if None computed according to Nr) to import
-    # Type : ImportMatrix
+    # Type : Import
     angle_rotor = property(
         fget=_get_angle_rotor,
         fset=_set_angle_rotor,
@@ -429,14 +443,14 @@ class InCurrent(Input):
 
     def _set_Nr(self, value):
         """setter of Nr"""
-        check_var("Nr", value, "ImportMatrix")
+        check_var("Nr", value, "Import")
         self._Nr = value
 
         if self._Nr is not None:
             self._Nr.parent = self
 
     # Rotor speed as a function of time to import
-    # Type : ImportMatrix
+    # Type : Import
     Nr = property(
         fget=_get_Nr,
         fset=_set_Nr,

@@ -96,7 +96,7 @@ test_obj.input = InCurrent(time=time, angle=angle, Is=I_3)
 InCurrent_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InCurrent.Is must have the shape (100, 3) (len(time), stator phase number), (2, 100) returned",
+        "exp": "ERROR: InCurrent.Is must be a matrix with the shape (100, 3) (len(time), stator phase number), (2, 100) returned",
     }
 )
 test_obj = Simulation(machine=M1)
@@ -104,7 +104,7 @@ test_obj.input = InCurrent(time=time, angle=angle, Is=I_4)
 InCurrent_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InCurrent.Is must have the shape (100, 3) (len(time), stator phase number), (100,) returned",
+        "exp": "ERROR: InCurrent.Is must be a matrix with the shape (100, 3) (len(time), stator phase number), (100,) returned",
     }
 )
 # Wrong Ir
@@ -118,7 +118,7 @@ test_obj.input = InCurrent(time=time, angle=angle, Ir=I_3)
 InCurrent_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InCurrent.Ir must have the shape (100, 2) (len(time), rotor phase number), (2, 100) returned",
+        "exp": "ERROR: InCurrent.Ir must be a matrix with the shape (100, 2) (len(time), rotor phase number), (2, 100) returned",
     }
 )
 test_obj = Simulation(machine=M2)
@@ -126,7 +126,7 @@ test_obj.input = InCurrent(time=time, angle=angle, Ir=I_4)
 InCurrent_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InCurrent.Ir must have the shape (100, 2) (len(time), rotor phase number), (100,) returned",
+        "exp": "ERROR: InCurrent.Ir must be a matrix with the shape (100, 2) (len(time), rotor phase number), (100,) returned",
     }
 )
 # Wrong Nr, alpha_rotor
