@@ -15,6 +15,7 @@ from pyleecan.Classes.Import import Import
 from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
+from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
@@ -71,6 +72,7 @@ from pyleecan.Classes.OutMag import OutMag
 from pyleecan.Classes.OutPost import OutPost
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.InCurrent import InCurrent
+from pyleecan.Classes.InFlux import InFlux
 from pyleecan.Classes.Input import Input
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Magnetics import Magnetics
