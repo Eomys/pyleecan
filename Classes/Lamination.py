@@ -22,6 +22,7 @@ from pyleecan.Methods.Machine.Lamination.get_Ryoke import get_Ryoke
 from pyleecan.Methods.Machine.Lamination.get_name_phase import get_name_phase
 from pyleecan.Methods.Machine.Lamination.plot import plot
 from pyleecan.Methods.Machine.Lamination.comp_output_geo import comp_output_geo
+from pyleecan.Methods.Machine.Lamination.get_polar_eq import get_polar_eq
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
@@ -70,6 +71,8 @@ class Lamination(FrozenClass):
     plot = plot
     # cf Methods.Machine.Lamination.comp_output_geo
     comp_output_geo = comp_output_geo
+    # cf Methods.Machine.Lamination.get_polar_eq
+    get_polar_eq = get_polar_eq
     # save method is available in all object
     save = save
 

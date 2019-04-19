@@ -9,3 +9,4 @@ desc;;Machine description;;;str;;;;;;;;;get_lamination;;;;MachineIPMSM
 ;;;;;;;;;;;;;;plot;;;;MachineSyRM
 ;;;;;;;;;;;;;;comp_output_geo;;;;
 ;;;;;;;;;;;;;;comp_length_airgap_active;;;;
+;;;;;;;;;;;;;;get_polar_eq;;;;
