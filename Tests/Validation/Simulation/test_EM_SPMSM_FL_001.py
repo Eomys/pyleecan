@@ -8,11 +8,14 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Tests.Validation.Machine.SPMSM_003 import SPMSM_003
 
 from pyleecan.Classes.InCurrent import InCurrent
+from pyleecan.Classes.InFlux import InFlux
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.ImportMatlab import ImportMatlab
 
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
+from pyleecan.Tests import DATA_DIR
 
 simu = Simu1(name="EM_SPMSM_FL_001", machine=SPMSM_003)
 
@@ -49,6 +52,14 @@ simu.mag = MagFEMM(
 simu_sym = Simu1(init_dict=simu.as_dict())
 simu_sym.mag.is_symmetry_a = True
 
+# Just load the Output and ends (we could also have directly filled the Output object)
+simu_load = Simu1(init_dict=simu.as_dict())
+simu_load.mag = None
+mat_file = join(DATA_DIR, "EM_SPMSM_FL_001_MANATEE_SDM.mat")
+Br = ImportMatlab(file_path=mat_file, var_name="XBr")
+Bt = ImportMatlab(file_path=mat_file, var_name="XBt")
+simu_load.input = InFlux(time=time, angle=angle, Br=Br, Bt=Bt)
+
 
 class test_EM_SPMSM_FL_001(TestCase):
     """unittest FEMM machine SPMSM_003
@@ -67,9 +78,21 @@ class test_EM_SPMSM_FL_001(TestCase):
         out2.post.line_color = "r--"
         simu_sym.run()
 
-        # Plot the result by comparing the two simulation
+        out3 = Output(simu=simu_load)
+        out3.post.legend_name = "MANATEE SDM"
+        out3.post.line_color = "g x"
+        simu_load.run()
+
+        # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
         out.plot_B_space(out_list=[out2])
 
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_EM_SPMSM_FL_001_sym.png"))
+
+        # Plot the result by comparing the two simulation (sym / MANATEE)
+        plt.close("all")
+        out.plot_B_space(j_t0=1, is_deg=False, out_list=[out3])
+
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_EM_SPMSM_FL_001_SDM.png"))
