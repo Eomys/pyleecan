@@ -41,13 +41,13 @@ def get_angle_rotor(self):
             A0 = self.elec.angle_rotor_initial
 
         if self.elec.time.size == 1:
-            deltaT = self.elec.time[0]
+            return A0  # Only one time step, no need to compute the position
         else:
             deltaT = self.elec.time[1] - self.elec.time[0]
-        # Convert Nr from [rpm] to [rad/s] (time in [s] and angle_rotor in [rad])
-        Ar = cumsum(rot_dir * deltaT * self.elec.Nr * 2 * pi / 60)
-        # Enforce first position to 0
-        Ar = roll(Ar, 1)
-        Ar[0] = 0
-        self.elec.angle_rotor = Ar + A0
-        return self.elec.angle_rotor
+            # Convert Nr from [rpm] to [rad/s] (time in [s] and angle_rotor in [rad])
+            Ar = cumsum(rot_dir * deltaT * self.elec.Nr * 2 * pi / 60)
+            # Enforce first position to 0
+            Ar = roll(Ar, 1)
+            Ar[0] = 0
+            self.elec.angle_rotor = Ar + A0
+            return self.elec.angle_rotor
