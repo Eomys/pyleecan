@@ -47,7 +47,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         ls = "_yoke_"
         ly = "_bore_"
 
-    ref_point = (self.Rint + (self.Rext - self.Rint) / 2) * exp(1j * pi / sym)
+    ref_point = self.comp_radius_mid_yoke() * exp(1j * pi / sym)
 
     surf_list = list()
     # Lamination surface(s)
