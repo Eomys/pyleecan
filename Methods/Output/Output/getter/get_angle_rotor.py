@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pyleecan.Methods.Output.Output.getter import GetOutError
-from numpy import pi, cumsum, roll, size
+from numpy import pi, cumsum, roll, size, ones
 
 
 def get_angle_rotor(self):
@@ -41,7 +41,8 @@ def get_angle_rotor(self):
             A0 = self.elec.angle_rotor_initial
 
         if self.elec.time.size == 1:
-            return A0  # Only one time step, no need to compute the position
+            # Only one time step, no need to compute the position
+            return ones(1) * A0
         else:
             deltaT = self.elec.time[1] - self.elec.time[0]
             # Convert Nr from [rpm] to [rad/s] (time in [s] and angle_rotor in [rad])
