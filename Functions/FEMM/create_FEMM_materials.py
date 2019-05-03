@@ -151,9 +151,9 @@ def create_FEMM_materials(
     # Set Rotor and Stator BH curves (if needed)
     if is_stator_linear_BH == 0:
         for ii in range(BHs.shape[0]):
-            femm.mi_addbhpoint("Stator Iron", BHs[ii][0], BHs[ii][1])
+            femm.mi_addbhpoint("Stator Iron", BHs[ii][1], BHs[ii][0])
     if is_rotor_linear_BH == 0:
         for ii in range(BHr.shape[0]):
-            femm.mi_addbhpoint("Rotor Iron", BHr[ii][0], BHr[ii][1])
+            femm.mi_addbhpoint("Rotor Iron", BHr[ii][1], BHr[ii][0])
 
     return prop_dict, materials, circuits
