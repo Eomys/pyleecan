@@ -15,7 +15,7 @@ from pyleecan.Methods.Machine import BAR_COLOR, SCR_COLOR
 
 
 def plot(
-    self, fig=None, plot_winding=False, sym=1, alpha=0, delta=0, is_edge_only=False
+    self, fig=None, is_lam_only=False, sym=1, alpha=0, delta=0, is_edge_only=False
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -26,8 +26,8 @@ def plot(
     fig :
         if None, open a new fig and plot, else add to the current
         one (Default value = None)
-    plot_winding : bool
-        If true, plot the bar and short circuit ring (Default value = False)
+    is_lam_only : bool
+        True to plot only the lamination (remove the bare)
     sym : int
         Symmetry factor (1= full machine, 2= half of the machine...)
     alpha : float
@@ -47,7 +47,7 @@ def plot(
     # Plot the lamination
     super(type(self), self).plot(
         fig,
-        plot_winding=False,
+        is_lam_only=is_lam_only,
         sym=sym,
         alpha=alpha,
         delta=delta,
@@ -55,12 +55,12 @@ def plot(
     )
 
     # Plot the winding if needed
-    if plot_winding:
+    if not is_lam_only:
         # point needed to plot the bar of a slot
         Hbar = self.winding.conductor.Hbar
         Wbar = self.winding.conductor.Wbar
         if self.is_internal:
-            HS = self.Rext - self.slot.comp_height(self.Rext)
+            HS = self.Rext - self.slot.comp_height()
             Bar_points = [
                 HS + 1j * Wbar / 2,
                 HS - 1j * Wbar / 2,
@@ -68,7 +68,7 @@ def plot(
                 HS + Hbar + 1j * Wbar / 2,
             ]
         else:
-            HS = self.Rint + self.slot.comp_height(self.Rint)
+            HS = self.Rint + self.slot.comp_height()
             Bar_points = [
                 HS + 1j * Wbar / 2,
                 HS - 1j * Wbar / 2,
@@ -84,13 +84,10 @@ def plot(
         patches = list()
         # Creation of the bar patches
         for wind in bar_list:
-            patches.append(Polygon(zip(wind.real, wind.imag), color=BAR_COLOR))
+            patches.append(Polygon(list(zip(wind.real, wind.imag)), color=BAR_COLOR))
 
         # Add the Short Circuit Ring
-        if self.is_internal:
-            Rmw = self.slot.comp_radius_mid_wind(self.Rext)
-        else:
-            Rmw = self.slot.comp_radius_mid_wind(self.Rint)
+        Rmw = self.slot.comp_radius_mid_wind()
         patches.append(
             Wedge(
                 (0, 0), Rmw + self.Hscr / 2.0, 0, 360, width=self.Hscr, color=SCR_COLOR
@@ -108,15 +105,17 @@ def plot(
     axes.set_xlim(-Lim, Lim)
     axes.set_ylim(-Lim, Lim)
 
-    if plot_winding:
-        # Add the magnet to the fig
+    if not is_lam_only:
+        # Add the bare to the fig
         for patch in patches:
             axes.add_patch(patch)
         # Legend setup (Rotor already setup by LamSlotWind.plot)
-        patch_leg.append(Patch(color=BAR_COLOR))
-        label_leg.append("Rotor Bar")
-        patch_leg.append(Patch(color=SCR_COLOR))
-        label_leg.append("Short Circuit Ring")
+        if "Rotor Bar" not in label_leg:
+            patch_leg.append(Patch(color=BAR_COLOR))
+            label_leg.append("Rotor Bar")
+        if "Short Circuit Ring" not in label_leg:
+            patch_leg.append(Patch(color=SCR_COLOR))
+            label_leg.append("Short Circuit Ring")
 
         legend(patch_leg, label_leg)
     fig.show()
