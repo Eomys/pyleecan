@@ -177,7 +177,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
             line6 = Segment(Z9, Zrad1)
             point_ref = (Zrad1 + Zrad2 + Z5 + Z6 + Z8 + Z9) / 6
             surface = SurfLine(
-                line_list=[line1, line2, line3, line4, line5, line6, line7],
+                line_list=[line1, line2, line3, line4, line5, line6],
                 label="Wind" + st + "_R1_T0_S0",
                 point_ref=point_ref,
             )
