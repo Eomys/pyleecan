@@ -54,7 +54,7 @@ def get_mesh_param(label, FEMM_dict):
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SH"]
         else:  # if the Hole is on the Rotor
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RH"]
-    elif "Wind" in label:  # Winding on the Lamination
+    elif "Wind" or "Bar" in label:  # Winding on the Lamination
         if label[4] == "S":  # if the winding is on the Stator
             mesh_dict["element_size"] = FEMM_dict["elementsize_slotS"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_slotS"]
