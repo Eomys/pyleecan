@@ -68,7 +68,7 @@ def plot(
             patches.append(surf.get_patch(color_lam, is_edge_only=is_edge_only))
         elif surf.label is not None and "_In" in surf.label:
             patches.append(surf.get_patch(is_edge_only=is_edge_only))
-        elif "Wind" in surf.label or "Bare" in surf.label:
+        elif "Wind" in surf.label or "Bar" in surf.label:
             if not is_lam_only:
                 color = find_wind_phase_color(wind_mat=wind_mat, label=surf.label)
                 patches.append(surf.get_patch(color=color, is_edge_only=is_edge_only))
