@@ -59,17 +59,18 @@ def gen_input(self):
             + " returned"
         )
 
-    if self.Bt is None:
-        raise InputError("ERROR: InFlux.Bt missing")
-    output.Bt = self.Bt.get_data()
-    if not isinstance(output.Bt, ndarray) or output.Bt.shape != (Nt_tot, Na_tot):
-        raise InputError(
-            "ERROR: InFlux.Bt must be a matrix with the shape "
-            + str((Nt_tot, Na_tot))
-            + " (len(time), rotor phase number), "
-            + str(output.Bt.shape)
-            + " returned"
-        )
+    if self.Bt is not None:
+        output.Bt = self.Bt.get_data()
+        if not isinstance(output.Bt, ndarray) or output.Bt.shape != (Nt_tot, Na_tot):
+            raise InputError(
+                "ERROR: InFlux.Bt must be a matrix with the shape "
+                + str((Nt_tot, Na_tot))
+                + " (len(time), rotor phase number), "
+                + str(output.Bt.shape)
+                + " returned"
+            )
+    else:
+        output.Bt = None
 
     if self.parent.parent is None:
         raise InputError(
