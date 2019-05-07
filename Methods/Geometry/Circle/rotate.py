@@ -30,7 +30,8 @@ def rotate(self, angle):
 
     # Modification of the object from the rotation
     self.center = self.center * exp(1j * angle)
-    self.point_ref = self.point_ref * exp(1j * angle)
+    if self.point_ref is not None:
+        self.point_ref = self.point_ref * exp(1j * angle)
 
 
 class AngleRotationCircleError(Exception):

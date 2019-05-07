@@ -97,8 +97,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             if Ryoke > 0:
                 surf_list.append(surf_yoke)
         else:
-            if Ryoke > 0:
-                surf_list.append(surf_yoke)
+            surf_yoke.point_ref = None  # No need to set the surface
+            surf_list.append(surf_yoke)
             surf_list.append(surf_slot)
     else:  # Only one surface
         # Modify the bore radius
