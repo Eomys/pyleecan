@@ -54,7 +54,8 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     output.mag.Bt = Bt
     output.mag.Tem = Tem
     output.mag.Tem_av = mean(Tem)
-    output.mag.Tem_rip = abs((np_max(Tem) - np_min(Tem)) / output.mag.Tem_av)
+    if output.mag.Tem_av != 0:
+        output.mag.Tem_rip = abs((np_max(Tem) - np_min(Tem)) / output.mag.Tem_av)
     output.mag.Phi_wind_stator = Phi_wind_stator
 
     # Electromotive forces computation (update output)
