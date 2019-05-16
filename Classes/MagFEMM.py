@@ -34,6 +34,7 @@ class MagFEMM(Magnetics):
         type_calc_leakage=0,
         file_name="",
         FEMM_dict={},
+        angle_stator=0,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_vent=False,
@@ -67,6 +68,7 @@ class MagFEMM(Magnetics):
                     "type_calc_leakage",
                     "file_name",
                     "FEMM_dict",
+                    "angle_stator",
                     "is_remove_slotS",
                     "is_remove_slotR",
                     "is_remove_vent",
@@ -93,6 +95,8 @@ class MagFEMM(Magnetics):
                 file_name = init_dict["file_name"]
             if "FEMM_dict" in list(init_dict.keys()):
                 FEMM_dict = init_dict["FEMM_dict"]
+            if "angle_stator" in list(init_dict.keys()):
+                angle_stator = init_dict["angle_stator"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -125,6 +129,7 @@ class MagFEMM(Magnetics):
         self.type_calc_leakage = type_calc_leakage
         self.file_name = file_name
         self.FEMM_dict = FEMM_dict
+        self.angle_stator = angle_stator
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -154,7 +159,8 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "Kgeo_fineness = " + str(self.Kgeo_fineness) + linesep
         MagFEMM_str += "type_calc_leakage = " + str(self.type_calc_leakage) + linesep
         MagFEMM_str += 'file_name = "' + str(self.file_name) + '"' + linesep
-        MagFEMM_str += "FEMM_dict = " + str(self.FEMM_dict)
+        MagFEMM_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
+        MagFEMM_str += "angle_stator = " + str(self.angle_stator)
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -176,6 +182,8 @@ class MagFEMM(Magnetics):
             return False
         if other.FEMM_dict != self.FEMM_dict:
             return False
+        if other.angle_stator != self.angle_stator:
+            return False
         return True
 
     def as_dict(self):
@@ -189,6 +197,7 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["type_calc_leakage"] = self.type_calc_leakage
         MagFEMM_dict["file_name"] = self.file_name
         MagFEMM_dict["FEMM_dict"] = self.FEMM_dict
+        MagFEMM_dict["angle_stator"] = self.angle_stator
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -202,6 +211,7 @@ class MagFEMM(Magnetics):
         self.type_calc_leakage = None
         self.file_name = None
         self.FEMM_dict = None
+        self.angle_stator = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -288,4 +298,21 @@ class MagFEMM(Magnetics):
         fget=_get_FEMM_dict,
         fset=_set_FEMM_dict,
         doc=u"""To enforce user-defined values for FEMM main parameters """,
+    )
+
+    def _get_angle_stator(self):
+        """getter of angle_stator"""
+        return self._angle_stator
+
+    def _set_angle_stator(self, value):
+        """setter of angle_stator"""
+        check_var("angle_stator", value, "float")
+        self._angle_stator = value
+
+    # Angular position shift of the stator
+    # Type : float
+    angle_stator = property(
+        fget=_get_angle_stator,
+        fset=_set_angle_stator,
+        doc=u"""Angular position shift of the stator""",
     )

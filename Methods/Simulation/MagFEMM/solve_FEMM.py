@@ -1,5 +1,5 @@
 import femm
-from numpy import zeros, pi, mean, max as np_max, min as np_min
+from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
 
 from pyleecan.Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from pyleecan.Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
@@ -49,6 +49,10 @@ def solve_FEMM(self, output, sym, FEMM_dict):
             qs, Npcpp, is_stator=True, Lfemm=FEMM_dict["Lfemm"], L1=L1, sym=sym
         )
 
+    # Shift to take into account stator position
+    roll_id = int(self.angle_stator * Na_tot / (2 * pi))
+    Br = roll(Br, roll_id, axis=1)
+    Bt = roll(Bt, roll_id, axis=1)
     # Store the results
     output.mag.Br = Br
     output.mag.Bt = Bt
