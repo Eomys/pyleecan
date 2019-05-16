@@ -40,8 +40,8 @@ def comp_flux_airgap(self, output):
         is_remove_slotR=self.is_remove_slotR,
         is_stator_linear_BH=self.is_stator_linear_BH,
         is_rotor_linear_BH=self.is_rotor_linear_BH,
-        kgeo_fineness=1,
-        kmesh_fineness=1,
+        kgeo_fineness=self.Kgeo_fineness,
+        kmesh_fineness=self.Kmesh_fineness,
         user_FEMM_dict=self.FEMM_dict,
         path_save=self.get_path_save(output),
     )
