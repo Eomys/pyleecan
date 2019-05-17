@@ -27,10 +27,14 @@ def comp_Ntspc(self, Zs=None):
     """
     if Zs is None:
         if self.parent is None:
-            raise WindingError("ERROR: The Winding object must be in a Lamination object.")
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object."
+            )
 
         if self.parent.slot is None:
-            raise WindingError("ERROR: The Winding object must be in a Lamination object with Slot.")
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object with Slot."
+            )
 
         Zs = self.parent.slot.Zs
 
