@@ -34,7 +34,8 @@ def translate(self, Zt):
     self.check()
 
     # Modification from the translation of Circle
-    self.point_ref = self.point_ref + Zt
+    if self.point_ref is not None:
+        self.point_ref = self.point_ref + Zt
     self.center = self.center + Zt
 
 

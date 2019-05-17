@@ -31,6 +31,7 @@ class WindingDW1L(Winding):
 
     def __init__(
         self,
+        coil_pitch=5,
         is_reverse_wind=False,
         Nslot_shift_wind=0,
         qs=3,
@@ -57,6 +58,7 @@ class WindingDW1L(Winding):
             check_init_dict(
                 init_dict,
                 [
+                    "coil_pitch",
                     "is_reverse_wind",
                     "Nslot_shift_wind",
                     "qs",
@@ -69,6 +71,8 @@ class WindingDW1L(Winding):
                 ],
             )
             # Overwrite default value with init_dict content
+            if "coil_pitch" in list(init_dict.keys()):
+                coil_pitch = init_dict["coil_pitch"]
             if "is_reverse_wind" in list(init_dict.keys()):
                 is_reverse_wind = init_dict["is_reverse_wind"]
             if "Nslot_shift_wind" in list(init_dict.keys()):
@@ -88,6 +92,7 @@ class WindingDW1L(Winding):
             if "conductor" in list(init_dict.keys()):
                 conductor = init_dict["conductor"]
         # Initialisation by argument
+        self.coil_pitch = coil_pitch
         # Call Winding init
         super(WindingDW1L, self).__init__(
             is_reverse_wind=is_reverse_wind,
@@ -109,6 +114,7 @@ class WindingDW1L(Winding):
         WindingDW1L_str = ""
         # Get the properties inherited from Winding
         WindingDW1L_str += super(WindingDW1L, self).__str__() + linesep
+        WindingDW1L_str += "coil_pitch = " + str(self.coil_pitch)
         return WindingDW1L_str
 
     def __eq__(self, other):
@@ -120,6 +126,8 @@ class WindingDW1L(Winding):
         # Check the properties inherited from Winding
         if not super(WindingDW1L, self).__eq__(other):
             return False
+        if other.coil_pitch != self.coil_pitch:
+            return False
         return True
 
     def as_dict(self):
@@ -128,6 +136,7 @@ class WindingDW1L(Winding):
 
         # Get the properties inherited from Winding
         WindingDW1L_dict = super(WindingDW1L, self).as_dict()
+        WindingDW1L_dict["coil_pitch"] = self.coil_pitch
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         WindingDW1L_dict["__class__"] = "WindingDW1L"
@@ -136,5 +145,23 @@ class WindingDW1L(Winding):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
+        self.coil_pitch = None
         # Set to None the properties inherited from Winding
         super(WindingDW1L, self)._set_None()
+
+    def _get_coil_pitch(self):
+        """getter of coil_pitch"""
+        return self._coil_pitch
+
+    def _set_coil_pitch(self, value):
+        """setter of coil_pitch"""
+        check_var("coil_pitch", value, "int", Vmin=0, Vmax=1000)
+        self._coil_pitch = value
+
+    # winding coil pitch or coil span expressed in slots (coil_pitch1=Zs/(2p)->full-pitch distributed winding, coil_pitch1<Zs/(2p)->chorded/shorted-pitch distributed winding, coil_pitch1=1->tooth-winding). Coil pitch is sometimes written 1/9 means Input.Magnetics.coil_pitch1=9-1=8
+    # Type : int, min = 0, max = 1000
+    coil_pitch = property(
+        fget=_get_coil_pitch,
+        fset=_set_coil_pitch,
+        doc=u"""winding coil pitch or coil span expressed in slots (coil_pitch1=Zs/(2p)->full-pitch distributed winding, coil_pitch1<Zs/(2p)->chorded/shorted-pitch distributed winding, coil_pitch1=1->tooth-winding). Coil pitch is sometimes written 1/9 means Input.Magnetics.coil_pitch1=9-1=8""",
+    )

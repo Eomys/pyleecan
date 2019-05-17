@@ -84,57 +84,56 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
     ) / 2
 
     # If Hstot = 0 there is no slot and this parameter won't be used
-    FEMM_dict["meshsize_slotS"] = Hstot / 10 / Kmesh_fineness
-    FEMM_dict["elementsize_slotS"] = Hstot / 10  # max element size in m for
-    # stator slot segments
+    FEMM_dict["meshsize_slotS"] = Hstot / 8 / Kmesh_fineness
+    # max element size in m for stator slot segments
+    FEMM_dict["elementsize_slotS"] = Hstot / 8 / Kmesh_fineness
 
-    FEMM_dict["meshsize_slotR"] = Hrtot / 10 / Kmesh_fineness  # mesh
     # parameter for rotor slot region
-    FEMM_dict["elementsize_slotR"] = Hrtot / 10  # max element size in m for
-    # stator slot segments
+    FEMM_dict["meshsize_slotR"] = Hrtot / 8 / Kmesh_fineness
+    # max element size in m for rotor slot segments
+    FEMM_dict["elementsize_slotR"] = Hrtot / 8 / Kmesh_fineness
 
-    FEMM_dict["meshsize_yokeR"] = Hry / 4 / Kmesh_fineness  # mesh parameter for
-    # rotor yoke region
-    FEMM_dict["elementsize_yokeR"] = Hry / 4  # max element size in m for rotor
-    # yoke segments
+    # mesh parameter for rotor yoke region
+    FEMM_dict["meshsize_yokeR"] = Hry / 4 / Kmesh_fineness
+    # max element size in m for rotor yoke segments
+    FEMM_dict["elementsize_yokeR"] = Hry / 4 / Kmesh_fineness
 
-    FEMM_dict["meshsize_yokeS"] = Hsy / 4 / Kmesh_fineness  # mesh parameter for
-    # stator yoke region
-    FEMM_dict["elementsize_yokeS"] = Hsy / 4  # max element size in m for stator
-    # yoke segments
+    # mesh parameter for stator yoke region
+    FEMM_dict["meshsize_yokeS"] = Hsy / 4 / Kmesh_fineness
+    # max element size in m for stator yoke segments
+    FEMM_dict["elementsize_yokeS"] = Hsy / 4 / Kmesh_fineness
 
-    FEMM_dict["meshsize_airgap"] = Wgap_mec / 5 / Kmesh_fineness  # mesh parameter
-    # for airgap region
-
-    FEMM_dict["elementsize_airgap"] = Wgap_mec / 5  # max element size in m for
-    # airgap segments
+    # mesh parameter for airgap region
+    FEMM_dict["meshsize_airgap"] = Wgap_mec / 3 / Kmesh_fineness
+    # max element size in m for airgap segments
+    FEMM_dict["elementsize_airgap"] = Wgap_mec / 3 / Kmesh_fineness
 
     if type(machine.stator) == LamSlotMag:
         Hmag = machine.stator.slot.magnet[0].Hmag
-        FEMM_dict["meshsize_magnetS"] = Hmag / 4 / Kmesh_fineness  # mesh
-        # parameter for magnet region
-        FEMM_dict["elementsize_magnetS"] = Hmag / 4  # max element size in m for
-        # magnet segments
+        # mesh parameter for magnet region
+        FEMM_dict["meshsize_magnetS"] = Hmag / 4 / Kmesh_fineness
+        # max element size in m for magnet segments
+        FEMM_dict["elementsize_magnetS"] = Hmag / 4 / Kmesh_fineness
     else:
         FEMM_dict["meshsize_magnetS"] = None
 
     if type(machine.rotor) == LamSlotMag:
         Hmag = machine.rotor.slot.magnet[0].Hmag
-        FEMM_dict["meshsize_magnetR"] = Hmag / 4 / Kmesh_fineness  # mesh
-        # parameter for magnet region
-        FEMM_dict["elementsize_magnetR"] = Hmag / 4  # max element size in m for
-        # magnet segments
+        # mesh parameter for magnet region
+        FEMM_dict["meshsize_magnetR"] = Hmag / 4 / Kmesh_fineness
+        # max element size in m for magnet segments
+        FEMM_dict["elementsize_magnetR"] = Hmag / 4 / Kmesh_fineness
     elif type(machine.rotor) == LamHole:
         Hmag = machine.rotor.hole[0].get_height_magnet()
-        FEMM_dict["meshsize_magnetR"] = Hmag / 4 / Kmesh_fineness  # mesh
-        # parameter for magnet region
-        FEMM_dict["elementsize_magnetR"] = Hmag / 4  # max element size in m for
-        # magnet segments
+        # mesh parameter for magnet region
+        FEMM_dict["meshsize_magnetR"] = Hmag / 4 / Kmesh_fineness
+        # max element size in m for magnet segments
+        FEMM_dict["elementsize_magnetR"] = Hmag / 4 / Kmesh_fineness
     else:
         FEMM_dict["meshsize_magnetR"] = None
 
-    FEMM_dict["meshsize_air"] = Hry / 4 / Kmesh_fineness  # mesh parameter for
-    # basic air regions (ventilation ducts etc)
+    # mesh parameter for basic air regions (ventilation ducts etc)
+    FEMM_dict["meshsize_air"] = Hry / 4 / Kmesh_fineness
     FEMM_dict["meshsize_wedge"] = Hstot / 20 / Kmesh_fineness
 
     if type_calc_leakage == 1:

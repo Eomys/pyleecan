@@ -118,7 +118,7 @@ def create_FEMM_materials(
                 femm.mi_addmaterial("Air", 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0)
                 materials.append("Air")
             prop_dict[label] = "Air"
-        elif "Bar" in label:  # Squirrel cage
+        elif "BarR" in label:  # Squirrel cage
             prop, materials = create_FEMM_bar(
                 is_mmfr, rotor.mat_type.elec.rho, materials
             )
@@ -151,9 +151,9 @@ def create_FEMM_materials(
     # Set Rotor and Stator BH curves (if needed)
     if is_stator_linear_BH == 0:
         for ii in range(BHs.shape[0]):
-            femm.mi_addbhpoint("Stator Iron", BHs[ii][0], BHs[ii][1])
+            femm.mi_addbhpoint("Stator Iron", BHs[ii][1], BHs[ii][0])
     if is_rotor_linear_BH == 0:
         for ii in range(BHr.shape[0]):
-            femm.mi_addbhpoint("Rotor Iron", BHr[ii][0], BHr[ii][1])
+            femm.mi_addbhpoint("Rotor Iron", BHr[ii][1], BHr[ii][0])
 
     return prop_dict, materials, circuits

@@ -54,16 +54,20 @@ def plot_B_space(self, j_t0=0, is_deg=True, out_list=[]):
 
     # Add all the other output to compare (if needed)
     for out in out_list:
-        if out.mag.Br is not None and out.mag.Br.shape == self.mag.Br.shape:
+        if is_deg:
+            angle_out = out.mag.angle * 180 / pi
+        else:
+            angle_out = out.mag.angle
+        if out.mag.Br is not None:
             axs[0].plot(
-                angle,
+                angle_out,
                 out.mag.Br[j_t0, :],
                 out.post.line_color,
                 label=out.post.legend_name,
             )
-        if out.mag.Bt is not None and out.mag.Bt.shape == self.mag.Bt.shape:
+        if out.mag.Bt is not None:
             axs[1].plot(
-                angle,
+                angle_out,
                 out.mag.Bt[j_t0, :],
                 out.post.line_color,
                 label=out.post.legend_name,

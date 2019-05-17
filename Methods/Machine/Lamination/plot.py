@@ -13,7 +13,9 @@ from pyleecan.Functions.init_fig import init_fig
 from pyleecan.Methods.Machine import ROTOR_COLOR, STATOR_COLOR, VENT_COLOR, VENT_EDGE
 
 
-def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False):
+def plot(
+    self, fig=None, is_lam_only=False, sym=1, alpha=0, delta=0, is_edge_only=False
+):
     """Plot the Lamination in a matplotlib fig
 
     Parameters
@@ -22,6 +24,8 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False):
         A Lamination object
     fig :
         if None, open a new fig and plot, else add to the current one (Default value = None)
+    is_lam_only: bool
+        True to plot only the lamination (no effect for Lamination object)
     sym : int
         Symmetry factor (1= full machine, 2= half of the machine...)
     alpha : float

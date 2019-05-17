@@ -4,3 +4,4 @@ Kgeo_fineness;;"global coefficient to adjust geometry fineness in FEMM (1 : defa
 type_calc_leakage;;0 no leakage calculation, 1 calculation using single slot;;0;int;0;0;1;;;;;;solve_FEMM;;;;
 file_name;;Name of the file to save the FEMM model;;0;str;;;;;;;;;;;;;
 FEMM_dict;;To enforce user-defined values for FEMM main parameters ;;0;dict;;;;;;;;;;;;;
+angle_stator;rad;Angular position shift of the stator;;0;float;0;;;;;;;;;;;;

@@ -21,10 +21,13 @@ def comp_emf(self):
     Nt_tot = output.mag.Nt_tot
     qs = output.simu.machine.stator.winding.qs
 
-    emf = zeros((Nt_tot, qs))
-    emf[:-1, :] = diff(Phi_wind, 1, 0) / diff(time, 1, 0)[:, newaxis]
-    # We approximate the Phi_wind to be periodic to compute the last value
-    # And we assume time to be a linspace
-    emf[-1] = (Phi_wind[0] - Phi_wind[-1]) / (time[1] - time[0])
+    if Nt_tot > 1:
+        emf = zeros((Nt_tot, qs))
+        emf[:-1, :] = diff(Phi_wind, 1, 0) / diff(time, 1, 0)[:, newaxis]
+        # We approximate the Phi_wind to be periodic to compute the last value
+        # And we assume time to be a linspace
+        emf[-1] = (Phi_wind[0] - Phi_wind[-1]) / (time[1] - time[0])
+    else:
+        emf = None
 
     output.mag.emf = emf

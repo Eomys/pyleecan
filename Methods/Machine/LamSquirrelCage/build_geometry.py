@@ -34,6 +34,6 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
     # Adapt the label
     for surf in surf_list:
         if "Wind" in surf.label:
-            surf.label = surf.label.replace("Wind", "Bare")
+            surf.label = surf.label.replace("Wind", "Bar")
 
     return surf_list
