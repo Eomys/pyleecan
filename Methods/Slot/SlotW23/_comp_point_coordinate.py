@@ -22,6 +22,9 @@ def _comp_point_coordinate(self):
 
     """
     Rbo = self.get_Rbo()
+    if self.is_cstt_tooth:
+        # Compute W1 and W2 to match W3 tooth constraint
+        self._comp_W()
 
     # alpha is the angle to rotate Z0 so ||Z1,Z8|| = W0
     alpha = float(arcsin(self.W0 / (2 * Rbo)))
