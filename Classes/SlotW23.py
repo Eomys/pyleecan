@@ -59,6 +59,7 @@ class SlotW23(SlotWind):
         W2=0.01,
         W3=0.01,
         H1_is_rad=False,
+        is_cstt_tooth=False,
         Zs=36,
         init_dict=None,
     ):
@@ -73,7 +74,19 @@ class SlotW23(SlotWind):
 
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict, ["W0", "H0", "H1", "W1", "H2", "W2", "W3", "H1_is_rad", "Zs"]
+                init_dict,
+                [
+                    "W0",
+                    "H0",
+                    "H1",
+                    "W1",
+                    "H2",
+                    "W2",
+                    "W3",
+                    "H1_is_rad",
+                    "is_cstt_tooth",
+                    "Zs",
+                ],
             )
             # Overwrite default value with init_dict content
             if "W0" in list(init_dict.keys()):
@@ -92,6 +105,8 @@ class SlotW23(SlotWind):
                 W3 = init_dict["W3"]
             if "H1_is_rad" in list(init_dict.keys()):
                 H1_is_rad = init_dict["H1_is_rad"]
+            if "is_cstt_tooth" in list(init_dict.keys()):
+                is_cstt_tooth = init_dict["is_cstt_tooth"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
         # Initialisation by argument
@@ -103,6 +118,7 @@ class SlotW23(SlotWind):
         self.W2 = W2
         self.W3 = W3
         self.H1_is_rad = H1_is_rad
+        self.is_cstt_tooth = is_cstt_tooth
         # Call SlotWind init
         super(SlotW23, self).__init__(Zs=Zs)
         # The class is frozen (in SlotWind init), for now it's impossible to
@@ -121,7 +137,8 @@ class SlotW23(SlotWind):
         SlotW23_str += "H2 = " + str(self.H2) + linesep
         SlotW23_str += "W2 = " + str(self.W2) + linesep
         SlotW23_str += "W3 = " + str(self.W3) + linesep
-        SlotW23_str += "H1_is_rad = " + str(self.H1_is_rad)
+        SlotW23_str += "H1_is_rad = " + str(self.H1_is_rad) + linesep
+        SlotW23_str += "is_cstt_tooth = " + str(self.is_cstt_tooth)
         return SlotW23_str
 
     def __eq__(self, other):
@@ -149,6 +166,8 @@ class SlotW23(SlotWind):
             return False
         if other.H1_is_rad != self.H1_is_rad:
             return False
+        if other.is_cstt_tooth != self.is_cstt_tooth:
+            return False
         return True
 
     def as_dict(self):
@@ -165,6 +184,7 @@ class SlotW23(SlotWind):
         SlotW23_dict["W2"] = self.W2
         SlotW23_dict["W3"] = self.W3
         SlotW23_dict["H1_is_rad"] = self.H1_is_rad
+        SlotW23_dict["is_cstt_tooth"] = self.is_cstt_tooth
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         SlotW23_dict["__class__"] = "SlotW23"
@@ -181,6 +201,7 @@ class SlotW23(SlotWind):
         self.W2 = None
         self.W3 = None
         self.H1_is_rad = None
+        self.is_cstt_tooth = None
         # Set to None the properties inherited from SlotWind
         super(SlotW23, self)._set_None()
 
@@ -290,4 +311,21 @@ class SlotW23(SlotWind):
     # Type : bool
     H1_is_rad = property(
         fget=_get_H1_is_rad, fset=_set_H1_is_rad, doc=u"""H1 unit, 0 for m, 1 for rad"""
+    )
+
+    def _get_is_cstt_tooth(self):
+        """getter of is_cstt_tooth"""
+        return self._is_cstt_tooth
+
+    def _set_is_cstt_tooth(self, value):
+        """setter of is_cstt_tooth"""
+        check_var("is_cstt_tooth", value, "bool")
+        self._is_cstt_tooth = value
+
+    # True: use W3 to define the slot, False: use W2 and W1
+    # Type : bool
+    is_cstt_tooth = property(
+        fget=_get_is_cstt_tooth,
+        fset=_set_is_cstt_tooth,
+        doc=u"""True: use W3 to define the slot, False: use W2 and W1""",
     )
