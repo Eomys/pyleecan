@@ -13,7 +13,7 @@ from pyleecan.Functions.Winding.reverse_wind_mat import reverse_wind_mat
 from pyleecan.Functions.Winding.shift_wind_mat import shift_wind_mat
 
 
-def comp_connection_mat(self, Zs):
+def comp_connection_mat(self, Zs=None):
     """Compute the Winding Matrix (for winding type 2)
     type 2 : TOOTH WINDING, SINGLE LAYER ALTERNATE TEETH WOUND
     (Nlay_rad=1,Nlay_tan=1)
@@ -36,6 +36,18 @@ def comp_connection_mat(self, Zs):
         Zs/qs/2 must be an integer
 
     """
+    if Zs is None:
+        if self.parent is None:
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object."
+            )
+
+        if self.parent.slot is None:
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object with Slot."
+            )
+
+        Zs = self.parent.slot.Zs
 
     assert Zs > 0, "Zs must be >0"
     assert Zs % 1 == 0, "Zs must be an integer"

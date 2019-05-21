@@ -8,7 +8,7 @@ from pyleecan.Functions.Winding.reverse_wind_mat import reverse_wind_mat
 from pyleecan.Functions.Winding.shift_wind_mat import shift_wind_mat
 
 
-def comp_connection_mat(self, Zs):
+def comp_connection_mat(self, Zs=None):
     """Compute the Winding Matrix (for winding type 3 or 4) (Nlay_rad=1 or 2,Nlay_tan=1)
     type 3 or 4 : DISTRIBUTED SHORTED PITCH INTEGRAL WINDING
 
@@ -30,6 +30,18 @@ def comp_connection_mat(self, Zs):
         Zs/2/p/qs must be an integer
 
     """
+    if Zs is None:
+        if self.parent is None:
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object."
+            )
+
+        if self.parent.slot is None:
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object with Slot."
+            )
+
+        Zs = self.parent.slot.Zs
 
     assert Zs > 0, "Zs must be >0"
     assert Zs % 1 == 0, "Zs must be an integer"

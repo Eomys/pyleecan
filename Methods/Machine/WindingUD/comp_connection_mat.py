@@ -10,7 +10,7 @@ Compute the Winding Matrix (for type 0) Method
 from pyleecan.Methods.Machine.Winding import WindingError
 
 
-def comp_connection_mat(self, Zs):
+def comp_connection_mat(self, Zs=None):
     """Compute the Winding Matrix (for winding type 0)
     Type 0 : User defined
 
@@ -36,6 +36,18 @@ def comp_connection_mat(self, Zs):
         Nlay_tan,Zs,qs)
 
     """
+    if Zs is None:
+        if self.parent is None:
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object."
+            )
+
+        if self.parent.slot is None:
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object with Slot."
+            )
+
+        Zs = self.parent.slot.Zs
 
     assert Zs > 0, "Zs must be >0"
     assert Zs % 1 == 0, "Zs must be an integer"

@@ -14,7 +14,7 @@ from pyleecan.Functions.Winding.reverse_wind_mat import reverse_wind_mat
 from pyleecan.Functions.Winding.shift_wind_mat import shift_wind_mat
 
 
-def comp_connection_mat(self, Zs):
+def comp_connection_mat(self, Zs=None):
     """Compute the Winding Matrix (for winding type 10)
     type 10 : Squirrel cage Winding (elementary circuit loop involving bar n°1
     and bar n°Zr for alphar0_rad=0) (Nlay_rad=Nlay_tan=1)
@@ -37,6 +37,18 @@ def comp_connection_mat(self, Zs):
         qs must be equal to Zs
 
     """
+    if Zs is None:
+        if self.parent is None:
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object."
+            )
+
+        if self.parent.slot is None:
+            raise WindingError(
+                "ERROR: The Winding object must be in a Lamination object with Slot."
+            )
+
+        Zs = self.parent.slot.Zs
 
     assert Zs > 0, "Zs must be >0"
     assert Zs % 1 == 0, "Zs must be an integer"
