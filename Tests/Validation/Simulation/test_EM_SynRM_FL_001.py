@@ -21,8 +21,8 @@ from pyleecan.Tests import DATA_DIR
 # As (for now) there is no electrical model, we will compute the current for each Phi0 here
 freq0 = 50  # supply frequency [Hz]
 qs = 3  # Number of phases
-p = 2  # Number of pole pair
-Nt_tot = 3  # Number of time step for each Phi0
+p = 2  # Number of pole pairs
+Nt_tot = 3  # Number of time step for each current angle Phi0
 Imax = 28.6878  # Nominal stator current magnitude [A]
 # to have one torque ripple period since torque ripple appears at multiple of 6*freq0
 Nrev = 1 / 6
@@ -106,11 +106,13 @@ Tem = [
 
 
 class test_EM_SynRM_FL_001(TestCase):
-    """unittest FEMM machine SynRM_001
+    """Validation of a SynRM machine from Syr-e r29 open source software
+    https://sourceforge.net/projects/syr-e/
     """
 
     def test_Magnetic_Phi0(self):
         """Test compute the Torque in FEMM as a function of Phi0
+        and compare the results with Syr-e r29
 		"""
 
         Tem_FEMM = zeros(Phi0.shape)

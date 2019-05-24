@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""Validation of a SynRM machine from Syr-e r29 open source software
+https://sourceforge.net/projects/syr-e/
+"""
 from numpy import pi
 from pyleecan.Classes.MachineSyRM import MachineSyRM
 
@@ -57,5 +60,10 @@ rotor.mat_type = M530_65A
 stator.winding.conductor.cond_mat = Copper1
 
 SynRM_001 = MachineSyRM(
-    name="SynRM_001", stator=stator, rotor=rotor, shaft=shaft, frame=frame
+    name="SynRM_001",
+    desc="SynRM machine from Syr-e r29 open source software",
+    stator=stator,
+    rotor=rotor,
+    shaft=shaft,
+    frame=frame,
 )

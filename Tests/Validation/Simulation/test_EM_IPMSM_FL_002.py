@@ -50,12 +50,18 @@ simu_sym.mag.is_antiper_a = True
 
 
 class test_EM_IPMSM_FL_002(TestCase):
-    """unittest FEMM machine IPMSM_A (Prius machine)
+    """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
+    50 kW peak, 400 Nm peak at 1500 rpm from publication
+
+    from publication
+    Z. Yang, M. Krishnamurthy and I. P. Brown,
+    "Electromagnetic and vibrational characteristic of IPM over full torque-speed range,"
+    Electric Machines & Drives Conference (IEMDC), 2013 IEEE International, Chicago, IL, 2013, pp. 295-302.
     """
 
     def test_Magnetic_FEMM_sym(self):
         """Test compute the Flux in FEMM, with and without symmetry
-		"""
+        """
 
         out = Output(simu=simu)
         out.post.legend_name = "No symmetry"

@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""Validation machine: outer rotor SPMSM Machine B
+from Vu Xuan Hung thesis
+"Modeling of exterior rotor permanent magnet machines with concentrated windings" 
+Hanoi university of science and technology 2012
+"""
+
 from numpy import pi
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 
@@ -58,5 +64,10 @@ stator.winding.conductor.cond_mat = Copper1
 rotor.slot.magnet[0].mat_type = Magnet5
 
 SPMSM_015 = MachineSIPMSM(
-    name="SPMSM_015", stator=stator, rotor=rotor, shaft=shaft, frame=frame
+    name="SPMSM_015",
+    desc="outer rotor SPMSM Machine B from Vu Xuan Hung thesis",
+    stator=stator,
+    rotor=rotor,
+    shaft=shaft,
+    frame=frame,
 )

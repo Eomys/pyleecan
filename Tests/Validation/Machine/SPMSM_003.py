@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+"""Validation machine: polar SIPMSM with surface magnet
+
+From publication
+Lubin, S. Mezani, and A. Rezzoug,
+“2-D Exact Analytical Model for Surface-Mounted Permanent-Magnet Motors with Semi-Closed Slots,”
+IEEE Trans. Magn., vol. 47, no. 2, pp. 479–492, 2011.
+"""
 from numpy import pi
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 
@@ -54,5 +61,10 @@ stator.winding.conductor.cond_mat = Copper1
 rotor.slot.magnet[0].mat_type = Magnet3
 
 SPMSM_003 = MachineSIPMSM(
-    name="SPMSM_003", stator=stator, rotor=rotor, shaft=shaft, frame=frame
+    name="SPMSM_003",
+    desc="polar SIPMSM with surface magnet from Lubin, S. Mezani, and A. Rezzoug publication",
+    stator=stator,
+    rotor=rotor,
+    shaft=shaft,
+    frame=frame,
 )

@@ -57,11 +57,18 @@ simu_load.input = InFlux(time=time, angle=angle, Br=Br, Bt=Bt)
 
 
 class test_EM_SIPMSM_AL_001(TestCase):
-    """unittest FEMM machine SIPMSM_001
+    """Validation of a polar SIPMSM with inset magnet
+    Armature load (magnet field canceled by is_mmfr=False)
+
+    from publication
+    A. Rahideh and T. Korakianitis,
+    “Analytical Magnetic Field Calculation of Slotted Brushless Permanent-Magnet Machines With Surface Inset Magnets,”
+    vol. 48, no. 10, pp. 2633–2649, 2012.
     """
 
     def test_Magnetic_FEMM_sym(self):
         """Test compute the Flux in FEMM, with and without symmetry
+        and with MANATEE semi-analytical subdomain model
 		"""
 
         out = Output(simu=simu)

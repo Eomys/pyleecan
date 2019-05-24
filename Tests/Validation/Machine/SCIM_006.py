@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""Validation machine of a polar SCIM
+From publication:
+K. Boughrara
+Analytical Analysis of Cage Rotor Induction Motors in Healthy, Defective and Broken Bars Conditions
+IEEE Trans on Mag, 2014
+"""
 from numpy import pi
 from pyleecan.Classes.CondType12 import CondType12
 from pyleecan.Classes.CondType21 import CondType21
@@ -53,4 +59,11 @@ rotor.mat_type = M400_50A
 rotor.ring_mat = Copper1
 rotor.winding.conductor.cond_mat = Copper1
 
-SCIM_006 = MachineSCIM(stator=stator, rotor=rotor, shaft=shaft, frame=frame)
+SCIM_006 = MachineSCIM(
+    name="SCIM_006",
+    desc="polar SCIM from K. Boughrara publication",
+    stator=stator,
+    rotor=rotor,
+    shaft=shaft,
+    frame=frame,
+)

@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+"""Validation machine file IPMSM
+TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
+50 kW peak, 400 Nm peak at 1500 rpm from publication
+
+Z. Yang, M. Krishnamurthy and I. P. Brown,
+"Electromagnetic and vibrational characteristic of IPM over full torque-speed range,"
+Electric Machines & Drives Conference (IEMDC), 2013 IEEE International, Chicago, IL, 2013, pp. 295-302.
+"""
 from numpy import pi
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 
@@ -85,5 +93,10 @@ rotor.hole[0].magnet_0.mat_type = Magnet_prius
 rotor.hole[0].magnet_1.mat_type = Magnet_prius
 
 IPMSM_A = MachineIPMSM(
-    name="IPMSM_A", stator=stator, rotor=rotor, shaft=shaft, frame=frame
+    name="IPMSM_A",
+    desc="TOYOTA Prius 2004 interior magnet (V shape) with distributed winding",
+    stator=stator,
+    rotor=rotor,
+    shaft=shaft,
+    frame=frame,
 )

@@ -55,11 +55,17 @@ simu_load.input = InFlux(time=time, angle=angle2, Br=Br, Bt=Bt)
 
 
 class test_EM_SIPMSM_AL_001(TestCase):
-    """unittest FEMM machine SIPMSM_001
+    """Validation of outer rotor SPMSM 
+    Open circuit (Null Stator currents)
+
+    Machine B from Vu Xuan Hung thesis
+    "Modeling of exterior rotor permanent magnet machines with concentrated windings" 
+    Hanoi university of science and technology 2012
     """
 
     def test_Magnetic_FEMM_sym(self):
         """Test compute the Flux in FEMM, with and without symmetry
+        and with MANATEE semi-analytical subdomain model
 		"""
 
         out = Output(simu=simu)

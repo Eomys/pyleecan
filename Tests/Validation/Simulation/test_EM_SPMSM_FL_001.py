@@ -62,11 +62,18 @@ simu_load.input = InFlux(time=time, angle=angle, Br=Br, Bt=Bt)
 
 
 class test_EM_SPMSM_FL_001(TestCase):
-    """unittest FEMM machine SPMSM_003
+    """Validation of a polar SIPMSM with surface magnet
+    Linear lamination material
+
+    From publication
+    Lubin, S. Mezani, and A. Rezzoug,
+    “2-D Exact Analytical Model for Surface-Mounted Permanent-Magnet Motors with Semi-Closed Slots,”
+    IEEE Trans. Magn., vol. 47, no. 2, pp. 479–492, 2011.
     """
 
     def test_Magnetic_FEMM_sym(self):
         """Test compute the Flux in FEMM, with and without symmetry
+        and with MANATEE semi-analytical subdomain model
 		"""
 
         out = Output(simu=simu)

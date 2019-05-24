@@ -55,11 +55,18 @@ simu_load.input = InFlux(time=time, angle=angle2, Br=Br, Bt=None)
 
 
 class test_EM_SCIM_NL_006(TestCase):
-    """unittest FEMM machine SCIM_006
+    """Validation of the FEMM model of a polar SCIM machine
+    Only one time step
+    
+    From publication:
+    K. Boughrara
+    Analytical Analysis of Cage Rotor Induction Motors in Healthy, Defective and Broken Bars Conditions
+    IEEE Trans on Mag, 2014
     """
 
     def test_Magnetic_FEMM_sym(self):
         """Test compute the Flux in FEMM, with and without symmetry
+        and with MANATEE MMF analytical model
 		"""
 
         out = Output(simu=simu)

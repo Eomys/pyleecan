@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+"""Validation machine a polar SIPMSM with inset magnet
+
+from publication
+A. Rahideh and T. Korakianitis,
+“Analytical Magnetic Field Calculation of Slotted Brushless Permanent-Magnet Machines With Surface Inset Magnets,”
+vol. 48, no. 10, pp. 2633–2649, 2012.
+"""
 from numpy import pi
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 
@@ -45,5 +52,10 @@ stator.winding.conductor.cond_mat = Copper1
 rotor.slot.magnet[0].mat_type = Magnet1
 
 SIPMSM_001 = MachineSIPMSM(
-    name="SIPMSM_001", stator=stator, rotor=rotor, shaft=shaft, frame=frame
+    name="SIPMSM_001",
+    desc="polar SIPMSM with inset magnet from A. Rahideh and T. Korakianitis publication",
+    stator=stator,
+    rotor=rotor,
+    shaft=shaft,
+    frame=frame,
 )
