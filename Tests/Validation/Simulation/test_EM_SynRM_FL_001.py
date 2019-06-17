@@ -83,7 +83,7 @@ simu.mag = MagFEMM(
     is_antiper_a=True,
     sym_a=2,
 )
-
+simu.struct = None
 # Expected results
 Tem = [
     0.08,

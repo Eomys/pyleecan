@@ -33,7 +33,7 @@ def run(self):
         self.mag.run()
     # if self.HT is not None:
     #     self.HT.run()
-    # if self.struct is not None:
-    #     self.struct.run()
+    if self.struct is not None:
+        self.struct.run()
     # if self.ac is not None:
     #     self.ac.run()

@@ -11,6 +11,9 @@ from pyleecan.Methods.Output.Output.getter.get_BH_rotor import get_BH_rotor
 from pyleecan.Methods.Output.Output.getter.get_path_result import get_path_result
 from pyleecan.Methods.Output.Output.getter.get_angle_rotor import get_angle_rotor
 from pyleecan.Methods.Output.Output.plot.Magnetic.plot_B_space import plot_B_space
+from pyleecan.Methods.Output.Output.plot.Structural.plot_force_space import (
+    plot_force_space,
+)
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Simulation import Simulation
@@ -18,6 +21,7 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.OutGeo import OutGeo
 from pyleecan.Classes.OutElec import OutElec
 from pyleecan.Classes.OutMag import OutMag
+from pyleecan.Classes.OutStruct import OutStruct
 from pyleecan.Classes.OutPost import OutPost
 
 
@@ -36,11 +40,21 @@ class Output(FrozenClass):
     get_angle_rotor = get_angle_rotor
     # cf Methods.Output.Output.plot.Magnetic.plot_B_space
     plot_B_space = plot_B_space
+    # cf Methods.Output.Output.plot.Structural.plot_force_space
+    plot_force_space = plot_force_space
     # save method is available in all object
     save = save
 
     def __init__(
-        self, simu=-1, path_res="", geo=-1, elec=-1, mag=-1, post=-1, init_dict=None
+        self,
+        simu=-1,
+        path_res="",
+        geo=-1,
+        elec=-1,
+        mag=-1,
+        struct=-1,
+        post=-1,
+        init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -59,11 +73,13 @@ class Output(FrozenClass):
             elec = OutElec()
         if mag == -1:
             mag = OutMag()
+        if struct == -1:
+            struct = OutStruct()
         if post == -1:
             post = OutPost()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict, ["simu", "path_res", "geo", "elec", "mag", "post"]
+                init_dict, ["simu", "path_res", "geo", "elec", "mag", "struct", "post"]
             )
             # Overwrite default value with init_dict content
             if "simu" in list(init_dict.keys()):
@@ -76,6 +92,8 @@ class Output(FrozenClass):
                 elec = init_dict["elec"]
             if "mag" in list(init_dict.keys()):
                 mag = init_dict["mag"]
+            if "struct" in list(init_dict.keys()):
+                struct = init_dict["struct"]
             if "post" in list(init_dict.keys()):
                 post = init_dict["post"]
         # Initialisation by argument
@@ -109,6 +127,11 @@ class Output(FrozenClass):
             self.mag = OutMag(init_dict=mag)
         else:
             self.mag = mag
+        # struct can be None, a OutStruct object or a dict
+        if isinstance(struct, dict):
+            self.struct = OutStruct(init_dict=struct)
+        else:
+            self.struct = struct
         # post can be None, a OutPost object or a dict
         if isinstance(post, dict):
             self.post = OutPost(init_dict=post)
@@ -131,6 +154,7 @@ class Output(FrozenClass):
         Output_str += "geo = " + str(self.geo.as_dict()) + linesep + linesep
         Output_str += "elec = " + str(self.elec.as_dict()) + linesep + linesep
         Output_str += "mag = " + str(self.mag.as_dict()) + linesep + linesep
+        Output_str += "struct = " + str(self.struct.as_dict()) + linesep + linesep
         Output_str += "post = " + str(self.post.as_dict())
         return Output_str
 
@@ -148,6 +172,8 @@ class Output(FrozenClass):
         if other.elec != self.elec:
             return False
         if other.mag != self.mag:
+            return False
+        if other.struct != self.struct:
             return False
         if other.post != self.post:
             return False
@@ -175,6 +201,10 @@ class Output(FrozenClass):
             Output_dict["mag"] = None
         else:
             Output_dict["mag"] = self.mag.as_dict()
+        if self.struct is None:
+            Output_dict["struct"] = None
+        else:
+            Output_dict["struct"] = self.struct.as_dict()
         if self.post is None:
             Output_dict["post"] = None
         else:
@@ -195,6 +225,8 @@ class Output(FrozenClass):
             self.elec._set_None()
         if self.mag is not None:
             self.mag._set_None()
+        if self.struct is not None:
+            self.struct._set_None()
         if self.post is not None:
             self.post._set_None()
 
@@ -282,6 +314,24 @@ class Output(FrozenClass):
     # Magnetic module output
     # Type : OutMag
     mag = property(fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module output""")
+
+    def _get_struct(self):
+        """getter of struct"""
+        return self._struct
+
+    def _set_struct(self, value):
+        """setter of struct"""
+        check_var("struct", value, "OutStruct")
+        self._struct = value
+
+        if self._struct is not None:
+            self._struct.parent = self
+
+    # Structural module output
+    # Type : OutStruct
+    struct = property(
+        fget=_get_struct, fset=_set_struct, doc=u"""Structural module output"""
+    )
 
     def _get_post(self):
         """getter of post"""

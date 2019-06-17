@@ -11,6 +11,7 @@ from pyleecan.Methods.Simulation.Simu1.run import run
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Magnetics import Magnetics
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.Structural import Structural
 from pyleecan.Classes.Machine import Machine
 from pyleecan.Classes.MachineSync import MachineSync
 from pyleecan.Classes.MachineAsync import MachineAsync
@@ -34,7 +35,9 @@ class Simu1(Simulation):
     # save method is available in all object
     save = save
 
-    def __init__(self, mag=-1, name="", desc="", machine=-1, input=-1, init_dict=None):
+    def __init__(
+        self, mag=-1, struct=-1, name="", desc="", machine=-1, input=-1, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -46,15 +49,21 @@ class Simu1(Simulation):
 
         if mag == -1:
             mag = Magnetics()
+        if struct == -1:
+            struct = Structural()
         if machine == -1:
             machine = Machine()
         if input == -1:
             input = Input()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["mag", "name", "desc", "machine", "input"])
+            check_init_dict(
+                init_dict, ["mag", "struct", "name", "desc", "machine", "input"]
+            )
             # Overwrite default value with init_dict content
             if "mag" in list(init_dict.keys()):
                 mag = init_dict["mag"]
+            if "struct" in list(init_dict.keys()):
+                struct = init_dict["struct"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "desc" in list(init_dict.keys()):
@@ -77,6 +86,11 @@ class Simu1(Simulation):
                 raise InitUnKnowClassError("Unknow class name in init_dict for mag")
         else:
             self.mag = mag
+        # struct can be None, a Structural object or a dict
+        if isinstance(struct, dict):
+            self.struct = Structural(init_dict=struct)
+        else:
+            self.struct = struct
         # Call Simulation init
         super(Simu1, self).__init__(name=name, desc=desc, machine=machine, input=input)
         # The class is frozen (in Simulation init), for now it's impossible to
@@ -88,7 +102,8 @@ class Simu1(Simulation):
         Simu1_str = ""
         # Get the properties inherited from Simulation
         Simu1_str += super(Simu1, self).__str__() + linesep
-        Simu1_str += "mag = " + str(self.mag.as_dict())
+        Simu1_str += "mag = " + str(self.mag.as_dict()) + linesep + linesep
+        Simu1_str += "struct = " + str(self.struct.as_dict())
         return Simu1_str
 
     def __eq__(self, other):
@@ -102,6 +117,8 @@ class Simu1(Simulation):
             return False
         if other.mag != self.mag:
             return False
+        if other.struct != self.struct:
+            return False
         return True
 
     def as_dict(self):
@@ -114,6 +131,10 @@ class Simu1(Simulation):
             Simu1_dict["mag"] = None
         else:
             Simu1_dict["mag"] = self.mag.as_dict()
+        if self.struct is None:
+            Simu1_dict["struct"] = None
+        else:
+            Simu1_dict["struct"] = self.struct.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         Simu1_dict["__class__"] = "Simu1"
@@ -124,6 +145,8 @@ class Simu1(Simulation):
 
         if self.mag is not None:
             self.mag._set_None()
+        if self.struct is not None:
+            self.struct._set_None()
         # Set to None the properties inherited from Simulation
         super(Simu1, self)._set_None()
 
@@ -142,3 +165,19 @@ class Simu1(Simulation):
     # Magnetic module
     # Type : Magnetics
     mag = property(fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module""")
+
+    def _get_struct(self):
+        """getter of struct"""
+        return self._struct
+
+    def _set_struct(self, value):
+        """setter of struct"""
+        check_var("struct", value, "Structural")
+        self._struct = value
+
+        if self._struct is not None:
+            self._struct.parent = self
+
+    # Structural module
+    # Type : Structural
+    struct = property(fget=_get_struct, fset=_set_struct, doc=u"""Structural module""")

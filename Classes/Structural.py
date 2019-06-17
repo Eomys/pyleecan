@@ -1,0 +1,118 @@
+# -*- coding: utf-8 -*-
+"""Warning : this file has been generated, you shouldn't edit it"""
+
+from os import linesep
+from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Functions.save import save
+from pyleecan.Classes.frozen import FrozenClass
+
+from pyleecan.Methods.Simulation.Structural.run import run
+from pyleecan.Methods.Simulation.Structural.comp_time_angle import comp_time_angle
+
+from pyleecan.Classes.check import InitUnKnowClassError
+from pyleecan.Classes.Force import Force
+from pyleecan.Classes.ForceMT import ForceMT
+
+
+class Structural(FrozenClass):
+    """Structural module abstract object"""
+
+    VERSION = 1
+
+    # cf Methods.Simulation.Structural.run
+    run = run
+    # cf Methods.Simulation.Structural.comp_time_angle
+    comp_time_angle = comp_time_angle
+    # save method is available in all object
+    save = save
+
+    def __init__(self, force=-1, init_dict=None):
+        """Constructor of the class. Can be use in two ways :
+        - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
+            for Matrix, None will initialise the property with an empty Matrix
+            for pyleecan type, None will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+
+        ndarray or list can be given for Vector and Matrix
+        object or dict can be given for pyleecan Object"""
+
+        if force == -1:
+            force = Force()
+        if init_dict is not None:  # Initialisation by dict
+            check_init_dict(init_dict, ["force"])
+            # Overwrite default value with init_dict content
+            if "force" in list(init_dict.keys()):
+                force = init_dict["force"]
+        # Initialisation by argument
+        self.parent = None
+        # force can be None, a Force object or a dict
+        if isinstance(force, dict):
+            # Call the correct constructor according to the dict
+            load_dict = {"ForceMT": ForceMT, "Force": Force}
+            obj_class = force.get("__class__")
+            if obj_class is None:
+                self.force = Force(init_dict=force)
+            elif obj_class in list(load_dict.keys()):
+                self.force = load_dict[obj_class](init_dict=force)
+            else:  # Avoid generation error or wrong modification in json
+                raise InitUnKnowClassError("Unknow class name in init_dict for force")
+        else:
+            self.force = force
+
+        # The class is frozen, for now it's impossible to add new properties
+        self._freeze()
+
+    def __str__(self):
+        """Convert this objet in a readeable string (for print)"""
+
+        Structural_str = ""
+        if self.parent is None:
+            Structural_str += "parent = None " + linesep
+        else:
+            Structural_str += "parent = " + str(type(self.parent)) + " object" + linesep
+        Structural_str += "force = " + str(self.force.as_dict())
+        return Structural_str
+
+    def __eq__(self, other):
+        """Compare two objects (skip parent)"""
+
+        if type(other) != type(self):
+            return False
+        if other.force != self.force:
+            return False
+        return True
+
+    def as_dict(self):
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
+
+        Structural_dict = dict()
+        if self.force is None:
+            Structural_dict["force"] = None
+        else:
+            Structural_dict["force"] = self.force.as_dict()
+        # The class name is added to the dict fordeserialisation purpose
+        Structural_dict["__class__"] = "Structural"
+        return Structural_dict
+
+    def _set_None(self):
+        """Set all the properties to None (except pyleecan object)"""
+
+        if self.force is not None:
+            self.force._set_None()
+
+    def _get_force(self):
+        """getter of force"""
+        return self._force
+
+    def _set_force(self, value):
+        """setter of force"""
+        check_var("force", value, "Force")
+        self._force = value
+
+        if self._force is not None:
+            self._force.parent = self
+
+    # Force module
+    # Type : Force
+    force = property(fget=_get_force, fset=_set_force, doc=u"""Force module""")

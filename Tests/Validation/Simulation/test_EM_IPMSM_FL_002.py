@@ -12,6 +12,7 @@ from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
 from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Output import Output
 
 simu = Simu1(name="EM_IPMSM_FL_002", machine=IPMSM_A)
@@ -42,11 +43,13 @@ simu.mag = MagFEMM(
     is_antiper_a=True,
     Kgeo_fineness=0.75,
 )
+simu.struct.force = ForceMT()
 # Copy the simu and activate the symmetry
 simu_sym = Simu1(init_dict=simu.as_dict())
 simu_sym.mag.is_symmetry_a = True
 simu_sym.mag.sym_a = 4
 simu_sym.mag.is_antiper_a = True
+simu_sym.struct = None
 
 
 class test_EM_IPMSM_FL_002(TestCase):
@@ -78,3 +81,11 @@ class test_EM_IPMSM_FL_002(TestCase):
 
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_EM_IPMSM_FL_002_sym.png"))
+
+        # Plot the surface magnetic forces
+        plt.close("all")
+        out.plot_force_space(j_t0=0, is_deg=False, out_list=[])
+
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_EM_IPMSM_FL_002_force.png"))
+

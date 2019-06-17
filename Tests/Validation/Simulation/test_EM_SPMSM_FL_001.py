@@ -48,6 +48,7 @@ simu.input = InCurrent(
 simu.mag = MagFEMM(
     is_stator_linear_BH=2, is_rotor_linear_BH=2, is_symmetry_a=False, is_antiper_a=True
 )
+simu.struct = None
 # Copy the simu and activate the symmetry
 simu_sym = Simu1(init_dict=simu.as_dict())
 simu_sym.mag.is_symmetry_a = True
