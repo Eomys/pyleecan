@@ -24,11 +24,12 @@ In the long-term basis Pyleecan will include 5 physics and several model for eac
 ## Origin and status of the project
 EOMYS has started an open and non-commercial project named Pyleecan (Python Library for Electrical Engineering Computational Analysis). The starting code of Pyleecan is based on [MANATEE](https://eomys.com/produits/manatee/article/logiciel-manatee) (EOMYS commercial software) but Pyleecan is not an EOMYS only project: The initial maintainers includes other company and university. We are welcoming everyone that want to contribute.
 
-The project is still under construction and **can't be used yet**. All the architecture of the project is ready and we are progressively releasing the starting modules. If you are interested by a topology or a specific model, you can open an issue on this Github repository to talk about it. We will gladly explain how to add it yourself or we will add it to the development list for further release.
+The first model is complete and enables to compute the airgap flux density with FEMM on several machine type. The corresponding project are available in the [Validation folder](https://github.com/Eomys/pyleecan/tree/master/Tests/Validation) and can be used as example for your own simulation. More information on this coupling are available in the [first newsletter of pyleecan](https://mailchi.mp/51e852c72abd/pyleecan-news-website-and-first-simulations-coupling-with-femm?e=[UNIQID]). 
+
+If you are interested by a topology or a specific model, you can [open an issue](https://github.com/Eomys/pyleecan/issues) on this Github repository to talk about it. We will gladly explain how to add it yourself or we will add it to the development list for further release.
 
 ## Documentation / Website
 For now all the information on the project are available on [www.pyleecan.org](http://www.pyleecan.org). At this link, you will find the ICEM 2018 publication and the architecture documentation.
-Then the documentation will be generated using Sphinx.
 
 ## Contact
 You can contact us on Github by opening an issue (to request a feature, ask a question or report a bug) or at pyleecan@framalistes.org that redirect to all the maintainers.
