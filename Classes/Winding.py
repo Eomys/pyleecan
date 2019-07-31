@@ -292,12 +292,12 @@ class Winding(FrozenClass):
         check_var("type_connection", value, "int", Vmin=0, Vmax=1)
         self._type_connection = value
 
-    # Winding connexion : 0 star (Y), 1 triangle (delta)
+    # Winding connection : 0 star (Y), 1 triangle (delta)
     # Type : int, min = 0, max = 1
     type_connection = property(
         fget=_get_type_connection,
         fset=_set_type_connection,
-        doc=u"""Winding connexion : 0 star (Y), 1 triangle (delta)""",
+        doc=u"""Winding connection : 0 star (Y), 1 triangle (delta)""",
     )
 
     def _get_p(self):
