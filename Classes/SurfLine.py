@@ -14,6 +14,7 @@ from pyleecan.Methods.Geometry.SurfLine.comp_length import comp_length
 from pyleecan.Methods.Geometry.SurfLine.get_patch import get_patch
 from pyleecan.Methods.Geometry.SurfLine.discretize import discretize
 from pyleecan.Methods.Geometry.SurfLine.comp_surface import comp_surface
+from pyleecan.Methods.Geometry.SurfLine.plot_lines import plot_lines
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Line import Line
@@ -45,6 +46,8 @@ class SurfLine(Surface):
     discretize = discretize
     # cf Methods.Geometry.SurfLine.comp_surface
     comp_surface = comp_surface
+    # cf Methods.Geometry.SurfLine.plot_lines
+    plot_lines = plot_lines
     # save method is available in all object
     save = save
 

@@ -7,3 +7,4 @@ line_list;-;List of Lines ;;0;[Line];[];;;;;;Geometry;Surface;get_lines;VERSION;
 ;;;;;;;;;;;;;;get_patch;;;;
 ;;;;;;;;;;;;;;discretize;;;;
 ;;;;;;;;;;;;;;comp_surface;;;;
+;;;;;;;;;;;;;;plot_lines;;;;
