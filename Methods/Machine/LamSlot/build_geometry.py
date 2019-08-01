@@ -77,7 +77,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     if sym == 1:  # Complete lamination
         # Create Slot surface
         surf_slot = SurfLine(
-            line_list=line_list, label="Lamination_" + ll + "_bore_" + ls
+            line_list=line_list, label="Lamination_" + ll + "_Bore_" + ls
         )
         if self.is_internal:
             surf_slot.point_ref = Ryoke + (H_yoke / 2)
@@ -87,7 +87,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         if Ryoke > 0:
             surf_yoke = Circle(
                 radius=Ryoke,
-                label="Lamination_" + ll + "_yoke_" + ly,
+                label="Lamination_" + ll + "_Yoke_" + ly,
                 line_label=ll + "_Yoke_Radius",
                 center=0,
             )
@@ -107,20 +107,20 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             start_angle = angle(line_list[-1].get_end())
             line_list.extend(
                 self.get_bore_line(
-                    start_angle, start_angle + t_angle / 2, label="Bore_line"
+                    start_angle, start_angle + t_angle / 2, label="Bore_Line"
                 )
             )
             line_list.insert(
-                0, self.get_bore_line(0, t_angle / 2, label="Bore_line")[0]
+                0, self.get_bore_line(0, t_angle / 2, label="Bore_Line")[0]
             )
         # Add the Yoke part
         Zy1 = Ryoke
         Zy2 = Ryoke * exp(1j * 2 * pi / sym)
-        line_list.append(Segment(line_list[-1].get_end(), Zy2, label=ll + "_Yoke_side"))
+        line_list.append(Segment(line_list[-1].get_end(), Zy2, label=ll + "_Yoke_Side"))
         if Ryoke > 0:  # For internal lamination
             line_list.append(Arc1(Zy2, Zy1, -Ryoke, ll + "_Yoke_Radius"))
         line_list.append(
-            Segment(Zy1, line_list[0].get_begin(), label=ll + "_Yoke_side")
+            Segment(Zy1, line_list[0].get_begin(), label=ll + "_Yoke_Side")
         )
         # Create a Surface for the slot
         if self.is_internal:
@@ -129,7 +129,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             point_ref = (Ryoke - H_yoke / 2) * exp(1j * pi / sym)
         surf_slot = SurfLine(
             line_list=line_list,
-            label="Lamination_" + ll + "_bore_" + ls,
+            label="Lamination_" + ll + "_Bore_" + ls,
             point_ref=point_ref,
         )
         surf_list.append(surf_slot)

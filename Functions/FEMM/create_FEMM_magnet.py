@@ -8,6 +8,7 @@
 import femm
 from re import findall
 
+
 def create_FEMM_magnet(label, is_mmf, is_eddies, materials, lam):
     """Set the material of the magnet in FEMM
 
@@ -39,7 +40,7 @@ def create_FEMM_magnet(label, is_mmf, is_eddies, materials, lam):
         elif "T2" in label:
             magnet = lam.hole[0].magnet_2
     else:
-        idx_str = findall(r"_T\d+_",label)[0][2:-1]
+        idx_str = findall(r"_T\d+_", label)[0][2:-1]
         magnet = lam.slot.magnet[int(idx_str)]
         # pole_mag = "_" + label[12] + "_" + label[-4]
 

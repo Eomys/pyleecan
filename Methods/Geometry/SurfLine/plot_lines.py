@@ -35,12 +35,12 @@ def plot_lines(self, fig=None):
 
     for idx in range(len(points) - 1):
         z1 = points[idx]
-        z2 = points[idx+1]
+        z2 = points[idx + 1]
         x1 = real(z1)
         y1 = imag(z1)
         x2 = real(z2)
         y2 = imag(z2)
-        axes.plot([x1, x2], [y1, y2],'k')
+        axes.plot([x1, x2], [y1, y2], "k")
 
     # Axis Setup
     axis("equal")
