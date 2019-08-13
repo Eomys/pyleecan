@@ -74,7 +74,7 @@ def create_FEMM_materials(
     # Starting creation of properties for each surface of the machine
     for surf in surf_list:
         label = surf.label
-        if "Lamination_Stator_bore" in label:  # Stator
+        if "Lamination_Stator_Bore" in label:  # Stator
             if is_stator_linear_BH == 2:
                 mu_is = 100000  # Infinite permeability
             else:
@@ -87,7 +87,7 @@ def create_FEMM_materials(
                 )
                 materials.append("Stator Iron")
             prop_dict[label] = "Stator Iron"
-        elif "Lamination_Rotor_bore" in label:  # Rotor
+        elif "Lamination_Rotor_Bore" in label:  # Rotor
             # Initialisation from the rotor of the machine
             if is_rotor_linear_BH == 2:
                 mu_ir = 100000  # Infinite permeability
@@ -145,7 +145,7 @@ def create_FEMM_materials(
             prop_dict[label] = prop
         elif "No_mesh" in label:  # Sliding band
             prop_dict[label] = "<No Mesh>"
-        elif "yoke" in label:
+        elif "Yoke" in label:
             prop_dict[label] = "<No Mesh>"
 
     # Set Rotor and Stator BH curves (if needed)

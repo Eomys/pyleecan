@@ -36,16 +36,16 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
 
     # Lamination label
     if self.is_stator:
-        label = "Lamination_Stator"
+        label = "Stator"
     else:
-        label = "Lamination_Rotor"
+        label = "Rotor"
 
     if self.is_internal:
-        ls = "_bore_"  # label for the bore
-        ly = "_yoke_"  # label for the yoke
+        ls = "_Bore_"  # label for the bore
+        ly = "_Yoke_"  # label for the yoke
     else:
-        ls = "_yoke_"
-        ly = "_bore_"
+        ls = "_Yoke_"
+        ly = "_Bore_"
 
     ref_point = self.comp_radius_mid_yoke() * exp(1j * pi / sym)
 
@@ -55,15 +55,20 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         surf_list.append(
             Circle(
                 radius=self.Rext,
-                label=label + ls + "Ext",
+                label="Lamination_" + label + ls + "Ext",
                 point_ref=ref_point,
                 center=0,
+                line_label=label + ls + "Radius",
             )
         )
         if self.Rint > 0:
             surf_list.append(
                 Circle(
-                    radius=self.Rint, label=label + ly + "Int", point_ref=0, center=0
+                    radius=self.Rint,
+                    label="Lamination_" + label + ly + "Int",
+                    point_ref=0,
+                    center=0,
+                    line_label=label + ly + "Radius",
                 )
             )
     else:  # Symmetry lamination
@@ -72,14 +77,20 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         Z_begin = self.Rint
         Z_end = self.Rint * exp(1j * 2 * pi / sym)
         line_list = [
-            Segment(Z_begin, begin),
-            Arc1(begin, end, self.Rext),
-            Segment(end, Z_end),
+            Segment(Z_begin, begin, label=label + "_Yoke_Side"),
+            Arc1(begin, end, self.Rext, label=label + ls + "Radius"),
+            Segment(end, Z_end, label=label + "_Yoke_Side"),
         ]
         if self.Rint > 0:
-            line_list.append(Arc1(Z_end, Z_begin, -self.Rint))
+            line_list.append(
+                Arc1(Z_end, Z_begin, -self.Rint, label=label + ly + "Radius")
+            )
         surf_list.append(
-            SurfLine(line_list=line_list, label=label + ls + "Ext", point_ref=ref_point)
+            SurfLine(
+                line_list=line_list,
+                label="Lamination_" + label + ls + "Ext",
+                point_ref=ref_point,
+            )
         )
 
     # Holes surface(s)

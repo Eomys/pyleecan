@@ -8,6 +8,7 @@ from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Methods.Machine.Winding.comp_Ncspc import comp_Ncspc
 from pyleecan.Methods.Machine.Winding.comp_Ntspc import comp_Ntspc
+from pyleecan.Methods.Machine.Winding.comp_phasor_angle import comp_phasor_angle
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Conductor import Conductor
@@ -26,6 +27,8 @@ class Winding(FrozenClass):
     comp_Ncspc = comp_Ncspc
     # cf Methods.Machine.Winding.comp_Ntspc
     comp_Ntspc = comp_Ntspc
+    # cf Methods.Machine.Winding.comp_phasor_angle
+    comp_phasor_angle = comp_phasor_angle
     # save method is available in all object
     save = save
 
@@ -289,12 +292,12 @@ class Winding(FrozenClass):
         check_var("type_connection", value, "int", Vmin=0, Vmax=1)
         self._type_connection = value
 
-    # Winding connexion : 0 star (Y), 1 triangle (delta)
+    # Winding connection : 0 star (Y), 1 triangle (delta)
     # Type : int, min = 0, max = 1
     type_connection = property(
         fget=_get_type_connection,
         fset=_set_type_connection,
-        doc=u"""Winding connexion : 0 star (Y), 1 triangle (delta)""",
+        doc=u"""Winding connection : 0 star (Y), 1 triangle (delta)""",
     )
 
     def _get_p(self):

@@ -7,6 +7,7 @@ from pyleecan.Functions.save import save
 from pyleecan.Classes.Machine import Machine
 
 from pyleecan.Methods.Machine.MachineSync.is_synchronous import is_synchronous
+from pyleecan.Methods.Machine.MachineSync.comp_initial_angle import comp_initial_angle
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Lamination import Lamination
@@ -26,6 +27,8 @@ class MachineSync(Machine):
 
     # cf Methods.Machine.MachineSync.is_synchronous
     is_synchronous = is_synchronous
+    # cf Methods.Machine.MachineSync.comp_initial_angle
+    comp_initial_angle = comp_initial_angle
     # save method is available in all object
     save = save
 

@@ -7,6 +7,9 @@ from pyleecan.Functions.save import save
 from pyleecan.Classes.Lamination import Lamination
 
 from pyleecan.Methods.Machine.LamSlot.build_geometry import build_geometry
+from pyleecan.Methods.Machine.LamSlot.build_geometry_half_tooth import (
+    build_geometry_half_tooth,
+)
 from pyleecan.Methods.Machine.LamSlot.check import check
 from pyleecan.Methods.Machine.LamSlot.comp_height_yoke import comp_height_yoke
 from pyleecan.Methods.Machine.LamSlot.comp_radius_mec import comp_radius_mec
@@ -56,6 +59,8 @@ class LamSlot(Lamination):
 
     # cf Methods.Machine.LamSlot.build_geometry
     build_geometry = build_geometry
+    # cf Methods.Machine.LamSlot.build_geometry_half_tooth
+    build_geometry_half_tooth = build_geometry_half_tooth
     # cf Methods.Machine.LamSlot.check
     check = check
     # cf Methods.Machine.LamSlot.comp_height_yoke

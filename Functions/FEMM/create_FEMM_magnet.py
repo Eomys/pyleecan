@@ -6,6 +6,7 @@
 @TODO: decision about the magnet renaming, removed at the moment
 """
 import femm
+from re import findall
 
 
 def create_FEMM_magnet(label, is_mmf, is_eddies, materials, lam):
@@ -39,7 +40,8 @@ def create_FEMM_magnet(label, is_mmf, is_eddies, materials, lam):
         elif "T2" in label:
             magnet = lam.hole[0].magnet_2
     else:
-        magnet = lam.slot.magnet[int(label[-4])]
+        idx_str = findall(r"_T\d+_", label)[0][2:-1]
+        magnet = lam.slot.magnet[int(idx_str)]
         # pole_mag = "_" + label[12] + "_" + label[-4]
 
     rho = magnet.mat_type.elec.rho  # Resistivity at 20°C

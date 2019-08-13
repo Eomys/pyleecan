@@ -83,51 +83,47 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
         machine.stator.comp_length() + machine.rotor.comp_length()
     ) / 2
 
-    # If Hstot = 0 there is no slot and this parameter won't be used
+    # stator slot region mesh and segments max element size parameter
+    # If Hstot = 0 there is no slot and the region parameter won't be used
     FEMM_dict["meshsize_slotS"] = Hstot / 8 / Kmesh_fineness
-    # max element size in m for stator slot segments
     FEMM_dict["elementsize_slotS"] = Hstot / 8 / Kmesh_fineness
 
-    # parameter for rotor slot region
-    FEMM_dict["meshsize_slotR"] = Hrtot / 8 / Kmesh_fineness
-    # max element size in m for rotor slot segments
-    FEMM_dict["elementsize_slotR"] = Hrtot / 8 / Kmesh_fineness
-
-    # mesh parameter for rotor yoke region
-    FEMM_dict["meshsize_yokeR"] = Hry / 4 / Kmesh_fineness
-    # max element size in m for rotor yoke segments
-    FEMM_dict["elementsize_yokeR"] = Hry / 4 / Kmesh_fineness
-
-    # mesh parameter for stator yoke region
+    # stator yoke region mesh and segments max element size parameter
     FEMM_dict["meshsize_yokeS"] = Hsy / 4 / Kmesh_fineness
-    # max element size in m for stator yoke segments
     FEMM_dict["elementsize_yokeS"] = Hsy / 4 / Kmesh_fineness
 
-    # mesh parameter for airgap region
+    # rotor slot region mesh and segments max element size parameter
+    if type(machine.rotor) == LamSlotMag or type(machine.rotor) == LamHole:
+        FEMM_dict["meshsize_slotR"] = Hry / 4 / Kmesh_fineness
+        FEMM_dict["elementsize_slotR"] = Hry / 4 / Kmesh_fineness
+    else:
+        FEMM_dict["meshsize_slotR"] = Hrtot / 8 / Kmesh_fineness
+        FEMM_dict["elementsize_slotR"] = Hrtot / 8 / Kmesh_fineness
+
+    # rotor yoke region mesh and segments max element size parameter
+    FEMM_dict["meshsize_yokeR"] = Hry / 4 / Kmesh_fineness
+    FEMM_dict["elementsize_yokeR"] = Hry / 4 / Kmesh_fineness
+
+    # airgap region mesh and segments max element size parameter
     FEMM_dict["meshsize_airgap"] = Wgap_mec / 3 / Kmesh_fineness
-    # max element size in m for airgap segments
     FEMM_dict["elementsize_airgap"] = Wgap_mec / 3 / Kmesh_fineness
 
+    # stator magnet region mesh and segments max element size parameter
     if type(machine.stator) == LamSlotMag:
         Hmag = machine.stator.slot.magnet[0].Hmag
-        # mesh parameter for magnet region
         FEMM_dict["meshsize_magnetS"] = Hmag / 4 / Kmesh_fineness
-        # max element size in m for magnet segments
         FEMM_dict["elementsize_magnetS"] = Hmag / 4 / Kmesh_fineness
     else:
         FEMM_dict["meshsize_magnetS"] = None
 
+    # rotor magnet region mesh and segments max element size parameter
     if type(machine.rotor) == LamSlotMag:
         Hmag = machine.rotor.slot.magnet[0].Hmag
-        # mesh parameter for magnet region
         FEMM_dict["meshsize_magnetR"] = Hmag / 4 / Kmesh_fineness
-        # max element size in m for magnet segments
         FEMM_dict["elementsize_magnetR"] = Hmag / 4 / Kmesh_fineness
     elif type(machine.rotor) == LamHole:
         Hmag = machine.rotor.hole[0].get_height_magnet()
-        # mesh parameter for magnet region
         FEMM_dict["meshsize_magnetR"] = Hmag / 4 / Kmesh_fineness
-        # max element size in m for magnet segments
         FEMM_dict["elementsize_magnetR"] = Hmag / 4 / Kmesh_fineness
     else:
         FEMM_dict["meshsize_magnetR"] = None
@@ -136,11 +132,10 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
     FEMM_dict["meshsize_air"] = Hry / 4 / Kmesh_fineness
     FEMM_dict["meshsize_wedge"] = Hstot / 20 / Kmesh_fineness
 
+    # mesh parameter for stator and rotor slot region
     if type_calc_leakage == 1:
         FEMM_dict["is_close_model"] = 1
-        # mesh parameter for stator slot region
         FEMM_dict["meshsize_slotS"] = Hstot / 50
-        # % mesh parameter for stator slot region
         FEMM_dict["meshsize_slotR"] = Hrtot / 50
 
     # Set groups

@@ -8,6 +8,7 @@ from pyleecan.Classes.Arc import Arc
 
 from pyleecan.Methods.Geometry.Arc1.check import check
 from pyleecan.Methods.Geometry.Arc1.comp_length import comp_length
+from pyleecan.Methods.Geometry.Arc1.comp_radius import comp_radius
 from pyleecan.Methods.Geometry.Arc1.discretize import discretize
 from pyleecan.Methods.Geometry.Arc1.get_begin import get_begin
 from pyleecan.Methods.Geometry.Arc1.get_center import get_center
@@ -29,6 +30,8 @@ class Arc1(Arc):
     check = check
     # cf Methods.Geometry.Arc1.comp_length
     comp_length = comp_length
+    # cf Methods.Geometry.Arc1.comp_radius
+    comp_radius = comp_radius
     # cf Methods.Geometry.Arc1.discretize
     discretize = discretize
     # cf Methods.Geometry.Arc1.get_begin

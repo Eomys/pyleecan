@@ -1,10 +1,10 @@
 Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
 is_reverse_wind;-;1 to reverse the default winding algorithm along the airgap (c,b,a instead of a,b,c along the trigonometric direction);;0;bool;0;;;;1;;Machine;;comp_Ncspc;VERSION;1;Winding abstract class;WindingCW1L
 Nslot_shift_wind;-;0 not to change the stator winding connection matrix built by MANATEE number of slots to shift the coils obtained with MANATEE winding algorithm (a,b,c becomes b,c,a with Nslot_shift_wind1=1);;0;int;0;;;;2;;;;comp_Ntspc;;;;WindingCW2LR
-qs;-;number of phases ;;0;int;3;1;100;;1;;;;;;;;WindingCW2LT
+qs;-;number of phases ;;0;int;3;1;100;;1;;;;comp_phasor_angle;;;;WindingCW2LT
 Ntcoil;-;number of turns per coil;;0;int;7;1;1000;;2;;;;;;;;WindingDW1L
 Npcpp;-;number of parallel circuits per phase (maximum 2p);;0;int;2;1;1000;;2;;;;;;;;WindingDW2L
-type_connection;-;Winding connexion : 0 star (Y), 1 triangle (delta);;0;int;0;0;1;;1;;;;;;;;WindingSC
+type_connection;-;Winding connection : 0 star (Y), 1 triangle (delta);;0;int;0;0;1;;1;;;;;;;;WindingSC
 p;-;pole pairs number;;0;int;3;1;100;;1;;;;;;;;WindingUD
 Lewout;m;straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length ;;0;float;1,50E-02;0;100;;2;;;;;;;;
 conductor;-;Winding's conductor;;;Conductor;;;;;;;;;;;;;
