@@ -9,6 +9,8 @@ from pyleecan.Classes.frozen import FrozenClass
 from pyleecan.Methods.Machine.Winding.comp_Ncspc import comp_Ncspc
 from pyleecan.Methods.Machine.Winding.comp_Ntspc import comp_Ntspc
 from pyleecan.Methods.Machine.Winding.comp_phasor_angle import comp_phasor_angle
+from pyleecan.Methods.Machine.Winding.comp_winding_factor import comp_winding_factor
+from pyleecan.Methods.Machine.Winding.comp_norm_resistance import comp_norm_resistance
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Conductor import Conductor
@@ -29,6 +31,10 @@ class Winding(FrozenClass):
     comp_Ntspc = comp_Ntspc
     # cf Methods.Machine.Winding.comp_phasor_angle
     comp_phasor_angle = comp_phasor_angle
+    # cf Methods.Machine.Winding.comp_winding_factor
+    comp_winding_factor = comp_winding_factor
+    # cf Methods.Machine.Winding.comp_norm_resistance
+    comp_norm_resistance = comp_norm_resistance
     # save method is available in all object
     save = save
 
