@@ -17,6 +17,7 @@ from pyleecan.Methods.Geometry.Arc1.get_middle import get_middle
 from pyleecan.Methods.Geometry.Arc1.rotate import rotate
 from pyleecan.Methods.Geometry.Arc1.translate import translate
 from pyleecan.Methods.Geometry.Arc1.get_angle import get_angle
+from pyleecan.Methods.Geometry.Arc1.reverse import reverse
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -48,6 +49,8 @@ class Arc1(Arc):
     translate = translate
     # cf Methods.Geometry.Arc1.get_angle
     get_angle = get_angle
+    # cf Methods.Geometry.Arc1.reverse
+    reverse = reverse
     # save method is available in all object
     save = save
 

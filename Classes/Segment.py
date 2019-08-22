@@ -15,6 +15,7 @@ from pyleecan.Methods.Geometry.Segment.get_middle import get_middle
 from pyleecan.Methods.Geometry.Segment.rotate import rotate
 from pyleecan.Methods.Geometry.Segment.translate import translate
 from pyleecan.Methods.Geometry.Segment.draw_FEMM import draw_FEMM
+from pyleecan.Methods.Geometry.Segment.reverse import reverse
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -42,6 +43,8 @@ class Segment(Line):
     translate = translate
     # cf Methods.Geometry.Segment.draw_FEMM
     draw_FEMM = draw_FEMM
+    # cf Methods.Geometry.Segment.reverse
+    reverse = reverse
     # save method is available in all object
     save = save
 

@@ -10,3 +10,4 @@ is_trigo_direction;-;Rotation direction of the ard;;0;bool;0;;;;;;;;comp_radius;
 ;;;;;;;;;;;;;;rotate;;;;
 ;;;;;;;;;;;;;;translate;;;;
 ;;;;;;;;;;;;;;get_angle;;;;
+;;;;;;;;;;;;;;reverse;;;;

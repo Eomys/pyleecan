@@ -10,3 +10,4 @@ radius;;Radius of the arc (can be + or -);;m;float;0;;;;;;;;comp_radius;;;;
 ;;;;;;;;;;;;;;rotate;;;;
 ;;;;;;;;;;;;;;translate;;;;
 ;;;;;;;;;;;;;;get_angle;;;;
+;;;;;;;;;;;;;;reverse;;;;
