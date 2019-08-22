@@ -1,8 +1,7 @@
 Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
 slot;;lamination Slot;;;Slot;;;;;;;Machine;Lamination;build_geometry;VERSION;1;Lamination with empty Slot;LamSlotMag
-;;;;;;;;;;;;;;build_geometry_half_tooth;;;;LamSlotWind
-;;;;;;;;;;;;;;check;;;;LamSquirrelCage
-;;;;;;;;;;;;;;comp_height_yoke;;;;
+;;;;;;;;;;;;;;check;;;;LamSlotWind
+;;;;;;;;;;;;;;comp_height_yoke;;;;LamSquirrelCage
 ;;;;;;;;;;;;;;comp_radius_mec;;;;
 ;;;;;;;;;;;;;;comp_surfaces;;;;
 ;;;;;;;;;;;;;;get_pole_pair_number;;;;

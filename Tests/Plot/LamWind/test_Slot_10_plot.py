@@ -24,6 +24,7 @@ from pyleecan.Classes.WindingUD import WindingUD
 from pyleecan.Classes.WindingCW2LT import WindingCW2LT
 from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.SlotW10 import SlotW10
+from pyleecan.Classes.SurfLine import SurfLine
 
 from pyleecan.Tests import save_plot_path as save_path
 from pyleecan.Tests.Plot.LamWind import wind_mat
@@ -106,3 +107,27 @@ class test_Lam_Wind_10_plot(TestCase):
         fig.savefig(join(save_path, "test_Lam_Wind_s10_3-Stator.png"))
         # 2 for lam + Zs*4 for wind
         self.assertEqual(len(fig.axes[0].patches), 26)
+
+        lines = test_obj.stator.slot.build_geometry_half_tooth(is_top=False)
+        surf = SurfLine(line_list=lines)
+        surf.plot_lines()
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Wind_s10_Tooth_bottom_out.png"))
+
+        lines = test_obj.stator.slot.build_geometry_half_tooth(is_top=True)
+        surf = SurfLine(line_list=lines)
+        surf.plot_lines()
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Wind_s10_Tooth_top_out.png"))
+
+        lines = test_obj.rotor.slot.build_geometry_half_tooth(is_top=False)
+        surf = SurfLine(line_list=lines)
+        surf.plot_lines()
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Wind_s10_Tooth_bottom_in.png"))
+
+        lines = test_obj.rotor.slot.build_geometry_half_tooth(is_top=True)
+        surf = SurfLine(line_list=lines)
+        surf.plot_lines()
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Wind_s10_Tooth_top_in.png"))
