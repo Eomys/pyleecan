@@ -1,4 +1,4 @@
-"""@package Output\Magnetic\comp_norm_resistance
+"""@package Output\Magnetic\comp_resistance_norm
 Compute the Winding Resistance normalized to 1 m per Coil Side
 @date Created on 16-08-2019 21:41
 @author sebastian_g
@@ -7,8 +7,10 @@ Compute the Winding Resistance normalized to 1 m per Coil Side
 # from pyleecan.Methods.Machine.Winding import WindingError
 
 
-def comp_norm_resistance(self, T=20):
-    """Compute the winding resistance normalized to 1 m per coil side
+def comp_resistance_norm(self, T=20):
+    """Compute the winding resistance per meter,
+    i.e. winding resistance divided by coil side lenght (including end winding).
+    The actual winding resistance is comp_resistance_norm * (lenght_active + length_end_winding)
 
     Parameters
     ----------
@@ -20,7 +22,7 @@ def comp_norm_resistance(self, T=20):
 
     Returns
     -------
-    winding_resistance: float
+    winding_resistance_norm: float
         normalized winding resistance
 
     """
@@ -31,6 +33,6 @@ def comp_norm_resistance(self, T=20):
     Ntspc = self.comp_Ntspc()  # Number of Turns in Series per Phase
 
     kT = 1 + alpha * (T - 20)
-    winding_resistance = 2 * Ntspc * cond_rho * kT / (cond_surf * Npcpp)
+    winding_resistance_norm = 2 * Ntspc * cond_rho * kT / (cond_surf * Npcpp)
 
-    return winding_resistance
+    return winding_resistance_norm
