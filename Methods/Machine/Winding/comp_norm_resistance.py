@@ -9,8 +9,8 @@ Compute the Winding Resistance normalized to 1 m per Coil Side
 
 def comp_resistance_norm(self, T=20):
     """Compute the winding resistance per meter,
-    i.e. winding resistance divided by coil side lenght (including end winding).
-    The actual winding resistance is comp_resistance_norm * (lenght_active + length_end_winding)
+    i.e. winding resistance divided by coil side length (including end winding).
+    The actual winding resistance is comp_resistance_norm * (length_active + length_end_winding)
 
     Parameters
     ----------
