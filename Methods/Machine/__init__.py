@@ -15,7 +15,7 @@ SCR_COLOR = (1, 0, 0, 0.25)  # Short circuit ring
 VENT_COLOR = "w"
 VENT_EDGE = "k"
 PATCH_COLOR = "w"
-PATCH_EDGE = "K"
+PATCH_EDGE = "k"
 PATCH_COLOR_ALPHA = (0, 0, 0, 0)
 PATCH_EDGE_ALPHA = (1, 0, 0, 1)
 # Winding Phase
