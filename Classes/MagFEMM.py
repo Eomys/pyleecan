@@ -9,6 +9,7 @@ from pyleecan.Classes.Magnetics import Magnetics
 from pyleecan.Methods.Simulation.MagFEMM.comp_flux_airgap import comp_flux_airgap
 from pyleecan.Methods.Simulation.MagFEMM.get_path_save import get_path_save
 from pyleecan.Methods.Simulation.MagFEMM.solve_FEMM import solve_FEMM
+from pyleecan.Methods.Simulation.MagFEMM.get_FEMM_mesh import get_FEMM_mesh
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -24,32 +25,12 @@ class MagFEMM(Magnetics):
     get_path_save = get_path_save
     # cf Methods.Simulation.MagFEMM.solve_FEMM
     solve_FEMM = solve_FEMM
+    # cf Methods.Simulation.MagFEMM.get_FEMM_mesh
+    get_FEMM_mesh = get_FEMM_mesh
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        Kmesh_fineness=1,
-        Kgeo_fineness=1,
-        type_calc_leakage=0,
-        file_name="",
-        FEMM_dict={},
-        angle_stator=0,
-        is_remove_slotS=False,
-        is_remove_slotR=False,
-        is_remove_vent=False,
-        is_mmfs=True,
-        is_mmfr=True,
-        is_stator_linear_BH=0,
-        is_rotor_linear_BH=0,
-        is_symmetry_t=False,
-        sym_t=1,
-        is_antiper_t=False,
-        is_symmetry_a=False,
-        sym_a=1,
-        is_antiper_a=False,
-        init_dict=None,
-    ):
+    def __init__(self, Kmesh_fineness=1, Kgeo_fineness=1, type_calc_leakage=0, file_name="", FEMM_dict={}, angle_stator=0, is_save_mesh=False, is_save_FEA=False, is_remove_slotS=False, is_remove_slotR=False, is_remove_vent=False, is_mmfs=True, is_mmfr=True, is_stator_linear_BH=0, is_rotor_linear_BH=0, is_symmetry_t=False, sym_t=1, is_antiper_t=False, is_symmetry_a=False, sym_a=1, is_antiper_a=False, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -60,30 +41,7 @@ class MagFEMM(Magnetics):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "Kmesh_fineness",
-                    "Kgeo_fineness",
-                    "type_calc_leakage",
-                    "file_name",
-                    "FEMM_dict",
-                    "angle_stator",
-                    "is_remove_slotS",
-                    "is_remove_slotR",
-                    "is_remove_vent",
-                    "is_mmfs",
-                    "is_mmfr",
-                    "is_stator_linear_BH",
-                    "is_rotor_linear_BH",
-                    "is_symmetry_t",
-                    "sym_t",
-                    "is_antiper_t",
-                    "is_symmetry_a",
-                    "sym_a",
-                    "is_antiper_a",
-                ],
-            )
+            check_init_dict(init_dict, ["Kmesh_fineness", "Kgeo_fineness", "type_calc_leakage", "file_name", "FEMM_dict", "angle_stator", "is_save_mesh", "is_save_FEA", "is_remove_slotS", "is_remove_slotR", "is_remove_vent", "is_mmfs", "is_mmfr", "is_stator_linear_BH", "is_rotor_linear_BH", "is_symmetry_t", "sym_t", "is_antiper_t", "is_symmetry_a", "sym_a", "is_antiper_a"])
             # Overwrite default value with init_dict content
             if "Kmesh_fineness" in list(init_dict.keys()):
                 Kmesh_fineness = init_dict["Kmesh_fineness"]
@@ -97,6 +55,10 @@ class MagFEMM(Magnetics):
                 FEMM_dict = init_dict["FEMM_dict"]
             if "angle_stator" in list(init_dict.keys()):
                 angle_stator = init_dict["angle_stator"]
+            if "is_save_mesh" in list(init_dict.keys()):
+                is_save_mesh = init_dict["is_save_mesh"]
+            if "is_save_FEA" in list(init_dict.keys()):
+                is_save_FEA = init_dict["is_save_FEA"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -130,22 +92,10 @@ class MagFEMM(Magnetics):
         self.file_name = file_name
         self.FEMM_dict = FEMM_dict
         self.angle_stator = angle_stator
+        self.is_save_mesh = is_save_mesh
+        self.is_save_FEA = is_save_FEA
         # Call Magnetics init
-        super(MagFEMM, self).__init__(
-            is_remove_slotS=is_remove_slotS,
-            is_remove_slotR=is_remove_slotR,
-            is_remove_vent=is_remove_vent,
-            is_mmfs=is_mmfs,
-            is_mmfr=is_mmfr,
-            is_stator_linear_BH=is_stator_linear_BH,
-            is_rotor_linear_BH=is_rotor_linear_BH,
-            is_symmetry_t=is_symmetry_t,
-            sym_t=sym_t,
-            is_antiper_t=is_antiper_t,
-            is_symmetry_a=is_symmetry_a,
-            sym_a=sym_a,
-            is_antiper_a=is_antiper_a,
-        )
+        super(MagFEMM, self).__init__(is_remove_slotS=is_remove_slotS, is_remove_slotR=is_remove_slotR, is_remove_vent=is_remove_vent, is_mmfs=is_mmfs, is_mmfr=is_mmfr, is_stator_linear_BH=is_stator_linear_BH, is_rotor_linear_BH=is_rotor_linear_BH, is_symmetry_t=is_symmetry_t, sym_t=sym_t, is_antiper_t=is_antiper_t, is_symmetry_a=is_symmetry_a, sym_a=sym_a, is_antiper_a=is_antiper_a)
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
 
@@ -160,7 +110,9 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "type_calc_leakage = " + str(self.type_calc_leakage) + linesep
         MagFEMM_str += 'file_name = "' + str(self.file_name) + '"' + linesep
         MagFEMM_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
-        MagFEMM_str += "angle_stator = " + str(self.angle_stator)
+        MagFEMM_str += "angle_stator = " + str(self.angle_stator) + linesep
+        MagFEMM_str += "is_save_mesh = " + str(self.is_save_mesh) + linesep
+        MagFEMM_str += "is_save_FEA = " + str(self.is_save_FEA)
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -184,6 +136,10 @@ class MagFEMM(Magnetics):
             return False
         if other.angle_stator != self.angle_stator:
             return False
+        if other.is_save_mesh != self.is_save_mesh:
+            return False
+        if other.is_save_FEA != self.is_save_FEA:
+            return False
         return True
 
     def as_dict(self):
@@ -198,6 +154,8 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["file_name"] = self.file_name
         MagFEMM_dict["FEMM_dict"] = self.FEMM_dict
         MagFEMM_dict["angle_stator"] = self.angle_stator
+        MagFEMM_dict["is_save_mesh"] = self.is_save_mesh
+        MagFEMM_dict["is_save_FEA"] = self.is_save_FEA
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -212,6 +170,8 @@ class MagFEMM(Magnetics):
         self.file_name = None
         self.FEMM_dict = None
         self.angle_stator = None
+        self.is_save_mesh = None
+        self.is_save_FEA = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -226,11 +186,8 @@ class MagFEMM(Magnetics):
 
     # global coefficient to adjust mesh fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)
     # Type : float
-    Kmesh_fineness = property(
-        fget=_get_Kmesh_fineness,
-        fset=_set_Kmesh_fineness,
-        doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)""",
-    )
+    Kmesh_fineness = property(fget=_get_Kmesh_fineness, fset=_set_Kmesh_fineness,
+                              doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)""")
 
     def _get_Kgeo_fineness(self):
         """getter of Kgeo_fineness"""
@@ -243,11 +200,8 @@ class MagFEMM(Magnetics):
 
     # global coefficient to adjust geometry fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)
     # Type : float
-    Kgeo_fineness = property(
-        fget=_get_Kgeo_fineness,
-        fset=_set_Kgeo_fineness,
-        doc=u"""global coefficient to adjust geometry fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)""",
-    )
+    Kgeo_fineness = property(fget=_get_Kgeo_fineness, fset=_set_Kgeo_fineness,
+                             doc=u"""global coefficient to adjust geometry fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)""")
 
     def _get_type_calc_leakage(self):
         """getter of type_calc_leakage"""
@@ -260,11 +214,8 @@ class MagFEMM(Magnetics):
 
     # 0 no leakage calculation, 1 calculation using single slot
     # Type : int, min = 0, max = 1
-    type_calc_leakage = property(
-        fget=_get_type_calc_leakage,
-        fset=_set_type_calc_leakage,
-        doc=u"""0 no leakage calculation, 1 calculation using single slot""",
-    )
+    type_calc_leakage = property(fget=_get_type_calc_leakage, fset=_set_type_calc_leakage,
+                                 doc=u"""0 no leakage calculation, 1 calculation using single slot""")
 
     def _get_file_name(self):
         """getter of file_name"""
@@ -277,11 +228,8 @@ class MagFEMM(Magnetics):
 
     # Name of the file to save the FEMM model
     # Type : str
-    file_name = property(
-        fget=_get_file_name,
-        fset=_set_file_name,
-        doc=u"""Name of the file to save the FEMM model""",
-    )
+    file_name = property(fget=_get_file_name, fset=_set_file_name,
+                         doc=u"""Name of the file to save the FEMM model""")
 
     def _get_FEMM_dict(self):
         """getter of FEMM_dict"""
@@ -292,13 +240,10 @@ class MagFEMM(Magnetics):
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 
-    # To enforce user-defined values for FEMM main parameters
+    # To enforce user-defined values for FEMM main parameters 
     # Type : dict
-    FEMM_dict = property(
-        fget=_get_FEMM_dict,
-        fset=_set_FEMM_dict,
-        doc=u"""To enforce user-defined values for FEMM main parameters """,
-    )
+    FEMM_dict = property(fget=_get_FEMM_dict, fset=_set_FEMM_dict,
+                         doc=u"""To enforce user-defined values for FEMM main parameters """)
 
     def _get_angle_stator(self):
         """getter of angle_stator"""
@@ -311,8 +256,33 @@ class MagFEMM(Magnetics):
 
     # Angular position shift of the stator
     # Type : float
-    angle_stator = property(
-        fget=_get_angle_stator,
-        fset=_set_angle_stator,
-        doc=u"""Angular position shift of the stator""",
-    )
+    angle_stator = property(fget=_get_angle_stator, fset=_set_angle_stator,
+                            doc=u"""Angular position shift of the stator""")
+
+    def _get_is_save_mesh(self):
+        """getter of is_save_mesh"""
+        return self._is_save_mesh
+
+    def _set_is_save_mesh(self, value):
+        """setter of is_save_mesh"""
+        check_var("is_save_mesh", value, "bool")
+        self._is_save_mesh = value
+
+    # To save FEA mesh for latter post-procesing 
+    # Type : bool
+    is_save_mesh = property(fget=_get_is_save_mesh, fset=_set_is_save_mesh,
+                            doc=u"""To save FEA mesh for latter post-procesing """)
+
+    def _get_is_save_FEA(self):
+        """getter of is_save_FEA"""
+        return self._is_save_FEA
+
+    def _set_is_save_FEA(self, value):
+        """setter of is_save_FEA"""
+        check_var("is_save_FEA", value, "bool")
+        self._is_save_FEA = value
+
+    # To save FEA mesh and solution in .dat file
+    # Type : bool
+    is_save_FEA = property(fget=_get_is_save_FEA, fset=_set_is_save_FEA,
+                           doc=u"""To save FEA mesh and solution in .dat file""")

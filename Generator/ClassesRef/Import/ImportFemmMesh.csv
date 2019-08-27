@@ -1,0 +1,2 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
+project_path;-;Path of the files to load;;0;str;;;;;;;Import;ImportMatrix;get_data;VERSION;1;Import a mesh from a .dat file;

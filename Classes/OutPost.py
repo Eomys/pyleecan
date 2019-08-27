@@ -93,11 +93,8 @@ class OutPost(FrozenClass):
 
     # Name to use in the legend in case of comparison
     # Type : str
-    legend_name = property(
-        fget=_get_legend_name,
-        fset=_set_legend_name,
-        doc=u"""Name to use in the legend in case of comparison""",
-    )
+    legend_name = property(fget=_get_legend_name, fset=_set_legend_name,
+                           doc=u"""Name to use in the legend in case of comparison""")
 
     def _get_line_color(self):
         """getter of line_color"""
@@ -110,8 +107,5 @@ class OutPost(FrozenClass):
 
     # Color to use in case of comparison
     # Type : str
-    line_color = property(
-        fget=_get_line_color,
-        fset=_set_line_color,
-        doc=u"""Color to use in case of comparison""",
-    )
+    line_color = property(fget=_get_line_color, fset=_set_line_color,
+                          doc=u"""Color to use in case of comparison""")

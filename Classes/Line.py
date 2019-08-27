@@ -85,8 +85,5 @@ class Line(FrozenClass):
 
     # the label of the Line (EX: Yoke_side)
     # Type : str
-    label = property(
-        fget=_get_label,
-        fset=_set_label,
-        doc=u"""the label of the Line (EX: Yoke_side)""",
-    )
+    label = property(fget=_get_label, fset=_set_label,
+                     doc=u"""the label of the Line (EX: Yoke_side)""")

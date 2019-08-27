@@ -13,6 +13,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class CondType22(Conductor):
     """conductor with only surface definition without specifc shape nor isolation"""
 
@@ -107,4 +108,5 @@ class CondType22(Conductor):
 
     # Surface of the Slot
     # Type : float, min = 0
-    Sbar = property(fget=_get_Sbar, fset=_set_Sbar, doc=u"""Surface of the Slot""")
+    Sbar = property(fget=_get_Sbar, fset=_set_Sbar,
+                    doc=u"""Surface of the Slot""")

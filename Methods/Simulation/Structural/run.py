@@ -22,4 +22,12 @@ def run(self):
     # Compute the magnetic force according to the airgap flux
     self.force.comp_force(output)
     if self.force.is_comp_nodal_force:
-        self.force.comp_force_nodal()
+        self.force.comp_force_nodal(output)
+       # self.force.comp_force_density(output)
+
+    #if self.is_mechanics:
+        # Initialize the mechanical model
+        #self.init_mechanical_model(output)
+
+        # Perform the application of magnetic forces on the mechanical model
+        #self.comp_mechanical_load(output)

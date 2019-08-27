@@ -45,3 +45,4 @@ boundary_prop["Rotor_Yoke_Radius"] = "bc_A0"
 boundary_prop["Stator_Yoke_Radius"] = "bc_A0"
 boundary_prop["Rotor_Yoke_side"] = "bc_r1"
 boundary_prop["Stator_Yoke_side"] = "bc_s1"
+

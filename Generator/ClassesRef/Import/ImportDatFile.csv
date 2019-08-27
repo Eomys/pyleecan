@@ -1,0 +1,2 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
+file_path;-;Path of the file to load;;0;str;;;;;;;Import;ImportMatrix;get_data;VERSION;1;Import the data from a .dat file;

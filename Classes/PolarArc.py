@@ -128,7 +128,8 @@ class PolarArc(Surface):
 
     # Polar angle
     # Type : float, min = 0
-    angle = property(fget=_get_angle, fset=_set_angle, doc=u"""Polar angle""")
+    angle = property(fget=_get_angle, fset=_set_angle,
+                     doc=u"""Polar angle""")
 
     def _get_height(self):
         """getter of height"""
@@ -141,6 +142,5 @@ class PolarArc(Surface):
 
     # The Heigth of the PolarAngle
     # Type : float, min = 0
-    height = property(
-        fget=_get_height, fset=_set_height, doc=u"""The Heigth of the PolarAngle"""
-    )
+    height = property(fget=_get_height, fset=_set_height,
+                      doc=u"""The Heigth of the PolarAngle""")

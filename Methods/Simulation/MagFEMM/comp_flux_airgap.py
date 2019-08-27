@@ -26,7 +26,38 @@ def comp_flux_airgap(self, output):
     else:
         sym = 1
 
-    # Setup the FEMM simulation
+    # if self.is_load_FEA:
+    #     path_save = join(MAIN_DIR, "Results", "Femm", "Mesh") + '\\'
+    #     Nt_tot = output.mag.Nt_tot
+    #     mesh = [MeshMat() for ii in range(Nt_tot)]
+    #     mesh_tmp = MeshTriangle()
+    #
+    #     for ii in range(Nt_tot):
+    #
+    #        listElem  = np.loadtxt(path_save + 'Mesh_elem' + str(ii) +  '.dat')
+    #        listElem = listElem.astype(int)
+    #        mesh_tmp.nb_elem = len(listElem)
+    #        mesh_tmp.element = listElem
+    #
+    #        listNd = np.loadtxt(path_save + 'Mesh_nodes' + str(ii) +  '.dat')
+    #        mesh_tmp.nb_node = len(listNd)
+    #        mesh_tmp.node = listNd
+    #
+    #        results = np.loadtxt(path_save + 'Solution_' + str(ii) + '.dat')
+    #        mesh_tmp.solution = dict()
+    #        mesh_tmp.solution["Bx"] = results[:, 0]
+    #        mesh_tmp.solution["By"] = results[:, 1]
+    #        mesh_tmp.solution["Hx"] = results[:, 2]
+    #        mesh_tmp.solution["Hy"] = results[:, 3]
+    #        mesh_tmp.solution["mu"] = results[:, 4]
+    #
+    #        mesh[ii] = mesh_tmp
+    #
+    #     output.mag.mesh = mesh
+    #
+    # else:
+
+        # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
     FEMM_dict = draw_FEMM(
         output,
@@ -49,4 +80,3 @@ def comp_flux_airgap(self, output):
     # Solve for all time step and store all the results in output
     self.solve_FEMM(output, sym, FEMM_dict)
 
-    output.mag.FEMM_dict = FEMM_dict

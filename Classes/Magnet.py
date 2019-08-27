@@ -19,6 +19,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class Magnet(FrozenClass):
     """abstract class of magnets"""
 
@@ -137,12 +138,10 @@ class Magnet(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
-
     # The Magnet material
     # Type : Material
-    mat_type = property(
-        fget=_get_mat_type, fset=_set_mat_type, doc=u"""The Magnet material"""
-    )
+    mat_type = property(fget=_get_mat_type, fset=_set_mat_type,
+                        doc=u"""The Magnet material""")
 
     def _get_type_magnetization(self):
         """getter of type_magnetization"""
@@ -155,11 +154,8 @@ class Magnet(FrozenClass):
 
     # Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for HallBach []
     # Type : int, min = 0, max = 5
-    type_magnetization = property(
-        fget=_get_type_magnetization,
-        fset=_set_type_magnetization,
-        doc=u"""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for HallBach []""",
-    )
+    type_magnetization = property(fget=_get_type_magnetization, fset=_set_type_magnetization,
+                                  doc=u"""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for HallBach []""")
 
     def _get_Lmag(self):
         """getter of Lmag"""
@@ -172,4 +168,5 @@ class Magnet(FrozenClass):
 
     # Magnet axial length
     # Type : float, min = 0
-    Lmag = property(fget=_get_Lmag, fset=_set_Lmag, doc=u"""Magnet axial length""")
+    Lmag = property(fget=_get_Lmag, fset=_set_Lmag,
+                    doc=u"""Magnet axial length""")

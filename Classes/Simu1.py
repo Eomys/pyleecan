@@ -25,6 +25,7 @@ from pyleecan.Classes.Input import Input
 from pyleecan.Classes.InCurrent import InCurrent
 
 
+
 class Simu1(Simulation):
     """Five sequential weak coupling multi physics simulation"""
 
@@ -35,9 +36,7 @@ class Simu1(Simulation):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self, mag=-1, struct=-1, name="", desc="", machine=-1, input=-1, init_dict=None
-    ):
+    def __init__(self, mag=-1, struct=-1, name="", desc="", machine=-1, input=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -56,9 +55,7 @@ class Simu1(Simulation):
         if input == -1:
             input = Input()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["mag", "struct", "name", "desc", "machine", "input"]
-            )
+            check_init_dict(init_dict, ["mag", "struct", "name", "desc", "machine", "input"])
             # Overwrite default value with init_dict content
             if "mag" in list(init_dict.keys()):
                 mag = init_dict["mag"]
@@ -77,7 +74,7 @@ class Simu1(Simulation):
         if isinstance(mag, dict):
             # Call the correct constructor according to the dict
             load_dict = {"MagFEMM": MagFEMM, "Magnetics": Magnetics}
-            obj_class = mag.get("__class__")
+            obj_class = mag.get('__class__')
             if obj_class is None:
                 self.mag = Magnetics(init_dict=mag)
             elif obj_class in list(load_dict.keys()):
@@ -161,10 +158,10 @@ class Simu1(Simulation):
 
         if self._mag is not None:
             self._mag.parent = self
-
     # Magnetic module
     # Type : Magnetics
-    mag = property(fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module""")
+    mag = property(fget=_get_mag, fset=_set_mag,
+                   doc=u"""Magnetic module""")
 
     def _get_struct(self):
         """getter of struct"""
@@ -177,7 +174,7 @@ class Simu1(Simulation):
 
         if self._struct is not None:
             self._struct.parent = self
-
     # Structural module
     # Type : Structural
-    struct = property(fget=_get_struct, fset=_set_struct, doc=u"""Structural module""")
+    struct = property(fget=_get_struct, fset=_set_struct,
+                      doc=u"""Structural module""")

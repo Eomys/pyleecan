@@ -1,0 +1,3 @@
+Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
+connectivity;;List of node composing the element;;;ndarray;None;;;;;;Mesh;;;VERSION;1;Store elements of the mesh defined by several nodes;
+solution_dict;;Dictionary contraining the FEA solution related to the elements;;;dict;None;;;;;;;;;;;;
