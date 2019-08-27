@@ -39,42 +39,43 @@ def build_geometry_half_tooth(self, is_top=False, alpha=0, delta=0):
     Rbo = self.get_Rbo()
 
     slot_list = self.build_geometry()
-    tooth_list = list()
+    top_list = list()
+    bot_list = list()
 
-    # delete some lines
+    for line in slot_list:
+        Zbegin = line.get_begin()
+        Zend = line.get_end()
+        # append line
+        if imag(Zbegin) <= 0 and imag(Zend) <= 0:
+            top_list.append(line)
+        elif imag(Zbegin) >= 0 and imag(Zend) >= 0:
+            bot_list.append(line)
+        else:  # The line cross the X axis => split
+            # Copy the line (split_half modify the object)
+            line2 = type(line)(init_dict=line.as_dict())
+            # Split the lines
+            line.split_half(is_begin=True)
+            line2.split_half(is_begin=False)
+            if imag(Zbegin) < 0:
+                top_list.append(line)
+                bot_list.append(line2)
+            else:
+                top_list.append(line2)
+                bot_list.append(line)
+
+    # add bore lines
+    Zbo = Rbo * exp(-1j * pi / Zs)
+    top_list.insert(0, Arc1(Zbo, top_list[0].get_begin(), Rbo))
+    Zbo = Rbo * exp(1j * pi / Zs)
+    bot_list.append(Arc1(bot_list[-1].get_end(), Zbo, Rbo))
+
+    # Select the lines to return
     if is_top:
-        for line in slot_list:
-            Zbegin = line.get_begin()
-            Zend = line.get_end()
-            # append line
-            if imag(Zbegin) < 0 or imag(Zend) < 0:
-                tooth_list.append(line)
-        T_angle = pi / Zs  # To rotate the tooth
-        # add bore line
-        Zbo = Rbo * exp(-1j * pi / Zs)
-        split_id = -1
-        tooth_list.insert(0, Arc1(Zbo, tooth_list[0].get_begin(), Rbo))
+        tooth_list = top_list
+        T_angle = pi / Zs
     else:
-        for line in slot_list:
-            Zbegin = line.get_begin()
-            Zend = line.get_end()
-            # append line
-            if imag(Zbegin) > 0 or imag(Zend) > 0:
-                tooth_list.append(line)
-        T_angle = -pi / Zs  # To rotate the tooth
-        # add bore line
-        Zbo = Rbo * exp(1j * pi / Zs)
-        split_id = 0
-        tooth_list.append(Arc1(tooth_list[-1].get_end(), Zbo, Rbo))
-
-    # cut by half (yoke)
-    if isinstance(tooth_list[split_id], Segment):
-        tooth_list[split_id].end = tooth_list[split_id].get_middle()
-    elif isinstance(tooth_list[split_id], Arc):
-        R = tooth_list[split_id].comp_radius()
-        Zbegin = tooth_list[split_id].get_begin()
-        Zend = tooth_list[split_id].get_middle()
-        tooth_list[split_id] = Arc1(Zbegin, Zend, R)
+        tooth_list = bot_list
+        T_angle = -pi / Zs
 
     # rotate
     for line in tooth_list:
