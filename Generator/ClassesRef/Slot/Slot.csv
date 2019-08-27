@@ -7,9 +7,9 @@ Zs;-;slot number;;0;int;36;0;1000;;3;;Slot;;build_geometry_half_tooth;VERSION;1;
 ;;;;;;;;;;;;;;get_is_stator;;;;SlotW13
 ;;;;;;;;;;;;;;get_Rbo;;;;SlotW14
 ;;;;;;;;;;;;;;get_surface;;;;SlotW15
-;;;;;;;;;;;;;;is_outwards;;;;SlotW16
-;;;;;;;;;;;;;;plot;;;;SlotW21
-;;;;;;;;;;;;;;;;;;SlotW22
+;;;;;;;;;;;;;;get_surface_tooth;;;;SlotW16
+;;;;;;;;;;;;;;is_outwards;;;;SlotW21
+;;;;;;;;;;;;;;plot;;;;SlotW22
 ;;;;;;;;;;;;;;;;;;SlotW23
 ;;;;;;;;;;;;;;;;;;SlotW24
 ;;;;;;;;;;;;;;;;;;SlotW25

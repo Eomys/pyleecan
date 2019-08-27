@@ -16,6 +16,7 @@ from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.get_is_stator import get_is_stator
 from pyleecan.Methods.Slot.Slot.get_Rbo import get_Rbo
 from pyleecan.Methods.Slot.Slot.get_surface import get_surface
+from pyleecan.Methods.Slot.Slot.get_surface_tooth import get_surface_tooth
 from pyleecan.Methods.Slot.Slot.is_outwards import is_outwards
 from pyleecan.Methods.Slot.Slot.plot import plot
 
@@ -43,6 +44,8 @@ class Slot(FrozenClass):
     get_Rbo = get_Rbo
     # cf Methods.Slot.Slot.get_surface
     get_surface = get_surface
+    # cf Methods.Slot.Slot.get_surface_tooth
+    get_surface_tooth = get_surface_tooth
     # cf Methods.Slot.Slot.is_outwards
     is_outwards = is_outwards
     # cf Methods.Slot.Slot.plot
