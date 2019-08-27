@@ -103,8 +103,9 @@ class ImportMatlab(Import):
 
     # Path of the file to load
     # Type : str
-    file_path = property(fget=_get_file_path, fset=_set_file_path,
-                         doc=u"""Path of the file to load""")
+    file_path = property(
+        fget=_get_file_path, fset=_set_file_path, doc=u"""Path of the file to load"""
+    )
 
     def _get_var_name(self):
         """getter of var_name"""
@@ -117,5 +118,6 @@ class ImportMatlab(Import):
 
     # Name of the variable to load
     # Type : str
-    var_name = property(fget=_get_var_name, fset=_set_var_name,
-                        doc=u"""Name of the variable to load""")
+    var_name = property(
+        fget=_get_var_name, fset=_set_var_name, doc=u"""Name of the variable to load"""
+    )

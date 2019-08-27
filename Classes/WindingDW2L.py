@@ -16,7 +16,6 @@ from pyleecan.Classes.CondType21 import CondType21
 from pyleecan.Classes.CondType22 import CondType22
 
 
-
 class WindingDW2L(WindingDW1L):
     """double layer overlapping integral distributed winding, radial coil superposition """
 
@@ -27,7 +26,20 @@ class WindingDW2L(WindingDW1L):
     # save method is available in all object
     save = save
 
-    def __init__(self, coil_pitch=5, is_reverse_wind=False, Nslot_shift_wind=0, qs=3, Ntcoil=7, Npcpp=2, type_connection=0, p=3, Lewout=0.015, conductor=-1, init_dict=None):
+    def __init__(
+        self,
+        coil_pitch=5,
+        is_reverse_wind=False,
+        Nslot_shift_wind=0,
+        qs=3,
+        Ntcoil=7,
+        Npcpp=2,
+        type_connection=0,
+        p=3,
+        Lewout=0.015,
+        conductor=-1,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -40,7 +52,21 @@ class WindingDW2L(WindingDW1L):
         if conductor == -1:
             conductor = Conductor()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["coil_pitch", "is_reverse_wind", "Nslot_shift_wind", "qs", "Ntcoil", "Npcpp", "type_connection", "p", "Lewout", "conductor"])
+            check_init_dict(
+                init_dict,
+                [
+                    "coil_pitch",
+                    "is_reverse_wind",
+                    "Nslot_shift_wind",
+                    "qs",
+                    "Ntcoil",
+                    "Npcpp",
+                    "type_connection",
+                    "p",
+                    "Lewout",
+                    "conductor",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "coil_pitch" in list(init_dict.keys()):
                 coil_pitch = init_dict["coil_pitch"]
@@ -64,7 +90,18 @@ class WindingDW2L(WindingDW1L):
                 conductor = init_dict["conductor"]
         # Initialisation by argument
         # Call WindingDW1L init
-        super(WindingDW2L, self).__init__(coil_pitch=coil_pitch, is_reverse_wind=is_reverse_wind, Nslot_shift_wind=Nslot_shift_wind, qs=qs, Ntcoil=Ntcoil, Npcpp=Npcpp, type_connection=type_connection, p=p, Lewout=Lewout, conductor=conductor)
+        super(WindingDW2L, self).__init__(
+            coil_pitch=coil_pitch,
+            is_reverse_wind=is_reverse_wind,
+            Nslot_shift_wind=Nslot_shift_wind,
+            qs=qs,
+            Ntcoil=Ntcoil,
+            Npcpp=Npcpp,
+            type_connection=type_connection,
+            p=p,
+            Lewout=Lewout,
+            conductor=conductor,
+        )
         # The class is frozen (in WindingDW1L init), for now it's impossible to
         # add new properties
 
@@ -103,5 +140,3 @@ class WindingDW2L(WindingDW1L):
 
         # Set to None the properties inherited from WindingDW1L
         super(WindingDW2L, self)._set_None()
-
-

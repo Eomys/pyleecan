@@ -118,5 +118,4 @@ class Slot(FrozenClass):
 
     # slot number
     # Type : int, min = 0, max = 1000
-    Zs = property(fget=_get_Zs, fset=_set_Zs,
-                  doc=u"""slot number""")
+    Zs = property(fget=_get_Zs, fset=_set_Zs, doc=u"""slot number""")

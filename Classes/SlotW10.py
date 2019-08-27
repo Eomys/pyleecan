@@ -46,7 +46,18 @@ class SlotW10(SlotWind):
     # save method is available in all object
     save = save
 
-    def __init__(self, W0=0.0122, H0=0.001, H1=0.0015, W1=0.014, H2=0.0325, W2=0.0122, H1_is_rad=False, Zs=36, init_dict=None):
+    def __init__(
+        self,
+        W0=0.0122,
+        H0=0.001,
+        H1=0.0015,
+        W1=0.014,
+        H2=0.0325,
+        W2=0.0122,
+        H1_is_rad=False,
+        Zs=36,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -57,7 +68,9 @@ class SlotW10(SlotWind):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["W0", "H0", "H1", "W1", "H2", "W2", "H1_is_rad", "Zs"])
+            check_init_dict(
+                init_dict, ["W0", "H0", "H1", "W1", "H2", "W2", "H1_is_rad", "Zs"]
+            )
             # Overwrite default value with init_dict content
             if "W0" in list(init_dict.keys()):
                 W0 = init_dict["W0"]
@@ -170,8 +183,7 @@ class SlotW10(SlotWind):
 
     # Slot isthmus width.
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0,
-                  doc=u"""Slot isthmus width.""")
+    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus width.""")
 
     def _get_H0(self):
         """getter of H0"""
@@ -184,8 +196,7 @@ class SlotW10(SlotWind):
 
     # Slot isthmus height.
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0,
-                  doc=u"""Slot isthmus height.""")
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height.""")
 
     def _get_H1(self):
         """getter of H1"""
@@ -198,8 +209,9 @@ class SlotW10(SlotWind):
 
     # Slot wedge radial height or wedge angle .
     # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1,
-                  doc=u"""Slot wedge radial height or wedge angle .""")
+    H1 = property(
+        fget=_get_H1, fset=_set_H1, doc=u"""Slot wedge radial height or wedge angle ."""
+    )
 
     def _get_W1(self):
         """getter of W1"""
@@ -212,8 +224,7 @@ class SlotW10(SlotWind):
 
     # Slot wedge width.
     # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1,
-                  doc=u"""Slot wedge width.""")
+    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Slot wedge width.""")
 
     def _get_H2(self):
         """getter of H2"""
@@ -224,10 +235,9 @@ class SlotW10(SlotWind):
         check_var("H2", value, "float", Vmin=0)
         self._H2 = value
 
-    # Slot height below wedge 
+    # Slot height below wedge
     # Type : float, min = 0
-    H2 = property(fget=_get_H2, fset=_set_H2,
-                  doc=u"""Slot height below wedge """)
+    H2 = property(fget=_get_H2, fset=_set_H2, doc=u"""Slot height below wedge """)
 
     def _get_W2(self):
         """getter of W2"""
@@ -240,8 +250,7 @@ class SlotW10(SlotWind):
 
     # Slot bottom width.
     # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2,
-                  doc=u"""Slot bottom width.""")
+    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""Slot bottom width.""")
 
     def _get_H1_is_rad(self):
         """getter of H1_is_rad"""
@@ -254,5 +263,6 @@ class SlotW10(SlotWind):
 
     # H1 unit, 0 for m, 1 for rad
     # Type : bool
-    H1_is_rad = property(fget=_get_H1_is_rad, fset=_set_H1_is_rad,
-                         doc=u"""H1 unit, 0 for m, 1 for rad""")
+    H1_is_rad = property(
+        fget=_get_H1_is_rad, fset=_set_H1_is_rad, doc=u"""H1 unit, 0 for m, 1 for rad"""
+    )

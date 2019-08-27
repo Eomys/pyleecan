@@ -77,5 +77,3 @@ class Arc(Line):
 
         # Set to None the properties inherited from Line
         super(Arc, self)._set_None()
-
-

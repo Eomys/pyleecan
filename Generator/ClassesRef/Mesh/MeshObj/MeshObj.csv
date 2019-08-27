@@ -1,3 +1,0 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-elements;;Containing all different elements ;;;[Element];None;;;;;;Mesh;Mesh;;VERSION;1;Gather the parameters of mesh under object format;
-nodes;;Containing all nodes ;;;ndarray;None;;;;;;;;;;;;

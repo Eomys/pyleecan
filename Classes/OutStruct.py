@@ -8,8 +8,6 @@ from pyleecan.Classes.frozen import FrozenClass
 
 from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
-from pyleecan.Classes.Mesh import Mesh
-
 
 
 class OutStruct(FrozenClass):
@@ -20,7 +18,16 @@ class OutStruct(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, time=None, angle=None, Nt_tot=None, Na_tot=None, Prad=None, Ptan=None, nodal_forces=None, mechanical_mesh=None, init_dict=None):
+    def __init__(
+        self,
+        time=None,
+        angle=None,
+        Nt_tot=None,
+        Na_tot=None,
+        Prad=None,
+        Ptan=None,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -30,10 +37,10 @@ class OutStruct(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if mechanical_mesh == -1:
-            mechanical_mesh = Mesh()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["time", "angle", "Nt_tot", "Na_tot", "Prad", "Ptan", "nodal_forces", "mechanical_mesh"])
+            check_init_dict(
+                init_dict, ["time", "angle", "Nt_tot", "Na_tot", "Prad", "Ptan"]
+            )
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
@@ -47,10 +54,6 @@ class OutStruct(FrozenClass):
                 Prad = init_dict["Prad"]
             if "Ptan" in list(init_dict.keys()):
                 Ptan = init_dict["Ptan"]
-            if "nodal_forces" in list(init_dict.keys()):
-                nodal_forces = init_dict["nodal_forces"]
-            if "mechanical_mesh" in list(init_dict.keys()):
-                mechanical_mesh = init_dict["mechanical_mesh"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -63,12 +66,6 @@ class OutStruct(FrozenClass):
         set_array(self, "Prad", Prad)
         # Ptan can be None, a ndarray or a list
         set_array(self, "Ptan", Ptan)
-        self.nodal_forces = nodal_forces
-        # mechanical_mesh can be None, a Mesh object or a dict
-        if isinstance(mechanical_mesh, dict):
-            self.mechanical_mesh = Mesh(init_dict=mechanical_mesh)
-        else:
-            self.mechanical_mesh = mechanical_mesh
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -86,9 +83,7 @@ class OutStruct(FrozenClass):
         OutStruct_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutStruct_str += "Na_tot = " + str(self.Na_tot) + linesep
         OutStruct_str += "Prad = " + linesep + str(self.Prad) + linesep + linesep
-        OutStruct_str += "Ptan = " + linesep + str(self.Ptan) + linesep + linesep
-        OutStruct_str += "nodal_forces = " + str(self.nodal_forces) + linesep
-        OutStruct_str += "mechanical_mesh = " + str(self.mechanical_mesh.as_dict())
+        OutStruct_str += "Ptan = " + linesep + str(self.Ptan)
         return OutStruct_str
 
     def __eq__(self, other):
@@ -107,10 +102,6 @@ class OutStruct(FrozenClass):
         if not array_equal(other.Prad, self.Prad):
             return False
         if not array_equal(other.Ptan, self.Ptan):
-            return False
-        if other.nodal_forces != self.nodal_forces:
-            return False
-        if other.mechanical_mesh != self.mechanical_mesh:
             return False
         return True
 
@@ -137,11 +128,6 @@ class OutStruct(FrozenClass):
             OutStruct_dict["Ptan"] = None
         else:
             OutStruct_dict["Ptan"] = self.Ptan.tolist()
-        OutStruct_dict["nodal_forces"] = self.nodal_forces
-        if self.mechanical_mesh is None:
-            OutStruct_dict["mechanical_mesh"] = None
-        else:
-            OutStruct_dict["mechanical_mesh"] = self.mechanical_mesh.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         OutStruct_dict["__class__"] = "OutStruct"
         return OutStruct_dict
@@ -155,9 +141,6 @@ class OutStruct(FrozenClass):
         self.Na_tot = None
         self.Prad = None
         self.Ptan = None
-        self.nodal_forces = None
-        if self.mechanical_mesh is not None:
-            self.mechanical_mesh._set_None()
 
     def _get_time(self):
         """getter of time"""
@@ -175,8 +158,9 @@ class OutStruct(FrozenClass):
 
     # Structural time vector (no symmetry)
     # Type : ndarray
-    time = property(fget=_get_time, fset=_set_time,
-                    doc=u"""Structural time vector (no symmetry)""")
+    time = property(
+        fget=_get_time, fset=_set_time, doc=u"""Structural time vector (no symmetry)"""
+    )
 
     def _get_angle(self):
         """getter of angle"""
@@ -194,8 +178,11 @@ class OutStruct(FrozenClass):
 
     # Structural position vector (no symmetry)
     # Type : ndarray
-    angle = property(fget=_get_angle, fset=_set_angle,
-                     doc=u"""Structural position vector (no symmetry)""")
+    angle = property(
+        fget=_get_angle,
+        fset=_set_angle,
+        doc=u"""Structural position vector (no symmetry)""",
+    )
 
     def _get_Nt_tot(self):
         """getter of Nt_tot"""
@@ -208,8 +195,9 @@ class OutStruct(FrozenClass):
 
     # Length of the time vector
     # Type : int
-    Nt_tot = property(fget=_get_Nt_tot, fset=_set_Nt_tot,
-                      doc=u"""Length of the time vector""")
+    Nt_tot = property(
+        fget=_get_Nt_tot, fset=_set_Nt_tot, doc=u"""Length of the time vector"""
+    )
 
     def _get_Na_tot(self):
         """getter of Na_tot"""
@@ -222,8 +210,9 @@ class OutStruct(FrozenClass):
 
     # Length of the angle vector
     # Type : int
-    Na_tot = property(fget=_get_Na_tot, fset=_set_Na_tot,
-                      doc=u"""Length of the angle vector""")
+    Na_tot = property(
+        fget=_get_Na_tot, fset=_set_Na_tot, doc=u"""Length of the angle vector"""
+    )
 
     def _get_Prad(self):
         """getter of Prad"""
@@ -241,8 +230,9 @@ class OutStruct(FrozenClass):
 
     # Radial magnetic air-gap surface force
     # Type : ndarray
-    Prad = property(fget=_get_Prad, fset=_set_Prad,
-                    doc=u"""Radial magnetic air-gap surface force""")
+    Prad = property(
+        fget=_get_Prad, fset=_set_Prad, doc=u"""Radial magnetic air-gap surface force"""
+    )
 
     def _get_Ptan(self):
         """getter of Ptan"""
@@ -260,35 +250,8 @@ class OutStruct(FrozenClass):
 
     # Tangential magnetic air-gap surface force
     # Type : ndarray
-    Ptan = property(fget=_get_Ptan, fset=_set_Ptan,
-                    doc=u"""Tangential magnetic air-gap surface force""")
-
-    def _get_nodal_forces(self):
-        """getter of nodal_forces"""
-        return self._nodal_forces
-
-    def _set_nodal_forces(self, value):
-        """setter of nodal_forces"""
-        check_var("nodal_forces", value, "dict")
-        self._nodal_forces = value
-
-    # Dictionnary containing nodal forces fx,fy  and there position posf
-    # Type : dict
-    nodal_forces = property(fget=_get_nodal_forces, fset=_set_nodal_forces,
-                            doc=u"""Dictionnary containing nodal forces fx,fy  and there position posf""")
-
-    def _get_mechanical_mesh(self):
-        """getter of mechanical_mesh"""
-        return self._mechanical_mesh
-
-    def _set_mechanical_mesh(self, value):
-        """setter of mechanical_mesh"""
-        check_var("mechanical_mesh", value, "Mesh")
-        self._mechanical_mesh = value
-
-        if self._mechanical_mesh is not None:
-            self._mechanical_mesh.parent = self
-    # Mesh used for the FEA mechanical simulation
-    # Type : Mesh
-    mechanical_mesh = property(fget=_get_mechanical_mesh, fset=_set_mechanical_mesh,
-                               doc=u"""Mesh used for the FEA mechanical simulation""")
+    Ptan = property(
+        fget=_get_Ptan,
+        fset=_set_Ptan,
+        doc=u"""Tangential magnetic air-gap surface force""",
+    )

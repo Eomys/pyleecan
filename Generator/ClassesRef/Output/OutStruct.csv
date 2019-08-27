@@ -5,5 +5,3 @@ Nt_tot;-;Length of the time vector;;;int;None;;;;;;;;;;;;
 Na_tot;-;Length of the angle vector;;;int;None;;;;;;;;;;;;
 Prad;N.m^2;Radial magnetic air-gap surface force;;(Nt_tot ,Na_tot);ndarray;None;;;;;;;;;;;;
 Ptan;N.m^2;Tangential magnetic air-gap surface force;;(Nt_tot ,Na_tot);ndarray;None;;;;;;;;;;;;
-nodal_forces;N;Dictionnary containing nodal forces fx,fy  and there position posf;;;dict;None;;;;;;;;;;;;
-mechanical_mesh;-;Mesh used for the FEA mechanical simulation;;;Mesh;None;;;;;;;;;;;;

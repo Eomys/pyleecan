@@ -1,6 +1,0 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-elements;;Containing one list of connectivity per type element type;;;[Elements];None;;;;;;Mesh;Mesh;comp_projection_mesh2mesh;VERSION;1;Gather the parameters of mesh under matricial format;
-nodes;;Containing nodes coordinates;;;ndarray;None;;;;;;;;get_Ntype_elem;;;;
-submeshes;;Containing  lists of elements number from the same part of the machine (stator, rotor, airgap …);;;dict;None;;;;;;;;set_Ntype_elem;;;;
-nodes_to_elements;;Containing list of element connected to each nodes;;;dict;None;;;;;;;;get_nodes2elements;;;;
-Ntype_elem;;Total number of different type of element;;;int;None;;;;;;;;set_nodes2elements;;;;

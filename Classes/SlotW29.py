@@ -45,7 +45,17 @@ class SlotW29(SlotWind):
     # save method is available in all object
     save = save
 
-    def __init__(self, W0=0.05, H0=0.001, H1=0.0015, W1=0.015, H2=0.03, W2=0.2, Zs=36, init_dict=None):
+    def __init__(
+        self,
+        W0=0.05,
+        H0=0.001,
+        H1=0.0015,
+        W1=0.015,
+        H2=0.03,
+        W2=0.2,
+        Zs=36,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -161,8 +171,7 @@ class SlotW29(SlotWind):
 
     # Slot isthmus width.
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0,
-                  doc=u"""Slot isthmus width.""")
+    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus width.""")
 
     def _get_H0(self):
         """getter of H0"""
@@ -175,8 +184,7 @@ class SlotW29(SlotWind):
 
     # Slot isthmus height.
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0,
-                  doc=u"""Slot isthmus height.""")
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height.""")
 
     def _get_H1(self):
         """getter of H1"""
@@ -189,8 +197,7 @@ class SlotW29(SlotWind):
 
     # Slot middle height
     # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1,
-                  doc=u"""Slot middle height""")
+    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Slot middle height""")
 
     def _get_W1(self):
         """getter of W1"""
@@ -203,8 +210,7 @@ class SlotW29(SlotWind):
 
     # Slot middle width.
     # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1,
-                  doc=u"""Slot middle width.""")
+    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Slot middle width.""")
 
     def _get_H2(self):
         """getter of H2"""
@@ -217,8 +223,7 @@ class SlotW29(SlotWind):
 
     # Slot bottom height
     # Type : float, min = 0
-    H2 = property(fget=_get_H2, fset=_set_H2,
-                  doc=u"""Slot bottom height""")
+    H2 = property(fget=_get_H2, fset=_set_H2, doc=u"""Slot bottom height""")
 
     def _get_W2(self):
         """getter of W2"""
@@ -231,5 +236,4 @@ class SlotW29(SlotWind):
 
     # Slot bottom width.
     # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2,
-                  doc=u"""Slot bottom width.""")
+    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""Slot bottom width.""")

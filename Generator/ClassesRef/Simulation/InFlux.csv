@@ -3,4 +3,3 @@ time;s;Electrical time vector (no symmetry) to import;;Nt_tot;Import;None;;;;;;S
 angle;rad;Electrical position vector (no symmetry) to import;;Na_tot;Import;None;;;;;;;;;;;;
 Br;T;Radial airgap flux density;;(Nt_tot ,Na_tot);Import;None;;;;;;;;;;;;
 Bt;T;Tangential airgap flux density;;(Nt_tot ,Na_tot);Import;None;;;;;;;;;;;;
-mesh;;Electromagnetic mesh informations;;;Import;None;;;;;;;;;;;;

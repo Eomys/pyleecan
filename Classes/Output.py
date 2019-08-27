@@ -11,9 +11,9 @@ from pyleecan.Methods.Output.Output.getter.get_BH_rotor import get_BH_rotor
 from pyleecan.Methods.Output.Output.getter.get_path_result import get_path_result
 from pyleecan.Methods.Output.Output.getter.get_angle_rotor import get_angle_rotor
 from pyleecan.Methods.Output.Output.plot.Magnetic.plot_B_space import plot_B_space
-from pyleecan.Methods.Output.Output.plot.Structural.plot_force_space import plot_force_space
-from pyleecan.Methods.Output.Output.plot.Structural.plot_nodal_force import plot_nodal_force
-from pyleecan.Methods.Output.Output.plot.Magnetic.plot_permeability import plot_permeability
+from pyleecan.Methods.Output.Output.plot.Structural.plot_force_space import (
+    plot_force_space,
+)
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Simulation import Simulation
@@ -23,7 +23,6 @@ from pyleecan.Classes.OutElec import OutElec
 from pyleecan.Classes.OutMag import OutMag
 from pyleecan.Classes.OutStruct import OutStruct
 from pyleecan.Classes.OutPost import OutPost
-
 
 
 class Output(FrozenClass):
@@ -43,14 +42,20 @@ class Output(FrozenClass):
     plot_B_space = plot_B_space
     # cf Methods.Output.Output.plot.Structural.plot_force_space
     plot_force_space = plot_force_space
-    # cf Methods.Output.Output.plot.Structural.plot_nodal_force
-    plot_nodal_force = plot_nodal_force
-    # cf Methods.Output.Output.plot.Magnetic.plot_permeability
-    plot_permeability = plot_permeability
     # save method is available in all object
     save = save
 
-    def __init__(self, simu=-1, path_res="", geo=-1, elec=-1, mag=-1, struct=-1, post=-1, init_dict=None):
+    def __init__(
+        self,
+        simu=-1,
+        path_res="",
+        geo=-1,
+        elec=-1,
+        mag=-1,
+        struct=-1,
+        post=-1,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -73,7 +78,9 @@ class Output(FrozenClass):
         if post == -1:
             post = OutPost()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["simu", "path_res", "geo", "elec", "mag", "struct", "post"])
+            check_init_dict(
+                init_dict, ["simu", "path_res", "geo", "elec", "mag", "struct", "post"]
+            )
             # Overwrite default value with init_dict content
             if "simu" in list(init_dict.keys()):
                 simu = init_dict["simu"]
@@ -95,7 +102,7 @@ class Output(FrozenClass):
         if isinstance(simu, dict):
             # Call the correct constructor according to the dict
             load_dict = {"Simu1": Simu1, "Simulation": Simulation}
-            obj_class = simu.get('__class__')
+            obj_class = simu.get("__class__")
             if obj_class is None:
                 self.simu = Simulation(init_dict=simu)
             elif obj_class in list(load_dict.keys()):
@@ -234,10 +241,14 @@ class Output(FrozenClass):
 
         if self._simu is not None:
             self._simu.parent = self
+
     # Simulation object that generated the Output
     # Type : Simulation
-    simu = property(fget=_get_simu, fset=_set_simu,
-                    doc=u"""Simulation object that generated the Output""")
+    simu = property(
+        fget=_get_simu,
+        fset=_set_simu,
+        doc=u"""Simulation object that generated the Output""",
+    )
 
     def _get_path_res(self):
         """getter of path_res"""
@@ -250,8 +261,11 @@ class Output(FrozenClass):
 
     # Path to the folder to same the results
     # Type : str
-    path_res = property(fget=_get_path_res, fset=_set_path_res,
-                        doc=u"""Path to the folder to same the results""")
+    path_res = property(
+        fget=_get_path_res,
+        fset=_set_path_res,
+        doc=u"""Path to the folder to same the results""",
+    )
 
     def _get_geo(self):
         """getter of geo"""
@@ -264,10 +278,10 @@ class Output(FrozenClass):
 
         if self._geo is not None:
             self._geo.parent = self
+
     # Geometry output
     # Type : OutGeo
-    geo = property(fget=_get_geo, fset=_set_geo,
-                   doc=u"""Geometry output""")
+    geo = property(fget=_get_geo, fset=_set_geo, doc=u"""Geometry output""")
 
     def _get_elec(self):
         """getter of elec"""
@@ -280,10 +294,10 @@ class Output(FrozenClass):
 
         if self._elec is not None:
             self._elec.parent = self
+
     # Electrical module output
     # Type : OutElec
-    elec = property(fget=_get_elec, fset=_set_elec,
-                    doc=u"""Electrical module output""")
+    elec = property(fget=_get_elec, fset=_set_elec, doc=u"""Electrical module output""")
 
     def _get_mag(self):
         """getter of mag"""
@@ -296,10 +310,10 @@ class Output(FrozenClass):
 
         if self._mag is not None:
             self._mag.parent = self
+
     # Magnetic module output
     # Type : OutMag
-    mag = property(fget=_get_mag, fset=_set_mag,
-                   doc=u"""Magnetic module output""")
+    mag = property(fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module output""")
 
     def _get_struct(self):
         """getter of struct"""
@@ -312,10 +326,12 @@ class Output(FrozenClass):
 
         if self._struct is not None:
             self._struct.parent = self
+
     # Structural module output
     # Type : OutStruct
-    struct = property(fget=_get_struct, fset=_set_struct,
-                      doc=u"""Structural module output""")
+    struct = property(
+        fget=_get_struct, fset=_set_struct, doc=u"""Structural module output"""
+    )
 
     def _get_post(self):
         """getter of post"""
@@ -328,7 +344,7 @@ class Output(FrozenClass):
 
         if self._post is not None:
             self._post.parent = self
+
     # Post-Processing settings
     # Type : OutPost
-    post = property(fget=_get_post, fset=_set_post,
-                    doc=u"""Post-Processing settings""")
+    post = property(fget=_get_post, fset=_set_post, doc=u"""Post-Processing settings""")

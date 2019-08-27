@@ -12,8 +12,6 @@ from pyleecan.Methods.Simulation.Structural.comp_time_angle import comp_time_ang
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Force import Force
 from pyleecan.Classes.ForceMT import ForceMT
-from pyleecan.Classes.ForceVWP import ForceVWP
-
 
 
 class Structural(FrozenClass):
@@ -28,7 +26,7 @@ class Structural(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, force=-1, is_mechanics=False, init_dict=None):
+    def __init__(self, force=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -41,19 +39,17 @@ class Structural(FrozenClass):
         if force == -1:
             force = Force()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["force", "is_mechanics"])
+            check_init_dict(init_dict, ["force"])
             # Overwrite default value with init_dict content
             if "force" in list(init_dict.keys()):
                 force = init_dict["force"]
-            if "is_mechanics" in list(init_dict.keys()):
-                is_mechanics = init_dict["is_mechanics"]
         # Initialisation by argument
         self.parent = None
         # force can be None, a Force object or a dict
         if isinstance(force, dict):
             # Call the correct constructor according to the dict
-            load_dict = {"ForceMT": ForceMT, "ForceVWP": ForceVWP, "Force": Force}
-            obj_class = force.get('__class__')
+            load_dict = {"ForceMT": ForceMT, "Force": Force}
+            obj_class = force.get("__class__")
             if obj_class is None:
                 self.force = Force(init_dict=force)
             elif obj_class in list(load_dict.keys()):
@@ -62,7 +58,6 @@ class Structural(FrozenClass):
                 raise InitUnKnowClassError("Unknow class name in init_dict for force")
         else:
             self.force = force
-        self.is_mechanics = is_mechanics
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -75,8 +70,7 @@ class Structural(FrozenClass):
             Structural_str += "parent = None " + linesep
         else:
             Structural_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Structural_str += "force = " + str(self.force.as_dict()) + linesep + linesep
-        Structural_str += "is_mechanics = " + str(self.is_mechanics)
+        Structural_str += "force = " + str(self.force.as_dict())
         return Structural_str
 
     def __eq__(self, other):
@@ -85,8 +79,6 @@ class Structural(FrozenClass):
         if type(other) != type(self):
             return False
         if other.force != self.force:
-            return False
-        if other.is_mechanics != self.is_mechanics:
             return False
         return True
 
@@ -99,7 +91,6 @@ class Structural(FrozenClass):
             Structural_dict["force"] = None
         else:
             Structural_dict["force"] = self.force.as_dict()
-        Structural_dict["is_mechanics"] = self.is_mechanics
         # The class name is added to the dict fordeserialisation purpose
         Structural_dict["__class__"] = "Structural"
         return Structural_dict
@@ -109,7 +100,6 @@ class Structural(FrozenClass):
 
         if self.force is not None:
             self.force._set_None()
-        self.is_mechanics = None
 
     def _get_force(self):
         """getter of force"""
@@ -122,21 +112,7 @@ class Structural(FrozenClass):
 
         if self._force is not None:
             self._force.parent = self
+
     # Force module
     # Type : Force
-    force = property(fget=_get_force, fset=_set_force,
-                     doc=u"""Force module""")
-
-    def _get_is_mechanics(self):
-        """getter of is_mechanics"""
-        return self._is_mechanics
-
-    def _set_is_mechanics(self, value):
-        """setter of is_mechanics"""
-        check_var("is_mechanics", value, "bool")
-        self._is_mechanics = value
-
-    # 1 to perform mechanical disp calculations
-    # Type : bool
-    is_mechanics = property(fget=_get_is_mechanics, fset=_set_is_mechanics,
-                            doc=u"""1 to perform mechanical disp calculations""")
+    force = property(fget=_get_force, fset=_set_force, doc=u"""Force module""")

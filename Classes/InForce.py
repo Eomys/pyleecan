@@ -19,7 +19,6 @@ from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 
 
-
 class InForce(Input):
     """Input to start with the structural one """
 
@@ -63,8 +62,17 @@ class InForce(Input):
         # time can be None, a Import object or a dict
         if isinstance(time, dict):
             # Call the correct constructor according to the dict
-            load_dict = {"ImportMatlab": ImportMatlab, "ImportMatrix": ImportMatrix, "ImportMatrixVal": ImportMatrixVal, "ImportMatrixXls": ImportMatrixXls, "ImportGenVectSin": ImportGenVectSin, "ImportGenMatrixSin": ImportGenMatrixSin, "ImportGenVectLin": ImportGenVectLin, "Import": Import}
-            obj_class = time.get('__class__')
+            load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
+                "ImportMatrixVal": ImportMatrixVal,
+                "ImportMatrixXls": ImportMatrixXls,
+                "ImportGenVectSin": ImportGenVectSin,
+                "ImportGenMatrixSin": ImportGenMatrixSin,
+                "ImportGenVectLin": ImportGenVectLin,
+                "Import": Import,
+            }
+            obj_class = time.get("__class__")
             if obj_class is None:
                 self.time = Import(init_dict=time)
             elif obj_class in list(load_dict.keys()):
@@ -76,8 +84,17 @@ class InForce(Input):
         # angle can be None, a Import object or a dict
         if isinstance(angle, dict):
             # Call the correct constructor according to the dict
-            load_dict = {"ImportMatlab": ImportMatlab, "ImportMatrix": ImportMatrix, "ImportMatrixVal": ImportMatrixVal, "ImportMatrixXls": ImportMatrixXls, "ImportGenVectSin": ImportGenVectSin, "ImportGenMatrixSin": ImportGenMatrixSin, "ImportGenVectLin": ImportGenVectLin, "Import": Import}
-            obj_class = angle.get('__class__')
+            load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
+                "ImportMatrixVal": ImportMatrixVal,
+                "ImportMatrixXls": ImportMatrixXls,
+                "ImportGenVectSin": ImportGenVectSin,
+                "ImportGenMatrixSin": ImportGenMatrixSin,
+                "ImportGenVectLin": ImportGenVectLin,
+                "Import": Import,
+            }
+            obj_class = angle.get("__class__")
             if obj_class is None:
                 self.angle = Import(init_dict=angle)
             elif obj_class in list(load_dict.keys()):
@@ -89,8 +106,17 @@ class InForce(Input):
         # Prad can be None, a Import object or a dict
         if isinstance(Prad, dict):
             # Call the correct constructor according to the dict
-            load_dict = {"ImportMatlab": ImportMatlab, "ImportMatrix": ImportMatrix, "ImportMatrixVal": ImportMatrixVal, "ImportMatrixXls": ImportMatrixXls, "ImportGenVectSin": ImportGenVectSin, "ImportGenMatrixSin": ImportGenMatrixSin, "ImportGenVectLin": ImportGenVectLin, "Import": Import}
-            obj_class = Prad.get('__class__')
+            load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
+                "ImportMatrixVal": ImportMatrixVal,
+                "ImportMatrixXls": ImportMatrixXls,
+                "ImportGenVectSin": ImportGenVectSin,
+                "ImportGenMatrixSin": ImportGenMatrixSin,
+                "ImportGenVectLin": ImportGenVectLin,
+                "Import": Import,
+            }
+            obj_class = Prad.get("__class__")
             if obj_class is None:
                 self.Prad = Import(init_dict=Prad)
             elif obj_class in list(load_dict.keys()):
@@ -102,8 +128,17 @@ class InForce(Input):
         # Ptan can be None, a Import object or a dict
         if isinstance(Ptan, dict):
             # Call the correct constructor according to the dict
-            load_dict = {"ImportMatlab": ImportMatlab, "ImportMatrix": ImportMatrix, "ImportMatrixVal": ImportMatrixVal, "ImportMatrixXls": ImportMatrixXls, "ImportGenVectSin": ImportGenVectSin, "ImportGenMatrixSin": ImportGenMatrixSin, "ImportGenVectLin": ImportGenVectLin, "Import": Import}
-            obj_class = Ptan.get('__class__')
+            load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
+                "ImportMatrixVal": ImportMatrixVal,
+                "ImportMatrixXls": ImportMatrixXls,
+                "ImportGenVectSin": ImportGenVectSin,
+                "ImportGenMatrixSin": ImportGenMatrixSin,
+                "ImportGenVectLin": ImportGenVectLin,
+                "Import": Import,
+            }
+            obj_class = Ptan.get("__class__")
             if obj_class is None:
                 self.Ptan = Import(init_dict=Ptan)
             elif obj_class in list(load_dict.keys()):
@@ -200,10 +235,14 @@ class InForce(Input):
 
         if self._time is not None:
             self._time.parent = self
+
     # Electrical time vector (no symmetry) to import
     # Type : Import
-    time = property(fget=_get_time, fset=_set_time,
-                    doc=u"""Electrical time vector (no symmetry) to import""")
+    time = property(
+        fget=_get_time,
+        fset=_set_time,
+        doc=u"""Electrical time vector (no symmetry) to import""",
+    )
 
     def _get_angle(self):
         """getter of angle"""
@@ -216,10 +255,14 @@ class InForce(Input):
 
         if self._angle is not None:
             self._angle.parent = self
+
     # Electrical position vector (no symmetry) to import
     # Type : Import
-    angle = property(fget=_get_angle, fset=_set_angle,
-                     doc=u"""Electrical position vector (no symmetry) to import""")
+    angle = property(
+        fget=_get_angle,
+        fset=_set_angle,
+        doc=u"""Electrical position vector (no symmetry) to import""",
+    )
 
     def _get_Prad(self):
         """getter of Prad"""
@@ -232,10 +275,12 @@ class InForce(Input):
 
         if self._Prad is not None:
             self._Prad.parent = self
+
     # Radial magnetic air-gap surface force
     # Type : Import
-    Prad = property(fget=_get_Prad, fset=_set_Prad,
-                    doc=u"""Radial magnetic air-gap surface force""")
+    Prad = property(
+        fget=_get_Prad, fset=_set_Prad, doc=u"""Radial magnetic air-gap surface force"""
+    )
 
     def _get_Ptan(self):
         """getter of Ptan"""
@@ -248,7 +293,11 @@ class InForce(Input):
 
         if self._Ptan is not None:
             self._Ptan.parent = self
+
     # Tangential magnetic air-gap surface force
     # Type : Import
-    Ptan = property(fget=_get_Ptan, fset=_set_Ptan,
-                    doc=u"""Tangential magnetic air-gap surface force""")
+    Ptan = property(
+        fget=_get_Ptan,
+        fset=_set_Ptan,
+        doc=u"""Tangential magnetic air-gap surface force""",
+    )

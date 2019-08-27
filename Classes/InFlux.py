@@ -19,7 +19,6 @@ from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 
 
-
 class InFlux(Input):
     """Input to skip the magnetic module and start with the structural one"""
 
@@ -30,7 +29,7 @@ class InFlux(Input):
     # save method is available in all object
     save = save
 
-    def __init__(self, time=None, angle=None, Br=None, Bt=None, mesh=None, init_dict=None):
+    def __init__(self, time=None, angle=None, Br=None, Bt=None, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -48,10 +47,8 @@ class InFlux(Input):
             Br = Import()
         if Bt == -1:
             Bt = Import()
-        if mesh == -1:
-            mesh = Import()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["time", "angle", "Br", "Bt", "mesh"])
+            check_init_dict(init_dict, ["time", "angle", "Br", "Bt"])
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
@@ -61,14 +58,21 @@ class InFlux(Input):
                 Br = init_dict["Br"]
             if "Bt" in list(init_dict.keys()):
                 Bt = init_dict["Bt"]
-            if "mesh" in list(init_dict.keys()):
-                mesh = init_dict["mesh"]
         # Initialisation by argument
         # time can be None, a Import object or a dict
         if isinstance(time, dict):
             # Call the correct constructor according to the dict
-            load_dict = {"ImportMatlab": ImportMatlab, "ImportMatrix": ImportMatrix, "ImportMatrixVal": ImportMatrixVal, "ImportMatrixXls": ImportMatrixXls, "ImportGenVectSin": ImportGenVectSin, "ImportGenMatrixSin": ImportGenMatrixSin, "ImportGenVectLin": ImportGenVectLin, "Import": Import}
-            obj_class = time.get('__class__')
+            load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
+                "ImportMatrixVal": ImportMatrixVal,
+                "ImportMatrixXls": ImportMatrixXls,
+                "ImportGenVectSin": ImportGenVectSin,
+                "ImportGenMatrixSin": ImportGenMatrixSin,
+                "ImportGenVectLin": ImportGenVectLin,
+                "Import": Import,
+            }
+            obj_class = time.get("__class__")
             if obj_class is None:
                 self.time = Import(init_dict=time)
             elif obj_class in list(load_dict.keys()):
@@ -80,8 +84,17 @@ class InFlux(Input):
         # angle can be None, a Import object or a dict
         if isinstance(angle, dict):
             # Call the correct constructor according to the dict
-            load_dict = {"ImportMatlab": ImportMatlab, "ImportMatrix": ImportMatrix, "ImportMatrixVal": ImportMatrixVal, "ImportMatrixXls": ImportMatrixXls, "ImportGenVectSin": ImportGenVectSin, "ImportGenMatrixSin": ImportGenMatrixSin, "ImportGenVectLin": ImportGenVectLin, "Import": Import}
-            obj_class = angle.get('__class__')
+            load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
+                "ImportMatrixVal": ImportMatrixVal,
+                "ImportMatrixXls": ImportMatrixXls,
+                "ImportGenVectSin": ImportGenVectSin,
+                "ImportGenMatrixSin": ImportGenMatrixSin,
+                "ImportGenVectLin": ImportGenVectLin,
+                "Import": Import,
+            }
+            obj_class = angle.get("__class__")
             if obj_class is None:
                 self.angle = Import(init_dict=angle)
             elif obj_class in list(load_dict.keys()):
@@ -93,8 +106,17 @@ class InFlux(Input):
         # Br can be None, a Import object or a dict
         if isinstance(Br, dict):
             # Call the correct constructor according to the dict
-            load_dict = {"ImportMatlab": ImportMatlab, "ImportMatrix": ImportMatrix, "ImportMatrixVal": ImportMatrixVal, "ImportMatrixXls": ImportMatrixXls, "ImportGenVectSin": ImportGenVectSin, "ImportGenMatrixSin": ImportGenMatrixSin, "ImportGenVectLin": ImportGenVectLin, "Import": Import}
-            obj_class = Br.get('__class__')
+            load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
+                "ImportMatrixVal": ImportMatrixVal,
+                "ImportMatrixXls": ImportMatrixXls,
+                "ImportGenVectSin": ImportGenVectSin,
+                "ImportGenMatrixSin": ImportGenMatrixSin,
+                "ImportGenVectLin": ImportGenVectLin,
+                "Import": Import,
+            }
+            obj_class = Br.get("__class__")
             if obj_class is None:
                 self.Br = Import(init_dict=Br)
             elif obj_class in list(load_dict.keys()):
@@ -106,8 +128,17 @@ class InFlux(Input):
         # Bt can be None, a Import object or a dict
         if isinstance(Bt, dict):
             # Call the correct constructor according to the dict
-            load_dict = {"ImportMatlab": ImportMatlab, "ImportMatrix": ImportMatrix, "ImportMatrixVal": ImportMatrixVal, "ImportMatrixXls": ImportMatrixXls, "ImportGenVectSin": ImportGenVectSin, "ImportGenMatrixSin": ImportGenMatrixSin, "ImportGenVectLin": ImportGenVectLin, "Import": Import}
-            obj_class = Bt.get('__class__')
+            load_dict = {
+                "ImportMatlab": ImportMatlab,
+                "ImportMatrix": ImportMatrix,
+                "ImportMatrixVal": ImportMatrixVal,
+                "ImportMatrixXls": ImportMatrixXls,
+                "ImportGenVectSin": ImportGenVectSin,
+                "ImportGenMatrixSin": ImportGenMatrixSin,
+                "ImportGenVectLin": ImportGenVectLin,
+                "Import": Import,
+            }
+            obj_class = Bt.get("__class__")
             if obj_class is None:
                 self.Bt = Import(init_dict=Bt)
             elif obj_class in list(load_dict.keys()):
@@ -116,19 +147,6 @@ class InFlux(Input):
                 raise InitUnKnowClassError("Unknow class name in init_dict for Bt")
         else:
             self.Bt = Bt
-        # mesh can be None, a Import object or a dict
-        if isinstance(mesh, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {"ImportMatlab": ImportMatlab, "ImportMatrix": ImportMatrix, "ImportMatrixVal": ImportMatrixVal, "ImportMatrixXls": ImportMatrixXls, "ImportGenVectSin": ImportGenVectSin, "ImportGenMatrixSin": ImportGenMatrixSin, "ImportGenVectLin": ImportGenVectLin, "Import": Import}
-            obj_class = mesh.get('__class__')
-            if obj_class is None:
-                self.mesh = Import(init_dict=mesh)
-            elif obj_class in list(load_dict.keys()):
-                self.mesh = load_dict[obj_class](init_dict=mesh)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for mesh")
-        else:
-            self.mesh = mesh
         # Call Input init
         super(InFlux, self).__init__()
         # The class is frozen (in Input init), for now it's impossible to
@@ -143,8 +161,7 @@ class InFlux(Input):
         InFlux_str += "time = " + str(self.time.as_dict()) + linesep + linesep
         InFlux_str += "angle = " + str(self.angle.as_dict()) + linesep + linesep
         InFlux_str += "Br = " + str(self.Br.as_dict()) + linesep + linesep
-        InFlux_str += "Bt = " + str(self.Bt.as_dict()) + linesep + linesep
-        InFlux_str += "mesh = " + str(self.mesh.as_dict())
+        InFlux_str += "Bt = " + str(self.Bt.as_dict())
         return InFlux_str
 
     def __eq__(self, other):
@@ -163,8 +180,6 @@ class InFlux(Input):
         if other.Br != self.Br:
             return False
         if other.Bt != self.Bt:
-            return False
-        if other.mesh != self.mesh:
             return False
         return True
 
@@ -190,10 +205,6 @@ class InFlux(Input):
             InFlux_dict["Bt"] = None
         else:
             InFlux_dict["Bt"] = self.Bt.as_dict()
-        if self.mesh is None:
-            InFlux_dict["mesh"] = None
-        else:
-            InFlux_dict["mesh"] = self.mesh.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         InFlux_dict["__class__"] = "InFlux"
@@ -210,8 +221,6 @@ class InFlux(Input):
             self.Br._set_None()
         if self.Bt is not None:
             self.Bt._set_None()
-        if self.mesh is not None:
-            self.mesh._set_None()
         # Set to None the properties inherited from Input
         super(InFlux, self)._set_None()
 
@@ -226,10 +235,14 @@ class InFlux(Input):
 
         if self._time is not None:
             self._time.parent = self
+
     # Electrical time vector (no symmetry) to import
     # Type : Import
-    time = property(fget=_get_time, fset=_set_time,
-                    doc=u"""Electrical time vector (no symmetry) to import""")
+    time = property(
+        fget=_get_time,
+        fset=_set_time,
+        doc=u"""Electrical time vector (no symmetry) to import""",
+    )
 
     def _get_angle(self):
         """getter of angle"""
@@ -242,10 +255,14 @@ class InFlux(Input):
 
         if self._angle is not None:
             self._angle.parent = self
+
     # Electrical position vector (no symmetry) to import
     # Type : Import
-    angle = property(fget=_get_angle, fset=_set_angle,
-                     doc=u"""Electrical position vector (no symmetry) to import""")
+    angle = property(
+        fget=_get_angle,
+        fset=_set_angle,
+        doc=u"""Electrical position vector (no symmetry) to import""",
+    )
 
     def _get_Br(self):
         """getter of Br"""
@@ -258,10 +275,10 @@ class InFlux(Input):
 
         if self._Br is not None:
             self._Br.parent = self
+
     # Radial airgap flux density
     # Type : Import
-    Br = property(fget=_get_Br, fset=_set_Br,
-                  doc=u"""Radial airgap flux density""")
+    Br = property(fget=_get_Br, fset=_set_Br, doc=u"""Radial airgap flux density""")
 
     def _get_Bt(self):
         """getter of Bt"""
@@ -274,23 +291,7 @@ class InFlux(Input):
 
         if self._Bt is not None:
             self._Bt.parent = self
+
     # Tangential airgap flux density
     # Type : Import
-    Bt = property(fget=_get_Bt, fset=_set_Bt,
-                  doc=u"""Tangential airgap flux density""")
-
-    def _get_mesh(self):
-        """getter of mesh"""
-        return self._mesh
-
-    def _set_mesh(self, value):
-        """setter of mesh"""
-        check_var("mesh", value, "Import")
-        self._mesh = value
-
-        if self._mesh is not None:
-            self._mesh.parent = self
-    # Electromagnetic mesh informations
-    # Type : Import
-    mesh = property(fget=_get_mesh, fset=_set_mesh,
-                    doc=u"""Electromagnetic mesh informations""")
+    Bt = property(fget=_get_Bt, fset=_set_Bt, doc=u"""Tangential airgap flux density""")

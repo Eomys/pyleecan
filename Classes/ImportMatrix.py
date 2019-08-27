@@ -95,5 +95,8 @@ class ImportMatrix(Import):
 
     # 1 to transpose the Imported/Generated matrix
     # Type : bool
-    is_transpose = property(fget=_get_is_transpose, fset=_set_is_transpose,
-                            doc=u"""1 to transpose the Imported/Generated matrix""")
+    is_transpose = property(
+        fget=_get_is_transpose,
+        fset=_set_is_transpose,
+        doc=u"""1 to transpose the Imported/Generated matrix""",
+    )

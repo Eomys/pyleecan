@@ -72,11 +72,6 @@ def gen_input(self):
     else:
         output.Bt = None
 
-    if self.mesh is not None:
-        output.mesh = self.mesh.get_data(Nt_tot)
-    else:
-        output.Bt = None
-
     if self.parent.parent is None:
         raise InputError(
             "ERROR: The Simulation object must be in an Output object to run"
