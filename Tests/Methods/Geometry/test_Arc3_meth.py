@@ -10,7 +10,7 @@
 from unittest import TestCase
 from ddt import ddt, data
 from pyleecan.Classes.Arc3 import Arc3
-
+from pyleecan.Classes.Arc1 import Arc1
 from numpy import pi, exp, sqrt, linspace
 
 # For AlmostEqual
@@ -165,6 +165,52 @@ get_angle_test.append(
     {"begin": 1 + 0j, "end": 0, "direction": False, "is_deg": True, "exp_angle": -180.0}
 )
 
+split_half_test = list()
+split_half_test.append(
+    {
+        "begin": 1,
+        "end": -1,
+        "direction": True,
+        "is_begin": True,
+        "N_begin": 1,
+        "N_end": 1j,
+        "N_radius": 1,
+    }
+)
+split_half_test.append(
+    {
+        "begin": 1,
+        "end": -1,
+        "direction": False,
+        "is_begin": False,
+        "N_begin": -1j,
+        "N_end": -1,
+        "N_radius": 1,
+    }
+)
+split_half_test.append(
+    {
+        "begin": 0,
+        "end": 2,
+        "direction": True,
+        "is_begin": True,
+        "N_begin": 0,
+        "N_end": 1 - 1j,
+        "N_radius": 1,
+    }
+)
+split_half_test.append(
+    {
+        "begin": 0,
+        "end": 2,
+        "direction": False,
+        "is_begin": False,
+        "N_begin": 1 + 1j,
+        "N_end": 2,
+        "N_radius": 1,
+    }
+)
+
 
 @ddt
 class test_Arc3_meth(TestCase):
@@ -273,3 +319,19 @@ class test_Arc3_meth(TestCase):
         )
         result = arc.get_angle(test_dict["is_deg"])
         self.assertAlmostEqual(result, test_dict["exp_angle"])
+
+    @data(*split_half_test)
+    def test_split_half(self, test_dict):
+        """Check that the arc3 split is correct
+        """
+        arc = Arc3(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            is_trigo_direction=test_dict["direction"],
+        )
+        arc.split_half(is_begin=test_dict["is_begin"])
+
+        self.assertTrue(isinstance(arc, Arc1))
+        self.assertAlmostEqual(arc.begin, test_dict["N_begin"])
+        self.assertAlmostEqual(arc.end, test_dict["N_end"])
+        self.assertAlmostEqual(arc.radius, test_dict["N_radius"])

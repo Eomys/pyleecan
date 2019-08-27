@@ -43,6 +43,5 @@ boundary_prop["sliding_line"] = "bc_ag2"
 boundary_prop["airgap_line_2"] = "bc_ag3"
 boundary_prop["Rotor_Yoke_Radius"] = "bc_A0"
 boundary_prop["Stator_Yoke_Radius"] = "bc_A0"
-boundary_prop["Rotor_Yoke_side"] = "bc_r1"
-boundary_prop["Stator_Yoke_side"] = "bc_s1"
-
+boundary_prop["Rotor_Yoke_Side"] = "bc_r1"
+boundary_prop["Stator_Yoke_Side"] = "bc_s1"

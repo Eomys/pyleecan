@@ -46,6 +46,26 @@ comp_length_test.append({"begin": 1, "end": 10, "length": 9})
 comp_length_test.append({"begin": 1j, "end": 10j, "length": 9})
 comp_length_test.append({"begin": 0, "end": 3 + 4j, "length": 5})
 
+split_half_test = list()
+split_half_test.append(
+    {"begin": 0, "end": 10 + 10j, "is_begin": True, "N_begin": 0, "N_end": 5 + 5j}
+)
+split_half_test.append(
+    {"begin": -10, "end": 10, "is_begin": False, "N_begin": 0, "N_end": 10}
+)
+split_half_test.append(
+    {
+        "begin": 2 + 2j,
+        "end": 1 + 1j,
+        "is_begin": True,
+        "N_begin": 2 + 2j,
+        "N_end": 1.5 + 1.5j,
+    }
+)
+split_half_test.append(
+    {"begin": -2j, "end": -6j, "is_begin": False, "N_begin": -4j, "N_end": -6j}
+)
+
 
 @ddt
 class test_Segment_meth(TestCase):
@@ -145,3 +165,13 @@ class test_Segment_meth(TestCase):
         expect_end = 0
         self.assertAlmostEqual(abs(expect_begin - segment.begin), 0)
         self.assertAlmostEqual(abs(expect_end - segment.end), 0)
+
+    @data(*split_half_test)
+    def test_split_half(self, test_dict):
+        """Check that the segment split is correct
+        """
+        seg = Segment(begin=test_dict["begin"], end=test_dict["end"])
+        seg.split_half(is_begin=test_dict["is_begin"])
+
+        self.assertAlmostEqual(seg.begin, test_dict["N_begin"])
+        self.assertAlmostEqual(seg.end, test_dict["N_end"])

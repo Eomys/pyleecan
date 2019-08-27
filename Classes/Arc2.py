@@ -10,13 +10,15 @@ from pyleecan.Methods.Geometry.Arc2.check import check
 from pyleecan.Methods.Geometry.Arc2.comp_length import comp_length
 from pyleecan.Methods.Geometry.Arc2.comp_radius import comp_radius
 from pyleecan.Methods.Geometry.Arc2.discretize import discretize
+from pyleecan.Methods.Geometry.Arc2.get_angle import get_angle
 from pyleecan.Methods.Geometry.Arc2.get_begin import get_begin
 from pyleecan.Methods.Geometry.Arc2.get_center import get_center
 from pyleecan.Methods.Geometry.Arc2.get_end import get_end
 from pyleecan.Methods.Geometry.Arc2.get_middle import get_middle
+from pyleecan.Methods.Geometry.Arc2.reverse import reverse
 from pyleecan.Methods.Geometry.Arc2.rotate import rotate
+from pyleecan.Methods.Geometry.Arc2.split_half import split_half
 from pyleecan.Methods.Geometry.Arc2.translate import translate
-from pyleecan.Methods.Geometry.Arc2.get_angle import get_angle
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -34,6 +36,8 @@ class Arc2(Arc):
     comp_radius = comp_radius
     # cf Methods.Geometry.Arc2.discretize
     discretize = discretize
+    # cf Methods.Geometry.Arc2.get_angle
+    get_angle = get_angle
     # cf Methods.Geometry.Arc2.get_begin
     get_begin = get_begin
     # cf Methods.Geometry.Arc2.get_center
@@ -42,12 +46,14 @@ class Arc2(Arc):
     get_end = get_end
     # cf Methods.Geometry.Arc2.get_middle
     get_middle = get_middle
+    # cf Methods.Geometry.Arc2.reverse
+    reverse = reverse
     # cf Methods.Geometry.Arc2.rotate
     rotate = rotate
+    # cf Methods.Geometry.Arc2.split_half
+    split_half = split_half
     # cf Methods.Geometry.Arc2.translate
     translate = translate
-    # cf Methods.Geometry.Arc2.get_angle
-    get_angle = get_angle
     # save method is available in all object
     save = save
 

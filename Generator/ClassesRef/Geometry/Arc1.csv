@@ -1,11 +1,14 @@
 Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
 begin;;begin point of the arc;;0;complex;0;;;;;;Geometry;Arc;check;VERSION;1;An arc between two points (defined by a radius);
 end;;end point of the arc;;0;complex;0;;;;;;;;comp_length;;;;
-radius;;Radius of the arc (can be + or -);;m;float;0;;;;;;;;discretize;;;;
+radius;;Radius of the arc (can be + or -);;m;float;0;;;;;;;;comp_radius;;;;
+;;;;;;;;;;;;;;discretize;;;;
+;;;;;;;;;;;;;;get_angle;;;;
 ;;;;;;;;;;;;;;get_begin;;;;
 ;;;;;;;;;;;;;;get_center;;;;
 ;;;;;;;;;;;;;;get_end;;;;
 ;;;;;;;;;;;;;;get_middle;;;;
+;;;;;;;;;;;;;;reverse;;;;
 ;;;;;;;;;;;;;;rotate;;;;
+;;;;;;;;;;;;;;split_half;;;;
 ;;;;;;;;;;;;;;translate;;;;
-;;;;;;;;;;;;;;get_angle;;;;

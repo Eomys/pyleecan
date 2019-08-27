@@ -8,6 +8,9 @@ from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Methods.Machine.Winding.comp_Ncspc import comp_Ncspc
 from pyleecan.Methods.Machine.Winding.comp_Ntspc import comp_Ntspc
+from pyleecan.Methods.Machine.Winding.comp_phasor_angle import comp_phasor_angle
+from pyleecan.Methods.Machine.Winding.comp_resistance_norm import comp_resistance_norm
+from pyleecan.Methods.Machine.Winding.comp_winding_factor import comp_winding_factor
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Conductor import Conductor
@@ -15,7 +18,6 @@ from pyleecan.Classes.CondType11 import CondType11
 from pyleecan.Classes.CondType12 import CondType12
 from pyleecan.Classes.CondType21 import CondType21
 from pyleecan.Classes.CondType22 import CondType22
-
 
 
 class Winding(FrozenClass):
@@ -27,10 +29,28 @@ class Winding(FrozenClass):
     comp_Ncspc = comp_Ncspc
     # cf Methods.Machine.Winding.comp_Ntspc
     comp_Ntspc = comp_Ntspc
+    # cf Methods.Machine.Winding.comp_phasor_angle
+    comp_phasor_angle = comp_phasor_angle
+    # cf Methods.Machine.Winding.comp_resistance_norm
+    comp_resistance_norm = comp_resistance_norm
+    # cf Methods.Machine.Winding.comp_winding_factor
+    comp_winding_factor = comp_winding_factor
     # save method is available in all object
     save = save
 
-    def __init__(self, is_reverse_wind=False, Nslot_shift_wind=0, qs=3, Ntcoil=7, Npcpp=2, type_connection=0, p=3, Lewout=0.015, conductor=-1, init_dict=None):
+    def __init__(
+        self,
+        is_reverse_wind=False,
+        Nslot_shift_wind=0,
+        qs=3,
+        Ntcoil=7,
+        Npcpp=2,
+        type_connection=0,
+        p=3,
+        Lewout=0.015,
+        conductor=-1,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -43,7 +63,20 @@ class Winding(FrozenClass):
         if conductor == -1:
             conductor = Conductor()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["is_reverse_wind", "Nslot_shift_wind", "qs", "Ntcoil", "Npcpp", "type_connection", "p", "Lewout", "conductor"])
+            check_init_dict(
+                init_dict,
+                [
+                    "is_reverse_wind",
+                    "Nslot_shift_wind",
+                    "qs",
+                    "Ntcoil",
+                    "Npcpp",
+                    "type_connection",
+                    "p",
+                    "Lewout",
+                    "conductor",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "is_reverse_wind" in list(init_dict.keys()):
                 is_reverse_wind = init_dict["is_reverse_wind"]
@@ -76,14 +109,22 @@ class Winding(FrozenClass):
         # conductor can be None, a Conductor object or a dict
         if isinstance(conductor, dict):
             # Call the correct constructor according to the dict
-            load_dict = {"CondType11": CondType11, "CondType12": CondType12, "CondType21": CondType21, "CondType22": CondType22, "Conductor": Conductor}
-            obj_class = conductor.get('__class__')
+            load_dict = {
+                "CondType11": CondType11,
+                "CondType12": CondType12,
+                "CondType21": CondType21,
+                "CondType22": CondType22,
+                "Conductor": Conductor,
+            }
+            obj_class = conductor.get("__class__")
             if obj_class is None:
                 self.conductor = Conductor(init_dict=conductor)
             elif obj_class in list(load_dict.keys()):
                 self.conductor = load_dict[obj_class](init_dict=conductor)
             else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for conductor")
+                raise InitUnKnowClassError(
+                    "Unknow class name in init_dict for conductor"
+                )
         else:
             self.conductor = conductor
 
@@ -180,8 +221,11 @@ class Winding(FrozenClass):
 
     # 1 to reverse the default winding algorithm along the airgap (c,b,a instead of a,b,c along the trigonometric direction)
     # Type : bool
-    is_reverse_wind = property(fget=_get_is_reverse_wind, fset=_set_is_reverse_wind,
-                               doc=u"""1 to reverse the default winding algorithm along the airgap (c,b,a instead of a,b,c along the trigonometric direction)""")
+    is_reverse_wind = property(
+        fget=_get_is_reverse_wind,
+        fset=_set_is_reverse_wind,
+        doc=u"""1 to reverse the default winding algorithm along the airgap (c,b,a instead of a,b,c along the trigonometric direction)""",
+    )
 
     def _get_Nslot_shift_wind(self):
         """getter of Nslot_shift_wind"""
@@ -194,8 +238,11 @@ class Winding(FrozenClass):
 
     # 0 not to change the stator winding connection matrix built by MANATEE number of slots to shift the coils obtained with MANATEE winding algorithm (a,b,c becomes b,c,a with Nslot_shift_wind1=1)
     # Type : int
-    Nslot_shift_wind = property(fget=_get_Nslot_shift_wind, fset=_set_Nslot_shift_wind,
-                                doc=u"""0 not to change the stator winding connection matrix built by MANATEE number of slots to shift the coils obtained with MANATEE winding algorithm (a,b,c becomes b,c,a with Nslot_shift_wind1=1)""")
+    Nslot_shift_wind = property(
+        fget=_get_Nslot_shift_wind,
+        fset=_set_Nslot_shift_wind,
+        doc=u"""0 not to change the stator winding connection matrix built by MANATEE number of slots to shift the coils obtained with MANATEE winding algorithm (a,b,c becomes b,c,a with Nslot_shift_wind1=1)""",
+    )
 
     def _get_qs(self):
         """getter of qs"""
@@ -206,10 +253,9 @@ class Winding(FrozenClass):
         check_var("qs", value, "int", Vmin=1, Vmax=100)
         self._qs = value
 
-    # number of phases 
+    # number of phases
     # Type : int, min = 1, max = 100
-    qs = property(fget=_get_qs, fset=_set_qs,
-                  doc=u"""number of phases """)
+    qs = property(fget=_get_qs, fset=_set_qs, doc=u"""number of phases """)
 
     def _get_Ntcoil(self):
         """getter of Ntcoil"""
@@ -222,8 +268,9 @@ class Winding(FrozenClass):
 
     # number of turns per coil
     # Type : int, min = 1, max = 1000
-    Ntcoil = property(fget=_get_Ntcoil, fset=_set_Ntcoil,
-                      doc=u"""number of turns per coil""")
+    Ntcoil = property(
+        fget=_get_Ntcoil, fset=_set_Ntcoil, doc=u"""number of turns per coil"""
+    )
 
     def _get_Npcpp(self):
         """getter of Npcpp"""
@@ -236,8 +283,11 @@ class Winding(FrozenClass):
 
     # number of parallel circuits per phase (maximum 2p)
     # Type : int, min = 1, max = 1000
-    Npcpp = property(fget=_get_Npcpp, fset=_set_Npcpp,
-                     doc=u"""number of parallel circuits per phase (maximum 2p)""")
+    Npcpp = property(
+        fget=_get_Npcpp,
+        fset=_set_Npcpp,
+        doc=u"""number of parallel circuits per phase (maximum 2p)""",
+    )
 
     def _get_type_connection(self):
         """getter of type_connection"""
@@ -248,10 +298,13 @@ class Winding(FrozenClass):
         check_var("type_connection", value, "int", Vmin=0, Vmax=1)
         self._type_connection = value
 
-    # Winding connexion : 0 star (Y), 1 triangle (delta)
+    # Winding connection : 0 star (Y), 1 triangle (delta)
     # Type : int, min = 0, max = 1
-    type_connection = property(fget=_get_type_connection, fset=_set_type_connection,
-                               doc=u"""Winding connexion : 0 star (Y), 1 triangle (delta)""")
+    type_connection = property(
+        fget=_get_type_connection,
+        fset=_set_type_connection,
+        doc=u"""Winding connection : 0 star (Y), 1 triangle (delta)""",
+    )
 
     def _get_p(self):
         """getter of p"""
@@ -264,8 +317,7 @@ class Winding(FrozenClass):
 
     # pole pairs number
     # Type : int, min = 1, max = 100
-    p = property(fget=_get_p, fset=_set_p,
-                 doc=u"""pole pairs number""")
+    p = property(fget=_get_p, fset=_set_p, doc=u"""pole pairs number""")
 
     def _get_Lewout(self):
         """getter of Lewout"""
@@ -276,10 +328,13 @@ class Winding(FrozenClass):
         check_var("Lewout", value, "float", Vmin=0, Vmax=100)
         self._Lewout = value
 
-    # straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length 
+    # straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length
     # Type : float, min = 0, max = 100
-    Lewout = property(fget=_get_Lewout, fset=_set_Lewout,
-                      doc=u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length """)
+    Lewout = property(
+        fget=_get_Lewout,
+        fset=_set_Lewout,
+        doc=u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length """,
+    )
 
     def _get_conductor(self):
         """getter of conductor"""
@@ -292,7 +347,9 @@ class Winding(FrozenClass):
 
         if self._conductor is not None:
             self._conductor.parent = self
+
     # Winding's conductor
     # Type : Conductor
-    conductor = property(fget=_get_conductor, fset=_set_conductor,
-                         doc=u"""Winding's conductor""")
+    conductor = property(
+        fget=_get_conductor, fset=_set_conductor, doc=u"""Winding's conductor"""
+    )

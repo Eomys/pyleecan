@@ -6,6 +6,9 @@ from pyleecan.Classes.check import check_init_dict, check_var
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
+from pyleecan.Methods.Slot.Slot.build_geometry_half_tooth import (
+    build_geometry_half_tooth,
+)
 from pyleecan.Methods.Slot.Slot.check import check
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.Slot.comp_height import comp_height
@@ -24,6 +27,8 @@ class Slot(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Slot.Slot.build_geometry_half_tooth
+    build_geometry_half_tooth = build_geometry_half_tooth
     # cf Methods.Slot.Slot.check
     check = check
     # cf Methods.Slot.Slot.comp_angle_opening

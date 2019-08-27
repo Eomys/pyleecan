@@ -25,7 +25,7 @@ def get_mesh_param(label, FEMM_dict):
     mesh_dict["automesh"] = FEMM_dict["automesh"]
 
     if "Lamination_Stator" in label:  # Stator
-        if "bore" in label:
+        if "Bore" in label:
             mesh_dict["element_size"] = FEMM_dict["elementsize_slotS"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_slotS"]
         else:
@@ -33,7 +33,7 @@ def get_mesh_param(label, FEMM_dict):
             mesh_dict["meshsize"] = FEMM_dict["meshsize_yokeS"]
         mesh_dict["group"] = FEMM_dict["groups"]["GROUP_SC"]
     elif "Lamination_Rotor" in label:  # Rotor
-        if "bore" in label:
+        if "Bore" in label:
             mesh_dict["element_size"] = FEMM_dict["elementsize_slotR"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_slotR"]
         else:
