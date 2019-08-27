@@ -13,6 +13,7 @@ from pyleecan.Functions.init_fig import init_fig
 
 def plot_lines(self, fig=None):
     """Plot the SurfLine-Contour in a matplotlib fig
+    (For plotting unclosed contour, for Polygon use plot method from Surface object)
 
     Parameters
     ----------

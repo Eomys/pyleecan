@@ -7,6 +7,7 @@ from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Methods.Geometry.Surface.draw_FEMM import draw_FEMM
+from pyleecan.Methods.Geometry.Surface.plot import plot
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -18,6 +19,8 @@ class Surface(FrozenClass):
 
     # cf Methods.Geometry.Surface.draw_FEMM
     draw_FEMM = draw_FEMM
+    # cf Methods.Geometry.Surface.plot
+    plot = plot
     # save method is available in all object
     save = save
 
