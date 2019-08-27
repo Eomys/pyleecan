@@ -2,10 +2,11 @@ Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Min
 begin;-;begin point of the line;;0;complex;0;;;;2;;Geometry;Line;check;VERSION;1;A segment between two points;
 end;-;end point of the line;;0;complex;0;;;;;;;;comp_length;;;;
 ;;;;;;;;;;;;;;discretize;;;;
+;;;;;;;;;;;;;;draw_FEMM;;;;
 ;;;;;;;;;;;;;;get_begin;;;;
 ;;;;;;;;;;;;;;get_end;;;;
 ;;;;;;;;;;;;;;get_middle;;;;
-;;;;;;;;;;;;;;rotate;;;;
-;;;;;;;;;;;;;;translate;;;;
-;;;;;;;;;;;;;;draw_FEMM;;;;
 ;;;;;;;;;;;;;;reverse;;;;
+;;;;;;;;;;;;;;rotate;;;;
+;;;;;;;;;;;;;;split_half;;;;
+;;;;;;;;;;;;;;translate;;;;

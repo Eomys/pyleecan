@@ -311,6 +311,52 @@ get_angle_test.append(
     {"begin": 2 + 1j, "end": 2 - 1j, "radius": -1, "is_deg": False, "exp_angle": -pi}
 )
 
+split_half_test = list()
+split_half_test.append(
+    {
+        "begin": 1,
+        "end": -1,
+        "radius": 1,
+        "is_begin": True,
+        "N_begin": 1,
+        "N_end": 1j,
+        "N_radius": 1,
+    }
+)
+split_half_test.append(
+    {
+        "begin": 1,
+        "end": -1,
+        "radius": 1,
+        "is_begin": False,
+        "N_begin": 1j,
+        "N_end": -1,
+        "N_radius": 1,
+    }
+)
+split_half_test.append(
+    {
+        "begin": 1,
+        "end": 1j,
+        "radius": -1,
+        "is_begin": True,
+        "N_begin": 1,
+        "N_end": exp(-1j * 3 * pi / 4) + 1 + 1j,
+        "N_radius": -1,
+    }
+)
+split_half_test.append(
+    {
+        "begin": 0,
+        "end": -2j - 2,
+        "radius": 2,
+        "is_begin": False,
+        "N_begin": 2 * exp(3j * pi / 4) - 2j,
+        "N_end": -2j - 2,
+        "N_radius": 2,
+    }
+)
+
 
 @ddt
 class test_Arc1_meth(TestCase):
@@ -461,3 +507,15 @@ class test_Arc1_meth(TestCase):
         )
         result = arc.get_angle(test_dict["is_deg"])
         self.assertAlmostEqual(result, test_dict["exp_angle"])
+
+    @data(*split_half_test)
+    def test_split_half(self, test_dict):
+        """Check that the arc1 split is correct
+        """
+        arc = Arc1(
+            begin=test_dict["begin"], end=test_dict["end"], radius=test_dict["radius"]
+        )
+        arc.split_half(is_begin=test_dict["is_begin"])
+        self.assertAlmostEqual(arc.begin, test_dict["N_begin"])
+        self.assertAlmostEqual(arc.end, test_dict["N_end"])
+        self.assertAlmostEqual(arc.radius, test_dict["N_radius"])

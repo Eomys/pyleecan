@@ -9,13 +9,14 @@ from pyleecan.Classes.Line import Line
 from pyleecan.Methods.Geometry.Segment.check import check
 from pyleecan.Methods.Geometry.Segment.comp_length import comp_length
 from pyleecan.Methods.Geometry.Segment.discretize import discretize
+from pyleecan.Methods.Geometry.Segment.draw_FEMM import draw_FEMM
 from pyleecan.Methods.Geometry.Segment.get_begin import get_begin
 from pyleecan.Methods.Geometry.Segment.get_end import get_end
 from pyleecan.Methods.Geometry.Segment.get_middle import get_middle
-from pyleecan.Methods.Geometry.Segment.rotate import rotate
-from pyleecan.Methods.Geometry.Segment.translate import translate
-from pyleecan.Methods.Geometry.Segment.draw_FEMM import draw_FEMM
 from pyleecan.Methods.Geometry.Segment.reverse import reverse
+from pyleecan.Methods.Geometry.Segment.rotate import rotate
+from pyleecan.Methods.Geometry.Segment.split_half import split_half
+from pyleecan.Methods.Geometry.Segment.translate import translate
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -31,20 +32,22 @@ class Segment(Line):
     comp_length = comp_length
     # cf Methods.Geometry.Segment.discretize
     discretize = discretize
+    # cf Methods.Geometry.Segment.draw_FEMM
+    draw_FEMM = draw_FEMM
     # cf Methods.Geometry.Segment.get_begin
     get_begin = get_begin
     # cf Methods.Geometry.Segment.get_end
     get_end = get_end
     # cf Methods.Geometry.Segment.get_middle
     get_middle = get_middle
-    # cf Methods.Geometry.Segment.rotate
-    rotate = rotate
-    # cf Methods.Geometry.Segment.translate
-    translate = translate
-    # cf Methods.Geometry.Segment.draw_FEMM
-    draw_FEMM = draw_FEMM
     # cf Methods.Geometry.Segment.reverse
     reverse = reverse
+    # cf Methods.Geometry.Segment.rotate
+    rotate = rotate
+    # cf Methods.Geometry.Segment.split_half
+    split_half = split_half
+    # cf Methods.Geometry.Segment.translate
+    translate = translate
     # save method is available in all object
     save = save
 

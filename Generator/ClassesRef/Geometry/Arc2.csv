@@ -3,11 +3,12 @@ begin;-;begin point of the arc;;0;complex;0;;;;;;Geometry;Arc;check;VERSION;1;An
 center;-;center of the arc;;0;complex;0;;;;;;;;comp_length;;;;
 angle;rad;opening angle of the arc;;0;float;1.57079633;-6.2831853071796;6.2831853071796;;;;;;comp_radius;;;;
 ;;;;;;;;;;;;;;discretize;;;;
+;;;;;;;;;;;;;;get_angle;;;;
 ;;;;;;;;;;;;;;get_begin;;;;
 ;;;;;;;;;;;;;;get_center;;;;
 ;;;;;;;;;;;;;;get_end;;;;
 ;;;;;;;;;;;;;;get_middle;;;;
-;;;;;;;;;;;;;;rotate;;;;
-;;;;;;;;;;;;;;translate;;;;
-;;;;;;;;;;;;;;get_angle;;;;
 ;;;;;;;;;;;;;;reverse;;;;
+;;;;;;;;;;;;;;rotate;;;;
+;;;;;;;;;;;;;;split_half;;;;
+;;;;;;;;;;;;;;translate;;;;

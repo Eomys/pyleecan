@@ -18,7 +18,7 @@ def discretize(self, Npoint=-1):
     self.check()
     # getting lines that delimit the SurfLine
     lines = self.get_lines()
-    if lines[0].begin == lines[-1].end:
+    if lines[0].get_begin() == lines[-1].get_end():
         closed = True
     else:
         closed = False
