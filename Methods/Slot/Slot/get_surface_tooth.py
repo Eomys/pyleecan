@@ -38,7 +38,8 @@ def get_surface_tooth(self):
     Z1 = Ryoke * exp(1j * pi / self.Zs)
     Z2 = Ryoke * exp(-1j * pi / self.Zs)
     curve_list.append(Segment(top_list[-1].get_end(), Z1))
-    curve_list.append(Arc1(Z1, Z2, -Ryoke))
+    if Ryoke > 0:
+        curve_list.append(Arc1(Z1, Z2, -Ryoke))
     curve_list.append(Segment(Z2, bot_list[0].get_begin()))
     # Second half of the tooth
     curve_list.extend(bot_list)

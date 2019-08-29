@@ -5,7 +5,7 @@
 @todo distinguish between different bore geometries (line, arc, ...)
 """
 from numpy import imag, pi, exp
-
+from numpy import abs as np_abs
 from pyleecan.Classes.Circle import Circle
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.Arc import Arc
@@ -65,9 +65,11 @@ def build_geometry_half_tooth(self, is_top=False, alpha=0, delta=0):
 
     # add bore lines
     Zbo = Rbo * exp(-1j * pi / Zs)
-    top_list.insert(0, Arc1(Zbo, top_list[0].get_begin(), Rbo))
+    if np_abs(Zbo - top_list[0].get_begin()) > 1e-6:
+        top_list.insert(0, Arc1(Zbo, top_list[0].get_begin(), Rbo))
     Zbo = Rbo * exp(1j * pi / Zs)
-    bot_list.append(Arc1(bot_list[-1].get_end(), Zbo, Rbo))
+    if np_abs(Zbo - bot_list[-1].get_end()) > 1e-6:
+        bot_list.append(Arc1(bot_list[-1].get_end(), Zbo, Rbo))
 
     # Select the lines to return
     if is_top:

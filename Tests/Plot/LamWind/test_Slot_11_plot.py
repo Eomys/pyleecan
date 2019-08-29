@@ -110,3 +110,13 @@ class test_Lam_Wind_11_plot(TestCase):
         fig.savefig(join(save_path, "test_Lam_Wind_s11_3-Stator.png"))
         # 2 for lam + Zs*2 for wind
         self.assertEqual(len(fig.axes[0].patches), 38)
+
+        tooth = test_obj.rotor.slot.get_surface_tooth()
+        tooth.plot(color="r")
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Wind_s11_Tooth_in.png"))
+
+        tooth = test_obj.stator.slot.get_surface_tooth()
+        tooth.plot(color="r")
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Wind_s11_Tooth_out.png"))

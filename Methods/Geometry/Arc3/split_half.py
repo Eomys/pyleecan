@@ -1,8 +1,9 @@
-from pyleecan.Classes.Arc1 import Arc1
+from pyleecan.Classes.Arc2 import Arc2
+from numpy import pi
 
 
 def split_half(self, is_begin=True):
-    """Cut the line in half (modify the object Arc3 => Arc1)
+    """Cut the line in half (modify the object Arc3 => Arc2)
 
     Parameters
     ----------
@@ -15,10 +16,17 @@ def split_half(self, is_begin=True):
     -------
     """
 
-    if is_begin:
-        arc = Arc1(begin=self.begin, end=self.get_middle(), radius=self.comp_radius())
+    if self.is_trigo_direction:
+        sign = 1
     else:
-        arc = Arc1(end=self.end, begin=self.get_middle(), radius=self.comp_radius())
-    # Change the object type from Arc3 => Arc1
-    self.__class__ = Arc1
+        sign = -1
+
+    if is_begin:
+        arc = Arc2(begin=self.begin, center=self.get_center(), angle=sign * pi / 2)
+    else:
+        arc = Arc2(
+            begin=self.get_middle(), center=self.get_center(), angle=sign * pi / 2
+        )
+    # Change the object type from Arc3 => Arc2
+    self.__class__ = Arc2
     self.__dict__.update(arc.__dict__)

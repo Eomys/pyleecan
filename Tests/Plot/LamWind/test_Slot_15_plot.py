@@ -57,3 +57,8 @@ class test_Lam_Wind_15_plot(TestCase):
         fig.savefig(join(save_path, "test_Lam_Wind_s15.png"))
         # 2 for lam + Zs*4 for wind
         self.assertEqual(len(fig.axes[0].patches), 26)
+
+        tooth = test_obj.slot.get_surface_tooth()
+        tooth.plot(color="r")
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Wind_s15_Tooth_out.png"))

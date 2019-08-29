@@ -131,3 +131,13 @@ class test_Lam_Wind_10_plot(TestCase):
         surf.plot_lines()
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s10_Tooth_top_in.png"))
+
+        tooth = test_obj.rotor.slot.get_surface_tooth()
+        tooth.plot(color="r")
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Wind_s10_Tooth_in.png"))
+
+        tooth = test_obj.stator.slot.get_surface_tooth()
+        tooth.plot(color="r")
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Wind_s10_Tooth_out.png"))

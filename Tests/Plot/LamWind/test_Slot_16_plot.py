@@ -84,3 +84,11 @@ class test_Lam_Wind_16_plot(TestCase):
         fig.savefig(join(save_path, "test_Lam_Wind_s16_3-rad-wind.png"))
         # 2 for lam + Zs*2 for wind
         self.assertEqual(len(fig.axes[0].patches), 14)
+
+    def test_Lam_Wind_16_tooth(self):
+        """Test the Slot 16 tooth plot
+        """
+        tooth = self.test_obj.slot.get_surface_tooth()
+        tooth.plot(color="r")
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Wind_s16_Tooth_in.png"))
