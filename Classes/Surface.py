@@ -6,6 +6,7 @@ from pyleecan.Classes.check import check_init_dict, check_var
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
+from pyleecan.Methods.Geometry.Surface.comp_mesh_dict import comp_mesh_dict
 from pyleecan.Methods.Geometry.Surface.draw_FEMM import draw_FEMM
 from pyleecan.Methods.Geometry.Surface.plot import plot
 
@@ -17,6 +18,8 @@ class Surface(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Geometry.Surface.comp_mesh_dict
+    comp_mesh_dict = comp_mesh_dict
     # cf Methods.Geometry.Surface.draw_FEMM
     draw_FEMM = draw_FEMM
     # cf Methods.Geometry.Surface.plot

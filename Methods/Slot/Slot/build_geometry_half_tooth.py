@@ -66,10 +66,14 @@ def build_geometry_half_tooth(self, is_top=False, alpha=0, delta=0):
     # add bore lines
     Zbo = Rbo * exp(-1j * pi / Zs)
     if np_abs(Zbo - top_list[0].get_begin()) > 1e-6:
-        top_list.insert(0, Arc1(Zbo, top_list[0].get_begin(), Rbo))
+        top_list.insert(
+            0, Arc1(Zbo, top_list[0].get_begin(), Rbo, label="Tooth_bore_arc_top")
+        )
     Zbo = Rbo * exp(1j * pi / Zs)
     if np_abs(Zbo - bot_list[-1].get_end()) > 1e-6:
-        bot_list.append(Arc1(bot_list[-1].get_end(), Zbo, Rbo))
+        bot_list.append(
+            Arc1(bot_list[-1].get_end(), Zbo, Rbo, label="Tooth_bore_arc_bot")
+        )
 
     # Select the lines to return
     if is_top:

@@ -140,4 +140,8 @@ class test_Lam_Wind_10_plot(TestCase):
         tooth = test_obj.stator.slot.get_surface_tooth()
         tooth.plot(color="r")
         fig = plt.gcf()
+        mesh_dict = tooth.comp_mesh_dict(5e-3)
+        for line in tooth.get_lines():
+            mid = line.get_middle()
+            plt.text(mid.real, mid.imag, str(mesh_dict[line.label]))
         fig.savefig(join(save_path, "test_Lam_Wind_s10_Tooth_out.png"))
