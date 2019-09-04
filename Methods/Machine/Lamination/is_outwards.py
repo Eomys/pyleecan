@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Slot.check
-Check that the Slot is correct
+"""@package Methods.Machine.Lamination.is_outwards
+Check if the Slot is outwards or inwards
 @date Created on Wed Feb 04 12:47:19 2015
 @copyright (C) 2015-2016 EOMYS ENGINEERING.
 @author pierre_b
+@todo: method name is a little confusing - sebastian_g
 """
-
-from pyleecan.Methods import ParentMissingError
 
 
 def is_outwards(self):
@@ -23,9 +22,4 @@ def is_outwards(self):
     is_outwards: bool
         True if the Lamination is not internal and false if not
     """
-    if self.parent is not None:
-        return self.parent.is_outwards()
-    else:
-        raise ParentMissingError(
-            "Error: The slot is not inside a Lamination or a Notch"
-        )
+    return not self.is_internal

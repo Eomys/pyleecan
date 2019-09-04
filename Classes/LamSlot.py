@@ -16,6 +16,7 @@ from pyleecan.Methods.Machine.LamSlot.plot import plot
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
+from pyleecan.Classes.Slot19 import Slot19
 from pyleecan.Classes.SlotMFlat import SlotMFlat
 from pyleecan.Classes.SlotMPolar import SlotMPolar
 from pyleecan.Classes.SlotW10 import SlotW10
@@ -47,6 +48,8 @@ from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
+from pyleecan.Classes.Notch import Notch
+from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 
 
 class LamSlot(Lamination):
@@ -84,6 +87,7 @@ class LamSlot(Lamination):
         Rext=1,
         is_stator=True,
         axial_vent=list(),
+        notch=list(),
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -114,6 +118,7 @@ class LamSlot(Lamination):
                     "Rext",
                     "is_stator",
                     "axial_vent",
+                    "notch",
                 ],
             )
             # Overwrite default value with init_dict content
@@ -139,11 +144,14 @@ class LamSlot(Lamination):
                 is_stator = init_dict["is_stator"]
             if "axial_vent" in list(init_dict.keys()):
                 axial_vent = init_dict["axial_vent"]
+            if "notch" in list(init_dict.keys()):
+                notch = init_dict["notch"]
         # Initialisation by argument
         # slot can be None, a Slot object or a dict
         if isinstance(slot, dict):
             # Call the correct constructor according to the dict
             load_dict = {
+                "Slot19": Slot19,
                 "SlotMFlat": SlotMFlat,
                 "SlotMPolar": SlotMPolar,
                 "SlotW10": SlotW10,
@@ -187,6 +195,7 @@ class LamSlot(Lamination):
             Rext=Rext,
             is_stator=is_stator,
             axial_vent=axial_vent,
+            notch=notch,
         )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties

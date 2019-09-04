@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """@package set_FEMM_materials
 @date Created on août 06 17:04 2018
-@author franco_i
+@author franco_i+
+@todo: why is the label "Lamination_Stator_Bore" and not "Lamination_Stator"
 """
 
 import femm
@@ -57,7 +58,7 @@ def create_FEMM_materials(
         1 to calculate eddy currents
     jt_0 : int
         Current time step for winding calculation
-    
+
     Returns
     -------
     Tuple: dict, list

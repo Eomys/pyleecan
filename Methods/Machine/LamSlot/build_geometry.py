@@ -44,9 +44,9 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         ll = "Rotor"
     if self.is_internal:
         ls = "Ext"  # label for the slot
-        ly = "In"  # label for the yoke
+        ly = "Int"  # label for the yoke
     else:
-        ls = "In"
+        ls = "Int"
         ly = "Ext"
 
     Ryoke = self.get_Ryoke()
@@ -59,11 +59,10 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     Slot_lines = self.slot.build_geometry()
     for line in Slot_lines:
         line.rotate(slot_pitch / 2)
-    # getting the bore line
-    bore_lines = self.get_bore_line(slot_pitch - t_angle / 2, slot_pitch + t_angle / 2)
-    Slot_lines.extend(bore_lines)
 
-    # Generate all the Bore lines
+    # Generate all the Slot and Bore lines
+    a0 = slot_pitch - t_angle / 2
+    a1 = slot_pitch + t_angle / 2
     line_list = list()
     for ii in range(Zs // sym):
         # Duplicate and rotate the slot + bore for each slot
@@ -71,6 +70,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             new_line = type(line)(init_dict=line.as_dict())
             new_line.rotate(ii * slot_pitch)
             line_list.append(new_line)
+        bore_lines = self.get_bore_line(a0 + ii * slot_pitch, a1 + ii * slot_pitch)
+        line_list.extend(bore_lines)
 
     # Create the lamination surface(s)
     surf_list = list()

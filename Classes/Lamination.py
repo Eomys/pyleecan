@@ -23,6 +23,7 @@ from pyleecan.Methods.Machine.Lamination.get_name_phase import get_name_phase
 from pyleecan.Methods.Machine.Lamination.plot import plot
 from pyleecan.Methods.Machine.Lamination.comp_output_geo import comp_output_geo
 from pyleecan.Methods.Machine.Lamination.get_polar_eq import get_polar_eq
+from pyleecan.Methods.Machine.Lamination.is_outwards import is_outwards
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
@@ -36,6 +37,8 @@ from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
+from pyleecan.Classes.Notch import Notch
+from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 
 
 class Lamination(FrozenClass):
@@ -73,6 +76,8 @@ class Lamination(FrozenClass):
     comp_output_geo = comp_output_geo
     # cf Methods.Machine.Lamination.get_polar_eq
     get_polar_eq = get_polar_eq
+    # cf Methods.Machine.Lamination.is_outwards
+    is_outwards = is_outwards
     # save method is available in all object
     save = save
 
@@ -88,6 +93,7 @@ class Lamination(FrozenClass):
         Rext=1,
         is_stator=True,
         axial_vent=list(),
+        notch=list(),
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -115,6 +121,7 @@ class Lamination(FrozenClass):
                     "Rext",
                     "is_stator",
                     "axial_vent",
+                    "notch",
                 ],
             )
             # Overwrite default value with init_dict content
@@ -138,6 +145,8 @@ class Lamination(FrozenClass):
                 is_stator = init_dict["is_stator"]
             if "axial_vent" in list(init_dict.keys()):
                 axial_vent = init_dict["axial_vent"]
+            if "notch" in list(init_dict.keys()):
+                notch = init_dict["notch"]
         # Initialisation by argument
         self.parent = None
         self.L1 = L1
@@ -188,6 +197,30 @@ class Lamination(FrozenClass):
             self.axial_vent = list()
         else:
             self.axial_vent = axial_vent
+        # notch can be None or a list of Notch object
+        self.notch = list()
+        if type(notch) is list:
+            for obj in notch:
+                if obj is None:  # Default value
+                    self.notch.append(Notch())
+                elif isinstance(obj, dict):
+                    # Call the correct constructor according to the dict
+                    load_dict = {"NotchEvenDist": NotchEvenDist, "Notch": Notch}
+                    obj_class = obj.get("__class__")
+                    if obj_class is None:
+                        self.notch.append(Notch(init_dict=obj))
+                    elif obj_class in list(load_dict.keys()):
+                        self.notch.append(load_dict[obj_class](init_dict=obj))
+                    else:  # Avoid generation error or wrong modification in json
+                        raise InitUnKnowClassError(
+                            "Unknow class name in init_dict for notch"
+                        )
+                else:
+                    self.notch.append(obj)
+        elif notch is None:
+            self.notch = list()
+        else:
+            self.notch = notch
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -220,6 +253,14 @@ class Lamination(FrozenClass):
                 + "] = "
                 + str(self.axial_vent[ii].as_dict())
                 + "\n"
+                + linesep
+                + linesep
+            )
+        if len(self.notch) == 0:
+            Lamination_str += "notch = []"
+        for ii in range(len(self.notch)):
+            Lamination_str += (
+                "notch[" + str(ii) + "] = " + str(self.notch[ii].as_dict()) + "\n"
             )
         return Lamination_str
 
@@ -248,6 +289,8 @@ class Lamination(FrozenClass):
             return False
         if other.axial_vent != self.axial_vent:
             return False
+        if other.notch != self.notch:
+            return False
         return True
 
     def as_dict(self):
@@ -270,6 +313,9 @@ class Lamination(FrozenClass):
         Lamination_dict["axial_vent"] = list()
         for obj in self.axial_vent:
             Lamination_dict["axial_vent"].append(obj.as_dict())
+        Lamination_dict["notch"] = list()
+        for obj in self.notch:
+            Lamination_dict["notch"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         Lamination_dict["__class__"] = "Lamination"
         return Lamination_dict
@@ -288,6 +334,8 @@ class Lamination(FrozenClass):
         self.Rext = None
         self.is_stator = None
         for obj in self.axial_vent:
+            obj._set_None()
+        for obj in self.notch:
             obj._set_None()
 
     def _get_L1(self):
@@ -450,4 +498,26 @@ class Lamination(FrozenClass):
     # Type : [Hole]
     axial_vent = property(
         fget=_get_axial_vent, fset=_set_axial_vent, doc=u"""Axial ventilation ducts"""
+    )
+
+    def _get_notch(self):
+        """getter of notch"""
+        for obj in self._notch:
+            if obj is not None:
+                obj.parent = self
+        return self._notch
+
+    def _set_notch(self, value):
+        """setter of notch"""
+        check_var("notch", value, "[Notch]")
+        self._notch = value
+
+        for obj in self._notch:
+            if obj is not None:
+                obj.parent = self
+
+    # Lamination bore notches
+    # Type : [Notch]
+    notch = property(
+        fget=_get_notch, fset=_set_notch, doc=u"""Lamination bore notches"""
     )
