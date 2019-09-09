@@ -2,6 +2,7 @@
 """@package build_geometry
 @date Created on juil. 10 10:31 2018
 @author franco_i
+@todo: modify side segments for other bore radii (due to notches)
 """
 from numpy import pi, exp
 
@@ -41,11 +42,18 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         label = "Rotor"
 
     if self.is_internal:
-        ls = "_Bore_"  # label for the bore
-        ly = "_Yoke_"  # label for the yoke
+        Ryoke = self.Rint
+        Rbore = self.Rext
+        label1 = "Ext"
+        label2 = "Int"
     else:
-        ls = "_Yoke_"
-        ly = "_Bore_"
+        Ryoke = self.Rext
+        Rbore = self.Rint
+        label2 = "Ext"
+        label1 = "Int"
+
+    label_bore = label + "_Bore_Radius"
+    label_yoke = label + "_Yoke_Radius"
 
     ref_point = self.comp_radius_mid_yoke() * exp(1j * pi / sym)
 
@@ -53,42 +61,40 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
     # Lamination surface(s)
     if sym == 1:  # Complete lamination
         surf_list.append(
-            Circle(
-                radius=self.Rext,
-                label="Lamination_" + label + ls + "Ext",
+            SurfLine(
+                line_list=self.get_bore_line(0, 2 * pi, label=label_bore),
+                label="Lamination_" + label + "_Bore_" + label1,
                 point_ref=ref_point,
-                center=0,
-                line_label=label + ls + "Radius",
             )
         )
-        if self.Rint > 0:
+        if Ryoke > 0:
             surf_list.append(
                 Circle(
-                    radius=self.Rint,
-                    label="Lamination_" + label + ly + "Int",
+                    radius=Ryoke,
+                    label="Lamination_" + label + "_Yoke_" + label2,
                     point_ref=0,
                     center=0,
-                    line_label=label + ly + "Radius",
+                    line_label=label_yoke,
                 )
             )
     else:  # Symmetry lamination
-        begin = self.Rext
-        end = self.Rext * exp(1j * 2 * pi / sym)
-        Z_begin = self.Rint
-        Z_end = self.Rint * exp(1j * 2 * pi / sym)
-        line_list = [
-            Segment(Z_begin, begin, label=label + "_Yoke_Side"),
-            Arc1(begin, end, self.Rext, label=label + ls + "Radius"),
-            Segment(end, Z_end, label=label + "_Yoke_Side"),
-        ]
-        if self.Rint > 0:
-            line_list.append(
-                Arc1(Z_end, Z_begin, -self.Rint, label=label + ly + "Radius")
-            )
+        alpha_begin = 0
+        alpha_end = 2 * pi / sym
+        begin = Rbore * exp(1j * alpha_begin)
+        end = Rbore * exp(1j * alpha_end)
+        Z_begin = Ryoke * exp(1j * alpha_begin)
+        Z_end = Ryoke * exp(1j * alpha_end)
+        line_list = [Segment(Z_begin, begin, label=label + "_Yoke_Side")]
+        bore_line = self.get_bore_line(alpha_begin, alpha_end, label=label_bore)
+        for line in bore_line:
+            line_list.append(line)
+        line_list.append(Segment(end, Z_end, label=label + "_Yoke_Side"))
+        if Ryoke > 0:
+            line_list.append(Arc1(Z_end, Z_begin, -Ryoke, label=label_yoke))
         surf_list.append(
             SurfLine(
                 line_list=line_list,
-                label="Lamination_" + label + ls + "Ext",
+                label="Lamination_" + label + "_Bore_" + label1,
                 point_ref=ref_point,
             )
         )

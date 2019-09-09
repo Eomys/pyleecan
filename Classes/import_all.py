@@ -48,6 +48,8 @@ from pyleecan.Classes.MagnetType11 import MagnetType11
 from pyleecan.Classes.MagnetType12 import MagnetType12
 from pyleecan.Classes.MagnetType13 import MagnetType13
 from pyleecan.Classes.MagnetType14 import MagnetType14
+from pyleecan.Classes.Notch import Notch
+from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingCW1L import WindingCW1L
@@ -91,6 +93,7 @@ from pyleecan.Classes.HoleM53 import HoleM53
 from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.Classes.HoleMag import HoleMag
 from pyleecan.Classes.Slot import Slot
+from pyleecan.Classes.Slot19 import Slot19
 from pyleecan.Classes.SlotMag import SlotMag
 from pyleecan.Classes.SlotMFlat import SlotMFlat
 from pyleecan.Classes.SlotMPolar import SlotMPolar

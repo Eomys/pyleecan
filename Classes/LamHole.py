@@ -27,6 +27,8 @@ from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Material import Material
+from pyleecan.Classes.Notch import Notch
+from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 
 
 class LamHole(Lamination):
@@ -66,6 +68,7 @@ class LamHole(Lamination):
         Rext=1,
         is_stator=True,
         axial_vent=list(),
+        notch=list(),
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -94,6 +97,7 @@ class LamHole(Lamination):
                     "Rext",
                     "is_stator",
                     "axial_vent",
+                    "notch",
                 ],
             )
             # Overwrite default value with init_dict content
@@ -119,6 +123,8 @@ class LamHole(Lamination):
                 is_stator = init_dict["is_stator"]
             if "axial_vent" in list(init_dict.keys()):
                 axial_vent = init_dict["axial_vent"]
+            if "notch" in list(init_dict.keys()):
+                notch = init_dict["notch"]
         # Initialisation by argument
         # hole can be None or a list of Hole object
         self.hole = list()
@@ -167,6 +173,7 @@ class LamHole(Lamination):
             Rext=Rext,
             is_stator=is_stator,
             axial_vent=axial_vent,
+            notch=notch,
         )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties

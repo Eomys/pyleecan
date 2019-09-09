@@ -30,7 +30,7 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
     Returns
     -------
     None
-    
+
     """
     label = surf.label
     Clabel = 0  # By default no circuit
@@ -103,6 +103,9 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
                 mag = angle(point_ref) * 180 / pi  # North pole magnet
             elif "Parallel" in label:
                 mag = angle(point_ref) * 180 / pi + 180  # South pole magnet
+            elif "Hallbach" in label:
+                Zs = lam.slot.Zs
+                mag = str(-(Zs / 2 - 1)) + " * theta + 90 "
         elif "Ventilation" in label:
             prop = "Air"
         elif "Hole" in label:

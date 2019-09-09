@@ -22,6 +22,7 @@ from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.WindingSC import WindingSC
 from pyleecan.Classes.WindingUD import WindingUD
 from pyleecan.Classes.Slot import Slot
+from pyleecan.Classes.Slot19 import Slot19
 from pyleecan.Classes.SlotMFlat import SlotMFlat
 from pyleecan.Classes.SlotMPolar import SlotMPolar
 from pyleecan.Classes.SlotW10 import SlotW10
@@ -52,6 +53,8 @@ from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap
+from pyleecan.Classes.Notch import Notch
+from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 
 
 class LamSquirrelCage(LamSlotWind):
@@ -88,6 +91,7 @@ class LamSquirrelCage(LamSlotWind):
         Rext=1,
         is_stator=True,
         axial_vent=list(),
+        notch=list(),
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -127,6 +131,7 @@ class LamSquirrelCage(LamSlotWind):
                     "Rext",
                     "is_stator",
                     "axial_vent",
+                    "notch",
                 ],
             )
             # Overwrite default value with init_dict content
@@ -162,6 +167,8 @@ class LamSquirrelCage(LamSlotWind):
                 is_stator = init_dict["is_stator"]
             if "axial_vent" in list(init_dict.keys()):
                 axial_vent = init_dict["axial_vent"]
+            if "notch" in list(init_dict.keys()):
+                notch = init_dict["notch"]
         # Initialisation by argument
         self.Hscr = Hscr
         self.Lscr = Lscr
@@ -185,6 +192,7 @@ class LamSquirrelCage(LamSlotWind):
             Rext=Rext,
             is_stator=is_stator,
             axial_vent=axial_vent,
+            notch=notch,
         )
         # The class is frozen (in LamSlotWind init), for now it's impossible to
         # add new properties

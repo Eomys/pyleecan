@@ -63,8 +63,10 @@ def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=
                 # Defining type of magnetization of the magnet
                 if self.slot.magnet[jj].type_magnetization == 0:
                     type_mag = "Radial"
-                else:
+                elif self.slot.magnet[jj].type_magnetization == 1:
                     type_mag = "Parallel"
+                elif self.slot.magnet[jj].type_magnetization == 2:
+                    type_mag = "Hallbach"
 
                 surf_list.extend(mag_surf)
                 # Adapt the label

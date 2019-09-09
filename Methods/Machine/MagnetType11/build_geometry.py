@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Magnet_Type_2.build_geometry
-Magnet_Type_2 build_geometry method
+"""@package Methods.Machine.Magnet_Type_11.build_geometry
+Magnet_Type_11 build_geometry method
 @date Created on Wed Dec 17 16:09:15 2014
 @copyright (C) 2014-2015 EOMYS ENGINEERING.
 @author pierre_b
@@ -40,8 +40,10 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # defining label for type_magnetization
     if self.type_magnetization == 0:
         t_p = "Radial"
-    else:
+    elif self.type_magnetization == 1:
         t_p = "Parallel"
+    elif self.type_magnetization == 2:
+        t_p = "Hallbach"
 
     [Z1, Z2, Z3, Zs3, Zs4, Z4, Zref] = self._comp_point_coordinate()
     # Creation of curve

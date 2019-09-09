@@ -27,13 +27,20 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     Returns
     surf_list : list
         list of surfaces needed to draw the lamination
-    
+
     """
     # Lamination label
     if self.is_stator:
         label = "Lamination_Stator"
     else:
         label = "Lamination_Rotor"
+
+    if self.is_internal:
+        ls = "_Bore_"  # label for the bore
+        ly = "_Yoke_"  # label for the yoke
+    else:
+        ls = "_Yoke_"
+        ly = "_Bore_"
 
     surf_list = list()
 
