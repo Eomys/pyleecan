@@ -10,10 +10,6 @@ from pyleecan.Methods.Machine.WindingDW2L.get_dim_wind import get_dim_wind
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Conductor import Conductor
-from pyleecan.Classes.CondType11 import CondType11
-from pyleecan.Classes.CondType12 import CondType12
-from pyleecan.Classes.CondType21 import CondType21
-from pyleecan.Classes.CondType22 import CondType22
 
 
 class WindingDW2L(WindingDW1L):

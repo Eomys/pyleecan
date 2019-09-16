@@ -14,10 +14,6 @@ from pyleecan.Methods.Machine.Winding.comp_winding_factor import comp_winding_fa
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Conductor import Conductor
-from pyleecan.Classes.CondType11 import CondType11
-from pyleecan.Classes.CondType12 import CondType12
-from pyleecan.Classes.CondType21 import CondType21
-from pyleecan.Classes.CondType22 import CondType22
 
 
 class Winding(FrozenClass):
@@ -108,23 +104,22 @@ class Winding(FrozenClass):
         self.Lewout = Lewout
         # conductor can be None, a Conductor object or a dict
         if isinstance(conductor, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {
-                "CondType11": CondType11,
-                "CondType12": CondType12,
-                "CondType21": CondType21,
-                "CondType22": CondType22,
-                "Conductor": Conductor,
-            }
-            obj_class = conductor.get("__class__")
-            if obj_class is None:
-                self.conductor = Conductor(init_dict=conductor)
-            elif obj_class in list(load_dict.keys()):
-                self.conductor = load_dict[obj_class](init_dict=conductor)
-            else:  # Avoid generation error or wrong modification in json
+            # Check that the type is correct (including daughter)
+            class_name = conductor.get("__class__")
+            if class_name not in [
+                "Conductor",
+                "CondType11",
+                "CondType12",
+                "CondType21",
+                "CondType22",
+            ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name in init_dict for conductor"
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
                 )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.conductor = class_obj(init_dict=conductor)
         else:
             self.conductor = conductor
 

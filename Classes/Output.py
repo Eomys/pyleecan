@@ -17,7 +17,6 @@ from pyleecan.Methods.Output.Output.plot.Structural.plot_force_space import (
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Simulation import Simulation
-from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.OutGeo import OutGeo
 from pyleecan.Classes.OutElec import OutElec
 from pyleecan.Classes.OutMag import OutMag
@@ -100,15 +99,16 @@ class Output(FrozenClass):
         self.parent = None
         # simu can be None, a Simulation object or a dict
         if isinstance(simu, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {"Simu1": Simu1, "Simulation": Simulation}
-            obj_class = simu.get("__class__")
-            if obj_class is None:
-                self.simu = Simulation(init_dict=simu)
-            elif obj_class in list(load_dict.keys()):
-                self.simu = load_dict[obj_class](init_dict=simu)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for simu")
+            # Check that the type is correct (including daughter)
+            class_name = simu.get("__class__")
+            if class_name not in ["Simulation", "Simu1"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.simu = class_obj(init_dict=simu)
         else:
             self.simu = simu
         self.path_res = path_res

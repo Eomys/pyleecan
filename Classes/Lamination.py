@@ -28,17 +28,7 @@ from pyleecan.Methods.Machine.Lamination.is_outwards import is_outwards
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.Hole import Hole
-from pyleecan.Classes.HoleMag import HoleMag
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.HoleM51 import HoleM51
-from pyleecan.Classes.HoleM52 import HoleM52
-from pyleecan.Classes.HoleM53 import HoleM53
-from pyleecan.Classes.HoleM54 import HoleM54
-from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.VentilationPolar import VentilationPolar
-from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Notch import Notch
-from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 
 
 class Lamination(FrozenClass):
@@ -169,28 +159,33 @@ class Lamination(FrozenClass):
                 if obj is None:  # Default value
                     self.axial_vent.append(Hole())
                 elif isinstance(obj, dict):
-                    # Call the correct constructor according to the dict
-                    load_dict = {
-                        "HoleMag": HoleMag,
-                        "HoleM50": HoleM50,
-                        "HoleM51": HoleM51,
-                        "HoleM52": HoleM52,
-                        "HoleM53": HoleM53,
-                        "HoleM54": HoleM54,
-                        "VentilationCirc": VentilationCirc,
-                        "VentilationPolar": VentilationPolar,
-                        "VentilationTrap": VentilationTrap,
-                        "Hole": Hole,
-                    }
-                    obj_class = obj.get("__class__")
-                    if obj_class is None:
-                        self.axial_vent.append(Hole(init_dict=obj))
-                    elif obj_class in list(load_dict.keys()):
-                        self.axial_vent.append(load_dict[obj_class](init_dict=obj))
-                    else:  # Avoid generation error or wrong modification in json
+                    # Check that the type is correct (including daughter)
+                    class_name = obj.get("__class__")
+                    if class_name not in [
+                        "Hole",
+                        "Hole",
+                        "HoleMag",
+                        "HoleM50",
+                        "HoleM51",
+                        "HoleM52",
+                        "HoleM53",
+                        "HoleM54",
+                        "VentilationCirc",
+                        "VentilationPolar",
+                        "VentilationTrap",
+                    ]:
                         raise InitUnKnowClassError(
-                            "Unknow class name in init_dict for axial_vent"
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for "
+                            + prop_name
                         )
+                    # Dynamic import to call the correct constructor
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
+                    self.axial_vent.append(class_obj(init_dict=obj))
                 else:
                     self.axial_vent.append(obj)
         elif axial_vent is None:
@@ -204,17 +199,21 @@ class Lamination(FrozenClass):
                 if obj is None:  # Default value
                     self.notch.append(Notch())
                 elif isinstance(obj, dict):
-                    # Call the correct constructor according to the dict
-                    load_dict = {"NotchEvenDist": NotchEvenDist, "Notch": Notch}
-                    obj_class = obj.get("__class__")
-                    if obj_class is None:
-                        self.notch.append(Notch(init_dict=obj))
-                    elif obj_class in list(load_dict.keys()):
-                        self.notch.append(load_dict[obj_class](init_dict=obj))
-                    else:  # Avoid generation error or wrong modification in json
+                    # Check that the type is correct (including daughter)
+                    class_name = obj.get("__class__")
+                    if class_name not in ["Notch", "NotchEvenDist"]:
                         raise InitUnKnowClassError(
-                            "Unknow class name in init_dict for notch"
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for "
+                            + prop_name
                         )
+                    # Dynamic import to call the correct constructor
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
+                    self.notch.append(class_obj(init_dict=obj))
                 else:
                     self.notch.append(obj)
         elif notch is None:

@@ -11,27 +11,6 @@ from pyleecan.Methods.Machine.Notch.is_outwards import is_outwards
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
-from pyleecan.Classes.Slot19 import Slot19
-from pyleecan.Classes.SlotMFlat import SlotMFlat
-from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.Classes.SlotW10 import SlotW10
-from pyleecan.Classes.SlotW11 import SlotW11
-from pyleecan.Classes.SlotW12 import SlotW12
-from pyleecan.Classes.SlotW13 import SlotW13
-from pyleecan.Classes.SlotW14 import SlotW14
-from pyleecan.Classes.SlotW15 import SlotW15
-from pyleecan.Classes.SlotW16 import SlotW16
-from pyleecan.Classes.SlotW21 import SlotW21
-from pyleecan.Classes.SlotW22 import SlotW22
-from pyleecan.Classes.SlotW23 import SlotW23
-from pyleecan.Classes.SlotW24 import SlotW24
-from pyleecan.Classes.SlotW25 import SlotW25
-from pyleecan.Classes.SlotW26 import SlotW26
-from pyleecan.Classes.SlotW27 import SlotW27
-from pyleecan.Classes.SlotW28 import SlotW28
-from pyleecan.Classes.SlotW29 import SlotW29
-from pyleecan.Classes.SlotW60 import SlotW60
-from pyleecan.Classes.SlotW61 import SlotW61
 
 
 class Notch(FrozenClass):
@@ -70,40 +49,45 @@ class Notch(FrozenClass):
                 if obj is None:  # Default value
                     self.notch_shape.append(Slot())
                 elif isinstance(obj, dict):
-                    # Call the correct constructor according to the dict
-                    load_dict = {
-                        "Slot19": Slot19,
-                        "SlotMFlat": SlotMFlat,
-                        "SlotMPolar": SlotMPolar,
-                        "SlotW10": SlotW10,
-                        "SlotW11": SlotW11,
-                        "SlotW12": SlotW12,
-                        "SlotW13": SlotW13,
-                        "SlotW14": SlotW14,
-                        "SlotW15": SlotW15,
-                        "SlotW16": SlotW16,
-                        "SlotW21": SlotW21,
-                        "SlotW22": SlotW22,
-                        "SlotW23": SlotW23,
-                        "SlotW24": SlotW24,
-                        "SlotW25": SlotW25,
-                        "SlotW26": SlotW26,
-                        "SlotW27": SlotW27,
-                        "SlotW28": SlotW28,
-                        "SlotW29": SlotW29,
-                        "SlotW60": SlotW60,
-                        "SlotW61": SlotW61,
-                        "Slot": Slot,
-                    }
-                    obj_class = obj.get("__class__")
-                    if obj_class is None:
-                        self.notch_shape.append(Slot(init_dict=obj))
-                    elif obj_class in list(load_dict.keys()):
-                        self.notch_shape.append(load_dict[obj_class](init_dict=obj))
-                    else:  # Avoid generation error or wrong modification in json
+                    # Check that the type is correct (including daughter)
+                    class_name = obj.get("__class__")
+                    if class_name not in [
+                        "Slot",
+                        "Slot",
+                        "Slot19",
+                        "SlotMFlat",
+                        "SlotMPolar",
+                        "SlotW10",
+                        "SlotW11",
+                        "SlotW12",
+                        "SlotW13",
+                        "SlotW14",
+                        "SlotW15",
+                        "SlotW16",
+                        "SlotW21",
+                        "SlotW22",
+                        "SlotW23",
+                        "SlotW24",
+                        "SlotW25",
+                        "SlotW26",
+                        "SlotW27",
+                        "SlotW28",
+                        "SlotW29",
+                        "SlotW60",
+                        "SlotW61",
+                    ]:
                         raise InitUnKnowClassError(
-                            "Unknow class name in init_dict for notch_shape"
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for "
+                            + prop_name
                         )
+                    # Dynamic import to call the correct constructor
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
+                    self.notch_shape.append(class_obj(init_dict=obj))
                 else:
                     self.notch_shape.append(obj)
         elif notch_shape is None:

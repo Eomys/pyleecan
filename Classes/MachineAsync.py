@@ -10,11 +10,6 @@ from pyleecan.Methods.Machine.MachineAsync.is_synchronous import is_synchronous
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Lamination import Lamination
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.LamSlot import LamSlot
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
 

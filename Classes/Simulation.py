@@ -8,16 +8,7 @@ from pyleecan.Classes.frozen import FrozenClass
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Machine import Machine
-from pyleecan.Classes.MachineSync import MachineSync
-from pyleecan.Classes.MachineAsync import MachineAsync
-from pyleecan.Classes.MachineSCIM import MachineSCIM
-from pyleecan.Classes.MachineDFIM import MachineDFIM
-from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
-from pyleecan.Classes.MachineWRSM import MachineWRSM
-from pyleecan.Classes.MachineSyRM import MachineSyRM
 from pyleecan.Classes.Input import Input
-from pyleecan.Classes.InCurrent import InCurrent
 
 
 class Simulation(FrozenClass):
@@ -59,38 +50,40 @@ class Simulation(FrozenClass):
         self.desc = desc
         # machine can be None, a Machine object or a dict
         if isinstance(machine, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {
-                "MachineSync": MachineSync,
-                "MachineAsync": MachineAsync,
-                "MachineSCIM": MachineSCIM,
-                "MachineDFIM": MachineDFIM,
-                "MachineSIPMSM": MachineSIPMSM,
-                "MachineIPMSM": MachineIPMSM,
-                "MachineWRSM": MachineWRSM,
-                "MachineSyRM": MachineSyRM,
-                "Machine": Machine,
-            }
-            obj_class = machine.get("__class__")
-            if obj_class is None:
-                self.machine = Machine(init_dict=machine)
-            elif obj_class in list(load_dict.keys()):
-                self.machine = load_dict[obj_class](init_dict=machine)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for machine")
+            # Check that the type is correct (including daughter)
+            class_name = machine.get("__class__")
+            if class_name not in [
+                "Machine",
+                "MachineSync",
+                "MachineAsync",
+                "MachineSCIM",
+                "MachineDFIM",
+                "MachineSIPMSM",
+                "MachineIPMSM",
+                "MachineWRSM",
+                "MachineSyRM",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.machine = class_obj(init_dict=machine)
         else:
             self.machine = machine
         # input can be None, a Input object or a dict
         if isinstance(input, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {"InCurrent": InCurrent, "Input": Input}
-            obj_class = input.get("__class__")
-            if obj_class is None:
-                self.input = Input(init_dict=input)
-            elif obj_class in list(load_dict.keys()):
-                self.input = load_dict[obj_class](init_dict=input)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for input")
+            # Check that the type is correct (including daughter)
+            class_name = input.get("__class__")
+            if class_name not in ["Input", "InCurrent"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.input = class_obj(init_dict=input)
         else:
             self.input = input
 

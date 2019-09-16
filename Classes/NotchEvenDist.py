@@ -11,27 +11,6 @@ from pyleecan.Methods.Machine.NotchEvenDist.build_geometry import build_geometry
 from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
-from pyleecan.Classes.Slot19 import Slot19
-from pyleecan.Classes.SlotMFlat import SlotMFlat
-from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.Classes.SlotW10 import SlotW10
-from pyleecan.Classes.SlotW11 import SlotW11
-from pyleecan.Classes.SlotW12 import SlotW12
-from pyleecan.Classes.SlotW13 import SlotW13
-from pyleecan.Classes.SlotW14 import SlotW14
-from pyleecan.Classes.SlotW15 import SlotW15
-from pyleecan.Classes.SlotW16 import SlotW16
-from pyleecan.Classes.SlotW21 import SlotW21
-from pyleecan.Classes.SlotW22 import SlotW22
-from pyleecan.Classes.SlotW23 import SlotW23
-from pyleecan.Classes.SlotW24 import SlotW24
-from pyleecan.Classes.SlotW25 import SlotW25
-from pyleecan.Classes.SlotW26 import SlotW26
-from pyleecan.Classes.SlotW27 import SlotW27
-from pyleecan.Classes.SlotW28 import SlotW28
-from pyleecan.Classes.SlotW29 import SlotW29
-from pyleecan.Classes.SlotW60 import SlotW60
-from pyleecan.Classes.SlotW61 import SlotW61
 
 
 class NotchEvenDist(Notch):

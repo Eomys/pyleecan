@@ -17,8 +17,6 @@ from pyleecan.Methods.Slot.SlotMPolar.get_point_bottom import get_point_bottom
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.MagnetPolar import MagnetPolar
-from pyleecan.Classes.MagnetType11 import MagnetType11
-from pyleecan.Classes.MagnetType14 import MagnetType14
 
 
 class SlotMPolar(SlotMag):
@@ -76,21 +74,25 @@ class SlotMPolar(SlotMag):
                 if obj is None:  # Default value
                     self.magnet.append(MagnetPolar())
                 elif isinstance(obj, dict):
-                    # Call the correct constructor according to the dict
-                    load_dict = {
-                        "MagnetType11": MagnetType11,
-                        "MagnetType14": MagnetType14,
-                        "MagnetPolar": MagnetPolar,
-                    }
-                    obj_class = obj.get("__class__")
-                    if obj_class is None:
-                        self.magnet.append(MagnetPolar(init_dict=obj))
-                    elif obj_class in list(load_dict.keys()):
-                        self.magnet.append(load_dict[obj_class](init_dict=obj))
-                    else:  # Avoid generation error or wrong modification in json
+                    # Check that the type is correct (including daughter)
+                    class_name = obj.get("__class__")
+                    if class_name not in [
+                        "MagnetPolar",
+                        "MagnetType11",
+                        "MagnetType14",
+                    ]:
                         raise InitUnKnowClassError(
-                            "Unknow class name in init_dict for magnet"
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for "
+                            + prop_name
                         )
+                    # Dynamic import to call the correct constructor
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
+                    self.magnet.append(class_obj(init_dict=obj))
                 else:
                     self.magnet.append(obj)
         elif magnet is None:

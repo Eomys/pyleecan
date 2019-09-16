@@ -10,11 +10,6 @@ from pyleecan.Methods.Material.MatLamination.get_BH import get_BH
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.ImportMatrix import ImportMatrix
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
-from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
-from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 
 
 class MatLamination(MatMagnetics):
@@ -52,24 +47,23 @@ class MatLamination(MatMagnetics):
         self.Wlam = Wlam
         # BH_curve can be None, a ImportMatrix object or a dict
         if isinstance(BH_curve, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {
-                "ImportMatrixVal": ImportMatrixVal,
-                "ImportMatrixXls": ImportMatrixXls,
-                "ImportGenVectSin": ImportGenVectSin,
-                "ImportGenMatrixSin": ImportGenMatrixSin,
-                "ImportGenVectLin": ImportGenVectLin,
-                "ImportMatrix": ImportMatrix,
-            }
-            obj_class = BH_curve.get("__class__")
-            if obj_class is None:
-                self.BH_curve = ImportMatrix(init_dict=BH_curve)
-            elif obj_class in list(load_dict.keys()):
-                self.BH_curve = load_dict[obj_class](init_dict=BH_curve)
-            else:  # Avoid generation error or wrong modification in json
+            # Check that the type is correct (including daughter)
+            class_name = BH_curve.get("__class__")
+            if class_name not in [
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+                "ImportGenVectSin",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+            ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name in init_dict for BH_curve"
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
                 )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.BH_curve = class_obj(init_dict=BH_curve)
         else:
             self.BH_curve = BH_curve
         # Call MatMagnetics init

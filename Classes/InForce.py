@@ -10,13 +10,6 @@ from pyleecan.Methods.Simulation.InForce.gen_input import gen_input
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Import import Import
-from pyleecan.Classes.ImportMatlab import ImportMatlab
-from pyleecan.Classes.ImportMatrix import ImportMatrix
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
-from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
-from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 
 
 class InForce(Input):
@@ -61,90 +54,140 @@ class InForce(Input):
         # Initialisation by argument
         # time can be None, a Import object or a dict
         if isinstance(time, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {
-                "ImportMatlab": ImportMatlab,
-                "ImportMatrix": ImportMatrix,
-                "ImportMatrixVal": ImportMatrixVal,
-                "ImportMatrixXls": ImportMatrixXls,
-                "ImportGenVectSin": ImportGenVectSin,
-                "ImportGenMatrixSin": ImportGenMatrixSin,
-                "ImportGenVectLin": ImportGenVectLin,
-                "Import": Import,
-            }
-            obj_class = time.get("__class__")
-            if obj_class is None:
-                self.time = Import(init_dict=time)
-            elif obj_class in list(load_dict.keys()):
-                self.time = load_dict[obj_class](init_dict=time)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for time")
+            # Check that the type is correct (including daughter)
+            class_name = time.get("__class__")
+            if class_name not in [
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+                "ImportGenVectSin",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.time = class_obj(init_dict=time)
         else:
             self.time = time
         # angle can be None, a Import object or a dict
         if isinstance(angle, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {
-                "ImportMatlab": ImportMatlab,
-                "ImportMatrix": ImportMatrix,
-                "ImportMatrixVal": ImportMatrixVal,
-                "ImportMatrixXls": ImportMatrixXls,
-                "ImportGenVectSin": ImportGenVectSin,
-                "ImportGenMatrixSin": ImportGenMatrixSin,
-                "ImportGenVectLin": ImportGenVectLin,
-                "Import": Import,
-            }
-            obj_class = angle.get("__class__")
-            if obj_class is None:
-                self.angle = Import(init_dict=angle)
-            elif obj_class in list(load_dict.keys()):
-                self.angle = load_dict[obj_class](init_dict=angle)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for angle")
+            # Check that the type is correct (including daughter)
+            class_name = angle.get("__class__")
+            if class_name not in [
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+                "ImportGenVectSin",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.angle = class_obj(init_dict=angle)
         else:
             self.angle = angle
         # Prad can be None, a Import object or a dict
         if isinstance(Prad, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {
-                "ImportMatlab": ImportMatlab,
-                "ImportMatrix": ImportMatrix,
-                "ImportMatrixVal": ImportMatrixVal,
-                "ImportMatrixXls": ImportMatrixXls,
-                "ImportGenVectSin": ImportGenVectSin,
-                "ImportGenMatrixSin": ImportGenMatrixSin,
-                "ImportGenVectLin": ImportGenVectLin,
-                "Import": Import,
-            }
-            obj_class = Prad.get("__class__")
-            if obj_class is None:
-                self.Prad = Import(init_dict=Prad)
-            elif obj_class in list(load_dict.keys()):
-                self.Prad = load_dict[obj_class](init_dict=Prad)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for Prad")
+            # Check that the type is correct (including daughter)
+            class_name = Prad.get("__class__")
+            if class_name not in [
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+                "ImportGenVectSin",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.Prad = class_obj(init_dict=Prad)
         else:
             self.Prad = Prad
         # Ptan can be None, a Import object or a dict
         if isinstance(Ptan, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {
-                "ImportMatlab": ImportMatlab,
-                "ImportMatrix": ImportMatrix,
-                "ImportMatrixVal": ImportMatrixVal,
-                "ImportMatrixXls": ImportMatrixXls,
-                "ImportGenVectSin": ImportGenVectSin,
-                "ImportGenMatrixSin": ImportGenMatrixSin,
-                "ImportGenVectLin": ImportGenVectLin,
-                "Import": Import,
-            }
-            obj_class = Ptan.get("__class__")
-            if obj_class is None:
-                self.Ptan = Import(init_dict=Ptan)
-            elif obj_class in list(load_dict.keys()):
-                self.Ptan = load_dict[obj_class](init_dict=Ptan)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for Ptan")
+            # Check that the type is correct (including daughter)
+            class_name = Ptan.get("__class__")
+            if class_name not in [
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+                "ImportGenVectSin",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.Ptan = class_obj(init_dict=Ptan)
         else:
             self.Ptan = Ptan
         # Call Input init

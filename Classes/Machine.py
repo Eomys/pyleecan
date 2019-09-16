@@ -22,11 +22,6 @@ from pyleecan.Methods.Machine.Machine.get_polar_eq import get_polar_eq
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Lamination import Lamination
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.LamSlot import LamSlot
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
 
@@ -109,42 +104,45 @@ class Machine(FrozenClass):
         self.parent = None
         # rotor can be None, a Lamination object or a dict
         if isinstance(rotor, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {
-                "LamHole": LamHole,
-                "LamSlot": LamSlot,
-                "LamSlotWind": LamSlotWind,
-                "LamSlotMag": LamSlotMag,
-                "LamSquirrelCage": LamSquirrelCage,
-                "Lamination": Lamination,
-            }
-            obj_class = rotor.get("__class__")
-            if obj_class is None:
-                self.rotor = Lamination(init_dict=rotor)
-            elif obj_class in list(load_dict.keys()):
-                self.rotor = load_dict[obj_class](init_dict=rotor)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for rotor")
+            # Check that the type is correct (including daughter)
+            class_name = rotor.get("__class__")
+            if class_name not in [
+                "Lamination",
+                "LamHole",
+                "LamSlot",
+                "LamSlotWind",
+                "LamSlotMag",
+                "LamSquirrelCage",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.rotor = class_obj(init_dict=rotor)
         else:
             self.rotor = rotor
         # stator can be None, a Lamination object or a dict
         if isinstance(stator, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {
-                "LamHole": LamHole,
-                "LamSlot": LamSlot,
-                "LamSlotWind": LamSlotWind,
-                "LamSlotMag": LamSlotMag,
-                "LamSquirrelCage": LamSquirrelCage,
-                "Lamination": Lamination,
-            }
-            obj_class = stator.get("__class__")
-            if obj_class is None:
-                self.stator = Lamination(init_dict=stator)
-            elif obj_class in list(load_dict.keys()):
-                self.stator = load_dict[obj_class](init_dict=stator)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for stator")
+            # Check that the type is correct (including daughter)
+            class_name = stator.get("__class__")
+            if class_name not in [
+                "Lamination",
+                "Lamination",
+                "LamHole",
+                "LamSlot",
+                "LamSlotWind",
+                "LamSlotMag",
+                "LamSquirrelCage",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.stator = class_obj(init_dict=stator)
         else:
             self.stator = stator
         # frame can be None, a Frame object or a dict

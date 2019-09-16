@@ -10,19 +10,9 @@ from pyleecan.Methods.Simulation.Simu1.run import run
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Magnetics import Magnetics
-from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Structural import Structural
 from pyleecan.Classes.Machine import Machine
-from pyleecan.Classes.MachineSync import MachineSync
-from pyleecan.Classes.MachineAsync import MachineAsync
-from pyleecan.Classes.MachineSCIM import MachineSCIM
-from pyleecan.Classes.MachineDFIM import MachineDFIM
-from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
-from pyleecan.Classes.MachineWRSM import MachineWRSM
-from pyleecan.Classes.MachineSyRM import MachineSyRM
 from pyleecan.Classes.Input import Input
-from pyleecan.Classes.InCurrent import InCurrent
 
 
 class Simu1(Simulation):
@@ -75,15 +65,16 @@ class Simu1(Simulation):
         # Initialisation by argument
         # mag can be None, a Magnetics object or a dict
         if isinstance(mag, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {"MagFEMM": MagFEMM, "Magnetics": Magnetics}
-            obj_class = mag.get("__class__")
-            if obj_class is None:
-                self.mag = Magnetics(init_dict=mag)
-            elif obj_class in list(load_dict.keys()):
-                self.mag = load_dict[obj_class](init_dict=mag)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for mag")
+            # Check that the type is correct (including daughter)
+            class_name = mag.get("__class__")
+            if class_name not in ["Magnetics", "MagFEMM"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.mag = class_obj(init_dict=mag)
         else:
             self.mag = mag
         # struct can be None, a Structural object or a dict

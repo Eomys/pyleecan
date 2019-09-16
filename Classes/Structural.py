@@ -11,7 +11,6 @@ from pyleecan.Methods.Simulation.Structural.comp_time_angle import comp_time_ang
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Force import Force
-from pyleecan.Classes.ForceMT import ForceMT
 
 
 class Structural(FrozenClass):
@@ -47,15 +46,16 @@ class Structural(FrozenClass):
         self.parent = None
         # force can be None, a Force object or a dict
         if isinstance(force, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {"ForceMT": ForceMT, "Force": Force}
-            obj_class = force.get("__class__")
-            if obj_class is None:
-                self.force = Force(init_dict=force)
-            elif obj_class in list(load_dict.keys()):
-                self.force = load_dict[obj_class](init_dict=force)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for force")
+            # Check that the type is correct (including daughter)
+            class_name = force.get("__class__")
+            if class_name not in ["Force", "ForceMT"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.force = class_obj(init_dict=force)
         else:
             self.force = force
 

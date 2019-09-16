@@ -18,11 +18,6 @@ from pyleecan.Methods.Geometry.SurfLine.plot_lines import plot_lines
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Line import Line
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Arc2 import Arc2
-from pyleecan.Classes.Arc3 import Arc3
-from pyleecan.Classes.Arc import Arc
 
 
 class SurfLine(Surface):
@@ -78,24 +73,28 @@ class SurfLine(Surface):
                 if obj is None:  # Default value
                     self.line_list.append(Line())
                 elif isinstance(obj, dict):
-                    # Call the correct constructor according to the dict
-                    load_dict = {
-                        "Segment": Segment,
-                        "Arc1": Arc1,
-                        "Arc2": Arc2,
-                        "Arc3": Arc3,
-                        "Arc": Arc,
-                        "Line": Line,
-                    }
-                    obj_class = obj.get("__class__")
-                    if obj_class is None:
-                        self.line_list.append(Line(init_dict=obj))
-                    elif obj_class in list(load_dict.keys()):
-                        self.line_list.append(load_dict[obj_class](init_dict=obj))
-                    else:  # Avoid generation error or wrong modification in json
+                    # Check that the type is correct (including daughter)
+                    class_name = obj.get("__class__")
+                    if class_name not in [
+                        "Line",
+                        "Segment",
+                        "Arc1",
+                        "Arc2",
+                        "Arc3",
+                        "Arc",
+                    ]:
                         raise InitUnKnowClassError(
-                            "Unknow class name in init_dict for line_list"
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for "
+                            + prop_name
                         )
+                    # Dynamic import to call the correct constructor
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
+                    self.line_list.append(class_obj(init_dict=obj))
                 else:
                     self.line_list.append(obj)
         elif line_list is None:

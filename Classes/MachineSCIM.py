@@ -11,11 +11,6 @@ from pyleecan.Methods.Machine.MachineSCIM.get_machine_type import get_machine_ty
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Lamination import Lamination
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.LamSlot import LamSlot
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
 

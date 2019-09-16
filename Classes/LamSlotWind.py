@@ -23,48 +23,10 @@ from pyleecan.Methods.Machine.LamSlotWind.get_polar_eq import get_polar_eq
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Winding import Winding
-from pyleecan.Classes.WindingCW1L import WindingCW1L
-from pyleecan.Classes.WindingCW2LR import WindingCW2LR
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingDW1L import WindingDW1L
-from pyleecan.Classes.WindingDW2L import WindingDW2L
-from pyleecan.Classes.WindingSC import WindingSC
-from pyleecan.Classes.WindingUD import WindingUD
 from pyleecan.Classes.Slot import Slot
-from pyleecan.Classes.Slot19 import Slot19
-from pyleecan.Classes.SlotMFlat import SlotMFlat
-from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.Classes.SlotW10 import SlotW10
-from pyleecan.Classes.SlotW11 import SlotW11
-from pyleecan.Classes.SlotW12 import SlotW12
-from pyleecan.Classes.SlotW13 import SlotW13
-from pyleecan.Classes.SlotW14 import SlotW14
-from pyleecan.Classes.SlotW15 import SlotW15
-from pyleecan.Classes.SlotW16 import SlotW16
-from pyleecan.Classes.SlotW21 import SlotW21
-from pyleecan.Classes.SlotW22 import SlotW22
-from pyleecan.Classes.SlotW23 import SlotW23
-from pyleecan.Classes.SlotW24 import SlotW24
-from pyleecan.Classes.SlotW25 import SlotW25
-from pyleecan.Classes.SlotW26 import SlotW26
-from pyleecan.Classes.SlotW27 import SlotW27
-from pyleecan.Classes.SlotW28 import SlotW28
-from pyleecan.Classes.SlotW29 import SlotW29
-from pyleecan.Classes.SlotW60 import SlotW60
-from pyleecan.Classes.SlotW61 import SlotW61
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.Hole import Hole
-from pyleecan.Classes.HoleMag import HoleMag
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.HoleM51 import HoleM51
-from pyleecan.Classes.HoleM52 import HoleM52
-from pyleecan.Classes.HoleM53 import HoleM53
-from pyleecan.Classes.HoleM54 import HoleM54
-from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.VentilationPolar import VentilationPolar
-from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Notch import Notch
-from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 
 
 class LamSlotWind(LamSlot):
@@ -185,24 +147,25 @@ class LamSlotWind(LamSlot):
         self.Ksfill = Ksfill
         # winding can be None, a Winding object or a dict
         if isinstance(winding, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {
-                "WindingCW1L": WindingCW1L,
-                "WindingCW2LR": WindingCW2LR,
-                "WindingCW2LT": WindingCW2LT,
-                "WindingDW1L": WindingDW1L,
-                "WindingDW2L": WindingDW2L,
-                "WindingSC": WindingSC,
-                "WindingUD": WindingUD,
-                "Winding": Winding,
-            }
-            obj_class = winding.get("__class__")
-            if obj_class is None:
-                self.winding = Winding(init_dict=winding)
-            elif obj_class in list(load_dict.keys()):
-                self.winding = load_dict[obj_class](init_dict=winding)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for winding")
+            # Check that the type is correct (including daughter)
+            class_name = winding.get("__class__")
+            if class_name not in [
+                "Winding",
+                "WindingCW1L",
+                "WindingCW2LR",
+                "WindingCW2LT",
+                "WindingDW1L",
+                "WindingDW2L",
+                "WindingSC",
+                "WindingUD",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.winding = class_obj(init_dict=winding)
         else:
             self.winding = winding
         # Call LamSlot init

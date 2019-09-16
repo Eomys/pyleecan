@@ -101,22 +101,13 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write("from numpy import array, array_equal\n")
         import_type_list.remove("ndarray")
 
-    # Import of all needed pyleecan type for property polymorphism
+    # Import of all needed pyleecan type for empty init
     class_file.write("from pyleecan.Classes.check import InitUnKnowClassError\n")
     for pyleecan_type in import_type_list:
-        type_dict = gen_dict[pyleecan_type]
         class_file.write(
             "from pyleecan.Classes." + pyleecan_type + " import " + pyleecan_type + "\n"
         )
-        for daughter_name in type_dict["daughters"]:
-            # Import of the inherited class (for init)
-            class_file.write(
-                "from pyleecan.Classes."
-                + daughter_name
-                + " import "
-                + daughter_name
-                + "\n"
-            )
+
     if len(import_type_list) > 0:
         class_file.write("\n")
 
@@ -383,33 +374,26 @@ def generate_set_class_by_dict_list(prop_name, prop_type, daug_list):
 
     class_dict_str = ""
     class_dict_str += TAB4 + "elif isinstance(obj, dict):\n"
-
     if len(daug_list) > 0:
+        daug_list.insert(0, prop_type)
         # Add the posibility to call the daughter init
         class_dict_str += (
-            TAB5 + "# Call the correct constructor according to " "the dict\n"
+            TAB5 + "# Check that the type is correct (including daughter)\n"
         )
-        class_dict_str += TAB5 + "load_dict = {"
-        for daughter_name in daug_list:
-            class_dict_str += '"' + daughter_name + '": ' + daughter_name + ", "
-        class_dict_str += '"' + prop_type + '": ' + prop_type + "}\n"
-        class_dict_str += TAB5 + "obj_class = obj.get('__class__')\n"
-        class_dict_str += TAB5 + "if obj_class is None:\n"
+        class_dict_str += TAB5 + "class_name = obj.get('__class__')\n"
+        class_dict_str += TAB5 + "if class_name not in " + str(daug_list) + ":\n"
         class_dict_str += (
-            TAB6 + "self." + prop_name + ".append(" + prop_type + "(init_dict=obj))\n"
+            TAB6
+            + 'raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)\n'
         )
-        class_dict_str += TAB5 + "elif obj_class in list(load_dict.keys()):\n"
+        class_dict_str += TAB5 + "# Dynamic import to call the correct constructor\n"
         class_dict_str += (
-            TAB6 + "self." + prop_name + ".append(load_dict["
-            "obj_class]("
-            "init_dict=obj))\n"
+            TAB5
+            + 'module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])\n'
         )
+        class_dict_str += TAB5 + "class_obj = getattr(module,class_name)\n"
         class_dict_str += (
-            TAB5 + "else:  # Avoid generation error or wrong " "modification in json\n"
-        )
-        class_dict_str += (
-            TAB6 + 'raise InitUnKnowClassError("Unknow class name '
-            "in init_dict for " + prop_name + '")\n'
+            TAB5 + "self." + prop_name + ".append(" + "class_obj(init_dict=obj))\n"
         )
     else:  # No daughter
         class_dict_str += (
@@ -440,37 +424,31 @@ def generate_set_class_by_dict(prop_name, prop_type, daug_list):
     class_dict_str += TAB2 + "if isinstance(" + prop_name + ", dict):\n"
 
     if len(daug_list) > 0:
+        daug_list.insert(0, prop_type)
         # Add the posibility to call the daughter init
         class_dict_str += (
-            TAB3 + "# Call the correct constructor according to " "the dict\n"
+            TAB3 + "# Check that the type is correct (including daughter)\n"
         )
-        class_dict_str += TAB3 + "load_dict = {"
-        for daughter_name in daug_list:
-            class_dict_str += '"' + daughter_name + '": ' + daughter_name + ", "
-        class_dict_str += '"' + prop_type + '": ' + prop_type + "}\n"
-        class_dict_str += TAB3 + "obj_class = " + prop_name + ".get('__class__')\n"
-        class_dict_str += TAB3 + "if obj_class is None:\n"
+        class_dict_str += TAB3 + "class_name = " + prop_name + ".get('__class__')\n"
+        class_dict_str += TAB3 + "if class_name not in " + str(daug_list) + ":\n"
         class_dict_str += (
             TAB4
+            + 'raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)\n'
+        )
+        class_dict_str += TAB3 + "# Dynamic import to call the correct constructor\n"
+        class_dict_str += (
+            TAB3
+            + 'module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])\n'
+        )
+        class_dict_str += TAB3 + "class_obj = getattr(module,class_name)\n"
+        class_dict_str += (
+            TAB3
             + "self."
             + prop_name
             + " = "
-            + prop_type
-            + "(init_dict="
+            + "class_obj(init_dict="
             + prop_name
             + ")\n"
-        )
-        class_dict_str += TAB3 + "elif obj_class in list(load_dict.keys()):\n"
-        class_dict_str += (
-            TAB4 + "self." + prop_name + " = load_dict[obj_class]("
-            "init_dict=" + prop_name + ")\n"
-        )
-        class_dict_str += (
-            TAB3 + "else:  # Avoid generation error or wrong " "modification in json\n"
-        )
-        class_dict_str += (
-            TAB4 + 'raise InitUnKnowClassError("Unknow class name '
-            "in init_dict for " + prop_name + '")\n'
         )
     else:  # No daughter
         class_dict_str += (

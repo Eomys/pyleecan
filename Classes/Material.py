@@ -9,8 +9,6 @@ from pyleecan.Classes.frozen import FrozenClass
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.MatElectrical import MatElectrical
 from pyleecan.Classes.MatMagnetics import MatMagnetics
-from pyleecan.Classes.MatLamination import MatLamination
-from pyleecan.Classes.MatMagnet import MatMagnet
 from pyleecan.Classes.MatStructural import MatStructural
 from pyleecan.Classes.MatHT import MatHT
 from pyleecan.Classes.MatEconomical import MatEconomical
@@ -87,19 +85,16 @@ class Material(FrozenClass):
             self.elec = elec
         # mag can be None, a MatMagnetics object or a dict
         if isinstance(mag, dict):
-            # Call the correct constructor according to the dict
-            load_dict = {
-                "MatLamination": MatLamination,
-                "MatMagnet": MatMagnet,
-                "MatMagnetics": MatMagnetics,
-            }
-            obj_class = mag.get("__class__")
-            if obj_class is None:
-                self.mag = MatMagnetics(init_dict=mag)
-            elif obj_class in list(load_dict.keys()):
-                self.mag = load_dict[obj_class](init_dict=mag)
-            else:  # Avoid generation error or wrong modification in json
-                raise InitUnKnowClassError("Unknow class name in init_dict for mag")
+            # Check that the type is correct (including daughter)
+            class_name = mag.get("__class__")
+            if class_name not in ["MatMagnetics", "MatLamination", "MatMagnet"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.mag = class_obj(init_dict=mag)
         else:
             self.mag = mag
         # struct can be None, a MatStructural object or a dict
