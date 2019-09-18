@@ -13,9 +13,11 @@ from pyleecan.Methods.Geometry.Segment.draw_FEMM import draw_FEMM
 from pyleecan.Methods.Geometry.Segment.get_begin import get_begin
 from pyleecan.Methods.Geometry.Segment.get_end import get_end
 from pyleecan.Methods.Geometry.Segment.get_middle import get_middle
+from pyleecan.Methods.Geometry.Segment.intersect_line import intersect_line
 from pyleecan.Methods.Geometry.Segment.reverse import reverse
 from pyleecan.Methods.Geometry.Segment.rotate import rotate
 from pyleecan.Methods.Geometry.Segment.split_half import split_half
+from pyleecan.Methods.Geometry.Segment.split_line import split_line
 from pyleecan.Methods.Geometry.Segment.translate import translate
 
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -40,12 +42,16 @@ class Segment(Line):
     get_end = get_end
     # cf Methods.Geometry.Segment.get_middle
     get_middle = get_middle
+    # cf Methods.Geometry.Segment.intersect_line
+    intersect_line = intersect_line
     # cf Methods.Geometry.Segment.reverse
     reverse = reverse
     # cf Methods.Geometry.Segment.rotate
     rotate = rotate
     # cf Methods.Geometry.Segment.split_half
     split_half = split_half
+    # cf Methods.Geometry.Segment.split_line
+    split_line = split_line
     # cf Methods.Geometry.Segment.translate
     translate = translate
     # save method is available in all object
