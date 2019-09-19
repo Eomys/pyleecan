@@ -43,7 +43,8 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # List of non python type to import
     import_type_list = list(find_import_type(gen_dict, class_dict, []))
-
+    if class_name in import_type_list:  # For recursive class
+        import_type_list.remove(class_name)
     # Encoding
     class_file.write("# -*- coding: utf-8 -*-\n")
 
