@@ -90,7 +90,15 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
             line_list.append(line)
         line_list.append(Segment(end, Z_end, label=label + "_Yoke_Side"))
         if Ryoke > 0:
-            line_list.append(Arc1(Z_end, Z_begin, -Ryoke, label=label_yoke))
+            line_list.append(
+                Arc1(
+                    begin=Z_end,
+                    end=Z_begin,
+                    radius=-Ryoke,
+                    is_trigo_direction=False,
+                    label=label_yoke,
+                )
+            )
         surf_list.append(
             SurfLine(
                 line_list=line_list,

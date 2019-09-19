@@ -5,15 +5,17 @@ Created on Mon Dec 08 11:31:14 2014
 @author: pierre_b
 """
 from unittest import TestCase
+from os.path import join
 
-from ddt import ddt, data
+import matplotlib.pyplot as plt
+from ddt import data, ddt
+from numpy import array, exp, pi, sqrt
 
 from pyleecan.Classes.Arc1 import Arc1
-
-from pyleecan.Methods.Geometry.Arc1.check import PointArc1Error, RadiusArc1Error
+from pyleecan.Methods.Geometry.Arc1.check import (PointArc1Error,
+                                                  RadiusArc1Error)
 from pyleecan.Methods.Geometry.Arc1.discretize import NbPointArc1DError
-from numpy import pi, exp, sqrt, array
-
+from pyleecan.Tests import save_plot_path as save_path
 
 # For AlmostEqual
 DELTA = 1e-6
@@ -757,3 +759,45 @@ class test_Arc1_meth(TestCase):
         self.assertAlmostEqual(arc.end, test_dict["N_end"])
         self.assertAlmostEqual(arc.radius, test_dict["N_radius"])
         self.assertAlmostEqual(arc.is_trigo_direction, test_dict["is_trigo"])
+
+    def test_plot_schematics(self):
+        """Check that the schematics is correct
+        """
+        begin = 1 + 1j
+        end = 3 + 2j
+        R = 2.5
+        # Creating the 4 arcs
+        arc_1 = Arc1(begin=begin, end=end, radius=R, is_trigo_direction=True)
+        arc_2 = Arc1(begin=begin, end=end, radius=-R, is_trigo_direction=True)
+        arc_3 = Arc1(begin=begin, end=end, radius=R, is_trigo_direction=False)
+        arc_4 = Arc1(begin=begin, end=end, radius=-R, is_trigo_direction=False)
+
+        plt.close("all")
+        fig, axes = plt.subplots()
+        axes.set_title("Arc1 Schematics")
+        # adding the 4 arcs
+        Z = arc_1.discretize(100)
+        plt.plot(Z.real, Z.imag, "b")
+        Z = arc_2.discretize(100)
+        plt.plot(Z.real, Z.imag, "y")
+        Z = arc_3.discretize(100)
+        plt.plot(Z.real, Z.imag, "r")
+        Z = arc_4.discretize(100)
+        plt.plot(Z.real, Z.imag, "g")
+        # Adding the center
+        Zc = arc_1.get_center()
+        plt.plot(Zc.real, Zc.imag, "rx")
+        plt.text(Zc.real, Zc.imag, "R > 0")
+        Zc = arc_2.get_center()
+        plt.plot(Zc.real, Zc.imag, "rx")
+        plt.text(Zc.real, Zc.imag, "R < 0")
+        # Adding begin and end
+        plt.text(begin.real, begin.imag, "begin")
+        plt.text(end.real, end.imag, "end")
+        # Adding legend
+        plt.legend(["R > 0, trigo", "R < 0, trigo", "R > 0, not trigo", "R < 0, not trigo"])
+        plt.axis("equal")
+
+        plt.plot()
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "Arc1_schematics.png"))

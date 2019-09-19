@@ -54,7 +54,7 @@ def discretize(self, nb_point=ARC_NPOINT_D):
         sign = 1
     else:
         sign = -1
-    t = linspace(0, sign * np_angle(Zend), nb_point + 2)
+    t = linspace(0, self.get_angle(), nb_point + 2)
     list_point = Zstart * exp(1j * t)
 
     # Geometric transformation : return to the main axis

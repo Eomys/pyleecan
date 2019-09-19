@@ -90,7 +90,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list_air.append(Segment(Z1, Z2))
     curve_list_air.append(Segment(Z2, Z10))
     curve_list_air.append(Segment(Z10, Z11))
-    curve_list_air.append(Arc1(Z11, Z1, -Rbo + self.H1))
+    curve_list_air.append(Arc1(begin=Z11, end=Z1, radius=-Rbo + self.H1, is_trigo_direction=False))
     point_ref = (Z1 + Z2 + Z10 + Z11) / 4
     S1 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
@@ -136,7 +136,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list_air.append(Segment(Z1s, Z2s))
     curve_list_air.append(Segment(Z2s, Z10s))
     curve_list_air.append(Segment(Z10s, Z11s))
-    curve_list_air.append(Arc1(Z11s, Z1s, Rbo - self.H1))
+    curve_list_air.append(Arc1(Z11s, Z1s, Rbo - self.H1, is_trigo_direction=False))
     point_ref = (Z1s + Z2s + Z10s + Z11s) / 4
     S4 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
 
@@ -205,7 +205,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list_mag.append(Segment(Z6, Z7))
     curve_list_mag.append(Segment(Z7, Z8))
     curve_list_mag.append(Segment(Z8, Z11))
-    curve_list_air.append(Arc1(Z11, Z1, -Rbo + self.H1))
+    curve_list_air.append(Arc1(Z11, Z1, -Rbo + self.H1, is_trigo_direction=False))
     point_ref = (Z3 + Z4 + Z9 + Z10) / 4
     S8 = SurfLine(line_list=curve_list_mag, label="Hole" + st, point_ref=point_ref)
 
@@ -222,7 +222,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list_mag.append(Segment(Z6s, Z7s))
     curve_list_mag.append(Segment(Z7s, Z8s))
     curve_list_mag.append(Segment(Z8s, Z11s))
-    curve_list_air.append(Arc1(Z11s, Z1s, -Rbo + self.H1))
+    curve_list_air.append(Arc1(Z11s, Z1s, -Rbo + self.H1, is_trigo_direction=False))
     point_ref = (Z3s + Z4s + Z9s + Z10s) / 4
     S9 = SurfLine(line_list=curve_list_mag, label="Hole" + st, point_ref=point_ref)
 
@@ -243,7 +243,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     if self.W2 > 0:
         curve_list_mag.append(Segment(Z9, Z8))
     curve_list_mag.append(Segment(Z8s, Z11s))
-    curve_list_air.append(Arc1(Z11s, Z1s, -Rbo + self.H1))
+    curve_list_air.append(Arc1(Z11s, Z1s, -Rbo + self.H1, is_trigo_direction=False))
     point_ref = (Z3s + Z4s + Z9s + Z10s) / 4
     S10 = SurfLine(line_list=curve_list_mag, label="Hole" + st, point_ref=point_ref)
 
@@ -264,16 +264,16 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     if self.W2 > 0:
         curve_list_mag.append(Segment(Z9s, Z8s))
     curve_list_mag.append(Segment(Z8, Z11))
-    curve_list_air.append(Arc1(Z11, Z1, -Rbo + self.H1))
+    curve_list_air.append(Arc1(Z11, Z1, -Rbo + self.H1, is_trigo_direction=False))
     point_ref = (Z3 + Z4 + Z9 + Z10) / 4
     S11 = SurfLine(line_list=curve_list_mag, label="Hole" + st, point_ref=point_ref)
 
     # No magnet and W1 = 0
     curve_list_mag = list()
-    curve_list_air.append(Arc1(Z1, Z11, Rbo - self.H1))
+    curve_list_air.append(Arc1(Z1, Z11, Rbo - self.H1, is_trigo_direction=False))
     curve_list_mag.append(Segment(Z11, Z8))
     curve_list_mag.append(Segment(Z8, Z11s))
-    curve_list_air.append(Arc1(Z11s, Z1s, Rbo - self.H1))
+    curve_list_air.append(Arc1(Z11s, Z1s, Rbo - self.H1, is_trigo_direction=False))
     curve_list_mag.append(Segment(Z1s, Z2s))
     if self.H3 > 0:
         curve_list_mag.append(Segment(Z2s, Z3s))
