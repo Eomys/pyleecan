@@ -57,7 +57,9 @@ class Arc3(Arc):
     # save method is available in all object
     save = save
 
-    def __init__(self, begin=0, end=0, is_trigo_direction=False, label="", init_dict=None):
+    def __init__(
+        self, begin=0, end=0, is_trigo_direction=False, label="", init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -149,8 +151,9 @@ class Arc3(Arc):
 
     # begin point of the arc
     # Type : complex
-    begin = property(fget=_get_begin, fset=_set_begin,
-                     doc=u"""begin point of the arc""")
+    begin = property(
+        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the arc"""
+    )
 
     def _get_end(self):
         """getter of end"""
@@ -163,8 +166,7 @@ class Arc3(Arc):
 
     # end of the arc
     # Type : complex
-    end = property(fget=_get_end, fset=_set_end,
-                   doc=u"""end of the arc""")
+    end = property(fget=_get_end, fset=_set_end, doc=u"""end of the arc""")
 
     def _get_is_trigo_direction(self):
         """getter of is_trigo_direction"""
@@ -177,5 +179,8 @@ class Arc3(Arc):
 
     # Rotation direction of the arc
     # Type : bool
-    is_trigo_direction = property(fget=_get_is_trigo_direction, fset=_set_is_trigo_direction,
-                                  doc=u"""Rotation direction of the arc""")
+    is_trigo_direction = property(
+        fget=_get_is_trigo_direction,
+        fset=_set_is_trigo_direction,
+        doc=u"""Rotation direction of the arc""",
+    )

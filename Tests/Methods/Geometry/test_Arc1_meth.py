@@ -196,15 +196,75 @@ discretize_test[7]["result"] = array(
 )
 
 comp_length_test = list()
-comp_length_test.append({"begin": 0, "end": 1, "Radius": 2, "length": 1.010721020568})
 comp_length_test.append(
-    {"begin": 1, "end": 1 * exp(1j * pi / 2), "Radius": 1, "length": pi / 2}
+    {
+        "begin": 0,
+        "end": 1,
+        "Radius": 2,
+        "center": 0.5 + 1.93649167j,
+        "is_trigo": True,
+        "length": 1.010721020568,
+    }
 )
 comp_length_test.append(
-    {"begin": 1, "end": 1 * exp(1j * 3 * pi / 2), "Radius": -1, "length": pi / 2}
+    {
+        "begin": 1,
+        "end": 0,
+        "Radius": -2,
+        "center": 0.5 + 1.93649167j,
+        "is_trigo": False,
+        "length": 1.010721020568,
+    }
 )
 comp_length_test.append(
-    {"begin": 1, "end": 1 * exp(1j * pi), "Radius": 1, "length": pi}
+    {
+        "begin": 1,
+        "end": 1 * exp(1j * pi / 2),
+        "Radius": 1,
+        "center": 0,
+        "is_trigo": True,
+        "length": pi / 2,
+    }
+)
+comp_length_test.append(
+    {
+        "begin": 1,
+        "end": 1 * exp(1j * pi / 2),
+        "Radius": -1,
+        "center": 1 + 1j,
+        "is_trigo": True,
+        "length": 3 * pi / 2,
+    }
+)
+comp_length_test.append(
+    {
+        "begin": 1,
+        "end": 1 * exp(1j * pi / 2),
+        "Radius": -1,
+        "center": 1 + 1j,
+        "is_trigo": False,
+        "length": pi / 2,
+    }
+)
+comp_length_test.append(
+    {
+        "begin": 1,
+        "end": 1 * exp(1j * 3 * pi / 2),
+        "Radius": -1,
+        "center": 0,
+        "is_trigo": True,
+        "length": 3 * pi / 2,
+    }
+)
+comp_length_test.append(
+    {
+        "begin": 1,
+        "end": 1 * exp(1j * pi),
+        "Radius": 1,
+        "center": 0,
+        "is_trigo": True,
+        "length": pi,
+    }
 )
 
 # Dictionary to test get_middle
@@ -214,7 +274,19 @@ comp_mid_test.append(
         "begin": 1,
         "end": 1 * exp(1j * pi / 2),
         "radius": 1,
+        "is_trigo": True,
+        "center": 0,
         "expect": sqrt(2) / 2 * (1 + 1j),
+    }
+)
+comp_mid_test.append(
+    {
+        "begin": 1,
+        "end": 1 * exp(1j * pi / 2),
+        "radius": 1,
+        "is_trigo": False,
+        "center": 0,
+        "expect": sqrt(2) / 2 * (-1 - 1j),
     }
 )
 comp_mid_test.append(
@@ -222,10 +294,21 @@ comp_mid_test.append(
         "begin": 2 * exp(1j * 3 * pi / 4),
         "end": 2 * exp(1j * pi / 4),
         "radius": -2,
+        "is_trigo": False,
+        "center": 0,
         "expect": 2j,
     }
 )
-comp_mid_test.append({"begin": 2, "end": 3, "radius": -4, "expect": 2.5 + 0.031373j})
+comp_mid_test.append(
+    {
+        "begin": 2 * exp(1j * 3 * pi / 4),
+        "end": 2 * exp(1j * pi / 4),
+        "radius": -2,
+        "is_trigo": True,
+        "center": 0,
+        "expect": -2j,
+    }
+)
 # Dictionary to test rotation
 comp_rotate_test = list()
 comp_rotate_test.append(
@@ -292,23 +375,104 @@ comp_translate_test.append(
 )
 
 get_angle_test = list()
-get_angle_test.append(
-    {"begin": 1, "end": 1j, "radius": 1, "is_deg": True, "exp_angle": 90}
+get_angle_test.append(  # 1
+    {
+        "begin": 1,
+        "end": 1j,
+        "radius": 1,
+        "center": 0,
+        "is_trigo": True,
+        "is_deg": True,
+        "exp_angle": 90,
+    }
 )
-get_angle_test.append(
-    {"begin": 1j, "end": 1, "radius": 1, "is_deg": True, "exp_angle": 90.0}
+get_angle_test.append(  # 2
+    {
+        "begin": 1,
+        "end": 1j,
+        "radius": 1,
+        "center": 0,
+        "is_trigo": False,
+        "is_deg": True,
+        "exp_angle": -270,
+    }
 )
-get_angle_test.append(
-    {"begin": 1, "end": 1j, "radius": -1, "is_deg": True, "exp_angle": -90}
+get_angle_test.append(  # 3
+    {
+        "begin": 1j,
+        "end": 1,
+        "radius": 1,
+        "center": 1 + 1j,
+        "is_trigo": True,
+        "is_deg": True,
+        "exp_angle": 90.0,
+    }
 )
-get_angle_test.append(
-    {"begin": 0, "end": -2j - 2, "radius": 2, "is_deg": False, "exp_angle": pi / 2}
+get_angle_test.append(  # 4
+    {
+        "begin": 1j,
+        "end": 1,
+        "radius": 1,
+        "center": 1 + 1j,
+        "is_trigo": False,
+        "is_deg": True,
+        "exp_angle": -270,
+    }
 )
-get_angle_test.append(
-    {"begin": 1 + 1j, "end": 1 - 1j, "radius": -1, "is_deg": False, "exp_angle": -pi}
+get_angle_test.append(  # 5
+    {
+        "begin": 1,
+        "end": 1j,
+        "radius": -1,
+        "center": 1 + 1j,
+        "is_trigo": False,
+        "is_deg": True,
+        "exp_angle": -90,
+    }
 )
-get_angle_test.append(
-    {"begin": 2 + 1j, "end": 2 - 1j, "radius": -1, "is_deg": False, "exp_angle": -pi}
+get_angle_test.append(  # 6
+    {
+        "begin": 1,
+        "end": 1j,
+        "radius": -1,
+        "center": 1 + 1j,
+        "is_trigo": True,
+        "is_deg": True,
+        "exp_angle": 270,
+    }
+)
+get_angle_test.append(  # 7
+    {
+        "begin": 0,
+        "end": -2j - 2,
+        "radius": 2,
+        "center": -2j,
+        "is_trigo": True,
+        "is_deg": False,
+        "exp_angle": pi / 2,
+    }
+)
+get_angle_test.append(  # 8
+    {
+        "begin": 1 + 1j,
+        "end": 1 - 1j,
+        "center": 1,
+        "radius": -1,
+        "is_trigo": True,
+        "is_deg": False,
+        "exp_angle": pi,
+    }
+)
+get_angle_test.append(  # 9
+    {
+        "begin": 2 + 1j,
+        "end": 2 - 1j,
+        "center": 2,
+        "radius": -1,
+        "is_trigo": False,
+        "is_deg": False,
+        "exp_angle": -pi,
+    }
 )
 
 split_half_test = list()
@@ -317,6 +481,8 @@ split_half_test.append(
         "begin": 1,
         "end": -1,
         "radius": 1,
+        "center": 0,
+        "is_trigo": True,
         "is_begin": True,
         "N_begin": 1,
         "N_end": 1j,
@@ -328,6 +494,8 @@ split_half_test.append(
         "begin": 1,
         "end": -1,
         "radius": 1,
+        "center": 0,
+        "is_trigo": True,
         "is_begin": False,
         "N_begin": 1j,
         "N_end": -1,
@@ -337,8 +505,23 @@ split_half_test.append(
 split_half_test.append(
     {
         "begin": 1,
+        "end": -1,
+        "radius": 1,
+        "center": 0,
+        "is_trigo": False,
+        "is_begin": False,
+        "N_begin": -1j,
+        "N_end": -1,
+        "N_radius": 1,
+    }
+)
+split_half_test.append(
+    {
+        "begin": 1,
         "end": 1j,
         "radius": -1,
+        "center": 1 + 1j,
+        "is_trigo": False,
         "is_begin": True,
         "N_begin": 1,
         "N_end": exp(-1j * 3 * pi / 4) + 1 + 1j,
@@ -350,6 +533,8 @@ split_half_test.append(
         "begin": 0,
         "end": -2j - 2,
         "radius": 2,
+        "center": -2j,
+        "is_trigo": True,
         "is_begin": False,
         "N_begin": 2 * exp(3j * pi / 4) - 2j,
         "N_end": -2j - 2,
@@ -422,11 +607,24 @@ class test_Arc1_meth(TestCase):
     def test_comp_length(self, test_dict):
         """Check that you the length return by comp_length is correct
         """
-        arc = Arc1(test_dict["begin"], test_dict["end"], test_dict["Radius"])
+        arc = Arc1(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            radius=test_dict["Radius"],
+            is_trigo_direction=test_dict["is_trigo"],
+        )
 
+        # Check center
+        Zc = arc.get_center()
+        msg = (
+            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])
+        )
+        self.assertAlmostEqual(abs(Zc - test_dict["center"]), 0, msg=msg)
+        # Check length
         a = float(arc.comp_length())
         b = float(test_dict["length"])
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+        msg = "Wrong length: returned " + str(a) + ", expected " + str(b)
+        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
 
     def test_comp_length_Point_error(self):
         """Check that discretize detect a one point arc1
@@ -465,10 +663,28 @@ class test_Arc1_meth(TestCase):
         """Check that you can compute the arc middle
         """
         arc = Arc1(
-            begin=test_dict["begin"], end=test_dict["end"], radius=test_dict["radius"]
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            radius=test_dict["radius"],
+            is_trigo_direction=test_dict["is_trigo"],
         )
+        # Check center
+        Zc = arc.get_center()
+        msg = (
+            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])
+        )
+        self.assertAlmostEqual(abs(Zc - test_dict["center"]), 0, msg=msg)
+        # Check middle
         result = arc.get_middle()
-        self.assertAlmostEqual(abs(result - test_dict["expect"]), 0, delta=1e-6)
+        msg = (
+            "Wrong middle: return "
+            + str(result)
+            + ", expected "
+            + str(test_dict["expect"])
+        )
+        self.assertAlmostEqual(
+            abs(result - test_dict["expect"]), 0, delta=1e-6, msg=msg
+        )
 
     @data(*comp_rotate_test)
     def test_rotate(self, test_dict):
@@ -503,8 +719,18 @@ class test_Arc1_meth(TestCase):
         """Check that the arc1 computed angle is correct
         """
         arc = Arc1(
-            begin=test_dict["begin"], end=test_dict["end"], radius=test_dict["radius"]
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            radius=test_dict["radius"],
+            is_trigo_direction=test_dict["is_trigo"],
         )
+        # Check center
+        Zc = arc.get_center()
+        msg = (
+            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])
+        )
+        self.assertAlmostEqual(abs(Zc - test_dict["center"]), 0, msg=msg)
+        # Check angle
         result = arc.get_angle(test_dict["is_deg"])
         self.assertAlmostEqual(result, test_dict["exp_angle"])
 
@@ -513,9 +739,21 @@ class test_Arc1_meth(TestCase):
         """Check that the arc1 split is correct
         """
         arc = Arc1(
-            begin=test_dict["begin"], end=test_dict["end"], radius=test_dict["radius"]
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            radius=test_dict["radius"],
+            is_trigo_direction=test_dict["is_trigo"],
         )
+
+        # Check center
+        Zc = arc.get_center()
+        msg = (
+            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])
+        )
+        self.assertAlmostEqual(abs(Zc - test_dict["center"]), 0, msg=msg)
+        # Check split
         arc.split_half(is_begin=test_dict["is_begin"])
         self.assertAlmostEqual(arc.begin, test_dict["N_begin"])
         self.assertAlmostEqual(arc.end, test_dict["N_end"])
         self.assertAlmostEqual(arc.radius, test_dict["N_radius"])
+        self.assertAlmostEqual(arc.is_trigo_direction, test_dict["is_trigo"])
