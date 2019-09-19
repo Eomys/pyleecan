@@ -31,10 +31,13 @@ def get_middle(self):
 
     # Geometric transformation : center is the origine, angle(begin) = 0
     Zstart = (z1 - zc) * exp(-1j * np_angle(z1 - zc))
-    Zend = (z2 - zc) * exp(-1j * np_angle(z1 - zc))
 
     # Generation of the point by rotation
-    Zmid = Zstart * exp(1j * np_angle(Zend) / 2.0)
+    if self.is_trigo_direction:
+        alpha = 1 * self.get_angle()
+    else:
+        alpha = -1 * self.get_angle()
+    Zmid = Zstart * exp(1j * alpha / 2)
 
     # Geometric transformation : return to the main axis
     Zmid = Zmid * exp(1j * np_angle(z1 - zc)) + zc

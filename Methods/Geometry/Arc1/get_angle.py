@@ -22,7 +22,11 @@ def get_angle(self, is_deg=False):
     Zc = self.get_center()
     Z2 = (self.end - Zc) * exp(-1j * angle(self.begin - Zc))
 
-    if is_deg:
-        return angle(Z2) * 180 / pi
+    if self.is_trigo_direction:
+        alpha = angle(Z2)
     else:
-        return angle(Z2)
+        alpha = 2 * pi - angle(Z2)
+    if is_deg:
+        return alpha * 180 / pi
+    else:
+        return alpha

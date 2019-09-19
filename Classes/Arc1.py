@@ -57,7 +57,7 @@ class Arc1(Arc):
     # save method is available in all object
     save = save
 
-    def __init__(self, begin=0, end=0, radius=0, label="", init_dict=None):
+    def __init__(self, begin=0, end=0, radius=0, is_trigo_direction=True, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -68,7 +68,7 @@ class Arc1(Arc):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["begin", "end", "radius", "label"])
+            check_init_dict(init_dict, ["begin", "end", "radius", "is_trigo_direction", "label"])
             # Overwrite default value with init_dict content
             if "begin" in list(init_dict.keys()):
                 begin = init_dict["begin"]
@@ -76,12 +76,15 @@ class Arc1(Arc):
                 end = init_dict["end"]
             if "radius" in list(init_dict.keys()):
                 radius = init_dict["radius"]
+            if "is_trigo_direction" in list(init_dict.keys()):
+                is_trigo_direction = init_dict["is_trigo_direction"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
         # Initialisation by argument
         self.begin = begin
         self.end = end
         self.radius = radius
+        self.is_trigo_direction = is_trigo_direction
         # Call Arc init
         super(Arc1, self).__init__(label=label)
         # The class is frozen (in Arc init), for now it's impossible to
@@ -95,7 +98,8 @@ class Arc1(Arc):
         Arc1_str += super(Arc1, self).__str__() + linesep
         Arc1_str += "begin = " + str(self.begin) + linesep
         Arc1_str += "end = " + str(self.end) + linesep
-        Arc1_str += "radius = " + str(self.radius)
+        Arc1_str += "radius = " + str(self.radius) + linesep
+        Arc1_str += "is_trigo_direction = " + str(self.is_trigo_direction)
         return Arc1_str
 
     def __eq__(self, other):
@@ -113,6 +117,8 @@ class Arc1(Arc):
             return False
         if other.radius != self.radius:
             return False
+        if other.is_trigo_direction != self.is_trigo_direction:
+            return False
         return True
 
     def as_dict(self):
@@ -124,6 +130,7 @@ class Arc1(Arc):
         Arc1_dict["begin"] = self.begin
         Arc1_dict["end"] = self.end
         Arc1_dict["radius"] = self.radius
+        Arc1_dict["is_trigo_direction"] = self.is_trigo_direction
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         Arc1_dict["__class__"] = "Arc1"
@@ -135,6 +142,7 @@ class Arc1(Arc):
         self.begin = None
         self.end = None
         self.radius = None
+        self.is_trigo_direction = None
         # Set to None the properties inherited from Arc
         super(Arc1, self)._set_None()
 
@@ -149,9 +157,8 @@ class Arc1(Arc):
 
     # begin point of the arc
     # Type : complex
-    begin = property(
-        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the arc"""
-    )
+    begin = property(fget=_get_begin, fset=_set_begin,
+                     doc=u"""begin point of the arc""")
 
     def _get_end(self):
         """getter of end"""
@@ -164,7 +171,8 @@ class Arc1(Arc):
 
     # end point of the arc
     # Type : complex
-    end = property(fget=_get_end, fset=_set_end, doc=u"""end point of the arc""")
+    end = property(fget=_get_end, fset=_set_end,
+                   doc=u"""end point of the arc""")
 
     def _get_radius(self):
         """getter of radius"""
@@ -177,6 +185,19 @@ class Arc1(Arc):
 
     # Radius of the arc (can be + or -)
     # Type : float
-    radius = property(
-        fget=_get_radius, fset=_set_radius, doc=u"""Radius of the arc (can be + or -)"""
-    )
+    radius = property(fget=_get_radius, fset=_set_radius,
+                      doc=u"""Radius of the arc (can be + or -)""")
+
+    def _get_is_trigo_direction(self):
+        """getter of is_trigo_direction"""
+        return self._is_trigo_direction
+
+    def _set_is_trigo_direction(self, value):
+        """setter of is_trigo_direction"""
+        check_var("is_trigo_direction", value, "bool")
+        self._is_trigo_direction = value
+
+    # Rotation direction of the arc
+    # Type : bool
+    is_trigo_direction = property(fget=_get_is_trigo_direction, fset=_set_is_trigo_direction,
+                                  doc=u"""Rotation direction of the arc""")

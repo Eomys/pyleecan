@@ -24,12 +24,10 @@ def comp_length(self):
 
     self.check()
 
-    z1 = self.begin
-    z2 = self.end
     R = self.radius
 
     # alpha is the opening angle
-    alpha = 2 * arcsin(abs(z2 - z1) / (2 * R))
+    alpha = self.get_angle()
 
     # 2*pi*R is the length of the total circle
     # The arc is an alpha / 2pi portion of the cercle

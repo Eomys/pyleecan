@@ -14,3 +14,4 @@ def reverse(self):
     self.end = self.begin
     self.begin = end
     self.radius = -self.radius
+    self.is_trigo_direction = not self.is_trigo_direction

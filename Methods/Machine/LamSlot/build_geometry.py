@@ -119,7 +119,15 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         Zy2 = Ryoke * exp(1j * 2 * pi / sym)
         line_list.append(Segment(line_list[-1].get_end(), Zy2, label=ll + "_Yoke_Side"))
         if Ryoke > 0:  # For internal lamination
-            line_list.append(Arc1(Zy2, Zy1, -Ryoke, ll + "_Yoke_Radius"))
+            line_list.append(
+                Arc1(
+                    begin=Zy2,
+                    end=Zy1,
+                    radius=-Ryoke,
+                    is_trigo_direction=False,
+                    label=ll + "_Yoke_Radius",
+                )
+            )
         line_list.append(
             Segment(Zy1, line_list[0].get_begin(), label=ll + "_Yoke_Side")
         )

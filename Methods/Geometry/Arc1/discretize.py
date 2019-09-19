@@ -50,7 +50,11 @@ def discretize(self, nb_point=ARC_NPOINT_D):
     Zend = (z2 - zc) * exp(-1j * np_angle(z1 - zc))
 
     # Generation of the point by rotation
-    t = linspace(0, np_angle(Zend), nb_point + 2)
+    if self.is_trigo_direction:
+        sign = 1
+    else:
+        sign = -1
+    t = linspace(0, sign * np_angle(Zend), nb_point + 2)
     list_point = Zstart * exp(1j * t)
 
     # Geometric transformation : return to the main axis

@@ -5,7 +5,7 @@ Compute the coordinate of the center of an Arc1 method
 @copyright (C) 2014-2015 EOMYS ENGINEERING.
 @author pierre_b
 """
-from numpy import abs as np_abs, angle as np_angle, arcsin, exp, pi
+from numpy import abs as np_abs, angle as np_angle, arcsin, exp, pi, sqrt
 
 
 def get_center(self):
@@ -28,21 +28,19 @@ def get_center(self):
     z1 = self.begin
     z2 = self.end
     R = self.radius
+    D12 = np_abs(z2 - z1)  # length of segment [begin,end]
 
     # Centre at the middle of begin and end (distance(Z1, Z2) = diameter )
-    if abs(abs(z2 - z1) - abs(2 * R)) < 1e-6:
+    if np_abs(D12 - np_abs(2 * R)) < 1e-6:
         Zc = (z2 + z1) / 2.0
     else:
-        # Alpha is the opening angle (Begin-Center-End)
-        alpha = 2 * arcsin(abs(z2 - z1) / (2 * R))
-        if R > 0:
-            Zc = z2 + R * exp(1j * (np_angle(z2 - z1) % (2 * pi))) * exp(
-                1j * (pi / 2 + np_abs(alpha) / 2)
-            )
+        # In the coordinate system begin on center and end on X > 0 axis
+        if R > 0:  # Center is above the segment
+            Zc = D12 / 2 + 1j * sqrt(R ** 2 - (D12 / 2) ** 2)
         else:
-            Zc = z1 - R * exp(1j * (np_angle(z1 - z2) % (2 * pi))) * exp(
-                1j * (pi / 2 + np_abs(alpha) / 2)
-            )
+            Zc = D12 / 2 - 1j * sqrt(R ** 2 - (D12 / 2) ** 2)
+        # Go back to the original coordinate system
+        Zc = Zc * exp(1j * np_angle(z2 - z1)) + z1
 
     # Return (0,0) if the point is too close from 0
     if np_abs(Zc) < 1e-6:
