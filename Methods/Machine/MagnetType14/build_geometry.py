@@ -93,7 +93,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list.append(Segment(Z4, Z2))
 
     if not is_simplified:
-        curve_list.append(Arc1(Z2, Z1, -abs(Z2)))
+        curve_list.append(Arc1(Z2, Z1, -abs(Z2), is_trigo_direction=False))
 
     surf_list = list()
     surf_list.append(

@@ -25,6 +25,6 @@ def get_surface(self):
     curve_list = self.build_geometry()
     Zbegin = curve_list[-1].get_end()
     Zend = curve_list[0].get_begin()
-    curve_list.append(Arc1(Zbegin, Zend, -Rbo))
+    curve_list.append(Arc1(Zbegin, Zend, -Rbo, is_trigo_direction=False))
 
     return SurfLine(line_list=curve_list, label="Slot")

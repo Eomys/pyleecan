@@ -12,8 +12,7 @@ from ddt import data, ddt
 from numpy import array, exp, pi, sqrt
 
 from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Methods.Geometry.Arc1.check import (PointArc1Error,
-                                                  RadiusArc1Error)
+from pyleecan.Methods.Geometry.Arc1.check import PointArc1Error, RadiusArc1Error
 from pyleecan.Methods.Geometry.Arc1.discretize import NbPointArc1DError
 from pyleecan.Tests import save_plot_path as save_path
 
@@ -24,34 +23,16 @@ discretize_test = list()
 
 # inner left top arc
 discretize_test.append(
-    {"nb_point": 9, "begin": 1 * exp(1j * pi), "end": 1 * exp(1j * pi / 2), "Radius": 1}
-)
-discretize_test[0]["result"] = array(
-    [
-        -1,
-        -0.84356553 + 1.23116594e-02j,
-        -0.69098301 + 4.89434837e-02j,
-        -0.54600950 + 1.08993476e-01j,
-        -0.41221475 + 1.90983006e-01j,
-        -0.29289322 + 2.92893219e-01j,
-        -0.19098301 + 4.12214748e-01j,
-        -0.10899348 + 5.46009500e-01j,
-        -0.04894348 + 6.90983006e-01j,
-        -0.01231166 + 8.43565535e-01j,
-        1j,
-    ]
-)
-
-# extern left top arc
-discretize_test.append(
     {
         "nb_point": 9,
         "begin": 1 * exp(1j * pi),
         "end": 1 * exp(1j * pi / 2),
+        "center": 0,
         "Radius": -1,
+        "is_trigo": False,
     }
 )
-discretize_test[1]["result"] = array(
+discretize_test[0]["result"] = array(
     [
         -1,
         -9.87688341e-01 + 1.56434465e-01j,
@@ -67,31 +48,45 @@ discretize_test[1]["result"] = array(
     ]
 )
 
-# extern right top arc
+# extern left top arc
 discretize_test.append(
-    {"nb_point": 9, "begin": 1, "end": 1 * exp(1j * pi / 2), "Radius": 1}
+    {
+        "nb_point": 9,
+        "begin": 1 * exp(1j * pi),
+        "end": 1 * exp(1j * pi / 2),
+        "Radius": 1,
+        "center": -1 + 1j,
+        "is_trigo": True,
+    }
 )
-discretize_test[2]["result"] = array(
+discretize_test[1]["result"] = array(
     [
-        1,
-        9.87688341e-01 + 0.15643447j,
-        9.51056516e-01 + 0.30901699j,
-        8.91006524e-01 + 0.4539905j,
-        8.09016994e-01 + 0.58778525j,
-        7.07106781e-01 + 0.70710678j,
-        5.87785252e-01 + 0.80901699j,
-        4.53990500e-01 + 0.89100652j,
-        3.09016994e-01 + 0.95105652j,
-        1.56434465e-01 + 0.98768834j,
+        -1,
+        -0.84356553 + 1.23116594e-02j,
+        -0.69098301 + 4.89434837e-02j,
+        -0.54600950 + 1.08993476e-01j,
+        -0.41221475 + 1.90983006e-01j,
+        -0.29289322 + 2.92893219e-01j,
+        -0.19098301 + 4.12214748e-01j,
+        -0.10899348 + 5.46009500e-01j,
+        -0.04894348 + 6.90983006e-01j,
+        -0.01231166 + 8.43565535e-01j,
         1j,
     ]
 )
 
-# inner right top arc
+# extern right top arc
 discretize_test.append(
-    {"nb_point": 9, "begin": 1, "end": 1 * exp(1j * pi / 2), "Radius": -1}
+    {
+        "nb_point": 9,
+        "begin": 1,
+        "end": 1 * exp(1j * pi / 2),
+        "Radius": -1,
+        "is_trigo": False,
+        "center": 1 + 1j,
+    }
 )
-discretize_test[3]["result"] = array(
+discretize_test[2]["result"] = array(
     [
         1,
         8.43565535e-01 + 0.01231166j,
@@ -107,41 +102,45 @@ discretize_test[3]["result"] = array(
     ]
 )
 
+# inner right top arc
+discretize_test.append(
+    {
+        "nb_point": 9,
+        "begin": 1,
+        "end": 1 * exp(1j * pi / 2),
+        "Radius": 1,
+        "is_trigo": True,
+        "center": 0,
+    }
+)
+discretize_test[3]["result"] = array(
+    [
+        1,
+        9.87688341e-01 + 0.15643447j,
+        9.51056516e-01 + 0.30901699j,
+        8.91006524e-01 + 0.4539905j,
+        8.09016994e-01 + 0.58778525j,
+        7.07106781e-01 + 0.70710678j,
+        5.87785252e-01 + 0.80901699j,
+        4.53990500e-01 + 0.89100652j,
+        3.09016994e-01 + 0.95105652j,
+        1.56434465e-01 + 0.98768834j,
+        1j,
+    ]
+)
+
 # extern left bottom arc
 discretize_test.append(
     {
         "nb_point": 9,
         "begin": 1 * exp(1j * pi),
         "end": 1 * exp(1j * 3 * pi / 2),
-        "Radius": 1,
+        "Radius": -1,
+        "is_trigo": False,
+        "center": -1 - 1j,
     }
 )
 discretize_test[4]["result"] = array(
-    [
-        -1,
-        -9.87688341e-01 - 1.56434465e-01j,
-        -9.51056516e-01 - 3.09016994e-01j,
-        -8.91006524e-01 - 4.53990500e-01j,
-        -8.09016994e-01 - 5.87785252e-01j,
-        -7.07106781e-01 - 7.07106781e-01j,
-        -5.87785252e-01 - 8.09016994e-01j,
-        -4.53990500e-01 - 8.91006524e-01j,
-        -3.09016994e-01 - 9.51056516e-01j,
-        -1.56434465e-01 - 9.87688341e-01j,
-        -1j,
-    ]
-)
-
-# inner left bottom arc
-discretize_test.append(
-    {
-        "nb_point": 9,
-        "begin": 1 * exp(1j * pi),
-        "end": 1 * exp(1j * 3 * pi / 2),
-        "Radius": -1,
-    }
-)
-discretize_test[5]["result"] = array(
     [
         -1,
         -0.84356553 - 1.23116594e-02j,
@@ -157,31 +156,45 @@ discretize_test[5]["result"] = array(
     ]
 )
 
-# inner right bottom arc
+# inner left bottom arc
 discretize_test.append(
-    {"nb_point": 9, "begin": 1, "end": 1 * exp(1j * 3 * pi / 2), "Radius": 1}
+    {
+        "nb_point": 9,
+        "begin": 1 * exp(1j * pi),
+        "end": 1 * exp(1j * 3 * pi / 2),
+        "Radius": 1,
+        "is_trigo": True,
+        "center": 0,
+    }
 )
-discretize_test[6]["result"] = array(
+discretize_test[5]["result"] = array(
     [
-        1,
-        8.43565535e-01 - 0.01231166j,
-        6.90983006e-01 - 0.04894348j,
-        5.46009500e-01 - 0.10899348j,
-        4.12214748e-01 - 0.19098301j,
-        2.92893219e-01 - 0.29289322j,
-        1.90983006e-01 - 0.41221475j,
-        1.08993476e-01 - 0.5460095j,
-        4.89434837e-02 - 0.69098301j,
-        1.23116594e-02 - 0.84356553j,
+        -1,
+        -9.87688341e-01 - 1.56434465e-01j,
+        -9.51056516e-01 - 3.09016994e-01j,
+        -8.91006524e-01 - 4.53990500e-01j,
+        -8.09016994e-01 - 5.87785252e-01j,
+        -7.07106781e-01 - 7.07106781e-01j,
+        -5.87785252e-01 - 8.09016994e-01j,
+        -4.53990500e-01 - 8.91006524e-01j,
+        -3.09016994e-01 - 9.51056516e-01j,
+        -1.56434465e-01 - 9.87688341e-01j,
         -1j,
     ]
 )
 
-# extern right bottom arc
+# inner right bottom arc
 discretize_test.append(
-    {"nb_point": 9, "begin": 1, "end": 1 * exp(1j * 3 * pi / 2), "Radius": -1}
+    {
+        "nb_point": 9,
+        "begin": 1,
+        "end": 1 * exp(1j * 3 * pi / 2),
+        "Radius": -1,
+        "is_trigo": False,
+        "center": 0,
+    }
 )
-discretize_test[7]["result"] = array(
+discretize_test[6]["result"] = array(
     [
         1,
         9.87688341e-01 - 0.15643447j,
@@ -193,6 +206,33 @@ discretize_test[7]["result"] = array(
         4.53990500e-01 - 0.89100652j,
         3.09016994e-01 - 0.95105652j,
         1.56434465e-01 - 0.98768834j,
+        -1j,
+    ]
+)
+
+# extern right bottom arc
+discretize_test.append(
+    {
+        "nb_point": 9,
+        "begin": 1,
+        "end": 1 * exp(1j * 3 * pi / 2),
+        "Radius": 1,
+        "is_trigo": True,
+        "center": 1 - 1j,
+    }
+)
+discretize_test[7]["result"] = array(
+    [
+        1,
+        8.43565535e-01 - 0.01231166j,
+        6.90983006e-01 - 0.04894348j,
+        5.46009500e-01 - 0.10899348j,
+        4.12214748e-01 - 0.19098301j,
+        2.92893219e-01 - 0.29289322j,
+        1.90983006e-01 - 0.41221475j,
+        1.08993476e-01 - 0.5460095j,
+        4.89434837e-02 - 0.69098301j,
+        1.23116594e-02 - 0.84356553j,
         -1j,
     ]
 )
@@ -567,15 +607,35 @@ class test_Arc1_meth(TestCase):
     def test_dicretize(self, test_dict):
         """Check that you can discretize an arc1
         """
-        arc = Arc1(test_dict["begin"], test_dict["end"], test_dict["Radius"])
+        arc = Arc1(
+            test_dict["begin"],
+            test_dict["end"],
+            test_dict["Radius"],
+            is_trigo_direction=test_dict["is_trigo"],
+        )
 
+        # Check center
+        Zc = arc.get_center()
+        msg = (
+            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])
+        )
+        self.assertAlmostEqual(abs(Zc - test_dict["center"]), 0, msg=msg)
+        # Check discretize
         result = arc.discretize(test_dict["nb_point"])
-
+        print(result)
         self.assertEqual(result.size, test_dict["result"].size)
-        for i in range(0, result.size):
-            a = result[i]
-            b = test_dict["result"][i]
-            self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+        for ii in range(0, result.size):
+            a = result[ii]
+            b = test_dict["result"][ii]
+            msg = (
+                "Wrong point["
+                + str(ii)
+                + "]: return "
+                + str(a)
+                + ", expected "
+                + str(b)
+            )
+            self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
 
     def test_discretize_Point_error(self):
         """Check that discretize detect a one point arc1
@@ -795,7 +855,9 @@ class test_Arc1_meth(TestCase):
         plt.text(begin.real, begin.imag, "begin")
         plt.text(end.real, end.imag, "end")
         # Adding legend
-        plt.legend(["R > 0, trigo", "R < 0, trigo", "R > 0, not trigo", "R < 0, not trigo"])
+        plt.legend(
+            ["R > 0, trigo", "R < 0, trigo", "R > 0, not trigo", "R < 0, not trigo"]
+        )
         plt.axis("equal")
 
         plt.plot()

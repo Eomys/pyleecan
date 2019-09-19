@@ -65,13 +65,13 @@ class test_Hole_51_plot(TestCase):
 
         self.test_obj.plot()
         fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_51_s51_1-Machine_012.png"))
+        fig.savefig(join(save_path, "test_Lam_Hole_s51_1-Machine_012.png"))
         # Rotor + 2 for stator + 0 for frame + 1 for shaft
         self.assertEqual(len(fig.axes[0].patches), 61)
 
         self.test_obj.rotor.plot()
         fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_51_s51_1-Rotor_012.png"))
+        fig.savefig(join(save_path, "test_Lam_Hole_s51_1-Rotor_012.png"))
         # 2 for lam + 7*8 for holes
         self.assertEqual(len(fig.axes[0].patches), 58)
 
@@ -83,7 +83,7 @@ class test_Hole_51_plot(TestCase):
         self.test_obj.rotor.hole[0].magnet_2 = Magnet()
         self.test_obj.rotor.plot()
         fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_51_s51_2-Rotor_N12.png"))
+        fig.savefig(join(save_path, "test_Lam_Hole_s51_2-Rotor_N12.png"))
         # 2 for lam + 5*8 for holes
         self.assertEqual(len(fig.axes[0].patches), 42)
 
@@ -95,7 +95,7 @@ class test_Hole_51_plot(TestCase):
         self.test_obj.rotor.hole[0].magnet_2 = Magnet()
         self.test_obj.rotor.plot()
         fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_51_s51_3-Rotor_0N2.png"))
+        fig.savefig(join(save_path, "test_Lam_Hole_s51_3-Rotor_0N2.png"))
         # 2 for lam + 5*8 for holes
         self.assertEqual(len(fig.axes[0].patches), 42)
 
@@ -107,7 +107,7 @@ class test_Hole_51_plot(TestCase):
         self.test_obj.rotor.hole[0].magnet_2 = Magnet()
         self.test_obj.rotor.plot()
         fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_51_s51_4-Rotor_NN2.png"))
+        fig.savefig(join(save_path, "test_Lam_Hole_s51_4-Rotor_NN2.png"))
         # 2 for lam + 3*8 for holes
         self.assertEqual(len(fig.axes[0].patches), 26)
 
@@ -119,7 +119,7 @@ class test_Hole_51_plot(TestCase):
         self.test_obj.rotor.hole[0].magnet_2 = None
         self.test_obj.rotor.plot()
         fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_51_s51_5-Rotor_01N.png"))
+        fig.savefig(join(save_path, "test_Lam_Hole_s51_5-Rotor_01N.png"))
         # 2 for lam + 5*8 for holes
         self.assertEqual(len(fig.axes[0].patches), 42)
 
@@ -131,7 +131,7 @@ class test_Hole_51_plot(TestCase):
         self.test_obj.rotor.hole[0].magnet_2 = None
         self.test_obj.rotor.plot()
         fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_51_s51_6-Rotor_N1N.png"))
+        fig.savefig(join(save_path, "test_Lam_Hole_s51_6-Rotor_N1N.png"))
         # 2 for lam + 3*8 for holes
         self.assertEqual(len(fig.axes[0].patches), 26)
 
@@ -143,7 +143,7 @@ class test_Hole_51_plot(TestCase):
         self.test_obj.rotor.hole[0].magnet_2 = None
         self.test_obj.rotor.plot()
         fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_51_s51_7-Rotor_0NN.png"))
+        fig.savefig(join(save_path, "test_Lam_Hole_s51_7-Rotor_0NN.png"))
         # 2 for lam + 3*8 for holes
         self.assertEqual(len(fig.axes[0].patches), 26)
 
@@ -155,6 +155,6 @@ class test_Hole_51_plot(TestCase):
         self.test_obj.rotor.hole[0].magnet_2 = None
         self.test_obj.rotor.plot()
         fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_51_s51_8-Rotor_NNN.png"))
+        fig.savefig(join(save_path, "test_Lam_Hole_s51_8-Rotor_NNN.png"))
         # 2 for lam + 1*8 for holes
         self.assertEqual(len(fig.axes[0].patches), 10)

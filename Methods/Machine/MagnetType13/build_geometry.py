@@ -81,7 +81,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         curve_list.append(Segment(Z1, Z3))
 
     if self.is_outwards():
-        curve_list.append(Arc1(Z3, Z4, -self.Rtop))
+        curve_list.append(Arc1(Z3, Z4, -self.Rtop, is_trigo_direction=False))
     else:
         curve_list.append(Arc1(Z3, Z4, self.Rtop))
 

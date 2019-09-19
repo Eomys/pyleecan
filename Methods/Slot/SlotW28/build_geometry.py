@@ -36,11 +36,11 @@ def build_geometry(self):
     # Creation of curve
     curve_list = list()
     curve_list.append(Segment(Z1, Z2))
-    curve_list.append(Arc1(Z2, Z3, rot_sign * self.R1))
+    curve_list.append(Arc1(Z2, Z3, rot_sign * self.R1, self.is_outwards()))
     curve_list.append(Segment(Z3, Z4))
     curve_list.append(Arc3(Z4, Z5, self.is_outwards()))
     curve_list.append(Segment(Z5, Z6))
-    curve_list.append(Arc1(Z6, Z7, rot_sign * self.R1))
+    curve_list.append(Arc1(Z6, Z7, rot_sign * self.R1, self.is_outwards()))
     curve_list.append(Segment(Z7, Z8))
 
     return curve_list

@@ -36,9 +36,13 @@ def build_geometry(self):
     curve_list.append(Segment(Z2, Z3))
     curve_list.append(Segment(Z3, Z4))
     if self.R1 * 2 < self.W2:
-        curve_list.append(Arc1(Z4, Z5, rot_sign * self.R1, is_trigo_direction=False))
+        curve_list.append(
+            Arc1(Z4, Z5, rot_sign * self.R1, is_trigo_direction=self.is_outwards())
+        )
         curve_list.append(Segment(Z5, Z6))
-        curve_list.append(Arc1(Z6, Z7, rot_sign * self.R1, is_trigo_direction=False))
+        curve_list.append(
+            Arc1(Z6, Z7, rot_sign * self.R1, is_trigo_direction=self.is_outwards())
+        )
     else:
         curve_list.append(Arc3(Z4, Z7, self.is_outwards()))
     curve_list.append(Segment(Z7, Z8))

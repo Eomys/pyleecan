@@ -88,4 +88,3 @@ class test_EM_IPMSM_FL_002(TestCase):
 
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_EM_IPMSM_FL_002_force.png"))
-

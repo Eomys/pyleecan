@@ -50,7 +50,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     surf_list = list()
     curve_list = list()
-    curve_list.append(Arc1(begin=Z1, end=Z2, radius=self.R1))
+    curve_list.append(Arc1(begin=Z1, end=Z2, radius=-self.R1, is_trigo_direction=False))
     curve_list.append(Arc3(begin=Z2, end=Z3, is_trigo_direction=True))
     curve_list.append(Arc1(begin=Z3, end=Z4, radius=self.R1 + self.H1))
     curve_list.append(Arc3(begin=Z4, end=Z1, is_trigo_direction=True))

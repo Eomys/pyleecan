@@ -89,14 +89,15 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
             )
             surf_list.append(surface)
         else:
-
             # Part 1 (0,0)
             curve_list = list()
             curve_list.append(Segment(Z7, Ztan1))
             curve_list.append(Segment(Ztan1, Ztan2))
-            curve_list.append(Arc1(Ztan2, Z5, rot_sign * self.R1))
+            curve_list.append(
+                Arc1(Ztan2, Z5, rot_sign * self.R1, not self.is_outwards())
+            )
             curve_list.append(Segment(Z5, Z6))
-            curve_list.append(Arc1(Z6, Z7, rot_sign * self.R1))
+            curve_list.append(Arc1(Z6, Z7, rot_sign * self.R1, not self.is_outwards()))
             point_ref = (Z7 + Ztan1 + Ztan2 + Z5 + Z6) / 5
             surface = SurfLine(
                 line_list=curve_list,
@@ -107,9 +108,11 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
             # Part2 (0,1)
             curve_list = list()
             curve_list.append(Segment(Ztan1, Z2))
-            curve_list.append(Arc1(Z2, Z3, rot_sign * self.R1))
+            curve_list.append(Arc1(Z2, Z3, rot_sign * self.R1, not self.is_outwards()))
             curve_list.append(Segment(Z3, Z4))
-            curve_list.append(Arc1(Z4, Ztan2, rot_sign * self.R1))
+            curve_list.append(
+                Arc1(Z4, Ztan2, rot_sign * self.R1, not self.is_outwards())
+            )
             curve_list.append(Segment(Ztan2, Ztan1))
             point_ref = (Ztan1 + Z2 + Z3 + Z4 + Ztan2) / 5
             surface = SurfLine(
@@ -145,11 +148,11 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
             # Part 1 (0,0)
             curve_list = list()
             curve_list.append(Segment(Z7, Z2))
-            curve_list.append(Arc1(Z2, Z3, rot_sign * self.R1))
+            curve_list.append(Arc1(Z2, Z3, rot_sign * self.R1, not self.is_outwards()))
             curve_list.append(Segment(Z3, Zrad2))
             curve_list.append(Segment(Zrad2, Zrad1))
             curve_list.append(Segment(Zrad1, Z6))
-            curve_list.append(Arc1(Z6, Z7, rot_sign * self.R1))
+            curve_list.append(Arc1(Z6, Z7, rot_sign * self.R1, not self.is_outwards()))
             point_ref = (Z7 + Z2 + Z3 + Zrad2 + Zrad1 + Z6) / 6
             surface = SurfLine(
                 line_list=curve_list,
@@ -222,7 +225,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
             curve_list.append(Segment(Ztan1, Zmid))
             curve_list.append(Segment(Zmid, Zrad1))
             curve_list.append(Segment(Zrad1, Z6))
-            curve_list.append(Arc1(Z6, Z7, rot_sign * self.R1))
+            curve_list.append(Arc1(Z6, Z7, rot_sign * self.R1, not self.is_outwards()))
             point_ref = (Z7 + Ztan1 + Zmid + Zrad1 + Z6) / 5
             surface = SurfLine(
                 line_list=curve_list,
@@ -234,7 +237,9 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
             curve_list = list()
             curve_list.append(Segment(Zrad1, Zmid))
             curve_list.append(Segment(Zmid, Ztan2))
-            curve_list.append(Arc1(Ztan2, Z5, rot_sign * self.R1))
+            curve_list.append(
+                Arc1(Ztan2, Z5, rot_sign * self.R1, not self.is_outwards())
+            )
             curve_list.append(Segment(Z5, Zrad1))
             point_ref = (Zrad1 + Zmid + Ztan2 + Z5) / 4
             surface = SurfLine(
@@ -246,7 +251,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
             # Part 3 (0,1)
             curve_list = list()
             curve_list.append(Segment(Ztan1, Z2))
-            curve_list.append(Arc1(Z2, Z3, rot_sign * self.R1))
+            curve_list.append(Arc1(Z2, Z3, rot_sign * self.R1, not self.is_outwards()))
             curve_list.append(Segment(Z3, Zrad2))
             curve_list.append(Segment(Zrad2, Zmid))
             curve_list.append(Segment(Zmid, Ztan1))
@@ -262,7 +267,9 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
             curve_list = list()
             curve_list.append(Segment(Zmid, Zrad2))
             curve_list.append(Segment(Zrad2, Z4))
-            curve_list.append(Arc1(Z4, Ztan2, rot_sign * self.R1))
+            curve_list.append(
+                Arc1(Z4, Ztan2, rot_sign * self.R1, not self.is_outwards())
+            )
             curve_list.append(Segment(Ztan2, Zmid))
             point_ref = (Zmid + Zrad2 + Z4 + Ztan2) / 4
             surface = SurfLine(
