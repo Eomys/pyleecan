@@ -91,7 +91,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list_air.append(Segment(Z2, Z10))
     curve_list_air.append(Segment(Z10, Z11))
     curve_list_air.append(
-        Arc1(begin=Z11, end=Z1, radius=Rbo - self.H1, is_trigo_direction=True)
+        Arc1(begin=Z11, end=Z1, radius=-Rbo + self.H1, is_trigo_direction=False)
     )
     point_ref = (Z1 + Z2 + Z10 + Z11) / 4
     S1 = SurfLine(line_list=curve_list_air, label="Hole" + st, point_ref=point_ref)
