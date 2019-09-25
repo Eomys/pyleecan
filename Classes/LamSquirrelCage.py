@@ -19,6 +19,7 @@ from pyleecan.Classes.Hole import Hole
 from pyleecan.Classes.Notch import Notch
 
 
+
 class LamSquirrelCage(LamSlotWind):
     """squirrel cages lamination"""
 
@@ -35,27 +36,7 @@ class LamSquirrelCage(LamSlotWind):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        Hscr=0.03,
-        Lscr=0.015,
-        ring_mat=-1,
-        Ksfill=None,
-        winding=-1,
-        slot=-1,
-        L1=0.35,
-        mat_type=-1,
-        Nrvd=0,
-        Wrvd=0,
-        Kf1=0.95,
-        is_internal=True,
-        Rint=0,
-        Rext=1,
-        is_stator=True,
-        axial_vent=list(),
-        notch=list(),
-        init_dict=None,
-    ):
+    def __init__(self, Hscr=0.03, Lscr=0.015, ring_mat=-1, Ksfill=None, winding=-1, slot=-1, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), notch=list(), init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -74,28 +55,7 @@ class LamSquirrelCage(LamSlotWind):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "Hscr",
-                    "Lscr",
-                    "ring_mat",
-                    "Ksfill",
-                    "winding",
-                    "slot",
-                    "L1",
-                    "mat_type",
-                    "Nrvd",
-                    "Wrvd",
-                    "Kf1",
-                    "is_internal",
-                    "Rint",
-                    "Rext",
-                    "is_stator",
-                    "axial_vent",
-                    "notch",
-                ],
-            )
+            check_init_dict(init_dict, ["Hscr", "Lscr", "ring_mat", "Ksfill", "winding", "slot", "L1", "mat_type", "Nrvd", "Wrvd", "Kf1", "is_internal", "Rint", "Rext", "is_stator", "axial_vent", "notch"])
             # Overwrite default value with init_dict content
             if "Hscr" in list(init_dict.keys()):
                 Hscr = init_dict["Hscr"]
@@ -140,22 +100,7 @@ class LamSquirrelCage(LamSlotWind):
         else:
             self.ring_mat = ring_mat
         # Call LamSlotWind init
-        super(LamSquirrelCage, self).__init__(
-            Ksfill=Ksfill,
-            winding=winding,
-            slot=slot,
-            L1=L1,
-            mat_type=mat_type,
-            Nrvd=Nrvd,
-            Wrvd=Wrvd,
-            Kf1=Kf1,
-            is_internal=is_internal,
-            Rint=Rint,
-            Rext=Rext,
-            is_stator=is_stator,
-            axial_vent=axial_vent,
-            notch=notch,
-        )
+        super(LamSquirrelCage, self).__init__(Ksfill=Ksfill, winding=winding, slot=slot, L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
         # The class is frozen (in LamSlotWind init), for now it's impossible to
         # add new properties
 
@@ -225,11 +170,8 @@ class LamSquirrelCage(LamSlotWind):
 
     # short circuit ring section radial height [m]
     # Type : float, min = 0
-    Hscr = property(
-        fget=_get_Hscr,
-        fset=_set_Hscr,
-        doc=u"""short circuit ring section radial height [m]""",
-    )
+    Hscr = property(fget=_get_Hscr, fset=_set_Hscr,
+                    doc=u"""short circuit ring section radial height [m]""")
 
     def _get_Lscr(self):
         """getter of Lscr"""
@@ -242,11 +184,8 @@ class LamSquirrelCage(LamSlotWind):
 
     # short circuit ring section axial length
     # Type : float, min = 0
-    Lscr = property(
-        fget=_get_Lscr,
-        fset=_set_Lscr,
-        doc=u"""short circuit ring section axial length""",
-    )
+    Lscr = property(fget=_get_Lscr, fset=_set_Lscr,
+                    doc=u"""short circuit ring section axial length""")
 
     def _get_ring_mat(self):
         """getter of ring_mat"""
@@ -259,11 +198,7 @@ class LamSquirrelCage(LamSlotWind):
 
         if self._ring_mat is not None:
             self._ring_mat.parent = self
-
     # Material of the Rotor short circuit ring
     # Type : Material
-    ring_mat = property(
-        fget=_get_ring_mat,
-        fset=_set_ring_mat,
-        doc=u"""Material of the Rotor short circuit ring""",
-    )
+    ring_mat = property(fget=_get_ring_mat, fset=_set_ring_mat,
+                        doc=u"""Material of the Rotor short circuit ring""")

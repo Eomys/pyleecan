@@ -13,6 +13,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
 
 
+
 class NotchEvenDist(Notch):
     """Class for evenly distributed notches"""
 
@@ -108,6 +109,5 @@ class NotchEvenDist(Notch):
 
     # angular positon of the first notch
     # Type : ndarray
-    alpha = property(
-        fget=_get_alpha, fset=_set_alpha, doc=u"""angular positon of the first notch"""
-    )
+    alpha = property(fget=_get_alpha, fset=_set_alpha,
+                     doc=u"""angular positon of the first notch""")

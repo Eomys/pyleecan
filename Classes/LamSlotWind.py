@@ -11,9 +11,7 @@ from pyleecan.Methods.Machine.LamSlotWind.check import check
 from pyleecan.Methods.Machine.LamSlotWind.comp_masses import comp_masses
 from pyleecan.Methods.Machine.LamSlotWind.comp_surfaces import comp_surfaces
 from pyleecan.Methods.Machine.LamSlotWind.comp_volumes import comp_volumes
-from pyleecan.Methods.Machine.LamSlotWind.get_pole_pair_number import (
-    get_pole_pair_number,
-)
+from pyleecan.Methods.Machine.LamSlotWind.get_pole_pair_number import get_pole_pair_number
 from pyleecan.Methods.Machine.LamSlotWind.get_name_phase import get_name_phase
 from pyleecan.Methods.Machine.LamSlotWind.plot import plot
 from pyleecan.Methods.Machine.LamSlotWind.plot_winding import plot_winding
@@ -27,6 +25,7 @@ from pyleecan.Classes.Slot import Slot
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.Hole import Hole
 from pyleecan.Classes.Notch import Notch
+
 
 
 class LamSlotWind(LamSlot):
@@ -61,24 +60,7 @@ class LamSlotWind(LamSlot):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        Ksfill=None,
-        winding=-1,
-        slot=-1,
-        L1=0.35,
-        mat_type=-1,
-        Nrvd=0,
-        Wrvd=0,
-        Kf1=0.95,
-        is_internal=True,
-        Rint=0,
-        Rext=1,
-        is_stator=True,
-        axial_vent=list(),
-        notch=list(),
-        init_dict=None,
-    ):
+    def __init__(self, Ksfill=None, winding=-1, slot=-1, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), notch=list(), init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -95,25 +77,7 @@ class LamSlotWind(LamSlot):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "Ksfill",
-                    "winding",
-                    "slot",
-                    "L1",
-                    "mat_type",
-                    "Nrvd",
-                    "Wrvd",
-                    "Kf1",
-                    "is_internal",
-                    "Rint",
-                    "Rext",
-                    "is_stator",
-                    "axial_vent",
-                    "notch",
-                ],
-            )
+            check_init_dict(init_dict, ["Ksfill", "winding", "slot", "L1", "mat_type", "Nrvd", "Wrvd", "Kf1", "is_internal", "Rint", "Rext", "is_stator", "axial_vent", "notch"])
             # Overwrite default value with init_dict content
             if "Ksfill" in list(init_dict.keys()):
                 Ksfill = init_dict["Ksfill"]
@@ -148,41 +112,17 @@ class LamSlotWind(LamSlot):
         # winding can be None, a Winding object or a dict
         if isinstance(winding, dict):
             # Check that the type is correct (including daughter)
-            class_name = winding.get("__class__")
-            if class_name not in [
-                "Winding",
-                "WindingCW1L",
-                "WindingCW2LR",
-                "WindingCW2LT",
-                "WindingDW1L",
-                "WindingDW2L",
-                "WindingSC",
-                "WindingUD",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
-                )
+            class_name = winding.get('__class__')
+            if class_name not in ['Winding', 'WindingCW1L', 'WindingCW2LR', 'WindingCW2LT', 'WindingDW1L', 'WindingDW2L', 'WindingSC', 'WindingUD']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.winding = class_obj(init_dict=winding)
         else:
             self.winding = winding
         # Call LamSlot init
-        super(LamSlotWind, self).__init__(
-            slot=slot,
-            L1=L1,
-            mat_type=mat_type,
-            Nrvd=Nrvd,
-            Wrvd=Wrvd,
-            Kf1=Kf1,
-            is_internal=is_internal,
-            Rint=Rint,
-            Rext=Rext,
-            is_stator=is_stator,
-            axial_vent=axial_vent,
-            notch=notch,
-        )
+        super(LamSlotWind, self).__init__(slot=slot, L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
         # The class is frozen (in LamSlot init), for now it's impossible to
         # add new properties
 
@@ -247,11 +187,8 @@ class LamSlotWind(LamSlot):
 
     # Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)
     # Type : float, min = 0, max = 1
-    Ksfill = property(
-        fget=_get_Ksfill,
-        fset=_set_Ksfill,
-        doc=u"""Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)""",
-    )
+    Ksfill = property(fget=_get_Ksfill, fset=_set_Ksfill,
+                      doc=u"""Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)""")
 
     def _get_winding(self):
         """getter of winding"""
@@ -264,9 +201,7 @@ class LamSlotWind(LamSlot):
 
         if self._winding is not None:
             self._winding.parent = self
-
     # Lamination's Winding
     # Type : Winding
-    winding = property(
-        fget=_get_winding, fset=_set_winding, doc=u"""Lamination's Winding"""
-    )
+    winding = property(fget=_get_winding, fset=_set_winding,
+                       doc=u"""Lamination's Winding""")

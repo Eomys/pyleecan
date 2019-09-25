@@ -23,6 +23,8 @@ def comp_flux_airgap(self, output):
         sym = self.sym_a
         if self.is_antiper_a:
             sym *= 2
+        if self.is_sliding_band:
+            self.is_sliding_band = True  # When there is a symmetry, there must be a sliding band.
     else:
         sym = 1
 
@@ -44,9 +46,9 @@ def comp_flux_airgap(self, output):
         kmesh_fineness=self.Kmesh_fineness,
         user_FEMM_dict=self.FEMM_dict,
         path_save=self.get_path_save(output),
+        is_sliding_band=self.is_sliding_band,
     )
 
     # Solve for all time step and store all the results in output
     self.solve_FEMM(output, sym, FEMM_dict)
 
-    output.mag.FEMM_dict = FEMM_dict

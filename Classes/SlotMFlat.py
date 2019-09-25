@@ -8,9 +8,7 @@ from pyleecan.Classes.SlotMag import SlotMag
 
 from pyleecan.Methods.Slot.SlotMFlat.build_geometry import build_geometry
 from pyleecan.Methods.Slot.SlotMFlat.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.SlotMFlat.comp_angle_opening_magnet import (
-    comp_angle_opening_magnet,
-)
+from pyleecan.Methods.Slot.SlotMFlat.comp_angle_opening_magnet import comp_angle_opening_magnet
 from pyleecan.Methods.Slot.SlotMFlat.comp_height import comp_height
 from pyleecan.Methods.Slot.SlotMFlat.comp_surface import comp_surface
 from pyleecan.Methods.Slot.SlotMFlat.comp_W0m import comp_W0m
@@ -18,6 +16,7 @@ from pyleecan.Methods.Slot.SlotMFlat.get_point_bottom import get_point_bottom
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.MagnetFlat import MagnetFlat
+
 
 
 class SlotMFlat(SlotMag):
@@ -44,16 +43,7 @@ class SlotMFlat(SlotMag):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        H0=0,
-        W0=0.0122,
-        W0_is_rad=False,
-        magnet=list(),
-        W3=0,
-        Zs=36,
-        init_dict=None,
-    ):
+    def __init__(self, H0=0, W0=0.0122, W0_is_rad=False, magnet=list(), W3=0, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -90,24 +80,12 @@ class SlotMFlat(SlotMag):
                     self.magnet.append(MagnetFlat())
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "MagnetFlat",
-                        "MagnetType10",
-                        "MagnetType12",
-                        "MagnetType13",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for "
-                            + prop_name
-                        )
+                    class_name = obj.get('__class__')
+                    if class_name not in ['MagnetFlat', 'MagnetType10', 'MagnetType12', 'MagnetType13']:
+                        raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
                     # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
+                    module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+                    class_obj = getattr(module,class_name)
                     self.magnet.append(class_obj(init_dict=obj))
                 else:
                     self.magnet.append(obj)
@@ -132,9 +110,7 @@ class SlotMFlat(SlotMag):
         if len(self.magnet) == 0:
             SlotMFlat_str += "magnet = []"
         for ii in range(len(self.magnet)):
-            SlotMFlat_str += (
-                "magnet[" + str(ii) + "] = " + str(self.magnet[ii].as_dict()) + "\n"
-            )
+            SlotMFlat_str += "magnet["+str(ii)+"] = "+str(self.magnet[ii].as_dict())+"\n"
         return SlotMFlat_str
 
     def __eq__(self, other):
@@ -195,7 +171,8 @@ class SlotMFlat(SlotMag):
 
     # Slot isthmus height
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height""")
+    H0 = property(fget=_get_H0, fset=_set_H0,
+                  doc=u"""Slot isthmus height""")
 
     def _get_W0(self):
         """getter of W0"""
@@ -208,7 +185,8 @@ class SlotMFlat(SlotMag):
 
     # Slot isthmus width.
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus width.""")
+    W0 = property(fget=_get_W0, fset=_set_W0,
+                  doc=u"""Slot isthmus width.""")
 
     def _get_W0_is_rad(self):
         """getter of W0_is_rad"""
@@ -221,9 +199,8 @@ class SlotMFlat(SlotMag):
 
     # W0 unit, 0 for m, 1 for rad
     # Type : bool
-    W0_is_rad = property(
-        fget=_get_W0_is_rad, fset=_set_W0_is_rad, doc=u"""W0 unit, 0 for m, 1 for rad"""
-    )
+    W0_is_rad = property(fget=_get_W0_is_rad, fset=_set_W0_is_rad,
+                         doc=u"""W0 unit, 0 for m, 1 for rad""")
 
     def _get_magnet(self):
         """getter of magnet"""
@@ -240,7 +217,7 @@ class SlotMFlat(SlotMag):
         for obj in self._magnet:
             if obj is not None:
                 obj.parent = self
-
     # List of magnet
     # Type : [MagnetFlat]
-    magnet = property(fget=_get_magnet, fset=_set_magnet, doc=u"""List of magnet""")
+    magnet = property(fget=_get_magnet, fset=_set_magnet,
+                      doc=u"""List of magnet""")

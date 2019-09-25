@@ -12,6 +12,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Import import Import
 
 
+
 class InForce(Input):
     """Input to start with the structural one """
 
@@ -55,138 +56,48 @@ class InForce(Input):
         # time can be None, a Import object or a dict
         if isinstance(time, dict):
             # Check that the type is correct (including daughter)
-            class_name = time.get("__class__")
-            if class_name not in [
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
-                )
+            class_name = time.get('__class__')
+            if class_name not in ['Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls', 'ImportGenVectSin', 'ImportGenMatrixSin', 'ImportGenVectLin']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.time = class_obj(init_dict=time)
         else:
             self.time = time
         # angle can be None, a Import object or a dict
         if isinstance(angle, dict):
             # Check that the type is correct (including daughter)
-            class_name = angle.get("__class__")
-            if class_name not in [
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
-                )
+            class_name = angle.get('__class__')
+            if class_name not in ['Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls', 'ImportGenVectSin', 'ImportGenMatrixSin', 'ImportGenVectLin']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.angle = class_obj(init_dict=angle)
         else:
             self.angle = angle
         # Prad can be None, a Import object or a dict
         if isinstance(Prad, dict):
             # Check that the type is correct (including daughter)
-            class_name = Prad.get("__class__")
-            if class_name not in [
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
-                )
+            class_name = Prad.get('__class__')
+            if class_name not in ['Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls', 'ImportGenVectSin', 'ImportGenMatrixSin', 'ImportGenVectLin']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.Prad = class_obj(init_dict=Prad)
         else:
             self.Prad = Prad
         # Ptan can be None, a Import object or a dict
         if isinstance(Ptan, dict):
             # Check that the type is correct (including daughter)
-            class_name = Ptan.get("__class__")
-            if class_name not in [
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
-                )
+            class_name = Ptan.get('__class__')
+            if class_name not in ['Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'Import', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls', 'ImportGenVectSin', 'ImportGenMatrixSin', 'ImportGenVectLin']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.Ptan = class_obj(init_dict=Ptan)
         else:
             self.Ptan = Ptan
@@ -278,14 +189,10 @@ class InForce(Input):
 
         if self._time is not None:
             self._time.parent = self
-
     # Electrical time vector (no symmetry) to import
     # Type : Import
-    time = property(
-        fget=_get_time,
-        fset=_set_time,
-        doc=u"""Electrical time vector (no symmetry) to import""",
-    )
+    time = property(fget=_get_time, fset=_set_time,
+                    doc=u"""Electrical time vector (no symmetry) to import""")
 
     def _get_angle(self):
         """getter of angle"""
@@ -298,14 +205,10 @@ class InForce(Input):
 
         if self._angle is not None:
             self._angle.parent = self
-
     # Electrical position vector (no symmetry) to import
     # Type : Import
-    angle = property(
-        fget=_get_angle,
-        fset=_set_angle,
-        doc=u"""Electrical position vector (no symmetry) to import""",
-    )
+    angle = property(fget=_get_angle, fset=_set_angle,
+                     doc=u"""Electrical position vector (no symmetry) to import""")
 
     def _get_Prad(self):
         """getter of Prad"""
@@ -318,12 +221,10 @@ class InForce(Input):
 
         if self._Prad is not None:
             self._Prad.parent = self
-
     # Radial magnetic air-gap surface force
     # Type : Import
-    Prad = property(
-        fget=_get_Prad, fset=_set_Prad, doc=u"""Radial magnetic air-gap surface force"""
-    )
+    Prad = property(fget=_get_Prad, fset=_set_Prad,
+                    doc=u"""Radial magnetic air-gap surface force""")
 
     def _get_Ptan(self):
         """getter of Ptan"""
@@ -336,11 +237,7 @@ class InForce(Input):
 
         if self._Ptan is not None:
             self._Ptan.parent = self
-
     # Tangential magnetic air-gap surface force
     # Type : Import
-    Ptan = property(
-        fget=_get_Ptan,
-        fset=_set_Ptan,
-        doc=u"""Tangential magnetic air-gap surface force""",
-    )
+    Ptan = property(fget=_get_Ptan, fset=_set_Ptan,
+                    doc=u"""Tangential magnetic air-gap surface force""")

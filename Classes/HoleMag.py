@@ -12,6 +12,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class HoleMag(Hole):
     """Hole with magnets for lamination (abstract)"""
 
@@ -82,3 +83,5 @@ class HoleMag(Hole):
 
         # Set to None the properties inherited from Hole
         super(HoleMag, self)._set_None()
+
+

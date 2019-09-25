@@ -13,6 +13,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class MagnetType14(MagnetPolar):
     """single magnet with polar base and curved-top shape """
 
@@ -27,16 +28,7 @@ class MagnetType14(MagnetPolar):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        Wmag=0.002,
-        Hmag=0.001,
-        Rtop=0.05,
-        mat_type=-1,
-        type_magnetization=0,
-        Lmag=0.95,
-        init_dict=None,
-    ):
+    def __init__(self, Wmag=0.002, Hmag=0.001, Rtop=0.05, mat_type=-1, type_magnetization=0, Lmag=0.95, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -49,10 +41,7 @@ class MagnetType14(MagnetPolar):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["Wmag", "Hmag", "Rtop", "mat_type", "type_magnetization", "Lmag"],
-            )
+            check_init_dict(init_dict, ["Wmag", "Hmag", "Rtop", "mat_type", "type_magnetization", "Lmag"])
             # Overwrite default value with init_dict content
             if "Wmag" in list(init_dict.keys()):
                 Wmag = init_dict["Wmag"]
@@ -71,9 +60,7 @@ class MagnetType14(MagnetPolar):
         self.Hmag = Hmag
         self.Rtop = Rtop
         # Call MagnetPolar init
-        super(MagnetType14, self).__init__(
-            mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag
-        )
+        super(MagnetType14, self).__init__(mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag)
         # The class is frozen (in MagnetPolar init), for now it's impossible to
         # add new properties
 
@@ -139,9 +126,8 @@ class MagnetType14(MagnetPolar):
 
     # magnet bottom width [rad]
     # Type : float, min = 0
-    Wmag = property(
-        fget=_get_Wmag, fset=_set_Wmag, doc=u"""magnet bottom width [rad]"""
-    )
+    Wmag = property(fget=_get_Wmag, fset=_set_Wmag,
+                    doc=u"""magnet bottom width [rad]""")
 
     def _get_Hmag(self):
         """getter of Hmag"""
@@ -154,7 +140,8 @@ class MagnetType14(MagnetPolar):
 
     # magnet radial height [m]
     # Type : float, min = 0
-    Hmag = property(fget=_get_Hmag, fset=_set_Hmag, doc=u"""magnet radial height [m]""")
+    Hmag = property(fget=_get_Hmag, fset=_set_Hmag,
+                    doc=u"""magnet radial height [m]""")
 
     def _get_Rtop(self):
         """getter of Rtop"""
@@ -167,6 +154,5 @@ class MagnetType14(MagnetPolar):
 
     # radius of the circular top shape [m]
     # Type : float, min = 0
-    Rtop = property(
-        fget=_get_Rtop, fset=_set_Rtop, doc=u"""radius of the circular top shape [m]"""
-    )
+    Rtop = property(fget=_get_Rtop, fset=_set_Rtop,
+                    doc=u"""radius of the circular top shape [m]""")

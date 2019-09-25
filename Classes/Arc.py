@@ -7,8 +7,6 @@ from pyleecan.Functions.save import save
 from pyleecan.Classes.Line import Line
 
 from pyleecan.Methods.Geometry.Arc.draw_FEMM import draw_FEMM
-from pyleecan.Methods.Geometry.Arc.intersect_line import intersect_line
-from pyleecan.Methods.Geometry.Arc.is_on_arc import is_on_arc
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -20,10 +18,6 @@ class Arc(Line):
 
     # cf Methods.Geometry.Arc.draw_FEMM
     draw_FEMM = draw_FEMM
-    # cf Methods.Geometry.Arc.intersect_line
-    intersect_line = intersect_line
-    # cf Methods.Geometry.Arc.is_on_arc
-    is_on_arc = is_on_arc
     # save method is available in all object
     save = save
 
@@ -83,3 +77,5 @@ class Arc(Line):
 
         # Set to None the properties inherited from Line
         super(Arc, self)._set_None()
+
+

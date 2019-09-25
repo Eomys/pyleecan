@@ -20,6 +20,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Line import Line
 
 
+
 class SurfLine(Surface):
     """SurfLine define by list of lines that delimit it, label and point reference."""
 
@@ -74,26 +75,12 @@ class SurfLine(Surface):
                     self.line_list.append(Line())
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Line",
-                        "Segment",
-                        "Arc1",
-                        "Arc2",
-                        "Arc3",
-                        "Arc",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for "
-                            + prop_name
-                        )
+                    class_name = obj.get('__class__')
+                    if class_name not in ['Line', 'Segment', 'Arc1', 'Arc2', 'Arc3', 'Arc']:
+                        raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
                     # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
+                    module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+                    class_obj = getattr(module,class_name)
                     self.line_list.append(class_obj(init_dict=obj))
                 else:
                     self.line_list.append(obj)
@@ -115,13 +102,7 @@ class SurfLine(Surface):
         if len(self.line_list) == 0:
             SurfLine_str += "line_list = []"
         for ii in range(len(self.line_list)):
-            SurfLine_str += (
-                "line_list["
-                + str(ii)
-                + "] = "
-                + str(self.line_list[ii].as_dict())
-                + "\n"
-            )
+            SurfLine_str += "line_list["+str(ii)+"] = "+str(self.line_list[ii].as_dict())+"\n"
         return SurfLine_str
 
     def __eq__(self, other):
@@ -174,9 +155,7 @@ class SurfLine(Surface):
         for obj in self._line_list:
             if obj is not None:
                 obj.parent = self
-
-    # List of Lines
+    # List of Lines 
     # Type : [Line]
-    line_list = property(
-        fget=_get_line_list, fset=_set_line_list, doc=u"""List of Lines """
-    )
+    line_list = property(fget=_get_line_list, fset=_set_line_list,
+                         doc=u"""List of Lines """)

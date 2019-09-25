@@ -5,3 +5,4 @@ type_calc_leakage;;0 no leakage calculation, 1 calculation using single slot;;0;
 file_name;;Name of the file to save the FEMM model;;0;str;;;;;;;;;;;;;
 FEMM_dict;;To enforce user-defined values for FEMM main parameters ;;0;dict;;;;;;;;;;;;;
 angle_stator;rad;Angular position shift of the stator;;0;float;0;;;;;;;;;;;;
+is_sliding_band;;0 to desactivate the sliding band;;0;bool;1;;;;;;;;;;;;

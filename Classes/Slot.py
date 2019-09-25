@@ -6,9 +6,7 @@ from pyleecan.Classes.check import check_init_dict, check_var
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from pyleecan.Methods.Slot.Slot.build_geometry_half_tooth import (
-    build_geometry_half_tooth,
-)
+from pyleecan.Methods.Slot.Slot.build_geometry_half_tooth import build_geometry_half_tooth
 from pyleecan.Methods.Slot.Slot.check import check
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.Slot.comp_height import comp_height
@@ -121,4 +119,5 @@ class Slot(FrozenClass):
 
     # slot number
     # Type : int, min = 0, max = 1000
-    Zs = property(fget=_get_Zs, fset=_set_Zs, doc=u"""slot number""")
+    Zs = property(fget=_get_Zs, fset=_set_Zs,
+                  doc=u"""slot number""")

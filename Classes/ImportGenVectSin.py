@@ -21,9 +21,7 @@ class ImportGenVectSin(ImportMatrix):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self, f=100, A=1, Phi=0, N=1024, Tf=1, is_transpose=False, init_dict=None
-    ):
+    def __init__(self, f=100, A=1, Phi=0, N=1024, Tf=1, is_transpose=False, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -131,9 +129,8 @@ class ImportGenVectSin(ImportMatrix):
 
     # Frequency of the sinus to generate
     # Type : float, min = 0
-    f = property(
-        fget=_get_f, fset=_set_f, doc=u"""Frequency of the sinus to generate"""
-    )
+    f = property(fget=_get_f, fset=_set_f,
+                 doc=u"""Frequency of the sinus to generate""")
 
     def _get_A(self):
         """getter of A"""
@@ -146,9 +143,8 @@ class ImportGenVectSin(ImportMatrix):
 
     # Amplitude of the sinus to generate
     # Type : float
-    A = property(
-        fget=_get_A, fset=_set_A, doc=u"""Amplitude of the sinus to generate"""
-    )
+    A = property(fget=_get_A, fset=_set_A,
+                 doc=u"""Amplitude of the sinus to generate""")
 
     def _get_Phi(self):
         """getter of Phi"""
@@ -161,9 +157,8 @@ class ImportGenVectSin(ImportMatrix):
 
     # Phase of the sinus to generate
     # Type : float, min = -6.29, max = 6.29
-    Phi = property(
-        fget=_get_Phi, fset=_set_Phi, doc=u"""Phase of the sinus to generate"""
-    )
+    Phi = property(fget=_get_Phi, fset=_set_Phi,
+                   doc=u"""Phase of the sinus to generate""")
 
     def _get_N(self):
         """getter of N"""
@@ -176,7 +171,8 @@ class ImportGenVectSin(ImportMatrix):
 
     # Length of the vector to generate
     # Type : int, min = 0
-    N = property(fget=_get_N, fset=_set_N, doc=u"""Length of the vector to generate""")
+    N = property(fget=_get_N, fset=_set_N,
+                 doc=u"""Length of the vector to generate""")
 
     def _get_Tf(self):
         """getter of Tf"""
@@ -189,6 +185,5 @@ class ImportGenVectSin(ImportMatrix):
 
     # End time of the sinus generation
     # Type : float, min = 0
-    Tf = property(
-        fget=_get_Tf, fset=_set_Tf, doc=u"""End time of the sinus generation"""
-    )
+    Tf = property(fget=_get_Tf, fset=_set_Tf,
+                  doc=u"""End time of the sinus generation""")

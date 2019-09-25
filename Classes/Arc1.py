@@ -57,15 +57,7 @@ class Arc1(Arc):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        begin=0,
-        end=0,
-        radius=0,
-        is_trigo_direction=True,
-        label="",
-        init_dict=None,
-    ):
+    def __init__(self, begin=0, end=0, radius=0, is_trigo_direction=True, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -76,9 +68,7 @@ class Arc1(Arc):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["begin", "end", "radius", "is_trigo_direction", "label"]
-            )
+            check_init_dict(init_dict, ["begin", "end", "radius", "is_trigo_direction", "label"])
             # Overwrite default value with init_dict content
             if "begin" in list(init_dict.keys()):
                 begin = init_dict["begin"]
@@ -167,9 +157,8 @@ class Arc1(Arc):
 
     # begin point of the arc
     # Type : complex
-    begin = property(
-        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the arc"""
-    )
+    begin = property(fget=_get_begin, fset=_set_begin,
+                     doc=u"""begin point of the arc""")
 
     def _get_end(self):
         """getter of end"""
@@ -182,7 +171,8 @@ class Arc1(Arc):
 
     # end point of the arc
     # Type : complex
-    end = property(fget=_get_end, fset=_set_end, doc=u"""end point of the arc""")
+    end = property(fget=_get_end, fset=_set_end,
+                   doc=u"""end point of the arc""")
 
     def _get_radius(self):
         """getter of radius"""
@@ -195,9 +185,8 @@ class Arc1(Arc):
 
     # Radius of the arc (can be + or -)
     # Type : float
-    radius = property(
-        fget=_get_radius, fset=_set_radius, doc=u"""Radius of the arc (can be + or -)"""
-    )
+    radius = property(fget=_get_radius, fset=_set_radius,
+                      doc=u"""Radius of the arc (can be + or -)""")
 
     def _get_is_trigo_direction(self):
         """getter of is_trigo_direction"""
@@ -210,8 +199,5 @@ class Arc1(Arc):
 
     # Rotation direction of the arc
     # Type : bool
-    is_trigo_direction = property(
-        fget=_get_is_trigo_direction,
-        fset=_set_is_trigo_direction,
-        doc=u"""Rotation direction of the arc""",
-    )
+    is_trigo_direction = property(fget=_get_is_trigo_direction, fset=_set_is_trigo_direction,
+                                  doc=u"""Rotation direction of the arc""")

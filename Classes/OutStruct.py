@@ -18,16 +18,7 @@ class OutStruct(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        time=None,
-        angle=None,
-        Nt_tot=None,
-        Na_tot=None,
-        Prad=None,
-        Ptan=None,
-        init_dict=None,
-    ):
+    def __init__(self, time=None, angle=None, Nt_tot=None, Na_tot=None, Prad=None, Ptan=None, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -38,9 +29,7 @@ class OutStruct(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["time", "angle", "Nt_tot", "Na_tot", "Prad", "Ptan"]
-            )
+            check_init_dict(init_dict, ["time", "angle", "Nt_tot", "Na_tot", "Prad", "Ptan"])
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
@@ -158,9 +147,8 @@ class OutStruct(FrozenClass):
 
     # Structural time vector (no symmetry)
     # Type : ndarray
-    time = property(
-        fget=_get_time, fset=_set_time, doc=u"""Structural time vector (no symmetry)"""
-    )
+    time = property(fget=_get_time, fset=_set_time,
+                    doc=u"""Structural time vector (no symmetry)""")
 
     def _get_angle(self):
         """getter of angle"""
@@ -178,11 +166,8 @@ class OutStruct(FrozenClass):
 
     # Structural position vector (no symmetry)
     # Type : ndarray
-    angle = property(
-        fget=_get_angle,
-        fset=_set_angle,
-        doc=u"""Structural position vector (no symmetry)""",
-    )
+    angle = property(fget=_get_angle, fset=_set_angle,
+                     doc=u"""Structural position vector (no symmetry)""")
 
     def _get_Nt_tot(self):
         """getter of Nt_tot"""
@@ -195,9 +180,8 @@ class OutStruct(FrozenClass):
 
     # Length of the time vector
     # Type : int
-    Nt_tot = property(
-        fget=_get_Nt_tot, fset=_set_Nt_tot, doc=u"""Length of the time vector"""
-    )
+    Nt_tot = property(fget=_get_Nt_tot, fset=_set_Nt_tot,
+                      doc=u"""Length of the time vector""")
 
     def _get_Na_tot(self):
         """getter of Na_tot"""
@@ -210,9 +194,8 @@ class OutStruct(FrozenClass):
 
     # Length of the angle vector
     # Type : int
-    Na_tot = property(
-        fget=_get_Na_tot, fset=_set_Na_tot, doc=u"""Length of the angle vector"""
-    )
+    Na_tot = property(fget=_get_Na_tot, fset=_set_Na_tot,
+                      doc=u"""Length of the angle vector""")
 
     def _get_Prad(self):
         """getter of Prad"""
@@ -230,9 +213,8 @@ class OutStruct(FrozenClass):
 
     # Radial magnetic air-gap surface force
     # Type : ndarray
-    Prad = property(
-        fget=_get_Prad, fset=_set_Prad, doc=u"""Radial magnetic air-gap surface force"""
-    )
+    Prad = property(fget=_get_Prad, fset=_set_Prad,
+                    doc=u"""Radial magnetic air-gap surface force""")
 
     def _get_Ptan(self):
         """getter of Ptan"""
@@ -250,8 +232,5 @@ class OutStruct(FrozenClass):
 
     # Tangential magnetic air-gap surface force
     # Type : ndarray
-    Ptan = property(
-        fget=_get_Ptan,
-        fset=_set_Ptan,
-        doc=u"""Tangential magnetic air-gap surface force""",
-    )
+    Ptan = property(fget=_get_Ptan, fset=_set_Ptan,
+                    doc=u"""Tangential magnetic air-gap surface force""")

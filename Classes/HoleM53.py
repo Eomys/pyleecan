@@ -22,6 +22,7 @@ from pyleecan.Classes.Magnet import Magnet
 from pyleecan.Classes.Material import Material
 
 
+
 class HoleM53(HoleMag):
     """V shape slot for buried magnet"""
 
@@ -51,22 +52,7 @@ class HoleM53(HoleMag):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        H0=0.003,
-        H1=0,
-        W1=0.013,
-        H2=0.02,
-        W2=0.01,
-        H3=0.01,
-        W3=0.01,
-        W4=0.01,
-        magnet_0=-1,
-        magnet_1=-1,
-        Zh=36,
-        mat_void=-1,
-        init_dict=None,
-    ):
+    def __init__(self, H0=0.003, H1=0, W1=0.013, H2=0.02, W2=0.01, H3=0.01, W3=0.01, W4=0.01, magnet_0=-1, magnet_1=-1, Zh=36, mat_void=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -83,23 +69,7 @@ class HoleM53(HoleMag):
         if mat_void == -1:
             mat_void = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "H0",
-                    "H1",
-                    "W1",
-                    "H2",
-                    "W2",
-                    "H3",
-                    "W3",
-                    "W4",
-                    "magnet_0",
-                    "magnet_1",
-                    "Zh",
-                    "mat_void",
-                ],
-            )
+            check_init_dict(init_dict, ["H0", "H1", "W1", "H2", "W2", "H3", "W3", "W4", "magnet_0", "magnet_1", "Zh", "mat_void"])
             # Overwrite default value with init_dict content
             if "H0" in list(init_dict.keys()):
                 H0 = init_dict["H0"]
@@ -137,59 +107,24 @@ class HoleM53(HoleMag):
         # magnet_0 can be None, a Magnet object or a dict
         if isinstance(magnet_0, dict):
             # Check that the type is correct (including daughter)
-            class_name = magnet_0.get("__class__")
-            if class_name not in [
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "MagnetFlat",
-                "MagnetPolar",
-                "MagnetType10",
-                "MagnetType11",
-                "MagnetType12",
-                "MagnetType13",
-                "MagnetType14",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
-                )
+            class_name = magnet_0.get('__class__')
+            if class_name not in ['Magnet', 'Magnet', 'Magnet', 'Magnet', 'MagnetFlat', 'MagnetPolar', 'MagnetType10', 'MagnetType11', 'MagnetType12', 'MagnetType13', 'MagnetType14']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.magnet_0 = class_obj(init_dict=magnet_0)
         else:
             self.magnet_0 = magnet_0
         # magnet_1 can be None, a Magnet object or a dict
         if isinstance(magnet_1, dict):
             # Check that the type is correct (including daughter)
-            class_name = magnet_1.get("__class__")
-            if class_name not in [
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "MagnetFlat",
-                "MagnetPolar",
-                "MagnetType10",
-                "MagnetType11",
-                "MagnetType12",
-                "MagnetType13",
-                "MagnetType14",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
-                )
+            class_name = magnet_1.get('__class__')
+            if class_name not in ['Magnet', 'Magnet', 'Magnet', 'Magnet', 'Magnet', 'MagnetFlat', 'MagnetPolar', 'MagnetType10', 'MagnetType11', 'MagnetType12', 'MagnetType13', 'MagnetType14']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.magnet_1 = class_obj(init_dict=magnet_1)
         else:
             self.magnet_1 = magnet_1
@@ -303,7 +238,8 @@ class HoleM53(HoleMag):
 
     # Slot depth
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot depth""")
+    H0 = property(fget=_get_H0, fset=_set_H0,
+                  doc=u"""Slot depth""")
 
     def _get_H1(self):
         """getter of H1"""
@@ -316,9 +252,8 @@ class HoleM53(HoleMag):
 
     # Distance from the lamination Bore
     # Type : float, min = 0
-    H1 = property(
-        fget=_get_H1, fset=_set_H1, doc=u"""Distance from the lamination Bore"""
-    )
+    H1 = property(fget=_get_H1, fset=_set_H1,
+                  doc=u"""Distance from the lamination Bore""")
 
     def _get_W1(self):
         """getter of W1"""
@@ -331,7 +266,8 @@ class HoleM53(HoleMag):
 
     # Tooth width (at V bottom)
     # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Tooth width (at V bottom)""")
+    W1 = property(fget=_get_W1, fset=_set_W1,
+                  doc=u"""Tooth width (at V bottom)""")
 
     def _get_H2(self):
         """getter of H2"""
@@ -344,7 +280,8 @@ class HoleM53(HoleMag):
 
     # Magnet Height
     # Type : float, min = 0
-    H2 = property(fget=_get_H2, fset=_set_H2, doc=u"""Magnet Height""")
+    H2 = property(fget=_get_H2, fset=_set_H2,
+                  doc=u"""Magnet Height""")
 
     def _get_W2(self):
         """getter of W2"""
@@ -357,9 +294,8 @@ class HoleM53(HoleMag):
 
     # Distance Magnet to bottom of the V
     # Type : float, min = 0
-    W2 = property(
-        fget=_get_W2, fset=_set_W2, doc=u"""Distance Magnet to bottom of the V"""
-    )
+    W2 = property(fget=_get_W2, fset=_set_W2,
+                  doc=u"""Distance Magnet to bottom of the V""")
 
     def _get_H3(self):
         """getter of H3"""
@@ -372,9 +308,8 @@ class HoleM53(HoleMag):
 
     # Additional depth for the magnet
     # Type : float, min = 0
-    H3 = property(
-        fget=_get_H3, fset=_set_H3, doc=u"""Additional depth for the magnet"""
-    )
+    H3 = property(fget=_get_H3, fset=_set_H3,
+                  doc=u"""Additional depth for the magnet""")
 
     def _get_W3(self):
         """getter of W3"""
@@ -387,7 +322,8 @@ class HoleM53(HoleMag):
 
     # Magnet Width
     # Type : float, min = 0
-    W3 = property(fget=_get_W3, fset=_set_W3, doc=u"""Magnet Width""")
+    W3 = property(fget=_get_W3, fset=_set_W3,
+                  doc=u"""Magnet Width""")
 
     def _get_W4(self):
         """getter of W4"""
@@ -400,7 +336,8 @@ class HoleM53(HoleMag):
 
     # Slot angle
     # Type : float, min = 0
-    W4 = property(fget=_get_W4, fset=_set_W4, doc=u"""Slot angle""")
+    W4 = property(fget=_get_W4, fset=_set_W4,
+                  doc=u"""Slot angle""")
 
     def _get_magnet_0(self):
         """getter of magnet_0"""
@@ -413,10 +350,10 @@ class HoleM53(HoleMag):
 
         if self._magnet_0 is not None:
             self._magnet_0.parent = self
-
     # First Magnet
     # Type : Magnet
-    magnet_0 = property(fget=_get_magnet_0, fset=_set_magnet_0, doc=u"""First Magnet""")
+    magnet_0 = property(fget=_get_magnet_0, fset=_set_magnet_0,
+                        doc=u"""First Magnet""")
 
     def _get_magnet_1(self):
         """getter of magnet_1"""
@@ -429,9 +366,7 @@ class HoleM53(HoleMag):
 
         if self._magnet_1 is not None:
             self._magnet_1.parent = self
-
     # Second Magnet
     # Type : Magnet
-    magnet_1 = property(
-        fget=_get_magnet_1, fset=_set_magnet_1, doc=u"""Second Magnet"""
-    )
+    magnet_1 = property(fget=_get_magnet_1, fset=_set_magnet_1,
+                        doc=u"""Second Magnet""")

@@ -8,15 +8,14 @@ from pyleecan.Classes.SlotMag import SlotMag
 
 from pyleecan.Methods.Slot.SlotMPolar.build_geometry import build_geometry
 from pyleecan.Methods.Slot.SlotMPolar.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.SlotMPolar.comp_angle_opening_magnet import (
-    comp_angle_opening_magnet,
-)
+from pyleecan.Methods.Slot.SlotMPolar.comp_angle_opening_magnet import comp_angle_opening_magnet
 from pyleecan.Methods.Slot.SlotMPolar.comp_height import comp_height
 from pyleecan.Methods.Slot.SlotMPolar.comp_surface import comp_surface
 from pyleecan.Methods.Slot.SlotMPolar.get_point_bottom import get_point_bottom
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.MagnetPolar import MagnetPolar
+
 
 
 class SlotMPolar(SlotMag):
@@ -75,23 +74,12 @@ class SlotMPolar(SlotMag):
                     self.magnet.append(MagnetPolar())
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "MagnetPolar",
-                        "MagnetType11",
-                        "MagnetType14",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for "
-                            + prop_name
-                        )
+                    class_name = obj.get('__class__')
+                    if class_name not in ['MagnetPolar', 'MagnetType11', 'MagnetType14']:
+                        raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
                     # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
+                    module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+                    class_obj = getattr(module,class_name)
                     self.magnet.append(class_obj(init_dict=obj))
                 else:
                     self.magnet.append(obj)
@@ -115,9 +103,7 @@ class SlotMPolar(SlotMag):
         if len(self.magnet) == 0:
             SlotMPolar_str += "magnet = []"
         for ii in range(len(self.magnet)):
-            SlotMPolar_str += (
-                "magnet[" + str(ii) + "] = " + str(self.magnet[ii].as_dict()) + "\n"
-            )
+            SlotMPolar_str += "magnet["+str(ii)+"] = "+str(self.magnet[ii].as_dict())+"\n"
         return SlotMPolar_str
 
     def __eq__(self, other):
@@ -174,7 +160,8 @@ class SlotMPolar(SlotMag):
 
     # Slot isthmus width.
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus width.""")
+    W0 = property(fget=_get_W0, fset=_set_W0,
+                  doc=u"""Slot isthmus width.""")
 
     def _get_H0(self):
         """getter of H0"""
@@ -187,7 +174,8 @@ class SlotMPolar(SlotMag):
 
     # Slot isthmus height
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height""")
+    H0 = property(fget=_get_H0, fset=_set_H0,
+                  doc=u"""Slot isthmus height""")
 
     def _get_magnet(self):
         """getter of magnet"""
@@ -204,7 +192,7 @@ class SlotMPolar(SlotMag):
         for obj in self._magnet:
             if obj is not None:
                 obj.parent = self
-
     # List of magnet
     # Type : [MagnetPolar]
-    magnet = property(fget=_get_magnet, fset=_set_magnet, doc=u"""List of magnet""")
+    magnet = property(fget=_get_magnet, fset=_set_magnet,
+                      doc=u"""List of magnet""")

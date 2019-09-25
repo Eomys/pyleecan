@@ -47,14 +47,14 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     if sym == 1:  # Complete lamination
         surface_yoke = Circle(
             radius=self.Rext,
-            label=label + "_Ext",
+            label=label + ly + "Ext",
             center=0,
             point_ref=self.Rint + (self.Rext - self.Rint) / 2,
         )
         surf_list.append(surface_yoke)
         if self.Rint > 0:
             surface = Circle(
-                radius=self.Rint, label=label + "_Int", center=0, point_ref=0
+                radius=self.Rint, label=label + ls + "Int", center=0, point_ref=0
             )
             surf_list.append(surface)
     else:  # Part of the lamination by symmetry
@@ -64,14 +64,10 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         Z2 = Z1 * exp(1j * 2 * pi / sym)
         curve_list = list()
         curve_list.append(Segment(Z0, Z1))
-        curve_list.append(
-            Arc1(begin=Z1, end=Z2, radius=self.Rext, is_trigo_direction=True)
-        )
+        curve_list.append(Arc1(Z1, Z2, self.Rext))
         curve_list.append(Segment(Z2, Z3))
         if self.Rint > 0:
-            curve_list.append(
-                Arc1(begin=Z3, end=Z0, radius=self.Rint, is_trigo_direction=False)
-            )
+            curve_list.append(Arc1(Z3, Z0, -self.Rint))
         surf_yoke = SurfLine(
             line_list=curve_list,
             label=label + "_Ext",
