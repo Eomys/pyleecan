@@ -64,10 +64,14 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         Z2 = Z1 * exp(1j * 2 * pi / sym)
         curve_list = list()
         curve_list.append(Segment(Z0, Z1))
-        curve_list.append(Arc1(Z1, Z2, self.Rext))
+        curve_list.append(
+            Arc1(begin=Z1, end=Z2, radius=self.Rext, is_trigo_direction=True)
+        )
         curve_list.append(Segment(Z2, Z3))
         if self.Rint > 0:
-            curve_list.append(Arc1(Z3, Z0, -self.Rint))
+            curve_list.append(
+                Arc1(begin=Z3, end=Z0, radius=self.Rint, is_trigo_direction=False)
+            )
         surf_yoke = SurfLine(
             line_list=curve_list,
             label=label + "_Ext",

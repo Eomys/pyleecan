@@ -3,11 +3,11 @@
 @date Created on mars 16 09:58 2018
 @author pierre_b
 """
-from numpy import sqrt
+from numpy import sqrt, abs as np_abs
 
 
-def inter_line_circle(Z1, Z2, R):
-    """INTER_LINE_CIRCLE find the intersection between a circle of center(0, 0)
+def inter_line_circle(Z1, Z2, R, Zc=0):
+    """INTER_LINE_CIRCLE find the intersection between a circle of center Zc
     and radius r with a line defined by two points
 
     Parameters
@@ -19,12 +19,21 @@ def inter_line_circle(Z1, Z2, R):
         Complex coordinate of another point on the line
     R : float
         Radius of the circle [m]
+    Zc : complex
+        Complex coordinate of the center
 
     Returns
     -------
     Zlist: list
         List of the complex coordinates of the intersection
     """
+    # Set the coordinate system on the circle center
+    if np_abs(Zc) > 1e-6:
+        Z1 = Z1 - Zc
+        Z2 = Z2 - Zc
+    else:
+        Zc = 0
+
     x1 = Z1.real
     y1 = Z1.imag
     x2 = Z2.real
@@ -39,7 +48,9 @@ def inter_line_circle(Z1, Z2, R):
     if delta < 0:  # 0 point
         return list()
     elif delta == 0:  # 1 point(tangent)
-        return [(D * dy - 1j * D * dx) / dr ** 2]
+        if np_abs(Zc) > 1e-6:
+            return [(D * dy - 1j * D * dx) / dr ** 2 + Zc]
+
     else:  # 2 points
         if dy < 0:
             xs1 = (D * dy - dx * sqrt(delta)) / dr ** 2
@@ -50,4 +61,4 @@ def inter_line_circle(Z1, Z2, R):
         ys1 = (-D * dx + abs(dy) * sqrt(delta)) / dr ** 2
         ys2 = (-D * dx - abs(dy) * sqrt(delta)) / dr ** 2
 
-        return [xs1 + 1j * ys1, xs2 + 1j * ys2]
+        return [xs1 + 1j * ys1 + Zc, xs2 + 1j * ys2 + Zc]
