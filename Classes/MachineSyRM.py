@@ -15,7 +15,6 @@ from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
 
 
-
 class MachineSyRM(MachineSync):
     """Synchronous Reluctance Machine"""
 
@@ -28,7 +27,16 @@ class MachineSyRM(MachineSync):
     # save method is available in all object
     save = save
 
-    def __init__(self, rotor=-1, stator=-1, frame=-1, shaft=-1, name="default_machine", desc="", init_dict=None):
+    def __init__(
+        self,
+        rotor=-1,
+        stator=-1,
+        frame=-1,
+        shaft=-1,
+        name="default_machine",
+        desc="",
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -47,7 +55,9 @@ class MachineSyRM(MachineSync):
         if shaft == -1:
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["rotor", "stator", "frame", "shaft", "name", "desc"])
+            check_init_dict(
+                init_dict, ["rotor", "stator", "frame", "shaft", "name", "desc"]
+            )
             # Overwrite default value with init_dict content
             if "rotor" in list(init_dict.keys()):
                 rotor = init_dict["rotor"]
@@ -63,7 +73,9 @@ class MachineSyRM(MachineSync):
                 desc = init_dict["desc"]
         # Initialisation by argument
         # Call MachineSync init
-        super(MachineSyRM, self).__init__(rotor=rotor, stator=stator, frame=frame, shaft=shaft, name=name, desc=desc)
+        super(MachineSyRM, self).__init__(
+            rotor=rotor, stator=stator, frame=frame, shaft=shaft, name=name, desc=desc
+        )
         # The class is frozen (in MachineSync init), for now it's impossible to
         # add new properties
 
@@ -102,5 +114,3 @@ class MachineSyRM(MachineSync):
 
         # Set to None the properties inherited from MachineSync
         super(MachineSyRM, self)._set_None()
-
-

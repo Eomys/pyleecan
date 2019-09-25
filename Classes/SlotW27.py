@@ -46,7 +46,19 @@ class SlotW27(SlotWind):
     # save method is available in all object
     save = save
 
-    def __init__(self, H0=0.003, H1=0, H2=0.02, W0=0.003, W1=0.013, W2=0.01, W3=0.003, is_trap_wind=False, Zs=36, init_dict=None):
+    def __init__(
+        self,
+        H0=0.003,
+        H1=0,
+        H2=0.02,
+        W0=0.003,
+        W1=0.013,
+        W2=0.01,
+        W3=0.003,
+        is_trap_wind=False,
+        Zs=36,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -57,7 +69,10 @@ class SlotW27(SlotWind):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["H0", "H1", "H2", "W0", "W1", "W2", "W3", "is_trap_wind", "Zs"])
+            check_init_dict(
+                init_dict,
+                ["H0", "H1", "H2", "W0", "W1", "W2", "W3", "is_trap_wind", "Zs"],
+            )
             # Overwrite default value with init_dict content
             if "H0" in list(init_dict.keys()):
                 H0 = init_dict["H0"]
@@ -178,8 +193,7 @@ class SlotW27(SlotWind):
 
     # Slot isthmus height.
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0,
-                  doc=u"""Slot isthmus height.""")
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height.""")
 
     def _get_H1(self):
         """getter of H1"""
@@ -192,8 +206,7 @@ class SlotW27(SlotWind):
 
     # Slot first part height
     # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1,
-                  doc=u"""Slot first part height""")
+    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Slot first part height""")
 
     def _get_H2(self):
         """getter of H2"""
@@ -206,8 +219,7 @@ class SlotW27(SlotWind):
 
     # Slot second part height
     # Type : float, min = 0
-    H2 = property(fget=_get_H2, fset=_set_H2,
-                  doc=u"""Slot second part height""")
+    H2 = property(fget=_get_H2, fset=_set_H2, doc=u"""Slot second part height""")
 
     def _get_W0(self):
         """getter of W0"""
@@ -220,8 +232,7 @@ class SlotW27(SlotWind):
 
     # Slot isthmus width.
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0,
-                  doc=u"""Slot isthmus width.""")
+    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus width.""")
 
     def _get_W1(self):
         """getter of W1"""
@@ -234,8 +245,7 @@ class SlotW27(SlotWind):
 
     # Slot top width.
     # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1,
-                  doc=u"""Slot top width.""")
+    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Slot top width.""")
 
     def _get_W2(self):
         """getter of W2"""
@@ -248,8 +258,7 @@ class SlotW27(SlotWind):
 
     # Slot middle width
     # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2,
-                  doc=u"""Slot middle width""")
+    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""Slot middle width""")
 
     def _get_W3(self):
         """getter of W3"""
@@ -262,8 +271,7 @@ class SlotW27(SlotWind):
 
     # Slot bottom width.
     # Type : float, min = 0
-    W3 = property(fget=_get_W3, fset=_set_W3,
-                  doc=u"""Slot bottom width.""")
+    W3 = property(fget=_get_W3, fset=_set_W3, doc=u"""Slot bottom width.""")
 
     def _get_is_trap_wind(self):
         """getter of is_trap_wind"""
@@ -276,5 +284,8 @@ class SlotW27(SlotWind):
 
     # If True, split the winding on the  trapezium bases. Else split at the middle height as usual
     # Type : bool
-    is_trap_wind = property(fget=_get_is_trap_wind, fset=_set_is_trap_wind,
-                            doc=u"""If True, split the winding on the  trapezium bases. Else split at the middle height as usual""")
+    is_trap_wind = property(
+        fget=_get_is_trap_wind,
+        fset=_set_is_trap_wind,
+        doc=u"""If True, split the winding on the  trapezium bases. Else split at the middle height as usual""",
+    )

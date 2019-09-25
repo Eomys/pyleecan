@@ -11,7 +11,9 @@ from pyleecan.Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
 from pyleecan.Functions.FEMM.set_FEMM_wind_material import set_FEMM_wind_material
 
 
-def update_FEMM_simulation(output, materials, circuits, is_mmfs, is_mmfr, j_t0, is_sliding_band):
+def update_FEMM_simulation(
+    output, materials, circuits, is_mmfs, is_mmfr, j_t0, is_sliding_band
+):
     """Update the simulation by changing the rotor position and
     updating the currents
     

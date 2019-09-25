@@ -13,7 +13,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
 
 
-
 class ImportGenMatrixSin(ImportMatrix):
     """To generate a Sinus matrix"""
 
@@ -72,7 +71,9 @@ class ImportGenMatrixSin(ImportMatrix):
         if len(self.sin_list) == 0:
             ImportGenMatrixSin_str += "sin_list = []"
         for ii in range(len(self.sin_list)):
-            ImportGenMatrixSin_str += "sin_list["+str(ii)+"] = "+str(self.sin_list[ii].as_dict())+"\n"
+            ImportGenMatrixSin_str += (
+                "sin_list[" + str(ii) + "] = " + str(self.sin_list[ii].as_dict()) + "\n"
+            )
         return ImportGenMatrixSin_str
 
     def __eq__(self, other):
@@ -125,7 +126,11 @@ class ImportGenMatrixSin(ImportMatrix):
         for obj in self._sin_list:
             if obj is not None:
                 obj.parent = self
+
     # List of sinus vector to generate the matrix lines
     # Type : [ImportGenVectSin]
-    sin_list = property(fget=_get_sin_list, fset=_set_sin_list,
-                        doc=u"""List of sinus vector to generate the matrix lines""")
+    sin_list = property(
+        fget=_get_sin_list,
+        fset=_set_sin_list,
+        doc=u"""List of sinus vector to generate the matrix lines""",
+    )

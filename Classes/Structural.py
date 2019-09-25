@@ -13,7 +13,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Force import Force
 
 
-
 class Structural(FrozenClass):
     """Structural module abstract object"""
 
@@ -48,12 +47,14 @@ class Structural(FrozenClass):
         # force can be None, a Force object or a dict
         if isinstance(force, dict):
             # Check that the type is correct (including daughter)
-            class_name = force.get('__class__')
-            if class_name not in ['Force', 'ForceMT']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
+            class_name = force.get("__class__")
+            if class_name not in ["Force", "ForceMT"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.force = class_obj(init_dict=force)
         else:
             self.force = force
@@ -111,7 +112,7 @@ class Structural(FrozenClass):
 
         if self._force is not None:
             self._force.parent = self
+
     # Force module
     # Type : Force
-    force = property(fget=_get_force, fset=_set_force,
-                     doc=u"""Force module""")
+    force = property(fget=_get_force, fset=_set_force, doc=u"""Force module""")

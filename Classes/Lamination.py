@@ -11,7 +11,9 @@ from pyleecan.Methods.Machine.Lamination.check import check
 from pyleecan.Methods.Machine.Lamination.comp_length import comp_length
 from pyleecan.Methods.Machine.Lamination.comp_masses import comp_masses
 from pyleecan.Methods.Machine.Lamination.comp_radius_mec import comp_radius_mec
-from pyleecan.Methods.Machine.Lamination.comp_surface_axial_vent import comp_surface_axial_vent
+from pyleecan.Methods.Machine.Lamination.comp_surface_axial_vent import (
+    comp_surface_axial_vent,
+)
 from pyleecan.Methods.Machine.Lamination.comp_surfaces import comp_surfaces
 from pyleecan.Methods.Machine.Lamination.comp_volumes import comp_volumes
 from pyleecan.Methods.Machine.Lamination.get_bore_line import get_bore_line
@@ -28,7 +30,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.Hole import Hole
 from pyleecan.Classes.Notch import Notch
-
 
 
 class Lamination(FrozenClass):
@@ -73,7 +74,21 @@ class Lamination(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), notch=list(), init_dict=None):
+    def __init__(
+        self,
+        L1=0.35,
+        mat_type=-1,
+        Nrvd=0,
+        Wrvd=0,
+        Kf1=0.95,
+        is_internal=True,
+        Rint=0,
+        Rext=1,
+        is_stator=True,
+        axial_vent=list(),
+        notch=list(),
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -86,7 +101,22 @@ class Lamination(FrozenClass):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["L1", "mat_type", "Nrvd", "Wrvd", "Kf1", "is_internal", "Rint", "Rext", "is_stator", "axial_vent", "notch"])
+            check_init_dict(
+                init_dict,
+                [
+                    "L1",
+                    "mat_type",
+                    "Nrvd",
+                    "Wrvd",
+                    "Kf1",
+                    "is_internal",
+                    "Rint",
+                    "Rext",
+                    "is_stator",
+                    "axial_vent",
+                    "notch",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "L1" in list(init_dict.keys()):
                 L1 = init_dict["L1"]
@@ -133,12 +163,31 @@ class Lamination(FrozenClass):
                     self.axial_vent.append(Hole())
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
-                    class_name = obj.get('__class__')
-                    if class_name not in ['Hole', 'Hole', 'HoleMag', 'HoleM50', 'HoleM51', 'HoleM52', 'HoleM53', 'HoleM54', 'VentilationCirc', 'VentilationPolar', 'VentilationTrap']:
-                        raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
+                    class_name = obj.get("__class__")
+                    if class_name not in [
+                        "Hole",
+                        "Hole",
+                        "HoleMag",
+                        "HoleM50",
+                        "HoleM51",
+                        "HoleM52",
+                        "HoleM53",
+                        "HoleM54",
+                        "VentilationCirc",
+                        "VentilationPolar",
+                        "VentilationTrap",
+                    ]:
+                        raise InitUnKnowClassError(
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for "
+                            + prop_name
+                        )
                     # Dynamic import to call the correct constructor
-                    module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-                    class_obj = getattr(module,class_name)
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
                     self.axial_vent.append(class_obj(init_dict=obj))
                 else:
                     self.axial_vent.append(obj)
@@ -154,12 +203,19 @@ class Lamination(FrozenClass):
                     self.notch.append(Notch())
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
-                    class_name = obj.get('__class__')
-                    if class_name not in ['Notch', 'NotchEvenDist']:
-                        raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
+                    class_name = obj.get("__class__")
+                    if class_name not in ["Notch", "NotchEvenDist"]:
+                        raise InitUnKnowClassError(
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for "
+                            + prop_name
+                        )
                     # Dynamic import to call the correct constructor
-                    module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-                    class_obj = getattr(module,class_name)
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
                     self.notch.append(class_obj(init_dict=obj))
                 else:
                     self.notch.append(obj)
@@ -180,7 +236,9 @@ class Lamination(FrozenClass):
         else:
             Lamination_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Lamination_str += "L1 = " + str(self.L1) + linesep
-        Lamination_str += "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
+        Lamination_str += (
+            "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
+        )
         Lamination_str += "Nrvd = " + str(self.Nrvd) + linesep
         Lamination_str += "Wrvd = " + str(self.Wrvd) + linesep
         Lamination_str += "Kf1 = " + str(self.Kf1) + linesep
@@ -191,11 +249,21 @@ class Lamination(FrozenClass):
         if len(self.axial_vent) == 0:
             Lamination_str += "axial_vent = []"
         for ii in range(len(self.axial_vent)):
-            Lamination_str += "axial_vent["+str(ii)+"] = "+str(self.axial_vent[ii].as_dict())+"\n" + linesep + linesep
+            Lamination_str += (
+                "axial_vent["
+                + str(ii)
+                + "] = "
+                + str(self.axial_vent[ii].as_dict())
+                + "\n"
+                + linesep
+                + linesep
+            )
         if len(self.notch) == 0:
             Lamination_str += "notch = []"
         for ii in range(len(self.notch)):
-            Lamination_str += "notch["+str(ii)+"] = "+str(self.notch[ii].as_dict())+"\n"
+            Lamination_str += (
+                "notch[" + str(ii) + "] = " + str(self.notch[ii].as_dict()) + "\n"
+            )
         return Lamination_str
 
     def __eq__(self, other):
@@ -283,8 +351,11 @@ class Lamination(FrozenClass):
 
     # Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets
     # Type : float, min = 0, max = 100
-    L1 = property(fget=_get_L1, fset=_set_L1,
-                  doc=u"""Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets""")
+    L1 = property(
+        fget=_get_L1,
+        fset=_set_L1,
+        doc=u"""Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets""",
+    )
 
     def _get_mat_type(self):
         """getter of mat_type"""
@@ -297,10 +368,12 @@ class Lamination(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     # Lamination's material
     # Type : Material
-    mat_type = property(fget=_get_mat_type, fset=_set_mat_type,
-                        doc=u"""Lamination's material""")
+    mat_type = property(
+        fget=_get_mat_type, fset=_set_mat_type, doc=u"""Lamination's material"""
+    )
 
     def _get_Nrvd(self):
         """getter of Nrvd"""
@@ -311,10 +384,13 @@ class Lamination(FrozenClass):
         check_var("Nrvd", value, "int", Vmin=0)
         self._Nrvd = value
 
-    # number of radial air ventilation ducts in lamination 
+    # number of radial air ventilation ducts in lamination
     # Type : int, min = 0
-    Nrvd = property(fget=_get_Nrvd, fset=_set_Nrvd,
-                    doc=u"""number of radial air ventilation ducts in lamination """)
+    Nrvd = property(
+        fget=_get_Nrvd,
+        fset=_set_Nrvd,
+        doc=u"""number of radial air ventilation ducts in lamination """,
+    )
 
     def _get_Wrvd(self):
         """getter of Wrvd"""
@@ -327,8 +403,11 @@ class Lamination(FrozenClass):
 
     # axial width of ventilation ducts in lamination
     # Type : float, min = 0
-    Wrvd = property(fget=_get_Wrvd, fset=_set_Wrvd,
-                    doc=u"""axial width of ventilation ducts in lamination""")
+    Wrvd = property(
+        fget=_get_Wrvd,
+        fset=_set_Wrvd,
+        doc=u"""axial width of ventilation ducts in lamination""",
+    )
 
     def _get_Kf1(self):
         """getter of Kf1"""
@@ -341,8 +420,9 @@ class Lamination(FrozenClass):
 
     # lamination stacking / packing factor
     # Type : float, min = 0, max = 1
-    Kf1 = property(fget=_get_Kf1, fset=_set_Kf1,
-                   doc=u"""lamination stacking / packing factor""")
+    Kf1 = property(
+        fget=_get_Kf1, fset=_set_Kf1, doc=u"""lamination stacking / packing factor"""
+    )
 
     def _get_is_internal(self):
         """getter of is_internal"""
@@ -355,8 +435,11 @@ class Lamination(FrozenClass):
 
     # 1 for internal lamination topology, 0 for external lamination
     # Type : bool
-    is_internal = property(fget=_get_is_internal, fset=_set_is_internal,
-                           doc=u"""1 for internal lamination topology, 0 for external lamination""")
+    is_internal = property(
+        fget=_get_is_internal,
+        fset=_set_is_internal,
+        doc=u"""1 for internal lamination topology, 0 for external lamination""",
+    )
 
     def _get_Rint(self):
         """getter of Rint"""
@@ -369,8 +452,7 @@ class Lamination(FrozenClass):
 
     # To fill
     # Type : float, min = 0
-    Rint = property(fget=_get_Rint, fset=_set_Rint,
-                    doc=u"""To fill""")
+    Rint = property(fget=_get_Rint, fset=_set_Rint, doc=u"""To fill""")
 
     def _get_Rext(self):
         """getter of Rext"""
@@ -383,8 +465,7 @@ class Lamination(FrozenClass):
 
     # To fill
     # Type : float, min = 0
-    Rext = property(fget=_get_Rext, fset=_set_Rext,
-                    doc=u"""To fill""")
+    Rext = property(fget=_get_Rext, fset=_set_Rext, doc=u"""To fill""")
 
     def _get_is_stator(self):
         """getter of is_stator"""
@@ -397,8 +478,7 @@ class Lamination(FrozenClass):
 
     # To fill
     # Type : bool
-    is_stator = property(fget=_get_is_stator, fset=_set_is_stator,
-                         doc=u"""To fill""")
+    is_stator = property(fget=_get_is_stator, fset=_set_is_stator, doc=u"""To fill""")
 
     def _get_axial_vent(self):
         """getter of axial_vent"""
@@ -415,10 +495,12 @@ class Lamination(FrozenClass):
         for obj in self._axial_vent:
             if obj is not None:
                 obj.parent = self
+
     # Axial ventilation ducts
     # Type : [Hole]
-    axial_vent = property(fget=_get_axial_vent, fset=_set_axial_vent,
-                          doc=u"""Axial ventilation ducts""")
+    axial_vent = property(
+        fget=_get_axial_vent, fset=_set_axial_vent, doc=u"""Axial ventilation ducts"""
+    )
 
     def _get_notch(self):
         """getter of notch"""
@@ -435,7 +517,9 @@ class Lamination(FrozenClass):
         for obj in self._notch:
             if obj is not None:
                 obj.parent = self
+
     # Lamination bore notches
     # Type : [Notch]
-    notch = property(fget=_get_notch, fset=_set_notch,
-                     doc=u"""Lamination bore notches""")
+    notch = property(
+        fget=_get_notch, fset=_set_notch, doc=u"""Lamination bore notches"""
+    )

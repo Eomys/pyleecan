@@ -103,8 +103,9 @@ class Surface(FrozenClass):
 
     # Center of symmetry
     # Type : complex
-    point_ref = property(fget=_get_point_ref, fset=_set_point_ref,
-                         doc=u"""Center of symmetry""")
+    point_ref = property(
+        fget=_get_point_ref, fset=_set_point_ref, doc=u"""Center of symmetry"""
+    )
 
     def _get_label(self):
         """getter of label"""
@@ -117,5 +118,4 @@ class Surface(FrozenClass):
 
     # Label of the surface
     # Type : str
-    label = property(fget=_get_label, fset=_set_label,
-                     doc=u"""Label of the surface""")
+    label = property(fget=_get_label, fset=_set_label, doc=u"""Label of the surface""")

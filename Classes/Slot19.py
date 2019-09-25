@@ -40,7 +40,9 @@ class Slot19(Slot):
     # save method is available in all object
     save = save
 
-    def __init__(self, W0=0.013, H0=0.02, W1=0.01, Wx_is_rad=False, Zs=36, init_dict=None):
+    def __init__(
+        self, W0=0.013, H0=0.02, W1=0.01, Wx_is_rad=False, Zs=36, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -140,8 +142,7 @@ class Slot19(Slot):
 
     # Slot top width
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0,
-                  doc=u"""Slot top width""")
+    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot top width""")
 
     def _get_H0(self):
         """getter of H0"""
@@ -154,8 +155,7 @@ class Slot19(Slot):
 
     # Slot height
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0,
-                  doc=u"""Slot height""")
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot height""")
 
     def _get_W1(self):
         """getter of W1"""
@@ -168,8 +168,7 @@ class Slot19(Slot):
 
     # Slot bottom width.
     # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1,
-                  doc=u"""Slot bottom width.""")
+    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Slot bottom width.""")
 
     def _get_Wx_is_rad(self):
         """getter of Wx_is_rad"""
@@ -182,5 +181,6 @@ class Slot19(Slot):
 
     # Wx unit, 0 for m, 1 for rad
     # Type : bool
-    Wx_is_rad = property(fget=_get_Wx_is_rad, fset=_set_Wx_is_rad,
-                         doc=u"""Wx unit, 0 for m, 1 for rad""")
+    Wx_is_rad = property(
+        fget=_get_Wx_is_rad, fset=_set_Wx_is_rad, doc=u"""Wx unit, 0 for m, 1 for rad"""
+    )

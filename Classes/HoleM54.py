@@ -16,7 +16,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
-
 class HoleM54(Hole):
     """Arc Hole for SyRM"""
 
@@ -36,7 +35,9 @@ class HoleM54(Hole):
     # save method is available in all object
     save = save
 
-    def __init__(self, H0=0.003, H1=0, W0=0.013, R1=0.02, Zh=36, mat_void=-1, init_dict=None):
+    def __init__(
+        self, H0=0.003, H1=0, W0=0.013, R1=0.02, Zh=36, mat_void=-1, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -140,8 +141,7 @@ class HoleM54(Hole):
 
     # Hole depth
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0,
-                  doc=u"""Hole depth""")
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Hole depth""")
 
     def _get_H1(self):
         """getter of H1"""
@@ -154,8 +154,7 @@ class HoleM54(Hole):
 
     # Hole width
     # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1,
-                  doc=u"""Hole width""")
+    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Hole width""")
 
     def _get_W0(self):
         """getter of W0"""
@@ -168,8 +167,7 @@ class HoleM54(Hole):
 
     # Hole angular width
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0,
-                  doc=u"""Hole angular width""")
+    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Hole angular width""")
 
     def _get_R1(self):
         """getter of R1"""
@@ -182,5 +180,4 @@ class HoleM54(Hole):
 
     # Hole radius
     # Type : float, min = 0
-    R1 = property(fget=_get_R1, fset=_set_R1,
-                  doc=u"""Hole radius""")
+    R1 = property(fget=_get_R1, fset=_set_R1, doc=u"""Hole radius""")

@@ -74,7 +74,7 @@ frame = None
 # Set Materials
 stator.mat_type = M400_50A
 rotor.mat_type = M400_50A
-#stator.winding.conductor.cond_mat = Copper1
+# stator.winding.conductor.cond_mat = Copper1
 rotor.hole[0].magnet_0.mat_type = Magnet_prius
 rotor.hole[0].magnet_1.mat_type = Magnet_prius
 

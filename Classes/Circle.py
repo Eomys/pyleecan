@@ -42,7 +42,9 @@ class Circle(Surface):
     # save method is available in all object
     save = save
 
-    def __init__(self, radius=1, center=0, line_label="", point_ref=0, label="", init_dict=None):
+    def __init__(
+        self, radius=1, center=0, line_label="", point_ref=0, label="", init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -53,7 +55,9 @@ class Circle(Surface):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["radius", "center", "line_label", "point_ref", "label"])
+            check_init_dict(
+                init_dict, ["radius", "center", "line_label", "point_ref", "label"]
+            )
             # Overwrite default value with init_dict content
             if "radius" in list(init_dict.keys()):
                 radius = init_dict["radius"]
@@ -136,8 +140,9 @@ class Circle(Surface):
 
     # Radius of the circle
     # Type : float, min = 0
-    radius = property(fget=_get_radius, fset=_set_radius,
-                      doc=u"""Radius of the circle""")
+    radius = property(
+        fget=_get_radius, fset=_set_radius, doc=u"""Radius of the circle"""
+    )
 
     def _get_center(self):
         """getter of center"""
@@ -150,8 +155,9 @@ class Circle(Surface):
 
     # center of the Circle
     # Type : complex
-    center = property(fget=_get_center, fset=_set_center,
-                      doc=u"""center of the Circle""")
+    center = property(
+        fget=_get_center, fset=_set_center, doc=u"""center of the Circle"""
+    )
 
     def _get_line_label(self):
         """getter of line_label"""
@@ -164,5 +170,6 @@ class Circle(Surface):
 
     # Label to set to the lines
     # Type : str
-    line_label = property(fget=_get_line_label, fset=_set_line_label,
-                          doc=u"""Label to set to the lines""")
+    line_label = property(
+        fget=_get_line_label, fset=_set_line_label, doc=u"""Label to set to the lines"""
+    )

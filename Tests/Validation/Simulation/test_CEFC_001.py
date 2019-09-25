@@ -1,8 +1,5 @@
-from numpy import zeros, ones, pi, array
+from numpy import ones, pi, array
 from unittest import TestCase
-from os.path import join
-import matplotlib.pyplot as plt
-from pyleecan.Tests import save_validation_path as save_path
 
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
@@ -12,20 +9,13 @@ from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
 from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Output import Output
 
 simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
 
 # Definition of the enforced output of the electrical module
 Nr = ImportMatrixVal(value=ones(1) * 3000)
-Is = ImportMatrixVal(
-    value=array(
-        [
-            [2.25353053e02, 2.25353053e02, 2.25353053e02]
-        ]
-    )
-)
+Is = ImportMatrixVal(value=array([[2.25353053e02, 2.25353053e02, 2.25353053e02]]))
 time = ImportGenVectLin(start=0, stop=1, num=1, endpoint=True)
 angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
 
@@ -39,11 +29,7 @@ simu.input = InCurrent(
 )
 
 # Definition of the magnetic simulation (no symmetry)
-simu.mag = MagFEMM(
-    is_stator_linear_BH=2,
-    is_rotor_linear_BH=0,
-    is_sliding_band=False,
-)
+simu.mag = MagFEMM(is_stator_linear_BH=2, is_rotor_linear_BH=0, is_sliding_band=False)
 
 
 class test_CEFC_001(TestCase):
@@ -58,6 +44,3 @@ class test_CEFC_001(TestCase):
         out = Output(simu=simu)
         out.post.legend_name = "Slotless lamination"
         simu.run()
-
-
-

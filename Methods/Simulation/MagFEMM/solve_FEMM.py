@@ -16,7 +16,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     Nt_tot = output.mag.Nt_tot  # Number of time step
     Na_tot = output.mag.Na_tot  # Number of angular step
 
-    if hasattr(output.simu.machine.stator, 'winding'):
+    if hasattr(output.simu.machine.stator, "winding"):
         qs = output.simu.machine.stator.winding.qs  # Winding phase number
         Npcpp = output.simu.machine.stator.winding.Npcpp
         Phi_wind_stator = zeros((Nt_tot, qs))
@@ -30,7 +30,6 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     Br = zeros((Nt_tot, Na_tot))
     Bt = zeros((Nt_tot, Na_tot))
     Tem = zeros((Nt_tot, 1))
-
 
     lam_int = output.simu.machine.get_lamination(True)
     lam_ext = output.simu.machine.get_lamination(False)
@@ -56,18 +55,18 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         # Get the flux result
         if self.is_sliding_band:
             for jj in range(Na_tot):
-                    Br[ii, jj], Bt[ii, jj] = femm.mo_getgapb("bc_ag2", angle[jj] * 180 / pi)
+                Br[ii, jj], Bt[ii, jj] = femm.mo_getgapb("bc_ag2", angle[jj] * 180 / pi)
         else:
-            Rag = (Rgap_mec_ext + Rgap_mec_int)/2
+            Rag = (Rgap_mec_ext + Rgap_mec_int) / 2
             for jj in range(Na_tot):
                 B = femm.mo_getb(Rag * np.cos(angle[jj]), Rag * np.sin(angle[jj]))
-                Br[ii, jj] = B[0]*np.cos(angle[jj]) + B[1]*np.sin(angle[jj])
-                Bt[ii, jj] = -B[0]*np.sin(angle[jj]) + B[1]*np.cos(angle[jj])
+                Br[ii, jj] = B[0] * np.cos(angle[jj]) + B[1] * np.sin(angle[jj])
+                Bt[ii, jj] = -B[0] * np.sin(angle[jj]) + B[1] * np.cos(angle[jj])
 
         # Compute the torque
         Tem[ii] = comp_FEMM_torque(FEMM_dict, sym=sym)
 
-        if hasattr(output.simu.machine.stator, 'winding'):
+        if hasattr(output.simu.machine.stator, "winding"):
             # Phi_wind computation
             Phi_wind_stator[ii, :] = comp_FEMM_Phi_wind(
                 qs, Npcpp, is_stator=True, Lfemm=FEMM_dict["Lfemm"], L1=L1, sym=sym
@@ -87,7 +86,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         output.mag.Tem_rip = abs((np_max(Tem) - np_min(Tem)) / output.mag.Tem_av)
     output.mag.Phi_wind_stator = Phi_wind_stator
 
-    if hasattr(output.simu.machine.stator, 'winding'):
+    if hasattr(output.simu.machine.stator, "winding"):
         # Electromotive forces computation (update output)
         self.comp_emf()
     else:

@@ -13,7 +13,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
 
 
-
 class Notch(FrozenClass):
     """Abstract class for notches"""
 
@@ -51,12 +50,42 @@ class Notch(FrozenClass):
                     self.notch_shape.append(Slot())
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
-                    class_name = obj.get('__class__')
-                    if class_name not in ['Slot', 'Slot19', 'SlotMFlat', 'SlotMPolar', 'SlotW10', 'SlotW11', 'SlotW12', 'SlotW13', 'SlotW14', 'SlotW15', 'SlotW16', 'SlotW21', 'SlotW22', 'SlotW23', 'SlotW24', 'SlotW25', 'SlotW26', 'SlotW27', 'SlotW28', 'SlotW29', 'SlotW60', 'SlotW61']:
-                        raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
+                    class_name = obj.get("__class__")
+                    if class_name not in [
+                        "Slot",
+                        "Slot19",
+                        "SlotMFlat",
+                        "SlotMPolar",
+                        "SlotW10",
+                        "SlotW11",
+                        "SlotW12",
+                        "SlotW13",
+                        "SlotW14",
+                        "SlotW15",
+                        "SlotW16",
+                        "SlotW21",
+                        "SlotW22",
+                        "SlotW23",
+                        "SlotW24",
+                        "SlotW25",
+                        "SlotW26",
+                        "SlotW27",
+                        "SlotW28",
+                        "SlotW29",
+                        "SlotW60",
+                        "SlotW61",
+                    ]:
+                        raise InitUnKnowClassError(
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for "
+                            + prop_name
+                        )
                     # Dynamic import to call the correct constructor
-                    module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-                    class_obj = getattr(module,class_name)
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
                     self.notch_shape.append(class_obj(init_dict=obj))
                 else:
                     self.notch_shape.append(obj)
@@ -79,7 +108,13 @@ class Notch(FrozenClass):
         if len(self.notch_shape) == 0:
             Notch_str += "notch_shape = []"
         for ii in range(len(self.notch_shape)):
-            Notch_str += "notch_shape["+str(ii)+"] = "+str(self.notch_shape[ii].as_dict())+"\n"
+            Notch_str += (
+                "notch_shape["
+                + str(ii)
+                + "] = "
+                + str(self.notch_shape[ii].as_dict())
+                + "\n"
+            )
         return Notch_str
 
     def __eq__(self, other):
@@ -124,7 +159,9 @@ class Notch(FrozenClass):
         for obj in self._notch_shape:
             if obj is not None:
                 obj.parent = self
+
     # Shape of Notch
     # Type : [Slot]
-    notch_shape = property(fget=_get_notch_shape, fset=_set_notch_shape,
-                           doc=u"""Shape of Notch""")
+    notch_shape = property(
+        fget=_get_notch_shape, fset=_set_notch_shape, doc=u"""Shape of Notch"""
+    )

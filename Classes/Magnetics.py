@@ -27,7 +27,23 @@ class Magnetics(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, is_remove_slotS=False, is_remove_slotR=False, is_remove_vent=False, is_mmfs=True, is_mmfr=True, is_stator_linear_BH=0, is_rotor_linear_BH=0, is_symmetry_t=False, sym_t=1, is_antiper_t=False, is_symmetry_a=False, sym_a=1, is_antiper_a=False, init_dict=None):
+    def __init__(
+        self,
+        is_remove_slotS=False,
+        is_remove_slotR=False,
+        is_remove_vent=False,
+        is_mmfs=True,
+        is_mmfr=True,
+        is_stator_linear_BH=0,
+        is_rotor_linear_BH=0,
+        is_symmetry_t=False,
+        sym_t=1,
+        is_antiper_t=False,
+        is_symmetry_a=False,
+        sym_a=1,
+        is_antiper_a=False,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -38,7 +54,24 @@ class Magnetics(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["is_remove_slotS", "is_remove_slotR", "is_remove_vent", "is_mmfs", "is_mmfr", "is_stator_linear_BH", "is_rotor_linear_BH", "is_symmetry_t", "sym_t", "is_antiper_t", "is_symmetry_a", "sym_a", "is_antiper_a"])
+            check_init_dict(
+                init_dict,
+                [
+                    "is_remove_slotS",
+                    "is_remove_slotR",
+                    "is_remove_vent",
+                    "is_mmfs",
+                    "is_mmfr",
+                    "is_stator_linear_BH",
+                    "is_rotor_linear_BH",
+                    "is_symmetry_t",
+                    "sym_t",
+                    "is_antiper_t",
+                    "is_symmetry_a",
+                    "sym_a",
+                    "is_antiper_a",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
@@ -98,8 +131,12 @@ class Magnetics(FrozenClass):
         Magnetics_str += "is_remove_vent = " + str(self.is_remove_vent) + linesep
         Magnetics_str += "is_mmfs = " + str(self.is_mmfs) + linesep
         Magnetics_str += "is_mmfr = " + str(self.is_mmfr) + linesep
-        Magnetics_str += "is_stator_linear_BH = " + str(self.is_stator_linear_BH) + linesep
-        Magnetics_str += "is_rotor_linear_BH = " + str(self.is_rotor_linear_BH) + linesep
+        Magnetics_str += (
+            "is_stator_linear_BH = " + str(self.is_stator_linear_BH) + linesep
+        )
+        Magnetics_str += (
+            "is_rotor_linear_BH = " + str(self.is_rotor_linear_BH) + linesep
+        )
         Magnetics_str += "is_symmetry_t = " + str(self.is_symmetry_t) + linesep
         Magnetics_str += "sym_t = " + str(self.sym_t) + linesep
         Magnetics_str += "is_antiper_t = " + str(self.is_antiper_t) + linesep
@@ -191,8 +228,11 @@ class Magnetics(FrozenClass):
 
     # 1 to artificially remove stator slotting effects in permeance mmf calculations
     # Type : bool
-    is_remove_slotS = property(fget=_get_is_remove_slotS, fset=_set_is_remove_slotS,
-                               doc=u"""1 to artificially remove stator slotting effects in permeance mmf calculations""")
+    is_remove_slotS = property(
+        fget=_get_is_remove_slotS,
+        fset=_set_is_remove_slotS,
+        doc=u"""1 to artificially remove stator slotting effects in permeance mmf calculations""",
+    )
 
     def _get_is_remove_slotR(self):
         """getter of is_remove_slotR"""
@@ -205,8 +245,11 @@ class Magnetics(FrozenClass):
 
     # 1 to artificially remove rotor slotting effects in permeance mmf calculations
     # Type : bool
-    is_remove_slotR = property(fget=_get_is_remove_slotR, fset=_set_is_remove_slotR,
-                               doc=u"""1 to artificially remove rotor slotting effects in permeance mmf calculations""")
+    is_remove_slotR = property(
+        fget=_get_is_remove_slotR,
+        fset=_set_is_remove_slotR,
+        doc=u"""1 to artificially remove rotor slotting effects in permeance mmf calculations""",
+    )
 
     def _get_is_remove_vent(self):
         """getter of is_remove_vent"""
@@ -219,8 +262,11 @@ class Magnetics(FrozenClass):
 
     # 1 to artificially remove the ventilations duct
     # Type : bool
-    is_remove_vent = property(fget=_get_is_remove_vent, fset=_set_is_remove_vent,
-                              doc=u"""1 to artificially remove the ventilations duct""")
+    is_remove_vent = property(
+        fget=_get_is_remove_vent,
+        fset=_set_is_remove_vent,
+        doc=u"""1 to artificially remove the ventilations duct""",
+    )
 
     def _get_is_mmfs(self):
         """getter of is_mmfs"""
@@ -233,8 +279,11 @@ class Magnetics(FrozenClass):
 
     # 1 to compute the stator magnetomotive force / stator armature magnetic field
     # Type : bool
-    is_mmfs = property(fget=_get_is_mmfs, fset=_set_is_mmfs,
-                       doc=u"""1 to compute the stator magnetomotive force / stator armature magnetic field""")
+    is_mmfs = property(
+        fget=_get_is_mmfs,
+        fset=_set_is_mmfs,
+        doc=u"""1 to compute the stator magnetomotive force / stator armature magnetic field""",
+    )
 
     def _get_is_mmfr(self):
         """getter of is_mmfr"""
@@ -247,8 +296,11 @@ class Magnetics(FrozenClass):
 
     # 1 to compute the rotor magnetomotive force / rotor magnetic field
     # Type : bool
-    is_mmfr = property(fget=_get_is_mmfr, fset=_set_is_mmfr,
-                       doc=u"""1 to compute the rotor magnetomotive force / rotor magnetic field""")
+    is_mmfr = property(
+        fget=_get_is_mmfr,
+        fset=_set_is_mmfr,
+        doc=u"""1 to compute the rotor magnetomotive force / rotor magnetic field""",
+    )
 
     def _get_is_stator_linear_BH(self):
         """getter of is_stator_linear_BH"""
@@ -261,8 +313,11 @@ class Magnetics(FrozenClass):
 
     # 0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)
     # Type : int, min = 0, max = 2
-    is_stator_linear_BH = property(fget=_get_is_stator_linear_BH, fset=_set_is_stator_linear_BH,
-                                   doc=u"""0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)""")
+    is_stator_linear_BH = property(
+        fget=_get_is_stator_linear_BH,
+        fset=_set_is_stator_linear_BH,
+        doc=u"""0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)""",
+    )
 
     def _get_is_rotor_linear_BH(self):
         """getter of is_rotor_linear_BH"""
@@ -275,8 +330,11 @@ class Magnetics(FrozenClass):
 
     # 0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)
     # Type : int, min = 0, max = 2
-    is_rotor_linear_BH = property(fget=_get_is_rotor_linear_BH, fset=_set_is_rotor_linear_BH,
-                                  doc=u"""0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)""")
+    is_rotor_linear_BH = property(
+        fget=_get_is_rotor_linear_BH,
+        fset=_set_is_rotor_linear_BH,
+        doc=u"""0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)""",
+    )
 
     def _get_is_symmetry_t(self):
         """getter of is_symmetry_t"""
@@ -289,8 +347,11 @@ class Magnetics(FrozenClass):
 
     # 0 Compute on the complete time vector, 1 compute according to sym_t and is_antiper_t
     # Type : bool
-    is_symmetry_t = property(fget=_get_is_symmetry_t, fset=_set_is_symmetry_t,
-                             doc=u"""0 Compute on the complete time vector, 1 compute according to sym_t and is_antiper_t""")
+    is_symmetry_t = property(
+        fget=_get_is_symmetry_t,
+        fset=_set_is_symmetry_t,
+        doc=u"""0 Compute on the complete time vector, 1 compute according to sym_t and is_antiper_t""",
+    )
 
     def _get_sym_t(self):
         """getter of sym_t"""
@@ -303,8 +364,11 @@ class Magnetics(FrozenClass):
 
     # Number of symmetry for the time vector
     # Type : int, min = 1
-    sym_t = property(fget=_get_sym_t, fset=_set_sym_t,
-                     doc=u"""Number of symmetry for the time vector""")
+    sym_t = property(
+        fget=_get_sym_t,
+        fset=_set_sym_t,
+        doc=u"""Number of symmetry for the time vector""",
+    )
 
     def _get_is_antiper_t(self):
         """getter of is_antiper_t"""
@@ -317,8 +381,11 @@ class Magnetics(FrozenClass):
 
     # To add an antiperiodicity to the time vector
     # Type : bool
-    is_antiper_t = property(fget=_get_is_antiper_t, fset=_set_is_antiper_t,
-                            doc=u"""To add an antiperiodicity to the time vector""")
+    is_antiper_t = property(
+        fget=_get_is_antiper_t,
+        fset=_set_is_antiper_t,
+        doc=u"""To add an antiperiodicity to the time vector""",
+    )
 
     def _get_is_symmetry_a(self):
         """getter of is_symmetry_a"""
@@ -331,8 +398,11 @@ class Magnetics(FrozenClass):
 
     # 0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a
     # Type : bool
-    is_symmetry_a = property(fget=_get_is_symmetry_a, fset=_set_is_symmetry_a,
-                             doc=u"""0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a""")
+    is_symmetry_a = property(
+        fget=_get_is_symmetry_a,
+        fset=_set_is_symmetry_a,
+        doc=u"""0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a""",
+    )
 
     def _get_sym_a(self):
         """getter of sym_a"""
@@ -345,8 +415,11 @@ class Magnetics(FrozenClass):
 
     # Number of symmetry for the angle vector
     # Type : int, min = 1
-    sym_a = property(fget=_get_sym_a, fset=_set_sym_a,
-                     doc=u"""Number of symmetry for the angle vector""")
+    sym_a = property(
+        fget=_get_sym_a,
+        fset=_set_sym_a,
+        doc=u"""Number of symmetry for the angle vector""",
+    )
 
     def _get_is_antiper_a(self):
         """getter of is_antiper_a"""
@@ -359,5 +432,8 @@ class Magnetics(FrozenClass):
 
     # To add an antiperiodicity to the angle vector
     # Type : bool
-    is_antiper_a = property(fget=_get_is_antiper_a, fset=_set_is_antiper_a,
-                            doc=u"""To add an antiperiodicity to the angle vector""")
+    is_antiper_a = property(
+        fget=_get_is_antiper_a,
+        fset=_set_is_antiper_a,
+        doc=u"""To add an antiperiodicity to the angle vector""",
+    )

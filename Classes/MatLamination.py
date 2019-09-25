@@ -12,7 +12,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 
 
-
 class MatLamination(MatMagnetics):
     """lamination properties"""
 
@@ -49,12 +48,21 @@ class MatLamination(MatMagnetics):
         # BH_curve can be None, a ImportMatrix object or a dict
         if isinstance(BH_curve, dict):
             # Check that the type is correct (including daughter)
-            class_name = BH_curve.get('__class__')
-            if class_name not in ['ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls', 'ImportGenVectSin', 'ImportGenMatrixSin', 'ImportGenVectLin']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)
+            class_name = BH_curve.get("__class__")
+            if class_name not in [
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+                "ImportGenVectSin",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.BH_curve = class_obj(init_dict=BH_curve)
         else:
             self.BH_curve = BH_curve
@@ -124,8 +132,11 @@ class MatLamination(MatMagnetics):
 
     # lamination sheet width without insulation [m] (for magnetic loss model)
     # Type : float, min = 0
-    Wlam = property(fget=_get_Wlam, fset=_set_Wlam,
-                    doc=u"""lamination sheet width without insulation [m] (for magnetic loss model)""")
+    Wlam = property(
+        fget=_get_Wlam,
+        fset=_set_Wlam,
+        doc=u"""lamination sheet width without insulation [m] (for magnetic loss model)""",
+    )
 
     def _get_BH_curve(self):
         """getter of BH_curve"""
@@ -138,7 +149,11 @@ class MatLamination(MatMagnetics):
 
         if self._BH_curve is not None:
             self._BH_curve.parent = self
-    # B(H) curve (two columns matrix, H and B(H)) 
+
+    # B(H) curve (two columns matrix, H and B(H))
     # Type : ImportMatrix
-    BH_curve = property(fget=_get_BH_curve, fset=_set_BH_curve,
-                        doc=u"""B(H) curve (two columns matrix, H and B(H)) """)
+    BH_curve = property(
+        fget=_get_BH_curve,
+        fset=_set_BH_curve,
+        doc=u"""B(H) curve (two columns matrix, H and B(H)) """,
+    )
