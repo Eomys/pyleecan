@@ -22,6 +22,7 @@ from pyleecan.Functions.FEMM.create_FEMM_boundary_conditions import (
 )
 from pyleecan.Functions.FEMM.create_FEMM_materials import create_FEMM_materials
 from pyleecan.Functions.FEMM.get_sliding_band import get_sliding_band
+from pyleecan.Functions.FEMM.get_airgap_surface import get_airgap_surface
 
 
 def draw_FEMM(
@@ -40,6 +41,7 @@ def draw_FEMM(
     kmesh_fineness=1,
     user_FEMM_dict={},
     path_save="FEMM_model.fem",
+    is_sliding_band=True,
 ):
     """Draws and assigns the property of the machine in FEMM
     
@@ -109,14 +111,24 @@ def draw_FEMM(
     lam_int = machine.get_lamination(is_internal=True)
     # adding Internal Lamination surface
     surf_list.extend(lam_int.build_geometry(sym=sym))
+
     # adding the Airgap surface
-    surf_list.extend(
-        get_sliding_band(
-            sym=sym,
-            lam_int=output.simu.machine.get_lamination(True),
-            lam_ext=output.simu.machine.get_lamination(False),
+    if is_sliding_band:
+        surf_list.extend(
+            get_sliding_band(
+                sym=sym,
+                lam_int=output.simu.machine.get_lamination(True),
+                lam_ext=output.simu.machine.get_lamination(False),
+            )
         )
-    )
+    else:
+        surf_list.extend(
+            get_airgap_surface(
+                lam_int=output.simu.machine.get_lamination(True),
+                lam_ext=output.simu.machine.get_lamination(False),
+            )
+        )
+
     # adding External Lamination surface
     surf_list.extend(lam_ext.build_geometry(sym=sym))
 

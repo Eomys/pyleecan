@@ -47,14 +47,14 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     if sym == 1:  # Complete lamination
         surface_yoke = Circle(
             radius=self.Rext,
-            label=label + "_Ext",
+            label=label + ly + "Ext",
             center=0,
             point_ref=self.Rint + (self.Rext - self.Rint) / 2,
         )
         surf_list.append(surface_yoke)
         if self.Rint > 0:
             surface = Circle(
-                radius=self.Rint, label=label + "_Int", center=0, point_ref=0
+                radius=self.Rint, label=label + ls + "Int", center=0, point_ref=0
             )
             surf_list.append(surface)
     else:  # Part of the lamination by symmetry

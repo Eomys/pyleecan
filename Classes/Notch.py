@@ -53,7 +53,6 @@ class Notch(FrozenClass):
                     class_name = obj.get("__class__")
                     if class_name not in [
                         "Slot",
-                        "Slot",
                         "Slot19",
                         "SlotMFlat",
                         "SlotMPolar",

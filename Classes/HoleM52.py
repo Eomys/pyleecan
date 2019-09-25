@@ -117,6 +117,8 @@ class HoleM52(HoleMag):
                 "Magnet",
                 "Magnet",
                 "Magnet",
+                "Magnet",
+                "Magnet",
                 "MagnetFlat",
                 "MagnetPolar",
                 "MagnetType10",

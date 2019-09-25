@@ -35,6 +35,7 @@ class MagFEMM(Magnetics):
         file_name="",
         FEMM_dict={},
         angle_stator=0,
+        is_sliding_band=True,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_vent=False,
@@ -69,6 +70,7 @@ class MagFEMM(Magnetics):
                     "file_name",
                     "FEMM_dict",
                     "angle_stator",
+                    "is_sliding_band",
                     "is_remove_slotS",
                     "is_remove_slotR",
                     "is_remove_vent",
@@ -97,6 +99,8 @@ class MagFEMM(Magnetics):
                 FEMM_dict = init_dict["FEMM_dict"]
             if "angle_stator" in list(init_dict.keys()):
                 angle_stator = init_dict["angle_stator"]
+            if "is_sliding_band" in list(init_dict.keys()):
+                is_sliding_band = init_dict["is_sliding_band"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -130,6 +134,7 @@ class MagFEMM(Magnetics):
         self.file_name = file_name
         self.FEMM_dict = FEMM_dict
         self.angle_stator = angle_stator
+        self.is_sliding_band = is_sliding_band
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -160,7 +165,8 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "type_calc_leakage = " + str(self.type_calc_leakage) + linesep
         MagFEMM_str += 'file_name = "' + str(self.file_name) + '"' + linesep
         MagFEMM_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
-        MagFEMM_str += "angle_stator = " + str(self.angle_stator)
+        MagFEMM_str += "angle_stator = " + str(self.angle_stator) + linesep
+        MagFEMM_str += "is_sliding_band = " + str(self.is_sliding_band)
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -184,6 +190,8 @@ class MagFEMM(Magnetics):
             return False
         if other.angle_stator != self.angle_stator:
             return False
+        if other.is_sliding_band != self.is_sliding_band:
+            return False
         return True
 
     def as_dict(self):
@@ -198,6 +206,7 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["file_name"] = self.file_name
         MagFEMM_dict["FEMM_dict"] = self.FEMM_dict
         MagFEMM_dict["angle_stator"] = self.angle_stator
+        MagFEMM_dict["is_sliding_band"] = self.is_sliding_band
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -212,6 +221,7 @@ class MagFEMM(Magnetics):
         self.file_name = None
         self.FEMM_dict = None
         self.angle_stator = None
+        self.is_sliding_band = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -315,4 +325,21 @@ class MagFEMM(Magnetics):
         fget=_get_angle_stator,
         fset=_set_angle_stator,
         doc=u"""Angular position shift of the stator""",
+    )
+
+    def _get_is_sliding_band(self):
+        """getter of is_sliding_band"""
+        return self._is_sliding_band
+
+    def _set_is_sliding_band(self, value):
+        """setter of is_sliding_band"""
+        check_var("is_sliding_band", value, "bool")
+        self._is_sliding_band = value
+
+    # 0 to desactivate the sliding band
+    # Type : bool
+    is_sliding_band = property(
+        fget=_get_is_sliding_band,
+        fset=_set_is_sliding_band,
+        doc=u"""0 to desactivate the sliding band""",
     )

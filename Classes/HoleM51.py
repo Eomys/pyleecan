@@ -163,6 +163,8 @@ class HoleM51(HoleMag):
                 "Magnet",
                 "Magnet",
                 "Magnet",
+                "Magnet",
+                "Magnet",
                 "MagnetFlat",
                 "MagnetPolar",
                 "MagnetType10",
@@ -189,6 +191,8 @@ class HoleM51(HoleMag):
                 "Magnet",
                 "Magnet",
                 "Magnet",
+                "Magnet",
+                "Magnet",
                 "MagnetFlat",
                 "MagnetPolar",
                 "MagnetType10",
@@ -211,6 +215,8 @@ class HoleM51(HoleMag):
             # Check that the type is correct (including daughter)
             class_name = magnet_2.get("__class__")
             if class_name not in [
+                "Magnet",
+                "Magnet",
                 "Magnet",
                 "Magnet",
                 "Magnet",

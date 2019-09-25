@@ -93,6 +93,10 @@ class InCurrent(Input):
             class_name = time.get("__class__")
             if class_name not in [
                 "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
@@ -115,6 +119,10 @@ class InCurrent(Input):
             # Check that the type is correct (including daughter)
             class_name = angle.get("__class__")
             if class_name not in [
+                "Import",
+                "Import",
+                "Import",
+                "Import",
                 "Import",
                 "Import",
                 "ImportMatlab",
@@ -142,6 +150,10 @@ class InCurrent(Input):
                 "Import",
                 "Import",
                 "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
@@ -164,6 +176,10 @@ class InCurrent(Input):
             # Check that the type is correct (including daughter)
             class_name = Ir.get("__class__")
             if class_name not in [
+                "Import",
+                "Import",
+                "Import",
+                "Import",
                 "Import",
                 "Import",
                 "Import",
@@ -195,6 +211,10 @@ class InCurrent(Input):
                 "Import",
                 "Import",
                 "Import",
+                "Import",
+                "Import",
+                "Import",
+                "Import",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
@@ -217,6 +237,10 @@ class InCurrent(Input):
             # Check that the type is correct (including daughter)
             class_name = Nr.get("__class__")
             if class_name not in [
+                "Import",
+                "Import",
+                "Import",
+                "Import",
                 "Import",
                 "Import",
                 "Import",

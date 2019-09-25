@@ -15,3 +15,4 @@ notch;-;Lamination bore notches;;0;[Notch];;;;;;;;;get_Ryoke;;;;
 ;;;;;;;;;;;;;;comp_output_geo;;;;
 ;;;;;;;;;;;;;;get_polar_eq;;;;
 ;;;;;;;;;;;;;;is_outwards;;;;
+;;;;;;;;;;;;;;comp_height_yoke;;;;

@@ -8,11 +8,11 @@ from pyleecan.Classes.Lamination import Lamination
 
 from pyleecan.Methods.Machine.LamSlot.build_geometry import build_geometry
 from pyleecan.Methods.Machine.LamSlot.check import check
-from pyleecan.Methods.Machine.LamSlot.comp_height_yoke import comp_height_yoke
 from pyleecan.Methods.Machine.LamSlot.comp_radius_mec import comp_radius_mec
 from pyleecan.Methods.Machine.LamSlot.comp_surfaces import comp_surfaces
 from pyleecan.Methods.Machine.LamSlot.get_pole_pair_number import get_pole_pair_number
 from pyleecan.Methods.Machine.LamSlot.plot import plot
+from pyleecan.Methods.Machine.LamSlot.comp_height_yoke import comp_height_yoke
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
@@ -30,8 +30,6 @@ class LamSlot(Lamination):
     build_geometry = build_geometry
     # cf Methods.Machine.LamSlot.check
     check = check
-    # cf Methods.Machine.LamSlot.comp_height_yoke
-    comp_height_yoke = comp_height_yoke
     # cf Methods.Machine.LamSlot.comp_radius_mec
     comp_radius_mec = comp_radius_mec
     # cf Methods.Machine.LamSlot.comp_surfaces
@@ -40,6 +38,8 @@ class LamSlot(Lamination):
     get_pole_pair_number = get_pole_pair_number
     # cf Methods.Machine.LamSlot.plot
     plot = plot
+    # cf Methods.Machine.LamSlot.comp_height_yoke
+    comp_height_yoke = comp_height_yoke
     # save method is available in all object
     save = save
 
@@ -121,6 +121,7 @@ class LamSlot(Lamination):
             # Check that the type is correct (including daughter)
             class_name = slot.get("__class__")
             if class_name not in [
+                "Slot",
                 "Slot",
                 "Slot19",
                 "SlotMFlat",
