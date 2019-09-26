@@ -86,8 +86,7 @@ class SurfLine(Surface):
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
-                            + " in init_dict for "
-                            + prop_name
+                            + " in init_dict for line_list"
                         )
                     # Dynamic import to call the correct constructor
                     module = __import__(

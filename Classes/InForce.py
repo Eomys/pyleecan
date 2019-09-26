@@ -58,16 +58,6 @@ class InForce(Input):
             class_name = time.get("__class__")
             if class_name not in [
                 "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
@@ -77,7 +67,7 @@ class InForce(Input):
                 "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for time"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
@@ -91,17 +81,6 @@ class InForce(Input):
             class_name = angle.get("__class__")
             if class_name not in [
                 "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
@@ -111,7 +90,7 @@ class InForce(Input):
                 "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for angle"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
@@ -125,18 +104,6 @@ class InForce(Input):
             class_name = Prad.get("__class__")
             if class_name not in [
                 "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
@@ -146,7 +113,7 @@ class InForce(Input):
                 "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for Prad"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
@@ -160,19 +127,6 @@ class InForce(Input):
             class_name = Ptan.get("__class__")
             if class_name not in [
                 "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
@@ -182,7 +136,7 @@ class InForce(Input):
                 "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for Ptan"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])

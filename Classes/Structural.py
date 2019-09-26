@@ -50,7 +50,7 @@ class Structural(FrozenClass):
             class_name = force.get("__class__")
             if class_name not in ["Force", "ForceMT"]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for force"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])

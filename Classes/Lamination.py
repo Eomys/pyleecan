@@ -166,7 +166,6 @@ class Lamination(FrozenClass):
                     class_name = obj.get("__class__")
                     if class_name not in [
                         "Hole",
-                        "Hole",
                         "HoleMag",
                         "HoleM50",
                         "HoleM51",
@@ -180,8 +179,7 @@ class Lamination(FrozenClass):
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
-                            + " in init_dict for "
-                            + prop_name
+                            + " in init_dict for axial_vent"
                         )
                     # Dynamic import to call the correct constructor
                     module = __import__(
@@ -208,8 +206,7 @@ class Lamination(FrozenClass):
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
-                            + " in init_dict for "
-                            + prop_name
+                            + " in init_dict for notch"
                         )
                     # Dynamic import to call the correct constructor
                     module = __import__(

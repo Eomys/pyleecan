@@ -138,10 +138,7 @@ class LamHole(Lamination):
                         "VentilationTrap",
                     ]:
                         raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for "
-                            + prop_name
+                            "Unknow class name " + class_name + " in init_dict for hole"
                         )
                     # Dynamic import to call the correct constructor
                     module = __import__(

@@ -93,10 +93,6 @@ class InCurrent(Input):
             class_name = time.get("__class__")
             if class_name not in [
                 "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
@@ -106,7 +102,7 @@ class InCurrent(Input):
                 "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for time"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
@@ -120,11 +116,6 @@ class InCurrent(Input):
             class_name = angle.get("__class__")
             if class_name not in [
                 "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
@@ -134,7 +125,7 @@ class InCurrent(Input):
                 "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for angle"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
@@ -148,12 +139,6 @@ class InCurrent(Input):
             class_name = Is.get("__class__")
             if class_name not in [
                 "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
@@ -163,7 +148,7 @@ class InCurrent(Input):
                 "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for Is"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
@@ -177,13 +162,6 @@ class InCurrent(Input):
             class_name = Ir.get("__class__")
             if class_name not in [
                 "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
@@ -193,7 +171,7 @@ class InCurrent(Input):
                 "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for Ir"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
@@ -207,14 +185,6 @@ class InCurrent(Input):
             class_name = angle_rotor.get("__class__")
             if class_name not in [
                 "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
@@ -224,7 +194,7 @@ class InCurrent(Input):
                 "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for angle_rotor"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
@@ -238,15 +208,6 @@ class InCurrent(Input):
             class_name = Nr.get("__class__")
             if class_name not in [
                 "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
-                "Import",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
@@ -256,7 +217,7 @@ class InCurrent(Input):
                 "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for Nr"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])

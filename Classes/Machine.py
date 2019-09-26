@@ -115,7 +115,7 @@ class Machine(FrozenClass):
                 "LamSquirrelCage",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for rotor"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
@@ -129,7 +129,6 @@ class Machine(FrozenClass):
             class_name = stator.get("__class__")
             if class_name not in [
                 "Lamination",
-                "Lamination",
                 "LamHole",
                 "LamSlot",
                 "LamSlotWind",
@@ -137,7 +136,7 @@ class Machine(FrozenClass):
                 "LamSquirrelCage",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for stator"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])

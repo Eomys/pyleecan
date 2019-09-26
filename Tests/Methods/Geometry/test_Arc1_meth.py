@@ -622,7 +622,6 @@ class test_Arc1_meth(TestCase):
         self.assertAlmostEqual(abs(Zc - test_dict["center"]), 0, msg=msg)
         # Check discretize
         result = arc.discretize(test_dict["nb_point"])
-        print(result)
         self.assertEqual(result.size, test_dict["result"].size)
         for ii in range(0, result.size):
             a = result[ii]

@@ -122,7 +122,6 @@ class LamSlot(Lamination):
             class_name = slot.get("__class__")
             if class_name not in [
                 "Slot",
-                "Slot",
                 "Slot19",
                 "SlotMFlat",
                 "SlotMPolar",
@@ -146,7 +145,7 @@ class LamSlot(Lamination):
                 "SlotW61",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for slot"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])

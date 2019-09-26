@@ -100,8 +100,7 @@ class SlotMFlat(SlotMag):
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
-                            + " in init_dict for "
-                            + prop_name
+                            + " in init_dict for magnet"
                         )
                     # Dynamic import to call the correct constructor
                     module = __import__(

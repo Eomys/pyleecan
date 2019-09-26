@@ -112,13 +112,6 @@ class HoleM52(HoleMag):
             class_name = magnet_0.get("__class__")
             if class_name not in [
                 "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
-                "Magnet",
                 "MagnetFlat",
                 "MagnetPolar",
                 "MagnetType10",
@@ -128,7 +121,7 @@ class HoleM52(HoleMag):
                 "MagnetType14",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for " + prop_name
+                    "Unknow class name " + class_name + " in init_dict for magnet_0"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])

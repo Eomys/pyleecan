@@ -78,8 +78,7 @@ class Notch(FrozenClass):
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
-                            + " in init_dict for "
-                            + prop_name
+                            + " in init_dict for notch_shape"
                         )
                     # Dynamic import to call the correct constructor
                     module = __import__(

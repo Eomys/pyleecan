@@ -376,7 +376,8 @@ def generate_set_class_by_dict_list(prop_name, prop_type, daug_list):
     class_dict_str = ""
     class_dict_str += TAB4 + "elif isinstance(obj, dict):\n"
     if len(daug_list) > 0:
-        daug_list.insert(0, prop_type)
+        if prop_type not in daug_list:
+            daug_list.insert(0, prop_type)
         # Add the posibility to call the daughter init
         class_dict_str += (
             TAB5 + "# Check that the type is correct (including daughter)\n"
@@ -385,7 +386,9 @@ def generate_set_class_by_dict_list(prop_name, prop_type, daug_list):
         class_dict_str += TAB5 + "if class_name not in " + str(daug_list) + ":\n"
         class_dict_str += (
             TAB6
-            + 'raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)\n'
+            + 'raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for '
+            + prop_name
+            + '")\n'
         )
         class_dict_str += TAB5 + "# Dynamic import to call the correct constructor\n"
         class_dict_str += (
@@ -425,7 +428,8 @@ def generate_set_class_by_dict(prop_name, prop_type, daug_list):
     class_dict_str += TAB2 + "if isinstance(" + prop_name + ", dict):\n"
 
     if len(daug_list) > 0:
-        daug_list.insert(0, prop_type)
+        if prop_type not in daug_list:
+            daug_list.insert(0, prop_type)
         # Add the posibility to call the daughter init
         class_dict_str += (
             TAB3 + "# Check that the type is correct (including daughter)\n"
@@ -434,7 +438,9 @@ def generate_set_class_by_dict(prop_name, prop_type, daug_list):
         class_dict_str += TAB3 + "if class_name not in " + str(daug_list) + ":\n"
         class_dict_str += (
             TAB4
-            + 'raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for " + prop_name)\n'
+            + 'raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for '
+            + prop_name
+            + '")\n'
         )
         class_dict_str += TAB3 + "# Dynamic import to call the correct constructor\n"
         class_dict_str += (
