@@ -5,7 +5,7 @@ from os.path import join
 from importlib import import_module
 from unittest import TestCase
 from ddt import ddt, data
-from numpy import array_equal, empty
+from numpy import array_equal, empty, array
 from pyleecan.Generator.read_fct import read_all
 from pyleecan.Generator.class_generator import get_mother_attr
 from pyleecan.Generator import DOC_DIR
@@ -85,8 +85,12 @@ class test_all_Classes(TestCase):
                     + prop["name"],
                 )
             elif type_name == "ndarray":
+                if type(prop["value"]) is list:
+                    expect = array(prop["value"])
+                else:
+                    expect = empty(0)
                 self.assertTrue(
-                    array_equal(result, empty(0)),
+                    array_equal(result, expect),
                     msg="Error for class "
                     + class_dict["name"]
                     + " for property: "
@@ -119,7 +123,10 @@ class test_all_Classes(TestCase):
         prop_list = get_mother_attr(gen_dict, class_dict, "properties")[0]
         for prop in prop_list:
             if prop["type"] == "ndarray":
-                d[prop["name"]] = list()
+                if type(prop["value"]) is list:
+                    d[prop["name"]] = prop["value"]
+                else:
+                    d[prop["name"]] = list()
             elif prop["value"] in ["None", None]:
                 d[prop["name"]] = None
             elif prop["type"] in PYTHON_TYPE:

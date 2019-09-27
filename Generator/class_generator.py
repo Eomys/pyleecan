@@ -281,7 +281,11 @@ def generate_init(gen_dict, class_dict):
                 ", " + prop["name"] + "=" + get_value_str(prop["value"], prop["type"])
             )
         elif prop["type"] == "ndarray":
-            arg_list += ", " + prop["name"] + "=None"
+            if prop["value"] not in ["", None] and type(prop["value"]) is list:
+                # Default value of ndarray are list
+                arg_list += ", " + prop["name"] + "=" + str(prop["value"])
+            else:
+                arg_list += ", " + prop["name"] + "=None"
         elif prop["type"][0] == "[" and prop["type"][-1] == "]":
             # List of pyleecan type
             arg_list += ", " + prop["name"] + "=list()"
