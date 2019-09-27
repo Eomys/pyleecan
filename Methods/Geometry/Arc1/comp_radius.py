@@ -22,4 +22,4 @@ def comp_radius(self):
 
     self.check()
 
-    return self.radius  # Radius of the arc
+    return abs(self.radius)  # Radius of the arc

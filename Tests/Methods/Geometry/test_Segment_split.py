@@ -138,7 +138,7 @@ class test_Segment_split_meth(TestCase):
             + str(test_dict["Zi"])
         )
         for ii in range(len(result)):
-            self.assertAlmostEqual(abs(result[ii] - test_dict["Zi"][ii]), 0)
+            self.assertAlmostEqual(abs(result[ii] - test_dict["Zi"][ii]), 0, msg=msg)
 
         # Check split_line is_top=True
         seg2 = seg.split_line(test_dict["Z1"], test_dict["Z2"], is_top=True)

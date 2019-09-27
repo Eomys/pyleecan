@@ -48,8 +48,7 @@ def inter_line_circle(Z1, Z2, R, Zc=0):
     if delta < 0:  # 0 point
         return list()
     elif delta == 0:  # 1 point(tangent)
-        if np_abs(Zc) > 1e-6:
-            return [(D * dy - 1j * D * dx) / dr ** 2 + Zc]
+        return [(D * dy - 1j * D * dx) / dr ** 2 + Zc]
 
     else:  # 2 points
         if dy < 0:

@@ -9,6 +9,7 @@ from pyleecan.Classes.Line import Line
 from pyleecan.Methods.Geometry.Arc.draw_FEMM import draw_FEMM
 from pyleecan.Methods.Geometry.Arc.intersect_line import intersect_line
 from pyleecan.Methods.Geometry.Arc.is_on_arc import is_on_arc
+from pyleecan.Methods.Geometry.Arc.split_line import split_line
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -24,6 +25,8 @@ class Arc(Line):
     intersect_line = intersect_line
     # cf Methods.Geometry.Arc.is_on_arc
     is_on_arc = is_on_arc
+    # cf Methods.Geometry.Arc.split_line
+    split_line = split_line
     # save method is available in all object
     save = save
 

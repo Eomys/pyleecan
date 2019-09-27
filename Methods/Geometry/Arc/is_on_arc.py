@@ -23,7 +23,7 @@ def is_on_arc(self, Z):
     R = self.comp_radius()
 
     # Check if on the circle
-    if np_abs(Z - Zc - R) > 1e-6:
+    if abs(np_abs(Z - Zc) - R) > 1e-6:
         return False
 
     # Check if point is begin or end
