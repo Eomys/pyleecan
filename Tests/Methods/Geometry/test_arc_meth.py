@@ -411,121 +411,142 @@ split_test.append(
         ],  # Expected result for slip not is_top
     }
 )
-# # 8) Arc2, 2 intersection
-# split_test.append(
-#     {
-#         "arc": Arc2(begin= , center= , angle= ),  # Arc to split
-#         "Z1": 1 + 1.9j,  # First point of cutting line
-#         "Z2": 2 + 1.9j,  # Second point of cutting line
-#         "center": 1j,  # Center of the arc (should not be changed by the split)
-#         "Zi": [X + 1.9j, -X + 1.9j],  # Expected intersection points
-#         "Zs_top": [
-#             Arc1(begin=X + 1.9j, end=-X + 1.9j, radius=1, is_trigo_direction=True)
-#         ],  # Expected result for slip is_top
-#         "Zs_bot": [
-#             Arc1(begin=1 + 1j, end=X + 1.9j, radius=1, is_trigo_direction=True),
-#             Arc1(
-#                 begin=-X + 1.9j,
-#                 end=1j + exp(1j * 3 * pi / 4),
-#                 radius=1,
-#                 is_trigo_direction=True,
-#             ),
-#         ],  # Expected result for slip not is_top
-#     }
-# )
-# # 9) Same as 8 with reversed cutting line
-# split_test.append(
-#     {
-#         "arc": Arc2(begin= , center= , angle= ),  # Arc to split
-#         "Z1": 2 + 1.9j,  # First point of cutting line
-#         "Z2": 1 + 1.9j,  # Second point of cutting line
-#         "center": 1j,  # Center of the arc (should not be changed by the split)
-#         "Zi": [X + 1.9j, -X + 1.9j],  # Expected intersection points
-#         "Zs_top": [
-#             Arc1(begin=1 + 1j, end=X + 1.9j, radius=1, is_trigo_direction=True),
-#             Arc1(
-#                 begin=-X + 1.9j,
-#                 end=1j + exp(1j * 3 * pi / 4),
-#                 radius=1,
-#                 is_trigo_direction=True,
-#             ),
-#         ],  # Expected result for slip is_top
-#         "Zs_bot": [
-#             Arc1(begin=X + 1.9j, end=-X + 1.9j, radius=1, is_trigo_direction=True)
-#         ],  # Expected result for slip not is_top
-#     }
-# )
-# # 10) Arc2, 2 intersection, is_trigo=False
-# split_test.append(
-#     {
-#         "arc": Arc2(begin= , center= , angle= ),  # Arc to split
-#         "Z1": -0.5+1j,  # First point of cutting line
-#         "Z2": -0.5+2j,  # Second point of cutting line
-#         "center": 0,  # Center of the arc (should not be changed by the split)
-#         "Zi": [-0.5-sqrt(0.75)*1j, -0.5+sqrt(0.75)*1j],  # Expected intersection points
-#         "Zs_top": [
-#             Arc1(begin=-0.5-sqrt(0.75)*1j, end=-0.5+sqrt(0.75)*1j, radius=-1, is_trigo_direction=False)
-
-#         ],  # Expected result for slip is_top
-#         "Zs_bot": [
-#             Arc1(begin=1, end=-0.5-sqrt(0.75)*1j, radius=-1, is_trigo_direction=False),
-#             Arc1(
-#                 begin=-0.5+sqrt(0.75)*1j,
-#                 end=1j,
-#                 radius=-1,
-#                 is_trigo_direction=False,
-#             ),
-#         ],  # Expected result for slip not is_top
-#     }
-# )
-# # 11) Arc2, 2 intersections, begin = int1
-# split_test.append(
-#     {
-#         "arc": Arc2(begin= , center= , angle= ),  # Arc to split
-#         "Z1": 1,  # First point of cutting line
-#         "Z2": -3-2j,  # Second point of cutting line
-#         "center": -1-3j,  # Center of the arc (should not be changed by the split)
-#         "Zi": [-1-1j, -2.6-1.8j],  # Expected intersection points
-#         "Zs_top": [
-#             Arc1(begin=-2.6-1.8j, end=-3-3j, radius=2, is_trigo_direction=True)
-#         ],  # Expected result for slip is_top
-#         "Zs_bot": [
-#             Arc1(begin=-1-1j, end=-2.6-1.8j, radius=2, is_trigo_direction=True),
-#         ],  # Expected result for slip not is_top
-#     }
-# )
-# # 12) Arc2, 2 intersections, end = int2
-# split_test.append(
-#     {
-#         "arc": Arc2(begin= , center= , angle= ),  # Arc to split
-#         "Z1": 2j,  # First point of cutting line
-#         "Z2": -1,  # Second point of cutting line
-#         "center": 0,  # Center of the arc (should not be changed by the split)
-#         "Zi": [-0.6+0.8j, -1],  # Expected intersection points
-#         "Zs_top": [
-#             Arc1(begin=1j, end=-0.6+0.8j, radius=1, is_trigo_direction=True)
-#         ],  # Expected result for slip is_top
-#         "Zs_bot": [
-#             Arc1(begin=-0.6+0.8j, end=-1, radius=1, is_trigo_direction=True),
-#         ],  # Expected result for slip not is_top
-#     }
-# )
-# # 13 Arc2, 2 intersections, begin = int1 and end = int2
-# split_test.append(
-#     {
-#         "arc": Arc2(begin= , center= , angle= ),  # Arc to split
-#         "Z1": -1j+sqrt(4.5)*(2+1j),  # First point of cutting line
-#         "Z2": -1j+sqrt(4.5)*(3+1j),  # Second point of cutting line
-#         "center": -1j,  # Center of the arc (should not be changed by the split)
-#         "Zi": [-1j+sqrt(4.5)*(1+1j), -1j+sqrt(4.5)*(-1+1j)],  # Expected intersection points
-#         "Zs_top": [
-#             Arc1(begin=-1j+3*exp(1j*pi/4), end=-1j+3*exp(1j*3*pi/4), radius=3, is_trigo_direction=True)
-#         ],  # Expected result for slip is_top
-#         "Zs_bot": [],  # Expected result for slip not is_top
-#     }
-# )
-# *************************
-# X) Arc3 No Intersection
+# 22) Arc2, 2 intersection
+X = 0.322875655
+split_test.append(
+    {
+        "arc": Arc2(begin=-1j, center=1, angle=-5 * pi / 4),  # Arc to split
+        "Z1": -1 + 0.5j,  # First point of cutting line
+        "Z2": 2 + 0.5j,  # Second point of cutting line
+        "center": 1,  # Center of the arc (should not be changed by the split)
+        "Zi": [-X + 0.5j, 2 + X + 0.5j],  # Expected intersection points
+        "Zs_top": [
+            Arc1(
+                begin=-X + 0.5j,
+                end=2 + X + 0.5j,
+                radius=-sqrt(2),
+                is_trigo_direction=False,
+            )
+        ],  # Expected result for slip is_top
+        "Zs_bot": [
+            Arc1(begin=-1j, end=-X + 0.5j, radius=-sqrt(2), is_trigo_direction=False),
+            Arc1(
+                begin=2 + X + 0.5j,
+                end=1 + sqrt(2),
+                radius=-sqrt(2),
+                is_trigo_direction=False,
+            ),
+        ],  # Expected result for slip not is_top
+    }
+)
+# 23) Same as 22 with reversed cutting line
+split_test.append(
+    {
+        "arc": Arc2(begin=-1j, center=1, angle=-5 * pi / 4),  # Arc to split
+        "Z1": 2 + 0.5j,  # First point of cutting line
+        "Z2": -1 + 0.5j,  # Second point of cutting line
+        "center": 1,  # Center of the arc (should not be changed by the split)
+        "Zi": [-X + 0.5j, 2 + X + 0.5j],  # Expected intersection points
+        "Zs_top": [
+            Arc1(begin=-1j, end=-X + 0.5j, radius=-sqrt(2), is_trigo_direction=False),
+            Arc1(
+                begin=2 + X + 0.5j,
+                end=1 + sqrt(2),
+                radius=-sqrt(2),
+                is_trigo_direction=False,
+            ),
+        ],  # Expected result for slip is_top
+        "Zs_bot": [
+            Arc1(
+                begin=-X + 0.5j,
+                end=2 + X + 0.5j,
+                radius=-sqrt(2),
+                is_trigo_direction=False,
+            )
+        ],  # Expected result for slip not is_top
+    }
+)
+# 24) Arc2, 2 intersection, angle < 0
+split_test.append(
+    {
+        "arc": Arc2(begin=-1, center=0, angle=-pi / 2),  # Arc to split
+        "Z1": -1.1,  # First point of cutting line
+        "Z2": 1.1j,  # Second point of cutting line
+        "center": 0,  # Center of the arc (should not be changed by the split)
+        "Zi": [
+            -0.99441 + 0.10559j,
+            -0.10559 + 0.99441j,
+        ],  # Expected intersection points
+        "Zs_top": [
+            Arc1(
+                begin=-0.99441 + 0.10559j,
+                end=-0.10559 + 0.99441j,
+                radius=-1,
+                is_trigo_direction=False,
+            )
+        ],  # Expected result for slip is_top
+        "Zs_bot": [
+            Arc1(
+                begin=-1, end=-0.99441 + 0.10559j, radius=-1, is_trigo_direction=False
+            ),
+            Arc1(
+                begin=-0.10559 + 0.99441j, end=1j, radius=-1, is_trigo_direction=False
+            ),
+        ],  # Expected result for slip not is_top
+    }
+)
+# 25) Arc2, 2 intersections, begin = int1
+split_test.append(
+    {
+        "arc": Arc2(begin=1j + 2, center=1j, angle=3 * pi / 4),  # Arc to split
+        "Z1": 4j - 1,  # First point of cutting line
+        "Z2": 3,  # Second point of cutting line
+        "center": 1j,  # Center of the arc (should not be changed by the split)
+        "Zi": [1j + 2, 3j],  # Expected intersection points
+        "Zs_top": [
+            Arc1(begin=1j + 2, end=3j, radius=2, is_trigo_direction=True)
+        ],  # Expected result for slip is_top
+        "Zs_bot": [
+            Arc1(
+                begin=3j,
+                end=1j + 2 * exp(1j * 3 * pi / 4),
+                radius=2,
+                is_trigo_direction=True,
+            )
+        ],  # Expected result for slip not is_top
+    }
+)
+# 26) Arc2, 2 intersections, end = int2
+split_test.append(
+    {
+        "arc": Arc2(begin=1, center=0, angle=-pi),  # Arc to split
+        "Z1": -1,  # First point of cutting line
+        "Z2": -1j,  # Second point of cutting line
+        "center": 0,  # Center of the arc (should not be changed by the split)
+        "Zi": [-1j, -1],  # Expected intersection points
+        "Zs_top": [
+            Arc1(begin=1, end=-1j, radius=-1, is_trigo_direction=False)
+        ],  # Expected result for slip is_top
+        "Zs_bot": [
+            Arc1(begin=-1j, end=-1, radius=-1, is_trigo_direction=False)
+        ],  # Expected result for slip not is_top
+    }
+)
+# 27 Arc2, 2 intersections, begin = int1 and end = int2
+split_test.append(
+    {
+        "arc": Arc2(begin=1 + 1j, center=0, angle=pi / 2),  # Arc to split
+        "Z1": -2 + 1j,  # First point of cutting line
+        "Z2": 1 + 1j,  # Second point of cutting line
+        "center": 0,  # Center of the arc (should not be changed by the split)
+        "Zi": [1 + 1j, -1 + 1j],  # Expected intersection points
+        "Zs_top": [
+            Arc2(begin=1 + 1j, center=0, angle=pi / 2)
+        ],  # Expected result for slip is_top
+        "Zs_bot": [],  # Expected result for slip not is_top
+    }
+)
+# 28) Arc3 No Intersection
 split_test.append(
     {
         "arc": Arc3(begin=1, end=-1, is_trigo_direction=False),  # Arc to split
@@ -571,7 +592,9 @@ class test_Arc_split_meth(TestCase):
             + str(test_dict["Zi"])
         )
         for ii in range(len(result)):
-            self.assertAlmostEqual(abs(result[ii] - test_dict["Zi"][ii]), 0, msg=msg)
+            self.assertAlmostEqual(
+                abs(result[ii] - test_dict["Zi"][ii]), 0, delta=DELTA, msg=msg
+            )
 
         # Check split_line is_top=True
         split_list = arc_obj.split_line(test_dict["Z1"], test_dict["Z2"], is_top=True)

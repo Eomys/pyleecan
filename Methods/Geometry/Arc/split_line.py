@@ -118,7 +118,7 @@ def split_line(self, Z1, Z2, is_top=True):
     if len(Z_int) == 2:
         # Two intersection => Three possible lines
         # Begin => Intersection1 (intersection are ordered along the arc)
-        if np_abs(Z_int[0] - self.begin) > DELTA:
+        if np_abs(Z_int[0] - self.get_begin()) > DELTA:
             line1 = Arc1(
                 begin=self.get_begin(),
                 end=Z_int[0],
@@ -141,7 +141,7 @@ def split_line(self, Z1, Z2, is_top=True):
         if np_abs(line2.get_center() - Zc) > 1e-6:
             line2.radius = -1 * line2.radius
         # Intersection 2 => End
-        if np_abs(Z_int[1] - self.end) > DELTA:
+        if np_abs(Z_int[1] - self.get_end()) > DELTA:
             line3 = Arc1(
                 begin=Z_int[1],
                 end=self.get_end(),
@@ -172,13 +172,13 @@ def split_line(self, Z1, Z2, is_top=True):
 
         # Return the correct line(s) according to the points position
         line_list = list()
-        if (Zb.imag >= DELTA or abs(Zb.imag) < DELTA) and is_top:
+        if Zb.imag > DELTA and is_top:
             if line1:
                 line_list.append(line1)
             if line3:
                 line_list.append(line3)
             return line_list
-        if (Zb.imag >= DELTA or abs(Zb.imag) < DELTA) and not is_top:
+        if Zb.imag > DELTA and not is_top:
             return [line2]
         if Zb.imag < -DELTA and is_top:
             return [line2]
@@ -188,3 +188,12 @@ def split_line(self, Z1, Z2, is_top=True):
             if line3:
                 line_list.append(line3)
             return line_list
+        # Begin on cutting line
+        if Ze.imag > DELTA and is_top:
+            return [line3]
+        if Ze.imag > DELTA and not is_top:
+            return [line2]
+        if Ze.imag < -DELTA and is_top:
+            return [line2]
+        if Ze.imag < -DELTA and not is_top:
+            return [line3]
