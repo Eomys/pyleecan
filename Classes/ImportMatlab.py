@@ -2,11 +2,17 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Import import Import
 
-from pyleecan.Methods.Import.ImportMatlab.get_data import get_data
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Import.ImportMatlab.get_data import get_data
+except ImportError as error:
+    get_data = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -17,7 +23,14 @@ class ImportMatlab(Import):
     VERSION = 1
 
     # cf Methods.Import.ImportMatlab.get_data
-    get_data = get_data
+    if isinstance(get_data, ImportError):
+        get_data = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ImportMatlab method get_data: " + str(get_data))
+            )
+        )
+    else:
+        get_data = get_data
     # save method is available in all object
     save = save
 

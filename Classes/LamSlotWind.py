@@ -2,24 +2,74 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.LamSlot import LamSlot
 
-from pyleecan.Methods.Machine.LamSlotWind.build_geometry import build_geometry
-from pyleecan.Methods.Machine.LamSlotWind.check import check
-from pyleecan.Methods.Machine.LamSlotWind.comp_masses import comp_masses
-from pyleecan.Methods.Machine.LamSlotWind.comp_surfaces import comp_surfaces
-from pyleecan.Methods.Machine.LamSlotWind.comp_volumes import comp_volumes
-from pyleecan.Methods.Machine.LamSlotWind.get_pole_pair_number import (
-    get_pole_pair_number,
-)
-from pyleecan.Methods.Machine.LamSlotWind.get_name_phase import get_name_phase
-from pyleecan.Methods.Machine.LamSlotWind.plot import plot
-from pyleecan.Methods.Machine.LamSlotWind.plot_winding import plot_winding
-from pyleecan.Methods.Machine.LamSlotWind.comp_fill_factor import comp_fill_factor
-from pyleecan.Methods.Machine.LamSlotWind.comp_output_geo import comp_output_geo
-from pyleecan.Methods.Machine.LamSlotWind.get_polar_eq import get_polar_eq
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.LamSlotWind.build_geometry import build_geometry
+except ImportError as error:
+    build_geometry = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotWind.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotWind.comp_masses import comp_masses
+except ImportError as error:
+    comp_masses = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotWind.comp_surfaces import comp_surfaces
+except ImportError as error:
+    comp_surfaces = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotWind.comp_volumes import comp_volumes
+except ImportError as error:
+    comp_volumes = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotWind.get_pole_pair_number import (
+        get_pole_pair_number,
+    )
+except ImportError as error:
+    get_pole_pair_number = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotWind.get_name_phase import get_name_phase
+except ImportError as error:
+    get_name_phase = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotWind.plot import plot
+except ImportError as error:
+    plot = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotWind.plot_winding import plot_winding
+except ImportError as error:
+    plot_winding = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotWind.comp_fill_factor import comp_fill_factor
+except ImportError as error:
+    comp_fill_factor = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotWind.comp_output_geo import comp_output_geo
+except ImportError as error:
+    comp_output_geo = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotWind.get_polar_eq import get_polar_eq
+except ImportError as error:
+    get_polar_eq = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Winding import Winding
@@ -34,30 +84,140 @@ class LamSlotWind(LamSlot):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.LamSlotWind.build_geometry
-    build_geometry = build_geometry
+    if isinstance(build_geometry, ImportError):
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method build_geometry: "
+                    + str(build_geometry)
+                )
+            )
+        )
+    else:
+        build_geometry = build_geometry
     # cf Methods.Machine.LamSlotWind.check
-    check = check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlotWind method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # cf Methods.Machine.LamSlotWind.comp_masses
-    comp_masses = comp_masses
+    if isinstance(comp_masses, ImportError):
+        comp_masses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_masses: " + str(comp_masses)
+                )
+            )
+        )
+    else:
+        comp_masses = comp_masses
     # cf Methods.Machine.LamSlotWind.comp_surfaces
-    comp_surfaces = comp_surfaces
+    if isinstance(comp_surfaces, ImportError):
+        comp_surfaces = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_surfaces: " + str(comp_surfaces)
+                )
+            )
+        )
+    else:
+        comp_surfaces = comp_surfaces
     # cf Methods.Machine.LamSlotWind.comp_volumes
-    comp_volumes = comp_volumes
+    if isinstance(comp_volumes, ImportError):
+        comp_volumes = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_volumes: " + str(comp_volumes)
+                )
+            )
+        )
+    else:
+        comp_volumes = comp_volumes
     # cf Methods.Machine.LamSlotWind.get_pole_pair_number
-    get_pole_pair_number = get_pole_pair_number
+    if isinstance(get_pole_pair_number, ImportError):
+        get_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method get_pole_pair_number: "
+                    + str(get_pole_pair_number)
+                )
+            )
+        )
+    else:
+        get_pole_pair_number = get_pole_pair_number
     # cf Methods.Machine.LamSlotWind.get_name_phase
-    get_name_phase = get_name_phase
+    if isinstance(get_name_phase, ImportError):
+        get_name_phase = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method get_name_phase: "
+                    + str(get_name_phase)
+                )
+            )
+        )
+    else:
+        get_name_phase = get_name_phase
     # cf Methods.Machine.LamSlotWind.plot
-    plot = plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlotWind method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # cf Methods.Machine.LamSlotWind.plot_winding
-    plot_winding = plot_winding
+    if isinstance(plot_winding, ImportError):
+        plot_winding = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method plot_winding: " + str(plot_winding)
+                )
+            )
+        )
+    else:
+        plot_winding = plot_winding
     # cf Methods.Machine.LamSlotWind.comp_fill_factor
-    comp_fill_factor = comp_fill_factor
+    if isinstance(comp_fill_factor, ImportError):
+        comp_fill_factor = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_fill_factor: "
+                    + str(comp_fill_factor)
+                )
+            )
+        )
+    else:
+        comp_fill_factor = comp_fill_factor
     # cf Methods.Machine.LamSlotWind.comp_output_geo
-    comp_output_geo = comp_output_geo
+    if isinstance(comp_output_geo, ImportError):
+        comp_output_geo = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_output_geo: "
+                    + str(comp_output_geo)
+                )
+            )
+        )
+    else:
+        comp_output_geo = comp_output_geo
     # cf Methods.Machine.LamSlotWind.get_polar_eq
-    get_polar_eq = get_polar_eq
+    if isinstance(get_polar_eq, ImportError):
+        get_polar_eq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method get_polar_eq: " + str(get_polar_eq)
+                )
+            )
+        )
+    else:
+        get_polar_eq = get_polar_eq
     # save method is available in all object
     save = save
 

@@ -2,14 +2,34 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 
-from pyleecan.Methods.Machine.LamSquirrelCage.build_geometry import build_geometry
-from pyleecan.Methods.Machine.LamSquirrelCage.check import check
-from pyleecan.Methods.Machine.LamSquirrelCage.comp_length_ring import comp_length_ring
-from pyleecan.Methods.Machine.LamSquirrelCage.plot import plot
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.LamSquirrelCage.build_geometry import build_geometry
+except ImportError as error:
+    build_geometry = error
+
+try:
+    from pyleecan.Methods.Machine.LamSquirrelCage.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from pyleecan.Methods.Machine.LamSquirrelCage.comp_length_ring import (
+        comp_length_ring,
+    )
+except ImportError as error:
+    comp_length_ring = error
+
+try:
+    from pyleecan.Methods.Machine.LamSquirrelCage.plot import plot
+except ImportError as error:
+    plot = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
@@ -24,14 +44,49 @@ class LamSquirrelCage(LamSlotWind):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.LamSquirrelCage.build_geometry
-    build_geometry = build_geometry
+    if isinstance(build_geometry, ImportError):
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method build_geometry: "
+                    + str(build_geometry)
+                )
+            )
+        )
+    else:
+        build_geometry = build_geometry
     # cf Methods.Machine.LamSquirrelCage.check
-    check = check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSquirrelCage method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # cf Methods.Machine.LamSquirrelCage.comp_length_ring
-    comp_length_ring = comp_length_ring
+    if isinstance(comp_length_ring, ImportError):
+        comp_length_ring = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_length_ring: "
+                    + str(comp_length_ring)
+                )
+            )
+        )
+    else:
+        comp_length_ring = comp_length_ring
     # cf Methods.Machine.LamSquirrelCage.plot
-    plot = plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSquirrelCage method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # save method is available in all object
     save = save
 

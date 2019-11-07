@@ -2,15 +2,37 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Slot import Slot
 
-from pyleecan.Methods.Slot.SlotWind.comp_angle_wind_eq import comp_angle_wind_eq
-from pyleecan.Methods.Slot.SlotWind.comp_height_wind import comp_height_wind
-from pyleecan.Methods.Slot.SlotWind.comp_radius_mid_wind import comp_radius_mid_wind
-from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
-from pyleecan.Methods.Slot.SlotWind.plot_wind import plot_wind
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Slot.SlotWind.comp_angle_wind_eq import comp_angle_wind_eq
+except ImportError as error:
+    comp_angle_wind_eq = error
+
+try:
+    from pyleecan.Methods.Slot.SlotWind.comp_height_wind import comp_height_wind
+except ImportError as error:
+    comp_height_wind = error
+
+try:
+    from pyleecan.Methods.Slot.SlotWind.comp_radius_mid_wind import comp_radius_mid_wind
+except ImportError as error:
+    comp_radius_mid_wind = error
+
+try:
+    from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+except ImportError as error:
+    comp_surface_wind = error
+
+try:
+    from pyleecan.Methods.Slot.SlotWind.plot_wind import plot_wind
+except ImportError as error:
+    plot_wind = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -20,16 +42,64 @@ class SlotWind(Slot):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.SlotWind.comp_angle_wind_eq
-    comp_angle_wind_eq = comp_angle_wind_eq
+    if isinstance(comp_angle_wind_eq, ImportError):
+        comp_angle_wind_eq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotWind method comp_angle_wind_eq: "
+                    + str(comp_angle_wind_eq)
+                )
+            )
+        )
+    else:
+        comp_angle_wind_eq = comp_angle_wind_eq
     # cf Methods.Slot.SlotWind.comp_height_wind
-    comp_height_wind = comp_height_wind
+    if isinstance(comp_height_wind, ImportError):
+        comp_height_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotWind method comp_height_wind: "
+                    + str(comp_height_wind)
+                )
+            )
+        )
+    else:
+        comp_height_wind = comp_height_wind
     # cf Methods.Slot.SlotWind.comp_radius_mid_wind
-    comp_radius_mid_wind = comp_radius_mid_wind
+    if isinstance(comp_radius_mid_wind, ImportError):
+        comp_radius_mid_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotWind method comp_radius_mid_wind: "
+                    + str(comp_radius_mid_wind)
+                )
+            )
+        )
+    else:
+        comp_radius_mid_wind = comp_radius_mid_wind
     # cf Methods.Slot.SlotWind.comp_surface_wind
-    comp_surface_wind = comp_surface_wind
+    if isinstance(comp_surface_wind, ImportError):
+        comp_surface_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotWind method comp_surface_wind: "
+                    + str(comp_surface_wind)
+                )
+            )
+        )
+    else:
+        comp_surface_wind = comp_surface_wind
     # cf Methods.Slot.SlotWind.plot_wind
-    plot_wind = plot_wind
+    if isinstance(plot_wind, ImportError):
+        plot_wind = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotWind method plot_wind: " + str(plot_wind))
+            )
+        )
+    else:
+        plot_wind = plot_wind
     # save method is available in all object
     save = save
 

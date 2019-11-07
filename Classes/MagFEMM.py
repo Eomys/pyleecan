@@ -2,13 +2,27 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Magnetics import Magnetics
 
-from pyleecan.Methods.Simulation.MagFEMM.comp_flux_airgap import comp_flux_airgap
-from pyleecan.Methods.Simulation.MagFEMM.get_path_save import get_path_save
-from pyleecan.Methods.Simulation.MagFEMM.solve_FEMM import solve_FEMM
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Simulation.MagFEMM.comp_flux_airgap import comp_flux_airgap
+except ImportError as error:
+    comp_flux_airgap = error
+
+try:
+    from pyleecan.Methods.Simulation.MagFEMM.get_path_save import get_path_save
+except ImportError as error:
+    get_path_save = error
+
+try:
+    from pyleecan.Methods.Simulation.MagFEMM.solve_FEMM import solve_FEMM
+except ImportError as error:
+    solve_FEMM = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -18,12 +32,39 @@ class MagFEMM(Magnetics):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.MagFEMM.comp_flux_airgap
-    comp_flux_airgap = comp_flux_airgap
+    if isinstance(comp_flux_airgap, ImportError):
+        comp_flux_airgap = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method comp_flux_airgap: "
+                    + str(comp_flux_airgap)
+                )
+            )
+        )
+    else:
+        comp_flux_airgap = comp_flux_airgap
     # cf Methods.Simulation.MagFEMM.get_path_save
-    get_path_save = get_path_save
+    if isinstance(get_path_save, ImportError):
+        get_path_save = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method get_path_save: " + str(get_path_save)
+                )
+            )
+        )
+    else:
+        get_path_save = get_path_save
     # cf Methods.Simulation.MagFEMM.solve_FEMM
-    solve_FEMM = solve_FEMM
+    if isinstance(solve_FEMM, ImportError):
+        solve_FEMM = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MagFEMM method solve_FEMM: " + str(solve_FEMM))
+            )
+        )
+    else:
+        solve_FEMM = solve_FEMM
     # save method is available in all object
     save = save
 

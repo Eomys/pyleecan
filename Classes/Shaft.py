@@ -2,13 +2,27 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from pyleecan.Methods.Machine.Shaft.build_geometry import build_geometry
-from pyleecan.Methods.Machine.Shaft.comp_mass import comp_mass
-from pyleecan.Methods.Machine.Shaft.plot import plot
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.Shaft.build_geometry import build_geometry
+except ImportError as error:
+    build_geometry = error
+
+try:
+    from pyleecan.Methods.Machine.Shaft.comp_mass import comp_mass
+except ImportError as error:
+    comp_mass = error
+
+try:
+    from pyleecan.Methods.Machine.Shaft.plot import plot
+except ImportError as error:
+    plot = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
@@ -19,12 +33,36 @@ class Shaft(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.Shaft.build_geometry
-    build_geometry = build_geometry
+    if isinstance(build_geometry, ImportError):
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Shaft method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
+    else:
+        build_geometry = build_geometry
     # cf Methods.Machine.Shaft.comp_mass
-    comp_mass = comp_mass
+    if isinstance(comp_mass, ImportError):
+        comp_mass = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Shaft method comp_mass: " + str(comp_mass))
+            )
+        )
+    else:
+        comp_mass = comp_mass
     # cf Methods.Machine.Shaft.plot
-    plot = plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Shaft method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # save method is available in all object
     save = save
 

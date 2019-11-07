@@ -2,29 +2,99 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from pyleecan.Methods.Machine.Lamination.build_geometry import build_geometry
-from pyleecan.Methods.Machine.Lamination.check import check
-from pyleecan.Methods.Machine.Lamination.comp_length import comp_length
-from pyleecan.Methods.Machine.Lamination.comp_masses import comp_masses
-from pyleecan.Methods.Machine.Lamination.comp_radius_mec import comp_radius_mec
-from pyleecan.Methods.Machine.Lamination.comp_surface_axial_vent import (
-    comp_surface_axial_vent,
-)
-from pyleecan.Methods.Machine.Lamination.comp_surfaces import comp_surfaces
-from pyleecan.Methods.Machine.Lamination.comp_volumes import comp_volumes
-from pyleecan.Methods.Machine.Lamination.get_bore_line import get_bore_line
-from pyleecan.Methods.Machine.Lamination.get_Rbo import get_Rbo
-from pyleecan.Methods.Machine.Lamination.get_Ryoke import get_Ryoke
-from pyleecan.Methods.Machine.Lamination.get_name_phase import get_name_phase
-from pyleecan.Methods.Machine.Lamination.plot import plot
-from pyleecan.Methods.Machine.Lamination.comp_output_geo import comp_output_geo
-from pyleecan.Methods.Machine.Lamination.get_polar_eq import get_polar_eq
-from pyleecan.Methods.Machine.Lamination.is_outwards import is_outwards
-from pyleecan.Methods.Machine.Lamination.comp_height_yoke import comp_height_yoke
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.Lamination.build_geometry import build_geometry
+except ImportError as error:
+    build_geometry = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.comp_length import comp_length
+except ImportError as error:
+    comp_length = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.comp_masses import comp_masses
+except ImportError as error:
+    comp_masses = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.comp_radius_mec import comp_radius_mec
+except ImportError as error:
+    comp_radius_mec = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.comp_surface_axial_vent import (
+        comp_surface_axial_vent,
+    )
+except ImportError as error:
+    comp_surface_axial_vent = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.comp_surfaces import comp_surfaces
+except ImportError as error:
+    comp_surfaces = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.comp_volumes import comp_volumes
+except ImportError as error:
+    comp_volumes = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.get_bore_line import get_bore_line
+except ImportError as error:
+    get_bore_line = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.get_Rbo import get_Rbo
+except ImportError as error:
+    get_Rbo = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.get_Ryoke import get_Ryoke
+except ImportError as error:
+    get_Ryoke = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.get_name_phase import get_name_phase
+except ImportError as error:
+    get_name_phase = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.plot import plot
+except ImportError as error:
+    plot = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.comp_output_geo import comp_output_geo
+except ImportError as error:
+    comp_output_geo = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.get_polar_eq import get_polar_eq
+except ImportError as error:
+    get_polar_eq = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.is_outwards import is_outwards
+except ImportError as error:
+    is_outwards = error
+
+try:
+    from pyleecan.Methods.Machine.Lamination.comp_height_yoke import comp_height_yoke
+except ImportError as error:
+    comp_height_yoke = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
@@ -37,40 +107,190 @@ class Lamination(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.Lamination.build_geometry
-    build_geometry = build_geometry
+    if isinstance(build_geometry, ImportError):
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
+    else:
+        build_geometry = build_geometry
     # cf Methods.Machine.Lamination.check
-    check = check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Lamination method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # cf Methods.Machine.Lamination.comp_length
-    comp_length = comp_length
+    if isinstance(comp_length, ImportError):
+        comp_length = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_length: " + str(comp_length)
+                )
+            )
+        )
+    else:
+        comp_length = comp_length
     # cf Methods.Machine.Lamination.comp_masses
-    comp_masses = comp_masses
+    if isinstance(comp_masses, ImportError):
+        comp_masses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_masses: " + str(comp_masses)
+                )
+            )
+        )
+    else:
+        comp_masses = comp_masses
     # cf Methods.Machine.Lamination.comp_radius_mec
-    comp_radius_mec = comp_radius_mec
+    if isinstance(comp_radius_mec, ImportError):
+        comp_radius_mec = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_radius_mec: "
+                    + str(comp_radius_mec)
+                )
+            )
+        )
+    else:
+        comp_radius_mec = comp_radius_mec
     # cf Methods.Machine.Lamination.comp_surface_axial_vent
-    comp_surface_axial_vent = comp_surface_axial_vent
+    if isinstance(comp_surface_axial_vent, ImportError):
+        comp_surface_axial_vent = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_surface_axial_vent: "
+                    + str(comp_surface_axial_vent)
+                )
+            )
+        )
+    else:
+        comp_surface_axial_vent = comp_surface_axial_vent
     # cf Methods.Machine.Lamination.comp_surfaces
-    comp_surfaces = comp_surfaces
+    if isinstance(comp_surfaces, ImportError):
+        comp_surfaces = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_surfaces: " + str(comp_surfaces)
+                )
+            )
+        )
+    else:
+        comp_surfaces = comp_surfaces
     # cf Methods.Machine.Lamination.comp_volumes
-    comp_volumes = comp_volumes
+    if isinstance(comp_volumes, ImportError):
+        comp_volumes = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_volumes: " + str(comp_volumes)
+                )
+            )
+        )
+    else:
+        comp_volumes = comp_volumes
     # cf Methods.Machine.Lamination.get_bore_line
-    get_bore_line = get_bore_line
+    if isinstance(get_bore_line, ImportError):
+        get_bore_line = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_bore_line: " + str(get_bore_line)
+                )
+            )
+        )
+    else:
+        get_bore_line = get_bore_line
     # cf Methods.Machine.Lamination.get_Rbo
-    get_Rbo = get_Rbo
+    if isinstance(get_Rbo, ImportError):
+        get_Rbo = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Lamination method get_Rbo: " + str(get_Rbo))
+            )
+        )
+    else:
+        get_Rbo = get_Rbo
     # cf Methods.Machine.Lamination.get_Ryoke
-    get_Ryoke = get_Ryoke
+    if isinstance(get_Ryoke, ImportError):
+        get_Ryoke = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Lamination method get_Ryoke: " + str(get_Ryoke))
+            )
+        )
+    else:
+        get_Ryoke = get_Ryoke
     # cf Methods.Machine.Lamination.get_name_phase
-    get_name_phase = get_name_phase
+    if isinstance(get_name_phase, ImportError):
+        get_name_phase = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_name_phase: " + str(get_name_phase)
+                )
+            )
+        )
+    else:
+        get_name_phase = get_name_phase
     # cf Methods.Machine.Lamination.plot
-    plot = plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Lamination method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # cf Methods.Machine.Lamination.comp_output_geo
-    comp_output_geo = comp_output_geo
+    if isinstance(comp_output_geo, ImportError):
+        comp_output_geo = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_output_geo: "
+                    + str(comp_output_geo)
+                )
+            )
+        )
+    else:
+        comp_output_geo = comp_output_geo
     # cf Methods.Machine.Lamination.get_polar_eq
-    get_polar_eq = get_polar_eq
+    if isinstance(get_polar_eq, ImportError):
+        get_polar_eq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_polar_eq: " + str(get_polar_eq)
+                )
+            )
+        )
+    else:
+        get_polar_eq = get_polar_eq
     # cf Methods.Machine.Lamination.is_outwards
-    is_outwards = is_outwards
+    if isinstance(is_outwards, ImportError):
+        is_outwards = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method is_outwards: " + str(is_outwards)
+                )
+            )
+        )
+    else:
+        is_outwards = is_outwards
     # cf Methods.Machine.Lamination.comp_height_yoke
-    comp_height_yoke = comp_height_yoke
+    if isinstance(comp_height_yoke, ImportError):
+        comp_height_yoke = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_height_yoke: "
+                    + str(comp_height_yoke)
+                )
+            )
+        )
+    else:
+        comp_height_yoke = comp_height_yoke
     # save method is available in all object
     save = save
 

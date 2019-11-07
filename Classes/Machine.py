@@ -2,23 +2,73 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from pyleecan.Methods.Machine.Machine.build_geometry import build_geometry
-from pyleecan.Methods.Machine.Machine.check import check
-from pyleecan.Methods.Machine.Machine.comp_masses import comp_masses
-from pyleecan.Methods.Machine.Machine.comp_width_airgap_mag import comp_width_airgap_mag
-from pyleecan.Methods.Machine.Machine.comp_width_airgap_mec import comp_width_airgap_mec
-from pyleecan.Methods.Machine.Machine.get_lamination import get_lamination
-from pyleecan.Methods.Machine.Machine.comp_Rgap_mec import comp_Rgap_mec
-from pyleecan.Methods.Machine.Machine.plot import plot
-from pyleecan.Methods.Machine.Machine.comp_output_geo import comp_output_geo
-from pyleecan.Methods.Machine.Machine.comp_length_airgap_active import (
-    comp_length_airgap_active,
-)
-from pyleecan.Methods.Machine.Machine.get_polar_eq import get_polar_eq
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.Machine.build_geometry import build_geometry
+except ImportError as error:
+    build_geometry = error
+
+try:
+    from pyleecan.Methods.Machine.Machine.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from pyleecan.Methods.Machine.Machine.comp_masses import comp_masses
+except ImportError as error:
+    comp_masses = error
+
+try:
+    from pyleecan.Methods.Machine.Machine.comp_width_airgap_mag import (
+        comp_width_airgap_mag,
+    )
+except ImportError as error:
+    comp_width_airgap_mag = error
+
+try:
+    from pyleecan.Methods.Machine.Machine.comp_width_airgap_mec import (
+        comp_width_airgap_mec,
+    )
+except ImportError as error:
+    comp_width_airgap_mec = error
+
+try:
+    from pyleecan.Methods.Machine.Machine.get_lamination import get_lamination
+except ImportError as error:
+    get_lamination = error
+
+try:
+    from pyleecan.Methods.Machine.Machine.comp_Rgap_mec import comp_Rgap_mec
+except ImportError as error:
+    comp_Rgap_mec = error
+
+try:
+    from pyleecan.Methods.Machine.Machine.plot import plot
+except ImportError as error:
+    plot = error
+
+try:
+    from pyleecan.Methods.Machine.Machine.comp_output_geo import comp_output_geo
+except ImportError as error:
+    comp_output_geo = error
+
+try:
+    from pyleecan.Methods.Machine.Machine.comp_length_airgap_active import (
+        comp_length_airgap_active,
+    )
+except ImportError as error:
+    comp_length_airgap_active = error
+
+try:
+    from pyleecan.Methods.Machine.Machine.get_polar_eq import get_polar_eq
+except ImportError as error:
+    get_polar_eq = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Lamination import Lamination
@@ -31,28 +81,125 @@ class Machine(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.Machine.build_geometry
-    build_geometry = build_geometry
+    if isinstance(build_geometry, ImportError):
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
+    else:
+        build_geometry = build_geometry
     # cf Methods.Machine.Machine.check
-    check = check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Machine method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # cf Methods.Machine.Machine.comp_masses
-    comp_masses = comp_masses
+    if isinstance(comp_masses, ImportError):
+        comp_masses = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Machine method comp_masses: " + str(comp_masses))
+            )
+        )
+    else:
+        comp_masses = comp_masses
     # cf Methods.Machine.Machine.comp_width_airgap_mag
-    comp_width_airgap_mag = comp_width_airgap_mag
+    if isinstance(comp_width_airgap_mag, ImportError):
+        comp_width_airgap_mag = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method comp_width_airgap_mag: "
+                    + str(comp_width_airgap_mag)
+                )
+            )
+        )
+    else:
+        comp_width_airgap_mag = comp_width_airgap_mag
     # cf Methods.Machine.Machine.comp_width_airgap_mec
-    comp_width_airgap_mec = comp_width_airgap_mec
+    if isinstance(comp_width_airgap_mec, ImportError):
+        comp_width_airgap_mec = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method comp_width_airgap_mec: "
+                    + str(comp_width_airgap_mec)
+                )
+            )
+        )
+    else:
+        comp_width_airgap_mec = comp_width_airgap_mec
     # cf Methods.Machine.Machine.get_lamination
-    get_lamination = get_lamination
+    if isinstance(get_lamination, ImportError):
+        get_lamination = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lamination: " + str(get_lamination)
+                )
+            )
+        )
+    else:
+        get_lamination = get_lamination
     # cf Methods.Machine.Machine.comp_Rgap_mec
-    comp_Rgap_mec = comp_Rgap_mec
+    if isinstance(comp_Rgap_mec, ImportError):
+        comp_Rgap_mec = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method comp_Rgap_mec: " + str(comp_Rgap_mec)
+                )
+            )
+        )
+    else:
+        comp_Rgap_mec = comp_Rgap_mec
     # cf Methods.Machine.Machine.plot
-    plot = plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Machine method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # cf Methods.Machine.Machine.comp_output_geo
-    comp_output_geo = comp_output_geo
+    if isinstance(comp_output_geo, ImportError):
+        comp_output_geo = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method comp_output_geo: " + str(comp_output_geo)
+                )
+            )
+        )
+    else:
+        comp_output_geo = comp_output_geo
     # cf Methods.Machine.Machine.comp_length_airgap_active
-    comp_length_airgap_active = comp_length_airgap_active
+    if isinstance(comp_length_airgap_active, ImportError):
+        comp_length_airgap_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method comp_length_airgap_active: "
+                    + str(comp_length_airgap_active)
+                )
+            )
+        )
+    else:
+        comp_length_airgap_active = comp_length_airgap_active
     # cf Methods.Machine.Machine.get_polar_eq
-    get_polar_eq = get_polar_eq
+    if isinstance(get_polar_eq, ImportError):
+        get_polar_eq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_polar_eq: " + str(get_polar_eq)
+                )
+            )
+        )
+    else:
+        get_polar_eq = get_polar_eq
     # save method is available in all object
     save = save
 

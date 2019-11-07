@@ -2,11 +2,17 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Machine import Machine
 
-from pyleecan.Methods.Machine.MachineAsync.is_synchronous import is_synchronous
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.MachineAsync.is_synchronous import is_synchronous
+except ImportError as error:
+    is_synchronous = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Lamination import Lamination
@@ -20,7 +26,17 @@ class MachineAsync(Machine):
     VERSION = 1
 
     # cf Methods.Machine.MachineAsync.is_synchronous
-    is_synchronous = is_synchronous
+    if isinstance(is_synchronous, ImportError):
+        is_synchronous = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MachineAsync method is_synchronous: "
+                    + str(is_synchronous)
+                )
+            )
+        )
+    else:
+        is_synchronous = is_synchronous
     # save method is available in all object
     save = save
 

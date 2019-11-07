@@ -2,17 +2,47 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.LamSlot import LamSlot
 
-from pyleecan.Methods.Machine.LamSlotMag.build_geometry import build_geometry
-from pyleecan.Methods.Machine.LamSlotMag.check import check
-from pyleecan.Methods.Machine.LamSlotMag.comp_masses import comp_masses
-from pyleecan.Methods.Machine.LamSlotMag.comp_radius_mec import comp_radius_mec
-from pyleecan.Methods.Machine.LamSlotMag.comp_surfaces import comp_surfaces
-from pyleecan.Methods.Machine.LamSlotMag.comp_volumes import comp_volumes
-from pyleecan.Methods.Machine.LamSlotMag.plot import plot
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.LamSlotMag.build_geometry import build_geometry
+except ImportError as error:
+    build_geometry = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotMag.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotMag.comp_masses import comp_masses
+except ImportError as error:
+    comp_masses = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotMag.comp_radius_mec import comp_radius_mec
+except ImportError as error:
+    comp_radius_mec = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotMag.comp_surfaces import comp_surfaces
+except ImportError as error:
+    comp_surfaces = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotMag.comp_volumes import comp_volumes
+except ImportError as error:
+    comp_volumes = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlotMag.plot import plot
+except ImportError as error:
+    plot = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
@@ -26,20 +56,81 @@ class LamSlotMag(LamSlot):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.LamSlotMag.build_geometry
-    build_geometry = build_geometry
+    if isinstance(build_geometry, ImportError):
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
+    else:
+        build_geometry = build_geometry
     # cf Methods.Machine.LamSlotMag.check
-    check = check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlotMag method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # cf Methods.Machine.LamSlotMag.comp_masses
-    comp_masses = comp_masses
+    if isinstance(comp_masses, ImportError):
+        comp_masses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method comp_masses: " + str(comp_masses)
+                )
+            )
+        )
+    else:
+        comp_masses = comp_masses
     # cf Methods.Machine.LamSlotMag.comp_radius_mec
-    comp_radius_mec = comp_radius_mec
+    if isinstance(comp_radius_mec, ImportError):
+        comp_radius_mec = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method comp_radius_mec: "
+                    + str(comp_radius_mec)
+                )
+            )
+        )
+    else:
+        comp_radius_mec = comp_radius_mec
     # cf Methods.Machine.LamSlotMag.comp_surfaces
-    comp_surfaces = comp_surfaces
+    if isinstance(comp_surfaces, ImportError):
+        comp_surfaces = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method comp_surfaces: " + str(comp_surfaces)
+                )
+            )
+        )
+    else:
+        comp_surfaces = comp_surfaces
     # cf Methods.Machine.LamSlotMag.comp_volumes
-    comp_volumes = comp_volumes
+    if isinstance(comp_volumes, ImportError):
+        comp_volumes = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method comp_volumes: " + str(comp_volumes)
+                )
+            )
+        )
+    else:
+        comp_volumes = comp_volumes
     # cf Methods.Machine.LamSlotMag.plot
-    plot = plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlotMag method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # save method is available in all object
     save = save
 

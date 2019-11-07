@@ -2,11 +2,17 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Input import Input
 
-from pyleecan.Methods.Simulation.InCurrent.gen_input import gen_input
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Simulation.InCurrent.gen_input import gen_input
+except ImportError as error:
+    gen_input = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Import import Import
@@ -18,7 +24,14 @@ class InCurrent(Input):
     VERSION = 1
 
     # cf Methods.Simulation.InCurrent.gen_input
-    gen_input = gen_input
+    if isinstance(gen_input, ImportError):
+        gen_input = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use InCurrent method gen_input: " + str(gen_input))
+            )
+        )
+    else:
+        gen_input = gen_input
     # save method is available in all object
     save = save
 

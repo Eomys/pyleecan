@@ -2,16 +2,42 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from pyleecan.Methods.Slot.Hole.comp_radius import comp_radius
-from pyleecan.Methods.Slot.Hole.comp_surface import comp_surface
-from pyleecan.Methods.Slot.Hole.get_is_stator import get_is_stator
-from pyleecan.Methods.Slot.Hole.get_Rbo import get_Rbo
-from pyleecan.Methods.Slot.Hole.has_magnet import has_magnet
-from pyleecan.Methods.Slot.Hole.plot import plot
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Slot.Hole.comp_radius import comp_radius
+except ImportError as error:
+    comp_radius = error
+
+try:
+    from pyleecan.Methods.Slot.Hole.comp_surface import comp_surface
+except ImportError as error:
+    comp_surface = error
+
+try:
+    from pyleecan.Methods.Slot.Hole.get_is_stator import get_is_stator
+except ImportError as error:
+    get_is_stator = error
+
+try:
+    from pyleecan.Methods.Slot.Hole.get_Rbo import get_Rbo
+except ImportError as error:
+    get_Rbo = error
+
+try:
+    from pyleecan.Methods.Slot.Hole.has_magnet import has_magnet
+except ImportError as error:
+    has_magnet = error
+
+try:
+    from pyleecan.Methods.Slot.Hole.plot import plot
+except ImportError as error:
+    plot = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
@@ -22,18 +48,63 @@ class Hole(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.Hole.comp_radius
-    comp_radius = comp_radius
+    if isinstance(comp_radius, ImportError):
+        comp_radius = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method comp_radius: " + str(comp_radius))
+            )
+        )
+    else:
+        comp_radius = comp_radius
     # cf Methods.Slot.Hole.comp_surface
-    comp_surface = comp_surface
+    if isinstance(comp_surface, ImportError):
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method comp_surface: " + str(comp_surface))
+            )
+        )
+    else:
+        comp_surface = comp_surface
     # cf Methods.Slot.Hole.get_is_stator
-    get_is_stator = get_is_stator
+    if isinstance(get_is_stator, ImportError):
+        get_is_stator = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Hole method get_is_stator: " + str(get_is_stator)
+                )
+            )
+        )
+    else:
+        get_is_stator = get_is_stator
     # cf Methods.Slot.Hole.get_Rbo
-    get_Rbo = get_Rbo
+    if isinstance(get_Rbo, ImportError):
+        get_Rbo = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method get_Rbo: " + str(get_Rbo))
+            )
+        )
+    else:
+        get_Rbo = get_Rbo
     # cf Methods.Slot.Hole.has_magnet
-    has_magnet = has_magnet
+    if isinstance(has_magnet, ImportError):
+        has_magnet = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method has_magnet: " + str(has_magnet))
+            )
+        )
+    else:
+        has_magnet = has_magnet
     # cf Methods.Slot.Hole.plot
-    plot = plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # save method is available in all object
     save = save
 

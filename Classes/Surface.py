@@ -2,13 +2,27 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from pyleecan.Methods.Geometry.Surface.comp_mesh_dict import comp_mesh_dict
-from pyleecan.Methods.Geometry.Surface.draw_FEMM import draw_FEMM
-from pyleecan.Methods.Geometry.Surface.plot import plot
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Geometry.Surface.comp_mesh_dict import comp_mesh_dict
+except ImportError as error:
+    comp_mesh_dict = error
+
+try:
+    from pyleecan.Methods.Geometry.Surface.draw_FEMM import draw_FEMM
+except ImportError as error:
+    draw_FEMM = error
+
+try:
+    from pyleecan.Methods.Geometry.Surface.plot import plot
+except ImportError as error:
+    plot = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -18,12 +32,36 @@ class Surface(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Geometry.Surface.comp_mesh_dict
-    comp_mesh_dict = comp_mesh_dict
+    if isinstance(comp_mesh_dict, ImportError):
+        comp_mesh_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Surface method comp_mesh_dict: " + str(comp_mesh_dict)
+                )
+            )
+        )
+    else:
+        comp_mesh_dict = comp_mesh_dict
     # cf Methods.Geometry.Surface.draw_FEMM
-    draw_FEMM = draw_FEMM
+    if isinstance(draw_FEMM, ImportError):
+        draw_FEMM = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Surface method draw_FEMM: " + str(draw_FEMM))
+            )
+        )
+    else:
+        draw_FEMM = draw_FEMM
     # cf Methods.Geometry.Surface.plot
-    plot = plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Surface method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # save method is available in all object
     save = save
 

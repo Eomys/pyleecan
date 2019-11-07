@@ -2,19 +2,49 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotMag import SlotMag
 
-from pyleecan.Methods.Slot.SlotMFlat.build_geometry import build_geometry
-from pyleecan.Methods.Slot.SlotMFlat.comp_angle_opening import comp_angle_opening
-from pyleecan.Methods.Slot.SlotMFlat.comp_angle_opening_magnet import (
-    comp_angle_opening_magnet,
-)
-from pyleecan.Methods.Slot.SlotMFlat.comp_height import comp_height
-from pyleecan.Methods.Slot.SlotMFlat.comp_surface import comp_surface
-from pyleecan.Methods.Slot.SlotMFlat.comp_W0m import comp_W0m
-from pyleecan.Methods.Slot.SlotMFlat.get_point_bottom import get_point_bottom
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Slot.SlotMFlat.build_geometry import build_geometry
+except ImportError as error:
+    build_geometry = error
+
+try:
+    from pyleecan.Methods.Slot.SlotMFlat.comp_angle_opening import comp_angle_opening
+except ImportError as error:
+    comp_angle_opening = error
+
+try:
+    from pyleecan.Methods.Slot.SlotMFlat.comp_angle_opening_magnet import (
+        comp_angle_opening_magnet,
+    )
+except ImportError as error:
+    comp_angle_opening_magnet = error
+
+try:
+    from pyleecan.Methods.Slot.SlotMFlat.comp_height import comp_height
+except ImportError as error:
+    comp_height = error
+
+try:
+    from pyleecan.Methods.Slot.SlotMFlat.comp_surface import comp_surface
+except ImportError as error:
+    comp_surface = error
+
+try:
+    from pyleecan.Methods.Slot.SlotMFlat.comp_W0m import comp_W0m
+except ImportError as error:
+    comp_W0m = error
+
+try:
+    from pyleecan.Methods.Slot.SlotMFlat.get_point_bottom import get_point_bottom
+except ImportError as error:
+    get_point_bottom = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.MagnetFlat import MagnetFlat
@@ -27,20 +57,85 @@ class SlotMFlat(SlotMag):
     IS_SYMMETRICAL = 1
     IS_INSET = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.SlotMFlat.build_geometry
-    build_geometry = build_geometry
+    if isinstance(build_geometry, ImportError):
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
+    else:
+        build_geometry = build_geometry
     # cf Methods.Slot.SlotMFlat.comp_angle_opening
-    comp_angle_opening = comp_angle_opening
+    if isinstance(comp_angle_opening, ImportError):
+        comp_angle_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat method comp_angle_opening: "
+                    + str(comp_angle_opening)
+                )
+            )
+        )
+    else:
+        comp_angle_opening = comp_angle_opening
     # cf Methods.Slot.SlotMFlat.comp_angle_opening_magnet
-    comp_angle_opening_magnet = comp_angle_opening_magnet
+    if isinstance(comp_angle_opening_magnet, ImportError):
+        comp_angle_opening_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat method comp_angle_opening_magnet: "
+                    + str(comp_angle_opening_magnet)
+                )
+            )
+        )
+    else:
+        comp_angle_opening_magnet = comp_angle_opening_magnet
     # cf Methods.Slot.SlotMFlat.comp_height
-    comp_height = comp_height
+    if isinstance(comp_height, ImportError):
+        comp_height = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat method comp_height: " + str(comp_height)
+                )
+            )
+        )
+    else:
+        comp_height = comp_height
     # cf Methods.Slot.SlotMFlat.comp_surface
-    comp_surface = comp_surface
+    if isinstance(comp_surface, ImportError):
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
+    else:
+        comp_surface = comp_surface
     # cf Methods.Slot.SlotMFlat.comp_W0m
-    comp_W0m = comp_W0m
+    if isinstance(comp_W0m, ImportError):
+        comp_W0m = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotMFlat method comp_W0m: " + str(comp_W0m))
+            )
+        )
+    else:
+        comp_W0m = comp_W0m
     # cf Methods.Slot.SlotMFlat.get_point_bottom
-    get_point_bottom = get_point_bottom
+    if isinstance(get_point_bottom, ImportError):
+        get_point_bottom = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat method get_point_bottom: "
+                    + str(get_point_bottom)
+                )
+            )
+        )
+    else:
+        get_point_bottom = get_point_bottom
     # save method is available in all object
     save = save
 

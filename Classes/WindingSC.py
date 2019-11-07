@@ -2,12 +2,24 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Winding import Winding
 
-from pyleecan.Methods.Machine.WindingSC.comp_connection_mat import comp_connection_mat
-from pyleecan.Methods.Machine.WindingSC.get_dim_wind import get_dim_wind
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.WindingSC.comp_connection_mat import (
+        comp_connection_mat,
+    )
+except ImportError as error:
+    comp_connection_mat = error
+
+try:
+    from pyleecan.Methods.Machine.WindingSC.get_dim_wind import get_dim_wind
+except ImportError as error:
+    get_dim_wind = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Conductor import Conductor
@@ -18,10 +30,30 @@ class WindingSC(Winding):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.WindingSC.comp_connection_mat
-    comp_connection_mat = comp_connection_mat
+    if isinstance(comp_connection_mat, ImportError):
+        comp_connection_mat = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use WindingSC method comp_connection_mat: "
+                    + str(comp_connection_mat)
+                )
+            )
+        )
+    else:
+        comp_connection_mat = comp_connection_mat
     # cf Methods.Machine.WindingSC.get_dim_wind
-    get_dim_wind = get_dim_wind
+    if isinstance(get_dim_wind, ImportError):
+        get_dim_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use WindingSC method get_dim_wind: " + str(get_dim_wind)
+                )
+            )
+        )
+    else:
+        get_dim_wind = get_dim_wind
     # save method is available in all object
     save = save
 

@@ -2,15 +2,37 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Hole import Hole
 
-from pyleecan.Methods.Slot.HoleM54.build_geometry import build_geometry
-from pyleecan.Methods.Slot.HoleM54.check import check
-from pyleecan.Methods.Slot.HoleM54.comp_radius import comp_radius
-from pyleecan.Methods.Slot.HoleM54.comp_surface import comp_surface
-from pyleecan.Methods.Slot.HoleM54.get_height_magnet import get_height_magnet
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Slot.HoleM54.build_geometry import build_geometry
+except ImportError as error:
+    build_geometry = error
+
+try:
+    from pyleecan.Methods.Slot.HoleM54.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from pyleecan.Methods.Slot.HoleM54.comp_radius import comp_radius
+except ImportError as error:
+    comp_radius = error
+
+try:
+    from pyleecan.Methods.Slot.HoleM54.comp_surface import comp_surface
+except ImportError as error:
+    comp_surface = error
+
+try:
+    from pyleecan.Methods.Slot.HoleM54.get_height_magnet import get_height_magnet
+except ImportError as error:
+    get_height_magnet = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
@@ -22,16 +44,59 @@ class HoleM54(Hole):
     VERSION = 1
     IS_SYMMETRICAL = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.HoleM54.build_geometry
-    build_geometry = build_geometry
+    if isinstance(build_geometry, ImportError):
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM54 method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
+    else:
+        build_geometry = build_geometry
     # cf Methods.Slot.HoleM54.check
-    check = check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleM54 method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # cf Methods.Slot.HoleM54.comp_radius
-    comp_radius = comp_radius
+    if isinstance(comp_radius, ImportError):
+        comp_radius = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleM54 method comp_radius: " + str(comp_radius))
+            )
+        )
+    else:
+        comp_radius = comp_radius
     # cf Methods.Slot.HoleM54.comp_surface
-    comp_surface = comp_surface
+    if isinstance(comp_surface, ImportError):
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM54 method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
+    else:
+        comp_surface = comp_surface
     # cf Methods.Slot.HoleM54.get_height_magnet
-    get_height_magnet = get_height_magnet
+    if isinstance(get_height_magnet, ImportError):
+        get_height_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM54 method get_height_magnet: "
+                    + str(get_height_magnet)
+                )
+            )
+        )
+    else:
+        get_height_magnet = get_height_magnet
     # save method is available in all object
     save = save
 

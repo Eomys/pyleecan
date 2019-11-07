@@ -2,12 +2,24 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Conductor import Conductor
 
-from pyleecan.Methods.Machine.CondType22.comp_surface_active import comp_surface_active
-from pyleecan.Methods.Machine.CondType22.comp_surface import comp_surface
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.CondType22.comp_surface_active import (
+        comp_surface_active,
+    )
+except ImportError as error:
+    comp_surface_active = error
+
+try:
+    from pyleecan.Methods.Machine.CondType22.comp_surface import comp_surface
+except ImportError as error:
+    comp_surface = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
@@ -18,10 +30,30 @@ class CondType22(Conductor):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.CondType22.comp_surface_active
-    comp_surface_active = comp_surface_active
+    if isinstance(comp_surface_active, ImportError):
+        comp_surface_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType22 method comp_surface_active: "
+                    + str(comp_surface_active)
+                )
+            )
+        )
+    else:
+        comp_surface_active = comp_surface_active
     # cf Methods.Machine.CondType22.comp_surface
-    comp_surface = comp_surface
+    if isinstance(comp_surface, ImportError):
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType22 method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
+    else:
+        comp_surface = comp_surface
     # save method is available in all object
     save = save
 

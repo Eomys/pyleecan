@@ -2,11 +2,17 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import set_array, check_init_dict, check_var
+from pyleecan.Classes.check import set_array, check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Notch import Notch
 
-from pyleecan.Methods.Machine.NotchEvenDist.build_geometry import build_geometry
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.NotchEvenDist.build_geometry import build_geometry
+except ImportError as error:
+    build_geometry = error
+
 
 from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -19,7 +25,17 @@ class NotchEvenDist(Notch):
     VERSION = 1
 
     # cf Methods.Machine.NotchEvenDist.build_geometry
-    build_geometry = build_geometry
+    if isinstance(build_geometry, ImportError):
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use NotchEvenDist method build_geometry: "
+                    + str(build_geometry)
+                )
+            )
+        )
+    else:
+        build_geometry = build_geometry
     # save method is available in all object
     save = save
 

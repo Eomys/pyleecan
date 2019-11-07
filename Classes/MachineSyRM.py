@@ -2,12 +2,22 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.MachineSync import MachineSync
 
-from pyleecan.Methods.Machine.MachineSyRM.check import check
-from pyleecan.Methods.Machine.MachineSyRM.get_machine_type import get_machine_type
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.MachineSyRM.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from pyleecan.Methods.Machine.MachineSyRM.get_machine_type import get_machine_type
+except ImportError as error:
+    get_machine_type = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Lamination import Lamination
@@ -20,10 +30,28 @@ class MachineSyRM(MachineSync):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.MachineSyRM.check
-    check = check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MachineSyRM method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # cf Methods.Machine.MachineSyRM.get_machine_type
-    get_machine_type = get_machine_type
+    if isinstance(get_machine_type, ImportError):
+        get_machine_type = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MachineSyRM method get_machine_type: "
+                    + str(get_machine_type)
+                )
+            )
+        )
+    else:
+        get_machine_type = get_machine_type
     # save method is available in all object
     save = save
 

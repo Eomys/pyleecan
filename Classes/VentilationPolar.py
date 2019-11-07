@@ -2,15 +2,37 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Hole import Hole
 
-from pyleecan.Methods.Slot.VentilationPolar.build_geometry import build_geometry
-from pyleecan.Methods.Slot.VentilationPolar.check import check
-from pyleecan.Methods.Slot.VentilationPolar.comp_radius import comp_radius
-from pyleecan.Methods.Slot.VentilationPolar.comp_surface import comp_surface
-from pyleecan.Methods.Slot.VentilationPolar.get_center import get_center
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Slot.VentilationPolar.build_geometry import build_geometry
+except ImportError as error:
+    build_geometry = error
+
+try:
+    from pyleecan.Methods.Slot.VentilationPolar.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from pyleecan.Methods.Slot.VentilationPolar.comp_radius import comp_radius
+except ImportError as error:
+    comp_radius = error
+
+try:
+    from pyleecan.Methods.Slot.VentilationPolar.comp_surface import comp_surface
+except ImportError as error:
+    comp_surface = error
+
+try:
+    from pyleecan.Methods.Slot.VentilationPolar.get_center import get_center
+except ImportError as error:
+    get_center = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
@@ -21,16 +43,62 @@ class VentilationPolar(Hole):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.VentilationPolar.build_geometry
-    build_geometry = build_geometry
+    if isinstance(build_geometry, ImportError):
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VentilationPolar method build_geometry: "
+                    + str(build_geometry)
+                )
+            )
+        )
+    else:
+        build_geometry = build_geometry
     # cf Methods.Slot.VentilationPolar.check
-    check = check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use VentilationPolar method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # cf Methods.Slot.VentilationPolar.comp_radius
-    comp_radius = comp_radius
+    if isinstance(comp_radius, ImportError):
+        comp_radius = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VentilationPolar method comp_radius: " + str(comp_radius)
+                )
+            )
+        )
+    else:
+        comp_radius = comp_radius
     # cf Methods.Slot.VentilationPolar.comp_surface
-    comp_surface = comp_surface
+    if isinstance(comp_surface, ImportError):
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VentilationPolar method comp_surface: "
+                    + str(comp_surface)
+                )
+            )
+        )
+    else:
+        comp_surface = comp_surface
     # cf Methods.Slot.VentilationPolar.get_center
-    get_center = get_center
+    if isinstance(get_center, ImportError):
+        get_center = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VentilationPolar method get_center: " + str(get_center)
+                )
+            )
+        )
+    else:
+        get_center = get_center
     # save method is available in all object
     save = save
 

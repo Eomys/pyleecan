@@ -2,13 +2,27 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from pyleecan.Methods.Simulation.Magnetics.run import run
-from pyleecan.Methods.Simulation.Magnetics.comp_time_angle import comp_time_angle
-from pyleecan.Methods.Simulation.Magnetics.comp_emf import comp_emf
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Simulation.Magnetics.run import run
+except ImportError as error:
+    run = error
+
+try:
+    from pyleecan.Methods.Simulation.Magnetics.comp_time_angle import comp_time_angle
+except ImportError as error:
+    comp_time_angle = error
+
+try:
+    from pyleecan.Methods.Simulation.Magnetics.comp_emf import comp_emf
+except ImportError as error:
+    comp_emf = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -18,12 +32,37 @@ class Magnetics(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.Magnetics.run
-    run = run
+    if isinstance(run, ImportError):
+        run = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Magnetics method run: " + str(run))
+            )
+        )
+    else:
+        run = run
     # cf Methods.Simulation.Magnetics.comp_time_angle
-    comp_time_angle = comp_time_angle
+    if isinstance(comp_time_angle, ImportError):
+        comp_time_angle = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Magnetics method comp_time_angle: "
+                    + str(comp_time_angle)
+                )
+            )
+        )
+    else:
+        comp_time_angle = comp_time_angle
     # cf Methods.Simulation.Magnetics.comp_emf
-    comp_emf = comp_emf
+    if isinstance(comp_emf, ImportError):
+        comp_emf = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Magnetics method comp_emf: " + str(comp_emf))
+            )
+        )
+    else:
+        comp_emf = comp_emf
     # save method is available in all object
     save = save
 

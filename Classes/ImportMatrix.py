@@ -2,11 +2,17 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Import import Import
 
-from pyleecan.Methods.Import.ImportMatrix.edit_matrix import edit_matrix
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Import.ImportMatrix.edit_matrix import edit_matrix
+except ImportError as error:
+    edit_matrix = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -17,7 +23,16 @@ class ImportMatrix(Import):
     VERSION = 1
 
     # cf Methods.Import.ImportMatrix.edit_matrix
-    edit_matrix = edit_matrix
+    if isinstance(edit_matrix, ImportError):
+        edit_matrix = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ImportMatrix method edit_matrix: " + str(edit_matrix)
+                )
+            )
+        )
+    else:
+        edit_matrix = edit_matrix
     # save method is available in all object
     save = save
 

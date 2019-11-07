@@ -2,14 +2,32 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Line import Line
 
-from pyleecan.Methods.Geometry.Arc.draw_FEMM import draw_FEMM
-from pyleecan.Methods.Geometry.Arc.intersect_line import intersect_line
-from pyleecan.Methods.Geometry.Arc.is_on_arc import is_on_arc
-from pyleecan.Methods.Geometry.Arc.split_line import split_line
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Geometry.Arc.draw_FEMM import draw_FEMM
+except ImportError as error:
+    draw_FEMM = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc.intersect_line import intersect_line
+except ImportError as error:
+    intersect_line = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc.is_on_arc import is_on_arc
+except ImportError as error:
+    is_on_arc = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc.split_line import split_line
+except ImportError as error:
+    split_line = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -19,14 +37,45 @@ class Arc(Line):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Geometry.Arc.draw_FEMM
-    draw_FEMM = draw_FEMM
+    if isinstance(draw_FEMM, ImportError):
+        draw_FEMM = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc method draw_FEMM: " + str(draw_FEMM))
+            )
+        )
+    else:
+        draw_FEMM = draw_FEMM
     # cf Methods.Geometry.Arc.intersect_line
-    intersect_line = intersect_line
+    if isinstance(intersect_line, ImportError):
+        intersect_line = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Arc method intersect_line: " + str(intersect_line)
+                )
+            )
+        )
+    else:
+        intersect_line = intersect_line
     # cf Methods.Geometry.Arc.is_on_arc
-    is_on_arc = is_on_arc
+    if isinstance(is_on_arc, ImportError):
+        is_on_arc = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc method is_on_arc: " + str(is_on_arc))
+            )
+        )
+    else:
+        is_on_arc = is_on_arc
     # cf Methods.Geometry.Arc.split_line
-    split_line = split_line
+    if isinstance(split_line, ImportError):
+        split_line = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc method split_line: " + str(split_line))
+            )
+        )
+    else:
+        split_line = split_line
     # save method is available in all object
     save = save
 

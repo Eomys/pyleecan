@@ -2,18 +2,52 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
-from pyleecan.Methods.Geometry.Trapeze.check import check
-from pyleecan.Methods.Geometry.Trapeze.comp_length import comp_length
-from pyleecan.Methods.Geometry.Trapeze.comp_surface import comp_surface
-from pyleecan.Methods.Geometry.Trapeze.discretize import discretize
-from pyleecan.Methods.Geometry.Trapeze.get_lines import get_lines
-from pyleecan.Methods.Geometry.Trapeze.get_patch import get_patch
-from pyleecan.Methods.Geometry.Trapeze.rotate import rotate
-from pyleecan.Methods.Geometry.Trapeze.translate import translate
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Geometry.Trapeze.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from pyleecan.Methods.Geometry.Trapeze.comp_length import comp_length
+except ImportError as error:
+    comp_length = error
+
+try:
+    from pyleecan.Methods.Geometry.Trapeze.comp_surface import comp_surface
+except ImportError as error:
+    comp_surface = error
+
+try:
+    from pyleecan.Methods.Geometry.Trapeze.discretize import discretize
+except ImportError as error:
+    discretize = error
+
+try:
+    from pyleecan.Methods.Geometry.Trapeze.get_lines import get_lines
+except ImportError as error:
+    get_lines = error
+
+try:
+    from pyleecan.Methods.Geometry.Trapeze.get_patch import get_patch
+except ImportError as error:
+    get_patch = error
+
+try:
+    from pyleecan.Methods.Geometry.Trapeze.rotate import rotate
+except ImportError as error:
+    rotate = error
+
+try:
+    from pyleecan.Methods.Geometry.Trapeze.translate import translate
+except ImportError as error:
+    translate = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -23,22 +57,81 @@ class Trapeze(Surface):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Geometry.Trapeze.check
-    check = check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Trapeze method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # cf Methods.Geometry.Trapeze.comp_length
-    comp_length = comp_length
+    if isinstance(comp_length, ImportError):
+        comp_length = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Trapeze method comp_length: " + str(comp_length))
+            )
+        )
+    else:
+        comp_length = comp_length
     # cf Methods.Geometry.Trapeze.comp_surface
-    comp_surface = comp_surface
+    if isinstance(comp_surface, ImportError):
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Trapeze method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
+    else:
+        comp_surface = comp_surface
     # cf Methods.Geometry.Trapeze.discretize
-    discretize = discretize
+    if isinstance(discretize, ImportError):
+        discretize = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Trapeze method discretize: " + str(discretize))
+            )
+        )
+    else:
+        discretize = discretize
     # cf Methods.Geometry.Trapeze.get_lines
-    get_lines = get_lines
+    if isinstance(get_lines, ImportError):
+        get_lines = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Trapeze method get_lines: " + str(get_lines))
+            )
+        )
+    else:
+        get_lines = get_lines
     # cf Methods.Geometry.Trapeze.get_patch
-    get_patch = get_patch
+    if isinstance(get_patch, ImportError):
+        get_patch = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Trapeze method get_patch: " + str(get_patch))
+            )
+        )
+    else:
+        get_patch = get_patch
     # cf Methods.Geometry.Trapeze.rotate
-    rotate = rotate
+    if isinstance(rotate, ImportError):
+        rotate = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Trapeze method rotate: " + str(rotate))
+            )
+        )
+    else:
+        rotate = rotate
     # cf Methods.Geometry.Trapeze.translate
-    translate = translate
+    if isinstance(translate, ImportError):
+        translate = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Trapeze method translate: " + str(translate))
+            )
+        )
+    else:
+        translate = translate
     # save method is available in all object
     save = save
 

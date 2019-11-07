@@ -2,23 +2,77 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Arc import Arc
 
-from pyleecan.Methods.Geometry.Arc1.check import check
-from pyleecan.Methods.Geometry.Arc1.comp_length import comp_length
-from pyleecan.Methods.Geometry.Arc1.comp_radius import comp_radius
-from pyleecan.Methods.Geometry.Arc1.discretize import discretize
-from pyleecan.Methods.Geometry.Arc1.get_angle import get_angle
-from pyleecan.Methods.Geometry.Arc1.get_begin import get_begin
-from pyleecan.Methods.Geometry.Arc1.get_center import get_center
-from pyleecan.Methods.Geometry.Arc1.get_end import get_end
-from pyleecan.Methods.Geometry.Arc1.get_middle import get_middle
-from pyleecan.Methods.Geometry.Arc1.reverse import reverse
-from pyleecan.Methods.Geometry.Arc1.rotate import rotate
-from pyleecan.Methods.Geometry.Arc1.split_half import split_half
-from pyleecan.Methods.Geometry.Arc1.translate import translate
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Geometry.Arc1.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc1.comp_length import comp_length
+except ImportError as error:
+    comp_length = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc1.comp_radius import comp_radius
+except ImportError as error:
+    comp_radius = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc1.discretize import discretize
+except ImportError as error:
+    discretize = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc1.get_angle import get_angle
+except ImportError as error:
+    get_angle = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc1.get_begin import get_begin
+except ImportError as error:
+    get_begin = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc1.get_center import get_center
+except ImportError as error:
+    get_center = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc1.get_end import get_end
+except ImportError as error:
+    get_end = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc1.get_middle import get_middle
+except ImportError as error:
+    get_middle = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc1.reverse import reverse
+except ImportError as error:
+    reverse = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc1.rotate import rotate
+except ImportError as error:
+    rotate = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc1.split_half import split_half
+except ImportError as error:
+    split_half = error
+
+try:
+    from pyleecan.Methods.Geometry.Arc1.translate import translate
+except ImportError as error:
+    translate = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -28,32 +82,124 @@ class Arc1(Arc):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Geometry.Arc1.check
-    check = check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc1 method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # cf Methods.Geometry.Arc1.comp_length
-    comp_length = comp_length
+    if isinstance(comp_length, ImportError):
+        comp_length = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc1 method comp_length: " + str(comp_length))
+            )
+        )
+    else:
+        comp_length = comp_length
     # cf Methods.Geometry.Arc1.comp_radius
-    comp_radius = comp_radius
+    if isinstance(comp_radius, ImportError):
+        comp_radius = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc1 method comp_radius: " + str(comp_radius))
+            )
+        )
+    else:
+        comp_radius = comp_radius
     # cf Methods.Geometry.Arc1.discretize
-    discretize = discretize
+    if isinstance(discretize, ImportError):
+        discretize = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc1 method discretize: " + str(discretize))
+            )
+        )
+    else:
+        discretize = discretize
     # cf Methods.Geometry.Arc1.get_angle
-    get_angle = get_angle
+    if isinstance(get_angle, ImportError):
+        get_angle = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc1 method get_angle: " + str(get_angle))
+            )
+        )
+    else:
+        get_angle = get_angle
     # cf Methods.Geometry.Arc1.get_begin
-    get_begin = get_begin
+    if isinstance(get_begin, ImportError):
+        get_begin = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc1 method get_begin: " + str(get_begin))
+            )
+        )
+    else:
+        get_begin = get_begin
     # cf Methods.Geometry.Arc1.get_center
-    get_center = get_center
+    if isinstance(get_center, ImportError):
+        get_center = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc1 method get_center: " + str(get_center))
+            )
+        )
+    else:
+        get_center = get_center
     # cf Methods.Geometry.Arc1.get_end
-    get_end = get_end
+    if isinstance(get_end, ImportError):
+        get_end = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc1 method get_end: " + str(get_end))
+            )
+        )
+    else:
+        get_end = get_end
     # cf Methods.Geometry.Arc1.get_middle
-    get_middle = get_middle
+    if isinstance(get_middle, ImportError):
+        get_middle = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc1 method get_middle: " + str(get_middle))
+            )
+        )
+    else:
+        get_middle = get_middle
     # cf Methods.Geometry.Arc1.reverse
-    reverse = reverse
+    if isinstance(reverse, ImportError):
+        reverse = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc1 method reverse: " + str(reverse))
+            )
+        )
+    else:
+        reverse = reverse
     # cf Methods.Geometry.Arc1.rotate
-    rotate = rotate
+    if isinstance(rotate, ImportError):
+        rotate = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc1 method rotate: " + str(rotate))
+            )
+        )
+    else:
+        rotate = rotate
     # cf Methods.Geometry.Arc1.split_half
-    split_half = split_half
+    if isinstance(split_half, ImportError):
+        split_half = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc1 method split_half: " + str(split_half))
+            )
+        )
+    else:
+        split_half = split_half
     # cf Methods.Geometry.Arc1.translate
-    translate = translate
+    if isinstance(translate, ImportError):
+        translate = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc1 method translate: " + str(translate))
+            )
+        )
+    else:
+        translate = translate
     # save method is available in all object
     save = save
 

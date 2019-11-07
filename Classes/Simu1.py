@@ -2,11 +2,17 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Simulation import Simulation
 
-from pyleecan.Methods.Simulation.Simu1.run import run
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Simulation.Simu1.run import run
+except ImportError as error:
+    run = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Magnetics import Magnetics
@@ -21,7 +27,14 @@ class Simu1(Simulation):
     VERSION = 1
 
     # cf Methods.Simulation.Simu1.run
-    run = run
+    if isinstance(run, ImportError):
+        run = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Simu1 method run: " + str(run))
+            )
+        )
+    else:
+        run = run
     # save method is available in all object
     save = save
 

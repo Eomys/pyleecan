@@ -2,18 +2,44 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from pyleecan.Methods.Output.Output.getter.get_BH_stator import get_BH_stator
-from pyleecan.Methods.Output.Output.getter.get_BH_rotor import get_BH_rotor
-from pyleecan.Methods.Output.Output.getter.get_path_result import get_path_result
-from pyleecan.Methods.Output.Output.getter.get_angle_rotor import get_angle_rotor
-from pyleecan.Methods.Output.Output.plot.Magnetic.plot_B_space import plot_B_space
-from pyleecan.Methods.Output.Output.plot.Structural.plot_force_space import (
-    plot_force_space,
-)
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Output.Output.getter.get_BH_stator import get_BH_stator
+except ImportError as error:
+    get_BH_stator = error
+
+try:
+    from pyleecan.Methods.Output.Output.getter.get_BH_rotor import get_BH_rotor
+except ImportError as error:
+    get_BH_rotor = error
+
+try:
+    from pyleecan.Methods.Output.Output.getter.get_path_result import get_path_result
+except ImportError as error:
+    get_path_result = error
+
+try:
+    from pyleecan.Methods.Output.Output.getter.get_angle_rotor import get_angle_rotor
+except ImportError as error:
+    get_angle_rotor = error
+
+try:
+    from pyleecan.Methods.Output.Output.plot.Magnetic.plot_B_space import plot_B_space
+except ImportError as error:
+    plot_B_space = error
+
+try:
+    from pyleecan.Methods.Output.Output.plot.Structural.plot_force_space import (
+        plot_force_space,
+    )
+except ImportError as error:
+    plot_force_space = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Simulation import Simulation
@@ -29,18 +55,73 @@ class Output(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Output.Output.getter.get_BH_stator
-    get_BH_stator = get_BH_stator
+    if isinstance(get_BH_stator, ImportError):
+        get_BH_stator = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method get_BH_stator: " + str(get_BH_stator)
+                )
+            )
+        )
+    else:
+        get_BH_stator = get_BH_stator
     # cf Methods.Output.Output.getter.get_BH_rotor
-    get_BH_rotor = get_BH_rotor
+    if isinstance(get_BH_rotor, ImportError):
+        get_BH_rotor = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method get_BH_rotor: " + str(get_BH_rotor)
+                )
+            )
+        )
+    else:
+        get_BH_rotor = get_BH_rotor
     # cf Methods.Output.Output.getter.get_path_result
-    get_path_result = get_path_result
+    if isinstance(get_path_result, ImportError):
+        get_path_result = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method get_path_result: " + str(get_path_result)
+                )
+            )
+        )
+    else:
+        get_path_result = get_path_result
     # cf Methods.Output.Output.getter.get_angle_rotor
-    get_angle_rotor = get_angle_rotor
+    if isinstance(get_angle_rotor, ImportError):
+        get_angle_rotor = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method get_angle_rotor: " + str(get_angle_rotor)
+                )
+            )
+        )
+    else:
+        get_angle_rotor = get_angle_rotor
     # cf Methods.Output.Output.plot.Magnetic.plot_B_space
-    plot_B_space = plot_B_space
+    if isinstance(plot_B_space, ImportError):
+        plot_B_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_B_space: " + str(plot_B_space)
+                )
+            )
+        )
+    else:
+        plot_B_space = plot_B_space
     # cf Methods.Output.Output.plot.Structural.plot_force_space
-    plot_force_space = plot_force_space
+    if isinstance(plot_force_space, ImportError):
+        plot_force_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_force_space: " + str(plot_force_space)
+                )
+            )
+        )
+    else:
+        plot_force_space = plot_force_space
     # save method is available in all object
     save = save
 

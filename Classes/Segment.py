@@ -2,23 +2,77 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Line import Line
 
-from pyleecan.Methods.Geometry.Segment.check import check
-from pyleecan.Methods.Geometry.Segment.comp_length import comp_length
-from pyleecan.Methods.Geometry.Segment.discretize import discretize
-from pyleecan.Methods.Geometry.Segment.draw_FEMM import draw_FEMM
-from pyleecan.Methods.Geometry.Segment.get_begin import get_begin
-from pyleecan.Methods.Geometry.Segment.get_end import get_end
-from pyleecan.Methods.Geometry.Segment.get_middle import get_middle
-from pyleecan.Methods.Geometry.Segment.intersect_line import intersect_line
-from pyleecan.Methods.Geometry.Segment.reverse import reverse
-from pyleecan.Methods.Geometry.Segment.rotate import rotate
-from pyleecan.Methods.Geometry.Segment.split_half import split_half
-from pyleecan.Methods.Geometry.Segment.split_line import split_line
-from pyleecan.Methods.Geometry.Segment.translate import translate
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Geometry.Segment.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from pyleecan.Methods.Geometry.Segment.comp_length import comp_length
+except ImportError as error:
+    comp_length = error
+
+try:
+    from pyleecan.Methods.Geometry.Segment.discretize import discretize
+except ImportError as error:
+    discretize = error
+
+try:
+    from pyleecan.Methods.Geometry.Segment.draw_FEMM import draw_FEMM
+except ImportError as error:
+    draw_FEMM = error
+
+try:
+    from pyleecan.Methods.Geometry.Segment.get_begin import get_begin
+except ImportError as error:
+    get_begin = error
+
+try:
+    from pyleecan.Methods.Geometry.Segment.get_end import get_end
+except ImportError as error:
+    get_end = error
+
+try:
+    from pyleecan.Methods.Geometry.Segment.get_middle import get_middle
+except ImportError as error:
+    get_middle = error
+
+try:
+    from pyleecan.Methods.Geometry.Segment.intersect_line import intersect_line
+except ImportError as error:
+    intersect_line = error
+
+try:
+    from pyleecan.Methods.Geometry.Segment.reverse import reverse
+except ImportError as error:
+    reverse = error
+
+try:
+    from pyleecan.Methods.Geometry.Segment.rotate import rotate
+except ImportError as error:
+    rotate = error
+
+try:
+    from pyleecan.Methods.Geometry.Segment.split_half import split_half
+except ImportError as error:
+    split_half = error
+
+try:
+    from pyleecan.Methods.Geometry.Segment.split_line import split_line
+except ImportError as error:
+    split_line = error
+
+try:
+    from pyleecan.Methods.Geometry.Segment.translate import translate
+except ImportError as error:
+    translate = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -28,32 +82,126 @@ class Segment(Line):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Geometry.Segment.check
-    check = check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # cf Methods.Geometry.Segment.comp_length
-    comp_length = comp_length
+    if isinstance(comp_length, ImportError):
+        comp_length = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method comp_length: " + str(comp_length))
+            )
+        )
+    else:
+        comp_length = comp_length
     # cf Methods.Geometry.Segment.discretize
-    discretize = discretize
+    if isinstance(discretize, ImportError):
+        discretize = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method discretize: " + str(discretize))
+            )
+        )
+    else:
+        discretize = discretize
     # cf Methods.Geometry.Segment.draw_FEMM
-    draw_FEMM = draw_FEMM
+    if isinstance(draw_FEMM, ImportError):
+        draw_FEMM = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method draw_FEMM: " + str(draw_FEMM))
+            )
+        )
+    else:
+        draw_FEMM = draw_FEMM
     # cf Methods.Geometry.Segment.get_begin
-    get_begin = get_begin
+    if isinstance(get_begin, ImportError):
+        get_begin = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method get_begin: " + str(get_begin))
+            )
+        )
+    else:
+        get_begin = get_begin
     # cf Methods.Geometry.Segment.get_end
-    get_end = get_end
+    if isinstance(get_end, ImportError):
+        get_end = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method get_end: " + str(get_end))
+            )
+        )
+    else:
+        get_end = get_end
     # cf Methods.Geometry.Segment.get_middle
-    get_middle = get_middle
+    if isinstance(get_middle, ImportError):
+        get_middle = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method get_middle: " + str(get_middle))
+            )
+        )
+    else:
+        get_middle = get_middle
     # cf Methods.Geometry.Segment.intersect_line
-    intersect_line = intersect_line
+    if isinstance(intersect_line, ImportError):
+        intersect_line = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Segment method intersect_line: " + str(intersect_line)
+                )
+            )
+        )
+    else:
+        intersect_line = intersect_line
     # cf Methods.Geometry.Segment.reverse
-    reverse = reverse
+    if isinstance(reverse, ImportError):
+        reverse = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method reverse: " + str(reverse))
+            )
+        )
+    else:
+        reverse = reverse
     # cf Methods.Geometry.Segment.rotate
-    rotate = rotate
+    if isinstance(rotate, ImportError):
+        rotate = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method rotate: " + str(rotate))
+            )
+        )
+    else:
+        rotate = rotate
     # cf Methods.Geometry.Segment.split_half
-    split_half = split_half
+    if isinstance(split_half, ImportError):
+        split_half = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method split_half: " + str(split_half))
+            )
+        )
+    else:
+        split_half = split_half
     # cf Methods.Geometry.Segment.split_line
-    split_line = split_line
+    if isinstance(split_line, ImportError):
+        split_line = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method split_line: " + str(split_line))
+            )
+        )
+    else:
+        split_line = split_line
     # cf Methods.Geometry.Segment.translate
-    translate = translate
+    if isinstance(translate, ImportError):
+        translate = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method translate: " + str(translate))
+            )
+        )
+    else:
+        translate = translate
     # save method is available in all object
     save = save
 

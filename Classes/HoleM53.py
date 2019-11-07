@@ -2,20 +2,62 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.HoleMag import HoleMag
 
-from pyleecan.Methods.Slot.HoleM53.build_geometry import build_geometry
-from pyleecan.Methods.Slot.HoleM53.check import check
-from pyleecan.Methods.Slot.HoleM53.comp_alpha import comp_alpha
-from pyleecan.Methods.Slot.HoleM53.comp_mass_magnets import comp_mass_magnets
-from pyleecan.Methods.Slot.HoleM53.comp_radius import comp_radius
-from pyleecan.Methods.Slot.HoleM53.comp_surface_magnets import comp_surface_magnets
-from pyleecan.Methods.Slot.HoleM53.comp_volume_magnets import comp_volume_magnets
-from pyleecan.Methods.Slot.HoleM53.comp_W5 import comp_W5
-from pyleecan.Methods.Slot.HoleM53.get_height_magnet import get_height_magnet
-from pyleecan.Methods.Slot.HoleM53.remove_magnet import remove_magnet
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Slot.HoleM53.build_geometry import build_geometry
+except ImportError as error:
+    build_geometry = error
+
+try:
+    from pyleecan.Methods.Slot.HoleM53.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from pyleecan.Methods.Slot.HoleM53.comp_alpha import comp_alpha
+except ImportError as error:
+    comp_alpha = error
+
+try:
+    from pyleecan.Methods.Slot.HoleM53.comp_mass_magnets import comp_mass_magnets
+except ImportError as error:
+    comp_mass_magnets = error
+
+try:
+    from pyleecan.Methods.Slot.HoleM53.comp_radius import comp_radius
+except ImportError as error:
+    comp_radius = error
+
+try:
+    from pyleecan.Methods.Slot.HoleM53.comp_surface_magnets import comp_surface_magnets
+except ImportError as error:
+    comp_surface_magnets = error
+
+try:
+    from pyleecan.Methods.Slot.HoleM53.comp_volume_magnets import comp_volume_magnets
+except ImportError as error:
+    comp_volume_magnets = error
+
+try:
+    from pyleecan.Methods.Slot.HoleM53.comp_W5 import comp_W5
+except ImportError as error:
+    comp_W5 = error
+
+try:
+    from pyleecan.Methods.Slot.HoleM53.get_height_magnet import get_height_magnet
+except ImportError as error:
+    get_height_magnet = error
+
+try:
+    from pyleecan.Methods.Slot.HoleM53.remove_magnet import remove_magnet
+except ImportError as error:
+    remove_magnet = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Magnet import Magnet
@@ -28,26 +70,113 @@ class HoleM53(HoleMag):
     VERSION = 1
     IS_SYMMETRICAL = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.HoleM53.build_geometry
-    build_geometry = build_geometry
+    if isinstance(build_geometry, ImportError):
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM53 method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
+    else:
+        build_geometry = build_geometry
     # cf Methods.Slot.HoleM53.check
-    check = check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleM53 method check: " + str(check))
+            )
+        )
+    else:
+        check = check
     # cf Methods.Slot.HoleM53.comp_alpha
-    comp_alpha = comp_alpha
+    if isinstance(comp_alpha, ImportError):
+        comp_alpha = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleM53 method comp_alpha: " + str(comp_alpha))
+            )
+        )
+    else:
+        comp_alpha = comp_alpha
     # cf Methods.Slot.HoleM53.comp_mass_magnets
-    comp_mass_magnets = comp_mass_magnets
+    if isinstance(comp_mass_magnets, ImportError):
+        comp_mass_magnets = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM53 method comp_mass_magnets: "
+                    + str(comp_mass_magnets)
+                )
+            )
+        )
+    else:
+        comp_mass_magnets = comp_mass_magnets
     # cf Methods.Slot.HoleM53.comp_radius
-    comp_radius = comp_radius
+    if isinstance(comp_radius, ImportError):
+        comp_radius = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleM53 method comp_radius: " + str(comp_radius))
+            )
+        )
+    else:
+        comp_radius = comp_radius
     # cf Methods.Slot.HoleM53.comp_surface_magnets
-    comp_surface_magnets = comp_surface_magnets
+    if isinstance(comp_surface_magnets, ImportError):
+        comp_surface_magnets = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM53 method comp_surface_magnets: "
+                    + str(comp_surface_magnets)
+                )
+            )
+        )
+    else:
+        comp_surface_magnets = comp_surface_magnets
     # cf Methods.Slot.HoleM53.comp_volume_magnets
-    comp_volume_magnets = comp_volume_magnets
+    if isinstance(comp_volume_magnets, ImportError):
+        comp_volume_magnets = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM53 method comp_volume_magnets: "
+                    + str(comp_volume_magnets)
+                )
+            )
+        )
+    else:
+        comp_volume_magnets = comp_volume_magnets
     # cf Methods.Slot.HoleM53.comp_W5
-    comp_W5 = comp_W5
+    if isinstance(comp_W5, ImportError):
+        comp_W5 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleM53 method comp_W5: " + str(comp_W5))
+            )
+        )
+    else:
+        comp_W5 = comp_W5
     # cf Methods.Slot.HoleM53.get_height_magnet
-    get_height_magnet = get_height_magnet
+    if isinstance(get_height_magnet, ImportError):
+        get_height_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM53 method get_height_magnet: "
+                    + str(get_height_magnet)
+                )
+            )
+        )
+    else:
+        get_height_magnet = get_height_magnet
     # cf Methods.Slot.HoleM53.remove_magnet
-    remove_magnet = remove_magnet
+    if isinstance(remove_magnet, ImportError):
+        remove_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM53 method remove_magnet: " + str(remove_magnet)
+                )
+            )
+        )
+    else:
+        remove_magnet = remove_magnet
     # save method is available in all object
     save = save
 

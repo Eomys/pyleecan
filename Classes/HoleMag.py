@@ -2,11 +2,17 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Hole import Hole
 
-from pyleecan.Methods.Slot.HoleMag.has_magnet import has_magnet
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Slot.HoleMag.has_magnet import has_magnet
+except ImportError as error:
+    has_magnet = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
@@ -18,7 +24,14 @@ class HoleMag(Hole):
     VERSION = 1
 
     # cf Methods.Slot.HoleMag.has_magnet
-    has_magnet = has_magnet
+    if isinstance(has_magnet, ImportError):
+        has_magnet = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleMag method has_magnet: " + str(has_magnet))
+            )
+        )
+    else:
+        has_magnet = has_magnet
     # save method is available in all object
     save = save
 

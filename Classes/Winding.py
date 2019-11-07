@@ -2,15 +2,39 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from pyleecan.Methods.Machine.Winding.comp_Ncspc import comp_Ncspc
-from pyleecan.Methods.Machine.Winding.comp_Ntspc import comp_Ntspc
-from pyleecan.Methods.Machine.Winding.comp_phasor_angle import comp_phasor_angle
-from pyleecan.Methods.Machine.Winding.comp_resistance_norm import comp_resistance_norm
-from pyleecan.Methods.Machine.Winding.comp_winding_factor import comp_winding_factor
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.Winding.comp_Ncspc import comp_Ncspc
+except ImportError as error:
+    comp_Ncspc = error
+
+try:
+    from pyleecan.Methods.Machine.Winding.comp_Ntspc import comp_Ntspc
+except ImportError as error:
+    comp_Ntspc = error
+
+try:
+    from pyleecan.Methods.Machine.Winding.comp_phasor_angle import comp_phasor_angle
+except ImportError as error:
+    comp_phasor_angle = error
+
+try:
+    from pyleecan.Methods.Machine.Winding.comp_resistance_norm import (
+        comp_resistance_norm,
+    )
+except ImportError as error:
+    comp_resistance_norm = error
+
+try:
+    from pyleecan.Methods.Machine.Winding.comp_winding_factor import comp_winding_factor
+except ImportError as error:
+    comp_winding_factor = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Conductor import Conductor
@@ -21,16 +45,61 @@ class Winding(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.Winding.comp_Ncspc
-    comp_Ncspc = comp_Ncspc
+    if isinstance(comp_Ncspc, ImportError):
+        comp_Ncspc = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Winding method comp_Ncspc: " + str(comp_Ncspc))
+            )
+        )
+    else:
+        comp_Ncspc = comp_Ncspc
     # cf Methods.Machine.Winding.comp_Ntspc
-    comp_Ntspc = comp_Ntspc
+    if isinstance(comp_Ntspc, ImportError):
+        comp_Ntspc = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Winding method comp_Ntspc: " + str(comp_Ntspc))
+            )
+        )
+    else:
+        comp_Ntspc = comp_Ntspc
     # cf Methods.Machine.Winding.comp_phasor_angle
-    comp_phasor_angle = comp_phasor_angle
+    if isinstance(comp_phasor_angle, ImportError):
+        comp_phasor_angle = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method comp_phasor_angle: "
+                    + str(comp_phasor_angle)
+                )
+            )
+        )
+    else:
+        comp_phasor_angle = comp_phasor_angle
     # cf Methods.Machine.Winding.comp_resistance_norm
-    comp_resistance_norm = comp_resistance_norm
+    if isinstance(comp_resistance_norm, ImportError):
+        comp_resistance_norm = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method comp_resistance_norm: "
+                    + str(comp_resistance_norm)
+                )
+            )
+        )
+    else:
+        comp_resistance_norm = comp_resistance_norm
     # cf Methods.Machine.Winding.comp_winding_factor
-    comp_winding_factor = comp_winding_factor
+    if isinstance(comp_winding_factor, ImportError):
+        comp_winding_factor = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method comp_winding_factor: "
+                    + str(comp_winding_factor)
+                )
+            )
+        )
+    else:
+        comp_winding_factor = comp_winding_factor
     # save method is available in all object
     save = save
 

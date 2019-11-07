@@ -58,11 +58,11 @@ def generate_class(gen_dict, class_name, path_to_gen):
     if "ndarray" in import_type_list:
         class_file.write(
             "from pyleecan.Classes.check import set_array, "
-            + "check_init_dict, check_var\n"
+            + "check_init_dict, check_var, raise_\n"
         )
     else:
         class_file.write(
-            "from pyleecan.Classes.check import check_init_dict, " + "check_var\n"
+            "from pyleecan.Classes.check import check_init_dict, check_var, raise_\n"
         )
     # Save function
     class_file.write("from pyleecan.Functions.save import save\n")
@@ -82,18 +82,13 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Import all the methods of the class
     # The methods are in Methods.<Main package>.<class name>, one file per method
-    for meth in class_dict["methods"]:
+    if len(class_dict["methods"]) > 0:
+        class_file.write("# Import all class method\n")
         class_file.write(
-            "from pyleecan.Methods."
-            + class_pack
-            + "."
-            + class_name
-            + "."
-            + meth
-            + " import "
-            + meth.split(".")[-1]
-            + "\n"
+            "# Try/catch to remove unnecessary dependencies in unused method\n"
         )
+    for meth in class_dict["methods"]:
+        class_file.write(import_method(class_pack, class_name, meth))
     if len(class_dict["methods"]) > 0:
         class_file.write("\n")
 
@@ -131,11 +126,29 @@ def generate_class(gen_dict, class_name, path_to_gen):
     class_file.write("\n")
 
     # Asign all the Methods of the class
+    if len(class_dict["methods"]) > 1:
+        class_file.write(
+            TAB
+            + "# Check ImportError to remove unnecessary dependencies in unused method\n"
+        )
     for meth in class_dict["methods"]:
+        meth_name = meth.split(".")[-1]
         class_file.write(
             TAB + "# cf Methods." + class_pack + "." + class_name + "." + meth + "\n"
         )
-        class_file.write(TAB + meth.split(".")[-1] + " = " + meth.split(".")[-1] + "\n")
+        class_file.write(TAB + "if isinstance(" + meth_name + ", ImportError):\n")
+        class_file.write(TAB2 + meth_name + " = property(fget=lambda x: raise_(")
+        class_file.write(
+            """ImportError("Can't use """
+            + class_name
+            + " method "
+            + meth_name
+            + ': " + str('
+            + meth_name
+            + "))))\n"
+        )
+        class_file.write(TAB + "else:\n")
+        class_file.write(TAB2 + meth_name + " = " + meth_name + "\n")
     class_file.write(TAB + "# save method is available in all object\n")
     class_file.write(TAB + "save = save\n\n")
 
@@ -162,6 +175,44 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # End of class generation
     class_file.close()
+
+
+def import_method(class_pack, class_name, meth):
+    """Method to generate the code to import a method (with import check)
+
+    Parameters
+    ----------
+    class_pack : str
+        Package of the class (Machine, Simulation, Material...)
+    class_name : str
+        Name of the class
+    meth : str
+        Path to the method in the class Method folder
+        (subfolder.name if any subfolder)
+
+    Returns
+    -------
+    code: str
+        Corresponding code
+    """
+
+    meth_name = meth.split(".")[-1]
+    code = "try:\n"
+    code += (
+        TAB
+        + "from pyleecan.Methods."
+        + class_pack
+        + "."
+        + class_name
+        + "."
+        + meth
+        + " import "
+        + meth_name
+        + "\n"
+    )
+    code += "except ImportError as error:\n"
+    code += TAB + meth_name + " = error\n\n"
+    return code
 
 
 def generate_init(gen_dict, class_dict):

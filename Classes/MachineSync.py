@@ -2,12 +2,24 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Machine import Machine
 
-from pyleecan.Methods.Machine.MachineSync.is_synchronous import is_synchronous
-from pyleecan.Methods.Machine.MachineSync.comp_initial_angle import comp_initial_angle
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.MachineSync.is_synchronous import is_synchronous
+except ImportError as error:
+    is_synchronous = error
+
+try:
+    from pyleecan.Methods.Machine.MachineSync.comp_initial_angle import (
+        comp_initial_angle,
+    )
+except ImportError as error:
+    comp_initial_angle = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Lamination import Lamination
@@ -20,10 +32,31 @@ class MachineSync(Machine):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.MachineSync.is_synchronous
-    is_synchronous = is_synchronous
+    if isinstance(is_synchronous, ImportError):
+        is_synchronous = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MachineSync method is_synchronous: "
+                    + str(is_synchronous)
+                )
+            )
+        )
+    else:
+        is_synchronous = is_synchronous
     # cf Methods.Machine.MachineSync.comp_initial_angle
-    comp_initial_angle = comp_initial_angle
+    if isinstance(comp_initial_angle, ImportError):
+        comp_initial_angle = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MachineSync method comp_initial_angle: "
+                    + str(comp_initial_angle)
+                )
+            )
+        )
+    else:
+        comp_initial_angle = comp_initial_angle
     # save method is available in all object
     save = save
 

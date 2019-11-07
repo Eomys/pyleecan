@@ -2,18 +2,56 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Lamination import Lamination
 
-from pyleecan.Methods.Machine.LamHole.build_geometry import build_geometry
-from pyleecan.Methods.Machine.LamHole.comp_height_yoke import comp_height_yoke
-from pyleecan.Methods.Machine.LamHole.comp_masses import comp_masses
-from pyleecan.Methods.Machine.LamHole.comp_surfaces import comp_surfaces
-from pyleecan.Methods.Machine.LamHole.comp_volumes import comp_volumes
-from pyleecan.Methods.Machine.LamHole.get_pole_pair_number import get_pole_pair_number
-from pyleecan.Methods.Machine.LamHole.plot import plot
-from pyleecan.Methods.Machine.LamHole.comp_radius_mid_yoke import comp_radius_mid_yoke
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.LamHole.build_geometry import build_geometry
+except ImportError as error:
+    build_geometry = error
+
+try:
+    from pyleecan.Methods.Machine.LamHole.comp_height_yoke import comp_height_yoke
+except ImportError as error:
+    comp_height_yoke = error
+
+try:
+    from pyleecan.Methods.Machine.LamHole.comp_masses import comp_masses
+except ImportError as error:
+    comp_masses = error
+
+try:
+    from pyleecan.Methods.Machine.LamHole.comp_surfaces import comp_surfaces
+except ImportError as error:
+    comp_surfaces = error
+
+try:
+    from pyleecan.Methods.Machine.LamHole.comp_volumes import comp_volumes
+except ImportError as error:
+    comp_volumes = error
+
+try:
+    from pyleecan.Methods.Machine.LamHole.get_pole_pair_number import (
+        get_pole_pair_number,
+    )
+except ImportError as error:
+    get_pole_pair_number = error
+
+try:
+    from pyleecan.Methods.Machine.LamHole.plot import plot
+except ImportError as error:
+    plot = error
+
+try:
+    from pyleecan.Methods.Machine.LamHole.comp_radius_mid_yoke import (
+        comp_radius_mid_yoke,
+    )
+except ImportError as error:
+    comp_radius_mid_yoke = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Hole import Hole
@@ -26,22 +64,94 @@ class LamHole(Lamination):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.LamHole.build_geometry
-    build_geometry = build_geometry
+    if isinstance(build_geometry, ImportError):
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
+    else:
+        build_geometry = build_geometry
     # cf Methods.Machine.LamHole.comp_height_yoke
-    comp_height_yoke = comp_height_yoke
+    if isinstance(comp_height_yoke, ImportError):
+        comp_height_yoke = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method comp_height_yoke: "
+                    + str(comp_height_yoke)
+                )
+            )
+        )
+    else:
+        comp_height_yoke = comp_height_yoke
     # cf Methods.Machine.LamHole.comp_masses
-    comp_masses = comp_masses
+    if isinstance(comp_masses, ImportError):
+        comp_masses = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamHole method comp_masses: " + str(comp_masses))
+            )
+        )
+    else:
+        comp_masses = comp_masses
     # cf Methods.Machine.LamHole.comp_surfaces
-    comp_surfaces = comp_surfaces
+    if isinstance(comp_surfaces, ImportError):
+        comp_surfaces = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method comp_surfaces: " + str(comp_surfaces)
+                )
+            )
+        )
+    else:
+        comp_surfaces = comp_surfaces
     # cf Methods.Machine.LamHole.comp_volumes
-    comp_volumes = comp_volumes
+    if isinstance(comp_volumes, ImportError):
+        comp_volumes = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method comp_volumes: " + str(comp_volumes)
+                )
+            )
+        )
+    else:
+        comp_volumes = comp_volumes
     # cf Methods.Machine.LamHole.get_pole_pair_number
-    get_pole_pair_number = get_pole_pair_number
+    if isinstance(get_pole_pair_number, ImportError):
+        get_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method get_pole_pair_number: "
+                    + str(get_pole_pair_number)
+                )
+            )
+        )
+    else:
+        get_pole_pair_number = get_pole_pair_number
     # cf Methods.Machine.LamHole.plot
-    plot = plot
+    if isinstance(plot, ImportError):
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamHole method plot: " + str(plot))
+            )
+        )
+    else:
+        plot = plot
     # cf Methods.Machine.LamHole.comp_radius_mid_yoke
-    comp_radius_mid_yoke = comp_radius_mid_yoke
+    if isinstance(comp_radius_mid_yoke, ImportError):
+        comp_radius_mid_yoke = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method comp_radius_mid_yoke: "
+                    + str(comp_radius_mid_yoke)
+                )
+            )
+        )
+    else:
+        comp_radius_mid_yoke = comp_radius_mid_yoke
     # save method is available in all object
     save = save
 

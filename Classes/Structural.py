@@ -2,12 +2,22 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from pyleecan.Methods.Simulation.Structural.run import run
-from pyleecan.Methods.Simulation.Structural.comp_time_angle import comp_time_angle
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Simulation.Structural.run import run
+except ImportError as error:
+    run = error
+
+try:
+    from pyleecan.Methods.Simulation.Structural.comp_time_angle import comp_time_angle
+except ImportError as error:
+    comp_time_angle = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Force import Force
@@ -18,10 +28,28 @@ class Structural(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.Structural.run
-    run = run
+    if isinstance(run, ImportError):
+        run = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Structural method run: " + str(run))
+            )
+        )
+    else:
+        run = run
     # cf Methods.Simulation.Structural.comp_time_angle
-    comp_time_angle = comp_time_angle
+    if isinstance(comp_time_angle, ImportError):
+        comp_time_angle = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Structural method comp_time_angle: "
+                    + str(comp_time_angle)
+                )
+            )
+        )
+    else:
+        comp_time_angle = comp_time_angle
     # save method is available in all object
     save = save
 

@@ -2,12 +2,22 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
-from pyleecan.Methods.Machine.Notch.get_Rbo import get_Rbo
-from pyleecan.Methods.Machine.Notch.is_outwards import is_outwards
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.Notch.get_Rbo import get_Rbo
+except ImportError as error:
+    get_Rbo = error
+
+try:
+    from pyleecan.Methods.Machine.Notch.is_outwards import is_outwards
+except ImportError as error:
+    is_outwards = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
@@ -18,10 +28,25 @@ class Notch(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.Notch.get_Rbo
-    get_Rbo = get_Rbo
+    if isinstance(get_Rbo, ImportError):
+        get_Rbo = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Notch method get_Rbo: " + str(get_Rbo))
+            )
+        )
+    else:
+        get_Rbo = get_Rbo
     # cf Methods.Machine.Notch.is_outwards
-    is_outwards = is_outwards
+    if isinstance(is_outwards, ImportError):
+        is_outwards = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Notch method is_outwards: " + str(is_outwards))
+            )
+        )
+    else:
+        is_outwards = is_outwards
     # save method is available in all object
     save = save
 

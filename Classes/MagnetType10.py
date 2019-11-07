@@ -2,13 +2,27 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.MagnetFlat import MagnetFlat
 
-from pyleecan.Methods.Machine.MagnetType10.build_geometry import build_geometry
-from pyleecan.Methods.Machine.MagnetType10.comp_height import comp_height
-from pyleecan.Methods.Machine.MagnetType10.comp_surface import comp_surface
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Machine.MagnetType10.build_geometry import build_geometry
+except ImportError as error:
+    build_geometry = error
+
+try:
+    from pyleecan.Methods.Machine.MagnetType10.comp_height import comp_height
+except ImportError as error:
+    comp_height = error
+
+try:
+    from pyleecan.Methods.Machine.MagnetType10.comp_surface import comp_surface
+except ImportError as error:
+    comp_surface = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
@@ -21,12 +35,41 @@ class MagnetType10(MagnetFlat):
     IS_FLAT_BOT = 1
     IS_FLAT_TOP = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.MagnetType10.build_geometry
-    build_geometry = build_geometry
+    if isinstance(build_geometry, ImportError):
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagnetType10 method build_geometry: "
+                    + str(build_geometry)
+                )
+            )
+        )
+    else:
+        build_geometry = build_geometry
     # cf Methods.Machine.MagnetType10.comp_height
-    comp_height = comp_height
+    if isinstance(comp_height, ImportError):
+        comp_height = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagnetType10 method comp_height: " + str(comp_height)
+                )
+            )
+        )
+    else:
+        comp_height = comp_height
     # cf Methods.Machine.MagnetType10.comp_surface
-    comp_surface = comp_surface
+    if isinstance(comp_surface, ImportError):
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagnetType10 method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
+    else:
+        comp_surface = comp_surface
     # save method is available in all object
     save = save
 
