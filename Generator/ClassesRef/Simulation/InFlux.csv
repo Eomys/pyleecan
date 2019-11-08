@@ -1,5 +1,5 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-time;s;Electrical time vector (no symmetry) to import;;Nt_tot;Import;None;;;;;;Simulation;Input;gen_input;VERSION;1;Input to skip the magnetic module and start with the structural one;
-angle;rad;Electrical position vector (no symmetry) to import;;Na_tot;Import;None;;;;;;;;;;;;
-Br;T;Radial airgap flux density;;(Nt_tot ,Na_tot);Import;None;;;;;;;;;;;;
-Bt;T;Tangential airgap flux density;;(Nt_tot ,Na_tot);Import;None;;;;;;;;;;;;
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
+time,s,Electrical time vector (no symmetry) to import,,Nt_tot,Import,None,,,,,,Simulation,Input,gen_input,VERSION,1,Input to skip the magnetic module and start with the structural one,
+angle,rad,Electrical position vector (no symmetry) to import,,Na_tot,Import,None,,,,,,,,,,,,
+Br,T,Radial airgap flux density,,(Nt_tot ,Na_tot),Import,None,,,,,,,,,,,,
+Bt,T,Tangential airgap flux density,,(Nt_tot ,Na_tot),Import,None,,,,,,,,,,,,

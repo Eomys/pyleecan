@@ -1,9 +1,9 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-H0;m;Slot isthmus height.;;0;float;3,00E-03;0;;;2;;Slot;SlotWind;build_geometry;VERSION;1;;
-H1;m/rad;Slot middle height;;0;float;0;0;;;2;;;;build_geometry_wind;IS_SYMMETRICAL;1;;
-R1;m;Wedges radius;;0;float;1,00E-03;0;;;2;;;;check;;;;
-R2;m;Slot bottom radius;;0;float;1,00E-03;0;;;2;;;;comp_angle_opening;;;;
-;;;;;;;;;;;;;;comp_height;;;;
-;;;;;;;;;;;;;;comp_height_wind;;;;
-;;;;;;;;;;;;;;comp_surface;;;;
-;;;;;;;;;;;;;;comp_surface_wind;;;;
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
+H0,m,Slot isthmus height.,,0,float,3,00E-03,0,,,2,,Slot,SlotWind,build_geometry,VERSION,1,,
+H1,m/rad,Slot middle height,,0,float,0,0,,,2,,,,build_geometry_wind,IS_SYMMETRICAL,1,,
+R1,m,Wedges radius,,0,float,1,00E-03,0,,,2,,,,check,,,,
+R2,m,Slot bottom radius,,0,float,1,00E-03,0,,,2,,,,comp_angle_opening,,,,
+,,,,,,,,,,,,,,comp_height,,,,
+,,,,,,,,,,,,,,comp_height_wind,,,,
+,,,,,,,,,,,,,,comp_surface,,,,
+,,,,,,,,,,,,,,comp_surface_wind,,,,

@@ -1,7 +1,7 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-W0;rad;Slot isthmus width.;;0;float;3,14E-01;0;;;2;;Slot;SlotMag;build_geometry;VERSION;1;Polar bottomed SlotMag;
-H0;m;Slot isthmus height;;0;float;0;0;;;2;;;;comp_angle_opening;IS_SYMMETRICAL;1;;
-magnet;;List of magnet;;0;[MagnetPolar];;;;;;;;;comp_angle_opening_magnet;IS_INSET;1;;
-;;;;;;;;;;;;;;comp_height;;;;
-;;;;;;;;;;;;;;comp_surface;;;;
-;;;;;;;;;;;;;;get_point_bottom;;;;
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
+W0,rad,Slot isthmus width.,,0,float,3,14E-01,0,,,2,,Slot,SlotMag,build_geometry,VERSION,1,Polar bottomed SlotMag,
+H0,m,Slot isthmus height,,0,float,0,0,,,2,,,,comp_angle_opening,IS_SYMMETRICAL,1,,
+magnet,,List of magnet,,0,[MagnetPolar],,,,,,,,,comp_angle_opening_magnet,IS_INSET,1,,
+,,,,,,,,,,,,,,comp_height,,,,
+,,,,,,,,,,,,,,comp_surface,,,,
+,,,,,,,,,,,,,,get_point_bottom,,,,
