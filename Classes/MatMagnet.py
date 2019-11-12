@@ -120,12 +120,12 @@ class MatMagnet(MatMagnetics):
         check_var("alpha_Br", value, "float")
         self._alpha_Br = value
 
-    # temperature coefficient for remanent flux density /°C compared to 20°C
+    # temperature coefficient for remanent flux density /degC compared to 20degC
     # Type : float
     alpha_Br = property(
         fget=_get_alpha_Br,
         fset=_set_alpha_Br,
-        doc=u"""temperature coefficient for remanent flux density /°C compared to 20°C""",
+        doc=u"""temperature coefficient for remanent flux density /degC compared to 20degC""",
     )
 
     def _get_Brm20(self):
@@ -137,8 +137,10 @@ class MatMagnet(MatMagnetics):
         check_var("Brm20", value, "float")
         self._Brm20 = value
 
-    # magnet remanence induction at 20°C
+    # magnet remanence induction at 20degC
     # Type : float
     Brm20 = property(
-        fget=_get_Brm20, fset=_set_Brm20, doc=u"""magnet remanence induction at 20°C"""
+        fget=_get_Brm20,
+        fset=_set_Brm20,
+        doc=u"""magnet remanence induction at 20degC""",
     )

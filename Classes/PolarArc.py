@@ -53,7 +53,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 
 
 class PolarArc(Surface):
-    """PolarArc define by  the center of object(point_ref), the label, the angle and the height"""
+    """PolarArc defined by  the center of object(point_ref), the label, the angle and the height"""
 
     VERSION = 1
 

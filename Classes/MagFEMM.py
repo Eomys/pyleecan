@@ -275,12 +275,12 @@ class MagFEMM(Magnetics):
         check_var("Kmesh_fineness", value, "float")
         self._Kmesh_fineness = value
 
-    # global coefficient to adjust mesh fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)
+    # global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
     # Type : float
     Kmesh_fineness = property(
         fget=_get_Kmesh_fineness,
         fset=_set_Kmesh_fineness,
-        doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)""",
+        doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)""",
     )
 
     def _get_Kgeo_fineness(self):
@@ -292,12 +292,12 @@ class MagFEMM(Magnetics):
         check_var("Kgeo_fineness", value, "float")
         self._Kgeo_fineness = value
 
-    # global coefficient to adjust geometry fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)
+    # global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
     # Type : float
     Kgeo_fineness = property(
         fget=_get_Kgeo_fineness,
         fset=_set_Kgeo_fineness,
-        doc=u"""global coefficient to adjust geometry fineness in FEMM (1 : default ; > 1 : finner ; < 1 : less fine)""",
+        doc=u"""global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)""",
     )
 
     def _get_type_calc_leakage(self):

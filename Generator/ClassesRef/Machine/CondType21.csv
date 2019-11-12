@@ -1,6 +1,6 @@
 Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-Hbar,m,Bar height,,0,float,1,00E-02,0,,,,,Machine,Conductor,comp_surface_active,VERSION,1,single rectangular conductor \nhas to be used for LamSquirrelCages's conductor,
-Wbar,m,Bar width,,0,float,1,00E-02,0,,,,,,,comp_height,,,,
+Hbar,m,Bar height,,0,float,1.00E-02,0,,,,,Machine,Conductor,comp_surface_active,VERSION,1,single rectangular conductor \nhas to be used for LamSquirrelCages's conductor,
+Wbar,m,Bar width,,0,float,1.00E-02,0,,,,,,,comp_height,,,,
 Wins,m,Width of insulation,,0,float,0,0,,,,,,,comp_surface,,,,
 ,,,,,,,,,,,,,,comp_width,,,,
 ,,,,,,,,,,,,,,plot,,,,

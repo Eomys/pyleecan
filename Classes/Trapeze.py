@@ -53,7 +53,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 
 
 class Trapeze(Surface):
-    """trapeze define by  the center of symmetry(point_ref), the label, the polar angle, the height and the big and small weight"""
+    """Trapeze defined by  the center of symmetry(point_ref), the label, the polar angle, the height and the big and small weight"""
 
     VERSION = 1
 

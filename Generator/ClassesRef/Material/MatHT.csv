@@ -3,4 +3,4 @@ lambda_x,W/K,"thermal conductivity (XY is lamination plane, Z is rotation axis)"
 lambda_y,W/K,"thermal conductivity (XY is lamination plane, Z is rotation axis)",,0,float,1,0,,,,,,,,,,,
 lambda_z,W/K,"thermal conductivity (XY is lamination plane, Z is rotation axis)",,0,float,1,0,,,,,,,,,,,
 Cp,W/kg/K,specific heat capacity,,0,float,1,0,,,,,,,,,,,
-alpha,-,thermal expansion coefficient,,0,float,3,93E-03,0,,,,,,,,,,,
+alpha,-,thermal expansion coefficient,,0,float,3.93E-03,0,,,,,,,,,,,

@@ -1,3 +1,3 @@
 Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-cost_unit,unit/kg,Cost of one kilo of material,,0,float,1,27E-01,0,,,2,,Material,,,VERSION,1,material ecomomical properties,
+cost_unit,unit/kg,Cost of one kilo of material,,0,float,1.27E-01,0,,,2,,Material,,,VERSION,1,material ecomomical properties,
 unit_name,-,Name of the unit,,0,str,$,,,,,,,,,,,,

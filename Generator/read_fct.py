@@ -75,7 +75,7 @@ def read_file(path):
     class_dict["name"] = path.split("\\")[-1][:-4]
 
     with open(path, mode="r") as csv_file:
-        class_csv = reader(csv_file, delimiter=";")
+        class_csv = reader(csv_file, delimiter=",")
         class_csv = list(class_csv)
         # Get all the properties of the class
         properties = list()

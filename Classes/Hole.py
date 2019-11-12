@@ -210,10 +210,10 @@ class Hole(FrozenClass):
         if self._mat_void is not None:
             self._mat_void.parent = self
 
-    # Material of the "void" part of the hole (Air in general)
+    # Material of the void part of the hole (Air in general)
     # Type : Material
     mat_void = property(
         fget=_get_mat_void,
         fset=_set_mat_void,
-        doc=u"""Material of the "void" part of the hole (Air in general)""",
+        doc=u"""Material of the void part of the hole (Air in general)""",
     )

@@ -168,5 +168,5 @@ class MatLamination(MatMagnetics):
     BH_curve = property(
         fget=_get_BH_curve,
         fset=_set_BH_curve,
-        doc=u"""B(H) curve (two columns matrix, H and B(H)) """,
+        doc=u"""B(H) curve (two columns matrix, H and B(H))""",
     )

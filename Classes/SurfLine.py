@@ -59,7 +59,7 @@ from pyleecan.Classes.Line import Line
 
 
 class SurfLine(Surface):
-    """SurfLine define by list of lines that delimit it, label and point reference."""
+    """SurfLine defined by list of lines that delimit it, label and point reference."""
 
     VERSION = 1
 

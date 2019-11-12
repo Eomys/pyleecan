@@ -3,5 +3,5 @@ time,s,Structural time vector (no symmetry),,Nt_tot,ndarray,None,,,,,,Output,,,V
 angle,rad,Structural position vector (no symmetry),,Na_tot,ndarray,None,,,,,,,,,,,,
 Nt_tot,-,Length of the time vector,,,int,None,,,,,,,,,,,,
 Na_tot,-,Length of the angle vector,,,int,None,,,,,,,,,,,,
-Prad,N.m^2,Radial magnetic air-gap surface force,,(Nt_tot ,Na_tot),ndarray,None,,,,,,,,,,,,
-Ptan,N.m^2,Tangential magnetic air-gap surface force,,(Nt_tot ,Na_tot),ndarray,None,,,,,,,,,,,,
+Prad,N.m^2,Radial magnetic air-gap surface force,,"(Nt_tot ,Na_tot)",ndarray,None,,,,,,,,,,,,
+Ptan,N.m^2,Tangential magnetic air-gap surface force,,"(Nt_tot ,Na_tot)",ndarray,None,,,,,,,,,,,,

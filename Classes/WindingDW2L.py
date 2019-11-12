@@ -19,7 +19,7 @@ from pyleecan.Classes.Conductor import Conductor
 
 
 class WindingDW2L(WindingDW1L):
-    """double layer overlapping integral distributed winding, radial coil superposition """
+    """double layer overlapping integral distributed winding, radial coil superposition"""
 
     VERSION = 1
 

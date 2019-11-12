@@ -283,12 +283,12 @@ class Winding(FrozenClass):
         check_var("is_reverse_wind", value, "bool")
         self._is_reverse_wind = value
 
-    # 1 to reverse the default winding algorithm along the airgap (c,b,a instead of a,b,c along the trigonometric direction)
+    # 1 to reverse the default winding algorithm along the airgap (c, b, a instead of a, b, c along the trigonometric direction)
     # Type : bool
     is_reverse_wind = property(
         fget=_get_is_reverse_wind,
         fset=_set_is_reverse_wind,
-        doc=u"""1 to reverse the default winding algorithm along the airgap (c,b,a instead of a,b,c along the trigonometric direction)""",
+        doc=u"""1 to reverse the default winding algorithm along the airgap (c, b, a instead of a, b, c along the trigonometric direction)""",
     )
 
     def _get_Nslot_shift_wind(self):
@@ -300,12 +300,12 @@ class Winding(FrozenClass):
         check_var("Nslot_shift_wind", value, "int")
         self._Nslot_shift_wind = value
 
-    # 0 not to change the stator winding connection matrix built by MANATEE number of slots to shift the coils obtained with MANATEE winding algorithm (a,b,c becomes b,c,a with Nslot_shift_wind1=1)
+    # 0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)
     # Type : int
     Nslot_shift_wind = property(
         fget=_get_Nslot_shift_wind,
         fset=_set_Nslot_shift_wind,
-        doc=u"""0 not to change the stator winding connection matrix built by MANATEE number of slots to shift the coils obtained with MANATEE winding algorithm (a,b,c becomes b,c,a with Nslot_shift_wind1=1)""",
+        doc=u"""0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)""",
     )
 
     def _get_qs(self):

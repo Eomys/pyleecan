@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-point_ref,-,Center of symmetry,,0,complex,0,,,,,,Geometry,,comp_mesh_dict,VERSION,1,SurfLine define by list of lines that delimit it, label and point reference.,Circle
+point_ref,-,Center of symmetry,,0,complex,0,,,,,,Geometry,,comp_mesh_dict,VERSION,1,"SurfLine define by list of lines that delimit it, label and point reference.",Circle
 label,-,Label of the surface,,0,str,,,,,,,,,draw_FEMM,,,,SurfLine
 ,,,,,,,,,,,,,,plot,,,,Trapeze
 ,,,,,,,,,,,,,,,,,,PolarArc

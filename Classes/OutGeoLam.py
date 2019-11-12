@@ -196,7 +196,7 @@ class OutGeoLam(FrozenClass):
     BH_curve = property(
         fget=_get_BH_curve,
         fset=_set_BH_curve,
-        doc=u"""B(H) curve (two columns matrix, H and B(H)) """,
+        doc=u"""B(H) curve (two columns matrix, H and B(H))""",
     )
 
     def _get_Ksfill(self):
@@ -264,12 +264,12 @@ class OutGeoLam(FrozenClass):
         check_var("sym", value, "int")
         self._sym = value
 
-    # Symmetry factor of the lamination (1=full machine, 2 = half,…)
+    # Symmetry factor of the lamination (1=full machine; 2 = half;...)
     # Type : int
     sym = property(
         fget=_get_sym,
         fset=_set_sym,
-        doc=u"""Symmetry factor of the lamination (1=full machine, 2 = half,…) """,
+        doc=u"""Symmetry factor of the lamination (1=full machine; 2 = half;...)""",
     )
 
     def _get_is_asym_wind(self):

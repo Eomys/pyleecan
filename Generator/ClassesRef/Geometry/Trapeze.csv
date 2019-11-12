@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-height,m,the height of the Trapeze,,,float,1,0,,,,,Geometry,Surface,check,VERSION,1,trapeze define by  the center of symmetry(point_ref), the label, the polar angle, the height and the big and small weight,
+height,m,the height of the Trapeze,,,float,1,0,,,,,Geometry,Surface,check,VERSION,1,"Trapeze defined by  the center of symmetry(point_ref), the label, the polar angle, the height and the big and small weight",
 W2,m,the big base of Trapeze,,,float,1,0,,,,,,,comp_length,,,,
 W1,m,the small base of the Trapeze,,,float,1,0,,,,,,,comp_surface,,,,
 ,,,,,,,,,,,,,,discretize,,,,
