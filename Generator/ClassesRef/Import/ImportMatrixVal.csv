@@ -1,2 +1,2 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-value;-;The matrix to return;;2;ndarray;;;;;;;Import;ImportMatrix;get_data;VERSION;1;Import directly the value from the object;
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
+value,-,The matrix to return,,2,ndarray,,,,,,,Import,ImportMatrix,get_data,VERSION,1,Import directly the value from the object,

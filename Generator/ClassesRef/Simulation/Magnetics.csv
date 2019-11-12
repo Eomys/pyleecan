@@ -1,14 +1,14 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constante Name;Constante Value;Description classe;Classe fille
-is_remove_slotS;-;1 to artificially remove stator slotting effects in permeance mmf calculations;;0;bool;0;;;;;;Simulation;;run;VERSION;1;Magnetic module abstract object;MagFEMM
-is_remove_slotR;-;1 to artificially remove rotor slotting effects in permeance mmf calculations;;0;bool;0;;;;;;;;comp_time_angle;;;;
-is_remove_vent;-;1 to artificially remove the ventilations duct;;0;bool;0;;;;;;;;comp_emf;;;;
-is_mmfs;-;1 to compute the stator magnetomotive force / stator armature magnetic field;;0;bool;1;;;;;;;;;;;;
-is_mmfr;-;1 to compute the rotor magnetomotive force / rotor magnetic field;;0;bool;1;;;;;;;;;;;;
-is_stator_linear_BH;-;0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000);;0;int;0;0;2;;;;;;;;;;
-is_rotor_linear_BH;-;0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000);;0;int;0;0;2;;;;;;;;;;
-is_symmetry_t;-;0 Compute on the complete time vector, 1 compute according to sym_t and is_antiper_t;;0;bool;0;;;;;;;;;;;;
-sym_t;-;Number of symmetry for the time vector;;0;int;1;1;;;;;;;;;;;
-is_antiper_t;-;To add an antiperiodicity to the time vector;;0;bool;0;;;;;;;;;;;;
-is_symmetry_a;;0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a;;0;bool;0;;;;;;;;;;;;
-sym_a;-;Number of symmetry for the angle vector;;0;int;1;1;;;;;;;;;;;
-is_antiper_a;-;To add an antiperiodicity to the angle vector;;0;bool;0;;;;;;;;;;;;
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+is_remove_slotS,-,1 to artificially remove stator slotting effects in permeance mmf calculations,,0,bool,0,,,,,,Simulation,,run,VERSION,1,Magnetic module abstract object,MagFEMM
+is_remove_slotR,-,1 to artificially remove rotor slotting effects in permeance mmf calculations,,0,bool,0,,,,,,,,comp_time_angle,,,,
+is_remove_vent,-,1 to artificially remove the ventilations duct,,0,bool,0,,,,,,,,comp_emf,,,,
+is_mmfs,-,1 to compute the stator magnetomotive force / stator armature magnetic field,,0,bool,1,,,,,,,,,,,,
+is_mmfr,-,1 to compute the rotor magnetomotive force / rotor magnetic field,,0,bool,1,,,,,,,,,,,,
+is_stator_linear_BH,-,0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000),,0,int,0,0,2,,,,,,,,,,
+is_rotor_linear_BH,-,0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000),,0,int,0,0,2,,,,,,,,,,
+is_symmetry_t,-,0 Compute on the complete time vector, 1 compute according to sym_t and is_antiper_t,,0,bool,0,,,,,,,,,,,,
+sym_t,-,Number of symmetry for the time vector,,0,int,1,1,,,,,,,,,,,
+is_antiper_t,-,To add an antiperiodicity to the time vector,,0,bool,0,,,,,,,,,,,,
+is_symmetry_a,,0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a,,0,bool,0,,,,,,,,,,,,
+sym_a,-,Number of symmetry for the angle vector,,0,int,1,1,,,,,,,,,,,
+is_antiper_a,-,To add an antiperiodicity to the angle vector,,0,bool,0,,,,,,,,,,,,

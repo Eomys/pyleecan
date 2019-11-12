@@ -1,2 +1,2 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-alpha;rad;angular positon of the first notch;;1;ndarray;;;;;;;Machine;Notch;build_geometry;VERSION;1;Class for evenly distributed notches;
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
+alpha,rad,angular positon of the first notch,,1,ndarray,,,,,,,Machine,Notch,build_geometry,VERSION,1,Class for evenly distributed notches,

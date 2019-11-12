@@ -1,8 +1,8 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-;;;;;;;;;;;;Machine;LamSlot;build_geometry;VERSION;1;Lamination with Slot for Magnets;
-;;;;;;;;;;;;;;check;;;;
-;;;;;;;;;;;;;;comp_masses;;;;
-;;;;;;;;;;;;;;comp_radius_mec;;;;
-;;;;;;;;;;;;;;comp_surfaces;;;;
-;;;;;;;;;;;;;;comp_volumes;;;;
-;;;;;;;;;;;;;;plot;;;;
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
+,,,,,,,,,,,,Machine,LamSlot,build_geometry,VERSION,1,Lamination with Slot for Magnets,
+,,,,,,,,,,,,,,check,,,,
+,,,,,,,,,,,,,,comp_masses,,,,
+,,,,,,,,,,,,,,comp_radius_mec,,,,
+,,,,,,,,,,,,,,comp_surfaces,,,,
+,,,,,,,,,,,,,,comp_volumes,,,,
+,,,,,,,,,,,,,,plot,,,,

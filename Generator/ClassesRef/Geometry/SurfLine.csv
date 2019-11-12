@@ -1,10 +1,10 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-line_list;-;List of Lines ;;0;[Line];[];;;;;;Geometry;Surface;get_lines;VERSION;1;SurfLine define by list of lines that delimit it, label and point reference.;
-;;;;;;;;;;;;;;rotate;;;;
-;;;;;;;;;;;;;;translate;;;;
-;;;;;;;;;;;;;;check;;;;
-;;;;;;;;;;;;;;comp_length;;;;
-;;;;;;;;;;;;;;get_patch;;;;
-;;;;;;;;;;;;;;discretize;;;;
-;;;;;;;;;;;;;;comp_surface;;;;
-;;;;;;;;;;;;;;plot_lines;;;;
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
+line_list,-,List of Lines ,,0,[Line],[],,,,,,Geometry,Surface,get_lines,VERSION,1,SurfLine define by list of lines that delimit it, label and point reference.,
+,,,,,,,,,,,,,,rotate,,,,
+,,,,,,,,,,,,,,translate,,,,
+,,,,,,,,,,,,,,check,,,,
+,,,,,,,,,,,,,,comp_length,,,,
+,,,,,,,,,,,,,,get_patch,,,,
+,,,,,,,,,,,,,,discretize,,,,
+,,,,,,,,,,,,,,comp_surface,,,,
+,,,,,,,,,,,,,,plot_lines,,,,

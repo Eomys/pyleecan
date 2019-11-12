@@ -1,15 +1,15 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-H0;m;Hole depth;;0;float;3,00E-03;0;;;2;;Slot;HoleMag;build_geometry;VERSION;1;3 magnets V hole;
-H1;m;Distance from the lamination Bore;;0;float;0;0;;;2;;;;check;IS_SYMMETRICAL;1;;
-H2;m;Hole width;;0;float;2,00E-02;0;;;2;;;;comp_alpha;;;;
-W0;m;Hole bottom width;;0;float;1,00E-02;0;;;2;;;;comp_mass_magnets;;;;
-W1;rad;Hole angular width;;0;float;0;0;;;2;;;;comp_radius;;;;
-W2;m;magnet_1 position;;0;float;1,00E-02;0;;;2;;;;comp_surface_magnets;;;;
-W3;m;magnet_1 width;;0;float;0;0;;;2;;;;comp_volume_magnets;;;;
-W4;m;magnet_2 position;;0;float;1,00E-02;0;;;2;;;;comp_width;;;;
-W5;m;magnet_2 width;;0;float;1,00E-02;0;;;2;;;;get_height_magnet;;;;
-W6;m;magnet_0 position;;0;float;0;0;;;2;;;;remove_magnet;;;;
-W7;m;magnet_0 width;;0;float;0;0;;;2;;;;;;;;
-magnet_0;-;First Magnet;;0;Magnet;;;;;;;;;;;;;
-magnet_1;-;Second Magnet;;0;Magnet;;;;;;;;;;;;;
-magnet_2;-;Third Magnet;;0;Magnet;;;;;;;;;;;;;
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
+H0,m,Hole depth,,0,float,3,00E-03,0,,,2,,Slot,HoleMag,build_geometry,VERSION,1,3 magnets V hole,
+H1,m,Distance from the lamination Bore,,0,float,0,0,,,2,,,,check,IS_SYMMETRICAL,1,,
+H2,m,Hole width,,0,float,2,00E-02,0,,,2,,,,comp_alpha,,,,
+W0,m,Hole bottom width,,0,float,1,00E-02,0,,,2,,,,comp_mass_magnets,,,,
+W1,rad,Hole angular width,,0,float,0,0,,,2,,,,comp_radius,,,,
+W2,m,magnet_1 position,,0,float,1,00E-02,0,,,2,,,,comp_surface_magnets,,,,
+W3,m,magnet_1 width,,0,float,0,0,,,2,,,,comp_volume_magnets,,,,
+W4,m,magnet_2 position,,0,float,1,00E-02,0,,,2,,,,comp_width,,,,
+W5,m,magnet_2 width,,0,float,1,00E-02,0,,,2,,,,get_height_magnet,,,,
+W6,m,magnet_0 position,,0,float,0,0,,,2,,,,remove_magnet,,,,
+W7,m,magnet_0 width,,0,float,0,0,,,2,,,,,,,,
+magnet_0,-,First Magnet,,0,Magnet,,,,,,,,,,,,,
+magnet_1,-,Second Magnet,,0,Magnet,,,,,,,,,,,,,
+magnet_2,-,Third Magnet,,0,Magnet,,,,,,,,,,,,,

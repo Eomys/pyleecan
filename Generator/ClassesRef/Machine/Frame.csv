@@ -1,8 +1,8 @@
-Variable name;Unit;Description (EN);Description (FR);Size;Type;Default value;Minimum value;Maximum value;Observations;Level;;Package;Inherit;Methods;Constant Name;Constant Value;Class description;Daughter classes
-Lfra;m;frame length [m];;0;float;3,50E-01;0;;;2;;Machine;;build_geometry;VERSION;1;machine frame;
-Rint;m;frame internal radius;;0;float;0,2;0;;;2;;;;comp_height_eq;;;;
-Rext;m;Frame external radius;;0;float;0,2;0;;;2;;;;comp_mass;;;;
-mat_type;;Frame material;;;Material;;;;;;;;;comp_surface;;;;
-;;;;;;;;;;;;;;comp_volume;;;;
-;;;;;;;;;;;;;;get_length;;;;
-;;;;;;;;;;;;;;plot;;;;
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
+Lfra,m,frame length [m],,0,float,3,50E-01,0,,,2,,Machine,,build_geometry,VERSION,1,machine frame,
+Rint,m,frame internal radius,,0,float,0,2,0,,,2,,,,comp_height_eq,,,,
+Rext,m,Frame external radius,,0,float,0,2,0,,,2,,,,comp_mass,,,,
+mat_type,,Frame material,,,Material,,,,,,,,,comp_surface,,,,
+,,,,,,,,,,,,,,comp_volume,,,,
+,,,,,,,,,,,,,,get_length,,,,
+,,,,,,,,,,,,,,plot,,,,
