@@ -14,9 +14,7 @@ except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Machine.CondType12.comp_surface_active import (
-        comp_surface_active,
-    )
+    from pyleecan.Methods.Machine.CondType12.comp_surface_active import comp_surface_active
 except ImportError as error:
     comp_surface_active = error
 
@@ -45,6 +43,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class CondType12(Conductor):
     """parallel stranded conductor consisting of at least a single round wire"""
 
@@ -53,81 +52,38 @@ class CondType12(Conductor):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.CondType12.check
     if isinstance(check, ImportError):
-        check = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use CondType12 method check: " + str(check))
-            )
-        )
+        check = property(fget=lambda x: raise_(ImportError("Can't use CondType12 method check: " + str(check))))
     else:
         check = check
     # cf Methods.Machine.CondType12.comp_surface_active
     if isinstance(comp_surface_active, ImportError):
-        comp_surface_active = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CondType12 method comp_surface_active: "
-                    + str(comp_surface_active)
-                )
-            )
-        )
+        comp_surface_active = property(fget=lambda x: raise_(ImportError("Can't use CondType12 method comp_surface_active: " + str(comp_surface_active))))
     else:
         comp_surface_active = comp_surface_active
     # cf Methods.Machine.CondType12.comp_height
     if isinstance(comp_height, ImportError):
-        comp_height = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CondType12 method comp_height: " + str(comp_height)
-                )
-            )
-        )
+        comp_height = property(fget=lambda x: raise_(ImportError("Can't use CondType12 method comp_height: " + str(comp_height))))
     else:
         comp_height = comp_height
     # cf Methods.Machine.CondType12.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CondType12 method comp_surface: " + str(comp_surface)
-                )
-            )
-        )
+        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use CondType12 method comp_surface: " + str(comp_surface))))
     else:
         comp_surface = comp_surface
     # cf Methods.Machine.CondType12.comp_width
     if isinstance(comp_width, ImportError):
-        comp_width = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CondType12 method comp_width: " + str(comp_width)
-                )
-            )
-        )
+        comp_width = property(fget=lambda x: raise_(ImportError("Can't use CondType12 method comp_width: " + str(comp_width))))
     else:
         comp_width = comp_width
     # cf Methods.Machine.CondType12.plot
     if isinstance(plot, ImportError):
-        plot = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use CondType12 method plot: " + str(plot))
-            )
-        )
+        plot = property(fget=lambda x: raise_(ImportError("Can't use CondType12 method plot: " + str(plot))))
     else:
         plot = plot
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        Wwire=0.015,
-        Wins_cond=0.015,
-        Nwppc=1,
-        Wins_wire=0,
-        Kwoh=0.5,
-        cond_mat=-1,
-        ins_mat=-1,
-        init_dict=None,
-    ):
+    def __init__(self, Wwire=0.015, Wins_cond=0.015, Nwppc=1, Wins_wire=0, Kwoh=0.5, cond_mat=-1, ins_mat=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -142,18 +98,7 @@ class CondType12(Conductor):
         if ins_mat == -1:
             ins_mat = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "Wwire",
-                    "Wins_cond",
-                    "Nwppc",
-                    "Wins_wire",
-                    "Kwoh",
-                    "cond_mat",
-                    "ins_mat",
-                ],
-            )
+            check_init_dict(init_dict, ["Wwire", "Wins_cond", "Nwppc", "Wins_wire", "Kwoh", "cond_mat", "ins_mat"])
             # Overwrite default value with init_dict content
             if "Wwire" in list(init_dict.keys()):
                 Wwire = init_dict["Wwire"]
@@ -252,11 +197,8 @@ class CondType12(Conductor):
 
     # cf schematics, single wire diameter without insulation [m]
     # Type : float, min = 0
-    Wwire = property(
-        fget=_get_Wwire,
-        fset=_set_Wwire,
-        doc=u"""cf schematics, single wire diameter without insulation [m]""",
-    )
+    Wwire = property(fget=_get_Wwire, fset=_set_Wwire,
+                     doc=u"""cf schematics, single wire diameter without insulation [m]""")
 
     def _get_Wins_cond(self):
         """getter of Wins_cond"""
@@ -269,11 +211,8 @@ class CondType12(Conductor):
 
     # (advanced) cf schematics, winding coil insulation diameter [m]
     # Type : float, min = 0
-    Wins_cond = property(
-        fget=_get_Wins_cond,
-        fset=_set_Wins_cond,
-        doc=u"""(advanced) cf schematics, winding coil insulation diameter [m]""",
-    )
+    Wins_cond = property(fget=_get_Wins_cond, fset=_set_Wins_cond,
+                         doc=u"""(advanced) cf schematics, winding coil insulation diameter [m]""")
 
     def _get_Nwppc(self):
         """getter of Nwppc"""
@@ -286,11 +225,8 @@ class CondType12(Conductor):
 
     # cf schematics, winding number of random wires (strands) in parallel per coil
     # Type : int, min = 1
-    Nwppc = property(
-        fget=_get_Nwppc,
-        fset=_set_Nwppc,
-        doc=u"""cf schematics, winding number of random wires (strands) in parallel per coil""",
-    )
+    Nwppc = property(fget=_get_Nwppc, fset=_set_Nwppc,
+                     doc=u"""cf schematics, winding number of random wires (strands) in parallel per coil""")
 
     def _get_Wins_wire(self):
         """getter of Wins_wire"""
@@ -303,11 +239,8 @@ class CondType12(Conductor):
 
     # (advanced) cf schematics, winding strand insulation thickness [m]
     # Type : float, min = 0
-    Wins_wire = property(
-        fget=_get_Wins_wire,
-        fset=_set_Wins_wire,
-        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]""",
-    )
+    Wins_wire = property(fget=_get_Wins_wire, fset=_set_Wins_wire,
+                         doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]""")
 
     def _get_Kwoh(self):
         """getter of Kwoh"""
@@ -320,8 +253,5 @@ class CondType12(Conductor):
 
     # winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)
     # Type : float, min = 0
-    Kwoh = property(
-        fget=_get_Kwoh,
-        fset=_set_Kwoh,
-        doc=u"""winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)""",
-    )
+    Kwoh = property(fget=_get_Kwoh, fset=_set_Kwoh,
+                    doc=u"""winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)""")

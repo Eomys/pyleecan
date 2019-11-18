@@ -18,6 +18,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class HoleMag(Hole):
     """Hole with magnets for lamination (abstract)"""
 
@@ -25,11 +26,7 @@ class HoleMag(Hole):
 
     # cf Methods.Slot.HoleMag.has_magnet
     if isinstance(has_magnet, ImportError):
-        has_magnet = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use HoleMag method has_magnet: " + str(has_magnet))
-            )
-        )
+        has_magnet = property(fget=lambda x: raise_(ImportError("Can't use HoleMag method has_magnet: " + str(has_magnet))))
     else:
         has_magnet = has_magnet
     # save method is available in all object
@@ -95,3 +92,5 @@ class HoleMag(Hole):
 
         # Set to None the properties inherited from Hole
         super(HoleMag, self)._set_None()
+
+

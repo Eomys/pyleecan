@@ -40,40 +40,22 @@ class Arc(Line):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Geometry.Arc.draw_FEMM
     if isinstance(draw_FEMM, ImportError):
-        draw_FEMM = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc method draw_FEMM: " + str(draw_FEMM))
-            )
-        )
+        draw_FEMM = property(fget=lambda x: raise_(ImportError("Can't use Arc method draw_FEMM: " + str(draw_FEMM))))
     else:
         draw_FEMM = draw_FEMM
     # cf Methods.Geometry.Arc.intersect_line
     if isinstance(intersect_line, ImportError):
-        intersect_line = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Arc method intersect_line: " + str(intersect_line)
-                )
-            )
-        )
+        intersect_line = property(fget=lambda x: raise_(ImportError("Can't use Arc method intersect_line: " + str(intersect_line))))
     else:
         intersect_line = intersect_line
     # cf Methods.Geometry.Arc.is_on_arc
     if isinstance(is_on_arc, ImportError):
-        is_on_arc = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc method is_on_arc: " + str(is_on_arc))
-            )
-        )
+        is_on_arc = property(fget=lambda x: raise_(ImportError("Can't use Arc method is_on_arc: " + str(is_on_arc))))
     else:
         is_on_arc = is_on_arc
     # cf Methods.Geometry.Arc.split_line
     if isinstance(split_line, ImportError):
-        split_line = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc method split_line: " + str(split_line))
-            )
-        )
+        split_line = property(fget=lambda x: raise_(ImportError("Can't use Arc method split_line: " + str(split_line))))
     else:
         split_line = split_line
     # save method is available in all object
@@ -135,3 +117,5 @@ class Arc(Line):
 
         # Set to None the properties inherited from Line
         super(Arc, self)._set_None()
+
+

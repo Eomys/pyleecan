@@ -23,6 +23,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Force import Force
 
 
+
 class Structural(FrozenClass):
     """Structural module abstract object"""
 
@@ -31,23 +32,12 @@ class Structural(FrozenClass):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.Structural.run
     if isinstance(run, ImportError):
-        run = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Structural method run: " + str(run))
-            )
-        )
+        run = property(fget=lambda x: raise_(ImportError("Can't use Structural method run: " + str(run))))
     else:
         run = run
     # cf Methods.Simulation.Structural.comp_time_angle
     if isinstance(comp_time_angle, ImportError):
-        comp_time_angle = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Structural method comp_time_angle: "
-                    + str(comp_time_angle)
-                )
-            )
-        )
+        comp_time_angle = property(fget=lambda x: raise_(ImportError("Can't use Structural method comp_time_angle: " + str(comp_time_angle))))
     else:
         comp_time_angle = comp_time_angle
     # save method is available in all object
@@ -75,14 +65,12 @@ class Structural(FrozenClass):
         # force can be None, a Force object or a dict
         if isinstance(force, dict):
             # Check that the type is correct (including daughter)
-            class_name = force.get("__class__")
-            if class_name not in ["Force", "ForceMT"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for force"
-                )
+            class_name = force.get('__class__')
+            if class_name not in ['Force', 'ForceMT']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for force")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.force = class_obj(init_dict=force)
         else:
             self.force = force
@@ -140,7 +128,7 @@ class Structural(FrozenClass):
 
         if self._force is not None:
             self._force.parent = self
-
     # Force module
     # Type : Force
-    force = property(fget=_get_force, fset=_set_force, doc=u"""Force module""")
+    force = property(fget=_get_force, fset=_set_force,
+                     doc=u"""Force module""")

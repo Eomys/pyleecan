@@ -45,9 +45,7 @@ class MatMagnetics(FrozenClass):
         if self.parent is None:
             MatMagnetics_str += "parent = None " + linesep
         else:
-            MatMagnetics_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            MatMagnetics_str += "parent = " + str(type(self.parent)) + " object" + linesep
         MatMagnetics_str += "mur_lin = " + str(self.mur_lin)
         return MatMagnetics_str
 
@@ -86,6 +84,5 @@ class MatMagnetics(FrozenClass):
 
     # Relative magnetic permeability
     # Type : float, min = 0
-    mur_lin = property(
-        fget=_get_mur_lin, fset=_set_mur_lin, doc=u"""Relative magnetic permeability"""
-    )
+    mur_lin = property(fget=_get_mur_lin, fset=_set_mur_lin,
+                       doc=u"""Relative magnetic permeability""")

@@ -1,20 +1,22 @@
 import femm
 import numpy as np
+from os.path import join
 from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
-
+from pyleecan.Generator import MAIN_DIR
 from pyleecan.Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from pyleecan.Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from pyleecan.Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
-
+from pyleecan.Classes.MeshMat import MeshMat
 
 def solve_FEMM(self, output, sym, FEMM_dict):
 
-    # Loading parameters for readibility
+    # Loading parameters for readibilitys
     angle = output.mag.angle
 
     L1 = output.simu.machine.stator.comp_length()
     Nt_tot = output.mag.Nt_tot  # Number of time step
     Na_tot = output.mag.Na_tot  # Number of angular step
+    save_path = self.get_path_save(output)
 
     if hasattr(output.simu.machine.stator, "winding"):
         qs = output.simu.machine.stator.winding.qs  # Winding phase number
@@ -35,6 +37,11 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     lam_ext = output.simu.machine.get_lamination(False)
     Rgap_mec_int = lam_int.comp_radius_mec()
     Rgap_mec_ext = lam_ext.comp_radius_mec()
+
+    if self.is_get_mesh or self.is_save_FEA:
+        mesh = [MeshMat() for ii in range(Nt_tot)]
+    else:
+        mesh = [MeshMat()]
 
     # Compute the data for each time step
     for ii in range(Nt_tot):
@@ -72,6 +79,10 @@ def solve_FEMM(self, output, sym, FEMM_dict):
                 qs, Npcpp, is_stator=True, Lfemm=FEMM_dict["Lfemm"], L1=L1, sym=sym
             )
 
+        # Load mesh data & solution
+        if self.is_get_mesh or self.is_save_FEA:
+            mesh[ii] = self.get_mesh(self.is_get_mesh, self.is_save_FEA, save_path, ii)
+
     # Shift to take into account stator position
     roll_id = int(self.angle_stator * Na_tot / (2 * pi))
     Br = roll(Br, roll_id, axis=1)
@@ -85,6 +96,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     if output.mag.Tem_av != 0:
         output.mag.Tem_rip = abs((np_max(Tem) - np_min(Tem)) / output.mag.Tem_av)
     output.mag.Phi_wind_stator = Phi_wind_stator
+    output.mag.mesh = mesh
 
     if hasattr(output.simu.machine.stator, "winding"):
         # Electromotive forces computation (update output)

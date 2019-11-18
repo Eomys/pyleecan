@@ -25,13 +25,7 @@ class ImportMatrixVal(ImportMatrix):
 
     # cf Methods.Import.ImportMatrixVal.get_data
     if isinstance(get_data, ImportError):
-        get_data = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ImportMatrixVal method get_data: " + str(get_data)
-                )
-            )
-        )
+        get_data = property(fget=lambda x: raise_(ImportError("Can't use ImportMatrixVal method get_data: " + str(get_data))))
     else:
         get_data = get_data
     # save method is available in all object
@@ -122,4 +116,5 @@ class ImportMatrixVal(ImportMatrix):
 
     # The matrix to return
     # Type : ndarray
-    value = property(fget=_get_value, fset=_set_value, doc=u"""The matrix to return""")
+    value = property(fget=_get_value, fset=_set_value,
+                     doc=u"""The matrix to return""")

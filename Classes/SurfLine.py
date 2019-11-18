@@ -58,6 +58,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Line import Line
 
 
+
 class SurfLine(Surface):
     """SurfLine defined by list of lines that delimit it, label and point reference."""
 
@@ -66,87 +67,47 @@ class SurfLine(Surface):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Geometry.SurfLine.get_lines
     if isinstance(get_lines, ImportError):
-        get_lines = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method get_lines: " + str(get_lines))
-            )
-        )
+        get_lines = property(fget=lambda x: raise_(ImportError("Can't use SurfLine method get_lines: " + str(get_lines))))
     else:
         get_lines = get_lines
     # cf Methods.Geometry.SurfLine.rotate
     if isinstance(rotate, ImportError):
-        rotate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method rotate: " + str(rotate))
-            )
-        )
+        rotate = property(fget=lambda x: raise_(ImportError("Can't use SurfLine method rotate: " + str(rotate))))
     else:
         rotate = rotate
     # cf Methods.Geometry.SurfLine.translate
     if isinstance(translate, ImportError):
-        translate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method translate: " + str(translate))
-            )
-        )
+        translate = property(fget=lambda x: raise_(ImportError("Can't use SurfLine method translate: " + str(translate))))
     else:
         translate = translate
     # cf Methods.Geometry.SurfLine.check
     if isinstance(check, ImportError):
-        check = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method check: " + str(check))
-            )
-        )
+        check = property(fget=lambda x: raise_(ImportError("Can't use SurfLine method check: " + str(check))))
     else:
         check = check
     # cf Methods.Geometry.SurfLine.comp_length
     if isinstance(comp_length, ImportError):
-        comp_length = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SurfLine method comp_length: " + str(comp_length)
-                )
-            )
-        )
+        comp_length = property(fget=lambda x: raise_(ImportError("Can't use SurfLine method comp_length: " + str(comp_length))))
     else:
         comp_length = comp_length
     # cf Methods.Geometry.SurfLine.get_patch
     if isinstance(get_patch, ImportError):
-        get_patch = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method get_patch: " + str(get_patch))
-            )
-        )
+        get_patch = property(fget=lambda x: raise_(ImportError("Can't use SurfLine method get_patch: " + str(get_patch))))
     else:
         get_patch = get_patch
     # cf Methods.Geometry.SurfLine.discretize
     if isinstance(discretize, ImportError):
-        discretize = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method discretize: " + str(discretize))
-            )
-        )
+        discretize = property(fget=lambda x: raise_(ImportError("Can't use SurfLine method discretize: " + str(discretize))))
     else:
         discretize = discretize
     # cf Methods.Geometry.SurfLine.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SurfLine method comp_surface: " + str(comp_surface)
-                )
-            )
-        )
+        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use SurfLine method comp_surface: " + str(comp_surface))))
     else:
         comp_surface = comp_surface
     # cf Methods.Geometry.SurfLine.plot_lines
     if isinstance(plot_lines, ImportError):
-        plot_lines = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method plot_lines: " + str(plot_lines))
-            )
-        )
+        plot_lines = property(fget=lambda x: raise_(ImportError("Can't use SurfLine method plot_lines: " + str(plot_lines))))
     else:
         plot_lines = plot_lines
     # save method is available in all object
@@ -180,25 +141,12 @@ class SurfLine(Surface):
                     self.line_list.append(Line())
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Line",
-                        "Segment",
-                        "Arc1",
-                        "Arc2",
-                        "Arc3",
-                        "Arc",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for line_list"
-                        )
+                    class_name = obj.get('__class__')
+                    if class_name not in ['Line', 'Segment', 'Arc1', 'Arc2', 'Arc3', 'Arc']:
+                        raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for line_list")
                     # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
+                    module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+                    class_obj = getattr(module,class_name)
                     self.line_list.append(class_obj(init_dict=obj))
                 else:
                     self.line_list.append(obj)
@@ -220,13 +168,7 @@ class SurfLine(Surface):
         if len(self.line_list) == 0:
             SurfLine_str += "line_list = []"
         for ii in range(len(self.line_list)):
-            SurfLine_str += (
-                "line_list["
-                + str(ii)
-                + "] = "
-                + str(self.line_list[ii].as_dict())
-                + "\n"
-            )
+            SurfLine_str += "line_list["+str(ii)+"] = "+str(self.line_list[ii].as_dict())+"\n"
         return SurfLine_str
 
     def __eq__(self, other):
@@ -279,9 +221,7 @@ class SurfLine(Surface):
         for obj in self._line_list:
             if obj is not None:
                 obj.parent = self
-
-    # List of Lines
+    # List of Lines 
     # Type : [Line]
-    line_list = property(
-        fget=_get_line_list, fset=_set_line_list, doc=u"""List of Lines """
-    )
+    line_list = property(fget=_get_line_list, fset=_set_line_list,
+                         doc=u"""List of Lines """)

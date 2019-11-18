@@ -24,16 +24,12 @@ except ImportError as error:
     comp_masses = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.comp_width_airgap_mag import (
-        comp_width_airgap_mag,
-    )
+    from pyleecan.Methods.Machine.Machine.comp_width_airgap_mag import comp_width_airgap_mag
 except ImportError as error:
     comp_width_airgap_mag = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.comp_width_airgap_mec import (
-        comp_width_airgap_mec,
-    )
+    from pyleecan.Methods.Machine.Machine.comp_width_airgap_mec import comp_width_airgap_mec
 except ImportError as error:
     comp_width_airgap_mec = error
 
@@ -58,9 +54,7 @@ except ImportError as error:
     comp_output_geo = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.comp_length_airgap_active import (
-        comp_length_airgap_active,
-    )
+    from pyleecan.Methods.Machine.Machine.comp_length_airgap_active import comp_length_airgap_active
 except ImportError as error:
     comp_length_airgap_active = error
 
@@ -76,6 +70,7 @@ from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
 
 
+
 class Machine(FrozenClass):
     """Abstract class for machines"""
 
@@ -84,135 +79,63 @@ class Machine(FrozenClass):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.Machine.build_geometry
     if isinstance(build_geometry, ImportError):
-        build_geometry = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Machine method build_geometry: " + str(build_geometry)
-                )
-            )
-        )
+        build_geometry = property(fget=lambda x: raise_(ImportError("Can't use Machine method build_geometry: " + str(build_geometry))))
     else:
         build_geometry = build_geometry
     # cf Methods.Machine.Machine.check
     if isinstance(check, ImportError):
-        check = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Machine method check: " + str(check))
-            )
-        )
+        check = property(fget=lambda x: raise_(ImportError("Can't use Machine method check: " + str(check))))
     else:
         check = check
     # cf Methods.Machine.Machine.comp_masses
     if isinstance(comp_masses, ImportError):
-        comp_masses = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Machine method comp_masses: " + str(comp_masses))
-            )
-        )
+        comp_masses = property(fget=lambda x: raise_(ImportError("Can't use Machine method comp_masses: " + str(comp_masses))))
     else:
         comp_masses = comp_masses
     # cf Methods.Machine.Machine.comp_width_airgap_mag
     if isinstance(comp_width_airgap_mag, ImportError):
-        comp_width_airgap_mag = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Machine method comp_width_airgap_mag: "
-                    + str(comp_width_airgap_mag)
-                )
-            )
-        )
+        comp_width_airgap_mag = property(fget=lambda x: raise_(ImportError("Can't use Machine method comp_width_airgap_mag: " + str(comp_width_airgap_mag))))
     else:
         comp_width_airgap_mag = comp_width_airgap_mag
     # cf Methods.Machine.Machine.comp_width_airgap_mec
     if isinstance(comp_width_airgap_mec, ImportError):
-        comp_width_airgap_mec = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Machine method comp_width_airgap_mec: "
-                    + str(comp_width_airgap_mec)
-                )
-            )
-        )
+        comp_width_airgap_mec = property(fget=lambda x: raise_(ImportError("Can't use Machine method comp_width_airgap_mec: " + str(comp_width_airgap_mec))))
     else:
         comp_width_airgap_mec = comp_width_airgap_mec
     # cf Methods.Machine.Machine.get_lamination
     if isinstance(get_lamination, ImportError):
-        get_lamination = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Machine method get_lamination: " + str(get_lamination)
-                )
-            )
-        )
+        get_lamination = property(fget=lambda x: raise_(ImportError("Can't use Machine method get_lamination: " + str(get_lamination))))
     else:
         get_lamination = get_lamination
     # cf Methods.Machine.Machine.comp_Rgap_mec
     if isinstance(comp_Rgap_mec, ImportError):
-        comp_Rgap_mec = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Machine method comp_Rgap_mec: " + str(comp_Rgap_mec)
-                )
-            )
-        )
+        comp_Rgap_mec = property(fget=lambda x: raise_(ImportError("Can't use Machine method comp_Rgap_mec: " + str(comp_Rgap_mec))))
     else:
         comp_Rgap_mec = comp_Rgap_mec
     # cf Methods.Machine.Machine.plot
     if isinstance(plot, ImportError):
-        plot = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Machine method plot: " + str(plot))
-            )
-        )
+        plot = property(fget=lambda x: raise_(ImportError("Can't use Machine method plot: " + str(plot))))
     else:
         plot = plot
     # cf Methods.Machine.Machine.comp_output_geo
     if isinstance(comp_output_geo, ImportError):
-        comp_output_geo = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Machine method comp_output_geo: " + str(comp_output_geo)
-                )
-            )
-        )
+        comp_output_geo = property(fget=lambda x: raise_(ImportError("Can't use Machine method comp_output_geo: " + str(comp_output_geo))))
     else:
         comp_output_geo = comp_output_geo
     # cf Methods.Machine.Machine.comp_length_airgap_active
     if isinstance(comp_length_airgap_active, ImportError):
-        comp_length_airgap_active = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Machine method comp_length_airgap_active: "
-                    + str(comp_length_airgap_active)
-                )
-            )
-        )
+        comp_length_airgap_active = property(fget=lambda x: raise_(ImportError("Can't use Machine method comp_length_airgap_active: " + str(comp_length_airgap_active))))
     else:
         comp_length_airgap_active = comp_length_airgap_active
     # cf Methods.Machine.Machine.get_polar_eq
     if isinstance(get_polar_eq, ImportError):
-        get_polar_eq = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Machine method get_polar_eq: " + str(get_polar_eq)
-                )
-            )
-        )
+        get_polar_eq = property(fget=lambda x: raise_(ImportError("Can't use Machine method get_polar_eq: " + str(get_polar_eq))))
     else:
         get_polar_eq = get_polar_eq
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        rotor=-1,
-        stator=-1,
-        frame=-1,
-        shaft=-1,
-        name="default_machine",
-        desc="",
-        init_dict=None,
-    ):
+    def __init__(self, rotor=-1, stator=-1, frame=-1, shaft=-1, name="default_machine", desc="", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -231,9 +154,7 @@ class Machine(FrozenClass):
         if shaft == -1:
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["rotor", "stator", "frame", "shaft", "name", "desc"]
-            )
+            check_init_dict(init_dict, ["rotor", "stator", "frame", "shaft", "name", "desc"])
             # Overwrite default value with init_dict content
             if "rotor" in list(init_dict.keys()):
                 rotor = init_dict["rotor"]
@@ -252,42 +173,24 @@ class Machine(FrozenClass):
         # rotor can be None, a Lamination object or a dict
         if isinstance(rotor, dict):
             # Check that the type is correct (including daughter)
-            class_name = rotor.get("__class__")
-            if class_name not in [
-                "Lamination",
-                "LamHole",
-                "LamSlot",
-                "LamSlotWind",
-                "LamSlotMag",
-                "LamSquirrelCage",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for rotor"
-                )
+            class_name = rotor.get('__class__')
+            if class_name not in ['Lamination', 'LamHole', 'LamSlot', 'LamSlotWind', 'LamSlotMag', 'LamSquirrelCage']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for rotor")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.rotor = class_obj(init_dict=rotor)
         else:
             self.rotor = rotor
         # stator can be None, a Lamination object or a dict
         if isinstance(stator, dict):
             # Check that the type is correct (including daughter)
-            class_name = stator.get("__class__")
-            if class_name not in [
-                "Lamination",
-                "LamHole",
-                "LamSlot",
-                "LamSlotWind",
-                "LamSlotMag",
-                "LamSquirrelCage",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for stator"
-                )
+            class_name = stator.get('__class__')
+            if class_name not in ['Lamination', 'LamHole', 'LamSlot', 'LamSlotWind', 'LamSlotMag', 'LamSquirrelCage']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for stator")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.stator = class_obj(init_dict=stator)
         else:
             self.stator = stator
@@ -394,10 +297,10 @@ class Machine(FrozenClass):
 
         if self._rotor is not None:
             self._rotor.parent = self
-
     # Machine's Rotor
     # Type : Lamination
-    rotor = property(fget=_get_rotor, fset=_set_rotor, doc=u"""Machine's Rotor""")
+    rotor = property(fget=_get_rotor, fset=_set_rotor,
+                     doc=u"""Machine's Rotor""")
 
     def _get_stator(self):
         """getter of stator"""
@@ -410,10 +313,10 @@ class Machine(FrozenClass):
 
         if self._stator is not None:
             self._stator.parent = self
-
     # Machine's Stator
     # Type : Lamination
-    stator = property(fget=_get_stator, fset=_set_stator, doc=u"""Machine's Stator""")
+    stator = property(fget=_get_stator, fset=_set_stator,
+                      doc=u"""Machine's Stator""")
 
     def _get_frame(self):
         """getter of frame"""
@@ -426,10 +329,10 @@ class Machine(FrozenClass):
 
         if self._frame is not None:
             self._frame.parent = self
-
     # Machine's Frame
     # Type : Frame
-    frame = property(fget=_get_frame, fset=_set_frame, doc=u"""Machine's Frame""")
+    frame = property(fget=_get_frame, fset=_set_frame,
+                     doc=u"""Machine's Frame""")
 
     def _get_shaft(self):
         """getter of shaft"""
@@ -442,10 +345,10 @@ class Machine(FrozenClass):
 
         if self._shaft is not None:
             self._shaft.parent = self
-
     # Machine's Shaft
     # Type : Shaft
-    shaft = property(fget=_get_shaft, fset=_set_shaft, doc=u"""Machine's Shaft""")
+    shaft = property(fget=_get_shaft, fset=_set_shaft,
+                     doc=u"""Machine's Shaft""")
 
     def _get_name(self):
         """getter of name"""
@@ -458,7 +361,8 @@ class Machine(FrozenClass):
 
     # Name of the machine
     # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""Name of the machine""")
+    name = property(fget=_get_name, fset=_set_name,
+                    doc=u"""Name of the machine""")
 
     def _get_desc(self):
         """getter of desc"""
@@ -471,4 +375,5 @@ class Machine(FrozenClass):
 
     # Machine description
     # Type : str
-    desc = property(fget=_get_desc, fset=_set_desc, doc=u"""Machine description""")
+    desc = property(fget=_get_desc, fset=_set_desc,
+                    doc=u"""Machine description""")

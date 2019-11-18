@@ -38,6 +38,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class VentilationPolar(Hole):
     """Polar axial ventilation duct"""
 
@@ -46,57 +47,27 @@ class VentilationPolar(Hole):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.VentilationPolar.build_geometry
     if isinstance(build_geometry, ImportError):
-        build_geometry = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VentilationPolar method build_geometry: "
-                    + str(build_geometry)
-                )
-            )
-        )
+        build_geometry = property(fget=lambda x: raise_(ImportError("Can't use VentilationPolar method build_geometry: " + str(build_geometry))))
     else:
         build_geometry = build_geometry
     # cf Methods.Slot.VentilationPolar.check
     if isinstance(check, ImportError):
-        check = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use VentilationPolar method check: " + str(check))
-            )
-        )
+        check = property(fget=lambda x: raise_(ImportError("Can't use VentilationPolar method check: " + str(check))))
     else:
         check = check
     # cf Methods.Slot.VentilationPolar.comp_radius
     if isinstance(comp_radius, ImportError):
-        comp_radius = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VentilationPolar method comp_radius: " + str(comp_radius)
-                )
-            )
-        )
+        comp_radius = property(fget=lambda x: raise_(ImportError("Can't use VentilationPolar method comp_radius: " + str(comp_radius))))
     else:
         comp_radius = comp_radius
     # cf Methods.Slot.VentilationPolar.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VentilationPolar method comp_surface: "
-                    + str(comp_surface)
-                )
-            )
-        )
+        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use VentilationPolar method comp_surface: " + str(comp_surface))))
     else:
         comp_surface = comp_surface
     # cf Methods.Slot.VentilationPolar.get_center
     if isinstance(get_center, ImportError):
-        get_center = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use VentilationPolar method get_center: " + str(get_center)
-                )
-            )
-        )
+        get_center = property(fget=lambda x: raise_(ImportError("Can't use VentilationPolar method get_center: " + str(get_center))))
     else:
         get_center = get_center
     # save method is available in all object
@@ -206,11 +177,8 @@ class VentilationPolar(Hole):
 
     # Shift angle of the hole around circumference
     # Type : float, min = 0, max = 6.29
-    Alpha0 = property(
-        fget=_get_Alpha0,
-        fset=_set_Alpha0,
-        doc=u"""Shift angle of the hole around circumference""",
-    )
+    Alpha0 = property(fget=_get_Alpha0, fset=_set_Alpha0,
+                      doc=u"""Shift angle of the hole around circumference""")
 
     def _get_D0(self):
         """getter of D0"""
@@ -223,7 +191,8 @@ class VentilationPolar(Hole):
 
     # Height of the hole
     # Type : float, min = 0
-    D0 = property(fget=_get_D0, fset=_set_D0, doc=u"""Height of the hole""")
+    D0 = property(fget=_get_D0, fset=_set_D0,
+                  doc=u"""Height of the hole""")
 
     def _get_H0(self):
         """getter of H0"""
@@ -236,7 +205,8 @@ class VentilationPolar(Hole):
 
     # Radius of the bottom of Hole
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Radius of the bottom of Hole""")
+    H0 = property(fget=_get_H0, fset=_set_H0,
+                  doc=u"""Radius of the bottom of Hole""")
 
     def _get_W1(self):
         """getter of W1"""
@@ -249,4 +219,5 @@ class VentilationPolar(Hole):
 
     # Hole angular width
     # Type : float, min = 0, max = 6.29
-    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Hole angular width""")
+    W1 = property(fget=_get_W1, fset=_set_W1,
+                  doc=u"""Hole angular width""")

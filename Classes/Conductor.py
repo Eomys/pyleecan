@@ -18,6 +18,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class Conductor(FrozenClass):
     """abstact class for conductors"""
 
@@ -25,11 +26,7 @@ class Conductor(FrozenClass):
 
     # cf Methods.Machine.Conductor.check
     if isinstance(check, ImportError):
-        check = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Conductor method check: " + str(check))
-            )
-        )
+        check = property(fget=lambda x: raise_(ImportError("Can't use Conductor method check: " + str(check))))
     else:
         check = check
     # save method is available in all object
@@ -80,9 +77,7 @@ class Conductor(FrozenClass):
             Conductor_str += "parent = None " + linesep
         else:
             Conductor_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Conductor_str += (
-            "cond_mat = " + str(self.cond_mat.as_dict()) + linesep + linesep
-        )
+        Conductor_str += "cond_mat = " + str(self.cond_mat.as_dict()) + linesep + linesep
         Conductor_str += "ins_mat = " + str(self.ins_mat.as_dict())
         return Conductor_str
 
@@ -133,12 +128,10 @@ class Conductor(FrozenClass):
 
         if self._cond_mat is not None:
             self._cond_mat.parent = self
-
     # Material of the conductor
     # Type : Material
-    cond_mat = property(
-        fget=_get_cond_mat, fset=_set_cond_mat, doc=u"""Material of the conductor"""
-    )
+    cond_mat = property(fget=_get_cond_mat, fset=_set_cond_mat,
+                        doc=u"""Material of the conductor""")
 
     def _get_ins_mat(self):
         """getter of ins_mat"""
@@ -151,9 +144,7 @@ class Conductor(FrozenClass):
 
         if self._ins_mat is not None:
             self._ins_mat.parent = self
-
     # Material of the insulation
     # Type : Material
-    ins_mat = property(
-        fget=_get_ins_mat, fset=_set_ins_mat, doc=u"""Material of the insulation"""
-    )
+    ins_mat = property(fget=_get_ins_mat, fset=_set_ins_mat,
+                       doc=u"""Material of the insulation""")

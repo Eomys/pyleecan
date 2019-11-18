@@ -60,78 +60,42 @@ class PolarArc(Surface):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Geometry.PolarArc.get_lines
     if isinstance(get_lines, ImportError):
-        get_lines = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use PolarArc method get_lines: " + str(get_lines))
-            )
-        )
+        get_lines = property(fget=lambda x: raise_(ImportError("Can't use PolarArc method get_lines: " + str(get_lines))))
     else:
         get_lines = get_lines
     # cf Methods.Geometry.PolarArc.rotate
     if isinstance(rotate, ImportError):
-        rotate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use PolarArc method rotate: " + str(rotate))
-            )
-        )
+        rotate = property(fget=lambda x: raise_(ImportError("Can't use PolarArc method rotate: " + str(rotate))))
     else:
         rotate = rotate
     # cf Methods.Geometry.PolarArc.translate
     if isinstance(translate, ImportError):
-        translate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use PolarArc method translate: " + str(translate))
-            )
-        )
+        translate = property(fget=lambda x: raise_(ImportError("Can't use PolarArc method translate: " + str(translate))))
     else:
         translate = translate
     # cf Methods.Geometry.PolarArc.check
     if isinstance(check, ImportError):
-        check = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use PolarArc method check: " + str(check))
-            )
-        )
+        check = property(fget=lambda x: raise_(ImportError("Can't use PolarArc method check: " + str(check))))
     else:
         check = check
     # cf Methods.Geometry.PolarArc.comp_length
     if isinstance(comp_length, ImportError):
-        comp_length = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use PolarArc method comp_length: " + str(comp_length)
-                )
-            )
-        )
+        comp_length = property(fget=lambda x: raise_(ImportError("Can't use PolarArc method comp_length: " + str(comp_length))))
     else:
         comp_length = comp_length
     # cf Methods.Geometry.PolarArc.discretize
     if isinstance(discretize, ImportError):
-        discretize = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use PolarArc method discretize: " + str(discretize))
-            )
-        )
+        discretize = property(fget=lambda x: raise_(ImportError("Can't use PolarArc method discretize: " + str(discretize))))
     else:
         discretize = discretize
     # cf Methods.Geometry.PolarArc.get_patch
     if isinstance(get_patch, ImportError):
-        get_patch = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use PolarArc method get_patch: " + str(get_patch))
-            )
-        )
+        get_patch = property(fget=lambda x: raise_(ImportError("Can't use PolarArc method get_patch: " + str(get_patch))))
     else:
         get_patch = get_patch
     # cf Methods.Geometry.PolarArc.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use PolarArc method comp_surface: " + str(comp_surface)
-                )
-            )
-        )
+        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use PolarArc method comp_surface: " + str(comp_surface))))
     else:
         comp_surface = comp_surface
     # save method is available in all object
@@ -223,7 +187,8 @@ class PolarArc(Surface):
 
     # Polar angle
     # Type : float, min = 0
-    angle = property(fget=_get_angle, fset=_set_angle, doc=u"""Polar angle""")
+    angle = property(fget=_get_angle, fset=_set_angle,
+                     doc=u"""Polar angle""")
 
     def _get_height(self):
         """getter of height"""
@@ -236,6 +201,5 @@ class PolarArc(Surface):
 
     # The Heigth of the PolarAngle
     # Type : float, min = 0
-    height = property(
-        fget=_get_height, fset=_set_height, doc=u"""The Heigth of the PolarAngle"""
-    )
+    height = property(fget=_get_height, fset=_set_height,
+                      doc=u"""The Heigth of the PolarAngle""")

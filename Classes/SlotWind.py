@@ -45,59 +45,27 @@ class SlotWind(Slot):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.SlotWind.comp_angle_wind_eq
     if isinstance(comp_angle_wind_eq, ImportError):
-        comp_angle_wind_eq = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotWind method comp_angle_wind_eq: "
-                    + str(comp_angle_wind_eq)
-                )
-            )
-        )
+        comp_angle_wind_eq = property(fget=lambda x: raise_(ImportError("Can't use SlotWind method comp_angle_wind_eq: " + str(comp_angle_wind_eq))))
     else:
         comp_angle_wind_eq = comp_angle_wind_eq
     # cf Methods.Slot.SlotWind.comp_height_wind
     if isinstance(comp_height_wind, ImportError):
-        comp_height_wind = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotWind method comp_height_wind: "
-                    + str(comp_height_wind)
-                )
-            )
-        )
+        comp_height_wind = property(fget=lambda x: raise_(ImportError("Can't use SlotWind method comp_height_wind: " + str(comp_height_wind))))
     else:
         comp_height_wind = comp_height_wind
     # cf Methods.Slot.SlotWind.comp_radius_mid_wind
     if isinstance(comp_radius_mid_wind, ImportError):
-        comp_radius_mid_wind = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotWind method comp_radius_mid_wind: "
-                    + str(comp_radius_mid_wind)
-                )
-            )
-        )
+        comp_radius_mid_wind = property(fget=lambda x: raise_(ImportError("Can't use SlotWind method comp_radius_mid_wind: " + str(comp_radius_mid_wind))))
     else:
         comp_radius_mid_wind = comp_radius_mid_wind
     # cf Methods.Slot.SlotWind.comp_surface_wind
     if isinstance(comp_surface_wind, ImportError):
-        comp_surface_wind = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotWind method comp_surface_wind: "
-                    + str(comp_surface_wind)
-                )
-            )
-        )
+        comp_surface_wind = property(fget=lambda x: raise_(ImportError("Can't use SlotWind method comp_surface_wind: " + str(comp_surface_wind))))
     else:
         comp_surface_wind = comp_surface_wind
     # cf Methods.Slot.SlotWind.plot_wind
     if isinstance(plot_wind, ImportError):
-        plot_wind = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SlotWind method plot_wind: " + str(plot_wind))
-            )
-        )
+        plot_wind = property(fget=lambda x: raise_(ImportError("Can't use SlotWind method plot_wind: " + str(plot_wind))))
     else:
         plot_wind = plot_wind
     # save method is available in all object
@@ -159,3 +127,5 @@ class SlotWind(Slot):
 
         # Set to None the properties inherited from Slot
         super(SlotWind, self)._set_None()
+
+

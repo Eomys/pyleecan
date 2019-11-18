@@ -85,119 +85,67 @@ class Arc2(Arc):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Geometry.Arc2.check
     if isinstance(check, ImportError):
-        check = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc2 method check: " + str(check))
-            )
-        )
+        check = property(fget=lambda x: raise_(ImportError("Can't use Arc2 method check: " + str(check))))
     else:
         check = check
     # cf Methods.Geometry.Arc2.comp_length
     if isinstance(comp_length, ImportError):
-        comp_length = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc2 method comp_length: " + str(comp_length))
-            )
-        )
+        comp_length = property(fget=lambda x: raise_(ImportError("Can't use Arc2 method comp_length: " + str(comp_length))))
     else:
         comp_length = comp_length
     # cf Methods.Geometry.Arc2.comp_radius
     if isinstance(comp_radius, ImportError):
-        comp_radius = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc2 method comp_radius: " + str(comp_radius))
-            )
-        )
+        comp_radius = property(fget=lambda x: raise_(ImportError("Can't use Arc2 method comp_radius: " + str(comp_radius))))
     else:
         comp_radius = comp_radius
     # cf Methods.Geometry.Arc2.discretize
     if isinstance(discretize, ImportError):
-        discretize = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc2 method discretize: " + str(discretize))
-            )
-        )
+        discretize = property(fget=lambda x: raise_(ImportError("Can't use Arc2 method discretize: " + str(discretize))))
     else:
         discretize = discretize
     # cf Methods.Geometry.Arc2.get_angle
     if isinstance(get_angle, ImportError):
-        get_angle = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc2 method get_angle: " + str(get_angle))
-            )
-        )
+        get_angle = property(fget=lambda x: raise_(ImportError("Can't use Arc2 method get_angle: " + str(get_angle))))
     else:
         get_angle = get_angle
     # cf Methods.Geometry.Arc2.get_begin
     if isinstance(get_begin, ImportError):
-        get_begin = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc2 method get_begin: " + str(get_begin))
-            )
-        )
+        get_begin = property(fget=lambda x: raise_(ImportError("Can't use Arc2 method get_begin: " + str(get_begin))))
     else:
         get_begin = get_begin
     # cf Methods.Geometry.Arc2.get_center
     if isinstance(get_center, ImportError):
-        get_center = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc2 method get_center: " + str(get_center))
-            )
-        )
+        get_center = property(fget=lambda x: raise_(ImportError("Can't use Arc2 method get_center: " + str(get_center))))
     else:
         get_center = get_center
     # cf Methods.Geometry.Arc2.get_end
     if isinstance(get_end, ImportError):
-        get_end = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc2 method get_end: " + str(get_end))
-            )
-        )
+        get_end = property(fget=lambda x: raise_(ImportError("Can't use Arc2 method get_end: " + str(get_end))))
     else:
         get_end = get_end
     # cf Methods.Geometry.Arc2.get_middle
     if isinstance(get_middle, ImportError):
-        get_middle = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc2 method get_middle: " + str(get_middle))
-            )
-        )
+        get_middle = property(fget=lambda x: raise_(ImportError("Can't use Arc2 method get_middle: " + str(get_middle))))
     else:
         get_middle = get_middle
     # cf Methods.Geometry.Arc2.reverse
     if isinstance(reverse, ImportError):
-        reverse = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc2 method reverse: " + str(reverse))
-            )
-        )
+        reverse = property(fget=lambda x: raise_(ImportError("Can't use Arc2 method reverse: " + str(reverse))))
     else:
         reverse = reverse
     # cf Methods.Geometry.Arc2.rotate
     if isinstance(rotate, ImportError):
-        rotate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc2 method rotate: " + str(rotate))
-            )
-        )
+        rotate = property(fget=lambda x: raise_(ImportError("Can't use Arc2 method rotate: " + str(rotate))))
     else:
         rotate = rotate
     # cf Methods.Geometry.Arc2.split_half
     if isinstance(split_half, ImportError):
-        split_half = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc2 method split_half: " + str(split_half))
-            )
-        )
+        split_half = property(fget=lambda x: raise_(ImportError("Can't use Arc2 method split_half: " + str(split_half))))
     else:
         split_half = split_half
     # cf Methods.Geometry.Arc2.translate
     if isinstance(translate, ImportError):
-        translate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc2 method translate: " + str(translate))
-            )
-        )
+        translate = property(fget=lambda x: raise_(ImportError("Can't use Arc2 method translate: " + str(translate))))
     else:
         translate = translate
     # save method is available in all object
@@ -295,9 +243,8 @@ class Arc2(Arc):
 
     # begin point of the arc
     # Type : complex
-    begin = property(
-        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the arc"""
-    )
+    begin = property(fget=_get_begin, fset=_set_begin,
+                     doc=u"""begin point of the arc""")
 
     def _get_center(self):
         """getter of center"""
@@ -310,7 +257,8 @@ class Arc2(Arc):
 
     # center of the arc
     # Type : complex
-    center = property(fget=_get_center, fset=_set_center, doc=u"""center of the arc""")
+    center = property(fget=_get_center, fset=_set_center,
+                      doc=u"""center of the arc""")
 
     def _get_angle(self):
         """getter of angle"""
@@ -323,6 +271,5 @@ class Arc2(Arc):
 
     # opening angle of the arc
     # Type : float, min = -6.2831853071796, max = 6.2831853071796
-    angle = property(
-        fget=_get_angle, fset=_set_angle, doc=u"""opening angle of the arc"""
-    )
+    angle = property(fget=_get_angle, fset=_set_angle,
+                     doc=u"""opening angle of the arc""")

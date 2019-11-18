@@ -85,127 +85,73 @@ class Arc3(Arc):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Geometry.Arc3.check
     if isinstance(check, ImportError):
-        check = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc3 method check: " + str(check))
-            )
-        )
+        check = property(fget=lambda x: raise_(ImportError("Can't use Arc3 method check: " + str(check))))
     else:
         check = check
     # cf Methods.Geometry.Arc3.comp_length
     if isinstance(comp_length, ImportError):
-        comp_length = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc3 method comp_length: " + str(comp_length))
-            )
-        )
+        comp_length = property(fget=lambda x: raise_(ImportError("Can't use Arc3 method comp_length: " + str(comp_length))))
     else:
         comp_length = comp_length
     # cf Methods.Geometry.Arc3.comp_radius
     if isinstance(comp_radius, ImportError):
-        comp_radius = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc3 method comp_radius: " + str(comp_radius))
-            )
-        )
+        comp_radius = property(fget=lambda x: raise_(ImportError("Can't use Arc3 method comp_radius: " + str(comp_radius))))
     else:
         comp_radius = comp_radius
     # cf Methods.Geometry.Arc3.discretize
     if isinstance(discretize, ImportError):
-        discretize = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc3 method discretize: " + str(discretize))
-            )
-        )
+        discretize = property(fget=lambda x: raise_(ImportError("Can't use Arc3 method discretize: " + str(discretize))))
     else:
         discretize = discretize
     # cf Methods.Geometry.Arc3.get_angle
     if isinstance(get_angle, ImportError):
-        get_angle = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc3 method get_angle: " + str(get_angle))
-            )
-        )
+        get_angle = property(fget=lambda x: raise_(ImportError("Can't use Arc3 method get_angle: " + str(get_angle))))
     else:
         get_angle = get_angle
     # cf Methods.Geometry.Arc3.get_begin
     if isinstance(get_begin, ImportError):
-        get_begin = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc3 method get_begin: " + str(get_begin))
-            )
-        )
+        get_begin = property(fget=lambda x: raise_(ImportError("Can't use Arc3 method get_begin: " + str(get_begin))))
     else:
         get_begin = get_begin
     # cf Methods.Geometry.Arc3.get_center
     if isinstance(get_center, ImportError):
-        get_center = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc3 method get_center: " + str(get_center))
-            )
-        )
+        get_center = property(fget=lambda x: raise_(ImportError("Can't use Arc3 method get_center: " + str(get_center))))
     else:
         get_center = get_center
     # cf Methods.Geometry.Arc3.get_end
     if isinstance(get_end, ImportError):
-        get_end = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc3 method get_end: " + str(get_end))
-            )
-        )
+        get_end = property(fget=lambda x: raise_(ImportError("Can't use Arc3 method get_end: " + str(get_end))))
     else:
         get_end = get_end
     # cf Methods.Geometry.Arc3.get_middle
     if isinstance(get_middle, ImportError):
-        get_middle = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc3 method get_middle: " + str(get_middle))
-            )
-        )
+        get_middle = property(fget=lambda x: raise_(ImportError("Can't use Arc3 method get_middle: " + str(get_middle))))
     else:
         get_middle = get_middle
     # cf Methods.Geometry.Arc3.reverse
     if isinstance(reverse, ImportError):
-        reverse = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc3 method reverse: " + str(reverse))
-            )
-        )
+        reverse = property(fget=lambda x: raise_(ImportError("Can't use Arc3 method reverse: " + str(reverse))))
     else:
         reverse = reverse
     # cf Methods.Geometry.Arc3.rotate
     if isinstance(rotate, ImportError):
-        rotate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc3 method rotate: " + str(rotate))
-            )
-        )
+        rotate = property(fget=lambda x: raise_(ImportError("Can't use Arc3 method rotate: " + str(rotate))))
     else:
         rotate = rotate
     # cf Methods.Geometry.Arc3.split_half
     if isinstance(split_half, ImportError):
-        split_half = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc3 method split_half: " + str(split_half))
-            )
-        )
+        split_half = property(fget=lambda x: raise_(ImportError("Can't use Arc3 method split_half: " + str(split_half))))
     else:
         split_half = split_half
     # cf Methods.Geometry.Arc3.translate
     if isinstance(translate, ImportError):
-        translate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Arc3 method translate: " + str(translate))
-            )
-        )
+        translate = property(fget=lambda x: raise_(ImportError("Can't use Arc3 method translate: " + str(translate))))
     else:
         translate = translate
     # save method is available in all object
     save = save
 
-    def __init__(
-        self, begin=0, end=0, is_trigo_direction=False, label="", init_dict=None
-    ):
+    def __init__(self, begin=0, end=0, is_trigo_direction=False, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -297,9 +243,8 @@ class Arc3(Arc):
 
     # begin point of the arc
     # Type : complex
-    begin = property(
-        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the arc"""
-    )
+    begin = property(fget=_get_begin, fset=_set_begin,
+                     doc=u"""begin point of the arc""")
 
     def _get_end(self):
         """getter of end"""
@@ -312,7 +257,8 @@ class Arc3(Arc):
 
     # end of the arc
     # Type : complex
-    end = property(fget=_get_end, fset=_set_end, doc=u"""end of the arc""")
+    end = property(fget=_get_end, fset=_set_end,
+                   doc=u"""end of the arc""")
 
     def _get_is_trigo_direction(self):
         """getter of is_trigo_direction"""
@@ -325,8 +271,5 @@ class Arc3(Arc):
 
     # Rotation direction of the arc
     # Type : bool
-    is_trigo_direction = property(
-        fget=_get_is_trigo_direction,
-        fset=_set_is_trigo_direction,
-        doc=u"""Rotation direction of the arc""",
-    )
+    is_trigo_direction = property(fget=_get_is_trigo_direction, fset=_set_is_trigo_direction,
+                                  doc=u"""Rotation direction of the arc""")

@@ -34,11 +34,14 @@ except ImportError as error:
     plot_B_space = error
 
 try:
-    from pyleecan.Methods.Output.Output.plot.Structural.plot_force_space import (
-        plot_force_space,
-    )
+    from pyleecan.Methods.Output.Output.plot.Structural.plot_force_space import plot_force_space
 except ImportError as error:
     plot_force_space = error
+
+try:
+    from pyleecan.Methods.Output.Output.plot.Magnetic.plot_mesh_field import plot_mesh_field
+except ImportError as error:
+    plot_mesh_field = error
 
 
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -50,6 +53,7 @@ from pyleecan.Classes.OutStruct import OutStruct
 from pyleecan.Classes.OutPost import OutPost
 
 
+
 class Output(FrozenClass):
     """Main Output object: gather all the outputs of all the modules"""
 
@@ -58,84 +62,43 @@ class Output(FrozenClass):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Output.Output.getter.get_BH_stator
     if isinstance(get_BH_stator, ImportError):
-        get_BH_stator = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method get_BH_stator: " + str(get_BH_stator)
-                )
-            )
-        )
+        get_BH_stator = property(fget=lambda x: raise_(ImportError("Can't use Output method get_BH_stator: " + str(get_BH_stator))))
     else:
         get_BH_stator = get_BH_stator
     # cf Methods.Output.Output.getter.get_BH_rotor
     if isinstance(get_BH_rotor, ImportError):
-        get_BH_rotor = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method get_BH_rotor: " + str(get_BH_rotor)
-                )
-            )
-        )
+        get_BH_rotor = property(fget=lambda x: raise_(ImportError("Can't use Output method get_BH_rotor: " + str(get_BH_rotor))))
     else:
         get_BH_rotor = get_BH_rotor
     # cf Methods.Output.Output.getter.get_path_result
     if isinstance(get_path_result, ImportError):
-        get_path_result = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method get_path_result: " + str(get_path_result)
-                )
-            )
-        )
+        get_path_result = property(fget=lambda x: raise_(ImportError("Can't use Output method get_path_result: " + str(get_path_result))))
     else:
         get_path_result = get_path_result
     # cf Methods.Output.Output.getter.get_angle_rotor
     if isinstance(get_angle_rotor, ImportError):
-        get_angle_rotor = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method get_angle_rotor: " + str(get_angle_rotor)
-                )
-            )
-        )
+        get_angle_rotor = property(fget=lambda x: raise_(ImportError("Can't use Output method get_angle_rotor: " + str(get_angle_rotor))))
     else:
         get_angle_rotor = get_angle_rotor
     # cf Methods.Output.Output.plot.Magnetic.plot_B_space
     if isinstance(plot_B_space, ImportError):
-        plot_B_space = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_B_space: " + str(plot_B_space)
-                )
-            )
-        )
+        plot_B_space = property(fget=lambda x: raise_(ImportError("Can't use Output method plot_B_space: " + str(plot_B_space))))
     else:
         plot_B_space = plot_B_space
     # cf Methods.Output.Output.plot.Structural.plot_force_space
     if isinstance(plot_force_space, ImportError):
-        plot_force_space = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_force_space: " + str(plot_force_space)
-                )
-            )
-        )
+        plot_force_space = property(fget=lambda x: raise_(ImportError("Can't use Output method plot_force_space: " + str(plot_force_space))))
     else:
         plot_force_space = plot_force_space
+    # cf Methods.Output.Output.plot.Magnetic.plot_mesh_field
+    if isinstance(plot_mesh_field, ImportError):
+        plot_mesh_field = property(fget=lambda x: raise_(ImportError("Can't use Output method plot_mesh_field: " + str(plot_mesh_field))))
+    else:
+        plot_mesh_field = plot_mesh_field
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        simu=-1,
-        path_res="",
-        geo=-1,
-        elec=-1,
-        mag=-1,
-        struct=-1,
-        post=-1,
-        init_dict=None,
-    ):
+    def __init__(self, simu=-1, path_res="", geo=-1, elec=-1, mag=-1, struct=-1, post=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -158,9 +121,7 @@ class Output(FrozenClass):
         if post == -1:
             post = OutPost()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["simu", "path_res", "geo", "elec", "mag", "struct", "post"]
-            )
+            check_init_dict(init_dict, ["simu", "path_res", "geo", "elec", "mag", "struct", "post"])
             # Overwrite default value with init_dict content
             if "simu" in list(init_dict.keys()):
                 simu = init_dict["simu"]
@@ -181,14 +142,12 @@ class Output(FrozenClass):
         # simu can be None, a Simulation object or a dict
         if isinstance(simu, dict):
             # Check that the type is correct (including daughter)
-            class_name = simu.get("__class__")
-            if class_name not in ["Simulation", "Simu1"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for simu"
-                )
+            class_name = simu.get('__class__')
+            if class_name not in ['Simulation', 'Simu1']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for simu")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.simu = class_obj(init_dict=simu)
         else:
             self.simu = simu
@@ -322,14 +281,10 @@ class Output(FrozenClass):
 
         if self._simu is not None:
             self._simu.parent = self
-
     # Simulation object that generated the Output
     # Type : Simulation
-    simu = property(
-        fget=_get_simu,
-        fset=_set_simu,
-        doc=u"""Simulation object that generated the Output""",
-    )
+    simu = property(fget=_get_simu, fset=_set_simu,
+                    doc=u"""Simulation object that generated the Output""")
 
     def _get_path_res(self):
         """getter of path_res"""
@@ -342,11 +297,8 @@ class Output(FrozenClass):
 
     # Path to the folder to same the results
     # Type : str
-    path_res = property(
-        fget=_get_path_res,
-        fset=_set_path_res,
-        doc=u"""Path to the folder to same the results""",
-    )
+    path_res = property(fget=_get_path_res, fset=_set_path_res,
+                        doc=u"""Path to the folder to same the results""")
 
     def _get_geo(self):
         """getter of geo"""
@@ -359,10 +311,10 @@ class Output(FrozenClass):
 
         if self._geo is not None:
             self._geo.parent = self
-
     # Geometry output
     # Type : OutGeo
-    geo = property(fget=_get_geo, fset=_set_geo, doc=u"""Geometry output""")
+    geo = property(fget=_get_geo, fset=_set_geo,
+                   doc=u"""Geometry output""")
 
     def _get_elec(self):
         """getter of elec"""
@@ -375,10 +327,10 @@ class Output(FrozenClass):
 
         if self._elec is not None:
             self._elec.parent = self
-
     # Electrical module output
     # Type : OutElec
-    elec = property(fget=_get_elec, fset=_set_elec, doc=u"""Electrical module output""")
+    elec = property(fget=_get_elec, fset=_set_elec,
+                    doc=u"""Electrical module output""")
 
     def _get_mag(self):
         """getter of mag"""
@@ -391,10 +343,10 @@ class Output(FrozenClass):
 
         if self._mag is not None:
             self._mag.parent = self
-
     # Magnetic module output
     # Type : OutMag
-    mag = property(fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module output""")
+    mag = property(fget=_get_mag, fset=_set_mag,
+                   doc=u"""Magnetic module output""")
 
     def _get_struct(self):
         """getter of struct"""
@@ -407,12 +359,10 @@ class Output(FrozenClass):
 
         if self._struct is not None:
             self._struct.parent = self
-
     # Structural module output
     # Type : OutStruct
-    struct = property(
-        fget=_get_struct, fset=_set_struct, doc=u"""Structural module output"""
-    )
+    struct = property(fget=_get_struct, fset=_set_struct,
+                      doc=u"""Structural module output""")
 
     def _get_post(self):
         """getter of post"""
@@ -425,7 +375,7 @@ class Output(FrozenClass):
 
         if self._post is not None:
             self._post.parent = self
-
     # Post-Processing settings
     # Type : OutPost
-    post = property(fget=_get_post, fset=_set_post, doc=u"""Post-Processing settings""")
+    post = property(fget=_get_post, fset=_set_post,
+                    doc=u"""Post-Processing settings""")

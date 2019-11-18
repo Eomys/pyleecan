@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import os
 from os.path import join, isdir
-from os import makedirs
 
 
 def get_path_save(self, output):
@@ -21,19 +21,9 @@ def get_path_save(self, output):
 
     """
     path_res = output.get_path_result()
-    save_dir = join(path_res, "Femm")
-    if not isdir(save_dir):
-        makedirs(save_dir)
-    if self.file_name not in [None, ""]:
-        if file_name[-4:] != ".fem":
-            file_name = file_name + ".fem"
-        else:
-            file_name = file_name
-    elif output.simu.machine.name not in [None, ""]:
-        file_name = output.simu.machine.name + "_model.fem"
-    elif output.simu.name not in [None, ""]:
-        file_name = output.simu.name + "_model.fem"
-    else:  # Default name
-        file_name = "FEMM_simulation.fem"
 
-    return join(save_dir, file_name)
+    save_dir = join(path_res, "Femm")
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+
+    return save_dir

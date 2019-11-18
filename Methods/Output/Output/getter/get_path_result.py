@@ -4,7 +4,8 @@ from os.path import join, dirname, abspath
 
 
 def get_path_result(self):
-    """Return the path to the result folder
+    """Return the path to the result folder. If there is a name for the simulation, the path leads to a sub-folder of
+    'Results' folder which has the same name. If this sub-folder does not exist, it creates it.
 
     Parameters
     ----------
@@ -12,7 +13,7 @@ def get_path_result(self):
         an Output object
 
     Returns
-    -------
+    -------s
     res_path: str
         path to the result folder
     """
@@ -20,6 +21,6 @@ def get_path_result(self):
     if self.path_res in [None, ""]:
         # If the path doesn't exist, set the default one
         self.path_res = abspath(
-            join(dirname(__file__), "..", "..", "..", "..", "Results")
+            join(dirname(__file__), "..", "..", "..", "..", "Results", self.simu.name)
         )
     return self.path_res

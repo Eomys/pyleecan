@@ -9,9 +9,7 @@ from pyleecan.Classes.Conductor import Conductor
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.CondType21.comp_surface_active import (
-        comp_surface_active,
-    )
+    from pyleecan.Methods.Machine.CondType21.comp_surface_active import comp_surface_active
 except ImportError as error:
     comp_surface_active = error
 
@@ -40,6 +38,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class CondType21(Conductor):
     """single rectangular conductor \nhas to be used for LamSquirrelCages's conductor"""
 
@@ -48,64 +47,33 @@ class CondType21(Conductor):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.CondType21.comp_surface_active
     if isinstance(comp_surface_active, ImportError):
-        comp_surface_active = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CondType21 method comp_surface_active: "
-                    + str(comp_surface_active)
-                )
-            )
-        )
+        comp_surface_active = property(fget=lambda x: raise_(ImportError("Can't use CondType21 method comp_surface_active: " + str(comp_surface_active))))
     else:
         comp_surface_active = comp_surface_active
     # cf Methods.Machine.CondType21.comp_height
     if isinstance(comp_height, ImportError):
-        comp_height = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CondType21 method comp_height: " + str(comp_height)
-                )
-            )
-        )
+        comp_height = property(fget=lambda x: raise_(ImportError("Can't use CondType21 method comp_height: " + str(comp_height))))
     else:
         comp_height = comp_height
     # cf Methods.Machine.CondType21.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CondType21 method comp_surface: " + str(comp_surface)
-                )
-            )
-        )
+        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use CondType21 method comp_surface: " + str(comp_surface))))
     else:
         comp_surface = comp_surface
     # cf Methods.Machine.CondType21.comp_width
     if isinstance(comp_width, ImportError):
-        comp_width = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CondType21 method comp_width: " + str(comp_width)
-                )
-            )
-        )
+        comp_width = property(fget=lambda x: raise_(ImportError("Can't use CondType21 method comp_width: " + str(comp_width))))
     else:
         comp_width = comp_width
     # cf Methods.Machine.CondType21.plot
     if isinstance(plot, ImportError):
-        plot = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use CondType21 method plot: " + str(plot))
-            )
-        )
+        plot = property(fget=lambda x: raise_(ImportError("Can't use CondType21 method plot: " + str(plot))))
     else:
         plot = plot
     # save method is available in all object
     save = save
 
-    def __init__(
-        self, Hbar=0.01, Wbar=0.01, Wins=0, cond_mat=-1, ins_mat=-1, init_dict=None
-    ):
+    def __init__(self, Hbar=0.01, Wbar=0.01, Wins=0, cond_mat=-1, ins_mat=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -203,7 +171,8 @@ class CondType21(Conductor):
 
     # Bar height
     # Type : float, min = 0
-    Hbar = property(fget=_get_Hbar, fset=_set_Hbar, doc=u"""Bar height""")
+    Hbar = property(fget=_get_Hbar, fset=_set_Hbar,
+                    doc=u"""Bar height""")
 
     def _get_Wbar(self):
         """getter of Wbar"""
@@ -216,7 +185,8 @@ class CondType21(Conductor):
 
     # Bar width
     # Type : float, min = 0
-    Wbar = property(fget=_get_Wbar, fset=_set_Wbar, doc=u"""Bar width""")
+    Wbar = property(fget=_get_Wbar, fset=_set_Wbar,
+                    doc=u"""Bar width""")
 
     def _get_Wins(self):
         """getter of Wins"""
@@ -229,4 +199,5 @@ class CondType21(Conductor):
 
     # Width of insulation
     # Type : float, min = 0
-    Wins = property(fget=_get_Wins, fset=_set_Wins, doc=u"""Width of insulation""")
+    Wins = property(fget=_get_Wins, fset=_set_Wins,
+                    doc=u"""Width of insulation""")

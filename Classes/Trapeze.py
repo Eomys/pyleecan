@@ -60,76 +60,42 @@ class Trapeze(Surface):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Geometry.Trapeze.check
     if isinstance(check, ImportError):
-        check = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Trapeze method check: " + str(check))
-            )
-        )
+        check = property(fget=lambda x: raise_(ImportError("Can't use Trapeze method check: " + str(check))))
     else:
         check = check
     # cf Methods.Geometry.Trapeze.comp_length
     if isinstance(comp_length, ImportError):
-        comp_length = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Trapeze method comp_length: " + str(comp_length))
-            )
-        )
+        comp_length = property(fget=lambda x: raise_(ImportError("Can't use Trapeze method comp_length: " + str(comp_length))))
     else:
         comp_length = comp_length
     # cf Methods.Geometry.Trapeze.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Trapeze method comp_surface: " + str(comp_surface)
-                )
-            )
-        )
+        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use Trapeze method comp_surface: " + str(comp_surface))))
     else:
         comp_surface = comp_surface
     # cf Methods.Geometry.Trapeze.discretize
     if isinstance(discretize, ImportError):
-        discretize = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Trapeze method discretize: " + str(discretize))
-            )
-        )
+        discretize = property(fget=lambda x: raise_(ImportError("Can't use Trapeze method discretize: " + str(discretize))))
     else:
         discretize = discretize
     # cf Methods.Geometry.Trapeze.get_lines
     if isinstance(get_lines, ImportError):
-        get_lines = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Trapeze method get_lines: " + str(get_lines))
-            )
-        )
+        get_lines = property(fget=lambda x: raise_(ImportError("Can't use Trapeze method get_lines: " + str(get_lines))))
     else:
         get_lines = get_lines
     # cf Methods.Geometry.Trapeze.get_patch
     if isinstance(get_patch, ImportError):
-        get_patch = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Trapeze method get_patch: " + str(get_patch))
-            )
-        )
+        get_patch = property(fget=lambda x: raise_(ImportError("Can't use Trapeze method get_patch: " + str(get_patch))))
     else:
         get_patch = get_patch
     # cf Methods.Geometry.Trapeze.rotate
     if isinstance(rotate, ImportError):
-        rotate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Trapeze method rotate: " + str(rotate))
-            )
-        )
+        rotate = property(fget=lambda x: raise_(ImportError("Can't use Trapeze method rotate: " + str(rotate))))
     else:
         rotate = rotate
     # cf Methods.Geometry.Trapeze.translate
     if isinstance(translate, ImportError):
-        translate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Trapeze method translate: " + str(translate))
-            )
-        )
+        translate = property(fget=lambda x: raise_(ImportError("Can't use Trapeze method translate: " + str(translate))))
     else:
         translate = translate
     # save method is available in all object
@@ -229,9 +195,8 @@ class Trapeze(Surface):
 
     # the height of the Trapeze
     # Type : float, min = 0
-    height = property(
-        fget=_get_height, fset=_set_height, doc=u"""the height of the Trapeze"""
-    )
+    height = property(fget=_get_height, fset=_set_height,
+                      doc=u"""the height of the Trapeze""")
 
     def _get_W2(self):
         """getter of W2"""
@@ -244,7 +209,8 @@ class Trapeze(Surface):
 
     # the big base of Trapeze
     # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""the big base of Trapeze""")
+    W2 = property(fget=_get_W2, fset=_set_W2,
+                  doc=u"""the big base of Trapeze""")
 
     def _get_W1(self):
         """getter of W1"""
@@ -257,4 +223,5 @@ class Trapeze(Surface):
 
     # the small base of the Trapeze
     # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""the small base of the Trapeze""")
+    W1 = property(fget=_get_W1, fset=_set_W1,
+                  doc=u"""the small base of the Trapeze""")

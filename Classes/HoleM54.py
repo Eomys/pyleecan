@@ -38,6 +38,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
+
 class HoleM54(Hole):
     """Arc Hole for SyRM"""
 
@@ -47,62 +48,33 @@ class HoleM54(Hole):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.HoleM54.build_geometry
     if isinstance(build_geometry, ImportError):
-        build_geometry = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM54 method build_geometry: " + str(build_geometry)
-                )
-            )
-        )
+        build_geometry = property(fget=lambda x: raise_(ImportError("Can't use HoleM54 method build_geometry: " + str(build_geometry))))
     else:
         build_geometry = build_geometry
     # cf Methods.Slot.HoleM54.check
     if isinstance(check, ImportError):
-        check = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use HoleM54 method check: " + str(check))
-            )
-        )
+        check = property(fget=lambda x: raise_(ImportError("Can't use HoleM54 method check: " + str(check))))
     else:
         check = check
     # cf Methods.Slot.HoleM54.comp_radius
     if isinstance(comp_radius, ImportError):
-        comp_radius = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use HoleM54 method comp_radius: " + str(comp_radius))
-            )
-        )
+        comp_radius = property(fget=lambda x: raise_(ImportError("Can't use HoleM54 method comp_radius: " + str(comp_radius))))
     else:
         comp_radius = comp_radius
     # cf Methods.Slot.HoleM54.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM54 method comp_surface: " + str(comp_surface)
-                )
-            )
-        )
+        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use HoleM54 method comp_surface: " + str(comp_surface))))
     else:
         comp_surface = comp_surface
     # cf Methods.Slot.HoleM54.get_height_magnet
     if isinstance(get_height_magnet, ImportError):
-        get_height_magnet = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM54 method get_height_magnet: "
-                    + str(get_height_magnet)
-                )
-            )
-        )
+        get_height_magnet = property(fget=lambda x: raise_(ImportError("Can't use HoleM54 method get_height_magnet: " + str(get_height_magnet))))
     else:
         get_height_magnet = get_height_magnet
     # save method is available in all object
     save = save
 
-    def __init__(
-        self, H0=0.003, H1=0, W0=0.013, R1=0.02, Zh=36, mat_void=-1, init_dict=None
-    ):
+    def __init__(self, H0=0.003, H1=0, W0=0.013, R1=0.02, Zh=36, mat_void=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -206,7 +178,8 @@ class HoleM54(Hole):
 
     # Hole depth
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Hole depth""")
+    H0 = property(fget=_get_H0, fset=_set_H0,
+                  doc=u"""Hole depth""")
 
     def _get_H1(self):
         """getter of H1"""
@@ -219,7 +192,8 @@ class HoleM54(Hole):
 
     # Hole width
     # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Hole width""")
+    H1 = property(fget=_get_H1, fset=_set_H1,
+                  doc=u"""Hole width""")
 
     def _get_W0(self):
         """getter of W0"""
@@ -232,7 +206,8 @@ class HoleM54(Hole):
 
     # Hole angular width
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Hole angular width""")
+    W0 = property(fget=_get_W0, fset=_set_W0,
+                  doc=u"""Hole angular width""")
 
     def _get_R1(self):
         """getter of R1"""
@@ -245,4 +220,5 @@ class HoleM54(Hole):
 
     # Hole radius
     # Type : float, min = 0
-    R1 = property(fget=_get_R1, fset=_set_R1, doc=u"""Hole radius""")
+    R1 = property(fget=_get_R1, fset=_set_R1,
+                  doc=u"""Hole radius""")

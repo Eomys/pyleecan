@@ -85,121 +85,67 @@ class Segment(Line):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Geometry.Segment.check
     if isinstance(check, ImportError):
-        check = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method check: " + str(check))
-            )
-        )
+        check = property(fget=lambda x: raise_(ImportError("Can't use Segment method check: " + str(check))))
     else:
         check = check
     # cf Methods.Geometry.Segment.comp_length
     if isinstance(comp_length, ImportError):
-        comp_length = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method comp_length: " + str(comp_length))
-            )
-        )
+        comp_length = property(fget=lambda x: raise_(ImportError("Can't use Segment method comp_length: " + str(comp_length))))
     else:
         comp_length = comp_length
     # cf Methods.Geometry.Segment.discretize
     if isinstance(discretize, ImportError):
-        discretize = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method discretize: " + str(discretize))
-            )
-        )
+        discretize = property(fget=lambda x: raise_(ImportError("Can't use Segment method discretize: " + str(discretize))))
     else:
         discretize = discretize
     # cf Methods.Geometry.Segment.draw_FEMM
     if isinstance(draw_FEMM, ImportError):
-        draw_FEMM = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method draw_FEMM: " + str(draw_FEMM))
-            )
-        )
+        draw_FEMM = property(fget=lambda x: raise_(ImportError("Can't use Segment method draw_FEMM: " + str(draw_FEMM))))
     else:
         draw_FEMM = draw_FEMM
     # cf Methods.Geometry.Segment.get_begin
     if isinstance(get_begin, ImportError):
-        get_begin = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method get_begin: " + str(get_begin))
-            )
-        )
+        get_begin = property(fget=lambda x: raise_(ImportError("Can't use Segment method get_begin: " + str(get_begin))))
     else:
         get_begin = get_begin
     # cf Methods.Geometry.Segment.get_end
     if isinstance(get_end, ImportError):
-        get_end = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method get_end: " + str(get_end))
-            )
-        )
+        get_end = property(fget=lambda x: raise_(ImportError("Can't use Segment method get_end: " + str(get_end))))
     else:
         get_end = get_end
     # cf Methods.Geometry.Segment.get_middle
     if isinstance(get_middle, ImportError):
-        get_middle = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method get_middle: " + str(get_middle))
-            )
-        )
+        get_middle = property(fget=lambda x: raise_(ImportError("Can't use Segment method get_middle: " + str(get_middle))))
     else:
         get_middle = get_middle
     # cf Methods.Geometry.Segment.intersect_line
     if isinstance(intersect_line, ImportError):
-        intersect_line = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Segment method intersect_line: " + str(intersect_line)
-                )
-            )
-        )
+        intersect_line = property(fget=lambda x: raise_(ImportError("Can't use Segment method intersect_line: " + str(intersect_line))))
     else:
         intersect_line = intersect_line
     # cf Methods.Geometry.Segment.reverse
     if isinstance(reverse, ImportError):
-        reverse = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method reverse: " + str(reverse))
-            )
-        )
+        reverse = property(fget=lambda x: raise_(ImportError("Can't use Segment method reverse: " + str(reverse))))
     else:
         reverse = reverse
     # cf Methods.Geometry.Segment.rotate
     if isinstance(rotate, ImportError):
-        rotate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method rotate: " + str(rotate))
-            )
-        )
+        rotate = property(fget=lambda x: raise_(ImportError("Can't use Segment method rotate: " + str(rotate))))
     else:
         rotate = rotate
     # cf Methods.Geometry.Segment.split_half
     if isinstance(split_half, ImportError):
-        split_half = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method split_half: " + str(split_half))
-            )
-        )
+        split_half = property(fget=lambda x: raise_(ImportError("Can't use Segment method split_half: " + str(split_half))))
     else:
         split_half = split_half
     # cf Methods.Geometry.Segment.split_line
     if isinstance(split_line, ImportError):
-        split_line = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method split_line: " + str(split_line))
-            )
-        )
+        split_line = property(fget=lambda x: raise_(ImportError("Can't use Segment method split_line: " + str(split_line))))
     else:
         split_line = split_line
     # cf Methods.Geometry.Segment.translate
     if isinstance(translate, ImportError):
-        translate = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Segment method translate: " + str(translate))
-            )
-        )
+        translate = property(fget=lambda x: raise_(ImportError("Can't use Segment method translate: " + str(translate))))
     else:
         translate = translate
     # save method is available in all object
@@ -289,9 +235,8 @@ class Segment(Line):
 
     # begin point of the line
     # Type : complex
-    begin = property(
-        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the line"""
-    )
+    begin = property(fget=_get_begin, fset=_set_begin,
+                     doc=u"""begin point of the line""")
 
     def _get_end(self):
         """getter of end"""
@@ -304,4 +249,5 @@ class Segment(Line):
 
     # end point of the line
     # Type : complex
-    end = property(fget=_get_end, fset=_set_end, doc=u"""end point of the line""")
+    end = property(fget=_get_end, fset=_set_end,
+                   doc=u"""end point of the line""")
