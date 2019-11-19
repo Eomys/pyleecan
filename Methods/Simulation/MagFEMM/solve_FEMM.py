@@ -1,8 +1,7 @@
 import femm
 import numpy as np
-from os.path import join
 from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
-from pyleecan.Generator import MAIN_DIR
+
 from pyleecan.Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from pyleecan.Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from pyleecan.Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
@@ -41,7 +40,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     if self.is_get_mesh or self.is_save_FEA:
         mesh = [MeshMat() for ii in range(Nt_tot)]
     else:
-        mesh = [MeshMat()]
+        mesh = []
 
     # Compute the data for each time step
     for ii in range(Nt_tot):

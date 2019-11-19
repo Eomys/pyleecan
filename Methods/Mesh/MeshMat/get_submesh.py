@@ -1,19 +1,22 @@
 # -*- coding: utf-8 -*-
-from pyleecan.Classes.SubMesh import SubMesh
 
-import numpy as np
+from pyleecan.Classes.SubMesh import SubMesh
 
 
 def get_submesh(self, group):
-    """Define a mesh object as submesh of parent mesh object
+    """Define a submesh of a MeshMat object
 
     Parameters
     ----------
-    :param self : an MeshFEMM object
-    :param group: id of the targeted group
+    self : MeshMat
+        a MeshMat object
+    group : int
+        id of the targeted group
 
-    Returns
+        Returns
     -------
+    submesh: Submesh
+        a Submesh object
 
     """
 

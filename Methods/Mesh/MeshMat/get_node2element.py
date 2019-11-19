@@ -1,37 +1,23 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Methods.Output.Output.getter import GetOutError
+import numpy as np
 
 
-def get_nodes2elements(self):
-    """Return the total number of elements in the stored mesh
+def get_nodes2elements(self, node_id):
+    """Return all elements containing the node node_id
 
     Parameters
     ----------
-    self : Mesh
-        an Mesh object
+    self : MeshMat
+        an MeshMat object
 
     Returns
     -------
-    Nb_elem_tot: int
-        Total number of elements mesh
+    elems: ndarray
+        all elements containing node_id
 
     """
+    elems = np.where(self.elements == node_id)
 
-    # Already available => Return
-    if self.nodes_to_elements is not None:
-        return self.nodes_to_elements
-
-    # Check if possible to get the BH curve
-    if (
-        self is None
-    ):
-        raise GetOutError(
-            "Mesh is not Set, can't get the list of element connected to each node"
-        )
-
-    # Compute and store the number of elements
-    nodes_to_elements = self.set_nodes2elements()
-
-    return nodes_to_elements
+    return elems
 

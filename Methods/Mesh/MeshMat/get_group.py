@@ -6,11 +6,15 @@ def get_group(self, name_submesh):
 
     Parameters
     ----------
-    :param self : an Mesh object
-    :param elem_id: ids of the elements which define the submesh
+    self : MeshFEMM
+        a MeshFEMM object
+    group : int
+        id of the targeted group
 
-    Returns
+        Returns
     -------
+    submesh: Submesh
+        a Submesh object
 
     """
     submesh = None

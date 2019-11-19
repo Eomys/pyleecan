@@ -12,6 +12,8 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Tests import save_validation_path as save_path
 
+import matplotlib.pyplot as plt
+
 simu = Simu1(name="SM_CEFC_002_save_mag", machine=CEFC_Lam, struct=None)
 
 # Definition of the enforced output of the electrical module
@@ -67,6 +69,7 @@ class test_CEFC_001(TestCase):
         out.plot_mesh_field()
 
         out.save(save_path=save_path)
+        plt.close("all")
 #    def test_magnetic_force(self):
 
 
