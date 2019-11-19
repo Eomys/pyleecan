@@ -1,0 +1,8 @@
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
+element,,Matrix of connectivity for one element type,,,ndarray,None,,,,,,Mesh,Mesh,get_submesh,VERSION,1,Gather the parameters of a mesh under matricial format containing one type of element. ,MeshFEMM
+node,,Containing nodes coordinates,,,ndarray,None,,,,,,,,get_group,,,,
+group,,Attribute a number to each subpart of the machine,,,ndarray,None,,,,,,,,get_node,,,,
+nb_elem,,Total number of elements,,,int,None,,,,,,,,get_element,,,,
+nb_node,,Total number of nodes,,,int,None,,,,,,,,get_node2element,,,,
+submesh,,List of submesh,,,[SubMesh],None,,,,,,,,,,,,
+nb_node_per_element,,Define the number of node per element,,,int,None,,,,,,,,,,,,

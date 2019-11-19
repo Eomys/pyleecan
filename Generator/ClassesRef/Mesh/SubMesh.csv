@@ -1,0 +1,5 @@
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
+mesh,,A self-standing mesh object,,,Mesh,None,,,,,,Mesh,,get_node_coord,VERSION,1,Define a submesh,
+parent_elem,,List of corresponding element number in the parent mesh,,,ndarray,None,,,,,,,,get_element,,,,
+parent_node,,List of corresponding node number in the parent mesh,,,ndarray,None,,,,,,,,set_submesh,,,,
+group_number,,"Group number defining this submesh. If several groups are indicated, the submesh corresponds to the intersection. Use (nbr,-1) to select the intersection of group ""nbr"" with all other groups.",,,ndarray,None,,,,,,,,,,,,

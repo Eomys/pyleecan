@@ -23,6 +23,16 @@ try:
 except ImportError as error:
     solve_FEMM = error
 
+try:
+    from pyleecan.Methods.Simulation.MagFEMM.get_mesh import get_mesh
+except ImportError as error:
+    get_mesh = error
+
+try:
+    from pyleecan.Methods.Simulation.MagFEMM.get_path_save_fem import get_path_save_fem
+except ImportError as error:
+    get_path_save_fem = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -65,6 +75,27 @@ class MagFEMM(Magnetics):
         )
     else:
         solve_FEMM = solve_FEMM
+    # cf Methods.Simulation.MagFEMM.get_mesh
+    if isinstance(get_mesh, ImportError):
+        get_mesh = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MagFEMM method get_mesh: " + str(get_mesh))
+            )
+        )
+    else:
+        get_mesh = get_mesh
+    # cf Methods.Simulation.MagFEMM.get_path_save_fem
+    if isinstance(get_path_save_fem, ImportError):
+        get_path_save_fem = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method get_path_save_fem: "
+                    + str(get_path_save_fem)
+                )
+            )
+        )
+    else:
+        get_path_save_fem = get_path_save_fem
     # save method is available in all object
     save = save
 
@@ -76,6 +107,8 @@ class MagFEMM(Magnetics):
         file_name="",
         FEMM_dict={},
         angle_stator=0,
+        is_get_mesh=False,
+        is_save_FEA=False,
         is_sliding_band=True,
         is_remove_slotS=False,
         is_remove_slotR=False,
@@ -111,6 +144,8 @@ class MagFEMM(Magnetics):
                     "file_name",
                     "FEMM_dict",
                     "angle_stator",
+                    "is_get_mesh",
+                    "is_save_FEA",
                     "is_sliding_band",
                     "is_remove_slotS",
                     "is_remove_slotR",
@@ -140,6 +175,10 @@ class MagFEMM(Magnetics):
                 FEMM_dict = init_dict["FEMM_dict"]
             if "angle_stator" in list(init_dict.keys()):
                 angle_stator = init_dict["angle_stator"]
+            if "is_get_mesh" in list(init_dict.keys()):
+                is_get_mesh = init_dict["is_get_mesh"]
+            if "is_save_FEA" in list(init_dict.keys()):
+                is_save_FEA = init_dict["is_save_FEA"]
             if "is_sliding_band" in list(init_dict.keys()):
                 is_sliding_band = init_dict["is_sliding_band"]
             if "is_remove_slotS" in list(init_dict.keys()):
@@ -175,6 +214,8 @@ class MagFEMM(Magnetics):
         self.file_name = file_name
         self.FEMM_dict = FEMM_dict
         self.angle_stator = angle_stator
+        self.is_get_mesh = is_get_mesh
+        self.is_save_FEA = is_save_FEA
         self.is_sliding_band = is_sliding_band
         # Call Magnetics init
         super(MagFEMM, self).__init__(
@@ -207,6 +248,8 @@ class MagFEMM(Magnetics):
         MagFEMM_str += 'file_name = "' + str(self.file_name) + '"' + linesep
         MagFEMM_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
         MagFEMM_str += "angle_stator = " + str(self.angle_stator) + linesep
+        MagFEMM_str += "is_get_mesh = " + str(self.is_get_mesh) + linesep
+        MagFEMM_str += "is_save_FEA = " + str(self.is_save_FEA) + linesep
         MagFEMM_str += "is_sliding_band = " + str(self.is_sliding_band)
         return MagFEMM_str
 
@@ -231,6 +274,10 @@ class MagFEMM(Magnetics):
             return False
         if other.angle_stator != self.angle_stator:
             return False
+        if other.is_get_mesh != self.is_get_mesh:
+            return False
+        if other.is_save_FEA != self.is_save_FEA:
+            return False
         if other.is_sliding_band != self.is_sliding_band:
             return False
         return True
@@ -247,6 +294,8 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["file_name"] = self.file_name
         MagFEMM_dict["FEMM_dict"] = self.FEMM_dict
         MagFEMM_dict["angle_stator"] = self.angle_stator
+        MagFEMM_dict["is_get_mesh"] = self.is_get_mesh
+        MagFEMM_dict["is_save_FEA"] = self.is_save_FEA
         MagFEMM_dict["is_sliding_band"] = self.is_sliding_band
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
@@ -262,6 +311,8 @@ class MagFEMM(Magnetics):
         self.file_name = None
         self.FEMM_dict = None
         self.angle_stator = None
+        self.is_get_mesh = None
+        self.is_save_FEA = None
         self.is_sliding_band = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
@@ -309,12 +360,12 @@ class MagFEMM(Magnetics):
         check_var("type_calc_leakage", value, "int", Vmin=0, Vmax=1)
         self._type_calc_leakage = value
 
-    # 0 no leakage calculation, 1 calculation using single slot
+    # 0 no leakage calculation /  1 calculation using single slot
     # Type : int, min = 0, max = 1
     type_calc_leakage = property(
         fget=_get_type_calc_leakage,
         fset=_set_type_calc_leakage,
-        doc=u"""0 no leakage calculation, 1 calculation using single slot""",
+        doc=u"""0 no leakage calculation /  1 calculation using single slot """,
     )
 
     def _get_file_name(self):
@@ -366,6 +417,40 @@ class MagFEMM(Magnetics):
         fget=_get_angle_stator,
         fset=_set_angle_stator,
         doc=u"""Angular position shift of the stator""",
+    )
+
+    def _get_is_get_mesh(self):
+        """getter of is_get_mesh"""
+        return self._is_get_mesh
+
+    def _set_is_get_mesh(self, value):
+        """setter of is_get_mesh"""
+        check_var("is_get_mesh", value, "bool")
+        self._is_get_mesh = value
+
+    # To save FEA mesh for latter post-procesing
+    # Type : bool
+    is_get_mesh = property(
+        fget=_get_is_get_mesh,
+        fset=_set_is_get_mesh,
+        doc=u"""To save FEA mesh for latter post-procesing """,
+    )
+
+    def _get_is_save_FEA(self):
+        """getter of is_save_FEA"""
+        return self._is_save_FEA
+
+    def _set_is_save_FEA(self, value):
+        """setter of is_save_FEA"""
+        check_var("is_save_FEA", value, "bool")
+        self._is_save_FEA = value
+
+    # To save FEA mesh and solution in .dat file
+    # Type : bool
+    is_save_FEA = property(
+        fget=_get_is_save_FEA,
+        fset=_set_is_save_FEA,
+        doc=u"""To save FEA mesh and solution in .dat file""",
     )
 
     def _get_is_sliding_band(self):

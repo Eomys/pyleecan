@@ -47,7 +47,7 @@ def comp_flux_airgap(self, output):
         kgeo_fineness=self.Kgeo_fineness,
         kmesh_fineness=self.Kmesh_fineness,
         user_FEMM_dict=self.FEMM_dict,
-        path_save=self.get_path_save(output),
+        path_save=self.get_path_save_fem(output),
         is_sliding_band=self.is_sliding_band,
     )
 
