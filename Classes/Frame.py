@@ -48,7 +48,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
-
 class Frame(FrozenClass):
     """machine frame"""
 
@@ -57,37 +56,69 @@ class Frame(FrozenClass):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.Frame.build_geometry
     if isinstance(build_geometry, ImportError):
-        build_geometry = property(fget=lambda x: raise_(ImportError("Can't use Frame method build_geometry: " + str(build_geometry))))
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Frame method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
     else:
         build_geometry = build_geometry
     # cf Methods.Machine.Frame.comp_height_eq
     if isinstance(comp_height_eq, ImportError):
-        comp_height_eq = property(fget=lambda x: raise_(ImportError("Can't use Frame method comp_height_eq: " + str(comp_height_eq))))
+        comp_height_eq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Frame method comp_height_eq: " + str(comp_height_eq)
+                )
+            )
+        )
     else:
         comp_height_eq = comp_height_eq
     # cf Methods.Machine.Frame.comp_mass
     if isinstance(comp_mass, ImportError):
-        comp_mass = property(fget=lambda x: raise_(ImportError("Can't use Frame method comp_mass: " + str(comp_mass))))
+        comp_mass = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Frame method comp_mass: " + str(comp_mass))
+            )
+        )
     else:
         comp_mass = comp_mass
     # cf Methods.Machine.Frame.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use Frame method comp_surface: " + str(comp_surface))))
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Frame method comp_surface: " + str(comp_surface))
+            )
+        )
     else:
         comp_surface = comp_surface
     # cf Methods.Machine.Frame.comp_volume
     if isinstance(comp_volume, ImportError):
-        comp_volume = property(fget=lambda x: raise_(ImportError("Can't use Frame method comp_volume: " + str(comp_volume))))
+        comp_volume = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Frame method comp_volume: " + str(comp_volume))
+            )
+        )
     else:
         comp_volume = comp_volume
     # cf Methods.Machine.Frame.get_length
     if isinstance(get_length, ImportError):
-        get_length = property(fget=lambda x: raise_(ImportError("Can't use Frame method get_length: " + str(get_length))))
+        get_length = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Frame method get_length: " + str(get_length))
+            )
+        )
     else:
         get_length = get_length
     # cf Methods.Machine.Frame.plot
     if isinstance(plot, ImportError):
-        plot = property(fget=lambda x: raise_(ImportError("Can't use Frame method plot: " + str(plot))))
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Frame method plot: " + str(plot))
+            )
+        )
     else:
         plot = plot
     # save method is available in all object
@@ -195,8 +226,7 @@ class Frame(FrozenClass):
 
     # frame length [m]
     # Type : float, min = 0
-    Lfra = property(fget=_get_Lfra, fset=_set_Lfra,
-                    doc=u"""frame length [m]""")
+    Lfra = property(fget=_get_Lfra, fset=_set_Lfra, doc=u"""frame length [m]""")
 
     def _get_Rint(self):
         """getter of Rint"""
@@ -209,8 +239,7 @@ class Frame(FrozenClass):
 
     # frame internal radius
     # Type : float, min = 0
-    Rint = property(fget=_get_Rint, fset=_set_Rint,
-                    doc=u"""frame internal radius""")
+    Rint = property(fget=_get_Rint, fset=_set_Rint, doc=u"""frame internal radius""")
 
     def _get_Rext(self):
         """getter of Rext"""
@@ -223,8 +252,7 @@ class Frame(FrozenClass):
 
     # Frame external radius
     # Type : float, min = 0
-    Rext = property(fget=_get_Rext, fset=_set_Rext,
-                    doc=u"""Frame external radius""")
+    Rext = property(fget=_get_Rext, fset=_set_Rext, doc=u"""Frame external radius""")
 
     def _get_mat_type(self):
         """getter of mat_type"""
@@ -237,7 +265,9 @@ class Frame(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     # Frame material
     # Type : Material
-    mat_type = property(fget=_get_mat_type, fset=_set_mat_type,
-                        doc=u"""Frame material""")
+    mat_type = property(
+        fget=_get_mat_type, fset=_set_mat_type, doc=u"""Frame material"""
+    )

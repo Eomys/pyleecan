@@ -34,7 +34,9 @@ except ImportError as error:
     comp_volumes = error
 
 try:
-    from pyleecan.Methods.Machine.LamHole.get_pole_pair_number import get_pole_pair_number
+    from pyleecan.Methods.Machine.LamHole.get_pole_pair_number import (
+        get_pole_pair_number,
+    )
 except ImportError as error:
     get_pole_pair_number = error
 
@@ -44,7 +46,9 @@ except ImportError as error:
     plot = error
 
 try:
-    from pyleecan.Methods.Machine.LamHole.comp_radius_mid_yoke import comp_radius_mid_yoke
+    from pyleecan.Methods.Machine.LamHole.comp_radius_mid_yoke import (
+        comp_radius_mid_yoke,
+    )
 except ImportError as error:
     comp_radius_mid_yoke = error
 
@@ -55,7 +59,6 @@ from pyleecan.Classes.Material import Material
 from pyleecan.Classes.Notch import Notch
 
 
-
 class LamHole(Lamination):
     """Lamination with Hole with or without magnet or winding"""
 
@@ -64,48 +67,110 @@ class LamHole(Lamination):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.LamHole.build_geometry
     if isinstance(build_geometry, ImportError):
-        build_geometry = property(fget=lambda x: raise_(ImportError("Can't use LamHole method build_geometry: " + str(build_geometry))))
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
     else:
         build_geometry = build_geometry
     # cf Methods.Machine.LamHole.comp_height_yoke
     if isinstance(comp_height_yoke, ImportError):
-        comp_height_yoke = property(fget=lambda x: raise_(ImportError("Can't use LamHole method comp_height_yoke: " + str(comp_height_yoke))))
+        comp_height_yoke = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method comp_height_yoke: "
+                    + str(comp_height_yoke)
+                )
+            )
+        )
     else:
         comp_height_yoke = comp_height_yoke
     # cf Methods.Machine.LamHole.comp_masses
     if isinstance(comp_masses, ImportError):
-        comp_masses = property(fget=lambda x: raise_(ImportError("Can't use LamHole method comp_masses: " + str(comp_masses))))
+        comp_masses = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamHole method comp_masses: " + str(comp_masses))
+            )
+        )
     else:
         comp_masses = comp_masses
     # cf Methods.Machine.LamHole.comp_surfaces
     if isinstance(comp_surfaces, ImportError):
-        comp_surfaces = property(fget=lambda x: raise_(ImportError("Can't use LamHole method comp_surfaces: " + str(comp_surfaces))))
+        comp_surfaces = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method comp_surfaces: " + str(comp_surfaces)
+                )
+            )
+        )
     else:
         comp_surfaces = comp_surfaces
     # cf Methods.Machine.LamHole.comp_volumes
     if isinstance(comp_volumes, ImportError):
-        comp_volumes = property(fget=lambda x: raise_(ImportError("Can't use LamHole method comp_volumes: " + str(comp_volumes))))
+        comp_volumes = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method comp_volumes: " + str(comp_volumes)
+                )
+            )
+        )
     else:
         comp_volumes = comp_volumes
     # cf Methods.Machine.LamHole.get_pole_pair_number
     if isinstance(get_pole_pair_number, ImportError):
-        get_pole_pair_number = property(fget=lambda x: raise_(ImportError("Can't use LamHole method get_pole_pair_number: " + str(get_pole_pair_number))))
+        get_pole_pair_number = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method get_pole_pair_number: "
+                    + str(get_pole_pair_number)
+                )
+            )
+        )
     else:
         get_pole_pair_number = get_pole_pair_number
     # cf Methods.Machine.LamHole.plot
     if isinstance(plot, ImportError):
-        plot = property(fget=lambda x: raise_(ImportError("Can't use LamHole method plot: " + str(plot))))
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamHole method plot: " + str(plot))
+            )
+        )
     else:
         plot = plot
     # cf Methods.Machine.LamHole.comp_radius_mid_yoke
     if isinstance(comp_radius_mid_yoke, ImportError):
-        comp_radius_mid_yoke = property(fget=lambda x: raise_(ImportError("Can't use LamHole method comp_radius_mid_yoke: " + str(comp_radius_mid_yoke))))
+        comp_radius_mid_yoke = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method comp_radius_mid_yoke: "
+                    + str(comp_radius_mid_yoke)
+                )
+            )
+        )
     else:
         comp_radius_mid_yoke = comp_radius_mid_yoke
     # save method is available in all object
     save = save
 
-    def __init__(self, hole=list(), L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), notch=list(), init_dict=None):
+    def __init__(
+        self,
+        hole=list(),
+        L1=0.35,
+        mat_type=-1,
+        Nrvd=0,
+        Wrvd=0,
+        Kf1=0.95,
+        is_internal=True,
+        Rint=0,
+        Rext=1,
+        is_stator=True,
+        axial_vent=list(),
+        notch=list(),
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -118,7 +183,23 @@ class LamHole(Lamination):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["hole", "L1", "mat_type", "Nrvd", "Wrvd", "Kf1", "is_internal", "Rint", "Rext", "is_stator", "axial_vent", "notch"])
+            check_init_dict(
+                init_dict,
+                [
+                    "hole",
+                    "L1",
+                    "mat_type",
+                    "Nrvd",
+                    "Wrvd",
+                    "Kf1",
+                    "is_internal",
+                    "Rint",
+                    "Rext",
+                    "is_stator",
+                    "axial_vent",
+                    "notch",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "hole" in list(init_dict.keys()):
                 hole = init_dict["hole"]
@@ -153,12 +234,27 @@ class LamHole(Lamination):
                     self.hole.append(Hole())
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
-                    class_name = obj.get('__class__')
-                    if class_name not in ['Hole', 'HoleMag', 'HoleM50', 'HoleM51', 'HoleM52', 'HoleM53', 'HoleM54', 'VentilationCirc', 'VentilationPolar', 'VentilationTrap']:
-                        raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for hole")
+                    class_name = obj.get("__class__")
+                    if class_name not in [
+                        "Hole",
+                        "HoleMag",
+                        "HoleM50",
+                        "HoleM51",
+                        "HoleM52",
+                        "HoleM53",
+                        "HoleM54",
+                        "VentilationCirc",
+                        "VentilationPolar",
+                        "VentilationTrap",
+                    ]:
+                        raise InitUnKnowClassError(
+                            "Unknow class name " + class_name + " in init_dict for hole"
+                        )
                     # Dynamic import to call the correct constructor
-                    module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-                    class_obj = getattr(module,class_name)
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
                     self.hole.append(class_obj(init_dict=obj))
                 else:
                     self.hole.append(obj)
@@ -167,7 +263,19 @@ class LamHole(Lamination):
         else:
             self.hole = hole
         # Call Lamination init
-        super(LamHole, self).__init__(L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
+        super(LamHole, self).__init__(
+            L1=L1,
+            mat_type=mat_type,
+            Nrvd=Nrvd,
+            Wrvd=Wrvd,
+            Kf1=Kf1,
+            is_internal=is_internal,
+            Rint=Rint,
+            Rext=Rext,
+            is_stator=is_stator,
+            axial_vent=axial_vent,
+            notch=notch,
+        )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
 
@@ -180,7 +288,9 @@ class LamHole(Lamination):
         if len(self.hole) == 0:
             LamHole_str += "hole = []"
         for ii in range(len(self.hole)):
-            LamHole_str += "hole["+str(ii)+"] = "+str(self.hole[ii].as_dict())+"\n"
+            LamHole_str += (
+                "hole[" + str(ii) + "] = " + str(self.hole[ii].as_dict()) + "\n"
+            )
         return LamHole_str
 
     def __eq__(self, other):
@@ -233,7 +343,7 @@ class LamHole(Lamination):
         for obj in self._hole:
             if obj is not None:
                 obj.parent = self
+
     # lamination Hole
     # Type : [Hole]
-    hole = property(fget=_get_hole, fset=_set_hole,
-                    doc=u"""lamination Hole""")
+    hole = property(fget=_get_hole, fset=_set_hole, doc=u"""lamination Hole""")

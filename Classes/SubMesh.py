@@ -29,7 +29,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Mesh import Mesh
 
 
-
 class SubMesh(FrozenClass):
     """Define a submesh"""
 
@@ -38,23 +37,44 @@ class SubMesh(FrozenClass):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Mesh.SubMesh.get_node_coord
     if isinstance(get_node_coord, ImportError):
-        get_node_coord = property(fget=lambda x: raise_(ImportError("Can't use SubMesh method get_node_coord: " + str(get_node_coord))))
+        get_node_coord = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SubMesh method get_node_coord: " + str(get_node_coord)
+                )
+            )
+        )
     else:
         get_node_coord = get_node_coord
     # cf Methods.Mesh.SubMesh.get_element
     if isinstance(get_element, ImportError):
-        get_element = property(fget=lambda x: raise_(ImportError("Can't use SubMesh method get_element: " + str(get_element))))
+        get_element = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SubMesh method get_element: " + str(get_element))
+            )
+        )
     else:
         get_element = get_element
     # cf Methods.Mesh.SubMesh.set_submesh
     if isinstance(set_submesh, ImportError):
-        set_submesh = property(fget=lambda x: raise_(ImportError("Can't use SubMesh method set_submesh: " + str(set_submesh))))
+        set_submesh = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SubMesh method set_submesh: " + str(set_submesh))
+            )
+        )
     else:
         set_submesh = set_submesh
     # save method is available in all object
     save = save
 
-    def __init__(self, mesh=None, parent_elem=None, parent_node=None, group_number=None, init_dict=None):
+    def __init__(
+        self,
+        mesh=None,
+        parent_elem=None,
+        parent_node=None,
+        group_number=None,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -67,7 +87,9 @@ class SubMesh(FrozenClass):
         if mesh == -1:
             mesh = Mesh()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["mesh", "parent_elem", "parent_node", "group_number"])
+            check_init_dict(
+                init_dict, ["mesh", "parent_elem", "parent_node", "group_number"]
+            )
             # Overwrite default value with init_dict content
             if "mesh" in list(init_dict.keys()):
                 mesh = init_dict["mesh"]
@@ -82,12 +104,14 @@ class SubMesh(FrozenClass):
         # mesh can be None, a Mesh object or a dict
         if isinstance(mesh, dict):
             # Check that the type is correct (including daughter)
-            class_name = mesh.get('__class__')
-            if class_name not in ['Mesh', 'MeshFEMM', 'MeshMat', 'MeshForce']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for mesh")
+            class_name = mesh.get("__class__")
+            if class_name not in ["Mesh", "MeshFEMM", "MeshMat", "MeshForce"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for mesh"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.mesh = class_obj(init_dict=mesh)
         else:
             self.mesh = mesh
@@ -110,8 +134,12 @@ class SubMesh(FrozenClass):
         else:
             SubMesh_str += "parent = " + str(type(self.parent)) + " object" + linesep
         SubMesh_str += "mesh = " + str(self.mesh.as_dict()) + linesep + linesep
-        SubMesh_str += "parent_elem = " + linesep + str(self.parent_elem) + linesep + linesep
-        SubMesh_str += "parent_node = " + linesep + str(self.parent_node) + linesep + linesep
+        SubMesh_str += (
+            "parent_elem = " + linesep + str(self.parent_elem) + linesep + linesep
+        )
+        SubMesh_str += (
+            "parent_node = " + linesep + str(self.parent_node) + linesep + linesep
+        )
         SubMesh_str += "group_number = " + linesep + str(self.group_number)
         return SubMesh_str
 
@@ -175,10 +203,12 @@ class SubMesh(FrozenClass):
 
         if self._mesh is not None:
             self._mesh.parent = self
+
     # A self-standing mesh object
     # Type : Mesh
-    mesh = property(fget=_get_mesh, fset=_set_mesh,
-                    doc=u"""A self-standing mesh object""")
+    mesh = property(
+        fget=_get_mesh, fset=_set_mesh, doc=u"""A self-standing mesh object"""
+    )
 
     def _get_parent_elem(self):
         """getter of parent_elem"""
@@ -196,8 +226,11 @@ class SubMesh(FrozenClass):
 
     # List of corresponding element number in the parent mesh
     # Type : ndarray
-    parent_elem = property(fget=_get_parent_elem, fset=_set_parent_elem,
-                           doc=u"""List of corresponding element number in the parent mesh""")
+    parent_elem = property(
+        fget=_get_parent_elem,
+        fset=_set_parent_elem,
+        doc=u"""List of corresponding element number in the parent mesh""",
+    )
 
     def _get_parent_node(self):
         """getter of parent_node"""
@@ -215,8 +248,11 @@ class SubMesh(FrozenClass):
 
     # List of corresponding node number in the parent mesh
     # Type : ndarray
-    parent_node = property(fget=_get_parent_node, fset=_set_parent_node,
-                           doc=u"""List of corresponding node number in the parent mesh""")
+    parent_node = property(
+        fget=_get_parent_node,
+        fset=_set_parent_node,
+        doc=u"""List of corresponding node number in the parent mesh""",
+    )
 
     def _get_group_number(self):
         """getter of group_number"""
@@ -234,5 +270,8 @@ class SubMesh(FrozenClass):
 
     # Group number defining this submesh. If several groups are indicated, the submesh corresponds to the intersection. Use (nbr,-1) to select the intersection of group "nbr" with all other groups.
     # Type : ndarray
-    group_number = property(fget=_get_group_number, fset=_set_group_number,
-                            doc=u"""Group number defining this submesh. If several groups are indicated, the submesh corresponds to the intersection. Use (nbr,-1) to select the intersection of group "nbr" with all other groups.""")
+    group_number = property(
+        fget=_get_group_number,
+        fset=_set_group_number,
+        doc=u"""Group number defining this submesh. If several groups are indicated, the submesh corresponds to the intersection. Use (nbr,-1) to select the intersection of group "nbr" with all other groups.""",
+    )

@@ -24,7 +24,13 @@ class ImportMatrix(Import):
 
     # cf Methods.Import.ImportMatrix.edit_matrix
     if isinstance(edit_matrix, ImportError):
-        edit_matrix = property(fget=lambda x: raise_(ImportError("Can't use ImportMatrix method edit_matrix: " + str(edit_matrix))))
+        edit_matrix = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ImportMatrix method edit_matrix: " + str(edit_matrix)
+                )
+            )
+        )
     else:
         edit_matrix = edit_matrix
     # save method is available in all object
@@ -104,5 +110,8 @@ class ImportMatrix(Import):
 
     # 1 to transpose the Imported/Generated matrix
     # Type : bool
-    is_transpose = property(fget=_get_is_transpose, fset=_set_is_transpose,
-                            doc=u"""1 to transpose the Imported/Generated matrix""")
+    is_transpose = property(
+        fget=_get_is_transpose,
+        fset=_set_is_transpose,
+        doc=u"""1 to transpose the Imported/Generated matrix""",
+    )

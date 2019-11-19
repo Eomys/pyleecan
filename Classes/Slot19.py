@@ -9,7 +9,9 @@ from pyleecan.Classes.Slot import Slot
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.Slot19._comp_point_coordinate import _comp_point_coordinate
+    from pyleecan.Methods.Slot.Slot19._comp_point_coordinate import (
+        _comp_point_coordinate,
+    )
 except ImportError as error:
     _comp_point_coordinate = error
 
@@ -56,43 +58,86 @@ class Slot19(Slot):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.Slot19._comp_point_coordinate
     if isinstance(_comp_point_coordinate, ImportError):
-        _comp_point_coordinate = property(fget=lambda x: raise_(ImportError("Can't use Slot19 method _comp_point_coordinate: " + str(_comp_point_coordinate))))
+        _comp_point_coordinate = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot19 method _comp_point_coordinate: "
+                    + str(_comp_point_coordinate)
+                )
+            )
+        )
     else:
         _comp_point_coordinate = _comp_point_coordinate
     # cf Methods.Slot.Slot19.build_geometry
     if isinstance(build_geometry, ImportError):
-        build_geometry = property(fget=lambda x: raise_(ImportError("Can't use Slot19 method build_geometry: " + str(build_geometry))))
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot19 method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
     else:
         build_geometry = build_geometry
     # cf Methods.Slot.Slot19.check
     if isinstance(check, ImportError):
-        check = property(fget=lambda x: raise_(ImportError("Can't use Slot19 method check: " + str(check))))
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot19 method check: " + str(check))
+            )
+        )
     else:
         check = check
     # cf Methods.Slot.Slot19.comp_angle_opening
     if isinstance(comp_angle_opening, ImportError):
-        comp_angle_opening = property(fget=lambda x: raise_(ImportError("Can't use Slot19 method comp_angle_opening: " + str(comp_angle_opening))))
+        comp_angle_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot19 method comp_angle_opening: "
+                    + str(comp_angle_opening)
+                )
+            )
+        )
     else:
         comp_angle_opening = comp_angle_opening
     # cf Methods.Slot.Slot19.comp_angle_bottom
     if isinstance(comp_angle_bottom, ImportError):
-        comp_angle_bottom = property(fget=lambda x: raise_(ImportError("Can't use Slot19 method comp_angle_bottom: " + str(comp_angle_bottom))))
+        comp_angle_bottom = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot19 method comp_angle_bottom: "
+                    + str(comp_angle_bottom)
+                )
+            )
+        )
     else:
         comp_angle_bottom = comp_angle_bottom
     # cf Methods.Slot.Slot19.comp_height
     if isinstance(comp_height, ImportError):
-        comp_height = property(fget=lambda x: raise_(ImportError("Can't use Slot19 method comp_height: " + str(comp_height))))
+        comp_height = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot19 method comp_height: " + str(comp_height))
+            )
+        )
     else:
         comp_height = comp_height
     # cf Methods.Slot.Slot19.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use Slot19 method comp_surface: " + str(comp_surface))))
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot19 method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
     else:
         comp_surface = comp_surface
     # save method is available in all object
     save = save
 
-    def __init__(self, W0=0.013, H0=0.02, W1=0.01, Wx_is_rad=False, Zs=36, init_dict=None):
+    def __init__(
+        self, W0=0.013, H0=0.02, W1=0.01, Wx_is_rad=False, Zs=36, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -192,8 +237,7 @@ class Slot19(Slot):
 
     # Slot top width
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0,
-                  doc=u"""Slot top width""")
+    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot top width""")
 
     def _get_H0(self):
         """getter of H0"""
@@ -206,8 +250,7 @@ class Slot19(Slot):
 
     # Slot height
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0,
-                  doc=u"""Slot height""")
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot height""")
 
     def _get_W1(self):
         """getter of W1"""
@@ -220,8 +263,7 @@ class Slot19(Slot):
 
     # Slot bottom width.
     # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1,
-                  doc=u"""Slot bottom width.""")
+    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Slot bottom width.""")
 
     def _get_Wx_is_rad(self):
         """getter of Wx_is_rad"""
@@ -234,5 +276,6 @@ class Slot19(Slot):
 
     # Wx unit, 0 for m, 1 for rad
     # Type : bool
-    Wx_is_rad = property(fget=_get_Wx_is_rad, fset=_set_Wx_is_rad,
-                         doc=u"""Wx unit, 0 for m, 1 for rad""")
+    Wx_is_rad = property(
+        fget=_get_Wx_is_rad, fset=_set_Wx_is_rad, doc=u"""Wx unit, 0 for m, 1 for rad"""
+    )

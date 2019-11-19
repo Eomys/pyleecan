@@ -11,7 +11,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Mesh import Mesh
 
 
-
 class OutMag(FrozenClass):
     """Gather the magnetic module outputs"""
 
@@ -20,7 +19,22 @@ class OutMag(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, time=None, angle=None, Nt_tot=None, Na_tot=None, Br=None, Bt=None, Tem=None, Tem_av=None, Tem_rip=None, Phi_wind_stator=None, emf=None, mesh=list(), init_dict=None):
+    def __init__(
+        self,
+        time=None,
+        angle=None,
+        Nt_tot=None,
+        Na_tot=None,
+        Br=None,
+        Bt=None,
+        Tem=None,
+        Tem_av=None,
+        Tem_rip=None,
+        Phi_wind_stator=None,
+        emf=None,
+        mesh=list(),
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -31,7 +45,23 @@ class OutMag(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["time", "angle", "Nt_tot", "Na_tot", "Br", "Bt", "Tem", "Tem_av", "Tem_rip", "Phi_wind_stator", "emf", "mesh"])
+            check_init_dict(
+                init_dict,
+                [
+                    "time",
+                    "angle",
+                    "Nt_tot",
+                    "Na_tot",
+                    "Br",
+                    "Bt",
+                    "Tem",
+                    "Tem_av",
+                    "Tem_rip",
+                    "Phi_wind_stator",
+                    "emf",
+                    "mesh",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
@@ -85,12 +115,16 @@ class OutMag(FrozenClass):
                     self.mesh.append(Mesh())
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
-                    class_name = obj.get('__class__')
-                    if class_name not in ['Mesh', 'MeshFEMM', 'MeshMat', 'MeshForce']:
-                        raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for mesh")
+                    class_name = obj.get("__class__")
+                    if class_name not in ["Mesh", "MeshFEMM", "MeshMat", "MeshForce"]:
+                        raise InitUnKnowClassError(
+                            "Unknow class name " + class_name + " in init_dict for mesh"
+                        )
                     # Dynamic import to call the correct constructor
-                    module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-                    class_obj = getattr(module,class_name)
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
                     self.mesh.append(class_obj(init_dict=obj))
                 else:
                     self.mesh.append(obj)
@@ -119,12 +153,20 @@ class OutMag(FrozenClass):
         OutMag_str += "Tem = " + linesep + str(self.Tem) + linesep + linesep
         OutMag_str += "Tem_av = " + str(self.Tem_av) + linesep
         OutMag_str += "Tem_rip = " + str(self.Tem_rip) + linesep
-        OutMag_str += "Phi_wind_stator = " + linesep + str(self.Phi_wind_stator) + linesep + linesep
+        OutMag_str += (
+            "Phi_wind_stator = "
+            + linesep
+            + str(self.Phi_wind_stator)
+            + linesep
+            + linesep
+        )
         OutMag_str += "emf = " + linesep + str(self.emf) + linesep + linesep
         if len(self.mesh) == 0:
             OutMag_str += "mesh = []"
         for ii in range(len(self.mesh)):
-            OutMag_str += "mesh["+str(ii)+"] = "+str(self.mesh[ii].as_dict())+"\n"
+            OutMag_str += (
+                "mesh[" + str(ii) + "] = " + str(self.mesh[ii].as_dict()) + "\n"
+            )
         return OutMag_str
 
     def __eq__(self, other):
@@ -235,8 +277,9 @@ class OutMag(FrozenClass):
 
     # Magnetic time vector (no symmetry)
     # Type : ndarray
-    time = property(fget=_get_time, fset=_set_time,
-                    doc=u"""Magnetic time vector (no symmetry)""")
+    time = property(
+        fget=_get_time, fset=_set_time, doc=u"""Magnetic time vector (no symmetry)"""
+    )
 
     def _get_angle(self):
         """getter of angle"""
@@ -254,8 +297,11 @@ class OutMag(FrozenClass):
 
     # Magnetic position vector (no symmetry)
     # Type : ndarray
-    angle = property(fget=_get_angle, fset=_set_angle,
-                     doc=u"""Magnetic position vector (no symmetry)""")
+    angle = property(
+        fget=_get_angle,
+        fset=_set_angle,
+        doc=u"""Magnetic position vector (no symmetry)""",
+    )
 
     def _get_Nt_tot(self):
         """getter of Nt_tot"""
@@ -268,8 +314,9 @@ class OutMag(FrozenClass):
 
     # Length of the time vector
     # Type : int
-    Nt_tot = property(fget=_get_Nt_tot, fset=_set_Nt_tot,
-                      doc=u"""Length of the time vector""")
+    Nt_tot = property(
+        fget=_get_Nt_tot, fset=_set_Nt_tot, doc=u"""Length of the time vector"""
+    )
 
     def _get_Na_tot(self):
         """getter of Na_tot"""
@@ -282,8 +329,9 @@ class OutMag(FrozenClass):
 
     # Length of the angle vector
     # Type : int
-    Na_tot = property(fget=_get_Na_tot, fset=_set_Na_tot,
-                      doc=u"""Length of the angle vector""")
+    Na_tot = property(
+        fget=_get_Na_tot, fset=_set_Na_tot, doc=u"""Length of the angle vector"""
+    )
 
     def _get_Br(self):
         """getter of Br"""
@@ -301,8 +349,7 @@ class OutMag(FrozenClass):
 
     # Radial airgap flux density
     # Type : ndarray
-    Br = property(fget=_get_Br, fset=_set_Br,
-                  doc=u"""Radial airgap flux density""")
+    Br = property(fget=_get_Br, fset=_set_Br, doc=u"""Radial airgap flux density""")
 
     def _get_Bt(self):
         """getter of Bt"""
@@ -320,8 +367,7 @@ class OutMag(FrozenClass):
 
     # Tangential airgap flux density
     # Type : ndarray
-    Bt = property(fget=_get_Bt, fset=_set_Bt,
-                  doc=u"""Tangential airgap flux density""")
+    Bt = property(fget=_get_Bt, fset=_set_Bt, doc=u"""Tangential airgap flux density""")
 
     def _get_Tem(self):
         """getter of Tem"""
@@ -339,8 +385,7 @@ class OutMag(FrozenClass):
 
     # Electromagnetic torque
     # Type : ndarray
-    Tem = property(fget=_get_Tem, fset=_set_Tem,
-                   doc=u"""Electromagnetic torque""")
+    Tem = property(fget=_get_Tem, fset=_set_Tem, doc=u"""Electromagnetic torque""")
 
     def _get_Tem_av(self):
         """getter of Tem_av"""
@@ -353,8 +398,9 @@ class OutMag(FrozenClass):
 
     # Average Electromagnetic torque
     # Type : float
-    Tem_av = property(fget=_get_Tem_av, fset=_set_Tem_av,
-                      doc=u"""Average Electromagnetic torque""")
+    Tem_av = property(
+        fget=_get_Tem_av, fset=_set_Tem_av, doc=u"""Average Electromagnetic torque"""
+    )
 
     def _get_Tem_rip(self):
         """getter of Tem_rip"""
@@ -367,8 +413,7 @@ class OutMag(FrozenClass):
 
     # Torque ripple
     # Type : float
-    Tem_rip = property(fget=_get_Tem_rip, fset=_set_Tem_rip,
-                       doc=u"""Torque ripple""")
+    Tem_rip = property(fget=_get_Tem_rip, fset=_set_Tem_rip, doc=u"""Torque ripple""")
 
     def _get_Phi_wind_stator(self):
         """getter of Phi_wind_stator"""
@@ -386,8 +431,11 @@ class OutMag(FrozenClass):
 
     # Stator winding flux
     # Type : ndarray
-    Phi_wind_stator = property(fget=_get_Phi_wind_stator, fset=_set_Phi_wind_stator,
-                               doc=u"""Stator winding flux""")
+    Phi_wind_stator = property(
+        fget=_get_Phi_wind_stator,
+        fset=_set_Phi_wind_stator,
+        doc=u"""Stator winding flux""",
+    )
 
     def _get_emf(self):
         """getter of emf"""
@@ -405,8 +453,7 @@ class OutMag(FrozenClass):
 
     # Electromotive force
     # Type : ndarray
-    emf = property(fget=_get_emf, fset=_set_emf,
-                   doc=u"""Electromotive force""")
+    emf = property(fget=_get_emf, fset=_set_emf, doc=u"""Electromotive force""")
 
     def _get_mesh(self):
         """getter of mesh"""
@@ -423,7 +470,9 @@ class OutMag(FrozenClass):
         for obj in self._mesh:
             if obj is not None:
                 obj.parent = self
+
     # FEA software mesh and solution
     # Type : [Mesh]
-    mesh = property(fget=_get_mesh, fset=_set_mesh,
-                    doc=u"""FEA software mesh and solution""")
+    mesh = property(
+        fget=_get_mesh, fset=_set_mesh, doc=u"""FEA software mesh and solution"""
+    )

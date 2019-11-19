@@ -19,7 +19,9 @@ except ImportError as error:
     comp_angle_opening = error
 
 try:
-    from pyleecan.Methods.Slot.SlotMFlat.comp_angle_opening_magnet import comp_angle_opening_magnet
+    from pyleecan.Methods.Slot.SlotMFlat.comp_angle_opening_magnet import (
+        comp_angle_opening_magnet,
+    )
 except ImportError as error:
     comp_angle_opening_magnet = error
 
@@ -48,7 +50,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.MagnetFlat import MagnetFlat
 
 
-
 class SlotMFlat(SlotMag):
     """Flat bottomed SlotMag"""
 
@@ -59,43 +60,95 @@ class SlotMFlat(SlotMag):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.SlotMFlat.build_geometry
     if isinstance(build_geometry, ImportError):
-        build_geometry = property(fget=lambda x: raise_(ImportError("Can't use SlotMFlat method build_geometry: " + str(build_geometry))))
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
     else:
         build_geometry = build_geometry
     # cf Methods.Slot.SlotMFlat.comp_angle_opening
     if isinstance(comp_angle_opening, ImportError):
-        comp_angle_opening = property(fget=lambda x: raise_(ImportError("Can't use SlotMFlat method comp_angle_opening: " + str(comp_angle_opening))))
+        comp_angle_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat method comp_angle_opening: "
+                    + str(comp_angle_opening)
+                )
+            )
+        )
     else:
         comp_angle_opening = comp_angle_opening
     # cf Methods.Slot.SlotMFlat.comp_angle_opening_magnet
     if isinstance(comp_angle_opening_magnet, ImportError):
-        comp_angle_opening_magnet = property(fget=lambda x: raise_(ImportError("Can't use SlotMFlat method comp_angle_opening_magnet: " + str(comp_angle_opening_magnet))))
+        comp_angle_opening_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat method comp_angle_opening_magnet: "
+                    + str(comp_angle_opening_magnet)
+                )
+            )
+        )
     else:
         comp_angle_opening_magnet = comp_angle_opening_magnet
     # cf Methods.Slot.SlotMFlat.comp_height
     if isinstance(comp_height, ImportError):
-        comp_height = property(fget=lambda x: raise_(ImportError("Can't use SlotMFlat method comp_height: " + str(comp_height))))
+        comp_height = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat method comp_height: " + str(comp_height)
+                )
+            )
+        )
     else:
         comp_height = comp_height
     # cf Methods.Slot.SlotMFlat.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use SlotMFlat method comp_surface: " + str(comp_surface))))
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
     else:
         comp_surface = comp_surface
     # cf Methods.Slot.SlotMFlat.comp_W0m
     if isinstance(comp_W0m, ImportError):
-        comp_W0m = property(fget=lambda x: raise_(ImportError("Can't use SlotMFlat method comp_W0m: " + str(comp_W0m))))
+        comp_W0m = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotMFlat method comp_W0m: " + str(comp_W0m))
+            )
+        )
     else:
         comp_W0m = comp_W0m
     # cf Methods.Slot.SlotMFlat.get_point_bottom
     if isinstance(get_point_bottom, ImportError):
-        get_point_bottom = property(fget=lambda x: raise_(ImportError("Can't use SlotMFlat method get_point_bottom: " + str(get_point_bottom))))
+        get_point_bottom = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat method get_point_bottom: "
+                    + str(get_point_bottom)
+                )
+            )
+        )
     else:
         get_point_bottom = get_point_bottom
     # save method is available in all object
     save = save
 
-    def __init__(self, H0=0, W0=0.0122, W0_is_rad=False, magnet=list(), W3=0, Zs=36, init_dict=None):
+    def __init__(
+        self,
+        H0=0,
+        W0=0.0122,
+        W0_is_rad=False,
+        magnet=list(),
+        W3=0,
+        Zs=36,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -132,12 +185,23 @@ class SlotMFlat(SlotMag):
                     self.magnet.append(MagnetFlat())
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
-                    class_name = obj.get('__class__')
-                    if class_name not in ['MagnetFlat', 'MagnetType10', 'MagnetType12', 'MagnetType13']:
-                        raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for magnet")
+                    class_name = obj.get("__class__")
+                    if class_name not in [
+                        "MagnetFlat",
+                        "MagnetType10",
+                        "MagnetType12",
+                        "MagnetType13",
+                    ]:
+                        raise InitUnKnowClassError(
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for magnet"
+                        )
                     # Dynamic import to call the correct constructor
-                    module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-                    class_obj = getattr(module,class_name)
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
                     self.magnet.append(class_obj(init_dict=obj))
                 else:
                     self.magnet.append(obj)
@@ -162,7 +226,9 @@ class SlotMFlat(SlotMag):
         if len(self.magnet) == 0:
             SlotMFlat_str += "magnet = []"
         for ii in range(len(self.magnet)):
-            SlotMFlat_str += "magnet["+str(ii)+"] = "+str(self.magnet[ii].as_dict())+"\n"
+            SlotMFlat_str += (
+                "magnet[" + str(ii) + "] = " + str(self.magnet[ii].as_dict()) + "\n"
+            )
         return SlotMFlat_str
 
     def __eq__(self, other):
@@ -223,8 +289,7 @@ class SlotMFlat(SlotMag):
 
     # Slot isthmus height
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0,
-                  doc=u"""Slot isthmus height""")
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height""")
 
     def _get_W0(self):
         """getter of W0"""
@@ -237,8 +302,7 @@ class SlotMFlat(SlotMag):
 
     # Slot isthmus width.
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0,
-                  doc=u"""Slot isthmus width.""")
+    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus width.""")
 
     def _get_W0_is_rad(self):
         """getter of W0_is_rad"""
@@ -251,8 +315,9 @@ class SlotMFlat(SlotMag):
 
     # W0 unit, 0 for m, 1 for rad
     # Type : bool
-    W0_is_rad = property(fget=_get_W0_is_rad, fset=_set_W0_is_rad,
-                         doc=u"""W0 unit, 0 for m, 1 for rad""")
+    W0_is_rad = property(
+        fget=_get_W0_is_rad, fset=_set_W0_is_rad, doc=u"""W0 unit, 0 for m, 1 for rad"""
+    )
 
     def _get_magnet(self):
         """getter of magnet"""
@@ -269,7 +334,7 @@ class SlotMFlat(SlotMag):
         for obj in self._magnet:
             if obj is not None:
                 obj.parent = self
+
     # List of magnet
     # Type : [MagnetFlat]
-    magnet = property(fget=_get_magnet, fset=_set_magnet,
-                      doc=u"""List of magnet""")
+    magnet = property(fget=_get_magnet, fset=_set_magnet, doc=u"""List of magnet""")

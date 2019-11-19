@@ -43,7 +43,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
-
 class Hole(FrozenClass):
     """Holes for lamination (abstract)"""
 
@@ -52,32 +51,58 @@ class Hole(FrozenClass):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.Hole.comp_radius
     if isinstance(comp_radius, ImportError):
-        comp_radius = property(fget=lambda x: raise_(ImportError("Can't use Hole method comp_radius: " + str(comp_radius))))
+        comp_radius = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method comp_radius: " + str(comp_radius))
+            )
+        )
     else:
         comp_radius = comp_radius
     # cf Methods.Slot.Hole.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use Hole method comp_surface: " + str(comp_surface))))
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method comp_surface: " + str(comp_surface))
+            )
+        )
     else:
         comp_surface = comp_surface
     # cf Methods.Slot.Hole.get_is_stator
     if isinstance(get_is_stator, ImportError):
-        get_is_stator = property(fget=lambda x: raise_(ImportError("Can't use Hole method get_is_stator: " + str(get_is_stator))))
+        get_is_stator = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Hole method get_is_stator: " + str(get_is_stator)
+                )
+            )
+        )
     else:
         get_is_stator = get_is_stator
     # cf Methods.Slot.Hole.get_Rbo
     if isinstance(get_Rbo, ImportError):
-        get_Rbo = property(fget=lambda x: raise_(ImportError("Can't use Hole method get_Rbo: " + str(get_Rbo))))
+        get_Rbo = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method get_Rbo: " + str(get_Rbo))
+            )
+        )
     else:
         get_Rbo = get_Rbo
     # cf Methods.Slot.Hole.has_magnet
     if isinstance(has_magnet, ImportError):
-        has_magnet = property(fget=lambda x: raise_(ImportError("Can't use Hole method has_magnet: " + str(has_magnet))))
+        has_magnet = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method has_magnet: " + str(has_magnet))
+            )
+        )
     else:
         has_magnet = has_magnet
     # cf Methods.Slot.Hole.plot
     if isinstance(plot, ImportError):
-        plot = property(fget=lambda x: raise_(ImportError("Can't use Hole method plot: " + str(plot))))
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method plot: " + str(plot))
+            )
+        )
     else:
         plot = plot
     # save method is available in all object
@@ -169,8 +194,9 @@ class Hole(FrozenClass):
 
     # Number of Hole around the circumference
     # Type : int, min = 0, max = 1000
-    Zh = property(fget=_get_Zh, fset=_set_Zh,
-                  doc=u"""Number of Hole around the circumference""")
+    Zh = property(
+        fget=_get_Zh, fset=_set_Zh, doc=u"""Number of Hole around the circumference"""
+    )
 
     def _get_mat_void(self):
         """getter of mat_void"""
@@ -183,7 +209,11 @@ class Hole(FrozenClass):
 
         if self._mat_void is not None:
             self._mat_void.parent = self
+
     # Material of the void part of the hole (Air in general)
     # Type : Material
-    mat_void = property(fget=_get_mat_void, fset=_set_mat_void,
-                        doc=u"""Material of the void part of the hole (Air in general)""")
+    mat_void = property(
+        fget=_get_mat_void,
+        fset=_set_mat_void,
+        doc=u"""Material of the void part of the hole (Air in general)""",
+    )

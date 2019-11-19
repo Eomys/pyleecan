@@ -18,7 +18,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Import import Import
 
 
-
 class InFlux(Input):
     """Input to skip the magnetic module and start with the structural one"""
 
@@ -26,7 +25,11 @@ class InFlux(Input):
 
     # cf Methods.Simulation.InFlux.gen_input
     if isinstance(gen_input, ImportError):
-        gen_input = property(fget=lambda x: raise_(ImportError("Can't use InFlux method gen_input: " + str(gen_input))))
+        gen_input = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use InFlux method gen_input: " + str(gen_input))
+            )
+        )
     else:
         gen_input = gen_input
     # save method is available in all object
@@ -65,48 +68,92 @@ class InFlux(Input):
         # time can be None, a Import object or a dict
         if isinstance(time, dict):
             # Check that the type is correct (including daughter)
-            class_name = time.get('__class__')
-            if class_name not in ['Import', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls', 'ImportGenVectSin', 'ImportGenMatrixSin', 'ImportGenVectLin']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for time")
+            class_name = time.get("__class__")
+            if class_name not in [
+                "Import",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+                "ImportGenVectSin",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for time"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.time = class_obj(init_dict=time)
         else:
             self.time = time
         # angle can be None, a Import object or a dict
         if isinstance(angle, dict):
             # Check that the type is correct (including daughter)
-            class_name = angle.get('__class__')
-            if class_name not in ['Import', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls', 'ImportGenVectSin', 'ImportGenMatrixSin', 'ImportGenVectLin']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for angle")
+            class_name = angle.get("__class__")
+            if class_name not in [
+                "Import",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+                "ImportGenVectSin",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for angle"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.angle = class_obj(init_dict=angle)
         else:
             self.angle = angle
         # Br can be None, a Import object or a dict
         if isinstance(Br, dict):
             # Check that the type is correct (including daughter)
-            class_name = Br.get('__class__')
-            if class_name not in ['Import', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls', 'ImportGenVectSin', 'ImportGenMatrixSin', 'ImportGenVectLin']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for Br")
+            class_name = Br.get("__class__")
+            if class_name not in [
+                "Import",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+                "ImportGenVectSin",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Br"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.Br = class_obj(init_dict=Br)
         else:
             self.Br = Br
         # Bt can be None, a Import object or a dict
         if isinstance(Bt, dict):
             # Check that the type is correct (including daughter)
-            class_name = Bt.get('__class__')
-            if class_name not in ['Import', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls', 'ImportGenVectSin', 'ImportGenMatrixSin', 'ImportGenVectLin']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for Bt")
+            class_name = Bt.get("__class__")
+            if class_name not in [
+                "Import",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+                "ImportGenVectSin",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Bt"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.Bt = class_obj(init_dict=Bt)
         else:
             self.Bt = Bt
@@ -198,10 +245,14 @@ class InFlux(Input):
 
         if self._time is not None:
             self._time.parent = self
+
     # Electrical time vector (no symmetry) to import
     # Type : Import
-    time = property(fget=_get_time, fset=_set_time,
-                    doc=u"""Electrical time vector (no symmetry) to import""")
+    time = property(
+        fget=_get_time,
+        fset=_set_time,
+        doc=u"""Electrical time vector (no symmetry) to import""",
+    )
 
     def _get_angle(self):
         """getter of angle"""
@@ -214,10 +265,14 @@ class InFlux(Input):
 
         if self._angle is not None:
             self._angle.parent = self
+
     # Electrical position vector (no symmetry) to import
     # Type : Import
-    angle = property(fget=_get_angle, fset=_set_angle,
-                     doc=u"""Electrical position vector (no symmetry) to import""")
+    angle = property(
+        fget=_get_angle,
+        fset=_set_angle,
+        doc=u"""Electrical position vector (no symmetry) to import""",
+    )
 
     def _get_Br(self):
         """getter of Br"""
@@ -230,10 +285,10 @@ class InFlux(Input):
 
         if self._Br is not None:
             self._Br.parent = self
+
     # Radial airgap flux density
     # Type : Import
-    Br = property(fget=_get_Br, fset=_set_Br,
-                  doc=u"""Radial airgap flux density""")
+    Br = property(fget=_get_Br, fset=_set_Br, doc=u"""Radial airgap flux density""")
 
     def _get_Bt(self):
         """getter of Bt"""
@@ -246,7 +301,7 @@ class InFlux(Input):
 
         if self._Bt is not None:
             self._Bt.parent = self
+
     # Tangential airgap flux density
     # Type : Import
-    Bt = property(fget=_get_Bt, fset=_set_Bt,
-                  doc=u"""Tangential airgap flux density""")
+    Bt = property(fget=_get_Bt, fset=_set_Bt, doc=u"""Tangential airgap flux density""")

@@ -24,13 +24,27 @@ class ImportMatrixXls(ImportMatrix):
 
     # cf Methods.Import.ImportMatrixXls.get_data
     if isinstance(get_data, ImportError):
-        get_data = property(fget=lambda x: raise_(ImportError("Can't use ImportMatrixXls method get_data: " + str(get_data))))
+        get_data = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ImportMatrixXls method get_data: " + str(get_data)
+                )
+            )
+        )
     else:
         get_data = get_data
     # save method is available in all object
     save = save
 
-    def __init__(self, file_path="", sheet="", skiprows=0, usecols=None, is_transpose=False, init_dict=None):
+    def __init__(
+        self,
+        file_path="",
+        sheet="",
+        skiprows=0,
+        usecols=None,
+        is_transpose=False,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -41,7 +55,9 @@ class ImportMatrixXls(ImportMatrix):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["file_path", "sheet", "skiprows", "usecols", "is_transpose"])
+            check_init_dict(
+                init_dict, ["file_path", "sheet", "skiprows", "usecols", "is_transpose"]
+            )
             # Overwrite default value with init_dict content
             if "file_path" in list(init_dict.keys()):
                 file_path = init_dict["file_path"]
@@ -130,8 +146,9 @@ class ImportMatrixXls(ImportMatrix):
 
     # Path of the file to load
     # Type : str
-    file_path = property(fget=_get_file_path, fset=_set_file_path,
-                         doc=u"""Path of the file to load""")
+    file_path = property(
+        fget=_get_file_path, fset=_set_file_path, doc=u"""Path of the file to load"""
+    )
 
     def _get_sheet(self):
         """getter of sheet"""
@@ -144,8 +161,9 @@ class ImportMatrixXls(ImportMatrix):
 
     # Name of the sheet to load
     # Type : str
-    sheet = property(fget=_get_sheet, fset=_set_sheet,
-                     doc=u"""Name of the sheet to load""")
+    sheet = property(
+        fget=_get_sheet, fset=_set_sheet, doc=u"""Name of the sheet to load"""
+    )
 
     def _get_skiprows(self):
         """getter of skiprows"""
@@ -158,8 +176,11 @@ class ImportMatrixXls(ImportMatrix):
 
     # To skip some rows in the file (header)
     # Type : int, min = 0
-    skiprows = property(fget=_get_skiprows, fset=_set_skiprows,
-                        doc=u"""To skip some rows in the file (header)""")
+    skiprows = property(
+        fget=_get_skiprows,
+        fset=_set_skiprows,
+        doc=u"""To skip some rows in the file (header)""",
+    )
 
     def _get_usecols(self):
         """getter of usecols"""
@@ -172,5 +193,8 @@ class ImportMatrixXls(ImportMatrix):
 
     # To select the range of column to use
     # Type : str
-    usecols = property(fget=_get_usecols, fset=_set_usecols,
-                       doc=u"""To select the range of column to use""")
+    usecols = property(
+        fget=_get_usecols,
+        fset=_set_usecols,
+        doc=u"""To select the range of column to use""",
+    )

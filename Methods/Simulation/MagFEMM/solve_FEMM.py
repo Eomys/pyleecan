@@ -7,6 +7,7 @@ from pyleecan.Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from pyleecan.Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
 from pyleecan.Classes.MeshMat import MeshMat
 
+
 def solve_FEMM(self, output, sym, FEMM_dict):
 
     # Loading parameters for readibilitys

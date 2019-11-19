@@ -20,4 +20,3 @@ def get_nodes2elements(self, node_id):
     elems = np.where(self.elements == node_id)
 
     return elems
-

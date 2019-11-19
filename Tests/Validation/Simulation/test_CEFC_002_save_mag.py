@@ -18,13 +18,7 @@ simu = Simu1(name="SM_CEFC_002_save_mag", machine=CEFC_Lam, struct=None)
 
 # Definition of the enforced output of the electrical module
 Nr = ImportMatrixVal(value=ones(1) * 3000)
-Is = ImportMatrixVal(
-    value=array(
-        [
-            [2.25353053e02, 2.25353053e02, 2.25353053e02]
-        ]
-    )
-)
+Is = ImportMatrixVal(value=array([[2.25353053e02, 2.25353053e02, 2.25353053e02]]))
 time = ImportGenVectLin(start=0, stop=1, num=1, endpoint=True)
 angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
 
@@ -65,12 +59,11 @@ class test_CEFC_001(TestCase):
         out.post.legend_name = "Slotless lamination"
         simu.run()
 
-        out.plot_mesh_field(field=out.mag.mesh[0].mu, title='Permeability')
+        out.plot_mesh_field(field=out.mag.mesh[0].mu, title="Permeability")
         out.plot_mesh_field()
 
         out.save(save_path=save_path)
         plt.close("all")
+
+
 #    def test_magnetic_force(self):
-
-
-

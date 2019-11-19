@@ -85,5 +85,8 @@ class Mesh(FrozenClass):
 
     # (Optional) Descriptive name of the mesh
     # Type : str
-    name = property(fget=_get_name, fset=_set_name,
-                    doc=u"""(Optional) Descriptive name of the mesh""")
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""(Optional) Descriptive name of the mesh""",
+    )

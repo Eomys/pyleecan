@@ -60,42 +60,90 @@ class SlotW12(SlotWind):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.SlotW12.build_geometry
     if isinstance(build_geometry, ImportError):
-        build_geometry = property(fget=lambda x: raise_(ImportError("Can't use SlotW12 method build_geometry: " + str(build_geometry))))
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW12 method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
     else:
         build_geometry = build_geometry
     # cf Methods.Slot.SlotW12.build_geometry_wind
     if isinstance(build_geometry_wind, ImportError):
-        build_geometry_wind = property(fget=lambda x: raise_(ImportError("Can't use SlotW12 method build_geometry_wind: " + str(build_geometry_wind))))
+        build_geometry_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW12 method build_geometry_wind: "
+                    + str(build_geometry_wind)
+                )
+            )
+        )
     else:
         build_geometry_wind = build_geometry_wind
     # cf Methods.Slot.SlotW12.check
     if isinstance(check, ImportError):
-        check = property(fget=lambda x: raise_(ImportError("Can't use SlotW12 method check: " + str(check))))
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotW12 method check: " + str(check))
+            )
+        )
     else:
         check = check
     # cf Methods.Slot.SlotW12.comp_angle_opening
     if isinstance(comp_angle_opening, ImportError):
-        comp_angle_opening = property(fget=lambda x: raise_(ImportError("Can't use SlotW12 method comp_angle_opening: " + str(comp_angle_opening))))
+        comp_angle_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW12 method comp_angle_opening: "
+                    + str(comp_angle_opening)
+                )
+            )
+        )
     else:
         comp_angle_opening = comp_angle_opening
     # cf Methods.Slot.SlotW12.comp_height
     if isinstance(comp_height, ImportError):
-        comp_height = property(fget=lambda x: raise_(ImportError("Can't use SlotW12 method comp_height: " + str(comp_height))))
+        comp_height = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotW12 method comp_height: " + str(comp_height))
+            )
+        )
     else:
         comp_height = comp_height
     # cf Methods.Slot.SlotW12.comp_height_wind
     if isinstance(comp_height_wind, ImportError):
-        comp_height_wind = property(fget=lambda x: raise_(ImportError("Can't use SlotW12 method comp_height_wind: " + str(comp_height_wind))))
+        comp_height_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW12 method comp_height_wind: "
+                    + str(comp_height_wind)
+                )
+            )
+        )
     else:
         comp_height_wind = comp_height_wind
     # cf Methods.Slot.SlotW12.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use SlotW12 method comp_surface: " + str(comp_surface))))
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW12 method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
     else:
         comp_surface = comp_surface
     # cf Methods.Slot.SlotW12.comp_surface_wind
     if isinstance(comp_surface_wind, ImportError):
-        comp_surface_wind = property(fget=lambda x: raise_(ImportError("Can't use SlotW12 method comp_surface_wind: " + str(comp_surface_wind))))
+        comp_surface_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW12 method comp_surface_wind: "
+                    + str(comp_surface_wind)
+                )
+            )
+        )
     else:
         comp_surface_wind = comp_surface_wind
     # save method is available in all object
@@ -201,8 +249,7 @@ class SlotW12(SlotWind):
 
     # Slot isthmus height.
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0,
-                  doc=u"""Slot isthmus height.""")
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height.""")
 
     def _get_H1(self):
         """getter of H1"""
@@ -215,8 +262,7 @@ class SlotW12(SlotWind):
 
     # Slot middle height
     # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1,
-                  doc=u"""Slot middle height""")
+    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Slot middle height""")
 
     def _get_R1(self):
         """getter of R1"""
@@ -229,8 +275,7 @@ class SlotW12(SlotWind):
 
     # Wedges radius
     # Type : float, min = 0
-    R1 = property(fget=_get_R1, fset=_set_R1,
-                  doc=u"""Wedges radius""")
+    R1 = property(fget=_get_R1, fset=_set_R1, doc=u"""Wedges radius""")
 
     def _get_R2(self):
         """getter of R2"""
@@ -243,5 +288,4 @@ class SlotW12(SlotWind):
 
     # Slot bottom radius
     # Type : float, min = 0
-    R2 = property(fget=_get_R2, fset=_set_R2,
-                  doc=u"""Slot bottom radius""")
+    R2 = property(fget=_get_R2, fset=_set_R2, doc=u"""Slot bottom radius""")

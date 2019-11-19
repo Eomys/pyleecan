@@ -39,7 +39,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.SubMesh import SubMesh
 
 
-
 class MeshMat(Mesh):
     """Gather the parameters of a mesh under matricial format containing one type of element. """
 
@@ -48,33 +47,67 @@ class MeshMat(Mesh):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Mesh.MeshMat.get_submesh
     if isinstance(get_submesh, ImportError):
-        get_submesh = property(fget=lambda x: raise_(ImportError("Can't use MeshMat method get_submesh: " + str(get_submesh))))
+        get_submesh = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method get_submesh: " + str(get_submesh))
+            )
+        )
     else:
         get_submesh = get_submesh
     # cf Methods.Mesh.MeshMat.get_group
     if isinstance(get_group, ImportError):
-        get_group = property(fget=lambda x: raise_(ImportError("Can't use MeshMat method get_group: " + str(get_group))))
+        get_group = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method get_group: " + str(get_group))
+            )
+        )
     else:
         get_group = get_group
     # cf Methods.Mesh.MeshMat.get_node
     if isinstance(get_node, ImportError):
-        get_node = property(fget=lambda x: raise_(ImportError("Can't use MeshMat method get_node: " + str(get_node))))
+        get_node = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method get_node: " + str(get_node))
+            )
+        )
     else:
         get_node = get_node
     # cf Methods.Mesh.MeshMat.get_element
     if isinstance(get_element, ImportError):
-        get_element = property(fget=lambda x: raise_(ImportError("Can't use MeshMat method get_element: " + str(get_element))))
+        get_element = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method get_element: " + str(get_element))
+            )
+        )
     else:
         get_element = get_element
     # cf Methods.Mesh.MeshMat.get_node2element
     if isinstance(get_node2element, ImportError):
-        get_node2element = property(fget=lambda x: raise_(ImportError("Can't use MeshMat method get_node2element: " + str(get_node2element))))
+        get_node2element = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshMat method get_node2element: "
+                    + str(get_node2element)
+                )
+            )
+        )
     else:
         get_node2element = get_node2element
     # save method is available in all object
     save = save
 
-    def __init__(self, element=None, node=None, group=None, nb_elem=None, nb_node=None, submesh=list(), nb_node_per_element=None, name=None, init_dict=None):
+    def __init__(
+        self,
+        element=None,
+        node=None,
+        group=None,
+        nb_elem=None,
+        nb_node=None,
+        submesh=list(),
+        nb_node_per_element=None,
+        name=None,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -85,7 +118,19 @@ class MeshMat(Mesh):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["element", "node", "group", "nb_elem", "nb_node", "submesh", "nb_node_per_element", "name"])
+            check_init_dict(
+                init_dict,
+                [
+                    "element",
+                    "node",
+                    "group",
+                    "nb_elem",
+                    "nb_node",
+                    "submesh",
+                    "nb_node_per_element",
+                    "name",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "element" in list(init_dict.keys()):
                 element = init_dict["element"]
@@ -146,7 +191,15 @@ class MeshMat(Mesh):
         if len(self.submesh) == 0:
             MeshMat_str += "submesh = []"
         for ii in range(len(self.submesh)):
-            MeshMat_str += "submesh["+str(ii)+"] = "+str(self.submesh[ii].as_dict())+"\n" + linesep + linesep
+            MeshMat_str += (
+                "submesh["
+                + str(ii)
+                + "] = "
+                + str(self.submesh[ii].as_dict())
+                + "\n"
+                + linesep
+                + linesep
+            )
         MeshMat_str += "nb_node_per_element = " + str(self.nb_node_per_element)
         return MeshMat_str
 
@@ -234,8 +287,11 @@ class MeshMat(Mesh):
 
     # Matrix of connectivity for one element type
     # Type : ndarray
-    element = property(fget=_get_element, fset=_set_element,
-                       doc=u"""Matrix of connectivity for one element type""")
+    element = property(
+        fget=_get_element,
+        fset=_set_element,
+        doc=u"""Matrix of connectivity for one element type""",
+    )
 
     def _get_node(self):
         """getter of node"""
@@ -253,8 +309,9 @@ class MeshMat(Mesh):
 
     # Containing nodes coordinates
     # Type : ndarray
-    node = property(fget=_get_node, fset=_set_node,
-                    doc=u"""Containing nodes coordinates""")
+    node = property(
+        fget=_get_node, fset=_set_node, doc=u"""Containing nodes coordinates"""
+    )
 
     def _get_group(self):
         """getter of group"""
@@ -272,8 +329,11 @@ class MeshMat(Mesh):
 
     # Attribute a number to each subpart of the machine
     # Type : ndarray
-    group = property(fget=_get_group, fset=_set_group,
-                     doc=u"""Attribute a number to each subpart of the machine""")
+    group = property(
+        fget=_get_group,
+        fset=_set_group,
+        doc=u"""Attribute a number to each subpart of the machine""",
+    )
 
     def _get_nb_elem(self):
         """getter of nb_elem"""
@@ -286,8 +346,9 @@ class MeshMat(Mesh):
 
     # Total number of elements
     # Type : int
-    nb_elem = property(fget=_get_nb_elem, fset=_set_nb_elem,
-                       doc=u"""Total number of elements""")
+    nb_elem = property(
+        fget=_get_nb_elem, fset=_set_nb_elem, doc=u"""Total number of elements"""
+    )
 
     def _get_nb_node(self):
         """getter of nb_node"""
@@ -300,8 +361,9 @@ class MeshMat(Mesh):
 
     # Total number of nodes
     # Type : int
-    nb_node = property(fget=_get_nb_node, fset=_set_nb_node,
-                       doc=u"""Total number of nodes""")
+    nb_node = property(
+        fget=_get_nb_node, fset=_set_nb_node, doc=u"""Total number of nodes"""
+    )
 
     def _get_submesh(self):
         """getter of submesh"""
@@ -318,10 +380,10 @@ class MeshMat(Mesh):
         for obj in self._submesh:
             if obj is not None:
                 obj.parent = self
+
     # List of submesh
     # Type : [SubMesh]
-    submesh = property(fget=_get_submesh, fset=_set_submesh,
-                       doc=u"""List of submesh""")
+    submesh = property(fget=_get_submesh, fset=_set_submesh, doc=u"""List of submesh""")
 
     def _get_nb_node_per_element(self):
         """getter of nb_node_per_element"""
@@ -334,5 +396,8 @@ class MeshMat(Mesh):
 
     # Define the number of node per element
     # Type : int
-    nb_node_per_element = property(fget=_get_nb_node_per_element, fset=_set_nb_node_per_element,
-                                   doc=u"""Define the number of node per element""")
+    nb_node_per_element = property(
+        fget=_get_nb_node_per_element,
+        fset=_set_nb_node_per_element,
+        doc=u"""Define the number of node per element""",
+    )

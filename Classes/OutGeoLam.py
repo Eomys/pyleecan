@@ -18,7 +18,18 @@ class OutGeoLam(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, name_phase=None, BH_curve=None, Ksfill=None, S_slot=None, S_slot_wind=None, S_wind_act=None, sym=None, is_asym_wind=None, init_dict=None):
+    def __init__(
+        self,
+        name_phase=None,
+        BH_curve=None,
+        Ksfill=None,
+        S_slot=None,
+        S_slot_wind=None,
+        S_wind_act=None,
+        sym=None,
+        is_asym_wind=None,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -29,7 +40,19 @@ class OutGeoLam(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["name_phase", "BH_curve", "Ksfill", "S_slot", "S_slot_wind", "S_wind_act", "sym", "is_asym_wind"])
+            check_init_dict(
+                init_dict,
+                [
+                    "name_phase",
+                    "BH_curve",
+                    "Ksfill",
+                    "S_slot",
+                    "S_slot_wind",
+                    "S_wind_act",
+                    "sym",
+                    "is_asym_wind",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "name_phase" in list(init_dict.keys()):
                 name_phase = init_dict["name_phase"]
@@ -71,7 +94,9 @@ class OutGeoLam(FrozenClass):
         else:
             OutGeoLam_str += "parent = " + str(type(self.parent)) + " object" + linesep
         OutGeoLam_str += "name_phase = " + linesep + str(self.name_phase) + linesep
-        OutGeoLam_str += "BH_curve = " + linesep + str(self.BH_curve) + linesep + linesep
+        OutGeoLam_str += (
+            "BH_curve = " + linesep + str(self.BH_curve) + linesep + linesep
+        )
         OutGeoLam_str += "Ksfill = " + str(self.Ksfill) + linesep
         OutGeoLam_str += "S_slot = " + str(self.S_slot) + linesep
         OutGeoLam_str += "S_slot_wind = " + str(self.S_slot_wind) + linesep
@@ -146,8 +171,11 @@ class OutGeoLam(FrozenClass):
 
     # Name of the phases of the winding (if any)
     # Type : list
-    name_phase = property(fget=_get_name_phase, fset=_set_name_phase,
-                          doc=u"""Name of the phases of the winding (if any)""")
+    name_phase = property(
+        fget=_get_name_phase,
+        fset=_set_name_phase,
+        doc=u"""Name of the phases of the winding (if any)""",
+    )
 
     def _get_BH_curve(self):
         """getter of BH_curve"""
@@ -165,8 +193,11 @@ class OutGeoLam(FrozenClass):
 
     # B(H) curve (two columns matrix, H and B(H))
     # Type : ndarray
-    BH_curve = property(fget=_get_BH_curve, fset=_set_BH_curve,
-                        doc=u"""B(H) curve (two columns matrix, H and B(H))""")
+    BH_curve = property(
+        fget=_get_BH_curve,
+        fset=_set_BH_curve,
+        doc=u"""B(H) curve (two columns matrix, H and B(H))""",
+    )
 
     def _get_Ksfill(self):
         """getter of Ksfill"""
@@ -179,8 +210,7 @@ class OutGeoLam(FrozenClass):
 
     # Slot fill factor
     # Type : float
-    Ksfill = property(fget=_get_Ksfill, fset=_set_Ksfill,
-                      doc=u"""Slot fill factor""")
+    Ksfill = property(fget=_get_Ksfill, fset=_set_Ksfill, doc=u"""Slot fill factor""")
 
     def _get_S_slot(self):
         """getter of S_slot"""
@@ -193,8 +223,7 @@ class OutGeoLam(FrozenClass):
 
     # Slot surface
     # Type : float
-    S_slot = property(fget=_get_S_slot, fset=_set_S_slot,
-                      doc=u"""Slot surface""")
+    S_slot = property(fget=_get_S_slot, fset=_set_S_slot, doc=u"""Slot surface""")
 
     def _get_S_slot_wind(self):
         """getter of S_slot_wind"""
@@ -207,8 +236,9 @@ class OutGeoLam(FrozenClass):
 
     # Slot winding surface
     # Type : float
-    S_slot_wind = property(fget=_get_S_slot_wind, fset=_set_S_slot_wind,
-                           doc=u"""Slot winding surface""")
+    S_slot_wind = property(
+        fget=_get_S_slot_wind, fset=_set_S_slot_wind, doc=u"""Slot winding surface"""
+    )
 
     def _get_S_wind_act(self):
         """getter of S_wind_act"""
@@ -221,8 +251,9 @@ class OutGeoLam(FrozenClass):
 
     # Conductor active surface
     # Type : float
-    S_wind_act = property(fget=_get_S_wind_act, fset=_set_S_wind_act,
-                          doc=u"""Conductor active surface""")
+    S_wind_act = property(
+        fget=_get_S_wind_act, fset=_set_S_wind_act, doc=u"""Conductor active surface"""
+    )
 
     def _get_sym(self):
         """getter of sym"""
@@ -235,8 +266,11 @@ class OutGeoLam(FrozenClass):
 
     # Symmetry factor of the lamination (1=full machine; 2 = half;...)
     # Type : int
-    sym = property(fget=_get_sym, fset=_set_sym,
-                   doc=u"""Symmetry factor of the lamination (1=full machine; 2 = half;...)""")
+    sym = property(
+        fget=_get_sym,
+        fset=_set_sym,
+        doc=u"""Symmetry factor of the lamination (1=full machine; 2 = half;...)""",
+    )
 
     def _get_is_asym_wind(self):
         """getter of is_asym_wind"""
@@ -249,5 +283,8 @@ class OutGeoLam(FrozenClass):
 
     # True if the winding has a asymmetry
     # Type : bool
-    is_asym_wind = property(fget=_get_is_asym_wind, fset=_set_is_asym_wind,
-                            doc=u"""True if the winding has a asymmetry""")
+    is_asym_wind = property(
+        fget=_get_is_asym_wind,
+        fset=_set_is_asym_wind,
+        doc=u"""True if the winding has a asymmetry""",
+    )

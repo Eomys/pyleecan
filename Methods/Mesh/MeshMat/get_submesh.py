@@ -22,7 +22,7 @@ def get_submesh(self, group):
 
     # Check if the submesh is already existing
     if len(self.submesh) > 1:
-        for isub in range (len(self.submesh)):
+        for isub in range(len(self.submesh)):
             if self.submesh[isub].group_number == group:
                 return self.submesh[isub]
     else:
@@ -36,4 +36,3 @@ def get_submesh(self, group):
     submesh.set_submesh(self)
 
     return submesh
-

@@ -23,7 +23,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
 
 
-
 class ImportGenMatrixSin(ImportMatrix):
     """To generate a Sinus matrix"""
 
@@ -32,12 +31,25 @@ class ImportGenMatrixSin(ImportMatrix):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Import.ImportGenMatrixSin.get_data
     if isinstance(get_data, ImportError):
-        get_data = property(fget=lambda x: raise_(ImportError("Can't use ImportGenMatrixSin method get_data: " + str(get_data))))
+        get_data = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ImportGenMatrixSin method get_data: " + str(get_data)
+                )
+            )
+        )
     else:
         get_data = get_data
     # cf Methods.Import.ImportGenMatrixSin.init_vector
     if isinstance(init_vector, ImportError):
-        init_vector = property(fget=lambda x: raise_(ImportError("Can't use ImportGenMatrixSin method init_vector: " + str(init_vector))))
+        init_vector = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ImportGenMatrixSin method init_vector: "
+                    + str(init_vector)
+                )
+            )
+        )
     else:
         init_vector = init_vector
     # save method is available in all object
@@ -89,7 +101,9 @@ class ImportGenMatrixSin(ImportMatrix):
         if len(self.sin_list) == 0:
             ImportGenMatrixSin_str += "sin_list = []"
         for ii in range(len(self.sin_list)):
-            ImportGenMatrixSin_str += "sin_list["+str(ii)+"] = "+str(self.sin_list[ii].as_dict())+"\n"
+            ImportGenMatrixSin_str += (
+                "sin_list[" + str(ii) + "] = " + str(self.sin_list[ii].as_dict()) + "\n"
+            )
         return ImportGenMatrixSin_str
 
     def __eq__(self, other):
@@ -142,7 +156,11 @@ class ImportGenMatrixSin(ImportMatrix):
         for obj in self._sin_list:
             if obj is not None:
                 obj.parent = self
+
     # List of sinus vector to generate the matrix lines
     # Type : [ImportGenVectSin]
-    sin_list = property(fget=_get_sin_list, fset=_set_sin_list,
-                        doc=u"""List of sinus vector to generate the matrix lines""")
+    sin_list = property(
+        fget=_get_sin_list,
+        fset=_set_sin_list,
+        doc=u"""List of sinus vector to generate the matrix lines""",
+    )

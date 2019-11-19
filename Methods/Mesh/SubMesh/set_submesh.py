@@ -43,8 +43,9 @@ def set_submesh(self, parent_mesh):
         if group == -1:
             interface = True
         else:
-            elem_id = np.append(elem_id,
-                                np.where(parent_mesh.group == group)[0])  # Find all element in the targeted group
+            elem_id = np.append(
+                elem_id, np.where(parent_mesh.group == group)[0]
+            )  # Find all element in the targeted group
             elem_id_no = np.append(elem_id_no, np.where(parent_mesh.group != group)[0])
 
     if interface:

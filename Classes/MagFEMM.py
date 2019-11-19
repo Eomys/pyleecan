@@ -45,33 +45,86 @@ class MagFEMM(Magnetics):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.MagFEMM.comp_flux_airgap
     if isinstance(comp_flux_airgap, ImportError):
-        comp_flux_airgap = property(fget=lambda x: raise_(ImportError("Can't use MagFEMM method comp_flux_airgap: " + str(comp_flux_airgap))))
+        comp_flux_airgap = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method comp_flux_airgap: "
+                    + str(comp_flux_airgap)
+                )
+            )
+        )
     else:
         comp_flux_airgap = comp_flux_airgap
     # cf Methods.Simulation.MagFEMM.get_path_save
     if isinstance(get_path_save, ImportError):
-        get_path_save = property(fget=lambda x: raise_(ImportError("Can't use MagFEMM method get_path_save: " + str(get_path_save))))
+        get_path_save = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method get_path_save: " + str(get_path_save)
+                )
+            )
+        )
     else:
         get_path_save = get_path_save
     # cf Methods.Simulation.MagFEMM.solve_FEMM
     if isinstance(solve_FEMM, ImportError):
-        solve_FEMM = property(fget=lambda x: raise_(ImportError("Can't use MagFEMM method solve_FEMM: " + str(solve_FEMM))))
+        solve_FEMM = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MagFEMM method solve_FEMM: " + str(solve_FEMM))
+            )
+        )
     else:
         solve_FEMM = solve_FEMM
     # cf Methods.Simulation.MagFEMM.get_mesh
     if isinstance(get_mesh, ImportError):
-        get_mesh = property(fget=lambda x: raise_(ImportError("Can't use MagFEMM method get_mesh: " + str(get_mesh))))
+        get_mesh = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MagFEMM method get_mesh: " + str(get_mesh))
+            )
+        )
     else:
         get_mesh = get_mesh
     # cf Methods.Simulation.MagFEMM.get_path_save_fem
     if isinstance(get_path_save_fem, ImportError):
-        get_path_save_fem = property(fget=lambda x: raise_(ImportError("Can't use MagFEMM method get_path_save_fem: " + str(get_path_save_fem))))
+        get_path_save_fem = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method get_path_save_fem: "
+                    + str(get_path_save_fem)
+                )
+            )
+        )
     else:
         get_path_save_fem = get_path_save_fem
     # save method is available in all object
     save = save
 
-    def __init__(self, Kmesh_fineness=1, Kgeo_fineness=1, type_calc_leakage=0, file_name="", FEMM_dict={}, angle_stator=0, is_get_mesh=False, is_save_FEA=False, is_sliding_band=True, is_remove_slotS=False, is_remove_slotR=False, is_remove_vent=False, is_mmfs=True, is_mmfr=True, is_stator_linear_BH=0, is_rotor_linear_BH=0, is_symmetry_t=False, sym_t=1, is_antiper_t=False, is_symmetry_a=False, sym_a=1, is_antiper_a=False, init_dict=None):
+    def __init__(
+        self,
+        Kmesh_fineness=1,
+        Kgeo_fineness=1,
+        type_calc_leakage=0,
+        file_name="",
+        FEMM_dict={},
+        angle_stator=0,
+        is_get_mesh=False,
+        is_save_FEA=False,
+        is_sliding_band=True,
+        is_remove_slotS=False,
+        is_remove_slotR=False,
+        is_remove_vent=False,
+        is_mmfs=True,
+        is_mmfr=True,
+        is_stator_linear_BH=0,
+        is_rotor_linear_BH=0,
+        is_symmetry_t=False,
+        sym_t=1,
+        is_antiper_t=False,
+        is_symmetry_a=False,
+        sym_a=1,
+        is_antiper_a=False,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -82,7 +135,33 @@ class MagFEMM(Magnetics):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["Kmesh_fineness", "Kgeo_fineness", "type_calc_leakage", "file_name", "FEMM_dict", "angle_stator", "is_get_mesh", "is_save_FEA", "is_sliding_band", "is_remove_slotS", "is_remove_slotR", "is_remove_vent", "is_mmfs", "is_mmfr", "is_stator_linear_BH", "is_rotor_linear_BH", "is_symmetry_t", "sym_t", "is_antiper_t", "is_symmetry_a", "sym_a", "is_antiper_a"])
+            check_init_dict(
+                init_dict,
+                [
+                    "Kmesh_fineness",
+                    "Kgeo_fineness",
+                    "type_calc_leakage",
+                    "file_name",
+                    "FEMM_dict",
+                    "angle_stator",
+                    "is_get_mesh",
+                    "is_save_FEA",
+                    "is_sliding_band",
+                    "is_remove_slotS",
+                    "is_remove_slotR",
+                    "is_remove_vent",
+                    "is_mmfs",
+                    "is_mmfr",
+                    "is_stator_linear_BH",
+                    "is_rotor_linear_BH",
+                    "is_symmetry_t",
+                    "sym_t",
+                    "is_antiper_t",
+                    "is_symmetry_a",
+                    "sym_a",
+                    "is_antiper_a",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "Kmesh_fineness" in list(init_dict.keys()):
                 Kmesh_fineness = init_dict["Kmesh_fineness"]
@@ -139,7 +218,21 @@ class MagFEMM(Magnetics):
         self.is_save_FEA = is_save_FEA
         self.is_sliding_band = is_sliding_band
         # Call Magnetics init
-        super(MagFEMM, self).__init__(is_remove_slotS=is_remove_slotS, is_remove_slotR=is_remove_slotR, is_remove_vent=is_remove_vent, is_mmfs=is_mmfs, is_mmfr=is_mmfr, is_stator_linear_BH=is_stator_linear_BH, is_rotor_linear_BH=is_rotor_linear_BH, is_symmetry_t=is_symmetry_t, sym_t=sym_t, is_antiper_t=is_antiper_t, is_symmetry_a=is_symmetry_a, sym_a=sym_a, is_antiper_a=is_antiper_a)
+        super(MagFEMM, self).__init__(
+            is_remove_slotS=is_remove_slotS,
+            is_remove_slotR=is_remove_slotR,
+            is_remove_vent=is_remove_vent,
+            is_mmfs=is_mmfs,
+            is_mmfr=is_mmfr,
+            is_stator_linear_BH=is_stator_linear_BH,
+            is_rotor_linear_BH=is_rotor_linear_BH,
+            is_symmetry_t=is_symmetry_t,
+            sym_t=sym_t,
+            is_antiper_t=is_antiper_t,
+            is_symmetry_a=is_symmetry_a,
+            sym_a=sym_a,
+            is_antiper_a=is_antiper_a,
+        )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
 
@@ -235,8 +328,11 @@ class MagFEMM(Magnetics):
 
     # global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
     # Type : float
-    Kmesh_fineness = property(fget=_get_Kmesh_fineness, fset=_set_Kmesh_fineness,
-                              doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)""")
+    Kmesh_fineness = property(
+        fget=_get_Kmesh_fineness,
+        fset=_set_Kmesh_fineness,
+        doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)""",
+    )
 
     def _get_Kgeo_fineness(self):
         """getter of Kgeo_fineness"""
@@ -249,8 +345,11 @@ class MagFEMM(Magnetics):
 
     # global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
     # Type : float
-    Kgeo_fineness = property(fget=_get_Kgeo_fineness, fset=_set_Kgeo_fineness,
-                             doc=u"""global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)""")
+    Kgeo_fineness = property(
+        fget=_get_Kgeo_fineness,
+        fset=_set_Kgeo_fineness,
+        doc=u"""global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)""",
+    )
 
     def _get_type_calc_leakage(self):
         """getter of type_calc_leakage"""
@@ -261,10 +360,13 @@ class MagFEMM(Magnetics):
         check_var("type_calc_leakage", value, "int", Vmin=0, Vmax=1)
         self._type_calc_leakage = value
 
-    # 0 no leakage calculation /  1 calculation using single slot 
+    # 0 no leakage calculation /  1 calculation using single slot
     # Type : int, min = 0, max = 1
-    type_calc_leakage = property(fget=_get_type_calc_leakage, fset=_set_type_calc_leakage,
-                                 doc=u"""0 no leakage calculation /  1 calculation using single slot """)
+    type_calc_leakage = property(
+        fget=_get_type_calc_leakage,
+        fset=_set_type_calc_leakage,
+        doc=u"""0 no leakage calculation /  1 calculation using single slot """,
+    )
 
     def _get_file_name(self):
         """getter of file_name"""
@@ -277,8 +379,11 @@ class MagFEMM(Magnetics):
 
     # Name of the file to save the FEMM model
     # Type : str
-    file_name = property(fget=_get_file_name, fset=_set_file_name,
-                         doc=u"""Name of the file to save the FEMM model""")
+    file_name = property(
+        fget=_get_file_name,
+        fset=_set_file_name,
+        doc=u"""Name of the file to save the FEMM model""",
+    )
 
     def _get_FEMM_dict(self):
         """getter of FEMM_dict"""
@@ -289,10 +394,13 @@ class MagFEMM(Magnetics):
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 
-    # To enforce user-defined values for FEMM main parameters 
+    # To enforce user-defined values for FEMM main parameters
     # Type : dict
-    FEMM_dict = property(fget=_get_FEMM_dict, fset=_set_FEMM_dict,
-                         doc=u"""To enforce user-defined values for FEMM main parameters """)
+    FEMM_dict = property(
+        fget=_get_FEMM_dict,
+        fset=_set_FEMM_dict,
+        doc=u"""To enforce user-defined values for FEMM main parameters """,
+    )
 
     def _get_angle_stator(self):
         """getter of angle_stator"""
@@ -305,8 +413,11 @@ class MagFEMM(Magnetics):
 
     # Angular position shift of the stator
     # Type : float
-    angle_stator = property(fget=_get_angle_stator, fset=_set_angle_stator,
-                            doc=u"""Angular position shift of the stator""")
+    angle_stator = property(
+        fget=_get_angle_stator,
+        fset=_set_angle_stator,
+        doc=u"""Angular position shift of the stator""",
+    )
 
     def _get_is_get_mesh(self):
         """getter of is_get_mesh"""
@@ -317,10 +428,13 @@ class MagFEMM(Magnetics):
         check_var("is_get_mesh", value, "bool")
         self._is_get_mesh = value
 
-    # To save FEA mesh for latter post-procesing 
+    # To save FEA mesh for latter post-procesing
     # Type : bool
-    is_get_mesh = property(fget=_get_is_get_mesh, fset=_set_is_get_mesh,
-                           doc=u"""To save FEA mesh for latter post-procesing """)
+    is_get_mesh = property(
+        fget=_get_is_get_mesh,
+        fset=_set_is_get_mesh,
+        doc=u"""To save FEA mesh for latter post-procesing """,
+    )
 
     def _get_is_save_FEA(self):
         """getter of is_save_FEA"""
@@ -333,8 +447,11 @@ class MagFEMM(Magnetics):
 
     # To save FEA mesh and solution in .dat file
     # Type : bool
-    is_save_FEA = property(fget=_get_is_save_FEA, fset=_set_is_save_FEA,
-                           doc=u"""To save FEA mesh and solution in .dat file""")
+    is_save_FEA = property(
+        fget=_get_is_save_FEA,
+        fset=_set_is_save_FEA,
+        doc=u"""To save FEA mesh and solution in .dat file""",
+    )
 
     def _get_is_sliding_band(self):
         """getter of is_sliding_band"""
@@ -347,5 +464,8 @@ class MagFEMM(Magnetics):
 
     # 0 to desactivate the sliding band
     # Type : bool
-    is_sliding_band = property(fget=_get_is_sliding_band, fset=_set_is_sliding_band,
-                               doc=u"""0 to desactivate the sliding band""")
+    is_sliding_band = property(
+        fget=_get_is_sliding_band,
+        fset=_set_is_sliding_band,
+        doc=u"""0 to desactivate the sliding band""",
+    )

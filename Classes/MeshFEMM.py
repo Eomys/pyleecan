@@ -11,7 +11,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.SubMesh import SubMesh
 
 
-
 class MeshFEMM(MeshMat):
     """Gather the parameters of a mesh with only triangles"""
 
@@ -20,7 +19,21 @@ class MeshFEMM(MeshMat):
     # save method is available in all object
     save = save
 
-    def __init__(self, B=None, H=None, mu=None, element=None, node=None, group=None, nb_elem=None, nb_node=None, submesh=list(), nb_node_per_element=None, name=None, init_dict=None):
+    def __init__(
+        self,
+        B=None,
+        H=None,
+        mu=None,
+        element=None,
+        node=None,
+        group=None,
+        nb_elem=None,
+        nb_node=None,
+        submesh=list(),
+        nb_node_per_element=None,
+        name=None,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -31,7 +44,22 @@ class MeshFEMM(MeshMat):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["B", "H", "mu", "element", "node", "group", "nb_elem", "nb_node", "submesh", "nb_node_per_element", "name"])
+            check_init_dict(
+                init_dict,
+                [
+                    "B",
+                    "H",
+                    "mu",
+                    "element",
+                    "node",
+                    "group",
+                    "nb_elem",
+                    "nb_node",
+                    "submesh",
+                    "nb_node_per_element",
+                    "name",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "B" in list(init_dict.keys()):
                 B = init_dict["B"]
@@ -63,7 +91,16 @@ class MeshFEMM(MeshMat):
         # mu can be None, a ndarray or a list
         set_array(self, "mu", mu)
         # Call MeshMat init
-        super(MeshFEMM, self).__init__(element=element, node=node, group=group, nb_elem=nb_elem, nb_node=nb_node, submesh=submesh, nb_node_per_element=nb_node_per_element, name=name)
+        super(MeshFEMM, self).__init__(
+            element=element,
+            node=node,
+            group=group,
+            nb_elem=nb_elem,
+            nb_node=nb_node,
+            submesh=submesh,
+            nb_node_per_element=nb_node_per_element,
+            name=name,
+        )
         # The class is frozen (in MeshMat init), for now it's impossible to
         # add new properties
 
@@ -143,8 +180,7 @@ class MeshFEMM(MeshMat):
 
     # Magnetic flux per element
     # Type : ndarray
-    B = property(fget=_get_B, fset=_set_B,
-                 doc=u"""Magnetic flux per element""")
+    B = property(fget=_get_B, fset=_set_B, doc=u"""Magnetic flux per element""")
 
     def _get_H(self):
         """getter of H"""
@@ -162,8 +198,7 @@ class MeshFEMM(MeshMat):
 
     # Magnetic field per element
     # Type : ndarray
-    H = property(fget=_get_H, fset=_set_H,
-                 doc=u"""Magnetic field per element""")
+    H = property(fget=_get_H, fset=_set_H, doc=u"""Magnetic field per element""")
 
     def _get_mu(self):
         """getter of mu"""
@@ -181,5 +216,4 @@ class MeshFEMM(MeshMat):
 
     # Pemreability per element
     # Type : ndarray
-    mu = property(fget=_get_mu, fset=_set_mu,
-                  doc=u"""Pemreability per element""")
+    mu = property(fget=_get_mu, fset=_set_mu, doc=u"""Pemreability per element""")
