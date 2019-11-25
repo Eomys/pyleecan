@@ -99,7 +99,7 @@ def get_mesh(self, is_get_mesh, is_save_FEA, save_path, j_t0):
 
         solution = SolutionFEMM(B=results[:, 0:2], H=results[:, 2:4], mu=results[:, 4])
 
-        meshFEMM = MeshSolution(name="FEMM_magnetic_mesh", mesh=mesh, solution=solution)
+        meshFEMM = MeshSolution(name="FEMM_magnetic_mesh", mesh=mesh, solution=[solution])
 
         if is_save_FEA:
             save_path_fea = join(save_path, "meshFEMM" + str(j_t0) + ".json")

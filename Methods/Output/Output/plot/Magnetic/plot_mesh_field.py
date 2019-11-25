@@ -22,13 +22,13 @@ def plot_mesh_field(self, j_t0=0, nodes=None, connectivity=None, field=None, tit
     """
 
     if nodes is None:
-        nodes = self.mag.mesh[j_t0].node
+        nodes = self.mag.mesh[j_t0].mesh.node.coordinate
 
     if connectivity is None:
-        connectivity = self.mag.mesh[j_t0].element
+        connectivity = self.mag.mesh[j_t0].mesh.element.connectivity
 
     if field is None:
-        field = np.linalg.norm(self.mag.mesh[j_t0].B, axis=1)
+        field = np.linalg.norm(self.mag.mesh[j_t0].solution[0].B, axis=1)
 
     def showMeshPlot(nodes, elements, values, title):
         y = nodes[:, 0]

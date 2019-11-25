@@ -38,7 +38,7 @@ class test_CEFC_001(TestCase):
     """
 
     def test_Magnetic_FEMM(self):
-        """Test compute the Flux in FEMM without sliding band.
+        """Test compute the Flux in FEMM without slots and without sliding band.
         """
 
         out = Output(simu=simu)

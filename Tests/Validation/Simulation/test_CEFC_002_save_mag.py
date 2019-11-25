@@ -38,7 +38,7 @@ simu.input = InCurrent(
 # Definition of the magnetic simulation (no symmetry)
 simu.mag = MagFEMM(
     is_stator_linear_BH=2,
-    is_rotor_linear_BH=0,
+    is_rotor_linear_BH=2,
     is_get_mesh=True,
     is_save_FEA=True,
     is_sliding_band=False,
@@ -63,7 +63,7 @@ class test_CEFC_001(TestCase):
         out.post.legend_name = "Slotless lamination"
         simu.run()
 
-        out.plot_mesh_field(field=out.mag.mesh[0].mu, title='Permeability')
+        out.plot_mesh_field(field=out.mag.mesh[0].solution[0].mu, title='Permeability')
         out.plot_mesh_field()
 
         out.save(save_path=save_path)
