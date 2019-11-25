@@ -2,3 +2,10 @@
 *.pyc
 /Results
 /Tests/Results
+/.idea/encodings.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/pyleecan.iml
+/.idea/vcs.xml
+/.idea/workspace.xml
+/Tests/Validation/Simulation/.cache/v/cache

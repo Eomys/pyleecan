@@ -1,4 +1,4 @@
 Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-element,,Storing connectivity,,,Element,None,,,,,,Mesh,,get_element,VERSION,1,Gather the mesh storage format,MeshFEMM
-node,,Storing nodes,,,Node,None,,,,,,,,set_submesh,,,,MeshMat
-submesh,,Storing submeshes. Node and element numbers/tags or group must be the same.,,,[Mesh],None,,,,,,,,,,,,MeshForce
+element,,Storing connectivity,,,Element,None,,,,,,Mesh,,get_element,VERSION,1,Gather the mesh storage format,
+node,,Storing nodes,,,Node,None,,,,,,,,set_submesh,,,,
+submesh,,Storing submeshes. Node and element numbers/tags or group must be the same.,,,[Mesh],None,,,,,,,,,,,,

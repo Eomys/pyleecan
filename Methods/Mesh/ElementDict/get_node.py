@@ -8,8 +8,8 @@ def get_node(self, elem):
 
     Parameters
     ----------
-    self : MeshMat
-        an MeshMat object
+    self : ElementMat
+        an ElementMat object
 
     Returns
     -------

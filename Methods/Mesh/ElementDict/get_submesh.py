@@ -9,7 +9,7 @@ def get_submesh(self, group):
 
     Parameters
     ----------
-    :param self : an MeshFEMM object
+    :param self : an SolutionFEMM object
     :param group: id of the targeted group
 
     Returns

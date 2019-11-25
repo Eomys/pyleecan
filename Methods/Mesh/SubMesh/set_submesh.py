@@ -27,10 +27,10 @@ def set_submesh(self, parent_mesh):
 
     """
 
-    #Dynamic import of MeshFEMM
-    module = __import__("pyleecan.Classes." + "MeshMat", fromlist=["MeshMat"])
-    mesh_group = getattr(module, "MeshMat")()
-    #mesh_group = module.MeshMat()
+    #Dynamic import of SolutionFEMM
+    module = __import__("pyleecan.Classes." + "ElementMat", fromlist=["ElementMat"])
+    mesh_group = getattr(module, "ElementMat")()
+    #mesh_group = module.ElementMat()
 
     group_number = self.group_number
     interface = False

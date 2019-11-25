@@ -8,7 +8,7 @@ from pyleecan.Classes.frozen import FrozenClass
 
 from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
-from pyleecan.Classes.Mesh import Mesh
+from pyleecan.Classes.MeshSolution import MeshSolution
 
 
 
@@ -77,21 +77,14 @@ class OutMag(FrozenClass):
         set_array(self, "Phi_wind_stator", Phi_wind_stator)
         # emf can be None, a ndarray or a list
         set_array(self, "emf", emf)
-        # mesh can be None or a list of Mesh object
+        # mesh can be None or a list of MeshSolution object
         self.mesh = list()
         if type(mesh) is list:
             for obj in mesh:
                 if obj is None:  # Default value
-                    self.mesh.append(Mesh())
+                    self.mesh.append(MeshSolution())
                 elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get('__class__')
-                    if class_name not in ['Mesh', 'MeshFEMM', 'MeshMat', 'MeshForce']:
-                        raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for mesh")
-                    # Dynamic import to call the correct constructor
-                    module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-                    class_obj = getattr(module,class_name)
-                    self.mesh.append(class_obj(init_dict=obj))
+                    self.mesh.append(MeshSolution(init_dict=obj))
                 else:
                     self.mesh.append(obj)
         elif mesh is None:
@@ -417,13 +410,13 @@ class OutMag(FrozenClass):
 
     def _set_mesh(self, value):
         """setter of mesh"""
-        check_var("mesh", value, "[Mesh]")
+        check_var("mesh", value, "[MeshSolution]")
         self._mesh = value
 
         for obj in self._mesh:
             if obj is not None:
                 obj.parent = self
     # FEA software mesh and solution
-    # Type : [Mesh]
+    # Type : [MeshSolution]
     mesh = property(fget=_get_mesh, fset=_set_mesh,
                     doc=u"""FEA software mesh and solution""")

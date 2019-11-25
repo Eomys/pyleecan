@@ -4,23 +4,21 @@
 from os import linesep
 from pyleecan.Classes.check import set_array, check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
-from pyleecan.Classes.MeshMat import MeshMat
+from pyleecan.Classes.Solution import Solution
 
 from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
-from pyleecan.Classes.SubMesh import SubMesh
 
 
-
-class MeshFEMM(MeshMat):
-    """Gather the parameters of a mesh with only triangles"""
+class SolutionFEMM(Solution):
+    """Gather the electromagnetic solution from FEMM (only 2D triangles)"""
 
     VERSION = 1
 
     # save method is available in all object
     save = save
 
-    def __init__(self, B=None, H=None, mu=None, element=None, node=None, group=None, nb_elem=None, nb_node=None, submesh=list(), nb_node_per_element=None, name=None, init_dict=None):
+    def __init__(self, B=None, H=None, mu=None, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -31,7 +29,7 @@ class MeshFEMM(MeshMat):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["B", "H", "mu", "element", "node", "group", "nb_elem", "nb_node", "submesh", "nb_node_per_element", "name"])
+            check_init_dict(init_dict, ["B", "H", "mu"])
             # Overwrite default value with init_dict content
             if "B" in list(init_dict.keys()):
                 B = init_dict["B"]
@@ -39,22 +37,6 @@ class MeshFEMM(MeshMat):
                 H = init_dict["H"]
             if "mu" in list(init_dict.keys()):
                 mu = init_dict["mu"]
-            if "element" in list(init_dict.keys()):
-                element = init_dict["element"]
-            if "node" in list(init_dict.keys()):
-                node = init_dict["node"]
-            if "group" in list(init_dict.keys()):
-                group = init_dict["group"]
-            if "nb_elem" in list(init_dict.keys()):
-                nb_elem = init_dict["nb_elem"]
-            if "nb_node" in list(init_dict.keys()):
-                nb_node = init_dict["nb_node"]
-            if "submesh" in list(init_dict.keys()):
-                submesh = init_dict["submesh"]
-            if "nb_node_per_element" in list(init_dict.keys()):
-                nb_node_per_element = init_dict["nb_node_per_element"]
-            if "name" in list(init_dict.keys()):
-                name = init_dict["name"]
         # Initialisation by argument
         # B can be None, a ndarray or a list
         set_array(self, "B", B)
@@ -62,21 +44,21 @@ class MeshFEMM(MeshMat):
         set_array(self, "H", H)
         # mu can be None, a ndarray or a list
         set_array(self, "mu", mu)
-        # Call MeshMat init
-        super(MeshFEMM, self).__init__(element=element, node=node, group=group, nb_elem=nb_elem, nb_node=nb_node, submesh=submesh, nb_node_per_element=nb_node_per_element, name=name)
-        # The class is frozen (in MeshMat init), for now it's impossible to
+        # Call Solution init
+        super(SolutionFEMM, self).__init__()
+        # The class is frozen (in Solution init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
-        MeshFEMM_str = ""
-        # Get the properties inherited from MeshMat
-        MeshFEMM_str += super(MeshFEMM, self).__str__() + linesep
-        MeshFEMM_str += "B = " + linesep + str(self.B) + linesep + linesep
-        MeshFEMM_str += "H = " + linesep + str(self.H) + linesep + linesep
-        MeshFEMM_str += "mu = " + linesep + str(self.mu)
-        return MeshFEMM_str
+        SolutionFEMM_str = ""
+        # Get the properties inherited from Solution
+        SolutionFEMM_str += super(SolutionFEMM, self).__str__() + linesep
+        SolutionFEMM_str += "B = " + linesep + str(self.B) + linesep + linesep
+        SolutionFEMM_str += "H = " + linesep + str(self.H) + linesep + linesep
+        SolutionFEMM_str += "mu = " + linesep + str(self.mu)
+        return SolutionFEMM_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -84,8 +66,8 @@ class MeshFEMM(MeshMat):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from MeshMat
-        if not super(MeshFEMM, self).__eq__(other):
+        # Check the properties inherited from Solution
+        if not super(SolutionFEMM, self).__eq__(other):
             return False
         if not array_equal(other.B, self.B):
             return False
@@ -99,24 +81,24 @@ class MeshFEMM(MeshMat):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        # Get the properties inherited from MeshMat
-        MeshFEMM_dict = super(MeshFEMM, self).as_dict()
+        # Get the properties inherited from Solution
+        SolutionFEMM_dict = super(SolutionFEMM, self).as_dict()
         if self.B is None:
-            MeshFEMM_dict["B"] = None
+            SolutionFEMM_dict["B"] = None
         else:
-            MeshFEMM_dict["B"] = self.B.tolist()
+            SolutionFEMM_dict["B"] = self.B.tolist()
         if self.H is None:
-            MeshFEMM_dict["H"] = None
+            SolutionFEMM_dict["H"] = None
         else:
-            MeshFEMM_dict["H"] = self.H.tolist()
+            SolutionFEMM_dict["H"] = self.H.tolist()
         if self.mu is None:
-            MeshFEMM_dict["mu"] = None
+            SolutionFEMM_dict["mu"] = None
         else:
-            MeshFEMM_dict["mu"] = self.mu.tolist()
+            SolutionFEMM_dict["mu"] = self.mu.tolist()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
-        MeshFEMM_dict["__class__"] = "MeshFEMM"
-        return MeshFEMM_dict
+        SolutionFEMM_dict["__class__"] = "SolutionFEMM"
+        return SolutionFEMM_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -124,8 +106,8 @@ class MeshFEMM(MeshMat):
         self.B = None
         self.H = None
         self.mu = None
-        # Set to None the properties inherited from MeshMat
-        super(MeshFEMM, self)._set_None()
+        # Set to None the properties inherited from Solution
+        super(SolutionFEMM, self)._set_None()
 
     def _get_B(self):
         """getter of B"""
@@ -141,10 +123,10 @@ class MeshFEMM(MeshMat):
         check_var("B", value, "ndarray")
         self._B = value
 
-    # Magnetic flux per element
+    # Magnetic flux per element (Bx, By)
     # Type : ndarray
     B = property(fget=_get_B, fset=_set_B,
-                 doc=u"""Magnetic flux per element""")
+                 doc=u"""Magnetic flux per element (Bx, By)""")
 
     def _get_H(self):
         """getter of H"""
@@ -160,10 +142,10 @@ class MeshFEMM(MeshMat):
         check_var("H", value, "ndarray")
         self._H = value
 
-    # Magnetic field per element
+    # Magnetic field per element (Hx, Hy)
     # Type : ndarray
     H = property(fget=_get_H, fset=_set_H,
-                 doc=u"""Magnetic field per element""")
+                 doc=u"""Magnetic field per element (Hx, Hy)""")
 
     def _get_mu(self):
         """getter of mu"""

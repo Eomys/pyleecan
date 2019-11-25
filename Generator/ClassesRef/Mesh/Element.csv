@@ -3,3 +3,4 @@ Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Min
 ,,,,,,,,,,,,,,get_element,,,,
 ,,,,,,,,,,,,,,get_node2element,,,,
 ,,,,,,,,,,,,,,add_element,,,,
+,,,,,,,,,,,,,,convert_element,,,,
