@@ -13,7 +13,7 @@ def get_path_result(self):
         an Output object
 
     Returns
-    -------s
+    -------
     res_path: str
         path to the result folder
     """
