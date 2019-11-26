@@ -24,7 +24,11 @@ class ImportMatlab(Import):
 
     # cf Methods.Import.ImportMatlab.get_data
     if isinstance(get_data, ImportError):
-        get_data = property(fget=lambda x: raise_(ImportError("Can't use ImportMatlab method get_data: " + str(get_data))))
+        get_data = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ImportMatlab method get_data: " + str(get_data))
+            )
+        )
     else:
         get_data = get_data
     # save method is available in all object
@@ -112,8 +116,9 @@ class ImportMatlab(Import):
 
     # Path of the file to load
     # Type : str
-    file_path = property(fget=_get_file_path, fset=_set_file_path,
-                         doc=u"""Path of the file to load""")
+    file_path = property(
+        fget=_get_file_path, fset=_set_file_path, doc=u"""Path of the file to load"""
+    )
 
     def _get_var_name(self):
         """getter of var_name"""
@@ -126,5 +131,6 @@ class ImportMatlab(Import):
 
     # Name of the variable to load
     # Type : str
-    var_name = property(fget=_get_var_name, fset=_set_var_name,
-                        doc=u"""Name of the variable to load""")
+    var_name = property(
+        fget=_get_var_name, fset=_set_var_name, doc=u"""Name of the variable to load"""
+    )

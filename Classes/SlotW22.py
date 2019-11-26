@@ -61,48 +61,98 @@ class SlotW22(SlotWind):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.SlotW22.build_geometry
     if isinstance(build_geometry, ImportError):
-        build_geometry = property(fget=lambda x: raise_(ImportError("Can't use SlotW22 method build_geometry: " + str(build_geometry))))
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW22 method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
     else:
         build_geometry = build_geometry
     # cf Methods.Slot.SlotW22.build_geometry_wind
     if isinstance(build_geometry_wind, ImportError):
-        build_geometry_wind = property(fget=lambda x: raise_(ImportError("Can't use SlotW22 method build_geometry_wind: " + str(build_geometry_wind))))
+        build_geometry_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW22 method build_geometry_wind: "
+                    + str(build_geometry_wind)
+                )
+            )
+        )
     else:
         build_geometry_wind = build_geometry_wind
     # cf Methods.Slot.SlotW22.check
     if isinstance(check, ImportError):
-        check = property(fget=lambda x: raise_(ImportError("Can't use SlotW22 method check: " + str(check))))
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotW22 method check: " + str(check))
+            )
+        )
     else:
         check = check
     # cf Methods.Slot.SlotW22.comp_angle_opening
     if isinstance(comp_angle_opening, ImportError):
-        comp_angle_opening = property(fget=lambda x: raise_(ImportError("Can't use SlotW22 method comp_angle_opening: " + str(comp_angle_opening))))
+        comp_angle_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW22 method comp_angle_opening: "
+                    + str(comp_angle_opening)
+                )
+            )
+        )
     else:
         comp_angle_opening = comp_angle_opening
     # cf Methods.Slot.SlotW22.comp_height
     if isinstance(comp_height, ImportError):
-        comp_height = property(fget=lambda x: raise_(ImportError("Can't use SlotW22 method comp_height: " + str(comp_height))))
+        comp_height = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotW22 method comp_height: " + str(comp_height))
+            )
+        )
     else:
         comp_height = comp_height
     # cf Methods.Slot.SlotW22.comp_height_wind
     if isinstance(comp_height_wind, ImportError):
-        comp_height_wind = property(fget=lambda x: raise_(ImportError("Can't use SlotW22 method comp_height_wind: " + str(comp_height_wind))))
+        comp_height_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW22 method comp_height_wind: "
+                    + str(comp_height_wind)
+                )
+            )
+        )
     else:
         comp_height_wind = comp_height_wind
     # cf Methods.Slot.SlotW22.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use SlotW22 method comp_surface: " + str(comp_surface))))
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW22 method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
     else:
         comp_surface = comp_surface
     # cf Methods.Slot.SlotW22.comp_surface_wind
     if isinstance(comp_surface_wind, ImportError):
-        comp_surface_wind = property(fget=lambda x: raise_(ImportError("Can't use SlotW22 method comp_surface_wind: " + str(comp_surface_wind))))
+        comp_surface_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW22 method comp_surface_wind: "
+                    + str(comp_surface_wind)
+                )
+            )
+        )
     else:
         comp_surface_wind = comp_surface_wind
     # save method is available in all object
     save = save
 
-    def __init__(self, W0=0.043633, H0=0.006, H2=0.04, W2=0.08725, Zs=36, init_dict=None):
+    def __init__(
+        self, W0=0.043633, H0=0.006, H2=0.04, W2=0.08725, Zs=36, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -202,8 +252,9 @@ class SlotW22(SlotWind):
 
     # Slot isthmus orthoradial angular width.
     # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0,
-                  doc=u"""Slot isthmus orthoradial angular width.""")
+    W0 = property(
+        fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus orthoradial angular width."""
+    )
 
     def _get_H0(self):
         """getter of H0"""
@@ -216,8 +267,7 @@ class SlotW22(SlotWind):
 
     # Slot isthmus radial height.
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0,
-                  doc=u"""Slot isthmus radial height.""")
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus radial height.""")
 
     def _get_H2(self):
         """getter of H2"""
@@ -228,10 +278,11 @@ class SlotW22(SlotWind):
         check_var("H2", value, "float", Vmin=0)
         self._H2 = value
 
-    # Slot radial height below wedge 
+    # Slot radial height below wedge
     # Type : float, min = 0
-    H2 = property(fget=_get_H2, fset=_set_H2,
-                  doc=u"""Slot radial height below wedge """)
+    H2 = property(
+        fget=_get_H2, fset=_set_H2, doc=u"""Slot radial height below wedge """
+    )
 
     def _get_W2(self):
         """getter of W2"""
@@ -244,5 +295,4 @@ class SlotW22(SlotWind):
 
     # Angle between slot edges
     # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2,
-                  doc=u"""Angle between slot edges""")
+    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""Angle between slot edges""")

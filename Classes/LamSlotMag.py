@@ -51,7 +51,6 @@ from pyleecan.Classes.Hole import Hole
 from pyleecan.Classes.Notch import Notch
 
 
-
 class LamSlotMag(LamSlot):
     """Lamination with Slot for Magnets"""
 
@@ -60,43 +59,97 @@ class LamSlotMag(LamSlot):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.LamSlotMag.build_geometry
     if isinstance(build_geometry, ImportError):
-        build_geometry = property(fget=lambda x: raise_(ImportError("Can't use LamSlotMag method build_geometry: " + str(build_geometry))))
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method build_geometry: " + str(build_geometry)
+                )
+            )
+        )
     else:
         build_geometry = build_geometry
     # cf Methods.Machine.LamSlotMag.check
     if isinstance(check, ImportError):
-        check = property(fget=lambda x: raise_(ImportError("Can't use LamSlotMag method check: " + str(check))))
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlotMag method check: " + str(check))
+            )
+        )
     else:
         check = check
     # cf Methods.Machine.LamSlotMag.comp_masses
     if isinstance(comp_masses, ImportError):
-        comp_masses = property(fget=lambda x: raise_(ImportError("Can't use LamSlotMag method comp_masses: " + str(comp_masses))))
+        comp_masses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method comp_masses: " + str(comp_masses)
+                )
+            )
+        )
     else:
         comp_masses = comp_masses
     # cf Methods.Machine.LamSlotMag.comp_radius_mec
     if isinstance(comp_radius_mec, ImportError):
-        comp_radius_mec = property(fget=lambda x: raise_(ImportError("Can't use LamSlotMag method comp_radius_mec: " + str(comp_radius_mec))))
+        comp_radius_mec = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method comp_radius_mec: "
+                    + str(comp_radius_mec)
+                )
+            )
+        )
     else:
         comp_radius_mec = comp_radius_mec
     # cf Methods.Machine.LamSlotMag.comp_surfaces
     if isinstance(comp_surfaces, ImportError):
-        comp_surfaces = property(fget=lambda x: raise_(ImportError("Can't use LamSlotMag method comp_surfaces: " + str(comp_surfaces))))
+        comp_surfaces = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method comp_surfaces: " + str(comp_surfaces)
+                )
+            )
+        )
     else:
         comp_surfaces = comp_surfaces
     # cf Methods.Machine.LamSlotMag.comp_volumes
     if isinstance(comp_volumes, ImportError):
-        comp_volumes = property(fget=lambda x: raise_(ImportError("Can't use LamSlotMag method comp_volumes: " + str(comp_volumes))))
+        comp_volumes = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMag method comp_volumes: " + str(comp_volumes)
+                )
+            )
+        )
     else:
         comp_volumes = comp_volumes
     # cf Methods.Machine.LamSlotMag.plot
     if isinstance(plot, ImportError):
-        plot = property(fget=lambda x: raise_(ImportError("Can't use LamSlotMag method plot: " + str(plot))))
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlotMag method plot: " + str(plot))
+            )
+        )
     else:
         plot = plot
     # save method is available in all object
     save = save
 
-    def __init__(self, slot=-1, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), notch=list(), init_dict=None):
+    def __init__(
+        self,
+        slot=-1,
+        L1=0.35,
+        mat_type=-1,
+        Nrvd=0,
+        Wrvd=0,
+        Kf1=0.95,
+        is_internal=True,
+        Rint=0,
+        Rext=1,
+        is_stator=True,
+        axial_vent=list(),
+        notch=list(),
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -111,7 +164,23 @@ class LamSlotMag(LamSlot):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["slot", "L1", "mat_type", "Nrvd", "Wrvd", "Kf1", "is_internal", "Rint", "Rext", "is_stator", "axial_vent", "notch"])
+            check_init_dict(
+                init_dict,
+                [
+                    "slot",
+                    "L1",
+                    "mat_type",
+                    "Nrvd",
+                    "Wrvd",
+                    "Kf1",
+                    "is_internal",
+                    "Rint",
+                    "Rext",
+                    "is_stator",
+                    "axial_vent",
+                    "notch",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "slot" in list(init_dict.keys()):
                 slot = init_dict["slot"]
@@ -139,7 +208,20 @@ class LamSlotMag(LamSlot):
                 notch = init_dict["notch"]
         # Initialisation by argument
         # Call LamSlot init
-        super(LamSlotMag, self).__init__(slot=slot, L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
+        super(LamSlotMag, self).__init__(
+            slot=slot,
+            L1=L1,
+            mat_type=mat_type,
+            Nrvd=Nrvd,
+            Wrvd=Wrvd,
+            Kf1=Kf1,
+            is_internal=is_internal,
+            Rint=Rint,
+            Rext=Rext,
+            is_stator=is_stator,
+            axial_vent=axial_vent,
+            notch=notch,
+        )
         # The class is frozen (in LamSlot init), for now it's impossible to
         # add new properties
 
@@ -178,5 +260,3 @@ class LamSlotMag(LamSlot):
 
         # Set to None the properties inherited from LamSlot
         super(LamSlotMag, self)._set_None()
-
-

@@ -9,11 +9,6 @@ from pyleecan.Classes.frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Mesh.Mesh.get_element import get_element
-except ImportError as error:
-    get_element = error
-
-try:
     from pyleecan.Methods.Mesh.Mesh.set_submesh import set_submesh
 except ImportError as error:
     set_submesh = error
@@ -24,21 +19,18 @@ from pyleecan.Classes.Element import Element
 from pyleecan.Classes.Node import Node
 
 
-
 class Mesh(FrozenClass):
     """Gather the mesh storage format"""
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.Mesh.get_element
-    if isinstance(get_element, ImportError):
-        get_element = property(fget=lambda x: raise_(ImportError("Can't use Mesh method get_element: " + str(get_element))))
-    else:
-        get_element = get_element
     # cf Methods.Mesh.Mesh.set_submesh
     if isinstance(set_submesh, ImportError):
-        set_submesh = property(fget=lambda x: raise_(ImportError("Can't use Mesh method set_submesh: " + str(set_submesh))))
+        set_submesh = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Mesh method set_submesh: " + str(set_submesh))
+            )
+        )
     else:
         set_submesh = set_submesh
     # save method is available in all object
@@ -110,7 +102,9 @@ class Mesh(FrozenClass):
         if len(self.submesh) == 0:
             Mesh_str += "submesh = []"
         for ii in range(len(self.submesh)):
-            Mesh_str += "submesh["+str(ii)+"] = "+str(self.submesh[ii].as_dict())+"\n"
+            Mesh_str += (
+                "submesh[" + str(ii) + "] = " + str(self.submesh[ii].as_dict()) + "\n"
+            )
         return Mesh_str
 
     def __eq__(self, other):
@@ -167,10 +161,12 @@ class Mesh(FrozenClass):
 
         if self._element is not None:
             self._element.parent = self
+
     # Storing connectivity
     # Type : Element
-    element = property(fget=_get_element, fset=_set_element,
-                       doc=u"""Storing connectivity""")
+    element = property(
+        fget=_get_element, fset=_set_element, doc=u"""Storing connectivity"""
+    )
 
     def _get_node(self):
         """getter of node"""
@@ -183,10 +179,10 @@ class Mesh(FrozenClass):
 
         if self._node is not None:
             self._node.parent = self
+
     # Storing nodes
     # Type : Node
-    node = property(fget=_get_node, fset=_set_node,
-                    doc=u"""Storing nodes""")
+    node = property(fget=_get_node, fset=_set_node, doc=u"""Storing nodes""")
 
     def _get_submesh(self):
         """getter of submesh"""
@@ -203,7 +199,11 @@ class Mesh(FrozenClass):
         for obj in self._submesh:
             if obj is not None:
                 obj.parent = self
+
     # Storing submeshes. Node and element numbers/tags or group must be the same.
     # Type : [Mesh]
-    submesh = property(fget=_get_submesh, fset=_set_submesh,
-                       doc=u"""Storing submeshes. Node and element numbers/tags or group must be the same.""")
+    submesh = property(
+        fget=_get_submesh,
+        fset=_set_submesh,
+        doc=u"""Storing submeshes. Node and element numbers/tags or group must be the same.""",
+    )

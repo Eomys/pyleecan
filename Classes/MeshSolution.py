@@ -11,7 +11,6 @@ from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.Solution import Solution
 
 
-
 class MeshSolution(FrozenClass):
     """To associate a Mesh with one or several solutions"""
 
@@ -57,12 +56,18 @@ class MeshSolution(FrozenClass):
                     self.solution.append(Solution())
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
-                    class_name = obj.get('__class__')
-                    if class_name not in ['Solution', 'SolutionFEMM']:
-                        raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for solution")
+                    class_name = obj.get("__class__")
+                    if class_name not in ["Solution", "SolutionFEMM"]:
+                        raise InitUnKnowClassError(
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for solution"
+                        )
                     # Dynamic import to call the correct constructor
-                    module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-                    class_obj = getattr(module,class_name)
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
                     self.solution.append(class_obj(init_dict=obj))
                 else:
                     self.solution.append(obj)
@@ -81,13 +86,17 @@ class MeshSolution(FrozenClass):
         if self.parent is None:
             MeshSolution_str += "parent = None " + linesep
         else:
-            MeshSolution_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            MeshSolution_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         MeshSolution_str += 'name = "' + str(self.name) + '"' + linesep
         MeshSolution_str += "mesh = " + str(self.mesh.as_dict()) + linesep + linesep
         if len(self.solution) == 0:
             MeshSolution_str += "solution = []"
         for ii in range(len(self.solution)):
-            MeshSolution_str += "solution["+str(ii)+"] = "+str(self.solution[ii].as_dict())+"\n"
+            MeshSolution_str += (
+                "solution[" + str(ii) + "] = " + str(self.solution[ii].as_dict()) + "\n"
+            )
         return MeshSolution_str
 
     def __eq__(self, other):
@@ -140,8 +149,11 @@ class MeshSolution(FrozenClass):
 
     # (Optional) Descriptive name of the mesh
     # Type : str
-    name = property(fget=_get_name, fset=_set_name,
-                    doc=u"""(Optional) Descriptive name of the mesh""")
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""(Optional) Descriptive name of the mesh""",
+    )
 
     def _get_mesh(self):
         """getter of mesh"""
@@ -154,10 +166,10 @@ class MeshSolution(FrozenClass):
 
         if self._mesh is not None:
             self._mesh.parent = self
-    # A Mesh object. 
+
+    # A Mesh object.
     # Type : Mesh
-    mesh = property(fget=_get_mesh, fset=_set_mesh,
-                    doc=u"""A Mesh object. """)
+    mesh = property(fget=_get_mesh, fset=_set_mesh, doc=u"""A Mesh object. """)
 
     def _get_solution(self):
         """getter of solution"""
@@ -174,7 +186,11 @@ class MeshSolution(FrozenClass):
         for obj in self._solution:
             if obj is not None:
                 obj.parent = self
+
     # A list of Solution object which are defined with respect to the mesh attribute.
     # Type : [Solution]
-    solution = property(fget=_get_solution, fset=_set_solution,
-                        doc=u"""A list of Solution object which are defined with respect to the mesh attribute.""")
+    solution = property(
+        fget=_get_solution,
+        fset=_set_solution,
+        doc=u"""A list of Solution object which are defined with respect to the mesh attribute.""",
+    )

@@ -9,24 +9,28 @@ from pyleecan.Classes.frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Mesh.Node.get_node import get_node
+    from pyleecan.Methods.Mesh.Node.get_group import get_group
 except ImportError as error:
-    get_node = error
+    get_group = error
 
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
 
 class Node(FrozenClass):
-    """Abstract class to define nodes coordinates and getter."""
+    """Abstract class to define nodes. It must have at least a method get_coord to get nodes coordinates for given node tags/number, and a method get_group to create a new objet Node based on a set of given elements."""
 
     VERSION = 1
 
-    # cf Methods.Mesh.Node.get_node
-    if isinstance(get_node, ImportError):
-        get_node = property(fget=lambda x: raise_(ImportError("Can't use Node method get_node: " + str(get_node))))
+    # cf Methods.Mesh.Node.get_group
+    if isinstance(get_group, ImportError):
+        get_group = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Node method get_group: " + str(get_group))
+            )
+        )
     else:
-        get_node = get_node
+        get_group = get_group
     # save method is available in all object
     save = save
 
@@ -74,6 +78,3 @@ class Node(FrozenClass):
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
-
-
-

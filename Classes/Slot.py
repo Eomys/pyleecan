@@ -9,7 +9,9 @@ from pyleecan.Classes.frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.Slot.build_geometry_half_tooth import build_geometry_half_tooth
+    from pyleecan.Methods.Slot.Slot.build_geometry_half_tooth import (
+        build_geometry_half_tooth,
+    )
 except ImportError as error:
     build_geometry_half_tooth = error
 
@@ -75,57 +77,111 @@ class Slot(FrozenClass):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.Slot.build_geometry_half_tooth
     if isinstance(build_geometry_half_tooth, ImportError):
-        build_geometry_half_tooth = property(fget=lambda x: raise_(ImportError("Can't use Slot method build_geometry_half_tooth: " + str(build_geometry_half_tooth))))
+        build_geometry_half_tooth = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method build_geometry_half_tooth: "
+                    + str(build_geometry_half_tooth)
+                )
+            )
+        )
     else:
         build_geometry_half_tooth = build_geometry_half_tooth
     # cf Methods.Slot.Slot.check
     if isinstance(check, ImportError):
-        check = property(fget=lambda x: raise_(ImportError("Can't use Slot method check: " + str(check))))
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method check: " + str(check))
+            )
+        )
     else:
         check = check
     # cf Methods.Slot.Slot.comp_angle_opening
     if isinstance(comp_angle_opening, ImportError):
-        comp_angle_opening = property(fget=lambda x: raise_(ImportError("Can't use Slot method comp_angle_opening: " + str(comp_angle_opening))))
+        comp_angle_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method comp_angle_opening: "
+                    + str(comp_angle_opening)
+                )
+            )
+        )
     else:
         comp_angle_opening = comp_angle_opening
     # cf Methods.Slot.Slot.comp_height
     if isinstance(comp_height, ImportError):
-        comp_height = property(fget=lambda x: raise_(ImportError("Can't use Slot method comp_height: " + str(comp_height))))
+        comp_height = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method comp_height: " + str(comp_height))
+            )
+        )
     else:
         comp_height = comp_height
     # cf Methods.Slot.Slot.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use Slot method comp_surface: " + str(comp_surface))))
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method comp_surface: " + str(comp_surface))
+            )
+        )
     else:
         comp_surface = comp_surface
     # cf Methods.Slot.Slot.get_is_stator
     if isinstance(get_is_stator, ImportError):
-        get_is_stator = property(fget=lambda x: raise_(ImportError("Can't use Slot method get_is_stator: " + str(get_is_stator))))
+        get_is_stator = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method get_is_stator: " + str(get_is_stator)
+                )
+            )
+        )
     else:
         get_is_stator = get_is_stator
     # cf Methods.Slot.Slot.get_Rbo
     if isinstance(get_Rbo, ImportError):
-        get_Rbo = property(fget=lambda x: raise_(ImportError("Can't use Slot method get_Rbo: " + str(get_Rbo))))
+        get_Rbo = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method get_Rbo: " + str(get_Rbo))
+            )
+        )
     else:
         get_Rbo = get_Rbo
     # cf Methods.Slot.Slot.get_surface
     if isinstance(get_surface, ImportError):
-        get_surface = property(fget=lambda x: raise_(ImportError("Can't use Slot method get_surface: " + str(get_surface))))
+        get_surface = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method get_surface: " + str(get_surface))
+            )
+        )
     else:
         get_surface = get_surface
     # cf Methods.Slot.Slot.get_surface_tooth
     if isinstance(get_surface_tooth, ImportError):
-        get_surface_tooth = property(fget=lambda x: raise_(ImportError("Can't use Slot method get_surface_tooth: " + str(get_surface_tooth))))
+        get_surface_tooth = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method get_surface_tooth: " + str(get_surface_tooth)
+                )
+            )
+        )
     else:
         get_surface_tooth = get_surface_tooth
     # cf Methods.Slot.Slot.is_outwards
     if isinstance(is_outwards, ImportError):
-        is_outwards = property(fget=lambda x: raise_(ImportError("Can't use Slot method is_outwards: " + str(is_outwards))))
+        is_outwards = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method is_outwards: " + str(is_outwards))
+            )
+        )
     else:
         is_outwards = is_outwards
     # cf Methods.Slot.Slot.plot
     if isinstance(plot, ImportError):
-        plot = property(fget=lambda x: raise_(ImportError("Can't use Slot method plot: " + str(plot))))
+        plot = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method plot: " + str(plot))
+            )
+        )
     else:
         plot = plot
     # save method is available in all object
@@ -199,5 +255,4 @@ class Slot(FrozenClass):
 
     # slot number
     # Type : int, min = 0, max = 1000
-    Zs = property(fget=_get_Zs, fset=_set_Zs,
-                  doc=u"""slot number""")
+    Zs = property(fget=_get_Zs, fset=_set_Zs, doc=u"""slot number""")

@@ -30,12 +30,23 @@ class ForceMT(Force):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.ForceMT.comp_force
     if isinstance(comp_force, ImportError):
-        comp_force = property(fget=lambda x: raise_(ImportError("Can't use ForceMT method comp_force: " + str(comp_force))))
+        comp_force = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ForceMT method comp_force: " + str(comp_force))
+            )
+        )
     else:
         comp_force = comp_force
     # cf Methods.Simulation.ForceMT.comp_force_nodal
     if isinstance(comp_force_nodal, ImportError):
-        comp_force_nodal = property(fget=lambda x: raise_(ImportError("Can't use ForceMT method comp_force_nodal: " + str(comp_force_nodal))))
+        comp_force_nodal = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ForceMT method comp_force_nodal: "
+                    + str(comp_force_nodal)
+                )
+            )
+        )
     else:
         comp_force_nodal = comp_force_nodal
     # save method is available in all object
@@ -97,5 +108,3 @@ class ForceMT(Force):
 
         # Set to None the properties inherited from Force
         super(ForceMT, self)._set_None()
-
-

@@ -6,14 +6,6 @@ from pyleecan.Classes.check import set_array, check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Node import Node
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from pyleecan.Methods.Mesh.NodeMat.get_node import get_node
-except ImportError as error:
-    get_node = error
-
-
 from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -23,11 +15,6 @@ class NodeMat(Node):
 
     VERSION = 1
 
-    # cf Methods.Mesh.NodeMat.get_node
-    if isinstance(get_node, ImportError):
-        get_node = property(fget=lambda x: raise_(ImportError("Can't use NodeMat method get_node: " + str(get_node))))
-    else:
-        get_node = get_node
     # save method is available in all object
     save = save
 
@@ -63,7 +50,9 @@ class NodeMat(Node):
         NodeMat_str = ""
         # Get the properties inherited from Node
         NodeMat_str += super(NodeMat, self).__str__() + linesep
-        NodeMat_str += "coordinate = " + linesep + str(self.coordinate) + linesep + linesep
+        NodeMat_str += (
+            "coordinate = " + linesep + str(self.coordinate) + linesep + linesep
+        )
         NodeMat_str += "nb_node = " + str(self.nb_node)
         return NodeMat_str
 
@@ -120,10 +109,11 @@ class NodeMat(Node):
         check_var("coordinate", value, "ndarray")
         self._coordinate = value
 
-    # Nodes coordinates (X, Y, Z)
+    # Nodes coordinates
     # Type : ndarray
-    coordinate = property(fget=_get_coordinate, fset=_set_coordinate,
-                          doc=u"""Nodes coordinates (X, Y, Z)""")
+    coordinate = property(
+        fget=_get_coordinate, fset=_set_coordinate, doc=u"""Nodes coordinates"""
+    )
 
     def _get_nb_node(self):
         """getter of nb_node"""
@@ -136,5 +126,6 @@ class NodeMat(Node):
 
     # Total number of nodes
     # Type : int
-    nb_node = property(fget=_get_nb_node, fset=_set_nb_node,
-                       doc=u"""Total number of nodes""")
+    nb_node = property(
+        fget=_get_nb_node, fset=_set_nb_node, doc=u"""Total number of nodes"""
+    )

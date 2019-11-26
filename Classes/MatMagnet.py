@@ -109,8 +109,7 @@ class MatMagnet(MatMagnetics):
 
     # Coercitivity field
     # Type : float, min = 0
-    Hc = property(fget=_get_Hc, fset=_set_Hc,
-                  doc=u"""Coercitivity field""")
+    Hc = property(fget=_get_Hc, fset=_set_Hc, doc=u"""Coercitivity field""")
 
     def _get_alpha_Br(self):
         """getter of alpha_Br"""
@@ -123,8 +122,11 @@ class MatMagnet(MatMagnetics):
 
     # temperature coefficient for remanent flux density /degC compared to 20degC
     # Type : float
-    alpha_Br = property(fget=_get_alpha_Br, fset=_set_alpha_Br,
-                        doc=u"""temperature coefficient for remanent flux density /degC compared to 20degC""")
+    alpha_Br = property(
+        fget=_get_alpha_Br,
+        fset=_set_alpha_Br,
+        doc=u"""temperature coefficient for remanent flux density /degC compared to 20degC""",
+    )
 
     def _get_Brm20(self):
         """getter of Brm20"""
@@ -137,5 +139,8 @@ class MatMagnet(MatMagnetics):
 
     # magnet remanence induction at 20degC
     # Type : float
-    Brm20 = property(fget=_get_Brm20, fset=_set_Brm20,
-                     doc=u"""magnet remanence induction at 20degC""")
+    Brm20 = property(
+        fget=_get_Brm20,
+        fset=_set_Brm20,
+        doc=u"""magnet remanence induction at 20degC""",
+    )

@@ -125,8 +125,9 @@ class SolutionFEMM(Solution):
 
     # Magnetic flux per element (Bx, By)
     # Type : ndarray
-    B = property(fget=_get_B, fset=_set_B,
-                 doc=u"""Magnetic flux per element (Bx, By)""")
+    B = property(
+        fget=_get_B, fset=_set_B, doc=u"""Magnetic flux per element (Bx, By)"""
+    )
 
     def _get_H(self):
         """getter of H"""
@@ -144,8 +145,9 @@ class SolutionFEMM(Solution):
 
     # Magnetic field per element (Hx, Hy)
     # Type : ndarray
-    H = property(fget=_get_H, fset=_set_H,
-                 doc=u"""Magnetic field per element (Hx, Hy)""")
+    H = property(
+        fget=_get_H, fset=_set_H, doc=u"""Magnetic field per element (Hx, Hy)"""
+    )
 
     def _get_mu(self):
         """getter of mu"""
@@ -163,5 +165,4 @@ class SolutionFEMM(Solution):
 
     # Pemreability per element
     # Type : ndarray
-    mu = property(fget=_get_mu, fset=_set_mu,
-                  doc=u"""Pemreability per element""")
+    mu = property(fget=_get_mu, fset=_set_mu, doc=u"""Pemreability per element""")

@@ -1,37 +1,29 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Methods.Output.Output.getter import GetOutError
+import numpy as np
 
 
-def get_nodes2elements(self):
-    """Return the total number of elements in the stored mesh
+def get_node2element(self, node_tag):
+    """Return all elements (connectivity) containing the node tag node_tag
 
     Parameters
     ----------
-    self : Mesh
-        an Mesh object
+    self : ElementMat
+        an ElementMat object
+    node_tag : int
+        a node tag
 
     Returns
     -------
-    Nb_elem_tot: int
-        Total number of elements mesh
+    nodes_to_elements: dict
+        Element tags of all elements containing the node node_tag
 
     """
 
-    # Already available => Return
-    if self.nodes_to_elements is not None:
-        return self.nodes_to_elements
+    nodes_to_elements = np.array([], dtype=int)
+    connect = self.connectivity
 
-    # Check if possible to get the BH curve
-    if (
-        self is None
-    ):
-        raise GetOutError(
-            "Mesh is not Set, can't get the list of element connected to each node"
-        )
-
-    # Compute and store the number of elements
-    nodes_to_elements = self.set_nodes2elements()
+    Ielem = np.where(connect == node_tag)[0]
+    nodes_to_elements = np.concatenate((nodes_to_elements, Ielem))
 
     return nodes_to_elements
-

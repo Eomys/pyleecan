@@ -49,7 +49,9 @@ class MatEconomical(FrozenClass):
         if self.parent is None:
             MatEconomical_str += "parent = None " + linesep
         else:
-            MatEconomical_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            MatEconomical_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         MatEconomical_str += "cost_unit = " + str(self.cost_unit) + linesep
         MatEconomical_str += 'unit_name = "' + str(self.unit_name) + '"'
         return MatEconomical_str
@@ -93,8 +95,11 @@ class MatEconomical(FrozenClass):
 
     # Cost of one kilo of material
     # Type : float, min = 0
-    cost_unit = property(fget=_get_cost_unit, fset=_set_cost_unit,
-                         doc=u"""Cost of one kilo of material""")
+    cost_unit = property(
+        fget=_get_cost_unit,
+        fset=_set_cost_unit,
+        doc=u"""Cost of one kilo of material""",
+    )
 
     def _get_unit_name(self):
         """getter of unit_name"""
@@ -107,5 +112,6 @@ class MatEconomical(FrozenClass):
 
     # Name of the unit
     # Type : str
-    unit_name = property(fget=_get_unit_name, fset=_set_unit_name,
-                         doc=u"""Name of the unit""")
+    unit_name = property(
+        fget=_get_unit_name, fset=_set_unit_name, doc=u"""Name of the unit"""
+    )

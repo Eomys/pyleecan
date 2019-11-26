@@ -1,21 +1,39 @@
 # -*- coding: utf-8 -*-
 
+from pyleecan.Classes.ElementDict import ElementDict
+import numpy as np
 
-def get_group(self, name_submesh):
-    """Define a mesh object as submesh of parent mesh object
 
-    Parameters
-    ----------
-    :param self : an Mesh object
-    :param elem_id: ids of the elements which define the submesh
+def get_group(self, group_number):
+    """Define an Element object as submesh of parent mesh object
 
-    Returns
-    -------
+     Parameters
+     ----------
+     self : ElementDict
+         an ElementDict object
+     group_number : int
+         a group number which define the elements which constitute the submesh
 
-    """
-    submesh = None
-    for im in range(len(self.submesh)):
-        if self.submesh[im].name == name_submesh:
-            submesh = self.submesh[im]
+     Returns
+     -------
+     subelem: ElementDict
+         an ElementDict which is a submesh of parent mesh self related to group_number
 
-    return submesh
+     """
+    subelem = ElementDict()
+    subelem.connectivity = dict()
+
+    connect_parent = self.connectivity
+    groups = self.group
+    tags = self.tag
+
+    for key in groups:
+        Ielem = np.where(groups[key] == group_number)[0]
+        subelem.connectivity[key] = connect_parent[key][Ielem, :]
+        subelem.group[key] = groups[key][Ielem]  # Should be only one type
+        subelem.nb_elem[key] = len(Ielem)
+        subelem.nb_node_per_element[key] = self.nb_node_per_element[key][
+            Ielem
+        ]  # Must be the same
+
+    return subelem

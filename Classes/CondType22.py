@@ -9,7 +9,9 @@ from pyleecan.Classes.Conductor import Conductor
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.CondType22.comp_surface_active import comp_surface_active
+    from pyleecan.Methods.Machine.CondType22.comp_surface_active import (
+        comp_surface_active,
+    )
 except ImportError as error:
     comp_surface_active = error
 
@@ -23,7 +25,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
-
 class CondType22(Conductor):
     """conductor with only surface definition without specifc shape nor isolation"""
 
@@ -32,12 +33,25 @@ class CondType22(Conductor):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.CondType22.comp_surface_active
     if isinstance(comp_surface_active, ImportError):
-        comp_surface_active = property(fget=lambda x: raise_(ImportError("Can't use CondType22 method comp_surface_active: " + str(comp_surface_active))))
+        comp_surface_active = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType22 method comp_surface_active: "
+                    + str(comp_surface_active)
+                )
+            )
+        )
     else:
         comp_surface_active = comp_surface_active
     # cf Methods.Machine.CondType22.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use CondType22 method comp_surface: " + str(comp_surface))))
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use CondType22 method comp_surface: " + str(comp_surface)
+                )
+            )
+        )
     else:
         comp_surface = comp_surface
     # save method is available in all object
@@ -125,5 +139,4 @@ class CondType22(Conductor):
 
     # Surface of the Slot
     # Type : float, min = 0
-    Sbar = property(fget=_get_Sbar, fset=_set_Sbar,
-                    doc=u"""Surface of the Slot""")
+    Sbar = property(fget=_get_Sbar, fset=_set_Sbar, doc=u"""Surface of the Slot""")

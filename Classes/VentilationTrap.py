@@ -38,7 +38,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
-
 class VentilationTrap(Hole):
     """Trapezoidal axial ventilation ducts"""
 
@@ -47,33 +46,65 @@ class VentilationTrap(Hole):
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.VentilationTrap.build_geometry
     if isinstance(build_geometry, ImportError):
-        build_geometry = property(fget=lambda x: raise_(ImportError("Can't use VentilationTrap method build_geometry: " + str(build_geometry))))
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VentilationTrap method build_geometry: "
+                    + str(build_geometry)
+                )
+            )
+        )
     else:
         build_geometry = build_geometry
     # cf Methods.Slot.VentilationTrap.check
     if isinstance(check, ImportError):
-        check = property(fget=lambda x: raise_(ImportError("Can't use VentilationTrap method check: " + str(check))))
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use VentilationTrap method check: " + str(check))
+            )
+        )
     else:
         check = check
     # cf Methods.Slot.VentilationTrap.comp_radius
     if isinstance(comp_radius, ImportError):
-        comp_radius = property(fget=lambda x: raise_(ImportError("Can't use VentilationTrap method comp_radius: " + str(comp_radius))))
+        comp_radius = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VentilationTrap method comp_radius: " + str(comp_radius)
+                )
+            )
+        )
     else:
         comp_radius = comp_radius
     # cf Methods.Slot.VentilationTrap.comp_surface
     if isinstance(comp_surface, ImportError):
-        comp_surface = property(fget=lambda x: raise_(ImportError("Can't use VentilationTrap method comp_surface: " + str(comp_surface))))
+        comp_surface = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VentilationTrap method comp_surface: "
+                    + str(comp_surface)
+                )
+            )
+        )
     else:
         comp_surface = comp_surface
     # cf Methods.Slot.VentilationTrap.get_center
     if isinstance(get_center, ImportError):
-        get_center = property(fget=lambda x: raise_(ImportError("Can't use VentilationTrap method get_center: " + str(get_center))))
+        get_center = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VentilationTrap method get_center: " + str(get_center)
+                )
+            )
+        )
     else:
         get_center = get_center
     # save method is available in all object
     save = save
 
-    def __init__(self, Alpha0=0, D0=1, H0=1, W1=1, W2=1, Zh=36, mat_void=-1, init_dict=None):
+    def __init__(
+        self, Alpha0=0, D0=1, H0=1, W1=1, W2=1, Zh=36, mat_void=-1, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -86,7 +117,9 @@ class VentilationTrap(Hole):
         if mat_void == -1:
             mat_void = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["Alpha0", "D0", "H0", "W1", "W2", "Zh", "mat_void"])
+            check_init_dict(
+                init_dict, ["Alpha0", "D0", "H0", "W1", "W2", "Zh", "mat_void"]
+            )
             # Overwrite default value with init_dict content
             if "Alpha0" in list(init_dict.keys()):
                 Alpha0 = init_dict["Alpha0"]
@@ -185,8 +218,11 @@ class VentilationTrap(Hole):
 
     # Shift angle of the hole around circumference
     # Type : float, min = 0, max = 6.29
-    Alpha0 = property(fget=_get_Alpha0, fset=_set_Alpha0,
-                      doc=u"""Shift angle of the hole around circumference""")
+    Alpha0 = property(
+        fget=_get_Alpha0,
+        fset=_set_Alpha0,
+        doc=u"""Shift angle of the hole around circumference""",
+    )
 
     def _get_D0(self):
         """getter of D0"""
@@ -199,8 +235,7 @@ class VentilationTrap(Hole):
 
     # Hole height
     # Type : float, min = 0
-    D0 = property(fget=_get_D0, fset=_set_D0,
-                  doc=u"""Hole height""")
+    D0 = property(fget=_get_D0, fset=_set_D0, doc=u"""Hole height""")
 
     def _get_H0(self):
         """getter of H0"""
@@ -213,8 +248,7 @@ class VentilationTrap(Hole):
 
     # Radius of the hole bottom
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0,
-                  doc=u"""Radius of the hole bottom""")
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Radius of the hole bottom""")
 
     def _get_W1(self):
         """getter of W1"""
@@ -227,8 +261,7 @@ class VentilationTrap(Hole):
 
     # Hole small basis
     # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1,
-                  doc=u"""Hole small basis""")
+    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Hole small basis""")
 
     def _get_W2(self):
         """getter of W2"""
@@ -241,5 +274,4 @@ class VentilationTrap(Hole):
 
     # Hole large basis
     # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2,
-                  doc=u"""Hole large basis""")
+    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""Hole large basis""")

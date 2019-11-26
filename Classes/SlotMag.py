@@ -93,5 +93,6 @@ class SlotMag(Slot):
 
     # Angle between magnet in the slot
     # Type : float
-    W3 = property(fget=_get_W3, fset=_set_W3,
-                  doc=u"""Angle between magnet in the slot""")
+    W3 = property(
+        fget=_get_W3, fset=_set_W3, doc=u"""Angle between magnet in the slot"""
+    )

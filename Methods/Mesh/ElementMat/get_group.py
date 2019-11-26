@@ -1,21 +1,34 @@
 # -*- coding: utf-8 -*-
 
+from pyleecan.Classes.ElementMat import ElementMat
+import numpy as np
 
-def get_group(self, name_submesh):
-    """Define a mesh object as submesh of parent mesh object
 
-    Parameters
-    ----------
-    :param self : an Mesh object
-    :param elem_id: ids of the elements which define the submesh
+def get_group(self, group_number):
+    """Define an Element object as submesh of parent mesh object
 
-    Returns
-    -------
+     Parameters
+     ----------
+     self : ElementMat
+         an ElementMat object
+     group_number : int
+         a group number which define the elements which constitute the submesh
 
-    """
-    submesh = None
-    for im in range(len(self.submesh)):
-        if self.submesh[im].name == name_submesh:
-            submesh = self.submesh[im]
+     Returns
+     -------
+     subelem: ElementMat
+         an ElementMat which is a submesh of parent mesh self related to group_number
 
-    return submesh
+     """
+    subelem = ElementMat()
+
+    elements_parent = self.connectivity
+    groups = self.group
+    elem_tags = np.where(groups == group_number)[0]
+
+    subelem.connectivity = elements_parent[elem_tags, :]
+    subelem.group = groups[elem_tags]  # Should be only one type
+    subelem.nb_elem = len(elem_tags)
+    subelem.nb_node_per_element = self.nb_node_per_element  # Must be the same
+
+    return subelem

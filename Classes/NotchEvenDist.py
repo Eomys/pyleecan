@@ -19,7 +19,6 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
 
 
-
 class NotchEvenDist(Notch):
     """Class for evenly distributed notches"""
 
@@ -27,7 +26,14 @@ class NotchEvenDist(Notch):
 
     # cf Methods.Machine.NotchEvenDist.build_geometry
     if isinstance(build_geometry, ImportError):
-        build_geometry = property(fget=lambda x: raise_(ImportError("Can't use NotchEvenDist method build_geometry: " + str(build_geometry))))
+        build_geometry = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use NotchEvenDist method build_geometry: "
+                    + str(build_geometry)
+                )
+            )
+        )
     else:
         build_geometry = build_geometry
     # save method is available in all object
@@ -118,5 +124,6 @@ class NotchEvenDist(Notch):
 
     # angular positon of the first notch
     # Type : ndarray
-    alpha = property(fget=_get_alpha, fset=_set_alpha,
-                     doc=u"""angular positon of the first notch""")
+    alpha = property(
+        fget=_get_alpha, fset=_set_alpha, doc=u"""angular positon of the first notch"""
+    )
