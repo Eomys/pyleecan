@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-group,,Attribute a group number (int) to each element . This group number should correspond to a subpart of the machine.,,,ndarray,None,,,,,,Mesh,,get_group,VERSION,1,Abstract class to define connectivity and getter.,
+,,,,,,,,,,,,Mesh,,get_group,VERSION,1,Abstract class to define connectivity and getter.,
 ,,,,,,,,,,,,,,get_node_tags,,,,
 ,,,,,,,,,,,,,,get_node2element,,,,
 ,,,,,,,,,,,,,,convert_element,,,,
