@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# from pyleecan.Classes.ElementDict import ElementDict
+#sfrom pyleecan.Classes.ElementDict import ElementDict
 from pyleecan.Classes.ElementMat import ElementMat
 import numpy as np
-
+import copy
 
 def convert_element(self, other_element):
     """Define an ElementDict object from any other Element type.
@@ -19,7 +19,6 @@ def convert_element(self, other_element):
      -------
      """
 
-    # elemdict = ElementDict()
     self.connectivity = dict()
     self.group = dict()
     self.nb_elem = dict()
@@ -53,3 +52,10 @@ def convert_element(self, other_element):
             self.tag["Quadrangle"] = np.linspace(
                 0, other_element.nb_elem - 1, other_element.nb_elem
             )
+
+    else:
+        self.connectivity = other_element.connectivity
+        self.group = other_element.group
+        self.nb_elem = other_element.nb_elem
+        self.nb_node_per_element = other_element.nb_node_per_element
+        self.tag = other_element.tag
