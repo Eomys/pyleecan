@@ -5,34 +5,36 @@ import numpy as np
 
 
 def plot_mesh_field(
-    self,
-    j_t0=0,
-    nodes=None,
-    connectivity=None,
-    field=None,
-    title="Magnetic field amplitude B",
+    self, meshsolution=None, mesh=None, solution=None, field=None, title="No title"
 ):
-    """ Display field amplitude per element
+    """ Display 2D field amplitude per element. Several possible inputs combinations: meshsolution only,
+        mesh and solution, or mesh and field.
 
     Parameters
     ----------
     self : Output
         an Output object
-    j_t0 : int
-        Index of the time vector to plot
-    nodes : ndarray
-        Nodes coordinates (2D)
-    connectivity : ndarray
-        Connectivity matrix (3 nodes per element)
-    field : ndarray
+    meshsolution: MeshSolution
+        a MeshSolution object. Can be replaced by mesh and field.
+    mesh : Mesh
+        a Mesh object
+    solution : Solution
+        a Solution object
+    field : array
         Column vector with the field to be displayed
+    title : str
+        Title of the figure
     """
 
-    if nodes is None:
-        nodes = self.mag.mesh[j_t0].mesh.node.get_node()
-
-    if connectivity is None:
-        connectivity = self.mag.mesh[j_t0].mesh.element.get_element()
+    if meshsolution is None:
+        nodes = mesh.node.get_coord()
+        connectivity = mesh.element.get_connectivity()
+        if solution is not None:
+            field = solution.get_field()
+    else:
+        nodes = meshsolution.mesh.node.get_coord()
+        connectivity = meshsolution.mesh.element.get_node_tags()
+        field = meshsolution.solution.get_field()
 
     if field is None:
         # field = np.linalg.norm(self.mag.mesh[j_t0].solution[0].B, axis=1)
@@ -70,4 +72,5 @@ def plot_mesh_field(
         return fig, ax
 
     fig, ax = showMeshPlot(nodes, connectivity, field, title)
+
     return fig, ax
