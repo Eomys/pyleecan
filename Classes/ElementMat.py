@@ -108,7 +108,6 @@ class ElementMat(Element):
         nb_elem=None,
         nb_node_per_element=None,
         group=None,
-        group=None,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -122,8 +121,7 @@ class ElementMat(Element):
 
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict,
-                ["connectivity", "nb_elem", "nb_node_per_element", "group", "group"],
+                init_dict, ["connectivity", "nb_elem", "nb_node_per_element", "group"]
             )
             # Overwrite default value with init_dict content
             if "connectivity" in list(init_dict.keys()):
@@ -134,8 +132,6 @@ class ElementMat(Element):
                 nb_node_per_element = init_dict["nb_node_per_element"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
-            if "group" in list(init_dict.keys()):
-                group = init_dict["group"]
         # Initialisation by argument
         # connectivity can be None, a ndarray or a list
         set_array(self, "connectivity", connectivity)
@@ -144,7 +140,7 @@ class ElementMat(Element):
         # group can be None, a ndarray or a list
         set_array(self, "group", group)
         # Call Element init
-        super(ElementMat, self).__init__(group=group)
+        super(ElementMat, self).__init__()
         # The class is frozen (in Element init), for now it's impossible to
         # add new properties
 

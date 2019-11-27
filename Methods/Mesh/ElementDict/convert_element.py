@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#from pyleecan.Classes.ElementDict import ElementDict
+# from pyleecan.Classes.ElementDict import ElementDict
 from pyleecan.Classes.ElementMat import ElementMat
 import numpy as np
 
@@ -32,18 +32,24 @@ def convert_element(self, other_element):
             self.group["Segment"] = other_element.group
             self.nb_elem["Segment"] = other_element.nb_elem
             self.nb_node_per_element["Segment"] = other_element.nb_node_per_element
-            self.tag["Segment"] = np.linspace(0, other_element.nb_elem-1, other_element.nb_elem)
+            self.tag["Segment"] = np.linspace(
+                0, other_element.nb_elem - 1, other_element.nb_elem
+            )
 
         if other_element.nb_node_per_element == 3:
             self.connectivity["Triangle"] = other_element.connectivity
             self.group["Triangle"] = other_element.group
             self.nb_elem["Triangle"] = other_element.nb_elem
             self.nb_node_per_element["Triangle"] = other_element.nb_node_per_element
-            self.tag["Triangle"] = np.linspace(0, other_element.nb_elem-1, other_element.nb_elem)
+            self.tag["Triangle"] = np.linspace(
+                0, other_element.nb_elem - 1, other_element.nb_elem
+            )
 
         if other_element.nb_node_per_element == 4:
             self.connectivity["Quadrangle"] = other_element.connectivity
             self.group["Quadrangle"] = other_element.group
             self.nb_elem["Quadrangle"] = other_element.nb_elem
             self.nb_node_per_element["Quadrangle"] = other_element.nb_node_per_element
-            self.tag["Quadrangle"] = np.linspace(0, other_element.nb_elem-1, other_element.nb_elem)
+            self.tag["Quadrangle"] = np.linspace(
+                0, other_element.nb_elem - 1, other_element.nb_elem
+            )

@@ -35,6 +35,8 @@ def get_group(self, group_number):
         subelem.connectivity[key] = connect_parent[key][Ielem, :]
         subelem.group[key] = groups[key][Ielem]  # Should be only one type
         subelem.nb_elem[key] = len(Ielem)
-        subelem.nb_node_per_element[key] = self.nb_node_per_element[key][Ielem]  # Must be the same
+        subelem.nb_node_per_element[key] = self.nb_node_per_element[key][
+            Ielem
+        ]  # Must be the same
 
     return subelem

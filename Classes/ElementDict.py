@@ -2,7 +2,7 @@
 """Warning : this file has been generated, you shouldn't edit it"""
 
 from os import linesep
-from pyleecan.Classes.check import set_array, check_init_dict, check_var, raise_
+from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Element import Element
 
@@ -34,7 +34,6 @@ except ImportError as error:
     add_element = error
 
 
-from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
 
 
@@ -109,7 +108,6 @@ class ElementDict(Element):
         nb_node_per_element=None,
         tag=None,
         group=None,
-        group=None,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -124,14 +122,7 @@ class ElementDict(Element):
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
                 init_dict,
-                [
-                    "connectivity",
-                    "nb_elem",
-                    "nb_node_per_element",
-                    "tag",
-                    "group",
-                    "group",
-                ],
+                ["connectivity", "nb_elem", "nb_node_per_element", "tag", "group"],
             )
             # Overwrite default value with init_dict content
             if "connectivity" in list(init_dict.keys()):
@@ -144,8 +135,6 @@ class ElementDict(Element):
                 tag = init_dict["tag"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
-            if "group" in list(init_dict.keys()):
-                group = init_dict["group"]
         # Initialisation by argument
         self.connectivity = connectivity
         self.nb_elem = nb_elem
@@ -153,7 +142,7 @@ class ElementDict(Element):
         self.tag = tag
         self.group = group
         # Call Element init
-        super(ElementDict, self).__init__(group=group)
+        super(ElementDict, self).__init__()
         # The class is frozen (in Element init), for now it's impossible to
         # add new properties
 

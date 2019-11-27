@@ -21,9 +21,7 @@ class unittest_convert_element(TestCase):
 
         mesh2 = Mesh()
         mesh2.element = ElementMat()
-        mesh2.element.connectivity = np.array(
-            [[0, 1, 2], [1, 2, 3]]
-        )
+        mesh2.element.connectivity = np.array([[0, 1, 2], [1, 2, 3]])
         mesh2.element.nb_elem = 2
         mesh2.element.nb_node_per_element = 3
 
@@ -34,7 +32,9 @@ class unittest_convert_element(TestCase):
         mesh_new.element.convert_element(mesh2.element)
 
         # Check results
-        solution =np.array([[0, 1, 2], [1, 2, 3]])  # Warning, elements tags, not line position !
+        solution = np.array(
+            [[0, 1, 2], [1, 2, 3]]
+        )  # Warning, elements tags, not line position !
         testA = np.sum(abs(solution - mesh_new.element.connectivity["Triangle"]))
         msg = (
             "Wrong projection: returned "
