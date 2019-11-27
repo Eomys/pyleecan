@@ -1,12 +1,17 @@
-from pyleecan.Classes.MeshFEMM import MeshFEMM
-from femm import callfemm
 import os
 import numpy as np
+
 from pyleecan.Generator import MAIN_DIR
+from pyleecan.Classes.MeshSolution import MeshSolution
+from pyleecan.Classes.Mesh import Mesh
+from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.NodeMat import NodeMat
+from pyleecan.Classes.SolutionFEMM import SolutionFEMM
+from femm import callfemm
 from os.path import join
 
 
-def get_mesh(self, is_get_mesh, is_save_FEA, save_path, j_t0):
+def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
     """Load the mesh data and solution data. FEMM must be working and a simulation must have been solved.
 
     Parameters
@@ -87,29 +92,21 @@ def get_mesh(self, is_get_mesh, is_save_FEA, save_path, j_t0):
     if is_get_mesh:
 
         # Create Mesh and Solution dictionaries
-        mesh = MeshFEMM()
-        mesh.name = "FEMM_magnetic_mesh"
-        mesh.nb_elem = NbElem
-        mesh.nb_node = NbNd
-        mesh.nb_node_per_element = 3
-        mesh.node = listNd
-        mesh.element = listElem
-        mesh.group = listElem0[:, 6]
-        # mesh.node2element = [-1] * mesh.nb_node
+        mesh = Mesh()
+        mesh.element = ElementMat(
+            connectivity=listElem,
+            nb_elem=NbElem,
+            group=listElem0[:, 6],
+            nb_node_per_element=3,
+        )
+        mesh.node = NodeMat(coordinate=listNd[:, 0:2], nb_node=NbNd)
 
-        # Store the data in matrices
-        mesh.B = np.zeros((NbElem, 2))
-        mesh.H = np.zeros((NbElem, 2))
-        mesh.mu = np.zeros((NbElem, 1))
+        solution = SolutionFEMM(B=results[:, 0:2], H=results[:, 2:4], mu=results[:, 4])
 
-        mesh.B[:, 0] = results[:, 0]
-        mesh.B[:, 1] = results[:, 1]
-        mesh.H[:, 0] = results[:, 2]
-        mesh.H[:, 1] = results[:, 3]
-        mesh.mu = results[:, 4]
+        meshFEMM = MeshSolution(name="FEMM_magnetic_mesh", mesh=mesh, solution=solution)
 
         if is_save_FEA:
             save_path_fea = join(save_path, "meshFEMM" + str(j_t0) + ".json")
-            mesh.save(save_path_fea)
+            meshFEMM.save(save_path_fea)
 
-        return mesh
+        return meshFEMM

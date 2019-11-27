@@ -1,0 +1,4 @@
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
+name,,(Optional) Descriptive name of the mesh,,,str,None,,,,,,Mesh,,,VERSION,1,To associate a Mesh with one or several solutions,
+mesh,,A Mesh object. ,,,Mesh,None,,,,,,,,,,,,
+solution,,A Solution object which are defined with respect to the mesh attribute.,,,Solution,None,,,,,,,,,,,,

@@ -24,9 +24,9 @@ except ImportError as error:
     solve_FEMM = error
 
 try:
-    from pyleecan.Methods.Simulation.MagFEMM.get_mesh import get_mesh
+    from pyleecan.Methods.Simulation.MagFEMM.get_meshsolution import get_meshsolution
 except ImportError as error:
-    get_mesh = error
+    get_meshsolution = error
 
 try:
     from pyleecan.Methods.Simulation.MagFEMM.get_path_save_fem import get_path_save_fem
@@ -75,15 +75,18 @@ class MagFEMM(Magnetics):
         )
     else:
         solve_FEMM = solve_FEMM
-    # cf Methods.Simulation.MagFEMM.get_mesh
-    if isinstance(get_mesh, ImportError):
-        get_mesh = property(
+    # cf Methods.Simulation.MagFEMM.get_meshsolution
+    if isinstance(get_meshsolution, ImportError):
+        get_meshsolution = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MagFEMM method get_mesh: " + str(get_mesh))
+                ImportError(
+                    "Can't use MagFEMM method get_meshsolution: "
+                    + str(get_meshsolution)
+                )
             )
         )
     else:
-        get_mesh = get_mesh
+        get_meshsolution = get_meshsolution
     # cf Methods.Simulation.MagFEMM.get_path_save_fem
     if isinstance(get_path_save_fem, ImportError):
         get_path_save_fem = property(

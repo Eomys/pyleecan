@@ -1,11 +1,11 @@
 import femm
 import numpy as np
-from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
 
+from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
 from pyleecan.Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from pyleecan.Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from pyleecan.Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
-from pyleecan.Classes.MeshMat import MeshMat
+from pyleecan.Classes.MeshSolution import MeshSolution
 
 
 def solve_FEMM(self, output, sym, FEMM_dict):
@@ -39,9 +39,9 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     Rgap_mec_ext = lam_ext.comp_radius_mec()
 
     if self.is_get_mesh or self.is_save_FEA:
-        mesh = [MeshMat() for ii in range(Nt_tot)]
+        meshFEMM = [MeshSolution() for ii in range(Nt_tot)]
     else:
-        mesh = []
+        meshFEMM = [MeshSolution()]
 
     # Compute the data for each time step
     for ii in range(Nt_tot):
@@ -81,7 +81,9 @@ def solve_FEMM(self, output, sym, FEMM_dict):
 
         # Load mesh data & solution
         if self.is_get_mesh or self.is_save_FEA:
-            mesh[ii] = self.get_mesh(self.is_get_mesh, self.is_save_FEA, save_path, ii)
+            meshFEMM[ii] = self.get_meshsolution(
+                self.is_get_mesh, self.is_save_FEA, save_path, ii
+            )
 
     # Shift to take into account stator position
     roll_id = int(self.angle_stator * Na_tot / (2 * pi))
@@ -96,7 +98,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     if output.mag.Tem_av != 0:
         output.mag.Tem_rip = abs((np_max(Tem) - np_min(Tem)) / output.mag.Tem_av)
     output.mag.Phi_wind_stator = Phi_wind_stator
-    output.mag.mesh = mesh
+    output.mag.meshsolution = meshFEMM
 
     if hasattr(output.simu.machine.stator, "winding"):
         # Electromotive forces computation (update output)

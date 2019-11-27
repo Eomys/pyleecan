@@ -7,12 +7,10 @@ from pyleecan.Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
 from pyleecan.Classes.InCurrent import InCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-
+from pyleecan.Classes.ElementDict import ElementDict
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Tests import save_validation_path as save_path
-
-import matplotlib.pyplot as plt
 
 simu = Simu1(name="SM_CEFC_002_save_mag", machine=CEFC_Lam, struct=None)
 
@@ -34,7 +32,7 @@ simu.input = InCurrent(
 # Definition of the magnetic simulation (no symmetry)
 simu.mag = MagFEMM(
     is_stator_linear_BH=2,
-    is_rotor_linear_BH=0,
+    is_rotor_linear_BH=2,
     is_get_mesh=True,
     is_save_FEA=True,
     is_sliding_band=False,
@@ -59,11 +57,16 @@ class test_CEFC_001(TestCase):
         out.post.legend_name = "Slotless lamination"
         simu.run()
 
-        out.plot_mesh_field(field=out.mag.mesh[0].mu, title="Permeability")
-        out.plot_mesh_field()
+        out.plot_mesh_field(
+            mesh=out.mag.meshsolution[0].mesh,
+            field=out.mag.meshsolution[0].solution.get_field("mu"),
+            title="Permeability",
+        )
 
-        out.save(save_path=save_path)
-        plt.close("all")
+        element_dict = ElementDict()
+        element_dict.convert_element(out.mag.meshsolution[0].mesh.element)  # It works !
+
+        # out.save(save_path=save_path)
 
 
 #    def test_magnetic_force(self):

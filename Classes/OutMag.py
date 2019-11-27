@@ -8,7 +8,7 @@ from pyleecan.Classes.frozen import FrozenClass
 
 from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
-from pyleecan.Classes.Mesh import Mesh
+from pyleecan.Classes.MeshSolution import MeshSolution
 
 
 class OutMag(FrozenClass):
@@ -32,7 +32,7 @@ class OutMag(FrozenClass):
         Tem_rip=None,
         Phi_wind_stator=None,
         emf=None,
-        mesh=list(),
+        meshsolution=list(),
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -59,7 +59,7 @@ class OutMag(FrozenClass):
                     "Tem_rip",
                     "Phi_wind_stator",
                     "emf",
-                    "mesh",
+                    "meshsolution",
                 ],
             )
             # Overwrite default value with init_dict content
@@ -85,8 +85,8 @@ class OutMag(FrozenClass):
                 Phi_wind_stator = init_dict["Phi_wind_stator"]
             if "emf" in list(init_dict.keys()):
                 emf = init_dict["emf"]
-            if "mesh" in list(init_dict.keys()):
-                mesh = init_dict["mesh"]
+            if "meshsolution" in list(init_dict.keys()):
+                meshsolution = init_dict["meshsolution"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -107,31 +107,20 @@ class OutMag(FrozenClass):
         set_array(self, "Phi_wind_stator", Phi_wind_stator)
         # emf can be None, a ndarray or a list
         set_array(self, "emf", emf)
-        # mesh can be None or a list of Mesh object
-        self.mesh = list()
-        if type(mesh) is list:
-            for obj in mesh:
+        # meshsolution can be None or a list of MeshSolution object
+        self.meshsolution = list()
+        if type(meshsolution) is list:
+            for obj in meshsolution:
                 if obj is None:  # Default value
-                    self.mesh.append(Mesh())
+                    self.meshsolution.append(MeshSolution())
                 elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in ["Mesh", "MeshFEMM", "MeshMat", "MeshForce"]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name " + class_name + " in init_dict for mesh"
-                        )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.mesh.append(class_obj(init_dict=obj))
+                    self.meshsolution.append(MeshSolution(init_dict=obj))
                 else:
-                    self.mesh.append(obj)
-        elif mesh is None:
-            self.mesh = list()
+                    self.meshsolution.append(obj)
+        elif meshsolution is None:
+            self.meshsolution = list()
         else:
-            self.mesh = mesh
+            self.meshsolution = meshsolution
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -161,11 +150,15 @@ class OutMag(FrozenClass):
             + linesep
         )
         OutMag_str += "emf = " + linesep + str(self.emf) + linesep + linesep
-        if len(self.mesh) == 0:
-            OutMag_str += "mesh = []"
-        for ii in range(len(self.mesh)):
+        if len(self.meshsolution) == 0:
+            OutMag_str += "meshsolution = []"
+        for ii in range(len(self.meshsolution)):
             OutMag_str += (
-                "mesh[" + str(ii) + "] = " + str(self.mesh[ii].as_dict()) + "\n"
+                "meshsolution["
+                + str(ii)
+                + "] = "
+                + str(self.meshsolution[ii].as_dict())
+                + "\n"
             )
         return OutMag_str
 
@@ -196,7 +189,7 @@ class OutMag(FrozenClass):
             return False
         if not array_equal(other.emf, self.emf):
             return False
-        if other.mesh != self.mesh:
+        if other.meshsolution != self.meshsolution:
             return False
         return True
 
@@ -237,9 +230,9 @@ class OutMag(FrozenClass):
             OutMag_dict["emf"] = None
         else:
             OutMag_dict["emf"] = self.emf.tolist()
-        OutMag_dict["mesh"] = list()
-        for obj in self.mesh:
-            OutMag_dict["mesh"].append(obj.as_dict())
+        OutMag_dict["meshsolution"] = list()
+        for obj in self.meshsolution:
+            OutMag_dict["meshsolution"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -258,7 +251,7 @@ class OutMag(FrozenClass):
         self.Tem_rip = None
         self.Phi_wind_stator = None
         self.emf = None
-        for obj in self.mesh:
+        for obj in self.meshsolution:
             obj._set_None()
 
     def _get_time(self):
@@ -455,24 +448,26 @@ class OutMag(FrozenClass):
     # Type : ndarray
     emf = property(fget=_get_emf, fset=_set_emf, doc=u"""Electromotive force""")
 
-    def _get_mesh(self):
-        """getter of mesh"""
-        for obj in self._mesh:
+    def _get_meshsolution(self):
+        """getter of meshsolution"""
+        for obj in self._meshsolution:
             if obj is not None:
                 obj.parent = self
-        return self._mesh
+        return self._meshsolution
 
-    def _set_mesh(self, value):
-        """setter of mesh"""
-        check_var("mesh", value, "[Mesh]")
-        self._mesh = value
+    def _set_meshsolution(self, value):
+        """setter of meshsolution"""
+        check_var("meshsolution", value, "[MeshSolution]")
+        self._meshsolution = value
 
-        for obj in self._mesh:
+        for obj in self._meshsolution:
             if obj is not None:
                 obj.parent = self
 
     # FEA software mesh and solution
-    # Type : [Mesh]
-    mesh = property(
-        fget=_get_mesh, fset=_set_mesh, doc=u"""FEA software mesh and solution"""
+    # Type : [MeshSolution]
+    meshsolution = property(
+        fget=_get_meshsolution,
+        fset=_set_meshsolution,
+        doc=u"""FEA software mesh and solution""",
     )
