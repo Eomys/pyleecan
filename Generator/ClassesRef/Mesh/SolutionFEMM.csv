@@ -1,4 +1,4 @@
 Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-B,,"Magnetic flux per element (Bx, By)",,,ndarray,None,,,,,,Mesh,Solution,,VERSION,1,Gather the electromagnetic solution from FEMM (only 2D triangles),
+B,,"Magnetic flux per element (Bx, By)",,,ndarray,None,,,,,,Mesh,Solution,get_field,VERSION,1,Gather the electromagnetic solution from FEMM (only 2D triangles),
 H,,"Magnetic field per element (Hx, Hy)",,,ndarray,None,,,,,,,,,,,,
 mu,,Pemreability per element,,,ndarray,None,,,,,,,,,,,,

@@ -6,6 +6,14 @@ from pyleecan.Classes.check import set_array, check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Solution import Solution
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Mesh.SolutionFEMM.get_field import get_field
+except ImportError as error:
+    get_field = error
+
+
 from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -15,6 +23,17 @@ class SolutionFEMM(Solution):
 
     VERSION = 1
 
+    # cf Methods.Mesh.SolutionFEMM.get_field
+    if isinstance(get_field, ImportError):
+        get_field = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SolutionFEMM method get_field: " + str(get_field)
+                )
+            )
+        )
+    else:
+        get_field = get_field
     # save method is available in all object
     save = save
 
