@@ -13,6 +13,11 @@ try:
 except ImportError as error:
     get_group = error
 
+try:
+    from pyleecan.Methods.Mesh.Node.get_coord import get_coord
+except ImportError as error:
+    get_coord = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -22,6 +27,7 @@ class Node(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Mesh.Node.get_group
     if isinstance(get_group, ImportError):
         get_group = property(
@@ -31,6 +37,15 @@ class Node(FrozenClass):
         )
     else:
         get_group = get_group
+    # cf Methods.Mesh.Node.get_coord
+    if isinstance(get_coord, ImportError):
+        get_coord = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Node method get_coord: " + str(get_coord))
+            )
+        )
+    else:
+        get_coord = get_coord
     # save method is available in all object
     save = save
 

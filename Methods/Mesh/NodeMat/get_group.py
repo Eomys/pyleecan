@@ -22,7 +22,7 @@ def get_group(self, element):
 
     node = NodeMat()
     node_tags = element.get_node_tags()
-    node.coordinate = self.get_coord(node_tags)
+    node.coordinate = self.coordinate[node_tags, :]
     node.nb_node = len(node.coordinate)
 
     return node

@@ -1,3 +1,3 @@
 Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-coordinate,,Nodes coordinates,,,ndarray,None,,,,,,Mesh,Node,,VERSION,1,Class to define nodes coordinates and getter.,
+coordinate,,Nodes coordinates,,,ndarray,None,,,,,,Mesh,Node,get_coord,VERSION,1,Class to define nodes coordinates and getter.,
 nb_node,,Total number of nodes,,,int,None,,,,,,,,,,,,
