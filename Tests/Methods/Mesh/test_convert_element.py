@@ -8,7 +8,7 @@ import numpy as np
 
 
 class unittest_convert_element(TestCase):
-    """unittest to get elements containing specific node(s)"""
+    """unittest to convert Element inherited classes between each other"""
 
     def test_ElementDict_to_ElementDict(self):
         # Init 1
@@ -36,10 +36,10 @@ class unittest_convert_element(TestCase):
         )  # Warning, elements tags, not line position !
         testA = np.sum(abs(solution - mesh_new.element.connectivity["Triangle"]))
         msg = (
-                "Wrong projection: returned "
-                + str(mesh_new.element.connectivity["Triangle"])
-                + ", expected: "
-                + str(solution)
+            "Wrong projection: returned "
+            + str(mesh_new.element.connectivity["Triangle"])
+            + ", expected: "
+            + str(solution)
         )
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)

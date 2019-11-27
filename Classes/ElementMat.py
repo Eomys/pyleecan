@@ -33,6 +33,11 @@ try:
 except ImportError as error:
     add_element = error
 
+try:
+    from pyleecan.Methods.Mesh.ElementMat.get_connectivity import get_connectivity
+except ImportError as error:
+    get_connectivity = error
+
 
 from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -99,6 +104,18 @@ class ElementMat(Element):
         )
     else:
         add_element = add_element
+    # cf Methods.Mesh.ElementMat.get_connectivity
+    if isinstance(get_connectivity, ImportError):
+        get_connectivity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ElementMat method get_connectivity: "
+                    + str(get_connectivity)
+                )
+            )
+        )
+    else:
+        get_connectivity = get_connectivity
     # save method is available in all object
     save = save
 

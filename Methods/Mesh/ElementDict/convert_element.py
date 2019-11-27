@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-#sfrom pyleecan.Classes.ElementDict import ElementDict
+# sfrom pyleecan.Classes.ElementDict import ElementDict
 from pyleecan.Classes.ElementMat import ElementMat
 import numpy as np
 import copy
+
 
 def convert_element(self, other_element):
     """Define an ElementDict object from any other Element type.

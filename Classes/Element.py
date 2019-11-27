@@ -33,6 +33,11 @@ try:
 except ImportError as error:
     add_element = error
 
+try:
+    from pyleecan.Methods.Mesh.Element.get_connectivity import get_connectivity
+except ImportError as error:
+    get_connectivity = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -95,6 +100,18 @@ class Element(FrozenClass):
         )
     else:
         add_element = add_element
+    # cf Methods.Mesh.Element.get_connectivity
+    if isinstance(get_connectivity, ImportError):
+        get_connectivity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Element method get_connectivity: "
+                    + str(get_connectivity)
+                )
+            )
+        )
+    else:
+        get_connectivity = get_connectivity
     # save method is available in all object
     save = save
 
