@@ -19,7 +19,7 @@ class MeshSolution(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, name=None, mesh=None, solution=list(), init_dict=None):
+    def __init__(self, name=None, mesh=None, solution=None, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -31,6 +31,8 @@ class MeshSolution(FrozenClass):
 
         if mesh == -1:
             mesh = Mesh()
+        if solution == -1:
+            solution = Solution()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(init_dict, ["name", "mesh", "solution"])
             # Overwrite default value with init_dict content
@@ -48,31 +50,18 @@ class MeshSolution(FrozenClass):
             self.mesh = Mesh(init_dict=mesh)
         else:
             self.mesh = mesh
-        # solution can be None or a list of Solution object
-        self.solution = list()
-        if type(solution) is list:
-            for obj in solution:
-                if obj is None:  # Default value
-                    self.solution.append(Solution())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in ["Solution", "SolutionFEMM"]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for solution"
-                        )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.solution.append(class_obj(init_dict=obj))
-                else:
-                    self.solution.append(obj)
-        elif solution is None:
-            self.solution = list()
+        # solution can be None, a Solution object or a dict
+        if isinstance(solution, dict):
+            # Check that the type is correct (including daughter)
+            class_name = solution.get("__class__")
+            if class_name not in ["Solution", "SolutionFEMM"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for solution"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.solution = class_obj(init_dict=solution)
         else:
             self.solution = solution
 
@@ -91,12 +80,7 @@ class MeshSolution(FrozenClass):
             )
         MeshSolution_str += 'name = "' + str(self.name) + '"' + linesep
         MeshSolution_str += "mesh = " + str(self.mesh.as_dict()) + linesep + linesep
-        if len(self.solution) == 0:
-            MeshSolution_str += "solution = []"
-        for ii in range(len(self.solution)):
-            MeshSolution_str += (
-                "solution[" + str(ii) + "] = " + str(self.solution[ii].as_dict()) + "\n"
-            )
+        MeshSolution_str += "solution = " + str(self.solution.as_dict())
         return MeshSolution_str
 
     def __eq__(self, other):
@@ -122,9 +106,10 @@ class MeshSolution(FrozenClass):
             MeshSolution_dict["mesh"] = None
         else:
             MeshSolution_dict["mesh"] = self.mesh.as_dict()
-        MeshSolution_dict["solution"] = list()
-        for obj in self.solution:
-            MeshSolution_dict["solution"].append(obj.as_dict())
+        if self.solution is None:
+            MeshSolution_dict["solution"] = None
+        else:
+            MeshSolution_dict["solution"] = self.solution.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         MeshSolution_dict["__class__"] = "MeshSolution"
         return MeshSolution_dict
@@ -135,8 +120,8 @@ class MeshSolution(FrozenClass):
         self.name = None
         if self.mesh is not None:
             self.mesh._set_None()
-        for obj in self.solution:
-            obj._set_None()
+        if self.solution is not None:
+            self.solution._set_None()
 
     def _get_name(self):
         """getter of name"""
@@ -173,24 +158,20 @@ class MeshSolution(FrozenClass):
 
     def _get_solution(self):
         """getter of solution"""
-        for obj in self._solution:
-            if obj is not None:
-                obj.parent = self
         return self._solution
 
     def _set_solution(self, value):
         """setter of solution"""
-        check_var("solution", value, "[Solution]")
+        check_var("solution", value, "Solution")
         self._solution = value
 
-        for obj in self._solution:
-            if obj is not None:
-                obj.parent = self
+        if self._solution is not None:
+            self._solution.parent = self
 
-    # A list of Solution object which are defined with respect to the mesh attribute.
-    # Type : [Solution]
+    # A Solution object which are defined with respect to the mesh attribute.
+    # Type : Solution
     solution = property(
         fget=_get_solution,
         fset=_set_solution,
-        doc=u"""A list of Solution object which are defined with respect to the mesh attribute.""",
+        doc=u"""A Solution object which are defined with respect to the mesh attribute.""",
     )
