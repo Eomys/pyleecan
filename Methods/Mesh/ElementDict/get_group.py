@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.ElementDict import ElementDict
 import numpy as np
 
 
@@ -20,7 +19,8 @@ def get_group(self, group_number):
          an ElementDict which is a submesh of parent mesh self related to group_number
 
      """
-    subelem = ElementDict()
+    module = __import__("pyleecan.Classes." + "ElementDict", fromlist=["ElementDict"])
+    subelem = getattr(module, "ElementDict")()
     subelem.connectivity = dict()
     subelem.group = dict()
     subelem.nb_elem = dict()
