@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.ElementMat import ElementMat
 import numpy as np
 
 
