@@ -38,6 +38,16 @@ try:
 except ImportError as error:
     get_connectivity = error
 
+try:
+    from pyleecan.Methods.Mesh.ElementDict.get_new_tag import get_new_tag
+except ImportError as error:
+    get_new_tag = error
+
+try:
+    from pyleecan.Methods.Mesh.ElementDict.is_exist import is_exist
+except ImportError as error:
+    is_exist = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -115,6 +125,26 @@ class ElementDict(Element):
         )
     else:
         get_connectivity = get_connectivity
+    # cf Methods.Mesh.ElementDict.get_new_tag
+    if isinstance(get_new_tag, ImportError):
+        get_new_tag = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ElementDict method get_new_tag: " + str(get_new_tag)
+                )
+            )
+        )
+    else:
+        get_new_tag = get_new_tag
+    # cf Methods.Mesh.ElementDict.is_exist
+    if isinstance(is_exist, ImportError):
+        is_exist = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ElementDict method is_exist: " + str(is_exist))
+            )
+        )
+    else:
+        is_exist = is_exist
     # save method is available in all object
     save = save
 
