@@ -13,6 +13,11 @@ try:
 except ImportError as error:
     get_field = error
 
+try:
+    from pyleecan.Methods.Mesh.Solution.set_field import set_field
+except ImportError as error:
+    set_field = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -22,6 +27,7 @@ class Solution(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Mesh.Solution.get_field
     if isinstance(get_field, ImportError):
         get_field = property(
@@ -31,6 +37,15 @@ class Solution(FrozenClass):
         )
     else:
         get_field = get_field
+    # cf Methods.Mesh.Solution.set_field
+    if isinstance(set_field, ImportError):
+        set_field = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Solution method set_field: " + str(set_field))
+            )
+        )
+    else:
+        set_field = set_field
     # save method is available in all object
     save = save
 

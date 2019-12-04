@@ -13,6 +13,11 @@ try:
 except ImportError as error:
     get_coord = error
 
+try:
+    from pyleecan.Methods.Mesh.NodeMat.get_group import get_group
+except ImportError as error:
+    get_group = error
+
 
 from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -23,6 +28,7 @@ class NodeMat(Node):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Mesh.NodeMat.get_coord
     if isinstance(get_coord, ImportError):
         get_coord = property(
@@ -32,6 +38,15 @@ class NodeMat(Node):
         )
     else:
         get_coord = get_coord
+    # cf Methods.Mesh.NodeMat.get_group
+    if isinstance(get_group, ImportError):
+        get_group = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use NodeMat method get_group: " + str(get_group))
+            )
+        )
+    else:
+        get_group = get_group
     # save method is available in all object
     save = save
 

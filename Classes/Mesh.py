@@ -13,6 +13,11 @@ try:
 except ImportError as error:
     set_submesh = error
 
+try:
+    from pyleecan.Methods.Mesh.Mesh.interface import interface
+except ImportError as error:
+    interface = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Element import Element
@@ -24,6 +29,7 @@ class Mesh(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Mesh.Mesh.set_submesh
     if isinstance(set_submesh, ImportError):
         set_submesh = property(
@@ -33,6 +39,15 @@ class Mesh(FrozenClass):
         )
     else:
         set_submesh = set_submesh
+    # cf Methods.Mesh.Mesh.interface
+    if isinstance(interface, ImportError):
+        interface = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Mesh method interface: " + str(interface))
+            )
+        )
+    else:
+        interface = interface
     # save method is available in all object
     save = save
 
@@ -63,12 +78,30 @@ class Mesh(FrozenClass):
         self.parent = None
         # element can be None, a Element object or a dict
         if isinstance(element, dict):
-            self.element = Element(init_dict=element)
+            # Check that the type is correct (including daughter)
+            class_name = element.get("__class__")
+            if class_name not in ["Element", "ElementMat", "ElementDict"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for element"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.element = class_obj(init_dict=element)
         else:
             self.element = element
         # node can be None, a Node object or a dict
         if isinstance(node, dict):
-            self.node = Node(init_dict=node)
+            # Check that the type is correct (including daughter)
+            class_name = node.get("__class__")
+            if class_name not in ["Node", "NodeMat"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for node"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.node = class_obj(init_dict=node)
         else:
             self.node = node
         # submesh can be None or a list of Mesh object
