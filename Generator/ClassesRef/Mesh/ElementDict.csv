@@ -7,3 +7,4 @@ group,,Attribute a group number (int) to each element . This group number should
 ,,,,,,,,,,,,,,get_connectivity,,,,
 ,,,,,,,,,,,,,,get_new_tag,,,,
 ,,,,,,,,,,,,,,is_exist,,,,
+,,,,,,,,,,,,,,get_all_node_tags,,,,

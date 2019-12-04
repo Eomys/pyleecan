@@ -48,6 +48,11 @@ try:
 except ImportError as error:
     is_exist = error
 
+try:
+    from pyleecan.Methods.Mesh.ElementDict.get_all_node_tags import get_all_node_tags
+except ImportError as error:
+    get_all_node_tags = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -145,6 +150,18 @@ class ElementDict(Element):
         )
     else:
         is_exist = is_exist
+    # cf Methods.Mesh.ElementDict.get_all_node_tags
+    if isinstance(get_all_node_tags, ImportError):
+        get_all_node_tags = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ElementDict method get_all_node_tags: "
+                    + str(get_all_node_tags)
+                )
+            )
+        )
+    else:
+        get_all_node_tags = get_all_node_tags
     # save method is available in all object
     save = save
 

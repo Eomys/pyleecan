@@ -6,3 +6,4 @@ Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Min
 ,,,,,,,,,,,,,,add_element,,,,
 ,,,,,,,,,,,,,,get_connectivity,,,,
 ,,,,,,,,,,,,,,get_new_tag,,,,
+,,,,,,,,,,,,,,get_all_node_tags,,,,

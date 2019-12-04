@@ -43,6 +43,11 @@ try:
 except ImportError as error:
     get_new_tag = error
 
+try:
+    from pyleecan.Methods.Mesh.Element.get_all_node_tags import get_all_node_tags
+except ImportError as error:
+    get_all_node_tags = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 
@@ -126,6 +131,18 @@ class Element(FrozenClass):
         )
     else:
         get_new_tag = get_new_tag
+    # cf Methods.Mesh.Element.get_all_node_tags
+    if isinstance(get_all_node_tags, ImportError):
+        get_all_node_tags = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Element method get_all_node_tags: "
+                    + str(get_all_node_tags)
+                )
+            )
+        )
+    else:
+        get_all_node_tags = get_all_node_tags
     # save method is available in all object
     save = save
 
