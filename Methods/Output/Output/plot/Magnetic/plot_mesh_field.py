@@ -27,13 +27,13 @@ def plot_mesh_field(
     """
 
     if meshsolution is None:
-        nodes = mesh.node.get_coord()
         connectivity = mesh.element.get_connectivity()
+        nodes = mesh.node.get_coord()
         if solution is not None:
             field = solution.get_field()
     else:
         nodes = meshsolution.mesh.node.get_coord()
-        connectivity = meshsolution.mesh.element.get_node_tags()
+        connectivity = meshsolution.mesh.element.get_all_node_tags()
         field = meshsolution.solution.get_field()
 
     if field is None:
