@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import numpy as np
+
 
 def get_coord(self, node_tags=None):
     """Return the coordinates of node(s).
@@ -8,12 +10,12 @@ def get_coord(self, node_tags=None):
      ----------
      self : NodeMat
          an NodeMat object
-     node_tags : array
+     node_tags : np.array
          an array of node tags
 
      Returns
      -------
-     coord: array
+     coord: np.array
          an array of node coordinates
 
      """
@@ -21,6 +23,10 @@ def get_coord(self, node_tags=None):
     if node_tags is None:
         coord = self.coordinate
     else:
-        coord = self.coordinate[node_tags, :]
+        nd_case = len(node_tags)
+        coord = np.zeros((nd_case, 2))
+        for ind in range(nd_case):
+            Ipos = np.where(self.node_tag == node_tags[ind])
+            coord[Ipos, :] = self.coordinate[Ipos, :]
 
     return coord

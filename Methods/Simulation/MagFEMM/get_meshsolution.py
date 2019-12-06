@@ -99,7 +99,11 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
             group=listElem0[:, 6],
             nb_node_per_element=3,
         )
-        mesh.node = NodeMat(coordinate=listNd[:, 0:2], nb_node=NbNd)
+        mesh.node = NodeMat(
+            coordinate=listNd[:, 0:2],
+            nb_node=NbNd,
+            node_tag=np.arange(start=0, stop=NbNd, step=1),
+        )
 
         solution = SolutionFEMM(B=results[:, 0:2], H=results[:, 2:4], mu=results[:, 4])
 
