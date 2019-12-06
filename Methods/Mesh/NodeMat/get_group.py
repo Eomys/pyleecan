@@ -21,7 +21,7 @@ def get_group(self, element):
     module = __import__("pyleecan.Classes." + "NodeMat", fromlist=["NodeMat"])
     node = getattr(module, "NodeMat")()
 
-    node_tags = element.get_node_tags()
+    node_tags = element.get_all_node_tags()
 
     node.nb_node = len(node_tags)
     node.coordinate = np.zeros((node.nb_node, 2)) # TO BE Extended to 3D

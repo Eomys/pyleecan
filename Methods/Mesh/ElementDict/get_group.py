@@ -23,6 +23,7 @@ def get_group(self, group_number):
     subelem = getattr(module, "ElementDict")()
     subelem.connectivity = dict()
     subelem.group = dict()
+    subelem.tag = dict()
     subelem.nb_elem = dict()
     subelem.nb_node_per_element = dict()
 
@@ -34,9 +35,9 @@ def get_group(self, group_number):
         Ielem = np.where(groups[key] == group_number)[0]
         subelem.connectivity[key] = connect_parent[key][Ielem, :]
         subelem.group[key] = groups[key][Ielem]  # Should be only one type
+        subelem.tag[key] = tags[key][Ielem]
         subelem.nb_elem[key] = len(Ielem)
-        subelem.nb_node_per_element[key] = self.nb_node_per_element[key][
-            Ielem
-        ]  # Must be the same
+        subelem.nb_node_per_element[key] = self.nb_node_per_element[key] # Must be the same
+
 
     return subelem
