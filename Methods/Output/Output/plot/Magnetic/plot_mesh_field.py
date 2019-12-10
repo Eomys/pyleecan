@@ -5,7 +5,7 @@ import numpy as np
 
 
 def plot_mesh_field(
-    self, meshsolution=None, mesh=None, solution=None, field=None, title="No title"
+    self, meshsolution=None, mesh=None, solution=None, field=None, title="No title", group=None
 ):
     """ Display 2D field amplitude per element. Several possible inputs combinations: meshsolution only,
         mesh and solution, or mesh and field.

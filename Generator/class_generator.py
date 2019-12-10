@@ -10,6 +10,7 @@ from pyleecan.Generator.read_fct import (
     find_import_type,
     get_value_str,
     is_list_pyleecan_type,
+    is_dict_pyleecan_type,
 )
 
 
@@ -286,6 +287,41 @@ def generate_init(gen_dict, class_dict):
             init_by_var += TAB3 + "self." + prop["name"] + " = list()\n"
             init_by_var += TAB2 + "else:\n"
             init_by_var += TAB3 + "self." + prop["name"] + " = " + prop["name"] + "\n"
+
+        elif is_dict_pyleecan_type(prop["type"]):
+            # List of pyleecan type
+            init_by_var += (
+                TAB2
+                + "# "
+                + prop["name"]
+                + " can be None or a list of "
+                + prop["type"][1:-1]
+                + " object\n"
+            )
+            init_by_var += TAB2 + "self." + prop["name"] + " = dict()\n"
+            init_by_var += TAB2 + "if type(" + prop["name"] + ") is dict:\n"
+            init_by_var += TAB3 + "for key, obj in " + prop["name"] + ".items():\n"
+            type_dict = gen_dict[prop["type"][1:-1]]
+            daug_list = type_dict["daughters"]
+            init_by_var += generate_set_class_by_dict_dict(
+                prop["name"], prop["type"][1:-1], daug_list
+            )
+            init_by_var += TAB4 + "else:\n"
+            init_by_var += (
+                TAB5 + prop["name"] + " = " + prop["name"] + "# Should raise an error\n"
+            )
+            init_by_var += TAB2 + "elif " + prop["name"] + " is None:\n"
+            init_by_var += TAB3 + "self." + prop["name"] + " = dict()\n"
+            init_by_var += TAB2 + "else:\n"
+            init_by_var += (
+                TAB3
+                + "self."
+                + prop["name"]
+                + " = "
+                + prop["name"]
+                + "# Should raise an error\n"
+            )
+
         else:  # For pyleecan Type
             init_by_var += (
                 TAB2
@@ -340,6 +376,9 @@ def generate_init(gen_dict, class_dict):
         elif prop["type"][0] == "[" and prop["type"][-1] == "]":
             # List of pyleecan type
             arg_list += ", " + prop["name"] + "=list()"
+        elif prop["type"][0] == "{" and prop["type"][-1] == "}":
+            # Dict of pyleecan type
+            arg_list += ", " + prop["name"] + "=dict()"
         else:  # pyleecan type
             if prop["value"] == "":
                 arg_list += ", " + prop["name"] + "=-1"
@@ -457,6 +496,57 @@ def generate_set_class_by_dict_list(prop_name, prop_type, daug_list):
     else:  # No daughter
         class_dict_str += (
             TAB5 + "self." + prop_name + ".append(" + prop_type + "(init_dict=obj))\n"
+        )
+    return class_dict_str
+
+
+def generate_set_class_by_dict_dict(prop_name, prop_type, daug_list):
+    """Generate the code to set a dict of pyleecan class property with a dictionary
+
+    Parameters
+    ----------
+    prop_name : str
+        Name of the property to set
+    prop_type : str
+        Type of the property to set
+    daug_list : list
+        List of the Daughter of the class
+
+    Returns
+    -------
+    class_dict_str : str
+        String containing the code to set a list of pyleecan class property with a dictionary
+    """
+
+    class_dict_str = ""
+    class_dict_str += TAB4 + "if isinstance(obj, dict):\n"
+    if len(daug_list) > 0:
+        if prop_type not in daug_list:
+            daug_list.insert(0, prop_type)
+        # Add the posibility to call the daughter init
+        class_dict_str += (
+            TAB5 + "# Check that the type is correct (including daughter)\n"
+        )
+        class_dict_str += TAB5 + "class_name = obj.get('__class__')\n"
+        class_dict_str += TAB5 + "if class_name not in " + str(daug_list) + ":\n"
+        class_dict_str += (
+            TAB6
+            + 'raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for '
+            + prop_name
+            + '")\n'
+        )
+        class_dict_str += TAB5 + "# Dynamic import to call the correct constructor\n"
+        class_dict_str += (
+            TAB5
+            + 'module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])\n'
+        )
+        class_dict_str += TAB5 + "class_obj = getattr(module,class_name)\n"
+        class_dict_str += (
+            TAB5 + "self." + prop_name + "[key] = class_obj(init_dict=obj)\n"
+        )
+    else:  # No daughter
+        class_dict_str += (
+            TAB5 + "self." + prop_name + "[key] = " + prop_type + "(init_dict=obj))\n"
         )
     return class_dict_str
 
@@ -652,6 +742,19 @@ def generate_str(gen_dict, class_dict):
                 + prop["name"]
                 + '[ii].as_dict())+"\\n"'
             )
+        elif is_dict_pyleecan_type(prop["type"]):
+            var_str += TAB2 + "if len(self." + prop["name"] + ") == 0:\n"
+            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = []"\n'
+            var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
+            var_str += (
+                TAB3
+                + class_name
+                + '_str += "'
+                + prop["name"]
+                + '["+key+"] = "+str(self.'
+                + prop["name"]
+                + '[key].as_dict())+"\\n"'
+            )
         else:  # For pyleecan type print the dict (from as_dict)
             # Add => < "MyClass = "+str(self.my_var.as_dict()) >to var_str
             var_str += (
@@ -814,6 +917,16 @@ def generate_as_dict(gen_dict, class_dict):
                 + prop["name"]
                 + '"].append(obj.as_dict())\n'
             )
+        elif is_dict_pyleecan_type(prop["type"]):
+            var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = dict()\n'
+            var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
+            var_str += (
+                TAB3
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"][key] = obj.as_dict()\n'
+            )
         else:
             # Add => "class_name ["var_name"] = self.var_name.as_dict()" to
             # var_str
@@ -888,6 +1001,9 @@ def generate_set_None(gen_dict, class_dict):
         elif is_list_pyleecan_type(prop["type"]):
             var_str += TAB2 + "for obj in self." + prop["name"] + ":\n"
             var_str += TAB3 + "obj._set_None()\n"
+        elif is_dict_pyleecan_type(prop["type"]):
+            var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
+            var_str += TAB3 + "obj._set_None()\n"
         else:  # Pyleecan type
             var_str += TAB2 + "if self." + prop["name"] + " is not None:\n"
             var_str += TAB3 + "self." + prop["name"] + "._set_None()\n"
@@ -940,6 +1056,12 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB2 + "for obj in self._" + prop["name"] + ":\n"
             prop_str += TAB3 + "if obj is not None:\n"
             prop_str += TAB4 + "obj.parent = self\n"
+        elif is_dict_pyleecan_type(prop["type"]):
+            # TODO: Update the parent should be done only in the setter but
+            # their is an issue with .append for list of pyleecan type
+            prop_str += TAB2 + "for key, obj in self._" + prop["name"] + ".items():\n"
+            prop_str += TAB3 + "if obj is not None:\n"
+            prop_str += TAB4 + "obj.parent = self\n"
         prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
 
         # Setter
@@ -971,7 +1093,11 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB2 + "for obj in self._" + prop["name"] + ":\n"
             prop_str += TAB3 + "if obj is not None:\n"
             prop_str += TAB4 + "obj.parent = self\n"
-        elif prop["type"] not in PYTHON_TYPE and prop["type"] != "ndarray":
+        elif (
+            prop["type"] not in PYTHON_TYPE
+            and prop["type"] != "ndarray"
+            and not is_dict_pyleecan_type(prop["type"])
+        ):
             # pyleecan type
             prop_str += TAB2 + "if self._" + prop["name"] + " is not None:\n"
             prop_str += TAB3 + "self._" + prop["name"] + ".parent = self\n"
