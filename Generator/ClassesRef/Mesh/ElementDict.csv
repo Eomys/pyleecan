@@ -5,3 +5,6 @@ nb_node_per_element,,Define the number of node per element,,,dict,,,,,,,,,get_no
 tag,,Dict containing tags stored per element type,,,dict,,,,,,,,,convert_element,,,,
 group,,Attribute a group number (int) to each element . This group number should correspond to a subpart of the machine.,,,dict,,,,,,,,,add_element,,,,
 ,,,,,,,,,,,,,,get_connectivity,,,,
+,,,,,,,,,,,,,,get_new_tag,,,,
+,,,,,,,,,,,,,,is_exist,,,,
+,,,,,,,,,,,,,,get_all_node_tags,,,,

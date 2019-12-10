@@ -3,7 +3,7 @@ import numpy as np
 
 
 def get_field(self, field_name="mu", node_tags=None):
-    """Define a new NodeMat object based on a set of elements.
+    """Get the value of variables stored in SolutionFEMM.
 
      Parameters
      ----------

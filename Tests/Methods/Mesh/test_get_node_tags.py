@@ -37,9 +37,9 @@ class unittest_get_node_tags(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
         # Method test 2
-        node_tags = mesh.element.get_node_tags(np.array([1, 2]))
+        node_tags = mesh.element.get_node_tags(elem_tag=1)
         # Check result
-        solution = np.array([0, 1, 2, 3])
+        solution = np.array([0, 1, 2])
         testA = np.sum(abs(solution - node_tags))
         msg = (
             "Wrong projection: returned "
@@ -51,7 +51,7 @@ class unittest_get_node_tags(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
         # Method test 3
-        node_tags = mesh.element.get_node_tags()
+        node_tags = mesh.element.get_all_node_tags()
         # Check result
         solution = np.array([0, 1, 2, 3])
         testA = np.sum(abs(solution - node_tags))

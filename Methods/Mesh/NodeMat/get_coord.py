@@ -2,7 +2,7 @@
 
 
 def get_coord(self, node_tags=None):
-    """Define a new NodeMat object based on a set of elements.
+    """Return the coordinates of node(s).
 
      Parameters
      ----------
