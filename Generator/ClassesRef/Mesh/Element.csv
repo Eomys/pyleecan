@@ -1,9 +1,3 @@
 Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-,,,,,,,,,,,,Mesh,,get_group,VERSION,1,Abstract class to define connectivity and getter.,ElementMat
-,,,,,,,,,,,,,,get_node_tags,,,,ElementDict
-,,,,,,,,,,,,,,get_node2element,,,,
-,,,,,,,,,,,,,,convert_element,,,,
-,,,,,,,,,,,,,,add_element,,,,
-,,,,,,,,,,,,,,get_connectivity,,,,
-,,,,,,,,,,,,,,get_new_tag,,,,
-,,,,,,,,,,,,,,get_all_node_tags,,,,
+,,,,,,,,,,,,Mesh,,,VERSION,1,Abstract class to define connectivity and getter.,ElementMat
+,,,,,,,,,,,,,,,,,,ElementDict

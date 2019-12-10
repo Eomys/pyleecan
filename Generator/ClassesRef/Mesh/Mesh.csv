@@ -1,4 +1,11 @@
 Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-element,,Storing connectivity,,,Element,None,,,,,,Mesh,,set_submesh,VERSION,1,Gather the mesh storage format,
+element,,Storing Element objects,,,{Element},None,,,,,,Mesh,,set_submesh,VERSION,1,Gather the mesh storage format,
 node,,Storing nodes,,,Node,None,,,,,,,,interface,,,,
-submesh,,Storing submeshes. Node and element numbers/tags or group must be the same.,,,[Mesh],None,,,,,,,,,,,,
+submesh,,Storing submeshes. Node and element numbers/tags or group must be the same.,,,[Mesh],None,,,,,,,,get_group,,,,
+,,,,,,,,,,,,,,get_node_tags,,,,
+,,,,,,,,,,,,,,get_node2element,,,,
+,,,,,,,,,,,,,,convert_element,,,,
+,,,,,,,,,,,,,,add_element,,,,
+,,,,,,,,,,,,,,get_connectivity,,,,
+,,,,,,,,,,,,,,get_new_tag,,,,
+,,,,,,,,,,,,,,get_all_node_tags,,,,

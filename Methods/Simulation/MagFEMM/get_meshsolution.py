@@ -93,7 +93,8 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
 
         # Create Mesh and Solution dictionaries
         mesh = Mesh()
-        mesh.element = ElementMat(
+        mesh.element = dict()
+        mesh.element["Triangle"] = ElementMat(
             connectivity=listElem,
             nb_elem=NbElem,
             group=listElem0[:, 6],
