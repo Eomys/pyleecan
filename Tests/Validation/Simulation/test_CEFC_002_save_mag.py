@@ -11,6 +11,7 @@ from pyleecan.Classes.ElementDict import ElementDict
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Tests import save_validation_path as save_path
+from pyleecan.Functions.FEMM import GROUP_SC
 
 simu = Simu1(name="SM_CEFC_002_save_mag", machine=CEFC_Lam, struct=None)
 
@@ -61,6 +62,13 @@ class test_CEFC_001(TestCase):
             mesh=out.mag.meshsolution[0].mesh,
             field=out.mag.meshsolution[0].solution.get_field("mu"),
             title="Permeability",
+        )
+
+        out.plot_mesh_field(
+            mesh=out.mag.meshsolution[0].mesh,
+            field=out.mag.meshsolution[0].solution.get_field("B"),
+            title="Magnetic flux",
+            group=GROUP_SC
         )
 
         element_dict = ElementDict()

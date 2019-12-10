@@ -122,8 +122,8 @@ class ElementMat(Element):
     def __init__(
         self,
         connectivity=None,
-        nb_elem=None,
-        nb_node_per_element=None,
+        nb_elem=0,
+        nb_node_per_element=0,
         group=None,
         init_dict=None,
     ):

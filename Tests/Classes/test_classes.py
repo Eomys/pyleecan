@@ -12,6 +12,7 @@ from pyleecan.Generator import DOC_DIR
 from pyleecan.Tests.find import (
     find_test_value,
     is_type_list,
+    is_type_dict,
     MissingTypeError,
     PYTHON_TYPE,
 )
@@ -84,6 +85,15 @@ class test_all_Classes(TestCase):
                     + " for property: "
                     + prop["name"],
                 )
+            elif is_type_dict(type_name):  # Dict of pyleecan type
+                self.assertEqual(
+                    result,
+                    dict(),
+                    msg="Error for class "
+                    + class_dict["name"]
+                    + " for property: "
+                    + prop["name"],
+                )
             elif type_name == "ndarray":
                 if type(prop["value"]) is list:
                     expect = array(prop["value"])
@@ -121,6 +131,7 @@ class test_all_Classes(TestCase):
         # Setup
         d = dict()
         prop_list = get_mother_attr(gen_dict, class_dict, "properties")[0]
+        # Generated the expected result dict
         for prop in prop_list:
             if prop["type"] == "ndarray":
                 if type(prop["value"]) is list:
@@ -135,6 +146,8 @@ class test_all_Classes(TestCase):
                 d[prop["name"]] = {}
             elif is_type_list(prop["type"]):  # List of pyleecan type
                 d[prop["name"]] = list()
+            elif is_type_dict(prop["type"]):  # Dict of pyleecan type
+                d[prop["name"]] = dict()
             else:  # pyleecan type
                 d[prop["name"]] = eval(prop["type"] + "().as_dict()")
         d["__class__"] = class_dict["name"]
@@ -146,7 +159,14 @@ class test_all_Classes(TestCase):
             self.assertEqual(
                 d[key],
                 result_dict[key],
-                msg="Error for class " + class_dict["name"] + " for property: " + key,
+                msg="Error for class "
+                + class_dict["name"]
+                + " for property: "
+                + key
+                + ", expected: "
+                + str(d[key])
+                + ", returned: "
+                + str(result_dict[key]),
             )
         self.assertEqual(d.keys(), result_dict.keys())
 

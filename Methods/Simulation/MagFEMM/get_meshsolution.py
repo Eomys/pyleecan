@@ -5,6 +5,7 @@ from pyleecan.Generator import MAIN_DIR
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.Element import Element
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.SolutionFEMM import SolutionFEMM
 from femm import callfemm
@@ -93,18 +94,13 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
 
         # Create Mesh and Solution dictionaries
         mesh = Mesh()
-        mesh.element = dict()
         mesh.element["Triangle"] = ElementMat(
             connectivity=listElem,
             nb_elem=NbElem,
             group=listElem0[:, 6],
             nb_node_per_element=3,
         )
-        mesh.node = NodeMat(
-            coordinate=listNd[:, 0:2],
-            nb_node=NbNd,
-            node_tag=np.arange(start=0, stop=NbNd, step=1),
-        )
+        mesh.node = NodeMat(coordinate=listNd[:, 0:2], nb_node=NbNd)
 
         solution = SolutionFEMM(B=results[:, 0:2], H=results[:, 2:4], mu=results[:, 4])
 

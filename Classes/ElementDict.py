@@ -167,11 +167,11 @@ class ElementDict(Element):
 
     def __init__(
         self,
-        connectivity=None,
-        nb_elem=None,
-        nb_node_per_element=None,
-        tag=None,
-        group=None,
+        connectivity={},
+        nb_elem={},
+        nb_node_per_element={},
+        tag={},
+        group={},
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :

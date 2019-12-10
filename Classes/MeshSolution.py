@@ -19,7 +19,7 @@ class MeshSolution(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, name=None, mesh=None, solution=None, init_dict=None):
+    def __init__(self, name="", mesh=-1, solution=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
