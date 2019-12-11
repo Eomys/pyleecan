@@ -3,32 +3,27 @@
 import numpy as np
 
 
-def get_connectivity(self, elem_type=None):
-    """Return the connectivity for a selected type of elements
+def get_connectivity(self, elem_tag=None):
+    """Return the connectivity for a selected element
 
     Parameters
     ----------
-    self : ElementDict
-        an ElementDict object
-    elem_type : str
-        a key corresponding to an element type
+    self : Mesh
+        an Mesh object
+    elem_tag : int
+        an element tag
 
     Returns
     -------
     connect_select: ndarray
-        Selected connectivity
+        Selected element connectivity
 
     """
 
-    connect = self.connectivity
-    tag = self.tag
     connect_select = np.array([])
+    tags_select = np.array([])
 
-    if elem_type is None:  # Return the first type of element to be found
-        for key in connect:
-            connect_select = connect[key]
-            break
-    else:
-        connect_select = connect[elem_type]
-
-    return connect_select
+    for key in self.element:
+        tmp_connect_select = self.element[key].get_connectivity(elem_tag)
+        if tmp_connect_select is not None:
+            return connect_select

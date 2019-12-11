@@ -18,6 +18,16 @@ try:
 except ImportError as error:
     get_all_node_coord = error
 
+try:
+    from pyleecan.Methods.Mesh.Mesh.add_element import add_element
+except ImportError as error:
+    add_element = error
+
+try:
+    from pyleecan.Methods.Mesh.Mesh.get_all_connectivity import get_all_connectivity
+except ImportError as error:
+    get_all_connectivity = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Element import Element
@@ -51,6 +61,27 @@ class Mesh(FrozenClass):
         )
     else:
         get_all_node_coord = get_all_node_coord
+    # cf Methods.Mesh.Mesh.add_element
+    if isinstance(add_element, ImportError):
+        add_element = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Mesh method add_element: " + str(add_element))
+            )
+        )
+    else:
+        add_element = add_element
+    # cf Methods.Mesh.Mesh.get_all_connectivity
+    if isinstance(get_all_connectivity, ImportError):
+        get_all_connectivity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Mesh method get_all_connectivity: "
+                    + str(get_all_connectivity)
+                )
+            )
+        )
+    else:
+        get_all_connectivity = get_all_connectivity
     # save method is available in all object
     save = save
 
@@ -84,7 +115,7 @@ class Mesh(FrozenClass):
                 if isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in ["Element", "ElementDict", "ElementMat"]:
+                    if class_name not in ["Element", "ElementMat"]:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name

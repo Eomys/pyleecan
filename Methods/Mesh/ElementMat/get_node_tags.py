@@ -4,12 +4,14 @@ import numpy as np
 
 
 def get_node_tags(self, elem_tag=None):
-    """Return the nodes tags in the element elem_tag
+    """Return a vector of nodes tags in the element elem_tag
 
     Parameters
     ----------
     self : ElementMat
         an ElementMat object
+    elem_tag : int
+        an element tag
 
     Returns
     -------
@@ -19,20 +21,11 @@ def get_node_tags(self, elem_tag=None):
     """
 
     connect = self.connectivity
-    node_tags = np.array([], dtype=int)
+    tag = self.tag
 
-    if elem_tag is None:
-        for ie in range(len(connect)):
-            node_tags = np.concatenate((node_tags, connect[ie, :]))
-        node_tags = np.unique(node_tags)
-
-    if type(elem_tag) is int:
-        node_tags = connect[elem_tag, :]
-
-    if type(elem_tag) is np.ndarray:
-        for ie in range(len(elem_tag)):
-            node_tags = np.concatenate((node_tags, connect[elem_tag[ie], :]))
-
-        node_tags = np.unique(node_tags)
-
-    return node_tags
+    if len(connect.shape) == 1:  # If there is only 1 element
+        if tag == elem_tag:
+            return connect
+    elif len(connect.shape) > 1:
+        line = np.where(tag == elem_tag)[0]
+        return connect[line, :]

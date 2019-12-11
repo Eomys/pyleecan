@@ -120,10 +120,5 @@ class unittest_add_element(TestCase):
         solution = np.array([-1, -1, 3], dtype=int)
         result = mesh.element["Triangle3"].group
         testA = ((result == solution) | (np.isnan(result) & np.isnan(solution))).all()
-        msg = (
-            "Wrong result: returned "
-            + str(result)
-            + ", expected: "
-            + str(solution)
-        )
+        msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         self.assertTrue(testA, msg=msg)

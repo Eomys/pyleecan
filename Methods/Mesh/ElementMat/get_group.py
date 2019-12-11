@@ -22,13 +22,14 @@ def get_group(self, group_number):
     module = __import__("pyleecan.Classes." + "ElementMat", fromlist=["ElementMat"])
     subelem = getattr(module, "ElementMat")()
 
-    elements_parent = self.connectivity
+    connect_parent = self.connectivity
     groups = self.group
-    elem_tags = np.where(groups == group_number)[0]
-
-    subelem.connectivity = elements_parent[elem_tags, :]
-    subelem.group = groups[elem_tags]  # Should be only one type
-    subelem.nb_elem = len(elem_tags)
+    tags = self.tag
+    Ielem = np.where(groups == group_number)[0]
+    subelem.connectivity = connect_parent[Ielem, :]
+    subelem.group = groups[Ielem]  # Should be only one type
+    subelem.tag = tags[Ielem]
+    subelem.nb_elem = len(Ielem)
     subelem.nb_node_per_element = self.nb_node_per_element  # Must be the same
 
     return subelem

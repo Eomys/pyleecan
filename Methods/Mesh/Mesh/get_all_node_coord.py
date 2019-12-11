@@ -30,8 +30,8 @@ def get_all_node_coord(self, group=None):
         else:
             for key in self.element:
                 element_group = self.element[key].get_group(group)
-                connect = element_group.get_all_node_tags()
-                coord = self.node.get_coord(connect)
-                tag = self.node.get_tag(connect)
+                node_tags = element_group.get_all_node_tags()
+                coord = self.node.get_coord(node_tags)
+                return coord, node_tags
     else:
         return None

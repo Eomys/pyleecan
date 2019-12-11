@@ -25,8 +25,9 @@ def get_coord(self, node_tags=None):
     else:
         nd_case = len(node_tags)
         coord = np.zeros((nd_case, 2))
+        tag = np.zeros(nd_case, dtype=int)
         for ind in range(nd_case):
-            Ipos = np.where(self.node_tag == node_tags[ind])[0]
+            Ipos = np.where(self.tag == node_tags[ind])[0]
             coord[ind, :] = self.coordinate[Ipos, :]
 
     return coord
