@@ -14,11 +14,6 @@ except ImportError as error:
     get_group = error
 
 try:
-    from pyleecan.Methods.Mesh.ElementMat.get_node_tags import get_node_tags
-except ImportError as error:
-    get_node_tags = error
-
-try:
     from pyleecan.Methods.Mesh.ElementMat.get_node2element import get_node2element
 except ImportError as error:
     get_node2element = error
@@ -80,17 +75,6 @@ class ElementMat(Element):
         )
     else:
         get_group = get_group
-    # cf Methods.Mesh.ElementMat.get_node_tags
-    if isinstance(get_node_tags, ImportError):
-        get_node_tags = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ElementMat method get_node_tags: " + str(get_node_tags)
-                )
-            )
-        )
-    else:
-        get_node_tags = get_node_tags
     # cf Methods.Mesh.ElementMat.get_node2element
     if isinstance(get_node2element, ImportError):
         get_node2element = property(
