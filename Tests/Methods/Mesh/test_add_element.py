@@ -9,7 +9,7 @@ import numpy as np
 class unittest_add_element(TestCase):
     """unittest for elements and nodes getter methods"""
 
-    def test_ElementMat_NodeMat(self):
+    def test_ElementMat(self):
         """unittest with ElementDict and NodeMat objects"""
         # Init
         mesh = Mesh()
@@ -22,7 +22,7 @@ class unittest_add_element(TestCase):
         # Check result
         testA = np.sum(abs(mesh.element["Segment2"].connectivity - node_tags))
         msg = (
-            "Wrong projection: returned "
+            "Wrong result: returned "
             + str(mesh.element["Segment2"].connectivity)
             + ", expected: "
             + str(node_tags)
@@ -31,7 +31,7 @@ class unittest_add_element(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
         msg = (
-            "Wrong projection: returned "
+            "Wrong result: returned "
             + str(mesh.element["Segment2"].nb_elem)
             + ", expected: "
             + str(1)
@@ -49,7 +49,7 @@ class unittest_add_element(TestCase):
         solution = np.array([[0, 1], [1, 2]])
         testA = np.sum(abs(mesh.element["Segment2"].connectivity - solution))
         msg = (
-            "Wrong projection: returned "
+            "Wrong result: returned "
             + str(mesh.element["Segment2"].connectivity)
             + ", expected: "
             + str(solution)
@@ -63,7 +63,7 @@ class unittest_add_element(TestCase):
         # Check result
         testA = np.sum(abs(mesh.element["Triangle3"].connectivity - node_tags))
         msg = (
-            "Wrong projection: returned "
+            "Wrong result: returned "
             + str(mesh.element["Triangle3"].connectivity)
             + ", expected: "
             + str(node_tags)
@@ -76,7 +76,7 @@ class unittest_add_element(TestCase):
         # Check result
         testA = np.sum(abs(mesh.element["Segment2"].connectivity - solution))
         msg = (
-            "Wrong projection: returned "
+            "Wrong result: returned "
             + str(mesh.element["Segment2"].connectivity)
             + ", expected: "
             + str(solution)
@@ -90,7 +90,7 @@ class unittest_add_element(TestCase):
         # Check result
         testA = np.sum(abs(mesh.element["Triangle3"].connectivity - node_tags))
         msg = (
-            "Wrong projection: returned "
+            "Wrong result: returned "
             + str(mesh.element["Triangle3"].connectivity)
             + ", expected: "
             + str(node_tags)
@@ -105,10 +105,25 @@ class unittest_add_element(TestCase):
         solution = np.array([[1, 2, 3], [2, 3, 0]])
         testA = np.sum(abs(mesh.element["Triangle3"].connectivity - solution))
         msg = (
-            "Wrong projection: returned "
+            "Wrong result: returned "
             + str(mesh.element["Triangle3"].connectivity)
             + ", expected: "
             + str(solution)
         )
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+
+        # Method test 7
+        node_tags = np.array([2, 0, 1])
+        mesh.add_element(node_tags, "Triangle3", group=3)
+        # Check result
+        solution = np.array([np.NaN, np.NaN, 3])
+        result = mesh.element["Triangle3"].group
+        testA = ((result == solution) | (np.isnan(result) & np.isnan(solution))).all()
+        msg = (
+            "Wrong result: returned "
+            + str(result)
+            + ", expected: "
+            + str(solution)
+        )
+        self.assertTrue(testA, msg=msg)

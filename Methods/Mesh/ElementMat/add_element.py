@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def add_element(self, node_tags):
+def add_element(self, node_tags, group=np.NaN):
     """Add a new element defined by a vector of node tags
 
     Parameters
@@ -12,6 +12,8 @@ def add_element(self, node_tags):
         an ElementMat object
     node_tags : numpy.array
         an array of node tags
+    group : int
+        the group number
 
     Returns
     -------
@@ -26,9 +28,11 @@ def add_element(self, node_tags):
     if self.connectivity.size == 0:
         self.connectivity = node_tags
         self.tag = np.array([self.get_new_tag()])
+        self.group = np.array([group])
     else:
         self.connectivity = np.vstack([self.connectivity, node_tags])
         self.tag = np.concatenate([self.tag, np.array([self.get_new_tag()])])
+        self.group = np.concatenate([self.group, np.array([group])])
 
     self.nb_elem = self.nb_elem + 1
 
