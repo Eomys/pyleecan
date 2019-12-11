@@ -32,7 +32,7 @@ class OutMag(FrozenClass):
         Tem_rip=None,
         Phi_wind_stator=None,
         emf=None,
-        meshsolution=list(),
+        meshsolution=-1,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -44,6 +44,8 @@ class OutMag(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if meshsolution == -1:
+            meshsolution = MeshSolution()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
                 init_dict,
@@ -107,18 +109,9 @@ class OutMag(FrozenClass):
         set_array(self, "Phi_wind_stator", Phi_wind_stator)
         # emf can be None, a ndarray or a list
         set_array(self, "emf", emf)
-        # meshsolution can be None or a list of MeshSolution object
-        self.meshsolution = list()
-        if type(meshsolution) is list:
-            for obj in meshsolution:
-                if obj is None:  # Default value
-                    self.meshsolution.append(MeshSolution())
-                elif isinstance(obj, dict):
-                    self.meshsolution.append(MeshSolution(init_dict=obj))
-                else:
-                    self.meshsolution.append(obj)
-        elif meshsolution is None:
-            self.meshsolution = list()
+        # meshsolution can be None, a MeshSolution object or a dict
+        if isinstance(meshsolution, dict):
+            self.meshsolution = MeshSolution(init_dict=meshsolution)
         else:
             self.meshsolution = meshsolution
 
@@ -150,16 +143,7 @@ class OutMag(FrozenClass):
             + linesep
         )
         OutMag_str += "emf = " + linesep + str(self.emf) + linesep + linesep
-        if len(self.meshsolution) == 0:
-            OutMag_str += "meshsolution = []"
-        for ii in range(len(self.meshsolution)):
-            OutMag_str += (
-                "meshsolution["
-                + str(ii)
-                + "] = "
-                + str(self.meshsolution[ii].as_dict())
-                + "\n"
-            )
+        OutMag_str += "meshsolution = " + str(self.meshsolution.as_dict())
         return OutMag_str
 
     def __eq__(self, other):
@@ -230,9 +214,10 @@ class OutMag(FrozenClass):
             OutMag_dict["emf"] = None
         else:
             OutMag_dict["emf"] = self.emf.tolist()
-        OutMag_dict["meshsolution"] = list()
-        for obj in self.meshsolution:
-            OutMag_dict["meshsolution"].append(obj.as_dict())
+        if self.meshsolution is None:
+            OutMag_dict["meshsolution"] = None
+        else:
+            OutMag_dict["meshsolution"] = self.meshsolution.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -251,8 +236,8 @@ class OutMag(FrozenClass):
         self.Tem_rip = None
         self.Phi_wind_stator = None
         self.emf = None
-        for obj in self.meshsolution:
-            obj._set_None()
+        if self.meshsolution is not None:
+            self.meshsolution._set_None()
 
     def _get_time(self):
         """getter of time"""
@@ -450,22 +435,18 @@ class OutMag(FrozenClass):
 
     def _get_meshsolution(self):
         """getter of meshsolution"""
-        for obj in self._meshsolution:
-            if obj is not None:
-                obj.parent = self
         return self._meshsolution
 
     def _set_meshsolution(self, value):
         """setter of meshsolution"""
-        check_var("meshsolution", value, "[MeshSolution]")
+        check_var("meshsolution", value, "MeshSolution")
         self._meshsolution = value
 
-        for obj in self._meshsolution:
-            if obj is not None:
-                obj.parent = self
+        if self._meshsolution is not None:
+            self._meshsolution.parent = self
 
     # FEA software mesh and solution
-    # Type : [MeshSolution]
+    # Type : MeshSolution
     meshsolution = property(
         fget=_get_meshsolution,
         fset=_set_meshsolution,
