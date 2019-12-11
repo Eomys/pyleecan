@@ -22,18 +22,20 @@ def add_element(self, node_tags, group=-1):
     """
     # Check the existence of the element
     if self.is_exist(node_tags):
-        return False
+        return None
+
+    new_tag = self.get_new_tag()
 
     # Create the new element
     if self.connectivity.size == 0:
         self.connectivity = node_tags
-        self.tag = np.array([self.get_new_tag()])
+        self.tag = np.array([new_tag])
         self.group = np.array([group], dtype=int)
     else:
         self.connectivity = np.vstack([self.connectivity, node_tags])
-        self.tag = np.concatenate([self.tag, np.array([self.get_new_tag()])])
+        self.tag = np.concatenate([self.tag, np.array([new_tag])])
         self.group = np.concatenate([self.group, np.array([group], dtype=int)])
 
     self.nb_elem = self.nb_elem + 1
 
-    return True
+    return new_tag
