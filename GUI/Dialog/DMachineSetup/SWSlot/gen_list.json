@@ -1,0 +1,11 @@
+[
+    {
+        "cls": "Slot",
+        "name": "Zs",
+        "widget": [
+            "in_Zs",
+            "si_Zs"
+        ],
+        "xls": "Slot"
+    }
+]

@@ -1,0 +1,28 @@
+[
+    {
+        "cls": "Conductor",
+        "name": "cond_mat",
+        "widget": [
+            "w_mat"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "CondType21",
+        "name": "Hbar",
+        "widget": [
+            "lf_Hbar",
+            "in_Hbar"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "CondType21",
+        "name": "Wbar",
+        "widget": [
+            "in_Wbar",
+            "lf_Wbar"
+        ],
+        "xls": "Machine"
+    }
+]

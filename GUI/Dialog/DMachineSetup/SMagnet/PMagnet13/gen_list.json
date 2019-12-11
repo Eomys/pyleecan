@@ -1,0 +1,29 @@
+[
+    {
+        "cls": "MagnetType13",
+        "name": "Hmag",
+        "widget": [
+            "in_Hmag",
+            "lf_Hmag"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "MagnetType13",
+        "name": "Wmag",
+        "widget": [
+            "in_Wmag",
+            "lf_Wmag"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "MagnetType13",
+        "name": "Rtop",
+        "widget": [
+            "in_Rtopm",
+            "lf_Rtopm"
+        ],
+        "xls": "Machine"
+    }
+]

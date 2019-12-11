@@ -1,0 +1,39 @@
+[
+    {
+        "cls": "LamSquirrelCage",
+        "name": "Hscr",
+        "widget": [
+            "in_Hscr",
+            "lf_Hscr",
+            "unit_Hscr"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "LamSquirrelCage",
+        "name": "Lscr",
+        "widget": [
+            "in_Lscr",
+            "lf_Lscr",
+            "unit_Lscr"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "Winding",
+        "name": "Lewout",
+        "widget": [
+            "in_Lewout",
+            "lf_Lewout"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "LamSquirrelCage",
+        "name": "ring_mat",
+        "widget": [
+            "w_mat"
+        ],
+        "xls": "Machine"
+    }
+]

@@ -31,6 +31,12 @@ makedirs(save_plot_path)
 # To save the validation results
 save_validation_path = join(save_path, "Validation")
 makedirs(save_validation_path)
-
+# To save the Save/Load .json results
 save_load_path = join(save_path, "Save_Load")
 makedirs(save_load_path)
+# To save the GUI results
+save_gui_path = join(save_path, "GUI")
+makedirs(save_gui_path)
+
+# To clean all the results at the end of the corresponding test
+is_clean_result = False

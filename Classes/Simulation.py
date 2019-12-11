@@ -62,6 +62,7 @@ class Simulation(FrozenClass):
                 "MachineIPMSM",
                 "MachineWRSM",
                 "MachineSyRM",
+                "MachineSRM",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for machine"

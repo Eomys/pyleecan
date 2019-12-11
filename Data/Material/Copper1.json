@@ -1,0 +1,39 @@
+{
+    "__class__": "Material",
+    "desc": "COPPER WINDING",
+    "eco": {
+        "unit_name": "$",
+        "__class__": "MatEconomical",
+        "cost_unit": 60.0
+    },
+    "elec": {
+        "__class__": "MatElectrical",
+        "epsr": null,
+        "rho": 1.73e-08
+    },
+    "is_isotropic": true,
+    "mag": null,
+    "struct": {
+        "Ex": 115000000000.0,
+        "Ey": 115000000000.0,
+        "Ez": 115000000000.0,
+        "Gxy": null,
+        "Gxz": null,
+        "Gyz": null,
+        "__class__": "MatStructural",
+        "nu_xy": null,
+        "nu_xz": null,
+        "nu_yz": null,
+        "rho": 8900.0
+    },
+    "name": "Copper1",
+    "path": null,
+    "HT": {
+        "Cp": 381.0,
+        "__class__": "MatHT",
+        "alpha": 0.00393,
+        "lambda_x": 385.0,
+        "lambda_y": 385.0,
+        "lambda_z": 385.0
+    }
+}

@@ -1,0 +1,96 @@
+# -*- coding: utf-8 -*-
+"""Warning : this file has been generated, you shouldn't edit it"""
+
+from pyleecan.GUI.Dialog.DMachineSetup.SWPole.PWSlot60.Ui_PWSlot60 import Ui_PWSlot60
+
+
+class Gen_PWSlot60(Ui_PWSlot60):
+    def setupUi(self, PWSlot60):
+        Ui_PWSlot60.setupUi(self, PWSlot60)
+        # Setup of in_R1
+        txt = self.tr(u"""Pole top radius""")
+        self.in_R1.setWhatsThis(txt)
+        self.in_R1.setToolTip(txt)
+
+        # Setup of lf_R1
+        self.lf_R1.validator().setBottom(0)
+        txt = self.tr(u"""Pole top radius""")
+        self.lf_R1.setWhatsThis(txt)
+        self.lf_R1.setToolTip(txt)
+
+        # Setup of in_W1
+        txt = self.tr(u"""Pole top width""")
+        self.in_W1.setWhatsThis(txt)
+        self.in_W1.setToolTip(txt)
+
+        # Setup of lf_W1
+        self.lf_W1.validator().setBottom(0)
+        txt = self.tr(u"""Pole top width""")
+        self.lf_W1.setWhatsThis(txt)
+        self.lf_W1.setToolTip(txt)
+
+        # Setup of in_W2
+        txt = self.tr(u"""Pole bottom width""")
+        self.in_W2.setWhatsThis(txt)
+        self.in_W2.setToolTip(txt)
+
+        # Setup of lf_W2
+        self.lf_W2.validator().setBottom(0)
+        txt = self.tr(u"""Pole bottom width""")
+        self.lf_W2.setWhatsThis(txt)
+        self.lf_W2.setToolTip(txt)
+
+        # Setup of in_H1
+        txt = self.tr(u"""Pole top height""")
+        self.in_H1.setWhatsThis(txt)
+        self.in_H1.setToolTip(txt)
+
+        # Setup of lf_H1
+        self.lf_H1.validator().setBottom(0)
+        txt = self.tr(u"""Pole top height""")
+        self.lf_H1.setWhatsThis(txt)
+        self.lf_H1.setToolTip(txt)
+
+        # Setup of in_H2
+        txt = self.tr(u"""Pole bottom height""")
+        self.in_H2.setWhatsThis(txt)
+        self.in_H2.setToolTip(txt)
+
+        # Setup of lf_H2
+        self.lf_H2.validator().setBottom(0)
+        txt = self.tr(u"""Pole bottom height""")
+        self.lf_H2.setWhatsThis(txt)
+        self.lf_H2.setToolTip(txt)
+
+        # Setup of in_W3
+        txt = self.tr(u"""Edge Distance Ploe-coil """)
+        self.in_W3.setWhatsThis(txt)
+        self.in_W3.setToolTip(txt)
+
+        # Setup of lf_W3
+        self.lf_W3.validator().setBottom(0)
+        txt = self.tr(u"""Edge Distance Ploe-coil """)
+        self.lf_W3.setWhatsThis(txt)
+        self.lf_W3.setToolTip(txt)
+
+        # Setup of in_H3
+        txt = self.tr(u"""Top Distance Ploe-coil """)
+        self.in_H3.setWhatsThis(txt)
+        self.in_H3.setToolTip(txt)
+
+        # Setup of lf_H3
+        self.lf_H3.validator().setBottom(0)
+        txt = self.tr(u"""Top Distance Ploe-coil """)
+        self.lf_H3.setWhatsThis(txt)
+        self.lf_H3.setToolTip(txt)
+
+        # Setup of in_H4
+        txt = self.tr(u"""Bottom Distance Ploe-coil """)
+        self.in_H4.setWhatsThis(txt)
+        self.in_H4.setToolTip(txt)
+
+        # Setup of lf_H4
+        self.lf_H4.validator().setBottom(0)
+        txt = self.tr(u"""Bottom Distance Ploe-coil """)
+        self.lf_H4.setWhatsThis(txt)
+        self.lf_H4.setToolTip(txt)

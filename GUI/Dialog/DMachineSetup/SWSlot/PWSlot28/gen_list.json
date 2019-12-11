@@ -1,0 +1,52 @@
+[
+    {
+        "cls": "SlotW28",
+        "name": "W0",
+        "widget": [
+            "in_W0",
+            "lf_W0",
+            "unit_W0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "SlotW28",
+        "name": "W3",
+        "widget": [
+            "in_W3",
+            "lf_W3",
+            "unit_W3"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "SlotW28",
+        "name": "R1",
+        "widget": [
+            "in_R1",
+            "lf_R1",
+            "unit_R1"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "SlotW28",
+        "name": "H0",
+        "widget": [
+            "in_H0",
+            "lf_H0",
+            "unit_H0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "SlotW28",
+        "name": "H3",
+        "widget": [
+            "in_H3",
+            "lf_H3",
+            "unit_H3"
+        ],
+        "xls": "Slot"
+    }
+]
