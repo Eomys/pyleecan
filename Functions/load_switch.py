@@ -13,7 +13,6 @@ load_switch = {
     "CondType22": CondType22,
     "Conductor": Conductor,
     "Element": Element,
-    "ElementDict": ElementDict,
     "ElementMat": ElementMat,
     "Force": Force,
     "ForceMT": ForceMT,

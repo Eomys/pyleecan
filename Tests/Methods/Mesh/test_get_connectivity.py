@@ -48,9 +48,11 @@ class unittest_get_all_connectivity(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
         # Method test 2
-        node_tags = np.array([1, 2]) # This element already exist
-        tag_test = mesh.add_element(node_tags, "Segment2") # This should return None
-        result = mesh.get_connectivity(tag_test) #We test what happened with None entry
+        node_tags = np.array([1, 2])  # This element already exist
+        tag_test = mesh.add_element(node_tags, "Segment2")  # This should return None
+        result = mesh.get_connectivity(
+            tag_test
+        )  # We test what happened with None entry
 
         # Check result
         solution = None
@@ -59,9 +61,10 @@ class unittest_get_all_connectivity(TestCase):
         self.assertTrue(testA, msg=msg)
 
         # Method test 3
-        result = mesh.get_connectivity(-99999) # We test what happened with stupid entry
+        result = mesh.get_connectivity(
+            -99999
+        )  # We test what happened with stupid entry
         # Check result
         testA = result is None
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(node_tags)
         self.assertTrue(testA, msg=msg)
-

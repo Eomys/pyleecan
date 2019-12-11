@@ -37,7 +37,3 @@ def get_connectivity(self, elem_tag=None):
             return connect[Ipos_select[0], :]
         else:
             return None
-
-
-
-
