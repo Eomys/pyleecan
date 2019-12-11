@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def add_element(self, node_tags, group=-1):
+def add_element(self, node_tags, new_tag, group=-1):
     """Add a new element defined by a vector of node tags
 
     Parameters
@@ -22,9 +22,7 @@ def add_element(self, node_tags, group=-1):
     """
     # Check the existence of the element
     if self.is_exist(node_tags):
-        return None
-
-    new_tag = self.get_new_tag()
+        return False
 
     # Create the new element
     if self.connectivity.size == 0:
@@ -38,4 +36,4 @@ def add_element(self, node_tags, group=-1):
 
     self.nb_elem = self.nb_elem + 1
 
-    return new_tag
+    return True

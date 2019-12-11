@@ -16,10 +16,14 @@ def add_element(self, node_tags, elem_type, group=-1):
     Returns
     -------
     new_tag : int
-        None if the element already exist
+        Tag of the created element. None if the element already exist
     """
 
     # Create the new element
-    new_tag = self.element[elem_type].add_element(node_tags, group)
+    new_tag = self.get_new_tag()
+    test_exist = self.element[elem_type].add_element(node_tags, new_tag, group)
 
-    return new_tag
+    if test_exist:
+        return new_tag
+    else:
+        return None
