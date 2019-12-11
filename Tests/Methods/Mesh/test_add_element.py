@@ -117,7 +117,7 @@ class unittest_add_element(TestCase):
         node_tags = np.array([2, 0, 1])
         mesh.add_element(node_tags, "Triangle3", group=3)
         # Check result
-        solution = np.array([np.NaN, np.NaN, 3])
+        solution = np.array([-1, -1, 3], dtype=int)
         result = mesh.element["Triangle3"].group
         testA = ((result == solution) | (np.isnan(result) & np.isnan(solution))).all()
         msg = (

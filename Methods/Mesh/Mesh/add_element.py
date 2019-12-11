@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def add_element(self, node_tags, elem_type, group=np.NaN):
+def add_element(self, node_tags, elem_type, group=-1):
     """Add a new element defined by a vector of node tags
 
     Parameters
