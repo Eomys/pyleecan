@@ -15,7 +15,7 @@ def get_connectivity(self, elem_tag=None):
 
     Returns
     -------
-    connect_select: ndarray
+    connect_select: numpy.array
         Selected element connectivity. Return None if the tag does not exist
 
     """
