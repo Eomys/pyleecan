@@ -10,7 +10,7 @@ import numpy as np
 class unittest_get_all_connectivity(TestCase):
     """unittest for elements and nodes getter methods"""
 
-    def test_ElementMat(self):
+    def test_ElementMat_NodeMat(self):
         """unittest with ElementDict and NodeMat objects"""
         # Init
         mesh = Mesh()
@@ -48,70 +48,20 @@ class unittest_get_all_connectivity(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
         # Method test 2
-        node_tags = np.array([1, 2])
-        mesh.add_element(node_tags, "Segment2")
-        result, tags = mesh.get_all_connectivity("Segment2")
+        node_tags = np.array([1, 2]) # This element already exist
+        tag_test = mesh.add_element(node_tags, "Segment2") # This should return None
+        result = mesh.get_connectivity(tag_test) #We test what happened with None entry
 
         # Check result
-        solution = np.array([[0, 1], [1, 2]])
-        testA = np.sum(abs(result - solution))
+        solution = None
+        testA = result is None
         msg = "Wrong output: returned " + str(result) + ", expected: " + str(solution)
-        DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        self.assertTrue(testA, msg=msg)
 
-        # Method test 4
-        node_tags = np.array([1, 2, 3])
-        mesh.add_element(node_tags, "Triangle3")
-        result, tags = mesh.get_all_connectivity("Triangle3")
+        # Method test 3
+        result = mesh.get_connectivity(-99999) # We test what happened with stupid entry
         # Check result
-        testA = np.sum(abs(result - node_tags))
+        testA = result is None
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(node_tags)
-        DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        self.assertTrue(testA, msg=msg)
 
-        # Method test 5
-        mesh.add_element(np.array([0, 1]), "Segment2")
-        result, tags = mesh.get_all_connectivity("Segment2")
-
-        # Check result
-        testA = np.sum(abs(result - solution))
-        msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
-        DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
-
-        # Method test 6
-        node_tags = np.array([1, 2, 3])
-        mesh.add_element(node_tags, "Triangle3")
-        result, tags = mesh.get_all_connectivity("Triangle3")
-        # Check result
-        testA = np.sum(abs(result - node_tags))
-        msg = "Wrong result: returned " + str(result) + ", expected: " + str(node_tags)
-        DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
-
-        # Method test 7
-        node_tags = np.array([2, 3, 0])
-        mesh.add_element(node_tags, "Triangle3")
-        result, tags = mesh.get_all_connectivity("Triangle3")
-
-        # Check result
-        solution = np.array([[1, 2, 3], [2, 3, 0]])
-        testA = np.sum(abs(result - solution))
-        msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
-        DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
-
-        # Method test 8
-        node_tags = np.array([2, 1, 0])
-        mesh.add_element(node_tags, "Triangle3", group=int(3))
-
-        result, tags = mesh.get_all_connectivity(
-            "Triangle3", group=np.array([3], dtype=int)
-        )
-
-        # Check result
-        solution = node_tags
-        testA = np.sum(abs(result - solution))
-        msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
-        DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)

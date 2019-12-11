@@ -3,8 +3,8 @@
 import numpy as np
 
 
-def get_connectivity(self, elem_tag=None):
-    """Return the connectivity for a selected element
+def get_connectivity(self, elem_tag):
+    """Return the connectivity for one selected element
 
     Parameters
     ----------
@@ -15,15 +15,12 @@ def get_connectivity(self, elem_tag=None):
 
     Returns
     -------
-    connect_select: ndarray
-        Selected element connectivity
+    connect_select: numpy.array
+        Selected connectivity. Return None if the tag does not exist
 
     """
 
-    connect_select = np.array([])
-    tags_select = np.array([])
-
     for key in self.element:
-        tmp_connect_select = self.element[key].get_connectivity(elem_tag)
-        if tmp_connect_select is not None:
+        connect_select = self.element[key].get_connectivity(elem_tag)
+        if connect_select is not None:
             return connect_select
