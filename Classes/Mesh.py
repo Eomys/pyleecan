@@ -28,6 +28,16 @@ try:
 except ImportError as error:
     get_all_connectivity = error
 
+try:
+    from pyleecan.Methods.Mesh.Mesh.get_connectivity import get_connectivity
+except ImportError as error:
+    get_connectivity = error
+
+try:
+    from pyleecan.Methods.Mesh.Mesh.get_new_tag import get_new_tag
+except ImportError as error:
+    get_new_tag = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Element import Element
@@ -82,6 +92,26 @@ class Mesh(FrozenClass):
         )
     else:
         get_all_connectivity = get_all_connectivity
+    # cf Methods.Mesh.Mesh.get_connectivity
+    if isinstance(get_connectivity, ImportError):
+        get_connectivity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Mesh method get_connectivity: " + str(get_connectivity)
+                )
+            )
+        )
+    else:
+        get_connectivity = get_connectivity
+    # cf Methods.Mesh.Mesh.get_new_tag
+    if isinstance(get_new_tag, ImportError):
+        get_new_tag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Mesh method get_new_tag: " + str(get_new_tag))
+            )
+        )
+    else:
+        get_new_tag = get_new_tag
     # save method is available in all object
     save = save
 
