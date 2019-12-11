@@ -8,8 +8,8 @@ def get_new_tag(self):
 
     Parameters
     ----------
-    self : ElementDict
-        an ElementDict object
+    self : Mesh
+        an Mesh object
 
     Returns
     -------
@@ -18,11 +18,12 @@ def get_new_tag(self):
 
     """
 
-    tag = self.tag
     new_tag = 0
-    if tag is not None:
-        for key in tag:  # There should only one solution
-            for ie in range(len(tag[key])):
-                new_tag = max(new_tag, tag[key][ie])
-    new_tag += 1
+
+    for key in self.element:  # There should only one solution
+        if self.element[key].tag.size > 0:
+            tmp_tag = max(self.element[key].tag)
+            new_tag = max(new_tag, tmp_tag)
+            new_tag += 1
+
     return new_tag
