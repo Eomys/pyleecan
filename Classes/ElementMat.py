@@ -9,11 +9,6 @@ from pyleecan.Classes.Element import Element
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Mesh.ElementMat.get_group import get_group
-except ImportError as error:
-    get_group = error
-
-try:
     from pyleecan.Methods.Mesh.ElementMat.get_node2element import get_node2element
 except ImportError as error:
     get_node2element = error
@@ -66,15 +61,6 @@ class ElementMat(Element):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.ElementMat.get_group
-    if isinstance(get_group, ImportError):
-        get_group = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use ElementMat method get_group: " + str(get_group))
-            )
-        )
-    else:
-        get_group = get_group
     # cf Methods.Mesh.ElementMat.get_node2element
     if isinstance(get_node2element, ImportError):
         get_node2element = property(
