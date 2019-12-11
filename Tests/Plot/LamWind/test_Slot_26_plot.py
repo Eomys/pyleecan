@@ -51,7 +51,9 @@ class test_Lam_Wind_26_plot(TestCase):
         test_obj.rotor.axial_vent = [
             VentilationCirc(Zh=6, Alpha0=pi / 6, D0=60e-3, H0=0.35)
         ]
-        test_obj.rotor.slot = SlotW26(Zs=6, W0=20e-3, R1=30e-3, H0=20e-3, H1=20e-3)
+        test_obj.rotor.slot = SlotW26(
+            Zs=6, W0=20e-3, R1=30e-3, R2=20e-3, H0=20e-3, H1=20e-3
+        )
         test_obj.rotor.winding = WindingUD(
             user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
         )
@@ -68,7 +70,9 @@ class test_Lam_Wind_26_plot(TestCase):
             Wrvd=0.05,
         )
         test_obj.stator.winding = WindingDW2L(qs=3, p=3)
-        test_obj.stator.slot = SlotW26(Zs=18, W0=40e-3, R1=60e-3, H0=20e-3, H1=40e-3)
+        test_obj.stator.slot = SlotW26(
+            Zs=18, W0=40e-3, R1=60e-3, R2=70e-3, H0=20e-3, H1=40e-3
+        )
         test_obj.stator.mat_type.mag = MatLamination(Wlam=0.5e-3)
         test_obj.stator.winding.Lewout = 60e-3
         test_obj.frame = Frame(Rint=0.8, Rext=0.9, Lfra=1)

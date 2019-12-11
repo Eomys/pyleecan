@@ -168,7 +168,9 @@ class SlotW26(SlotWind):
     # save method is available in all object
     save = save
 
-    def __init__(self, W0=0.0122, H0=0.001, H1=0.003, R1=0.003, Zs=36, init_dict=None):
+    def __init__(
+        self, W0=0.0122, H0=0.001, H1=0.003, R1=0.003, R2=0.003, Zs=36, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -179,7 +181,7 @@ class SlotW26(SlotWind):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["W0", "H0", "H1", "R1", "Zs"])
+            check_init_dict(init_dict, ["W0", "H0", "H1", "R1", "R2", "Zs"])
             # Overwrite default value with init_dict content
             if "W0" in list(init_dict.keys()):
                 W0 = init_dict["W0"]
@@ -189,6 +191,8 @@ class SlotW26(SlotWind):
                 H1 = init_dict["H1"]
             if "R1" in list(init_dict.keys()):
                 R1 = init_dict["R1"]
+            if "R2" in list(init_dict.keys()):
+                R2 = init_dict["R2"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
         # Initialisation by argument
@@ -196,6 +200,7 @@ class SlotW26(SlotWind):
         self.H0 = H0
         self.H1 = H1
         self.R1 = R1
+        self.R2 = R2
         # Call SlotWind init
         super(SlotW26, self).__init__(Zs=Zs)
         # The class is frozen (in SlotWind init), for now it's impossible to
@@ -210,7 +215,8 @@ class SlotW26(SlotWind):
         SlotW26_str += "W0 = " + str(self.W0) + linesep
         SlotW26_str += "H0 = " + str(self.H0) + linesep
         SlotW26_str += "H1 = " + str(self.H1) + linesep
-        SlotW26_str += "R1 = " + str(self.R1)
+        SlotW26_str += "R1 = " + str(self.R1) + linesep
+        SlotW26_str += "R2 = " + str(self.R2)
         return SlotW26_str
 
     def __eq__(self, other):
@@ -230,6 +236,8 @@ class SlotW26(SlotWind):
             return False
         if other.R1 != self.R1:
             return False
+        if other.R2 != self.R2:
+            return False
         return True
 
     def as_dict(self):
@@ -242,6 +250,7 @@ class SlotW26(SlotWind):
         SlotW26_dict["H0"] = self.H0
         SlotW26_dict["H1"] = self.H1
         SlotW26_dict["R1"] = self.R1
+        SlotW26_dict["R2"] = self.R2
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         SlotW26_dict["__class__"] = "SlotW26"
@@ -254,6 +263,7 @@ class SlotW26(SlotWind):
         self.H0 = None
         self.H1 = None
         self.R1 = None
+        self.R2 = None
         # Set to None the properties inherited from SlotWind
         super(SlotW26, self)._set_None()
 
@@ -308,3 +318,16 @@ class SlotW26(SlotWind):
     # Slot edge radius
     # Type : float, min = 0
     R1 = property(fget=_get_R1, fset=_set_R1, doc=u"""Slot edge radius""")
+
+    def _get_R2(self):
+        """getter of R2"""
+        return self._R2
+
+    def _set_R2(self, value):
+        """setter of R2"""
+        check_var("R2", value, "float", Vmin=0)
+        self._R2 = value
+
+    # Slot top radius
+    # Type : float, min = 0
+    R2 = property(fget=_get_R2, fset=_set_R2, doc=u"""Slot top radius""")
