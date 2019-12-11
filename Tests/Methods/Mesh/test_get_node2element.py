@@ -18,7 +18,7 @@ class unittest_getnode2element(TestCase):
         )
         mesh.element["Triangle3"].nb_elem = 4
         mesh.element["Triangle3"].nb_node_per_element = 3
-        mesh.element["Triangle3"].tag = np.array([0,1,2,3])
+        mesh.element["Triangle3"].tag = np.array([0, 1, 2, 3])
         # Method test 1
         elem_tag = mesh.element["Triangle3"].get_node2element(1)
         # Check results

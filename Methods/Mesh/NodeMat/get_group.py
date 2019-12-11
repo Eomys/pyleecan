@@ -26,10 +26,10 @@ def get_group(self, element):
 
     node.nb_node = len(node_tags)
     node.coordinate = np.zeros((node.nb_node, 2))  # TO BE Extended to 3D
-    node.node_tag = np.zeros((node.nb_node))
+    node.tag = np.zeros((node.nb_node))
     for ind in range(node.nb_node):
-        Ipos = np.where(node_tags[ind] == self.node_tag)[0]
+        Ipos = np.where(node_tags[ind] == self.tag)[0]
         node.coordinate[ind, :] = self.coordinate[Ipos, :]
-        node.node_tag[ind] = self.node_tag[Ipos]
+        node.tag[ind] = self.tag[Ipos]
 
     return node

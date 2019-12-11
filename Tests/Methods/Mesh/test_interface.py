@@ -2,7 +2,6 @@
 
 from unittest import TestCase
 from pyleecan.Classes.Mesh import Mesh
-from pyleecan.Classes.ElementDict import ElementDict
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.ElementMat import ElementMat
 import numpy as np

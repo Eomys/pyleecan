@@ -50,6 +50,16 @@ try:
 except ImportError as error:
     get_all_node_tags = error
 
+try:
+    from pyleecan.Methods.Mesh.ElementMat.get_group import get_group
+except ImportError as error:
+    get_group = error
+
+try:
+    from pyleecan.Methods.Mesh.ElementMat.get_node_tags import get_node_tags
+except ImportError as error:
+    get_node_tags = error
+
 
 from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -152,6 +162,26 @@ class ElementMat(Element):
         )
     else:
         get_all_node_tags = get_all_node_tags
+    # cf Methods.Mesh.ElementMat.get_group
+    if isinstance(get_group, ImportError):
+        get_group = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ElementMat method get_group: " + str(get_group))
+            )
+        )
+    else:
+        get_group = get_group
+    # cf Methods.Mesh.ElementMat.get_node_tags
+    if isinstance(get_node_tags, ImportError):
+        get_node_tags = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ElementMat method get_node_tags: " + str(get_node_tags)
+                )
+            )
+        )
+    else:
+        get_node_tags = get_node_tags
     # save method is available in all object
     save = save
 

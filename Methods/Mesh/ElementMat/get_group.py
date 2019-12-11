@@ -29,7 +29,10 @@ def get_group(self, group_number):
 
     grp_connect, grp_tags = self.get_all_connectivity(group_number)
     nb_elem_grp = len(grp_tags)
-    for ie in range(nb_elem_grp):
-        grp_elem.add_element(grp_connect[ie], grp_tags[ie])
+    if nb_elem_grp > 1:
+        for ie in range(nb_elem_grp):
+            grp_elem.add_element(grp_connect[ie], grp_tags[ie])
+    elif nb_elem_grp == 1:
+        grp_elem.add_element(grp_connect, grp_tags[0])
 
     return grp_elem

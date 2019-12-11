@@ -10,6 +10,8 @@ def add_element(self, node_tags, new_tag, group=-1):
     ----------
     self : ElementMat
         an ElementMat object
+    new_tag : int
+        an new element tag
     node_tags : numpy.array
         an array of node tags
     group : int

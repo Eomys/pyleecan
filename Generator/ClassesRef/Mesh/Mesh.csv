@@ -5,3 +5,4 @@ submesh,,Storing submeshes. Node and element numbers/tags or group must be the s
 ,,,,,,,,,,,,,,get_all_connectivity,,,,
 ,,,,,,,,,,,,,,get_connectivity,,,,
 ,,,,,,,,,,,,,,get_new_tag,,,,
+,,,,,,,,,,,,,,interface,,,,
