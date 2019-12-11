@@ -31,6 +31,7 @@ class Material(FrozenClass):
         HT=-1,
         eco=-1,
         desc="Lamination M400-50A",
+        path="",
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -55,7 +56,17 @@ class Material(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
                 init_dict,
-                ["name", "is_isotropic", "elec", "mag", "struct", "HT", "eco", "desc"],
+                [
+                    "name",
+                    "is_isotropic",
+                    "elec",
+                    "mag",
+                    "struct",
+                    "HT",
+                    "eco",
+                    "desc",
+                    "path",
+                ],
             )
             # Overwrite default value with init_dict content
             if "name" in list(init_dict.keys()):
@@ -74,6 +85,8 @@ class Material(FrozenClass):
                 eco = init_dict["eco"]
             if "desc" in list(init_dict.keys()):
                 desc = init_dict["desc"]
+            if "path" in list(init_dict.keys()):
+                path = init_dict["path"]
         # Initialisation by argument
         self.parent = None
         self.name = name
@@ -113,6 +126,7 @@ class Material(FrozenClass):
         else:
             self.eco = eco
         self.desc = desc
+        self.path = path
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -127,12 +141,28 @@ class Material(FrozenClass):
             Material_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Material_str += 'name = "' + str(self.name) + '"' + linesep
         Material_str += "is_isotropic = " + str(self.is_isotropic) + linesep
-        Material_str += "elec = " + str(self.elec.as_dict()) + linesep + linesep
-        Material_str += "mag = " + str(self.mag.as_dict()) + linesep + linesep
-        Material_str += "struct = " + str(self.struct.as_dict()) + linesep + linesep
-        Material_str += "HT = " + str(self.HT.as_dict()) + linesep + linesep
-        Material_str += "eco = " + str(self.eco.as_dict()) + linesep + linesep
-        Material_str += 'desc = "' + str(self.desc) + '"'
+        if self.elec is not None:
+            Material_str += "elec = " + str(self.elec.as_dict()) + linesep + linesep
+        else:
+            Material_str += "elec = None" + linesep + linesep
+        if self.mag is not None:
+            Material_str += "mag = " + str(self.mag.as_dict()) + linesep + linesep
+        else:
+            Material_str += "mag = None" + linesep + linesep
+        if self.struct is not None:
+            Material_str += "struct = " + str(self.struct.as_dict()) + linesep + linesep
+        else:
+            Material_str += "struct = None" + linesep + linesep
+        if self.HT is not None:
+            Material_str += "HT = " + str(self.HT.as_dict()) + linesep + linesep
+        else:
+            Material_str += "HT = None" + linesep + linesep
+        if self.eco is not None:
+            Material_str += "eco = " + str(self.eco.as_dict()) + linesep + linesep
+        else:
+            Material_str += "eco = None" + linesep + linesep
+        Material_str += 'desc = "' + str(self.desc) + '"' + linesep
+        Material_str += 'path = "' + str(self.path) + '"'
         return Material_str
 
     def __eq__(self, other):
@@ -155,6 +185,8 @@ class Material(FrozenClass):
         if other.eco != self.eco:
             return False
         if other.desc != self.desc:
+            return False
+        if other.path != self.path:
             return False
         return True
 
@@ -186,6 +218,7 @@ class Material(FrozenClass):
         else:
             Material_dict["eco"] = self.eco.as_dict()
         Material_dict["desc"] = self.desc
+        Material_dict["path"] = self.path
         # The class name is added to the dict fordeserialisation purpose
         Material_dict["__class__"] = "Material"
         return Material_dict
@@ -206,6 +239,7 @@ class Material(FrozenClass):
         if self.eco is not None:
             self.eco._set_None()
         self.desc = None
+        self.path = None
 
     def _get_name(self):
         """getter of name"""
@@ -341,3 +375,18 @@ class Material(FrozenClass):
     # material description
     # Type : str
     desc = property(fget=_get_desc, fset=_set_desc, doc=u"""material description""")
+
+    def _get_path(self):
+        """getter of path"""
+        return self._path
+
+    def _set_path(self, value):
+        """setter of path"""
+        check_var("path", value, "str")
+        self._path = value
+
+    # Path to the material file
+    # Type : str
+    path = property(
+        fget=_get_path, fset=_set_path, doc=u"""Path to the material file"""
+    )

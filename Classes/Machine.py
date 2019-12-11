@@ -211,6 +211,7 @@ class Machine(FrozenClass):
         shaft=-1,
         name="default_machine",
         desc="",
+        type_machine=1,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -232,7 +233,8 @@ class Machine(FrozenClass):
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict, ["rotor", "stator", "frame", "shaft", "name", "desc"]
+                init_dict,
+                ["rotor", "stator", "frame", "shaft", "name", "desc", "type_machine"],
             )
             # Overwrite default value with init_dict content
             if "rotor" in list(init_dict.keys()):
@@ -247,6 +249,8 @@ class Machine(FrozenClass):
                 name = init_dict["name"]
             if "desc" in list(init_dict.keys()):
                 desc = init_dict["desc"]
+            if "type_machine" in list(init_dict.keys()):
+                type_machine = init_dict["type_machine"]
         # Initialisation by argument
         self.parent = None
         # rotor can be None, a Lamination object or a dict
@@ -303,6 +307,7 @@ class Machine(FrozenClass):
             self.shaft = shaft
         self.name = name
         self.desc = desc
+        self.type_machine = type_machine
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -315,12 +320,25 @@ class Machine(FrozenClass):
             Machine_str += "parent = None " + linesep
         else:
             Machine_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Machine_str += "rotor = " + str(self.rotor.as_dict()) + linesep + linesep
-        Machine_str += "stator = " + str(self.stator.as_dict()) + linesep + linesep
-        Machine_str += "frame = " + str(self.frame.as_dict()) + linesep + linesep
-        Machine_str += "shaft = " + str(self.shaft.as_dict()) + linesep + linesep
+        if self.rotor is not None:
+            Machine_str += "rotor = " + str(self.rotor.as_dict()) + linesep + linesep
+        else:
+            Machine_str += "rotor = None" + linesep + linesep
+        if self.stator is not None:
+            Machine_str += "stator = " + str(self.stator.as_dict()) + linesep + linesep
+        else:
+            Machine_str += "stator = None" + linesep + linesep
+        if self.frame is not None:
+            Machine_str += "frame = " + str(self.frame.as_dict()) + linesep + linesep
+        else:
+            Machine_str += "frame = None" + linesep + linesep
+        if self.shaft is not None:
+            Machine_str += "shaft = " + str(self.shaft.as_dict()) + linesep + linesep
+        else:
+            Machine_str += "shaft = None" + linesep + linesep
         Machine_str += 'name = "' + str(self.name) + '"' + linesep
-        Machine_str += 'desc = "' + str(self.desc) + '"'
+        Machine_str += 'desc = "' + str(self.desc) + '"' + linesep
+        Machine_str += "type_machine = " + str(self.type_machine)
         return Machine_str
 
     def __eq__(self, other):
@@ -339,6 +357,8 @@ class Machine(FrozenClass):
         if other.name != self.name:
             return False
         if other.desc != self.desc:
+            return False
+        if other.type_machine != self.type_machine:
             return False
         return True
 
@@ -365,6 +385,7 @@ class Machine(FrozenClass):
             Machine_dict["shaft"] = self.shaft.as_dict()
         Machine_dict["name"] = self.name
         Machine_dict["desc"] = self.desc
+        Machine_dict["type_machine"] = self.type_machine
         # The class name is added to the dict fordeserialisation purpose
         Machine_dict["__class__"] = "Machine"
         return Machine_dict
@@ -382,6 +403,7 @@ class Machine(FrozenClass):
             self.shaft._set_None()
         self.name = None
         self.desc = None
+        self.type_machine = None
 
     def _get_rotor(self):
         """getter of rotor"""
@@ -472,3 +494,20 @@ class Machine(FrozenClass):
     # Machine description
     # Type : str
     desc = property(fget=_get_desc, fset=_set_desc, doc=u"""Machine description""")
+
+    def _get_type_machine(self):
+        """getter of type_machine"""
+        return self._type_machine
+
+    def _set_type_machine(self, value):
+        """setter of type_machine"""
+        check_var("type_machine", value, "int")
+        self._type_machine = value
+
+    # Integer to store the machine type (for the GUI, should be replaced by a test of the object type)
+    # Type : int
+    type_machine = property(
+        fget=_get_type_machine,
+        fset=_set_type_machine,
+        doc=u"""Integer to store the machine type (for the GUI, should be replaced by a test of the object type)""",
+    )

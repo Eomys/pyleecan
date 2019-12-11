@@ -5,8 +5,8 @@ frame,,Machine's Frame,,,Frame,,,,,,,,,comp_masses,,,,MachineSCIM
 shaft,,Machine's Shaft,,,Shaft,,,,,,,,,comp_width_airgap_mag,,,,MachineDFIM
 name,,Name of the machine,,,str,default_machine,,,,,,,,comp_width_airgap_mec,,,,MachineSIPMSM
 desc,,Machine description,,,str,,,,,,,,,get_lamination,,,,MachineIPMSM
-,,,,,,,,,,,,,,comp_Rgap_mec,,,,MachineWRSM
+type_machine,,"Integer to store the machine type (for the GUI, should be replaced by a test of the object type)",,,int,1,,,,,,,,comp_Rgap_mec,,,,MachineWRSM
 ,,,,,,,,,,,,,,plot,,,,MachineSyRM
-,,,,,,,,,,,,,,comp_output_geo,,,,
+,,,,,,,,,,,,,,comp_output_geo,,,,MachineSRM
 ,,,,,,,,,,,,,,comp_length_airgap_active,,,,
 ,,,,,,,,,,,,,,get_polar_eq,,,,
