@@ -172,7 +172,12 @@ class Frame(FrozenClass):
         Frame_str += "Lfra = " + str(self.Lfra) + linesep
         Frame_str += "Rint = " + str(self.Rint) + linesep
         Frame_str += "Rext = " + str(self.Rext) + linesep
-        Frame_str += "mat_type = " + str(self.mat_type.as_dict())
+        if self.mat_type is not None:
+            Frame_str += (
+                "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
+            )
+        else:
+            Frame_str += "mat_type = None"
         return Frame_str
 
     def __eq__(self, other):

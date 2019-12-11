@@ -97,8 +97,14 @@ class Mesh(FrozenClass):
             Mesh_str += "parent = None " + linesep
         else:
             Mesh_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Mesh_str += "element = " + str(self.element.as_dict()) + linesep + linesep
-        Mesh_str += "node = " + str(self.node.as_dict()) + linesep + linesep
+        if self.element is not None:
+            Mesh_str += "element = " + str(self.element.as_dict()) + linesep + linesep
+        else:
+            Mesh_str += "element = None" + linesep + linesep
+        if self.node is not None:
+            Mesh_str += "node = " + str(self.node.as_dict()) + linesep + linesep
+        else:
+            Mesh_str += "node = None" + linesep + linesep
         if len(self.submesh) == 0:
             Mesh_str += "submesh = []"
         for ii in range(len(self.submesh)):

@@ -248,13 +248,31 @@ class Output(FrozenClass):
             Output_str += "parent = None " + linesep
         else:
             Output_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Output_str += "simu = " + str(self.simu.as_dict()) + linesep + linesep
+        if self.simu is not None:
+            Output_str += "simu = " + str(self.simu.as_dict()) + linesep + linesep
+        else:
+            Output_str += "simu = None" + linesep + linesep
         Output_str += 'path_res = "' + str(self.path_res) + '"' + linesep
-        Output_str += "geo = " + str(self.geo.as_dict()) + linesep + linesep
-        Output_str += "elec = " + str(self.elec.as_dict()) + linesep + linesep
-        Output_str += "mag = " + str(self.mag.as_dict()) + linesep + linesep
-        Output_str += "struct = " + str(self.struct.as_dict()) + linesep + linesep
-        Output_str += "post = " + str(self.post.as_dict())
+        if self.geo is not None:
+            Output_str += "geo = " + str(self.geo.as_dict()) + linesep + linesep
+        else:
+            Output_str += "geo = None" + linesep + linesep
+        if self.elec is not None:
+            Output_str += "elec = " + str(self.elec.as_dict()) + linesep + linesep
+        else:
+            Output_str += "elec = None" + linesep + linesep
+        if self.mag is not None:
+            Output_str += "mag = " + str(self.mag.as_dict()) + linesep + linesep
+        else:
+            Output_str += "mag = None" + linesep + linesep
+        if self.struct is not None:
+            Output_str += "struct = " + str(self.struct.as_dict()) + linesep + linesep
+        else:
+            Output_str += "struct = None" + linesep + linesep
+        if self.post is not None:
+            Output_str += "post = " + str(self.post.as_dict()) + linesep + linesep
+        else:
+            Output_str += "post = None"
         return Output_str
 
     def __eq__(self, other):

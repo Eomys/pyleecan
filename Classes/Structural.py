@@ -98,7 +98,10 @@ class Structural(FrozenClass):
             Structural_str += "parent = None " + linesep
         else:
             Structural_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Structural_str += "force = " + str(self.force.as_dict())
+        if self.force is not None:
+            Structural_str += "force = " + str(self.force.as_dict()) + linesep + linesep
+        else:
+            Structural_str += "force = None"
         return Structural_str
 
     def __eq__(self, other):

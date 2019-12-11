@@ -287,7 +287,12 @@ class HoleM52(HoleMag):
         HoleM52_str += "H1 = " + str(self.H1) + linesep
         HoleM52_str += "W3 = " + str(self.W3) + linesep
         HoleM52_str += "H2 = " + str(self.H2) + linesep
-        HoleM52_str += "magnet_0 = " + str(self.magnet_0.as_dict())
+        if self.magnet_0 is not None:
+            HoleM52_str += (
+                "magnet_0 = " + str(self.magnet_0.as_dict()) + linesep + linesep
+            )
+        else:
+            HoleM52_str += "magnet_0 = None"
         return HoleM52_str
 
     def __eq__(self, other):

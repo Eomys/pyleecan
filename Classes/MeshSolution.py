@@ -79,8 +79,16 @@ class MeshSolution(FrozenClass):
                 "parent = " + str(type(self.parent)) + " object" + linesep
             )
         MeshSolution_str += 'name = "' + str(self.name) + '"' + linesep
-        MeshSolution_str += "mesh = " + str(self.mesh.as_dict()) + linesep + linesep
-        MeshSolution_str += "solution = " + str(self.solution.as_dict())
+        if self.mesh is not None:
+            MeshSolution_str += "mesh = " + str(self.mesh.as_dict()) + linesep + linesep
+        else:
+            MeshSolution_str += "mesh = None" + linesep + linesep
+        if self.solution is not None:
+            MeshSolution_str += (
+                "solution = " + str(self.solution.as_dict()) + linesep + linesep
+            )
+        else:
+            MeshSolution_str += "solution = None"
         return MeshSolution_str
 
     def __eq__(self, other):
