@@ -23,6 +23,16 @@ try:
 except ImportError as error:
     get_group = error
 
+try:
+    from pyleecan.Methods.Mesh.NodeMat.add_node import add_node
+except ImportError as error:
+    add_node = error
+
+try:
+    from pyleecan.Methods.Mesh.NodeMat.is_exist import is_exist
+except ImportError as error:
+    is_exist = error
+
 
 from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -61,10 +71,30 @@ class NodeMat(Node):
         )
     else:
         get_group = get_group
+    # cf Methods.Mesh.NodeMat.add_node
+    if isinstance(add_node, ImportError):
+        add_node = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use NodeMat method add_node: " + str(add_node))
+            )
+        )
+    else:
+        add_node = add_node
+    # cf Methods.Mesh.NodeMat.is_exist
+    if isinstance(is_exist, ImportError):
+        is_exist = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use NodeMat method is_exist: " + str(is_exist))
+            )
+        )
+    else:
+        is_exist = is_exist
     # save method is available in all object
     save = save
 
-    def __init__(self, coordinate=None, nb_node=None, tag=None, init_dict=None):
+    def __init__(
+        self, coordinate=None, nb_node=0, tag=None, delta=1e-10, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -75,7 +105,7 @@ class NodeMat(Node):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["coordinate", "nb_node", "tag"])
+            check_init_dict(init_dict, ["coordinate", "nb_node", "tag", "delta"])
             # Overwrite default value with init_dict content
             if "coordinate" in list(init_dict.keys()):
                 coordinate = init_dict["coordinate"]
@@ -83,12 +113,15 @@ class NodeMat(Node):
                 nb_node = init_dict["nb_node"]
             if "tag" in list(init_dict.keys()):
                 tag = init_dict["tag"]
+            if "delta" in list(init_dict.keys()):
+                delta = init_dict["delta"]
         # Initialisation by argument
         # coordinate can be None, a ndarray or a list
         set_array(self, "coordinate", coordinate)
         self.nb_node = nb_node
         # tag can be None, a ndarray or a list
         set_array(self, "tag", tag)
+        self.delta = delta
         # Call Node init
         super(NodeMat, self).__init__()
         # The class is frozen (in Node init), for now it's impossible to
@@ -104,7 +137,8 @@ class NodeMat(Node):
             "coordinate = " + linesep + str(self.coordinate) + linesep + linesep
         )
         NodeMat_str += "nb_node = " + str(self.nb_node) + linesep
-        NodeMat_str += "tag = " + linesep + str(self.tag)
+        NodeMat_str += "tag = " + linesep + str(self.tag) + linesep + linesep
+        NodeMat_str += "delta = " + str(self.delta)
         return NodeMat_str
 
     def __eq__(self, other):
@@ -121,6 +155,8 @@ class NodeMat(Node):
         if other.nb_node != self.nb_node:
             return False
         if not array_equal(other.tag, self.tag):
+            return False
+        if other.delta != self.delta:
             return False
         return True
 
@@ -139,6 +175,7 @@ class NodeMat(Node):
             NodeMat_dict["tag"] = None
         else:
             NodeMat_dict["tag"] = self.tag.tolist()
+        NodeMat_dict["delta"] = self.delta
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         NodeMat_dict["__class__"] = "NodeMat"
@@ -150,6 +187,7 @@ class NodeMat(Node):
         self.coordinate = None
         self.nb_node = None
         self.tag = None
+        self.delta = None
         # Set to None the properties inherited from Node
         super(NodeMat, self)._set_None()
 
@@ -205,3 +243,18 @@ class NodeMat(Node):
     # Node tags
     # Type : ndarray
     tag = property(fget=_get_tag, fset=_set_tag, doc=u"""Node tags""")
+
+    def _get_delta(self):
+        """getter of delta"""
+        return self._delta
+
+    def _set_delta(self, value):
+        """setter of delta"""
+        check_var("delta", value, "float")
+        self._delta = value
+
+    # Sensibility for node searching
+    # Type : float
+    delta = property(
+        fget=_get_delta, fset=_set_delta, doc=u"""Sensibility for node searching"""
+    )
