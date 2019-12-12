@@ -31,7 +31,6 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
     res_path: str
         path to the result folder
     """
-    # TODO: Not saving the mesh (only the solution) when the sliding band is activated
 
     idworker = "1"  # For parallelization TODO
 
@@ -90,14 +89,17 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
     os.remove(path_results)
 
     # Create Mesh and Solution dictionaries
-    mesh = Mesh()
-    mesh.element["Triangle"] = ElementMat(
-        connectivity=listElem,
-        nb_elem=NbElem,
-        group=listElem0[:, 6],
-        nb_node_per_element=3,
-    )
-    mesh.node = NodeMat(coordinate=listNd[:, 0:2], nb_node=NbNd)
+    if (not self.is_sliding_band) or (j_t0 == 0):
+        mesh = Mesh()
+        mesh.element["Triangle"] = ElementMat(
+            connectivity=listElem,
+            nb_elem=NbElem,
+            group=listElem0[:, 6],
+            nb_node_per_element=3,
+        )
+        mesh.node = NodeMat(coordinate=listNd[:, 0:2], nb_node=NbNd)
+    else:
+        mesh = None
 
     solution = SolutionFEMM(B=results[:, 0:2], H=results[:, 2:4], mu=results[:, 4])
 

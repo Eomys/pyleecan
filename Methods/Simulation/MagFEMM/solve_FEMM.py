@@ -10,6 +10,7 @@ from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.SolutionFEMM import SolutionFEMM
 from os.path import join
 
+
 def solve_FEMM(self, output, sym, FEMM_dict):
 
     # Loading parameters for readibilitys
@@ -104,7 +105,13 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     output.mag.Phi_wind_stator = Phi_wind_stator
 
     if self.is_get_mesh:
-        output.mag.meshsolution = MeshSolution(name="FEMM_magnetic_mesh", mesh=meshFEMM, solution=solutionFEMM)
+        cond = (not self.is_sliding_band) or (Nt_tot == 1)
+        output.mag.meshsolution = MeshSolution(
+            name="FEMM_magnetic_mesh",
+            mesh=meshFEMM,
+            solution=solutionFEMM,
+            is_same_mesh=cond,
+        )
 
     if self.is_save_FEA:
         save_path_fea = join(save_path, "MeshSolutionFEMM.json")
