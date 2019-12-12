@@ -23,9 +23,6 @@ def add_element(self, node_tags, new_tag, group=-1):
             False if the element already exist or if it is not possible to add the element
     """
     # Check the existence of the element
-    if type(node_tags) is not np.ndarray:
-        return False
-
     if len(np.unique(node_tags)) != self.nb_node_per_element:
         return False
 
