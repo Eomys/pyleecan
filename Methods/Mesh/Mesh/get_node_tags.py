@@ -3,32 +3,26 @@
 import numpy as np
 
 
-def get_node_tags(self, elem_tag=None):
-    """Return a vector of nodes tags in the element(s) elem_tag
+def get_node_tags(self, elem_tag):
+    """Return a vector of (unique) node tags related to a vector of element tags.
+    For only one element, use get connectivity.
 
     Parameters
     ----------
-    self : ElementDict
-        an ElementDict object
-    elem_tag : int
-        some element tags
-
+    self : Mesh
+        an Mesh object
+    elem_tag : numpy.array
+        an element tag
     Returns
     -------
-    node_tags: ndarray
-        Selected nodes coordinates
+    all_node_tag: numpy.array
+        Selected nodes tags
 
     """
+    all_node_tag = np.array([], dtype=int)
+    for ie in range(len(elem_tag)):
+        all_node_tag = np.concatenate(
+            (all_node_tag, self.get_connectivity(elem_tag[ie]))
+        )
 
-    connect = self.connectivity
-    tag = self.tag
-
-    for key in connect:
-        if len(connect[key].shape) == 1:  # If there is only 1 element
-            if tag[key] == elem_tag:
-                return connect[key]
-        else:
-            Ielem = np.where(tag[key] == elem_tag)[0]
-            # There should only one solution
-            if len(Ielem) > 0:
-                return connect[key][Ielem[0]]
+    return np.unique(all_node_tag)

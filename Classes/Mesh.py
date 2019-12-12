@@ -43,6 +43,11 @@ try:
 except ImportError as error:
     interface = error
 
+try:
+    from pyleecan.Methods.Mesh.Mesh.get_node_tags import get_node_tags
+except ImportError as error:
+    get_node_tags = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Element import Element
@@ -126,6 +131,17 @@ class Mesh(FrozenClass):
         )
     else:
         interface = interface
+    # cf Methods.Mesh.Mesh.get_node_tags
+    if isinstance(get_node_tags, ImportError):
+        get_node_tags = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Mesh method get_node_tags: " + str(get_node_tags)
+                )
+            )
+        )
+    else:
+        get_node_tags = get_node_tags
     # save method is available in all object
     save = save
 
