@@ -10,7 +10,7 @@ def is_exist(self, node_tags):
     ----------
     self : ElementMat
         an ElementMat object
-    node_tags : numpy.array
+    node_tags : numpy.ndarray
         an array of node tags
 
     Returns
@@ -18,6 +18,7 @@ def is_exist(self, node_tags):
         bool
             True if the element already exist
     """
+
     # Check the existence of the element
     e = np.array([], dtype=int)
     for nd_tag in node_tags:
