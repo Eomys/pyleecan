@@ -6,7 +6,9 @@ from pyleecan.Functions.FEMM.update_FEMM_simulation import update_FEMM_simulatio
 from pyleecan.Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from pyleecan.Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
 from pyleecan.Classes.MeshSolution import MeshSolution
-
+from pyleecan.Classes.Mesh import Mesh
+from pyleecan.Classes.SolutionFEMM import SolutionFEMM
+from os.path import join
 
 def solve_FEMM(self, output, sym, FEMM_dict):
 
@@ -39,9 +41,11 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     Rgap_mec_ext = lam_ext.comp_radius_mec()
 
     if self.is_get_mesh or self.is_save_FEA:
-        meshFEMM = [MeshSolution() for ii in range(Nt_tot)]
+        meshFEMM = [Mesh() for ii in range(Nt_tot)]
+        solutionFEMM = [SolutionFEMM() for ii in range(Nt_tot)]
     else:
-        meshFEMM = [MeshSolution()]
+        meshFEMM = [Mesh()]
+        solutionFEMM = [SolutionFEMM()]
 
     # Compute the data for each time step
     for ii in range(Nt_tot):
@@ -81,7 +85,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
 
         # Load mesh data & solution
         if self.is_get_mesh or self.is_save_FEA:
-            meshFEMM[ii] = self.get_meshsolution(
+            meshFEMM[ii], solutionFEMM[ii] = self.get_meshsolution(
                 self.is_get_mesh, self.is_save_FEA, save_path, ii
             )
 
@@ -98,7 +102,13 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     if output.mag.Tem_av != 0:
         output.mag.Tem_rip = abs((np_max(Tem) - np_min(Tem)) / output.mag.Tem_av)
     output.mag.Phi_wind_stator = Phi_wind_stator
-    output.mag.meshsolution = meshFEMM
+
+    if self.is_get_mesh:
+        output.mag.meshsolution = MeshSolution(name="FEMM_magnetic_mesh", mesh=meshFEMM, solution=solutionFEMM)
+
+    if self.is_save_FEA:
+        save_path_fea = join(save_path, "MeshSolutionFEMM.json")
+        output.mag.meshsolution.save(save_path_fea)
 
     if hasattr(output.simu.machine.stator, "winding"):
         # Electromotive forces computation (update output)

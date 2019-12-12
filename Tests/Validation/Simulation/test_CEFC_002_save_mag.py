@@ -7,7 +7,6 @@ from pyleecan.Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
 from pyleecan.Classes.InCurrent import InCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ElementDict import ElementDict
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Tests import save_validation_path as save_path
@@ -68,11 +67,8 @@ class test_CEFC_001(TestCase):
             mesh=out.mag.meshsolution[0].mesh,
             field=out.mag.meshsolution[0].solution.get_field("B"),
             title="Magnetic flux",
-            group=GROUP_SC
+            group=GROUP_SC,
         )
-
-        element_dict = ElementDict()
-        element_dict.convert_element(out.mag.meshsolution[0].mesh.element)  # It works !
 
         # out.save(save_path=save_path)
 

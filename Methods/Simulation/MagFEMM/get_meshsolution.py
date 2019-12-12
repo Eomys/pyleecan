@@ -89,25 +89,16 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
     # Delete text files
     os.remove(path_results)
 
-    # Save data
-    if is_get_mesh:
+    # Create Mesh and Solution dictionaries
+    mesh = Mesh()
+    mesh.element["Triangle"] = ElementMat(
+        connectivity=listElem,
+        nb_elem=NbElem,
+        group=listElem0[:, 6],
+        nb_node_per_element=3,
+    )
+    mesh.node = NodeMat(coordinate=listNd[:, 0:2], nb_node=NbNd)
 
-        # Create Mesh and Solution dictionaries
-        mesh = Mesh()
-        mesh.element["Triangle"] = ElementMat(
-            connectivity=listElem,
-            nb_elem=NbElem,
-            group=listElem0[:, 6],
-            nb_node_per_element=3,
-        )
-        mesh.node = NodeMat(coordinate=listNd[:, 0:2], nb_node=NbNd)
+    solution = SolutionFEMM(B=results[:, 0:2], H=results[:, 2:4], mu=results[:, 4])
 
-        solution = SolutionFEMM(B=results[:, 0:2], H=results[:, 2:4], mu=results[:, 4])
-
-        meshFEMM = MeshSolution(name="FEMM_magnetic_mesh", mesh=mesh, solution=solution)
-
-        if is_save_FEA:
-            save_path_fea = join(save_path, "meshFEMM" + str(j_t0) + ".json")
-            meshFEMM.save(save_path_fea)
-
-        return meshFEMM
+    return mesh, solution
