@@ -26,7 +26,7 @@ def get_all_connectivity(self, elem_type=None, group=None):
     connect_select = np.array([])
     tags_select = np.array([])
 
-    for key in self.element:
+    for key in self.element:  # Protect from non-existing elem_type
         if key == elem_type:
             connect_select, tags_select = self.element[key].get_all_connectivity(group)
 

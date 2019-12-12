@@ -48,6 +48,11 @@ try:
 except ImportError as error:
     get_node_tags = error
 
+try:
+    from pyleecan.Methods.Mesh.Mesh.get_vertice import get_vertice
+except ImportError as error:
+    get_vertice = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Element import Element
@@ -142,6 +147,15 @@ class Mesh(FrozenClass):
         )
     else:
         get_node_tags = get_node_tags
+    # cf Methods.Mesh.Mesh.get_vertice
+    if isinstance(get_vertice, ImportError):
+        get_vertice = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Mesh method get_vertice: " + str(get_vertice))
+            )
+        )
+    else:
+        get_vertice = get_vertice
     # save method is available in all object
     save = save
 

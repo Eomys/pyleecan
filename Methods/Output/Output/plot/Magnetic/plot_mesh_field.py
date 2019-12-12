@@ -5,7 +5,15 @@ import numpy as np
 
 
 def plot_mesh_field(
-    self, meshsolution=None, mesh=None, solution=None, field=None, title="No title", group=None
+    self,
+    meshsolution=None,
+    j_t0=0,
+    mesh=None,
+    solution=None,
+    field=None,
+    title="No title",
+    group=None,
+    elem_type="Triangle3",
 ):
     """ Display 2D field amplitude per element. Several possible inputs combinations: meshsolution only,
         mesh and solution, or mesh and field.
@@ -25,30 +33,24 @@ def plot_mesh_field(
     title : str
         Title of the figure
     """
+    if meshsolution is not None:
+        mesh = meshsolution.get_mesh(j_t0)
+        solution = meshsolution.get_solution(j_t0)
 
-    if meshsolution is None:
-        connectivity = mesh.element.get_connectivity()
-        nodes = mesh.node.get_coord()
-        if solution is not None:
-            field = solution.get_field()
-    else:
-        nodes = meshsolution.mesh.node.get_coord()
-        connectivity = meshsolution.mesh.element.get_all_node_tags()
-        field = meshsolution.solution.get_field()
+    if group is not None:
+        mesh = mesh.set_submesh(group)
 
     if field is None:
-        # field = np.linalg.norm(self.mag.mesh[j_t0].solution[0].B, axis=1)
-        field = 1
+        field = solution.get_field(elem_type=elem_type, group=group)
 
-    def showMeshPlot(nodes, elements, values, title):
-        y = nodes[:, 0]
-        z = nodes[:, 1]
+    def showMeshPlot(mesh, elem_type, field, title):
 
-        def triplot(y, z, triangles, values, ax=None, **kwargs):
+        def triplot(mesh, elem_type, values, ax=None, **kwargs):
+
             if not ax:
                 ax = plt.gca()
-            yz = np.c_[y, z]
-            verts = yz[triangles]
+
+            verts = mesh.get_vertice(elem_type)
             pc = matplotlib.collections.PolyCollection(verts, **kwargs)
             pc.set_array(values)
             ax.add_collection(pc)
@@ -57,20 +59,18 @@ def plot_mesh_field(
 
         fig, ax = plt.subplots()
         ax.set_aspect("equal")
-
-        pc = triplot(
-            y, z, np.asarray(elements), values, ax=ax, edgecolor="white", cmap="rainbow"
-        )
+        pc = triplot(mesh, elem_type, field, ax=ax, edgecolor="white", cmap="rainbow")
         fig.colorbar(pc, ax=ax)
+
+        nodes, tags = mesh.get_all_node_coord()
+        x = nodes[:, 0]
+        y = nodes[:, 1]
         ax.plot(
-            y, z, marker="o", markersize=0.1, ls="", color="white"
+            x, y, marker="o", markersize=0.1, ls="", color="white"
         )  # Tu peux mettre "." sur le marker pou avoir des plus petits noeuds
 
         ax.set(title=title, xlabel="Y Axis", ylabel="Z Axis")
-
-        plt.show()
         return fig, ax
 
-    fig, ax = showMeshPlot(nodes, connectivity, field, title)
-
-    return fig, ax
+    fig, ax = showMeshPlot(mesh, elem_type, field, title)
+    fig.show()
