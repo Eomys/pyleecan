@@ -65,9 +65,7 @@ def plot_mesh_field(
         nodes, tags = mesh.get_all_node_coord()
         x = nodes[:, 0]
         y = nodes[:, 1]
-        ax.plot(
-            x, y, marker="o", markersize=0.1, ls="", color="white"
-        )  # Tu peux mettre "." sur le marker pou avoir des plus petits noeuds
+        ax.plot(x, y, marker=".", markersize=0.1, ls="", color="white")
 
         ax.set(title=title, xlabel="Y Axis", ylabel="Z Axis")
         return fig, ax

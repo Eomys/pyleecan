@@ -10,6 +10,9 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Tests import save_validation_path as save_path
+from os.path import join
+
+import matplotlib.pyplot as plt
 from pyleecan.Functions.FEMM import GROUP_SC
 
 simu = Simu1(name="SM_CEFC_002_save_mag", machine=CEFC_Lam, struct=None)
@@ -39,7 +42,7 @@ simu.mag = MagFEMM(
 )
 
 
-class test_CEFC_001(TestCase):
+class test_CEFC_002(TestCase):
     """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
     50 kW peak, 400 Nm peak at 1500 rpm from publication
 
@@ -57,18 +60,12 @@ class test_CEFC_001(TestCase):
         out.post.legend_name = "Slotless lamination"
         simu.run()
 
-        out.plot_mesh_field(
-            mesh=out.mag.meshsolution[0].mesh,
-            field=out.mag.meshsolution[0].solution.get_field("mu"),
-            title="Permeability",
-        )
+        #out.plot_mesh_field(meshsolution=out.mag.meshsolution, title="Permeability")
+        out.plot_mesh_field(mesh=out.mag.meshsolution.mesh[0], title="Permeability", field=out.mag.meshsolution.solution[0].mu)
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_CEFC_002_save_mag"))
 
-        out.plot_mesh_field(
-            mesh=out.mag.meshsolution[0].mesh,
-            field=out.mag.meshsolution[0].solution.get_field("B"),
-            title="Magnetic flux",
-            group=GROUP_SC,
-        )
+
 
         # out.save(save_path=save_path)
 
