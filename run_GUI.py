@@ -1,4 +1,10 @@
-from os.path import abspath, dirname, join
+import sys
+from os.path import dirname, abspath, normpath, join
+
+sys.path.insert(0, normpath(abspath(join(dirname(__file__), ".."))))
+
+from os import mkdir
+from os.path import isdir
 from sys import argv, exit
 
 from PyQt5.QtCore import QTranslator
