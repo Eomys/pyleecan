@@ -7,7 +7,7 @@ import numpy as np
 
 
 class unittest_get_all_connectivity(TestCase):
-    """unittest for elements and nodes getter methods"""
+    """unittest for Mesh and Element get_all_connectivity methods"""
 
     def setUp(self):
         self.mesh = Mesh()
