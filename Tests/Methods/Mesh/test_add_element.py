@@ -85,7 +85,7 @@ class unittest_add_element(TestCase):
         self.mesh.add_element(np.array([0, 1]), "Segment2")
         self.mesh.add_element(np.array([1, 2]), "Segment2")
         self.mesh.add_element(np.array([1, 2, 3]), "Triangle3")
-        self.mesh.add_element(np.array([0, 1]), "Segment2") # already exist
+        self.mesh.add_element(np.array([0, 1]), "Segment2")  # already exist
 
         solution = np.array([[0, 1], [1, 2]])
         testA = np.sum(abs(self.mesh.element["Segment2"].connectivity - solution))
@@ -165,4 +165,3 @@ class unittest_add_element(TestCase):
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
-

@@ -73,12 +73,7 @@ class unittest_interface(TestCase):
         solution = np.array([[0, 1], [1, 5]])
         result = new_seg_mesh.element["Segment2"].connectivity
         testA = np.sum(abs(result - solution))
-        msg = (
-            "Wrong result: returned "
-            + str(result)
-            + ", expected: "
-            + str(solution)
-        )
+        msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
@@ -104,12 +99,7 @@ class unittest_interface(TestCase):
         solution = np.array([[0, 1], [1, 5]])
         result = new_seg_mesh.element["Segment2"].connectivity
         testA = np.sum(abs(result - solution))
-        msg = (
-                "Wrong result: returned "
-                + str(result)
-                + ", expected: "
-                + str(solution)
-        )
+        msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
@@ -133,13 +123,6 @@ class unittest_interface(TestCase):
         solution = np.array([])
         result = new_seg_mesh.element["Segment2"].connectivity
         testA = np.sum(abs(result - solution))
-        msg = (
-                "Wrong result: returned "
-                + str(result)
-                + ", expected: "
-                + str(solution)
-        )
+        msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
-
-

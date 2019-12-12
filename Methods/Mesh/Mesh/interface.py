@@ -96,9 +96,7 @@ def interface(self, other_mesh):
                 tmp_element_tags_other_unique[ind] == tmp_element_tags_other
             )[0]
             nb_element_tags_other_unique[ind] = len(Ipos)
-            nodes_tmp = other_mesh.get_node_tags(
-                tmp_element_tags_other_unique[ind]
-            )
+            nodes_tmp = other_mesh.get_node_tags(tmp_element_tags_other_unique[ind])
             nodes_tmp_interf = np.array([], dtype=int)
             for ipos in range(len(nodes_tmp)):
                 if nodes_tmp[ipos] in interface_nodes_tags:

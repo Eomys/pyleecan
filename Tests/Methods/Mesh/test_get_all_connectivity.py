@@ -32,12 +32,7 @@ class unittest_get_all_connectivity(TestCase):
         result, tags = self.mesh.get_all_connectivity("Segment2")
 
         testA = np.sum(abs(result - node_tags))
-        msg = (
-            "Wrong output: returned "
-            + str(result)
-            + ", expected: "
-            + str(node_tags)
-        )
+        msg = "Wrong output: returned " + str(result) + ", expected: " + str(node_tags)
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
@@ -98,9 +93,7 @@ class unittest_get_all_connectivity(TestCase):
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-        result, tags = self.mesh.get_all_connectivity(
-            "Triangle3", group=3
-        )
+        result, tags = self.mesh.get_all_connectivity("Triangle3", group=3)
         solution = node_tags
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
@@ -115,9 +108,7 @@ class unittest_get_all_connectivity(TestCase):
         self.mesh.add_element([1, 2, 3], "Triangle3")
         self.mesh.add_element([2, 3, 0], "Triangle3", group=3)
         self.mesh.add_element([2, 1, 0], "Triangle3", group=3)
-        result, tags = self.mesh.get_all_connectivity(
-            "Triangle3", group=3
-        )
+        result, tags = self.mesh.get_all_connectivity("Triangle3", group=3)
         solution = np.array([[2, 3, 0], [2, 1, 0]])
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
