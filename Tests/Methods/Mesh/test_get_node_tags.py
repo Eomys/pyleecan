@@ -2,7 +2,6 @@
 
 from unittest import TestCase
 from pyleecan.Classes.Mesh import Mesh
-from pyleecan.Classes.ElementDict import ElementDict
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.ElementMat import ElementMat
 import numpy as np
@@ -11,21 +10,28 @@ import numpy as np
 class unittest_get_node_tags(TestCase):
     """unittest for elements and nodes getter methods"""
 
-    def test_ElementDict_NodeMat(self):
-        """unittest with ElementDict and NodeMat objects"""
-        # Init
-        mesh = Mesh()
-        mesh.element = ElementDict()
-        mesh.node = NodeMat()
-        mesh.node.coordinate = np.array([[0, 0], [1, 0], [1, 2], [2, 3]])
-        mesh.element.connectivity = {"Triangle": np.array([[0, 1, 2], [1, 2, 3]])}
-        mesh.element.tag = {"Triangle": np.array([1, 2])}
-        mesh.element.nb_elem = {"Triangle": 2}
-        mesh.element.nb_node_per_element = {"Triangle": 3}
-        # Method test 1
-        node_tags = mesh.element.get_node_tags(2)
-        # Check result
-        solution = np.array([1, 2, 3])
+    def setUp(self):
+        self.mesh = Mesh()
+        self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
+        self.mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)
+        self.mesh.node = NodeMat()
+        self.mesh.node.add_node(np.array([0, 0]))
+        self.mesh.node.add_node(np.array([1, 0]))
+        self.mesh.node.add_node(np.array([1, 2]))
+        self.mesh.node.add_node(np.array([2, 3]))
+        self.mesh.node.add_node(np.array([3, 3]))
+
+        self.mesh.add_element(np.array([0, 1, 2]), "Triangle3", group=int(3))
+        self.mesh.add_element(np.array([1, 2, 3]), "Triangle3", group=int(3))
+        self.mesh.add_element(np.array([4, 2, 3]), "Triangle3", group=int(2))
+        self.mesh.add_element(np.array([4, 3]), "Segment2", group=int(2))
+
+    def test_ElementMat_NodeMat_Triangle3(self):
+        """unittest with ElementMat and NodeMat objects, only Triangle3 elements are defined"""
+
+        node_tags = self.mesh.get_node_tags(elem_tag=np.array([1, 2], dtype=int))
+        solution = np.array([1, 2, 3, 4])
+
         testA = np.sum(abs(solution - node_tags))
         msg = (
             "Wrong projection: returned "
@@ -36,76 +42,12 @@ class unittest_get_node_tags(TestCase):
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
+    def test_ElementMat_NodeMat_MixedElement(self):
+        """unittest with ElementMat and NodeMat objects, both Triangle3 and Segment2 elements are defined"""
         # Method test 2
-        node_tags = mesh.element.get_node_tags(elem_tag=1)
+        node_tags = self.mesh.get_node_tags(np.array([2, 3]))
         # Check result
-        solution = np.array([0, 1, 2])
-        testA = np.sum(abs(solution - node_tags))
-        msg = (
-            "Wrong projection: returned "
-            + str(node_tags)
-            + ", expected: "
-            + str(solution)
-        )
-        DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
-
-        # Method test 3
-        node_tags = mesh.element.get_all_node_tags()
-        # Check result
-        solution = np.array([0, 1, 2, 3])
-        testA = np.sum(abs(solution - node_tags))
-        msg = (
-            "Wrong projection: returned "
-            + str(node_tags)
-            + ", expected: "
-            + str(solution)
-        )
-        DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
-
-    def test_ElementMat_NodeMat(self):
-        """unittest with ElementMat and NodeMat objects"""
-        # Init
-        mesh = Mesh()
-        mesh.element = ElementMat()
-        mesh.node = NodeMat()
-        mesh.node.coordinate = np.array([[0, 0], [1, 0], [1, 2], [2, 3]])
-        mesh.element.connectivity = np.array([[0, 1, 2], [1, 2, 3]])
-        mesh.element.nb_elem = 2
-        mesh.element.nb_node_per_element = 3
-        # Method test 1
-        node_tags = mesh.element.get_node_tags(1)
-        # Check result
-        solution = np.array([1, 2, 3])
-        testA = np.sum(abs(solution - node_tags))
-        msg = (
-            "Wrong projection: returned "
-            + str(node_tags)
-            + ", expected: "
-            + str(solution)
-        )
-        DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
-
-        # Method test 2
-        node_tags = mesh.element.get_node_tags(np.array([0, 1]))
-        # Check result
-        solution = np.array([0, 1, 2, 3])
-        testA = np.sum(abs(solution - node_tags))
-        msg = (
-            "Wrong projection: returned "
-            + str(node_tags)
-            + ", expected: "
-            + str(solution)
-        )
-        DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
-
-        # Method test 3
-        node_tags = mesh.element.get_node_tags()
-        # Check result
-        solution = np.array([0, 1, 2, 3])
+        solution = np.array([2, 3, 4])
         testA = np.sum(abs(solution - node_tags))
         msg = (
             "Wrong projection: returned "

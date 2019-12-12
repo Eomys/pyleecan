@@ -1,0 +1,29 @@
+[
+    {
+        "cls": "VentilationCirc",
+        "name": "Alpha0",
+        "widget": [
+            "in_Alpha0",
+            "lf_Alpha0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "VentilationCirc",
+        "name": "D0",
+        "widget": [
+            "in_D0",
+            "lf_D0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "VentilationCirc",
+        "name": "H0",
+        "widget": [
+            "in_H0",
+            "lf_H0"
+        ],
+        "xls": "Slot"
+    }
+]

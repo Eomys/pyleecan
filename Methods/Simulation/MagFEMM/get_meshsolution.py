@@ -31,7 +31,6 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
     res_path: str
         path to the result folder
     """
-    # TODO: Not saving the mesh (only the solution) when the sliding band is activated
 
     idworker = "1"  # For parallelization TODO
 
@@ -89,29 +88,20 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
     # Delete text files
     os.remove(path_results)
 
-    # Save data
-    if is_get_mesh:
-
-        # Create Mesh and Solution dictionaries
+    # Create Mesh and Solution dictionaries
+    if (not self.is_sliding_band) or (j_t0 == 0):
         mesh = Mesh()
-        mesh.element["Triangle"] = ElementMat(
+        mesh.element["Triangle3"] = ElementMat(
             connectivity=listElem,
             nb_elem=NbElem,
             group=listElem0[:, 6],
             nb_node_per_element=3,
+            tag=np.linspace(0, NbElem-1, NbElem)
         )
-        mesh.node = NodeMat(
-            coordinate=listNd[:, 0:2],
-            nb_node=NbNd,
-            node_tag=np.arange(start=0, stop=NbNd, step=1),
-        )
+        mesh.node = NodeMat(coordinate=listNd[:, 0:2], nb_node=NbNd, tag=np.linspace(0, NbNd-1, NbNd))
+    else:
+        mesh = None
 
-        solution = SolutionFEMM(B=results[:, 0:2], H=results[:, 2:4], mu=results[:, 4])
+    solution = SolutionFEMM(B=results[:, 0:2], H=results[:, 2:4], mu=results[:, 4])
 
-        meshFEMM = MeshSolution(name="FEMM_magnetic_mesh", mesh=mesh, solution=solution)
-
-        if is_save_FEA:
-            save_path_fea = join(save_path, "meshFEMM" + str(j_t0) + ".json")
-            meshFEMM.save(save_path_fea)
-
-        return meshFEMM
+    return mesh, solution

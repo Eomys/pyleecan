@@ -68,6 +68,7 @@ class MachineSync(Machine):
         shaft=-1,
         name="default_machine",
         desc="",
+        type_machine=1,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -89,7 +90,8 @@ class MachineSync(Machine):
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict, ["rotor", "stator", "frame", "shaft", "name", "desc"]
+                init_dict,
+                ["rotor", "stator", "frame", "shaft", "name", "desc", "type_machine"],
             )
             # Overwrite default value with init_dict content
             if "rotor" in list(init_dict.keys()):
@@ -104,10 +106,18 @@ class MachineSync(Machine):
                 name = init_dict["name"]
             if "desc" in list(init_dict.keys()):
                 desc = init_dict["desc"]
+            if "type_machine" in list(init_dict.keys()):
+                type_machine = init_dict["type_machine"]
         # Initialisation by argument
         # Call Machine init
         super(MachineSync, self).__init__(
-            rotor=rotor, stator=stator, frame=frame, shaft=shaft, name=name, desc=desc
+            rotor=rotor,
+            stator=stator,
+            frame=frame,
+            shaft=shaft,
+            name=name,
+            desc=desc,
+            type_machine=type_machine,
         )
         # The class is frozen (in Machine init), for now it's impossible to
         # add new properties

@@ -11,11 +11,11 @@ from pyleecan.Classes.CondType21 import CondType21
 from pyleecan.Classes.CondType22 import CondType22
 from pyleecan.Classes.Conductor import Conductor
 from pyleecan.Classes.Element import Element
-from pyleecan.Classes.ElementDict import ElementDict
 from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.Force import Force
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Frame import Frame
+from pyleecan.Classes.GUIOption import GUIOption
 from pyleecan.Classes.Hole import Hole
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.HoleM51 import HoleM51
@@ -48,6 +48,7 @@ from pyleecan.Classes.MachineDFIM import MachineDFIM
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 from pyleecan.Classes.MachineSCIM import MachineSCIM
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
+from pyleecan.Classes.MachineSRM import MachineSRM
 from pyleecan.Classes.MachineSyRM import MachineSyRM
 from pyleecan.Classes.MachineSync import MachineSync
 from pyleecan.Classes.MachineWRSM import MachineWRSM
@@ -117,6 +118,7 @@ from pyleecan.Classes.Structural import Structural
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.Surface import Surface
 from pyleecan.Classes.Trapeze import Trapeze
+from pyleecan.Classes.Unit import Unit
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.VentilationTrap import VentilationTrap

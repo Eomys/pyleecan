@@ -184,7 +184,12 @@ class Magnet(FrozenClass):
             Magnet_str += "parent = None " + linesep
         else:
             Magnet_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Magnet_str += "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
+        if self.mat_type is not None:
+            Magnet_str += (
+                "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
+            )
+        else:
+            Magnet_str += "mat_type = None" + linesep + linesep
         Magnet_str += "type_magnetization = " + str(self.type_magnetization) + linesep
         Magnet_str += "Lmag = " + str(self.Lmag)
         return Magnet_str

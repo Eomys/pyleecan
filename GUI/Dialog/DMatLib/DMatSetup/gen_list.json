@@ -1,0 +1,253 @@
+[
+    {
+        "cls": "Material",
+        "name": "name",
+        "widget": [
+            "in_name",
+            "le_name"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "Material",
+        "name": "is_isotropic",
+        "widget": [
+            "is_isotropic"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatElectrical",
+        "name": "rho",
+        "widget": [
+            "in_rho_elec",
+            "lf_rho_elec",
+            "unit_rho_elec"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatEconomical",
+        "name": "cost_unit",
+        "widget": [
+            "in_cost_unit",
+            "lf_cost_unit",
+            "unit_cost_unit"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatHT",
+        "name": "Cp",
+        "widget": [
+            "in_Cp",
+            "lf_Cp",
+            "unit_Cp"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatHT",
+        "name": "alpha",
+        "widget": [
+            "in_alpha",
+            "lf_alpha"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatHT",
+        "name": "lambda_x",
+        "widget": [
+            "in_L",
+            "unit_L",
+            "lf_L"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatHT",
+        "name": "lambda_x",
+        "widget": [
+            "in_Lx",
+            "lf_Lx"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatHT",
+        "name": "lambda_y",
+        "widget": [
+            "in_Ly",
+            "lf_Ly"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatHT",
+        "name": "lambda_z",
+        "widget": [
+            "in_Lz",
+            "lf_Lz"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "rho",
+        "widget": [
+            "in_rho_meca",
+            "lf_rho_meca",
+            "unit_rho_meca"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Ex",
+        "widget": [
+            "in_E",
+            "lf_E",
+            "unit_E"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Ex",
+        "widget": [
+            "in_Ex",
+            "lf_Ex"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Ey",
+        "widget": [
+            "in_Ey",
+            "lf_Ey"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Ez",
+        "widget": [
+            "in_Ez",
+            "lf_Ez"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Gxy",
+        "widget": [
+            "in_G",
+            "lf_G",
+            "unit_G"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Gxy",
+        "widget": [
+            "in_Gxy",
+            "lf_Gxy"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Gxz",
+        "widget": [
+            "in_Gxz",
+            "lf_Gxz"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Gyz",
+        "widget": [
+            "in_Gyz",
+            "lf_Gyz"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "nu_xy",
+        "widget": [
+            "in_nu",
+            "lf_nu"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "nu_xy",
+        "widget": [
+            "in_nu_xy",
+            "lf_nu_xy"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "nu_xz",
+        "widget": [
+            "in_nu_xz",
+            "lf_nu_xz"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "nu_yz",
+        "widget": [
+            "in_nu_yz",
+            "lf_nu_yz"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatMagnetics",
+        "name": "mur_lin",
+        "widget": [
+            "in_mur_lin",
+            "lf_mur_lin"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatMagnet",
+        "name": "Brm20",
+        "widget": [
+            "in_Brm20",
+            "lf_Brm20",
+            "unit_Brm20"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatMagnet",
+        "name": "alpha_Br",
+        "widget": [
+            "in_alpha_Br",
+            "lf_alpha_Br"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatLamination",
+        "name": "Wlam",
+        "widget": [
+            "in_Wlam",
+            "lf_Wlam",
+            "unit_Wlam"
+        ],
+        "xls": "Material"
+    }
+]

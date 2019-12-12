@@ -1,0 +1,11 @@
+[
+    {
+        "cls": "Winding",
+        "name": "p",
+        "widget": [
+            "si_p",
+            "in_p"
+        ],
+        "xls": "Machine"
+    }
+]

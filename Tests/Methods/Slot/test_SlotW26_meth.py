@@ -22,29 +22,29 @@ slotW26_test = list()
 
 # Internal Slot
 lam = LamSlot(is_internal=True, Rext=0.1)
-lam.slot = SlotW26(Zs=12, H0=10e-3, W0=10e-3, H1=0.025, R1=0.01)
+lam.slot = SlotW26(Zs=12, H0=10e-3, W0=10e-3, H1=0.025, R1=0.01, R2=0.0075)
 slotW26_test.append(
     {
         "test_obj": lam,
-        "S_exp": 9.059346e-4,
+        "S_exp": 7.7471e-4,
         "Ao": 0.10004,
-        "Aw": 0.271,
-        "SW_exp": 8.05100657e-4,
-        "H_exp": 5.3785e-2,
+        "Aw": 0.2362668,
+        "SW_exp": 6.7387e-4,
+        "H_exp": 5.1285e-2,
     }
 )
 
 # External Slot
 lam = LamSlot(is_internal=False, Rint=0.1)
-lam.slot = SlotW26(Zs=12, H0=10e-3, W0=10e-3, H1=0.025, R1=0.01)
+lam.slot = SlotW26(Zs=12, H0=10e-3, W0=10e-3, H1=0.025, R1=0.01, R2=0.0075)
 slotW26_test.append(
     {
         "test_obj": lam,
-        "S_exp": 9.042666e-4,
+        "S_exp": 7.73044e-4,
         "Ao": 0.10004,
-        "Aw": 0.14001078,
-        "SW_exp": 8.05100657e-4,
-        "H_exp": 5.3535e-2,
+        "Aw": 0.1254996,
+        "SW_exp": 6.7387e-4,
+        "H_exp": 5.103517e-2,
     }
 )
 

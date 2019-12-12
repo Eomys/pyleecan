@@ -9,16 +9,6 @@ from pyleecan.Classes.Element import Element
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Mesh.ElementMat.get_group import get_group
-except ImportError as error:
-    get_group = error
-
-try:
-    from pyleecan.Methods.Mesh.ElementMat.get_node_tags import get_node_tags
-except ImportError as error:
-    get_node_tags = error
-
-try:
     from pyleecan.Methods.Mesh.ElementMat.get_node2element import get_node2element
 except ImportError as error:
     get_node2element = error
@@ -38,6 +28,33 @@ try:
 except ImportError as error:
     get_connectivity = error
 
+try:
+    from pyleecan.Methods.Mesh.ElementMat.get_all_connectivity import (
+        get_all_connectivity,
+    )
+except ImportError as error:
+    get_all_connectivity = error
+
+try:
+    from pyleecan.Methods.Mesh.ElementMat.is_exist import is_exist
+except ImportError as error:
+    is_exist = error
+
+try:
+    from pyleecan.Methods.Mesh.ElementMat.get_new_tag import get_new_tag
+except ImportError as error:
+    get_new_tag = error
+
+try:
+    from pyleecan.Methods.Mesh.ElementMat.get_all_node_tags import get_all_node_tags
+except ImportError as error:
+    get_all_node_tags = error
+
+try:
+    from pyleecan.Methods.Mesh.ElementMat.get_group import get_group
+except ImportError as error:
+    get_group = error
+
 
 from numpy import array, array_equal
 from pyleecan.Classes.check import InitUnKnowClassError
@@ -49,26 +66,6 @@ class ElementMat(Element):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.ElementMat.get_group
-    if isinstance(get_group, ImportError):
-        get_group = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use ElementMat method get_group: " + str(get_group))
-            )
-        )
-    else:
-        get_group = get_group
-    # cf Methods.Mesh.ElementMat.get_node_tags
-    if isinstance(get_node_tags, ImportError):
-        get_node_tags = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ElementMat method get_node_tags: " + str(get_node_tags)
-                )
-            )
-        )
-    else:
-        get_node_tags = get_node_tags
     # cf Methods.Mesh.ElementMat.get_node2element
     if isinstance(get_node2element, ImportError):
         get_node2element = property(
@@ -116,6 +113,59 @@ class ElementMat(Element):
         )
     else:
         get_connectivity = get_connectivity
+    # cf Methods.Mesh.ElementMat.get_all_connectivity
+    if isinstance(get_all_connectivity, ImportError):
+        get_all_connectivity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ElementMat method get_all_connectivity: "
+                    + str(get_all_connectivity)
+                )
+            )
+        )
+    else:
+        get_all_connectivity = get_all_connectivity
+    # cf Methods.Mesh.ElementMat.is_exist
+    if isinstance(is_exist, ImportError):
+        is_exist = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ElementMat method is_exist: " + str(is_exist))
+            )
+        )
+    else:
+        is_exist = is_exist
+    # cf Methods.Mesh.ElementMat.get_new_tag
+    if isinstance(get_new_tag, ImportError):
+        get_new_tag = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ElementMat method get_new_tag: " + str(get_new_tag)
+                )
+            )
+        )
+    else:
+        get_new_tag = get_new_tag
+    # cf Methods.Mesh.ElementMat.get_all_node_tags
+    if isinstance(get_all_node_tags, ImportError):
+        get_all_node_tags = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ElementMat method get_all_node_tags: "
+                    + str(get_all_node_tags)
+                )
+            )
+        )
+    else:
+        get_all_node_tags = get_all_node_tags
+    # cf Methods.Mesh.ElementMat.get_group
+    if isinstance(get_group, ImportError):
+        get_group = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ElementMat method get_group: " + str(get_group))
+            )
+        )
+    else:
+        get_group = get_group
     # save method is available in all object
     save = save
 
@@ -125,6 +175,7 @@ class ElementMat(Element):
         nb_elem=0,
         nb_node_per_element=0,
         group=None,
+        tag=None,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -138,7 +189,8 @@ class ElementMat(Element):
 
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict, ["connectivity", "nb_elem", "nb_node_per_element", "group"]
+                init_dict,
+                ["connectivity", "nb_elem", "nb_node_per_element", "group", "tag"],
             )
             # Overwrite default value with init_dict content
             if "connectivity" in list(init_dict.keys()):
@@ -149,6 +201,8 @@ class ElementMat(Element):
                 nb_node_per_element = init_dict["nb_node_per_element"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
+            if "tag" in list(init_dict.keys()):
+                tag = init_dict["tag"]
         # Initialisation by argument
         # connectivity can be None, a ndarray or a list
         set_array(self, "connectivity", connectivity)
@@ -156,6 +210,8 @@ class ElementMat(Element):
         self.nb_node_per_element = nb_node_per_element
         # group can be None, a ndarray or a list
         set_array(self, "group", group)
+        # tag can be None, a ndarray or a list
+        set_array(self, "tag", tag)
         # Call Element init
         super(ElementMat, self).__init__()
         # The class is frozen (in Element init), for now it's impossible to
@@ -174,7 +230,8 @@ class ElementMat(Element):
         ElementMat_str += (
             "nb_node_per_element = " + str(self.nb_node_per_element) + linesep
         )
-        ElementMat_str += "group = " + linesep + str(self.group)
+        ElementMat_str += "group = " + linesep + str(self.group) + linesep + linesep
+        ElementMat_str += "tag = " + linesep + str(self.tag)
         return ElementMat_str
 
     def __eq__(self, other):
@@ -194,6 +251,8 @@ class ElementMat(Element):
             return False
         if not array_equal(other.group, self.group):
             return False
+        if not array_equal(other.tag, self.tag):
+            return False
         return True
 
     def as_dict(self):
@@ -212,6 +271,10 @@ class ElementMat(Element):
             ElementMat_dict["group"] = None
         else:
             ElementMat_dict["group"] = self.group.tolist()
+        if self.tag is None:
+            ElementMat_dict["tag"] = None
+        else:
+            ElementMat_dict["tag"] = self.tag.tolist()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         ElementMat_dict["__class__"] = "ElementMat"
@@ -224,6 +287,7 @@ class ElementMat(Element):
         self.nb_elem = None
         self.nb_node_per_element = None
         self.group = None
+        self.tag = None
         # Set to None the properties inherited from Element
         super(ElementMat, self)._set_None()
 
@@ -302,3 +366,21 @@ class ElementMat(Element):
         fset=_set_group,
         doc=u"""Attribute a group number (int) to each element . This group number should correspond to a subpart of the machine.""",
     )
+
+    def _get_tag(self):
+        """getter of tag"""
+        return self._tag
+
+    def _set_tag(self, value):
+        """setter of tag"""
+        if type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("tag", value, "ndarray")
+        self._tag = value
+
+    # Element tags
+    # Type : ndarray
+    tag = property(fget=_get_tag, fset=_set_tag, doc=u"""Element tags""")

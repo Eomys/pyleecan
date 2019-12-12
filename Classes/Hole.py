@@ -148,7 +148,10 @@ class Hole(FrozenClass):
         else:
             Hole_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Hole_str += "Zh = " + str(self.Zh) + linesep
-        Hole_str += "mat_void = " + str(self.mat_void.as_dict())
+        if self.mat_void is not None:
+            Hole_str += "mat_void = " + str(self.mat_void.as_dict()) + linesep + linesep
+        else:
+            Hole_str += "mat_void = None"
         return Hole_str
 
     def __eq__(self, other):

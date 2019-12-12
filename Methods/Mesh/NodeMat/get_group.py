@@ -2,6 +2,7 @@
 
 import numpy as np
 
+
 def get_group(self, element):
     """Define a new NodeMat object based on a set of elements.
 
@@ -24,11 +25,11 @@ def get_group(self, element):
     node_tags = element.get_all_node_tags()
 
     node.nb_node = len(node_tags)
-    node.coordinate = np.zeros((node.nb_node, 2)) # TO BE Extended to 3D
-    node.node_tag = np.zeros((node.nb_node))
+    node.coordinate = np.zeros((node.nb_node, 2))  # TO BE Extended to 3D
+    node.tag = np.zeros((node.nb_node))
     for ind in range(node.nb_node):
-        Ipos = np.where(node_tags[ind] == self.node_tag)[0]
+        Ipos = np.where(node_tags[ind] == self.tag)[0]
         node.coordinate[ind, :] = self.coordinate[Ipos, :]
-        node.node_tag[ind] = self.node_tag[Ipos]
+        node.tag[ind] = self.tag[Ipos]
 
     return node

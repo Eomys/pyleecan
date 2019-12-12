@@ -757,15 +757,18 @@ def generate_str(gen_dict, class_dict):
             )
         else:  # For pyleecan type print the dict (from as_dict)
             # Add => < "MyClass = "+str(self.my_var.as_dict()) >to var_str
+            var_str += TAB2 + "if self." + prop["name"] + " is not None:\n"
             var_str += (
-                TAB2
+                TAB3
                 + class_name
                 + '_str += "'
                 + prop["name"]
                 + ' = " + str(self.'
                 + prop["name"]
-                + ".as_dict())"
+                + ".as_dict()) + linesep + linesep\n"
             )
+            var_str += TAB2 + "else:\n"
+            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = None"'
 
         # Add linesep except for the last line
         if ii == len(class_dict["properties"]) - 1:

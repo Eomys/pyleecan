@@ -1,0 +1,20 @@
+[
+    {
+        "cls": "Winding",
+        "name": "Ntcoil",
+        "widget": [
+            "in_Ntcoil",
+            "si_Ntcoil"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "Winding",
+        "name": "Npcpp",
+        "widget": [
+            "in_Npcpp",
+            "si_Npcpp"
+        ],
+        "xls": "Machine"
+    }
+]

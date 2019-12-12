@@ -1,0 +1,226 @@
+[
+    {
+        "cls": "Material",
+        "name": "name",
+        "widget": [
+            "out_name"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "Material",
+        "name": "is_isotropic",
+        "widget": [
+            "out_iso"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatElectrical",
+        "name": "rho",
+        "widget": [
+            "out_rho_elec"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatElectrical",
+        "name": "epsr",
+        "widget": [
+            "out_epsr"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatEconomical",
+        "name": "cost_unit",
+        "widget": [
+            "out_cost_unit"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatHT",
+        "name": "Cp",
+        "widget": [
+            "out_Cp"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatHT",
+        "name": "alpha",
+        "widget": [
+            "out_alpha"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatHT",
+        "name": "lambda_x",
+        "widget": [
+            "out_L"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatHT",
+        "name": "lambda_x",
+        "widget": [
+            "out_LX"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatHT",
+        "name": "lambda_y",
+        "widget": [
+            "out_LY"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatHT",
+        "name": "lambda_z",
+        "widget": [
+            "out_LZ"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "rho",
+        "widget": [
+            "out_rho_meca"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Ex",
+        "widget": [
+            "out_E"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Ex",
+        "widget": [
+            "out_EX"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Ey",
+        "widget": [
+            "out_EY"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Ez",
+        "widget": [
+            "out_EZ"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Gxy",
+        "widget": [
+            "out_G"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Gxy",
+        "widget": [
+            "out_GXY"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Gxz",
+        "widget": [
+            "out_GXZ"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "Gyz",
+        "widget": [
+            "out_GYZ"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "nu_xy",
+        "widget": [
+            "out_nu"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "nu_xy",
+        "widget": [
+            "out_nu_XY"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "nu_xz",
+        "widget": [
+            "out_nu_XZ"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatStructural",
+        "name": "nu_yz",
+        "widget": [
+            "out_nu_YZ"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatMagnetics",
+        "name": "mur_lin",
+        "widget": [
+            "out_mur_lin"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatMagnet",
+        "name": "Brm20",
+        "widget": [
+            "out_Brm20"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatMagnet",
+        "name": "alpha_Br",
+        "widget": [
+            "out_alpha_Br"
+        ],
+        "xls": "Material"
+    },
+    {
+        "cls": "MatLamination",
+        "name": "Wlam",
+        "widget": [
+            "out_wlam"
+        ],
+        "xls": "Material"
+    }
+]

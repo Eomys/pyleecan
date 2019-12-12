@@ -1,0 +1,20 @@
+[
+    {
+        "cls": "MagnetType10",
+        "name": "Hmag",
+        "widget": [
+            "in_Hmag",
+            "lf_Hmag"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "MagnetType10",
+        "name": "Wmag",
+        "widget": [
+            "in_Wmag",
+            "lf_Wmag"
+        ],
+        "xls": "Machine"
+    }
+]

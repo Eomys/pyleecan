@@ -1,0 +1,385 @@
+# -*- coding: utf-8 -*-
+"""@package pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension
+Second Page of the Machine Setup: Machine Dimension
+@date Created on Thu May 21 17:38:19 2015
+@copyright (C) 2015-2016 EOMYS ENGINEERING.
+@author pierre_b
+@todo unittest it
+"""
+
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QMessageBox, QWidget
+
+from pyleecan.Classes.Frame import Frame
+from pyleecan.GUI import gui_option
+from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.Ui_SMachineDimension import (
+    Ui_SMachineDimension,
+)
+from pyleecan.GUI.Resources import pixmap_dict
+
+
+class SMachineDimension(Ui_SMachineDimension, QWidget):
+    """Step to setup the Machine dimension
+    """
+
+    # Signal to DMachineSetup to know that the save popup is needed
+    saveNeeded = pyqtSignal()
+    # Information for the DMachineSetup nav
+    step_name = "Machine Dimensions"
+
+    def __init__(self, machine, matlib=[], is_stator=False):
+        """Initialize the widget according to machine
+
+        Parameters
+        ----------
+        self : SMachineDimension
+            A SMachineDimension widget
+        machine : Machine
+            current machine to edit
+        matlib : list
+            List of available Material
+        is_stator : bool
+            To adapt the GUI to set either the stator or the rotor
+        """
+
+        # Build the interface according to the .ui file
+        QWidget.__init__(self)
+        self.setupUi(self)
+
+        # Saving arguments
+        self.machine = machine
+        self.matlib = matlib
+        self.is_stator = is_stator
+
+        # Set FloatEdit unit
+        self.lf_SRint.unit = "m"
+        self.lf_SRext.unit = "m"
+        self.lf_RRext.unit = "m"
+        self.lf_RRint.unit = "m"
+        self.lf_Wfra.unit = "m"
+        self.lf_Lfra.unit = "m"
+        # Set unit name (m ou mm)
+        wid_list = [
+            self.unit_SRint,
+            self.unit_SRext,
+            self.unit_RRext,
+            self.unit_RRint,
+            self.unit_Wfra,
+            self.unit_Lfra,
+        ]
+        for wid in wid_list:
+            wid.setText(gui_option.unit.get_m_name())
+
+        # Initialize the GUI with the current machine value
+        self.lf_SRint.setValue(machine.stator.Rint)
+        self.lf_SRext.setValue(machine.stator.Rext)
+        self.lf_RRint.setValue(machine.rotor.Rint)
+        self.lf_RRext.setValue(machine.rotor.Rext)
+
+        self.set_airgap()  # Update out_airgap if possible
+
+        if (
+            machine.frame is None
+            or machine.frame.Rint is None
+            or machine.frame.Rext is None
+            or machine.frame.comp_height_eq() == 0
+        ):
+            self.g_frame.setChecked(False)
+            self.lf_Wfra.clear()  # Empty spinbox
+            self.lf_Lfra.clear()  # Empty spinbox
+        else:
+            self.g_frame.setChecked(True)
+            Wfra = machine.frame.comp_height_eq()
+            self.lf_Wfra.setText(format(gui_option.unit.get_m(Wfra), ".6g"))
+            if machine.frame.Lfra is not None:
+                self.lf_Lfra.setValue(machine.frame.Lfra)
+
+        # Adapt the GUI to the topology of the machine
+        if not machine.rotor.is_internal:  # External Rotor
+            self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_Ext_Rotor"]))
+            self.g_shaft.hide()
+            self.g_frame.hide()
+        elif (
+            machine.shaft is None
+            or machine.shaft.Drsh is None
+            or machine.shaft.Drsh == 0
+        ):
+            # Internal Rotor without shaft
+            self.g_shaft.show()
+            self.g_frame.show()
+            self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_No_Shaft"]))
+            self.g_shaft.setChecked(False)
+            self.out_Drsh.hide()
+            # If there is no shaft, the rotor doesn't have internal radius
+            self.lf_RRint.setValue(0)
+            self.lf_RRint.setEnabled(False)
+            self.machine.rotor.Rint = 0
+        else:  # Internal Rotor with shaft
+            self.g_shaft.show()
+            self.g_frame.show()
+            self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
+            self.g_shaft.setChecked(True)
+            if machine.shaft.Drsh is not None:
+                self.out_Drsh.setText(
+                    self.tr("Drsh = 2*Rotor.Rint = ")
+                    + str(2000 * self.machine.rotor.Rint)
+                    + " mm"
+                )
+        # Connect the widget
+        self.lf_SRint.editingFinished.connect(self.set_stator_Rint)
+        self.lf_SRext.editingFinished.connect(self.set_stator_Rext)
+        self.lf_RRint.editingFinished.connect(self.set_rotor_Rint)
+        self.lf_RRext.editingFinished.connect(self.set_rotor_Rext)
+        self.lf_Wfra.editingFinished.connect(self.set_Wfra)
+        self.lf_Lfra.editingFinished.connect(self.set_Lfra)
+
+        self.g_shaft.toggled.connect(self.set_Drsh)
+        self.g_frame.toggled.connect(self.clear_frame)
+
+    def set_stator_Rint(self):
+        """Signal to update the value of stator.Rint according to the line edit
+
+        Parameters
+        ----------
+        self : SMachineDimension
+            A SMachineDimension object
+        """
+        self.machine.stator.Rint = self.lf_SRint.value()
+        self.set_airgap()  # Update out_airgap if possible
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_stator_Rext(self):
+        """Signal to update the value of stator.Rext according to the line edit
+
+        Parameters
+        ----------
+        self : SMachineDimension
+            A SMachineDimension object
+        """
+        if self.machine.stator.Rext != self.lf_SRext.value():
+            Rext = self.lf_SRext.value()
+            self.machine.stator.Rext = Rext
+            if self.machine.frame is not None:
+                try:  # Fail if lf_Wfra empty
+                    self.machine.frame.Rext = Rext + self.lf_Wfra.value()
+                    self.machine.frame.Rint = Rext
+                except TypeError:  # Wfra is None
+                    self.machine.frame.Rext = Rext
+                    self.machine.frame.Rint = Rext
+            self.set_airgap()  # Update out_airgap if possible
+            # Notify the machine GUI that the machine has changed
+            self.saveNeeded.emit()
+
+    def set_rotor_Rint(self):
+        """Signal to update the value of rotor.Rint according to the line edit
+
+        Parameters
+        ----------
+        self : SMachineDimension
+            A SMachineDimension object
+        """
+        self.machine.rotor.Rint = self.lf_RRint.value()
+        if self.machine.rotor.is_internal:  # Update out_Drsh if needed
+            self.set_Drsh(self.g_shaft.isChecked())
+        self.set_airgap()  # Update out_airgap if possible
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_rotor_Rext(self):
+        """Signal to update the value of rotor.Rext according to the line edit
+
+        Parameters
+        ----------
+        self : SMachineDimension
+            A SMachineDimension object
+        """
+        self.machine.rotor.Rext = self.lf_RRext.value()
+        self.set_airgap()  # Update out_airgap if possible
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_airgap(self):
+        """Signal to update the value of airgap according to the line edit
+
+        Parameters
+        ----------
+        self : SMachineDimension
+            A SMachineDimension object
+        """
+        # For readibility
+        rotor = self.machine.rotor
+        stator = self.machine.stator
+        gap_txt = self.tr("gap = ")
+        # Airgap definition change accoding to Topology
+        if rotor.is_internal:
+            # Update only if the needed parameters are set
+            if rotor.Rext is not None and stator.Rint is not None:
+                gap = stator.Rint - rotor.Rext
+                airgap = format(gap * 1000, ".6g")
+                self.out_airgap.setText(gap_txt + airgap + " mm")
+            else:
+                self.out_airgap.setText(gap_txt + "?")
+        else:
+            # Update only if the needed parameters are set
+            if rotor.Rint is not None and stator.Rext is not None:
+                airgap = format((rotor.Rint - stator.Rext) * 1000, ".6g")
+                self.out_airgap.setText(gap_txt + airgap + " mm")
+            else:
+                self.out_airgap.setText(gap_txt + "?")
+
+    def set_Wfra(self):
+        """Signal to update the value of Wfra according to the spinbox
+
+        Parameters
+        ----------
+        self : SMachineDimension
+            A SMachineDimension object
+        """
+        if self.machine.stator.Rext is not None:
+            Wfra = self.lf_Wfra.value()
+            self.machine.frame.Rint = self.machine.stator.Rext
+            self.machine.frame.Rext = self.machine.stator.Rext + Wfra
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_Lfra(self):
+        """Signal to update the value of Lfra according to the line edit
+
+        Parameters
+        ----------
+        self : SMachineDimension
+            A SMachineDimension object
+        """
+        self.machine.frame.Lfra = self.lf_Lfra.value()
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def clear_frame(self, is_checked):
+        """Signal to remove the frame if the checkbox is unchecked
+
+        Parameters
+        ----------
+        self : SMachineDimension
+            A SMachineDimension object
+        is_checked : bool
+            State of the g_frame checkbox
+        """
+        if is_checked:
+            self.machine.frame = Frame()
+            self.machine.frame._set_None()
+            if self.machine.stator.Rext is not None:
+                self.machine.frame.Rint = self.machine.stator.Rext
+                self.machine.frame.Rext = self.machine.stator.Rext
+            else:
+                self.machine.frame.Rint = None
+                self.machine.frame.Rext = None
+
+            self.lf_Wfra.clear()
+            self.lf_Lfra.clear()
+            self.in_Lfra.show()
+            self.unit_Lfra.show()
+        else:
+            self.machine.frame = None
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    def set_Drsh(self, is_checked):
+        """Signal to set Drsh according to the page context
+
+        Parameters
+        ----------
+        self : SMachineDimension
+            A SMachineDimension object
+        is_checked : bool
+            State of g_shaft
+        """
+
+        if is_checked:  # If there is a shaft
+            # Set the corresponding image
+            self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
+            # Set Drsh if machine.rotor.Rint is set
+            if self.machine.rotor.Rint is not None:
+                self.out_Drsh.setText(
+                    self.tr("Drsh = 2*Rotor.Rint = ")
+                    + str(2000 * self.machine.rotor.Rint)
+                    + " mm"
+                )
+                self.machine.shaft.Drsh = self.machine.rotor.Rint * 2
+            else:
+                self.out_Drsh.setText(self.tr("Drsh = 2*Rotor.Rint = "))
+                self.machine.shaft.Drsh = None
+
+            # machine.rotor.Rint editable only if there is a shaft
+            self.lf_RRint.setEnabled(True)
+
+        else:  # If there is no shaft
+            # Set the corresponding image
+            self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_No_Shaft"]))
+
+            self.machine.shaft.Drsh = 0
+            self.machine.rotor.Rint = 0
+            self.lf_RRint.setValue(0)
+
+            # machine.rotor.Rint editable only if there is a shaft
+            self.lf_RRint.setEnabled(False)
+        # Notify the machine GUI that the machine has changed
+        self.saveNeeded.emit()
+
+    @staticmethod
+    def check(machine):
+        """Check that the current machine have all the needed field set
+
+        Parameters
+        ----------
+        machine : Machine
+            Machine to check
+
+        Returns
+        -------
+        error : str
+            Error message (return None if no error)
+
+        """
+
+        # Check that everything is set
+        if machine.stator.Rint is None:
+            return "You must set Stator.Rint !"
+        if machine.stator.Rext is None:
+            return "You must set Stator.Rext !"
+        if machine.rotor.Rint is None:
+            return "You must set Rotor.Rint !"
+        if machine.rotor.Rext is None:
+            return "You must set Rotor.Rext !"
+
+        # Check that everything is set right
+        if machine.stator.Rext <= machine.stator.Rint:
+            return "The Stator can't have an internal radius greater than the external one !"
+        if machine.rotor.Rext <= machine.rotor.Rint:
+            return "The Rotor can't have an internal radius greater than the external one !"
+        if machine.rotor.is_internal and machine.stator.Rint <= machine.rotor.Rext:
+            return "For inner rotor machine, you must have: Rotor.Rext < Stator.Rint !"
+        if not machine.rotor.is_internal and machine.stator.Rext >= machine.rotor.Rint:
+            return (
+                "For external rotor machine, you must have: Stator.Rext < Rotor.Rint !"
+            )
+
+    def check_gui(self):
+        """Check that the widget are set right according to the current machine
+
+        Parameters
+        ----------
+        self : SMachineDimension
+            A SMachineDimension object
+        """
+        machine = self.machine
+
+        if machine.rotor.Rint is None and self.g_shaft.isChecked():
+            return self.tr("You must set Rotor.Rint !")
+        if machine.rotor.Rint is None and not self.g_shaft.isChecked():
+            machine.rotor.Rint = 0
+        if self.g_frame.isChecked() and machine.frame.Rint is None:
+            return self.tr("You must set Wfra or unchecked Frame !")
+        if not self.g_frame.isChecked():
+            self.machine.frame = None

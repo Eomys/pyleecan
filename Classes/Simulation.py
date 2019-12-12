@@ -62,6 +62,7 @@ class Simulation(FrozenClass):
                 "MachineIPMSM",
                 "MachineWRSM",
                 "MachineSyRM",
+                "MachineSRM",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for machine"
@@ -100,8 +101,16 @@ class Simulation(FrozenClass):
             Simulation_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Simulation_str += 'name = "' + str(self.name) + '"' + linesep
         Simulation_str += 'desc = "' + str(self.desc) + '"' + linesep
-        Simulation_str += "machine = " + str(self.machine.as_dict()) + linesep + linesep
-        Simulation_str += "input = " + str(self.input.as_dict())
+        if self.machine is not None:
+            Simulation_str += (
+                "machine = " + str(self.machine.as_dict()) + linesep + linesep
+            )
+        else:
+            Simulation_str += "machine = None" + linesep + linesep
+        if self.input is not None:
+            Simulation_str += "input = " + str(self.input.as_dict()) + linesep + linesep
+        else:
+            Simulation_str += "input = None"
         return Simulation_str
 
     def __eq__(self, other):

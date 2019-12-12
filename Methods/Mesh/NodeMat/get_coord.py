@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def get_coord(self, node_tags=None):
+def get_coord(self, node_tags):
     """Return the coordinates of node(s).
 
      Parameters
@@ -20,13 +20,17 @@ def get_coord(self, node_tags=None):
 
      """
 
-    if node_tags is None:
-        coord = self.coordinate
+    nd_case = np.size(node_tags)
+    coord = np.zeros((nd_case, 2))
+    if nd_case == 1:
+        Ipos = np.where(self.tag == node_tags)[0]
+        coord = self.coordinate[Ipos, :]
     else:
-        nd_case = len(node_tags)
-        coord = np.zeros((nd_case, 2))
         for ind in range(nd_case):
-            Ipos = np.where(self.node_tag == node_tags[ind])[0]
+            Ipos = np.where(self.tag == node_tags[ind])[0]
             coord[ind, :] = self.coordinate[Ipos, :]
 
-    return coord
+    if np.size(coord) == 0:
+        return None
+    else:
+        return coord

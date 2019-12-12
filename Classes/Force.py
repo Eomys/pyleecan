@@ -6,6 +6,19 @@ from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Simulation.Force.comp_force import comp_force
+except ImportError as error:
+    comp_force = error
+
+try:
+    from pyleecan.Methods.Simulation.Force.comp_force_nodal import comp_force_nodal
+except ImportError as error:
+    comp_force_nodal = error
+
+
 from pyleecan.Classes.check import InitUnKnowClassError
 
 
@@ -14,6 +27,27 @@ class Force(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Simulation.Force.comp_force
+    if isinstance(comp_force, ImportError):
+        comp_force = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Force method comp_force: " + str(comp_force))
+            )
+        )
+    else:
+        comp_force = comp_force
+    # cf Methods.Simulation.Force.comp_force_nodal
+    if isinstance(comp_force_nodal, ImportError):
+        comp_force_nodal = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Force method comp_force_nodal: " + str(comp_force_nodal)
+                )
+            )
+        )
+    else:
+        comp_force_nodal = comp_force_nodal
     # save method is available in all object
     save = save
 

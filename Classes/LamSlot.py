@@ -270,7 +270,10 @@ class LamSlot(Lamination):
         LamSlot_str = ""
         # Get the properties inherited from Lamination
         LamSlot_str += super(LamSlot, self).__str__() + linesep
-        LamSlot_str += "slot = " + str(self.slot.as_dict())
+        if self.slot is not None:
+            LamSlot_str += "slot = " + str(self.slot.as_dict()) + linesep + linesep
+        else:
+            LamSlot_str += "slot = None"
         return LamSlot_str
 
     def __eq__(self, other):

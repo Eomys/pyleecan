@@ -32,31 +32,23 @@ def build_geometry(self):
     """
     Rbo = self.get_Rbo()
 
-    # alpha is the angle to rotate Z0 so ||Z1,Z8|| = W0
-    alpha = float(arcsin(self.W0 / (2 * Rbo)))
-
-    # comp point coordinate (in complex)
-    Z0 = Rbo * exp(1j * 0)
-    Z1 = Z0 * exp(1j * alpha)
-
-    if self.is_outwards():
-        Z2 = Z1 + self.H0
-        ZC1 = Z2.real + sqrt(self.R1 ** 2 - (self.W0 / 2.0) ** 2)
-        Z3 = ZC1 + self.R1 * 1j
-        Z4 = Z3 + self.H1
-        rot_sign = 1  # Rotation direction for Arc1
-    else:  # inward slot
-        Z2 = Z1 - self.H0
-        ZC1 = Z2.real - sqrt(self.R1 ** 2 - (self.W0 / 2.0) ** 2)
-        Z3 = ZC1 + self.R1 * 1j
-        Z4 = Z3 - self.H1
-        rot_sign = -1  # Rotation direction for Arc1
-
-    # symetry
-    Z5 = Z4.conjugate()
-    Z6 = Z3.conjugate()
-    Z7 = Z2.conjugate()
-    Z8 = Z1.conjugate()
+    # getting all point coordinate
+    [
+        Z1,
+        Z2,
+        Z3,
+        Z4,
+        Z5,
+        Z6,
+        Z7,
+        Z8,
+        Ztan1,
+        Ztan2,
+        Zmid,
+        Zrad1,
+        Zrad2,
+        rot_sign,
+    ] = self._comp_point_coordinate()
 
     [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8] = [Z8, Z7, Z6, Z5, Z4, Z3, Z2, Z1]
 
@@ -64,15 +56,23 @@ def build_geometry(self):
     curve_list = list()
     curve_list.append(Segment(Z1, Z2))
     if self.H1 > 0:
-        curve_list.append(Arc1(Z2, Z3, rot_sign * self.R1, self.is_outwards()))
+        curve_list.append(
+            Arc1(Z2, Z3, rot_sign * self.R1, is_trigo_direction=self.is_outwards())
+        )
         curve_list.append(Segment(Z3, Z4))
         curve_list.append(Arc3(Z4, Z5, self.is_outwards()))
         curve_list.append(Segment(Z5, Z6))
-        curve_list.append(Arc1(Z6, Z7, rot_sign * self.R1, self.is_outwards()))
+        curve_list.append(
+            Arc1(Z6, Z7, rot_sign * self.R1, is_trigo_direction=self.is_outwards())
+        )
     elif self.H1 == 0:
-        curve_list.append(Arc1(Z2, Z3, rot_sign * self.R1, self.is_outwards()))
+        curve_list.append(
+            Arc1(Z2, Z3, rot_sign * self.R1, is_trigo_direction=self.is_outwards())
+        )
         curve_list.append(Arc3(Z3, Z6, self.is_outwards()))
-        curve_list.append(Arc1(Z6, Z7, rot_sign * self.R1, self.is_outwards()))
+        curve_list.append(
+            Arc1(Z6, Z7, rot_sign * self.R1, is_trigo_direction=self.is_outwards())
+        )
     else:  # Should never be called
         raise (Slot26_H1, "H1 can't be <0")
 
