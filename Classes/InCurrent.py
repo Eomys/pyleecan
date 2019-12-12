@@ -251,14 +251,32 @@ class InCurrent(Input):
         InCurrent_str = ""
         # Get the properties inherited from Input
         InCurrent_str += super(InCurrent, self).__str__() + linesep
-        InCurrent_str += "time = " + str(self.time.as_dict()) + linesep + linesep
-        InCurrent_str += "angle = " + str(self.angle.as_dict()) + linesep + linesep
-        InCurrent_str += "Is = " + str(self.Is.as_dict()) + linesep + linesep
-        InCurrent_str += "Ir = " + str(self.Ir.as_dict()) + linesep + linesep
-        InCurrent_str += (
-            "angle_rotor = " + str(self.angle_rotor.as_dict()) + linesep + linesep
-        )
-        InCurrent_str += "Nr = " + str(self.Nr.as_dict()) + linesep + linesep
+        if self.time is not None:
+            InCurrent_str += "time = " + str(self.time.as_dict()) + linesep + linesep
+        else:
+            InCurrent_str += "time = None" + linesep + linesep
+        if self.angle is not None:
+            InCurrent_str += "angle = " + str(self.angle.as_dict()) + linesep + linesep
+        else:
+            InCurrent_str += "angle = None" + linesep + linesep
+        if self.Is is not None:
+            InCurrent_str += "Is = " + str(self.Is.as_dict()) + linesep + linesep
+        else:
+            InCurrent_str += "Is = None" + linesep + linesep
+        if self.Ir is not None:
+            InCurrent_str += "Ir = " + str(self.Ir.as_dict()) + linesep + linesep
+        else:
+            InCurrent_str += "Ir = None" + linesep + linesep
+        if self.angle_rotor is not None:
+            InCurrent_str += (
+                "angle_rotor = " + str(self.angle_rotor.as_dict()) + linesep + linesep
+            )
+        else:
+            InCurrent_str += "angle_rotor = None" + linesep + linesep
+        if self.Nr is not None:
+            InCurrent_str += "Nr = " + str(self.Nr.as_dict()) + linesep + linesep
+        else:
+            InCurrent_str += "Nr = None" + linesep + linesep
         InCurrent_str += "rot_dir = " + str(self.rot_dir) + linesep
         InCurrent_str += "angle_rotor_initial = " + str(self.angle_rotor_initial)
         return InCurrent_str

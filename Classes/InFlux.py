@@ -168,10 +168,22 @@ class InFlux(Input):
         InFlux_str = ""
         # Get the properties inherited from Input
         InFlux_str += super(InFlux, self).__str__() + linesep
-        InFlux_str += "time = " + str(self.time.as_dict()) + linesep + linesep
-        InFlux_str += "angle = " + str(self.angle.as_dict()) + linesep + linesep
-        InFlux_str += "Br = " + str(self.Br.as_dict()) + linesep + linesep
-        InFlux_str += "Bt = " + str(self.Bt.as_dict())
+        if self.time is not None:
+            InFlux_str += "time = " + str(self.time.as_dict()) + linesep + linesep
+        else:
+            InFlux_str += "time = None" + linesep + linesep
+        if self.angle is not None:
+            InFlux_str += "angle = " + str(self.angle.as_dict()) + linesep + linesep
+        else:
+            InFlux_str += "angle = None" + linesep + linesep
+        if self.Br is not None:
+            InFlux_str += "Br = " + str(self.Br.as_dict()) + linesep + linesep
+        else:
+            InFlux_str += "Br = None" + linesep + linesep
+        if self.Bt is not None:
+            InFlux_str += "Bt = " + str(self.Bt.as_dict()) + linesep + linesep
+        else:
+            InFlux_str += "Bt = None"
         return InFlux_str
 
     def __eq__(self, other):

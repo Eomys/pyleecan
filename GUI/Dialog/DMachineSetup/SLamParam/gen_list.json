@@ -1,0 +1,46 @@
+[
+    {
+        "cls": "Lamination",
+        "name": "L1",
+        "widget": [
+            "in_L1",
+            "lf_L1"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "Lamination",
+        "name": "Kf1",
+        "widget": [
+            "in_Kf1",
+            "lf_Kf1"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "Lamination",
+        "name": "mat_type",
+        "widget": [
+            "w_mat"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "Lamination",
+        "name": "Wrvd",
+        "widget": [
+            "in_Wrvd",
+            "lf_Wrvd"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "Lamination",
+        "name": "Nrvd",
+        "widget": [
+            "in_Nrvd",
+            "si_Nrvd"
+        ],
+        "xls": "Machine"
+    }
+]

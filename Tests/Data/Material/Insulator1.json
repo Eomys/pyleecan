@@ -1,0 +1,39 @@
+{
+    "__class__": "Material",
+    "desc": "INSULATOR1",
+    "eco": {
+        "unit_name": "$",
+        "__class__": "MatEconomical",
+        "cost_unit": null
+    },
+    "elec": {
+        "__class__": "MatElectrical",
+        "epsr": null,
+        "rho": null
+    },
+    "is_isotropic": true,
+    "mag": null,
+    "struct": {
+        "Ex": null,
+        "Ey": null,
+        "Ez": null,
+        "Gxy": null,
+        "Gxz": null,
+        "Gyz": null,
+        "__class__": "MatStructural",
+        "nu_xy": null,
+        "nu_xz": null,
+        "nu_yz": null,
+        "rho": 1200.0
+    },
+    "name": "Insulator1",
+    "path": null,
+    "HT": {
+        "Cp": 671.0,
+        "__class__": "MatHT",
+        "alpha": null,
+        "lambda_x": 0.2,
+        "lambda_y": 0.2,
+        "lambda_z": 0.2
+    }
+}

@@ -1,0 +1,20 @@
+[
+    {
+        "cls": "SlotW24",
+        "name": "W3",
+        "widget": [
+            "in_W3",
+            "lf_W3"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "SlotW24",
+        "name": "H2",
+        "widget": [
+            "in_H2",
+            "lf_H2"
+        ],
+        "xls": "Slot"
+    }
+]

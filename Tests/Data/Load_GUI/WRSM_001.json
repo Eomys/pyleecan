@@ -1,0 +1,426 @@
+{
+    "__class__": "MachineWRSM",
+    "desc": null,
+    "frame": {
+        "Lfra": null,
+        "Rext": null,
+        "Rint": null,
+        "__class__": "Frame",
+        "mat_type": {
+            "HT": {
+                "Cp": null,
+                "__class__": "MatHT",
+                "alpha": null,
+                "lambda_x": null,
+                "lambda_y": null,
+                "lambda_z": null
+            },
+            "__class__": "Material",
+            "desc": null,
+            "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": null,
+                "unit_name": null
+            },
+            "elec": {
+                "__class__": "MatElectrical",
+                "alpha": null,
+                "epsr": null,
+                "rho": null
+            },
+            "is_isotropic": null,
+            "mag": {
+                "__class__": "MatMagnetics",
+                "mur_lin": null
+            },
+            "name": null,
+            "path": null,
+            "struct": {
+                "Ex": null,
+                "Ey": null,
+                "Ez": null,
+                "Gxy": null,
+                "Gxz": null,
+                "Gyz": null,
+                "__class__": "MatStructural",
+                "nu_xy": null,
+                "nu_xz": null,
+                "nu_yz": null,
+                "rho": null
+            }
+        }
+    },
+    "name": "WRSM_001",
+    "rotor": {
+        "Kf1": null,
+        "Ksfill": null,
+        "L1": null,
+        "Nrvd": null,
+        "Rext": null,
+        "Rint": null,
+        "Wrvd": null,
+        "__class__": "LamSlotWind",
+        "axial_vent": [],
+        "is_internal": true,
+        "is_stator": false,
+        "mat_type": {
+            "HT": {
+                "Cp": null,
+                "__class__": "MatHT",
+                "alpha": null,
+                "lambda_x": null,
+                "lambda_y": null,
+                "lambda_z": null
+            },
+            "__class__": "Material",
+            "desc": null,
+            "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": null,
+                "unit_name": null
+            },
+            "elec": {
+                "__class__": "MatElectrical",
+                "alpha": null,
+                "epsr": null,
+                "rho": null
+            },
+            "is_isotropic": null,
+            "mag": {
+                "__class__": "MatMagnetics",
+                "mur_lin": null
+            },
+            "name": null,
+            "path": null,
+            "struct": {
+                "Ex": null,
+                "Ey": null,
+                "Ez": null,
+                "Gxy": null,
+                "Gxz": null,
+                "Gyz": null,
+                "__class__": "MatStructural",
+                "nu_xy": null,
+                "nu_xz": null,
+                "nu_yz": null,
+                "rho": null
+            }
+        },
+        "notch": [],
+        "slot": {
+            "Zs": null,
+            "__class__": "Slot"
+        },
+        "winding": {
+            "Lewout": null,
+            "Npcpp": null,
+            "Nslot_shift_wind": null,
+            "Ntcoil": null,
+            "__class__": "WindingCW2LT",
+            "conductor": {
+                "__class__": "Conductor",
+                "cond_mat": {
+                    "HT": {
+                        "Cp": null,
+                        "__class__": "MatHT",
+                        "alpha": null,
+                        "lambda_x": null,
+                        "lambda_y": null,
+                        "lambda_z": null
+                    },
+                    "__class__": "Material",
+                    "desc": null,
+                    "eco": {
+                        "__class__": "MatEconomical",
+                        "cost_unit": null,
+                        "unit_name": null
+                    },
+                    "elec": {
+                        "__class__": "MatElectrical",
+                        "alpha": null,
+                        "epsr": null,
+                        "rho": null
+                    },
+                    "is_isotropic": null,
+                    "mag": {
+                        "__class__": "MatMagnetics",
+                        "mur_lin": null
+                    },
+                    "name": null,
+                    "path": null,
+                    "struct": {
+                        "Ex": null,
+                        "Ey": null,
+                        "Ez": null,
+                        "Gxy": null,
+                        "Gxz": null,
+                        "Gyz": null,
+                        "__class__": "MatStructural",
+                        "nu_xy": null,
+                        "nu_xz": null,
+                        "nu_yz": null,
+                        "rho": null
+                    }
+                },
+                "ins_mat": {
+                    "HT": {
+                        "Cp": null,
+                        "__class__": "MatHT",
+                        "alpha": null,
+                        "lambda_x": null,
+                        "lambda_y": null,
+                        "lambda_z": null
+                    },
+                    "__class__": "Material",
+                    "desc": null,
+                    "eco": {
+                        "__class__": "MatEconomical",
+                        "cost_unit": null,
+                        "unit_name": null
+                    },
+                    "elec": {
+                        "__class__": "MatElectrical",
+                        "alpha": null,
+                        "epsr": null,
+                        "rho": null
+                    },
+                    "is_isotropic": null,
+                    "mag": {
+                        "__class__": "MatMagnetics",
+                        "mur_lin": null
+                    },
+                    "name": null,
+                    "path": null,
+                    "struct": {
+                        "Ex": null,
+                        "Ey": null,
+                        "Ez": null,
+                        "Gxy": null,
+                        "Gxz": null,
+                        "Gyz": null,
+                        "__class__": "MatStructural",
+                        "nu_xy": null,
+                        "nu_xz": null,
+                        "nu_yz": null,
+                        "rho": null
+                    }
+                }
+            },
+            "is_reverse_wind": null,
+            "p": 6,
+            "qs": null,
+            "type_connection": null
+        }
+    },
+    "shaft": {
+        "Drsh": null,
+        "Lshaft": null,
+        "__class__": "Shaft",
+        "mat_type": {
+            "HT": {
+                "Cp": null,
+                "__class__": "MatHT",
+                "alpha": null,
+                "lambda_x": null,
+                "lambda_y": null,
+                "lambda_z": null
+            },
+            "__class__": "Material",
+            "desc": null,
+            "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": null,
+                "unit_name": null
+            },
+            "elec": {
+                "__class__": "MatElectrical",
+                "alpha": null,
+                "epsr": null,
+                "rho": null
+            },
+            "is_isotropic": null,
+            "mag": {
+                "__class__": "MatMagnetics",
+                "mur_lin": null
+            },
+            "name": null,
+            "path": null,
+            "struct": {
+                "Ex": null,
+                "Ey": null,
+                "Ez": null,
+                "Gxy": null,
+                "Gxz": null,
+                "Gyz": null,
+                "__class__": "MatStructural",
+                "nu_xy": null,
+                "nu_xz": null,
+                "nu_yz": null,
+                "rho": null
+            }
+        }
+    },
+    "stator": {
+        "Kf1": null,
+        "Ksfill": null,
+        "L1": null,
+        "Nrvd": null,
+        "Rext": null,
+        "Rint": null,
+        "Wrvd": null,
+        "__class__": "LamSlotWind",
+        "axial_vent": [],
+        "is_internal": false,
+        "is_stator": true,
+        "mat_type": {
+            "HT": {
+                "Cp": null,
+                "__class__": "MatHT",
+                "alpha": null,
+                "lambda_x": null,
+                "lambda_y": null,
+                "lambda_z": null
+            },
+            "__class__": "Material",
+            "desc": null,
+            "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": null,
+                "unit_name": null
+            },
+            "elec": {
+                "__class__": "MatElectrical",
+                "alpha": null,
+                "epsr": null,
+                "rho": null
+            },
+            "is_isotropic": null,
+            "mag": {
+                "__class__": "MatMagnetics",
+                "mur_lin": null
+            },
+            "name": null,
+            "path": null,
+            "struct": {
+                "Ex": null,
+                "Ey": null,
+                "Ez": null,
+                "Gxy": null,
+                "Gxz": null,
+                "Gyz": null,
+                "__class__": "MatStructural",
+                "nu_xy": null,
+                "nu_xz": null,
+                "nu_yz": null,
+                "rho": null
+            }
+        },
+        "notch": [],
+        "slot": {
+            "Zs": null,
+            "__class__": "Slot"
+        },
+        "winding": {
+            "Lewout": null,
+            "Npcpp": null,
+            "Nslot_shift_wind": null,
+            "Ntcoil": null,
+            "__class__": "WindingDW2L",
+            "coil_pitch": null,
+            "conductor": {
+                "__class__": "Conductor",
+                "cond_mat": {
+                    "HT": {
+                        "Cp": null,
+                        "__class__": "MatHT",
+                        "alpha": null,
+                        "lambda_x": null,
+                        "lambda_y": null,
+                        "lambda_z": null
+                    },
+                    "__class__": "Material",
+                    "desc": null,
+                    "eco": {
+                        "__class__": "MatEconomical",
+                        "cost_unit": null,
+                        "unit_name": null
+                    },
+                    "elec": {
+                        "__class__": "MatElectrical",
+                        "alpha": null,
+                        "epsr": null,
+                        "rho": null
+                    },
+                    "is_isotropic": null,
+                    "mag": {
+                        "__class__": "MatMagnetics",
+                        "mur_lin": null
+                    },
+                    "name": null,
+                    "path": null,
+                    "struct": {
+                        "Ex": null,
+                        "Ey": null,
+                        "Ez": null,
+                        "Gxy": null,
+                        "Gxz": null,
+                        "Gyz": null,
+                        "__class__": "MatStructural",
+                        "nu_xy": null,
+                        "nu_xz": null,
+                        "nu_yz": null,
+                        "rho": null
+                    }
+                },
+                "ins_mat": {
+                    "HT": {
+                        "Cp": null,
+                        "__class__": "MatHT",
+                        "alpha": null,
+                        "lambda_x": null,
+                        "lambda_y": null,
+                        "lambda_z": null
+                    },
+                    "__class__": "Material",
+                    "desc": null,
+                    "eco": {
+                        "__class__": "MatEconomical",
+                        "cost_unit": null,
+                        "unit_name": null
+                    },
+                    "elec": {
+                        "__class__": "MatElectrical",
+                        "alpha": null,
+                        "epsr": null,
+                        "rho": null
+                    },
+                    "is_isotropic": null,
+                    "mag": {
+                        "__class__": "MatMagnetics",
+                        "mur_lin": null
+                    },
+                    "name": null,
+                    "path": null,
+                    "struct": {
+                        "Ex": null,
+                        "Ey": null,
+                        "Ez": null,
+                        "Gxy": null,
+                        "Gxz": null,
+                        "Gyz": null,
+                        "__class__": "MatStructural",
+                        "nu_xy": null,
+                        "nu_xz": null,
+                        "nu_yz": null,
+                        "rho": null
+                    }
+                }
+            },
+            "is_reverse_wind": null,
+            "p": 6,
+            "qs": null,
+            "type_connection": null
+        }
+    },
+    "type_machine": 9
+}

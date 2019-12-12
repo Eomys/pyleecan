@@ -245,7 +245,10 @@ class Mesh(FrozenClass):
                 + linesep
                 + linesep
             )
-        Mesh_str += "node = " + str(self.node.as_dict()) + linesep + linesep
+        if self.node is not None:
+            Mesh_str += "node = " + str(self.node.as_dict()) + linesep + linesep
+        else:
+            Mesh_str += "node = None" + linesep + linesep
         if len(self.submesh) == 0:
             Mesh_str += "submesh = []"
         for ii in range(len(self.submesh)):

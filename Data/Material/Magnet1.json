@@ -1,0 +1,45 @@
+{
+    "__class__": "Material",
+    "desc": "MAGNET1 for SIPMSM",
+    "eco": {
+        "unit_name": "$",
+        "__class__": "MatEconomical",
+        "cost_unit": 252.0
+    },
+    "elec": {
+        "__class__": "MatElectrical",
+        "epsr": null,
+        "rho": 1.6e-06
+    },
+    "is_isotropic": true,
+    "mag": {
+        "Brm20": 1.0,
+        "Hc": null,
+        "__class__": "MatMagnet",
+        "alpha_Br": 0.0,
+        "mur_lin": 1.05
+    },
+    "struct": {
+        "Ex": null,
+        "Ey": null,
+        "Ez": null,
+        "Gxy": null,
+        "Gxz": null,
+        "Gyz": null,
+        "__class__": "MatStructural",
+        "nu_xy": null,
+        "nu_xz": null,
+        "nu_yz": null,
+        "rho": 7500.0
+    },
+    "name": "Magnet1",
+    "path": null,
+    "HT": {
+        "Cp": 450.0,
+        "__class__": "MatHT",
+        "alpha": null,
+        "lambda_x": 8.5,
+        "lambda_y": 8.5,
+        "lambda_z": 8.5
+    }
+}

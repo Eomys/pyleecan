@@ -109,7 +109,12 @@ class Shaft(FrozenClass):
         else:
             Shaft_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Shaft_str += "Lshaft = " + str(self.Lshaft) + linesep
-        Shaft_str += "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
+        if self.mat_type is not None:
+            Shaft_str += (
+                "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
+            )
+        else:
+            Shaft_str += "mat_type = None" + linesep + linesep
         Shaft_str += "Drsh = " + str(self.Drsh)
         return Shaft_str
 

@@ -87,8 +87,14 @@ class OutGeo(FrozenClass):
             OutGeo_str += "parent = None " + linesep
         else:
             OutGeo_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutGeo_str += "stator = " + str(self.stator.as_dict()) + linesep + linesep
-        OutGeo_str += "rotor = " + str(self.rotor.as_dict()) + linesep + linesep
+        if self.stator is not None:
+            OutGeo_str += "stator = " + str(self.stator.as_dict()) + linesep + linesep
+        else:
+            OutGeo_str += "stator = None" + linesep + linesep
+        if self.rotor is not None:
+            OutGeo_str += "rotor = " + str(self.rotor.as_dict()) + linesep + linesep
+        else:
+            OutGeo_str += "rotor = None" + linesep + linesep
         OutGeo_str += "Wgap_mec = " + str(self.Wgap_mec) + linesep
         OutGeo_str += "Wgap_mag = " + str(self.Wgap_mag) + linesep
         OutGeo_str += "Rgap_mec = " + str(self.Rgap_mec) + linesep

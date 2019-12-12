@@ -453,9 +453,12 @@ class Lamination(FrozenClass):
         else:
             Lamination_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Lamination_str += "L1 = " + str(self.L1) + linesep
-        Lamination_str += (
-            "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
-        )
+        if self.mat_type is not None:
+            Lamination_str += (
+                "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
+            )
+        else:
+            Lamination_str += "mat_type = None" + linesep + linesep
         Lamination_str += "Nrvd = " + str(self.Nrvd) + linesep
         Lamination_str += "Wrvd = " + str(self.Wrvd) + linesep
         Lamination_str += "Kf1 = " + str(self.Kf1) + linesep

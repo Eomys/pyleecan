@@ -29,4 +29,4 @@ def comp_height_wind(self):
     alpha2 = arcsin(self.W0 / (2.0 * self.R1))
     Harc2 = float(self.R1 * (1 - cos(alpha2)))
 
-    return self.H1 + 2 * self.R1 - Harc2
+    return self.H1 + self.R2 + self.R1 - Harc2

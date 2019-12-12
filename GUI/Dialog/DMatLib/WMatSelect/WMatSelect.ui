@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WMatSelect</class>
+ <widget class="QWidget" name="WMatSelect">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>283</width>
+    <height>50</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QLabel" name="in_mat_type">
+     <property name="text">
+      <string>mat_type :</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="c_mat_type">
+     <item>
+      <property name="text">
+       <string>M400-50A</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>M350-50A</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>M330-35A</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="b_matlib">
+     <property name="text">
+      <string>Edit Materials</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>c_mat_type</tabstop>
+  <tabstop>b_matlib</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../../Resources/pyleecan.qrc"/>
+  <include location="../../../Resources/pyleecan.qrc"/>
+  <include location="../../../Resources/pyleecan.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -34,6 +34,8 @@ def get_angle(self, is_deg=False):
         alpha = abs(angle(Z2))
     elif Z2.imag == 0 and not self.is_trigo_direction:
         alpha = -abs(angle(Z2))
+    else:
+        alpha = 0
 
     if is_deg:
         return alpha * 180 / pi

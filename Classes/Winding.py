@@ -211,7 +211,12 @@ class Winding(FrozenClass):
         Winding_str += "type_connection = " + str(self.type_connection) + linesep
         Winding_str += "p = " + str(self.p) + linesep
         Winding_str += "Lewout = " + str(self.Lewout) + linesep
-        Winding_str += "conductor = " + str(self.conductor.as_dict())
+        if self.conductor is not None:
+            Winding_str += (
+                "conductor = " + str(self.conductor.as_dict()) + linesep + linesep
+            )
+        else:
+            Winding_str += "conductor = None"
         return Winding_str
 
     def __eq__(self, other):

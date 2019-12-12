@@ -1,0 +1,47 @@
+[
+    {
+        "cls": "VentilationTrap",
+        "name": "Alpha0",
+        "widget": [
+            "in_Alpha0",
+            "lf_Alpha0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "VentilationTrap",
+        "name": "D0",
+        "widget": [
+            "in_D0",
+            "lf_D0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "VentilationTrap",
+        "name": "H0",
+        "widget": [
+            "in_H0",
+            "lf_H0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "VentilationTrap",
+        "name": "W1",
+        "widget": [
+            "in_W1",
+            "lf_W1"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "VentilationTrap",
+        "name": "W2",
+        "widget": [
+            "in_W2",
+            "lf_W2"
+        ],
+        "xls": "Slot"
+    }
+]

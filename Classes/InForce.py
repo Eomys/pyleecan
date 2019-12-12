@@ -168,10 +168,22 @@ class InForce(Input):
         InForce_str = ""
         # Get the properties inherited from Input
         InForce_str += super(InForce, self).__str__() + linesep
-        InForce_str += "time = " + str(self.time.as_dict()) + linesep + linesep
-        InForce_str += "angle = " + str(self.angle.as_dict()) + linesep + linesep
-        InForce_str += "Prad = " + str(self.Prad.as_dict()) + linesep + linesep
-        InForce_str += "Ptan = " + str(self.Ptan.as_dict())
+        if self.time is not None:
+            InForce_str += "time = " + str(self.time.as_dict()) + linesep + linesep
+        else:
+            InForce_str += "time = None" + linesep + linesep
+        if self.angle is not None:
+            InForce_str += "angle = " + str(self.angle.as_dict()) + linesep + linesep
+        else:
+            InForce_str += "angle = None" + linesep + linesep
+        if self.Prad is not None:
+            InForce_str += "Prad = " + str(self.Prad.as_dict()) + linesep + linesep
+        else:
+            InForce_str += "Prad = None" + linesep + linesep
+        if self.Ptan is not None:
+            InForce_str += "Ptan = " + str(self.Ptan.as_dict()) + linesep + linesep
+        else:
+            InForce_str += "Ptan = None"
         return InForce_str
 
     def __eq__(self, other):

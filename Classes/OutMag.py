@@ -143,7 +143,12 @@ class OutMag(FrozenClass):
             + linesep
         )
         OutMag_str += "emf = " + linesep + str(self.emf) + linesep + linesep
-        OutMag_str += "meshsolution = " + str(self.meshsolution.as_dict())
+        if self.meshsolution is not None:
+            OutMag_str += (
+                "meshsolution = " + str(self.meshsolution.as_dict()) + linesep + linesep
+            )
+        else:
+            OutMag_str += "meshsolution = None"
         return OutMag_str
 
     def __eq__(self, other):

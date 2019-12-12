@@ -91,7 +91,12 @@ class MatLamination(MatMagnetics):
         # Get the properties inherited from MatMagnetics
         MatLamination_str += super(MatLamination, self).__str__() + linesep
         MatLamination_str += "Wlam = " + str(self.Wlam) + linesep
-        MatLamination_str += "BH_curve = " + str(self.BH_curve.as_dict())
+        if self.BH_curve is not None:
+            MatLamination_str += (
+                "BH_curve = " + str(self.BH_curve.as_dict()) + linesep + linesep
+            )
+        else:
+            MatLamination_str += "BH_curve = None"
         return MatLamination_str
 
     def __eq__(self, other):

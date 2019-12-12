@@ -1,0 +1,47 @@
+[
+    {
+        "cls": "CondType11",
+        "name": "Nwppc_tan",
+        "widget": [
+            "in_Nwpc1_tan",
+            "si_Nwpc1_tan"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "CondType11",
+        "name": "Nwppc_rad",
+        "widget": [
+            "in_Nwpc1_rad",
+            "si_Nwpc1_rad"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "CondType11",
+        "name": "Hwire",
+        "widget": [
+            "in_Hwire",
+            "lf_Hwire"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "CondType11",
+        "name": "Wwire",
+        "widget": [
+            "in_Wwire",
+            "lf_Wwire"
+        ],
+        "xls": "Machine"
+    },
+    {
+        "cls": "CondType11",
+        "name": "Wins_wire",
+        "widget": [
+            "in_Wins_wire",
+            "lf_Wins_wire"
+        ],
+        "xls": "Machine"
+    }
+]

@@ -1,0 +1,22 @@
+# -*- coding: utf-8 -*-
+"""Warning : this file has been generated, you shouldn't edit it"""
+
+from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.Ui_SMachineType import (
+    Ui_SMachineType,
+)
+
+
+class Gen_SMachineType(Ui_SMachineType):
+    def setupUi(self, SMachineType):
+        Ui_SMachineType.setupUi(self, SMachineType)
+        # Setup of si_p
+        self.si_p.setMinimum(1)
+        self.si_p.setMaximum(100)
+        txt = self.tr(u"""pole pairs number""")
+        self.si_p.setWhatsThis(txt)
+        self.si_p.setToolTip(txt)
+
+        # Setup of in_p
+        txt = self.tr(u"""pole pairs number""")
+        self.in_p.setWhatsThis(txt)
+        self.in_p.setToolTip(txt)

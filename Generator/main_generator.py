@@ -6,6 +6,7 @@ from os import mkdir
 from os.path import isdir, join
 
 from pyleecan.Generator.class_generator import generate_class
+from pyleecan.Generator.gui_generator import generate_gui
 from pyleecan.Generator.read_fct import read_all
 from pyleecan.Generator import MAIN_DIR
 
@@ -54,6 +55,9 @@ def generate_code(root_path):
     import_file.close()
     load_file.write("}\n")
     load_file.close()
+
+    # print("#############################\nGenerating gui....")
+    # generate_gui(gen_dict)
 
 
 if __name__ == "__main__":

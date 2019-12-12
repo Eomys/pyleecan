@@ -1,0 +1,10 @@
+[
+    {
+        "cls": "Conductor",
+        "name": "cond_mat",
+        "widget": [
+            "w_mat"
+        ],
+        "xls": "Machine"
+    }
+]
