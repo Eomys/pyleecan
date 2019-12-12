@@ -20,9 +20,12 @@ def get_node_tags(self, elem_tag):
 
     """
     all_node_tag = np.array([], dtype=int)
-    for ie in range(len(elem_tag)):
-        all_node_tag = np.concatenate(
-            (all_node_tag, self.get_connectivity(elem_tag[ie]))
-        )
+    if np.size(elem_tag) > 1:
+        for ie in range(len(elem_tag)):
+            all_node_tag = np.concatenate(
+                (all_node_tag, self.get_connectivity(elem_tag[ie]))
+            )
+    else:
+        all_node_tag = self.get_connectivity(elem_tag)
 
     return np.unique(all_node_tag)
