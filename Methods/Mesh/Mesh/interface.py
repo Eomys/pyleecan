@@ -62,7 +62,7 @@ def interface(self, other_mesh):
             Ipos = np.where(tmp_element_tags_unique[ind] == tmp_element_tags)[0]
             nb_element_tags_unique[ind] = len(Ipos)
             # Which nodes exactly are concerned; store them in elem2node_dict
-            nodes_tmp = self.element[key].get_node_tags(tmp_element_tags_unique[ind])
+            nodes_tmp = self.get_node_tags(tmp_element_tags_unique[ind])
             nodes_tmp_interf = np.array([], dtype=int)
             for ipos in range(len(nodes_tmp)):
                 if nodes_tmp[ipos] in interface_nodes_tags:
@@ -96,7 +96,7 @@ def interface(self, other_mesh):
                 tmp_element_tags_other_unique[ind] == tmp_element_tags_other
             )[0]
             nb_element_tags_other_unique[ind] = len(Ipos)
-            nodes_tmp = other_mesh.element[key].get_node_tags(
+            nodes_tmp = other_mesh.get_node_tags(
                 tmp_element_tags_other_unique[ind]
             )
             nodes_tmp_interf = np.array([], dtype=int)
