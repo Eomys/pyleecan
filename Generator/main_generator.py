@@ -56,8 +56,8 @@ def generate_code(root_path):
     load_file.write("}\n")
     load_file.close()
 
-    # print("#############################\nGenerating gui....")
-    # generate_gui(gen_dict)
+    print("#############################\nGenerating gui....")
+    generate_gui(gen_dict)
 
 
 if __name__ == "__main__":
