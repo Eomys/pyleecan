@@ -2,8 +2,13 @@
 """Created on Mon Nov 10 15:44:20 2014
 @author: pierre_b
 """
+import sys
+from os.path import dirname, abspath, normpath, join
+
+sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", ".."))))
+
 from os import mkdir
-from os.path import isdir, join
+from os.path import isdir
 
 from pyleecan.Generator.class_generator import generate_class
 from pyleecan.Generator.gui_generator import generate_gui

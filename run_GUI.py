@@ -1,7 +1,11 @@
-from os.path import abspath, dirname, join, realpath, split
-from sys import argv, exit, path
+import sys
+from os.path import dirname, abspath, normpath, join
 
-path.append(split(dirname(realpath(__file__)))[0])
+sys.path.insert(0, normpath(abspath(join(dirname(__file__), ".."))))
+
+from os import mkdir
+from os.path import isdir
+from sys import argv, exit
 
 from PyQt5.QtCore import QTranslator
 from PyQt5.QtWidgets import QApplication
