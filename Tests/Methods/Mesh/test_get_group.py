@@ -7,37 +7,30 @@ from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
 
-class unittest_getnode2element(TestCase):
-    """unittest to get elements containing specific node(s)"""
+class unittest_get_group(TestCase):
+    """unittest to extract a group as a Mesh object"""
 
-    def test_ElementMat(self):
-        # Init 1
-        # Init
-        mesh = Mesh()
-        mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
-        mesh.node = NodeMat()
-        mesh.node.add_node(np.array([0, 0]))
-        mesh.node.add_node(np.array([1, 0]))
-        mesh.node.add_node(np.array([1, 2]))
-        mesh.node.add_node(np.array([2, 3]))
-        mesh.node.add_node(np.array([3, 3]))
+    def setUp(self):
+        self.mesh = Mesh()
+        self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
+        self.mesh.node = NodeMat()
+        self.mesh.node.add_node(np.array([0, 0]))
+        self.mesh.node.add_node(np.array([1, 0]))
+        self.mesh.node.add_node(np.array([1, 2]))
+        self.mesh.node.add_node(np.array([2, 3]))
+        self.mesh.node.add_node(np.array([3, 3]))
 
-        mesh.add_element(np.array([0, 1, 2]), "Triangle3", group=int(3))
-        mesh.add_element(np.array([1, 2, 3]), "Triangle3", group=int(3))
-        mesh.add_element(np.array([4, 2, 3]), "Triangle3", group=int(2))
-        # Method test 1
-        elem_grp4 = mesh.element["Triangle3"].get_group([3])
-        # Check results
-        solution = np.array(
-            [[0, 1, 2], [1, 2, 3]]
-        )  # In this case, element tag = line position
+        self.mesh.add_element(np.array([0, 1, 2]), "Triangle3", group=int(3))
+        self.mesh.add_element(np.array([1, 2, 3]), "Triangle3", group=int(3))
+        self.mesh.add_element(np.array([4, 2, 3]), "Triangle3", group=int(2))
+
+    def test_ElementMat_1group(self):
+        """unittest for 1 group"""
+
+        elem_grp4 = self.mesh.element["Triangle3"].get_group([3])
+        solution = np.array([[0, 1, 2], [1, 2, 3]])
         results = elem_grp4.connectivity
         testA = np.sum(abs(solution - results))
-        msg = (
-            "Wrong projection: returned "
-            + str(results)
-            + ", expected: "
-            + str(solution)
-        )
+        msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
