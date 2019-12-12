@@ -10,29 +10,28 @@ import numpy as np
 class unittest_get_node_tags(TestCase):
     """unittest for elements and nodes getter methods"""
 
-    # TODO
-    def test_ElementMat_NodeMat(self):
-        """unittest with ElementMat and NodeMat objects"""
-        # Init
-        mesh = Mesh()
-        mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
-        mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)
-        mesh.node = NodeMat()
-        mesh.node.add_node(np.array([0, 0]))
-        mesh.node.add_node(np.array([1, 0]))
-        mesh.node.add_node(np.array([1, 2]))
-        mesh.node.add_node(np.array([2, 3]))
-        mesh.node.add_node(np.array([3, 3]))
+    def setUp(self):
+        self.mesh = Mesh()
+        self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
+        self.mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)
+        self.mesh.node = NodeMat()
+        self.mesh.node.add_node(np.array([0, 0]))
+        self.mesh.node.add_node(np.array([1, 0]))
+        self.mesh.node.add_node(np.array([1, 2]))
+        self.mesh.node.add_node(np.array([2, 3]))
+        self.mesh.node.add_node(np.array([3, 3]))
 
-        mesh.add_element(np.array([0, 1, 2]), "Triangle3", group=int(3))
-        mesh.add_element(np.array([1, 2, 3]), "Triangle3", group=int(3))
-        mesh.add_element(np.array([4, 2, 3]), "Triangle3", group=int(2))
-        mesh.add_element(np.array([4, 3]), "Segment2", group=int(2))
+        self.mesh.add_element(np.array([0, 1, 2]), "Triangle3", group=int(3))
+        self.mesh.add_element(np.array([1, 2, 3]), "Triangle3", group=int(3))
+        self.mesh.add_element(np.array([4, 2, 3]), "Triangle3", group=int(2))
+        self.mesh.add_element(np.array([4, 3]), "Segment2", group=int(2))
 
-        # Method test 1
-        node_tags = mesh.get_node_tags(elem_tag=np.array([1, 2], dtype=int))
-        # Check result
+    def test_ElementMat_NodeMat_Triangle3(self):
+        """unittest with ElementMat and NodeMat objects, only Triangle3 elements are defined"""
+
+        node_tags = self.mesh.get_node_tags(elem_tag=np.array([1, 2], dtype=int))
         solution = np.array([1, 2, 3, 4])
+
         testA = np.sum(abs(solution - node_tags))
         msg = (
             "Wrong projection: returned "
@@ -43,8 +42,10 @@ class unittest_get_node_tags(TestCase):
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
+    def test_ElementMat_NodeMat_MixedElement(self):
+        """unittest with ElementMat and NodeMat objects, both Triangle3 and Segment2 elements are defined"""
         # Method test 2
-        node_tags = mesh.get_node_tags(np.array([2, 3]))
+        node_tags = self.mesh.get_node_tags(np.array([2, 3]))
         # Check result
         solution = np.array([2, 3, 4])
         testA = np.sum(abs(solution - node_tags))
