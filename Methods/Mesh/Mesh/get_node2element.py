@@ -8,8 +8,8 @@ def get_node2element(self, node_tag):
 
     Parameters
     ----------
-    self : ElementDict
-        an ElementDict object
+    self : Mesh
+        an Mesh object
     node_tag : int
         a node tag
 
@@ -33,4 +33,7 @@ def get_node2element(self, node_tag):
                 if sum(connect[key] == node_tag) > 0:
                     nodes_to_elements = np.concatenate((nodes_to_elements, tag[key]))
 
-    return nodes_to_elements
+    if nodes_to_elements.size == 0:
+        return None
+    else:
+        return nodes_to_elements

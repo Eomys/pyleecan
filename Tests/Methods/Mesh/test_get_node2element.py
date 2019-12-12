@@ -3,32 +3,43 @@
 from unittest import TestCase
 from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
 
-class unittest_getnode2element(TestCase):
+class unittest_get_node2element(TestCase):
     """unittest to get elements containing specific node(s)"""
 
-    def test_ElementMat(self):
-        # Init 1
-        mesh = Mesh()
-        mesh.element["Triangle3"] = ElementMat()
-        mesh.element["Triangle3"].connectivity = np.array(
-            [[11, 12, 13], [0, 1, 2], [1, 2, 3], [120, 11, 12]]
-        )
-        mesh.element["Triangle3"].nb_elem = 4
-        mesh.element["Triangle3"].nb_node_per_element = 3
-        mesh.element["Triangle3"].tag = np.array([0, 1, 2, 3])
-        # Method test 1
-        elem_tag = mesh.element["Triangle3"].get_node2element(1)
-        # Check results
-        solution = np.array([1, 2])  # In this case, element tag = line position
+    def setUp(self):
+        self.mesh = Mesh()
+        self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
+        self.mesh.add_element(np.array([0, 1, 2]), "Triangle3", group=int(3))
+        self.mesh.add_element(np.array([1, 2, 3]), "Triangle3", group=int(3))
+        self.mesh.add_element(np.array([4, 2, 3]), "Triangle3", group=int(2))
+
+    def test_ElementMat_1node(self):
+        """unittest for one existing node """
+        elem_tag = self.mesh.element["Triangle3"].get_node2element(1)
+        solution = np.array([0, 1])
         testA = np.sum(abs(solution - elem_tag))
-        msg = (
-            "Wrong projection: returned "
-            + str(elem_tag)
-            + ", expected: "
-            + str(solution)
-        )
+        msg = "Wrong output: returned " + str(elem_tag) + ", expected: " + str(solution)
+        DELTA = 1e-10
+        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+
+    def test_ElementMat_fakenode(self):
+        """unittest for one non-existing node """
+        elem_tag = self.mesh.element["Triangle3"].get_node2element(-99)
+        solution = None
+        testA = np.sum(abs(solution - elem_tag))
+        msg = "Wrong output: returned " + str(elem_tag) + ", expected: " + str(solution)
+        DELTA = 1e-10
+        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+
+    def test_ElementMat_None(self):
+        """unittest for None input """
+        elem_tag = self.mesh.element["Triangle3"].get_node2element(None)
+        solution = None
+        testA = np.sum(abs(solution - elem_tag))
+        msg = "Wrong output: returned " + str(elem_tag) + ", expected: " + str(solution)
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
