@@ -182,7 +182,7 @@ class Mesh(FrozenClass):
                 submesh = init_dict["submesh"]
         # Initialisation by argument
         self.parent = None
-        # element can be None or a list of Element object
+        # element can be None or a dict of Element object
         self.element = dict()
         if type(element) is dict:
             for key, obj in element.items():
@@ -202,7 +202,7 @@ class Mesh(FrozenClass):
                     class_obj = getattr(module, class_name)
                     self.element[key] = class_obj(init_dict=obj)
                 else:
-                    element = element  # Should raise an error
+                    element = obj  # Should raise an error
         elif element is None:
             self.element = dict()
         else:
@@ -248,7 +248,7 @@ class Mesh(FrozenClass):
         else:
             Mesh_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if len(self.element) == 0:
-            Mesh_str += "element = []"
+            Mesh_str += "element = dict()"
         for key, obj in self.element.items():
             Mesh_str += (
                 "element["
