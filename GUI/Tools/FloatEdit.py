@@ -113,7 +113,7 @@ class FloatValidator(QDoubleValidator):
 
         """
         string = string.replace(",", ".")
-        
+
         match = search(r"^[+-]?($|(\d+\.?|\.?(\d+|$))\d*($|([eE][+-]?)?\d*$))", string)
         is_intermediate = True if match else False
 
@@ -144,9 +144,6 @@ class FloatValidator(QDoubleValidator):
         -------
 
         """
-        # match = _float_re.search(text)
-        # text = match.groups()[0] if match else ""
-
         if text != "":  # We can't correct an empty text
             # 12,10 can't be converted to float 12.10 can
             text = text.replace(",", ".")
