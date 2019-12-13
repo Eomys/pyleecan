@@ -307,7 +307,7 @@ def generate_init(gen_dict, class_dict):
                 prop["name"], prop["type"][1:-1], daug_list
             )
             init_by_var += TAB4 + "else:\n"
-            init_by_var += TAB5 + prop["name"] + " = obj # Should raise an error\n"
+            init_by_var += TAB5 + "self." + prop["name"] + "[key] = obj\n"
             init_by_var += TAB2 + "elif " + prop["name"] + " is None:\n"
             init_by_var += TAB3 + "self." + prop["name"] + " = dict()\n"
             init_by_var += TAB2 + "else:\n"

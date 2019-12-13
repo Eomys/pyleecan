@@ -202,7 +202,7 @@ class Mesh(FrozenClass):
                     class_obj = getattr(module, class_name)
                     self.element[key] = class_obj(init_dict=obj)
                 else:
-                    element = obj  # Should raise an error
+                    self.element[key] = obj
         elif element is None:
             self.element = dict()
         else:
