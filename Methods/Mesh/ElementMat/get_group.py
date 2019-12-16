@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.ElementMat import ElementMat
 import numpy as np
 
 
@@ -20,15 +19,20 @@ def get_group(self, group_number):
          an ElementMat which is a submesh of parent mesh self related to group_number
 
      """
-    subelem = ElementMat()
+    module = __import__("pyleecan.Classes." + "ElementMat", fromlist=["ElementMat"])
+    grp_elem = getattr(module, "ElementMat")()
 
-    elements_parent = self.connectivity
+    connect_parent = self.connectivity
     groups = self.group
-    elem_tags = np.where(groups == group_number)[0]
+    tags = self.tag
+    grp_elem.nb_node_per_element = self.nb_node_per_element
 
-    subelem.connectivity = elements_parent[elem_tags, :]
-    subelem.group = groups[elem_tags]  # Should be only one type
-    subelem.nb_elem = len(elem_tags)
-    subelem.nb_node_per_element = self.nb_node_per_element  # Must be the same
+    grp_connect, grp_tags = self.get_all_connectivity(group_number)
+    nb_elem_grp = len(grp_tags)
+    if nb_elem_grp > 1:
+        for ie in range(nb_elem_grp):
+            grp_elem.add_element(grp_connect[ie], grp_tags[ie])
+    elif nb_elem_grp == 1:
+        grp_elem.add_element(grp_connect, grp_tags[0])
 
-    return subelem
+    return grp_elem

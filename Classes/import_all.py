@@ -11,7 +11,6 @@ from pyleecan.Classes.CondType21 import CondType21
 from pyleecan.Classes.CondType22 import CondType22
 from pyleecan.Classes.Conductor import Conductor
 from pyleecan.Classes.Element import Element
-from pyleecan.Classes.ElementDict import ElementDict
 from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.Force import Force
 from pyleecan.Classes.ForceMT import ForceMT

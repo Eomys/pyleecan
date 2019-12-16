@@ -19,7 +19,10 @@ def run(self):
 
     self.comp_time_angle(output)
 
-    # Compute the magnetic force according to the airgap flux
+    group = self.force.group  # Magnetic force target
+
+    # Init model, generate or import mechanical mesh
+    self.init_mechanical_model(output, group)
+
+    # Compute the magnetic force according to the Force model
     self.force.comp_force(output)
-    if self.force.is_comp_nodal_force:
-        self.force.comp_force_nodal()
