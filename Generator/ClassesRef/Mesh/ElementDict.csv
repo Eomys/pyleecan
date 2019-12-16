@@ -1,7 +1,0 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-connectivity,,"Dict containing connectivity strored per element type in a ndarray: element = {""Triangle"": np.array([nd1, nd2, nd3 ]), ""Quadrangle"": np.array([nd1, nd2, nd3, nd4 ])}.",,,dict,None,,,,,,Mesh,Element,get_group,VERSION,1,"Define the connectivity with a dict, sorting element by types. ",
-nb_elem,,"Number of elements per element type and total: nb_elem = {""Total"": nb_elem_total (int), ""Triangle"": nb_elem_triangle (int)  … }.",,,dict,None,,,,,,,,get_node_tags,,,,
-nb_node_per_element,,Define the number of node per element,,,dict,None,,,,,,,,get_node2element,,,,
-tag,,Dict containing tags stored per element type,,,dict,None,,,,,,,,convert_element,,,,
-group,,Attribute a group number (int) to each element . This group number should correspond to a subpart of the machine.,,,dict,None,,,,,,,,add_element,,,,
-,,,,,,,,,,,,,,get_connectivity,,,,

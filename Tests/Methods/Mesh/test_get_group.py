@@ -2,68 +2,35 @@
 
 from unittest import TestCase
 from pyleecan.Classes.Mesh import Mesh
-from pyleecan.Classes.ElementDict import ElementDict
 from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
 
-class unittest_getnode2element(TestCase):
-    """unittest to get elements containing specific node(s)"""
+class unittest_get_group(TestCase):
+    """unittest to extract a group as a Mesh object"""
 
-    def test_ElementDict(self):
-        # Init 1
-        mesh = Mesh()
-        mesh.element = ElementDict()
-        mesh.element.connectivity = {"Triangle": np.array([[0, 1, 2], [1, 2, 3]])}
-        mesh.element.tag = {"Triangle": np.array([1, 2])}
-        mesh.element.nb_elem = {"Triangle": 2}
-        mesh.element.nb_node_per_element = {"Triangle": 3}
-        # Method test 1
-        elem_tag = mesh.element.get_node2element(1)
-        # Check results
-        solution = np.array([1, 2])  # Warning, elements tags, not line position !
-        testA = np.sum(abs(solution - elem_tag))
-        msg = (
-            "Wrong projection: returned "
-            + str(elem_tag)
-            + ", expected: "
-            + str(solution)
-        )
-        DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+    def setUp(self):
+        self.mesh = Mesh()
+        self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
+        self.mesh.node = NodeMat()
+        self.mesh.node.add_node(np.array([0, 0]))
+        self.mesh.node.add_node(np.array([1, 0]))
+        self.mesh.node.add_node(np.array([1, 2]))
+        self.mesh.node.add_node(np.array([2, 3]))
+        self.mesh.node.add_node(np.array([3, 3]))
 
-        # Method test 2
-        elem_tag = mesh.element.get_node2element(3)
-        solution = np.array([2])
-        testA = np.sum(abs(solution - elem_tag))
-        msg = (
-            "Wrong projection: returned "
-            + str(elem_tag)
-            + ", expected: "
-            + str(solution)
-        )
-        DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        self.mesh.add_element(np.array([0, 1, 2]), "Triangle3", group=int(3))
+        self.mesh.add_element(np.array([1, 2, 3]), "Triangle3", group=int(3))
+        self.mesh.add_element(np.array([4, 2, 3]), "Triangle3", group=int(2))
 
-    def test_ElementMat(self):
-        # Init 1
-        mesh = Mesh()
-        mesh.element = ElementMat()
-        mesh.element.connectivity = np.array(
-            [[11, 12, 13], [0, 1, 2], [1, 2, 3], [120, 11, 12]]
-        )
-        mesh.element.nb_elem = 2
-        mesh.element.nb_node_per_element = 3
-        # Method test 1
-        elem_tag = mesh.element.get_node2element(1)
-        # Check results
-        solution = np.array([1, 2])  # In this case, element tag = line position
-        testA = np.sum(abs(solution - elem_tag))
-        msg = (
-            "Wrong projection: returned "
-            + str(elem_tag)
-            + ", expected: "
-            + str(solution)
-        )
+    def test_ElementMat_1group(self):
+        """unittest for 1 group"""
+
+        elem_grp4 = self.mesh.element["Triangle3"].get_group([3])
+        solution = np.array([[0, 1, 2], [1, 2, 3]])
+        results = elem_grp4.connectivity
+        testA = np.sum(abs(solution - results))
+        msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)

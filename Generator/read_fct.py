@@ -193,7 +193,7 @@ def find_import_type(gen_dict, class_dict, pyleecan_type=[]):
     # Find every property type of the class
     for prop in prop_list:
         # Detect list of pyleecan type
-        if is_list_pyleecan_type(prop["type"]):
+        if is_list_pyleecan_type(prop["type"]) or is_dict_pyleecan_type(prop["type"]):
             prop_type = prop["type"][1:-1]
         else:
             prop_type = prop["type"]
@@ -217,6 +217,22 @@ def is_list_pyleecan_type(type_name):
         True if the type is a list of pyleecan type
     """
     return type_name[0] == "[" and type_name[-1] == "]"
+
+
+def is_dict_pyleecan_type(type_name):
+    """Check if the type is a dict of Pyleecan type ({name})
+
+    Parameters
+    ----------
+    type_name : str
+        Type of the property
+
+    Returns
+    -------
+    is_list : bool
+        True if the type is a dict of pyleecan type
+    """
+    return type_name[0] == "{" and type_name[-1] == "}"
 
 
 class NotAFile(Exception):

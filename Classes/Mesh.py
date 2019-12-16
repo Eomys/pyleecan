@@ -13,6 +13,46 @@ try:
 except ImportError as error:
     set_submesh = error
 
+try:
+    from pyleecan.Methods.Mesh.Mesh.get_all_node_coord import get_all_node_coord
+except ImportError as error:
+    get_all_node_coord = error
+
+try:
+    from pyleecan.Methods.Mesh.Mesh.add_element import add_element
+except ImportError as error:
+    add_element = error
+
+try:
+    from pyleecan.Methods.Mesh.Mesh.get_all_connectivity import get_all_connectivity
+except ImportError as error:
+    get_all_connectivity = error
+
+try:
+    from pyleecan.Methods.Mesh.Mesh.get_connectivity import get_connectivity
+except ImportError as error:
+    get_connectivity = error
+
+try:
+    from pyleecan.Methods.Mesh.Mesh.get_new_tag import get_new_tag
+except ImportError as error:
+    get_new_tag = error
+
+try:
+    from pyleecan.Methods.Mesh.Mesh.interface import interface
+except ImportError as error:
+    interface = error
+
+try:
+    from pyleecan.Methods.Mesh.Mesh.get_node_tags import get_node_tags
+except ImportError as error:
+    get_node_tags = error
+
+try:
+    from pyleecan.Methods.Mesh.Mesh.get_vertice import get_vertice
+except ImportError as error:
+    get_vertice = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Element import Element
@@ -24,6 +64,7 @@ class Mesh(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Mesh.Mesh.set_submesh
     if isinstance(set_submesh, ImportError):
         set_submesh = property(
@@ -33,10 +74,92 @@ class Mesh(FrozenClass):
         )
     else:
         set_submesh = set_submesh
+    # cf Methods.Mesh.Mesh.get_all_node_coord
+    if isinstance(get_all_node_coord, ImportError):
+        get_all_node_coord = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Mesh method get_all_node_coord: "
+                    + str(get_all_node_coord)
+                )
+            )
+        )
+    else:
+        get_all_node_coord = get_all_node_coord
+    # cf Methods.Mesh.Mesh.add_element
+    if isinstance(add_element, ImportError):
+        add_element = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Mesh method add_element: " + str(add_element))
+            )
+        )
+    else:
+        add_element = add_element
+    # cf Methods.Mesh.Mesh.get_all_connectivity
+    if isinstance(get_all_connectivity, ImportError):
+        get_all_connectivity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Mesh method get_all_connectivity: "
+                    + str(get_all_connectivity)
+                )
+            )
+        )
+    else:
+        get_all_connectivity = get_all_connectivity
+    # cf Methods.Mesh.Mesh.get_connectivity
+    if isinstance(get_connectivity, ImportError):
+        get_connectivity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Mesh method get_connectivity: " + str(get_connectivity)
+                )
+            )
+        )
+    else:
+        get_connectivity = get_connectivity
+    # cf Methods.Mesh.Mesh.get_new_tag
+    if isinstance(get_new_tag, ImportError):
+        get_new_tag = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Mesh method get_new_tag: " + str(get_new_tag))
+            )
+        )
+    else:
+        get_new_tag = get_new_tag
+    # cf Methods.Mesh.Mesh.interface
+    if isinstance(interface, ImportError):
+        interface = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Mesh method interface: " + str(interface))
+            )
+        )
+    else:
+        interface = interface
+    # cf Methods.Mesh.Mesh.get_node_tags
+    if isinstance(get_node_tags, ImportError):
+        get_node_tags = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Mesh method get_node_tags: " + str(get_node_tags)
+                )
+            )
+        )
+    else:
+        get_node_tags = get_node_tags
+    # cf Methods.Mesh.Mesh.get_vertice
+    if isinstance(get_vertice, ImportError):
+        get_vertice = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Mesh method get_vertice: " + str(get_vertice))
+            )
+        )
+    else:
+        get_vertice = get_vertice
     # save method is available in all object
     save = save
 
-    def __init__(self, element=None, node=None, submesh=list(), init_dict=None):
+    def __init__(self, element=dict(), node=-1, submesh=list(), init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -46,8 +169,6 @@ class Mesh(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if element == -1:
-            element = Element()
         if node == -1:
             node = Node()
         if init_dict is not None:  # Initialisation by dict
@@ -61,14 +182,43 @@ class Mesh(FrozenClass):
                 submesh = init_dict["submesh"]
         # Initialisation by argument
         self.parent = None
-        # element can be None, a Element object or a dict
-        if isinstance(element, dict):
-            self.element = Element(init_dict=element)
+        # element can be None or a dict of Element object
+        self.element = dict()
+        if type(element) is dict:
+            for key, obj in element.items():
+                if isinstance(obj, dict):
+                    # Check that the type is correct (including daughter)
+                    class_name = obj.get("__class__")
+                    if class_name not in ["Element", "ElementMat"]:
+                        raise InitUnKnowClassError(
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for element"
+                        )
+                    # Dynamic import to call the correct constructor
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
+                    self.element[key] = class_obj(init_dict=obj)
+                else:
+                    self.element[key] = obj
+        elif element is None:
+            self.element = dict()
         else:
-            self.element = element
+            self.element = element  # Should raise an error
         # node can be None, a Node object or a dict
         if isinstance(node, dict):
-            self.node = Node(init_dict=node)
+            # Check that the type is correct (including daughter)
+            class_name = node.get("__class__")
+            if class_name not in ["Node", "NodeMat"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for node"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.node = class_obj(init_dict=node)
         else:
             self.node = node
         # submesh can be None or a list of Mesh object
@@ -97,10 +247,18 @@ class Mesh(FrozenClass):
             Mesh_str += "parent = None " + linesep
         else:
             Mesh_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        if self.element is not None:
-            Mesh_str += "element = " + str(self.element.as_dict()) + linesep + linesep
-        else:
-            Mesh_str += "element = None" + linesep + linesep
+        if len(self.element) == 0:
+            Mesh_str += "element = dict()"
+        for key, obj in self.element.items():
+            Mesh_str += (
+                "element["
+                + key
+                + "] = "
+                + str(self.element[key].as_dict())
+                + "\n"
+                + linesep
+                + linesep
+            )
         if self.node is not None:
             Mesh_str += "node = " + str(self.node.as_dict()) + linesep + linesep
         else:
@@ -131,10 +289,9 @@ class Mesh(FrozenClass):
         """
 
         Mesh_dict = dict()
-        if self.element is None:
-            Mesh_dict["element"] = None
-        else:
-            Mesh_dict["element"] = self.element.as_dict()
+        Mesh_dict["element"] = dict()
+        for key, obj in self.element.items():
+            Mesh_dict["element"][key] = obj.as_dict()
         if self.node is None:
             Mesh_dict["node"] = None
         else:
@@ -149,8 +306,8 @@ class Mesh(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.element is not None:
-            self.element._set_None()
+        for key, obj in self.element.items():
+            obj._set_None()
         if self.node is not None:
             self.node._set_None()
         for obj in self.submesh:
@@ -158,18 +315,18 @@ class Mesh(FrozenClass):
 
     def _get_element(self):
         """getter of element"""
+        for key, obj in self._element.items():
+            if obj is not None:
+                obj.parent = self
         return self._element
 
     def _set_element(self, value):
         """setter of element"""
-        check_var("element", value, "Element")
+        check_var("element", value, "{Element}")
         self._element = value
 
-        if self._element is not None:
-            self._element.parent = self
-
     # Storing connectivity
-    # Type : Element
+    # Type : {Element}
     element = property(
         fget=_get_element, fset=_set_element, doc=u"""Storing connectivity"""
     )

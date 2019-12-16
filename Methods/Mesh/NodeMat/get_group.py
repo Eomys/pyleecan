@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.NodeMat import NodeMat
+import numpy as np
 
 
 def get_group(self, element):
@@ -19,10 +19,17 @@ def get_group(self, element):
          a Node object corresponding to Element
 
      """
+    module = __import__("pyleecan.Classes." + "NodeMat", fromlist=["NodeMat"])
+    node = getattr(module, "NodeMat")()
 
-    node = NodeMat()
-    node_tags = element.get_node_tags()
-    node.coordinate = self.coordinate[node_tags, :]
-    node.nb_node = len(node.coordinate)
+    node_tags = element.get_all_node_tags()
+
+    node.nb_node = len(node_tags)
+    node.coordinate = np.zeros((node.nb_node, 2))  # TO BE Extended to 3D
+    node.tag = np.zeros((node.nb_node))
+    for ind in range(node.nb_node):
+        Ipos = np.where(node_tags[ind] == self.tag)[0]
+        node.coordinate[ind, :] = self.coordinate[Ipos, :]
+        node.tag[ind] = self.tag[Ipos]
 
     return node

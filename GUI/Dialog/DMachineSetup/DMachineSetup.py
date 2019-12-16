@@ -53,7 +53,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
             self.machine_path = machine_path
 
         if matlib_path == "":
-            join(DATA_DIR, "Material")
+            self.matlib_path = join(DATA_DIR, "Material")
         else:
             self.matlib_path = matlib_path
         # Load all the materials
