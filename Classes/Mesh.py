@@ -255,7 +255,6 @@ class Mesh(FrozenClass):
                 + key
                 + "] = "
                 + str(self.element[key].as_dict())
-                + "\n"
                 + linesep
                 + linesep
             )

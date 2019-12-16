@@ -96,9 +96,11 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
             nb_elem=NbElem,
             group=listElem0[:, 6],
             nb_node_per_element=3,
-            tag=np.linspace(0, NbElem-1, NbElem)
+            tag=np.linspace(0, NbElem - 1, NbElem),
         )
-        mesh.node = NodeMat(coordinate=listNd[:, 0:2], nb_node=NbNd, tag=np.linspace(0, NbNd-1, NbNd))
+        mesh.node = NodeMat(
+            coordinate=listNd[:, 0:2], nb_node=NbNd, tag=np.linspace(0, NbNd - 1, NbNd)
+        )
     else:
         mesh = None
 

@@ -751,7 +751,7 @@ def generate_str(gen_dict, class_dict):
                 + prop["name"]
                 + '["+key+"] = "+str(self.'
                 + prop["name"]
-                + '[key].as_dict())\n'
+                + "[key].as_dict())"
             )
         else:  # For pyleecan type print the dict (from as_dict)
             # Add => < "MyClass = "+str(self.my_var.as_dict()) >to var_str
