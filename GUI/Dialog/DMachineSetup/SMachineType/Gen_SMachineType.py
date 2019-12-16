@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to SMachineType/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.Ui_SMachineType import (
     Ui_SMachineType,
@@ -8,6 +10,8 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.Ui_SMachineType import (
 
 class Gen_SMachineType(Ui_SMachineType):
     def setupUi(self, SMachineType):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_SMachineType.setupUi(self, SMachineType)
         # Setup of si_p
         self.si_p.setMinimum(1)

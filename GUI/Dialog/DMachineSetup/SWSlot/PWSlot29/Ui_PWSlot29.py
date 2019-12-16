@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'D:\GitHub\pyleecan\GUI\Dialog\DMachineSetup\SWSlot\PWSlot29\PWSlot29.ui'
-#
-# Created by: PyQt5 UI code generator 5.12
-#
+# File generated according to PWSlot29.ui
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets

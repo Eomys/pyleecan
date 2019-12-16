@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to PWSlot24/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot24.Ui_PWSlot24 import Ui_PWSlot24
 
 
 class Gen_PWSlot24(Ui_PWSlot24):
     def setupUi(self, PWSlot24):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_PWSlot24.setupUi(self, PWSlot24)
         # Setup of in_W3
         txt = self.tr(u"""Teeth width""")

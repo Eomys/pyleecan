@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to DMatLib/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMatLib.Ui_DMatLib import Ui_DMatLib
 
 
 class Gen_DMatLib(Ui_DMatLib):
     def setupUi(self, DMatLib):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_DMatLib.setupUi(self, DMatLib)
         # Setup of out_name
         txt = self.tr(u"""name of the material""")

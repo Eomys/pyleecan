@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to PWSlot21/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot21.Ui_PWSlot21 import Ui_PWSlot21
 
 
 class Gen_PWSlot21(Ui_PWSlot21):
     def setupUi(self, PWSlot21):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_PWSlot21.setupUi(self, PWSlot21)
         # Setup of in_W0
         txt = self.tr(u"""Slot isthmus width.""")

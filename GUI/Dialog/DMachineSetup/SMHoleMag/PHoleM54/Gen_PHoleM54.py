@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to PHoleM54/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.Ui_PHoleM54 import Ui_PHoleM54
 
 
 class Gen_PHoleM54(Ui_PHoleM54):
     def setupUi(self, PHoleM54):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_PHoleM54.setupUi(self, PHoleM54)
         # Setup of in_R1
         txt = self.tr(u"""Hole radius""")

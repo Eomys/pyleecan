@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to PHoleM52/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52.Ui_PHoleM52 import Ui_PHoleM52
 
 
 class Gen_PHoleM52(Ui_PHoleM52):
     def setupUi(self, PHoleM52):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_PHoleM52.setupUi(self, PHoleM52)
         # Setup of in_W0
         txt = self.tr(u"""Magnet width""")

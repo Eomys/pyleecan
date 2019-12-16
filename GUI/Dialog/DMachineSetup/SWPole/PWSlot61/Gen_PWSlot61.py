@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to PWSlot61/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SWPole.PWSlot61.Ui_PWSlot61 import Ui_PWSlot61
 
 
 class Gen_PWSlot61(Ui_PWSlot61):
     def setupUi(self, PWSlot61):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_PWSlot61.setupUi(self, PWSlot61)
         # Setup of in_W0
         txt = self.tr(u"""Pole top width""")

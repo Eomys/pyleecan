@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'D:\GitHub\pyleecan\GUI\Dialog\DMachineSetup\SMHoleMag\PHoleM52\PHoleM52.ui'
-#
-# Created by: PyQt5 UI code generator 5.12
-#
+# File generated according to PHoleM52.ui
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
