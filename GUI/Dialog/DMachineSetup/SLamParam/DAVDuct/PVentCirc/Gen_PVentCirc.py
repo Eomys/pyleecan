@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to PVentCirc/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.Ui_PVentCirc import (
     Ui_PVentCirc,
@@ -8,6 +10,8 @@ from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.Ui_PVentCirc 
 
 class Gen_PVentCirc(Ui_PVentCirc):
     def setupUi(self, PVentCirc):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_PVentCirc.setupUi(self, PVentCirc)
         # Setup of in_Alpha0
         txt = self.tr(u"""Shift angle of the holes around circumference""")

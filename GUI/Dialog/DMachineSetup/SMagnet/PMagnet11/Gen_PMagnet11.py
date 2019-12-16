@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to PMagnet11/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet11.Ui_PMagnet11 import (
     Ui_PMagnet11,
@@ -8,6 +10,8 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet11.Ui_PMagnet11 import (
 
 class Gen_PMagnet11(Ui_PMagnet11):
     def setupUi(self, PMagnet11):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_PMagnet11.setupUi(self, PMagnet11)
         # Setup of in_Hmag
         txt = self.tr(u"""magnet radial height [m]""")

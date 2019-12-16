@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to PVentPolar/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.Ui_PVentPolar import (
     Ui_PVentPolar,
@@ -8,6 +10,8 @@ from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.Ui_PVentPola
 
 class Gen_PVentPolar(Ui_PVentPolar):
     def setupUi(self, PVentPolar):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_PVentPolar.setupUi(self, PVentPolar)
         # Setup of in_Alpha0
         txt = self.tr(u"""Shift angle of the hole around circumference""")

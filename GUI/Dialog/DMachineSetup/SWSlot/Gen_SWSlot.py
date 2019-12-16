@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to SWSlot/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.Ui_SWSlot import Ui_SWSlot
 
 
 class Gen_SWSlot(Ui_SWSlot):
     def setupUi(self, SWSlot):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_SWSlot.setupUi(self, SWSlot)
         # Setup of in_Zs
         txt = self.tr(u"""slot number""")

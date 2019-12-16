@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to PHoleM53/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM53.Ui_PHoleM53 import Ui_PHoleM53
 
 
 class Gen_PHoleM53(Ui_PHoleM53):
     def setupUi(self, PHoleM53):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_PHoleM53.setupUi(self, PHoleM53)
         # Setup of in_W1
         txt = self.tr(u"""Tooth width (at V bottom)""")

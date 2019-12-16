@@ -44,7 +44,6 @@ def plot_mesh_field(
         field = solution.get_field(elem_type=elem_type, group=group)
 
     def showMeshPlot(mesh, elem_type, field, title):
-
         def triplot(mesh, elem_type, values, ax=None, **kwargs):
 
             if not ax:

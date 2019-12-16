@@ -294,7 +294,7 @@ def generate_init(gen_dict, class_dict):
                 TAB2
                 + "# "
                 + prop["name"]
-                + " can be None or a list of "
+                + " can be None or a dict of "
                 + prop["type"][1:-1]
                 + " object\n"
             )
@@ -307,9 +307,7 @@ def generate_init(gen_dict, class_dict):
                 prop["name"], prop["type"][1:-1], daug_list
             )
             init_by_var += TAB4 + "else:\n"
-            init_by_var += (
-                TAB5 + prop["name"] + " = " + prop["name"] + "# Should raise an error\n"
-            )
+            init_by_var += TAB5 + "self." + prop["name"] + "[key] = obj\n"
             init_by_var += TAB2 + "elif " + prop["name"] + " is None:\n"
             init_by_var += TAB3 + "self." + prop["name"] + " = dict()\n"
             init_by_var += TAB2 + "else:\n"
@@ -373,10 +371,10 @@ def generate_init(gen_dict, class_dict):
                 arg_list += ", " + prop["name"] + "=" + str(prop["value"])
             else:
                 arg_list += ", " + prop["name"] + "=None"
-        elif prop["type"][0] == "[" and prop["type"][-1] == "]":
+        elif is_list_pyleecan_type(prop["type"]):
             # List of pyleecan type
             arg_list += ", " + prop["name"] + "=list()"
-        elif prop["type"][0] == "{" and prop["type"][-1] == "}":
+        elif is_dict_pyleecan_type(prop["type"]):
             # Dict of pyleecan type
             arg_list += ", " + prop["name"] + "=dict()"
         else:  # pyleecan type
@@ -744,7 +742,7 @@ def generate_str(gen_dict, class_dict):
             )
         elif is_dict_pyleecan_type(prop["type"]):
             var_str += TAB2 + "if len(self." + prop["name"] + ") == 0:\n"
-            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = []"\n'
+            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = dict()"\n'
             var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
             var_str += (
                 TAB3
@@ -753,7 +751,7 @@ def generate_str(gen_dict, class_dict):
                 + prop["name"]
                 + '["+key+"] = "+str(self.'
                 + prop["name"]
-                + '[key].as_dict())+"\\n"'
+                + "[key].as_dict())"
             )
         else:  # For pyleecan type print the dict (from as_dict)
             # Add => < "MyClass = "+str(self.my_var.as_dict()) >to var_str

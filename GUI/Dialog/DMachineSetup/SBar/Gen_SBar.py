@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to SBar/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.Ui_SBar import Ui_SBar
 
 
 class Gen_SBar(Ui_SBar):
     def setupUi(self, SBar):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_SBar.setupUi(self, SBar)
         # Setup of in_Hscr
         txt = self.tr(u"""short circuit ring section radial height [m]""")

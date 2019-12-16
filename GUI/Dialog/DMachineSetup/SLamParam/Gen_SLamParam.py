@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to SLamParam/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.Ui_SLamParam import Ui_SLamParam
 
 
 class Gen_SLamParam(Ui_SLamParam):
     def setupUi(self, SLamParam):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_SLamParam.setupUi(self, SLamParam)
         # Setup of in_L1
         txt = self.tr(

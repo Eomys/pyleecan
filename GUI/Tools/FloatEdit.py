@@ -6,7 +6,7 @@ A Line Edit Widget optimize to input float
 @author pierre_b
 @todo unittest it
 """
-from re import compile
+from re import compile, search
 
 from PyQt5 import QtGui
 from PyQt5.QtGui import QDoubleValidator
@@ -73,7 +73,7 @@ class FloatEdit(QLineEdit):
                 self.setText(format(value, ".8g"))
 
     def value(self):
-        """Return the containt of the Widget as a float
+        """Return the content of the Widget as a float
 
         Parameters
         ----------
@@ -112,9 +112,14 @@ class FloatValidator(QDoubleValidator):
         -------
 
         """
+        string = string.replace(",", ".")
+
+        match = search(r"^[+-]?($|(\d+\.?|\.?(\d+|$))\d*($|([eE][+-]?)?\d*$))", string)
+        is_intermediate = True if match else False
+
         if valid_float_string(string):
             state = QtGui.QValidator.Acceptable
-        elif string == "" or string[position - 1] in "e.-+":
+        elif is_intermediate:
             state = QtGui.QValidator.Intermediate
         else:
             state = QtGui.QValidator.Invalid

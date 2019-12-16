@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to PWSlot60/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SWPole.PWSlot60.Ui_PWSlot60 import Ui_PWSlot60
 
 
 class Gen_PWSlot60(Ui_PWSlot60):
     def setupUi(self, PWSlot60):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_PWSlot60.setupUi(self, PWSlot60)
         # Setup of in_R1
         txt = self.tr(u"""Pole top radius""")

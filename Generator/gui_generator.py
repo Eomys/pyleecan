@@ -25,13 +25,15 @@ MIN_SPIN = -999999
 MAX_SPIN = 999999
 
 
-def generate_gui(gen_dict):
+def generate_gui(gen_dict, is_gen_resource=True):
     """Generate all the needed file for the GUI
 
     Parameters
     ----------
     gen_dict : dict
         Dict with key = class name and value = class_dict
+    is_gen_resource : bool
+        True to genrate the resources as well
     """
 
     # Get all the ui files
@@ -48,8 +50,12 @@ def generate_gui(gen_dict):
                 gen_list = jload(load_file)
                 gen_gui_edit_file(file_tuple[0], file_tuple[1][:-3], gen_dict, gen_list)
     # Generate the resources
-    print("Generate GUI ressources...")
-    qrc_to_py(RES_PATH, RES_NAME)
+    if is_gen_resource:
+        print("Generate GUI resources...")
+        qrc_to_py(RES_PATH, RES_NAME)
+    else:
+        print("############################")
+        print("Skipping resource generation")
 
 
 def gen_gui_edit_file(path, class_name, gen_dict, gen_list):
@@ -76,9 +82,8 @@ def gen_gui_edit_file(path, class_name, gen_dict, gen_list):
 
     # gen_str contains the code that will be written in the generated file
     gen_str = "# -*- coding: utf-8 -*-\n"
-    gen_str += (
-        '"""Warning : this file has been generated, you shouldn\'t ' 'edit it"""\n\n'
-    )
+    gen_str += '"""File generated according to ' + class_name + "/gen_list.json\n"
+    gen_str += 'WARNING! All changes made in this file will be lost!\n"""\n\n'
 
     # Generate the import path
     # from "C:\\Users...\\GUI\\Dialog..." to ["C:", "Users",..., "GUI",
@@ -106,6 +111,10 @@ def gen_gui_edit_file(path, class_name, gen_dict, gen_list):
 
     # We use polymorphism to add some code lines to setupUi
     gen_str += TAB + "def setupUi(self, " + class_name + "):\n"
+    gen_str += (
+        TAB2 + '"""Abstract class to update the widget according to the csv doc\n'
+    )
+    gen_str += TAB2 + '"""\n'
     gen_str += TAB2 + "Ui_" + class_name + ".setupUi(self, " + class_name + ")\n"
 
     # We generate the corresponding lines for every needed widget
@@ -495,6 +504,13 @@ def ui_to_py(path, file_name):
 
     print("pyuic5 --import-from=pyleecan.GUI.Resources " + path_in + " -o " + path_out)
     system("pyuic5 --import-from=pyleecan.GUI.Resources " + path_in + " -o " + path_out)
+    # Remove header part of the generated file (to avoid "commit noise")
+    with open(path_out, "r") as py_file:
+        data = py_file.read().splitlines(True)
+    with open(path_out, "w") as py_file:
+        py_file.write(data[0])
+        py_file.write("\n# File generated according to " + file_name + "\n")
+        py_file.writelines(data[6:])
 
 
 #    #Run the windows command "pyuic5" for converting files

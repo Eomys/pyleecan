@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to PWSlot12/gen_list.json
+WARNING! All changes made in this file will be lost!
+"""
 
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot12.Ui_PWSlot12 import Ui_PWSlot12
 
 
 class Gen_PWSlot12(Ui_PWSlot12):
     def setupUi(self, PWSlot12):
+        """Abstract class to update the widget according to the csv doc
+        """
         Ui_PWSlot12.setupUi(self, PWSlot12)
         # Setup of in_R1
         txt = self.tr(u"""Wedges radius""")
