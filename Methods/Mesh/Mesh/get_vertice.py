@@ -25,9 +25,13 @@ def get_vertice(self, elem_type=None, group=None):
     connect_select, tags_select = self.get_all_connectivity(elem_type, group)
     nb_elem = len(tags_select)
     nb_node_per_elem = self.element[elem_type].nb_node_per_element
-    vertices = np.zeros((nb_elem, nb_node_per_elem, 2))
 
-    for ie in range(nb_elem):
-        vertices[ie, :, :] = self.node.get_coord(connect_select[ie, :])
+    if nb_elem == 1:
+        vertices = np.zeros((nb_node_per_elem, 2))
+        vertices = self.node.get_coord(connect_select)
+    else:
+        vertices = np.zeros((nb_elem, nb_node_per_elem, 2))
+        for ie in range(nb_elem):
+            vertices[ie, :, :] = self.node.get_coord(connect_select[ie, :])
 
     return vertices

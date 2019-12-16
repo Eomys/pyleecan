@@ -25,7 +25,8 @@ def get_node_tags(self, elem_tag):
             all_node_tag = np.concatenate(
                 (all_node_tag, self.get_connectivity(elem_tag[ie]))
             )
+        all_node_tag = np.unique(all_node_tag)
     else:
         all_node_tag = self.get_connectivity(elem_tag)
 
-    return np.unique(all_node_tag)
+    return all_node_tag
