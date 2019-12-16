@@ -25,13 +25,15 @@ MIN_SPIN = -999999
 MAX_SPIN = 999999
 
 
-def generate_gui(gen_dict):
+def generate_gui(gen_dict, is_gen_resource=True):
     """Generate all the needed file for the GUI
 
     Parameters
     ----------
     gen_dict : dict
         Dict with key = class name and value = class_dict
+    is_gen_resource : bool
+        True to genrate the resources as well
     """
 
     # Get all the ui files
@@ -48,8 +50,12 @@ def generate_gui(gen_dict):
                 gen_list = jload(load_file)
                 gen_gui_edit_file(file_tuple[0], file_tuple[1][:-3], gen_dict, gen_list)
     # Generate the resources
-    print("Generate GUI ressources...")
-    qrc_to_py(RES_PATH, RES_NAME)
+    if is_gen_resource:
+        print("Generate GUI resources...")
+        qrc_to_py(RES_PATH, RES_NAME)
+    else:
+        print("############################")
+        print("Skipping resource generation")
 
 
 def gen_gui_edit_file(path, class_name, gen_dict, gen_list):
