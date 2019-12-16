@@ -12,6 +12,7 @@ class unittest_get_vertice(TestCase):
 
     def setUp(self):
         self.mesh = Mesh()
+        self.mesh.element["Quad4"] = ElementMat(nb_node_per_element=4)
         self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
         self.mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)
         self.mesh.node = NodeMat()
@@ -29,9 +30,44 @@ class unittest_get_vertice(TestCase):
     def test_ElementMat_empty(self):
         """unittest with ElementMat object. Test for empty Mesh"""
 
-        solution = np.array([])
+        solution = 0
+        result = self.mesh.get_vertice("Quad4")
+        testA = result.size
+        msg = (
+            "Wrong output: returned "
+            + str(result.size)
+            + ", expected: "
+            + str(solution)
+        )
+        DELTA = 1e-10
+        self.assertAlmostEqual(testA, solution, msg=msg, delta=DELTA)
+
+    def test_ElementMat_seg(self):
+        """unittest with ElementMat object. Test for empty Mesh"""
+
+        solution = 4
+        result = self.mesh.get_vertice("Segment2")
+        testA = result.size
+        msg = (
+            "Wrong output: returned "
+            + str(result.size)
+            + ", expected: "
+            + str(solution)
+        )
+        DELTA = 1e-10
+        self.assertAlmostEqual(testA, solution, msg=msg, delta=DELTA)
+
+    def test_ElementMat_tgl(self):
+        """unittest with ElementMat object. Test for empty Mesh"""
+
+        solution = 18
         result = self.mesh.get_vertice("Triangle3")
         testA = result.size
-        msg = "Wrong output: returned " + str(result.size) + ", expected: " + str(0)
+        msg = (
+            "Wrong output: returned "
+            + str(result.size)
+            + ", expected: "
+            + str(solution)
+        )
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        self.assertAlmostEqual(testA, solution, msg=msg, delta=DELTA)
