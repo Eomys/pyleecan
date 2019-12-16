@@ -371,10 +371,10 @@ def generate_init(gen_dict, class_dict):
                 arg_list += ", " + prop["name"] + "=" + str(prop["value"])
             else:
                 arg_list += ", " + prop["name"] + "=None"
-        elif prop["type"][0] == "[" and prop["type"][-1] == "]":
+        elif is_list_pyleecan_type(prop["type"]):
             # List of pyleecan type
             arg_list += ", " + prop["name"] + "=list()"
-        elif prop["type"][0] == "{" and prop["type"][-1] == "}":
+        elif is_dict_pyleecan_type(prop["type"]):
             # Dict of pyleecan type
             arg_list += ", " + prop["name"] + "=dict()"
         else:  # pyleecan type
@@ -751,7 +751,7 @@ def generate_str(gen_dict, class_dict):
                 + prop["name"]
                 + '["+key+"] = "+str(self.'
                 + prop["name"]
-                + '[key].as_dict())+"\\n"'
+                + '[key].as_dict())\n'
             )
         else:  # For pyleecan type print the dict (from as_dict)
             # Add => < "MyClass = "+str(self.my_var.as_dict()) >to var_str
