@@ -8,7 +8,7 @@ Main windows of the Machine Setup Tools
 """
 
 from os import getcwd, rename
-from os.path import basename, join, isfile
+from os.path import basename, join, isfile, dirname
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QWidget
@@ -132,6 +132,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
             self.machine.save(save_file_path)
             # To update the machine name field (if first page)
             self.set_nav(self.nav_step.currentRow())
+            # Update the machine path to remember the last used folder
+            self.machine_path = dirname(save_file_path)
             # Notify the project GUI that the machine has changed
             self.machineChanged.emit()
             self.is_save_needed = False
@@ -170,6 +172,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                 self.machine = load(load_path)
                 self.machineChanged.emit()
                 self.is_save_needed = False
+                # Update the machine path to remember the last used folder
+                self.machine_path = dirname(load_path)
             except Exception as e:
                 QMessageBox().critical(
                     self,
