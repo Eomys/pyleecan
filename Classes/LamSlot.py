@@ -219,6 +219,7 @@ class LamSlot(Lamination):
                 "Slot19",
                 "SlotMFlat",
                 "SlotMPolar",
+                "SlotUD",
                 "SlotW10",
                 "SlotW11",
                 "SlotW12",

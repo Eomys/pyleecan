@@ -144,6 +144,8 @@ class test_all_Classes(TestCase):
                 d[prop["name"]] = prop["value"]
             elif prop["type"] == "dict":
                 d[prop["name"]] = {}
+            elif prop["type"] == "list":
+                d[prop["name"]] = []
             elif is_type_list(prop["type"]):  # List of pyleecan type
                 d[prop["name"]] = list()
             elif is_type_dict(prop["type"]):  # Dict of pyleecan type

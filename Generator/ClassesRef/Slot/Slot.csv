@@ -2,14 +2,15 @@ Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Min
 Zs,-,slot number,,0,int,36,0,1000,,3,,Slot,,build_geometry_half_tooth,VERSION,1,Generic class for slot (abstract),Slot19
 ,,,,,,,,,,,,,,check,,,,SlotMFlat
 ,,,,,,,,,,,,,,comp_angle_opening,,,,SlotMPolar
-,,,,,,,,,,,,,,comp_height,,,,SlotW10
-,,,,,,,,,,,,,,comp_surface,,,,SlotW11
-,,,,,,,,,,,,,,get_is_stator,,,,SlotW12
-,,,,,,,,,,,,,,get_Rbo,,,,SlotW13
-,,,,,,,,,,,,,,get_surface,,,,SlotW14
-,,,,,,,,,,,,,,get_surface_tooth,,,,SlotW15
-,,,,,,,,,,,,,,is_outwards,,,,SlotW16
-,,,,,,,,,,,,,,plot,,,,SlotW21
+,,,,,,,,,,,,,,comp_height,,,,SlotUD
+,,,,,,,,,,,,,,comp_surface,,,,SlotW10
+,,,,,,,,,,,,,,get_is_stator,,,,SlotW11
+,,,,,,,,,,,,,,get_Rbo,,,,SlotW12
+,,,,,,,,,,,,,,get_surface,,,,SlotW13
+,,,,,,,,,,,,,,get_surface_tooth,,,,SlotW14
+,,,,,,,,,,,,,,is_outwards,,,,SlotW15
+,,,,,,,,,,,,,,plot,,,,SlotW16
+,,,,,,,,,,,,,,,,,,SlotW21
 ,,,,,,,,,,,,,,,,,,SlotW22
 ,,,,,,,,,,,,,,,,,,SlotW23
 ,,,,,,,,,,,,,,,,,,SlotW24

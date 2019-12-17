@@ -93,6 +93,7 @@ from pyleecan.Classes.Slot19 import Slot19
 from pyleecan.Classes.SlotMFlat import SlotMFlat
 from pyleecan.Classes.SlotMPolar import SlotMPolar
 from pyleecan.Classes.SlotMag import SlotMag
+from pyleecan.Classes.SlotUD import SlotUD
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.SlotW11 import SlotW11
 from pyleecan.Classes.SlotW12 import SlotW12

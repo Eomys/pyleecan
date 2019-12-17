@@ -95,6 +95,7 @@ load_switch = {
     "SlotMFlat": SlotMFlat,
     "SlotMPolar": SlotMPolar,
     "SlotMag": SlotMag,
+    "SlotUD": SlotUD,
     "SlotW10": SlotW10,
     "SlotW11": SlotW11,
     "SlotW12": SlotW12,
