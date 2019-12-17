@@ -281,7 +281,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         if index != len(step_list) - 1:
             self.w_step.b_next.clicked.connect(self.s_next)
         else:
-            self.w_step.b_next.setText(self.tr("Save"))
+            self.w_step.b_next.setText(self.tr(u"Save and Close"))
             self.w_step.b_next.clicked.connect(self.s_save_close)
         # Refresh the GUI
         self.main_layout.insertWidget(1, self.w_step)
