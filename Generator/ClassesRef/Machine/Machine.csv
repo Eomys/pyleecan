@@ -10,3 +10,4 @@ type_machine,,"Integer to store the machine type (for the GUI, should be replace
 ,,,,,,,,,,,,,,comp_output_geo,,,,MachineSRM
 ,,,,,,,,,,,,,,comp_length_airgap_active,,,,
 ,,,,,,,,,,,,,,get_polar_eq,,,,
+,,,,,,,,,,,,,,plot_anim_rotor,,,,

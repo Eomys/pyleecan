@@ -69,6 +69,11 @@ try:
 except ImportError as error:
     get_polar_eq = error
 
+try:
+    from pyleecan.Methods.Machine.Machine.plot_anim_rotor import plot_anim_rotor
+except ImportError as error:
+    plot_anim_rotor = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Lamination import Lamination
@@ -200,6 +205,17 @@ class Machine(FrozenClass):
         )
     else:
         get_polar_eq = get_polar_eq
+    # cf Methods.Machine.Machine.plot_anim_rotor
+    if isinstance(plot_anim_rotor, ImportError):
+        plot_anim_rotor = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method plot_anim_rotor: " + str(plot_anim_rotor)
+                )
+            )
+        )
+    else:
+        plot_anim_rotor = plot_anim_rotor
     # save method is available in all object
     save = save
 

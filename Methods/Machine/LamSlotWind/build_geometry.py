@@ -5,6 +5,7 @@
 """
 from numpy import pi
 
+from pyleecan.Classes.Winding import Winding
 from pyleecan.Methods import NotImplementedYetError
 from pyleecan.Methods.Machine.LamSlot.build_geometry import build_geometry as build_geo
 
@@ -39,10 +40,13 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
     # getting angle between Slot
     angle = 2 * pi / Zs
     # getting Nrad and Ntan
-    try:
-        Nrad, Ntan = self.winding.get_dim_wind()
-    except NotImplementedYetError:
+    if type(self.winding) is Winding:
         Nrad, Ntan = 1, 1
+    else:
+        try:
+            Nrad, Ntan = self.winding.get_dim_wind()
+        except NotImplementedYetError:
+            Nrad, Ntan = 1, 1
     surf_Wind = self.slot.build_geometry_wind(
         Nrad=Nrad, Ntan=Ntan, is_simplified=is_simplified, alpha=alpha, delta=delta
     )

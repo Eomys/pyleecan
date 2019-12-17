@@ -16,7 +16,14 @@ from pyleecan.Classes.WindingSC import WindingSC
 
 
 def plot(
-    self, fig=None, is_lam_only=False, sym=1, alpha=0, delta=0, is_edge_only=False
+    self,
+    fig=None,
+    is_lam_only=False,
+    sym=1,
+    alpha=0,
+    delta=0,
+    is_edge_only=False,
+    is_display=True,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -37,10 +44,12 @@ def plot(
         Complex value for translation
     is_edge_only: bool
         To plot transparent Patches
-
+    is_display : bool
+        False to return the patches
     Returns
     -------
-    None
+    patches : list
+        List of Patches
     """
     if self.is_stator:
         color_lam = STATOR_COLOR
@@ -75,37 +84,40 @@ def plot(
         else:
             patches.append(surf.get_patch(is_edge_only=is_edge_only))
 
-    # Display the result
-    (fig, axes, patch_leg, label_leg) = init_fig(fig)
-    axes.set_xlabel("(m)")
-    axes.set_ylabel("(m)")
-    for patch in patches:
-        axes.add_patch(patch)
-    # Axis Setup
-    axis("equal")
+    if is_display:
+        # Display the result
+        (fig, axes, patch_leg, label_leg) = init_fig(fig)
+        axes.set_xlabel("(m)")
+        axes.set_ylabel("(m)")
+        for patch in patches:
+            axes.add_patch(patch)
+        # Axis Setup
+        axis("equal")
 
-    # The Lamination is centered in the figure
-    Lim = self.Rext * 1.5
-    axes.set_xlim(-Lim, Lim)
-    axes.set_ylim(-Lim, Lim)
+        # The Lamination is centered in the figure
+        Lim = self.Rext * 1.5
+        axes.set_xlim(-Lim, Lim)
+        axes.set_ylim(-Lim, Lim)
 
-    # Add the legend
-    if not is_edge_only:
-        if self.is_stator:
-            patch_leg.append(Patch(color=STATOR_COLOR))
-            label_leg.append("Stator")
-            axes.set_title("Stator with Winding")
-        else:
-            patch_leg.append(Patch(color=ROTOR_COLOR))
-            label_leg.append("Rotor")
-            axes.set_title("Rotor with Winding")
-        # Add the winding legend only if needed
-        if not is_lam_only:
-            for ii in range(qs):
-                if not ("Phase " + PHASE_NAME[ii] in label_leg):
-                    # Avoid adding twice the same label
-                    index = ii % len(PHASE_COLOR)
-                    patch_leg.append(Patch(color=PHASE_COLOR[index]))
-                    label_leg.append("Phase " + PHASE_NAME[ii])
-        legend(patch_leg, label_leg)
-    fig.show()
+        # Add the legend
+        if not is_edge_only:
+            if self.is_stator:
+                patch_leg.append(Patch(color=STATOR_COLOR))
+                label_leg.append("Stator")
+                axes.set_title("Stator with Winding")
+            else:
+                patch_leg.append(Patch(color=ROTOR_COLOR))
+                label_leg.append("Rotor")
+                axes.set_title("Rotor with Winding")
+            # Add the winding legend only if needed
+            if not is_lam_only:
+                for ii in range(qs):
+                    if not ("Phase " + PHASE_NAME[ii] in label_leg):
+                        # Avoid adding twice the same label
+                        index = ii % len(PHASE_COLOR)
+                        patch_leg.append(Patch(color=PHASE_COLOR[index]))
+                        label_leg.append("Phase " + PHASE_NAME[ii])
+            legend(patch_leg, label_leg)
+        fig.show()
+    else:
+        return patches
