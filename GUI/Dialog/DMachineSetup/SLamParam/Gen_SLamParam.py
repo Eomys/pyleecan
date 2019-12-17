@@ -56,13 +56,13 @@ class Gen_SLamParam(Ui_SLamParam):
         self.lf_Wrvd.setToolTip(txt)
 
         # Setup of in_Nrvd
-        txt = self.tr(u"""number of radial air ventilation ducts in lamination """)
+        txt = self.tr(u"""number of radial air ventilation ducts in lamination""")
         self.in_Nrvd.setWhatsThis(txt)
         self.in_Nrvd.setToolTip(txt)
 
         # Setup of si_Nrvd
         self.si_Nrvd.setMinimum(0)
         self.si_Nrvd.setMaximum(999999)
-        txt = self.tr(u"""number of radial air ventilation ducts in lamination """)
+        txt = self.tr(u"""number of radial air ventilation ducts in lamination""")
         self.si_Nrvd.setWhatsThis(txt)
         self.si_Nrvd.setToolTip(txt)

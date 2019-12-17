@@ -1,7 +1,7 @@
 Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
 L1,m,Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets,,0,float,3.50E-01,0,100,,3,,Machine,,build_geometry,VERSION,1,abstract class for lamination,LamHole
 mat_type,,Lamination's material,,,Material,,,,,,,,,check,,,,LamSlot
-Nrvd,-,number of radial air ventilation ducts in lamination ,,0,int,0,0,,,2,,,,comp_length,,,,LamSlotWind
+Nrvd,-,number of radial air ventilation ducts in lamination,,0,int,0,0,,,2,,,,comp_length,,,,LamSlotWind
 Wrvd,m,axial width of ventilation ducts in lamination,,0,float,0,0,,,2,,,,comp_masses,,,,LamSlotMag
 Kf1,-,lamination stacking / packing factor,,0,float,9.50E-01,0,1,,2,,,,comp_radius_mec,,,,LamSquirrelCage
 is_internal,-,"1 for internal lamination topology, 0 for external lamination",,0,bool,1,,,0 not validated,2,,,,comp_surface_axial_vent,,,,

@@ -5,7 +5,7 @@
 from codecs import open as open_co
 from os.path import join
 
-from pyleecan.Generator import PYTHON_TYPE, TAB, TAB2, TAB3, TAB4, TAB5, TAB6
+from pyleecan.Generator import PYTHON_TYPE, TAB, TAB2, TAB3, TAB4, TAB5, TAB6, TAB7
 from pyleecan.Generator.read_fct import (
     find_import_type,
     get_value_str,
@@ -105,9 +105,6 @@ def generate_class(gen_dict, class_name, path_to_gen):
             "from pyleecan.Classes." + pyleecan_type + " import " + pyleecan_type + "\n"
         )
 
-    if len(import_type_list) > 0:
-        class_file.write("\n")
-
     # Class declaration
     if class_dict["mother"] != "":
         class_file.write(
@@ -141,21 +138,23 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write(TAB2 + meth_name + " = property(\n")
         class_file.write(TAB3 + "fget=lambda x: raise_(\n")
         # PEP8 formating
-        if len(class_name) + 2 * len(meth_name) > 40:
+        if len(class_name) + 2 * len(meth_name) > 39:
+            # 2 lines Import text
             class_file.write(TAB4 + "ImportError(\n")
             class_file.write(
                 TAB5 + """"Can't use """ + class_name + " method " + meth_name + ': "\n'
             )
             class_file.write(TAB5 + "+ str(" + meth_name + ")\n")
             class_file.write(TAB4 + ")\n")
-        elif len(class_name) + 2 * len(meth_name) > 26:
+        elif len(class_name) + 2 * len(meth_name) > 29:
+            # Import text on line different line
             class_file.write(TAB4 + "ImportError(\n")
             class_file.write(
                 TAB5 + """"Can't use """ + class_name + " method " + meth_name + ': "'
             )
             class_file.write(" + str(" + meth_name + ")\n")
             class_file.write(TAB4 + ")\n")
-        else:
+        else:  # On one line
             class_file.write(
                 TAB4
                 + """ImportError("Can't use """
@@ -495,20 +494,20 @@ def generate_set_class_by_dict_list(prop_name, prop_type, daug_list):
         class_dict_str += (
             TAB5 + "# Check that the type is correct (including daughter)\n"
         )
-        class_dict_str += TAB5 + "class_name = obj.get('__class__')\n"
+        class_dict_str += TAB5 + 'class_name = obj.get("__class__")\n'
         class_dict_str += TAB5 + "if class_name not in " + str(daug_list) + ":\n"
-        class_dict_str += (
-            TAB6
-            + 'raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for '
-            + prop_name
-            + '")\n'
-        )
+        class_dict_str += TAB6 + "raise InitUnKnowClassError(\n"
+        class_dict_str += TAB7 + '"Unknow class name "\n'
+        class_dict_str += TAB7 + "+ class_name\n"
+        class_dict_str += TAB7 + '+ " in init_dict for ' + prop_name + '"\n'
+        class_dict_str += TAB6 + ")\n"
         class_dict_str += TAB5 + "# Dynamic import to call the correct constructor\n"
+        class_dict_str += TAB5 + "module = __import__(\n"
         class_dict_str += (
-            TAB5
-            + 'module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])\n'
+            TAB6 + '"pyleecan.Classes." + class_name, fromlist=[class_name]\n'
         )
-        class_dict_str += TAB5 + "class_obj = getattr(module,class_name)\n"
+        class_dict_str += TAB5 + ")\n"
+        class_dict_str += TAB5 + "class_obj = getattr(module, class_name)\n"
         class_dict_str += (
             TAB5 + "self." + prop_name + ".append(" + "class_obj(init_dict=obj))\n"
         )
@@ -1114,7 +1113,7 @@ def generate_properties(gen_dict, class_dict):
             # List of pyleecan type
             prop_str += TAB2 + "for obj in self._" + prop["name"] + ":\n"
             prop_str += TAB3 + "if obj is not None:\n"
-            prop_str += TAB4 + "obj.parent = self\n"
+            prop_str += TAB4 + "obj.parent = self\n\n"
         elif (
             prop["type"] not in PYTHON_TYPE
             and prop["type"] != "ndarray"
@@ -1136,17 +1135,24 @@ def generate_properties(gen_dict, class_dict):
         # Add "var_name = property(fget=_get_var_name, fset=_set_var_name,
         # doc = "this is doc")"
         if len(prop["desc"]) > 40:  # PEP8
+            # Three lines definition
             prop_str += TAB + prop["name"] + " = property(\n"
             prop_str += TAB2 + "fget=_get_" + prop["name"] + ",\n"
             prop_str += TAB2 + "fset=_set_" + prop["name"] + ",\n"
             prop_str += TAB2 + 'doc=u"""' + prop["desc"] + '""",\n'
             prop_str += TAB + ")\n\n"
-        else:
+        elif len(prop["desc"]) + 2 * len(prop["name"]) > 25:
             prop_str += TAB + prop["name"] + " = property(\n"
             prop_str += TAB2 + "fget=_get_" + prop["name"]
             prop_str += ", fset=_set_" + prop["name"]
             prop_str += ', doc=u"""' + prop["desc"] + '"""\n'
             prop_str += TAB + ")\n\n"
+        else:
+            # All on one line
+            prop_str += TAB + prop["name"] + " = property("
+            prop_str += "fget=_get_" + prop["name"]
+            prop_str += ", fset=_set_" + prop["name"]
+            prop_str += ', doc=u"""' + prop["desc"] + '""")\n\n'
 
     return prop_str[:-2]  # Remove last \n\n
 

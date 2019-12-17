@@ -609,7 +609,7 @@ class Lamination(FrozenClass):
     Nrvd = property(
         fget=_get_Nrvd,
         fset=_set_Nrvd,
-        doc=u"""number of radial air ventilation ducts in lamination """,
+        doc=u"""number of radial air ventilation ducts in lamination""",
     )
 
     def _get_Wrvd(self):
