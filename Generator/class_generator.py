@@ -138,16 +138,36 @@ def generate_class(gen_dict, class_name, path_to_gen):
             TAB + "# cf Methods." + class_pack + "." + class_name + "." + meth + "\n"
         )
         class_file.write(TAB + "if isinstance(" + meth_name + ", ImportError):\n")
-        class_file.write(TAB2 + meth_name + " = property(fget=lambda x: raise_(")
-        class_file.write(
-            """ImportError("Can't use """
-            + class_name
-            + " method "
-            + meth_name
-            + ': " + str('
-            + meth_name
-            + "))))\n"
-        )
+        class_file.write(TAB2 + meth_name + " = property(\n")
+        class_file.write(TAB3 + "fget=lambda x: raise_(\n")
+        # PEP8 formating
+        if len(class_name) + 2 * len(meth_name) > 40:
+            class_file.write(TAB4 + "ImportError(\n")
+            class_file.write(
+                TAB5 + """"Can't use """ + class_name + " method " + meth_name + ': "\n'
+            )
+            class_file.write(TAB5 + "+ str(" + meth_name + ")\n")
+            class_file.write(TAB4 + ")\n")
+        elif len(class_name) + 2 * len(meth_name) > 26:
+            class_file.write(TAB4 + "ImportError(\n")
+            class_file.write(
+                TAB5 + """"Can't use """ + class_name + " method " + meth_name + ': "'
+            )
+            class_file.write(" + str(" + meth_name + ")\n")
+            class_file.write(TAB4 + ")\n")
+        else:
+            class_file.write(
+                TAB4
+                + """ImportError("Can't use """
+                + class_name
+                + " method "
+                + meth_name
+                + ': " + str('
+                + meth_name
+                + "))\n"
+            )
+        class_file.write(TAB3 + ")\n")
+        class_file.write(TAB2 + ")\n")
         class_file.write(TAB + "else:\n")
         class_file.write(TAB2 + meth_name + " = " + meth_name + "\n")
     class_file.write(TAB + "# save method is available in all object\n")
@@ -169,10 +189,11 @@ def generate_class(gen_dict, class_name, path_to_gen):
     class_file.write(generate_as_dict(gen_dict, class_dict) + "\n")
 
     # Add the _set_None method
-    class_file.write(generate_set_None(gen_dict, class_dict) + "\n")
+    class_file.write(generate_set_None(gen_dict, class_dict))
 
     # Add all the properties getter and setter
-    class_file.write(generate_properties(gen_dict, class_dict) + "\n")
+    if len(class_dict["properties"]) > 0:
+        class_file.write("\n" + generate_properties(gen_dict, class_dict) + "\n")
 
     # End of class generation
     class_file.close()
@@ -1114,13 +1135,18 @@ def generate_properties(gen_dict, class_dict):
         prop_str += "\n"
         # Add "var_name = property(fget=_get_var_name, fset=_set_var_name,
         # doc = "this is doc")"
-        prop_str += TAB + prop["name"] + " = property(fget=_get_" + prop["name"]
-        prop_str += ", fset=_set_" + prop["name"]
-        # "Clean" the doc string from excel
-        prop_str += ",\n" + TAB4
-        for ii in range(len(prop["name"])):  # Align doc with fget
-            prop_str += " "
-        prop_str += 'doc=u"""' + prop["desc"] + '""")\n\n'
+        if len(prop["desc"]) > 40:  # PEP8
+            prop_str += TAB + prop["name"] + " = property(\n"
+            prop_str += TAB2 + "fget=_get_" + prop["name"] + ",\n"
+            prop_str += TAB2 + "fset=_set_" + prop["name"] + ",\n"
+            prop_str += TAB2 + 'doc=u"""' + prop["desc"] + '""",\n'
+            prop_str += TAB + ")\n\n"
+        else:
+            prop_str += TAB + prop["name"] + " = property(\n"
+            prop_str += TAB2 + "fget=_get_" + prop["name"]
+            prop_str += ", fset=_set_" + prop["name"]
+            prop_str += ', doc=u"""' + prop["desc"] + '"""\n'
+            prop_str += TAB + ")\n\n"
 
     return prop_str[:-2]  # Remove last \n\n
 
