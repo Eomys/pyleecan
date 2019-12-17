@@ -277,8 +277,8 @@ class Machine(FrozenClass):
                 "Lamination",
                 "LamHole",
                 "LamSlot",
-                "LamSlotWind",
                 "LamSlotMag",
+                "LamSlotWind",
                 "LamSquirrelCage",
             ]:
                 raise InitUnKnowClassError(
@@ -298,8 +298,8 @@ class Machine(FrozenClass):
                 "Lamination",
                 "LamHole",
                 "LamSlot",
-                "LamSlotWind",
                 "LamSlotMag",
+                "LamSlotWind",
                 "LamSquirrelCage",
             ]:
                 raise InitUnKnowClassError(

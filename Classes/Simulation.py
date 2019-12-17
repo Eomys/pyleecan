@@ -54,15 +54,15 @@ class Simulation(FrozenClass):
             class_name = machine.get("__class__")
             if class_name not in [
                 "Machine",
-                "MachineSync",
                 "MachineAsync",
-                "MachineSCIM",
                 "MachineDFIM",
-                "MachineSIPMSM",
                 "MachineIPMSM",
-                "MachineWRSM",
-                "MachineSyRM",
+                "MachineSCIM",
+                "MachineSIPMSM",
                 "MachineSRM",
+                "MachineSyRM",
+                "MachineSync",
+                "MachineWRSM",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for machine"
@@ -77,7 +77,7 @@ class Simulation(FrozenClass):
         if isinstance(input, dict):
             # Check that the type is correct (including daughter)
             class_name = input.get("__class__")
-            if class_name not in ["Input", "InCurrent"]:
+            if class_name not in ["Input", "InCurrent", "InFlux", "InForce"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for input"
                 )

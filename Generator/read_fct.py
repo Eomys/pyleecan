@@ -23,7 +23,7 @@ METH_COL = 14  # Number of the Methods list column
 CST_NAME_COL = 15  # Number of the Methods list column
 CST_VAL_COL = 16  # Number of the Methods list column
 CLASS_DEF_COL = 17  # Number of the Methods list column
-DAUG_COL = 18  # Number of the daughter class list column
+# DAUG_COL = 18  # Number of the daughter class list column (unused)
 
 
 def read_all(path):
@@ -47,6 +47,8 @@ def read_all(path):
             if file_name[-4:] == ".csv" and file_name[:2] != "~$":
                 # For all .csv file in the folder and subfolder ...
                 gen_dict[file_name[:-4]] = read_file(join(dirpath, file_name))
+    # Update all the "daughters" key according to "mother" key
+    update_all_daughters(gen_dict)
 
     return gen_dict
 
@@ -116,18 +118,41 @@ def read_file(path):
             if meth != "":
                 class_dict["methods"].append(meth)
 
-        # Get all the daughters
+        # The daughters are automatically detected in read_all
         class_dict["daughters"] = list()
-        for rx in range(1, Nline):  # Skip the first line (title of column)
-            daughter = class_csv[rx][DAUG_COL]
-            if daughter != "":
-                class_dict["daughters"].append(daughter)
 
     class_dict["package"] = class_csv[1][PACK_COL]
     class_dict["desc"] = class_csv[1][CLASS_DEF_COL]
     class_dict["mother"] = class_csv[1][HER_COL]
 
     return class_dict
+
+
+def update_all_daughters(gen_dict):
+    """This function update all the "daughters" key according to the "mother" key
+
+    Parameters
+    ----------
+    gen_dict : dict
+        gen_dict with no daughter set
+    """
+
+    # list of classes that have a mother
+    daughter_dict = {
+        class_name: class_dict
+        for class_name, class_dict in gen_dict.items()
+        if class_dict["mother"] not in ["", None]
+    }
+
+    # Update the daughter (sorted to avoid "commit noise")
+    for name, daughter in iter(sorted(list(daughter_dict.items()))):
+        # Update the mother
+        mother = gen_dict[daughter["mother"]]
+        mother["daughters"].append(name)
+        # Update all the mother of the mother
+        while mother["mother"] not in ["", None]:
+            mother = gen_dict[mother["mother"]]
+            mother["daughters"].append(name)
 
 
 def get_value_str(value, type_val):

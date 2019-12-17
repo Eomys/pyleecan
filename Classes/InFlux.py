@@ -71,13 +71,13 @@ class InFlux(Input):
             class_name = time.get("__class__")
             if class_name not in [
                 "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for time"
@@ -94,13 +94,13 @@ class InFlux(Input):
             class_name = angle.get("__class__")
             if class_name not in [
                 "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for angle"
@@ -117,13 +117,13 @@ class InFlux(Input):
             class_name = Br.get("__class__")
             if class_name not in [
                 "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for Br"
@@ -140,13 +140,13 @@ class InFlux(Input):
             class_name = Bt.get("__class__")
             if class_name not in [
                 "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for Bt"

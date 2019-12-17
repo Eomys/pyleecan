@@ -81,6 +81,7 @@ class Notch(FrozenClass):
                         "Slot19",
                         "SlotMFlat",
                         "SlotMPolar",
+                        "SlotMag",
                         "SlotUD",
                         "SlotW10",
                         "SlotW11",
@@ -100,6 +101,7 @@ class Notch(FrozenClass):
                         "SlotW29",
                         "SlotW60",
                         "SlotW61",
+                        "SlotWind",
                     ]:
                         raise InitUnKnowClassError(
                             "Unknow class name "

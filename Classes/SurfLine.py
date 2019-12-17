@@ -183,11 +183,11 @@ class SurfLine(Surface):
                     class_name = obj.get("__class__")
                     if class_name not in [
                         "Line",
-                        "Segment",
+                        "Arc",
                         "Arc1",
                         "Arc2",
                         "Arc3",
-                        "Arc",
+                        "Segment",
                     ]:
                         raise InitUnKnowClassError(
                             "Unknow class name "

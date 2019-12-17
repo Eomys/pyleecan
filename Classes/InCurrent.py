@@ -106,13 +106,13 @@ class InCurrent(Input):
             class_name = time.get("__class__")
             if class_name not in [
                 "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for time"
@@ -129,13 +129,13 @@ class InCurrent(Input):
             class_name = angle.get("__class__")
             if class_name not in [
                 "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for angle"
@@ -152,13 +152,13 @@ class InCurrent(Input):
             class_name = Is.get("__class__")
             if class_name not in [
                 "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for Is"
@@ -175,13 +175,13 @@ class InCurrent(Input):
             class_name = Ir.get("__class__")
             if class_name not in [
                 "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for Ir"
@@ -198,13 +198,13 @@ class InCurrent(Input):
             class_name = angle_rotor.get("__class__")
             if class_name not in [
                 "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for angle_rotor"
@@ -221,13 +221,13 @@ class InCurrent(Input):
             class_name = Nr.get("__class__")
             if class_name not in [
                 "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
                 "ImportMatlab",
                 "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
-                "ImportGenVectSin",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for Nr"

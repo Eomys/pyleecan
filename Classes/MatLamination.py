@@ -64,11 +64,11 @@ class MatLamination(MatMagnetics):
             class_name = BH_curve.get("__class__")
             if class_name not in [
                 "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-                "ImportGenVectSin",
                 "ImportGenMatrixSin",
                 "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for BH_curve"

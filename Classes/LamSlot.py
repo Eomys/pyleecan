@@ -219,6 +219,7 @@ class LamSlot(Lamination):
                 "Slot19",
                 "SlotMFlat",
                 "SlotMPolar",
+                "SlotMag",
                 "SlotUD",
                 "SlotW10",
                 "SlotW11",
@@ -238,6 +239,7 @@ class LamSlot(Lamination):
                 "SlotW29",
                 "SlotW60",
                 "SlotW61",
+                "SlotWind",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for slot"
