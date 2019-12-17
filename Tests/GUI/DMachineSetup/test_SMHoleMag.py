@@ -89,7 +89,7 @@ class test_SMHoleMag(TestCase):
         """Check that the Widget initialize to the correct hole"""
 
         self.assertEqual(
-            self.widget2.out_hole_pitch.text(), "Slot pitch = 360 / 2p = 22.50 °"
+            self.widget2.out_hole_pitch.text(), "Slot pitch = 360 / 2p = 22.5 °"
         )
         self.assertEqual(self.widget2.tab_hole.count(), 1)
         self.assertEqual(self.widget2.tab_hole.widget(0).c_hole_type.currentIndex(), 4)
@@ -126,7 +126,7 @@ class test_SMHoleMag(TestCase):
         )
 
         self.assertEqual(
-            self.widget2.out_hole_pitch.text(), "Slot pitch = 360 / 2p = 22.50 °"
+            self.widget2.out_hole_pitch.text(), "Slot pitch = 360 / 2p = 22.5 °"
         )
         self.assertEqual(self.widget2.tab_hole.count(), 1)
         self.assertEqual(self.widget2.tab_hole.widget(0).c_hole_type.currentIndex(), 1)

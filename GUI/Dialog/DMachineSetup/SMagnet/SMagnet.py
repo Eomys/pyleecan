@@ -137,22 +137,13 @@ class SMagnet(Ui_SMagnet, QDialog):
             Slot_pitch_rad = Slot_pitch * pi / 180
 
             pitch_txt = self.tr("Slot pitch = ")
-            if Slot_pitch == 360 // Zs:  # If Slot_pitch is an integer
-                out += (
-                    pitch_txt
-                    + str(int(Slot_pitch))
-                    + u" ° ("
-                    + "%.2f" % (Slot_pitch_rad)
-                    + " rad)"
-                )
-            else:  # If Slot_pitch is a float: display 2 decimals only
-                out += (
-                    pitch_txt
-                    + "%.2f" % (Slot_pitch)
-                    + u" ° ("
-                    + "%.2f" % (Slot_pitch_rad)
-                    + " rad)"
-                )
+            out += (
+                pitch_txt
+                + "%.4g" % (Slot_pitch)
+                + u" ° ("
+                + "%.4g" % (Slot_pitch_rad)
+                + " rad)"
+            )
             self.out_Nmag.setText(out)
         else:
             self.out_Nmag.setText(Nmag_txt + "?")

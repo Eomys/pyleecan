@@ -203,22 +203,13 @@ class SWSlot(Gen_SWSlot, QWidget):
             Slot_pitch = 360.0 / Zs
             Slot_pitch_rad = Slot_pitch * pi / 180
 
-            if Slot_pitch == 360 / Zs:  # If Slot_pitch is an integer
-                self.out_Slot_pitch.setText(
-                    sp_txt
-                    + str(int(Slot_pitch))
-                    + u" ° ("
-                    + "%.2f" % (Slot_pitch_rad)
-                    + " rad)"
-                )
-            else:  # If Slot_pitch is a float: display 2 decimals only
-                self.out_Slot_pitch.setText(
-                    sp_txt
-                    + "%.2f" % (Slot_pitch)
-                    + u" ° ("
-                    + "%.2f" % (Slot_pitch_rad)
-                    + " rad)"
-                )
+            self.out_Slot_pitch.setText(
+                sp_txt
+                + "%.4g" % (Slot_pitch)
+                + u" ° ("
+                + "%.4g" % (Slot_pitch_rad)
+                + " rad)"
+            )
 
     def s_update_slot(self):
         """Update the slot widget

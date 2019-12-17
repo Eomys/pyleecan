@@ -114,10 +114,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             self.out_hole_pitch.setText(Zh_txt + "?")
         else:
             hole_pitch = 360.0 / Zh
-            if hole_pitch == 360 // Zh:  # If hole_pitch is an integer
-                self.out_hole_pitch.setText(Zh_txt + str(int(hole_pitch)) + u" °")
-            else:  # If hole_pitch is a float: display 2 decimals only
-                self.out_hole_pitch.setText(Zh_txt + "%.2f" % (hole_pitch) + u" °")
+            self.out_hole_pitch.setText(Zh_txt + "%.4g" % (hole_pitch) + u" °")
 
     def s_add(self, hole=False):
         """Signal to add a new hole
