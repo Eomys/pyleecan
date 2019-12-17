@@ -21,13 +21,10 @@ def generate_class(gen_dict, class_name, path_to_gen):
     ----------
     gen_dict : dict
         Dict with key = class name and value = class dict (name, package, properties, methods...)
-
     class_name : str
         name of the class to generate
-
     path_to_gen : str
         path to the file to save the class code
-
 
     Returns
     -------
@@ -50,9 +47,12 @@ def generate_class(gen_dict, class_name, path_to_gen):
     class_file.write("# -*- coding: utf-8 -*-\n")
 
     # Warning
-    class_file.write(
-        '"""Warning : this file has been generated, ' 'you shouldn\'t edit it"""\n\n'
-    )
+    class_file.write('"""File generated according to ' + class_dict["path"] + "\n")
+    if class_dict["is_internal"]:
+        class_file.write(
+            "WARNING! Internal version of the class: DO NOT SHARE ON GITHUB !\n"
+        )
+    class_file.write('WARNING! All changes made in this file will be lost!\n"""\n\n')
 
     # Import
     class_file.write("from os import linesep\n")

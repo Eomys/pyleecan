@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Warning : this file has been generated, you shouldn't edit it"""
+"""File generated according to pyleecan/Generator/ClassesRef/Machine/MagnetType10.csv
+WARNING! All changes made in this file will be lost!
+"""
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var, raise_

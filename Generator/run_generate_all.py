@@ -10,10 +10,9 @@ sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", ".."))))
 from pyleecan.Generator.run_generate_classes import generate_code
 from pyleecan.Generator.gui_generator import generate_gui
 from pyleecan.Generator.read_fct import read_all
-from pyleecan.Generator import MAIN_DIR
+from pyleecan.Generator import MAIN_DIR, DOC_DIR, INT_DIR
 
 if __name__ == "__main__":
-    DOC_DIR = join(MAIN_DIR, "Generator", "ClassesRef")
-    gen_dict = read_all(DOC_DIR)
-    generate_code(MAIN_DIR)
+    gen_dict = read_all(DOC_DIR, is_internal=False, in_path=INT_DIR)
+    generate_code(MAIN_DIR, gen_dict)
     generate_gui(gen_dict, is_gen_resource=True)

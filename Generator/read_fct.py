@@ -26,7 +26,7 @@ CLASS_DEF_COL = 17  # Number of the Methods list column
 # DAUG_COL = 18  # Number of the daughter class list column (unused)
 
 
-def read_all(path):
+def read_all(path, is_internal=False, in_path=""):
     """Read every csv files in a directory and subdirectory and create a structure for the
     code generation
 
@@ -34,6 +34,8 @@ def read_all(path):
     ----------
     path : str
         path to the root folder with the csv files
+    is_internal : bool
+        True to overwrite the open source csv files by internal ones
 
     Returns
     -------
@@ -42,11 +44,24 @@ def read_all(path):
     """
     gen_dict = dict()
 
+    # Read the open source doc
     for (dirpath, dirnames, filenames) in walk(path):
         for file_name in filenames:
             if file_name[-4:] == ".csv" and file_name[:2] != "~$":
                 # For all .csv file in the folder and subfolder ...
                 gen_dict[file_name[:-4]] = read_file(join(dirpath, file_name))
+                gen_dict[file_name[:-4]]["is_internal"] = False
+
+    # Read the Internal doc to adapt the classes (if needed)
+    if is_internal:
+        for (dirpath, dirnames, filenames) in walk(in_path):
+            for file_name in filenames:
+                if file_name[-4:] == ".csv" and file_name[:2] != "~$":
+                    # For all .csv file in the folder and subfolder ...
+                    print("Using internal version for: " + file_name[:-4])
+                    gen_dict[file_name[:-4]] = read_file(join(dirpath, file_name))
+                    gen_dict[file_name[:-4]]["is_internal"] = True
+
     # Update all the "daughters" key according to "mother" key
     update_all_daughters(gen_dict)
 
@@ -75,7 +90,12 @@ def read_file(path):
 
     # The class name is the csv file name
     class_dict["name"] = path.split("\\")[-1][:-4]
-
+    try:  # Cleanup path to avoid "commit noise"
+        class_dict["path"] = path[path.index("pyleecan") :]
+    except ValueError:  # Path doesn't contain pyleecan
+        class_dict["path"] = path
+    # Cleanup \ to avoid errors
+    class_dict["path"] = class_dict["path"].replace("\\", "/")
     with open(path, mode="r") as csv_file:
         class_csv = reader(csv_file, delimiter=",")
         class_csv = list(class_csv)
