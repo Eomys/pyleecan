@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Wed Jan 13 17:33:49 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
+
 from os.path import join
 from unittest import TestCase
 
@@ -22,7 +18,7 @@ from pyleecan.Tests import save_plot_path as save_path
 
 
 class test_SlotUD(TestCase):
-    """unittest for UserDefined slot + animation
+    """unittest for UserDefined slot
     """
 
     def test_christmas(self):
