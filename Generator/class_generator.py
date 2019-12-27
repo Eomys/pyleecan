@@ -101,6 +101,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
     # For function type
     if "function" in import_type_list:
         class_file.write("from inspect import getsource\n")
+        class_file.write("from cloudpickle import dumps, loads\n")
         class_file.write("from pyleecan.Classes.check import CheckTypeError\n")
         import_type_list.remove("function")
 
@@ -572,7 +573,7 @@ def generate_set_class_by_dict_dict(prop_name, prop_type, daug_list):
         )
     else:  # No daughter
         class_dict_str += (
-            TAB5 + "self." + prop_name + "[key] = " + prop_type + "(init_dict=obj))\n"
+            TAB5 + "self." + prop_name + "[key] = " + prop_type + "(init_dict=obj)\n"
         )
     return class_dict_str
 
@@ -749,9 +750,8 @@ def generate_str(gen_dict, class_dict):
                 + class_name
                 + '_str += "'
                 + prop["name"]
-                + ' = " + str(self._'
-                + prop["name"]
-                + ")"
+                + ' = " + linesep + self._'
+                + prop["name"]+"[1]"
             )
         elif prop["type"] in ["ndarray", "list"]:
             # For Matrix (skip a line then print the matrix)
@@ -768,7 +768,9 @@ def generate_str(gen_dict, class_dict):
             )
         elif is_list_pyleecan_type(prop["type"]):
             var_str += TAB2 + "if len(self." + prop["name"] + ") == 0:\n"
-            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = []"\n'
+            var_str += (
+                TAB3 + class_name + '_str += "' + prop["name"] + ' = []" + linesep\n'
+            )
             var_str += TAB2 + "for ii in range(len(self." + prop["name"] + ")):\n"
             var_str += (
                 TAB3
@@ -781,7 +783,13 @@ def generate_str(gen_dict, class_dict):
             )
         elif is_dict_pyleecan_type(prop["type"]):
             var_str += TAB2 + "if len(self." + prop["name"] + ") == 0:\n"
-            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = dict()"\n'
+            var_str += (
+                TAB3
+                + class_name
+                + '_str += "'
+                + prop["name"]
+                + ' = dict()" + linesep\n'
+            )
             var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
             var_str += (
                 TAB3
@@ -958,9 +966,11 @@ def generate_as_dict(gen_dict, class_dict):
                 + class_name
                 + '_dict["'
                 + prop["name"]
-                + '"] = self._'
+                + '"] = [dumps(self._'
                 + prop["name"]
-                + "\n"
+                + "[0]).decode('ISO-8859-2'), self._"
+                + prop["name"]
+                + "[1]]\n"
             )
         elif is_list_pyleecan_type(prop["type"]):
             var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = list()\n'
@@ -1111,21 +1121,16 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB2 + "for obj in self._" + prop["name"] + ":\n"
             prop_str += TAB3 + "if obj is not None:\n"
             prop_str += TAB4 + "obj.parent = self\n"
+            prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
         elif is_dict_pyleecan_type(prop["type"]):
             # TODO: Update the parent should be done only in the setter but
             # their is an issue with .append for list of pyleecan type
             prop_str += TAB2 + "for key, obj in self._" + prop["name"] + ".items():\n"
             prop_str += TAB3 + "if obj is not None:\n"
             prop_str += TAB4 + "obj.parent = self\n"
-
-        if prop["type"] == "function":
-            prop_str += TAB2 + "if self._" + prop["name"] + " is None: \n"
-            prop_str += TAB3 + "return self._" + prop["name"] + "\n"
-            prop_str += TAB2 + "else:\n"
-            prop_str += TAB3 + "# Return the function evaluated\n"
-            prop_str += TAB3 + "tmp = {}\n"
-            prop_str += TAB3 + "exec(self._" + prop["name"] + ", globals(), tmp)\n"
-            prop_str += TAB3 + "return tmp[list(tmp)[0]]\n\n"
+            prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
+        elif prop["type"] == "function":
+            prop_str += TAB2 + "return self._" + prop["name"] + "[0]\n\n"
         else:
             prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
 
@@ -1142,9 +1147,9 @@ def generate_properties(gen_dict, class_dict):
 
         # Add check_var("var_name",value, "var_type", min=var_min, max=var_max)
         if prop["type"] == "function":
-            # A function can be defined by its source code to be loaded from a dict or by a function
+            # A function can be defined by a callable or a list containing the serialized callable and its sourcecode
             prop_str += TAB2 + "try:\n"
-            prop_str += TAB3 + 'check_var("' + prop["name"] + '", value, "str")\n'
+            prop_str += TAB3 + 'check_var("' + prop["name"] + '", value, "list")\n'
             prop_str += TAB2 + "except CheckTypeError:\n"
             prop_str += (
                 TAB3
@@ -1153,6 +1158,24 @@ def generate_properties(gen_dict, class_dict):
                 + '", value, "'
                 + prop["type"]
                 + '")\n'
+            )
+            prop_str += (
+                TAB2 + "if isinstance(value,list): # Load function from saved dict\n"
+            )
+            prop_str += (
+                TAB3
+                + "self._"
+                + prop["name"]
+                + " = [loads(value[0].encode('ISO-8859-2')),value[1]]\n"
+            )
+            prop_str += TAB2 + "elif value is None:\n"
+            prop_str += TAB3 + "self._" + prop["name"] + " = [None,None]\n"
+            prop_str += TAB2 + "elif callable(value):\n"
+            prop_str += TAB3 + "self._" + prop["name"] + " = [value,getsource(value)]\n"
+            prop_str += TAB2 + "else:\n"
+            prop_str += (
+                TAB3
+                + "raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) \n"
             )
         else:
             prop_str += (
@@ -1165,14 +1188,8 @@ def generate_properties(gen_dict, class_dict):
                 if str(prop["max"]) is not "":
                     prop_str += ", Vmax=" + str(prop["max"])
             prop_str += ")\n"
-
-        if prop["type"] == "function":
-            prop_str += TAB2 + "if value is None or isinstance(value,str):\n"
-            prop_str += TAB3 + "self._" + prop["name"] + " = value\n"
-            prop_str += TAB2 + "else:\n"
-            prop_str += TAB3 + "self._" + prop["name"] + " = getsource(value)\n"
-        else:
             prop_str += TAB2 + "self._" + prop["name"] + " = value\n\n"
+
         if is_list_pyleecan_type(prop["type"]):
             # List of pyleecan type
             prop_str += TAB2 + "for obj in self._" + prop["name"] + ":\n"
