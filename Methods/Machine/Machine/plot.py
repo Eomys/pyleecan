@@ -80,6 +80,14 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, comp_machi
     _plot(plot_int, fig, plot_args)
     _plot(plot_shaft, fig, plot_args)
 
+    if comp_machine is not None:
+        comp_machine.rotor.plot(
+            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=True
+        )
+        comp_machine.stator.plot(
+            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=True
+        )
+
     axes.set_xlabel("(m)")
     axes.set_ylabel("(m)")
     axes.set_title("Machine")
