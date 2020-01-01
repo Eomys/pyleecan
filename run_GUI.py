@@ -9,6 +9,7 @@ from sys import argv, exit
 
 from PyQt5.QtCore import QTranslator
 from PyQt5.QtWidgets import QApplication
+from PyQt5.QtGui import QIcon
 from pyleecan.GUI import DATA_DIR
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
@@ -39,7 +40,9 @@ if __name__ == "__main__":
     
     if EXT_GUI:
         # Setup extended GUI with sub windows
+        icon= dirname(__file__) + '/GUI/Resources/images/icon/pyleecan_64.png'
         window = SidebarWindow()
+        window.setWindowIcon(QIcon(icon))
         
         window.addSubWindow("Design", c)
         window.DesignWidget = c
