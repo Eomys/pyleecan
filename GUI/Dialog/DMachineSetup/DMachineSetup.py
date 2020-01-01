@@ -17,6 +17,7 @@ from pyleecan.Functions.load import load, load_matlib
 from pyleecan.GUI.Dialog.DMachineSetup import mach_index, mach_list
 from pyleecan.GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
 from pyleecan.GUI import DATA_DIR
+from pyleecan.Classes.Machine import Machine
 
 # Flag for set the enable property of w_nav (List_Widget)
 DISABLE_ITEM = Qt.NoItemFlags
@@ -169,11 +170,21 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         )
         if load_path != "":
             try:
-                self.machine = load(load_path)
-                self.machineChanged.emit()
-                self.is_save_needed = False
                 # Update the machine path to remember the last used folder
                 self.machine_path = dirname(load_path)
+                # Load and check type of instance
+                machine = load(load_path)
+                if isinstance(machine, Machine):
+                    self.machine = machine
+                else:
+                    QMessageBox().critical(
+                        self,
+                        self.tr("Error"),
+                        self.tr("The choosen file is not a machine file."),
+                    )
+                    return
+                self.machineChanged.emit()
+                self.is_save_needed = False
             except Exception as e:
                 QMessageBox().critical(
                     self,

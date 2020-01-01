@@ -11,8 +11,16 @@ from PyQt5.QtCore import QTranslator
 from PyQt5.QtWidgets import QApplication
 from pyleecan.GUI import DATA_DIR
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+
+from pyleecan.GUI.Tools.SidebarWindow import SidebarWindow
+from pyleecan.GUI.Tools.MachinePlotWidget import MachinePlotWidget
+
+EXT_GUI = True
 
 if __name__ == "__main__":
+    # Default material data path
+    matlib_path = join(DATA_DIR, "Material") 
 
     # Script to be used to test in dev
     a = QApplication(argv)
@@ -26,9 +34,26 @@ if __name__ == "__main__":
     translator.load(translationFile, "GUI//i18n")
     a.installTranslator(translator)
 
-    c = DMachineSetup(
-        machine_path=join(DATA_DIR, "Machine"), matlib_path=join(DATA_DIR, "Material")
-    )
-    c.show()
+    # Machine Setup Widget
+    c = DMachineSetup(machine_path=join(DATA_DIR, "Machine"), matlib_path=matlib_path)
+    
+    if EXT_GUI:
+        # Setup extended GUI with sub windows
+        window = SidebarWindow()
+        
+        window.addSubWindow("Design", c)
+        window.DesignWidget = c
+
+        plt_widget = MachinePlotWidget(window)
+        window.addSubWindow("Plot", plt_widget, plt_widget.update)
+        
+        mat_widget = DMatLib(window.DesignWidget.matlib, selected=0)
+        window.addSubWindow("MatLib", mat_widget)
+        
+        window.show()
+
+    else:
+        # "Normal" GUI
+        c.show()
 
     exit(a.exec_())
