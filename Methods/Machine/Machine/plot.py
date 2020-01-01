@@ -8,7 +8,10 @@ Machine plot method
 from matplotlib.pyplot import axis, subplots
 from pyleecan.Functions.init_fig import init_fig
 
-def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, comp_machine=None):
+
+def plot(
+    self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, comp_machine=None
+):
     """Plot the Machine in a matplotlib fig
 
     Parameters
@@ -32,7 +35,7 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, comp_machi
 
     """
     # Display
-    #fig, axes = subplots()
+    # fig, axes = subplots()
     (fig, axes, patch_leg, label_leg) = init_fig(fig)
 
     # Get the patches to display from corresponding plot
@@ -55,8 +58,8 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, comp_machi
                 plot_shaft = self.shaft.plot
         else:
             plot_ext = self.rotor.plot
-        Rext = self.rotor.Rext # will be reset by stator in case
-        
+        Rext = self.rotor.Rext  # will be reset by stator in case
+
     if self.stator is not None:
         if self.stator.is_internal:
             plot_int = self.stator.plot
@@ -66,15 +69,15 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, comp_machi
             Rext = self.stator.Rext
 
     Lim = (Rext + Wfra) * 1.5  # Axes limit for plot
-        
+
     # Plot
     plot_args = {
-        'sym':sym, 
-        'alpha':alpha, 
-        'delta':delta, 
-        'is_edge_only':is_edge_only
-        }
-    
+        "sym": sym,
+        "alpha": alpha,
+        "delta": delta,
+        "is_edge_only": is_edge_only,
+    }
+
     _plot(plot_frame, fig, plot_args)
     _plot(plot_ext, fig, plot_args)
     _plot(plot_int, fig, plot_args)
@@ -100,10 +103,10 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, comp_machi
     axes.set_ylim(-Lim, Lim)
     fig.show()
 
+
 def _plot(plt_fcn, fig, plot_args):
-    if plt_fcn is not None: 
+    if plt_fcn is not None:
         try:
             plt_fcn(fig, **plot_args)
         except Exception:
             pass
-
