@@ -18,13 +18,6 @@ class SidebarWindow(QtWidgets.QMainWindow):
         self._main = QtWidgets.QWidget()
         self.setCentralWidget(self._main)
 
-        # === Actions ===
-        # Close 
-        exitAction = QtWidgets.QAction("&Close", self)
-        exitAction.setShortcut("Ctrl+Q")
-        exitAction.setStatusTip('Close Pyleecan')
-        exitAction.triggered.connect(self.close_application)
-
         # === Main Widgets ===
         # Navigation Panel with Button Group
         self.nav_panel = QtWidgets.QFrame()
