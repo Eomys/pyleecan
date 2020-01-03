@@ -745,13 +745,25 @@ def generate_str(gen_dict, class_dict):
             )
         elif prop["type"] == "function":
             # Add => < MyClass_str += "my_var = "+str(self._my_var) >to var_str
+            var_str += TAB2 + "if self._" + prop["name"] + "[1] is None:\n"
             var_str += (
-                TAB2
+                TAB3
                 + class_name
                 + '_str += "'
                 + prop["name"]
-                + ' = " + linesep + self._'
-                + prop["name"]+"[1]"
+                + ' = " + str(self._'
+                + prop["name"]
+                + "[1])\n"
+            )
+            var_str += TAB2 + "else:\n"
+            var_str += (
+                TAB3
+                + class_name
+                + '_str += "'
+                + prop["name"]
+                + ' = " + linesep + str(self._'
+                + prop["name"]
+                + "[1])"
             )
         elif prop["type"] in ["ndarray", "list"]:
             # For Matrix (skip a line then print the matrix)
