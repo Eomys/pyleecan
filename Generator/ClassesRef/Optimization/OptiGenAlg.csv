@@ -1,0 +1,10 @@
+Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+multi_output,-,Optimization results containing every output,,1,OutputMultiOpti,-1,,,,,,Optimization,,,VERSION,1,Multi-objectives optimization problem with some constraints,
+pop,-,Current population,,1,list,[],,,,,,,,,,,,
+selector,-,Selector of the genetic algorithm,,1,function,,,,,,,,,,,,,
+crossover,-,Crossover of the genetic algorithm,,1,function,,,,,,,,,,,,,
+mutator,-,Mutator of the genetic algorithm,,1,function,,,,,,,,,,,,,
+p_cross,-,Probability of crossover,,1,float,0.9,0,1,,,,,,,,,,
+p_mute,-,Probability of mutation ,,1,float,0.1,0,1,,,,,,,,,,
+size_pop,-,Size of the population,,1,int,50,1,,,,,,,,,,,
+problem,-,Problem to solve,,1,OptiProblem,,,,,,,,,,,,,
