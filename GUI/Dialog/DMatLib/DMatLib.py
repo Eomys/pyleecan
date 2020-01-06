@@ -85,7 +85,7 @@ class DMatLib(Gen_DMatLib, QDialog):
 
         load_path = str(
             QFileDialog.getExistingDirectory(
-                self, self.tr("Select Directory"), matlib_path
+                self, self.tr("Select Material Library Directory"), self.matlib_path
             )
         )
 
