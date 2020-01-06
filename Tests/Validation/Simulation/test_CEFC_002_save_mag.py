@@ -60,12 +60,14 @@ class test_CEFC_002(TestCase):
         out.post.legend_name = "Slotless lamination"
         simu.run()
 
-        #out.plot_mesh_field(meshsolution=out.mag.meshsolution, title="Permeability")
-        out.plot_mesh_field(mesh=out.mag.meshsolution.mesh[0], title="Permeability", field=out.mag.meshsolution.solution[0].mu)
+        # out.plot_mesh_field(meshsolution=out.mag.meshsolution, title="Permeability")
+        out.plot_mesh_field(
+            mesh=out.mag.meshsolution.mesh[0],
+            title="Permeability",
+            field=out.mag.meshsolution.solution[0].mu,
+        )
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_CEFC_002_save_mag"))
-
-
 
         # out.save(save_path=save_path)
 

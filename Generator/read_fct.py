@@ -9,21 +9,21 @@ from csv import reader
 
 from pyleecan.Generator import PYTHON_TYPE
 
-# Constante for csv reading
-NAME_COL = 0  # Number of the Name column
-EN_DESC_COL = 2  # Number of the English description column
-TYPE_COL = 5  # Number of the Type column
-DEF_VAL_COL = 6  # Number of the default value column
-MIN_VAL_COL = 7  # Number of the minimum value column
-MAX_VAL_COL = 8  # Number of the maximum value column
+# Constants for csv reading, i.e. column number of data
+NAME_COL = 0  # attribue name
+EN_DESC_COL = 2  # english description
+TYPE_COL = 5  # type
+DEF_VAL_COL = 6  # default value
+MIN_VAL_COL = 7  # minimum value
+MAX_VAL_COL = 8  # maximum value
 
-PACK_COL = 12  # Number of the Package column
-HER_COL = 13  # Number of the mother class name column
-METH_COL = 14  # Number of the Methods list column
-CST_NAME_COL = 15  # Number of the Methods list column
-CST_VAL_COL = 16  # Number of the Methods list column
-CLASS_DEF_COL = 17  # Number of the Methods list column
-# DAUG_COL = 18  # Number of the daughter class list column (unused)
+PACK_COL = 12  # package
+HER_COL = 13  # mother class name
+METH_COL = 14  # methods list
+CST_NAME_COL = 15  # constants name list
+CST_VAL_COL = 16  # constants value list
+CLASS_DEF_COL = 17  # class description
+# DAUG_COL = 18  # daughter class list (unused)
 
 
 def read_all(path, is_internal=False, in_path=""):

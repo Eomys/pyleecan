@@ -46,7 +46,7 @@ class DMatLib(Gen_DMatLib, QDialog):
 
         # Copy to set the modification only if validated
         self.matlib = list(matlib)
-        self.matlib_path = abspath(join(DATA_DIR, "MaterialData"))
+        self.matlib_path = abspath(join(DATA_DIR, "Material"))
 
         if len(self.matlib) == 0:
             self.load()
@@ -83,13 +83,12 @@ class DMatLib(Gen_DMatLib, QDialog):
 
         """
 
-        mat_path = join(getcwd(), "..", "MaterialData")
-
         load_path = str(
-            QFileDialog.getOpenFileName(
-                self, self.tr("Select Material library file"), mat_path, "Matlab (*.m)"
+            QFileDialog.getExistingDirectory(
+                self, self.tr("Select Material Library Directory"), self.matlib_path
             )
         )
+
         if load_path != "":
             try:
                 self.matlib = load_matlib(load_path)
