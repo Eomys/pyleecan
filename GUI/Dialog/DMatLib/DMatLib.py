@@ -22,13 +22,13 @@ from pyleecan.GUI import DATA_DIR
 
 
 class DMatLib(Gen_DMatLib, QDialog):
-    def __init__(self, matlib, selected=0):
+    def __init__(self, matlib=list(), selected=0):
         """Init the Matlib GUI
 
         Parameters
         ----------
         self :
-            a W_Matlib object
+            a DMatLib object
         matlib :
             The current state of the Material library (list of
             material)
@@ -44,8 +44,8 @@ class DMatLib(Gen_DMatLib, QDialog):
         QDialog.__init__(self)
         self.setupUi(self)
 
-        # Copy to set the modification only if validated
-        self.matlib = list(matlib)
+        # do not copy to set the modification here (i.e. within DMatLib)
+        self.matlib = matlib
         self.matlib_path = abspath(join(DATA_DIR, "Material"))
 
         if len(self.matlib) == 0:
@@ -76,7 +76,7 @@ class DMatLib(Gen_DMatLib, QDialog):
         Parameters
         ----------
         self :
-            A W_MatLib object
+            A DMatLib object
 
         Returns
         -------
@@ -113,12 +113,14 @@ class DMatLib(Gen_DMatLib, QDialog):
             self.reject()
 
     def edit_material(self, item=None):
-        """Open the setup material GUI to edit the current material
+        """
+        Open the setup material GUI to edit the current material.
+        Changes will be saved to the corresponding material file.
 
         Parameters
         ----------
         self :
-            A W_MatLib object
+            A DMatLib object
         item :
              (Default value = None)
 
@@ -128,14 +130,16 @@ class DMatLib(Gen_DMatLib, QDialog):
         """
         # Get the current material (filtering index)
         mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1
-        # Open the setup GUI
+       # Open the setup GUI 
+        # (creates a copy of the material, i.e. self.matlib won't be edited directly)
         self.mat_win = DMatSetup(self.matlib[mat_id])
         return_code = self.mat_win.exec_()
         if return_code == QDialog.Accepted:
-            # Update the material only if the user validate at the end
+            # Update the material only if the user save changes 
             old_name = self.matlib[mat_id].name
             old_path = self.matlib[mat_id].path
-            self.matlib[mat_id] = self.mat_win.mat
+            # keep material object
+            self.matlib[mat_id].__init__(init_dict=self.mat_win.mat.as_dict())
             if old_name != self.matlib[mat_id].name:
                 # Update the material name list only if modified
                 index = self.nav_mat.currentRow()
@@ -149,6 +153,10 @@ class DMatLib(Gen_DMatLib, QDialog):
             self.matlib[mat_id].save(self.matlib[mat_id].path)
             self.update_out()
 
+            # Signal set by WMatSelect to update Combobox
+            self.accepted.emit()
+
+
     def new_material(self):
         """Open the setup material GUI to create a new material according to
         the current material
@@ -156,7 +164,7 @@ class DMatLib(Gen_DMatLib, QDialog):
         Parameters
         ----------
         self :
-            A W_MatLib object
+            A DMatLib object
 
         Returns
         -------
@@ -164,7 +172,8 @@ class DMatLib(Gen_DMatLib, QDialog):
         """
         # Get the current material (filtering index)
         mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1
-        # Open the setup GUI (creates a copy of the material)
+        # Open the setup GUI 
+        # (creates a copy of the material, i.e. self.matlib won't be edited directly)
         self.mat_win = DMatSetup(self.matlib[mat_id])
         return_code = self.mat_win.exec_()
         if return_code == QDialog.Accepted:
@@ -175,13 +184,17 @@ class DMatLib(Gen_DMatLib, QDialog):
             self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
             self.update_out()
 
+            # Signal set by WMatSelect to update Combobox
+            self.accepted.emit()
+
+
     def delete_material(self):
         """Delete the selected material
 
         Parameters
         ----------
         self :
-            A W_MatLib object
+            A DMatLib object
 
         Returns
         -------
@@ -202,6 +215,10 @@ class DMatLib(Gen_DMatLib, QDialog):
                 self.nav_mat.setCurrentRow(index)
             else:
                 self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
+
+            # Signal set by WMatSelect to update Combobox
+            self.accepted.emit()
+
 
     def filter_material(self, index=None):
         """
@@ -224,7 +241,7 @@ class DMatLib(Gen_DMatLib, QDialog):
         Parameters
         ----------
         self :
-            A W_MatLib object
+            A DMatLib object
 
         Returns
         -------
@@ -258,7 +275,7 @@ class DMatLib(Gen_DMatLib, QDialog):
         Parameters
         ----------
         self :
-            A W_MatLib object
+            A DMatLib object
         index :
             Current index of nav_mat (Default value = 0)
 

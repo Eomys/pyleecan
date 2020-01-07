@@ -115,7 +115,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -134,7 +134,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
         index :
             Current index of the combobox
 
@@ -162,7 +162,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
         is_checked :
             State of the checkbox
 
@@ -180,7 +180,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -194,7 +194,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -208,7 +208,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -222,7 +222,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -236,7 +236,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -250,7 +250,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -264,7 +264,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -278,7 +278,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -292,7 +292,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -308,7 +308,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -322,7 +322,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -336,7 +336,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -350,7 +350,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -364,7 +364,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -380,7 +380,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -394,7 +394,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -408,7 +408,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -422,7 +422,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -438,7 +438,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -452,7 +452,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -466,7 +466,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -480,7 +480,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -496,7 +496,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -510,7 +510,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -524,7 +524,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------

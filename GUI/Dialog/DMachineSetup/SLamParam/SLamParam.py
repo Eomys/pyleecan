@@ -72,8 +72,8 @@ class SLamParam(Gen_SLamParam, QWidget):
             if self.obj.Kf1 is None:
                 # Default value for rotor is the stator one
                 self.obj.Kf1 = self.machine.stator.Kf1
-
-        self.w_mat.update(self.obj.mat_type, matlib)
+        
+        self.w_mat.update(self.obj, 'mat_type', matlib)
 
         self.lf_L1.setValue(self.obj.L1)
         self.lf_Kf1.setValue(self.obj.Kf1)
