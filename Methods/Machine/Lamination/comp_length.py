@@ -22,5 +22,7 @@ def comp_length(self):
         Total Lenght of the Lamination [m]
 
     """
-
-    return self.L1 + self.Nrvd * self.Wrvd
+    if self.Nrvd is None or self.Wrvd is None:
+        return self.L1
+    else:
+        return self.L1 + self.Nrvd * self.Wrvd
