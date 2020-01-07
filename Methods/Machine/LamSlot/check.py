@@ -5,6 +5,7 @@ Check that the Lamination is correct
 @copyright (C) 2015-2016 EOMYS ENGINEERING.
 @author pierre_b
 @todo unittest it
+@todo check tooth widths
 @todo Check that the Slot don't colide (use width tooth)
 """
 
@@ -39,12 +40,13 @@ def check(self):
 
     if self.comp_height_yoke() < 0:
         raise LSC_SlotTooLong("The Slot is too long for the lamination " "(HYoke <0)")
-
+    
+    '''
     Wt = self.slot.comp_tooth_widths()["WTooth_min"]
 
     if Wt < 0:
         raise LSC_OverlappingSlot("The Lamination has overlapping slot")
-
+    '''
 
 class Lam_SlotCheckError(LaminationCheckError):
     """ """
