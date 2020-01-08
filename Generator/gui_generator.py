@@ -13,6 +13,7 @@ from re import match
 from subprocess import PIPE, Popen
 from json import load as jload
 from pyleecan.Generator import GEN_DIR, TAB, TAB2, TAB3
+from pyleecan.Functions.short_filepath import short_filepath
 
 GUI_DIR = abspath(join(GEN_DIR, "..", "GUI"))
 ROOT_DIR = abspath(join(GEN_DIR, ".."))
@@ -502,8 +503,20 @@ def ui_to_py(path, file_name):
     path_in = join(path, file_name)  # Input file
     path_out = join(path, "Ui_" + file_name[:-3] + ".py")  # Output file
 
-    print("pyuic5 --import-from=pyleecan.GUI.Resources " + path_in + " -o " + path_out)
-    system("pyuic5 --import-from=pyleecan.GUI.Resources " + path_in + " -o " + path_out)
+    print(
+        'pyuic5 --import-from=pyleecan.GUI.Resources "'
+        + short_filepath(path_in, length=40)
+        + '" -o "'
+        + short_filepath(path_out, length=40)
+        + '"'
+    )
+    system(
+        'pyuic5 --import-from=pyleecan.GUI.Resources "'
+        + path_in
+        + '" -o "'
+        + path_out
+        + '"'
+    )
     # Remove header part of the generated file (to avoid "commit noise")
     with open(path_out, "r") as py_file:
         data = py_file.read().splitlines(True)
