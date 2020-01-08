@@ -487,7 +487,7 @@ def qrc_to_py(path, file_name):
     path_out = join(path, file_name[:-4] + "_rc.py")  # Output file
 
     # Run the windows command "pyrcc5" for converting files
-    p = Popen("pyrcc5 " + path_in + " > " + path_out, stdout=PIPE, shell=True)
+    p = Popen('pyrcc5 "' + path_in + '" > "' + path_out + '"', stdout=PIPE, shell=True)
     (output, err) = p.communicate()
 
     # Print the name of the converted file for check
