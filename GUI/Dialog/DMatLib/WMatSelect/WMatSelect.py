@@ -163,7 +163,6 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         -------
 
         """
-        print('"rejected"')
         # Empty and fill the list to keep the same object (to change it everywhere)
         #del self.matlib[:]
         #self.matlib.extend(self.mat_win.matlib)
@@ -185,8 +184,8 @@ class WMatSelect(Ui_WMatSelect, QWidget):
 
         self.c_mat_type.clear()
         self.c_mat_type.addItems([mat.name for mat in self.matlib])
-
-        index = self.c_mat_type.findText(self.mat.name)
+        print(getattr(self.obj, self.mat_attr_name).name)
+        index = self.c_mat_type.findText(getattr(self.obj, self.mat_attr_name).name)
         self.c_mat_type.setCurrentIndex(index)
 
         self.c_mat_type.blockSignals(False)
