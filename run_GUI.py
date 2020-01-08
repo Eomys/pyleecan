@@ -17,7 +17,7 @@ from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 
 from pyleecan.GUI.Tools.SidebarWindow import SidebarWindow
 from pyleecan.GUI.Tools.MachinePlotWidget import MachinePlotWidget
-from pyleecan.GUI._Internal.FEAnoloadWidget import FEAnoloadWidget
+#from pyleecan.GUI._Internal.FEAnoloadWidget import FEAnoloadWidget
 
 EXT_GUI = True
 
@@ -56,12 +56,9 @@ if __name__ == "__main__":
         mat_widget = DMatLib(window.DesignWidget.matlib, selected=0)
         window.addSubWindow("MatLib", mat_widget, mat_widget.update_mat_list)
 
-        test = FEAnoloadWidget(c, 'Leerlauf FEA')
-        window.addSubWindow("noload FEA", test)
+        #test = FEAnoloadWidget(c, 'Leerlauf FEA')
+        #window.addSubWindow("noload FEA", test)
         
-        
-        
-
         window.show()
 
     else:
