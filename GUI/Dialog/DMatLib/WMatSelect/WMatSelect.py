@@ -184,7 +184,6 @@ class WMatSelect(Ui_WMatSelect, QWidget):
 
         self.c_mat_type.clear()
         self.c_mat_type.addItems([mat.name for mat in self.matlib])
-        print(getattr(self.obj, self.mat_attr_name).name)
         index = self.c_mat_type.findText(getattr(self.obj, self.mat_attr_name).name)
         self.c_mat_type.setCurrentIndex(index)
 
