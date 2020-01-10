@@ -1,12 +1,12 @@
 from pyleecan.Classes.Material import Material
-from pyleecan.Classes.MatLamination import MatLamination
+from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
 from os.path import dirname, abspath, join
 
 file_path = abspath(join(dirname(__file__), "M530-65A.xlsx"))
 
 M530_65A = Material(name="M530-65A")
-M530_65A.mag = MatLamination()
+M530_65A.mag = MatMagnetics()
 
 M530_65A.mag.mur_lin = 2500.0
 M530_65A.mag.Wlam = 0.0005

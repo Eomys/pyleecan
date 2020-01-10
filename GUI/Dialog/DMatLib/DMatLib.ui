@@ -41,30 +41,6 @@
         </layout>
        </item>
        <item>
-        <widget class="QComboBox" name="c_search">
-         <item>
-          <property name="text">
-           <string>All</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Lamination</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Magnet</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Raw</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
         <widget class="QListWidget" name="nav_mat"/>
        </item>
        <item>
@@ -100,13 +76,6 @@
         <widget class="QLabel" name="out_name">
          <property name="text">
           <string>name : M400-50A</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="out_type">
-         <property name="text">
-          <string>Raw Material</string>
          </property>
         </widget>
        </item>

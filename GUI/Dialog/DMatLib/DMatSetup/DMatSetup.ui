@@ -33,50 +33,6 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_33">
-     <item>
-      <widget class="QLabel" name="in_type_mat">
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Material type</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="c_type_mat">
-       <property name="font">
-        <font>
-         <pointsize>8</pointsize>
-         <weight>50</weight>
-         <bold>false</bold>
-        </font>
-       </property>
-       <item>
-        <property name="text">
-         <string>Raw material</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Magnet material</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Lamination material</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
     <widget class="QCheckBox" name="is_isotropic">
      <property name="text">
       <string>is_isotropic</string>
@@ -92,7 +48,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_elec">
       <attribute name="title">
@@ -153,128 +109,101 @@
       <attribute name="title">
        <string>Magnetics</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_7">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_44">
-         <item>
-          <widget class="QLabel" name="in_mur_lin">
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>mur_lin</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="FloatEdit" name="lf_mur_lin"/>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QStackedWidget" name="nav_mag">
-         <property name="currentIndex">
-          <number>0</number>
+      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0">
+       <item row="1" column="2">
+        <widget class="QLabel" name="unit_Brm20">
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
          </property>
-         <widget class="QWidget" name="page_magnet">
-          <layout class="QVBoxLayout" name="verticalLayout_3">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_8">
-             <item>
-              <widget class="QLabel" name="in_Brm20">
-               <property name="font">
-                <font>
-                 <pointsize>8</pointsize>
-                 <weight>50</weight>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string>Brm20</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="FloatEdit" name="lf_Brm20"/>
-             </item>
-             <item>
-              <widget class="QLabel" name="unit_Brm20">
-               <property name="font">
-                <font>
-                 <pointsize>8</pointsize>
-                 <weight>50</weight>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string>T</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_9">
-             <item>
-              <widget class="QLabel" name="in_alpha_Br">
-               <property name="font">
-                <font>
-                 <pointsize>8</pointsize>
-                 <weight>50</weight>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string>alphaBr</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="FloatEdit" name="lf_alpha_Br"/>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QWidget" name="page_lam">
-          <layout class="QHBoxLayout" name="horizontalLayout_10">
-           <item>
-            <widget class="QLabel" name="in_Wlam">
-             <property name="font">
-              <font>
-               <pointsize>8</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Wlam</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="FloatEdit" name="lf_Wlam"/>
-           </item>
-           <item>
-            <widget class="QLabel" name="unit_Wlam">
-             <property name="font">
-              <font>
-               <pointsize>8</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>m</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
+         <property name="text">
+          <string>T</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="in_Brm20">
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Brm20</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="FloatEdit" name="lf_Brm20"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="FloatEdit" name="lf_alpha_Br"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="FloatEdit" name="lf_mur_lin"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="in_Wlam">
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Wlam</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="in_mur_lin">
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>mur_lin</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="FloatEdit" name="lf_Wlam"/>
+       </item>
+       <item row="3" column="2">
+        <widget class="QLabel" name="unit_Wlam">
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>m</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="in_alpha_Br">
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>alphaBr</string>
+         </property>
         </widget>
        </item>
       </layout>

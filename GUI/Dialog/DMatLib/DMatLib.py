@@ -13,8 +13,6 @@ from re import match
 
 from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox
 
-from pyleecan.Classes.MatLamination import MatLamination
-from pyleecan.Classes.MatMagnet import MatMagnet
 from pyleecan.Functions.load import load_matlib
 from pyleecan.GUI.Dialog.DMatLib.Gen_DMatLib import Gen_DMatLib
 from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
@@ -22,6 +20,8 @@ from pyleecan.GUI import DATA_DIR
 
 
 class DMatLib(Gen_DMatLib, QDialog):
+    """Material Library Dialog to view and modify material data."""
+
     def __init__(self, matlib=list(), selected=0):
         """Init the Matlib GUI
 
@@ -62,7 +62,6 @@ class DMatLib(Gen_DMatLib, QDialog):
         self.out_epsr.hide()
 
         self.nav_mat.currentRowChanged.connect(self.update_out)
-        self.c_search.currentIndexChanged.connect(self.filter_material)
         self.le_search.textChanged.connect(self.filter_material)
 
         self.b_edit.clicked.connect(self.edit_material)
@@ -130,12 +129,12 @@ class DMatLib(Gen_DMatLib, QDialog):
         """
         # Get the current material (filtering index)
         mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1
-       # Open the setup GUI 
+        # Open the setup GUI
         # (creates a copy of the material, i.e. self.matlib won't be edited directly)
         self.mat_win = DMatSetup(self.matlib[mat_id])
         return_code = self.mat_win.exec_()
         if return_code == QDialog.Accepted:
-            # Update the material only if the user save changes 
+            # Update the material only if the user save changes
             old_name = self.matlib[mat_id].name
             old_path = self.matlib[mat_id].path
             # keep material object
@@ -156,7 +155,6 @@ class DMatLib(Gen_DMatLib, QDialog):
             # Signal set by WMatSelect to update Combobox
             self.accepted.emit()
 
-
     def new_material(self):
         """Open the setup material GUI to create a new material according to
         the current material
@@ -172,7 +170,7 @@ class DMatLib(Gen_DMatLib, QDialog):
         """
         # Get the current material (filtering index)
         mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1
-        # Open the setup GUI 
+        # Open the setup GUI
         # (creates a copy of the material, i.e. self.matlib won't be edited directly)
         self.mat_win = DMatSetup(self.matlib[mat_id])
         return_code = self.mat_win.exec_()
@@ -186,7 +184,6 @@ class DMatLib(Gen_DMatLib, QDialog):
 
             # Signal set by WMatSelect to update Combobox
             self.accepted.emit()
-
 
     def delete_material(self):
         """Delete the selected material
@@ -218,7 +215,6 @@ class DMatLib(Gen_DMatLib, QDialog):
 
             # Signal set by WMatSelect to update Combobox
             self.accepted.emit()
-
 
     def filter_material(self, index=None):
         """
@@ -253,15 +249,7 @@ class DMatLib(Gen_DMatLib, QDialog):
 
         # Filter the material
         for ii, mat in enumerate(mat_list):
-            if self.c_search.currentIndex() == 1 and type(mat.mag) is not MatLamination:
-                # Lamination only
-                continue
-            if self.c_search.currentIndex() == 2 and type(mat.mag) is not MatMagnet:
-                # Magnet only
-                continue
-            if self.c_search.currentIndex() == 3 and mat.mag is not None:
-                # Raw mat only
-                continue
+            # todo: add new filter
             if self.le_search.text() != "" and not match(
                 ".*" + self.le_search.text().lower() + ".*", mat.name.lower()
             ):
@@ -297,63 +285,53 @@ class DMatLib(Gen_DMatLib, QDialog):
             self.out_iso.setText(self.tr("type: anisotropic"))
 
         # Update Electrical parameters
-        update_text(self.out_rho_elec, "rho", mat.elec.rho, "ohm.m")
-        # Update_text(self.out_epsr,"epsr",mat.elec.epsr,None)
+        if mat.elec is not None:
+            update_text(self.out_rho_elec, "rho", mat.elec.rho, "ohm.m")
+            # update_text(self.out_epsr,"epsr",mat.elec.epsr,None)
 
         # Update Economical parameters
-        update_text(self.out_cost_unit, "cost_unit", mat.eco.cost_unit, u"€/kg")
+        if mat.eco is not None:
+            update_text(self.out_cost_unit, "cost_unit", mat.eco.cost_unit, u"€/kg")
 
         # Update Thermics parameters
-        update_text(self.out_Cp, "Cp", mat.HT.Cp, "W/kg/K")
-        update_text(self.out_alpha, "alpha", mat.HT.alpha, None)
-        if mat.is_isotropic:
-            self.nav_iso_therm.setCurrentIndex(0)
-            update_text(self.out_L, "Lambda", mat.HT.lambda_x, "W/K")
-        else:
-            self.nav_iso_therm.setCurrentIndex(1)
-            update_text(self.out_LX, "Lambda X", mat.HT.lambda_x, "W/K")
-            update_text(self.out_LY, "Lambda Y", mat.HT.lambda_y, "W/K")
-            update_text(self.out_LZ, "Lambda Z", mat.HT.lambda_z, "W/K")
+        if mat.HT is not None:
+            update_text(self.out_Cp, "Cp", mat.HT.Cp, "W/kg/K")
+            update_text(self.out_alpha, "alpha", mat.HT.alpha, None)
+            if mat.is_isotropic:
+                self.nav_iso_therm.setCurrentIndex(0)
+                update_text(self.out_L, "Lambda", mat.HT.lambda_x, "W/K")
+            else:
+                self.nav_iso_therm.setCurrentIndex(1)
+                update_text(self.out_LX, "Lambda X", mat.HT.lambda_x, "W/K")
+                update_text(self.out_LY, "Lambda Y", mat.HT.lambda_y, "W/K")
+                update_text(self.out_LZ, "Lambda Z", mat.HT.lambda_z, "W/K")
 
         # Update Structural parameters
-        update_text(self.out_rho_meca, "rho", mat.struct.rho, "kg/m^3")
-        if mat.is_isotropic:
-            self.nav_iso_meca.setCurrentIndex(0)
-            update_text(self.out_E, "E", mat.struct.Ex, "Pa")
-            update_text(self.out_G, "G", mat.struct.Gxy, "Pa")
-            update_text(self.out_nu, "nu", mat.struct.nu_xy, None)
-        else:
-            self.nav_iso_meca.setCurrentIndex(1)
-            update_text(self.out_EX, None, mat.struct.Ex, None)
-            update_text(self.out_GXY, None, mat.struct.Gxy, None)
-            update_text(self.out_nu_XY, None, mat.struct.nu_xy, None)
-            update_text(self.out_EY, None, mat.struct.Ey, None)
-            update_text(self.out_GYZ, None, mat.struct.Gyz, None)
-            update_text(self.out_nu_YZ, None, mat.struct.nu_yz, None)
-            update_text(self.out_EZ, None, mat.struct.Ez, None)
-            update_text(self.out_GXZ, None, mat.struct.Gxz, None)
-            update_text(self.out_nu_XZ, None, mat.struct.nu_xz, None)
+        if mat.struct is not None:
+            update_text(self.out_rho_meca, "rho", mat.struct.rho, "kg/m^3")
+            if mat.is_isotropic:
+                self.nav_iso_meca.setCurrentIndex(0)
+                update_text(self.out_E, "E", mat.struct.Ex, "Pa")
+                update_text(self.out_G, "G", mat.struct.Gxy, "Pa")
+                update_text(self.out_nu, "nu", mat.struct.nu_xy, None)
+            else:
+                self.nav_iso_meca.setCurrentIndex(1)
+                update_text(self.out_EX, None, mat.struct.Ex, None)
+                update_text(self.out_GXY, None, mat.struct.Gxy, None)
+                update_text(self.out_nu_XY, None, mat.struct.nu_xy, None)
+                update_text(self.out_EY, None, mat.struct.Ey, None)
+                update_text(self.out_GYZ, None, mat.struct.Gyz, None)
+                update_text(self.out_nu_YZ, None, mat.struct.nu_yz, None)
+                update_text(self.out_EZ, None, mat.struct.Ez, None)
+                update_text(self.out_GXZ, None, mat.struct.Gxz, None)
+                update_text(self.out_nu_XZ, None, mat.struct.nu_xz, None)
 
         # Update Magnetics parameters
-        if mat.mag is None:
-            self.out_type.setText(self.tr("Raw Material"))
-            self.g_mag.hide()
-        else:
-            self.g_mag.show()
+        if mat.mag is not None:
             update_text(self.out_mur_lin, "mur_lin", mat.mag.mur_lin, None)
-            if type(mat.mag) is MatMagnet:
-                self.out_type.setText(self.tr("Magnet Material"))
-                update_text(self.out_Brm20, "Brm20", mat.mag.Brm20, "T")
-                self.out_Brm20.show()
-                update_text(self.out_alpha_Br, "alpha_Br", mat.mag.alpha_Br, None)
-                self.out_alpha_Br.show()
-                self.out_wlam.hide()
-            elif type(mat.mag) is MatLamination:
-                self.out_type.setText(self.tr("Lamination Material"))
-                self.out_Brm20.hide()
-                self.out_alpha_Br.hide()
-                update_text(self.out_wlam, "wlam", mat.mag.Wlam, "m")
-                self.out_wlam.show()
+            update_text(self.out_Brm20, "Brm20", mat.mag.Brm20, "T")
+            update_text(self.out_alpha_Br, "alpha_Br", mat.mag.alpha_Br, None)
+            update_text(self.out_wlam, "wlam", mat.mag.Wlam, "m")
 
 
 def update_text(label, name, value, unit):

@@ -200,7 +200,7 @@
         "xls": "Material"
     },
     {
-        "cls": "MatMagnet",
+        "cls": "MatMagnetics",
         "name": "Brm20",
         "widget": [
             "out_Brm20"
@@ -208,7 +208,7 @@
         "xls": "Material"
     },
     {
-        "cls": "MatMagnet",
+        "cls": "MatMagnetics",
         "name": "alpha_Br",
         "widget": [
             "out_alpha_Br"
@@ -216,7 +216,7 @@
         "xls": "Material"
     },
     {
-        "cls": "MatLamination",
+        "cls": "MatMagnetics",
         "name": "Wlam",
         "widget": [
             "out_wlam"

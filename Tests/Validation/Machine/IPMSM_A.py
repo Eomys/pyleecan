@@ -11,7 +11,6 @@ from numpy import pi
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 
 from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.MatLamination import MatLamination
 from pyleecan.Classes.SlotW11 import SlotW11
 from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Classes.CondType11 import CondType11
@@ -24,7 +23,6 @@ from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
 
 from pyleecan.Classes.Material import Material
-from pyleecan.Classes.MatMagnet import MatMagnet
 from pyleecan.Tests.Validation.Material.M400_50A import M400_50A
 from pyleecan.Tests.Validation.Material.Magnet_prius import Magnet_prius
 from pyleecan.Tests.Validation.Material.Copper1 import Copper1

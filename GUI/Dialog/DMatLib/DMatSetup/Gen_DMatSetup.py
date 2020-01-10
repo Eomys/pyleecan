@@ -404,7 +404,7 @@ class Gen_DMatSetup(Ui_DMatSetup):
 
         # Setup of in_Wlam
         txt = self.tr(
-            u"""lamination sheet width without insulation [m] (for magnetic loss model)"""
+            u"""lamination sheet width without insulation [m] (0 == not laminated)"""
         )
         self.in_Wlam.setWhatsThis(txt)
         self.in_Wlam.setToolTip(txt)
@@ -412,14 +412,14 @@ class Gen_DMatSetup(Ui_DMatSetup):
         # Setup of lf_Wlam
         self.lf_Wlam.validator().setBottom(0)
         txt = self.tr(
-            u"""lamination sheet width without insulation [m] (for magnetic loss model)"""
+            u"""lamination sheet width without insulation [m] (0 == not laminated)"""
         )
         self.lf_Wlam.setWhatsThis(txt)
         self.lf_Wlam.setToolTip(txt)
 
         # Setup of unit_Wlam
         txt = self.tr(
-            u"""lamination sheet width without insulation [m] (for magnetic loss model)"""
+            u"""lamination sheet width without insulation [m] (0 == not laminated)"""
         )
         self.unit_Wlam.setWhatsThis(txt)
         self.unit_Wlam.setToolTip(txt)

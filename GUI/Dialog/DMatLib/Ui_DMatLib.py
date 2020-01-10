@@ -3,6 +3,7 @@
 # File generated according to DMatLib.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -34,13 +35,6 @@ class Ui_DMatLib(object):
         self.img_search.setObjectName("img_search")
         self.horizontalLayout_9.addWidget(self.img_search)
         self.verticalLayout_3.addLayout(self.horizontalLayout_9)
-        self.c_search = QtWidgets.QComboBox(DMatLib)
-        self.c_search.setObjectName("c_search")
-        self.c_search.addItem("")
-        self.c_search.addItem("")
-        self.c_search.addItem("")
-        self.c_search.addItem("")
-        self.verticalLayout_3.addWidget(self.c_search)
         self.nav_mat = QtWidgets.QListWidget(DMatLib)
         self.nav_mat.setObjectName("nav_mat")
         self.verticalLayout_3.addWidget(self.nav_mat)
@@ -62,9 +56,6 @@ class Ui_DMatLib(object):
         self.out_name = QtWidgets.QLabel(DMatLib)
         self.out_name.setObjectName("out_name")
         self.verticalLayout_10.addWidget(self.out_name)
-        self.out_type = QtWidgets.QLabel(DMatLib)
-        self.out_type.setObjectName("out_type")
-        self.verticalLayout_10.addWidget(self.out_type)
         self.out_iso = QtWidgets.QLabel(DMatLib)
         self.out_iso.setObjectName("out_iso")
         self.verticalLayout_10.addWidget(self.out_iso)
@@ -340,15 +331,10 @@ class Ui_DMatLib(object):
     def retranslateUi(self, DMatLib):
         _translate = QtCore.QCoreApplication.translate
         DMatLib.setWindowTitle(_translate("DMatLib", "Material Library"))
-        self.c_search.setItemText(0, _translate("DMatLib", "All"))
-        self.c_search.setItemText(1, _translate("DMatLib", "Lamination"))
-        self.c_search.setItemText(2, _translate("DMatLib", "Magnet"))
-        self.c_search.setItemText(3, _translate("DMatLib", "Raw"))
         self.b_edit.setText(_translate("DMatLib", "Edit"))
         self.b_duplicate.setText(_translate("DMatLib", "New from"))
         self.b_delete.setText(_translate("DMatLib", "Delete"))
         self.out_name.setText(_translate("DMatLib", "name : M400-50A"))
-        self.out_type.setText(_translate("DMatLib", "Raw Material"))
         self.out_iso.setText(_translate("DMatLib", "isotropic"))
         self.g_elec.setTitle(_translate("DMatLib", "Electrical"))
         self.out_rho_elec.setText(_translate("DMatLib", "rho = 10e-3 ohm.m"))

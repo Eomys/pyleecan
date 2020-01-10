@@ -10,7 +10,7 @@ from unittest import TestCase
 
 from PyQt5 import QtWidgets
 
-from pyleecan.Classes.MatLamination import MatLamination
+from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 
@@ -25,7 +25,7 @@ class test_DMatLib(TestCase):
         mat_lib[0].name = "test_material_1"
         mat_lib[0].is_isotropic = True
         mat_lib[0].elec.rho = 0.11
-        mat_lib[0].mag = MatLamination(mur_lin=0.12, Wlam=0.13)
+        mat_lib[0].mag = MatMagnetics(mur_lin=0.12, Wlam=0.13)
         mat_lib[0].struct.rho = 0.14
         mat_lib[0].struct.Ex = 0.15
         mat_lib[0].struct.Ey = 0.152

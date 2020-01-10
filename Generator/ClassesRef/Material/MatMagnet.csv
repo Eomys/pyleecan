@@ -1,4 +1,0 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-Hc,A/m,Coercitivity field,,0,float,1,0,,,2,,Material,MatMagnetics,,VERSION,1,magnet material properties,
-alpha_Br,-,temperature coefficient for remanent flux density /degC compared to 20degC,,0,float,0,,,,,,,,,,,,
-Brm20,T,magnet remanence induction at 20degC,,0,float,1,,,,,,,,,,,,
