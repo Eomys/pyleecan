@@ -40,13 +40,14 @@ def check(self):
 
     if self.comp_height_yoke() < 0:
         raise LSC_SlotTooLong("The Slot is too long for the lamination " "(HYoke <0)")
-    
-    '''
+
+    """
     Wt = self.slot.comp_tooth_widths()["WTooth_min"]
 
     if Wt < 0:
         raise LSC_OverlappingSlot("The Lamination has overlapping slot")
-    '''
+    """
+
 
 class Lam_SlotCheckError(LaminationCheckError):
     """ """

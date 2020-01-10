@@ -51,14 +51,14 @@ def check(self):
 
     if self.comp_height_yoke() < 0:
         raise LMC_SlotTooLong("The Slot is too long for the lamination " "(HYoke <0)")
-    
-    '''
+
+    """
     Wt = self.slot.comp_tooth_widths()["WTooth_min"]
 
     if Wt < 0:
         raise LMC_OverlappingSlot("The Lamination has overlapping slot")
-    '''
-    
+    """
+
     # Magnet check
     if isinstance(self.slot, SlotMFlat):
         if isinstance(self.magnet, MagnetType11):

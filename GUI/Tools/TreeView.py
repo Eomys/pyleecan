@@ -11,7 +11,9 @@ class TreeView(QtWidgets.QTreeView):
         # self.__typeWrappers = {}
 
         model = QtGui.QStandardItemModel(0, 1)
-        model.setHorizontalHeaderLabels(["Name", "Value", "Unit", "Class", "Description"])
+        model.setHorizontalHeaderLabels(
+            ["Name", "Value", "Unit", "Class", "Description"]
+        )
 
         self.rootNode = model.invisibleRootItem()
 
@@ -68,4 +70,3 @@ class TreeView(QtWidgets.QTreeView):
                 # todo: list, dict, ndarray attributes
                 else:
                     pass
-
