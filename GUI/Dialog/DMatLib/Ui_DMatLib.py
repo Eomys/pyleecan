@@ -307,6 +307,25 @@ class Ui_DMatLib(object):
         self.out_wlam = QtWidgets.QLabel(self.g_mag)
         self.out_wlam.setObjectName("out_wlam")
         self.verticalLayout_8.addWidget(self.out_wlam)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.in_BH_curve = QtWidgets.QLabel(self.g_mag)
+        self.in_BH_curve.setObjectName("in_BH_curve")
+        self.horizontalLayout.addWidget(self.in_BH_curve)
+        self.out_BH = QtWidgets.QLabel(self.g_mag)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.out_BH.sizePolicy().hasHeightForWidth())
+        self.out_BH.setSizePolicy(sizePolicy)
+        self.out_BH.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
+        self.out_BH.setObjectName("out_BH")
+        self.horizontalLayout.addWidget(self.out_BH)
+        self.verticalLayout_8.addLayout(self.horizontalLayout)
         self.verticalLayout_10.addWidget(self.g_mag)
         spacerItem = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
@@ -441,6 +460,8 @@ class Ui_DMatLib(object):
         self.out_Brm20.setText(_translate("DMatLib", "Brm20 = 1 T"))
         self.out_alpha_Br.setText(_translate("DMatLib", "alpha_Br=0.1"))
         self.out_wlam.setText(_translate("DMatLib", "wlam = 0.5 m"))
+        self.in_BH_curve.setText(_translate("DMatLib", "BH curve:"))
+        self.out_BH.setText(_translate("DMatLib", "-"))
 
 
 from pyleecan.GUI.Resources import pyleecan_rc

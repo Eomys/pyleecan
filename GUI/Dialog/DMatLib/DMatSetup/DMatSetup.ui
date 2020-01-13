@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>392</width>
+    <width>388</width>
     <height>451</height>
    </rect>
   </property>
@@ -55,22 +55,11 @@
        <string>Electrical</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="in_rho_elec">
-         <property name="font">
-          <font>
-           <pointsize>8</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>rho</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="1">
         <widget class="FloatEdit" name="lf_rho_elec"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="FloatEdit" name="lf_epsr"/>
        </item>
        <item row="0" column="2">
         <widget class="QLabel" name="unit_rho_elec">
@@ -100,8 +89,32 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="FloatEdit" name="lf_epsr"/>
+       <item row="0" column="0">
+        <widget class="QLabel" name="in_rho_elec">
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>rho</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -109,7 +122,7 @@
       <attribute name="title">
        <string>Magnetics</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0">
+      <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0">
        <item row="1" column="2">
         <widget class="QLabel" name="unit_Brm20">
          <property name="font">
@@ -124,28 +137,21 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="in_Brm20">
-         <property name="font">
-          <font>
-           <pointsize>8</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Brm20</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="FloatEdit" name="lf_Brm20"/>
-       </item>
        <item row="2" column="1">
         <widget class="FloatEdit" name="lf_alpha_Br"/>
        </item>
-       <item row="0" column="1">
-        <widget class="FloatEdit" name="lf_mur_lin"/>
+       <item row="5" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="in_Wlam">
@@ -161,6 +167,9 @@
          </property>
         </widget>
        </item>
+       <item row="1" column="1">
+        <widget class="FloatEdit" name="lf_Brm20"/>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="in_mur_lin">
          <property name="font">
@@ -172,6 +181,23 @@
          </property>
          <property name="text">
           <string>mur_lin</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="FloatEdit" name="lf_mur_lin"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="in_alpha_Br">
+         <property name="font">
+          <font>
+           <pointsize>8</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>alphaBr</string>
          </property>
         </widget>
        </item>
@@ -192,8 +218,8 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="in_alpha_Br">
+       <item row="1" column="0">
+        <widget class="QLabel" name="in_Brm20">
          <property name="font">
           <font>
            <pointsize>8</pointsize>
@@ -202,8 +228,125 @@
           </font>
          </property>
          <property name="text">
-          <string>alphaBr</string>
+          <string>Brm20</string>
          </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="3">
+        <widget class="QGroupBox" name="group_BH">
+         <property name="title">
+          <string>BH curve</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <property name="leftMargin">
+           <number>4</number>
+          </property>
+          <property name="topMargin">
+           <number>4</number>
+          </property>
+          <property name="rightMargin">
+           <number>4</number>
+          </property>
+          <property name="bottomMargin">
+           <number>4</number>
+          </property>
+          <item row="0" column="1">
+           <widget class="QLabel" name="in_BH_file">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>-</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="in_file">
+            <property name="text">
+             <string>File:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <property name="spacing">
+             <number>1</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="b_new">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>New</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="b_edit">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Edit</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="b_plot">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Plot</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="b_xls">
+              <property name="text">
+               <string>XLS Import</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="b_csv">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>CSV Import</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -251,7 +394,7 @@
        <item>
         <widget class="QStackedWidget" name="nav_meca">
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page_niso_mec">
           <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -435,6 +578,19 @@
              </layout>
             </widget>
            </item>
+           <item>
+            <spacer name="verticalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </widget>
          <widget class="QWidget" name="page_iso_mec">
@@ -453,13 +609,43 @@
              </property>
             </widget>
            </item>
+           <item row="2" column="2" colspan="2">
+            <widget class="FloatEdit" name="lf_G"/>
+           </item>
+           <item row="4" column="3">
+            <spacer name="verticalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="4">
+            <widget class="QLabel" name="unit_G">
+             <property name="text">
+              <string>Pa</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="1" colspan="3">
             <widget class="FloatEdit" name="lf_E"/>
            </item>
-           <item row="0" column="4">
-            <widget class="QLabel" name="unit_E">
+           <item row="2" column="0" colspan="2">
+            <widget class="QLabel" name="in_G">
+             <property name="font">
+              <font>
+               <pointsize>8</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
              <property name="text">
-              <string>Pa</string>
+              <string>G</string>
              </property>
             </widget>
            </item>
@@ -480,25 +666,8 @@
            <item row="1" column="3">
             <widget class="FloatEdit" name="lf_nu"/>
            </item>
-           <item row="2" column="0" colspan="2">
-            <widget class="QLabel" name="in_G">
-             <property name="font">
-              <font>
-               <pointsize>8</pointsize>
-               <weight>50</weight>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>G</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2" colspan="2">
-            <widget class="FloatEdit" name="lf_G"/>
-           </item>
-           <item row="2" column="4">
-            <widget class="QLabel" name="unit_G">
+           <item row="0" column="4">
+            <widget class="QLabel" name="unit_E">
              <property name="text">
               <string>Pa</string>
              </property>
@@ -622,6 +791,20 @@
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout_3">
+         <item row="1" column="0">
+          <widget class="QLabel" name="in_alpha">
+           <property name="font">
+            <font>
+             <pointsize>8</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>alpha</string>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="0">
           <widget class="QLabel" name="in_Cp">
            <property name="font">
@@ -636,8 +819,8 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="FloatEdit" name="lf_Cp"/>
+         <item row="1" column="1">
+          <widget class="FloatEdit" name="lf_alpha"/>
          </item>
          <item row="0" column="2">
           <widget class="QLabel" name="unit_Cp">
@@ -653,24 +836,23 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="in_alpha">
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>alpha</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="FloatEdit" name="lf_alpha"/>
+         <item row="0" column="1">
+          <widget class="FloatEdit" name="lf_Cp"/>
          </item>
         </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -706,6 +888,19 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

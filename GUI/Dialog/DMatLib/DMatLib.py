@@ -8,7 +8,7 @@
 """
 
 from os import getcwd, rename
-from os.path import join, dirname, abspath
+from os.path import join, dirname, abspath, split
 from re import match
 
 from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox
@@ -332,6 +332,11 @@ class DMatLib(Gen_DMatLib, QDialog):
             update_text(self.out_Brm20, "Brm20", mat.mag.Brm20, "T")
             update_text(self.out_alpha_Br, "alpha_Br", mat.mag.alpha_Br, None)
             update_text(self.out_wlam, "wlam", mat.mag.Wlam, "m")
+            if type(mat.mag.BH_curve).__name__ == "ImportMatrixXls":
+                text = split(mat.mag.BH_curve.file_path)[1]
+            else:
+                text = "-"
+            self.out_BH.setText(text)
 
 
 def update_text(label, name, value, unit):

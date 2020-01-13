@@ -18,6 +18,8 @@ def plot(
     ----------
     self : Machine
         A Machine object
+    fig :
+        if None, open a new fig and plot, else add to the gcf (Default value = None)
     sym : int
         Symmetry factor (1= full machine, 2= half of the machine...)
     alpha : float

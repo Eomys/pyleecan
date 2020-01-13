@@ -15,6 +15,11 @@ try:
 except ImportError as error:
     get_BH = error
 
+try:
+    from pyleecan.Methods.Material.MatMagnetics.plot_BH import plot_BH
+except ImportError as error:
+    plot_BH = error
+
 
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.ImportMatrix import ImportMatrix
@@ -25,6 +30,7 @@ class MatMagnetics(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Material.MatMagnetics.get_BH
     if isinstance(get_BH, ImportError):
         get_BH = property(
@@ -34,6 +40,15 @@ class MatMagnetics(FrozenClass):
         )
     else:
         get_BH = get_BH
+    # cf Methods.Material.MatMagnetics.plot_BH
+    if isinstance(plot_BH, ImportError):
+        plot_BH = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MatMagnetics method plot_BH: " + str(plot_BH))
+            )
+        )
+    else:
+        plot_BH = plot_BH
     # save method is available in all object
     save = save
 
