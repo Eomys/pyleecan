@@ -54,7 +54,9 @@ class OptiObjFunc(FrozenClass):
         if self.parent is None:
             OptiObjFunc_str += "parent = None " + linesep
         else:
-            OptiObjFunc_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            OptiObjFunc_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         OptiObjFunc_str += 'description = "' + str(self.description) + '"' + linesep
         if self._func[1] is None:
             OptiObjFunc_str += "func = " + str(self._func[1])
@@ -82,7 +84,10 @@ class OptiObjFunc(FrozenClass):
         if self.func is None:
             OptiObjFunc_dict["func"] = None
         else:
-            OptiObjFunc_dict["func"] = [dumps(self._func[0]).decode('ISO-8859-2'), self._func[1]]
+            OptiObjFunc_dict["func"] = [
+                dumps(self._func[0]).decode("ISO-8859-2"),
+                self._func[1],
+            ]
         # The class name is added to the dict fordeserialisation purpose
         OptiObjFunc_dict["__class__"] = "OptiObjFunc"
         return OptiObjFunc_dict
@@ -105,7 +110,9 @@ class OptiObjFunc(FrozenClass):
     # Description of the objective
     # Type : str
     description = property(
-        fget=_get_description, fset=_set_description, doc=u"""Description of the objective"""
+        fget=_get_description,
+        fset=_set_description,
+        doc=u"""Description of the objective""",
     )
 
     def _get_func(self):
@@ -118,16 +125,17 @@ class OptiObjFunc(FrozenClass):
             check_var("func", value, "list")
         except CheckTypeError:
             check_var("func", value, "function")
-        if isinstance(value,list): # Load function from saved dict
-            self._func = [loads(value[0].encode('ISO-8859-2')),value[1]]
+        if isinstance(value, list):  # Load function from saved dict
+            self._func = [loads(value[0].encode("ISO-8859-2")), value[1]]
         elif value is None:
-            self._func = [None,None]
+            self._func = [None, None]
         elif callable(value):
-            self._func = [value,getsource(value)]
+            self._func = [value, getsource(value)]
         else:
-            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
+            raise TypeError(
+                "Expected function or list from a saved file, got: " + str(type(value))
+            )
+
     # Function to minimize
     # Type : function
-    func = property(
-        fget=_get_func, fset=_set_func, doc=u"""Function to minimize"""
-    )
+    func = property(fget=_get_func, fset=_set_func, doc=u"""Function to minimize""")

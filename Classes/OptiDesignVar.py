@@ -22,7 +22,9 @@ class OptiDesignVar(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, name="", type_var="interval", space=[0, 1], function=None, init_dict=None):
+    def __init__(
+        self, name="", type_var="interval", space=[0, 1], function=None, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -60,7 +62,9 @@ class OptiDesignVar(FrozenClass):
         if self.parent is None:
             OptiDesignVar_str += "parent = None " + linesep
         else:
-            OptiDesignVar_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            OptiDesignVar_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         OptiDesignVar_str += 'name = "' + str(self.name) + '"' + linesep
         OptiDesignVar_str += 'type_var = "' + str(self.type_var) + '"' + linesep
         OptiDesignVar_str += "space = " + linesep + str(self.space) + linesep
@@ -96,7 +100,10 @@ class OptiDesignVar(FrozenClass):
         if self.function is None:
             OptiDesignVar_dict["function"] = None
         else:
-            OptiDesignVar_dict["function"] = [dumps(self._function[0]).decode('ISO-8859-2'), self._function[1]]
+            OptiDesignVar_dict["function"] = [
+                dumps(self._function[0]).decode("ISO-8859-2"),
+                self._function[1],
+            ]
         # The class name is added to the dict fordeserialisation purpose
         OptiDesignVar_dict["__class__"] = "OptiDesignVar"
         return OptiDesignVar_dict
@@ -136,7 +143,9 @@ class OptiDesignVar(FrozenClass):
     # Type of the variable interval or set.
     # Type : str
     type_var = property(
-        fget=_get_type_var, fset=_set_type_var, doc=u"""Type of the variable interval or set."""
+        fget=_get_type_var,
+        fset=_set_type_var,
+        doc=u"""Type of the variable interval or set.""",
     )
 
     def _get_space(self):
@@ -150,9 +159,7 @@ class OptiDesignVar(FrozenClass):
 
     # Space of the variable
     # Type : list
-    space = property(
-        fget=_get_space, fset=_set_space, doc=u"""Space of the variable"""
-    )
+    space = property(fget=_get_space, fset=_set_space, doc=u"""Space of the variable""")
 
     def _get_function(self):
         """getter of function"""
@@ -164,14 +171,17 @@ class OptiDesignVar(FrozenClass):
             check_var("function", value, "list")
         except CheckTypeError:
             check_var("function", value, "function")
-        if isinstance(value,list): # Load function from saved dict
-            self._function = [loads(value[0].encode('ISO-8859-2')),value[1]]
+        if isinstance(value, list):  # Load function from saved dict
+            self._function = [loads(value[0].encode("ISO-8859-2")), value[1]]
         elif value is None:
-            self._function = [None,None]
+            self._function = [None, None]
         elif callable(value):
-            self._function = [value,getsource(value)]
+            self._function = [value, getsource(value)]
         else:
-            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
+            raise TypeError(
+                "Expected function or list from a saved file, got: " + str(type(value))
+            )
+
     # Function of the space to initiate the variable
     # Type : function
     function = property(
