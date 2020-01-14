@@ -13,13 +13,18 @@ from pyleecan.Functions.load_switch import load_switch
 from pyleecan.Classes.Material import Material
 
 
-def load(file_path):
-    """Load a pyleecan object from a json file
+def load_json(file_path):
+    """Load a json file
 
     Parameters
     ----------
     file_path: str
         path to the file to load
+
+    Returns
+    -------
+    json_data: json decoded data type
+        data of the json file
     """
     # The file_name must end with .json
     if not match(".*\.json", file_path):
@@ -29,19 +34,117 @@ def load(file_path):
     if not isfile(file_path):
         raise LoadMissingFileError(str(file_path) + " doesn't exist")
 
-    # Get the data dictionnary
+    # Get the data dictionary
     with open(file_path, "r") as load_file:
-        init_dict = jload(load_file)
+        json_data = jload(load_file)
 
-    # Check that the dictionnay have a "__class__" key
+    return json_data
+
+
+def init_data(obj):
+    """ 
+    Initialize pyleecan objects (by init_dict) within list and/or dict data structure.
+    Non pyleecan, list or dict type data will be kept as they are.
+
+    Parameters
+    ----------
+    obj: object
+        list/dict containing pyleecan init_dict data
+
+    Returns
+    -------
+    data: 
+        initialized pyleecan objects within a list or dict
+    """
+    # --- list type ---
+    if isinstance(obj, list):
+        data = []
+        for elem in obj:
+            data.append(init_data(elem))
+        return data
+    # --- dict type ---
+    if isinstance(obj, dict):
+        # --- pyleecan class (has to be checked befor 'normal' dict) ---
+        # Check if the dictionay has a "__class__" key
+        if "__class__" in obj:
+            # Check if data is a pyleecan class
+            if obj["__class__"] in load_switch:
+                return load_switch[obj["__class__"]](init_dict=obj)
+
+        # --- 'normal' dict ---
+        data = dict()
+        for key in obj:
+            data[key] = init_data(obj[key])
+        return data
+
+    # --- other type ---
+    # keep all other (json) types as they are
+    else:
+        return obj
+
+
+def load(file_path):
+    """Load a pyleecan object from a json file
+
+    Parameters
+    ----------
+    file_path: str
+        path to the file to load
+    """
+    init_dict = load_json(file_path)
+
+    # Check that loaded data are of type dict
+    if not isinstance(init_dict, dict):
+        raise LoadWrongTypeError(
+            'Loaded file is of type "'
+            + type(init_dict).__name__
+            + '", type "dict" expected.'
+        )
+    # Check that the dictionay has a "__class__" key
     if "__class__" not in init_dict:
         raise LoadWrongDictClassError('Key "__class__" missing in loaded file')
+    # Check that data is a pyleecan class
     if init_dict["__class__"] not in load_switch:
         raise LoadWrongDictClassError(
             init_dict["__class__"] + " is not a pyleecan class"
         )
 
-    return load_switch[init_dict["__class__"]](init_dict=init_dict)
+    return init_data(init_dict)
+
+
+def _load(file_path, cls_type):
+    """Load a list of pyleecan objects from a json file
+
+    Parameters
+    ----------
+    file_path: str
+        path to the file to load
+    """
+    obj = load_json(file_path)
+
+    # check the initial object's type
+    if type(obj).__name__ is not cls_type:
+        raise LoadWrongTypeError(
+            'Object is of type "'
+            + type(obj).__name__
+            + '", type "'
+            + cls_type
+            + '" expected.'
+        )
+
+    # check that load_switch does not contain 'dict' or 'list' for init_data to work
+    if ("list" in load_switch) or ("dict" in load_switch):
+        raise LoadSwitchError("'list' or 'dict' should not be in load_switch dict.")
+
+    return init_data(obj)
+
+
+def load_list(file_path):
+    return _load(file_path, "list")
+
+
+def load_dict(file_path):
+    return _load(file_path, "dict")
 
 
 def load_matlib(mat_path):
@@ -95,6 +198,18 @@ class LoadMissingFolderError(Exception):
 
 
 class LoadWrongDictClassError(Exception):
+    """ """
+
+    pass
+
+
+class LoadWrongTypeError(Exception):
+    """ """
+
+    pass
+
+
+class LoadSwitchError(Exception):
     """ """
 
     pass
