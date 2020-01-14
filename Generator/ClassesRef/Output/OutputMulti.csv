@@ -1,4 +1,5 @@
 Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-output_ref,,Reference output of the multi simulation,,,Output,-1,,,,,,Output,,,,,,
+output_ref,,Reference output of the multi simulation,,,Output,-1,,,,,,Output,,add_output,,,,
 outputs,-,list of output from the multi-simulation,,1,[Output],[],,,,,,,,,,,,
 is_valid,-,list to indicate if the corresponding output is valid,,1,list,[],,,,,,,,,,,,
+design_var,,list of design variables corresponding to the output,,1,list,[],,,,,,,,,,,,

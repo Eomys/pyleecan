@@ -1,3 +1,4 @@
 Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-fitness,-,List of the corresponding output objective values,,1,list,[],,,,,,Output,OutputMulti,,,,Optimization results,
-const_vel,-,List of the corresponding output constraint values,,,list,[],,,,,,,,,,,,
+fitness,-,List of the corresponding output objective values,,1,list,[],,,,,,Output,OutputMulti,add_evaluation,,,Optimization results,
+constraint,-,List of the corresponding output constraint values,,,list,[],,,,,,,,plot_pareto,,,,
+ngen,-,Number of generation of the indiv,,1,list,[],,,,,,,,,,,,

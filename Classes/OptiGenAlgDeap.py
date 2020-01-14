@@ -41,7 +41,20 @@ class OptiGenAlgDeap(OptiGenAlg):
     # save method is available in all object
     save = save
 
-    def __init__(self, multi_output=-1, pop=[], selector=None, crossover=None, mutator=None, p_cross=0.9, p_mute=0.1, size_pop=50, problem=-1, init_dict=None):
+    def __init__(
+        self,
+        multi_output=-1,
+        pop=[],
+        selector=None,
+        crossover=None,
+        mutator=None,
+        p_cross=0.9,
+        p_mutate=0.1,
+        size_pop=50,
+        nb_gen=200,
+        problem=-1,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -56,7 +69,21 @@ class OptiGenAlgDeap(OptiGenAlg):
         if problem == -1:
             problem = OptiProblem()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["multi_output", "pop", "selector", "crossover", "mutator", "p_cross", "p_mute", "size_pop", "problem"])
+            check_init_dict(
+                init_dict,
+                [
+                    "multi_output",
+                    "pop",
+                    "selector",
+                    "crossover",
+                    "mutator",
+                    "p_cross",
+                    "p_mutate",
+                    "size_pop",
+                    "nb_gen",
+                    "problem",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "multi_output" in list(init_dict.keys()):
                 multi_output = init_dict["multi_output"]
@@ -70,15 +97,28 @@ class OptiGenAlgDeap(OptiGenAlg):
                 mutator = init_dict["mutator"]
             if "p_cross" in list(init_dict.keys()):
                 p_cross = init_dict["p_cross"]
-            if "p_mute" in list(init_dict.keys()):
-                p_mute = init_dict["p_mute"]
+            if "p_mutate" in list(init_dict.keys()):
+                p_mutate = init_dict["p_mutate"]
             if "size_pop" in list(init_dict.keys()):
                 size_pop = init_dict["size_pop"]
+            if "nb_gen" in list(init_dict.keys()):
+                nb_gen = init_dict["nb_gen"]
             if "problem" in list(init_dict.keys()):
                 problem = init_dict["problem"]
         # Initialisation by argument
         # Call OptiGenAlg init
-        super(OptiGenAlgDeap, self).__init__(multi_output=multi_output, pop=pop, selector=selector, crossover=crossover, mutator=mutator, p_cross=p_cross, p_mute=p_mute, size_pop=size_pop, problem=problem)
+        super(OptiGenAlgDeap, self).__init__(
+            multi_output=multi_output,
+            pop=pop,
+            selector=selector,
+            crossover=crossover,
+            mutator=mutator,
+            p_cross=p_cross,
+            p_mutate=p_mutate,
+            size_pop=size_pop,
+            nb_gen=nb_gen,
+            problem=problem,
+        )
         # The class is frozen (in OptiGenAlg init), for now it's impossible to
         # add new properties
 

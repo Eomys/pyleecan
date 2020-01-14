@@ -8,6 +8,19 @@ from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.OutputMulti import OutputMulti
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from pyleecan.Methods.Output.OutputMultiOpti.add_evaluation import add_evaluation
+except ImportError as error:
+    add_evaluation = error
+
+try:
+    from pyleecan.Methods.Output.OutputMultiOpti.plot_pareto import plot_pareto
+except ImportError as error:
+    plot_pareto = error
+
+
 from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Output import Output
 
@@ -15,11 +28,44 @@ from pyleecan.Classes.Output import Output
 class OutputMultiOpti(OutputMulti):
     """Optimization results"""
 
-
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Output.OutputMultiOpti.add_evaluation
+    if isinstance(add_evaluation, ImportError):
+        add_evaluation = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutputMultiOpti method add_evaluation: "
+                    + str(add_evaluation)
+                )
+            )
+        )
+    else:
+        add_evaluation = add_evaluation
+    # cf Methods.Output.OutputMultiOpti.plot_pareto
+    if isinstance(plot_pareto, ImportError):
+        plot_pareto = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutputMultiOpti method plot_pareto: " + str(plot_pareto)
+                )
+            )
+        )
+    else:
+        plot_pareto = plot_pareto
     # save method is available in all object
     save = save
 
-    def __init__(self, fitness=[], const_vel=[], output_ref=-1, outputs=list(), is_valid=[], init_dict=None):
+    def __init__(
+        self,
+        fitness=[],
+        constraint=[],
+        ngen=[],
+        output_ref=-1,
+        outputs=list(),
+        is_valid=[],
+        design_var=[],
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -32,23 +78,44 @@ class OutputMultiOpti(OutputMulti):
         if output_ref == -1:
             output_ref = Output()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["fitness", "const_vel", "output_ref", "outputs", "is_valid"])
+            check_init_dict(
+                init_dict,
+                [
+                    "fitness",
+                    "constraint",
+                    "ngen",
+                    "output_ref",
+                    "outputs",
+                    "is_valid",
+                    "design_var",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "fitness" in list(init_dict.keys()):
                 fitness = init_dict["fitness"]
-            if "const_vel" in list(init_dict.keys()):
-                const_vel = init_dict["const_vel"]
+            if "constraint" in list(init_dict.keys()):
+                constraint = init_dict["constraint"]
+            if "ngen" in list(init_dict.keys()):
+                ngen = init_dict["ngen"]
             if "output_ref" in list(init_dict.keys()):
                 output_ref = init_dict["output_ref"]
             if "outputs" in list(init_dict.keys()):
                 outputs = init_dict["outputs"]
             if "is_valid" in list(init_dict.keys()):
                 is_valid = init_dict["is_valid"]
+            if "design_var" in list(init_dict.keys()):
+                design_var = init_dict["design_var"]
         # Initialisation by argument
         self.fitness = fitness
-        self.const_vel = const_vel
+        self.constraint = constraint
+        self.ngen = ngen
         # Call OutputMulti init
-        super(OutputMultiOpti, self).__init__(output_ref=output_ref, outputs=outputs, is_valid=is_valid)
+        super(OutputMultiOpti, self).__init__(
+            output_ref=output_ref,
+            outputs=outputs,
+            is_valid=is_valid,
+            design_var=design_var,
+        )
         # The class is frozen (in OutputMulti init), for now it's impossible to
         # add new properties
 
@@ -59,7 +126,10 @@ class OutputMultiOpti(OutputMulti):
         # Get the properties inherited from OutputMulti
         OutputMultiOpti_str += super(OutputMultiOpti, self).__str__() + linesep
         OutputMultiOpti_str += "fitness = " + linesep + str(self.fitness) + linesep
-        OutputMultiOpti_str += "const_vel = " + linesep + str(self.const_vel)
+        OutputMultiOpti_str += (
+            "constraint = " + linesep + str(self.constraint) + linesep
+        )
+        OutputMultiOpti_str += "ngen = " + linesep + str(self.ngen)
         return OutputMultiOpti_str
 
     def __eq__(self, other):
@@ -73,7 +143,9 @@ class OutputMultiOpti(OutputMulti):
             return False
         if other.fitness != self.fitness:
             return False
-        if other.const_vel != self.const_vel:
+        if other.constraint != self.constraint:
+            return False
+        if other.ngen != self.ngen:
             return False
         return True
 
@@ -84,7 +156,8 @@ class OutputMultiOpti(OutputMulti):
         # Get the properties inherited from OutputMulti
         OutputMultiOpti_dict = super(OutputMultiOpti, self).as_dict()
         OutputMultiOpti_dict["fitness"] = self.fitness
-        OutputMultiOpti_dict["const_vel"] = self.const_vel
+        OutputMultiOpti_dict["constraint"] = self.constraint
+        OutputMultiOpti_dict["ngen"] = self.ngen
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         OutputMultiOpti_dict["__class__"] = "OutputMultiOpti"
@@ -94,7 +167,8 @@ class OutputMultiOpti(OutputMulti):
         """Set all the properties to None (except pyleecan object)"""
 
         self.fitness = None
-        self.const_vel = None
+        self.constraint = None
+        self.ngen = None
         # Set to None the properties inherited from OutputMulti
         super(OutputMultiOpti, self)._set_None()
 
@@ -115,19 +189,34 @@ class OutputMultiOpti(OutputMulti):
         doc=u"""List of the corresponding output objective values""",
     )
 
-    def _get_const_vel(self):
-        """getter of const_vel"""
-        return self._const_vel
+    def _get_constraint(self):
+        """getter of constraint"""
+        return self._constraint
 
-    def _set_const_vel(self, value):
-        """setter of const_vel"""
-        check_var("const_vel", value, "list")
-        self._const_vel = value
+    def _set_constraint(self, value):
+        """setter of constraint"""
+        check_var("constraint", value, "list")
+        self._constraint = value
 
     # List of the corresponding output constraint values
     # Type : list
-    const_vel = property(
-        fget=_get_const_vel,
-        fset=_set_const_vel,
+    constraint = property(
+        fget=_get_constraint,
+        fset=_set_constraint,
         doc=u"""List of the corresponding output constraint values""",
+    )
+
+    def _get_ngen(self):
+        """getter of ngen"""
+        return self._ngen
+
+    def _set_ngen(self, value):
+        """setter of ngen"""
+        check_var("ngen", value, "list")
+        self._ngen = value
+
+    # Number of generation of the indiv
+    # Type : list
+    ngen = property(
+        fget=_get_ngen, fset=_set_ngen, doc=u"""Number of generation of the indiv"""
     )
