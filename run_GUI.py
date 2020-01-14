@@ -19,7 +19,6 @@ from pyleecan.GUI.Tools.SidebarWindow import SidebarWindow
 from pyleecan.GUI.Tools.MachinePlotWidget import MachinePlotWidget
 from pyleecan.GUI.Tools.TreeView import TreeView
 
-
 EXT_GUI = True
 
 if __name__ == "__main__":
@@ -55,6 +54,7 @@ if __name__ == "__main__":
         window.addSubWindow("Plot", plt_widget, plt_widget.update)
 
         mat_widget = DMatLib(window.DesignWidget.matlib, selected=0)
+        mat_widget.installEventFilter(window)
         window.addSubWindow("MatLib", mat_widget, mat_widget.update_mat_list)
 
         tree = TreeView()
