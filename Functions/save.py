@@ -8,6 +8,7 @@
 from json import dump
 from os.path import join, basename, isdir
 
+
 def fix_file_name(save_path, obj):
     if isdir(save_path):
         file_path = join(save_path, type(obj).__name__ + ".json")
@@ -16,6 +17,7 @@ def fix_file_name(save_path, obj):
     else:
         file_path = save_path
     return file_path
+
 
 def is_json_serializable(obj):
     try:
@@ -70,6 +72,7 @@ def build_data(obj):
     else:
         return None
 
+
 def save_data(obj, save_path=""):
     """Save the object to the save_path
 
@@ -82,12 +85,21 @@ def save_data(obj, save_path=""):
     """
     # correct file name if needed
     file_path = fix_file_name(save_path, self)
-    
+
     # save
     obj = build_data(obj)
     with open(file_path, "w") as json_file:
         dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
-        
+
 
 def save(self, save_path=""):
+    """Save the object to the save_path
+
+    Parameters
+    ----------
+    self : 
+        A pyleecan object
+    save_path: str
+        path to the folder to save the object
+    """
     save_data(self, save_path)
