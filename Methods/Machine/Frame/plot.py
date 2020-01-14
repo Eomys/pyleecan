@@ -21,7 +21,7 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False):
     self : Frame
         A Frame object
     fig :
-        if true, open a new fig and plot, else add to the gcf (Default value = None)
+        if None, open a new fig and plot, else add to the gcf (Default value = None)
     sym : int
         Symmetry factor (1= plot full machine, 2= half of the machine...)
     alpha : float

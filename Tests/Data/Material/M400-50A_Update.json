@@ -15,7 +15,7 @@
     "mag": {
         "BH_curve": null,
         "Wlam": 0.0005,
-        "__class__": "MatLamination",
+        "__class__": "MatMagnetics",
         "mur_lin": 2501.2
     },
     "struct": {

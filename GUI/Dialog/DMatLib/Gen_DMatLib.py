@@ -182,7 +182,7 @@ class Gen_DMatLib(Ui_DMatLib):
 
         # Setup of out_wlam
         txt = self.tr(
-            u"""lamination sheet width without insulation [m] (for magnetic loss model)"""
+            u"""lamination sheet width without insulation [m] (0 == not laminated)"""
         )
         self.out_wlam.setWhatsThis(txt)
         self.out_wlam.setToolTip(txt)
