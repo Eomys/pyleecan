@@ -111,7 +111,7 @@ class SMagnet(Ui_SMagnet, QDialog):
         # Set material
         self.w_mat.setText(self.tr("mat_mag:"))
         self.w_mat.def_mat = "Magnet1"
-        self.w_mat.update(self.machine.rotor.slot.magnet[0].mat_type, matlib)
+        self.w_mat.update(self.machine.rotor.slot.magnet[0], 'mat_type', matlib)
 
         # Connect signals
         self.c_type.currentIndexChanged.connect(self.set_type)

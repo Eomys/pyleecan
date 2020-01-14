@@ -81,7 +81,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         self.w_mat.setText("mat_mag:")
         self.w_mat.def_mat = "Magnet1"
         if self.machine.type_machine == 8:  # For IPMSM only
-            self.w_mat.update(self.obj.hole[0].magnet_0.mat_type, matlib)
+            self.w_mat.update(self.obj.hole[0].magnet_0, 'mat_type', matlib)
 
         # Set Help URL
         self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"

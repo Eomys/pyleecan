@@ -259,12 +259,12 @@ class Magnet(FrozenClass):
         check_var("type_magnetization", value, "int", Vmin=0, Vmax=5)
         self._type_magnetization = value
 
-    # Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for HallBach []
+    # Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach
     # Type : int, min = 0, max = 5
     type_magnetization = property(
         fget=_get_type_magnetization,
         fset=_set_type_magnetization,
-        doc=u"""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for HallBach []""",
+        doc=u"""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach""",
     )
 
     def _get_Lmag(self):

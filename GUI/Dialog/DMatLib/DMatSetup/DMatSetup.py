@@ -1,18 +1,27 @@
 # -*- coding: utf-8 -*-
-
-from os.path import join, dirname
-from PyQt5.QtWidgets import QDialog
+"""
+@date Created on 
+@author pierre_b
+@todo add BH curve editing and csv import
+@todo unittest it
+"""
+from os.path import join, dirname, split
+from PyQt5.QtWidgets import QDialog, QMessageBox, QFileDialog
 from PyQt5.QtCore import Qt
 
 from pyleecan.GUI.Dialog.DMatLib.DMatSetup.Gen_DMatSetup import Gen_DMatSetup
+from pyleecan.GUI.Tools.MPLCanvas import MPLCanvas
 
 from pyleecan.Classes.Material import Material
-from pyleecan.Classes.MatMagnet import MatMagnet
-from pyleecan.Classes.MatLamination import MatLamination
+from pyleecan.Classes.MatMagnetics import MatMagnetics
+from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+
+from numpy import array
 
 
 class DMatSetup(Gen_DMatSetup, QDialog):
-    """ """
+    """Dialog for editing material data."""
 
     def __init__(self, material):
         # Build the interface according to the .ui file
@@ -22,8 +31,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         # Copy to set the modification only if validated
         self.mat = Material(init_dict=material.as_dict())
 
-        self.le_name.setText(material.name)
-        if material.is_isotropic:
+        self.le_name.setText(self.mat.name)
+        if self.mat.is_isotropic:
             self.is_isotropic.setCheckState(Qt.Checked)
             self.nav_meca.setCurrentIndex(1)
             self.nav_ther.setCurrentIndex(1)
@@ -31,55 +40,66 @@ class DMatSetup(Gen_DMatSetup, QDialog):
             self.is_isotropic.setCheckState(Qt.Unchecked)
             self.nav_meca.setCurrentIndex(0)
             self.nav_ther.setCurrentIndex(0)
+
+        # === check material attribute and set values ===
         # Elec
-        self.lf_rho_elec.setValue(material.elec.rho)
+        if self.mat.elec is None:
+            self.set_default("elec", "electrical")
+        self.lf_rho_elec.setValue(self.mat.elec.rho)
+
         # Economical
-        self.lf_cost_unit.setValue(material.eco.cost_unit)
+        if self.mat.eco is None:
+            self.set_default("eco", "economical")
+        self.lf_cost_unit.setValue(self.mat.eco.cost_unit)
+
         # Thermics
-        self.lf_Cp.setValue(material.HT.Cp)
-        self.lf_alpha.setValue(material.HT.alpha)
-        self.lf_L.setValue(material.HT.lambda_x)
-        self.lf_Lx.setValue(material.HT.lambda_x)
-        self.lf_Ly.setValue(material.HT.lambda_y)
-        self.lf_Lz.setValue(material.HT.lambda_z)
+        if self.mat.HT is None:
+            self.set_default("HT", "thermaical")
+        self.lf_Cp.setValue(self.mat.HT.Cp)
+        self.lf_alpha.setValue(self.mat.HT.alpha)
+        self.lf_L.setValue(self.mat.HT.lambda_x)
+        self.lf_Lx.setValue(self.mat.HT.lambda_x)
+        self.lf_Ly.setValue(self.mat.HT.lambda_y)
+        self.lf_Lz.setValue(self.mat.HT.lambda_z)
         # Structural
-        self.lf_rho_meca.setValue(material.struct.rho)
-        self.lf_E.setValue(material.struct.Ex)
-        self.lf_Ex.setValue(material.struct.Ex)
-        self.lf_Ey.setValue(material.struct.Ey)
-        self.lf_Ez.setValue(material.struct.Ez)
-        self.lf_G.setValue(material.struct.Gxy)
-        self.lf_Gxy.setValue(material.struct.Gxy)
-        self.lf_Gxz.setValue(material.struct.Gxz)
-        self.lf_Gyz.setValue(material.struct.Gyz)
-        self.lf_nu.setValue(material.struct.nu_xy)
-        self.lf_nu_xy.setValue(material.struct.nu_xy)
-        self.lf_nu_xz.setValue(material.struct.nu_xz)
-        self.lf_nu_yz.setValue(material.struct.nu_yz)
+        if self.mat.struct is None:
+            self.set_default("struct", "structural")
+        self.lf_rho_meca.setValue(self.mat.struct.rho)
+        self.lf_E.setValue(self.mat.struct.Ex)
+        self.lf_Ex.setValue(self.mat.struct.Ex)
+        self.lf_Ey.setValue(self.mat.struct.Ey)
+        self.lf_Ez.setValue(self.mat.struct.Ez)
+        self.lf_G.setValue(self.mat.struct.Gxy)
+        self.lf_Gxy.setValue(self.mat.struct.Gxy)
+        self.lf_Gxz.setValue(self.mat.struct.Gxz)
+        self.lf_Gyz.setValue(self.mat.struct.Gyz)
+        self.lf_nu.setValue(self.mat.struct.nu_xy)
+        self.lf_nu_xy.setValue(self.mat.struct.nu_xy)
+        self.lf_nu_xz.setValue(self.mat.struct.nu_xz)
+        self.lf_nu_yz.setValue(self.mat.struct.nu_yz)
 
-        if type(material.mag) is MatLamination:
-            self.c_type_mat.setCurrentIndex(2)
-            self.nav_mag.setCurrentIndex(1)
-            self.lf_mur_lin.setValue(material.mag.mur_lin)
-            self.lf_Wlam.setValue(material.mag.Wlam)
-        elif type(material.mag) is MatMagnet:
-            self.c_type_mat.setCurrentIndex(1)
-            self.nav_mag.setCurrentIndex(0)
-            self.lf_mur_lin.setValue(material.mag.mur_lin)
-            self.lf_Brm20.setValue(material.mag.Brm20)
-            self.lf_alpha_Br.setValue(material.mag.alpha_Br)
-        else:  # Mat_Raw
-            self.c_type_mat.setCurrentIndex(0)
-            self.nav_phy.removeTab(1)
-
+        # Magnetical
+        if self.mat.mag is None:
+            self.set_default("mag", "magnetical")
+        self.lf_mur_lin.setValue(self.mat.mag.mur_lin)
+        self.lf_Brm20.setValue(self.mat.mag.Brm20)
+        self.lf_alpha_Br.setValue(self.mat.mag.alpha_Br)
+        self.lf_Wlam.setValue(self.mat.mag.Wlam)
+        if isinstance(self.mat.mag.BH_curve, ImportMatrixXls):
+            self.in_BH_file.setText(split(self.mat.mag.BH_curve.file_path)[1])
+            self.b_plot.setEnabled(True)
+        
         # Hide useless widget
         self.in_epsr.hide()
         self.lf_epsr.hide()
 
+        # === setup signals ===
+        # Misc.
         self.le_name.editingFinished.connect(self.set_name)
-        self.c_type_mat.currentIndexChanged.connect(self.set_type_mat)
         self.is_isotropic.toggled.connect(self.set_is_isotropic)
         self.lf_rho_elec.editingFinished.connect(self.set_rho_elec)
+        self.b_xls.clicked.connect(self.set_xls_BH)
+        self.b_plot.clicked.connect(self.plot_BH)
         # Magnetics
         self.lf_mur_lin.editingFinished.connect(self.set_mur_lin)
         self.lf_Brm20.editingFinished.connect(self.set_Brm20)
@@ -109,13 +129,52 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.lf_nu_xz.editingFinished.connect(self.set_nu_xz)
         self.lf_nu_yz.editingFinished.connect(self.set_nu_yz)
 
+    def plot_BH(self):
+        self.plot_win = MPLCanvas(self)
+        self.mat.mag.plot_BH(fig=self.plot_win.fig)
+        self.plot_win.setWindowTitle("BH curve")
+        self.plot_win.exec_()
+        
+    def set_xls_BH(self):
+        # Ask the user to select a .xlsx file to load
+        load_path = str(
+            QFileDialog.getOpenFileName(
+                self,
+                self.tr("Load file"),
+                split(self.mat.path)[0],
+                "Excel (*.xlsx *.xls)",
+            )[0]
+        )
+        if load_path is not None:
+            self.mat.mag.BH_curve = ImportMatrixXls(
+                file_path=load_path,
+                sheet="BH",
+                is_transpose=False,
+                skiprows=0,
+                usecols=None,
+            )
+            self.in_BH_file.setText(split(load_path)[1])
+            self.b_plot.setEnabled(True)
+
+    def set_default(self, attr, attr_name):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Critical)
+        msg.setText(
+            "Material "
+            + attr_name
+            + " property is None.\nDefault values set. Please check values."
+        )
+        msg.setWindowTitle("Warning")
+        msg.exec_()
+        setattr(self.mat, attr, type(getattr(Material(), attr))())
+
     def set_name(self):
         """Signal to update the value of name according to the line edit
 
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -128,41 +187,13 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.le_name.setText(self.mat.name)
         self.mat.path = join(dirname(self.mat.path), file_name + ".json")
 
-    def set_type_mat(self, index):
-        """Signal to update the material type according to the combobox
-
-        Parameters
-        ----------
-        self :
-            A W_MatSetup object
-        index :
-            Current index of the combobox
-
-        Returns
-        -------
-        None
-        """
-        if index == 0:  # Raw Mat
-            self.mat.mag = None
-            self.nav_phy.removeTab(1)
-        elif index == 1:  # Magnet
-            self.mat.mag = MatMagnet()
-            self.mat.mag._set_None()
-            self.nav_phy.insertTab(1, self.tab_mag, self.tr("Magnetics"))
-            self.nav_mag.setCurrentIndex(0)
-        else:  # Lamination
-            self.mat.mag = MatLamination()
-            self.mat.mag._set_None()
-            self.nav_phy.insertTab(1, self.tab_mag, self.tr("Magnetics"))
-            self.nav_mag.setCurrentIndex(1)
-
     def set_is_isotropic(self, is_checked):
         """Signal to update the value of is_isotropic according to the checkbox
 
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
         is_checked :
             State of the checkbox
 
@@ -180,7 +211,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -194,7 +225,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -208,7 +239,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -222,7 +253,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -236,7 +267,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -250,7 +281,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -264,7 +295,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -278,7 +309,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -292,7 +323,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -308,7 +339,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -322,7 +353,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -336,7 +367,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -350,7 +381,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -364,7 +395,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -380,7 +411,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -394,7 +425,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -408,7 +439,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -422,7 +453,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -438,7 +469,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -452,7 +483,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -466,7 +497,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -480,7 +511,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -496,7 +527,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -510,7 +541,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------
@@ -524,7 +555,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         Parameters
         ----------
         self :
-            A W_MatSetup object
+            A DMatSetup object
 
         Returns
         -------

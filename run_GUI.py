@@ -13,9 +13,11 @@ from PyQt5.QtGui import QIcon
 from pyleecan.GUI import DATA_DIR
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 
 from pyleecan.GUI.Tools.SidebarWindow import SidebarWindow
 from pyleecan.GUI.Tools.MachinePlotWidget import MachinePlotWidget
+from pyleecan.GUI.Tools.TreeView import TreeView
 
 EXT_GUI = True
 
@@ -44,14 +46,20 @@ if __name__ == "__main__":
         window = SidebarWindow()
         window.setWindowIcon(QIcon(icon))
 
-        window.addSubWindow("Design", c)
+        update_step = lambda: c.set_nav(c.nav_step.currentRow())
+        window.addSubWindow("Design", c, update_step)
         window.DesignWidget = c
 
         plt_widget = MachinePlotWidget(window)
         window.addSubWindow("Plot", plt_widget, plt_widget.update)
 
         mat_widget = DMatLib(window.DesignWidget.matlib, selected=0)
-        window.addSubWindow("MatLib", mat_widget)
+        mat_widget.installEventFilter(window)
+        window.addSubWindow("MatLib", mat_widget, mat_widget.update_mat_list)
+
+        tree = TreeView()
+        tree_fcn = lambda: tree.generate(getattr(c, "machine"))
+        window.addSubWindow("TreeView", tree, tree_fcn)
 
         window.show()
 

@@ -154,15 +154,16 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
             self.close()
 
     def s_load(self):
-        """Slot to load a machine from a .m file (triggered by b_load)
+        """Slot to load a machine from a .json file (triggered by b_load)
 
         Parameters
         ----------
         self : DMachineSetup
             A DMachineSetup object
         """
-
-        # Ask the user to select a .m file to load
+        ### TODO: handle material data, i.e. "connect", set new material, etc. 
+        
+        # Ask the user to select a .json file to load
         load_path = str(
             QFileDialog.getOpenFileName(
                 self, self.tr("Load file"), self.machine_path, "Json (*.json)"

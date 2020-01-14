@@ -1,3 +1,0 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-Wlam,m,lamination sheet width without insulation [m] (for magnetic loss model),,0,float,5.00E-04,0,,,,,Material,MatMagnetics,get_BH,VERSION,1,lamination properties,
-BH_curve,-,"B(H) curve (two columns matrix, H and B(H))",,0,ImportMatrix,,,,,,,,,,,,,
