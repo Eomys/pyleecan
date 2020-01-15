@@ -1,17 +1,13 @@
 from deap.base import Fitness
 from pyleecan.Classes.Output import Output
-from pyleecan.Methods.Optimization.OptiGenAlgIndivDEAP.update import update
+from pyleecan.Methods.Optimization.OptiGenAlgIndivDeap.update import update
 
 
-class OptiGenAlgIndivDEAP(list):
+class OptiGenAlgIndivDeap(list):
     # cf Methods.Optimization.OptiGenAlgIndivDEAP.update
     update = update
 
-    def __init__(self, output=Output(), design_var={}, weights=()):
-        if not isinstance(weights, tuple) and not isinstance(weights, list):
-            raise TypeError("Indiv.weights must be a tuple or a list.")
-        if len(weights) == 0:
-            raise Exception("Weights cannot be empty.")
+    def __init__(self, output=Output(), design_var={}):
 
         # Extract design variables
         keys = list(design_var.keys())
@@ -27,11 +23,17 @@ class OptiGenAlgIndivDEAP(list):
 
         # Create the fitness
         fitness = Fitness
-        fitness.weights = weights
+        fitness.weights = [-1 for _ in keys]
         self.fitness = fitness()
+
+        # Store the keys
+        self.keys = keys
 
         # Store the design variables
         self.design_var = design_var
+
+        # Store the design variables values
+        self.design_var_value = var
 
         # Output with the design variables set
         self.output = output
