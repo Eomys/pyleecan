@@ -112,7 +112,7 @@ def load(file_path):
     return init_data(init_dict)
 
 
-def _load(file_path, cls_type):
+def _load(file_path, cls_type=None):
     """Load a list of pyleecan objects from a json file
 
     Parameters
@@ -122,15 +122,16 @@ def _load(file_path, cls_type):
     """
     obj = load_json(file_path)
 
-    # check the initial object's type
-    if type(obj).__name__ is not cls_type:
-        raise LoadWrongTypeError(
-            'Object is of type "'
-            + type(obj).__name__
-            + '", type "'
-            + cls_type
-            + '" expected.'
-        )
+    # check the initial object's type if set
+    if cls_type is not None:
+        if type(obj).__name__ != cls_type:
+            raise LoadWrongTypeError(
+                'Object is of type "'
+                + type(obj).__name__
+                + '", type "'
+                + cls_type
+                + '" expected.'
+            )
 
     # check that load_switch does not contain 'dict' or 'list' for init_data to work
     if ("list" in load_switch) or ("dict" in load_switch):

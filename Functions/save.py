@@ -20,10 +20,9 @@ def fix_file_name(save_path, obj):
 
 
 def is_json_serializable(obj):
-    try:
-        json.dumps(x)
+    if isinstance(obj, (bool, float, int, str)):
         return True
-    except:
+    else:
         return False
 
 
@@ -84,7 +83,7 @@ def save_data(obj, save_path=""):
         path to the folder to save the object
     """
     # correct file name if needed
-    file_path = fix_file_name(save_path, self)
+    file_path = fix_file_name(save_path, obj)
 
     # save
     obj = build_data(obj)
@@ -102,4 +101,4 @@ def save(self, save_path=""):
     save_path: str
         path to the folder to save the object
     """
-    save_data(self, save_path)
+    save_data(self, save_path=save_path)
