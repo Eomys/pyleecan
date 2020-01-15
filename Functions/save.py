@@ -12,7 +12,7 @@ from os.path import join, basename, isdir
 def fix_file_name(save_path, obj):
     if isdir(save_path) or not save_path:
         file_path = join(save_path, type(obj).__name__ + ".json")
-    elif "." not in basename(save_path):
+    elif ".json" != basename(save_path)[-5:]:
         file_path = save_path + ".json"
     else:
         file_path = save_path
