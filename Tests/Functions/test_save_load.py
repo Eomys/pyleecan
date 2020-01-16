@@ -245,4 +245,3 @@ def test_save_load_dict(self):
     # set tuple to None as save will do
     test_dict["tuple"] = None
     self.assertEqual(result_dict, test_dict)
-

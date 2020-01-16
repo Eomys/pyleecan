@@ -68,7 +68,7 @@ class PCondType21(Gen_PCondType21, QWidget):
         self.lf_Hbar.setValue(conductor.Hbar)
         self.lf_Wbar.setValue(conductor.Wbar)
 
-        self.w_mat.update(conductor, 'cond_mat', matlib)
+        self.w_mat.update(conductor, "cond_mat", matlib)
 
         # Display the main output
         self.w_out.comp_output()

@@ -17,9 +17,9 @@ from pyleecan.Tests.find import (
     PYTHON_TYPE,
 )
 
-from pyleecan.Classes.check import CheckMinError, CheckTypeError, CheckMaxError
-from pyleecan.Classes.check import NotADictError
-from pyleecan.Classes.frozen import FrozenClass, FrozenError
+from pyleecan.Classes._check import CheckMinError, CheckTypeError, CheckMaxError
+from pyleecan.Classes._check import NotADictError
+from pyleecan.Classes._frozen import FrozenClass, FrozenError
 
 # Get the dict of all the classes and their information
 gen_dict = read_all(DOC_DIR)  # dict of class dict

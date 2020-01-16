@@ -4,6 +4,7 @@
 """
 import sys
 from os.path import dirname, abspath, normpath, join
+from os import listdir, remove
 
 sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", ".."))))
 
@@ -31,10 +32,16 @@ def generate_code(root_path, gen_dict=None):
     CLASS_DIR = join(root_path, "Classes")
     FUNC_DIR = join(root_path, "Functions")
     DOC_DIR = join(root_path, "Generator", "ClassesRef")
-    print("Reading classes csv in :" + DOC_DIR)
-    print("Saving generated files in :" + CLASS_DIR)
+    print("Reading classes csv in: " + DOC_DIR)
+    print("Saving generated files in: " + CLASS_DIR)
 
     path = __file__[__file__.index("pyleecan") :]
+
+    # Deleting all the previous class
+    print("Deleting old class files...")
+    for file_name in listdir(CLASS_DIR):
+        if file_name[0] != "_":
+            remove(join(CLASS_DIR, file_name))
 
     # A file to import every classes quickly
     import_file = open(join(CLASS_DIR, "import_all.py"), "w")

@@ -41,7 +41,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         # Create the property of the widget
         self.mat_win = None  # DMatLib widget
         self.obj = None  # object that has a material attribute
-        self.mat_attr_name = '' # material attribute name
+        self.mat_attr_name = ""  # material attribute name
         self.matlib = list()  # Matlib
         self.matlib_path = ""  # Path to save the matlib
         self.def_mat = "M400-50A"  # Default material
@@ -90,7 +90,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
             # Default lamination material: M400-50A
             index = self.c_mat_type.findText(self.def_mat)
             if index != -1:
-                #self.mat.__init__(init_dict=self.matlib[index].as_dict())
+                # self.mat.__init__(init_dict=self.matlib[index].as_dict())
                 setattr(self.obj, self.mat_attr_name, self.matlib[index])
         else:
             index = self.c_mat_type.findText(mat.name)
@@ -164,20 +164,20 @@ class WMatSelect(Ui_WMatSelect, QWidget):
 
         """
         # Empty and fill the list to keep the same object (to change it everywhere)
-        #del self.matlib[:]
-        #self.matlib.extend(self.mat_win.matlib)
+        # del self.matlib[:]
+        # self.matlib.extend(self.mat_win.matlib)
         # Update the material
         index = int(self.mat_win.nav_mat.currentItem().text()[:3]) - 1
-        
+
         # not needed if machine materials are "connected" properly
-        #mat_dict = (self.mat_win.matlib[index]).as_dict()
-        #self.mat.__init__(init_dict=mat_dict)
-        
+        # mat_dict = (self.mat_win.matlib[index]).as_dict()
+        # self.mat.__init__(init_dict=mat_dict)
+
         # Do not clear for now to keep editor (DMatLib) open
         # # Clear the window
         # self.mat_win.deleteLater()
         # self.mat_win = None
-        
+
         # Update the widget
         # Avoid trigger signal currentIndexChanged
         self.c_mat_type.blockSignals(True)

@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes.check import set_array, check_init_dict, check_var, raise_
+from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Notch import Notch
 
@@ -17,7 +17,7 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
-from pyleecan.Classes.check import InitUnKnowClassError
+from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
 
 

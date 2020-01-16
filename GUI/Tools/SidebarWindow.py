@@ -90,7 +90,6 @@ class SidebarWindow(QtWidgets.QMainWindow):
             widget.installEventFilter(instance_of_main_window)
         """
         if event.type() == QtCore.QEvent.KeyPress:
-            if event.key() in (QtCore.Qt.Key_Escape, ):
+            if event.key() in (QtCore.Qt.Key_Escape,):
                 return True
         return super(SidebarWindow, self).eventFilter(obj, event)
-

@@ -88,7 +88,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         if isinstance(self.mat.mag.BH_curve, ImportMatrixXls):
             self.in_BH_file.setText(split(self.mat.mag.BH_curve.file_path)[1])
             self.b_plot.setEnabled(True)
-        
+
         # Hide useless widget
         self.in_epsr.hide()
         self.lf_epsr.hide()
@@ -134,7 +134,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.mat.mag.plot_BH(fig=self.plot_win.fig)
         self.plot_win.setWindowTitle("BH curve")
         self.plot_win.exec_()
-        
+
     def set_xls_BH(self):
         # Ask the user to select a .xlsx file to load
         load_path = str(
