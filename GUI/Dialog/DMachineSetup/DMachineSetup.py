@@ -161,8 +161,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         self : DMachineSetup
             A DMachineSetup object
         """
-        ### TODO: handle material data, i.e. "connect", set new material, etc. 
-        
+        ### TODO: handle material data, i.e. "connect", set new material, etc.
+
         # Ask the user to select a .json file to load
         load_path = str(
             QFileDialog.getOpenFileName(

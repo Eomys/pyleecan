@@ -19,4 +19,3 @@ class MPLCanvas(QtWidgets.QDialog):
         self.fig.show = self.canvas.draw
 
         self.layout().addWidget(self.canvas, 0, 0, 1, 1)
-
