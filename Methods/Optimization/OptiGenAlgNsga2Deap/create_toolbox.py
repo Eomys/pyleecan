@@ -46,7 +46,7 @@ def create_toolbox(self):
         ind.design_var = design_var
 
         # Output with the design variables set
-        ind.output = output
+        ind.output = Output(simu=output.simu.as_dict())
 
         return ind
 
@@ -66,7 +66,7 @@ def create_toolbox(self):
         "individual",
         create_indiv,
         self.toolbox.creator,
-        Output(simu=self.problem.output.simu.as_dict()),
+        self.problem.output,
         self.problem.design_var,
     )
 
