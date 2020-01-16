@@ -6,7 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
-from pyleecan.Classes.OptiGenAlgDeap import OptiGenAlgDeap
+from pyleecan.Classes.OptiGenAlg import OptiGenAlg
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -20,6 +20,12 @@ try:
 except ImportError as error:
     mutate = error
 
+try:
+    from pyleecan.Methods.Optimization.OptiGenAlgNsga2Deap.create_toolbox import (
+        create_toolbox,
+    )
+except ImportError as error:
+    create_toolbox = error
 
 from inspect import getsource
 from cloudpickle import dumps, loads
@@ -29,7 +35,7 @@ from pyleecan.Classes.OutputMultiOpti import OutputMultiOpti
 from pyleecan.Classes.OptiProblem import OptiProblem
 
 
-class OptiGenAlgNsga2Deap(OptiGenAlgDeap):
+class OptiGenAlgNsga2Deap(OptiGenAlg):
     """Multi-objectives optimization problem solver using DEAP"""
 
     VERSION = 1
@@ -55,13 +61,25 @@ class OptiGenAlgNsga2Deap(OptiGenAlgDeap):
         )
     else:
         mutate = mutate
+
+    # cf Methods.Optimization.OptiGenAlgNsga2Deap.create_toolbox
+    if isinstance(create_toolbox, ImportError):
+        create_toolbox = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OptiGenAlgNsga2Deap method create_toolbox: "
+                    + str(create_toolbox)
+                )
+            )
+        )
+    else:
+        create_toolbox = create_toolbox
     # save method is available in all object
     save = save
 
     def __init__(
         self,
         multi_output=-1,
-        pop=[],
         selector=None,
         crossover=None,
         mutator=None,
@@ -70,63 +88,20 @@ class OptiGenAlgNsga2Deap(OptiGenAlgDeap):
         size_pop=50,
         nb_gen=200,
         problem=-1,
-        init_dict=None,
     ):
-        """Constructor of the class. Can be use in two ways :
-        - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
-
-        ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object"""
+        """Constructor of the class."""
 
         if multi_output == -1:
             multi_output = OutputMultiOpti()
         if problem == -1:
             problem = OptiProblem()
-        if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "multi_output",
-                    "pop",
-                    "selector",
-                    "crossover",
-                    "mutator",
-                    "p_cross",
-                    "p_mutate",
-                    "size_pop",
-                    "nb_gen",
-                    "problem",
-                ],
-            )
-            # Overwrite default value with init_dict content
-            if "multi_output" in list(init_dict.keys()):
-                multi_output = init_dict["multi_output"]
-            if "pop" in list(init_dict.keys()):
-                pop = init_dict["pop"]
-            if "selector" in list(init_dict.keys()):
-                selector = init_dict["selector"]
-            if "crossover" in list(init_dict.keys()):
-                crossover = init_dict["crossover"]
-            if "mutator" in list(init_dict.keys()):
-                mutator = init_dict["mutator"]
-            if "p_cross" in list(init_dict.keys()):
-                p_cross = init_dict["p_cross"]
-            if "p_mutate" in list(init_dict.keys()):
-                p_mutate = init_dict["p_mutate"]
-            if "size_pop" in list(init_dict.keys()):
-                size_pop = init_dict["size_pop"]
-            if "nb_gen" in list(init_dict.keys()):
-                nb_gen = init_dict["nb_gen"]
-            if "problem" in list(init_dict.keys()):
-                problem = init_dict["problem"]
+
         # Initialisation by argument
-        # Call OptiGenAlgDeap init
+        self.toolbox = None
+
+        # Call OptiGenAlg init
         super(OptiGenAlgNsga2Deap, self).__init__(
             multi_output=multi_output,
-            pop=pop,
             selector=selector,
             crossover=crossover,
             mutator=mutator,
@@ -136,15 +111,16 @@ class OptiGenAlgNsga2Deap(OptiGenAlgDeap):
             nb_gen=nb_gen,
             problem=problem,
         )
-        # The class is frozen (in OptiGenAlgDeap init), for now it's impossible to
+        # The class is frozen (in OptiGenAlg init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
         OptiGenAlgNsga2Deap_str = ""
-        # Get the properties inherited from OptiGenAlgDeap
+        # Get the properties inherited from OptiGenAlg
         OptiGenAlgNsga2Deap_str += super(OptiGenAlgNsga2Deap, self).__str__() + linesep
+        OptiGenAlgNsga2Deap_str += "toolbox = " + linesep + str(None)
         return OptiGenAlgNsga2Deap_str
 
     def __eq__(self, other):
@@ -153,8 +129,10 @@ class OptiGenAlgNsga2Deap(OptiGenAlgDeap):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from OptiGenAlgDeap
+        # Check the properties inherited from OptiGenAlg
         if not super(OptiGenAlgNsga2Deap, self).__eq__(other):
+            return False
+        if other.toolbox != self.toolbox:
             return False
         return True
 
@@ -162,8 +140,9 @@ class OptiGenAlgNsga2Deap(OptiGenAlgDeap):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        # Get the properties inherited from OptiGenAlgDeap
+        # Get the properties inherited from OptiGenAlg
         OptiGenAlgNsga2Deap_dict = super(OptiGenAlgNsga2Deap, self).as_dict()
+        OptiGenAlgNsga2Deap_dict["toolbox"] = None
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         OptiGenAlgNsga2Deap_dict["__class__"] = "OptiGenAlgNsga2Deap"
@@ -172,5 +151,20 @@ class OptiGenAlgNsga2Deap(OptiGenAlgDeap):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        # Set to None the properties inherited from OptiGenAlgDeap
+        self.toolbox = None
+        # Set to None the properties inherited from OptiGenAlg
         super(OptiGenAlgNsga2Deap, self)._set_None()
+
+    def _get_toolbox(self):
+        """getter of toolbox"""
+        return self._toolbox
+
+    def _set_toolbox(self, value):
+        """setter of toolbox"""
+        self._toolbox = value
+
+    # Toolbox to use DEAP tools
+    # Type : list
+    toolbox = property(
+        fget=_get_toolbox, fset=_set_toolbox, doc=u"""Toolbox to use DEAP tools"""
+    )

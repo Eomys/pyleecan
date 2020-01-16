@@ -78,7 +78,6 @@ from pyleecan.Classes.Notch import Notch
 from pyleecan.Classes.NotchEvenDist import NotchEvenDist
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
 from pyleecan.Classes.OptiGenAlg import OptiGenAlg
-from pyleecan.Classes.OptiGenAlgDeap import OptiGenAlgDeap
 from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 from pyleecan.Classes.OptiObjFunc import OptiObjFunc
 from pyleecan.Classes.OptiProblem import OptiProblem

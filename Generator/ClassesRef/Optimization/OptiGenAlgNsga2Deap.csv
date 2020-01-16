@@ -1,3 +1,0 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-,,,,,,,,,,,,Optimization,OptiGenAlgDeap,solve,VERSION,1,Multi-objectives optimization problem solver using DEAP,
-,,,,,,,,,,,,,,mutate,,,,

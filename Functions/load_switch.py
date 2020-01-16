@@ -80,7 +80,6 @@ load_switch = {
     "NotchEvenDist": NotchEvenDist,
     "OptiDesignVar": OptiDesignVar,
     "OptiGenAlg": OptiGenAlg,
-    "OptiGenAlgDeap": OptiGenAlgDeap,
     "OptiGenAlgNsga2Deap": OptiGenAlgNsga2Deap,
     "OptiObjFunc": OptiObjFunc,
     "OptiProblem": OptiProblem,

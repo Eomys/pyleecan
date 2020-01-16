@@ -27,7 +27,6 @@ class OptiGenAlg(FrozenClass):
     def __init__(
         self,
         multi_output=-1,
-        pop=[],
         selector=None,
         crossover=None,
         mutator=None,
@@ -56,7 +55,6 @@ class OptiGenAlg(FrozenClass):
                 init_dict,
                 [
                     "multi_output",
-                    "pop",
                     "selector",
                     "crossover",
                     "mutator",
@@ -70,8 +68,6 @@ class OptiGenAlg(FrozenClass):
             # Overwrite default value with init_dict content
             if "multi_output" in list(init_dict.keys()):
                 multi_output = init_dict["multi_output"]
-            if "pop" in list(init_dict.keys()):
-                pop = init_dict["pop"]
             if "selector" in list(init_dict.keys()):
                 selector = init_dict["selector"]
             if "crossover" in list(init_dict.keys()):
@@ -95,7 +91,6 @@ class OptiGenAlg(FrozenClass):
             self.multi_output = OutputMultiOpti(init_dict=multi_output)
         else:
             self.multi_output = multi_output
-        self.pop = pop
         self.selector = selector
         self.crossover = crossover
         self.mutator = mutator
@@ -126,7 +121,6 @@ class OptiGenAlg(FrozenClass):
             )
         else:
             OptiGenAlg_str += "multi_output = None" + linesep + linesep
-        OptiGenAlg_str += "pop = " + linesep + str(self.pop) + linesep
         if self._selector[1] is None:
             OptiGenAlg_str += "selector = " + str(self._selector[1])
         else:
@@ -164,8 +158,6 @@ class OptiGenAlg(FrozenClass):
             return False
         if other.multi_output != self.multi_output:
             return False
-        if other.pop != self.pop:
-            return False
         if other.selector != self.selector:
             return False
         if other.crossover != self.crossover:
@@ -193,7 +185,6 @@ class OptiGenAlg(FrozenClass):
             OptiGenAlg_dict["multi_output"] = None
         else:
             OptiGenAlg_dict["multi_output"] = self.multi_output.as_dict()
-        OptiGenAlg_dict["pop"] = self.pop
         if self.selector is None:
             OptiGenAlg_dict["selector"] = None
         else:
@@ -232,7 +223,6 @@ class OptiGenAlg(FrozenClass):
 
         if self.multi_output is not None:
             self.multi_output._set_None()
-        self.pop = None
         self.selector = None
         self.crossover = None
         self.mutator = None
@@ -262,19 +252,6 @@ class OptiGenAlg(FrozenClass):
         fset=_set_multi_output,
         doc=u"""Optimization results containing every output""",
     )
-
-    def _get_pop(self):
-        """getter of pop"""
-        return self._pop
-
-    def _set_pop(self, value):
-        """setter of pop"""
-        check_var("pop", value, "list")
-        self._pop = value
-
-    # Current population
-    # Type : list
-    pop = property(fget=_get_pop, fset=_set_pop, doc=u"""Current population""")
 
     def _get_selector(self):
         """getter of selector"""
