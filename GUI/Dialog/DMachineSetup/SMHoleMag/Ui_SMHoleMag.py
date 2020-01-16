@@ -3,13 +3,14 @@
 # File generated according to SMHoleMag.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_SMHoleMag(object):
     def setupUi(self, SMHoleMag):
         SMHoleMag.setObjectName("SMHoleMag")
-        SMHoleMag.resize(650, 610)
+        SMHoleMag.resize(780, 640)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
         )
@@ -17,9 +18,15 @@ class Ui_SMHoleMag(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(SMHoleMag.sizePolicy().hasHeightForWidth())
         SMHoleMag.setSizePolicy(sizePolicy)
-        SMHoleMag.setMinimumSize(QtCore.QSize(650, 610))
+        SMHoleMag.setMinimumSize(QtCore.QSize(780, 640))
         self.verticalLayout = QtWidgets.QVBoxLayout(SMHoleMag)
+        self.verticalLayout.setContentsMargins(5, 5, 5, 5)
+        self.verticalLayout.setSpacing(5)
         self.verticalLayout.setObjectName("verticalLayout")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.b_help = HelpButton(SMHoleMag)
@@ -34,11 +41,7 @@ class Ui_SMHoleMag(object):
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )
         self.horizontalLayout_2.addItem(spacerItem)
-        self.w_mat = WMatSelect(SMHoleMag)
-        self.w_mat.setMinimumSize(QtCore.QSize(100, 0))
-        self.w_mat.setObjectName("w_mat")
-        self.horizontalLayout_2.addWidget(self.w_mat)
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.b_add = QtWidgets.QPushButton(SMHoleMag)
@@ -51,17 +54,39 @@ class Ui_SMHoleMag(object):
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )
         self.horizontalLayout_3.addItem(spacerItem1)
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred
+        )
+        self.verticalLayout_2.addItem(spacerItem2)
+        self.horizontalLayout_4.addLayout(self.verticalLayout_2)
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_3.setSpacing(0)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.w_mat_1 = WMatSelect(SMHoleMag)
+        self.w_mat_1.setMinimumSize(QtCore.QSize(100, 0))
+        self.w_mat_1.setObjectName("w_mat_1")
+        self.verticalLayout_3.addWidget(self.w_mat_1)
+        self.w_mat_2 = WMatSelect(SMHoleMag)
+        self.w_mat_2.setMinimumSize(QtCore.QSize(100, 0))
+        self.w_mat_2.setObjectName("w_mat_2")
+        self.verticalLayout_3.addWidget(self.w_mat_2)
+        self.w_mat_3 = WMatSelect(SMHoleMag)
+        self.w_mat_3.setMinimumSize(QtCore.QSize(100, 0))
+        self.w_mat_3.setObjectName("w_mat_3")
+        self.verticalLayout_3.addWidget(self.w_mat_3)
+        self.horizontalLayout_4.addLayout(self.verticalLayout_3)
+        self.verticalLayout.addLayout(self.horizontalLayout_4)
         self.tab_hole = QtWidgets.QTabWidget(SMHoleMag)
-        self.tab_hole.setMinimumSize(QtCore.QSize(630, 500))
+        self.tab_hole.setMinimumSize(QtCore.QSize(770, 500))
         self.tab_hole.setObjectName("tab_hole")
         self.verticalLayout.addWidget(self.tab_hole)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem2 = QtWidgets.QSpacerItem(
+        spacerItem3 = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )
-        self.horizontalLayout.addItem(spacerItem2)
+        self.horizontalLayout.addItem(spacerItem3)
         self.b_plot = QtWidgets.QPushButton(SMHoleMag)
         self.b_plot.setObjectName("b_plot")
         self.horizontalLayout.addWidget(self.b_plot)

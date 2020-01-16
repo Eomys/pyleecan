@@ -3,15 +3,25 @@
 # File generated according to WMatSelect.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_WMatSelect(object):
     def setupUi(self, WMatSelect):
         WMatSelect.setObjectName("WMatSelect")
-        WMatSelect.resize(283, 50)
+        WMatSelect.resize(283, 30)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(WMatSelect.sizePolicy().hasHeightForWidth())
+        WMatSelect.setSizePolicy(sizePolicy)
         WMatSelect.setMinimumSize(QtCore.QSize(0, 0))
         self.horizontalLayout = QtWidgets.QHBoxLayout(WMatSelect)
+        self.horizontalLayout.setContentsMargins(4, 2, 4, 2)
+        self.horizontalLayout.setSpacing(2)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.in_mat_type = QtWidgets.QLabel(WMatSelect)
         self.in_mat_type.setObjectName("in_mat_type")
