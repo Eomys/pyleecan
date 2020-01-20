@@ -10,6 +10,7 @@
 from matplotlib.pyplot import subplots
 from pyleecan.Functions.init_fig import init_fig
 
+
 def plot_BH(self, fig=None, grid=True):
     """Plot the curve B(H) at the specified frequency
 
@@ -28,7 +29,7 @@ def plot_BH(self, fig=None, grid=True):
 
     if self.BH_curve is not None:
         BH = self.get_BH()
-        axes.plot(BH[:,0], BH[:,1], color="r")
+        axes.plot(BH[:, 0], BH[:, 1], color="r")
         axes.grid(b=True)
         axes.set_xlabel("H [A/m]")
         axes.set_ylabel("B [T]")

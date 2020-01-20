@@ -14,4 +14,3 @@ from pyleecan.Generator import MAIN_DIR, DOC_DIR, INT_DIR
 if __name__ == "__main__":
     gen_dict = read_all(DOC_DIR, is_internal=True, in_path=INT_DIR)
     generate_code(MAIN_DIR, gen_dict)
-    

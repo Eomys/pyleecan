@@ -58,12 +58,12 @@ def generate_class(gen_dict, class_name, path_to_gen):
     class_file.write("from os import linesep\n")
     if "ndarray" in import_type_list:
         class_file.write(
-            "from pyleecan.Classes.check import set_array, "
+            "from pyleecan.Classes._check import set_array, "
             + "check_init_dict, check_var, raise_\n"
         )
     else:
         class_file.write(
-            "from pyleecan.Classes.check import check_init_dict, check_var, raise_\n"
+            "from pyleecan.Classes._check import check_init_dict, check_var, raise_\n"
         )
     # Save function
     class_file.write("from pyleecan.Functions.save import save\n")
@@ -79,7 +79,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
             + "\n\n"
         )
     else:
-        class_file.write("from pyleecan.Classes.frozen import FrozenClass\n\n")
+        class_file.write("from pyleecan.Classes._frozen import FrozenClass\n\n")
 
     # Import all the methods of the class
     # The methods are in Methods.<Main package>.<class name>, one file per method
@@ -99,7 +99,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
         import_type_list.remove("ndarray")
 
     # Import of all needed pyleecan type for empty init
-    class_file.write("from pyleecan.Classes.check import InitUnKnowClassError\n")
+    class_file.write("from pyleecan.Classes._check import InitUnKnowClassError\n")
     for pyleecan_type in import_type_list:
         class_file.write(
             "from pyleecan.Classes." + pyleecan_type + " import " + pyleecan_type + "\n"

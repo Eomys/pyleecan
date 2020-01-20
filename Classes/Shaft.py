@@ -4,9 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
-from pyleecan.Classes.frozen import FrozenClass
+from pyleecan.Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -26,7 +26,7 @@ except ImportError as error:
     plot = error
 
 
-from pyleecan.Classes.check import InitUnKnowClassError
+from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 

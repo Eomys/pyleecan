@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotWind import SlotWind
 
@@ -58,7 +58,7 @@ except ImportError as error:
     comp_surface_wind = error
 
 
-from pyleecan.Classes.check import InitUnKnowClassError
+from pyleecan.Classes._check import InitUnKnowClassError
 
 
 class SlotW11(SlotWind):
