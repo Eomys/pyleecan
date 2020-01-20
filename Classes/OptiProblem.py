@@ -23,6 +23,7 @@ from pyleecan.Classes.check import InitUnKnowClassError
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
 from pyleecan.Classes.OptiObjFunc import OptiObjFunc
+from pyleecan.Classes.OptiConstraint import OptiConstraint
 
 
 class OptiProblem(FrozenClass):
@@ -48,6 +49,7 @@ class OptiProblem(FrozenClass):
         design_var=dict(),
         obj_func=dict(),
         eval_func=None,
+        constraint=dict(),
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -63,7 +65,8 @@ class OptiProblem(FrozenClass):
             output = Output()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict, ["output", "design_var", "obj_func", "eval_func"]
+                init_dict,
+                ["output", "design_var", "obj_func", "eval_func", "constraint"],
             )
             # Overwrite default value with init_dict content
             if "output" in list(init_dict.keys()):
@@ -74,6 +77,8 @@ class OptiProblem(FrozenClass):
                 obj_func = init_dict["obj_func"]
             if "eval_func" in list(init_dict.keys()):
                 eval_func = init_dict["eval_func"]
+            if "constraint" in list(init_dict.keys()):
+                constraint = init_dict["constraint"]
         # Initialisation by argument
         self.parent = None
         # output can be None, a Output object or a dict
@@ -106,6 +111,18 @@ class OptiProblem(FrozenClass):
         else:
             self.obj_func = obj_func  # Should raise an error
         self.eval_func = eval_func
+        # constraint can be None or a dict of OptiConstraint object
+        self.constraint = dict()
+        if type(constraint) is dict:
+            for key, obj in constraint.items():
+                if isinstance(obj, dict):
+                    self.constraint[key] = OptiConstraint(init_dict=obj)
+                else:
+                    self.constraint[key] = obj
+        elif constraint is None:
+            self.constraint = dict()
+        else:
+            self.constraint = constraint  # Should raise an error
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -151,7 +168,15 @@ class OptiProblem(FrozenClass):
         if self._eval_func[1] is None:
             OptiProblem_str += "eval_func = " + str(self._eval_func[1])
         else:
-            OptiProblem_str += "eval_func = " + linesep + str(self._eval_func[1])
+            OptiProblem_str += (
+                "eval_func = " + linesep + str(self._eval_func[1]) + linesep + linesep
+            )
+        if len(self.constraint) == 0:
+            OptiProblem_str += "constraint = dict()"
+        for key, obj in self.constraint.items():
+            OptiProblem_str += (
+                "constraint[" + key + "] = " + str(self.constraint[key].as_dict())
+            )
         return OptiProblem_str
 
     def __eq__(self, other):
@@ -166,6 +191,8 @@ class OptiProblem(FrozenClass):
         if other.obj_func != self.obj_func:
             return False
         if other.eval_func != self.eval_func:
+            return False
+        if other.constraint != self.constraint:
             return False
         return True
 
@@ -191,6 +218,9 @@ class OptiProblem(FrozenClass):
                 dumps(self._eval_func[0]).decode("ISO-8859-2"),
                 self._eval_func[1],
             ]
+        OptiProblem_dict["constraint"] = dict()
+        for key, obj in self.constraint.items():
+            OptiProblem_dict["constraint"][key] = obj.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         OptiProblem_dict["__class__"] = "OptiProblem"
         return OptiProblem_dict
@@ -205,6 +235,8 @@ class OptiProblem(FrozenClass):
         for key, obj in self.obj_func.items():
             obj._set_None()
         self.eval_func = None
+        for key, obj in self.constraint.items():
+            obj._set_None()
 
     def _get_output(self):
         """getter of output"""
@@ -289,4 +321,24 @@ class OptiProblem(FrozenClass):
         fget=_get_eval_func,
         fset=_set_eval_func,
         doc=u"""Function to evaluate before computing obj function and constraints""",
+    )
+
+    def _get_constraint(self):
+        """getter of constraint"""
+        for key, obj in self._constraint.items():
+            if obj is not None:
+                obj.parent = self
+        return self._constraint
+
+    def _set_constraint(self, value):
+        """setter of constraint"""
+        check_var("constraint", value, "{OptiConstraint}")
+        self._constraint = value
+
+    # Dict containing the constraints
+    # Type : {OptiConstraint}
+    constraint = property(
+        fget=_get_constraint,
+        fset=_set_constraint,
+        doc=u"""Dict containing the constraints """,
     )

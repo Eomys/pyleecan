@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
+
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
-from deap.tools import selNSGA2, selTournamentDCD, cxOnePoint
+from deap.tools import selNSGA2, cxOnePoint
 from copy import deepcopy
 import random
 import numpy as np
@@ -13,6 +15,8 @@ from pyleecan.Classes.Output import Output
 # from pyleecan.Classes.OptiGenAlgIndivDeap import OptiGenAlgIndivDeap
 from pyleecan.Functions.Optimization.evaluate import evaluate
 from pyleecan.Functions.Optimization.update import update
+from pyleecan.Functions.Optimization.check_cstr import check_cstr
+from pyleecan.Functions.Optimization.tournamentDCD import tournamentDCD
 
 
 class MissingProblem(Exception):
@@ -58,15 +62,22 @@ def solve(self):
             ),
             end="",
         )
-    print("\n")
+
+    # Check the constraints violation
+    nb_infeasible = 0
+    if len(self.problem.constraint) > 0:
+        for indiv in pop:
+            nb_infeasible += check_cstr(self, indiv)
+    print(
+        "\rgen 0: 100%, {:>4} errors,{:>4} infeasible.".format(
+            nb_error, nb_infeasible - nb_error
+        )
+    )
 
     # Add pop to OutputMultiOpt
     for indiv in pop:
-        # Check that at every fitness values is different from NaN
-        is_valid = (
-            indiv.fitness.valid
-            and sum([j == float("inf") for j in indiv.fitness.values]) == 0
-        )
+        # Check that at every fitness values is different from inf
+        is_valid = indiv.fitness.valid and indiv.is_simu_valid and indiv.cstr_viol == 0
 
         # Add the indiv to the multi_output
         self.multi_output.add_evaluation(
@@ -83,22 +94,16 @@ def solve(self):
     ############################
     for ngen in range(1, self.nb_gen):
         print(datetime.now().strftime("%H:%M:%S"), "Generation:", ngen)
-        # Extracting parents
-        parents = []
+        # Extracting parents using
+        parents = tournamentDCD(pop, self.size_pop)
 
-        # for _ in range(len(pop)):
-        #     pass
-        # TODO constraint
-        parents = selTournamentDCD(pop, self.size_pop)
-
-        # start = time.time()
         # Copy new indivuals
         children = []
 
         for indiv in parents:
             child = self.toolbox.individual()
             for i in range(len(indiv)):
-                child[i] = indiv[i]
+                child[i] = deepcopy(indiv[i])
             child.output = Output(init_dict=indiv.output.as_dict())
             child.fitness = deepcopy(indiv.fitness)
             children.append(child)
@@ -139,15 +144,24 @@ def solve(self):
                 ),
                 end="",
             )
-        print("\n")
 
+        # Check the constraints violation
+        nb_infeasible = 0
+        if len(self.problem.constraint) > 0:
+            for indiv in to_eval:
+                nb_infeasible += check_cstr(self, indiv)
+        print(
+            "\rgen 0: 100%, {:>4} errors,{:>4} infeasible.".format(
+                nb_error, nb_infeasible - nb_error
+            )
+        )
         # Add children to OutputMultiOpti
         for indiv in children:
-            # Check that at every fitness values is different from NaN
+            # Check that at every fitness values is different from inf
             is_valid = (
-                indiv.fitness.valid
-                and sum([j == float("inf") for j in indiv.fitness.values]) == 0
+                indiv.fitness.valid and indiv.is_simu_valid and indiv.cstr_viol == 0
             )
+
             # Add the indiv to the multi_output
             self.multi_output.add_evaluation(
                 indiv.output, is_valid, list(indiv), indiv.fitness.values, ngen,

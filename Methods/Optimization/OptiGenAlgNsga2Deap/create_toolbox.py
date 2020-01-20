@@ -19,7 +19,8 @@ def create_toolbox(self):
             function to create the individual
         output : pyleecan.Classes.Output
             output of the individual
-        design_var : var of 
+        design_var : dict
+            Design variables  
             
         Returns:
         --------
@@ -44,6 +45,12 @@ def create_toolbox(self):
 
         # Store the design variables
         ind.design_var = design_var
+
+        # Store the simulation validity
+        ind.is_simu_valid = False
+
+        # Store the number of constraints violations
+        ind.cstr_viol = 0
 
         # Output with the design variables set
         ind.output = Output(simu=output.simu.as_dict())

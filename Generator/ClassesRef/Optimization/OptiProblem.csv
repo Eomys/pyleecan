@@ -3,3 +3,4 @@ output,,Default output to define the default simulation. ,,1,Output,-1,,,,1,,Opt
 design_var,,Dict of design variables,,1,{OptiDesignVar},{},,,,1,,,,,,,,
 obj_func,,Dict of objective functions,,1,{OptiObjFunc},{},,,,1,,,,,,,,
 eval_func,,Function to evaluate before computing obj function and constraints,,1,function,None,,,,1,,,,,,,,
+constraint,,Dict containing the constraints ,,1,{OptiConstraint},{},,,,1,,,,,,,,

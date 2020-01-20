@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 def evaluate(solver, indiv):
     """Evaluate the individual according to the solver method
     
@@ -31,6 +34,7 @@ def evaluate(solver, indiv):
             fitness.append(solver.problem.obj_func[key].func(indiv.output))
 
         indiv.fitness.values = fitness
+        indiv.is_simu_valid = True
         return 0
     except:
         # TODO logging
@@ -42,5 +46,6 @@ def evaluate(solver, indiv):
 
         # Set fitness as inf
         indiv.fitness.values = [float("inf") for _ in keys]
+        indiv.is_simu_valid = False
 
         return 1

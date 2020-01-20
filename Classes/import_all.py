@@ -76,9 +76,9 @@ from pyleecan.Classes.Node import Node
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.Notch import Notch
 from pyleecan.Classes.NotchEvenDist import NotchEvenDist
+from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
 from pyleecan.Classes.OptiGenAlg import OptiGenAlg
-from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 from pyleecan.Classes.OptiObjFunc import OptiObjFunc
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.OutElec import OutElec
