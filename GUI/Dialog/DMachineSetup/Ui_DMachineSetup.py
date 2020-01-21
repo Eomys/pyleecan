@@ -3,13 +3,14 @@
 # File generated according to DMachineSetup.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_DMachineSetup(object):
     def setupUi(self, DMachineSetup):
         DMachineSetup.setObjectName("DMachineSetup")
-        DMachineSetup.resize(583, 356)
+        DMachineSetup.resize(996, 711)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(DMachineSetup)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.nav_step = QtWidgets.QListWidget(DMachineSetup)
@@ -39,6 +40,14 @@ class Ui_DMachineSetup(object):
         self.horizontalLayout.addWidget(self.b_load)
         self.main_layout.addLayout(self.horizontalLayout)
         self.w_step = QtWidgets.QWidget(DMachineSetup)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.w_step.sizePolicy().hasHeightForWidth())
+        self.w_step.setSizePolicy(sizePolicy)
+        self.w_step.setMinimumSize(QtCore.QSize(800, 660))
         self.w_step.setObjectName("w_step")
         self.main_layout.addWidget(self.w_step)
         self.horizontalLayout_2.addLayout(self.main_layout)

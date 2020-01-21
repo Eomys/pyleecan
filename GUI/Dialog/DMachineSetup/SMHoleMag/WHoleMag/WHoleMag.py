@@ -26,15 +26,15 @@ class WHoleMag(Ui_WHoleMag, QWidget):
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
 
-    def __init__(self, lam, is_mag, index):
+    def __init__(self, parent, is_mag, index):
         """Initialize the GUI according to lamination
 
         Parameters
         ----------
         self : WHoleMag
             A WHoleMag object
-        lam : LamHole
-            The lamination to edit
+        parent : 
+            A parent object containing the lamination (LamHole) to edit
         is_mag : bool
             False: no magnet in the Hole (for the SyRM)
         index : int
@@ -46,9 +46,10 @@ class WHoleMag(Ui_WHoleMag, QWidget):
         self.setupUi(self)
 
         self.is_stator = False
-        self.obj = lam
+        self.obj = parent.obj
         self.index = index
         self.is_mag = is_mag
+        self.parent = parent
 
         # Adapt the GUI to the current machine
         if is_mag:  # IPMSM
@@ -67,14 +68,19 @@ class WHoleMag(Ui_WHoleMag, QWidget):
         self.c_hole_type.clear()
         for hole in self.name_list:
             self.c_hole_type.addItem(hole)
-        self.c_hole_type.setCurrentIndex(self.type_list.index(type(lam.hole[index])))
+        self.c_hole_type.setCurrentIndex(
+            self.type_list.index(type(self.obj.hole[index]))
+        )
 
         # Regenerate the pages with the new values
         self.w_hole.setParent(None)
-        self.w_hole = self.wid_list[self.c_hole_type.currentIndex()](lam.hole[index])
+        self.w_hole = self.wid_list[self.c_hole_type.currentIndex()](
+            self.obj.hole[index]
+        )
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_hole)
         self.main_layout.insertWidget(1, self.w_hole)
+        self.parent.update_w_mat()
 
         # Connect the slot
         self.c_hole_type.currentIndexChanged.connect(self.set_hole_type)
@@ -122,6 +128,7 @@ class WHoleMag(Ui_WHoleMag, QWidget):
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_hole)
         self.main_layout.insertWidget(1, self.w_hole)
+        self.parent.update_w_mat()
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

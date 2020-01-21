@@ -9,7 +9,7 @@ Buried Slot Setup Page
 
 
 from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PyQt5.QtWidgets import QMessageBox, QWidget, QSizePolicy
 
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.Material import Material
@@ -44,22 +44,37 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         QWidget.__init__(self)
         self.setupUi(self)
 
+        # Size Policy on w_mat Widgets
+        sp = QSizePolicy()
+        sp.setRetainSizeWhenHidden(True)
+        self.w_mat_1.setSizePolicy(sp)
+        self.w_mat_2.setSizePolicy(sp)
+        self.w_mat_3.setSizePolicy(sp)
+
+        # hide edit buttons
+        self.w_mat_2.b_matlib.setSizePolicy(sp)
+        self.w_mat_3.b_matlib.setSizePolicy(sp)
+        self.w_mat_2.b_matlib.hide()
+        self.w_mat_3.b_matlib.hide()
+
         # Saving arguments
         self.machine = machine
         self.matlib = matlib
         self.is_stator = is_stator
+
+        # Set default materials
+        self.w_mat_1.setText("Magnet 1:")
+        self.w_mat_1.def_mat = "Magnet1"
+        self.w_mat_2.setText("Magnet 2:")
+        self.w_mat_2.def_mat = "Magnet1"
+        self.w_mat_3.setText("Magnet 3:")
+        self.w_mat_3.def_mat = "Magnet1"
 
         # Get the correct object to set
         if self.is_stator:
             self.obj = machine.stator
         else:
             self.obj = machine.rotor
-
-        # Adapt GUI for SyRM (no magnets)
-        if self.machine.type_machine == 5:
-            self.w_mat.hide()
-        else:
-            self.w_mat.show()
 
         # If the hole is not set, initialize it with a HoleM50
         if len(self.obj.hole) == 0:
@@ -72,16 +87,11 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
 
         # Update all the hole tab
         # (the current hole types will be initialized)
+        # print(type(self.obj.hole[0]).__name__)
         self.tab_hole.clear()
         for hole in self.obj.hole:
             self.s_add(hole)
         self.tab_hole.setCurrentIndex(0)
-
-        # Set materials
-        self.w_mat.setText("mat_mag:")
-        self.w_mat.def_mat = "Magnet1"
-        if self.machine.type_machine == 8:  # For IPMSM only
-            self.w_mat.update(self.obj.hole[0].magnet_0, "mat_type", matlib)
 
         # Set Help URL
         self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"
@@ -92,7 +102,40 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         self.b_remove.clicked.connect(self.s_remove)
 
         self.b_plot.clicked.connect(self.s_plot)
-        self.w_mat.saveNeeded.connect(self.emit_save)
+        self.w_mat_1.saveNeeded.connect(self.emit_save)
+        self.w_mat_2.saveNeeded.connect(self.emit_save)
+        self.w_mat_3.saveNeeded.connect(self.emit_save)
+
+        self.tab_hole.currentChanged.connect(self.update_w_mat)
+
+    def update_w_mat(self, idx=None):
+        if idx is None:
+            idx = self.tab_hole.currentIndex()
+        hole = self.obj.hole[idx]
+        if self.machine.type_machine == 8:  # For IPMSM only
+            if type(hole).__name__ in ["HoleM50", "HoleM53"]:
+                self.w_mat_1.show()
+                self.w_mat_2.show()
+                self.w_mat_3.hide()
+                self.w_mat_1.update(hole.magnet_0, "mat_type", self.matlib)
+                self.w_mat_2.update(hole.magnet_1, "mat_type", self.matlib)
+            if type(hole).__name__ in ["HoleM51"]:
+                self.w_mat_1.show()
+                self.w_mat_2.show()
+                self.w_mat_3.show()
+                self.w_mat_1.update(hole.magnet_0, "mat_type", self.matlib)
+                self.w_mat_2.update(hole.magnet_1, "mat_type", self.matlib)
+                self.w_mat_3.update(hole.magnet_2, "mat_type", self.matlib)
+            if type(hole).__name__ in ["HoleM52"]:
+                self.w_mat_1.show()
+                self.w_mat_2.hide()
+                self.w_mat_3.hide()
+                self.w_mat_1.update(hole.magnet_0, "mat_type", self.matlib)
+
+        elif self.machine.type_machine == 5:
+            self.w_mat_1.hide()
+            self.w_mat_2.hide()
+            self.w_mat_3.hide()
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup
@@ -145,7 +188,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
             hole.Zh = self.obj.hole[0].Zh
         else:
             hole_index = self.obj.hole.index(hole)
-        tab = WHoleMag(self.obj, is_mag=is_mag, index=hole_index)
+        tab = WHoleMag(self, is_mag=is_mag, index=hole_index)
         tab.saveNeeded.connect(self.emit_save)
         self.tab_hole.addTab(tab, "Slot " + str(hole_index + 1))
 
@@ -192,7 +235,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
         """
 
         # Check that everything is set
-        index = self.w_mat.c_mat_type.currentIndex()
+        index = self.w_mat_1.c_mat_type.currentIndex()
         for hole in self.obj.hole:
             hole.Zh = self.machine.stator.winding.p * 2
             if self.machine.type_machine == 8:  # IPMSM machine only
