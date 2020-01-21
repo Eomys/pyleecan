@@ -1,5 +1,6 @@
 import femm
 import numpy as np
+from op import path
 
 from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
 from pyleecan.Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
@@ -60,6 +61,15 @@ def solve_FEMM(self, output, sym, FEMM_dict):
             j_t0=ii,
             is_sliding_band=self.is_sliding_band,
         )
+        # try "previous solution" for speed up of FEMM calculation
+        if self.is_sliding_band:
+            try:
+                base = path.basename(self.get_path_save_fem(output))
+                ans_file = path.splitext(base)[0] + ".ans"
+                femm.mi_setprevious(ans_file, 0)
+            except:
+                pass
+
         # Run the computation
         femm.mi_analyze()
         femm.mi_loadsolution()
