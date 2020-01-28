@@ -22,6 +22,7 @@ import matplotlib.image as img
 import numpy as np
 import random
 
+
 @pytest.mark.validation
 @pytest.mark.optimization
 def test_zdt3():
@@ -42,7 +43,9 @@ def test_zdt3():
     )
     Ir = ImportMatrixVal(value=np.zeros(30))
     time = ImportGenVectLin(start=0, stop=0.015, num=Nt, endpoint=True)
-    angle = ImportGenVectLin(start=0, stop=2 * np.pi, num=64, endpoint=False)  # num=1024
+    angle = ImportGenVectLin(
+        start=0, stop=2 * np.pi, num=64, endpoint=False
+    )  # num=1024
 
     # Definition of the simulation
     simu = Simu1(name="Test_machine", machine=SCIM_001)
@@ -59,7 +62,10 @@ def test_zdt3():
 
     # Definition of the magnetic simulation
     simu.mag = MagFEMM(
-        is_stator_linear_BH=2, is_rotor_linear_BH=2, is_symmetry_a=True, is_antiper_a=False
+        is_stator_linear_BH=2,
+        is_rotor_linear_BH=2,
+        is_symmetry_a=True,
+        is_antiper_a=False,
     )
     simu.mag.Kmesh_fineness = 0.01
     # simu.mag.Kgeo_fineness=0.02
@@ -67,7 +73,6 @@ def test_zdt3():
     simu.struct = None
 
     output = Output(simu=simu)
-
 
     # ### Design variable
     my_vars = {}
@@ -79,7 +84,6 @@ def test_zdt3():
             space=[0, 1],
             function=lambda space: np.random.uniform(*space),
         )
-
 
     # ### Objectives
     objs = {
@@ -102,13 +106,14 @@ def test_zdt3():
         output.mag.Tem_av = f1(x)
         output.mag.Tem_rip = g(x) * h(f1(x), g(x))
 
-
     # ### Defining the problem
     my_prob = OptiProblem(
         output=output, design_var=my_vars, obj_func=objs, eval_func=evaluate
-    ) 
+    )
 
-    solver = OptiGenAlgNsga2Deap(problem=my_prob, size_pop=40, nb_gen=100, p_mutate=0.5,)
+    solver = OptiGenAlgNsga2Deap(
+        problem=my_prob, size_pop=40, nb_gen=100, p_mutate=0.5,
+    )
     res = solver.solve()
 
     def plot_pareto(self):
@@ -131,7 +136,7 @@ def test_zdt3():
 
         fitness = fitness[indx]
         ngen = ngen[indx]
-        
+
         # Get pareto front
         pareto = list(np.unique(fitness, axis=0))
 
@@ -152,25 +157,35 @@ def test_zdt3():
                     break
 
         pareto = np.array(pareto)
-        
-        fig, axs = plt.subplots(1,2,figsize=(16,6))
+
+        fig, axs = plt.subplots(1, 2, figsize=(16, 6))
 
         # Plot Pareto front
-        axs[0].scatter(pareto[:, 0], pareto[:, 1], facecolors="b", edgecolors="b",s=0.8 , label= 'Pareto Front')
+        axs[0].scatter(
+            pareto[:, 0],
+            pareto[:, 1],
+            facecolors="b",
+            edgecolors="b",
+            s=0.8,
+            label="Pareto Front",
+        )
         axs[0].autoscale()
         axs[0].legend()
-        axs[0].set_title('Pyleecan results')
-        axs[0].set_xlabel(r'$f_1(x)$')
-        axs[0].set_ylabel(r'$f_2(x)$')
+        axs[0].set_title("Pyleecan results")
+        axs[0].set_xlabel(r"$f_1(x)$")
+        axs[0].set_ylabel(r"$f_2(x)$")
         try:
-            img_to_find=img.imread('pyleecan\\Tests\\Validation\\Optimization\\zdt3.jpg',format='jpg')
-            axs[1].imshow(img_to_find, aspect='auto')
-            axs[1].axis('off')
-            axs[1].set_title('Pareto front of the problem')
+            img_to_find = img.imread(
+                "pyleecan\\Tests\\Validation\\Optimization\\zdt3.jpg", format="jpg"
+            )
+            axs[1].imshow(img_to_find, aspect="auto")
+            axs[1].axis("off")
+            axs[1].set_title("Pareto front of the problem")
         except TypeError:
-            print('Pillow is needed to import jpg files')
-        
+            print("Pillow is needed to import jpg files")
+
         return fig
 
-    fig=plot_pareto(res)
-    plt.savefig('pyleecan\\Tests\\Results\\Validation\\test_zdt3.png')
+    fig = plot_pareto(res)
+    plt.savefig("pyleecan\\Tests\\Results\\Validation\\test_zdt3.png")
+
