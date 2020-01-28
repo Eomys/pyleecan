@@ -8,6 +8,11 @@ def create_toolbox(self):
     Parameters
     ----------
     self : OptiGenAlgNsga2Deap
+
+    Returns
+    -------
+    self : OptiGenAlgNsga2Deap
+        OptiGenAlgNsga2Deap with toolbox created 
     """
 
     def create_indiv(create, output, design_var):

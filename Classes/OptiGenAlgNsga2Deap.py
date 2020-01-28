@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv
-WARNING! All changes made in this file will be lost!
-"""
 
 from os import linesep
 from pyleecan.Classes.check import check_init_dict, check_var, raise_
