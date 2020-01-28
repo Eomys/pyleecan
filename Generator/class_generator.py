@@ -56,6 +56,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Import
     class_file.write("from os import linesep\n")
+    class_file.write("import numpy\n")
     if "ndarray" in import_type_list:
         class_file.write(
             "from pyleecan.Classes._check import set_array, "
@@ -905,7 +906,7 @@ def generate_as_dict(gen_dict, class_dict):
         if prop["type"] == "dict":
             var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = dict()\n'
             var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
-            var_str += TAB3 + "if type(obj) is ndarray:\n"
+            var_str += TAB3 + "if type(obj) is numpy.ndarray:\n"
             var_str += (
                 TAB4
                 + class_name
@@ -913,8 +914,9 @@ def generate_as_dict(gen_dict, class_dict):
                 + prop["name"]
                 + '"][key] = obj.tolist()\n'
             )
+            var_str += TAB3 + "else:\n"
             var_str += (
-                TAB3
+                TAB4
                 + class_name
                 + '_dict["'
                 + prop["name"]
