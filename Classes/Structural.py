@@ -101,7 +101,8 @@ class Structural(FrozenClass):
         else:
             Structural_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.force is not None:
-            Structural_str += "force = " + str(self.force.as_dict()) + linesep + linesep
+            tmp = self.force.__str__()[:-2].replace(linesep, linesep + "\t")
+            Structural_str += "force = " + tmp
         else:
             Structural_str += "force = None"
         return Structural_str

@@ -56,7 +56,8 @@ class GUIOption(FrozenClass):
         else:
             GUIOption_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.unit is not None:
-            GUIOption_str += "unit = " + str(self.unit.as_dict()) + linesep + linesep
+            tmp = self.unit.__str__()[:-2].replace(linesep, linesep + "\t")
+            GUIOption_str += "unit = " + tmp
         else:
             GUIOption_str += "unit = None"
         return GUIOption_str

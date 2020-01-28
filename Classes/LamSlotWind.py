@@ -356,9 +356,8 @@ class LamSlotWind(LamSlot):
         LamSlotWind_str += super(LamSlotWind, self).__str__() + linesep
         LamSlotWind_str += "Ksfill = " + str(self.Ksfill) + linesep
         if self.winding is not None:
-            LamSlotWind_str += (
-                "winding = " + str(self.winding.as_dict()) + linesep + linesep
-            )
+            tmp = self.winding.__str__()[:-2].replace(linesep, linesep + "\t")
+            LamSlotWind_str += "winding = " + tmp
         else:
             LamSlotWind_str += "winding = None"
         return LamSlotWind_str

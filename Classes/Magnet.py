@@ -187,9 +187,8 @@ class Magnet(FrozenClass):
         else:
             Magnet_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.mat_type is not None:
-            Magnet_str += (
-                "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
-            )
+            tmp = self.mat_type.__str__()[:-2].replace(linesep, linesep + "\t")
+            Magnet_str += "mat_type = " + tmp
         else:
             Magnet_str += "mat_type = None" + linesep + linesep
         Magnet_str += "type_magnetization = " + str(self.type_magnetization) + linesep

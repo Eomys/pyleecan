@@ -4,9 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
-from pyleecan.Classes.frozen import FrozenClass
+from pyleecan.Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -18,8 +18,8 @@ except ImportError as error:
 
 from inspect import getsource
 from cloudpickle import dumps, loads
-from pyleecan.Classes.check import CheckTypeError
-from pyleecan.Classes.check import InitUnKnowClassError
+from pyleecan.Classes._check import CheckTypeError
+from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
 from pyleecan.Classes.OptiObjFunc import OptiObjFunc
@@ -138,33 +138,26 @@ class OptiProblem(FrozenClass):
                 "parent = " + str(type(self.parent)) + " object" + linesep
             )
         if self.output is not None:
-            OptiProblem_str += (
-                "output = " + str(self.output.as_dict()) + linesep + linesep
-            )
+            tmp = self.output.__str__()[:-2].replace(linesep, linesep + "\t")
+            OptiProblem_str += "output = " + tmp
         else:
             OptiProblem_str += "output = None" + linesep + linesep
         if len(self.design_var) == 0:
             OptiProblem_str += "design_var = dict()"
         for key, obj in self.design_var.items():
-            OptiProblem_str += (
-                "design_var["
-                + key
-                + "] = "
-                + str(self.design_var[key].as_dict())
-                + linesep
-                + linesep
+            tmp = (
+                self.design_var[key].__str__()[:-2].replace(linesep, linesep + "\t")
+                + "\n"
             )
+            OptiProblem_str += "design_var[" + key + "] =" + tmp + linesep + linesep
         if len(self.obj_func) == 0:
             OptiProblem_str += "obj_func = dict()"
         for key, obj in self.obj_func.items():
-            OptiProblem_str += (
-                "obj_func["
-                + key
-                + "] = "
-                + str(self.obj_func[key].as_dict())
-                + linesep
-                + linesep
+            tmp = (
+                self.obj_func[key].__str__()[:-2].replace(linesep, linesep + "\t")
+                + "\n"
             )
+            OptiProblem_str += "obj_func[" + key + "] =" + tmp + linesep + linesep
         if self._eval_func[1] is None:
             OptiProblem_str += "eval_func = " + str(self._eval_func[1])
         else:
@@ -174,9 +167,11 @@ class OptiProblem(FrozenClass):
         if len(self.constraint) == 0:
             OptiProblem_str += "constraint = dict()"
         for key, obj in self.constraint.items():
-            OptiProblem_str += (
-                "constraint[" + key + "] = " + str(self.constraint[key].as_dict())
+            tmp = (
+                self.constraint[key].__str__()[:-2].replace(linesep, linesep + "\t")
+                + "\n"
             )
+            OptiProblem_str += "constraint[" + key + "] =" + tmp
         return OptiProblem_str
 
     def __eq__(self, other):

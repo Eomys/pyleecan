@@ -175,9 +175,8 @@ class Frame(FrozenClass):
         Frame_str += "Rint = " + str(self.Rint) + linesep
         Frame_str += "Rext = " + str(self.Rext) + linesep
         if self.mat_type is not None:
-            Frame_str += (
-                "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
-            )
+            tmp = self.mat_type.__str__()[:-2].replace(linesep, linesep + "\t")
+            Frame_str += "mat_type = " + tmp
         else:
             Frame_str += "mat_type = None"
         return Frame_str

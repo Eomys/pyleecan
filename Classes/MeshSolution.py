@@ -141,27 +141,15 @@ class MeshSolution(FrozenClass):
         if len(self.mesh) == 0:
             MeshSolution_str += "mesh = []"
         for ii in range(len(self.mesh)):
-            MeshSolution_str += (
-                "mesh["
-                + str(ii)
-                + "] = "
-                + str(self.mesh[ii].as_dict())
-                + "\n"
-                + linesep
-                + linesep
-            )
+            tmp = self.mesh[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
+            MeshSolution_str += "mesh[" + str(ii) + "] =" + tmp + linesep + linesep
         if len(self.solution) == 0:
             MeshSolution_str += "solution = []"
         for ii in range(len(self.solution)):
-            MeshSolution_str += (
-                "solution["
-                + str(ii)
-                + "] = "
-                + str(self.solution[ii].as_dict())
-                + "\n"
-                + linesep
-                + linesep
+            tmp = (
+                self.solution[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
             )
+            MeshSolution_str += "solution[" + str(ii) + "] =" + tmp + linesep + linesep
         MeshSolution_str += "is_same_mesh = " + str(self.is_same_mesh)
         return MeshSolution_str
 

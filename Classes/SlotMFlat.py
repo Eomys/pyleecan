@@ -228,9 +228,8 @@ class SlotMFlat(SlotMag):
         if len(self.magnet) == 0:
             SlotMFlat_str += "magnet = []"
         for ii in range(len(self.magnet)):
-            SlotMFlat_str += (
-                "magnet[" + str(ii) + "] = " + str(self.magnet[ii].as_dict()) + "\n"
-            )
+            tmp = self.magnet[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
+            SlotMFlat_str += "magnet[" + str(ii) + "] =" + tmp
         return SlotMFlat_str
 
     def __eq__(self, other):

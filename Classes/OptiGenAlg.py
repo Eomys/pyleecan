@@ -4,14 +4,14 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
-from pyleecan.Classes.frozen import FrozenClass
+from pyleecan.Classes._frozen import FrozenClass
 
 from inspect import getsource
 from cloudpickle import dumps, loads
-from pyleecan.Classes.check import CheckTypeError
-from pyleecan.Classes.check import InitUnKnowClassError
+from pyleecan.Classes._check import CheckTypeError
+from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.OutputMultiOpti import OutputMultiOpti
 from pyleecan.Classes.OptiProblem import OptiProblem
 
@@ -32,8 +32,8 @@ class OptiGenAlg(FrozenClass):
         mutator=None,
         p_cross=0.9,
         p_mutate=0.1,
-        size_pop=50,
-        nb_gen=200,
+        size_pop=40,
+        nb_gen=100,
         problem=-1,
         init_dict=None,
     ):
@@ -116,9 +116,8 @@ class OptiGenAlg(FrozenClass):
         else:
             OptiGenAlg_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.multi_output is not None:
-            OptiGenAlg_str += (
-                "multi_output = " + str(self.multi_output.as_dict()) + linesep + linesep
-            )
+            tmp = self.multi_output.__str__()[:-2].replace(linesep, linesep + "\t")
+            OptiGenAlg_str += "multi_output = " + tmp
         else:
             OptiGenAlg_str += "multi_output = None" + linesep + linesep
         if self._selector[1] is None:
@@ -144,9 +143,8 @@ class OptiGenAlg(FrozenClass):
         OptiGenAlg_str += "size_pop = " + str(self.size_pop) + linesep
         OptiGenAlg_str += "nb_gen = " + str(self.nb_gen) + linesep
         if self.problem is not None:
-            OptiGenAlg_str += (
-                "problem = " + str(self.problem.as_dict()) + linesep + linesep
-            )
+            tmp = self.problem.__str__()[:-2].replace(linesep, linesep + "\t")
+            OptiGenAlg_str += "problem = " + tmp
         else:
             OptiGenAlg_str += "problem = None"
         return OptiGenAlg_str

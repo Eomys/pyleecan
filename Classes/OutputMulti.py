@@ -4,9 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
-from pyleecan.Classes.frozen import FrozenClass
+from pyleecan.Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -16,7 +16,7 @@ except ImportError as error:
     add_output = error
 
 
-from pyleecan.Classes.check import InitUnKnowClassError
+from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Output import Output
 
 
@@ -101,23 +101,17 @@ class OutputMulti(FrozenClass):
                 "parent = " + str(type(self.parent)) + " object" + linesep
             )
         if self.output_ref is not None:
-            OutputMulti_str += (
-                "output_ref = " + str(self.output_ref.as_dict()) + linesep + linesep
-            )
+            tmp = self.output_ref.__str__()[:-2].replace(linesep, linesep + "\t")
+            OutputMulti_str += "output_ref = " + tmp
         else:
             OutputMulti_str += "output_ref = None" + linesep + linesep
         if len(self.outputs) == 0:
             OutputMulti_str += "outputs = []"
         for ii in range(len(self.outputs)):
-            OutputMulti_str += (
-                "outputs["
-                + str(ii)
-                + "] = "
-                + str(self.outputs[ii].as_dict())
-                + "\n"
-                + linesep
-                + linesep
+            tmp = (
+                self.outputs[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
             )
+            OutputMulti_str += "outputs[" + str(ii) + "] =" + tmp + linesep + linesep
         OutputMulti_str += "is_valid = " + linesep + str(self.is_valid) + linesep
         OutputMulti_str += "design_var = " + linesep + str(self.design_var)
         return OutputMulti_str

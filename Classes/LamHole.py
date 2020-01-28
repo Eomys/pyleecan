@@ -290,9 +290,8 @@ class LamHole(Lamination):
         if len(self.hole) == 0:
             LamHole_str += "hole = []"
         for ii in range(len(self.hole)):
-            LamHole_str += (
-                "hole[" + str(ii) + "] = " + str(self.hole[ii].as_dict()) + "\n"
-            )
+            tmp = self.hole[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
+            LamHole_str += "hole[" + str(ii) + "] =" + tmp
         return LamHole_str
 
     def __eq__(self, other):
