@@ -11,7 +11,9 @@ from pyleecan.Classes.Winding import Winding
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.WindingUD.comp_connection_mat import comp_connection_mat
+    from pyleecan.Methods.Machine.WindingUD.comp_connection_mat import (
+        comp_connection_mat,
+    )
 except ImportError as error:
     comp_connection_mat = error
 
@@ -58,7 +60,20 @@ class WindingUD(Winding):
     # save method is available in all object
     save = save
 
-    def __init__(self, user_wind_mat=None, is_reverse_wind=False, Nslot_shift_wind=0, qs=3, Ntcoil=7, Npcpp=2, type_connection=0, p=3, Lewout=0.015, conductor=-1, init_dict=None):
+    def __init__(
+        self,
+        user_wind_mat=None,
+        is_reverse_wind=False,
+        Nslot_shift_wind=0,
+        qs=3,
+        Ntcoil=7,
+        Npcpp=2,
+        type_connection=0,
+        p=3,
+        Lewout=0.015,
+        conductor=-1,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -71,7 +86,21 @@ class WindingUD(Winding):
         if conductor == -1:
             conductor = Conductor()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["user_wind_mat", "is_reverse_wind", "Nslot_shift_wind", "qs", "Ntcoil", "Npcpp", "type_connection", "p", "Lewout", "conductor"])
+            check_init_dict(
+                init_dict,
+                [
+                    "user_wind_mat",
+                    "is_reverse_wind",
+                    "Nslot_shift_wind",
+                    "qs",
+                    "Ntcoil",
+                    "Npcpp",
+                    "type_connection",
+                    "p",
+                    "Lewout",
+                    "conductor",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "user_wind_mat" in list(init_dict.keys()):
                 user_wind_mat = init_dict["user_wind_mat"]
@@ -97,7 +126,17 @@ class WindingUD(Winding):
         # user_wind_mat can be None, a ndarray or a list
         set_array(self, "user_wind_mat", user_wind_mat)
         # Call Winding init
-        super(WindingUD, self).__init__(is_reverse_wind=is_reverse_wind, Nslot_shift_wind=Nslot_shift_wind, qs=qs, Ntcoil=Ntcoil, Npcpp=Npcpp, type_connection=type_connection, p=p, Lewout=Lewout, conductor=conductor)
+        super(WindingUD, self).__init__(
+            is_reverse_wind=is_reverse_wind,
+            Nslot_shift_wind=Nslot_shift_wind,
+            qs=qs,
+            Ntcoil=Ntcoil,
+            Npcpp=Npcpp,
+            type_connection=type_connection,
+            p=p,
+            Lewout=Lewout,
+            conductor=conductor,
+        )
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties
 
@@ -162,5 +201,7 @@ class WindingUD(Winding):
     # user defined Winding matrix
     # Type : ndarray
     user_wind_mat = property(
-        fget=_get_user_wind_mat, fset=_set_user_wind_mat, doc=u"""user defined Winding matrix"""
+        fget=_get_user_wind_mat,
+        fset=_set_user_wind_mat,
+        doc=u"""user defined Winding matrix""",
     )

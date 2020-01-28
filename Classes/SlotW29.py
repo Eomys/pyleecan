@@ -11,7 +11,9 @@ from pyleecan.Classes.SlotWind import SlotWind
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.SlotW29._comp_point_coordinate import _comp_point_coordinate
+    from pyleecan.Methods.Slot.SlotW29._comp_point_coordinate import (
+        _comp_point_coordinate,
+    )
 except ImportError as error:
     _comp_point_coordinate = error
 
@@ -135,7 +137,8 @@ class SlotW29(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW29 method comp_height_wind: " + str(comp_height_wind)
+                    "Can't use SlotW29 method comp_height_wind: "
+                    + str(comp_height_wind)
                 )
             )
         )
@@ -167,7 +170,17 @@ class SlotW29(SlotWind):
     # save method is available in all object
     save = save
 
-    def __init__(self, W0=0.05, H0=0.001, H1=0.0015, W1=0.015, H2=0.03, W2=0.2, Zs=36, init_dict=None):
+    def __init__(
+        self,
+        W0=0.05,
+        H0=0.001,
+        H1=0.0015,
+        W1=0.015,
+        H2=0.03,
+        W2=0.2,
+        Zs=36,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix

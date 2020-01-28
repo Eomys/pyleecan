@@ -21,7 +21,9 @@ except ImportError as error:
     comp_angle_opening = error
 
 try:
-    from pyleecan.Methods.Slot.SlotMFlat.comp_angle_opening_magnet import comp_angle_opening_magnet
+    from pyleecan.Methods.Slot.SlotMFlat.comp_angle_opening_magnet import (
+        comp_angle_opening_magnet,
+    )
 except ImportError as error:
     comp_angle_opening_magnet = error
 
@@ -139,7 +141,16 @@ class SlotMFlat(SlotMag):
     # save method is available in all object
     save = save
 
-    def __init__(self, H0=0, W0=0.0122, W0_is_rad=False, magnet=list(), W3=0, Zs=36, init_dict=None):
+    def __init__(
+        self,
+        H0=0,
+        W0=0.0122,
+        W0_is_rad=False,
+        magnet=list(),
+        W3=0,
+        Zs=36,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -177,7 +188,12 @@ class SlotMFlat(SlotMag):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in ['MagnetFlat', 'MagnetType10', 'MagnetType12', 'MagnetType13']:
+                    if class_name not in [
+                        "MagnetFlat",
+                        "MagnetType10",
+                        "MagnetType12",
+                        "MagnetType13",
+                    ]:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -212,7 +228,9 @@ class SlotMFlat(SlotMag):
         if len(self.magnet) == 0:
             SlotMFlat_str += "magnet = []"
         for ii in range(len(self.magnet)):
-            SlotMFlat_str += "magnet["+str(ii)+"] = "+str(self.magnet[ii].as_dict())+"\n"
+            SlotMFlat_str += (
+                "magnet[" + str(ii) + "] = " + str(self.magnet[ii].as_dict()) + "\n"
+            )
         return SlotMFlat_str
 
     def __eq__(self, other):
@@ -321,6 +339,4 @@ class SlotMFlat(SlotMag):
 
     # List of magnet
     # Type : [MagnetFlat]
-    magnet = property(
-        fget=_get_magnet, fset=_set_magnet, doc=u"""List of magnet"""
-    )
+    magnet = property(fget=_get_magnet, fset=_set_magnet, doc=u"""List of magnet""")

@@ -312,9 +312,7 @@ class Arc2(Arc):
 
     # center of the arc
     # Type : complex
-    center = property(
-        fget=_get_center, fset=_set_center, doc=u"""center of the arc"""
-    )
+    center = property(fget=_get_center, fset=_set_center, doc=u"""center of the arc""")
 
     def _get_angle(self):
         """getter of angle"""

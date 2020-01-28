@@ -118,7 +118,8 @@ class SlotW12(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW12 method comp_height_wind: " + str(comp_height_wind)
+                    "Can't use SlotW12 method comp_height_wind: "
+                    + str(comp_height_wind)
                 )
             )
         )

@@ -11,7 +11,9 @@ from pyleecan.Classes.Slot import Slot
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.Slot19._comp_point_coordinate import _comp_point_coordinate
+    from pyleecan.Methods.Slot.Slot19._comp_point_coordinate import (
+        _comp_point_coordinate,
+    )
 except ImportError as error:
     _comp_point_coordinate = error
 
@@ -135,7 +137,9 @@ class Slot19(Slot):
     # save method is available in all object
     save = save
 
-    def __init__(self, W0=0.013, H0=0.02, W1=0.01, Wx_is_rad=False, Zs=36, init_dict=None):
+    def __init__(
+        self, W0=0.013, H0=0.02, W1=0.01, Wx_is_rad=False, Zs=36, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix

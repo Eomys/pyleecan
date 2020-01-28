@@ -183,7 +183,14 @@ class SurfLine(Surface):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in ['Line', 'Arc', 'Arc1', 'Arc2', 'Arc3', 'Segment']:
+                    if class_name not in [
+                        "Line",
+                        "Arc",
+                        "Arc1",
+                        "Arc2",
+                        "Arc3",
+                        "Segment",
+                    ]:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -215,7 +222,13 @@ class SurfLine(Surface):
         if len(self.line_list) == 0:
             SurfLine_str += "line_list = []"
         for ii in range(len(self.line_list)):
-            SurfLine_str += "line_list["+str(ii)+"] = "+str(self.line_list[ii].as_dict())+"\n"
+            SurfLine_str += (
+                "line_list["
+                + str(ii)
+                + "] = "
+                + str(self.line_list[ii].as_dict())
+                + "\n"
+            )
         return SurfLine_str
 
     def __eq__(self, other):
@@ -269,7 +282,7 @@ class SurfLine(Surface):
             if obj is not None:
                 obj.parent = self
 
-    # List of Lines 
+    # List of Lines
     # Type : [Line]
     line_list = property(
         fget=_get_line_list, fset=_set_line_list, doc=u"""List of Lines """

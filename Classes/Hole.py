@@ -214,6 +214,7 @@ class Hole(FrozenClass):
 
         if self._mat_void is not None:
             self._mat_void.parent = self
+
     # Material of the void part of the hole (Air in general)
     # Type : Material
     mat_void = property(

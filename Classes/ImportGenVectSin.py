@@ -38,7 +38,9 @@ class ImportGenVectSin(ImportMatrix):
     # save method is available in all object
     save = save
 
-    def __init__(self, f=100, A=1, Phi=0, N=1024, Tf=1, is_transpose=False, init_dict=None):
+    def __init__(
+        self, f=100, A=1, Phi=0, N=1024, Tf=1, is_transpose=False, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -191,9 +193,7 @@ class ImportGenVectSin(ImportMatrix):
 
     # Length of the vector to generate
     # Type : int, min = 0
-    N = property(
-        fget=_get_N, fset=_set_N, doc=u"""Length of the vector to generate"""
-    )
+    N = property(fget=_get_N, fset=_set_N, doc=u"""Length of the vector to generate""")
 
     def _get_Tf(self):
         """getter of Tf"""

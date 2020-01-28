@@ -37,7 +37,18 @@ class InCurrent(Input):
     # save method is available in all object
     save = save
 
-    def __init__(self, time=None, angle=None, Is=None, Ir=None, angle_rotor=None, Nr=None, rot_dir=-1, angle_rotor_initial=0, init_dict=None):
+    def __init__(
+        self,
+        time=None,
+        angle=None,
+        Is=None,
+        Ir=None,
+        angle_rotor=None,
+        Nr=None,
+        rot_dir=-1,
+        angle_rotor_initial=0,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -60,7 +71,19 @@ class InCurrent(Input):
         if Nr == -1:
             Nr = Import()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["time", "angle", "Is", "Ir", "angle_rotor", "Nr", "rot_dir", "angle_rotor_initial"])
+            check_init_dict(
+                init_dict,
+                [
+                    "time",
+                    "angle",
+                    "Is",
+                    "Ir",
+                    "angle_rotor",
+                    "Nr",
+                    "rot_dir",
+                    "angle_rotor_initial",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
@@ -82,72 +105,138 @@ class InCurrent(Input):
         # time can be None, a Import object or a dict
         if isinstance(time, dict):
             # Check that the type is correct (including daughter)
-            class_name = time.get('__class__')
-            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for time")
+            class_name = time.get("__class__")
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for time"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.time = class_obj(init_dict=time)
         else:
             self.time = time
         # angle can be None, a Import object or a dict
         if isinstance(angle, dict):
             # Check that the type is correct (including daughter)
-            class_name = angle.get('__class__')
-            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for angle")
+            class_name = angle.get("__class__")
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for angle"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.angle = class_obj(init_dict=angle)
         else:
             self.angle = angle
         # Is can be None, a Import object or a dict
         if isinstance(Is, dict):
             # Check that the type is correct (including daughter)
-            class_name = Is.get('__class__')
-            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for Is")
+            class_name = Is.get("__class__")
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Is"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.Is = class_obj(init_dict=Is)
         else:
             self.Is = Is
         # Ir can be None, a Import object or a dict
         if isinstance(Ir, dict):
             # Check that the type is correct (including daughter)
-            class_name = Ir.get('__class__')
-            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for Ir")
+            class_name = Ir.get("__class__")
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Ir"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.Ir = class_obj(init_dict=Ir)
         else:
             self.Ir = Ir
         # angle_rotor can be None, a Import object or a dict
         if isinstance(angle_rotor, dict):
             # Check that the type is correct (including daughter)
-            class_name = angle_rotor.get('__class__')
-            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for angle_rotor")
+            class_name = angle_rotor.get("__class__")
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for angle_rotor"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.angle_rotor = class_obj(init_dict=angle_rotor)
         else:
             self.angle_rotor = angle_rotor
         # Nr can be None, a Import object or a dict
         if isinstance(Nr, dict):
             # Check that the type is correct (including daughter)
-            class_name = Nr.get('__class__')
-            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for Nr")
+            class_name = Nr.get("__class__")
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Nr"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.Nr = class_obj(init_dict=Nr)
         else:
             self.Nr = Nr
@@ -181,7 +270,9 @@ class InCurrent(Input):
         else:
             InCurrent_str += "Ir = None" + linesep + linesep
         if self.angle_rotor is not None:
-            InCurrent_str += "angle_rotor = " + str(self.angle_rotor.as_dict()) + linesep + linesep
+            InCurrent_str += (
+                "angle_rotor = " + str(self.angle_rotor.as_dict()) + linesep + linesep
+            )
         else:
             InCurrent_str += "angle_rotor = None" + linesep + linesep
         if self.Nr is not None:
@@ -287,6 +378,7 @@ class InCurrent(Input):
 
         if self._time is not None:
             self._time.parent = self
+
     # Electrical time vector (no symmetry) to import
     # Type : Import
     time = property(
@@ -306,6 +398,7 @@ class InCurrent(Input):
 
         if self._angle is not None:
             self._angle.parent = self
+
     # Electrical position vector (no symmetry) to import
     # Type : Import
     angle = property(
@@ -325,6 +418,7 @@ class InCurrent(Input):
 
         if self._Is is not None:
             self._Is.parent = self
+
     # Stator currents as a function of time (each column correspond to one phase) to import
     # Type : Import
     Is = property(
@@ -344,6 +438,7 @@ class InCurrent(Input):
 
         if self._Ir is not None:
             self._Ir.parent = self
+
     # Rotor currents as a function of time (each column correspond to one phase) to import
     # Type : Import
     Ir = property(
@@ -363,6 +458,7 @@ class InCurrent(Input):
 
         if self._angle_rotor is not None:
             self._angle_rotor.parent = self
+
     # Rotor angular position as a function of time (if None computed according to Nr) to import
     # Type : Import
     angle_rotor = property(
@@ -382,6 +478,7 @@ class InCurrent(Input):
 
         if self._Nr is not None:
             self._Nr.parent = self
+
     # Rotor speed as a function of time to import
     # Type : Import
     Nr = property(

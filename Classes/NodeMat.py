@@ -94,7 +94,9 @@ class NodeMat(Node):
     # save method is available in all object
     save = save
 
-    def __init__(self, coordinate=None, nb_node=0, tag=None, delta=1e-10, init_dict=None):
+    def __init__(
+        self, coordinate=None, nb_node=0, tag=None, delta=1e-10, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -133,7 +135,9 @@ class NodeMat(Node):
         NodeMat_str = ""
         # Get the properties inherited from Node
         NodeMat_str += super(NodeMat, self).__str__() + linesep
-        NodeMat_str += "coordinate = " + linesep + str(self.coordinate) + linesep + linesep
+        NodeMat_str += (
+            "coordinate = " + linesep + str(self.coordinate) + linesep + linesep
+        )
         NodeMat_str += "nb_node = " + str(self.nb_node) + linesep
         NodeMat_str += "tag = " + linesep + str(self.tag) + linesep + linesep
         NodeMat_str += "delta = " + str(self.delta)

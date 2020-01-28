@@ -72,4 +72,5 @@ class test_CEFC_002(TestCase):
         # Test save with MeshSolution object in out
         out.save(save_path=save_path)
 
+
 #    def test_magnetic_force(self):

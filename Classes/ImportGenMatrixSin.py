@@ -103,7 +103,9 @@ class ImportGenMatrixSin(ImportMatrix):
         if len(self.sin_list) == 0:
             ImportGenMatrixSin_str += "sin_list = []"
         for ii in range(len(self.sin_list)):
-            ImportGenMatrixSin_str += "sin_list["+str(ii)+"] = "+str(self.sin_list[ii].as_dict())+"\n"
+            ImportGenMatrixSin_str += (
+                "sin_list[" + str(ii) + "] = " + str(self.sin_list[ii].as_dict()) + "\n"
+            )
         return ImportGenMatrixSin_str
 
     def __eq__(self, other):

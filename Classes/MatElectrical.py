@@ -54,7 +54,9 @@ class MatElectrical(FrozenClass):
         if self.parent is None:
             MatElectrical_str += "parent = None " + linesep
         else:
-            MatElectrical_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            MatElectrical_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         MatElectrical_str += "rho = " + str(self.rho) + linesep
         MatElectrical_str += "epsr = " + str(self.epsr) + linesep
         MatElectrical_str += "alpha = " + str(self.alpha)
@@ -103,9 +105,7 @@ class MatElectrical(FrozenClass):
 
     # Resistivity at 20 deg C
     # Type : float, min = 0
-    rho = property(
-        fget=_get_rho, fset=_set_rho, doc=u"""Resistivity at 20 deg C"""
-    )
+    rho = property(fget=_get_rho, fset=_set_rho, doc=u"""Resistivity at 20 deg C""")
 
     def _get_epsr(self):
         """getter of epsr"""
@@ -133,6 +133,4 @@ class MatElectrical(FrozenClass):
 
     # Thermal Coefficient
     # Type : float, min = 0
-    alpha = property(
-        fget=_get_alpha, fset=_set_alpha, doc=u"""Thermal Coefficient"""
-    )
+    alpha = property(fget=_get_alpha, fset=_set_alpha, doc=u"""Thermal Coefficient""")

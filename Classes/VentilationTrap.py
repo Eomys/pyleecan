@@ -83,7 +83,8 @@ class VentilationTrap(Hole):
         comp_surface = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VentilationTrap method comp_surface: " + str(comp_surface)
+                    "Can't use VentilationTrap method comp_surface: "
+                    + str(comp_surface)
                 )
             )
         )
@@ -103,7 +104,9 @@ class VentilationTrap(Hole):
     # save method is available in all object
     save = save
 
-    def __init__(self, Alpha0=0, D0=1, H0=1, W1=1, W2=1, Zh=36, mat_void=-1, init_dict=None):
+    def __init__(
+        self, Alpha0=0, D0=1, H0=1, W1=1, W2=1, Zh=36, mat_void=-1, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -116,7 +119,9 @@ class VentilationTrap(Hole):
         if mat_void == -1:
             mat_void = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["Alpha0", "D0", "H0", "W1", "W2", "Zh", "mat_void"])
+            check_init_dict(
+                init_dict, ["Alpha0", "D0", "H0", "W1", "W2", "Zh", "mat_void"]
+            )
             # Overwrite default value with init_dict content
             if "Alpha0" in list(init_dict.keys()):
                 Alpha0 = init_dict["Alpha0"]
@@ -245,9 +250,7 @@ class VentilationTrap(Hole):
 
     # Radius of the hole bottom
     # Type : float, min = 0
-    H0 = property(
-        fget=_get_H0, fset=_set_H0, doc=u"""Radius of the hole bottom"""
-    )
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Radius of the hole bottom""")
 
     def _get_W1(self):
         """getter of W1"""

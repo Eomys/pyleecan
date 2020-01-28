@@ -205,7 +205,9 @@ class Arc3(Arc):
     # save method is available in all object
     save = save
 
-    def __init__(self, begin=0, end=0, is_trigo_direction=False, label="", init_dict=None):
+    def __init__(
+        self, begin=0, end=0, is_trigo_direction=False, label="", init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -326,5 +328,7 @@ class Arc3(Arc):
     # Rotation direction of the arc
     # Type : bool
     is_trigo_direction = property(
-        fget=_get_is_trigo_direction, fset=_set_is_trigo_direction, doc=u"""Rotation direction of the arc"""
+        fget=_get_is_trigo_direction,
+        fset=_set_is_trigo_direction,
+        doc=u"""Rotation direction of the arc""",
     )

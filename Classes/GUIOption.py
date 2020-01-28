@@ -100,6 +100,7 @@ class GUIOption(FrozenClass):
 
         if self._unit is not None:
             self._unit.parent = self
+
     # Unit options
     # Type : Unit
     unit = property(fget=_get_unit, fset=_set_unit, doc=u"""Unit options""")

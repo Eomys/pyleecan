@@ -186,6 +186,4 @@ class SolutionFEMM(Solution):
 
     # Pemreability per element
     # Type : ndarray
-    mu = property(
-        fget=_get_mu, fset=_set_mu, doc=u"""Pemreability per element"""
-    )
+    mu = property(fget=_get_mu, fset=_set_mu, doc=u"""Pemreability per element""")

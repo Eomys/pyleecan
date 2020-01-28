@@ -187,7 +187,9 @@ class Magnet(FrozenClass):
         else:
             Magnet_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.mat_type is not None:
-            Magnet_str += "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
+            Magnet_str += (
+                "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
+            )
         else:
             Magnet_str += "mat_type = None" + linesep + linesep
         Magnet_str += "type_magnetization = " + str(self.type_magnetization) + linesep
@@ -241,6 +243,7 @@ class Magnet(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     # The Magnet material
     # Type : Material
     mat_type = property(
@@ -275,6 +278,4 @@ class Magnet(FrozenClass):
 
     # Magnet axial length
     # Type : float, min = 0
-    Lmag = property(
-        fget=_get_Lmag, fset=_set_Lmag, doc=u"""Magnet axial length"""
-    )
+    Lmag = property(fget=_get_Lmag, fset=_set_Lmag, doc=u"""Magnet axial length""")

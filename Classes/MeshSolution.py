@@ -55,7 +55,9 @@ class MeshSolution(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, name="", mesh=list(), solution=list(), is_same_mesh=True, init_dict=None):
+    def __init__(
+        self, name="", mesh=list(), solution=list(), is_same_mesh=True, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -102,7 +104,7 @@ class MeshSolution(FrozenClass):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in ['Solution', 'SolutionFEMM']:
+                    if class_name not in ["Solution", "SolutionFEMM"]:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -132,16 +134,34 @@ class MeshSolution(FrozenClass):
         if self.parent is None:
             MeshSolution_str += "parent = None " + linesep
         else:
-            MeshSolution_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            MeshSolution_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         MeshSolution_str += 'name = "' + str(self.name) + '"' + linesep
         if len(self.mesh) == 0:
             MeshSolution_str += "mesh = []"
         for ii in range(len(self.mesh)):
-            MeshSolution_str += "mesh["+str(ii)+"] = "+str(self.mesh[ii].as_dict())+"\n" + linesep + linesep
+            MeshSolution_str += (
+                "mesh["
+                + str(ii)
+                + "] = "
+                + str(self.mesh[ii].as_dict())
+                + "\n"
+                + linesep
+                + linesep
+            )
         if len(self.solution) == 0:
             MeshSolution_str += "solution = []"
         for ii in range(len(self.solution)):
-            MeshSolution_str += "solution["+str(ii)+"] = "+str(self.solution[ii].as_dict())+"\n" + linesep + linesep
+            MeshSolution_str += (
+                "solution["
+                + str(ii)
+                + "] = "
+                + str(self.solution[ii].as_dict())
+                + "\n"
+                + linesep
+                + linesep
+            )
         MeshSolution_str += "is_same_mesh = " + str(self.is_same_mesh)
         return MeshSolution_str
 
@@ -199,7 +219,9 @@ class MeshSolution(FrozenClass):
     # (Optional) Descriptive name of the mesh
     # Type : str
     name = property(
-        fget=_get_name, fset=_set_name, doc=u"""(Optional) Descriptive name of the mesh"""
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""(Optional) Descriptive name of the mesh""",
     )
 
     def _get_mesh(self):
@@ -218,7 +240,7 @@ class MeshSolution(FrozenClass):
             if obj is not None:
                 obj.parent = self
 
-    # A Mesh object. 
+    # A Mesh object.
     # Type : [Mesh]
     mesh = property(fget=_get_mesh, fset=_set_mesh, doc=u"""A Mesh object. """)
 

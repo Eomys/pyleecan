@@ -306,6 +306,4 @@ class Segment(Line):
 
     # end point of the line
     # Type : complex
-    end = property(
-        fget=_get_end, fset=_set_end, doc=u"""end point of the line"""
-    )
+    end = property(fget=_get_end, fset=_set_end, doc=u"""end point of the line""")

@@ -49,7 +49,8 @@ class Magnetics(FrozenClass):
         comp_time_angle = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Magnetics method comp_time_angle: " + str(comp_time_angle)
+                    "Can't use Magnetics method comp_time_angle: "
+                    + str(comp_time_angle)
                 )
             )
         )
@@ -67,7 +68,23 @@ class Magnetics(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, is_remove_slotS=False, is_remove_slotR=False, is_remove_vent=False, is_mmfs=True, is_mmfr=True, is_stator_linear_BH=0, is_rotor_linear_BH=0, is_symmetry_t=False, sym_t=1, is_antiper_t=False, is_symmetry_a=False, sym_a=1, is_antiper_a=False, init_dict=None):
+    def __init__(
+        self,
+        is_remove_slotS=False,
+        is_remove_slotR=False,
+        is_remove_vent=False,
+        is_mmfs=True,
+        is_mmfr=True,
+        is_stator_linear_BH=0,
+        is_rotor_linear_BH=0,
+        is_symmetry_t=False,
+        sym_t=1,
+        is_antiper_t=False,
+        is_symmetry_a=False,
+        sym_a=1,
+        is_antiper_a=False,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -78,7 +95,24 @@ class Magnetics(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["is_remove_slotS", "is_remove_slotR", "is_remove_vent", "is_mmfs", "is_mmfr", "is_stator_linear_BH", "is_rotor_linear_BH", "is_symmetry_t", "sym_t", "is_antiper_t", "is_symmetry_a", "sym_a", "is_antiper_a"])
+            check_init_dict(
+                init_dict,
+                [
+                    "is_remove_slotS",
+                    "is_remove_slotR",
+                    "is_remove_vent",
+                    "is_mmfs",
+                    "is_mmfr",
+                    "is_stator_linear_BH",
+                    "is_rotor_linear_BH",
+                    "is_symmetry_t",
+                    "sym_t",
+                    "is_antiper_t",
+                    "is_symmetry_a",
+                    "sym_a",
+                    "is_antiper_a",
+                ],
+            )
             # Overwrite default value with init_dict content
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
@@ -138,8 +172,12 @@ class Magnetics(FrozenClass):
         Magnetics_str += "is_remove_vent = " + str(self.is_remove_vent) + linesep
         Magnetics_str += "is_mmfs = " + str(self.is_mmfs) + linesep
         Magnetics_str += "is_mmfr = " + str(self.is_mmfr) + linesep
-        Magnetics_str += "is_stator_linear_BH = " + str(self.is_stator_linear_BH) + linesep
-        Magnetics_str += "is_rotor_linear_BH = " + str(self.is_rotor_linear_BH) + linesep
+        Magnetics_str += (
+            "is_stator_linear_BH = " + str(self.is_stator_linear_BH) + linesep
+        )
+        Magnetics_str += (
+            "is_rotor_linear_BH = " + str(self.is_rotor_linear_BH) + linesep
+        )
         Magnetics_str += "is_symmetry_t = " + str(self.is_symmetry_t) + linesep
         Magnetics_str += "sym_t = " + str(self.sym_t) + linesep
         Magnetics_str += "is_antiper_t = " + str(self.is_antiper_t) + linesep
@@ -368,7 +406,9 @@ class Magnetics(FrozenClass):
     # Number of symmetry for the time vector
     # Type : int, min = 1
     sym_t = property(
-        fget=_get_sym_t, fset=_set_sym_t, doc=u"""Number of symmetry for the time vector"""
+        fget=_get_sym_t,
+        fset=_set_sym_t,
+        doc=u"""Number of symmetry for the time vector""",
     )
 
     def _get_is_antiper_t(self):
@@ -417,7 +457,9 @@ class Magnetics(FrozenClass):
     # Number of symmetry for the angle vector
     # Type : int, min = 1
     sym_a = property(
-        fget=_get_sym_a, fset=_set_sym_a, doc=u"""Number of symmetry for the angle vector"""
+        fget=_get_sym_a,
+        fset=_set_sym_a,
+        doc=u"""Number of symmetry for the angle vector""",
     )
 
     def _get_is_antiper_a(self):

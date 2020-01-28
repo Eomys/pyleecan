@@ -122,5 +122,7 @@ class Force(FrozenClass):
     # 1 to compute lumped tooth forces
     # Type : bool
     is_comp_nodal_force = property(
-        fget=_get_is_comp_nodal_force, fset=_set_is_comp_nodal_force, doc=u"""1 to compute lumped tooth forces"""
+        fget=_get_is_comp_nodal_force,
+        fset=_set_is_comp_nodal_force,
+        doc=u"""1 to compute lumped tooth forces""",
     )

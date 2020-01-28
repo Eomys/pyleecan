@@ -113,5 +113,7 @@ class OutPost(FrozenClass):
     # Color to use in case of comparison
     # Type : str
     line_color = property(
-        fget=_get_line_color, fset=_set_line_color, doc=u"""Color to use in case of comparison"""
+        fget=_get_line_color,
+        fset=_set_line_color,
+        doc=u"""Color to use in case of comparison""",
     )

@@ -238,9 +238,7 @@ class VentilationPolar(Hole):
 
     # Radius of the bottom of Hole
     # Type : float, min = 0
-    H0 = property(
-        fget=_get_H0, fset=_set_H0, doc=u"""Radius of the bottom of Hole"""
-    )
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Radius of the bottom of Hole""")
 
     def _get_W1(self):
         """getter of W1"""

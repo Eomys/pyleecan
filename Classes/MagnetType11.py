@@ -11,7 +11,9 @@ from pyleecan.Classes.MagnetPolar import MagnetPolar
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.MagnetType11._comp_point_coordinate import _comp_point_coordinate
+    from pyleecan.Methods.Machine.MagnetType11._comp_point_coordinate import (
+        _comp_point_coordinate,
+    )
 except ImportError as error:
     _comp_point_coordinate = error
 
@@ -92,7 +94,15 @@ class MagnetType11(MagnetPolar):
     # save method is available in all object
     save = save
 
-    def __init__(self, Wmag=0.002, Hmag=0.001, mat_type=-1, type_magnetization=0, Lmag=0.95, init_dict=None):
+    def __init__(
+        self,
+        Wmag=0.002,
+        Hmag=0.001,
+        mat_type=-1,
+        type_magnetization=0,
+        Lmag=0.95,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -105,7 +115,9 @@ class MagnetType11(MagnetPolar):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["Wmag", "Hmag", "mat_type", "type_magnetization", "Lmag"])
+            check_init_dict(
+                init_dict, ["Wmag", "Hmag", "mat_type", "type_magnetization", "Lmag"]
+            )
             # Overwrite default value with init_dict content
             if "Wmag" in list(init_dict.keys()):
                 Wmag = init_dict["Wmag"]
@@ -121,7 +133,9 @@ class MagnetType11(MagnetPolar):
         self.Wmag = Wmag
         self.Hmag = Hmag
         # Call MagnetPolar init
-        super(MagnetType11, self).__init__(mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag)
+        super(MagnetType11, self).__init__(
+            mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag
+        )
         # The class is frozen (in MagnetPolar init), for now it's impossible to
         # add new properties
 
@@ -197,6 +211,4 @@ class MagnetType11(MagnetPolar):
 
     # magnet radial height [m]
     # Type : float, min = 0
-    Hmag = property(
-        fget=_get_Hmag, fset=_set_Hmag, doc=u"""magnet radial height [m]"""
-    )
+    Hmag = property(fget=_get_Hmag, fset=_set_Hmag, doc=u"""magnet radial height [m]""")
