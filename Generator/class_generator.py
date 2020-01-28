@@ -902,7 +902,25 @@ def generate_as_dict(gen_dict, class_dict):
     var_str = ""  # For the creation of the return dict (in as_dict)
 
     for prop in class_dict["properties"]:
-        if prop["type"] in PYTHON_TYPE:
+        if prop["type"] == "dict":
+            var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = dict()\n'
+            var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
+            var_str += TAB3 + "if type(obj) is ndarray:\n"
+            var_str += (
+                TAB4
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"][key] = obj.tolist()\n'
+            )
+            var_str += (
+                TAB3
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"][key] = obj.as_dict()\n'
+            )
+        elif prop["type"] in PYTHON_TYPE:
             # Add => "class_name ["var_name"] = self.var_name" to var_str
             var_str += (
                 TAB2
