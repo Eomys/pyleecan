@@ -69,7 +69,7 @@ class test_CEFC_002(TestCase):
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_CEFC_002_save_mag"))
 
-        # out.save(save_path=save_path)
-
+        # Test save with MeshSolution object in out
+        out.save(save_path=save_path)
 
 #    def test_magnetic_force(self):
