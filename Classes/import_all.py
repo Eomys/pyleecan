@@ -73,7 +73,6 @@ from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.MatStructural import MatStructural
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.Mesh import Mesh
-from pyleecan.Classes.MeshFenics import MeshFenics
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.Node import Node
 from pyleecan.Classes.NodeMat import NodeMat
