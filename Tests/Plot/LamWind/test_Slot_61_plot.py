@@ -23,7 +23,7 @@ from pyleecan.Classes.Winding import Winding
 from pyleecan.Classes.WindingUD import WindingUD
 from pyleecan.Classes.WindingCW2LT import WindingCW2LT
 from pyleecan.Classes.WindingDW2L import WindingDW2L
-from pyleecan.Classes.MatLamination import MatLamination
+from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.SlotW61 import SlotW61
 
 from pyleecan.Tests import save_plot_path as save_path

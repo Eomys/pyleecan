@@ -17,8 +17,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtTest import QTest
 
-from pyleecan.Classes.MatLamination import MatLamination
-from pyleecan.Classes.MatMagnet import MatMagnet
+from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 from pyleecan.Tests import save_load_path as save_path, DATA_DIR
@@ -44,7 +43,7 @@ class test_DMatSetup(TestCase):
         self.test_obj.path = join(self.work_path, "Magnet1.json")
         self.test_obj.is_isotropic = True
         self.test_obj.elec.rho = 0.11
-        self.test_obj.mag = MatLamination(mur_lin=0.12, Wlam=0.13)
+        self.test_obj.mag = MatMagnetics(mur_lin=0.12, Wlam=0.13)
         self.test_obj.struct.rho = 0.14
         self.test_obj.struct.Ex = 0.15
         self.test_obj.struct.Ey = 0.152
@@ -97,7 +96,6 @@ class test_DMatSetup(TestCase):
         self.assertEqual(self.widget.lf_Cp.value(), 0.19)
         self.assertEqual(self.widget.lf_alpha.value(), 0.2)
         self.assertEqual(self.widget.lf_cost_unit.value(), 0.21)
-        self.assertEqual(self.widget.c_type_mat.currentIndex(), 2)
 
         # Test Raw Material
         self.test_obj.mag = None
@@ -116,11 +114,10 @@ class test_DMatSetup(TestCase):
         self.assertEqual(self.widget.lf_Cp.value(), 0.19)
         self.assertEqual(self.widget.lf_alpha.value(), 0.2)
         self.assertEqual(self.widget.lf_cost_unit.value(), 0.21)
-        self.assertEqual(self.widget.c_type_mat.currentIndex(), 0)
 
         # Test Magnet material Non isotropic
         self.test_obj.is_isotropic = False
-        self.test_obj.mag = MatMagnet(mur_lin=0.22, Brm20=0.23, alpha_Br=0.24)
+        self.test_obj.mag = MatMagnetics(mur_lin=0.22, Brm20=0.23, alpha_Br=0.24)
         self.widget = DMatSetup(material=self.test_obj)
 
         self.assertEqual(self.widget.nav_ther.currentIndex(), 0)
@@ -152,7 +149,6 @@ class test_DMatSetup(TestCase):
         self.assertEqual(self.widget.lf_Cp.value(), 0.19)
         self.assertEqual(self.widget.lf_alpha.value(), 0.2)
         self.assertEqual(self.widget.lf_cost_unit.value(), 0.21)
-        self.assertEqual(self.widget.c_type_mat.currentIndex(), 1)
 
     def test_set_name(self):
         """Check that you can change the name and the path
@@ -181,7 +177,7 @@ class test_DMatSetup(TestCase):
         self.assertEqual(self.widget.mat.mag.mur_lin, value)
 
         # Test also for Magnet Materials
-        self.test_obj.mag = MatMagnet()
+        self.test_obj.mag = MatMagnetics()
         self.widget = DMatSetup(material=self.test_obj)
 
         self.widget.lf_mur_lin.clear()  # Clear the field before writing
@@ -203,7 +199,7 @@ class test_DMatSetup(TestCase):
     def test_set_Brm20(self):
         """Check that the Widget allow to update Brm20"""
         # Set Material for Magnet
-        self.test_obj.mag = MatMagnet()
+        self.test_obj.mag = MatMagnetics()
         self.widget = DMatSetup(material=self.test_obj)
 
         self.widget.lf_Brm20.clear()  # Clear the field before writing
@@ -216,7 +212,7 @@ class test_DMatSetup(TestCase):
     def test_set_alpha_Br(self):
         """Check that the Widget allow to update alpha_Br"""
         # Set Material for Magnet
-        self.test_obj.mag = MatMagnet()
+        self.test_obj.mag = MatMagnetics()
         self.widget = DMatSetup(material=self.test_obj)
 
         self.widget.lf_alpha_Br.clear()  # Clear the field before writing
@@ -348,14 +344,3 @@ class test_DMatSetup(TestCase):
         self.widget.lf_Gxz.editingFinished.emit()  # To trigger the slot
 
         self.assertEqual(self.widget.mat.struct.Gxz, value)
-
-    def test_set_mat_type(self):
-        """Check that the Widget allow to change the material type"""
-        self.widget.c_type_mat.setCurrentIndex(0)
-        self.assertEqual(self.widget.mat.mag, None)
-
-        self.widget.c_type_mat.setCurrentIndex(1)
-        self.assertEqual(type(self.widget.mat.mag), MatMagnet)
-
-        self.widget.c_type_mat.setCurrentIndex(2)
-        self.assertEqual(type(self.widget.mat.mag), MatLamination)

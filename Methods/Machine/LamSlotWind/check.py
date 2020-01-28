@@ -6,6 +6,7 @@ Check that the Lamination is correct
 @author pierre_b
 @todo unittest it
 @todo check winding
+@todo check tooth widths
 """
 
 from pyleecan.Classes.Lamination import Lamination
@@ -42,10 +43,12 @@ def check(self):
     if self.comp_height_yoke() < 0:
         raise LWC_SlotTooLong("The Slot is too long for the lamination " "(HYoke <0)")
 
+    """
     Wt = self.slot.comp_tooth_widths()["WTooth_min"]
 
     if Wt < 0:
         raise LWC_OverlappingSlot("The Lamination has overlapping slot")
+    """
 
 
 class Lam_WindCheckError(LaminationCheckError):

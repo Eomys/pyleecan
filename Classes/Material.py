@@ -4,11 +4,11 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
-from pyleecan.Classes.frozen import FrozenClass
+from pyleecan.Classes._frozen import FrozenClass
 
-from pyleecan.Classes.check import InitUnKnowClassError
+from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.MatElectrical import MatElectrical
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.MatStructural import MatStructural
@@ -100,16 +100,7 @@ class Material(FrozenClass):
             self.elec = elec
         # mag can be None, a MatMagnetics object or a dict
         if isinstance(mag, dict):
-            # Check that the type is correct (including daughter)
-            class_name = mag.get("__class__")
-            if class_name not in ["MatMagnetics", "MatLamination", "MatMagnet"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for mag"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.mag = class_obj(init_dict=mag)
+            self.mag = MatMagnetics(init_dict=mag)
         else:
             self.mag = mag
         # struct can be None, a MatStructural object or a dict

@@ -4,9 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes.check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
-from pyleecan.Classes.frozen import FrozenClass
+from pyleecan.Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -51,7 +51,7 @@ except ImportError as error:
     plot = error
 
 
-from pyleecan.Classes.check import InitUnKnowClassError
+from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
 
 
@@ -259,12 +259,12 @@ class Magnet(FrozenClass):
         check_var("type_magnetization", value, "int", Vmin=0, Vmax=5)
         self._type_magnetization = value
 
-    # Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for HallBach []
+    # Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach
     # Type : int, min = 0, max = 5
     type_magnetization = property(
         fget=_get_type_magnetization,
         fset=_set_type_magnetization,
-        doc=u"""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for HallBach []""",
+        doc=u"""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach""",
     )
 
     def _get_Lmag(self):

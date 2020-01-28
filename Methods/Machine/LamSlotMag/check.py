@@ -5,6 +5,7 @@ Check that the Lamination is correct
 @copyright (C) 2015-2016 EOMYS ENGINEERING.
 @author pierre_b
 @todo check magnet
+@todo check tooth widths
 """
 
 from numpy import sin
@@ -51,10 +52,12 @@ def check(self):
     if self.comp_height_yoke() < 0:
         raise LMC_SlotTooLong("The Slot is too long for the lamination " "(HYoke <0)")
 
+    """
     Wt = self.slot.comp_tooth_widths()["WTooth_min"]
 
     if Wt < 0:
         raise LMC_OverlappingSlot("The Lamination has overlapping slot")
+    """
 
     # Magnet check
     if isinstance(self.slot, SlotMFlat):

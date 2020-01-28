@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>583</width>
-    <height>356</height>
+    <width>996</width>
+    <height>711</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -64,7 +64,20 @@
       </layout>
      </item>
      <item>
-      <widget class="QWidget" name="w_step" native="true"/>
+      <widget class="QWidget" name="w_step" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>800</width>
+         <height>660</height>
+        </size>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

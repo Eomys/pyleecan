@@ -3,14 +3,15 @@
 # File generated according to PHoleM52.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_PHoleM52(object):
     def setupUi(self, PHoleM52):
         PHoleM52.setObjectName("PHoleM52")
-        PHoleM52.resize(630, 470)
-        PHoleM52.setMinimumSize(QtCore.QSize(630, 470))
+        PHoleM52.resize(740, 440)
+        PHoleM52.setMinimumSize(QtCore.QSize(740, 440))
         PHoleM52.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.horizontalLayout = QtWidgets.QHBoxLayout(PHoleM52)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -18,14 +19,14 @@ class Ui_PHoleM52(object):
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.img_slot = QtWidgets.QLabel(PHoleM52)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.img_slot.sizePolicy().hasHeightForWidth())
         self.img_slot.setSizePolicy(sizePolicy)
-        self.img_slot.setMinimumSize(QtCore.QSize(200, 0))
-        self.img_slot.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.img_slot.setMinimumSize(QtCore.QSize(500, 213))
+        self.img_slot.setMaximumSize(QtCore.QSize(500, 213))
         self.img_slot.setText("")
         self.img_slot.setPixmap(
             QtGui.QPixmap(":/images/images/MachineSetup/WSlot/Slot_52.PNG")
@@ -35,7 +36,7 @@ class Ui_PHoleM52(object):
         self.verticalLayout_3.addWidget(self.img_slot)
         self.txt_constraint = QtWidgets.QTextEdit(PHoleM52)
         sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
         )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -51,6 +52,10 @@ class Ui_PHoleM52(object):
         )
         self.txt_constraint.setObjectName("txt_constraint")
         self.verticalLayout_3.addWidget(self.txt_constraint)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
+        self.verticalLayout_3.addItem(spacerItem)
         self.horizontalLayout.addLayout(self.verticalLayout_3)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -119,6 +124,10 @@ class Ui_PHoleM52(object):
         self.out_W1 = QtWidgets.QLabel(self.g_output)
         self.out_W1.setObjectName("out_W1")
         self.verticalLayout.addWidget(self.out_W1)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
+        self.verticalLayout.addItem(spacerItem1)
         self.verticalLayout_2.addWidget(self.g_output)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
@@ -139,7 +148,7 @@ class Ui_PHoleM52(object):
                 '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
-                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
                 '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt; font-weight:600; text-decoration: underline;">Constraints :</span></p>\n'
                 '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:14pt;">H2 &lt; H1</span></p>\n'
                 '<p align="center" style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;"><br /></p></body></html>',

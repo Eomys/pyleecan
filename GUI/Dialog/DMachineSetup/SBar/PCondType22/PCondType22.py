@@ -60,7 +60,7 @@ class PCondType22(Gen_PCondType22, QWidget):
             self.machine.rotor.winding.conductor = CondType22()
             self.machine.rotor.winding.conductor._set_None()
 
-        self.w_mat.update(self.machine.rotor.winding.conductor.cond_mat, matlib)
+        self.w_mat.update(conductor, "cond_mat", matlib)
 
         # Update active surface for output display
         self.machine.rotor.winding.conductor.Sbar = (

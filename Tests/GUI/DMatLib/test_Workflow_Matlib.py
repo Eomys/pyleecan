@@ -21,7 +21,6 @@ from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 from pyleecan.Classes.Material import Material
-from pyleecan.Classes.MatLamination import MatLamination
 from pyleecan.Functions.load import load_matlib
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib

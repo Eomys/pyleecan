@@ -211,7 +211,7 @@ def check_type(var_name, value, expect_type, type_value):
             )
         # Check type of value element
         expect_type = expect_type[1:-1]
-        for element in value:
+        for key, element in value.items():
             type_value = type(element).__name__
             # Check if it's the expected type
             if not type_value == expect_type:

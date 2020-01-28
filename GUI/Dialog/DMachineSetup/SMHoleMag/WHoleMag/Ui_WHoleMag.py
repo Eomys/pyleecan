@@ -3,15 +3,18 @@
 # File generated according to WHoleMag.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_WHoleMag(object):
     def setupUi(self, WHoleMag):
         WHoleMag.setObjectName("WHoleMag")
-        WHoleMag.resize(630, 470)
-        WHoleMag.setMinimumSize(QtCore.QSize(630, 470))
+        WHoleMag.resize(760, 490)
+        WHoleMag.setMinimumSize(QtCore.QSize(760, 490))
         self.main_layout = QtWidgets.QVBoxLayout(WHoleMag)
+        self.main_layout.setContentsMargins(5, 5, 5, 5)
+        self.main_layout.setSpacing(4)
         self.main_layout.setObjectName("main_layout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -31,7 +34,14 @@ class Ui_WHoleMag(object):
         self.horizontalLayout.addItem(spacerItem)
         self.main_layout.addLayout(self.horizontalLayout)
         self.w_hole = QtWidgets.QWidget(WHoleMag)
-        self.w_hole.setMinimumSize(QtCore.QSize(640, 480))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.w_hole.sizePolicy().hasHeightForWidth())
+        self.w_hole.setSizePolicy(sizePolicy)
+        self.w_hole.setMinimumSize(QtCore.QSize(750, 450))
         self.w_hole.setObjectName("w_hole")
         self.main_layout.addWidget(self.w_hole)
 

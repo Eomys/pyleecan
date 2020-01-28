@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.MatLamination import MatLamination
 from pyleecan.Methods.Output.Output.getter import GetOutError
 
 
@@ -34,10 +33,8 @@ def get_BH_stator(self):
             "Output.simu.machine.stator.mat_type is not Set, can't get the B(H) curve"
         )
     mat_type = self.simu.machine.stator.mat_type
-    if mat_type.mag is None or type(mat_type.mag) is not MatLamination:
-        raise GetOutError(
-            "Stator material should have a MatLamination object for magnetic properties"
-        )
+    if mat_type.mag is None:
+        raise GetOutError("stator materials magnetic property is not set")
 
     # Compute and store the BH curve
     BH = mat_type.mag.get_BH()
