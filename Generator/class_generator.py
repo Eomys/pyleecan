@@ -101,7 +101,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
     if "function" in import_type_list:
         class_file.write("from inspect import getsource\n")
         class_file.write("from cloudpickle import dumps, loads\n")
-        class_file.write("from pyleecan.Classes.check import CheckTypeError\n")
+        class_file.write("from pyleecan.Classes._check import CheckTypeError\n")
         import_type_list.remove("function")
 
     # Import of all needed pyleecan type for empty init
@@ -783,12 +783,12 @@ def generate_str(gen_dict, class_dict):
             var_str += TAB2 + "for ii in range(len(self." + prop["name"] + ")):\n"
             var_str += (
                 TAB3
-                + class_name
-                + '_str += "'
+                + "tmp = self."
                 + prop["name"]
-                + '["+str(ii)+"] = "+str(self.'
-                + prop["name"]
-                + '[ii].as_dict())+"\\n"'
+                + '[ii].__str__()[:-2].replace(linesep, linesep + "\\t")+"\\n" \n'
+            )
+            var_str += (
+                TAB3 + class_name + '_str += "' + prop["name"] + '["+str(ii)+"] ="+ tmp'
             )
         elif is_dict_pyleecan_type(prop["type"]):
             var_str += TAB2 + "if len(self." + prop["name"] + ") == 0:\n"
@@ -796,25 +796,32 @@ def generate_str(gen_dict, class_dict):
             var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
             var_str += (
                 TAB3
-                + class_name
-                + '_str += "'
+                + "tmp = self."
                 + prop["name"]
-                + '["+key+"] = "+str(self.'
-                + prop["name"]
-                + "[key].as_dict())"
+                + '[key].__str__()[:-2].replace(linesep, linesep + "\\t")+"\\n" \n'
+            )
+            var_str += (
+                TAB3 + class_name + '_str += "' + prop["name"] + '["+key+"] ="+ tmp'
             )
         else:  # For pyleecan type print the dict (from as_dict)
             # Add => < "MyClass = "+str(self.my_var.as_dict()) >to var_str
             var_str += TAB2 + "if self." + prop["name"] + " is not None:\n"
+            # var_str += (
+            #     TAB3
+            #     + class_name
+            #     + "_str += \""
+            #     + prop["name"]
+            #     + ' = " + str(self.'
+            #     + prop["name"]
+            #     + ".as_dict()) + linesep + linesep\n"
+            # )
             var_str += (
                 TAB3
-                + class_name
-                + '_str += "'
+                + "tmp = self."
                 + prop["name"]
-                + ' = " + str(self.'
-                + prop["name"]
-                + ".as_dict()) + linesep + linesep\n"
+                + '.__str__()[:-2].replace(linesep, linesep + "\\t") \n'
             )
+            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = "+ tmp\n'
             var_str += TAB2 + "else:\n"
             var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = None"'
 
