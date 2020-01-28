@@ -1,18 +1,13 @@
 # -*- coding: utf-8 -*-
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
 from deap.tools import selNSGA2, cxOnePoint
 from copy import deepcopy
-import random
-import numpy as np
 from datetime import datetime
-
+import random
 import time
-import inspect
-from pyleecan.Classes.Output import Output
+import logging
 
-# from pyleecan.Classes.OptiGenAlgIndivDeap import OptiGenAlgIndivDeap
+from pyleecan.Classes.Output import Output
 from pyleecan.Functions.Optimization.evaluate import evaluate
 from pyleecan.Functions.Optimization.update import update
 from pyleecan.Functions.Optimization.check_cstr import check_cstr
@@ -20,6 +15,8 @@ from pyleecan.Functions.Optimization.tournamentDCD import tournamentDCD
 
 
 class MissingProblem(Exception):
+    """Class to Raise an error"""
+
     def __init__(self, message):
         self.message = message
 
@@ -52,13 +49,16 @@ def solve(self):
     # Create the first population
     pop = self.toolbox.population(self.size_pop)
 
+    # Start of the evaluation of the generation
+    time_start_gen = datetime.now().strftime("%H:%M:%S")
+
     # Evaluate the population
     nb_error = 0
     for i in range(0, self.size_pop):
         nb_error += evaluate(self, pop[i])
         print(
-            "\rgen 0: {:>3}%, {:>4} errors.".format(
-                (i + 1) * 100 / self.size_pop, nb_error
+            "\r{}  gen {:>5}: {:>5.2f}%, {:>4} errors.".format(
+                time_start_gen, 0, (i + 1) * 100 / self.size_pop, nb_error
             ),
             end="",
         )
@@ -69,8 +69,8 @@ def solve(self):
         for indiv in pop:
             nb_infeasible += check_cstr(self, indiv)
     print(
-        "\rgen 0: 100%, {:>4} errors,{:>4} infeasible.".format(
-            nb_error, nb_infeasible - nb_error
+        "\r{}  gen {:>5}: 100%, {:>4} errors,{:>4} infeasible.".format(
+            time_start_gen, 0, nb_error, nb_infeasible - nb_error
         )
     )
 
@@ -93,7 +93,7 @@ def solve(self):
     # LOOP FOR EACH GENERATION #
     ############################
     for ngen in range(1, self.nb_gen):
-        print(datetime.now().strftime("%H:%M:%S"), "Generation:", ngen)
+        time_start_gen = datetime.now().strftime("%H:%M:%S")
         # Extracting parents using
         parents = tournamentDCD(pop, self.size_pop)
 
@@ -139,8 +139,8 @@ def solve(self):
         for i in range(len(to_eval)):
             nb_error += evaluate(self, to_eval[i])
             print(
-                "\rgen {}: {:>3}%, {:>4} errors.".format(
-                    ngen, (i + 1) * 100 / len(to_eval), nb_error
+                "\r{}  gen {:>5}: {:>5.2f}%, {:>4} errors.".format(
+                    time_start_gen, ngen, (i + 1) * 100 / len(to_eval), nb_error
                 ),
                 end="",
             )
@@ -151,8 +151,8 @@ def solve(self):
             for indiv in to_eval:
                 nb_infeasible += check_cstr(self, indiv)
         print(
-            "\rgen 0: 100%, {:>4} errors,{:>4} infeasible.".format(
-                nb_error, nb_infeasible - nb_error
+            "\r{}  gen {:>5}: 100%, {:>4} errors,{:>4} infeasible.".format(
+                time_start_gen, ngen, nb_error, nb_infeasible - nb_error
             )
         )
         # Add children to OutputMultiOpti
