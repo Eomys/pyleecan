@@ -21,9 +21,7 @@ except ImportError as error:
     comp_angle_opening = error
 
 try:
-    from pyleecan.Methods.Slot.SlotMPolar.comp_angle_opening_magnet import (
-        comp_angle_opening_magnet,
-    )
+    from pyleecan.Methods.Slot.SlotMPolar.comp_angle_opening_magnet import comp_angle_opening_magnet
 except ImportError as error:
     comp_angle_opening_magnet = error
 
@@ -162,11 +160,7 @@ class SlotMPolar(SlotMag):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in [
-                        "MagnetPolar",
-                        "MagnetType11",
-                        "MagnetType14",
-                    ]:
+                    if class_name not in ['MagnetPolar', 'MagnetType11', 'MagnetType14']:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -200,9 +194,7 @@ class SlotMPolar(SlotMag):
         if len(self.magnet) == 0:
             SlotMPolar_str += "magnet = []"
         for ii in range(len(self.magnet)):
-            SlotMPolar_str += (
-                "magnet[" + str(ii) + "] = " + str(self.magnet[ii].as_dict()) + "\n"
-            )
+            SlotMPolar_str += "magnet["+str(ii)+"] = "+str(self.magnet[ii].as_dict())+"\n"
         return SlotMPolar_str
 
     def __eq__(self, other):
@@ -292,4 +284,6 @@ class SlotMPolar(SlotMag):
 
     # List of magnet
     # Type : [MagnetPolar]
-    magnet = property(fget=_get_magnet, fset=_set_magnet, doc=u"""List of magnet""")
+    magnet = property(
+        fget=_get_magnet, fset=_set_magnet, doc=u"""List of magnet"""
+    )

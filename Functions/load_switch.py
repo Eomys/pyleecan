@@ -75,6 +75,7 @@ load_switch = {
     "MatStructural": MatStructural,
     "Material": Material,
     "Mesh": Mesh,
+    "MeshFenics": MeshFenics,
     "MeshSolution": MeshSolution,
     "Node": Node,
     "NodeMat": NodeMat,

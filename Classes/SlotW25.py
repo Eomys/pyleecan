@@ -11,9 +11,7 @@ from pyleecan.Classes.SlotWind import SlotWind
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.SlotW25._comp_point_coordinate import (
-        _comp_point_coordinate,
-    )
+    from pyleecan.Methods.Slot.SlotW25._comp_point_coordinate import _comp_point_coordinate
 except ImportError as error:
     _comp_point_coordinate = error
 
@@ -137,8 +135,7 @@ class SlotW25(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW25 method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotW25 method comp_height_wind: " + str(comp_height_wind)
                 )
             )
         )

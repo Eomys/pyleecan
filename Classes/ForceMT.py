@@ -44,8 +44,7 @@ class ForceMT(Force):
         comp_force_nodal = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ForceMT method comp_force_nodal: "
-                    + str(comp_force_nodal)
+                    "Can't use ForceMT method comp_force_nodal: " + str(comp_force_nodal)
                 )
             )
         )

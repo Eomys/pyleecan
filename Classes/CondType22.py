@@ -11,9 +11,7 @@ from pyleecan.Classes.Conductor import Conductor
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.CondType22.comp_surface_active import (
-        comp_surface_active,
-    )
+    from pyleecan.Methods.Machine.CondType22.comp_surface_active import comp_surface_active
 except ImportError as error:
     comp_surface_active = error
 
@@ -141,4 +139,6 @@ class CondType22(Conductor):
 
     # Surface of the Slot
     # Type : float, min = 0
-    Sbar = property(fget=_get_Sbar, fset=_set_Sbar, doc=u"""Surface of the Slot""")
+    Sbar = property(
+        fget=_get_Sbar, fset=_set_Sbar, doc=u"""Surface of the Slot"""
+    )

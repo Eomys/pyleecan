@@ -53,39 +53,24 @@ class Simulation(FrozenClass):
         # machine can be None, a Machine object or a dict
         if isinstance(machine, dict):
             # Check that the type is correct (including daughter)
-            class_name = machine.get("__class__")
-            if class_name not in [
-                "Machine",
-                "MachineAsync",
-                "MachineDFIM",
-                "MachineIPMSM",
-                "MachineSCIM",
-                "MachineSIPMSM",
-                "MachineSRM",
-                "MachineSyRM",
-                "MachineSync",
-                "MachineWRSM",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for machine"
-                )
+            class_name = machine.get('__class__')
+            if class_name not in ['Machine', 'MachineAsync', 'MachineDFIM', 'MachineIPMSM', 'MachineSCIM', 'MachineSIPMSM', 'MachineSRM', 'MachineSyRM', 'MachineSync', 'MachineWRSM']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for machine")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.machine = class_obj(init_dict=machine)
         else:
             self.machine = machine
         # input can be None, a Input object or a dict
         if isinstance(input, dict):
             # Check that the type is correct (including daughter)
-            class_name = input.get("__class__")
-            if class_name not in ["Input", "InCurrent", "InFlux", "InForce"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for input"
-                )
+            class_name = input.get('__class__')
+            if class_name not in ['Input', 'InCurrent', 'InFlux', 'InForce']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for input")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.input = class_obj(init_dict=input)
         else:
             self.input = input
@@ -104,9 +89,7 @@ class Simulation(FrozenClass):
         Simulation_str += 'name = "' + str(self.name) + '"' + linesep
         Simulation_str += 'desc = "' + str(self.desc) + '"' + linesep
         if self.machine is not None:
-            Simulation_str += (
-                "machine = " + str(self.machine.as_dict()) + linesep + linesep
-            )
+            Simulation_str += "machine = " + str(self.machine.as_dict()) + linesep + linesep
         else:
             Simulation_str += "machine = None" + linesep + linesep
         if self.input is not None:
@@ -170,7 +153,9 @@ class Simulation(FrozenClass):
 
     # Name of the simulation
     # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""Name of the simulation""")
+    name = property(
+        fget=_get_name, fset=_set_name, doc=u"""Name of the simulation"""
+    )
 
     def _get_desc(self):
         """getter of desc"""
@@ -183,7 +168,9 @@ class Simulation(FrozenClass):
 
     # Simulation description
     # Type : str
-    desc = property(fget=_get_desc, fset=_set_desc, doc=u"""Simulation description""")
+    desc = property(
+        fget=_get_desc, fset=_set_desc, doc=u"""Simulation description"""
+    )
 
     def _get_machine(self):
         """getter of machine"""
@@ -196,7 +183,6 @@ class Simulation(FrozenClass):
 
         if self._machine is not None:
             self._machine.parent = self
-
     # Machine to simulate
     # Type : Machine
     machine = property(
@@ -214,7 +200,6 @@ class Simulation(FrozenClass):
 
         if self._input is not None:
             self._input.parent = self
-
     # Input of the simulation
     # Type : Input
     input = property(

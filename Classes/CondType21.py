@@ -11,9 +11,7 @@ from pyleecan.Classes.Conductor import Conductor
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.CondType21.comp_surface_active import (
-        comp_surface_active,
-    )
+    from pyleecan.Methods.Machine.CondType21.comp_surface_active import comp_surface_active
 except ImportError as error:
     comp_surface_active = error
 
@@ -105,9 +103,7 @@ class CondType21(Conductor):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self, Hbar=0.01, Wbar=0.01, Wins=0, cond_mat=-1, ins_mat=-1, init_dict=None
-    ):
+    def __init__(self, Hbar=0.01, Wbar=0.01, Wins=0, cond_mat=-1, ins_mat=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -231,4 +227,6 @@ class CondType21(Conductor):
 
     # Width of insulation
     # Type : float, min = 0
-    Wins = property(fget=_get_Wins, fset=_set_Wins, doc=u"""Width of insulation""")
+    Wins = property(
+        fget=_get_Wins, fset=_set_Wins, doc=u"""Width of insulation"""
+    )

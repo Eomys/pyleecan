@@ -63,3 +63,4 @@ class Import(FrozenClass):
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
+

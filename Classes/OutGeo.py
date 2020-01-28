@@ -20,16 +20,7 @@ class OutGeo(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        stator=None,
-        rotor=None,
-        Wgap_mec=None,
-        Wgap_mag=None,
-        Rgap_mec=None,
-        Lgap=None,
-        init_dict=None,
-    ):
+    def __init__(self, stator=None, rotor=None, Wgap_mec=None, Wgap_mag=None, Rgap_mec=None, Lgap=None, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -44,10 +35,7 @@ class OutGeo(FrozenClass):
         if rotor == -1:
             rotor = OutGeoLam()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["stator", "rotor", "Wgap_mec", "Wgap_mag", "Rgap_mec", "Lgap"],
-            )
+            check_init_dict(init_dict, ["stator", "rotor", "Wgap_mec", "Wgap_mag", "Rgap_mec", "Lgap"])
             # Overwrite default value with init_dict content
             if "stator" in list(init_dict.keys()):
                 stator = init_dict["stator"]
@@ -166,7 +154,6 @@ class OutGeo(FrozenClass):
 
         if self._stator is not None:
             self._stator.parent = self
-
     # Geometry output of the stator
     # Type : OutGeoLam
     stator = property(
@@ -184,7 +171,6 @@ class OutGeo(FrozenClass):
 
         if self._rotor is not None:
             self._rotor.parent = self
-
     # Geometry output of the rotor
     # Type : OutGeoLam
     rotor = property(
@@ -253,4 +239,6 @@ class OutGeo(FrozenClass):
 
     # Airgap active length
     # Type : float
-    Lgap = property(fget=_get_Lgap, fset=_set_Lgap, doc=u"""Airgap active length""")
+    Lgap = property(
+        fget=_get_Lgap, fset=_set_Lgap, doc=u"""Airgap active length"""
+    )

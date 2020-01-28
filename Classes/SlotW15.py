@@ -11,9 +11,7 @@ from pyleecan.Classes.SlotWind import SlotWind
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.SlotW15._comp_point_coordinate import (
-        _comp_point_coordinate,
-    )
+    from pyleecan.Methods.Slot.SlotW15._comp_point_coordinate import _comp_point_coordinate
 except ImportError as error:
     _comp_point_coordinate = error
 
@@ -132,8 +130,7 @@ class SlotW15(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW15 method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotW15 method comp_height_wind: " + str(comp_height_wind)
                 )
             )
         )
@@ -153,18 +150,7 @@ class SlotW15(SlotWind):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        W0=0.0122,
-        W3=0.0122,
-        H0=0.001,
-        H1=0.0015,
-        H2=0.0122,
-        R1=0.001,
-        R2=0.001,
-        Zs=36,
-        init_dict=None,
-    ):
+    def __init__(self, W0=0.0122, W3=0.0122, H0=0.001, H1=0.0015, H2=0.0122, R1=0.001, R2=0.001, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -327,7 +313,9 @@ class SlotW15(SlotWind):
 
     # Slot intermediate height.
     # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Slot intermediate height.""")
+    H1 = property(
+        fget=_get_H1, fset=_set_H1, doc=u"""Slot intermediate height."""
+    )
 
     def _get_H2(self):
         """getter of H2"""

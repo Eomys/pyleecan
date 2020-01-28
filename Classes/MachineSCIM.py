@@ -57,17 +57,7 @@ class MachineSCIM(MachineDFIM):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        rotor=-1,
-        stator=-1,
-        frame=-1,
-        shaft=-1,
-        name="default_machine",
-        desc="",
-        type_machine=1,
-        init_dict=None,
-    ):
+    def __init__(self, rotor=-1, stator=-1, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -86,10 +76,7 @@ class MachineSCIM(MachineDFIM):
         if shaft == -1:
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["rotor", "stator", "frame", "shaft", "name", "desc", "type_machine"],
-            )
+            check_init_dict(init_dict, ["rotor", "stator", "frame", "shaft", "name", "desc", "type_machine"])
             # Overwrite default value with init_dict content
             if "rotor" in list(init_dict.keys()):
                 rotor = init_dict["rotor"]
@@ -107,15 +94,7 @@ class MachineSCIM(MachineDFIM):
                 type_machine = init_dict["type_machine"]
         # Initialisation by argument
         # Call MachineDFIM init
-        super(MachineSCIM, self).__init__(
-            rotor=rotor,
-            stator=stator,
-            frame=frame,
-            shaft=shaft,
-            name=name,
-            desc=desc,
-            type_machine=type_machine,
-        )
+        super(MachineSCIM, self).__init__(rotor=rotor, stator=stator, frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine)
         # The class is frozen (in MachineDFIM init), for now it's impossible to
         # add new properties
 
