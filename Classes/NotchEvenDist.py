@@ -17,7 +17,7 @@ except ImportError as error:
     build_geometry = error
 
 
-from numpy import array, array_equal
+from numpy import array, empty, array_equal
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
 

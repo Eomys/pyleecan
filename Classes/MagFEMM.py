@@ -300,10 +300,7 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["file_name"] = self.file_name
         MagFEMM_dict["FEMM_dict"] = dict()
         for key, obj in self.FEMM_dict.items():
-            if type(obj) is numpy.ndarray:
-                MagFEMM_dict["FEMM_dict"][key] = obj.tolist()
-            else:
-                MagFEMM_dict["FEMM_dict"][key] = obj.as_dict()
+            MagFEMM_dict["FEMM_dict"][key] = obj.as_dict()
         MagFEMM_dict["angle_stator"] = self.angle_stator
         MagFEMM_dict["is_get_mesh"] = self.is_get_mesh
         MagFEMM_dict["is_save_FEA"] = self.is_save_FEA
