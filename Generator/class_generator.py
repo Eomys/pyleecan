@@ -56,7 +56,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Import
     class_file.write("from os import linesep\n")
-    class_file.write("import numpy\n")
+    # class_file.write("import numpy\n")
     if "ndarray" in import_type_list:
         class_file.write(
             "from pyleecan.Classes._check import set_array, "
