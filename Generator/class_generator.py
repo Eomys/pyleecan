@@ -56,7 +56,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Import
     class_file.write("from os import linesep\n")
-    # class_file.write("import numpy\n")
+
     if "ndarray" in import_type_list:
         class_file.write(
             "from pyleecan.Classes._check import set_array, "
@@ -93,6 +93,10 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write(import_method(class_pack, class_name, meth))
     if len(class_dict["methods"]) > 0:
         class_file.write("\n")
+
+    if "{ndarray}" in import_type_list:
+        class_file.write("from numpy import array, array_equal\n")
+        import_type_list.remove("{ndarray}")
 
     # For Matrix and Vector (numpy) property
     if "ndarray" in import_type_list:
@@ -802,7 +806,7 @@ def generate_str(gen_dict, class_dict):
                 + prop["name"]
                 + '["+key+"] = "+str(self.'
                 + prop["name"]
-                + "[key].as_dict())"
+                + "[key])"
             )
         elif is_dict_pyleecan_type(prop["type"]):
             var_str += TAB2 + "if len(self." + prop["name"] + ") == 0:\n"
@@ -946,17 +950,7 @@ def generate_as_dict(gen_dict, class_dict):
     var_str = ""  # For the creation of the return dict (in as_dict)
 
     for prop in class_dict["properties"]:
-        if prop["type"] == "dict":
-            var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = dict()\n'
-            var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
-            var_str += (
-                TAB3
-                + class_name
-                + '_dict["'
-                + prop["name"]
-                + '"][key] = obj.as_dict()\n'
-            )
-        elif prop["type"] in PYTHON_TYPE:
+        if prop["type"] in PYTHON_TYPE:
             # Add => "class_name ["var_name"] = self.var_name" to var_str
             var_str += (
                 TAB2
@@ -1088,7 +1082,7 @@ def generate_set_None(gen_dict, class_dict):
             var_str += TAB3 + "obj._set_None()\n"
         elif prop["type"] == "{ndarray}":
             var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
-            var_str += TAB3 + "obj._set_None()\n"
+            var_str += TAB3 + "obj = dict()\n"
         elif is_dict_pyleecan_type(prop["type"]):
             var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
             var_str += TAB3 + "obj._set_None()\n"
@@ -1144,15 +1138,8 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB2 + "for obj in self._" + prop["name"] + ":\n"
             prop_str += TAB3 + "if obj is not None:\n"
             prop_str += TAB4 + "obj.parent = self\n"
-        elif prop["type"] == "{ndarray}":
-            prop_str += TAB2 + "for key, obj in self._" + prop["name"] + ".items():\n"
-            prop_str += TAB3 + "if type(obj) is list:\n"
-            prop_str += TAB4 + "try:\n"
-            prop_str += TAB5 + "obj = array(obj)\n"
-            prop_str += TAB4 + "except:\n"
-            prop_str += TAB5 + "pass\n"
 
-        elif is_dict_pyleecan_type(prop["type"]):
+        elif is_dict_pyleecan_type(prop["type"]) and prop["type"] != "{ndarray}":
             # TODO: Update the parent should be done only in the setter but
             # their is an issue with .append for list of pyleecan type
             prop_str += TAB2 + "for key, obj in self._" + prop["name"] + ".items():\n"
@@ -1170,6 +1157,14 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB4 + "value = array(value)\n"
             prop_str += TAB3 + "except:\n"
             prop_str += TAB4 + "pass\n"
+
+        elif prop["type"] == "{ndarray}":
+            prop_str += TAB2 + "for key, obj in value.items():\n"
+            prop_str += TAB3 + "if type(obj) is list:\n"
+            prop_str += TAB4 + "try:\n"
+            prop_str += TAB5 + "obj = array(obj)\n"
+            prop_str += TAB4 + "except:\n"
+            prop_str += TAB5 + "pass\n"
 
         # Add check_var("var_name",value, "var_type", min=var_min, max=var_max)
         prop_str += (
