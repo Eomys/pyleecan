@@ -23,7 +23,7 @@ except ImportError as error:
     get_dim_wind = error
 
 
-from numpy import array, empty, array_equal
+from numpy import array, array_equal
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Conductor import Conductor
 

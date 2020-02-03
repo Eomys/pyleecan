@@ -8,7 +8,7 @@ from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
-from numpy import array, empty, array_equal
+from numpy import array, array_equal
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.MeshSolution import MeshSolution
 

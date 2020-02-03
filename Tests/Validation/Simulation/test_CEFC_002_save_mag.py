@@ -86,4 +86,3 @@ class test_CEFC_002(TestCase):
             title="Permeability",
             field=FEMM.mag.meshsolution.solution[0].face["mu"],
         )
-

@@ -94,14 +94,17 @@ def generate_class(gen_dict, class_name, path_to_gen):
     if len(class_dict["methods"]) > 0:
         class_file.write("\n")
 
-    if "{ndarray}" in import_type_list:
-        class_file.write("from numpy import array, array_equal\n")
-        import_type_list.remove("{ndarray}")
-
-    # For Matrix and Vector (numpy) property
-    if "ndarray" in import_type_list:
+    if "{ndarray}" in import_type_list and "ndarray" in import_type_list:
         class_file.write("from numpy import array, empty, array_equal\n")
+        import_type_list.remove("{ndarray}")
         import_type_list.remove("ndarray")
+    elif "ndarray" in import_type_list:
+        class_file.write("from numpy import array, array_equal\n")
+        import_type_list.remove("ndarray")
+    # For Matrix and Vector (numpy) property
+    elif "{ndarray}" in import_type_list:
+        class_file.write("from numpy import array, empty\n")
+        import_type_list.remove("{ndarray}")
 
     # Import of all needed pyleecan type for empty init
     class_file.write("from pyleecan.Classes._check import InitUnKnowClassError\n")

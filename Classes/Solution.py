@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -21,7 +21,7 @@ except ImportError as error:
     set_field = error
 
 
-from numpy import array, empty, array_equal
+from numpy import array, empty
 from pyleecan.Classes._check import InitUnKnowClassError
 
 
