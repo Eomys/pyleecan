@@ -13,6 +13,8 @@ from pyleecan.Tests import save_validation_path as save_path
 from os.path import join
 
 import matplotlib.pyplot as plt
+import json
+import numpy as np
 from pyleecan.Functions.FEMM import GROUP_SC
 
 simu = Simu1(name="SM_CEFC_002_save_mag", machine=CEFC_Lam, struct=None)
@@ -64,7 +66,7 @@ class test_CEFC_002(TestCase):
         out.plot_mesh_field(
             mesh=out.mag.meshsolution.mesh[0],
             title="Permeability",
-            field=out.mag.meshsolution.solution[0].mu,
+            field=out.mag.meshsolution.solution[0].face["mu"],
         )
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_CEFC_002_save_mag"))
@@ -72,5 +74,16 @@ class test_CEFC_002(TestCase):
         # Test save with MeshSolution object in out
         out.save(save_path=save_path)
 
+        load_path = join(save_path, "Output.json")
+        # Test to load the Meshsolution object (inside the output):
+        with open(load_path) as json_file:
+            json_tmp = json.load(json_file)
+            FEMM = Output(init_dict=json_tmp)
 
-#    def test_magnetic_force(self):
+        # To test that the "mu" is still a ndarray after saving and loading
+        out.plot_mesh_field(
+            mesh=FEMM.mag.meshsolution.mesh[0],
+            title="Permeability",
+            field=FEMM.mag.meshsolution.solution[0].face["mu"],
+        )
+
