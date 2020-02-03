@@ -21,7 +21,7 @@ for k=1,nelm do
 	p1,p2,p3,cx,cy,s,grp=mo_getelement(k);
 	a,bx,by,o,nrg,hx,hy,Je,Js,mux,muy=mo_getpointvalues(cx,cy);	
 	write(fp2,p1," ",p2," ",p3," ",cx," ",cy," ",s," ",grp,"\n");
-	write(fp3,bx," ",by," ",hx," ",hy," ",mux,"\n");
+	write(fp3,bx," ",by," ",hx," ",hy," ",mux," ", a,"\n");
 end
 
 closefile(fp2);

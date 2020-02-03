@@ -2,12 +2,10 @@ import os
 import numpy as np
 
 from pyleecan.Generator import MAIN_DIR
-from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.Element import Element
 from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.SolutionFEMM import SolutionFEMM
+from pyleecan.Classes.Solution import Solution
 from femm import callfemm
 from os.path import join
 
@@ -104,6 +102,15 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
     else:
         mesh = None
 
-    solution = SolutionFEMM(B=results[:, 0:2], H=results[:, 2:4], mu=results[:, 4])
+    B = results[:, 0:2]
+    H = results[:, 2:4]
+    mu = results[:, 4]
+    Az = results[:, 5]
+
+    solution = Solution()
+    solution.set_field(field_value=B, field_name="B", field_type="face")
+    solution.set_field(field_value=H, field_name="H", field_type="face")
+    solution.set_field(field_value=mu, field_name="mu", field_type="face")
+    solution.set_field(field_value=Az, field_name="Az", field_type="nodal")
 
     return mesh, solution
