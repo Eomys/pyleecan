@@ -1,5 +1,5 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-name,,(Optional) Descriptive name of the mesh,,,str,,,,,,,Mesh,,get_mesh,VERSION,1,To associate a Mesh with one or several solutions,
-mesh,,A Mesh object. ,,,[Mesh],,,,,,,,,get_solution,,,,
-solution,,A Solution object which are defined with respect to the mesh attribute.,,,[Solution],,,,,,,,,,,,,
-is_same_mesh,,1 if the mesh is the same at each time step,,,bool,1,,,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+name,,(Optional) Descriptive name of the mesh,,str,,,,,Mesh,,get_mesh,VERSION,1,To associate a Mesh with one or several solutions
+mesh,,A Mesh object. ,,[Mesh],,,,,,,get_solution,,,
+solution,,A Solution object which are defined with respect to the mesh attribute.,,[Solution],,,,,,,,,,
+is_same_mesh,,1 if the mesh is the same at each time step,,bool,1,,,,,,,,,

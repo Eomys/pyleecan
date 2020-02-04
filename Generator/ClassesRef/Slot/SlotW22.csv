@@ -1,9 +1,9 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-W0,rad,Slot isthmus orthoradial angular width.,,0,float,0.043633,0,,,,,Slot,SlotWind,build_geometry,VERSION,1,semi-closed orthoradial without fillet without wedge,
-H0,m,Slot isthmus radial height.,,0,float,0.006,0,,,,,,,build_geometry_wind,IS_SYMMETRICAL,1,,
-H2,m,Slot radial height below wedge ,,0,float,0.04,0,,,,,,,check,,,,
-W2,rad,Angle between slot edges,,0,float,0.08725,0,,,,,,,comp_angle_opening,,,,
-,,,,,,,,,,,,,,comp_height,,,,
-,,,,,,,,,,,,,,comp_height_wind,,,,
-,,,,,,,,,,,,,,comp_surface,,,,
-,,,,,,,,,,,,,,comp_surface_wind,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+W0,rad,Slot isthmus orthoradial angular width.,0,float,0.043633,0,,,Slot,SlotWind,build_geometry,VERSION,1,semi-closed orthoradial without fillet without wedge
+H0,m,Slot isthmus radial height.,0,float,0.006,0,,,,,build_geometry_wind,IS_SYMMETRICAL,1,
+H2,m,Slot radial height below wedge ,0,float,0.04,0,,,,,check,,,
+W2,rad,Angle between slot edges,0,float,0.08725,0,,,,,comp_angle_opening,,,
+,,,,,,,,,,,comp_height,,,
+,,,,,,,,,,,comp_height_wind,,,
+,,,,,,,,,,,comp_surface,,,
+,,,,,,,,,,,comp_surface_wind,,,

@@ -1,10 +1,10 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-element,,Storing connectivity,,,{Element},,,,,,,Mesh,,set_submesh,VERSION,1,Gather the mesh storage format,
-node,,Storing nodes,,,Node,,,,,,,,,get_all_node_coord,,,,
-submesh,,Storing submeshes. Node and element numbers/tags or group must be the same.,,,[Mesh],,,,,,,,,add_element,,,,
-,,,,,,,,,,,,,,get_all_connectivity,,,,
-,,,,,,,,,,,,,,get_connectivity,,,,
-,,,,,,,,,,,,,,get_new_tag,,,,
-,,,,,,,,,,,,,,interface,,,,
-,,,,,,,,,,,,,,get_node_tags,,,,
-,,,,,,,,,,,,,,get_vertice,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+element,,Storing connectivity,,{Element},,,,,Mesh,,set_submesh,VERSION,1,Gather the mesh storage format
+node,,Storing nodes,,Node,,,,,,,get_all_node_coord,,,
+submesh,,Storing submeshes. Node and element numbers/tags or group must be the same.,,[Mesh],,,,,,,add_element,,,
+,,,,,,,,,,,get_all_connectivity,,,
+,,,,,,,,,,,get_connectivity,,,
+,,,,,,,,,,,get_new_tag,,,
+,,,,,,,,,,,interface,,,
+,,,,,,,,,,,get_node_tags,,,
+,,,,,,,,,,,get_vertice,,,

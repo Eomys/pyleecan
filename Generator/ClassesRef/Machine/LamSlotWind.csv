@@ -1,13 +1,13 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-Ksfill,-,"Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)",,,float,None,0,1,,,,Machine,LamSlot,build_geometry,VERSION,1,Lamination with Slot filled with winding,LamSquirrelCage
-winding,,Lamination's Winding,,,Winding,,,,,,,,,check,,,,
-,,,,,,,,,,,,,,comp_masses,,,,
-,,,,,,,,,,,,,,comp_surfaces,,,,
-,,,,,,,,,,,,,,comp_volumes,,,,
-,,,,,,,,,,,,,,get_pole_pair_number,,,,
-,,,,,,,,,,,,,,get_name_phase,,,,
-,,,,,,,,,,,,,,plot,,,,
-,,,,,,,,,,,,,,plot_winding,,,,
-,,,,,,,,,,,,,,comp_fill_factor,,,,
-,,,,,,,,,,,,,,comp_output_geo,,,,
-,,,,,,,,,,,,,,get_polar_eq,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Ksfill,-,"Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)",,float,None,0,1,,Machine,LamSlot,build_geometry,VERSION,1,Lamination with Slot filled with winding
+winding,,Lamination's Winding,,Winding,,,,,,,check,,,
+,,,,,,,,,,,comp_masses,,,
+,,,,,,,,,,,comp_surfaces,,,
+,,,,,,,,,,,comp_volumes,,,
+,,,,,,,,,,,get_pole_pair_number,,,
+,,,,,,,,,,,get_name_phase,,,
+,,,,,,,,,,,plot,,,
+,,,,,,,,,,,plot_winding,,,
+,,,,,,,,,,,comp_fill_factor,,,
+,,,,,,,,,,,comp_output_geo,,,
+,,,,,,,,,,,get_polar_eq,,,
