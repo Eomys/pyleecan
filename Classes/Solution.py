@@ -204,14 +204,10 @@ class Solution(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for key, obj in self.nodal.items():
-            obj = dict()
-        for key, obj in self.edge.items():
-            obj = dict()
-        for key, obj in self.face.items():
-            obj = dict()
-        for key, obj in self.volume.items():
-            obj = dict()
+        self.nodal = dict()
+        self.edge = dict()
+        self.face = dict()
+        self.volume = dict()
 
     def _get_nodal(self):
         """getter of nodal"""
