@@ -56,6 +56,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Import
     class_file.write("from os import linesep\n")
+
     if "ndarray" in import_type_list:
         class_file.write(
             "from pyleecan.Classes._check import set_array, "
@@ -93,10 +94,17 @@ def generate_class(gen_dict, class_name, path_to_gen):
     if len(class_dict["methods"]) > 0:
         class_file.write("\n")
 
-    # For Matrix and Vector (numpy) property
-    if "ndarray" in import_type_list:
+    if "{ndarray}" in import_type_list and "ndarray" in import_type_list:
+        class_file.write("from numpy import array, empty, array_equal\n")
+        import_type_list.remove("{ndarray}")
+        import_type_list.remove("ndarray")
+    elif "ndarray" in import_type_list:
         class_file.write("from numpy import array, array_equal\n")
         import_type_list.remove("ndarray")
+    # For Matrix and Vector (numpy) property
+    elif "{ndarray}" in import_type_list:
+        class_file.write("from numpy import array, empty\n")
+        import_type_list.remove("{ndarray}")
 
     # Import of all needed pyleecan type for empty init
     class_file.write("from pyleecan.Classes._check import InitUnKnowClassError\n")
@@ -308,6 +316,33 @@ def generate_init(gen_dict, class_dict):
             init_by_var += TAB2 + "else:\n"
             init_by_var += TAB3 + "self." + prop["name"] + " = " + prop["name"] + "\n"
 
+        elif prop["type"] == "{ndarray}":
+            # List of ndarray
+            init_by_var += (
+                TAB2 + "# " + prop["name"] + " can be None or a dict of ndarray\n"
+            )
+            init_by_var += TAB2 + "self." + prop["name"] + " = dict()\n"
+            init_by_var += TAB2 + "if type(" + prop["name"] + ") is dict:\n"
+            init_by_var += TAB3 + "for key, obj in " + prop["name"] + ".items():\n"
+
+            init_by_var += TAB4 + "if obj is None:  # Default value\n"
+            init_by_var += TAB5 + "value = empty(0)\n"
+            init_by_var += TAB4 + "elif isinstance(obj, list):\n"
+            init_by_var += TAB5 + "value = array(obj)\n"
+            init_by_var += TAB4 + "self." + prop["name"] + "[key] = value\n"
+
+            init_by_var += TAB2 + "elif " + prop["name"] + " is None:\n"
+            init_by_var += TAB3 + "self." + prop["name"] + " = dict()\n"
+            init_by_var += TAB2 + "else:\n"
+            init_by_var += (
+                TAB3
+                + "self."
+                + prop["name"]
+                + " = "
+                + prop["name"]
+                + "# Should raise an error\n"
+            )
+
         elif is_dict_pyleecan_type(prop["type"]):
             # List of pyleecan type
             init_by_var += (
@@ -394,6 +429,9 @@ def generate_init(gen_dict, class_dict):
         elif is_list_pyleecan_type(prop["type"]):
             # List of pyleecan type
             arg_list += ", " + prop["name"] + "=list()"
+        elif prop["type"] == "{ndarray}":
+            # Dict of ndarray
+            arg_list += ", " + prop["name"] + "=dict()"
         elif is_dict_pyleecan_type(prop["type"]):
             # Dict of pyleecan type
             arg_list += ", " + prop["name"] + "=dict()"
@@ -760,6 +798,19 @@ def generate_str(gen_dict, class_dict):
                 + prop["name"]
                 + '[ii].as_dict())+"\\n"'
             )
+        elif prop["type"] == "{ndarray}":
+            var_str += TAB2 + "if len(self." + prop["name"] + ") == 0:\n"
+            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = dict()"\n'
+            var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
+            var_str += (
+                TAB3
+                + class_name
+                + '_str += "'
+                + prop["name"]
+                + '["+key+"] = "+str(self.'
+                + prop["name"]
+                + "[key])"
+            )
         elif is_dict_pyleecan_type(prop["type"]):
             var_str += TAB2 + "if len(self." + prop["name"] + ") == 0:\n"
             var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = dict()"\n'
@@ -938,6 +989,16 @@ def generate_as_dict(gen_dict, class_dict):
                 + prop["name"]
                 + '"].append(obj.as_dict())\n'
             )
+        elif prop["type"] == "{ndarray}":
+            var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = dict()\n'
+            var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
+            var_str += (
+                TAB3
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"][key] = obj.tolist()\n'
+            )
         elif is_dict_pyleecan_type(prop["type"]):
             var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = dict()\n'
             var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
@@ -1022,6 +1083,8 @@ def generate_set_None(gen_dict, class_dict):
         elif is_list_pyleecan_type(prop["type"]):
             var_str += TAB2 + "for obj in self." + prop["name"] + ":\n"
             var_str += TAB3 + "obj._set_None()\n"
+        elif prop["type"] == "{ndarray}":
+            var_str += TAB2 + "self." + prop["name"] + " = dict()\n"
         elif is_dict_pyleecan_type(prop["type"]):
             var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
             var_str += TAB3 + "obj._set_None()\n"
@@ -1077,7 +1140,8 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB2 + "for obj in self._" + prop["name"] + ":\n"
             prop_str += TAB3 + "if obj is not None:\n"
             prop_str += TAB4 + "obj.parent = self\n"
-        elif is_dict_pyleecan_type(prop["type"]):
+
+        elif is_dict_pyleecan_type(prop["type"]) and prop["type"] != "{ndarray}":
             # TODO: Update the parent should be done only in the setter but
             # their is an issue with .append for list of pyleecan type
             prop_str += TAB2 + "for key, obj in self._" + prop["name"] + ".items():\n"
@@ -1095,6 +1159,14 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB4 + "value = array(value)\n"
             prop_str += TAB3 + "except:\n"
             prop_str += TAB4 + "pass\n"
+
+        elif prop["type"] == "{ndarray}":
+            prop_str += TAB2 + "for key, obj in value.items():\n"
+            prop_str += TAB3 + "if type(obj) is list:\n"
+            prop_str += TAB4 + "try:\n"
+            prop_str += TAB5 + "obj = array(obj)\n"
+            prop_str += TAB4 + "except:\n"
+            prop_str += TAB5 + "pass\n"
 
         # Add check_var("var_name",value, "var_type", min=var_min, max=var_max)
         prop_str += (
@@ -1118,6 +1190,7 @@ def generate_properties(gen_dict, class_dict):
             prop["type"] not in PYTHON_TYPE
             and prop["type"] != "ndarray"
             and not is_dict_pyleecan_type(prop["type"])
+            and prop["type"] != "{ndarray}"
         ):
             # pyleecan type
             prop_str += TAB2 + "if self._" + prop["name"] + " is not None:\n"

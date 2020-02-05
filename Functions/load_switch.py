@@ -118,7 +118,6 @@ load_switch = {
     "SlotW61": SlotW61,
     "SlotWind": SlotWind,
     "Solution": Solution,
-    "SolutionFEMM": SolutionFEMM,
     "Structural": Structural,
     "SurfLine": SurfLine,
     "Surface": Surface,

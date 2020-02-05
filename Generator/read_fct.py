@@ -277,7 +277,8 @@ def is_dict_pyleecan_type(type_name):
     is_list : bool
         True if the type is a dict of pyleecan type
     """
-    return type_name[0] == "{" and type_name[-1] == "}"
+
+    return type_name[0] == "{" and type_name[-1] == "}" and type_name != "{ndarray}"
 
 
 class NotAFile(Exception):
