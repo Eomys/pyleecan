@@ -25,8 +25,8 @@ def comp_flux_airgap(self, output):
             sym *= 2
         if self.is_sliding_band:
             self.is_sliding_band = (
-                True
-            )  # When there is a symmetry, there must be a sliding band.
+                True  # When there is a symmetry, there must be a sliding band.
+            )
     else:
         sym = 1
 
