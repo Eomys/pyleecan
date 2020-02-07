@@ -36,6 +36,7 @@ def generate_code(root_path, gen_dict=None):
     print("Saving generated files in: " + CLASS_DIR)
 
     path = __file__[__file__.index("pyleecan") :]
+    path = path.replace("\\", "/")
 
     # Deleting all the previous class
     print("Deleting old class files...")
