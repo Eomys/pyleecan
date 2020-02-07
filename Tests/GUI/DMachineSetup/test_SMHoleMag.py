@@ -15,13 +15,13 @@ from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 from pyleecan.Classes.MachineSyRM import MachineSyRM
 from pyleecan.Classes.Magnet import Magnet
-from pyleecan.Classes.Material import Material
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.HoleM51 import HoleM51
 from pyleecan.Classes.HoleM52 import HoleM52
 from pyleecan.Classes.HoleM53 import HoleM53
 from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
+from pyleecan.Classes.Material import Material
 
 
 class test_SMHoleMag(TestCase):
@@ -80,10 +80,6 @@ class test_SMHoleMag(TestCase):
             self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 50"
         )
         self.assertEqual(self.widget.tab_hole.widget(0).c_hole_type.count(), 4)
-        # Check that the material is visible
-        self.assertFalse(self.widget.w_mat.isHidden())
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentText(), "Magnet3")
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentIndex(), 2)
 
     def test_init_SyRM(self):
         """Check that the Widget initialize to the correct hole"""
@@ -97,8 +93,6 @@ class test_SMHoleMag(TestCase):
             self.widget2.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 54"
         )
         self.assertEqual(self.widget2.tab_hole.widget(0).c_hole_type.count(), 5)
-        # Check that the material is hidden
-        self.assertTrue(self.widget2.w_mat.isHidden())
 
     def test_init_SyRM_51(self):
         """Check that the Widget initialize to the correct hole"""
@@ -161,8 +155,6 @@ class test_SMHoleMag(TestCase):
         self.assertEqual(
             self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 51"
         )
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentText(), "Magnet1")
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentIndex(), 0)
 
     def test_init_52(self):
         """Check that you can edit a hole 52"""
@@ -178,8 +170,6 @@ class test_SMHoleMag(TestCase):
         self.assertEqual(
             self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 52"
         )
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentText(), "Magnet1")
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentIndex(), 0)
 
     def test_init_53(self):
         """Check that you can edit a hole 53"""
@@ -195,8 +185,6 @@ class test_SMHoleMag(TestCase):
         self.assertEqual(
             self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 53"
         )
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentText(), "Magnet1")
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentIndex(), 0)
 
     def test_set_type_51(self):
         """ """
@@ -210,9 +198,6 @@ class test_SMHoleMag(TestCase):
         self.assertEqual(
             self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 51"
         )
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentText(), "Magnet3")
-        self.assertEqual(self.test_obj.rotor.hole[0].magnet_0.mat_type.name, "Magnet3")
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentIndex(), 2)
 
     def test_set_type_52(self):
         """ """
@@ -226,9 +211,6 @@ class test_SMHoleMag(TestCase):
         self.assertEqual(
             self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 52"
         )
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentText(), "Magnet3")
-        self.assertEqual(self.test_obj.rotor.hole[0].magnet_0.mat_type.name, "Magnet3")
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentIndex(), 2)
 
     def test_set_type_53(self):
         """ """
@@ -242,9 +224,6 @@ class test_SMHoleMag(TestCase):
         self.assertEqual(
             self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 53"
         )
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentText(), "Magnet3")
-        self.assertEqual(self.test_obj.rotor.hole[0].magnet_0.mat_type.name, "Magnet3")
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentIndex(), 2)
 
     def test_SyRM_set_type_54_51_54(self):
         """Set a type 54 for a SyRM then set a 51 to check how the magnets are handled
@@ -274,18 +253,6 @@ class test_SMHoleMag(TestCase):
         )
         self.assertEqual(type(self.test_obj2.rotor.hole[0]), HoleM54)
         self.assertEqual(self.test_obj2.rotor.hole[0].Zh, 16)
-
-    def test_set_material(self):
-        """Check that you can change the magnet material"""
-        self.widget.w_mat.c_mat_type.setCurrentIndex(1)
-
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentText(), "Magnet2")
-        self.assertEqual(self.test_obj.rotor.hole[0].magnet_0.mat_type.name, "Magnet2")
-
-        self.widget.w_mat.c_mat_type.setCurrentIndex(2)
-
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentText(), "Magnet3")
-        self.assertEqual(self.test_obj.rotor.hole[0].magnet_0.mat_type.name, "Magnet3")
 
     def test_add_remove_hole(self):
         self.assertEqual(len(self.test_obj.rotor.hole), 1)

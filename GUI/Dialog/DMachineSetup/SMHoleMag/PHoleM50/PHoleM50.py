@@ -30,7 +30,7 @@ class PHoleM50(Gen_PHoleM50, QWidget):
     hole_name = "Slot Type 50"
     hole_type = HoleM50
 
-    def __init__(self, hole=None):
+    def __init__(self, hole=None, matlib=[]):
         """Initialize the widget according to hole
 
         Parameters
@@ -39,10 +39,15 @@ class PHoleM50(Gen_PHoleM50, QWidget):
             A PHoleM50 widget
         hole : HoleM50
             current hole to edit
+        matlib : list
+            List of available Material
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)
         self.setupUi(self)
+
+        self.matlib = matlib
+        self.hole = hole
 
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
@@ -56,10 +61,23 @@ class PHoleM50(Gen_PHoleM50, QWidget):
         self.lf_H3.unit = "m"
         self.lf_H4.unit = "m"
 
+        # Set default materials
+        self.w_mat_0.setText("magnet_0:")
+        self.w_mat_0.def_mat = "Magnet1"
+        self.w_mat_1.setText("magnet_1:")
+        self.w_mat_1.def_mat = "Magnet1"
+
+        # Adapt GUI with/without magnet
         if hole.magnet_0 is None:  # SyRM
             self.img_slot.setPixmap(
                 QPixmap(":/images/images/MachineSetup/WSlot/Slot_50_no_mag.PNG")
             )
+            self.w_mat_0.hide()
+            self.w_mat_1.hide()
+        else:
+            # Set current material
+            self.w_mat_0.update(self.hole.magnet_0, "mat_type", self.matlib)
+            self.w_mat_1.update(self.hole.magnet_1, "mat_type", self.matlib)
 
         # Set unit name (m ou mm)
         self.u = gui_option.unit
@@ -77,8 +95,6 @@ class PHoleM50(Gen_PHoleM50, QWidget):
         ]
         for wid in wid_list:
             wid.setText(self.u.get_m_name())
-
-        self.hole = hole
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.hole.W0)
@@ -106,6 +122,8 @@ class PHoleM50(Gen_PHoleM50, QWidget):
         self.lf_H2.editingFinished.connect(self.set_H2)
         self.lf_H3.editingFinished.connect(self.set_H3)
         self.lf_H4.editingFinished.connect(self.set_H4)
+        self.w_mat_0.saveNeeded.connect(self.emit_save)
+        self.w_mat_1.saveNeeded.connect(self.emit_save)
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit
@@ -321,3 +339,8 @@ class PHoleM50(Gen_PHoleM50, QWidget):
             self.hole.check()
         except SlotCheckError as error:
             return str(error)
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup
+        """
+        self.saveNeeded.emit()

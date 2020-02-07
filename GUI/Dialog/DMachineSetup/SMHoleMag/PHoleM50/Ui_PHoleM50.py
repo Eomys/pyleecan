@@ -3,7 +3,6 @@
 # File generated according to PHoleM50.ui
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -153,6 +152,14 @@ class Ui_PHoleM50(object):
         self.unit_W4.setObjectName("unit_W4")
         self.gridLayout.addWidget(self.unit_W4, 9, 2, 1, 1)
         self.verticalLayout_2.addLayout(self.gridLayout)
+        self.w_mat_0 = WMatSelect(PHoleM50)
+        self.w_mat_0.setMinimumSize(QtCore.QSize(100, 0))
+        self.w_mat_0.setObjectName("w_mat_0")
+        self.verticalLayout_2.addWidget(self.w_mat_0)
+        self.w_mat_1 = WMatSelect(PHoleM50)
+        self.w_mat_1.setMinimumSize(QtCore.QSize(100, 0))
+        self.w_mat_1.setObjectName("w_mat_1")
+        self.verticalLayout_2.addWidget(self.w_mat_1)
         self.g_output = QtWidgets.QGroupBox(PHoleM50)
         self.g_output.setMinimumSize(QtCore.QSize(200, 0))
         self.g_output.setObjectName("g_output")
@@ -198,11 +205,11 @@ class Ui_PHoleM50(object):
                 '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
-                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt; font-weight:600; text-decoration: underline;">Constraints :</span></p>\n'
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:14pt;">H2 &lt; H3</span></p>\n'
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:14pt;">W1 &lt; W0</span></p>\n'
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:14pt;">H1 &lt; H0 </span></p></body></html>',
+                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt; font-weight:600; text-decoration: underline;">Constraints :</span></p>\n'
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:14pt;">H2 &lt; H3</span></p>\n'
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:14pt;">W1 &lt; W0</span></p>\n'
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:14pt;">H1 &lt; H0 </span></p></body></html>',
             )
         )
         self.in_H0.setText(_translate("PHoleM50", "H0 :"))
@@ -236,5 +243,6 @@ class Ui_PHoleM50(object):
         self.out_W5.setText(_translate("PHoleM50", "W5 : ?"))
 
 
+from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

@@ -30,7 +30,7 @@ class PHoleM52(Gen_PHoleM52, QWidget):
     hole_name = "Slot Type 52"
     hole_type = HoleM52
 
-    def __init__(self, hole=None):
+    def __init__(self, hole=None, matlib=[]):
         """Initialize the widget according to hole
 
         Parameters
@@ -39,10 +39,15 @@ class PHoleM52(Gen_PHoleM52, QWidget):
             A PHoleM52 widget
         hole : HoleM52
             current hole to edit
+        matlib : list
+            List of available Material
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)
         self.setupUi(self)
+
+        self.matlib = matlib
+        self.hole = hole
 
         # Set FloatEdit unit
         self.lf_W0.unit = "m"
@@ -50,6 +55,10 @@ class PHoleM52(Gen_PHoleM52, QWidget):
         self.lf_H0.unit = "m"
         self.lf_H1.unit = "m"
         self.lf_H2.unit = "m"
+
+        # Set default materials
+        self.w_mat_0.setText("magnet_0:")
+        self.w_mat_0.def_mat = "Magnet1"
 
         # Set unit name (m ou mm)
         self.u = gui_option.unit
@@ -63,12 +72,14 @@ class PHoleM52(Gen_PHoleM52, QWidget):
         for wid in wid_list:
             wid.setText(self.u.get_m_name())
 
-        self.hole = hole
-
+        # Adapt GUI with/without magnet
         if hole.magnet_0 is None:  # SyRM
             self.img_slot.setPixmap(
                 QPixmap(":/images/images/MachineSetup/WSlot/Slot_52_no_mag.PNG")
             )
+            self.w_mat_0.hide()
+        else:
+            self.w_mat_0.update(self.hole.magnet_0, "mat_type", self.matlib)
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.hole.W0)
@@ -86,6 +97,11 @@ class PHoleM52(Gen_PHoleM52, QWidget):
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_H1.editingFinished.connect(self.set_H1)
         self.lf_H2.editingFinished.connect(self.set_H2)
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup
+        """
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit

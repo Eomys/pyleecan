@@ -14,6 +14,7 @@ from PyQt5.QtTest import QTest
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM52 import HoleM52
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52.PHoleM52 import PHoleM52
+from pyleecan.Classes.Material import Material
 
 
 class test_PHoleM52(TestCase):
@@ -24,7 +25,14 @@ class test_PHoleM52(TestCase):
         self.test_obj = LamHole(Rint=0.1, Rext=0.2)
         self.test_obj.hole = list()
         self.test_obj.hole.append(HoleM52(H0=0.10, H1=0.11, H2=0.12, W0=0.13, W3=0.17))
-        self.widget = PHoleM52(self.test_obj.hole[0])
+        self.test_obj.hole[0].magnet_0.mat_type.name = "Magnet2"
+
+        self.matlib = list()
+        self.matlib.append(Material(name="Magnet1"))
+        self.matlib.append(Material(name="Magnet2"))
+        self.matlib.append(Material(name="Magnet3"))
+
+        self.widget = PHoleM52(self.test_obj.hole[0], self.matlib)
 
     @classmethod
     def setUpClass(cls):
@@ -45,6 +53,10 @@ class test_PHoleM52(TestCase):
         self.assertEqual(self.widget.lf_H2.value(), 0.12)
         self.assertEqual(self.widget.lf_W0.value(), 0.13)
         self.assertEqual(self.widget.lf_W3.value(), 0.17)
+        # Check material
+        self.assertFalse(self.widget.w_mat_0.isHidden())
+        self.assertEqual(self.widget.w_mat_0.c_mat_type.currentText(), "Magnet2")
+        self.assertEqual(self.widget.w_mat_0.c_mat_type.currentIndex(), 1)
 
     def test_set_W0(self):
         """Check that the Widget allow to update W0"""
@@ -91,3 +103,10 @@ class test_PHoleM52(TestCase):
 
         self.assertEqual(self.widget.hole.H2, 0.36)
         self.assertEqual(self.test_obj.hole[0].H2, 0.36)
+
+    def test_set_material_0(self):
+        """Check that you can change the material of magnet_0"""
+        self.widget.w_mat_0.c_mat_type.setCurrentIndex(0)
+
+        self.assertEqual(self.widget.w_mat_0.c_mat_type.currentText(), "Magnet1")
+        self.assertEqual(self.test_obj.hole[0].magnet_0.mat_type.name, "Magnet1")
