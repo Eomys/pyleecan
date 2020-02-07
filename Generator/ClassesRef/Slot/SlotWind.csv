@@ -1,19 +1,19 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-,,,,,,,,,,,,Slot,Slot,comp_angle_wind_eq,VERSION,1,Slot for winding (abstract),SlotW10
-,,,,,,,,,,,,,,comp_height_wind,,,,SlotW11
-,,,,,,,,,,,,,,comp_radius_mid_wind,,,,SlotW12
-,,,,,,,,,,,,,,comp_surface_wind,,,,SlotW13
-,,,,,,,,,,,,,,plot_wind,,,,SlotW14
-,,,,,,,,,,,,,,,,,,SlotW15
-,,,,,,,,,,,,,,,,,,SlotW16
-,,,,,,,,,,,,,,,,,,SlotW21
-,,,,,,,,,,,,,,,,,,SlotW22
-,,,,,,,,,,,,,,,,,,SlotW23
-,,,,,,,,,,,,,,,,,,SlotW24
-,,,,,,,,,,,,,,,,,,SlotW25
-,,,,,,,,,,,,,,,,,,SlotW26
-,,,,,,,,,,,,,,,,,,SlotW27
-,,,,,,,,,,,,,,,,,,SlotW28
-,,,,,,,,,,,,,,,,,,SlotW29
-,,,,,,,,,,,,,,,,,,SlotW60
-,,,,,,,,,,,,,,,,,,SlotW61
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+,,,,,,,,,Slot,Slot,comp_angle_wind_eq,VERSION,1,Slot for winding (abstract)
+,,,,,,,,,,,comp_height_wind,,,
+,,,,,,,,,,,comp_radius_mid_wind,,,
+,,,,,,,,,,,comp_surface_wind,,,
+,,,,,,,,,,,plot_wind,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,

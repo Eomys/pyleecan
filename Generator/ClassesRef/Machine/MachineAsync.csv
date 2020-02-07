@@ -1,3 +1,3 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-,,,,,,,,,,,,Machine,Machine,is_synchronous,VERSION,1,Abstract class for asynchronous machines,MachineSCIM
-,,,,,,,,,,,,,,,,,,MachineDFIM
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+,,,,,,,,,Machine,Machine,is_synchronous,VERSION,1,Abstract class for asynchronous machines
+,,,,,,,,,,,,,,

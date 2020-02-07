@@ -12,17 +12,17 @@ from pyleecan.Generator import PYTHON_TYPE
 # Constants for csv reading, i.e. column number of data
 NAME_COL = 0  # attribue name
 EN_DESC_COL = 2  # english description
-TYPE_COL = 5  # type
-DEF_VAL_COL = 6  # default value
-MIN_VAL_COL = 7  # minimum value
-MAX_VAL_COL = 8  # maximum value
+TYPE_COL = 4  # type
+DEF_VAL_COL = 5  # default value
+MIN_VAL_COL = 6  # minimum value
+MAX_VAL_COL = 7  # maximum value
 
-PACK_COL = 12  # package
-HER_COL = 13  # mother class name
-METH_COL = 14  # methods list
-CST_NAME_COL = 15  # constants name list
-CST_VAL_COL = 16  # constants value list
-CLASS_DEF_COL = 17  # class description
+PACK_COL = 9  # package
+HER_COL = 10  # mother class name
+METH_COL = 11  # methods list
+CST_NAME_COL = 12  # constants name list
+CST_VAL_COL = 13  # constants value list
+CLASS_DEF_COL = 14  # class description
 # DAUG_COL = 18  # daughter class list (unused)
 
 
