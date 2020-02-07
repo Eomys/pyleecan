@@ -7,6 +7,7 @@ import numpy as np
 def plot_mesh_field(
     self,
     meshsolution=None,
+    field_name="mu",
     j_t0=0,
     mesh=None,
     solution=None,
@@ -41,7 +42,7 @@ def plot_mesh_field(
         mesh = mesh.set_submesh(group)
 
     if field is None:
-        field = solution.get_field(elem_type=elem_type, group=group)
+        field = solution.get_field(field_name)
 
     def showMeshPlot(mesh, elem_type, field, title):
         def triplot(mesh, elem_type, values, ax=None, **kwargs):

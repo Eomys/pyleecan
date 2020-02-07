@@ -116,7 +116,6 @@ from pyleecan.Classes.SlotW60 import SlotW60
 from pyleecan.Classes.SlotW61 import SlotW61
 from pyleecan.Classes.SlotWind import SlotWind
 from pyleecan.Classes.Solution import Solution
-from pyleecan.Classes.SolutionFEMM import SolutionFEMM
 from pyleecan.Classes.Structural import Structural
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.Surface import Surface
