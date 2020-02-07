@@ -35,6 +35,7 @@ class OutMag(FrozenClass):
         Phi_wind_stator=None,
         emf=None,
         meshsolution=-1,
+        FEMM_dict=None,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -64,6 +65,7 @@ class OutMag(FrozenClass):
                     "Phi_wind_stator",
                     "emf",
                     "meshsolution",
+                    "FEMM_dict",
                 ],
             )
             # Overwrite default value with init_dict content
@@ -91,6 +93,8 @@ class OutMag(FrozenClass):
                 emf = init_dict["emf"]
             if "meshsolution" in list(init_dict.keys()):
                 meshsolution = init_dict["meshsolution"]
+            if "FEMM_dict" in list(init_dict.keys()):
+                FEMM_dict = init_dict["FEMM_dict"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -116,6 +120,7 @@ class OutMag(FrozenClass):
             self.meshsolution = MeshSolution(init_dict=meshsolution)
         else:
             self.meshsolution = meshsolution
+        self.FEMM_dict = FEMM_dict
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -150,7 +155,8 @@ class OutMag(FrozenClass):
                 "meshsolution = " + str(self.meshsolution.as_dict()) + linesep + linesep
             )
         else:
-            OutMag_str += "meshsolution = None"
+            OutMag_str += "meshsolution = None" + linesep + linesep
+        OutMag_str += "FEMM_dict = " + str(self.FEMM_dict)
         return OutMag_str
 
     def __eq__(self, other):
@@ -181,6 +187,8 @@ class OutMag(FrozenClass):
         if not array_equal(other.emf, self.emf):
             return False
         if other.meshsolution != self.meshsolution:
+            return False
+        if other.FEMM_dict != self.FEMM_dict:
             return False
         return True
 
@@ -225,6 +233,7 @@ class OutMag(FrozenClass):
             OutMag_dict["meshsolution"] = None
         else:
             OutMag_dict["meshsolution"] = self.meshsolution.as_dict()
+        OutMag_dict["FEMM_dict"] = self.FEMM_dict
         # The class name is added to the dict fordeserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -245,6 +254,7 @@ class OutMag(FrozenClass):
         self.emf = None
         if self.meshsolution is not None:
             self.meshsolution._set_None()
+        self.FEMM_dict = None
 
     def _get_time(self):
         """getter of time"""
@@ -458,4 +468,21 @@ class OutMag(FrozenClass):
         fget=_get_meshsolution,
         fset=_set_meshsolution,
         doc=u"""FEA software mesh and solution""",
+    )
+
+    def _get_FEMM_dict(self):
+        """getter of FEMM_dict"""
+        return self._FEMM_dict
+
+    def _set_FEMM_dict(self, value):
+        """setter of FEMM_dict"""
+        check_var("FEMM_dict", value, "dict")
+        self._FEMM_dict = value
+
+    # Dictionnary containing the main FEMM parameter
+    # Type : dict
+    FEMM_dict = property(
+        fget=_get_FEMM_dict,
+        fset=_set_FEMM_dict,
+        doc=u"""Dictionnary containing the main FEMM parameter""",
     )
