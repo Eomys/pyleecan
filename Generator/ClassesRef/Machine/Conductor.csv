@@ -1,5 +1,5 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-cond_mat,-,Material of the conductor,,0,Material,,,,,,,Machine,,check,VERSION,1,abstact class for conductors,CondType11
-ins_mat,-,Material of the insulation,,0,Material,,,,,,,,,,,,,CondType12
-,,,,,,,,,,,,,,,,,,CondType21
-,,,,,,,,,,,,,,,,,,CondType22
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+cond_mat,-,Material of the conductor,0,Material,,,,,Machine,,check,VERSION,1,abstact class for conductors
+ins_mat,-,Material of the insulation,0,Material,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,

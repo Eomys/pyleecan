@@ -1,6 +1,6 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-label,-,the label of the Line (EX: Yoke_side),,0,str,,,,,,,Geometry,,,VERSION,1,Abstract geometry class (A line between two points),Segment
-,,,,,,,,,,,,,,,,,,Arc1
-,,,,,,,,,,,,,,,,,,Arc2
-,,,,,,,,,,,,,,,,,,Arc3
-,,,,,,,,,,,,,,,,,,Arc
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+label,-,the label of the Line (EX: Yoke_side),0,str,,,,,Geometry,,,VERSION,1,Abstract geometry class (A line between two points)
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,

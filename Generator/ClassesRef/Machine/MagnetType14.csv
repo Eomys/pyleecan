@@ -1,4 +1,4 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-Wmag,rad,magnet bottom width [rad],,0,float,2.00E-03,0,,,,,Machine,MagnetPolar,build_geometry,VERSION,1,single magnet with polar base and curved-top shape ,
-Hmag,m,magnet radial height [m],,0,float,1.00E-03,0,,,1,,,,comp_height,IS_FLAT_BOT,0,,
-Rtop,m,radius of the circular top shape [m],,0,float,5.00E-02,0,,,,,,,,IS_FLAT_TOP,0,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Wmag,rad,magnet bottom width [rad],0,float,2.00E-03,0,,,Machine,MagnetPolar,build_geometry,VERSION,1,single magnet with polar base and curved-top shape 
+Hmag,m,magnet radial height [m],0,float,1.00E-03,0,,,,,comp_height,IS_FLAT_BOT,0,
+Rtop,m,radius of the circular top shape [m],0,float,5.00E-02,0,,,,,,IS_FLAT_TOP,0,

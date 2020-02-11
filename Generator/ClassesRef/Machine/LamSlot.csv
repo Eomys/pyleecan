@@ -1,9 +1,9 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-slot,,lamination Slot,,,Slot,,,,,,,Machine,Lamination,build_geometry,VERSION,1,Lamination with empty Slot,LamSlotMag
-,,,,,,,,,,,,,,check,,,,LamSlotWind
-,,,,,,,,,,,,,,comp_radius_mec,,,,LamSquirrelCage
-,,,,,,,,,,,,,,comp_surfaces,,,,
-,,,,,,,,,,,,,,get_pole_pair_number,,,,
-,,,,,,,,,,,,,,plot,,,,
-,,,,,,,,,,,,,,comp_height_yoke,,,,
-,,,,,,,,,,,,,,get_Zs,,,,
+﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+slot,,lamination Slot,,Slot,,,,,Machine,Lamination,build_geometry,VERSION,1,Lamination with empty Slot
+,,,,,,,,,,,check,,,
+,,,,,,,,,,,comp_radius_mec,,,
+,,,,,,,,,,,comp_surfaces,,,
+,,,,,,,,,,,get_pole_pair_number,,,
+,,,,,,,,,,,plot,,,
+,,,,,,,,,,,comp_height_yoke,,,
+,,,,,,,,,,,get_Zs,,,

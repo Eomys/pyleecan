@@ -3,7 +3,6 @@
 # File generated according to SMHoleMag.ui
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -20,13 +19,7 @@ class Ui_SMHoleMag(object):
         SMHoleMag.setSizePolicy(sizePolicy)
         SMHoleMag.setMinimumSize(QtCore.QSize(780, 640))
         self.verticalLayout = QtWidgets.QVBoxLayout(SMHoleMag)
-        self.verticalLayout.setContentsMargins(5, 5, 5, 5)
-        self.verticalLayout.setSpacing(5)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.b_help = HelpButton(SMHoleMag)
@@ -41,7 +34,7 @@ class Ui_SMHoleMag(object):
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )
         self.horizontalLayout_2.addItem(spacerItem)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.b_add = QtWidgets.QPushButton(SMHoleMag)
@@ -54,29 +47,11 @@ class Ui_SMHoleMag(object):
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )
         self.horizontalLayout_3.addItem(spacerItem1)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
+        self.verticalLayout.addLayout(self.horizontalLayout_3)
         spacerItem2 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred
         )
-        self.verticalLayout_2.addItem(spacerItem2)
-        self.horizontalLayout_4.addLayout(self.verticalLayout_2)
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_3.setSpacing(0)
-        self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.w_mat_1 = WMatSelect(SMHoleMag)
-        self.w_mat_1.setMinimumSize(QtCore.QSize(100, 0))
-        self.w_mat_1.setObjectName("w_mat_1")
-        self.verticalLayout_3.addWidget(self.w_mat_1)
-        self.w_mat_2 = WMatSelect(SMHoleMag)
-        self.w_mat_2.setMinimumSize(QtCore.QSize(100, 0))
-        self.w_mat_2.setObjectName("w_mat_2")
-        self.verticalLayout_3.addWidget(self.w_mat_2)
-        self.w_mat_3 = WMatSelect(SMHoleMag)
-        self.w_mat_3.setMinimumSize(QtCore.QSize(100, 0))
-        self.w_mat_3.setObjectName("w_mat_3")
-        self.verticalLayout_3.addWidget(self.w_mat_3)
-        self.horizontalLayout_4.addLayout(self.verticalLayout_3)
-        self.verticalLayout.addLayout(self.horizontalLayout_4)
+        self.verticalLayout.addItem(spacerItem2)
         self.tab_hole = QtWidgets.QTabWidget(SMHoleMag)
         self.tab_hole.setMinimumSize(QtCore.QSize(770, 500))
         self.tab_hole.setObjectName("tab_hole")
@@ -116,6 +91,5 @@ class Ui_SMHoleMag(object):
         self.b_next.setText(_translate("SMHoleMag", "Save"))
 
 
-from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 from pyleecan.GUI.Tools.HelpButton import HelpButton
 from pyleecan.GUI.Resources import pyleecan_rc

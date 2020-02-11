@@ -113,6 +113,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     if output.mag.Tem_av != 0:
         output.mag.Tem_rip = abs((np_max(Tem) - np_min(Tem)) / output.mag.Tem_av)
     output.mag.Phi_wind_stator = Phi_wind_stator
+    output.mag.FEMM_dict = FEMM_dict
 
     if self.is_get_mesh:
         cond = (not self.is_sliding_band) or (Nt_tot == 1)

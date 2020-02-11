@@ -1,4 +1,4 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-,,,,,,,,,,,,Machine,Magnet,,VERSION,1,abstract class of magnets with rectangular base,MagnetType10
-,,,,,,,,,,,,,,,,,,MagnetType12
-,,,,,,,,,,,,,,,,,,MagnetType13
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+,,,,,,,,,Machine,Magnet,,VERSION,1,abstract class of magnets with rectangular base
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,

@@ -1,7 +1,7 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-Alpha0,rad,Shift angle of the hole around circumference,,0,float,0,0,6.29,,,,Slot,Hole,build_geometry,VERSION,1,Trapezoidal axial ventilation ducts,
-D0,m,Hole height,,0,float,1,0,,,,,,,check,,,,
-H0,m,Radius of the hole bottom,,0,float,1,0,,,,,,,comp_radius,,,,
-W1,m,Hole small basis,,0,float,1,0,,,,,,,comp_surface,,,,
-W2,m,Hole large basis,,0,float,1,0,,,,,,,get_center,,,,
-,,,,,,,,,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+Alpha0,rad,Shift angle of the hole around circumference,0,float,0,0,6.29,,Slot,Hole,build_geometry,VERSION,1,Trapezoidal axial ventilation ducts
+D0,m,Hole height,0,float,1,0,,,,,check,,,
+H0,m,Radius of the hole bottom,0,float,1,0,,,,,comp_radius,,,
+W1,m,Hole small basis,0,float,1,0,,,,,comp_surface,,,
+W2,m,Hole large basis,0,float,1,0,,,,,get_center,,,
+,,,,,,,,,,,,,,

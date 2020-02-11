@@ -1,7 +1,7 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-mur_lin,-,Relative magnetic permeability,,0,float,1,0,,,,,Material,,get_BH,VERSION,1,magnetic material properties,
-Hc,A/m,Coercitivity field,,0,float,0,0,,,,,,,plot_BH,,,,
-Brm20,T,magnet remanence induction at 20degC,,0,float,0,,,,,,,,,,,,
-alpha_Br,-,temperature coefficient for remanent flux density /degC compared to 20degC,,0,float,0,,,,,,,,,,,,
-Wlam,m,lamination sheet width without insulation [m] (0 == not laminated),,0,float,0,0,,,,,,,,,,,
-BH_curve,-,"nonlinear B(H) curve (two columns matrix, H and B(H))",,0,ImportMatrix,,,,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+mur_lin,-,Relative magnetic permeability,0,float,1,0,,,Material,,get_BH,VERSION,1,magnetic material properties
+Hc,A/m,Coercitivity field,0,float,0,0,,,,,plot_BH,,,
+Brm20,T,magnet remanence induction at 20degC,0,float,0,,,,,,,,,
+alpha_Br,-,temperature coefficient for remanent flux density /degC compared to 20degC,0,float,0,,,,,,,,,
+Wlam,m,lamination sheet width without insulation [m] (0 == not laminated),0,float,0,0,,,,,,,,
+BH_curve,-,"nonlinear B(H) curve (two columns matrix, H and B(H))",0,ImportMatrix,,,,,,,,,,
