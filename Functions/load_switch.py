@@ -38,6 +38,7 @@ load_switch = {
     "ImportMatrixVal": ImportMatrixVal,
     "ImportMatrixXls": ImportMatrixXls,
     "InCurrent": InCurrent,
+    "InCurrentDQ": InCurrentDQ,
     "InFlux": InFlux,
     "InForce": InForce,
     "Input": Input,
