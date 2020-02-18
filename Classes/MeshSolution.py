@@ -102,20 +102,7 @@ class MeshSolution(FrozenClass):
                 if obj is None:  # Default value
                     self.solution.append(Solution())
                 elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in ["Solution", "SolutionFEMM"]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for solution"
-                        )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.solution.append(class_obj(init_dict=obj))
+                    self.solution.append(Solution(init_dict=obj))
                 else:
                     self.solution.append(obj)
         elif solution is None:

@@ -1,9 +1,9 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-time,s,Electrical time vector (no symmetry),,Nt_tot,ndarray,None,,,,,,Output,,,VERSION,1,Gather the electric module outputs,
-angle,rad,Electrical position vector (no symmetry),,Na_tot,ndarray,None,,,,,,,,,,,,
-Is,A,Stator currents as a function of time (each column correspond to one phase),,"(Nt_tot, qs)",ndarray,None,,,,,,,,,,,,
-Ir,A,Rotor currents as a function of time (each column correspond to one phase),,"(Nt_tot, qs)",ndarray,None,,,,,,,,,,,,
-angle_rotor,rad,Rotor angular position as a function of time (if None computed according to Nr),,Nt_tot,ndarray,None,,,,,,,,,,,,
-Nr,rpm,Rotor speed as a function of time,,Nt_tot,ndarray,None,,,,,,,,,,,,
-rot_dir,-,"Rotation direction of the rotor 1 trigo, -1 clockwise",,,float,-1,-1,1,,,,,,,,,,
-angle_rotor_initial,,Initial angular position of the rotor at t=0,,,float,0,,,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+time,s,Electrical time vector (no symmetry),Nt_tot,ndarray,None,,,,Output,,,VERSION,1,Gather the electric module outputs
+angle,rad,Electrical position vector (no symmetry),Na_tot,ndarray,None,,,,,,,,,
+Is,A,Stator currents as a function of time (each column correspond to one phase),"(Nt_tot, qs)",ndarray,None,,,,,,,,,
+Ir,A,Rotor currents as a function of time (each column correspond to one phase),"(Nt_tot, qs)",ndarray,None,,,,,,,,,
+angle_rotor,rad,Rotor angular position as a function of time (if None computed according to Nr),Nt_tot,ndarray,None,,,,,,,,,
+Nr,rpm,Rotor speed as a function of time,Nt_tot,ndarray,None,,,,,,,,,
+rot_dir,-,"Rotation direction of the rotor 1 trigo, -1 clockwise",,float,-1,-1,1,,,,,,,
+angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,,,,

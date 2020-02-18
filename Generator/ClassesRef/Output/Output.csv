@@ -1,8 +1,8 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-simu,-,Simulation object that generated the Output,,0,Simulation,,,,,,,Output,,getter.get_BH_stator,VERSION,1,Main Output object: gather all the outputs of all the modules,
-path_res,-,Path to the folder to same the results,,0,str,,,,,,,,,getter.get_BH_rotor,,,,
-geo,-,Geometry output,,0,OutGeo,,,,,,,,,getter.get_path_result,,,,
-elec,-,Electrical module output,,0,OutElec,,,,,,,,,getter.get_angle_rotor,,,,
-mag,-,Magnetic module output,,0,OutMag,,,,,,,,,plot.Magnetic.plot_B_space,,,,
-struct,-,Structural module output,,0,OutStruct,,,,,,,,,plot.Structural.plot_force_space,,,,
-post,-,Post-Processing settings,,0,OutPost,,,,,,,,,plot.Magnetic.plot_mesh_field,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+simu,-,Simulation object that generated the Output,0,Simulation,,,,,Output,,getter.get_BH_stator,VERSION,1,Main Output object: gather all the outputs of all the modules
+path_res,-,Path to the folder to same the results,0,str,,,,,,,getter.get_BH_rotor,,,
+geo,-,Geometry output,0,OutGeo,,,,,,,getter.get_path_result,,,
+elec,-,Electrical module output,0,OutElec,,,,,,,getter.get_angle_rotor,,,
+mag,-,Magnetic module output,0,OutMag,,,,,,,plot.Magnetic.plot_B_space,,,
+struct,-,Structural module output,0,OutStruct,,,,,,,plot.Structural.plot_force_space,,,
+post,-,Post-Processing settings,0,OutPost,,,,,,,plot.Magnetic.plot_mesh_field,,,

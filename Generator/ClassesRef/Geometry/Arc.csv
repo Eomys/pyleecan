@@ -1,5 +1,5 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-,,,,,,,,,,,,Geometry,Line,draw_FEMM,VERSION,1,Abstract class for arc,Arc1
-,,,,,,,,,,,,,,intersect_line,,,,Arc2
-,,,,,,,,,,,,,,is_on_arc,,,,Arc3
-,,,,,,,,,,,,,,split_line,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+,,,,,,,,,Geometry,Line,draw_FEMM,VERSION,1,Abstract class for arc
+,,,,,,,,,,,intersect_line,,,
+,,,,,,,,,,,is_on_arc,,,
+,,,,,,,,,,,split_line,,,

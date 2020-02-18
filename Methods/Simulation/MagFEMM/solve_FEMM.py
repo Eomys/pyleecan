@@ -8,7 +8,7 @@ from pyleecan.Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from pyleecan.Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.Mesh import Mesh
-from pyleecan.Classes.SolutionFEMM import SolutionFEMM
+from pyleecan.Classes.Solution import Solution
 from os.path import join
 
 
@@ -44,10 +44,10 @@ def solve_FEMM(self, output, sym, FEMM_dict):
 
     if self.is_get_mesh or self.is_save_FEA:
         meshFEMM = [Mesh() for ii in range(Nt_tot)]
-        solutionFEMM = [SolutionFEMM() for ii in range(Nt_tot)]
+        solutionFEMM = [Solution() for ii in range(Nt_tot)]
     else:
         meshFEMM = [Mesh()]
-        solutionFEMM = [SolutionFEMM()]
+        solutionFEMM = [Solution()]
 
     # Compute the data for each time step
     for ii in range(Nt_tot):

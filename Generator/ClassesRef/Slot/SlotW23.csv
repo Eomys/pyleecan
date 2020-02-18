@@ -1,11 +1,11 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constant Name,Constant Value,Class description,Daughter classes
-W0,m,Slot isthmus width.,,0,float,3.00E-03,0,,,2,,Slot,SlotWind,_comp_W,VERSION,1,semi-closed trapezoidal without fillet without wedge (rounded bottom),
-H0,m,Slot isthmus height.,,0,float,3.00E-03,0,,,2,,,,_comp_point_coordinate,IS_SYMMETRICAL,1,,
-H1,m/rad,height or angle  (See Schematics),,0,float,0,0,,,2,,,,build_geometry,,,,
-W1,m,Slot top width.,,0,float,1.30E-02,0,,,2,,,,build_geometry_wind,,,,
-H2,m,Slot height below wedge ,,0,float,2.00E-02,0,,,2,,,,check,,,,
-W2,m,Slot bottom width.,,0,float,1.00E-02,0,,,2,,,,comp_angle_opening,,,,
-W3,m,Tooth width,,0,float,1.00E-02,0,,,2,,,,comp_height,,,,
-H1_is_rad,-,"H1 unit, 0 for m, 1 for rad",,0,bool,0,,,,4,,,,comp_height_wind,,,,
-is_cstt_tooth,-,"True: use W3 to define the slot, False: use W2 and W1",,0,bool,0,,,,,,,,comp_surface,,,,
-,,,,,,,,,,,,,,comp_surface_wind,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+W0,m,Slot isthmus width.,0,float,3.00E-03,0,,,Slot,SlotWind,_comp_W,VERSION,1,semi-closed trapezoidal without fillet without wedge (rounded bottom)
+H0,m,Slot isthmus height.,0,float,3.00E-03,0,,,,,_comp_point_coordinate,IS_SYMMETRICAL,1,
+H1,m/rad,height or angle  (See Schematics),0,float,0,0,,,,,build_geometry,,,
+W1,m,Slot top width.,0,float,1.30E-02,0,,,,,build_geometry_wind,,,
+H2,m,Slot height below wedge ,0,float,2.00E-02,0,,,,,check,,,
+W2,m,Slot bottom width.,0,float,1.00E-02,0,,,,,comp_angle_opening,,,
+W3,m,Tooth width,0,float,1.00E-02,0,,,,,comp_height,,,
+H1_is_rad,-,"H1 unit, 0 for m, 1 for rad",0,bool,0,,,,,,comp_height_wind,,,
+is_cstt_tooth,-,"True: use W3 to define the slot, False: use W2 and W1",0,bool,0,,,,,,comp_surface,,,
+,,,,,,,,,,,comp_surface_wind,,,
