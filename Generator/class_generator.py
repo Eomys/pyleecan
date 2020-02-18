@@ -2,7 +2,6 @@
 """Created on Tue Nov 04 09:01:21 2014
 @author: pierre_b
 """
-from codecs import open as open_co
 from os.path import join
 
 from pyleecan.Generator import PYTHON_TYPE, TAB, TAB2, TAB3, TAB4, TAB5, TAB6, TAB7
@@ -37,7 +36,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Start of file generation
     # Create or Erase the file by opening it
-    class_file = open_co(join(path_to_gen, class_name + ".py"), "w", "utf-8")
+    class_file = open(join(path_to_gen, class_name + ".py"), "w")
 
     # List of non python type to import
     import_type_list = list(find_import_type(gen_dict, class_dict, []))
