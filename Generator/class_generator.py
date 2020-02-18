@@ -105,6 +105,13 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write("from numpy import array, empty\n")
         import_type_list.remove("{ndarray}")
 
+    # For function type
+    if "function" in import_type_list:
+        class_file.write("from inspect import getsource\n")
+        class_file.write("from cloudpickle import dumps, loads\n")
+        class_file.write("from pyleecan.Classes._check import CheckTypeError\n")
+        import_type_list.remove("function")
+
     # Import of all needed pyleecan type for empty init
     class_file.write("from pyleecan.Classes._check import InitUnKnowClassError\n")
     for pyleecan_type in import_type_list:
@@ -270,7 +277,7 @@ def generate_init(gen_dict, class_dict):
         init_by_var += TAB2 + "self.parent = None\n"
 
     for prop in class_dict["properties"]:
-        if prop["type"] in PYTHON_TYPE:
+        if prop["type"] in PYTHON_TYPE or prop["type"] == "function":
             # Add => "self.my_var = my_var\n" to init_by_var
             init_by_var += TAB2 + "self." + prop["name"] + " = " + prop["name"] + "\n"
         elif prop["type"] == "ndarray":
@@ -425,6 +432,8 @@ def generate_init(gen_dict, class_dict):
                 arg_list += ", " + prop["name"] + "=" + str(prop["value"])
             else:
                 arg_list += ", " + prop["name"] + "=None"
+        elif prop["type"] == "function":
+            arg_list += ", " + prop["name"] + "=None"
         elif is_list_pyleecan_type(prop["type"]):
             # List of pyleecan type
             arg_list += ", " + prop["name"] + "=list()"
@@ -601,7 +610,7 @@ def generate_set_class_by_dict_dict(prop_name, prop_type, daug_list):
         )
     else:  # No daughter
         class_dict_str += (
-            TAB5 + "self." + prop_name + "[key] = " + prop_type + "(init_dict=obj))\n"
+            TAB5 + "self." + prop_name + "[key] = " + prop_type + "(init_dict=obj)\n"
         )
     return class_dict_str
 
@@ -770,6 +779,28 @@ def generate_str(gen_dict, class_dict):
                 + ' = " + str(self.'
                 + prop["name"]
                 + ")"
+            )
+        elif prop["type"] == "function":
+            # Add => < MyClass_str += "my_var = "+str(self._my_var) >to var_str
+            var_str += TAB2 + "if self._" + prop["name"] + "[1] is None:\n"
+            var_str += (
+                TAB3
+                + class_name
+                + '_str += "'
+                + prop["name"]
+                + ' = " + str(self._'
+                + prop["name"]
+                + "[1])\n"
+            )
+            var_str += TAB2 + "else:\n"
+            var_str += (
+                TAB3
+                + class_name
+                + '_str += "'
+                + prop["name"]
+                + ' = " + linesep + str(self._'
+                + prop["name"]
+                + "[1])"
             )
         elif prop["type"] in ["ndarray", "list"]:
             # For Matrix (skip a line then print the matrix)
@@ -978,6 +1009,23 @@ def generate_as_dict(gen_dict, class_dict):
                 + prop["name"]
                 + ".tolist()\n"
             )
+        elif prop["type"] == "function":
+            # Add => "class_name ["var_name"] = self._var_name" to
+            # var_str
+            var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
+            var_str += TAB2 + "else:\n"
+            var_str += (
+                TAB3
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"] = [dumps(self._'
+                + prop["name"]
+                + "[0]).decode('ISO-8859-2'), self._"
+                + prop["name"]
+                + "[1]]\n"
+            )
         elif is_list_pyleecan_type(prop["type"]):
             var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = list()\n'
             var_str += TAB2 + "for obj in self." + prop["name"] + ":\n"
@@ -1077,7 +1125,7 @@ def generate_set_None(gen_dict, class_dict):
     var_str = ""
 
     for prop in class_dict["properties"]:
-        if prop["type"] in PYTHON_TYPE or prop["type"] == "ndarray":
+        if prop["type"] in PYTHON_TYPE or prop["type"] in ["ndarray", "function"]:
             var_str += TAB2 + "self." + prop["name"] + " = None\n"
         elif is_list_pyleecan_type(prop["type"]):
             var_str += TAB2 + "for obj in self." + prop["name"] + ":\n"
@@ -1146,7 +1194,11 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB2 + "for key, obj in self._" + prop["name"] + ".items():\n"
             prop_str += TAB3 + "if obj is not None:\n"
             prop_str += TAB4 + "obj.parent = self\n"
-        prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
+            prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
+        elif prop["type"] == "function":
+            prop_str += TAB2 + "return self._" + prop["name"] + "[0]\n\n"
+        else:
+            prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
 
         # Setter
         prop_str += TAB + "def _set_" + prop["name"] + "(self, value):\n"
@@ -1168,16 +1220,49 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB5 + "pass\n"
 
         # Add check_var("var_name",value, "var_type", min=var_min, max=var_max)
-        prop_str += (
-            TAB2 + 'check_var("' + prop["name"] + '", value, "' + prop["type"] + '"'
-        )
-        # Min and max are added only if needed
-        if prop["type"] in ["float", "int", "ndarray"]:
-            if str(prop["min"]) is not "":
-                prop_str += ", Vmin=" + str(prop["min"])
-            if str(prop["max"]) is not "":
-                prop_str += ", Vmax=" + str(prop["max"])
-        prop_str += ")\n"
+        if prop["type"] == "function":
+            # A function can be defined by a callable or a list containing the serialized callable and its sourcecode
+            prop_str += TAB2 + "try:\n"
+            prop_str += TAB3 + 'check_var("' + prop["name"] + '", value, "list")\n'
+            prop_str += TAB2 + "except CheckTypeError:\n"
+            prop_str += (
+                TAB3
+                + 'check_var("'
+                + prop["name"]
+                + '", value, "'
+                + prop["type"]
+                + '")\n'
+            )
+            prop_str += (
+                TAB2 + "if isinstance(value,list): # Load function from saved dict\n"
+            )
+            prop_str += (
+                TAB3
+                + "self._"
+                + prop["name"]
+                + " = [loads(value[0].encode('ISO-8859-2')),value[1]]\n"
+            )
+            prop_str += TAB2 + "elif value is None:\n"
+            prop_str += TAB3 + "self._" + prop["name"] + " = [None,None]\n"
+            prop_str += TAB2 + "elif callable(value):\n"
+            prop_str += TAB3 + "self._" + prop["name"] + " = [value,getsource(value)]\n"
+            prop_str += TAB2 + "else:\n"
+            prop_str += (
+                TAB3
+                + "raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) \n"
+            )
+        else:
+            prop_str += (
+                TAB2 + 'check_var("' + prop["name"] + '", value, "' + prop["type"] + '"'
+            )
+            # Min and max are added only if needed
+            if prop["type"] in ["float", "int", "ndarray"]:
+                if str(prop["min"]) is not "":
+                    prop_str += ", Vmin=" + str(prop["min"])
+                if str(prop["max"]) is not "":
+                    prop_str += ", Vmax=" + str(prop["max"])
+            prop_str += ")\n"
+            prop_str += TAB2 + "self._" + prop["name"] + " = value\n\n"
 
         prop_str += TAB2 + "self._" + prop["name"] + " = value\n\n"
         if is_list_pyleecan_type(prop["type"]):
@@ -1187,7 +1272,7 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB4 + "obj.parent = self\n\n"
         elif (
             prop["type"] not in PYTHON_TYPE
-            and prop["type"] != "ndarray"
+            and prop["type"] not in ["ndarray", "function"]
             and not is_dict_pyleecan_type(prop["type"])
             and prop["type"] != "{ndarray}"
         ):
