@@ -251,28 +251,34 @@ class Output(FrozenClass):
         else:
             Output_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.simu is not None:
-            Output_str += "simu = " + str(self.simu.as_dict()) + linesep + linesep
+            tmp = self.simu.__str__()[:-2].replace(linesep, linesep + "\t")
+            Output_str += "simu = " + tmp
         else:
             Output_str += "simu = None" + linesep + linesep
         Output_str += 'path_res = "' + str(self.path_res) + '"' + linesep
         if self.geo is not None:
-            Output_str += "geo = " + str(self.geo.as_dict()) + linesep + linesep
+            tmp = self.geo.__str__()[:-2].replace(linesep, linesep + "\t")
+            Output_str += "geo = " + tmp
         else:
             Output_str += "geo = None" + linesep + linesep
         if self.elec is not None:
-            Output_str += "elec = " + str(self.elec.as_dict()) + linesep + linesep
+            tmp = self.elec.__str__()[:-2].replace(linesep, linesep + "\t")
+            Output_str += "elec = " + tmp
         else:
             Output_str += "elec = None" + linesep + linesep
         if self.mag is not None:
-            Output_str += "mag = " + str(self.mag.as_dict()) + linesep + linesep
+            tmp = self.mag.__str__()[:-2].replace(linesep, linesep + "\t")
+            Output_str += "mag = " + tmp
         else:
             Output_str += "mag = None" + linesep + linesep
         if self.struct is not None:
-            Output_str += "struct = " + str(self.struct.as_dict()) + linesep + linesep
+            tmp = self.struct.__str__()[:-2].replace(linesep, linesep + "\t")
+            Output_str += "struct = " + tmp
         else:
             Output_str += "struct = None" + linesep + linesep
         if self.post is not None:
-            Output_str += "post = " + str(self.post.as_dict()) + linesep + linesep
+            tmp = self.post.__str__()[:-2].replace(linesep, linesep + "\t")
+            Output_str += "post = " + tmp
         else:
             Output_str += "post = None"
         return Output_str

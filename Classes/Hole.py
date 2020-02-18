@@ -151,7 +151,8 @@ class Hole(FrozenClass):
             Hole_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Hole_str += "Zh = " + str(self.Zh) + linesep
         if self.mat_void is not None:
-            Hole_str += "mat_void = " + str(self.mat_void.as_dict()) + linesep + linesep
+            tmp = self.mat_void.__str__()[:-2].replace(linesep, linesep + "\t")
+            Hole_str += "mat_void = " + tmp
         else:
             Hole_str += "mat_void = None"
         return Hole_str

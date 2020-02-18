@@ -151,9 +151,8 @@ class OutMag(FrozenClass):
         )
         OutMag_str += "emf = " + linesep + str(self.emf) + linesep + linesep
         if self.meshsolution is not None:
-            OutMag_str += (
-                "meshsolution = " + str(self.meshsolution.as_dict()) + linesep + linesep
-            )
+            tmp = self.meshsolution.__str__()[:-2].replace(linesep, linesep + "\t")
+            OutMag_str += "meshsolution = " + tmp
         else:
             OutMag_str += "meshsolution = None" + linesep + linesep
         OutMag_str += "FEMM_dict = " + str(self.FEMM_dict)

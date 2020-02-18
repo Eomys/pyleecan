@@ -222,13 +222,11 @@ class SurfLine(Surface):
         if len(self.line_list) == 0:
             SurfLine_str += "line_list = []"
         for ii in range(len(self.line_list)):
-            SurfLine_str += (
-                "line_list["
-                + str(ii)
-                + "] = "
-                + str(self.line_list[ii].as_dict())
+            tmp = (
+                self.line_list[ii].__str__()[:-2].replace(linesep, linesep + "\t")
                 + "\n"
             )
+            SurfLine_str += "line_list[" + str(ii) + "] =" + tmp
         return SurfLine_str
 
     def __eq__(self, other):
@@ -271,7 +269,6 @@ class SurfLine(Surface):
         for obj in self._line_list:
             if obj is not None:
                 obj.parent = self
-        return self._line_list
 
     def _set_line_list(self, value):
         """setter of line_list"""

@@ -331,15 +331,13 @@ class HoleM53(HoleMag):
         HoleM53_str += "W3 = " + str(self.W3) + linesep
         HoleM53_str += "W4 = " + str(self.W4) + linesep
         if self.magnet_0 is not None:
-            HoleM53_str += (
-                "magnet_0 = " + str(self.magnet_0.as_dict()) + linesep + linesep
-            )
+            tmp = self.magnet_0.__str__()[:-2].replace(linesep, linesep + "\t")
+            HoleM53_str += "magnet_0 = " + tmp
         else:
             HoleM53_str += "magnet_0 = None" + linesep + linesep
         if self.magnet_1 is not None:
-            HoleM53_str += (
-                "magnet_1 = " + str(self.magnet_1.as_dict()) + linesep + linesep
-            )
+            tmp = self.magnet_1.__str__()[:-2].replace(linesep, linesep + "\t")
+            HoleM53_str += "magnet_1 = " + tmp
         else:
             HoleM53_str += "magnet_1 = None"
         return HoleM53_str

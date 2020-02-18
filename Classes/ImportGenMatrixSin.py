@@ -103,9 +103,10 @@ class ImportGenMatrixSin(ImportMatrix):
         if len(self.sin_list) == 0:
             ImportGenMatrixSin_str += "sin_list = []"
         for ii in range(len(self.sin_list)):
-            ImportGenMatrixSin_str += (
-                "sin_list[" + str(ii) + "] = " + str(self.sin_list[ii].as_dict()) + "\n"
+            tmp = (
+                self.sin_list[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
             )
+            ImportGenMatrixSin_str += "sin_list[" + str(ii) + "] =" + tmp
         return ImportGenMatrixSin_str
 
     def __eq__(self, other):
@@ -148,7 +149,6 @@ class ImportGenMatrixSin(ImportMatrix):
         for obj in self._sin_list:
             if obj is not None:
                 obj.parent = self
-        return self._sin_list
 
     def _set_sin_list(self, value):
         """setter of sin_list"""

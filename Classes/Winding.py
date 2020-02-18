@@ -214,9 +214,8 @@ class Winding(FrozenClass):
         Winding_str += "p = " + str(self.p) + linesep
         Winding_str += "Lewout = " + str(self.Lewout) + linesep
         if self.conductor is not None:
-            Winding_str += (
-                "conductor = " + str(self.conductor.as_dict()) + linesep + linesep
-            )
+            tmp = self.conductor.__str__()[:-2].replace(linesep, linesep + "\t")
+            Winding_str += "conductor = " + tmp
         else:
             Winding_str += "conductor = None"
         return Winding_str

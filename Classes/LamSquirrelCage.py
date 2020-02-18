@@ -225,9 +225,8 @@ class LamSquirrelCage(LamSlotWind):
         LamSquirrelCage_str += "Hscr = " + str(self.Hscr) + linesep
         LamSquirrelCage_str += "Lscr = " + str(self.Lscr) + linesep
         if self.ring_mat is not None:
-            LamSquirrelCage_str += (
-                "ring_mat = " + str(self.ring_mat.as_dict()) + linesep + linesep
-            )
+            tmp = self.ring_mat.__str__()[:-2].replace(linesep, linesep + "\t")
+            LamSquirrelCage_str += "ring_mat = " + tmp
         else:
             LamSquirrelCage_str += "ring_mat = None"
         return LamSquirrelCage_str

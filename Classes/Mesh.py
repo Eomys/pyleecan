@@ -252,24 +252,22 @@ class Mesh(FrozenClass):
         if len(self.element) == 0:
             Mesh_str += "element = dict()"
         for key, obj in self.element.items():
-            Mesh_str += (
-                "element["
-                + key
-                + "] = "
-                + str(self.element[key].as_dict())
-                + linesep
-                + linesep
+            tmp = (
+                self.element[key].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
             )
+            Mesh_str += "element[" + key + "] =" + tmp + linesep + linesep
         if self.node is not None:
-            Mesh_str += "node = " + str(self.node.as_dict()) + linesep + linesep
+            tmp = self.node.__str__()[:-2].replace(linesep, linesep + "\t")
+            Mesh_str += "node = " + tmp
         else:
             Mesh_str += "node = None" + linesep + linesep
         if len(self.submesh) == 0:
             Mesh_str += "submesh = []"
         for ii in range(len(self.submesh)):
-            Mesh_str += (
-                "submesh[" + str(ii) + "] = " + str(self.submesh[ii].as_dict()) + "\n"
+            tmp = (
+                self.submesh[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
             )
+            Mesh_str += "submesh[" + str(ii) + "] =" + tmp
         return Mesh_str
 
     def __eq__(self, other):
@@ -319,7 +317,6 @@ class Mesh(FrozenClass):
         for key, obj in self._element.items():
             if obj is not None:
                 obj.parent = self
-        return self._element
 
     def _set_element(self, value):
         """setter of element"""
@@ -353,7 +350,6 @@ class Mesh(FrozenClass):
         for obj in self._submesh:
             if obj is not None:
                 obj.parent = self
-        return self._submesh
 
     def _set_submesh(self, value):
         """setter of submesh"""

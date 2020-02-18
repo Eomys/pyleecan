@@ -200,9 +200,8 @@ class SlotMPolar(SlotMag):
         if len(self.magnet) == 0:
             SlotMPolar_str += "magnet = []"
         for ii in range(len(self.magnet)):
-            SlotMPolar_str += (
-                "magnet[" + str(ii) + "] = " + str(self.magnet[ii].as_dict()) + "\n"
-            )
+            tmp = self.magnet[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
+            SlotMPolar_str += "magnet[" + str(ii) + "] =" + tmp
         return SlotMPolar_str
 
     def __eq__(self, other):
@@ -279,7 +278,6 @@ class SlotMPolar(SlotMag):
         for obj in self._magnet:
             if obj is not None:
                 obj.parent = self
-        return self._magnet
 
     def _set_magnet(self, value):
         """setter of magnet"""
