@@ -53,41 +53,16 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     Rbo = self.get_Rbo()
     H_yoke = self.comp_height_yoke()
 
+    bore_desc = self.get_bore_desc(sym=sym)
     bore_list = list()
-
-    # Add first bore line
-    if sym > 1:
-        op0 = self.slot_list[0].comp_angle_opening()
-        # self.get_bore_line(0, self.alpha[0] - op0 / 2)
-        bore_list.append(
-            Arc1(
-                begin=Rbo,
-                end=Rbo * exp(self.alpha[0] - op0 / 2),
-                radius=Rbo,
-                is_trigo_direction=True,
-            )
-        )
-
-    for ii in range(int(len(self.slot_list) / sym) - 1):
-        # Add the slot lines
-        slot_line = self.slot_list[ii].build_geometry()
-        for line in slot_line:
-            line.rotate(angle=self.alpha[ii])
-        bore_list.extend(slot_line)
-        # Add the bore line up to the next slot
-        if sym == 1 or ii != len(self.slot_list) / sym - 1:
-            # Skip the last bore line in case of sym
-            op1 = self.slot_list[ii].comp_angle_opening()
-            op2 = self.slot_list[ii + 1].comp_angle_opening()
-            # self.get_bore_line(self.alpha[ii] + op1 / 2, self.alpha[ii + 1] - op2 / 2)
-            bore_list.append(
-                Arc1(
-                    begin=Rbo * exp(1j * (self.alpha[ii] + op1 / 2)),
-                    end=Rbo * exp(1j * (self.alpha[ii + 1] - op2 / 2)),
-                    radius=Rbo,
-                    is_trigo_direction=True,
-                )
-            )
+    for bore in bore_desc:
+        if type(bore["obj"]) is Arc1:
+            bore_list.append(bore["obj"])
+        else:
+            lines = bore["obj"].build_geometry()
+            for line in lines:
+                line.rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
+            bore_list.extend(lines)
 
     # Create the lamination surface(s)
     surf_list = list()
@@ -118,15 +93,6 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             surf_list.append(surf_yoke)
             surf_list.append(surf_slot)
     else:  # Only one surface
-        # Add the last bore line
-        bore_list.append(
-            Arc1(
-                begin=Rbo * exp(1j * (self.alpha[ii] + op1 / 2)),
-                end=Rbo * exp(1j * (2 * pi / sym)),
-                radius=Rbo,
-                is_trigo_direction=True,
-            )
-        )
         # Add the Yoke part
         Zy1 = Ryoke
         Zy2 = Ryoke * exp(1j * 2 * pi / sym)

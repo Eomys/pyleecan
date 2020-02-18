@@ -52,6 +52,11 @@ try:
 except ImportError as error:
     get_Zs = error
 
+try:
+    from pyleecan.Methods.Machine.LamSlotMulti.get_bore_desc import get_bore_desc
+except ImportError as error:
+    get_bore_desc = error
+
 
 from numpy import array, array_equal
 from pyleecan.Classes._check import InitUnKnowClassError
@@ -153,6 +158,17 @@ class LamSlotMulti(Lamination):
         )
     else:
         get_Zs = get_Zs
+    # cf Methods.Machine.LamSlotMulti.get_bore_desc
+    if isinstance(get_bore_desc, ImportError):
+        get_bore_desc = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotMulti method get_bore_desc: " + str(get_bore_desc)
+                )
+            )
+        )
+    else:
+        get_bore_desc = get_bore_desc
     # save method is available in all object
     save = save
 
