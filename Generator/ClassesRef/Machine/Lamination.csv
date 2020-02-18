@@ -1,4 +1,4 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 L1,m,Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets,0,float,3.50E-01,0,100,,Machine,,build_geometry,VERSION,1,abstract class for lamination
 mat_type,,Lamination's material,,Material,,,,,,,check,,,
 Nrvd,-,number of radial air ventilation ducts in lamination,0,int,0,0,,,,,comp_length,,,
@@ -16,3 +16,4 @@ notch,-,Lamination bore notches,0,[Notch],,,,,,,get_Ryoke,,,
 ,,,,,,,,,,,get_polar_eq,,,
 ,,,,,,,,,,,is_outwards,,,
 ,,,,,,,,,,,comp_height_yoke,,,
+,,,,,,,,,,,get_notch_list,,,

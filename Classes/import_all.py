@@ -36,12 +36,14 @@ from pyleecan.Classes.ImportMatrix import ImportMatrix
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
 from pyleecan.Classes.InCurrent import InCurrent
+from pyleecan.Classes.InCurrentDQ import InCurrentDQ
 from pyleecan.Classes.InFlux import InFlux
 from pyleecan.Classes.InForce import InForce
 from pyleecan.Classes.Input import Input
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.LamSlotMag import LamSlotMag
+from pyleecan.Classes.LamSlotMulti import LamSlotMulti
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.Lamination import Lamination
