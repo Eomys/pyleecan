@@ -80,7 +80,7 @@ def generate_code(root_path, gen_dict=None):
     print("Generation of import_all.py")
 
     # Save gen_dict
-    class_dict_file = join(CLASS_DIR, 'Class_Dict.json')
+    class_dict_file = join(CLASS_DIR, "Class_Dict.json")
     with open(class_dict_file, "w") as json_file:
         json.dump(gen_dict, json_file, sort_keys=True, indent=4, separators=(",", ": "))
 

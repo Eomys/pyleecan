@@ -11,7 +11,7 @@ from pyleecan.Generator import PYTHON_TYPE
 
 # Constants for csv reading, i.e. column number of data
 NAME_COL = 0  # attribue name
-UNIT_COL = 1 # value unit
+UNIT_COL = 1  # value unit
 EN_DESC_COL = 2  # english description
 TYPE_COL = 4  # type
 DEF_VAL_COL = 5  # default value

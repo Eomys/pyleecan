@@ -211,6 +211,73 @@
             }
         ]
     },
+    "Bore": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "Bore",
+            "BoreFlower"
+        ],
+        "desc": "Abstract class for Bore shape",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "Bore",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/Bore.csv",
+        "properties": []
+    },
+    "BoreFlower": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class for Bore flower shape",
+        "is_internal": false,
+        "methods": [
+            "get_bore_line"
+        ],
+        "mother": "Bore",
+        "name": "BoreFlower",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/BoreFlower.csv",
+        "properties": [
+            {
+                "desc": "Number of flower arc",
+                "max": "",
+                "min": "0",
+                "name": "N",
+                "type": "int",
+                "unit": "-",
+                "value": 8
+            },
+            {
+                "desc": "Radius of the flower arc",
+                "max": "",
+                "min": "0",
+                "name": "Rarc",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "Angular offset for the arc",
+                "max": "",
+                "min": "",
+                "name": "alpha",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
+            }
+        ]
+    },
     "Circle": {
         "constants": [
             {
@@ -2132,6 +2199,15 @@
                 "type": "[Hole]",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "desc": "Bore Shape",
+                "max": "",
+                "min": "",
+                "name": "bore",
+                "type": "Bore",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -2156,7 +2232,8 @@
             "comp_surfaces",
             "get_pole_pair_number",
             "plot",
-            "comp_height_yoke"
+            "comp_height_yoke",
+            "get_Zs"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -2198,6 +2275,52 @@
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMag.csv",
         "properties": []
+    },
+    "LamSlotMulti": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Lamination with list of Slot",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "comp_radius_mec",
+            "comp_surfaces",
+            "get_pole_pair_number",
+            "plot",
+            "comp_height_yoke",
+            "get_Zs",
+            "get_bore_desc"
+        ],
+        "mother": "Lamination",
+        "name": "LamSlotMulti",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMulti.csv",
+        "properties": [
+            {
+                "desc": "List of lamination Slot",
+                "max": "",
+                "min": "",
+                "name": "slot_list",
+                "type": "[Slot]",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Angular position of the Slots",
+                "max": "",
+                "min": "",
+                "name": "alpha",
+                "type": "ndarray",
+                "unit": "[rad]",
+                "value": ""
+            }
+        ]
     },
     "LamSlotWind": {
         "constants": [
@@ -2312,6 +2435,7 @@
             "LamHole",
             "LamSlot",
             "LamSlotMag",
+            "LamSlotMulti",
             "LamSlotWind",
             "LamSquirrelCage"
         ],
@@ -2334,7 +2458,8 @@
             "comp_output_geo",
             "get_polar_eq",
             "is_outwards",
-            "comp_height_yoke"
+            "comp_height_yoke",
+            "get_notch_list"
         ],
         "mother": "",
         "name": "Lamination",
@@ -4024,17 +4149,7 @@
         "name": "Notch",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/Notch.csv",
-        "properties": [
-            {
-                "desc": "Shape of Notch",
-                "max": "",
-                "min": "",
-                "name": "notch_shape",
-                "type": "[Slot]",
-                "unit": "-",
-                "value": ""
-            }
-        ]
+        "properties": []
     },
     "NotchEvenDist": {
         "constants": [
@@ -4044,10 +4159,10 @@
             }
         ],
         "daughters": [],
-        "desc": "Class for evenly distributed notches",
+        "desc": "Class for evenly distributed notches (according to Zs)",
         "is_internal": false,
         "methods": [
-            "build_geometry"
+            "get_notch_list"
         ],
         "mother": "Notch",
         "name": "NotchEvenDist",
@@ -4059,8 +4174,17 @@
                 "max": "",
                 "min": "",
                 "name": "alpha",
-                "type": "ndarray",
+                "type": "float",
                 "unit": "rad",
+                "value": 0
+            },
+            {
+                "desc": "Shape of the Notch",
+                "max": "",
+                "min": "",
+                "name": "notch_shape",
+                "type": "Slot",
+                "unit": "-",
                 "value": ""
             }
         ]

@@ -8,6 +8,8 @@ from pyleecan.Classes.Arc import Arc
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Arc2 import Arc2
 from pyleecan.Classes.Arc3 import Arc3
+from pyleecan.Classes.Bore import Bore
+from pyleecan.Classes.BoreFlower import BoreFlower
 from pyleecan.Classes.Circle import Circle
 from pyleecan.Classes.CondType11 import CondType11
 from pyleecan.Classes.CondType12 import CondType12

@@ -60,13 +60,22 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
     surf_list = list()
     # Lamination surface(s)
     if sym == 1:  # Complete lamination
-        surf_list.append(
-            SurfLine(
-                line_list=self.get_bore_line(0, 2 * pi, label=label_bore),
-                label="Lamination_" + label + "_Bore_" + label1,
-                point_ref=ref_point,
+        if self.bore is None:
+            surf_list.append(
+                SurfLine(
+                    line_list=self.get_bore_line(0, 2 * pi, label=label_bore),
+                    label="Lamination_" + label + "_Bore_" + label1,
+                    point_ref=ref_point,
+                )
             )
-        )
+        else:
+            surf_list.append(
+                SurfLine(
+                    line_list=self.bore.get_bore_line(label=label_bore),
+                    label="Lamination_" + label + "_Bore_" + label1,
+                    point_ref=ref_point,
+                )
+            )
         if Ryoke > 0:
             surf_list.append(
                 Circle(

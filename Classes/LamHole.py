@@ -57,6 +57,7 @@ except ImportError as error:
 
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Hole import Hole
+from pyleecan.Classes.Bore import Bore
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.Notch import Notch
 
@@ -160,6 +161,7 @@ class LamHole(Lamination):
     def __init__(
         self,
         hole=list(),
+        bore=None,
         L1=0.35,
         mat_type=-1,
         Nrvd=0,
@@ -182,6 +184,8 @@ class LamHole(Lamination):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if bore == -1:
+            bore = Bore()
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
@@ -189,6 +193,7 @@ class LamHole(Lamination):
                 init_dict,
                 [
                     "hole",
+                    "bore",
                     "L1",
                     "mat_type",
                     "Nrvd",
@@ -205,6 +210,8 @@ class LamHole(Lamination):
             # Overwrite default value with init_dict content
             if "hole" in list(init_dict.keys()):
                 hole = init_dict["hole"]
+            if "bore" in list(init_dict.keys()):
+                bore = init_dict["bore"]
             if "L1" in list(init_dict.keys()):
                 L1 = init_dict["L1"]
             if "mat_type" in list(init_dict.keys()):
@@ -264,6 +271,20 @@ class LamHole(Lamination):
             self.hole = list()
         else:
             self.hole = hole
+        # bore can be None, a Bore object or a dict
+        if isinstance(bore, dict):
+            # Check that the type is correct (including daughter)
+            class_name = bore.get("__class__")
+            if class_name not in ["Bore", "BoreFlower"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for bore"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.bore = class_obj(init_dict=bore)
+        else:
+            self.bore = bore
         # Call Lamination init
         super(LamHole, self).__init__(
             L1=L1,
@@ -291,8 +312,18 @@ class LamHole(Lamination):
             LamHole_str += "hole = []"
         for ii in range(len(self.hole)):
             LamHole_str += (
-                "hole[" + str(ii) + "] = " + str(self.hole[ii].as_dict()) + "\n"
+                "hole["
+                + str(ii)
+                + "] = "
+                + str(self.hole[ii].as_dict())
+                + "\n"
+                + linesep
+                + linesep
             )
+        if self.bore is not None:
+            LamHole_str += "bore = " + str(self.bore.as_dict()) + linesep + linesep
+        else:
+            LamHole_str += "bore = None"
         return LamHole_str
 
     def __eq__(self, other):
@@ -306,6 +337,8 @@ class LamHole(Lamination):
             return False
         if other.hole != self.hole:
             return False
+        if other.bore != self.bore:
+            return False
         return True
 
     def as_dict(self):
@@ -317,6 +350,10 @@ class LamHole(Lamination):
         LamHole_dict["hole"] = list()
         for obj in self.hole:
             LamHole_dict["hole"].append(obj.as_dict())
+        if self.bore is None:
+            LamHole_dict["bore"] = None
+        else:
+            LamHole_dict["bore"] = self.bore.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         LamHole_dict["__class__"] = "LamHole"
@@ -327,6 +364,8 @@ class LamHole(Lamination):
 
         for obj in self.hole:
             obj._set_None()
+        if self.bore is not None:
+            self.bore._set_None()
         # Set to None the properties inherited from Lamination
         super(LamHole, self)._set_None()
 
@@ -349,3 +388,19 @@ class LamHole(Lamination):
     # lamination Hole
     # Type : [Hole]
     hole = property(fget=_get_hole, fset=_set_hole, doc=u"""lamination Hole""")
+
+    def _get_bore(self):
+        """getter of bore"""
+        return self._bore
+
+    def _set_bore(self, value):
+        """setter of bore"""
+        check_var("bore", value, "Bore")
+        self._bore = value
+
+        if self._bore is not None:
+            self._bore.parent = self
+
+    # Bore Shape
+    # Type : Bore
+    bore = property(fget=_get_bore, fset=_set_bore, doc=u"""Bore Shape""")
