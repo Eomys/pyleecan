@@ -65,7 +65,7 @@ def generate_code(root_path, gen_dict=None):
         gen_dict = read_all(DOC_DIR)
 
     # Generate all the class files (sorted to remove "commit noise")
-    for class_name, class_dict in iter(sorted(list(gen_dict.items()))):
+    for class_name, _ in iter(sorted(list(gen_dict.items()))):
         import_file.write(
             "from pyleecan.Classes." + class_name + " import " + class_name + "\n"
         )
