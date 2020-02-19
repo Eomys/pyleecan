@@ -79,7 +79,13 @@ class Simulation(FrozenClass):
         if isinstance(input, dict):
             # Check that the type is correct (including daughter)
             class_name = input.get("__class__")
-            if class_name not in ["Input", "InCurrent", "InFlux", "InForce"]:
+            if class_name not in [
+                "Input",
+                "InCurrent",
+                "InCurrentDQ",
+                "InFlux",
+                "InForce",
+            ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for input"
                 )

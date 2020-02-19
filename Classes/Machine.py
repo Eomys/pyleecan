@@ -280,6 +280,7 @@ class Machine(FrozenClass):
                 "LamHole",
                 "LamSlot",
                 "LamSlotMag",
+                "LamSlotMulti",
                 "LamSlotWind",
                 "LamSquirrelCage",
             ]:
@@ -301,6 +302,7 @@ class Machine(FrozenClass):
                 "LamHole",
                 "LamSlot",
                 "LamSlotMag",
+                "LamSlotMulti",
                 "LamSlotWind",
                 "LamSquirrelCage",
             ]:
