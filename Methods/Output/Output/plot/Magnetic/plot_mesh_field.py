@@ -59,7 +59,9 @@ def plot_mesh_field(
 
         fig, ax = plt.subplots()
         ax.set_aspect("equal")
-        pc = triplot(mesh, elem_type, field, ax=ax, edgecolor="white", cmap="rainbow")
+        pc = triplot(
+            mesh, elem_type, field, ax=ax, lw=0.1, edgecolor="white", cmap="rainbow"
+        )
         fig.colorbar(pc, ax=ax)
 
         nodes, tags = mesh.get_all_node_coord()
