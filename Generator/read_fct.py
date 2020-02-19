@@ -11,6 +11,7 @@ from pyleecan.Generator import PYTHON_TYPE
 
 # Constants for csv reading, i.e. column number of data
 NAME_COL = 0  # attribue name
+UNIT_COL = 1  # value unit
 EN_DESC_COL = 2  # english description
 TYPE_COL = 4  # type
 DEF_VAL_COL = 5  # default value
@@ -45,7 +46,7 @@ def read_all(path, is_internal=False, in_path=""):
     gen_dict = dict()
 
     # Read the open source doc
-    for (dirpath, dirnames, filenames) in walk(path):
+    for (dirpath, _, filenames) in walk(path):
         for file_name in filenames:
             if file_name[-4:] == ".csv" and file_name[:2] != "~$":
                 # For all .csv file in the folder and subfolder ...
@@ -54,7 +55,7 @@ def read_all(path, is_internal=False, in_path=""):
 
     # Read the Internal doc to adapt the classes (if needed)
     if is_internal:
-        for (dirpath, dirnames, filenames) in walk(in_path):
+        for (dirpath, _, filenames) in walk(in_path):
             for file_name in filenames:
                 if file_name[-4:] == ".csv" and file_name[:2] != "~$":
                     # For all .csv file in the folder and subfolder ...
@@ -107,6 +108,7 @@ def read_file(path):
             if name != "":
                 prop_dict = dict()
                 prop_dict["name"] = name
+                prop_dict["unit"] = class_csv[rx][UNIT_COL]
                 prop_dict["type"] = class_csv[rx][TYPE_COL]
                 prop_dict["min"] = class_csv[rx][MIN_VAL_COL].replace(",", ".")
                 prop_dict["max"] = class_csv[rx][MAX_VAL_COL].replace(",", ".")

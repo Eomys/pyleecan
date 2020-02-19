@@ -1,6 +1,6 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+﻿Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 hole,,lamination Hole,1,[Hole],,,,,Machine,Lamination,build_geometry,VERSION,1,Lamination with Hole with or without magnet or winding
-,,,,,,,,,,,comp_height_yoke,,,
+bore,,Bore Shape,,Bore,None,,,,,,comp_height_yoke,,,
 ,,,,,,,,,,,comp_masses,,,
 ,,,,,,,,,,,comp_surfaces,,,
 ,,,,,,,,,,,comp_volumes,,,

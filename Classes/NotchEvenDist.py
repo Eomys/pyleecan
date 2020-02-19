@@ -4,44 +4,43 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Notch import Notch
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.NotchEvenDist.build_geometry import build_geometry
+    from pyleecan.Methods.Machine.NotchEvenDist.get_notch_list import get_notch_list
 except ImportError as error:
-    build_geometry = error
+    get_notch_list = error
 
 
-from numpy import array, array_equal
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
 
 
 class NotchEvenDist(Notch):
-    """Class for evenly distributed notches"""
+    """Class for evenly distributed notches (according to Zs)"""
 
     VERSION = 1
 
-    # cf Methods.Machine.NotchEvenDist.build_geometry
-    if isinstance(build_geometry, ImportError):
-        build_geometry = property(
+    # cf Methods.Machine.NotchEvenDist.get_notch_list
+    if isinstance(get_notch_list, ImportError):
+        get_notch_list = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use NotchEvenDist method build_geometry: "
-                    + str(build_geometry)
+                    "Can't use NotchEvenDist method get_notch_list: "
+                    + str(get_notch_list)
                 )
             )
         )
     else:
-        build_geometry = build_geometry
+        get_notch_list = get_notch_list
     # save method is available in all object
     save = save
 
-    def __init__(self, alpha=None, notch_shape=list(), init_dict=None):
+    def __init__(self, alpha=0, notch_shape=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -51,6 +50,8 @@ class NotchEvenDist(Notch):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if notch_shape == -1:
+            notch_shape = Slot()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(init_dict, ["alpha", "notch_shape"])
             # Overwrite default value with init_dict content
@@ -59,10 +60,49 @@ class NotchEvenDist(Notch):
             if "notch_shape" in list(init_dict.keys()):
                 notch_shape = init_dict["notch_shape"]
         # Initialisation by argument
-        # alpha can be None, a ndarray or a list
-        set_array(self, "alpha", alpha)
+        self.alpha = alpha
+        # notch_shape can be None, a Slot object or a dict
+        if isinstance(notch_shape, dict):
+            # Check that the type is correct (including daughter)
+            class_name = notch_shape.get("__class__")
+            if class_name not in [
+                "Slot",
+                "Slot19",
+                "SlotMFlat",
+                "SlotMPolar",
+                "SlotMag",
+                "SlotUD",
+                "SlotW10",
+                "SlotW11",
+                "SlotW12",
+                "SlotW13",
+                "SlotW14",
+                "SlotW15",
+                "SlotW16",
+                "SlotW21",
+                "SlotW22",
+                "SlotW23",
+                "SlotW24",
+                "SlotW25",
+                "SlotW26",
+                "SlotW27",
+                "SlotW28",
+                "SlotW29",
+                "SlotW60",
+                "SlotW61",
+                "SlotWind",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for notch_shape"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.notch_shape = class_obj(init_dict=notch_shape)
+        else:
+            self.notch_shape = notch_shape
         # Call Notch init
-        super(NotchEvenDist, self).__init__(notch_shape=notch_shape)
+        super(NotchEvenDist, self).__init__()
         # The class is frozen (in Notch init), for now it's impossible to
         # add new properties
 
@@ -72,7 +112,13 @@ class NotchEvenDist(Notch):
         NotchEvenDist_str = ""
         # Get the properties inherited from Notch
         NotchEvenDist_str += super(NotchEvenDist, self).__str__() + linesep
-        NotchEvenDist_str += "alpha = " + linesep + str(self.alpha)
+        NotchEvenDist_str += "alpha = " + str(self.alpha) + linesep
+        if self.notch_shape is not None:
+            NotchEvenDist_str += (
+                "notch_shape = " + str(self.notch_shape.as_dict()) + linesep + linesep
+            )
+        else:
+            NotchEvenDist_str += "notch_shape = None"
         return NotchEvenDist_str
 
     def __eq__(self, other):
@@ -84,7 +130,9 @@ class NotchEvenDist(Notch):
         # Check the properties inherited from Notch
         if not super(NotchEvenDist, self).__eq__(other):
             return False
-        if not array_equal(other.alpha, self.alpha):
+        if other.alpha != self.alpha:
+            return False
+        if other.notch_shape != self.notch_shape:
             return False
         return True
 
@@ -94,10 +142,11 @@ class NotchEvenDist(Notch):
 
         # Get the properties inherited from Notch
         NotchEvenDist_dict = super(NotchEvenDist, self).as_dict()
-        if self.alpha is None:
-            NotchEvenDist_dict["alpha"] = None
+        NotchEvenDist_dict["alpha"] = self.alpha
+        if self.notch_shape is None:
+            NotchEvenDist_dict["notch_shape"] = None
         else:
-            NotchEvenDist_dict["alpha"] = self.alpha.tolist()
+            NotchEvenDist_dict["notch_shape"] = self.notch_shape.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         NotchEvenDist_dict["__class__"] = "NotchEvenDist"
@@ -107,6 +156,8 @@ class NotchEvenDist(Notch):
         """Set all the properties to None (except pyleecan object)"""
 
         self.alpha = None
+        if self.notch_shape is not None:
+            self.notch_shape._set_None()
         # Set to None the properties inherited from Notch
         super(NotchEvenDist, self)._set_None()
 
@@ -116,16 +167,29 @@ class NotchEvenDist(Notch):
 
     def _set_alpha(self, value):
         """setter of alpha"""
-        if type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("alpha", value, "ndarray")
+        check_var("alpha", value, "float")
         self._alpha = value
 
     # angular positon of the first notch
-    # Type : ndarray
+    # Type : float
     alpha = property(
         fget=_get_alpha, fset=_set_alpha, doc=u"""angular positon of the first notch"""
+    )
+
+    def _get_notch_shape(self):
+        """getter of notch_shape"""
+        return self._notch_shape
+
+    def _set_notch_shape(self, value):
+        """setter of notch_shape"""
+        check_var("notch_shape", value, "Slot")
+        self._notch_shape = value
+
+        if self._notch_shape is not None:
+            self._notch_shape.parent = self
+
+    # Shape of the Notch
+    # Type : Slot
+    notch_shape = property(
+        fget=_get_notch_shape, fset=_set_notch_shape, doc=u"""Shape of the Notch"""
     )

@@ -97,6 +97,11 @@ try:
 except ImportError as error:
     comp_height_yoke = error
 
+try:
+    from pyleecan.Methods.Machine.Lamination.get_notch_list import get_notch_list
+except ImportError as error:
+    get_notch_list = error
+
 
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Material import Material
@@ -293,6 +298,17 @@ class Lamination(FrozenClass):
         )
     else:
         comp_height_yoke = comp_height_yoke
+    # cf Methods.Machine.Lamination.get_notch_list
+    if isinstance(get_notch_list, ImportError):
+        get_notch_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method get_notch_list: " + str(get_notch_list)
+                )
+            )
+        )
+    else:
+        get_notch_list = get_notch_list
     # save method is available in all object
     save = save
 

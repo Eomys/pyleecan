@@ -5,6 +5,7 @@
 import sys
 from os.path import dirname, abspath, normpath, join
 from os import listdir, remove
+import json
 
 sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", ".."))))
 
@@ -77,6 +78,11 @@ def generate_code(root_path, gen_dict=None):
 
     print("Generation of load_switch.py")
     print("Generation of import_all.py")
+
+    # Save gen_dict
+    class_dict_file = join(CLASS_DIR, "Class_Dict.json")
+    with open(class_dict_file, "w") as json_file:
+        json.dump(gen_dict, json_file, sort_keys=True, indent=4, separators=(",", ": "))
 
 
 if __name__ == "__main__":

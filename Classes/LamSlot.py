@@ -47,6 +47,11 @@ try:
 except ImportError as error:
     comp_height_yoke = error
 
+try:
+    from pyleecan.Methods.Machine.LamSlot.get_Zs import get_Zs
+except ImportError as error:
+    get_Zs = error
+
 
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
@@ -136,6 +141,15 @@ class LamSlot(Lamination):
         )
     else:
         comp_height_yoke = comp_height_yoke
+    # cf Methods.Machine.LamSlot.get_Zs
+    if isinstance(get_Zs, ImportError):
+        get_Zs = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlot method get_Zs: " + str(get_Zs))
+            )
+        )
+    else:
+        get_Zs = get_Zs
     # save method is available in all object
     save = save
 

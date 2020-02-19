@@ -8,6 +8,8 @@ from pyleecan.Classes.Arc import Arc
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Arc2 import Arc2
 from pyleecan.Classes.Arc3 import Arc3
+from pyleecan.Classes.Bore import Bore
+from pyleecan.Classes.BoreFlower import BoreFlower
 from pyleecan.Classes.Circle import Circle
 from pyleecan.Classes.CondType11 import CondType11
 from pyleecan.Classes.CondType12 import CondType12
@@ -36,12 +38,14 @@ from pyleecan.Classes.ImportMatrix import ImportMatrix
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
 from pyleecan.Classes.InCurrent import InCurrent
+from pyleecan.Classes.InCurrentDQ import InCurrentDQ
 from pyleecan.Classes.InFlux import InFlux
 from pyleecan.Classes.InForce import InForce
 from pyleecan.Classes.Input import Input
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.LamSlotMag import LamSlotMag
+from pyleecan.Classes.LamSlotMulti import LamSlotMulti
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.Lamination import Lamination
