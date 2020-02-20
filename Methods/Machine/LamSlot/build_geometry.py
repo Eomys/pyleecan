@@ -57,6 +57,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
 
     # getting the Lines that delimit one slot
     Slot_lines = self.slot.build_geometry()
+    # By convention, the first tooth is centered on X+ axis
     for line in Slot_lines:
         line.rotate(slot_pitch / 2)
 

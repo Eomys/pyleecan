@@ -4,7 +4,9 @@ import sys
 import gmsh
 
 
-def gen_3D_mesh(lamination, save_path="Lamination.msh", mesh_size=5e-3, Nlayer=20):
+def gen_3D_mesh(
+    lamination, save_path="Lamination.msh", sym=-1, mesh_size=5e-3, Nlayer=20
+):
     """Draw 3D mesh of the lamination
     Parameters
     ----------
@@ -12,6 +14,8 @@ def gen_3D_mesh(lamination, save_path="Lamination.msh", mesh_size=5e-3, Nlayer=2
         Lamintation with slot to draw
     save_path: str
         Path to save the msh result file
+    sym : int
+        Number of symmetry to apply
     mesh_size : float
         Size of the mesh [m]
     Nlayer : int
@@ -21,13 +25,18 @@ def gen_3D_mesh(lamination, save_path="Lamination.msh", mesh_size=5e-3, Nlayer=2
     -------
     None
     """
-    tooth_surf = lamination.slot.get_surface_tooth()
+    # The defaut symmetry is Zs => We draw only one tooth
+    if sym == -1:
+        tooth_surf = lamination.slot.get_surface_tooth()
+        Zs = lamination.get_Zs()
+    else:
+        tooth_surf = lamination.build_geometry(sym=sym)[0]
+        Zs = sym
 
     # For readibility
     model = gmsh.model
     factory = model.geo
     L = lamination.L1  # Lamination length
-    Zs = lamination.slot.Zs
 
     # Start a new model
     gmsh.initialize(sys.argv)
@@ -72,7 +81,7 @@ def gen_3D_mesh(lamination, save_path="Lamination.msh", mesh_size=5e-3, Nlayer=2
     surf_list = [1]
     for ii in range(Zs):
         ov = factory.copy([(2, 1)])
-        factory.rotate(ov, 0, 0, -L / 2, 0, 0, 1, (ii + 1) * 2 * pi / 36)
+        factory.rotate(ov, 0, 0, -L / 2, 0, 0, 1, (ii + 1) * 2 * pi / Zs)
         surf_list.append(ov[0][1])
     gmsh.model.addPhysicalGroup(2, surf_list, 2)
     gmsh.model.setPhysicalName(2, 2, "Lamination")
