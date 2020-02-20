@@ -20,6 +20,15 @@ def generate_uml(file_path, save_file=None, is_attributes=True, is_methods=True)
     with open(file_path, "r") as load_file:
         class_dict = jload(load_file)
 
+    # get classes by package
+    package_dict = {}
+    for key, item in class_dict.items():
+        pkg_name = item['package']
+        if pkg_name in package_dict:
+            package_dict[pkg_name].append(key)
+        else:
+            package_dict[pkg_name] = [key]
+
     # generate dot language file header
     header = ""
     header += 0 * TAB + "digraph G {\n"
@@ -38,28 +47,38 @@ def generate_uml(file_path, save_file=None, is_attributes=True, is_methods=True)
     # content
     cls_str = ""
     rel_str = "\n\n"
-    for cls_name, cls_dict in class_dict.items():
-        cls_str += "\n"
-        cls_str += 1 * TAB + cls_name + "_ [\n"
-        cls_str += 2 * TAB + 'label = "{' + cls_name + "|"
-        if is_attributes:
-            for attr in cls_dict["properties"]:
-                type_str = attr["type"]
-                type_str = type_str.replace("]", ")")
-                type_str = type_str.replace("}", ")")
-                type_str = type_str.replace("[", "list(")
-                type_str = type_str.replace("{", "dict(")
-                cls_str += attr["name"] + " : " + type_str + "\\l"
-        cls_str += "|"
-        if is_methods:
-            for mthd in cls_dict["methods"]:
-                cls_str += mthd + "()\\l"
 
-        cls_str += '}"\n'
-        cls_str += 1 * TAB + "]"
+    for pkg_name, pkg_classes in package_dict.items():
+        cls_str += 1 * TAB + "\n"
+        cls_str += 1 * TAB + f"subgraph  cluster{pkg_name} {{\n" # keyword 'cluster' is needed
+        cls_str += 2 * TAB + f'label = "Package: {pkg_name}"\n\n'
 
-        if cls_dict["mother"]:
-            rel_str += 1 * TAB + cls_name + "_ -> " + cls_dict["mother"] + "_\n"
+        for cls_name in pkg_classes:
+            cls_dict = class_dict[cls_name]
+            cls_str += "\n"
+            cls_str += 2 * TAB + cls_name + "_ [\n"
+            cls_str += 3 * TAB + 'label = "{' + cls_name + "|"
+            if is_attributes:
+                for attr in cls_dict["properties"]:
+                    type_str = attr["type"]
+                    type_str = type_str.replace("]", ")")
+                    type_str = type_str.replace("}", ")")
+                    type_str = type_str.replace("[", "list(")
+                    type_str = type_str.replace("{", "dict(")
+                    cls_str += attr["name"] + " : " + type_str + "\\l"
+            cls_str += "|"
+            if is_methods:
+                for mthd in cls_dict["methods"]:
+                    cls_str += mthd + "()\\l"
+
+            cls_str += '}"\n'
+            cls_str += 2 * TAB + "]"
+
+            if cls_dict["mother"]:
+                rel_str += 1 * TAB + cls_name + "_ -> " + cls_dict["mother"] + "_\n"
+
+        cls_str += 1 * TAB + "\n"
+        cls_str += 1 * TAB + "}\n"
 
     # footer
     footer = "\n}"
