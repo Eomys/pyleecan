@@ -1,5 +1,5 @@
-Variable name,Unit,Description (EN),Description (FR),Size,Type,Default value,Minimum value,Maximum value,Observations,Level,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-name,,name of the design variable,,1,str,,,,,1,,Optimization,,,VERSION,1,Optimization,
-type_var,,Type of the variable interval or set.,,1,str,interval,,,,1,,,,,,,,
-space,,Space of the variable,,2,list,"[0,1]",,,,1,,,,,,,,
-function,,Function of the space to initiate the variable,,1,function,None,,,,,,,,,,,,
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+name,,name of the design variable,1,str,,,,,Optimization,,,VERSION,1,Optimization,
+type_var,,Type of the variable interval or set.,1,str,interval,,,,,,,,,,
+space,,Space of the variable,2,list,"[0,1]",,,,,,,,,,
+function,,Function of the space to initiate the variable,1,function,None,,,,,,,,,,
