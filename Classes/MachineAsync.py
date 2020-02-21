@@ -17,7 +17,6 @@ except ImportError as error:
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Lamination import Lamination
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
 
@@ -44,8 +43,6 @@ class MachineAsync(Machine):
 
     def __init__(
         self,
-        rotor=-1,
-        stator=-1,
         frame=-1,
         shaft=-1,
         name="default_machine",
@@ -62,24 +59,15 @@ class MachineAsync(Machine):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if rotor == -1:
-            rotor = Lamination()
-        if stator == -1:
-            stator = Lamination()
         if frame == -1:
             frame = Frame()
         if shaft == -1:
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict,
-                ["rotor", "stator", "frame", "shaft", "name", "desc", "type_machine"],
+                init_dict, ["frame", "shaft", "name", "desc", "type_machine"]
             )
             # Overwrite default value with init_dict content
-            if "rotor" in list(init_dict.keys()):
-                rotor = init_dict["rotor"]
-            if "stator" in list(init_dict.keys()):
-                stator = init_dict["stator"]
             if "frame" in list(init_dict.keys()):
                 frame = init_dict["frame"]
             if "shaft" in list(init_dict.keys()):
@@ -93,13 +81,7 @@ class MachineAsync(Machine):
         # Initialisation by argument
         # Call Machine init
         super(MachineAsync, self).__init__(
-            rotor=rotor,
-            stator=stator,
-            frame=frame,
-            shaft=shaft,
-            name=name,
-            desc=desc,
-            type_machine=type_machine,
+            frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine
         )
         # The class is frozen (in Machine init), for now it's impossible to
         # add new properties

@@ -22,7 +22,7 @@ except ImportError as error:
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Lamination import Lamination
+from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
 
@@ -78,9 +78,9 @@ class MachineSCIM(MachineDFIM):
         object or dict can be given for pyleecan Object"""
 
         if rotor == -1:
-            rotor = Lamination()
+            rotor = LamSlotWind()
         if stator == -1:
-            stator = Lamination()
+            stator = LamSlotWind()
         if frame == -1:
             frame = Frame()
         if shaft == -1:
