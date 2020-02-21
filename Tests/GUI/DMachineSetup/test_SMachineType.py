@@ -87,7 +87,7 @@ class test_SMachineType(TestCase):
             is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
         self.test_obj.stator.winding.p = 21
-        self.test_obj.rotor = LamSlotMag(
+        self.test_obj.rotor = LamHole(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
         self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
@@ -138,7 +138,7 @@ class test_SMachineType(TestCase):
             is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
         self.test_obj.stator.winding.p = 10
-        self.test_obj.rotor = LamSlotMag(
+        self.test_obj.rotor = LamHole(
             is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
         self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)

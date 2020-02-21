@@ -13,8 +13,8 @@ from numpy import pi
 
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.Lamination import Lamination
-from pyleecan.Classes.Machine import Machine
+from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 from pyleecan.Classes.Magnet import Magnet
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.VentilationCirc import VentilationCirc
@@ -30,7 +30,7 @@ class test_Hole_50_plot(TestCase):
     def setUp(self):
         """Run at the begining of every test to setup the machine"""
         plt.close("all")
-        test_obj = Machine()
+        test_obj = MachineIPMSM()
         test_obj.rotor = LamHole(
             is_internal=True, Rint=0.021, Rext=0.075, is_stator=False, L1=0.7
         )
@@ -60,9 +60,10 @@ class test_Hole_50_plot(TestCase):
         )
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1.2)
 
-        test_obj.stator = Lamination(
+        test_obj.stator = LamSlotWind(
             Rint=0.078, Rext=0.104, is_internal=False, is_stator=True, L1=0.8
         )
+        test_obj.stator.slot = None
         test_obj.stator.axial_vent.append(
             VentilationPolar(Zh=8, H0=0.08, D0=0.01, W1=pi / 8, Alpha0=pi / 8)
         )

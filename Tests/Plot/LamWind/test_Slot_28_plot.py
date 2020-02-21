@@ -14,7 +14,7 @@ from numpy import array, pi, zeros
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
-from pyleecan.Classes.Machine import Machine
+from pyleecan.Classes.MachineDFIM import MachineDFIM
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
@@ -38,7 +38,7 @@ class test_Lam_Wind_28_plot(TestCase):
         """
         print("\nTest plot Slot 28")
         plt.close("all")
-        test_obj = Machine()
+        test_obj = MachineDFIM()
         test_obj.rotor = LamSlotWind(
             Rint=35e-3,
             Rext=84e-3,
@@ -96,7 +96,7 @@ class test_Lam_Wind_28_plot(TestCase):
         """Test machine plot with Slot 28 and winding rad=2, tan=2
         """
         plt.close("all")
-        test_obj = Machine()
+        test_obj = MachineDFIM()
         test_obj.rotor = LamSlotWind(
             Rint=0.01,
             Rext=0.129,

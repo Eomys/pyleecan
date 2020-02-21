@@ -6,8 +6,8 @@ from ddt import ddt, data
 from mock import MagicMock
 from numpy import array, pi, zeros
 
-from pyleecan.Classes.Machine import Machine
-from pyleecan.Classes.Lamination import Lamination
+from pyleecan.Classes.MachineIPMSM import MachineIPMSM
+from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
@@ -19,7 +19,7 @@ from pyleecan.Classes.Shaft import Shaft
 DELTA = 1e-4
 
 M_test = list()
-test_obj = Machine()
+test_obj = MachineIPMSM()
 test_obj.rotor = LamHole(
     is_internal=True, Rint=0.021, Rext=0.075, is_stator=False, L1=0.7, Nrvd=0, Kf1=0.95
 )
@@ -51,9 +51,11 @@ test_obj.rotor.axial_vent.append(
 test_obj.rotor.mat_type.struct.rho = 7600
 test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1.2)
 test_obj.shaft.mat_type.struct.rho = 5000
-test_obj.stator = Lamination(
+test_obj.stator = LamSlotWind(
     Rint=0.078, Rext=0.104, is_internal=False, is_stator=True, L1=0.8, Nrvd=0, Kf1=0.95
 )
+test_obj.stator.slot = None
+test_obj.stator.winding = None
 test_obj.stator.axial_vent.append(
     VentilationPolar(Zh=8, H0=0.08, D0=0.01, W1=pi / 8, Alpha0=pi / 8)
 )
