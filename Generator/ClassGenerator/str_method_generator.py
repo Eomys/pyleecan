@@ -86,6 +86,16 @@ def generate_str(gen_dict, class_dict):
                 + prop["name"]
                 + "[1])"
             )
+        elif "." in prop["type"]:  # Imported type
+            var_str += (
+                TAB2
+                + class_name
+                + '_str += "'
+                + prop["name"]
+                + ' = " + linesep + str(self.'
+                + prop["name"]
+                + ")"
+            )
         elif prop["type"] in ["ndarray", "list"]:
             # For Matrix (skip a line then print the matrix)
             # Add => < MyClass_str += "my_var = "+ linesep + str(
@@ -138,27 +148,29 @@ def generate_str(gen_dict, class_dict):
             var_str += (
                 TAB3 + class_name + '_str += "' + prop["name"] + '["+key+"] ="+ tmp'
             )
-        else:  # For pyleecan type print the dict (from as_dict)
+        else:  # For pyleecan type print the __str__
             # Add => < "MyClass = "+str(self.my_var.as_dict()) >to var_str
             var_str += TAB2 + "if self." + prop["name"] + " is not None:\n"
             var_str += (
                 TAB3
                 + "tmp = self."
                 + prop["name"]
-                + '.__str__()[:-2].replace(linesep, linesep + "\\t") \n'
+                + '.__str__()[:-2].replace(linesep, linesep + "\\t")+"\\n" \n'
             )
-            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = "+ tmp\n'
+            var_str += (
+                TAB3 + class_name + '_str +="\\t" "' + prop["name"] + ' = "+ tmp\n'
+            )
             var_str += TAB2 + "else:\n"
-            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = None"'
+            var_str += TAB3 + class_name + '_str +="\\t"+ "' + prop["name"] + ' = None"'
 
         # Add linesep except for the last line
-        if ii == len(class_dict["properties"]) - 1:
-            var_str += "\n"
-        else:
-            if prop["type"] in PYTHON_TYPE:
-                var_str += " + linesep\n"
-            else:  # Skip two lines for pyleecan type and ndarray
-                var_str += " + linesep + linesep\n"
+        # if ii == len(class_dict["properties"]) - 1:
+        #     var_str += "\n"
+        # else:
+        if prop["type"] in PYTHON_TYPE:
+            var_str += " + linesep\n"
+        else:  # Skip two lines for pyleecan type and ndarray
+            var_str += " + linesep + linesep\n"
     # Code generation
     str_str += TAB + "def __str__(self):\n"
     str_str += (

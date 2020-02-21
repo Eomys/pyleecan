@@ -68,6 +68,29 @@ def generate_as_dict(gen_dict, class_dict):
                 + prop["name"]
                 + "[1]]\n"
             )
+        elif "." in prop["type"]:  # Type from external package
+            var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
+            var_str += (
+                TAB2
+                + "else: # Store serialized data (using cloudpickle) and str to read it in json save files\n"
+            )
+            var_str += (
+                TAB3
+                + class_name
+                + "_dict['"
+                + prop["name"]
+                + '\'] ={"__class__" : str(type(self._'
+                + prop["name"]
+                + ")),"
+                + '"__repr__":str(self._'
+                + prop["name"]
+                + ".__repr__()),"
+                + '"serialized":dumps(self._'
+                + prop["name"]
+                + ").decode('ISO-8859-2')}\n"
+            )
+
         elif is_list_pyleecan_type(prop["type"]):
             var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = list()\n'
             var_str += TAB2 + "for obj in self." + prop["name"] + ":\n"

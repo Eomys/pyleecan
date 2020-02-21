@@ -33,7 +33,11 @@ def generate_init(gen_dict, class_dict):
         init_by_var += TAB2 + "self.parent = None\n"
 
     for prop in class_dict["properties"]:
-        if prop["type"] in PYTHON_TYPE or prop["type"] == "function":
+        if (
+            prop["type"] in PYTHON_TYPE
+            or prop["type"] == "function"
+            or "." in prop["type"]
+        ):
             # Add => "self.my_var = my_var\n" to init_by_var
             init_by_var += TAB2 + "self." + prop["name"] + " = " + prop["name"] + "\n"
         elif prop["type"] == "ndarray":
@@ -189,7 +193,14 @@ def generate_init(gen_dict, class_dict):
             else:
                 arg_list += ", " + prop["name"] + "=None"
         elif prop["type"] == "function":
+            # Callable type (function or lambda function)
             arg_list += ", " + prop["name"] + "=None"
+        elif "." in prop["type"]:
+            # Imported type
+            if prop["value"] != "":
+                arg_list += ", " + prop["name"] + "=" + prop["value"]
+            else:
+                arg_list += ", " + prop["name"] + "=None"
         elif is_list_pyleecan_type(prop["type"]):
             # List of pyleecan type
             arg_list += ", " + prop["name"] + "=list()"

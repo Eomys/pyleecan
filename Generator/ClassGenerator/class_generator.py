@@ -11,14 +11,18 @@ from pyleecan.Generator.read_fct import (
     is_list_pyleecan_type,
     is_dict_pyleecan_type,
 )
-from pyleecan.Generator.import_method_generator import import_method
-from pyleecan.Generator.init_method_generator import generate_init
-from pyleecan.Generator.str_method_generator import generate_str
-from pyleecan.Generator.as_dict_method_generator import generate_as_dict
-from pyleecan.Generator.properties_generator import generate_properties
-from pyleecan.Generator.init_void_method_generator import generate_init_void
-from pyleecan.Generator.eq_method_generator import generate_eq
-from pyleecan.Generator.set_None_method_generator import generate_set_None
+from pyleecan.Generator.ClassGenerator.import_method_generator import import_method
+from pyleecan.Generator.ClassGenerator.init_method_generator import generate_init
+from pyleecan.Generator.ClassGenerator.str_method_generator import generate_str
+from pyleecan.Generator.ClassGenerator.as_dict_method_generator import generate_as_dict
+from pyleecan.Generator.ClassGenerator.properties_generator import generate_properties
+from pyleecan.Generator.ClassGenerator.init_void_method_generator import (
+    generate_init_void,
+)
+from pyleecan.Generator.ClassGenerator.eq_method_generator import generate_eq
+from pyleecan.Generator.ClassGenerator.set_None_method_generator import (
+    generate_set_None,
+)
 
 
 def generate_class(gen_dict, class_name, path_to_gen):
@@ -114,18 +118,46 @@ def generate_class(gen_dict, class_name, path_to_gen):
         import_type_list.remove("{ndarray}")
 
     # For function type
+    cloudpickle_imported = False  # Only import cloudpickle once
     if "function" in import_type_list:
+        cloudpickle_imported = True
         class_file.write("from inspect import getsource\n")
         class_file.write("from cloudpickle import dumps, loads\n")
         class_file.write("from pyleecan.Classes._check import CheckTypeError\n")
         import_type_list.remove("function")
 
+    # Import types from other package
+    types_imported = []
+    for import_type in import_type_list:
+        if "." in import_type:
+            if cloudpickle_imported == False:
+                cloudpickle_imported = True
+                class_file.write("from cloudpickle import dumps, loads\n")
+                class_file.write("from pyleecan.Classes._check import CheckTypeError\n")
+
+            # Extract import name
+            type_name = import_type[: import_type.rfind(".")]
+
+            # Import the type if not already imported
+            if type_name not in types_imported:
+                class_file.write("try :\n")
+                class_file.write(TAB + "import  " + type_name + "\n")
+                class_file.write("except ImportError :\n")
+                class_file.write(TAB + type_name + "= ImportError\n")
+
+                types_imported.append(type_name)
+
     # Import of all needed pyleecan type for empty init
     class_file.write("from pyleecan.Classes._check import InitUnKnowClassError\n")
     for pyleecan_type in import_type_list:
-        class_file.write(
-            "from pyleecan.Classes." + pyleecan_type + " import " + pyleecan_type + "\n"
-        )
+        if "." not in pyleecan_type:
+            class_file.write(
+                "from pyleecan.Classes."
+                + pyleecan_type
+                + " import "
+                + pyleecan_type
+                + "\n"
+            )
 
     # Class declaration
     if class_dict["mother"] != "":

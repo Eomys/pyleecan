@@ -26,7 +26,11 @@ def generate_set_None(gen_dict, class_dict):
     var_str = ""
 
     for prop in class_dict["properties"]:
-        if prop["type"] in PYTHON_TYPE or prop["type"] in ["ndarray", "function"]:
+        if (
+            prop["type"] in PYTHON_TYPE
+            or prop["type"] in ["ndarray", "function"]
+            or "." in prop["type"]
+        ):
             var_str += TAB2 + "self." + prop["name"] + " = None\n"
         elif is_list_pyleecan_type(prop["type"]):
             var_str += TAB2 + "for obj in self." + prop["name"] + ":\n"

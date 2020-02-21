@@ -113,7 +113,12 @@ def read_file(path):
                 prop_dict["value"] = class_csv[rx][DEF_VAL_COL]
                 if prop_dict["type"] == "float":
                     prop_dict["value"] = prop_dict["value"].replace(",", ".")
-                if prop_dict["value"] != "" and prop_dict["type"] != "str":
+
+                elif (
+                    prop_dict["value"] != ""
+                    and prop_dict["type"] != "str"
+                    and "." not in prop_dict["value"]
+                ):
                     prop_dict["value"] = eval(prop_dict["value"])
                 desc = class_csv[rx][EN_DESC_COL]
                 prop_dict["desc"] = desc.replace("\\\\", "\\")

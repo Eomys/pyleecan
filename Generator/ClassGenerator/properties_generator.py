@@ -31,6 +31,7 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB2 + "for obj in self._" + prop["name"] + ":\n"
             prop_str += TAB3 + "if obj is not None:\n"
             prop_str += TAB4 + "obj.parent = self\n"
+            prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
 
         elif is_dict_pyleecan_type(prop["type"]) and prop["type"] != "{ndarray}":
             # TODO: Update the parent should be done only in the setter but
@@ -94,6 +95,33 @@ def generate_properties(gen_dict, class_dict):
                 TAB3
                 + "raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) \n"
             )
+
+        elif "." in prop["type"]:  # Import from another package
+            prop_str += TAB2 + "try: # Check the type \n"
+            prop_str += TAB3 + 'check_var("' + prop["name"] + '", value, "dict")\n'
+            prop_str += TAB2 + "except CheckTypeError:\n"
+            prop_str += (
+                TAB3
+                + 'check_var("'
+                + prop["name"]
+                + '", value, "'
+                + prop["type"]
+                + '")\n'
+            )
+            prop_str += TAB3 + "# property can be set from a list to handle loads\n"
+            prop_str += (
+                TAB2
+                + 'if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]\n'
+            )
+            prop_str += (
+                TAB3
+                + "self._"
+                + prop["name"]
+                + " = loads(value[\"serialized\"].encode('ISO-8859-2'))\n"
+            )
+            prop_str += TAB2 + "else: \n"
+            prop_str += TAB3 + "self._" + prop["name"] + "= value \n"
+
         else:
             prop_str += (
                 TAB2 + 'check_var("' + prop["name"] + '", value, "' + prop["type"] + '"'
@@ -114,9 +142,9 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB4 + "obj.parent = self\n\n"
         elif (
             prop["type"] not in PYTHON_TYPE
-            and prop["type"] not in ["ndarray", "function"]
+            and prop["type"] not in ["ndarray", "function", "{ndarray}"]
             and not is_dict_pyleecan_type(prop["type"])
-            and prop["type"] != "{ndarray}"
+            and "." not in prop["type"]
         ):
             # pyleecan type
             prop_str += TAB2 + "if self._" + prop["name"] + " is not None:\n"
