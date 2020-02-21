@@ -59,6 +59,7 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.MachineSRM import MachineSRM
 from pyleecan.Classes.MachineSyRM import MachineSyRM
 from pyleecan.Classes.MachineSync import MachineSync
+from pyleecan.Classes.MachineUD import MachineUD
 from pyleecan.Classes.MachineWRSM import MachineWRSM
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Magnet import Magnet

@@ -64,6 +64,7 @@ class Simulation(FrozenClass):
                 "MachineSRM",
                 "MachineSyRM",
                 "MachineSync",
+                "MachineUD",
                 "MachineWRSM",
             ]:
                 raise InitUnKnowClassError(

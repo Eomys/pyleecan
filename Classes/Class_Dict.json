@@ -2219,6 +2219,7 @@
             }
         ],
         "daughters": [
+            "LamSlot",
             "LamSlotMag",
             "LamSlotWind",
             "LamSquirrelCage"
@@ -2330,6 +2331,7 @@
             }
         ],
         "daughters": [
+            "LamSlotWind",
             "LamSquirrelCage"
         ],
         "desc": "Lamination with Slot filled with winding",
@@ -2618,6 +2620,7 @@
             "MachineSRM",
             "MachineSyRM",
             "MachineSync",
+            "MachineUD",
             "MachineWRSM"
         ],
         "desc": "Abstract class for machines",
@@ -2641,24 +2644,6 @@
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/Machine.csv",
         "properties": [
-            {
-                "desc": "Machine's Rotor",
-                "max": "",
-                "min": "",
-                "name": "rotor",
-                "type": "Lamination",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Machine's Stator",
-                "max": "",
-                "min": "",
-                "name": "stator",
-                "type": "Lamination",
-                "unit": "",
-                "value": ""
-            },
             {
                 "desc": "Machine's Frame",
                 "max": "",
@@ -2748,7 +2733,26 @@
         "name": "MachineDFIM",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/MachineDFIM.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Machine's Rotor",
+                "max": "",
+                "min": "",
+                "name": "rotor",
+                "type": "LamSlotWind",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Machine's Stator",
+                "max": "",
+                "min": "",
+                "name": "stator",
+                "type": "LamSlotWind",
+                "unit": "",
+                "value": ""
+            }
+        ]
     },
     "MachineIPMSM": {
         "constants": [
@@ -2768,7 +2772,26 @@
         "name": "MachineIPMSM",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/MachineIPMSM.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Machine's Rotor",
+                "max": "",
+                "min": "",
+                "name": "rotor",
+                "type": "LamHole",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Machine's Stator",
+                "max": "",
+                "min": "",
+                "name": "stator",
+                "type": "LamSlotWind",
+                "unit": "",
+                "value": ""
+            }
+        ]
     },
     "MachineSCIM": {
         "constants": [
@@ -2808,7 +2831,26 @@
         "name": "MachineSIPMSM",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/MachineSIPMSM.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Machine's Rotor",
+                "max": "",
+                "min": "",
+                "name": "rotor",
+                "type": "LamSlotMag",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Machine's Stator",
+                "max": "",
+                "min": "",
+                "name": "stator",
+                "type": "LamSlotWind",
+                "unit": "",
+                "value": ""
+            }
+        ]
     },
     "MachineSRM": {
         "constants": [
@@ -2828,7 +2870,26 @@
         "name": "MachineSRM",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/MachineSRM.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Machine's Rotor",
+                "max": "",
+                "min": "",
+                "name": "rotor",
+                "type": "LamSlot",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Machine's Stator",
+                "max": "",
+                "min": "",
+                "name": "stator",
+                "type": "LamSlotWind",
+                "unit": "",
+                "value": ""
+            }
+        ]
     },
     "MachineSyRM": {
         "constants": [
@@ -2848,7 +2909,26 @@
         "name": "MachineSyRM",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/MachineSyRM.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Machine's Rotor",
+                "max": "",
+                "min": "",
+                "name": "rotor",
+                "type": "LamHole",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Machine's Stator",
+                "max": "",
+                "min": "",
+                "name": "stator",
+                "type": "LamSlotWind",
+                "unit": "",
+                "value": ""
+            }
+        ]
     },
     "MachineSync": {
         "constants": [
@@ -2876,6 +2956,36 @@
         "path": "pyleecan/Generator/ClassesRef/Machine/MachineSync.csv",
         "properties": []
     },
+    "MachineUD": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Doubly Fed Induction Machine",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "plot"
+        ],
+        "mother": "Machine",
+        "name": "MachineUD",
+        "package": "Machine",
+        "path": "pyleecan/Generator/ClassesRef/Machine/MachineUD.csv",
+        "properties": [
+            {
+                "desc": "List of Lamination",
+                "max": "",
+                "min": "",
+                "name": "lam_list",
+                "type": "[Lamination]",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
     "MachineWRSM": {
         "constants": [
             {
@@ -2894,7 +3004,26 @@
         "name": "MachineWRSM",
         "package": "Machine",
         "path": "pyleecan/Generator/ClassesRef/Machine/MachineWRSM.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Machine's Rotor",
+                "max": "",
+                "min": "",
+                "name": "rotor",
+                "type": "LamSlotWind",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Machine's Stator",
+                "max": "",
+                "min": "",
+                "name": "stator",
+                "type": "LamSlotWind",
+                "unit": "",
+                "value": ""
+            }
+        ]
     },
     "MagFEMM": {
         "constants": [

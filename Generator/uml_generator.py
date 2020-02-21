@@ -23,7 +23,7 @@ def generate_uml(file_path, save_file=None, is_attributes=True, is_methods=True)
     # get classes by package
     package_dict = {}
     for key, item in class_dict.items():
-        pkg_name = item['package']
+        pkg_name = item["package"]
         if pkg_name in package_dict:
             package_dict[pkg_name].append(key)
         else:
@@ -50,7 +50,9 @@ def generate_uml(file_path, save_file=None, is_attributes=True, is_methods=True)
 
     for pkg_name, pkg_classes in package_dict.items():
         cls_str += 1 * TAB + "\n"
-        cls_str += 1 * TAB + f"subgraph  cluster{pkg_name} {{\n" # keyword 'cluster' is needed
+        cls_str += (
+            1 * TAB + f"subgraph  cluster{pkg_name} {{\n"
+        )  # keyword 'cluster' is needed
         cls_str += 2 * TAB + f'label = "Package: {pkg_name}"\n\n'
 
         for cls_name in pkg_classes:

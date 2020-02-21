@@ -61,6 +61,7 @@ load_switch = {
     "MachineSRM": MachineSRM,
     "MachineSyRM": MachineSyRM,
     "MachineSync": MachineSync,
+    "MachineUD": MachineUD,
     "MachineWRSM": MachineWRSM,
     "MagFEMM": MagFEMM,
     "Magnet": Magnet,

@@ -213,3 +213,60 @@ class test_ICEM_2020(TestCase):
         fig = plt.gcf()
         self.assertEqual(len(fig.axes[0].patches), 83)
         fig.savefig(join(save_path, "test_Christmas.png"))
+
+    def test_MachineUD(self):
+        """Check that you can plot a machine with 4 laminations
+        """
+        test_obj = MachineUD()
+
+        Rext = 170e-3
+        W1 = 30e-3
+        A1 = 2.5e-3
+        W2 = 20e-3
+        A2 = 10e-3
+        W3 = 20e-3
+        A3 = 2.5e-3
+        W4 = 60e-3
+
+        # Outer stator
+        lam1 = LamSlotWind(Rext=Rext, Rint=Rext - W1, is_internal=False, is_stator=True)
+        lam1.slot = SlotW22(
+            Zs=12, W0=2 * pi / 12 * 0.75, W2=2 * pi / 12 * 0.75, H0=0, H2=W1 * 0.65
+        )
+        lam1.winding = WindingCW2LT(qs=3, p=3)
+        # Outer rotor
+        lam2 = LamSlot(
+            Rext=lam1.Rint - A1,
+            Rint=lam1.Rint - A1 - W2,
+            is_internal=True,
+            is_stator=False,
+        )
+        lam2.slot = SlotW10(
+            Zs=22, W0=25e-3, W1=25e-3, W2=15e-3, H0=0, H1=0, H2=W2 * 0.75
+        )
+        # Inner rotor
+        lam3 = LamSlot(
+            Rext=lam2.Rint - A2,
+            Rint=lam2.Rint - A2 - W3,
+            is_internal=False,
+            is_stator=False,
+        )
+        lam3.slot = SlotW10(
+            Zs=22, W0=17.5e-3, W1=17.5e-3, W2=12.5e-3, H0=0, H1=0, H2=W3 * 0.75
+        )
+        # Inner stator
+        lam4 = LamSlotWind(
+            Rext=lam3.Rint - A3,
+            Rint=lam3.Rint - A3 - W4,
+            is_internal=True,
+            is_stator=True,
+        )
+        lam4.slot = SlotW10(
+            Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75
+        )
+        lam4.winding = WindingCW2LT(qs=3, p=3)
+        test_obj.lam_list = [lam1, lam2, lam3, lam4]
+        test_obj.plot()
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_MachineUD.png"))
+        self.assertEqual(len(fig.axes[0].patches), 56)
