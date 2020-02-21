@@ -21,4 +21,7 @@ def comp_height_yoke(self):
         yoke height [m]
 
     """
-    return self.Rext - self.Rint - self.slot.comp_height()
+    if self.slot is not None and self.slot.Zs > 0:
+        return self.Rext - self.Rint - self.slot.comp_height()
+    else:
+        return self.Rext - self.Rint

@@ -26,8 +26,12 @@ def comp_output_geo(self):
 
     output = Lamination.comp_output_geo(self)
     output.Ksfill = self.comp_fill_factor()
-    output.S_slot = self.slot.comp_surface()
-    output.S_slot_wind = self.slot.comp_surface_wind()
+    if self.slot is None:
+        output.S_slot = 0
+        output.S_slot_wind = 0
+    else:
+        output.S_slot = self.slot.comp_surface()
+        output.S_slot_wind = self.slot.comp_surface_wind()
     # output.S_wind_act = self.winding.conductor.comp_surface_active()
 
     return output

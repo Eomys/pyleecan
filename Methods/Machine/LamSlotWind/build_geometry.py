@@ -35,35 +35,36 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
     # getting the Lamination surface
     surf_lam = build_geo(self, sym=sym, alpha=alpha, delta=delta)
     surf_list = list()
-    # getting number of slot
-    Zs = self.slot.Zs
-    # getting angle between Slot
-    angle = 2 * pi / Zs
-    # getting Nrad and Ntan
-    if type(self.winding) is Winding:
-        Nrad, Ntan = 1, 1
-    else:
-        try:
-            Nrad, Ntan = self.winding.get_dim_wind()
-        except NotImplementedYetError:
+    if self.slot is not None and self.slot.Zs != 0:
+        # getting number of slot
+        Zs = self.slot.Zs
+        # getting angle between Slot
+        angle = 2 * pi / Zs
+        # getting Nrad and Ntan
+        if type(self.winding) is Winding:
             Nrad, Ntan = 1, 1
-    surf_Wind = self.slot.build_geometry_wind(
-        Nrad=Nrad, Ntan=Ntan, is_simplified=is_simplified, alpha=alpha, delta=delta
-    )
+        else:
+            try:
+                Nrad, Ntan = self.winding.get_dim_wind()
+            except NotImplementedYetError:
+                Nrad, Ntan = 1, 1
+        surf_Wind = self.slot.build_geometry_wind(
+            Nrad=Nrad, Ntan=Ntan, is_simplified=is_simplified, alpha=alpha, delta=delta
+        )
 
-    assert (Zs % sym) == 0
-    for ii in range(Zs // sym):  # for each slot
-        # for each part of the winding surface in the slot
-        for surf in surf_Wind:
-            new_surf = type(surf)(init_dict=surf.as_dict())
-            # changing the slot reference number
-            new_surf.label = surf.label[:-1] + str(ii)
-            new_surf.rotate(ii * angle)
-            surf_list.append(new_surf)
+        assert (Zs % sym) == 0
+        for ii in range(Zs // sym):  # for each slot
+            # for each part of the winding surface in the slot
+            for surf in surf_Wind:
+                new_surf = type(surf)(init_dict=surf.as_dict())
+                # changing the slot reference number
+                new_surf.label = surf.label[:-1] + str(ii)
+                new_surf.rotate(ii * angle)
+                surf_list.append(new_surf)
 
-    # Shift to have a tooth center on Ox
-    for surf in surf_list:
-        surf.rotate(pi / Zs)
+        # Shift to have a tooth center on Ox
+        for surf in surf_list:
+            surf.rotate(pi / Zs)
 
     surf_list = surf_lam + surf_list
 

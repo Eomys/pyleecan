@@ -22,4 +22,7 @@ def get_Zs(self):
         Number of Slot
     """
 
-    return self.slot.Zs
+    if self.slot is None:
+        return 0
+    else:
+        return self.slot.Zs

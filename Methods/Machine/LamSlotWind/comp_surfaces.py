@@ -27,6 +27,9 @@ def comp_surfaces(self):
 
     S_dict = LamSlot.comp_surfaces(self)
 
-    S_dict["Swind"] = self.slot.Zs * self.slot.comp_surface_wind()
+    if self.slot is not None:
+        S_dict["Swind"] = self.get_Zs() * self.slot.comp_surface_wind()
+    else:
+        S_dict["Swind"] = 0
 
     return S_dict

@@ -27,6 +27,9 @@ def comp_volumes(self):
 
     V_dict = LamSlot.comp_volumes(self)
     Lf = self.comp_length()  # Include radial ventilation ducts
-    V_dict["Vwind"] = Lf * self.slot.Zs * self.slot.comp_surface_wind()
+    if self.slot is None:
+        V_dict["Vwind"] = 0
+    else:
+        V_dict["Vwind"] = Lf * self.get_Zs() * self.slot.comp_surface_wind()
 
     return V_dict
