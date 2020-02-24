@@ -162,11 +162,11 @@ class LamHole(Lamination):
         self,
         hole=list(),
         bore=None,
-        L1=0.35,
+        L1=3.50e-01,
         mat_type=-1,
         Nrvd=0,
         Wrvd=0,
-        Kf1=0.95,
+        Kf1=9.50e-01,
         is_internal=True,
         Rint=0,
         Rext=1,
@@ -307,23 +307,17 @@ class LamHole(Lamination):
 
         LamHole_str = ""
         # Get the properties inherited from Lamination
-        LamHole_str += super(LamHole, self).__str__() + linesep
+        LamHole_str += super(LamHole, self).__str__()
         if len(self.hole) == 0:
-            LamHole_str += "hole = []"
+            LamHole_str += "hole = []" + linesep
         for ii in range(len(self.hole)):
-            LamHole_str += (
-                "hole["
-                + str(ii)
-                + "] = "
-                + str(self.hole[ii].as_dict())
-                + "\n"
-                + linesep
-                + linesep
-            )
+            tmp = self.hole[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            LamHole_str += "hole[" + str(ii) + "] =" + tmp + linesep + linesep
         if self.bore is not None:
-            LamHole_str += "bore = " + str(self.bore.as_dict()) + linesep + linesep
+            tmp = self.bore.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            LamHole_str += "bore = " + tmp
         else:
-            LamHole_str += "bore = None"
+            LamHole_str += "bore = None" + linesep + linesep
         return LamHole_str
 
     def __eq__(self, other):

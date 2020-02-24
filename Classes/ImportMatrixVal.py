@@ -69,8 +69,14 @@ class ImportMatrixVal(ImportMatrix):
 
         ImportMatrixVal_str = ""
         # Get the properties inherited from ImportMatrix
-        ImportMatrixVal_str += super(ImportMatrixVal, self).__str__() + linesep
-        ImportMatrixVal_str += "value = " + linesep + str(self.value)
+        ImportMatrixVal_str += super(ImportMatrixVal, self).__str__()
+        ImportMatrixVal_str += (
+            "value = "
+            + linesep
+            + str(self.value).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return ImportMatrixVal_str
 
     def __eq__(self, other):

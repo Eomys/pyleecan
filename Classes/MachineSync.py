@@ -111,7 +111,7 @@ class MachineSync(Machine):
 
         MachineSync_str = ""
         # Get the properties inherited from Machine
-        MachineSync_str += super(MachineSync, self).__str__() + linesep
+        MachineSync_str += super(MachineSync, self).__str__()
         return MachineSync_str
 
     def __eq__(self, other):

@@ -106,7 +106,13 @@ class CondType21(Conductor):
     save = save
 
     def __init__(
-        self, Hbar=0.01, Wbar=0.01, Wins=0, cond_mat=-1, ins_mat=-1, init_dict=None
+        self,
+        Hbar=1.00e-02,
+        Wbar=1.00e-02,
+        Wins=0,
+        cond_mat=-1,
+        ins_mat=-1,
+        init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -148,10 +154,10 @@ class CondType21(Conductor):
 
         CondType21_str = ""
         # Get the properties inherited from Conductor
-        CondType21_str += super(CondType21, self).__str__() + linesep
+        CondType21_str += super(CondType21, self).__str__()
         CondType21_str += "Hbar = " + str(self.Hbar) + linesep
         CondType21_str += "Wbar = " + str(self.Wbar) + linesep
-        CondType21_str += "Wins = " + str(self.Wins)
+        CondType21_str += "Wins = " + str(self.Wins) + linesep
         return CondType21_str
 
     def __eq__(self, other):

@@ -138,7 +138,7 @@ class WindingCW2LR(Winding):
 
         WindingCW2LR_str = ""
         # Get the properties inherited from Winding
-        WindingCW2LR_str += super(WindingCW2LR, self).__str__() + linesep
+        WindingCW2LR_str += super(WindingCW2LR, self).__str__()
         return WindingCW2LR_str
 
     def __eq__(self, other):

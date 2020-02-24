@@ -20,7 +20,7 @@ class MatHT(FrozenClass):
     save = save
 
     def __init__(
-        self, lambda_x=1, lambda_y=1, lambda_z=1, Cp=1, alpha=0.00393, init_dict=None
+        self, lambda_x=1, lambda_y=1, lambda_z=1, Cp=1, alpha=3.93e-03, init_dict=None
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -69,7 +69,7 @@ class MatHT(FrozenClass):
         MatHT_str += "lambda_y = " + str(self.lambda_y) + linesep
         MatHT_str += "lambda_z = " + str(self.lambda_z) + linesep
         MatHT_str += "Cp = " + str(self.Cp) + linesep
-        MatHT_str += "alpha = " + str(self.alpha)
+        MatHT_str += "alpha = " + str(self.alpha) + linesep
         return MatHT_str
 
     def __eq__(self, other):

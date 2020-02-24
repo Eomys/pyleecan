@@ -173,9 +173,9 @@ class PolarArc(Surface):
 
         PolarArc_str = ""
         # Get the properties inherited from Surface
-        PolarArc_str += super(PolarArc, self).__str__() + linesep
+        PolarArc_str += super(PolarArc, self).__str__()
         PolarArc_str += "angle = " + str(self.angle) + linesep
-        PolarArc_str += "height = " + str(self.height)
+        PolarArc_str += "height = " + str(self.height) + linesep
         return PolarArc_str
 
     def __eq__(self, other):

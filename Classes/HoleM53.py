@@ -184,14 +184,14 @@ class HoleM53(HoleMag):
 
     def __init__(
         self,
-        H0=0.003,
+        H0=3.00e-03,
         H1=0,
-        W1=0.013,
-        H2=0.02,
-        W2=0.01,
-        H3=0.01,
-        W3=0.01,
-        W4=0.01,
+        W1=1.30e-02,
+        H2=2.00e-02,
+        W2=1.00e-02,
+        H3=1.00e-02,
+        W3=1.00e-02,
+        W4=1.00e-02,
         magnet_0=-1,
         magnet_1=-1,
         Zh=36,
@@ -321,7 +321,7 @@ class HoleM53(HoleMag):
 
         HoleM53_str = ""
         # Get the properties inherited from HoleMag
-        HoleM53_str += super(HoleM53, self).__str__() + linesep
+        HoleM53_str += super(HoleM53, self).__str__()
         HoleM53_str += "H0 = " + str(self.H0) + linesep
         HoleM53_str += "H1 = " + str(self.H1) + linesep
         HoleM53_str += "W1 = " + str(self.W1) + linesep
@@ -331,17 +331,15 @@ class HoleM53(HoleMag):
         HoleM53_str += "W3 = " + str(self.W3) + linesep
         HoleM53_str += "W4 = " + str(self.W4) + linesep
         if self.magnet_0 is not None:
-            HoleM53_str += (
-                "magnet_0 = " + str(self.magnet_0.as_dict()) + linesep + linesep
-            )
+            tmp = self.magnet_0.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            HoleM53_str += "magnet_0 = " + tmp
         else:
             HoleM53_str += "magnet_0 = None" + linesep + linesep
         if self.magnet_1 is not None:
-            HoleM53_str += (
-                "magnet_1 = " + str(self.magnet_1.as_dict()) + linesep + linesep
-            )
+            tmp = self.magnet_1.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            HoleM53_str += "magnet_1 = " + tmp
         else:
-            HoleM53_str += "magnet_1 = None"
+            HoleM53_str += "magnet_1 = None" + linesep + linesep
         return HoleM53_str
 
     def __eq__(self, other):

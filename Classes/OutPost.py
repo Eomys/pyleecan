@@ -53,7 +53,7 @@ class OutPost(FrozenClass):
         else:
             OutPost_str += "parent = " + str(type(self.parent)) + " object" + linesep
         OutPost_str += 'legend_name = "' + str(self.legend_name) + '"' + linesep
-        OutPost_str += 'line_color = "' + str(self.line_color) + '"'
+        OutPost_str += 'line_color = "' + str(self.line_color) + '"' + linesep
         return OutPost_str
 
     def __eq__(self, other):

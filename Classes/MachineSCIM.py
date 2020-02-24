@@ -124,7 +124,7 @@ class MachineSCIM(MachineDFIM):
 
         MachineSCIM_str = ""
         # Get the properties inherited from MachineDFIM
-        MachineSCIM_str += super(MachineSCIM, self).__str__() + linesep
+        MachineSCIM_str += super(MachineSCIM, self).__str__()
         return MachineSCIM_str
 
     def __eq__(self, other):

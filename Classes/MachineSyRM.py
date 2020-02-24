@@ -138,19 +138,17 @@ class MachineSyRM(MachineSync):
 
         MachineSyRM_str = ""
         # Get the properties inherited from MachineSync
-        MachineSyRM_str += super(MachineSyRM, self).__str__() + linesep
+        MachineSyRM_str += super(MachineSyRM, self).__str__()
         if self.rotor is not None:
-            MachineSyRM_str += (
-                "rotor = " + str(self.rotor.as_dict()) + linesep + linesep
-            )
+            tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MachineSyRM_str += "rotor = " + tmp
         else:
             MachineSyRM_str += "rotor = None" + linesep + linesep
         if self.stator is not None:
-            MachineSyRM_str += (
-                "stator = " + str(self.stator.as_dict()) + linesep + linesep
-            )
+            tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MachineSyRM_str += "stator = " + tmp
         else:
-            MachineSyRM_str += "stator = None"
+            MachineSyRM_str += "stator = None" + linesep + linesep
         return MachineSyRM_str
 
     def __eq__(self, other):

@@ -59,7 +59,7 @@ class MatElectrical(FrozenClass):
             )
         MatElectrical_str += "rho = " + str(self.rho) + linesep
         MatElectrical_str += "epsr = " + str(self.epsr) + linesep
-        MatElectrical_str += "alpha = " + str(self.alpha)
+        MatElectrical_str += "alpha = " + str(self.alpha) + linesep
         return MatElectrical_str
 
     def __eq__(self, other):

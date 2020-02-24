@@ -131,7 +131,7 @@ class SlotWind(Slot):
 
         SlotWind_str = ""
         # Get the properties inherited from Slot
-        SlotWind_str += super(SlotWind, self).__str__() + linesep
+        SlotWind_str += super(SlotWind, self).__str__()
         return SlotWind_str
 
     def __eq__(self, other):

@@ -67,7 +67,7 @@ class HoleMag(Hole):
 
         HoleMag_str = ""
         # Get the properties inherited from Hole
-        HoleMag_str += super(HoleMag, self).__str__() + linesep
+        HoleMag_str += super(HoleMag, self).__str__()
         return HoleMag_str
 
     def __eq__(self, other):

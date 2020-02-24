@@ -144,7 +144,7 @@ class Unit(FrozenClass):
             Unit_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Unit_str += "unit_m = " + str(self.unit_m) + linesep
         Unit_str += "unit_rad = " + str(self.unit_rad) + linesep
-        Unit_str += "unit_m2 = " + str(self.unit_m2)
+        Unit_str += "unit_m2 = " + str(self.unit_m2) + linesep
         return Unit_str
 
     def __eq__(self, other):

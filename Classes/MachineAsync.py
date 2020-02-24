@@ -91,7 +91,7 @@ class MachineAsync(Machine):
 
         MachineAsync_str = ""
         # Get the properties inherited from Machine
-        MachineAsync_str += super(MachineAsync, self).__str__() + linesep
+        MachineAsync_str += super(MachineAsync, self).__str__()
         return MachineAsync_str
 
     def __eq__(self, other):

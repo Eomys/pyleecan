@@ -178,10 +178,10 @@ class Circle(Surface):
 
         Circle_str = ""
         # Get the properties inherited from Surface
-        Circle_str += super(Circle, self).__str__() + linesep
+        Circle_str += super(Circle, self).__str__()
         Circle_str += "radius = " + str(self.radius) + linesep
         Circle_str += "center = " + str(self.center) + linesep
-        Circle_str += 'line_label = "' + str(self.line_label) + '"'
+        Circle_str += 'line_label = "' + str(self.line_label) + '"' + linesep
         return Circle_str
 
     def __eq__(self, other):

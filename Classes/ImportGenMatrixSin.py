@@ -99,12 +99,13 @@ class ImportGenMatrixSin(ImportMatrix):
 
         ImportGenMatrixSin_str = ""
         # Get the properties inherited from ImportMatrix
-        ImportGenMatrixSin_str += super(ImportGenMatrixSin, self).__str__() + linesep
+        ImportGenMatrixSin_str += super(ImportGenMatrixSin, self).__str__()
         if len(self.sin_list) == 0:
-            ImportGenMatrixSin_str += "sin_list = []"
+            ImportGenMatrixSin_str += "sin_list = []" + linesep
         for ii in range(len(self.sin_list)):
+            tmp = self.sin_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
             ImportGenMatrixSin_str += (
-                "sin_list[" + str(ii) + "] = " + str(self.sin_list[ii].as_dict()) + "\n"
+                "sin_list[" + str(ii) + "] =" + tmp + linesep + linesep
             )
         return ImportGenMatrixSin_str
 

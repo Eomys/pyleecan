@@ -145,8 +145,14 @@ class WindingUD(Winding):
 
         WindingUD_str = ""
         # Get the properties inherited from Winding
-        WindingUD_str += super(WindingUD, self).__str__() + linesep
-        WindingUD_str += "user_wind_mat = " + linesep + str(self.user_wind_mat)
+        WindingUD_str += super(WindingUD, self).__str__()
+        WindingUD_str += (
+            "user_wind_mat = "
+            + linesep
+            + str(self.user_wind_mat).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return WindingUD_str
 
     def __eq__(self, other):

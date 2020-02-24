@@ -219,7 +219,7 @@ class Slot(FrozenClass):
             Slot_str += "parent = None " + linesep
         else:
             Slot_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Slot_str += "Zs = " + str(self.Zs)
+        Slot_str += "Zs = " + str(self.Zs) + linesep
         return Slot_str
 
     def __eq__(self, other):

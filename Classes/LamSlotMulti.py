@@ -176,11 +176,11 @@ class LamSlotMulti(Lamination):
         self,
         slot_list=list(),
         alpha=None,
-        L1=0.35,
+        L1=3.50e-01,
         mat_type=-1,
         Nrvd=0,
         Wrvd=0,
-        Kf1=0.95,
+        Kf1=9.50e-01,
         is_internal=True,
         Rint=0,
         Rext=1,
@@ -324,20 +324,21 @@ class LamSlotMulti(Lamination):
 
         LamSlotMulti_str = ""
         # Get the properties inherited from Lamination
-        LamSlotMulti_str += super(LamSlotMulti, self).__str__() + linesep
+        LamSlotMulti_str += super(LamSlotMulti, self).__str__()
         if len(self.slot_list) == 0:
-            LamSlotMulti_str += "slot_list = []"
+            LamSlotMulti_str += "slot_list = []" + linesep
         for ii in range(len(self.slot_list)):
-            LamSlotMulti_str += (
-                "slot_list["
-                + str(ii)
-                + "] = "
-                + str(self.slot_list[ii].as_dict())
-                + "\n"
-                + linesep
-                + linesep
+            tmp = (
+                self.slot_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
             )
-        LamSlotMulti_str += "alpha = " + linesep + str(self.alpha)
+            LamSlotMulti_str += "slot_list[" + str(ii) + "] =" + tmp + linesep + linesep
+        LamSlotMulti_str += (
+            "alpha = "
+            + linesep
+            + str(self.alpha).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return LamSlotMulti_str
 
     def __eq__(self, other):

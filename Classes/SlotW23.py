@@ -187,13 +187,13 @@ class SlotW23(SlotWind):
 
     def __init__(
         self,
-        W0=0.003,
-        H0=0.003,
+        W0=3.00e-03,
+        H0=3.00e-03,
         H1=0,
-        W1=0.013,
-        H2=0.02,
-        W2=0.01,
-        W3=0.01,
+        W1=1.30e-02,
+        H2=2.00e-02,
+        W2=1.00e-02,
+        W3=1.00e-02,
         H1_is_rad=False,
         is_cstt_tooth=False,
         Zs=36,
@@ -265,7 +265,7 @@ class SlotW23(SlotWind):
 
         SlotW23_str = ""
         # Get the properties inherited from SlotWind
-        SlotW23_str += super(SlotW23, self).__str__() + linesep
+        SlotW23_str += super(SlotW23, self).__str__()
         SlotW23_str += "W0 = " + str(self.W0) + linesep
         SlotW23_str += "H0 = " + str(self.H0) + linesep
         SlotW23_str += "H1 = " + str(self.H1) + linesep
@@ -274,7 +274,7 @@ class SlotW23(SlotWind):
         SlotW23_str += "W2 = " + str(self.W2) + linesep
         SlotW23_str += "W3 = " + str(self.W3) + linesep
         SlotW23_str += "H1_is_rad = " + str(self.H1_is_rad) + linesep
-        SlotW23_str += "is_cstt_tooth = " + str(self.is_cstt_tooth)
+        SlotW23_str += "is_cstt_tooth = " + str(self.is_cstt_tooth) + linesep
         return SlotW23_str
 
     def __eq__(self, other):
