@@ -138,7 +138,7 @@ class OptiProblem(FrozenClass):
                 "parent = " + str(type(self.parent)) + " object" + linesep
             )
         if self.output is not None:
-            tmp = self.output.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.output.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             OptiProblem_str += "output = " + tmp
         else:
             OptiProblem_str += "output = None" + linesep + linesep
@@ -146,16 +146,15 @@ class OptiProblem(FrozenClass):
             OptiProblem_str += "design_var = dict()"
         for key, obj in self.design_var.items():
             tmp = (
-                self.design_var[key].__str__()[:-2].replace(linesep, linesep + "\t")
-                + "\n"
+                self.design_var[key].__str__().replace(linesep, linesep + "\t")
+                + linesep
             )
             OptiProblem_str += "design_var[" + key + "] =" + tmp + linesep + linesep
         if len(self.obj_func) == 0:
             OptiProblem_str += "obj_func = dict()"
         for key, obj in self.obj_func.items():
             tmp = (
-                self.obj_func[key].__str__()[:-2].replace(linesep, linesep + "\t")
-                + "\n"
+                self.obj_func[key].__str__().replace(linesep, linesep + "\t") + linesep
             )
             OptiProblem_str += "obj_func[" + key + "] =" + tmp + linesep + linesep
         if self._eval_func[1] is None:
@@ -168,10 +167,10 @@ class OptiProblem(FrozenClass):
             OptiProblem_str += "constraint = dict()"
         for key, obj in self.constraint.items():
             tmp = (
-                self.constraint[key].__str__()[:-2].replace(linesep, linesep + "\t")
-                + "\n"
+                self.constraint[key].__str__().replace(linesep, linesep + "\t")
+                + linesep
             )
-            OptiProblem_str += "constraint[" + key + "] =" + tmp
+            OptiProblem_str += "constraint[" + key + "] =" + tmp + linesep + linesep
         return OptiProblem_str
 
     def __eq__(self, other):

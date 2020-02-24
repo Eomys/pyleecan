@@ -72,7 +72,11 @@ class OptiConstraint(FrozenClass):
             OptiConstraint_str += "get_variable = " + str(self._get_variable[1])
         else:
             OptiConstraint_str += (
-                "get_variable = " + linesep + str(self._get_variable[1])
+                "get_variable = "
+                + linesep
+                + str(self._get_variable[1])
+                + linesep
+                + linesep
             )
         return OptiConstraint_str
 

@@ -116,7 +116,11 @@ class OptiGenAlg(FrozenClass):
         else:
             OptiGenAlg_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.multi_output is not None:
-            tmp = self.multi_output.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = (
+                self.multi_output.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
             OptiGenAlg_str += "multi_output = " + tmp
         else:
             OptiGenAlg_str += "multi_output = None" + linesep + linesep
@@ -143,10 +147,10 @@ class OptiGenAlg(FrozenClass):
         OptiGenAlg_str += "size_pop = " + str(self.size_pop) + linesep
         OptiGenAlg_str += "nb_gen = " + str(self.nb_gen) + linesep
         if self.problem is not None:
-            tmp = self.problem.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.problem.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             OptiGenAlg_str += "problem = " + tmp
         else:
-            OptiGenAlg_str += "problem = None"
+            OptiGenAlg_str += "problem = None" + linesep + linesep
         return OptiGenAlg_str
 
     def __eq__(self, other):

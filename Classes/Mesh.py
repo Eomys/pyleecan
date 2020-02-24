@@ -313,6 +313,7 @@ class Mesh(FrozenClass):
         for key, obj in self._element.items():
             if obj is not None:
                 obj.parent = self
+        return self._element
 
     def _set_element(self, value):
         """setter of element"""

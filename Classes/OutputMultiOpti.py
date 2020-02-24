@@ -20,6 +20,11 @@ try:
 except ImportError as error:
     plot_pareto = error
 
+try:
+    from pyleecan.Methods.Output.OutputMultiOpti.plot_generation import plot_generation
+except ImportError as error:
+    plot_generation = error
+
 
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Output import Output
@@ -52,6 +57,18 @@ class OutputMultiOpti(OutputMulti):
         )
     else:
         plot_pareto = plot_pareto
+    # cf Methods.Output.OutputMultiOpti.plot_generation
+    if isinstance(plot_generation, ImportError):
+        plot_generation = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutputMultiOpti method plot_generation: "
+                    + str(plot_generation)
+                )
+            )
+        )
+    else:
+        plot_generation = plot_generation
     # save method is available in all object
     save = save
 
@@ -60,10 +77,12 @@ class OutputMultiOpti(OutputMulti):
         fitness=[],
         constraint=[],
         ngen=[],
+        fitness_names=[],
         output_ref=-1,
         outputs=list(),
         is_valid=[],
         design_var=[],
+        design_var_names=[],
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -84,10 +103,12 @@ class OutputMultiOpti(OutputMulti):
                     "fitness",
                     "constraint",
                     "ngen",
+                    "fitness_names",
                     "output_ref",
                     "outputs",
                     "is_valid",
                     "design_var",
+                    "design_var_names",
                 ],
             )
             # Overwrite default value with init_dict content
@@ -97,6 +118,8 @@ class OutputMultiOpti(OutputMulti):
                 constraint = init_dict["constraint"]
             if "ngen" in list(init_dict.keys()):
                 ngen = init_dict["ngen"]
+            if "fitness_names" in list(init_dict.keys()):
+                fitness_names = init_dict["fitness_names"]
             if "output_ref" in list(init_dict.keys()):
                 output_ref = init_dict["output_ref"]
             if "outputs" in list(init_dict.keys()):
@@ -105,16 +128,20 @@ class OutputMultiOpti(OutputMulti):
                 is_valid = init_dict["is_valid"]
             if "design_var" in list(init_dict.keys()):
                 design_var = init_dict["design_var"]
+            if "design_var_names" in list(init_dict.keys()):
+                design_var_names = init_dict["design_var_names"]
         # Initialisation by argument
         self.fitness = fitness
         self.constraint = constraint
         self.ngen = ngen
+        self.fitness_names = fitness_names
         # Call OutputMulti init
         super(OutputMultiOpti, self).__init__(
             output_ref=output_ref,
             outputs=outputs,
             is_valid=is_valid,
             design_var=design_var,
+            design_var_names=design_var_names,
         )
         # The class is frozen (in OutputMulti init), for now it's impossible to
         # add new properties
@@ -124,12 +151,31 @@ class OutputMultiOpti(OutputMulti):
 
         OutputMultiOpti_str = ""
         # Get the properties inherited from OutputMulti
-        OutputMultiOpti_str += super(OutputMultiOpti, self).__str__() + linesep
-        OutputMultiOpti_str += "fitness = " + linesep + str(self.fitness) + linesep
+        OutputMultiOpti_str += super(OutputMultiOpti, self).__str__()
         OutputMultiOpti_str += (
-            "constraint = " + linesep + str(self.constraint) + linesep
+            "fitness = "
+            + linesep
+            + str(self.fitness).replace(linesep, linesep + "\t")
+            + linesep
         )
-        OutputMultiOpti_str += "ngen = " + linesep + str(self.ngen)
+        OutputMultiOpti_str += (
+            "constraint = "
+            + linesep
+            + str(self.constraint).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        OutputMultiOpti_str += (
+            "ngen = "
+            + linesep
+            + str(self.ngen).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        OutputMultiOpti_str += (
+            "fitness_names = "
+            + linesep
+            + str(self.fitness_names).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return OutputMultiOpti_str
 
     def __eq__(self, other):
@@ -147,6 +193,8 @@ class OutputMultiOpti(OutputMulti):
             return False
         if other.ngen != self.ngen:
             return False
+        if other.fitness_names != self.fitness_names:
+            return False
         return True
 
     def as_dict(self):
@@ -158,6 +206,7 @@ class OutputMultiOpti(OutputMulti):
         OutputMultiOpti_dict["fitness"] = self.fitness
         OutputMultiOpti_dict["constraint"] = self.constraint
         OutputMultiOpti_dict["ngen"] = self.ngen
+        OutputMultiOpti_dict["fitness_names"] = self.fitness_names
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         OutputMultiOpti_dict["__class__"] = "OutputMultiOpti"
@@ -169,6 +218,7 @@ class OutputMultiOpti(OutputMulti):
         self.fitness = None
         self.constraint = None
         self.ngen = None
+        self.fitness_names = None
         # Set to None the properties inherited from OutputMulti
         super(OutputMultiOpti, self)._set_None()
 
@@ -219,4 +269,21 @@ class OutputMultiOpti(OutputMulti):
     # Type : list
     ngen = property(
         fget=_get_ngen, fset=_set_ngen, doc=u"""Number of generation of the indiv"""
+    )
+
+    def _get_fitness_names(self):
+        """getter of fitness_names"""
+        return self._fitness_names
+
+    def _set_fitness_names(self, value):
+        """setter of fitness_names"""
+        check_var("fitness_names", value, "list")
+        self._fitness_names = value
+
+    # Names of the objectives functions
+    # Type : list
+    fitness_names = property(
+        fget=_get_fitness_names,
+        fset=_set_fitness_names,
+        doc=u"""Names of the objectives functions""",
     )

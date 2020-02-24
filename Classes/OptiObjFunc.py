@@ -61,7 +61,9 @@ class OptiObjFunc(FrozenClass):
         if self._func[1] is None:
             OptiObjFunc_str += "func = " + str(self._func[1])
         else:
-            OptiObjFunc_str += "func = " + linesep + str(self._func[1])
+            OptiObjFunc_str += (
+                "func = " + linesep + str(self._func[1]) + linesep + linesep
+            )
         return OptiObjFunc_str
 
     def __eq__(self, other):

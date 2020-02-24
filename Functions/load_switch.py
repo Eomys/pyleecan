@@ -85,6 +85,7 @@ load_switch = {
     "NodeMat": NodeMat,
     "Notch": Notch,
     "NotchEvenDist": NotchEvenDist,
+    "OptiConstraint": OptiConstraint,
     "OptiDesignVar": OptiDesignVar,
     "OptiGenAlg": OptiGenAlg,
     "OptiObjFunc": OptiObjFunc,

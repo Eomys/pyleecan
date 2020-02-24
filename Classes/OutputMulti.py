@@ -37,7 +37,13 @@ class OutputMulti(FrozenClass):
     save = save
 
     def __init__(
-        self, output_ref=-1, outputs=list(), is_valid=[], design_var=[], init_dict=None
+        self,
+        output_ref=-1,
+        outputs=list(),
+        is_valid=[],
+        design_var=[],
+        design_var_names=[],
+        init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -52,7 +58,8 @@ class OutputMulti(FrozenClass):
             output_ref = Output()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict, ["output_ref", "outputs", "is_valid", "design_var"]
+                init_dict,
+                ["output_ref", "outputs", "is_valid", "design_var", "design_var_names"],
             )
             # Overwrite default value with init_dict content
             if "output_ref" in list(init_dict.keys()):
@@ -63,6 +70,8 @@ class OutputMulti(FrozenClass):
                 is_valid = init_dict["is_valid"]
             if "design_var" in list(init_dict.keys()):
                 design_var = init_dict["design_var"]
+            if "design_var_names" in list(init_dict.keys()):
+                design_var_names = init_dict["design_var_names"]
         # Initialisation by argument
         self.parent = None
         # output_ref can be None, a Output object or a dict
@@ -86,6 +95,7 @@ class OutputMulti(FrozenClass):
             self.outputs = outputs
         self.is_valid = is_valid
         self.design_var = design_var
+        self.design_var_names = design_var_names
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -101,19 +111,35 @@ class OutputMulti(FrozenClass):
                 "parent = " + str(type(self.parent)) + " object" + linesep
             )
         if self.output_ref is not None:
-            tmp = self.output_ref.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = (
+                self.output_ref.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
             OutputMulti_str += "output_ref = " + tmp
         else:
             OutputMulti_str += "output_ref = None" + linesep + linesep
         if len(self.outputs) == 0:
-            OutputMulti_str += "outputs = []"
+            OutputMulti_str += "outputs = []" + linesep
         for ii in range(len(self.outputs)):
-            tmp = (
-                self.outputs[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
-            )
+            tmp = self.outputs[ii].__str__().replace(linesep, linesep + "\t") + linesep
             OutputMulti_str += "outputs[" + str(ii) + "] =" + tmp + linesep + linesep
-        OutputMulti_str += "is_valid = " + linesep + str(self.is_valid) + linesep
-        OutputMulti_str += "design_var = " + linesep + str(self.design_var)
+        OutputMulti_str += (
+            "is_valid = "
+            + linesep
+            + str(self.is_valid).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        OutputMulti_str += (
+            "design_var = "
+            + linesep
+            + str(self.design_var).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        OutputMulti_str += (
+            "design_var_names = "
+            + linesep
+            + str(self.design_var_names).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return OutputMulti_str
 
     def __eq__(self, other):
@@ -128,6 +154,8 @@ class OutputMulti(FrozenClass):
         if other.is_valid != self.is_valid:
             return False
         if other.design_var != self.design_var:
+            return False
+        if other.design_var_names != self.design_var_names:
             return False
         return True
 
@@ -145,6 +173,7 @@ class OutputMulti(FrozenClass):
             OutputMulti_dict["outputs"].append(obj.as_dict())
         OutputMulti_dict["is_valid"] = self.is_valid
         OutputMulti_dict["design_var"] = self.design_var
+        OutputMulti_dict["design_var_names"] = self.design_var_names
         # The class name is added to the dict fordeserialisation purpose
         OutputMulti_dict["__class__"] = "OutputMulti"
         return OutputMulti_dict
@@ -158,6 +187,7 @@ class OutputMulti(FrozenClass):
             obj._set_None()
         self.is_valid = None
         self.design_var = None
+        self.design_var_names = None
 
     def _get_output_ref(self):
         """getter of output_ref"""
@@ -235,4 +265,21 @@ class OutputMulti(FrozenClass):
         fget=_get_design_var,
         fset=_set_design_var,
         doc=u"""list of design variables corresponding to the output""",
+    )
+
+    def _get_design_var_names(self):
+        """getter of design_var_names"""
+        return self._design_var_names
+
+    def _set_design_var_names(self, value):
+        """setter of design_var_names"""
+        check_var("design_var_names", value, "list")
+        self._design_var_names = value
+
+    # list of str containing the design variables names sorted alphabetically
+    # Type : list
+    design_var_names = property(
+        fget=_get_design_var_names,
+        fset=_set_design_var_names,
+        doc=u"""list of str containing the design variables names sorted alphabetically""",
     )

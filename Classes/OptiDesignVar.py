@@ -67,11 +67,18 @@ class OptiDesignVar(FrozenClass):
             )
         OptiDesignVar_str += 'name = "' + str(self.name) + '"' + linesep
         OptiDesignVar_str += 'type_var = "' + str(self.type_var) + '"' + linesep
-        OptiDesignVar_str += "space = " + linesep + str(self.space) + linesep
+        OptiDesignVar_str += (
+            "space = "
+            + linesep
+            + str(self.space).replace(linesep, linesep + "\t")
+            + linesep
+        )
         if self._function[1] is None:
             OptiDesignVar_str += "function = " + str(self._function[1])
         else:
-            OptiDesignVar_str += "function = " + linesep + str(self._function[1])
+            OptiDesignVar_str += (
+                "function = " + linesep + str(self._function[1]) + linesep + linesep
+            )
         return OptiDesignVar_str
 
     def __eq__(self, other):
