@@ -13,7 +13,7 @@ from os.path import isdir
 from pyleecan.Generator.class_generator import generate_class
 from pyleecan.Generator.gui_generator import generate_gui
 from pyleecan.Generator.read_fct import read_all
-from pyleecan.Generator import MAIN_DIR
+from pyleecan.definitions import MAIN_DIR
 
 
 if __name__ == "__main__":

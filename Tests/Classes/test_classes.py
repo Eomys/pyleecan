@@ -8,7 +8,7 @@ from ddt import ddt, data
 from numpy import array_equal, empty, array
 from pyleecan.Generator.read_fct import read_all
 from pyleecan.Generator.class_generator import get_mother_attr
-from pyleecan.Generator import DOC_DIR
+from pyleecan.definitions import DOC_DIR
 from pyleecan.Tests.find import (
     find_test_value,
     is_type_list,

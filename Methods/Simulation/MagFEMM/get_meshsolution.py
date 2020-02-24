@@ -1,7 +1,7 @@
 import os
 import numpy as np
 
-from pyleecan.Generator import MAIN_DIR
+from pyleecan.definitions import MAIN_DIR
 from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
