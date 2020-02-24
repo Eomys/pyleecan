@@ -59,7 +59,7 @@ class CondType22(Conductor):
     # save method is available in all object
     save = save
 
-    def __init__(self, Sbar=0.01, cond_mat=-1, ins_mat=-1, init_dict=None):
+    def __init__(self, Sbar=1.00e-02, cond_mat=-1, ins_mat=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -94,8 +94,8 @@ class CondType22(Conductor):
 
         CondType22_str = ""
         # Get the properties inherited from Conductor
-        CondType22_str += super(CondType22, self).__str__() + linesep
-        CondType22_str += "Sbar = " + str(self.Sbar)
+        CondType22_str += super(CondType22, self).__str__()
+        CondType22_str += "Sbar = " + str(self.Sbar) + linesep
         return CondType22_str
 
     def __eq__(self, other):

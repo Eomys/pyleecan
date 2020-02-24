@@ -285,16 +285,18 @@ class Machine(FrozenClass):
         else:
             Machine_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.frame is not None:
-            Machine_str += "frame = " + str(self.frame.as_dict()) + linesep + linesep
+            tmp = self.frame.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Machine_str += "frame = " + tmp
         else:
             Machine_str += "frame = None" + linesep + linesep
         if self.shaft is not None:
-            Machine_str += "shaft = " + str(self.shaft.as_dict()) + linesep + linesep
+            tmp = self.shaft.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Machine_str += "shaft = " + tmp
         else:
             Machine_str += "shaft = None" + linesep + linesep
         Machine_str += 'name = "' + str(self.name) + '"' + linesep
         Machine_str += 'desc = "' + str(self.desc) + '"' + linesep
-        Machine_str += "type_machine = " + str(self.type_machine)
+        Machine_str += "type_machine = " + str(self.type_machine) + linesep
         return Machine_str
 
     def __eq__(self, other):

@@ -83,17 +83,15 @@ class Conductor(FrozenClass):
         else:
             Conductor_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.cond_mat is not None:
-            Conductor_str += (
-                "cond_mat = " + str(self.cond_mat.as_dict()) + linesep + linesep
-            )
+            tmp = self.cond_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Conductor_str += "cond_mat = " + tmp
         else:
             Conductor_str += "cond_mat = None" + linesep + linesep
         if self.ins_mat is not None:
-            Conductor_str += (
-                "ins_mat = " + str(self.ins_mat.as_dict()) + linesep + linesep
-            )
+            tmp = self.ins_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Conductor_str += "ins_mat = " + tmp
         else:
-            Conductor_str += "ins_mat = None"
+            Conductor_str += "ins_mat = None" + linesep + linesep
         return Conductor_str
 
     def __eq__(self, other):

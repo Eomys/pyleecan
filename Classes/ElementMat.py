@@ -224,16 +224,32 @@ class ElementMat(Element):
 
         ElementMat_str = ""
         # Get the properties inherited from Element
-        ElementMat_str += super(ElementMat, self).__str__() + linesep
+        ElementMat_str += super(ElementMat, self).__str__()
         ElementMat_str += (
-            "connectivity = " + linesep + str(self.connectivity) + linesep + linesep
+            "connectivity = "
+            + linesep
+            + str(self.connectivity).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
         )
         ElementMat_str += "nb_elem = " + str(self.nb_elem) + linesep
         ElementMat_str += (
             "nb_node_per_element = " + str(self.nb_node_per_element) + linesep
         )
-        ElementMat_str += "group = " + linesep + str(self.group) + linesep + linesep
-        ElementMat_str += "tag = " + linesep + str(self.tag)
+        ElementMat_str += (
+            "group = "
+            + linesep
+            + str(self.group).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        ElementMat_str += (
+            "tag = "
+            + linesep
+            + str(self.tag).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return ElementMat_str
 
     def __eq__(self, other):

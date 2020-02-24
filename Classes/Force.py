@@ -83,7 +83,7 @@ class Force(FrozenClass):
             Force_str += "parent = None " + linesep
         else:
             Force_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Force_str += "is_comp_nodal_force = " + str(self.is_comp_nodal_force)
+        Force_str += "is_comp_nodal_force = " + str(self.is_comp_nodal_force) + linesep
         return Force_str
 
     def __eq__(self, other):

@@ -126,7 +126,7 @@ class Frame(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, Lfra=0.35, Rint=0.2, Rext=0.2, mat_type=-1, init_dict=None):
+    def __init__(self, Lfra=3.50e-01, Rint=0.2, Rext=0.2, mat_type=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -175,11 +175,10 @@ class Frame(FrozenClass):
         Frame_str += "Rint = " + str(self.Rint) + linesep
         Frame_str += "Rext = " + str(self.Rext) + linesep
         if self.mat_type is not None:
-            Frame_str += (
-                "mat_type = " + str(self.mat_type.as_dict()) + linesep + linesep
-            )
+            tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Frame_str += "mat_type = " + tmp
         else:
-            Frame_str += "mat_type = None"
+            Frame_str += "mat_type = None" + linesep + linesep
         return Frame_str
 
     def __eq__(self, other):

@@ -173,12 +173,12 @@ class SlotW10(SlotWind):
 
     def __init__(
         self,
-        W0=0.0122,
-        H0=0.001,
-        H1=0.0015,
-        W1=0.014,
-        H2=0.0325,
-        W2=0.0122,
+        W0=1.22e-02,
+        H0=1.00e-03,
+        H1=1.50e-03,
+        W1=1.40e-02,
+        H2=3.25e-02,
+        W2=1.22e-02,
         H1_is_rad=False,
         Zs=36,
         init_dict=None,
@@ -231,14 +231,14 @@ class SlotW10(SlotWind):
 
         SlotW10_str = ""
         # Get the properties inherited from SlotWind
-        SlotW10_str += super(SlotW10, self).__str__() + linesep
+        SlotW10_str += super(SlotW10, self).__str__()
         SlotW10_str += "W0 = " + str(self.W0) + linesep
         SlotW10_str += "H0 = " + str(self.H0) + linesep
         SlotW10_str += "H1 = " + str(self.H1) + linesep
         SlotW10_str += "W1 = " + str(self.W1) + linesep
         SlotW10_str += "H2 = " + str(self.H2) + linesep
         SlotW10_str += "W2 = " + str(self.W2) + linesep
-        SlotW10_str += "H1_is_rad = " + str(self.H1_is_rad)
+        SlotW10_str += "H1_is_rad = " + str(self.H1_is_rad) + linesep
         return SlotW10_str
 
     def __eq__(self, other):

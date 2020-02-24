@@ -95,16 +95,25 @@ class OutGeoLam(FrozenClass):
             OutGeoLam_str += "parent = None " + linesep
         else:
             OutGeoLam_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutGeoLam_str += "name_phase = " + linesep + str(self.name_phase) + linesep
         OutGeoLam_str += (
-            "BH_curve = " + linesep + str(self.BH_curve) + linesep + linesep
+            "name_phase = "
+            + linesep
+            + str(self.name_phase).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        OutGeoLam_str += (
+            "BH_curve = "
+            + linesep
+            + str(self.BH_curve).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
         )
         OutGeoLam_str += "Ksfill = " + str(self.Ksfill) + linesep
         OutGeoLam_str += "S_slot = " + str(self.S_slot) + linesep
         OutGeoLam_str += "S_slot_wind = " + str(self.S_slot_wind) + linesep
         OutGeoLam_str += "S_wind_act = " + str(self.S_wind_act) + linesep
         OutGeoLam_str += "sym = " + str(self.sym) + linesep
-        OutGeoLam_str += "is_asym_wind = " + str(self.is_asym_wind)
+        OutGeoLam_str += "is_asym_wind = " + str(self.is_asym_wind) + linesep
         return OutGeoLam_str
 
     def __eq__(self, other):

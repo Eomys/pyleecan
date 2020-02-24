@@ -143,10 +143,10 @@ class VentilationCirc(Hole):
 
         VentilationCirc_str = ""
         # Get the properties inherited from Hole
-        VentilationCirc_str += super(VentilationCirc, self).__str__() + linesep
+        VentilationCirc_str += super(VentilationCirc, self).__str__()
         VentilationCirc_str += "Alpha0 = " + str(self.Alpha0) + linesep
         VentilationCirc_str += "D0 = " + str(self.D0) + linesep
-        VentilationCirc_str += "H0 = " + str(self.H0)
+        VentilationCirc_str += "H0 = " + str(self.H0) + linesep
         return VentilationCirc_str
 
     def __eq__(self, other):

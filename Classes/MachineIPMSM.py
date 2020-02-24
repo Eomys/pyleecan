@@ -138,19 +138,17 @@ class MachineIPMSM(MachineSync):
 
         MachineIPMSM_str = ""
         # Get the properties inherited from MachineSync
-        MachineIPMSM_str += super(MachineIPMSM, self).__str__() + linesep
+        MachineIPMSM_str += super(MachineIPMSM, self).__str__()
         if self.rotor is not None:
-            MachineIPMSM_str += (
-                "rotor = " + str(self.rotor.as_dict()) + linesep + linesep
-            )
+            tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MachineIPMSM_str += "rotor = " + tmp
         else:
             MachineIPMSM_str += "rotor = None" + linesep + linesep
         if self.stator is not None:
-            MachineIPMSM_str += (
-                "stator = " + str(self.stator.as_dict()) + linesep + linesep
-            )
+            tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MachineIPMSM_str += "stator = " + tmp
         else:
-            MachineIPMSM_str += "stator = None"
+            MachineIPMSM_str += "stator = None" + linesep + linesep
         return MachineIPMSM_str
 
     def __eq__(self, other):

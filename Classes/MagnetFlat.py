@@ -54,7 +54,7 @@ class MagnetFlat(Magnet):
 
         MagnetFlat_str = ""
         # Get the properties inherited from Magnet
-        MagnetFlat_str += super(MagnetFlat, self).__str__() + linesep
+        MagnetFlat_str += super(MagnetFlat, self).__str__()
         return MagnetFlat_str
 
     def __eq__(self, other):

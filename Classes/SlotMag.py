@@ -48,8 +48,8 @@ class SlotMag(Slot):
 
         SlotMag_str = ""
         # Get the properties inherited from Slot
-        SlotMag_str += super(SlotMag, self).__str__() + linesep
-        SlotMag_str += "W3 = " + str(self.W3)
+        SlotMag_str += super(SlotMag, self).__str__()
+        SlotMag_str += "W3 = " + str(self.W3) + linesep
         return SlotMag_str
 
     def __eq__(self, other):

@@ -103,7 +103,14 @@ class HoleM54(Hole):
     save = save
 
     def __init__(
-        self, H0=0.003, H1=0, W0=0.013, R1=0.02, Zh=36, mat_void=-1, init_dict=None
+        self,
+        H0=3.00e-03,
+        H1=0,
+        W0=1.30e-02,
+        R1=2.00e-02,
+        Zh=36,
+        mat_void=-1,
+        init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -146,11 +153,11 @@ class HoleM54(Hole):
 
         HoleM54_str = ""
         # Get the properties inherited from Hole
-        HoleM54_str += super(HoleM54, self).__str__() + linesep
+        HoleM54_str += super(HoleM54, self).__str__()
         HoleM54_str += "H0 = " + str(self.H0) + linesep
         HoleM54_str += "H1 = " + str(self.H1) + linesep
         HoleM54_str += "W0 = " + str(self.W0) + linesep
-        HoleM54_str += "R1 = " + str(self.R1)
+        HoleM54_str += "R1 = " + str(self.R1) + linesep
         return HoleM54_str
 
     def __eq__(self, other):

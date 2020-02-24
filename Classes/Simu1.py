@@ -107,15 +107,17 @@ class Simu1(Simulation):
 
         Simu1_str = ""
         # Get the properties inherited from Simulation
-        Simu1_str += super(Simu1, self).__str__() + linesep
+        Simu1_str += super(Simu1, self).__str__()
         if self.mag is not None:
-            Simu1_str += "mag = " + str(self.mag.as_dict()) + linesep + linesep
+            tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Simu1_str += "mag = " + tmp
         else:
             Simu1_str += "mag = None" + linesep + linesep
         if self.struct is not None:
-            Simu1_str += "struct = " + str(self.struct.as_dict()) + linesep + linesep
+            tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Simu1_str += "struct = " + tmp
         else:
-            Simu1_str += "struct = None"
+            Simu1_str += "struct = None" + linesep + linesep
         return Simu1_str
 
     def __eq__(self, other):

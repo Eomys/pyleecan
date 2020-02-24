@@ -133,30 +133,69 @@ class OutMag(FrozenClass):
             OutMag_str += "parent = None " + linesep
         else:
             OutMag_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutMag_str += "time = " + linesep + str(self.time) + linesep + linesep
-        OutMag_str += "angle = " + linesep + str(self.angle) + linesep + linesep
+        OutMag_str += (
+            "time = "
+            + linesep
+            + str(self.time).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutMag_str += (
+            "angle = "
+            + linesep
+            + str(self.angle).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         OutMag_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutMag_str += "Na_tot = " + str(self.Na_tot) + linesep
-        OutMag_str += "Br = " + linesep + str(self.Br) + linesep + linesep
-        OutMag_str += "Bt = " + linesep + str(self.Bt) + linesep + linesep
-        OutMag_str += "Tem = " + linesep + str(self.Tem) + linesep + linesep
+        OutMag_str += (
+            "Br = "
+            + linesep
+            + str(self.Br).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutMag_str += (
+            "Bt = "
+            + linesep
+            + str(self.Bt).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutMag_str += (
+            "Tem = "
+            + linesep
+            + str(self.Tem).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         OutMag_str += "Tem_av = " + str(self.Tem_av) + linesep
         OutMag_str += "Tem_rip = " + str(self.Tem_rip) + linesep
         OutMag_str += (
             "Phi_wind_stator = "
             + linesep
-            + str(self.Phi_wind_stator)
+            + str(self.Phi_wind_stator).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
-        OutMag_str += "emf = " + linesep + str(self.emf) + linesep + linesep
+        OutMag_str += (
+            "emf = "
+            + linesep
+            + str(self.emf).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         if self.meshsolution is not None:
-            OutMag_str += (
-                "meshsolution = " + str(self.meshsolution.as_dict()) + linesep + linesep
+            tmp = (
+                self.meshsolution.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
             )
+            OutMag_str += "meshsolution = " + tmp
         else:
             OutMag_str += "meshsolution = None" + linesep + linesep
-        OutMag_str += "FEMM_dict = " + str(self.FEMM_dict)
+        OutMag_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
         return OutMag_str
 
     def __eq__(self, other):

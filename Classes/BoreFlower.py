@@ -38,7 +38,7 @@ class BoreFlower(Bore):
     # save method is available in all object
     save = save
 
-    def __init__(self, N=8, Rarc=0.01, alpha=0, init_dict=None):
+    def __init__(self, N=8, Rarc=1.00e-02, alpha=0, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -71,10 +71,10 @@ class BoreFlower(Bore):
 
         BoreFlower_str = ""
         # Get the properties inherited from Bore
-        BoreFlower_str += super(BoreFlower, self).__str__() + linesep
+        BoreFlower_str += super(BoreFlower, self).__str__()
         BoreFlower_str += "N = " + str(self.N) + linesep
         BoreFlower_str += "Rarc = " + str(self.Rarc) + linesep
-        BoreFlower_str += "alpha = " + str(self.alpha)
+        BoreFlower_str += "alpha = " + str(self.alpha) + linesep
         return BoreFlower_str
 
     def __eq__(self, other):

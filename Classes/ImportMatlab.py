@@ -66,9 +66,9 @@ class ImportMatlab(Import):
 
         ImportMatlab_str = ""
         # Get the properties inherited from Import
-        ImportMatlab_str += super(ImportMatlab, self).__str__() + linesep
+        ImportMatlab_str += super(ImportMatlab, self).__str__()
         ImportMatlab_str += 'file_path = "' + str(self.file_path) + '"' + linesep
-        ImportMatlab_str += 'var_name = "' + str(self.var_name) + '"'
+        ImportMatlab_str += 'var_name = "' + str(self.var_name) + '"' + linesep
         return ImportMatlab_str
 
     def __eq__(self, other):

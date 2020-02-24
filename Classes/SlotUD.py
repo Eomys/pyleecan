@@ -70,9 +70,14 @@ class SlotUD(Slot):
 
         SlotUD_str = ""
         # Get the properties inherited from Slot
-        SlotUD_str += super(SlotUD, self).__str__() + linesep
-        SlotUD_str += "point_list = " + linesep + str(self.point_list) + linesep
-        SlotUD_str += "is_sym = " + str(self.is_sym)
+        SlotUD_str += super(SlotUD, self).__str__()
+        SlotUD_str += (
+            "point_list = "
+            + linesep
+            + str(self.point_list).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        SlotUD_str += "is_sym = " + str(self.is_sym) + linesep
         return SlotUD_str
 
     def __eq__(self, other):

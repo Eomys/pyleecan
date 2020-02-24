@@ -96,8 +96,8 @@ class MagnetType11(MagnetPolar):
 
     def __init__(
         self,
-        Wmag=0.002,
-        Hmag=0.001,
+        Wmag=2.00e-03,
+        Hmag=1.00e-03,
         mat_type=-1,
         type_magnetization=0,
         Lmag=0.95,
@@ -144,9 +144,9 @@ class MagnetType11(MagnetPolar):
 
         MagnetType11_str = ""
         # Get the properties inherited from MagnetPolar
-        MagnetType11_str += super(MagnetType11, self).__str__() + linesep
+        MagnetType11_str += super(MagnetType11, self).__str__()
         MagnetType11_str += "Wmag = " + str(self.Wmag) + linesep
-        MagnetType11_str += "Hmag = " + str(self.Hmag)
+        MagnetType11_str += "Hmag = " + str(self.Hmag) + linesep
         return MagnetType11_str
 
     def __eq__(self, other):

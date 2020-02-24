@@ -252,37 +252,43 @@ class InCurrentDQ(Input):
 
         InCurrentDQ_str = ""
         # Get the properties inherited from Input
-        InCurrentDQ_str += super(InCurrentDQ, self).__str__() + linesep
+        InCurrentDQ_str += super(InCurrentDQ, self).__str__()
         if self.time is not None:
-            InCurrentDQ_str += "time = " + str(self.time.as_dict()) + linesep + linesep
+            tmp = self.time.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            InCurrentDQ_str += "time = " + tmp
         else:
             InCurrentDQ_str += "time = None" + linesep + linesep
         if self.angle is not None:
-            InCurrentDQ_str += (
-                "angle = " + str(self.angle.as_dict()) + linesep + linesep
-            )
+            tmp = self.angle.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            InCurrentDQ_str += "angle = " + tmp
         else:
             InCurrentDQ_str += "angle = None" + linesep + linesep
         if self.Is is not None:
-            InCurrentDQ_str += "Is = " + str(self.Is.as_dict()) + linesep + linesep
+            tmp = self.Is.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            InCurrentDQ_str += "Is = " + tmp
         else:
             InCurrentDQ_str += "Is = None" + linesep + linesep
         if self.Ir is not None:
-            InCurrentDQ_str += "Ir = " + str(self.Ir.as_dict()) + linesep + linesep
+            tmp = self.Ir.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            InCurrentDQ_str += "Ir = " + tmp
         else:
             InCurrentDQ_str += "Ir = None" + linesep + linesep
         if self.angle_rotor is not None:
-            InCurrentDQ_str += (
-                "angle_rotor = " + str(self.angle_rotor.as_dict()) + linesep + linesep
+            tmp = (
+                self.angle_rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             )
+            InCurrentDQ_str += "angle_rotor = " + tmp
         else:
             InCurrentDQ_str += "angle_rotor = None" + linesep + linesep
         if self.Nr is not None:
-            InCurrentDQ_str += "Nr = " + str(self.Nr.as_dict()) + linesep + linesep
+            tmp = self.Nr.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            InCurrentDQ_str += "Nr = " + tmp
         else:
             InCurrentDQ_str += "Nr = None" + linesep + linesep
         InCurrentDQ_str += "rot_dir = " + str(self.rot_dir) + linesep
-        InCurrentDQ_str += "angle_rotor_initial = " + str(self.angle_rotor_initial)
+        InCurrentDQ_str += (
+            "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
+        )
         return InCurrentDQ_str
 
     def __eq__(self, other):

@@ -183,7 +183,7 @@ class Magnetics(FrozenClass):
         Magnetics_str += "is_antiper_t = " + str(self.is_antiper_t) + linesep
         Magnetics_str += "is_symmetry_a = " + str(self.is_symmetry_a) + linesep
         Magnetics_str += "sym_a = " + str(self.sym_a) + linesep
-        Magnetics_str += "is_antiper_a = " + str(self.is_antiper_a)
+        Magnetics_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
         return Magnetics_str
 
     def __eq__(self, other):

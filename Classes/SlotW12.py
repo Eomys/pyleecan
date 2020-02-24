@@ -151,7 +151,9 @@ class SlotW12(SlotWind):
     # save method is available in all object
     save = save
 
-    def __init__(self, H0=0.003, H1=0, R1=0.001, R2=0.001, Zs=36, init_dict=None):
+    def __init__(
+        self, H0=3.00e-03, H1=0, R1=1.00e-03, R2=1.00e-03, Zs=36, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -189,11 +191,11 @@ class SlotW12(SlotWind):
 
         SlotW12_str = ""
         # Get the properties inherited from SlotWind
-        SlotW12_str += super(SlotW12, self).__str__() + linesep
+        SlotW12_str += super(SlotW12, self).__str__()
         SlotW12_str += "H0 = " + str(self.H0) + linesep
         SlotW12_str += "H1 = " + str(self.H1) + linesep
         SlotW12_str += "R1 = " + str(self.R1) + linesep
-        SlotW12_str += "R2 = " + str(self.R2)
+        SlotW12_str += "R2 = " + str(self.R2) + linesep
         return SlotW12_str
 
     def __eq__(self, other):
