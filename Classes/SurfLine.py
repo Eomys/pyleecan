@@ -218,15 +218,14 @@ class SurfLine(Surface):
 
         SurfLine_str = ""
         # Get the properties inherited from Surface
-        SurfLine_str += super(SurfLine, self).__str__() + linesep
+        SurfLine_str += super(SurfLine, self).__str__()
         if len(self.line_list) == 0:
-            SurfLine_str += "line_list = []"
+            SurfLine_str += "line_list = []" + linesep
         for ii in range(len(self.line_list)):
             tmp = (
-                self.line_list[ii].__str__()[:-2].replace(linesep, linesep + "\t")
-                + "\n"
+                self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
             )
-            SurfLine_str += "line_list[" + str(ii) + "] =" + tmp
+            SurfLine_str += "line_list[" + str(ii) + "] =" + tmp + linesep + linesep
         return SurfLine_str
 
     def __eq__(self, other):
@@ -269,6 +268,7 @@ class SurfLine(Surface):
         for obj in self._line_list:
             if obj is not None:
                 obj.parent = self
+        return self._line_list
 
     def _set_line_list(self, value):
         """setter of line_list"""

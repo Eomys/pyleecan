@@ -139,11 +139,11 @@ class LamSlotMag(LamSlot):
     def __init__(
         self,
         slot=-1,
-        L1=0.35,
+        L1=3.50e-01,
         mat_type=-1,
         Nrvd=0,
         Wrvd=0,
-        Kf1=0.95,
+        Kf1=9.50e-01,
         is_internal=True,
         Rint=0,
         Rext=1,
@@ -232,7 +232,7 @@ class LamSlotMag(LamSlot):
 
         LamSlotMag_str = ""
         # Get the properties inherited from LamSlot
-        LamSlotMag_str += super(LamSlotMag, self).__str__() + linesep
+        LamSlotMag_str += super(LamSlotMag, self).__str__()
         return LamSlotMag_str
 
     def __eq__(self, other):

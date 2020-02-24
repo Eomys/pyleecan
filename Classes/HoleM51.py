@@ -184,15 +184,15 @@ class HoleM51(HoleMag):
 
     def __init__(
         self,
-        H0=0.003,
+        H0=3.00e-03,
         H1=0,
-        H2=0.02,
-        W0=0.01,
+        H2=2.00e-02,
+        W0=1.00e-02,
         W1=0,
-        W2=0.01,
+        W2=1.00e-02,
         W3=0,
-        W4=0.01,
-        W5=0.01,
+        W4=1.00e-02,
+        W5=1.00e-02,
         W6=0,
         W7=0,
         magnet_0=-1,
@@ -365,7 +365,7 @@ class HoleM51(HoleMag):
 
         HoleM51_str = ""
         # Get the properties inherited from HoleMag
-        HoleM51_str += super(HoleM51, self).__str__() + linesep
+        HoleM51_str += super(HoleM51, self).__str__()
         HoleM51_str += "H0 = " + str(self.H0) + linesep
         HoleM51_str += "H1 = " + str(self.H1) + linesep
         HoleM51_str += "H2 = " + str(self.H2) + linesep
@@ -378,20 +378,20 @@ class HoleM51(HoleMag):
         HoleM51_str += "W6 = " + str(self.W6) + linesep
         HoleM51_str += "W7 = " + str(self.W7) + linesep
         if self.magnet_0 is not None:
-            tmp = self.magnet_0.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.magnet_0.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             HoleM51_str += "magnet_0 = " + tmp
         else:
             HoleM51_str += "magnet_0 = None" + linesep + linesep
         if self.magnet_1 is not None:
-            tmp = self.magnet_1.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.magnet_1.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             HoleM51_str += "magnet_1 = " + tmp
         else:
             HoleM51_str += "magnet_1 = None" + linesep + linesep
         if self.magnet_2 is not None:
-            tmp = self.magnet_2.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.magnet_2.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             HoleM51_str += "magnet_2 = " + tmp
         else:
-            HoleM51_str += "magnet_2 = None"
+            HoleM51_str += "magnet_2 = None" + linesep + linesep
         return HoleM51_str
 
     def __eq__(self, other):

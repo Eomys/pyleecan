@@ -192,11 +192,11 @@ class SlotW22(SlotWind):
 
         SlotW22_str = ""
         # Get the properties inherited from SlotWind
-        SlotW22_str += super(SlotW22, self).__str__() + linesep
+        SlotW22_str += super(SlotW22, self).__str__()
         SlotW22_str += "W0 = " + str(self.W0) + linesep
         SlotW22_str += "H0 = " + str(self.H0) + linesep
         SlotW22_str += "H2 = " + str(self.H2) + linesep
-        SlotW22_str += "W2 = " + str(self.W2)
+        SlotW22_str += "W2 = " + str(self.W2) + linesep
         return SlotW22_str
 
     def __eq__(self, other):

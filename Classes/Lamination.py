@@ -298,11 +298,11 @@ class Lamination(FrozenClass):
 
     def __init__(
         self,
-        L1=0.35,
+        L1=3.50e-01,
         mat_type=-1,
         Nrvd=0,
         Wrvd=0,
-        Kf1=0.95,
+        Kf1=9.50e-01,
         is_internal=True,
         Rint=0,
         Rext=1,
@@ -456,7 +456,7 @@ class Lamination(FrozenClass):
             Lamination_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Lamination_str += "L1 = " + str(self.L1) + linesep
         if self.mat_type is not None:
-            tmp = self.mat_type.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Lamination_str += "mat_type = " + tmp
         else:
             Lamination_str += "mat_type = None" + linesep + linesep
@@ -468,18 +468,17 @@ class Lamination(FrozenClass):
         Lamination_str += "Rext = " + str(self.Rext) + linesep
         Lamination_str += "is_stator = " + str(self.is_stator) + linesep
         if len(self.axial_vent) == 0:
-            Lamination_str += "axial_vent = []"
+            Lamination_str += "axial_vent = []" + linesep
         for ii in range(len(self.axial_vent)):
             tmp = (
-                self.axial_vent[ii].__str__()[:-2].replace(linesep, linesep + "\t")
-                + "\n"
+                self.axial_vent[ii].__str__().replace(linesep, linesep + "\t") + linesep
             )
             Lamination_str += "axial_vent[" + str(ii) + "] =" + tmp + linesep + linesep
         if len(self.notch) == 0:
-            Lamination_str += "notch = []"
+            Lamination_str += "notch = []" + linesep
         for ii in range(len(self.notch)):
-            tmp = self.notch[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
-            Lamination_str += "notch[" + str(ii) + "] =" + tmp
+            tmp = self.notch[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            Lamination_str += "notch[" + str(ii) + "] =" + tmp + linesep + linesep
         return Lamination_str
 
     def __eq__(self, other):
@@ -701,6 +700,7 @@ class Lamination(FrozenClass):
         for obj in self._axial_vent:
             if obj is not None:
                 obj.parent = self
+        return self._axial_vent
 
     def _set_axial_vent(self, value):
         """setter of axial_vent"""
@@ -722,6 +722,7 @@ class Lamination(FrozenClass):
         for obj in self._notch:
             if obj is not None:
                 obj.parent = self
+        return self._notch
 
     def _set_notch(self, value):
         """setter of notch"""

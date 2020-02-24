@@ -95,7 +95,7 @@ class NodeMat(Node):
     save = save
 
     def __init__(
-        self, coordinate=None, nb_node=0, tag=None, delta=1e-10, init_dict=None
+        self, coordinate=None, nb_node=0, tag=None, delta=1.00e-10, init_dict=None
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -134,13 +134,23 @@ class NodeMat(Node):
 
         NodeMat_str = ""
         # Get the properties inherited from Node
-        NodeMat_str += super(NodeMat, self).__str__() + linesep
+        NodeMat_str += super(NodeMat, self).__str__()
         NodeMat_str += (
-            "coordinate = " + linesep + str(self.coordinate) + linesep + linesep
+            "coordinate = "
+            + linesep
+            + str(self.coordinate).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
         )
         NodeMat_str += "nb_node = " + str(self.nb_node) + linesep
-        NodeMat_str += "tag = " + linesep + str(self.tag) + linesep + linesep
-        NodeMat_str += "delta = " + str(self.delta)
+        NodeMat_str += (
+            "tag = "
+            + linesep
+            + str(self.tag).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        NodeMat_str += "delta = " + str(self.delta) + linesep
         return NodeMat_str
 
     def __eq__(self, other):

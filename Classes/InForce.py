@@ -169,27 +169,27 @@ class InForce(Input):
 
         InForce_str = ""
         # Get the properties inherited from Input
-        InForce_str += super(InForce, self).__str__() + linesep
+        InForce_str += super(InForce, self).__str__()
         if self.time is not None:
-            tmp = self.time.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.time.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InForce_str += "time = " + tmp
         else:
             InForce_str += "time = None" + linesep + linesep
         if self.angle is not None:
-            tmp = self.angle.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.angle.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InForce_str += "angle = " + tmp
         else:
             InForce_str += "angle = None" + linesep + linesep
         if self.Prad is not None:
-            tmp = self.Prad.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.Prad.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InForce_str += "Prad = " + tmp
         else:
             InForce_str += "Prad = None" + linesep + linesep
         if self.Ptan is not None:
-            tmp = self.Ptan.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.Ptan.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InForce_str += "Ptan = " + tmp
         else:
-            InForce_str += "Ptan = None"
+            InForce_str += "Ptan = None" + linesep + linesep
         return InForce_str
 
     def __eq__(self, other):

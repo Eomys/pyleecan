@@ -71,8 +71,14 @@ class NotchEvenDist(Notch):
 
         NotchEvenDist_str = ""
         # Get the properties inherited from Notch
-        NotchEvenDist_str += super(NotchEvenDist, self).__str__() + linesep
-        NotchEvenDist_str += "alpha = " + linesep + str(self.alpha)
+        NotchEvenDist_str += super(NotchEvenDist, self).__str__()
+        NotchEvenDist_str += (
+            "alpha = "
+            + linesep
+            + str(self.alpha).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return NotchEvenDist_str
 
     def __eq__(self, other):

@@ -160,11 +160,11 @@ class LamHole(Lamination):
     def __init__(
         self,
         hole=list(),
-        L1=0.35,
+        L1=3.50e-01,
         mat_type=-1,
         Nrvd=0,
         Wrvd=0,
-        Kf1=0.95,
+        Kf1=9.50e-01,
         is_internal=True,
         Rint=0,
         Rext=1,
@@ -286,12 +286,12 @@ class LamHole(Lamination):
 
         LamHole_str = ""
         # Get the properties inherited from Lamination
-        LamHole_str += super(LamHole, self).__str__() + linesep
+        LamHole_str += super(LamHole, self).__str__()
         if len(self.hole) == 0:
-            LamHole_str += "hole = []"
+            LamHole_str += "hole = []" + linesep
         for ii in range(len(self.hole)):
-            tmp = self.hole[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
-            LamHole_str += "hole[" + str(ii) + "] =" + tmp
+            tmp = self.hole[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            LamHole_str += "hole[" + str(ii) + "] =" + tmp + linesep + linesep
         return LamHole_str
 
     def __eq__(self, other):
@@ -334,6 +334,7 @@ class LamHole(Lamination):
         for obj in self._hole:
             if obj is not None:
                 obj.parent = self
+        return self._hole
 
     def _set_hole(self, value):
         """setter of hole"""

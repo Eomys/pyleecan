@@ -56,10 +56,10 @@ class GUIOption(FrozenClass):
         else:
             GUIOption_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.unit is not None:
-            tmp = self.unit.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.unit.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             GUIOption_str += "unit = " + tmp
         else:
-            GUIOption_str += "unit = None"
+            GUIOption_str += "unit = None" + linesep + linesep
         return GUIOption_str
 
     def __eq__(self, other):

@@ -146,11 +146,11 @@ class VentilationPolar(Hole):
 
         VentilationPolar_str = ""
         # Get the properties inherited from Hole
-        VentilationPolar_str += super(VentilationPolar, self).__str__() + linesep
+        VentilationPolar_str += super(VentilationPolar, self).__str__()
         VentilationPolar_str += "Alpha0 = " + str(self.Alpha0) + linesep
         VentilationPolar_str += "D0 = " + str(self.D0) + linesep
         VentilationPolar_str += "H0 = " + str(self.H0) + linesep
-        VentilationPolar_str += "W1 = " + str(self.W1)
+        VentilationPolar_str += "W1 = " + str(self.W1) + linesep
         return VentilationPolar_str
 
     def __eq__(self, other):

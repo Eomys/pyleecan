@@ -124,7 +124,7 @@ class MachineIPMSM(MachineSync):
 
         MachineIPMSM_str = ""
         # Get the properties inherited from MachineSync
-        MachineIPMSM_str += super(MachineIPMSM, self).__str__() + linesep
+        MachineIPMSM_str += super(MachineIPMSM, self).__str__()
         return MachineIPMSM_str
 
     def __eq__(self, other):

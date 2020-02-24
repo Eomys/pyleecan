@@ -339,28 +339,28 @@ class Machine(FrozenClass):
         else:
             Machine_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.rotor is not None:
-            tmp = self.rotor.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Machine_str += "rotor = " + tmp
         else:
             Machine_str += "rotor = None" + linesep + linesep
         if self.stator is not None:
-            tmp = self.stator.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Machine_str += "stator = " + tmp
         else:
             Machine_str += "stator = None" + linesep + linesep
         if self.frame is not None:
-            tmp = self.frame.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.frame.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Machine_str += "frame = " + tmp
         else:
             Machine_str += "frame = None" + linesep + linesep
         if self.shaft is not None:
-            tmp = self.shaft.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.shaft.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Machine_str += "shaft = " + tmp
         else:
             Machine_str += "shaft = None" + linesep + linesep
         Machine_str += 'name = "' + str(self.name) + '"' + linesep
         Machine_str += 'desc = "' + str(self.desc) + '"' + linesep
-        Machine_str += "type_machine = " + str(self.type_machine)
+        Machine_str += "type_machine = " + str(self.type_machine) + linesep
         return Machine_str
 
     def __eq__(self, other):

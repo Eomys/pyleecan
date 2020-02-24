@@ -162,7 +162,9 @@ class Solution(FrozenClass):
         if len(self.volume) == 0:
             Solution_str += "volume = dict()"
         for key, obj in self.volume.items():
-            Solution_str += "volume[" + key + "] = " + str(self.volume[key])
+            Solution_str += (
+                "volume[" + key + "] = " + str(self.volume[key]) + linesep + linesep
+            )
         return Solution_str
 
     def __eq__(self, other):

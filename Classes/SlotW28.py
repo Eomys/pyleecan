@@ -154,7 +154,14 @@ class SlotW28(SlotWind):
     save = save
 
     def __init__(
-        self, W0=0.0122, H0=0.001, R1=0.003, W3=0.005, H3=0.003, Zs=36, init_dict=None
+        self,
+        W0=1.22e-02,
+        H0=1.00e-03,
+        R1=3.00e-03,
+        W3=5.00e-03,
+        H3=3.00e-03,
+        Zs=36,
+        init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -196,12 +203,12 @@ class SlotW28(SlotWind):
 
         SlotW28_str = ""
         # Get the properties inherited from SlotWind
-        SlotW28_str += super(SlotW28, self).__str__() + linesep
+        SlotW28_str += super(SlotW28, self).__str__()
         SlotW28_str += "W0 = " + str(self.W0) + linesep
         SlotW28_str += "H0 = " + str(self.H0) + linesep
         SlotW28_str += "R1 = " + str(self.R1) + linesep
         SlotW28_str += "W3 = " + str(self.W3) + linesep
-        SlotW28_str += "H3 = " + str(self.H3)
+        SlotW28_str += "H3 = " + str(self.H3) + linesep
         return SlotW28_str
 
     def __eq__(self, other):

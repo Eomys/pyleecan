@@ -239,9 +239,9 @@ class Segment(Line):
 
         Segment_str = ""
         # Get the properties inherited from Line
-        Segment_str += super(Segment, self).__str__() + linesep
+        Segment_str += super(Segment, self).__str__()
         Segment_str += "begin = " + str(self.begin) + linesep
-        Segment_str += "end = " + str(self.end)
+        Segment_str += "end = " + str(self.end) + linesep
         return Segment_str
 
     def __eq__(self, other):

@@ -135,32 +135,32 @@ class Material(FrozenClass):
         Material_str += 'name = "' + str(self.name) + '"' + linesep
         Material_str += "is_isotropic = " + str(self.is_isotropic) + linesep
         if self.elec is not None:
-            tmp = self.elec.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.elec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Material_str += "elec = " + tmp
         else:
             Material_str += "elec = None" + linesep + linesep
         if self.mag is not None:
-            tmp = self.mag.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Material_str += "mag = " + tmp
         else:
             Material_str += "mag = None" + linesep + linesep
         if self.struct is not None:
-            tmp = self.struct.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Material_str += "struct = " + tmp
         else:
             Material_str += "struct = None" + linesep + linesep
         if self.HT is not None:
-            tmp = self.HT.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.HT.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Material_str += "HT = " + tmp
         else:
             Material_str += "HT = None" + linesep + linesep
         if self.eco is not None:
-            tmp = self.eco.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.eco.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Material_str += "eco = " + tmp
         else:
             Material_str += "eco = None" + linesep + linesep
         Material_str += 'desc = "' + str(self.desc) + '"' + linesep
-        Material_str += 'path = "' + str(self.path) + '"'
+        Material_str += 'path = "' + str(self.path) + '"' + linesep
         return Material_str
 
     def __eq__(self, other):

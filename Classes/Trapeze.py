@@ -174,10 +174,10 @@ class Trapeze(Surface):
 
         Trapeze_str = ""
         # Get the properties inherited from Surface
-        Trapeze_str += super(Trapeze, self).__str__() + linesep
+        Trapeze_str += super(Trapeze, self).__str__()
         Trapeze_str += "height = " + str(self.height) + linesep
         Trapeze_str += "W2 = " + str(self.W2) + linesep
-        Trapeze_str += "W1 = " + str(self.W1)
+        Trapeze_str += "W1 = " + str(self.W1) + linesep
         return Trapeze_str
 
     def __eq__(self, other):

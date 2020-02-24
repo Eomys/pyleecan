@@ -68,7 +68,7 @@ class Shaft(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, Lshaft=0.442, mat_type=-1, Drsh=0.045, init_dict=None):
+    def __init__(self, Lshaft=4.42e-01, mat_type=-1, Drsh=4.50e-02, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -112,11 +112,11 @@ class Shaft(FrozenClass):
             Shaft_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Shaft_str += "Lshaft = " + str(self.Lshaft) + linesep
         if self.mat_type is not None:
-            tmp = self.mat_type.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Shaft_str += "mat_type = " + tmp
         else:
             Shaft_str += "mat_type = None" + linesep + linesep
-        Shaft_str += "Drsh = " + str(self.Drsh)
+        Shaft_str += "Drsh = " + str(self.Drsh) + linesep
         return Shaft_str
 
     def __eq__(self, other):

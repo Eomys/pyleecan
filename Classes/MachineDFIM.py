@@ -124,7 +124,7 @@ class MachineDFIM(MachineAsync):
 
         MachineDFIM_str = ""
         # Get the properties inherited from MachineAsync
-        MachineDFIM_str += super(MachineDFIM, self).__str__() + linesep
+        MachineDFIM_str += super(MachineDFIM, self).__str__()
         return MachineDFIM_str
 
     def __eq__(self, other):

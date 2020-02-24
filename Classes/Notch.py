@@ -135,13 +135,13 @@ class Notch(FrozenClass):
         else:
             Notch_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if len(self.notch_shape) == 0:
-            Notch_str += "notch_shape = []"
+            Notch_str += "notch_shape = []" + linesep
         for ii in range(len(self.notch_shape)):
             tmp = (
-                self.notch_shape[ii].__str__()[:-2].replace(linesep, linesep + "\t")
-                + "\n"
+                self.notch_shape[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
             )
-            Notch_str += "notch_shape[" + str(ii) + "] =" + tmp
+            Notch_str += "notch_shape[" + str(ii) + "] =" + tmp + linesep + linesep
         return Notch_str
 
     def __eq__(self, other):
@@ -176,6 +176,7 @@ class Notch(FrozenClass):
         for obj in self._notch_shape:
             if obj is not None:
                 obj.parent = self
+        return self._notch_shape
 
     def _set_notch_shape(self, value):
         """setter of notch_shape"""

@@ -131,10 +131,10 @@ class MatMagnetics(FrozenClass):
         MatMagnetics_str += "alpha_Br = " + str(self.alpha_Br) + linesep
         MatMagnetics_str += "Wlam = " + str(self.Wlam) + linesep
         if self.BH_curve is not None:
-            tmp = self.BH_curve.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.BH_curve.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             MatMagnetics_str += "BH_curve = " + tmp
         else:
-            MatMagnetics_str += "BH_curve = None"
+            MatMagnetics_str += "BH_curve = None" + linesep + linesep
         return MatMagnetics_str
 
     def __eq__(self, other):

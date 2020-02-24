@@ -86,11 +86,11 @@ class ImportGenVectLin(ImportMatrix):
 
         ImportGenVectLin_str = ""
         # Get the properties inherited from ImportMatrix
-        ImportGenVectLin_str += super(ImportGenVectLin, self).__str__() + linesep
+        ImportGenVectLin_str += super(ImportGenVectLin, self).__str__()
         ImportGenVectLin_str += "start = " + str(self.start) + linesep
         ImportGenVectLin_str += "stop = " + str(self.stop) + linesep
         ImportGenVectLin_str += "num = " + str(self.num) + linesep
-        ImportGenVectLin_str += "endpoint = " + str(self.endpoint)
+        ImportGenVectLin_str += "endpoint = " + str(self.endpoint) + linesep
         return ImportGenVectLin_str
 
     def __eq__(self, other):
