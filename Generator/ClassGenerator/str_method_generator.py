@@ -92,7 +92,7 @@ def generate_str(gen_dict, class_dict):
                 + class_name
                 + '_str += "'
                 + prop["name"]
-                + ' = " + linesep + str(self.'
+                + ' = "+ str(self.'
                 + prop["name"]
                 + ")"
             )
@@ -107,17 +107,19 @@ def generate_str(gen_dict, class_dict):
                 + prop["name"]
                 + ' = " + linesep + str(self.'
                 + prop["name"]
-                + ")"
+                + ').replace(linesep, linesep + "\\t")'
             )
         elif is_list_pyleecan_type(prop["type"]):
             var_str += TAB2 + "if len(self." + prop["name"] + ") == 0:\n"
-            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = []"\n'
+            var_str += (
+                TAB3 + class_name + '_str += "' + prop["name"] + ' = []" + linesep\n'
+            )
             var_str += TAB2 + "for ii in range(len(self." + prop["name"] + ")):\n"
             var_str += (
                 TAB3
                 + "tmp = self."
                 + prop["name"]
-                + '[ii].__str__()[:-2].replace(linesep, linesep + "\\t")+"\\n" \n'
+                + '[ii].__str__().replace(linesep, linesep + "\\t") + linesep\n'
             )
             var_str += (
                 TAB3 + class_name + '_str += "' + prop["name"] + '["+str(ii)+"] ="+ tmp'
@@ -143,7 +145,7 @@ def generate_str(gen_dict, class_dict):
                 TAB3
                 + "tmp = self."
                 + prop["name"]
-                + '[key].__str__()[:-2].replace(linesep, linesep + "\\t")+"\\n" \n'
+                + '[key].__str__().replace(linesep, linesep + "\\t")+ linesep \n'
             )
             var_str += (
                 TAB3 + class_name + '_str += "' + prop["name"] + '["+key+"] ="+ tmp'
@@ -155,13 +157,11 @@ def generate_str(gen_dict, class_dict):
                 TAB3
                 + "tmp = self."
                 + prop["name"]
-                + '.__str__()[:-2].replace(linesep, linesep + "\\t")+"\\n" \n'
+                + '.__str__().replace(linesep, linesep + "\\t").rstrip("\\t")\n'
             )
-            var_str += (
-                TAB3 + class_name + '_str +="\\t" "' + prop["name"] + ' = "+ tmp\n'
-            )
+            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = "+ tmp\n'
             var_str += TAB2 + "else:\n"
-            var_str += TAB3 + class_name + '_str +="\\t"+ "' + prop["name"] + ' = None"'
+            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = None"'
 
         # Add linesep except for the last line
         # if ii == len(class_dict["properties"]) - 1:
@@ -183,11 +183,7 @@ def generate_str(gen_dict, class_dict):
         )
         # Add => "Class_str += super(Class, self).__str__() + linesep
         str_str += (
-            TAB2
-            + class_name
-            + "_str += super("
-            + class_name
-            + ", self).__str__() + linesep\n"
+            TAB2 + class_name + "_str += super(" + class_name + ", self).__str__()\n"
         )
     str_str += var_str
     str_str += TAB2 + "return " + class_name + "_str\n"
