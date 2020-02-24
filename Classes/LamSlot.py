@@ -47,6 +47,11 @@ try:
 except ImportError as error:
     comp_height_yoke = error
 
+try:
+    from pyleecan.Methods.Machine.LamSlot.get_Zs import get_Zs
+except ImportError as error:
+    get_Zs = error
+
 
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Slot import Slot
@@ -136,17 +141,26 @@ class LamSlot(Lamination):
         )
     else:
         comp_height_yoke = comp_height_yoke
+    # cf Methods.Machine.LamSlot.get_Zs
+    if isinstance(get_Zs, ImportError):
+        get_Zs = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlot method get_Zs: " + str(get_Zs))
+            )
+        )
+    else:
+        get_Zs = get_Zs
     # save method is available in all object
     save = save
 
     def __init__(
         self,
         slot=-1,
-        L1=0.35,
+        L1=3.50e-01,
         mat_type=-1,
         Nrvd=0,
         Wrvd=0,
-        Kf1=0.95,
+        Kf1=9.50e-01,
         is_internal=True,
         Rint=0,
         Rext=1,
@@ -274,12 +288,12 @@ class LamSlot(Lamination):
 
         LamSlot_str = ""
         # Get the properties inherited from Lamination
-        LamSlot_str += super(LamSlot, self).__str__() + linesep
+        LamSlot_str += super(LamSlot, self).__str__()
         if self.slot is not None:
-            tmp = self.slot.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.slot.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             LamSlot_str += "slot = " + tmp
         else:
-            LamSlot_str += "slot = None"
+            LamSlot_str += "slot = None" + linesep + linesep
         return LamSlot_str
 
     def __eq__(self, other):

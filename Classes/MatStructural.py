@@ -22,8 +22,8 @@ class MatStructural(FrozenClass):
     def __init__(
         self,
         rho=7650,
-        Ex=215000000000.0,
-        Ey=215000000000.0,
+        Ex=2.15e11,
+        Ey=2.15e11,
         Ez=80000000000,
         nu_xy=0.3,
         nu_xz=0.03,
@@ -114,7 +114,7 @@ class MatStructural(FrozenClass):
         MatStructural_str += "nu_yz = " + str(self.nu_yz) + linesep
         MatStructural_str += "Gxz = " + str(self.Gxz) + linesep
         MatStructural_str += "Gxy = " + str(self.Gxy) + linesep
-        MatStructural_str += "Gyz = " + str(self.Gyz)
+        MatStructural_str += "Gyz = " + str(self.Gyz) + linesep
         return MatStructural_str
 
     def __eq__(self, other):

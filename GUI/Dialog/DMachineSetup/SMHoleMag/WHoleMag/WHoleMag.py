@@ -26,7 +26,7 @@ class WHoleMag(Ui_WHoleMag, QWidget):
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
 
-    def __init__(self, parent, is_mag, index):
+    def __init__(self, parent, is_mag, index, matlib=[]):
         """Initialize the GUI according to lamination
 
         Parameters
@@ -39,6 +39,8 @@ class WHoleMag(Ui_WHoleMag, QWidget):
             False: no magnet in the Hole (for the SyRM)
         index : int
             Index of the hole to edit
+        matlib : list
+            List of available Material
         """
 
         # Build the interface according to the .ui file
@@ -50,6 +52,7 @@ class WHoleMag(Ui_WHoleMag, QWidget):
         self.index = index
         self.is_mag = is_mag
         self.parent = parent
+        self.matlib = matlib
 
         # Adapt the GUI to the current machine
         if is_mag:  # IPMSM
@@ -75,12 +78,11 @@ class WHoleMag(Ui_WHoleMag, QWidget):
         # Regenerate the pages with the new values
         self.w_hole.setParent(None)
         self.w_hole = self.wid_list[self.c_hole_type.currentIndex()](
-            self.obj.hole[index]
+            hole=self.obj.hole[index], matlib=self.matlib
         )
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_hole)
         self.main_layout.insertWidget(1, self.w_hole)
-        self.parent.update_w_mat()
 
         # Connect the slot
         self.c_hole_type.currentIndexChanged.connect(self.set_hole_type)
@@ -123,12 +125,13 @@ class WHoleMag(Ui_WHoleMag, QWidget):
 
         # Update the GUI
         self.w_hole.setParent(None)
-        self.w_hole = self.wid_list[c_index](self.obj.hole[self.index])
+        self.w_hole = self.wid_list[c_index](
+            hole=self.obj.hole[self.index], matlib=self.matlib
+        )
         self.w_hole.saveNeeded.connect(self.emit_save)
         # Refresh the GUI
         self.main_layout.removeWidget(self.w_hole)
         self.main_layout.insertWidget(1, self.w_hole)
-        self.parent.update_w_mat()
 
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

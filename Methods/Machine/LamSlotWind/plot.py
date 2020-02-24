@@ -56,7 +56,6 @@ def plot(
     else:
         color_lam = ROTOR_COLOR
 
-    Zs = self.slot.Zs
     # Get the LamSlot surface(s)
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
 
@@ -66,6 +65,7 @@ def plot(
         wind_mat = None
     else:
         try:
+            Zs = self.get_Zs()
             wind_mat = self.winding.comp_connection_mat(Zs)
             (Nrad, Ntan, Zs, qs) = wind_mat.shape
         except Exception:

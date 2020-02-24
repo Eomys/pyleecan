@@ -42,6 +42,7 @@ def draw_FEMM(
     user_FEMM_dict={},
     path_save="FEMM_model.fem",
     is_sliding_band=True,
+    transform_list=[],
 ):
     """Draws and assigns the property of the machine in FEMM
     
@@ -131,6 +132,14 @@ def draw_FEMM(
 
     # adding External Lamination surface
     surf_list.extend(lam_ext.build_geometry(sym=sym))
+
+    # Applying user defined modifications
+    for transfrom in transform_list:
+        for surf in surf_list:
+            if transfrom["label"] in surf.label and transfrom["type"] == "rotate":
+                surf.rotate(transfrom["value"])
+            elif transfrom["label"] in surf.label and transfrom["type"] == "translate":
+                surf.translate(transfrom["value"])
 
     # Computing parameter (element size, arcspan...) needed to define the simulation
     FEMM_dict = comp_FEMM_dict(

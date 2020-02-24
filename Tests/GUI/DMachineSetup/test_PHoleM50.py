@@ -16,6 +16,7 @@ from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.PHoleM50 import PHoleM50
 from pyleecan.Tests.GUI import gui_option  # Set unit to m
+from pyleecan.Classes.Material import Material
 
 
 class test_PHoleM50(TestCase):
@@ -39,7 +40,15 @@ class test_PHoleM50(TestCase):
                 W4=0.19,
             )
         )
-        self.widget = PHoleM50(self.test_obj.hole[0])
+        self.test_obj.hole[0].magnet_0.mat_type.name = "Magnet3"
+        self.test_obj.hole[0].magnet_1.mat_type.name = "Magnet2"
+
+        self.matlib = list()
+        self.matlib.append(Material(name="Magnet1"))
+        self.matlib.append(Material(name="Magnet2"))
+        self.matlib.append(Material(name="Magnet3"))
+
+        self.widget = PHoleM50(self.test_obj.hole[0], self.matlib)
 
     @classmethod
     def setUpClass(cls):
@@ -65,6 +74,13 @@ class test_PHoleM50(TestCase):
         self.assertEqual(self.widget.lf_W3.value(), 0.17)
         self.assertEqual(self.widget.lf_H4.value(), 0.18)
         self.assertEqual(self.widget.lf_W4.value(), 0.19)
+        # Check material
+        self.assertFalse(self.widget.w_mat_0.isHidden())
+        self.assertEqual(self.widget.w_mat_0.c_mat_type.currentText(), "Magnet3")
+        self.assertEqual(self.widget.w_mat_0.c_mat_type.currentIndex(), 2)
+        self.assertFalse(self.widget.w_mat_1.isHidden())
+        self.assertEqual(self.widget.w_mat_1.c_mat_type.currentText(), "Magnet2")
+        self.assertEqual(self.widget.w_mat_1.c_mat_type.currentIndex(), 1)
 
         self.test_obj.hole[0] = HoleM50(
             H0=0.20,
@@ -181,3 +197,17 @@ class test_PHoleM50(TestCase):
 
         self.assertEqual(self.widget.hole.H4, value)
         self.assertEqual(self.test_obj.hole[0].H4, value)
+
+    def test_set_material_0(self):
+        """Check that you can change the material of magnet_0"""
+        self.widget.w_mat_0.c_mat_type.setCurrentIndex(0)
+
+        self.assertEqual(self.widget.w_mat_0.c_mat_type.currentText(), "Magnet1")
+        self.assertEqual(self.test_obj.hole[0].magnet_0.mat_type.name, "Magnet1")
+
+    def test_set_material_1(self):
+        """Check that you can change the material of magnet_1"""
+        self.widget.w_mat_1.c_mat_type.setCurrentIndex(0)
+
+        self.assertEqual(self.widget.w_mat_1.c_mat_type.currentText(), "Magnet1")
+        self.assertEqual(self.test_obj.hole[0].magnet_1.mat_type.name, "Magnet1")

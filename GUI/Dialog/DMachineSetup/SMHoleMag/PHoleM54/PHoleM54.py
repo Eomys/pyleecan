@@ -28,7 +28,7 @@ class PHoleM54(Gen_PHoleM54, QWidget):
     hole_name = "Slot Type 54"
     hole_type = HoleM54
 
-    def __init__(self, hole=None):
+    def __init__(self, hole=None, matlib=[]):
         """Initialize the widget according to hole
 
         Parameters
@@ -37,6 +37,8 @@ class PHoleM54(Gen_PHoleM54, QWidget):
             A PHoleM54 widget
         hole : HoleM54
             current hole to edit
+        matlib : list
+            List of available Material
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)
@@ -54,6 +56,7 @@ class PHoleM54(Gen_PHoleM54, QWidget):
         for wid in wid_list:
             wid.setText(self.u.get_m_name())
 
+        self.matlib = matlib
         self.hole = hole
 
         # Fill the fields with the machine values (if they're filled)
@@ -70,6 +73,11 @@ class PHoleM54(Gen_PHoleM54, QWidget):
         self.lf_R1.editingFinished.connect(self.set_R1)
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_H1.editingFinished.connect(self.set_H1)
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup
+        """
+        self.saveNeeded.emit()
 
     def set_W0(self):
         """Signal to update the value of W0 according to the line edit

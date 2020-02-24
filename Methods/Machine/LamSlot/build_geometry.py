@@ -9,6 +9,9 @@ from pyleecan.Classes.Circle import Circle
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Segment import Segment
+from pyleecan.Methods.Machine.Lamination.build_geometry import (
+    build_geometry as build_geo,
+)
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0):
@@ -32,12 +35,6 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
 
     """
 
-    # getting Number of Slot
-    Zs = self.slot.Zs
-
-    # Check for symmetry
-    assert (Zs % sym) == 0
-
     if self.is_stator:
         ll = "Stator"  # Label lamination
     else:
@@ -50,28 +47,39 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         ly = "Ext"
 
     Ryoke = self.get_Ryoke()
-    slot_pitch = 2 * pi / Zs
-    op_angle = self.slot.comp_angle_opening()
-    t_angle = slot_pitch - op_angle
     H_yoke = self.comp_height_yoke()
 
-    # getting the Lines that delimit one slot
-    Slot_lines = self.slot.build_geometry()
-    for line in Slot_lines:
-        line.rotate(slot_pitch / 2)
+    if self.slot is not None and self.slot.Zs != 0:
+        # getting Number of Slot
+        Zs = self.slot.Zs
 
-    # Generate all the Slot and Bore lines
-    a0 = slot_pitch - t_angle / 2
-    a1 = slot_pitch + t_angle / 2
-    line_list = list()
-    for ii in range(Zs // sym):
-        # Duplicate and rotate the slot + bore for each slot
+        # Check for symmetry
+        assert (Zs % sym) == 0
+
+        slot_pitch = 2 * pi / Zs
+        op_angle = self.slot.comp_angle_opening()
+        t_angle = slot_pitch - op_angle
+
+        # getting the Lines that delimit one slot
+        Slot_lines = self.slot.build_geometry()
+
+        # By convention, the first tooth is centered on X+ axis
         for line in Slot_lines:
-            new_line = type(line)(init_dict=line.as_dict())
-            new_line.rotate(ii * slot_pitch)
-            line_list.append(new_line)
-        bore_lines = self.get_bore_line(a0 + ii * slot_pitch, a1 + ii * slot_pitch)
-        line_list.extend(bore_lines)
+            line.rotate(slot_pitch / 2)
+        # Generate all the Slot and Bore lines
+        a0 = slot_pitch - t_angle / 2
+        a1 = slot_pitch + t_angle / 2
+        line_list = list()
+        for ii in range(Zs // sym):
+            # Duplicate and rotate the slot + bore for each slot
+            for line in Slot_lines:
+                new_line = type(line)(init_dict=line.as_dict())
+                new_line.rotate(ii * slot_pitch)
+                line_list.append(new_line)
+            bore_lines = self.get_bore_line(a0 + ii * slot_pitch, a1 + ii * slot_pitch)
+            line_list.extend(bore_lines)
+    else:  # No slot
+        return build_geo(self, sym=sym, alpha=alpha, delta=delta)
 
     # Create the lamination surface(s)
     surf_list = list()

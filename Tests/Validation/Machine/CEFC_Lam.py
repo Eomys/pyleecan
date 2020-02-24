@@ -10,7 +10,6 @@ Electric Machines & Drives Conference (IEMDC), 2013 IEEE International, Chicago,
 from numpy import pi
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 
-from pyleecan.Classes.Lamination import Lamination
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
 from pyleecan.Classes.WindingDW1L import WindingDW1L
@@ -29,7 +28,7 @@ from pyleecan.Tests.Validation.Material.Magnet_prius import Magnet_prius
 from pyleecan.Tests.Validation.Material.Copper1 import Copper1
 
 # Stator setup
-stator = Lamination(
+stator = LamSlotWind(
     Rint=80.95e-3,
     Rext=134.62e-3,
     Nrvd=0,
@@ -38,6 +37,8 @@ stator = Lamination(
     is_internal=False,
     is_stator=True,
 )
+stator.slot = None
+stator.winding = None
 
 # Rotor setup
 rotor = LamHole(

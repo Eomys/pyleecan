@@ -5,10 +5,11 @@
 import sys
 from os.path import dirname, abspath, normpath, join
 from os import listdir, remove
+import json
 
 sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", ".."))))
 
-from pyleecan.Generator.class_generator import generate_class
+from pyleecan.Generator.ClassGenerator.class_generator import generate_class
 from pyleecan.Generator.read_fct import read_all
 from pyleecan.Generator import MAIN_DIR, DOC_DIR, INT_DIR
 
@@ -36,6 +37,7 @@ def generate_code(root_path, gen_dict=None):
     print("Saving generated files in: " + CLASS_DIR)
 
     path = __file__[__file__.index("pyleecan") :]
+    path = path.replace("\\", "/")
 
     # Deleting all the previous class
     print("Deleting old class files...")
@@ -63,7 +65,7 @@ def generate_code(root_path, gen_dict=None):
         gen_dict = read_all(DOC_DIR)
 
     # Generate all the class files (sorted to remove "commit noise")
-    for class_name, class_dict in iter(sorted(list(gen_dict.items()))):
+    for class_name, _ in iter(sorted(list(gen_dict.items()))):
         import_file.write(
             "from pyleecan.Classes." + class_name + " import " + class_name + "\n"
         )
@@ -76,6 +78,11 @@ def generate_code(root_path, gen_dict=None):
 
     print("Generation of load_switch.py")
     print("Generation of import_all.py")
+
+    # Save gen_dict
+    class_dict_file = join(CLASS_DIR, "Class_Dict.json")
+    with open(class_dict_file, "w") as json_file:
+        json.dump(gen_dict, json_file, sort_keys=True, indent=4, separators=(",", ": "))
 
 
 if __name__ == "__main__":

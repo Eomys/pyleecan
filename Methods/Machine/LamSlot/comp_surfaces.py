@@ -26,7 +26,10 @@ def comp_surfaces(self):
     """
 
     S_dict = Lamination.comp_surfaces(self)
-    Sslot = self.slot.Zs * self.slot.comp_surface()
+    if self.slot is None:
+        Sslot = 0
+    else:
+        Sslot = self.get_Zs() * self.slot.comp_surface()
 
     S_dict["Sslot"] = Sslot
     S_dict["Slam"] -= Sslot

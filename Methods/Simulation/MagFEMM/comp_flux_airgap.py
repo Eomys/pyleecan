@@ -49,6 +49,7 @@ def comp_flux_airgap(self, output):
         user_FEMM_dict=self.FEMM_dict,
         path_save=self.get_path_save_fem(output),
         is_sliding_band=self.is_sliding_band,
+        transform_list=self.transform_list,
     )
 
     # Solve for all time step and store all the results in output

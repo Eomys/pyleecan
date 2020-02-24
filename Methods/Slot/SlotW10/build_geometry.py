@@ -35,7 +35,8 @@ def build_geometry(self):
     if self.W1 > self.W0:
         curve_list.append(Segment(Z3, Z4))
     curve_list.append(Segment(Z4, Z5))
-    curve_list.append(Segment(Z5, Z6))
+    if self.W2 > 0:
+        curve_list.append(Segment(Z5, Z6))
     curve_list.append(Segment(Z6, Z7))
     if self.W1 > self.W0:
         curve_list.append(Segment(Z7, Z8))

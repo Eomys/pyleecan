@@ -86,11 +86,11 @@ class ImportMatrixXls(ImportMatrix):
 
         ImportMatrixXls_str = ""
         # Get the properties inherited from ImportMatrix
-        ImportMatrixXls_str += super(ImportMatrixXls, self).__str__() + linesep
+        ImportMatrixXls_str += super(ImportMatrixXls, self).__str__()
         ImportMatrixXls_str += 'file_path = "' + str(self.file_path) + '"' + linesep
         ImportMatrixXls_str += 'sheet = "' + str(self.sheet) + '"' + linesep
         ImportMatrixXls_str += "skiprows = " + str(self.skiprows) + linesep
-        ImportMatrixXls_str += 'usecols = "' + str(self.usecols) + '"'
+        ImportMatrixXls_str += 'usecols = "' + str(self.usecols) + '"' + linesep
         return ImportMatrixXls_str
 
     def __eq__(self, other):

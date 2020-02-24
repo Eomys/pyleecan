@@ -143,8 +143,8 @@ class WindingDW1L(Winding):
 
         WindingDW1L_str = ""
         # Get the properties inherited from Winding
-        WindingDW1L_str += super(WindingDW1L, self).__str__() + linesep
-        WindingDW1L_str += "coil_pitch = " + str(self.coil_pitch)
+        WindingDW1L_str += super(WindingDW1L, self).__str__()
+        WindingDW1L_str += "coil_pitch = " + str(self.coil_pitch) + linesep
         return WindingDW1L_str
 
     def __eq__(self, other):

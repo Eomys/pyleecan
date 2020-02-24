@@ -107,7 +107,7 @@ class Arc(Line):
 
         Arc_str = ""
         # Get the properties inherited from Line
-        Arc_str += super(Arc, self).__str__() + linesep
+        Arc_str += super(Arc, self).__str__()
         return Arc_str
 
     def __eq__(self, other):

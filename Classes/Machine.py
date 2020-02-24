@@ -78,7 +78,6 @@ except ImportError as error:
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Lamination import Lamination
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
 
@@ -223,8 +222,6 @@ class Machine(FrozenClass):
 
     def __init__(
         self,
-        rotor=-1,
-        stator=-1,
         frame=-1,
         shaft=-1,
         name="default_machine",
@@ -241,24 +238,15 @@ class Machine(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if rotor == -1:
-            rotor = Lamination()
-        if stator == -1:
-            stator = Lamination()
         if frame == -1:
             frame = Frame()
         if shaft == -1:
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict,
-                ["rotor", "stator", "frame", "shaft", "name", "desc", "type_machine"],
+                init_dict, ["frame", "shaft", "name", "desc", "type_machine"]
             )
             # Overwrite default value with init_dict content
-            if "rotor" in list(init_dict.keys()):
-                rotor = init_dict["rotor"]
-            if "stator" in list(init_dict.keys()):
-                stator = init_dict["stator"]
             if "frame" in list(init_dict.keys()):
                 frame = init_dict["frame"]
             if "shaft" in list(init_dict.keys()):
@@ -271,48 +259,6 @@ class Machine(FrozenClass):
                 type_machine = init_dict["type_machine"]
         # Initialisation by argument
         self.parent = None
-        # rotor can be None, a Lamination object or a dict
-        if isinstance(rotor, dict):
-            # Check that the type is correct (including daughter)
-            class_name = rotor.get("__class__")
-            if class_name not in [
-                "Lamination",
-                "LamHole",
-                "LamSlot",
-                "LamSlotMag",
-                "LamSlotWind",
-                "LamSquirrelCage",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for rotor"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.rotor = class_obj(init_dict=rotor)
-        else:
-            self.rotor = rotor
-        # stator can be None, a Lamination object or a dict
-        if isinstance(stator, dict):
-            # Check that the type is correct (including daughter)
-            class_name = stator.get("__class__")
-            if class_name not in [
-                "Lamination",
-                "LamHole",
-                "LamSlot",
-                "LamSlotMag",
-                "LamSlotWind",
-                "LamSquirrelCage",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for stator"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.stator = class_obj(init_dict=stator)
-        else:
-            self.stator = stator
         # frame can be None, a Frame object or a dict
         if isinstance(frame, dict):
             self.frame = Frame(init_dict=frame)
@@ -338,39 +284,25 @@ class Machine(FrozenClass):
             Machine_str += "parent = None " + linesep
         else:
             Machine_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        if self.rotor is not None:
-            tmp = self.rotor.__str__()[:-2].replace(linesep, linesep + "\t")
-            Machine_str += "rotor = " + tmp
-        else:
-            Machine_str += "rotor = None" + linesep + linesep
-        if self.stator is not None:
-            tmp = self.stator.__str__()[:-2].replace(linesep, linesep + "\t")
-            Machine_str += "stator = " + tmp
-        else:
-            Machine_str += "stator = None" + linesep + linesep
         if self.frame is not None:
-            tmp = self.frame.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.frame.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Machine_str += "frame = " + tmp
         else:
             Machine_str += "frame = None" + linesep + linesep
         if self.shaft is not None:
-            tmp = self.shaft.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.shaft.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Machine_str += "shaft = " + tmp
         else:
             Machine_str += "shaft = None" + linesep + linesep
         Machine_str += 'name = "' + str(self.name) + '"' + linesep
         Machine_str += 'desc = "' + str(self.desc) + '"' + linesep
-        Machine_str += "type_machine = " + str(self.type_machine)
+        Machine_str += "type_machine = " + str(self.type_machine) + linesep
         return Machine_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
 
         if type(other) != type(self):
-            return False
-        if other.rotor != self.rotor:
-            return False
-        if other.stator != self.stator:
             return False
         if other.frame != self.frame:
             return False
@@ -389,14 +321,6 @@ class Machine(FrozenClass):
         """
 
         Machine_dict = dict()
-        if self.rotor is None:
-            Machine_dict["rotor"] = None
-        else:
-            Machine_dict["rotor"] = self.rotor.as_dict()
-        if self.stator is None:
-            Machine_dict["stator"] = None
-        else:
-            Machine_dict["stator"] = self.stator.as_dict()
         if self.frame is None:
             Machine_dict["frame"] = None
         else:
@@ -415,10 +339,6 @@ class Machine(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.rotor is not None:
-            self.rotor._set_None()
-        if self.stator is not None:
-            self.stator._set_None()
         if self.frame is not None:
             self.frame._set_None()
         if self.shaft is not None:
@@ -426,38 +346,6 @@ class Machine(FrozenClass):
         self.name = None
         self.desc = None
         self.type_machine = None
-
-    def _get_rotor(self):
-        """getter of rotor"""
-        return self._rotor
-
-    def _set_rotor(self, value):
-        """setter of rotor"""
-        check_var("rotor", value, "Lamination")
-        self._rotor = value
-
-        if self._rotor is not None:
-            self._rotor.parent = self
-
-    # Machine's Rotor
-    # Type : Lamination
-    rotor = property(fget=_get_rotor, fset=_set_rotor, doc=u"""Machine's Rotor""")
-
-    def _get_stator(self):
-        """getter of stator"""
-        return self._stator
-
-    def _set_stator(self, value):
-        """setter of stator"""
-        check_var("stator", value, "Lamination")
-        self._stator = value
-
-        if self._stator is not None:
-            self._stator.parent = self
-
-    # Machine's Stator
-    # Type : Lamination
-    stator = property(fget=_get_stator, fset=_set_stator, doc=u"""Machine's Stator""")
 
     def _get_frame(self):
         """getter of frame"""

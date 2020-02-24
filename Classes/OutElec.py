@@ -100,16 +100,52 @@ class OutElec(FrozenClass):
             OutElec_str += "parent = None " + linesep
         else:
             OutElec_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutElec_str += "time = " + linesep + str(self.time) + linesep + linesep
-        OutElec_str += "angle = " + linesep + str(self.angle) + linesep + linesep
-        OutElec_str += "Is = " + linesep + str(self.Is) + linesep + linesep
-        OutElec_str += "Ir = " + linesep + str(self.Ir) + linesep + linesep
         OutElec_str += (
-            "angle_rotor = " + linesep + str(self.angle_rotor) + linesep + linesep
+            "time = "
+            + linesep
+            + str(self.time).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
         )
-        OutElec_str += "Nr = " + linesep + str(self.Nr) + linesep + linesep
+        OutElec_str += (
+            "angle = "
+            + linesep
+            + str(self.angle).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutElec_str += (
+            "Is = "
+            + linesep
+            + str(self.Is).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutElec_str += (
+            "Ir = "
+            + linesep
+            + str(self.Ir).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutElec_str += (
+            "angle_rotor = "
+            + linesep
+            + str(self.angle_rotor).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutElec_str += (
+            "Nr = "
+            + linesep
+            + str(self.Nr).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         OutElec_str += "rot_dir = " + str(self.rot_dir) + linesep
-        OutElec_str += "angle_rotor_initial = " + str(self.angle_rotor_initial)
+        OutElec_str += (
+            "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
+        )
         return OutElec_str
 
     def __eq__(self, other):

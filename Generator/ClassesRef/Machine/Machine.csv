@@ -1,11 +1,11 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-rotor,,Machine's Rotor,,Lamination,,,,,Machine,,build_geometry,VERSION,1,Abstract class for machines
-stator,,Machine's Stator,,Lamination,,,,,,,check,,,
-frame,,Machine's Frame,,Frame,,,,,,,comp_masses,,,
-shaft,,Machine's Shaft,,Shaft,,,,,,,comp_width_airgap_mag,,,
-name,,Name of the machine,,str,default_machine,,,,,,comp_width_airgap_mec,,,
-desc,,Machine description,,str,,,,,,,get_lamination,,,
-type_machine,,"Integer to store the machine type (for the GUI, should be replaced by a test of the object type)",,int,1,,,,,,comp_Rgap_mec,,,
+frame,,Machine's Frame,,Frame,,,,,Machine,,build_geometry,VERSION,1,Abstract class for machines
+shaft,,Machine's Shaft,,Shaft,,,,,,,check,,,
+name,,Name of the machine,,str,default_machine,,,,,,comp_masses,,,
+desc,,Machine description,,str,,,,,,,comp_width_airgap_mag,,,
+type_machine,,"Integer to store the machine type (for the GUI, should be replaced by a test of the object type)",,int,1,,,,,,comp_width_airgap_mec,,,
+,,,,,,,,,,,get_lamination,,,
+,,,,,,,,,,,comp_Rgap_mec,,,
 ,,,,,,,,,,,plot,,,
 ,,,,,,,,,,,comp_output_geo,,,
 ,,,,,,,,,,,comp_length_airgap_active,,,

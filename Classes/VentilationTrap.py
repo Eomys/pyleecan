@@ -153,12 +153,12 @@ class VentilationTrap(Hole):
 
         VentilationTrap_str = ""
         # Get the properties inherited from Hole
-        VentilationTrap_str += super(VentilationTrap, self).__str__() + linesep
+        VentilationTrap_str += super(VentilationTrap, self).__str__()
         VentilationTrap_str += "Alpha0 = " + str(self.Alpha0) + linesep
         VentilationTrap_str += "D0 = " + str(self.D0) + linesep
         VentilationTrap_str += "H0 = " + str(self.H0) + linesep
         VentilationTrap_str += "W1 = " + str(self.W1) + linesep
-        VentilationTrap_str += "W2 = " + str(self.W2)
+        VentilationTrap_str += "W2 = " + str(self.W2) + linesep
         return VentilationTrap_str
 
     def __eq__(self, other):

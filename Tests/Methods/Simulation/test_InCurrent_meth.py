@@ -16,7 +16,7 @@ from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.InCurrent import InCurrent
 from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.Machine import Machine
+from pyleecan.Classes.MachineDFIM import MachineDFIM
 from pyleecan.Classes.Simulation import Simulation
 from pyleecan.Classes.Output import Output
 from pyleecan.Methods.Simulation.Input import InputError
@@ -42,15 +42,17 @@ Nr_wrong2 = ImportMatrixVal(value=zeros((102)))
 Nr = ImportMatrixVal(value=zeros((100)))
 
 # Winding stator only
-M1 = Machine()
+M1 = MachineDFIM()
 M1.stator = LamSlotWind()
 M1.stator.winding.qs = 3
+M1.rotor.winding = None
 # Winding rotor only
-M2 = Machine()
+M2 = MachineDFIM()
 M2.rotor = LamSlotWind()
 M2.rotor.winding.qs = 2
+M2.stator.winding = None
 # Winding rotor + stator
-M3 = Machine()
+M3 = MachineDFIM()
 M3.stator = LamSlotWind()
 M3.stator.winding.qs = 3
 M3.rotor = LamSlotWind()

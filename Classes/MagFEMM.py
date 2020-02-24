@@ -115,6 +115,7 @@ class MagFEMM(Magnetics):
         is_get_mesh=False,
         is_save_FEA=False,
         is_sliding_band=True,
+        transform_list=[],
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_vent=False,
@@ -152,6 +153,7 @@ class MagFEMM(Magnetics):
                     "is_get_mesh",
                     "is_save_FEA",
                     "is_sliding_band",
+                    "transform_list",
                     "is_remove_slotS",
                     "is_remove_slotR",
                     "is_remove_vent",
@@ -186,6 +188,8 @@ class MagFEMM(Magnetics):
                 is_save_FEA = init_dict["is_save_FEA"]
             if "is_sliding_band" in list(init_dict.keys()):
                 is_sliding_band = init_dict["is_sliding_band"]
+            if "transform_list" in list(init_dict.keys()):
+                transform_list = init_dict["transform_list"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -222,6 +226,7 @@ class MagFEMM(Magnetics):
         self.is_get_mesh = is_get_mesh
         self.is_save_FEA = is_save_FEA
         self.is_sliding_band = is_sliding_band
+        self.transform_list = transform_list
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -246,7 +251,7 @@ class MagFEMM(Magnetics):
 
         MagFEMM_str = ""
         # Get the properties inherited from Magnetics
-        MagFEMM_str += super(MagFEMM, self).__str__() + linesep
+        MagFEMM_str += super(MagFEMM, self).__str__()
         MagFEMM_str += "Kmesh_fineness = " + str(self.Kmesh_fineness) + linesep
         MagFEMM_str += "Kgeo_fineness = " + str(self.Kgeo_fineness) + linesep
         MagFEMM_str += "type_calc_leakage = " + str(self.type_calc_leakage) + linesep
@@ -255,7 +260,13 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "angle_stator = " + str(self.angle_stator) + linesep
         MagFEMM_str += "is_get_mesh = " + str(self.is_get_mesh) + linesep
         MagFEMM_str += "is_save_FEA = " + str(self.is_save_FEA) + linesep
-        MagFEMM_str += "is_sliding_band = " + str(self.is_sliding_band)
+        MagFEMM_str += "is_sliding_band = " + str(self.is_sliding_band) + linesep
+        MagFEMM_str += (
+            "transform_list = "
+            + linesep
+            + str(self.transform_list).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -285,6 +296,8 @@ class MagFEMM(Magnetics):
             return False
         if other.is_sliding_band != self.is_sliding_band:
             return False
+        if other.transform_list != self.transform_list:
+            return False
         return True
 
     def as_dict(self):
@@ -302,6 +315,7 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["is_get_mesh"] = self.is_get_mesh
         MagFEMM_dict["is_save_FEA"] = self.is_save_FEA
         MagFEMM_dict["is_sliding_band"] = self.is_sliding_band
+        MagFEMM_dict["transform_list"] = self.transform_list
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -319,6 +333,7 @@ class MagFEMM(Magnetics):
         self.is_get_mesh = None
         self.is_save_FEA = None
         self.is_sliding_band = None
+        self.transform_list = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -473,4 +488,21 @@ class MagFEMM(Magnetics):
         fget=_get_is_sliding_band,
         fset=_set_is_sliding_band,
         doc=u"""0 to desactivate the sliding band""",
+    )
+
+    def _get_transform_list(self):
+        """getter of transform_list"""
+        return self._transform_list
+
+    def _set_transform_list(self, value):
+        """setter of transform_list"""
+        check_var("transform_list", value, "list")
+        self._transform_list = value
+
+    # List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
+    # Type : list
+    transform_list = property(
+        fget=_get_transform_list,
+        fset=_set_transform_list,
+        doc=u"""List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)""",
     )

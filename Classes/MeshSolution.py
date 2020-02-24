@@ -126,18 +126,16 @@ class MeshSolution(FrozenClass):
             )
         MeshSolution_str += 'name = "' + str(self.name) + '"' + linesep
         if len(self.mesh) == 0:
-            MeshSolution_str += "mesh = []"
+            MeshSolution_str += "mesh = []" + linesep
         for ii in range(len(self.mesh)):
-            tmp = self.mesh[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
+            tmp = self.mesh[ii].__str__().replace(linesep, linesep + "\t") + linesep
             MeshSolution_str += "mesh[" + str(ii) + "] =" + tmp + linesep + linesep
         if len(self.solution) == 0:
-            MeshSolution_str += "solution = []"
+            MeshSolution_str += "solution = []" + linesep
         for ii in range(len(self.solution)):
-            tmp = (
-                self.solution[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
-            )
+            tmp = self.solution[ii].__str__().replace(linesep, linesep + "\t") + linesep
             MeshSolution_str += "solution[" + str(ii) + "] =" + tmp + linesep + linesep
-        MeshSolution_str += "is_same_mesh = " + str(self.is_same_mesh)
+        MeshSolution_str += "is_same_mesh = " + str(self.is_same_mesh) + linesep
         return MeshSolution_str
 
     def __eq__(self, other):

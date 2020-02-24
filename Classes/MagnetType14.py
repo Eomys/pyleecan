@@ -61,9 +61,9 @@ class MagnetType14(MagnetPolar):
 
     def __init__(
         self,
-        Wmag=0.002,
-        Hmag=0.001,
-        Rtop=0.05,
+        Wmag=2.00e-03,
+        Hmag=1.00e-03,
+        Rtop=5.00e-02,
         mat_type=-1,
         type_magnetization=0,
         Lmag=0.95,
@@ -114,10 +114,10 @@ class MagnetType14(MagnetPolar):
 
         MagnetType14_str = ""
         # Get the properties inherited from MagnetPolar
-        MagnetType14_str += super(MagnetType14, self).__str__() + linesep
+        MagnetType14_str += super(MagnetType14, self).__str__()
         MagnetType14_str += "Wmag = " + str(self.Wmag) + linesep
         MagnetType14_str += "Hmag = " + str(self.Hmag) + linesep
-        MagnetType14_str += "Rtop = " + str(self.Rtop)
+        MagnetType14_str += "Rtop = " + str(self.Rtop) + linesep
         return MagnetType14_str
 
     def __eq__(self, other):

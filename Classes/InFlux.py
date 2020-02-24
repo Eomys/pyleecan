@@ -169,27 +169,27 @@ class InFlux(Input):
 
         InFlux_str = ""
         # Get the properties inherited from Input
-        InFlux_str += super(InFlux, self).__str__() + linesep
+        InFlux_str += super(InFlux, self).__str__()
         if self.time is not None:
-            tmp = self.time.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.time.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InFlux_str += "time = " + tmp
         else:
             InFlux_str += "time = None" + linesep + linesep
         if self.angle is not None:
-            tmp = self.angle.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.angle.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InFlux_str += "angle = " + tmp
         else:
             InFlux_str += "angle = None" + linesep + linesep
         if self.Br is not None:
-            tmp = self.Br.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.Br.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InFlux_str += "Br = " + tmp
         else:
             InFlux_str += "Br = None" + linesep + linesep
         if self.Bt is not None:
-            tmp = self.Bt.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.Bt.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InFlux_str += "Bt = " + tmp
         else:
-            InFlux_str += "Bt = None"
+            InFlux_str += "Bt = None" + linesep + linesep
         return InFlux_str
 
     def __eq__(self, other):

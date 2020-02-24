@@ -127,7 +127,7 @@ class SlotMPolar(SlotMag):
     # save method is available in all object
     save = save
 
-    def __init__(self, W0=0.314, H0=0, magnet=list(), W3=0, Zs=36, init_dict=None):
+    def __init__(self, W0=3.14e-01, H0=0, magnet=list(), W3=0, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -194,14 +194,14 @@ class SlotMPolar(SlotMag):
 
         SlotMPolar_str = ""
         # Get the properties inherited from SlotMag
-        SlotMPolar_str += super(SlotMPolar, self).__str__() + linesep
+        SlotMPolar_str += super(SlotMPolar, self).__str__()
         SlotMPolar_str += "W0 = " + str(self.W0) + linesep
         SlotMPolar_str += "H0 = " + str(self.H0) + linesep
         if len(self.magnet) == 0:
-            SlotMPolar_str += "magnet = []"
+            SlotMPolar_str += "magnet = []" + linesep
         for ii in range(len(self.magnet)):
-            tmp = self.magnet[ii].__str__()[:-2].replace(linesep, linesep + "\t") + "\n"
-            SlotMPolar_str += "magnet[" + str(ii) + "] =" + tmp
+            tmp = self.magnet[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            SlotMPolar_str += "magnet[" + str(ii) + "] =" + tmp + linesep + linesep
         return SlotMPolar_str
 
     def __eq__(self, other):

@@ -240,10 +240,10 @@ class Arc2(Arc):
 
         Arc2_str = ""
         # Get the properties inherited from Arc
-        Arc2_str += super(Arc2, self).__str__() + linesep
+        Arc2_str += super(Arc2, self).__str__()
         Arc2_str += "begin = " + str(self.begin) + linesep
         Arc2_str += "center = " + str(self.center) + linesep
-        Arc2_str += "angle = " + str(self.angle)
+        Arc2_str += "angle = " + str(self.angle) + linesep
         return Arc2_str
 
     def __eq__(self, other):

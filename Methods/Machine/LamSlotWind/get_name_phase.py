@@ -23,4 +23,6 @@ def get_name_phase(self):
 
     """
 
+    if self.winding is None:
+        return list()
     return gen_name(self.winding.qs)

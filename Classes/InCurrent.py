@@ -252,39 +252,43 @@ class InCurrent(Input):
 
         InCurrent_str = ""
         # Get the properties inherited from Input
-        InCurrent_str += super(InCurrent, self).__str__() + linesep
+        InCurrent_str += super(InCurrent, self).__str__()
         if self.time is not None:
-            tmp = self.time.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.time.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InCurrent_str += "time = " + tmp
         else:
             InCurrent_str += "time = None" + linesep + linesep
         if self.angle is not None:
-            tmp = self.angle.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.angle.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InCurrent_str += "angle = " + tmp
         else:
             InCurrent_str += "angle = None" + linesep + linesep
         if self.Is is not None:
-            tmp = self.Is.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.Is.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InCurrent_str += "Is = " + tmp
         else:
             InCurrent_str += "Is = None" + linesep + linesep
         if self.Ir is not None:
-            tmp = self.Ir.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.Ir.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InCurrent_str += "Ir = " + tmp
         else:
             InCurrent_str += "Ir = None" + linesep + linesep
         if self.angle_rotor is not None:
-            tmp = self.angle_rotor.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = (
+                self.angle_rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
             InCurrent_str += "angle_rotor = " + tmp
         else:
             InCurrent_str += "angle_rotor = None" + linesep + linesep
         if self.Nr is not None:
-            tmp = self.Nr.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.Nr.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             InCurrent_str += "Nr = " + tmp
         else:
             InCurrent_str += "Nr = None" + linesep + linesep
         InCurrent_str += "rot_dir = " + str(self.rot_dir) + linesep
-        InCurrent_str += "angle_rotor_initial = " + str(self.angle_rotor_initial)
+        InCurrent_str += (
+            "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
+        )
         return InCurrent_str
 
     def __eq__(self, other):

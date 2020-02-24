@@ -242,10 +242,10 @@ class Arc3(Arc):
 
         Arc3_str = ""
         # Get the properties inherited from Arc
-        Arc3_str += super(Arc3, self).__str__() + linesep
+        Arc3_str += super(Arc3, self).__str__()
         Arc3_str += "begin = " + str(self.begin) + linesep
         Arc3_str += "end = " + str(self.end) + linesep
-        Arc3_str += "is_trigo_direction = " + str(self.is_trigo_direction)
+        Arc3_str += "is_trigo_direction = " + str(self.is_trigo_direction) + linesep
         return Arc3_str
 
     def __eq__(self, other):

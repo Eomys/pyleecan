@@ -13,7 +13,7 @@ from PyQt5.QtTest import QTest
 
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.Machine import Machine
+from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.MagnetType10 import MagnetType10
 from pyleecan.Classes.MagnetType11 import MagnetType11
 from pyleecan.Classes.MagnetType12 import MagnetType12
@@ -35,7 +35,7 @@ class test_SMagnet_surface(TestCase):
     def setUp(self):
         """Run at the begining of every test to setup the gui"""
 
-        self.test_obj = Machine(type_machine=6)  # SPMSM
+        self.test_obj = MachineSIPMSM(type_machine=6)  # SPMSM
         # For comp_output compatibility
         self.test_obj.stator = LamSlotWind(Rint=0.95, Rext=0.99)
         self.test_obj.rotor = LamSlotMag(Rint=0.1, Rext=0.9)

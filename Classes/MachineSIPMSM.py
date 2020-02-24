@@ -22,7 +22,8 @@ except ImportError as error:
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Lamination import Lamination
+from pyleecan.Classes.LamSlotMag import LamSlotMag
+from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
 
@@ -78,9 +79,9 @@ class MachineSIPMSM(MachineSync):
         object or dict can be given for pyleecan Object"""
 
         if rotor == -1:
-            rotor = Lamination()
+            rotor = LamSlotMag()
         if stator == -1:
-            stator = Lamination()
+            stator = LamSlotWind()
         if frame == -1:
             frame = Frame()
         if shaft == -1:
@@ -106,15 +107,28 @@ class MachineSIPMSM(MachineSync):
             if "type_machine" in list(init_dict.keys()):
                 type_machine = init_dict["type_machine"]
         # Initialisation by argument
+        # rotor can be None, a LamSlotMag object or a dict
+        if isinstance(rotor, dict):
+            self.rotor = LamSlotMag(init_dict=rotor)
+        else:
+            self.rotor = rotor
+        # stator can be None, a LamSlotWind object or a dict
+        if isinstance(stator, dict):
+            # Check that the type is correct (including daughter)
+            class_name = stator.get("__class__")
+            if class_name not in ["LamSlotWind", "LamSquirrelCage"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for stator"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.stator = class_obj(init_dict=stator)
+        else:
+            self.stator = stator
         # Call MachineSync init
         super(MachineSIPMSM, self).__init__(
-            rotor=rotor,
-            stator=stator,
-            frame=frame,
-            shaft=shaft,
-            name=name,
-            desc=desc,
-            type_machine=type_machine,
+            frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine
         )
         # The class is frozen (in MachineSync init), for now it's impossible to
         # add new properties
@@ -124,7 +138,17 @@ class MachineSIPMSM(MachineSync):
 
         MachineSIPMSM_str = ""
         # Get the properties inherited from MachineSync
-        MachineSIPMSM_str += super(MachineSIPMSM, self).__str__() + linesep
+        MachineSIPMSM_str += super(MachineSIPMSM, self).__str__()
+        if self.rotor is not None:
+            tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MachineSIPMSM_str += "rotor = " + tmp
+        else:
+            MachineSIPMSM_str += "rotor = None" + linesep + linesep
+        if self.stator is not None:
+            tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MachineSIPMSM_str += "stator = " + tmp
+        else:
+            MachineSIPMSM_str += "stator = None" + linesep + linesep
         return MachineSIPMSM_str
 
     def __eq__(self, other):
@@ -136,6 +160,10 @@ class MachineSIPMSM(MachineSync):
         # Check the properties inherited from MachineSync
         if not super(MachineSIPMSM, self).__eq__(other):
             return False
+        if other.rotor != self.rotor:
+            return False
+        if other.stator != self.stator:
+            return False
         return True
 
     def as_dict(self):
@@ -144,6 +172,14 @@ class MachineSIPMSM(MachineSync):
 
         # Get the properties inherited from MachineSync
         MachineSIPMSM_dict = super(MachineSIPMSM, self).as_dict()
+        if self.rotor is None:
+            MachineSIPMSM_dict["rotor"] = None
+        else:
+            MachineSIPMSM_dict["rotor"] = self.rotor.as_dict()
+        if self.stator is None:
+            MachineSIPMSM_dict["stator"] = None
+        else:
+            MachineSIPMSM_dict["stator"] = self.stator.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         MachineSIPMSM_dict["__class__"] = "MachineSIPMSM"
@@ -152,5 +188,41 @@ class MachineSIPMSM(MachineSync):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
+        if self.rotor is not None:
+            self.rotor._set_None()
+        if self.stator is not None:
+            self.stator._set_None()
         # Set to None the properties inherited from MachineSync
         super(MachineSIPMSM, self)._set_None()
+
+    def _get_rotor(self):
+        """getter of rotor"""
+        return self._rotor
+
+    def _set_rotor(self, value):
+        """setter of rotor"""
+        check_var("rotor", value, "LamSlotMag")
+        self._rotor = value
+
+        if self._rotor is not None:
+            self._rotor.parent = self
+
+    # Machine's Rotor
+    # Type : LamSlotMag
+    rotor = property(fget=_get_rotor, fset=_set_rotor, doc=u"""Machine's Rotor""")
+
+    def _get_stator(self):
+        """getter of stator"""
+        return self._stator
+
+    def _set_stator(self, value):
+        """setter of stator"""
+        check_var("stator", value, "LamSlotWind")
+        self._stator = value
+
+        if self._stator is not None:
+            self._stator.parent = self
+
+    # Machine's Stator
+    # Type : LamSlotWind
+    stator = property(fget=_get_stator, fset=_set_stator, doc=u"""Machine's Stator""")

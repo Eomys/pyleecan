@@ -121,11 +121,11 @@ class CondType12(Conductor):
 
     def __init__(
         self,
-        Wwire=0.015,
-        Wins_cond=0.015,
+        Wwire=1.50e-02,
+        Wins_cond=1.50e-02,
         Nwppc=1,
         Wins_wire=0,
-        Kwoh=0.5,
+        Kwoh=5.00e-01,
         cond_mat=-1,
         ins_mat=-1,
         init_dict=None,
@@ -187,12 +187,12 @@ class CondType12(Conductor):
 
         CondType12_str = ""
         # Get the properties inherited from Conductor
-        CondType12_str += super(CondType12, self).__str__() + linesep
+        CondType12_str += super(CondType12, self).__str__()
         CondType12_str += "Wwire = " + str(self.Wwire) + linesep
         CondType12_str += "Wins_cond = " + str(self.Wins_cond) + linesep
         CondType12_str += "Nwppc = " + str(self.Nwppc) + linesep
         CondType12_str += "Wins_wire = " + str(self.Wins_wire) + linesep
-        CondType12_str += "Kwoh = " + str(self.Kwoh)
+        CondType12_str += "Kwoh = " + str(self.Kwoh) + linesep
         return CondType12_str
 
     def __eq__(self, other):

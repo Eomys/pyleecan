@@ -90,19 +90,19 @@ class OutGeo(FrozenClass):
         else:
             OutGeo_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.stator is not None:
-            tmp = self.stator.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             OutGeo_str += "stator = " + tmp
         else:
             OutGeo_str += "stator = None" + linesep + linesep
         if self.rotor is not None:
-            tmp = self.rotor.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             OutGeo_str += "rotor = " + tmp
         else:
             OutGeo_str += "rotor = None" + linesep + linesep
         OutGeo_str += "Wgap_mec = " + str(self.Wgap_mec) + linesep
         OutGeo_str += "Wgap_mag = " + str(self.Wgap_mag) + linesep
         OutGeo_str += "Rgap_mec = " + str(self.Rgap_mec) + linesep
-        OutGeo_str += "Lgap = " + str(self.Lgap)
+        OutGeo_str += "Lgap = " + str(self.Lgap) + linesep
         return OutGeo_str
 
     def __eq__(self, other):

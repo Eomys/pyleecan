@@ -22,7 +22,10 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     Na_tot = output.mag.Na_tot  # Number of angular step
     save_path = self.get_path_save(output)
 
-    if hasattr(output.simu.machine.stator, "winding"):
+    if (
+        hasattr(output.simu.machine.stator, "winding")
+        and output.simu.machine.stator.winding is not None
+    ):
         qs = output.simu.machine.stator.winding.qs  # Winding phase number
         Npcpp = output.simu.machine.stator.winding.Npcpp
         Phi_wind_stator = zeros((Nt_tot, qs))
@@ -88,7 +91,10 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         # Compute the torque
         Tem[ii] = comp_FEMM_torque(FEMM_dict, sym=sym)
 
-        if hasattr(output.simu.machine.stator, "winding"):
+        if (
+            hasattr(output.simu.machine.stator, "winding")
+            and output.simu.machine.stator.winding is not None
+        ):
             # Phi_wind computation
             Phi_wind_stator[ii, :] = comp_FEMM_Phi_wind(
                 qs, Npcpp, is_stator=True, Lfemm=FEMM_dict["Lfemm"], L1=L1, sym=sym
@@ -113,6 +119,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     if output.mag.Tem_av != 0:
         output.mag.Tem_rip = abs((np_max(Tem) - np_min(Tem)) / output.mag.Tem_av)
     output.mag.Phi_wind_stator = Phi_wind_stator
+    output.mag.FEMM_dict = FEMM_dict
 
     if self.is_get_mesh:
         cond = (not self.is_sliding_band) or (Nt_tot == 1)
@@ -127,7 +134,10 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         save_path_fea = join(save_path, "MeshSolutionFEMM.json")
         output.mag.meshsolution.save(save_path_fea)
 
-    if hasattr(output.simu.machine.stator, "winding"):
+    if (
+        hasattr(output.simu.machine.stator, "winding")
+        and output.simu.machine.stator.winding is not None
+    ):
         # Electromotive forces computation (update output)
         self.comp_emf()
     else:

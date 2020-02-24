@@ -13,13 +13,14 @@ from numpy import pi
 
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.Lamination import Lamination
-from pyleecan.Classes.Machine import Machine
+from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 from pyleecan.Classes.Magnet import Magnet
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.HoleM50 import HoleM50
+from pyleecan.Classes.BoreFlower import BoreFlower
 from pyleecan.Tests import save_plot_path as save_path
 
 
@@ -29,10 +30,11 @@ class test_Hole_50_plot(TestCase):
     def setUp(self):
         """Run at the begining of every test to setup the machine"""
         plt.close("all")
-        test_obj = Machine()
+        test_obj = MachineIPMSM()
         test_obj.rotor = LamHole(
             is_internal=True, Rint=0.021, Rext=0.075, is_stator=False, L1=0.7
         )
+        test_obj.rotor.bore = BoreFlower(N=8, Rarc=0.05, alpha=pi / 8)
         test_obj.rotor.hole = list()
         test_obj.rotor.hole.append(
             HoleM50(
@@ -43,7 +45,7 @@ class test_Hole_50_plot(TestCase):
                 W3=1e-3,
                 W4=20.6e-3,
                 H0=17.3e-3,
-                H1=1.25e-3,
+                H1=3e-3,
                 H2=0.5e-3,
                 H3=6.8e-3,
                 H4=0,
@@ -58,9 +60,10 @@ class test_Hole_50_plot(TestCase):
         )
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1.2)
 
-        test_obj.stator = Lamination(
+        test_obj.stator = LamSlotWind(
             Rint=0.078, Rext=0.104, is_internal=False, is_stator=True, L1=0.8
         )
+        test_obj.stator.slot = None
         test_obj.stator.axial_vent.append(
             VentilationPolar(Zh=8, H0=0.08, D0=0.01, W1=pi / 8, Alpha0=pi / 8)
         )

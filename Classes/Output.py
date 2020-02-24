@@ -251,36 +251,36 @@ class Output(FrozenClass):
         else:
             Output_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.simu is not None:
-            tmp = self.simu.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Output_str += "simu = " + tmp
         else:
             Output_str += "simu = None" + linesep + linesep
         Output_str += 'path_res = "' + str(self.path_res) + '"' + linesep
         if self.geo is not None:
-            tmp = self.geo.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.geo.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Output_str += "geo = " + tmp
         else:
             Output_str += "geo = None" + linesep + linesep
         if self.elec is not None:
-            tmp = self.elec.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.elec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Output_str += "elec = " + tmp
         else:
             Output_str += "elec = None" + linesep + linesep
         if self.mag is not None:
-            tmp = self.mag.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Output_str += "mag = " + tmp
         else:
             Output_str += "mag = None" + linesep + linesep
         if self.struct is not None:
-            tmp = self.struct.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Output_str += "struct = " + tmp
         else:
             Output_str += "struct = None" + linesep + linesep
         if self.post is not None:
-            tmp = self.post.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.post.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Output_str += "post = " + tmp
         else:
-            Output_str += "post = None"
+            Output_str += "post = None" + linesep + linesep
         return Output_str
 
     def __eq__(self, other):

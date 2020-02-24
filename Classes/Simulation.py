@@ -64,6 +64,7 @@ class Simulation(FrozenClass):
                 "MachineSRM",
                 "MachineSyRM",
                 "MachineSync",
+                "MachineUD",
                 "MachineWRSM",
             ]:
                 raise InitUnKnowClassError(
@@ -79,7 +80,13 @@ class Simulation(FrozenClass):
         if isinstance(input, dict):
             # Check that the type is correct (including daughter)
             class_name = input.get("__class__")
-            if class_name not in ["Input", "InCurrent", "InFlux", "InForce"]:
+            if class_name not in [
+                "Input",
+                "InCurrent",
+                "InCurrentDQ",
+                "InFlux",
+                "InForce",
+            ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for input"
                 )
@@ -104,15 +111,15 @@ class Simulation(FrozenClass):
         Simulation_str += 'name = "' + str(self.name) + '"' + linesep
         Simulation_str += 'desc = "' + str(self.desc) + '"' + linesep
         if self.machine is not None:
-            tmp = self.machine.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.machine.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Simulation_str += "machine = " + tmp
         else:
             Simulation_str += "machine = None" + linesep + linesep
         if self.input is not None:
-            tmp = self.input.__str__()[:-2].replace(linesep, linesep + "\t")
+            tmp = self.input.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Simulation_str += "input = " + tmp
         else:
-            Simulation_str += "input = None"
+            Simulation_str += "input = None" + linesep + linesep
         return Simulation_str
 
     def __eq__(self, other):

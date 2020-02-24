@@ -26,7 +26,10 @@ def comp_masses(self):
 
     M_dict = LamSlot.comp_masses(self)
     V_dict = self.comp_volumes()
-    Mwind = V_dict["Vwind"] * self.winding.mat_type.struct.rho
+    if self.winding is not None:
+        Mwind = V_dict["Vwind"] * self.winding.mat_type.struct.rho
+    else:
+        Mwind = 0
 
     M_dict["Mtot"] += Mwind
     M_dict["Mwind"] = Mwind

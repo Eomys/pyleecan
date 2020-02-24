@@ -29,16 +29,20 @@ def build_geometry(self):
 
     # Creation of curve
     curve_list = list()
-    curve_list.append(Segment(Z1, Z2))
+    if self.H0 > 0:
+        curve_list.append(Segment(Z1, Z2))
     curve_list.append(Segment(Z2, Z3))
-    curve_list.append(Segment(Z3, Z4))
+    if self.H1 > 0:
+        curve_list.append(Segment(Z3, Z4))
     curve_list.append(Segment(Z4, Z5))
     curve_list.append(Segment(Z5, Z6))
     curve_list.append(Segment(Z6, Z7))
     curve_list.append(Segment(Z7, Z8))
     curve_list.append(Segment(Z8, Z9))
-    curve_list.append(Segment(Z9, Z10))
+    if self.H1 > 0:
+        curve_list.append(Segment(Z9, Z10))
     curve_list.append(Segment(Z10, Z11))
-    curve_list.append(Segment(Z11, Z12))
+    if self.H0 > 0:
+        curve_list.append(Segment(Z11, Z12))
 
     return curve_list

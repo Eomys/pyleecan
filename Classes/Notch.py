@@ -22,7 +22,6 @@ except ImportError as error:
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Slot import Slot
 
 
 class Notch(FrozenClass):
@@ -52,7 +51,7 @@ class Notch(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, notch_shape=list(), init_dict=None):
+    def __init__(self, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -63,67 +62,9 @@ class Notch(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["notch_shape"])
-            # Overwrite default value with init_dict content
-            if "notch_shape" in list(init_dict.keys()):
-                notch_shape = init_dict["notch_shape"]
-        # Initialisation by argument
-        self.parent = None
-        # notch_shape can be None or a list of Slot object
-        self.notch_shape = list()
-        if type(notch_shape) is list:
-            for obj in notch_shape:
-                if obj is None:  # Default value
-                    self.notch_shape.append(Slot())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Slot",
-                        "Slot19",
-                        "SlotMFlat",
-                        "SlotMPolar",
-                        "SlotMag",
-                        "SlotUD",
-                        "SlotW10",
-                        "SlotW11",
-                        "SlotW12",
-                        "SlotW13",
-                        "SlotW14",
-                        "SlotW15",
-                        "SlotW16",
-                        "SlotW21",
-                        "SlotW22",
-                        "SlotW23",
-                        "SlotW24",
-                        "SlotW25",
-                        "SlotW26",
-                        "SlotW27",
-                        "SlotW28",
-                        "SlotW29",
-                        "SlotW60",
-                        "SlotW61",
-                        "SlotWind",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for notch_shape"
-                        )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.notch_shape.append(class_obj(init_dict=obj))
-                else:
-                    self.notch_shape.append(obj)
-        elif notch_shape is None:
-            self.notch_shape = list()
-        else:
-            self.notch_shape = notch_shape
-
+            check_init_dict(init_dict, [])
         # The class is frozen, for now it's impossible to add new properties
+        self.parent = None
         self._freeze()
 
     def __str__(self):
@@ -134,22 +75,12 @@ class Notch(FrozenClass):
             Notch_str += "parent = None " + linesep
         else:
             Notch_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        if len(self.notch_shape) == 0:
-            Notch_str += "notch_shape = []"
-        for ii in range(len(self.notch_shape)):
-            tmp = (
-                self.notch_shape[ii].__str__()[:-2].replace(linesep, linesep + "\t")
-                + "\n"
-            )
-            Notch_str += "notch_shape[" + str(ii) + "] =" + tmp
         return Notch_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
 
         if type(other) != type(self):
-            return False
-        if other.notch_shape != self.notch_shape:
             return False
         return True
 
@@ -158,37 +89,9 @@ class Notch(FrozenClass):
         """
 
         Notch_dict = dict()
-        Notch_dict["notch_shape"] = list()
-        for obj in self.notch_shape:
-            Notch_dict["notch_shape"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         Notch_dict["__class__"] = "Notch"
         return Notch_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
-
-        for obj in self.notch_shape:
-            obj._set_None()
-
-    def _get_notch_shape(self):
-        """getter of notch_shape"""
-        for obj in self._notch_shape:
-            if obj is not None:
-                obj.parent = self
-        return self._notch_shape
-
-    def _set_notch_shape(self, value):
-        """setter of notch_shape"""
-        check_var("notch_shape", value, "[Slot]")
-        self._notch_shape = value
-
-        for obj in self._notch_shape:
-            if obj is not None:
-                obj.parent = self
-
-    # Shape of Notch
-    # Type : [Slot]
-    notch_shape = property(
-        fget=_get_notch_shape, fset=_set_notch_shape, doc=u"""Shape of Notch"""
-    )
