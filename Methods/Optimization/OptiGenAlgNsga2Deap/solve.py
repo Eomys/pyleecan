@@ -43,6 +43,14 @@ def solve(self):
     # Create the toolbox
     self.create_toolbox()
 
+    # Add the design variable names
+    self.multi_output.design_var_names = list(self.problem.design_var.keys())
+    self.multi_output.design_var_names.sort()
+
+    # Add the fitness names
+    self.multi_output.fitness_names = list(self.problem.obj_func.keys())
+    self.multi_output.fitness_names.sort()
+
     # Add the reference output to multi_output
     self.multi_output.output_ref = self.problem.output
 
