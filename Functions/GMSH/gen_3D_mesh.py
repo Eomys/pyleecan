@@ -5,7 +5,13 @@ import gmsh
 
 
 def gen_3D_mesh(
-    lamination, save_path="Lamination.msh", sym=-1, mesh_size=5e-3, Nlayer=20
+    lamination,
+    save_path="Lamination.msh",
+    sym=-1,
+    mesh_size=5e-3,
+    user_mesh_dict=None,
+    is_rect=False,
+    Nlayer=20,
 ):
     """Draw 3D mesh of the lamination
     Parameters
@@ -18,6 +24,10 @@ def gen_3D_mesh(
         Number of symmetry to apply
     mesh_size : float
         Size of the mesh [m]
+    user_mesh_dict : dict
+        To enforce the number of elements on the lines
+    is_rect : bool
+        To use rectangular elements
     Nlayer : int
         Number of mesh layer on Z axis
 
@@ -41,6 +51,7 @@ def gen_3D_mesh(
     # Start a new model
     gmsh.initialize(sys.argv)
     gmsh.option.setNumber("General.Terminal", 1)
+    gmsh.option.setNumber("Geometry.CopyMeshingMethod", 1)
     model.add("Pyleecan")
 
     # Create all the points of the tooth
@@ -77,6 +88,22 @@ def gen_3D_mesh(
     gmsh.model.addPhysicalGroup(2, [1], 1)
     gmsh.model.setPhysicalName(2, 1, "Tooth")
 
+    # convert triangle mesh to rectangle mesh
+    if is_rect:
+        factory.mesh.setRecombine(2, 1)
+
+    # Change the mesh size for each line
+    if user_mesh_dict is not None:
+        # Compute basic mesh_dict
+        mesh_dict = tooth_surf.comp_mesh_dict(element_size=mesh_size, label="Tooth")
+        # Overwrite basic mesh dict with user one
+        mesh_dict.update(user_mesh_dict)
+        # Apply the number of element on each line of the surface
+        for ii, line in enumerate(tooth_surf.get_lines()):
+            factory.mesh.setTransfiniteCurve(
+                ii + 1, mesh_dict[line.label] + 1, "Progression"
+            )
+
     # Copy/Rotate all the tooth to get the 2D lamination
     surf_list = [1]
     for ii in range(Zs):
@@ -88,7 +115,7 @@ def gen_3D_mesh(
 
     # Extrude the lamination
     for surf in surf_list:
-        ov = factory.extrude([(2, surf)], 0, 0, L, numElements=[Nlayer])
+        ov = factory.extrude([(2, surf)], 0, 0, L, numElements=[Nlayer], recombine=True)
     model.addPhysicalGroup(3, list(range(1, Zs + 1)), 1)
     if lamination.is_stator:
         model.setPhysicalName(3, 1, "stator")

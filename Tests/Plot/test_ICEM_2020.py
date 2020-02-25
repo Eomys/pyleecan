@@ -102,10 +102,52 @@ class test_ICEM_2020(TestCase):
         # Generate the gmsh equivalent
         gen_3D_mesh(
             lamination=test_obj,
-            save_path=join(save_path, "Lamination.msh"),
+            save_path=join(save_path, "gmsh_SlotMulti.msh"),
             sym=4,
             mesh_size=20e-3,
             Nlayer=20,
+        )
+
+    def test_gmsh_mesh_dict(self):
+        """Generate a 3D mesh with GMSH by setting the number of element on each lines
+        """
+        stator = LamSlotWind(
+            Rint=0.1325,
+            Rext=0.2,
+            Nrvd=0,
+            L1=0.35,
+            Kf1=0.95,
+            is_internal=False,
+            is_stator=True,
+        )
+        stator.slot = SlotW10(
+            Zs=36, H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3
+        )
+
+        # Definition of the number of each element on each line
+        mesh_dict = {
+            "Tooth_Yoke_Side": 5,
+            "Tooth_Yoke_Arc": 5,
+            "Tooth_line_3": 2,
+            "Tooth_line_4": 8,
+            "Tooth_line_5": 1,
+            "Tooth_line_6": 1,
+            "Tooth_line_7": 1,
+            "Tooth_bore_arc_bot": 2,
+            "Tooth_bore_arc_top": 2,
+            "Tooth_line_10": 1,
+            "Tooth_line_11": 1,
+            "Tooth_line_12": 1,
+            "Tooth_line_13": 8,
+            "Tooth_line_14": 2,
+        }
+        gen_3D_mesh(
+            lamination=stator,
+            save_path=join(save_path, "gmsh_mesh_dict.msh"),
+            mesh_size=7e-3,
+            user_mesh_dict=mesh_dict,
+            is_rect=True,
+            Nlayer=18,
         )
 
     def test_ecc_FEMM(self):
