@@ -145,13 +145,12 @@ class MachineUD(Machine):
 
         MachineUD_str = ""
         # Get the properties inherited from Machine
-        MachineUD_str += super(MachineUD, self).__str__() + linesep
+        MachineUD_str += super(MachineUD, self).__str__()
         if len(self.lam_list) == 0:
-            MachineUD_str += "lam_list = []"
+            MachineUD_str += "lam_list = []" + linesep
         for ii in range(len(self.lam_list)):
-            MachineUD_str += (
-                "lam_list[" + str(ii) + "] = " + str(self.lam_list[ii].as_dict()) + "\n"
-            )
+            tmp = self.lam_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            MachineUD_str += "lam_list[" + str(ii) + "] =" + tmp + linesep + linesep
         return MachineUD_str
 
     def __eq__(self, other):

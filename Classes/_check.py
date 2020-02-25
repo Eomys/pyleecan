@@ -7,6 +7,7 @@ check function for classes
 """
 
 from numpy import array, empty, int32
+from importlib import import_module
 
 
 def set_array(obj, prop, value):
@@ -234,7 +235,20 @@ def check_type(var_name, value, expect_type, type_value):
                         + type_value
                         + " given"
                     )
-
+    elif "." in expect_type:
+        # Imported type
+        module_to_import = import_module(expect_type[: expect_type.rfind(".")])
+        expect_type2 = "module_to_import" + expect_type[expect_type.rfind(".") :]
+        if not eval("isinstance(value," + expect_type2 + ")"):
+            raise CheckTypeError(
+                "For "
+                + var_name
+                + " :"
+                + expect_type
+                + " expected, "
+                + type_value
+                + " given"
+            )
     else:
         if not type_value == expect_type:  # Check if it's the expected type
             if expect_type in ["int", "bool", "str"]:

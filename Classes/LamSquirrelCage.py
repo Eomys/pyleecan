@@ -94,17 +94,17 @@ class LamSquirrelCage(LamSlotWind):
 
     def __init__(
         self,
-        Hscr=0.03,
-        Lscr=0.015,
+        Hscr=3.00e-02,
+        Lscr=1.50e-02,
         ring_mat=-1,
         Ksfill=None,
         winding=-1,
         slot=-1,
-        L1=0.35,
+        L1=3.50e-01,
         mat_type=-1,
         Nrvd=0,
         Wrvd=0,
-        Kf1=0.95,
+        Kf1=9.50e-01,
         is_internal=True,
         Rint=0,
         Rext=1,
@@ -221,15 +221,14 @@ class LamSquirrelCage(LamSlotWind):
 
         LamSquirrelCage_str = ""
         # Get the properties inherited from LamSlotWind
-        LamSquirrelCage_str += super(LamSquirrelCage, self).__str__() + linesep
+        LamSquirrelCage_str += super(LamSquirrelCage, self).__str__()
         LamSquirrelCage_str += "Hscr = " + str(self.Hscr) + linesep
         LamSquirrelCage_str += "Lscr = " + str(self.Lscr) + linesep
         if self.ring_mat is not None:
-            LamSquirrelCage_str += (
-                "ring_mat = " + str(self.ring_mat.as_dict()) + linesep + linesep
-            )
+            tmp = self.ring_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            LamSquirrelCage_str += "ring_mat = " + tmp
         else:
-            LamSquirrelCage_str += "ring_mat = None"
+            LamSquirrelCage_str += "ring_mat = None" + linesep + linesep
         return LamSquirrelCage_str
 
     def __eq__(self, other):

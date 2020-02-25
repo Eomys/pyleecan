@@ -107,8 +107,8 @@ class CondType11(Conductor):
 
     def __init__(
         self,
-        Hwire=0.01,
-        Wwire=0.01,
+        Hwire=1.00e-02,
+        Wwire=1.00e-02,
         Nwppc_rad=1,
         Nwppc_tan=1,
         Wins_wire=0,
@@ -188,7 +188,7 @@ class CondType11(Conductor):
 
         CondType11_str = ""
         # Get the properties inherited from Conductor
-        CondType11_str += super(CondType11, self).__str__() + linesep
+        CondType11_str += super(CondType11, self).__str__()
         CondType11_str += "Hwire = " + str(self.Hwire) + linesep
         CondType11_str += "Wwire = " + str(self.Wwire) + linesep
         CondType11_str += "Nwppc_rad = " + str(self.Nwppc_rad) + linesep
@@ -198,7 +198,7 @@ class CondType11(Conductor):
         CondType11_str += (
             "type_winding_shape = " + str(self.type_winding_shape) + linesep
         )
-        CondType11_str += "alpha_ew = " + str(self.alpha_ew)
+        CondType11_str += "alpha_ew = " + str(self.alpha_ew) + linesep
         return CondType11_str
 
     def __eq__(self, other):

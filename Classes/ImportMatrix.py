@@ -65,8 +65,8 @@ class ImportMatrix(Import):
 
         ImportMatrix_str = ""
         # Get the properties inherited from Import
-        ImportMatrix_str += super(ImportMatrix, self).__str__() + linesep
-        ImportMatrix_str += "is_transpose = " + str(self.is_transpose)
+        ImportMatrix_str += super(ImportMatrix, self).__str__()
+        ImportMatrix_str += "is_transpose = " + str(self.is_transpose) + linesep
         return ImportMatrix_str
 
     def __eq__(self, other):

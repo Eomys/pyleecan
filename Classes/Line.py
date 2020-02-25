@@ -49,7 +49,7 @@ class Line(FrozenClass):
             Line_str += "parent = None " + linesep
         else:
             Line_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        Line_str += 'label = "' + str(self.label) + '"'
+        Line_str += 'label = "' + str(self.label) + '"' + linesep
         return Line_str
 
     def __eq__(self, other):

@@ -77,8 +77,8 @@ class MagnetType12(MagnetFlat):
 
     def __init__(
         self,
-        Wmag=0.002,
-        Hmag=0.001,
+        Wmag=2.00e-03,
+        Hmag=1.00e-03,
         mat_type=-1,
         type_magnetization=0,
         Lmag=0.95,
@@ -125,9 +125,9 @@ class MagnetType12(MagnetFlat):
 
         MagnetType12_str = ""
         # Get the properties inherited from MagnetFlat
-        MagnetType12_str += super(MagnetType12, self).__str__() + linesep
+        MagnetType12_str += super(MagnetType12, self).__str__()
         MagnetType12_str += "Wmag = " + str(self.Wmag) + linesep
-        MagnetType12_str += "Hmag = " + str(self.Hmag)
+        MagnetType12_str += "Hmag = " + str(self.Hmag) + linesep
         return MagnetType12_str
 
     def __eq__(self, other):

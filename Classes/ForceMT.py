@@ -80,7 +80,7 @@ class ForceMT(Force):
 
         ForceMT_str = ""
         # Get the properties inherited from Force
-        ForceMT_str += super(ForceMT, self).__str__() + linesep
+        ForceMT_str += super(ForceMT, self).__str__()
         return ForceMT_str
 
     def __eq__(self, other):

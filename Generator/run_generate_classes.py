@@ -9,7 +9,7 @@ import json
 
 sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", ".."))))
 
-from pyleecan.Generator.class_generator import generate_class
+from pyleecan.Generator.ClassGenerator.class_generator import generate_class
 from pyleecan.Generator.read_fct import read_all
 from pyleecan.Generator import MAIN_DIR, DOC_DIR, INT_DIR
 

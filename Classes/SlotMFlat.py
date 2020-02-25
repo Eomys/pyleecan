@@ -144,7 +144,7 @@ class SlotMFlat(SlotMag):
     def __init__(
         self,
         H0=0,
-        W0=0.0122,
+        W0=1.22e-02,
         W0_is_rad=False,
         magnet=list(),
         W3=0,
@@ -221,16 +221,15 @@ class SlotMFlat(SlotMag):
 
         SlotMFlat_str = ""
         # Get the properties inherited from SlotMag
-        SlotMFlat_str += super(SlotMFlat, self).__str__() + linesep
+        SlotMFlat_str += super(SlotMFlat, self).__str__()
         SlotMFlat_str += "H0 = " + str(self.H0) + linesep
         SlotMFlat_str += "W0 = " + str(self.W0) + linesep
         SlotMFlat_str += "W0_is_rad = " + str(self.W0_is_rad) + linesep
         if len(self.magnet) == 0:
-            SlotMFlat_str += "magnet = []"
+            SlotMFlat_str += "magnet = []" + linesep
         for ii in range(len(self.magnet)):
-            SlotMFlat_str += (
-                "magnet[" + str(ii) + "] = " + str(self.magnet[ii].as_dict()) + "\n"
-            )
+            tmp = self.magnet[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            SlotMFlat_str += "magnet[" + str(ii) + "] =" + tmp + linesep + linesep
         return SlotMFlat_str
 
     def __eq__(self, other):

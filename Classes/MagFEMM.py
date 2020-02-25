@@ -251,7 +251,7 @@ class MagFEMM(Magnetics):
 
         MagFEMM_str = ""
         # Get the properties inherited from Magnetics
-        MagFEMM_str += super(MagFEMM, self).__str__() + linesep
+        MagFEMM_str += super(MagFEMM, self).__str__()
         MagFEMM_str += "Kmesh_fineness = " + str(self.Kmesh_fineness) + linesep
         MagFEMM_str += "Kgeo_fineness = " + str(self.Kgeo_fineness) + linesep
         MagFEMM_str += "type_calc_leakage = " + str(self.type_calc_leakage) + linesep
@@ -261,7 +261,12 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "is_get_mesh = " + str(self.is_get_mesh) + linesep
         MagFEMM_str += "is_save_FEA = " + str(self.is_save_FEA) + linesep
         MagFEMM_str += "is_sliding_band = " + str(self.is_sliding_band) + linesep
-        MagFEMM_str += "transform_list = " + linesep + str(self.transform_list)
+        MagFEMM_str += (
+            "transform_list = "
+            + linesep
+            + str(self.transform_list).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return MagFEMM_str
 
     def __eq__(self, other):

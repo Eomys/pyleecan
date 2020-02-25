@@ -101,7 +101,7 @@ class Surface(FrozenClass):
         else:
             Surface_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Surface_str += "point_ref = " + str(self.point_ref) + linesep
-        Surface_str += 'label = "' + str(self.label) + '"'
+        Surface_str += 'label = "' + str(self.label) + '"' + linesep
         return Surface_str
 
     def __eq__(self, other):

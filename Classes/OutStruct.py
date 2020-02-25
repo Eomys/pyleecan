@@ -80,12 +80,36 @@ class OutStruct(FrozenClass):
             OutStruct_str += "parent = None " + linesep
         else:
             OutStruct_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutStruct_str += "time = " + linesep + str(self.time) + linesep + linesep
-        OutStruct_str += "angle = " + linesep + str(self.angle) + linesep + linesep
+        OutStruct_str += (
+            "time = "
+            + linesep
+            + str(self.time).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutStruct_str += (
+            "angle = "
+            + linesep
+            + str(self.angle).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         OutStruct_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutStruct_str += "Na_tot = " + str(self.Na_tot) + linesep
-        OutStruct_str += "Prad = " + linesep + str(self.Prad) + linesep + linesep
-        OutStruct_str += "Ptan = " + linesep + str(self.Ptan)
+        OutStruct_str += (
+            "Prad = "
+            + linesep
+            + str(self.Prad).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutStruct_str += (
+            "Ptan = "
+            + linesep
+            + str(self.Ptan).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return OutStruct_str
 
     def __eq__(self, other):

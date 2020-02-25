@@ -111,15 +111,15 @@ class Simulation(FrozenClass):
         Simulation_str += 'name = "' + str(self.name) + '"' + linesep
         Simulation_str += 'desc = "' + str(self.desc) + '"' + linesep
         if self.machine is not None:
-            Simulation_str += (
-                "machine = " + str(self.machine.as_dict()) + linesep + linesep
-            )
+            tmp = self.machine.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Simulation_str += "machine = " + tmp
         else:
             Simulation_str += "machine = None" + linesep + linesep
         if self.input is not None:
-            Simulation_str += "input = " + str(self.input.as_dict()) + linesep + linesep
+            tmp = self.input.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Simulation_str += "input = " + tmp
         else:
-            Simulation_str += "input = None"
+            Simulation_str += "input = None" + linesep + linesep
         return Simulation_str
 
     def __eq__(self, other):

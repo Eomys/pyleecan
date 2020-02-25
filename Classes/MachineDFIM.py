@@ -146,19 +146,17 @@ class MachineDFIM(MachineAsync):
 
         MachineDFIM_str = ""
         # Get the properties inherited from MachineAsync
-        MachineDFIM_str += super(MachineDFIM, self).__str__() + linesep
+        MachineDFIM_str += super(MachineDFIM, self).__str__()
         if self.rotor is not None:
-            MachineDFIM_str += (
-                "rotor = " + str(self.rotor.as_dict()) + linesep + linesep
-            )
+            tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MachineDFIM_str += "rotor = " + tmp
         else:
             MachineDFIM_str += "rotor = None" + linesep + linesep
         if self.stator is not None:
-            MachineDFIM_str += (
-                "stator = " + str(self.stator.as_dict()) + linesep + linesep
-            )
+            tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MachineDFIM_str += "stator = " + tmp
         else:
-            MachineDFIM_str += "stator = None"
+            MachineDFIM_str += "stator = None" + linesep + linesep
         return MachineDFIM_str
 
     def __eq__(self, other):

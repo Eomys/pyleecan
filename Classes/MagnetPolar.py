@@ -54,7 +54,7 @@ class MagnetPolar(Magnet):
 
         MagnetPolar_str = ""
         # Get the properties inherited from Magnet
-        MagnetPolar_str += super(MagnetPolar, self).__str__() + linesep
+        MagnetPolar_str += super(MagnetPolar, self).__str__()
         return MagnetPolar_str
 
     def __eq__(self, other):

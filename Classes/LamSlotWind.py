@@ -228,11 +228,11 @@ class LamSlotWind(LamSlot):
         Ksfill=None,
         winding=-1,
         slot=-1,
-        L1=0.35,
+        L1=3.50e-01,
         mat_type=-1,
         Nrvd=0,
         Wrvd=0,
-        Kf1=0.95,
+        Kf1=9.50e-01,
         is_internal=True,
         Rint=0,
         Rext=1,
@@ -353,14 +353,13 @@ class LamSlotWind(LamSlot):
 
         LamSlotWind_str = ""
         # Get the properties inherited from LamSlot
-        LamSlotWind_str += super(LamSlotWind, self).__str__() + linesep
+        LamSlotWind_str += super(LamSlotWind, self).__str__()
         LamSlotWind_str += "Ksfill = " + str(self.Ksfill) + linesep
         if self.winding is not None:
-            LamSlotWind_str += (
-                "winding = " + str(self.winding.as_dict()) + linesep + linesep
-            )
+            tmp = self.winding.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            LamSlotWind_str += "winding = " + tmp
         else:
-            LamSlotWind_str += "winding = None"
+            LamSlotWind_str += "winding = None" + linesep + linesep
         return LamSlotWind_str
 
     def __eq__(self, other):

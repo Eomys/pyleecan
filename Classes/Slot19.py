@@ -138,7 +138,13 @@ class Slot19(Slot):
     save = save
 
     def __init__(
-        self, W0=0.013, H0=0.02, W1=0.01, Wx_is_rad=False, Zs=36, init_dict=None
+        self,
+        W0=1.30e-02,
+        H0=2.00e-02,
+        W1=1.00e-02,
+        Wx_is_rad=False,
+        Zs=36,
+        init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -177,11 +183,11 @@ class Slot19(Slot):
 
         Slot19_str = ""
         # Get the properties inherited from Slot
-        Slot19_str += super(Slot19, self).__str__() + linesep
+        Slot19_str += super(Slot19, self).__str__()
         Slot19_str += "W0 = " + str(self.W0) + linesep
         Slot19_str += "H0 = " + str(self.H0) + linesep
         Slot19_str += "W1 = " + str(self.W1) + linesep
-        Slot19_str += "Wx_is_rad = " + str(self.Wx_is_rad)
+        Slot19_str += "Wx_is_rad = " + str(self.Wx_is_rad) + linesep
         return Slot19_str
 
     def __eq__(self, other):
