@@ -22,7 +22,6 @@ def init_mechanical_model(self, output, group):
 
     # TODO:
     if self.mechanical_mesh is not None:
-        output.struct.mechanical_mesh = self.mechanical_mesh.get_data(output, grouo)
+        output.struct.mechanical_mesh = self.mechanical_mesh.get_data(output, group)
     else:
-
         output.struct.mechanical_mesh = self.gen_mechanical_mesh()
