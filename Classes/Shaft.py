@@ -68,7 +68,7 @@ class Shaft(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, Lshaft=4.42e-01, mat_type=-1, Drsh=4.50e-02, init_dict=None):
+    def __init__(self, Lshaft=0.442, mat_type=-1, Drsh=0.045, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix

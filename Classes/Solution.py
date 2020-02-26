@@ -217,12 +217,13 @@ class Solution(FrozenClass):
 
     def _set_nodal(self, value):
         """setter of nodal"""
-        for key, obj in value.items():
-            if type(obj) is list:
-                try:
-                    obj = array(obj)
-                except:
-                    pass
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is list:
+                    try:
+                        obj = array(obj)
+                    except:
+                        pass
         check_var("nodal", value, "{ndarray}")
         self._nodal = value
 
@@ -238,12 +239,13 @@ class Solution(FrozenClass):
 
     def _set_edge(self, value):
         """setter of edge"""
-        for key, obj in value.items():
-            if type(obj) is list:
-                try:
-                    obj = array(obj)
-                except:
-                    pass
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is list:
+                    try:
+                        obj = array(obj)
+                    except:
+                        pass
         check_var("edge", value, "{ndarray}")
         self._edge = value
 
@@ -259,12 +261,13 @@ class Solution(FrozenClass):
 
     def _set_face(self, value):
         """setter of face"""
-        for key, obj in value.items():
-            if type(obj) is list:
-                try:
-                    obj = array(obj)
-                except:
-                    pass
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is list:
+                    try:
+                        obj = array(obj)
+                    except:
+                        pass
         check_var("face", value, "{ndarray}")
         self._face = value
 
@@ -280,12 +283,13 @@ class Solution(FrozenClass):
 
     def _set_volume(self, value):
         """setter of volume"""
-        for key, obj in value.items():
-            if type(obj) is list:
-                try:
-                    obj = array(obj)
-                except:
-                    pass
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is list:
+                    try:
+                        obj = array(obj)
+                    except:
+                        pass
         check_var("volume", value, "{ndarray}")
         self._volume = value
 

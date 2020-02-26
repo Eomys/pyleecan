@@ -107,8 +107,8 @@ class CondType11(Conductor):
 
     def __init__(
         self,
-        Hwire=1.00e-02,
-        Wwire=1.00e-02,
+        Hwire=0.01,
+        Wwire=0.01,
         Nwppc_rad=1,
         Nwppc_tan=1,
         Wins_wire=0,

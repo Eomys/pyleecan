@@ -106,13 +106,7 @@ class CondType21(Conductor):
     save = save
 
     def __init__(
-        self,
-        Hbar=1.00e-02,
-        Wbar=1.00e-02,
-        Wins=0,
-        cond_mat=-1,
-        ins_mat=-1,
-        init_dict=None,
+        self, Hbar=0.01, Wbar=0.01, Wins=0, cond_mat=-1, ins_mat=-1, init_dict=None
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values

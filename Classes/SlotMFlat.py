@@ -144,7 +144,7 @@ class SlotMFlat(SlotMag):
     def __init__(
         self,
         H0=0,
-        W0=1.22e-02,
+        W0=0.0122,
         W0_is_rad=False,
         magnet=list(),
         W3=0,

@@ -154,14 +154,7 @@ class SlotW16(SlotWind):
     save = save
 
     def __init__(
-        self,
-        W0=1.22e-02,
-        W3=1.22e-02,
-        H0=1.00e-03,
-        H2=1.22e-02,
-        R1=1.00e-03,
-        Zs=36,
-        init_dict=None,
+        self, W0=0.0122, W3=0.0122, H0=0.001, H2=0.0122, R1=0.001, Zs=36, init_dict=None
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values

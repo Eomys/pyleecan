@@ -95,7 +95,7 @@ class NodeMat(Node):
     save = save
 
     def __init__(
-        self, coordinate=None, nb_node=0, tag=None, delta=1.00e-10, init_dict=None
+        self, coordinate=None, nb_node=0, tag=None, delta=1e-10, init_dict=None
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values

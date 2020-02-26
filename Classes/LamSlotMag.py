@@ -139,11 +139,11 @@ class LamSlotMag(LamSlot):
     def __init__(
         self,
         slot=-1,
-        L1=3.50e-01,
+        L1=0.35,
         mat_type=-1,
         Nrvd=0,
         Wrvd=0,
-        Kf1=9.50e-01,
+        Kf1=0.95,
         is_internal=True,
         Rint=0,
         Rext=1,

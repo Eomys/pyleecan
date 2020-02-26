@@ -126,7 +126,7 @@ class Frame(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, Lfra=3.50e-01, Rint=0.2, Rext=0.2, mat_type=-1, init_dict=None):
+    def __init__(self, Lfra=0.35, Rint=0.2, Rext=0.2, mat_type=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix

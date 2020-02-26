@@ -80,7 +80,7 @@
                 "name": "radius",
                 "type": "float",
                 "unit": "",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Rotation direction of the arc",
@@ -148,7 +148,7 @@
                 "name": "angle",
                 "type": "float",
                 "unit": "rad",
-                "value": "1.57079633"
+                "value": 1.57079633
             }
         ]
     },
@@ -265,7 +265,7 @@
                 "name": "Rarc",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Angular offset for the arc",
@@ -274,7 +274,7 @@
                 "name": "alpha",
                 "type": "float",
                 "unit": "rad",
-                "value": "0"
+                "value": 0
             }
         ]
     },
@@ -310,7 +310,7 @@
                 "name": "radius",
                 "type": "float",
                 "unit": "",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "center of the Circle",
@@ -361,7 +361,7 @@
                 "name": "Hwire",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "cf schematics, single wire width without insulation [m]",
@@ -370,7 +370,7 @@
                 "name": "Wwire",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction",
@@ -397,7 +397,7 @@
                 "name": "Wins_wire",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "(advanced) cf schematics, winding coil insulation  thickness [m]",
@@ -406,7 +406,7 @@
                 "name": "Wins_coil",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "type of winding shape for end winding length calculation\\n0 for hairpin windings\\n1 for normal windings",
@@ -424,7 +424,7 @@
                 "name": "alpha_ew",
                 "type": "float",
                 "unit": "deg",
-                "value": "58"
+                "value": 58
             }
         ]
     },
@@ -458,7 +458,7 @@
                 "name": "Wwire",
                 "type": "float",
                 "unit": "m",
-                "value": "1.50E-02"
+                "value": 0.015
             },
             {
                 "desc": "(advanced) cf schematics, winding coil insulation diameter [m]",
@@ -467,7 +467,7 @@
                 "name": "Wins_cond",
                 "type": "float",
                 "unit": "m",
-                "value": "1.50E-02"
+                "value": 0.015
             },
             {
                 "desc": "cf schematics, winding number of random wires (strands) in parallel per coil",
@@ -485,7 +485,7 @@
                 "name": "Wins_wire",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)",
@@ -494,7 +494,7 @@
                 "name": "Kwoh",
                 "type": "float",
                 "unit": "-",
-                "value": "5.00E-01"
+                "value": 0.5
             }
         ]
     },
@@ -527,7 +527,7 @@
                 "name": "Hbar",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Bar width",
@@ -536,7 +536,7 @@
                 "name": "Wbar",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Width of insulation",
@@ -545,7 +545,7 @@
                 "name": "Wins",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             }
         ]
     },
@@ -575,7 +575,7 @@
                 "name": "Sbar",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             }
         ]
     },
@@ -800,7 +800,7 @@
                 "name": "Lfra",
                 "type": "float",
                 "unit": "m",
-                "value": "3.50E-01"
+                "value": 0.35
             },
             {
                 "desc": "frame internal radius",
@@ -809,7 +809,7 @@
                 "name": "Rint",
                 "type": "float",
                 "unit": "m",
-                "value": "0.2"
+                "value": 0.2
             },
             {
                 "desc": "Frame external radius",
@@ -818,7 +818,7 @@
                 "name": "Rext",
                 "type": "float",
                 "unit": "m",
-                "value": "0.2"
+                "value": 0.2
             },
             {
                 "desc": "Frame material",
@@ -950,7 +950,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Slot opening",
@@ -959,7 +959,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Distance from the lamination Bore",
@@ -968,7 +968,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Tooth width (at V bottom)",
@@ -977,7 +977,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.30E-02"
+                "value": 0.013
             },
             {
                 "desc": "Additional depth for the magnet",
@@ -986,7 +986,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-02"
+                "value": 0.02
             },
             {
                 "desc": "Distance Magnet to bottom of the V",
@@ -995,7 +995,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Magnet Height",
@@ -1004,7 +1004,7 @@
                 "name": "H3",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Tooth width (at V top)",
@@ -1013,7 +1013,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Slot top height",
@@ -1022,7 +1022,7 @@
                 "name": "H4",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Magnet Width",
@@ -1031,7 +1031,7 @@
                 "name": "W4",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "First Magnet",
@@ -1091,7 +1091,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Distance from the lamination Bore",
@@ -1100,7 +1100,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Hole width",
@@ -1109,7 +1109,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-02"
+                "value": 0.02
             },
             {
                 "desc": "Hole bottom width",
@@ -1118,7 +1118,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Hole angular width",
@@ -1127,7 +1127,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "rad",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "magnet_1 position",
@@ -1136,7 +1136,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "magnet_1 width",
@@ -1145,7 +1145,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "magnet_2 position",
@@ -1154,7 +1154,7 @@
                 "name": "W4",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "magnet_2 width",
@@ -1163,7 +1163,7 @@
                 "name": "W5",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "magnet_0 position",
@@ -1172,7 +1172,7 @@
                 "name": "W6",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "magnet_0 width",
@@ -1181,7 +1181,7 @@
                 "name": "W7",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "First Magnet",
@@ -1251,7 +1251,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Magnet width",
@@ -1260,7 +1260,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Magnet height",
@@ -1269,7 +1269,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Tooth width",
@@ -1278,7 +1278,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "1.30E-02"
+                "value": 0.013
             },
             {
                 "desc": "Additional depth for the magnet",
@@ -1287,7 +1287,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-02"
+                "value": 0.02
             },
             {
                 "desc": "Magnet of the hole",
@@ -1338,7 +1338,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Distance from the lamination Bore",
@@ -1347,7 +1347,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Tooth width (at V bottom)",
@@ -1356,7 +1356,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.30E-02"
+                "value": 0.013
             },
             {
                 "desc": "Magnet Height",
@@ -1365,7 +1365,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-02"
+                "value": 0.02
             },
             {
                 "desc": "Distance Magnet to bottom of the V",
@@ -1374,7 +1374,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Additional depth for the magnet",
@@ -1383,7 +1383,7 @@
                 "name": "H3",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Magnet Width",
@@ -1392,7 +1392,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Slot angle",
@@ -1401,7 +1401,7 @@
                 "name": "W4",
                 "type": "float",
                 "unit": "rad",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "First Magnet",
@@ -1456,7 +1456,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Hole width",
@@ -1465,7 +1465,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Hole angular width",
@@ -1474,7 +1474,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "rad",
-                "value": "1.30E-02"
+                "value": 0.013
             },
             {
                 "desc": "Hole radius",
@@ -1483,7 +1483,7 @@
                 "name": "R1",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-02"
+                "value": 0.02
             }
         ]
     },
@@ -1592,7 +1592,7 @@
                 "name": "start",
                 "type": "float",
                 "unit": "-",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "End point of the linspace",
@@ -1601,7 +1601,7 @@
                 "name": "stop",
                 "type": "float",
                 "unit": "-",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "Number of value in the linspace",
@@ -1610,7 +1610,7 @@
                 "name": "num",
                 "type": "float",
                 "unit": "-",
-                "value": "100"
+                "value": 100
             },
             {
                 "desc": "If True, stop is the last sample. Otherwise, it is not included",
@@ -1648,7 +1648,7 @@
                 "name": "f",
                 "type": "float",
                 "unit": "Hz",
-                "value": "100"
+                "value": 100
             },
             {
                 "desc": "Amplitude of the sinus to generate",
@@ -1657,7 +1657,7 @@
                 "name": "A",
                 "type": "float",
                 "unit": "-",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "Phase of the sinus to generate",
@@ -1666,7 +1666,7 @@
                 "name": "Phi",
                 "type": "float",
                 "unit": "-",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Length of the vector to generate",
@@ -1684,7 +1684,7 @@
                 "name": "Tf",
                 "type": "float",
                 "unit": "s",
-                "value": "1"
+                "value": 1
             }
         ]
     },
@@ -1926,7 +1926,7 @@
                 "name": "rot_dir",
                 "type": "float",
                 "unit": "-",
-                "value": "-1"
+                "value": -1
             },
             {
                 "desc": "Initial angular position of the rotor at t=0",
@@ -1935,7 +1935,7 @@
                 "name": "angle_rotor_initial",
                 "type": "float",
                 "unit": "",
-                "value": "0"
+                "value": 0
             }
         ]
     },
@@ -2018,7 +2018,7 @@
                 "name": "rot_dir",
                 "type": "float",
                 "unit": "-",
-                "value": "-1"
+                "value": -1
             },
             {
                 "desc": "Initial angular position of the rotor at t=0",
@@ -2027,7 +2027,7 @@
                 "name": "angle_rotor_initial",
                 "type": "float",
                 "unit": "",
-                "value": "0"
+                "value": 0
             }
         ]
     },
@@ -2362,7 +2362,7 @@
                 "name": "Ksfill",
                 "type": "float",
                 "unit": "-",
-                "value": "None"
+                "value": null
             },
             {
                 "desc": "Lamination's Winding",
@@ -2403,7 +2403,7 @@
                 "name": "Hscr",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-02"
+                "value": 0.03
             },
             {
                 "desc": "short circuit ring section axial length",
@@ -2412,7 +2412,7 @@
                 "name": "Lscr",
                 "type": "float",
                 "unit": "m",
-                "value": "1.50E-02"
+                "value": 0.015
             },
             {
                 "desc": "Material of the Rotor short circuit ring",
@@ -2475,7 +2475,7 @@
                 "name": "L1",
                 "type": "float",
                 "unit": "m",
-                "value": "3.50E-01"
+                "value": 0.35
             },
             {
                 "desc": "Lamination's material",
@@ -2502,7 +2502,7 @@
                 "name": "Wrvd",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "lamination stacking / packing factor",
@@ -2511,7 +2511,7 @@
                 "name": "Kf1",
                 "type": "float",
                 "unit": "-",
-                "value": "9.50E-01"
+                "value": 0.95
             },
             {
                 "desc": "1 for internal lamination topology, 0 for external lamination",
@@ -2529,7 +2529,7 @@
                 "name": "Rint",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "To fill",
@@ -2538,7 +2538,7 @@
                 "name": "Rext",
                 "type": "float",
                 "unit": "m",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "To fill",
@@ -3054,7 +3054,7 @@
                 "name": "Kmesh_fineness",
                 "type": "float",
                 "unit": "",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)",
@@ -3063,7 +3063,7 @@
                 "name": "Kgeo_fineness",
                 "type": "float",
                 "unit": "",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "0 no leakage calculation /  1 calculation using single slot ",
@@ -3099,7 +3099,7 @@
                 "name": "angle_stator",
                 "type": "float",
                 "unit": "rad",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "To save FEA mesh for latter post-procesing ",
@@ -3198,7 +3198,7 @@
                 "name": "Lmag",
                 "type": "float",
                 "unit": "-",
-                "value": "0.95"
+                "value": 0.95
             }
         ]
     },
@@ -3280,7 +3280,7 @@
                 "name": "Wmag",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-03"
+                "value": 0.002
             },
             {
                 "desc": "magnet radial height [m]",
@@ -3289,7 +3289,7 @@
                 "name": "Hmag",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             }
         ]
     },
@@ -3329,7 +3329,7 @@
                 "name": "Wmag",
                 "type": "float",
                 "unit": "rad",
-                "value": "2.00E-03"
+                "value": 0.002
             },
             {
                 "desc": "magnet radial height [m]",
@@ -3338,7 +3338,7 @@
                 "name": "Hmag",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             }
         ]
     },
@@ -3377,7 +3377,7 @@
                 "name": "Wmag",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-03"
+                "value": 0.002
             },
             {
                 "desc": "magnet radial height [m]",
@@ -3386,7 +3386,7 @@
                 "name": "Hmag",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             }
         ]
     },
@@ -3425,7 +3425,7 @@
                 "name": "Wmag",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-03"
+                "value": 0.002
             },
             {
                 "desc": "magnet radial height [m]",
@@ -3434,7 +3434,7 @@
                 "name": "Hmag",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             },
             {
                 "desc": "radius of the circular top shape [m]",
@@ -3443,7 +3443,7 @@
                 "name": "Rtop",
                 "type": "float",
                 "unit": "m",
-                "value": "5.00E-02"
+                "value": 0.05
             }
         ]
     },
@@ -3481,7 +3481,7 @@
                 "name": "Wmag",
                 "type": "float",
                 "unit": "rad",
-                "value": "2.00E-03"
+                "value": 0.002
             },
             {
                 "desc": "magnet radial height [m]",
@@ -3490,7 +3490,7 @@
                 "name": "Hmag",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             },
             {
                 "desc": "radius of the circular top shape [m]",
@@ -3499,7 +3499,7 @@
                 "name": "Rtop",
                 "type": "float",
                 "unit": "m",
-                "value": "5.00E-02"
+                "value": 0.05
             }
         ]
     },
@@ -3668,7 +3668,7 @@
                 "name": "cost_unit",
                 "type": "float",
                 "unit": "unit/kg",
-                "value": "1.27E-01"
+                "value": 0.127
             },
             {
                 "desc": "Name of the unit",
@@ -3704,7 +3704,7 @@
                 "name": "rho",
                 "type": "float",
                 "unit": "ohm.m",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "Relative dielectric constant",
@@ -3713,7 +3713,7 @@
                 "name": "epsr",
                 "type": "float",
                 "unit": "-",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "Thermal Coefficient",
@@ -3722,7 +3722,7 @@
                 "name": "alpha",
                 "type": "float",
                 "unit": "1/K",
-                "value": "1"
+                "value": 1
             }
         ]
     },
@@ -3749,7 +3749,7 @@
                 "name": "lambda_x",
                 "type": "float",
                 "unit": "W/K",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "thermal conductivity (XY is lamination plane, Z is rotation axis)",
@@ -3758,7 +3758,7 @@
                 "name": "lambda_y",
                 "type": "float",
                 "unit": "W/K",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "thermal conductivity (XY is lamination plane, Z is rotation axis)",
@@ -3767,7 +3767,7 @@
                 "name": "lambda_z",
                 "type": "float",
                 "unit": "W/K",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "specific heat capacity",
@@ -3776,7 +3776,7 @@
                 "name": "Cp",
                 "type": "float",
                 "unit": "W/kg/K",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "thermal expansion coefficient",
@@ -3785,7 +3785,7 @@
                 "name": "alpha",
                 "type": "float",
                 "unit": "-",
-                "value": "3.93E-03"
+                "value": 0.00393
             }
         ]
     },
@@ -3815,7 +3815,7 @@
                 "name": "mur_lin",
                 "type": "float",
                 "unit": "-",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "Coercitivity field",
@@ -3824,7 +3824,7 @@
                 "name": "Hc",
                 "type": "float",
                 "unit": "A/m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "magnet remanence induction at 20degC",
@@ -3833,7 +3833,7 @@
                 "name": "Brm20",
                 "type": "float",
                 "unit": "T",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "temperature coefficient for remanent flux density /degC compared to 20degC",
@@ -3842,7 +3842,7 @@
                 "name": "alpha_Br",
                 "type": "float",
                 "unit": "-",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "lamination sheet width without insulation [m] (0 == not laminated)",
@@ -3851,7 +3851,7 @@
                 "name": "Wlam",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "nonlinear B(H) curve (two columns matrix, H and B(H))",
@@ -3887,7 +3887,7 @@
                 "name": "rho",
                 "type": "float",
                 "unit": "kg/m^3",
-                "value": "7650"
+                "value": 7650
             },
             {
                 "desc": "equivalent Young modulus (XY is lamination plane, Z is rotation axis)",
@@ -3896,7 +3896,7 @@
                 "name": "Ex",
                 "type": "float",
                 "unit": "Pa",
-                "value": "2.15E+11"
+                "value": 215000000000.0
             },
             {
                 "desc": "equivalent Young modulus (XY is lamination plane, Z is rotation axis)",
@@ -3905,7 +3905,7 @@
                 "name": "Ey",
                 "type": "float",
                 "unit": "Pa",
-                "value": "2.15E+11"
+                "value": 215000000000.0
             },
             {
                 "desc": "equivalent Young modulus (XY is lamination plane, Z is rotation axis)",
@@ -3914,7 +3914,7 @@
                 "name": "Ez",
                 "type": "float",
                 "unit": "Pa",
-                "value": "80000000000"
+                "value": 80000000000
             },
             {
                 "desc": "equivalent Poisson ratio in the XY plane (XY is lamination plane, Z is rotation axis)",
@@ -3923,7 +3923,7 @@
                 "name": "nu_xy",
                 "type": "float",
                 "unit": "-",
-                "value": "0.3"
+                "value": 0.3
             },
             {
                 "desc": "equivalent Poisson ratio in the XZ plane (XY is lamination plane, Z is rotation axis)",
@@ -3932,7 +3932,7 @@
                 "name": "nu_xz",
                 "type": "float",
                 "unit": "-",
-                "value": "0.03"
+                "value": 0.03
             },
             {
                 "desc": "equivalent Poisson ratio in the YZ plane (XY is lamination plane, Z is rotation axis)",
@@ -3941,7 +3941,7 @@
                 "name": "nu_yz",
                 "type": "float",
                 "unit": "-",
-                "value": "0.03"
+                "value": 0.03
             },
             {
                 "desc": "shear modulus in XY plane (XY is lamination plane, Z is rotation axis)",
@@ -3950,7 +3950,7 @@
                 "name": "Gxz",
                 "type": "float",
                 "unit": "Pa",
-                "value": "2000000000"
+                "value": 2000000000
             },
             {
                 "desc": "shear modulus in XZ plane (XY is lamination plane, Z is rotation axis)",
@@ -3959,7 +3959,7 @@
                 "name": "Gxy",
                 "type": "float",
                 "unit": "Pa",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "shear modulus in YZ plane (XY is lamination plane, Z is rotation axis)",
@@ -3968,7 +3968,7 @@
                 "name": "Gyz",
                 "type": "float",
                 "unit": "Pa",
-                "value": "2000000000"
+                "value": 2000000000
             }
         ]
     },
@@ -4262,7 +4262,7 @@
                 "name": "delta",
                 "type": "float",
                 "unit": "",
-                "value": "1.00E-10"
+                "value": 1e-10
             }
         ]
     },
@@ -4314,7 +4314,7 @@
                 "name": "alpha",
                 "type": "float",
                 "unit": "rad",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Shape of the Notch",
@@ -4404,7 +4404,7 @@
                 "name": "rot_dir",
                 "type": "float",
                 "unit": "-",
-                "value": "-1"
+                "value": -1
             },
             {
                 "desc": "Initial angular position of the rotor at t=0",
@@ -4413,7 +4413,7 @@
                 "name": "angle_rotor_initial",
                 "type": "float",
                 "unit": "",
-                "value": "0"
+                "value": 0
             }
         ]
     },
@@ -4458,7 +4458,7 @@
                 "name": "Wgap_mec",
                 "type": "float",
                 "unit": "m",
-                "value": "None"
+                "value": null
             },
             {
                 "desc": "the magnetic airgap width (distance beetween the two Laminations bore radius)",
@@ -4467,7 +4467,7 @@
                 "name": "Wgap_mag",
                 "type": "float",
                 "unit": "m",
-                "value": "None"
+                "value": null
             },
             {
                 "desc": "radius of the center of the mecanical airgap",
@@ -4476,7 +4476,7 @@
                 "name": "Rgap_mec",
                 "type": "float",
                 "unit": "m",
-                "value": "None"
+                "value": null
             },
             {
                 "desc": "Airgap active length",
@@ -4485,7 +4485,7 @@
                 "name": "Lgap",
                 "type": "float",
                 "unit": "m",
-                "value": "None"
+                "value": null
             }
         ]
     },
@@ -4530,7 +4530,7 @@
                 "name": "Ksfill",
                 "type": "float",
                 "unit": "-",
-                "value": "None"
+                "value": null
             },
             {
                 "desc": "Slot surface",
@@ -4539,7 +4539,7 @@
                 "name": "S_slot",
                 "type": "float",
                 "unit": "m^2",
-                "value": "None"
+                "value": null
             },
             {
                 "desc": "Slot winding surface",
@@ -4548,7 +4548,7 @@
                 "name": "S_slot_wind",
                 "type": "float",
                 "unit": "m^2",
-                "value": "None"
+                "value": null
             },
             {
                 "desc": "Conductor active surface",
@@ -4557,7 +4557,7 @@
                 "name": "S_wind_act",
                 "type": "float",
                 "unit": "m^2",
-                "value": "None"
+                "value": null
             },
             {
                 "desc": "Symmetry factor of the lamination (1=full machine; 2 = half;...)",
@@ -4665,7 +4665,7 @@
                 "name": "Tem_av",
                 "type": "float",
                 "unit": "N.m",
-                "value": "None"
+                "value": null
             },
             {
                 "desc": "Torque ripple",
@@ -4674,7 +4674,7 @@
                 "name": "Tem_rip",
                 "type": "float",
                 "unit": "-",
-                "value": "None"
+                "value": null
             },
             {
                 "desc": "Stator winding flux",
@@ -4943,7 +4943,7 @@
                 "name": "angle",
                 "type": "float",
                 "unit": "-",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "The Heigth of the PolarAngle",
@@ -4952,7 +4952,7 @@
                 "name": "height",
                 "type": "float",
                 "unit": "m",
-                "value": "1"
+                "value": 1
             }
         ]
     },
@@ -5033,7 +5033,7 @@
                 "name": "Lshaft",
                 "type": "float",
                 "unit": "m",
-                "value": "4.42E-01"
+                "value": 0.442
             },
             {
                 "desc": "Shaft's Material",
@@ -5051,7 +5051,7 @@
                 "name": "Drsh",
                 "type": "float",
                 "unit": "m",
-                "value": "4.50E-02"
+                "value": 0.045
             }
         ]
     },
@@ -5250,7 +5250,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.30E-02"
+                "value": 0.013
             },
             {
                 "desc": "Slot height",
@@ -5259,7 +5259,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-02"
+                "value": 0.02
             },
             {
                 "desc": "Slot bottom width.",
@@ -5268,7 +5268,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Wx unit, 0 for m, 1 for rad",
@@ -5320,7 +5320,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Slot isthmus width.",
@@ -5329,7 +5329,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m/rad",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "W0 unit, 0 for m, 1 for rad",
@@ -5389,7 +5389,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "rad",
-                "value": "3.14E-01"
+                "value": 0.314
             },
             {
                 "desc": "Slot isthmus height",
@@ -5398,7 +5398,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "List of magnet",
@@ -5437,7 +5437,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "rad",
-                "value": "0"
+                "value": 0
             }
         ]
     },
@@ -5516,7 +5516,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "Slot isthmus height.",
@@ -5525,7 +5525,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             },
             {
                 "desc": "Slot wedge radial height or wedge angle .",
@@ -5534,7 +5534,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m/rad",
-                "value": "1.50E-03"
+                "value": 0.0015
             },
             {
                 "desc": "Slot wedge width.",
@@ -5543,7 +5543,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.40E-02"
+                "value": 0.014
             },
             {
                 "desc": "Slot height below wedge ",
@@ -5552,7 +5552,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "3.25E-02"
+                "value": 0.0325
             },
             {
                 "desc": "Slot bottom width.",
@@ -5561,7 +5561,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "H1 unit, 0 for m, 1 for rad",
@@ -5611,7 +5611,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Slot isthmus height.",
@@ -5620,7 +5620,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "height or angle  (See Schematics)",
@@ -5629,7 +5629,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m/rad",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "H1 unit, 0 for m, 1 for rad",
@@ -5647,7 +5647,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.30E-02"
+                "value": 0.013
             },
             {
                 "desc": "Slot height below wedge ",
@@ -5656,7 +5656,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-02"
+                "value": 0.02
             },
             {
                 "desc": "Slot bottom width.",
@@ -5665,7 +5665,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Slot bottom radius",
@@ -5674,7 +5674,7 @@
                 "name": "R1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             }
         ]
     },
@@ -5714,7 +5714,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Slot middle height",
@@ -5723,7 +5723,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m/rad",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Wedges radius",
@@ -5732,7 +5732,7 @@
                 "name": "R1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             },
             {
                 "desc": "Slot bottom radius",
@@ -5741,7 +5741,7 @@
                 "name": "R2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             }
         ]
     },
@@ -5782,7 +5782,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "Slot isthmus height.",
@@ -5791,7 +5791,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             },
             {
                 "desc": "Slot wedge radial height or wedge angle .",
@@ -5800,7 +5800,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m/rad",
-                "value": "1.50E-03"
+                "value": 0.0015
             },
             {
                 "desc": "Slot wedge width.",
@@ -5809,7 +5809,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.40E-02"
+                "value": 0.014
             },
             {
                 "desc": "Slot height below wedge ",
@@ -5818,7 +5818,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "3.25E-02"
+                "value": 0.0325
             },
             {
                 "desc": "Slot width below wedge ",
@@ -5827,7 +5827,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "Slot bottom width.",
@@ -5836,7 +5836,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "H1 unit, 0 for m, 1 for rad",
@@ -5886,7 +5886,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "Slot isthmus height.",
@@ -5895,7 +5895,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             },
             {
                 "desc": "Slot intermediate height.",
@@ -5904,7 +5904,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.50E-03"
+                "value": 0.0015
             },
             {
                 "desc": "Tooth height",
@@ -5913,7 +5913,7 @@
                 "name": "H3",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "Tooth width",
@@ -5922,7 +5922,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             }
         ]
     },
@@ -5962,7 +5962,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "Tooth width",
@@ -5971,7 +5971,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "Slot isthmus height.",
@@ -5980,7 +5980,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             },
             {
                 "desc": "Slot intermediate height.",
@@ -5989,7 +5989,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.50E-03"
+                "value": 0.0015
             },
             {
                 "desc": "Slot height",
@@ -5998,7 +5998,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "Top radius",
@@ -6007,7 +6007,7 @@
                 "name": "R1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             },
             {
                 "desc": "Bottom radius",
@@ -6016,7 +6016,7 @@
                 "name": "R2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             }
         ]
     },
@@ -6056,7 +6056,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "rad",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "Tooth width",
@@ -6065,7 +6065,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "Slot isthmus height.",
@@ -6074,7 +6074,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             },
             {
                 "desc": "Slot height",
@@ -6083,7 +6083,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "Top radius",
@@ -6092,7 +6092,7 @@
                 "name": "R1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             }
         ]
     },
@@ -6133,7 +6133,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Slot isthmus height.",
@@ -6142,7 +6142,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "height or angle  (See Schematics)",
@@ -6151,7 +6151,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m/rad",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "H1 unit, 0 for m, 1 for rad",
@@ -6169,7 +6169,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.30E-02"
+                "value": 0.013
             },
             {
                 "desc": "Slot height below wedge ",
@@ -6178,7 +6178,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-02"
+                "value": 0.02
             },
             {
                 "desc": "Slot bottom width.",
@@ -6187,7 +6187,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             }
         ]
     },
@@ -6227,7 +6227,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "rad",
-                "value": "0.043633"
+                "value": 0.043633
             },
             {
                 "desc": "Slot isthmus radial height.",
@@ -6236,7 +6236,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "0.006"
+                "value": 0.006
             },
             {
                 "desc": "Slot radial height below wedge ",
@@ -6245,7 +6245,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "0.04"
+                "value": 0.04
             },
             {
                 "desc": "Angle between slot edges",
@@ -6254,7 +6254,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "rad",
-                "value": "0.08725"
+                "value": 0.08725
             }
         ]
     },
@@ -6296,7 +6296,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Slot isthmus height.",
@@ -6305,7 +6305,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "height or angle  (See Schematics)",
@@ -6314,7 +6314,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m/rad",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Slot top width.",
@@ -6323,7 +6323,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.30E-02"
+                "value": 0.013
             },
             {
                 "desc": "Slot height below wedge ",
@@ -6332,7 +6332,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-02"
+                "value": 0.02
             },
             {
                 "desc": "Slot bottom width.",
@@ -6341,7 +6341,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Tooth width",
@@ -6350,7 +6350,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "H1 unit, 0 for m, 1 for rad",
@@ -6410,7 +6410,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Slot height",
@@ -6419,7 +6419,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             }
         ]
     },
@@ -6460,7 +6460,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Slot bottom height",
@@ -6469,7 +6469,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Teeth top width",
@@ -6478,7 +6478,7 @@
                 "name": "W4",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Slot top height",
@@ -6487,7 +6487,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             }
         ]
     },
@@ -6528,7 +6528,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "Slot isthmus height.",
@@ -6537,7 +6537,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             },
             {
                 "desc": "Slot depth ",
@@ -6546,7 +6546,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Slot edge radius",
@@ -6555,7 +6555,7 @@
                 "name": "R1",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Slot top radius",
@@ -6564,7 +6564,7 @@
                 "name": "R2",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             }
         ]
     },
@@ -6605,7 +6605,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Slot first part height",
@@ -6614,7 +6614,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Slot second part height",
@@ -6623,7 +6623,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-02"
+                "value": 0.02
             },
             {
                 "desc": "Slot isthmus width.",
@@ -6632,7 +6632,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Slot top width.",
@@ -6641,7 +6641,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.30E-02"
+                "value": 0.013
             },
             {
                 "desc": "Slot middle width",
@@ -6650,7 +6650,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-02"
+                "value": 0.01
             },
             {
                 "desc": "Slot bottom width.",
@@ -6659,7 +6659,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "If True, split the winding on the  trapezium bases. Else split at the middle height as usual",
@@ -6708,7 +6708,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.22E-02"
+                "value": 0.0122
             },
             {
                 "desc": "Slot isthmus height.",
@@ -6717,7 +6717,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             },
             {
                 "desc": "Slot edge radius",
@@ -6726,7 +6726,7 @@
                 "name": "R1",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Tooth width",
@@ -6735,7 +6735,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "5.00E-03"
+                "value": 0.005
             },
             {
                 "desc": "Tooth height",
@@ -6744,7 +6744,7 @@
                 "name": "H3",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             }
         ]
     },
@@ -6785,7 +6785,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "5.00E-02"
+                "value": 0.05
             },
             {
                 "desc": "Slot isthmus height.",
@@ -6794,7 +6794,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "1.00E-03"
+                "value": 0.001
             },
             {
                 "desc": "Slot middle height",
@@ -6803,7 +6803,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.50E-03"
+                "value": 0.0015
             },
             {
                 "desc": "Slot middle width.",
@@ -6812,7 +6812,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "1.50E-02"
+                "value": 0.015
             },
             {
                 "desc": "Slot bottom height",
@@ -6821,7 +6821,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-02"
+                "value": 0.03
             },
             {
                 "desc": "Slot bottom width.",
@@ -6830,7 +6830,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-01"
+                "value": 0.2
             }
         ]
     },
@@ -6871,7 +6871,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-02"
+                "value": 0.02
             },
             {
                 "desc": "Pole bottom width",
@@ -6880,7 +6880,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-02"
+                "value": 0.03
             },
             {
                 "desc": "Pole top height",
@@ -6889,7 +6889,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": "5.00E-02"
+                "value": 0.05
             },
             {
                 "desc": "Pole bottom height",
@@ -6898,7 +6898,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.50E-01"
+                "value": 0.15
             },
             {
                 "desc": "Pole top radius",
@@ -6907,7 +6907,7 @@
                 "name": "R1",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-02"
+                "value": 0.03
             },
             {
                 "desc": "Top Distance Ploe-coil ",
@@ -6916,7 +6916,7 @@
                 "name": "H3",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Bottom Distance Ploe-coil ",
@@ -6925,7 +6925,7 @@
                 "name": "H4",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Edge Distance Ploe-coil ",
@@ -6934,7 +6934,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             }
         ]
     },
@@ -6975,7 +6975,7 @@
                 "name": "W0",
                 "type": "float",
                 "unit": "m",
-                "value": "0.314"
+                "value": 0.314
             },
             {
                 "desc": "Pole top width",
@@ -6984,7 +6984,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "2.00E-02"
+                "value": 0.02
             },
             {
                 "desc": "Pole bottom width",
@@ -6993,7 +6993,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-02"
+                "value": 0.03
             },
             {
                 "desc": "Pole top height",
@@ -7002,7 +7002,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "3.00E-03"
+                "value": 0.003
             },
             {
                 "desc": "Pole intermediate height",
@@ -7011,7 +7011,7 @@
                 "name": "H1",
                 "type": "float",
                 "unit": "m",
-                "value": "5.00E-02"
+                "value": 0.05
             },
             {
                 "desc": "Pole bottom height",
@@ -7020,7 +7020,7 @@
                 "name": "H2",
                 "type": "float",
                 "unit": "m",
-                "value": "1.50E-01"
+                "value": 0.15
             },
             {
                 "desc": "Top Distance Ploe-coil ",
@@ -7029,7 +7029,7 @@
                 "name": "H3",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Bottom Distance Ploe-coil ",
@@ -7038,7 +7038,7 @@
                 "name": "H4",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Edge Distance Ploe-coil ",
@@ -7047,7 +7047,7 @@
                 "name": "W3",
                 "type": "float",
                 "unit": "m",
-                "value": "0"
+                "value": 0
             }
         ]
     },
@@ -7294,7 +7294,7 @@
                 "name": "height",
                 "type": "float",
                 "unit": "m",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "the big base of Trapeze",
@@ -7303,7 +7303,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "the small base of the Trapeze",
@@ -7312,7 +7312,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "1"
+                "value": 1
             }
         ]
     },
@@ -7397,7 +7397,7 @@
                 "name": "Alpha0",
                 "type": "float",
                 "unit": "rad",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Hole diameters",
@@ -7406,7 +7406,7 @@
                 "name": "D0",
                 "type": "float",
                 "unit": "m",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "Diameter of the hole centers",
@@ -7415,7 +7415,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "1"
+                "value": 1
             }
         ]
     },
@@ -7448,7 +7448,7 @@
                 "name": "Alpha0",
                 "type": "float",
                 "unit": "rad",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Height of the hole",
@@ -7457,7 +7457,7 @@
                 "name": "D0",
                 "type": "float",
                 "unit": "m",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "Radius of the bottom of Hole",
@@ -7466,7 +7466,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "Hole angular width",
@@ -7475,7 +7475,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "rad",
-                "value": "1"
+                "value": 1
             }
         ]
     },
@@ -7508,7 +7508,7 @@
                 "name": "Alpha0",
                 "type": "float",
                 "unit": "rad",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Hole height",
@@ -7517,7 +7517,7 @@
                 "name": "D0",
                 "type": "float",
                 "unit": "m",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "Radius of the hole bottom",
@@ -7526,7 +7526,7 @@
                 "name": "H0",
                 "type": "float",
                 "unit": "m",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "Hole small basis",
@@ -7535,7 +7535,7 @@
                 "name": "W1",
                 "type": "float",
                 "unit": "m",
-                "value": "1"
+                "value": 1
             },
             {
                 "desc": "Hole large basis",
@@ -7544,7 +7544,7 @@
                 "name": "W2",
                 "type": "float",
                 "unit": "m",
-                "value": "1"
+                "value": 1
             }
         ]
     },
@@ -7649,7 +7649,7 @@
                 "name": "Lewout",
                 "type": "float",
                 "unit": "m",
-                "value": "0.015"
+                "value": 0.015
             },
             {
                 "desc": "Winding's conductor",

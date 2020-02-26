@@ -77,9 +77,9 @@ class MagnetType13(MagnetFlat):
 
     def __init__(
         self,
-        Wmag=2.00e-03,
-        Hmag=1.00e-03,
-        Rtop=5.00e-02,
+        Wmag=0.002,
+        Hmag=0.001,
+        Rtop=0.05,
         mat_type=-1,
         type_magnetization=0,
         Lmag=0.95,
