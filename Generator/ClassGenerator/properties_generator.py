@@ -39,6 +39,7 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB2 + "for key, obj in self._" + prop["name"] + ".items():\n"
             prop_str += TAB3 + "if obj is not None:\n"
             prop_str += TAB4 + "obj.parent = self\n"
+            prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
         elif prop["type"] == "function":
             prop_str += TAB2 + "return self._" + prop["name"] + "[0]\n\n"
         else:
