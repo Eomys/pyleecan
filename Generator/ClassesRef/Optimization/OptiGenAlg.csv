@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-multi_output,-,Optimization results containing every output,1,OutputMultiOpti,-1,,,,Optimization,,,VERSION,1,Genetic algorithm class,
+multi_output,-,Optimization results containing every output,1,OutputMultiOpti,,,,,Optimization,,,VERSION,1,Genetic algorithm class,
 selector,-,Selector of the genetic algorithm,1,function,None,,,,,,,,,,
 crossover,-,Crossover of the genetic algorithm,1,function,None,,,,,,,,,,
 mutator,-,Mutator of the genetic algorithm,1,function,None,,,,,,,,,,

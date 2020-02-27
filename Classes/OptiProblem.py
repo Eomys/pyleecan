@@ -143,7 +143,7 @@ class OptiProblem(FrozenClass):
         else:
             OptiProblem_str += "output = None" + linesep + linesep
         if len(self.design_var) == 0:
-            OptiProblem_str += "design_var = dict()"
+            OptiProblem_str += "design_var = dict()" + linesep
         for key, obj in self.design_var.items():
             tmp = (
                 self.design_var[key].__str__().replace(linesep, linesep + "\t")
@@ -151,7 +151,7 @@ class OptiProblem(FrozenClass):
             )
             OptiProblem_str += "design_var[" + key + "] =" + tmp + linesep + linesep
         if len(self.obj_func) == 0:
-            OptiProblem_str += "obj_func = dict()"
+            OptiProblem_str += "obj_func = dict()" + linesep
         for key, obj in self.obj_func.items():
             tmp = (
                 self.obj_func[key].__str__().replace(linesep, linesep + "\t") + linesep
@@ -164,7 +164,7 @@ class OptiProblem(FrozenClass):
                 "eval_func = " + linesep + str(self._eval_func[1]) + linesep + linesep
             )
         if len(self.constraint) == 0:
-            OptiProblem_str += "constraint = dict()"
+            OptiProblem_str += "constraint = dict()" + linesep
         for key, obj in self.constraint.items():
             tmp = (
                 self.constraint[key].__str__().replace(linesep, linesep + "\t")

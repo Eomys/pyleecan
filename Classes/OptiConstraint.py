@@ -23,7 +23,7 @@ class OptiConstraint(FrozenClass):
     save = save
 
     def __init__(
-        self, name="", type_const="" <= "", value=0, get_variable=None, init_dict=None
+        self, name="", type_const="<=", value=0, get_variable=None, init_dict=None
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values

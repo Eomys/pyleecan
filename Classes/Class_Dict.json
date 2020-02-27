@@ -4359,7 +4359,7 @@
                 "name": "type_const",
                 "type": "str",
                 "unit": "",
-                "value": "\"<=\""
+                "value": "<="
             },
             {
                 "desc": "Value to compare",
@@ -4368,7 +4368,7 @@
                 "name": "value",
                 "type": "float",
                 "unit": "",
-                "value": "0"
+                "value": 0
             },
             {
                 "desc": "Function to get the variable to compare",
@@ -4461,7 +4461,7 @@
                 "name": "multi_output",
                 "type": "OutputMultiOpti",
                 "unit": "-",
-                "value": -1
+                "value": ""
             },
             {
                 "desc": "Selector of the genetic algorithm",
@@ -4497,7 +4497,7 @@
                 "name": "p_cross",
                 "type": "float",
                 "unit": "-",
-                "value": "0.9"
+                "value": 0.9
             },
             {
                 "desc": "Probability of mutation ",
@@ -4506,7 +4506,7 @@
                 "name": "p_mutate",
                 "type": "float",
                 "unit": "-",
-                "value": "0.1"
+                "value": 0.1
             },
             {
                 "desc": "Size of the population",
@@ -4598,7 +4598,7 @@
                 "name": "output",
                 "type": "Output",
                 "unit": "",
-                "value": -1
+                "value": ""
             },
             {
                 "desc": "Dict of design variables",
@@ -5244,7 +5244,7 @@
                 "name": "output_ref",
                 "type": "Output",
                 "unit": "",
-                "value": -1
+                "value": ""
             },
             {
                 "desc": "list of output from the multi-simulation",
@@ -5292,7 +5292,10 @@
         "methods": [
             "add_evaluation",
             "plot_pareto",
-            "plot_generation"
+            "plot_generation",
+            "get_pareto",
+            "plot_pareto_design_space",
+            "plot_generation_design_space"
         ],
         "mother": "OutputMulti",
         "name": "OutputMultiOpti",
