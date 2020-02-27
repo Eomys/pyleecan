@@ -25,14 +25,14 @@ def plot_generation_design_space(self, dvar1=0, dvar2=1):
     # Get both objective function index and name
     if isinstance(dvar1, int):
         idx_dvar1 = dvar1
-        dvar1 = self.fitness_names[idx_dvar1]
+        dvar1 = self.design_var_names[idx_dvar1]
     else:
-        dvar1 = self.fitness_names.index(dvar1)
+        dvar1 = self.design_var_names.index(dvar1)
     if isinstance(dvar2, int):
         idx_dvar2 = dvar2
-        dvar2 = self.fitness_names[idx_dvar2]
+        dvar2 = self.design_var_names[idx_dvar2]
     else:
-        dvar2 = self.fitness_names.index(dvar2)
+        dvar2 = self.design_var_names.index(dvar2)
 
     # TODO define the colormap according to Pyleecan graphical chart
     # Colormap definition
@@ -52,7 +52,7 @@ def plot_generation_design_space(self, dvar1=0, dvar2=1):
 
     design_var = design_var[indx]
     ngen = ngen[indx]
-    _, ax = plt.subplots()
+    fig, ax = plt.subplots()
 
     # Plot fitness values
     scatter = ax.scatter(
@@ -67,4 +67,4 @@ def plot_generation_design_space(self, dvar1=0, dvar2=1):
     ax.set_title("Design variable values for each individual")
 
     ax.autoscale()
-    plt.show()
+    fig.show()

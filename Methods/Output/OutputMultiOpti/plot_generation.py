@@ -47,7 +47,7 @@ def plot_generation(self, obj1=0, obj2=1):
 
     fitness = fitness[indx]
     ngen = ngen[indx]
-    _, ax = plt.subplots()
+    fig, ax = plt.subplots()
 
     # Plot fitness values
     scatter = ax.scatter(
@@ -62,4 +62,4 @@ def plot_generation(self, obj1=0, obj2=1):
     ax.set_title("Fitness values for each individual")
 
     ax.autoscale()
-    plt.show()
+    fig.show()

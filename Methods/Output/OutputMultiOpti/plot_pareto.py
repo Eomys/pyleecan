@@ -109,9 +109,7 @@ def plot_pareto(self, obj1=0, obj2=1):
         pos = sc.get_offsets()[ind["ind"][0]]
         annot.xy = pos
         annot.set_text(legend_annot[ind["ind"][0]])
-        annot.get_bbox_patch().set_facecolor(
-            (230 / 255, 175 / 255, 0)
-        )  # Color of the annotation background (230,175,0) from Pyleecan graphic chart
+        annot.get_bbox_patch().set_facecolor(pyleecan_color)
         annot.get_bbox_patch().set_alpha(0.4)
 
     def hover(event):
@@ -129,4 +127,4 @@ def plot_pareto(self, obj1=0, obj2=1):
 
     fig.canvas.mpl_connect("motion_notify_event", hover)
 
-    plt.show()
+    fig.show()

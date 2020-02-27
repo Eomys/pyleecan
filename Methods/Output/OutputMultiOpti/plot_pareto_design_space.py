@@ -33,14 +33,6 @@ def plot_pareto_design_space(self, dvar1=0, dvar2=1):
     else:
         dvar2 = self.design_var_names.index(dvar2)
 
-    # TODO define the colormap according to Pyleecan graphical chart
-    # Colormap definition
-    cm = LinearSegmentedColormap.from_list(
-        "colormap",
-        [(35 / 255, 89 / 255, 133 / 255), (250 / 255, 202 / 255, 56 / 255)],
-        N=max(self.ngen),
-    )
-
     # Get fitness and ngen
     is_valid = np.array(self.is_valid)
     fitness = np.array(self.fitness)
@@ -134,4 +126,4 @@ def plot_pareto_design_space(self, dvar1=0, dvar2=1):
 
     fig.canvas.mpl_connect("motion_notify_event", hover)
 
-    plt.show()
+    fig.show()
