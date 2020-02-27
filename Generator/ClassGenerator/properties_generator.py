@@ -56,7 +56,13 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB3 + "except:\n"
             prop_str += TAB4 + "pass\n"
         elif prop["type"] == "{ndarray}":
-            prop_str += TAB5 + "pass\n"
+            prop_str += TAB2 + "if type(value) is dict:\n"
+            prop_str += TAB3 + "for key, obj in value.items():\n"
+            prop_str += TAB4 + "if type(obj) is list:\n"
+            prop_str += TAB5 + "try:\n"
+            prop_str += TAB6 + "obj = array(obj)\n"
+            prop_str += TAB5 + "except:\n"
+            prop_str += TAB6 + "pass\n"
 
         # Add check_var("var_name",value, "var_type", min=var_min, max=var_max)
         if prop["type"] == "function":
