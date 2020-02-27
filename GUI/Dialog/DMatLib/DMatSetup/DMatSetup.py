@@ -17,6 +17,8 @@ from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
+from pyleecan.Functions.path_tools import abs_file_path, rel_file_path
+
 from numpy import array
 
 
@@ -86,7 +88,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.lf_alpha_Br.setValue(self.mat.mag.alpha_Br)
         self.lf_Wlam.setValue(self.mat.mag.Wlam)
         if isinstance(self.mat.mag.BH_curve, ImportMatrixXls):
-            self.in_BH_file.setText(split(self.mat.mag.BH_curve.file_path)[1])
+            file_path = abs_file_path(self.mat.mag.BH_curve.file_path, is_check=False)
+            self.in_BH_file.setText(split(file_path)[1])
             self.b_plot.setEnabled(True)
 
         # Hide useless widget
@@ -141,13 +144,13 @@ class DMatSetup(Gen_DMatSetup, QDialog):
             QFileDialog.getOpenFileName(
                 self,
                 self.tr("Load file"),
-                split(self.mat.path)[0],
+                split(abs_file_path(self.mat.path, is_check=False))[0],
                 "Excel (*.xlsx *.xls)",
             )[0]
         )
         if load_path is not None:
             self.mat.mag.BH_curve = ImportMatrixXls(
-                file_path=load_path,
+                file_path=rel_file_path(load_path, "MATLIB_DIR"),
                 sheet="BH",
                 is_transpose=False,
                 skiprows=0,
@@ -185,7 +188,9 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         # Update name and path
         self.mat.name = file_name
         self.le_name.setText(self.mat.name)
-        self.mat.path = join(dirname(self.mat.path), file_name + ".json")
+        self.mat.path = rel_file_path(
+            join(dirname(self.mat.path), file_name + ".json"), "MATLIB_DIR"
+        )
 
     def set_is_isotropic(self, is_checked):
         """Signal to update the value of is_isotropic according to the checkbox

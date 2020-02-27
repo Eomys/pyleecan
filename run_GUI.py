@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+from definitions import ROOT_DIR, DATA_DIR, MATLIB_DIR
+
 import sys
 from os.path import dirname, abspath, normpath, join
 
-sys.path.insert(0, normpath(abspath(join(dirname(__file__), ".."))))
+sys.path.insert(0, ROOT_DIR)
 
 from os import mkdir
 from os.path import isdir
@@ -10,7 +13,7 @@ from sys import argv, exit
 from PyQt5.QtCore import QTranslator
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QIcon
-from pyleecan.GUI import DATA_DIR
+
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
@@ -23,7 +26,7 @@ EXT_GUI = True
 
 if __name__ == "__main__":
     # Default material data path
-    matlib_path = join(DATA_DIR, "Material")
+    
 
     # Script to be used to test in dev
     a = QApplication(argv)
@@ -38,7 +41,7 @@ if __name__ == "__main__":
     a.installTranslator(translator)
 
     # Machine Setup Widget
-    c = DMachineSetup(machine_path=join(DATA_DIR, "Machine"), matlib_path=matlib_path)
+    c = DMachineSetup(machine_path=join(DATA_DIR, "Machine"), matlib_path=MATLIB_DIR)
 
     if EXT_GUI:
         # Setup extended GUI with sub windows
