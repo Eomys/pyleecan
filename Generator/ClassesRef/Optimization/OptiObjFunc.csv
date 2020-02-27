@@ -1,0 +1,3 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+description,,Description of the objective,1,str,',,,,Optimization,,,VERSION,1,Optimization,
+func,,Function to minimize,1,function,None,,,,,,,,,,

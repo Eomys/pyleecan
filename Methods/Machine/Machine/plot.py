@@ -95,7 +95,7 @@ def plot(
 
     axes.set_xlabel("(m)")
     axes.set_ylabel("(m)")
-    axes.set_title("Machine")
+    axes.set_title(self.name)
 
     # Axis Setup
     axis("equal")

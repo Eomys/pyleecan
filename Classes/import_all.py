@@ -83,6 +83,11 @@ from pyleecan.Classes.Node import Node
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.Notch import Notch
 from pyleecan.Classes.NotchEvenDist import NotchEvenDist
+from pyleecan.Classes.OptiConstraint import OptiConstraint
+from pyleecan.Classes.OptiDesignVar import OptiDesignVar
+from pyleecan.Classes.OptiGenAlg import OptiGenAlg
+from pyleecan.Classes.OptiObjFunc import OptiObjFunc
+from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.OutElec import OutElec
 from pyleecan.Classes.OutGeo import OutGeo
 from pyleecan.Classes.OutGeoLam import OutGeoLam
@@ -90,6 +95,8 @@ from pyleecan.Classes.OutMag import OutMag
 from pyleecan.Classes.OutPost import OutPost
 from pyleecan.Classes.OutStruct import OutStruct
 from pyleecan.Classes.Output import Output
+from pyleecan.Classes.OutputMulti import OutputMulti
+from pyleecan.Classes.OutputMultiOpti import OutputMultiOpti
 from pyleecan.Classes.PolarArc import PolarArc
 from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.Shaft import Shaft

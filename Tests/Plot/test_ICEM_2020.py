@@ -12,6 +12,20 @@ from pyleecan.Tests import save_plot_path
 from pyleecan.Tests.Plot.LamWind import wind_mat
 from pyleecan.Tests.Validation.Machine.SCIM_006 import SCIM_006
 from pyleecan.Tests.Validation.Machine.SPMSM_015 import SPMSM_015
+from pyleecan.Functions.load import load
+from pyleecan.Classes.InCurrent import InCurrent
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.Classes.Output import Output
+from pyleecan.Classes.OptiDesignVar import OptiDesignVar
+from pyleecan.Classes.OptiObjFunc import OptiObjFunc
+from pyleecan.Classes.OptiProblem import OptiProblem
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes._OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
+
+import numpy as np
+import random
 
 # Gather results in the same folder
 save_path = join(save_plot_path, "ICEM_2020")
@@ -488,3 +502,226 @@ class test_ICEM_2020(TestCase):
         )
         fig = plt.gcf()
         fig.savefig(join(save_path, "fig_18_transform_list.png"))
+
+    def test_Optimization_problem(self):
+        """
+        Figure19: Machine topology before optimization
+        Figure20: Individuals in the fitness space
+        Figure21: Pareto Front in the fitness space
+        Figure22: Topology to maximize first torque harmonic
+        Figure22: Topology to minimize second torque harmonic  
+
+        WARNING: The computation takes 6 hours on a single 3GHz CPU core.
+        The algorithm uses randomization at different steps so it is impossible to get the same graphs. 
+        """
+        # ------------------ #
+        # DEFAULT SIMULATION #
+        # ------------------ #
+
+        # First, we need to define a default simulation.
+        # This simulation will the base of every simulation during the optimization process
+
+        # Load the machine
+        SPMSM_001 = load("pyleecan/Tests/Validation/Machine/SPMSM_001.json")
+
+        # Definition of the enforced output of the electrical module
+        Na = 1024  # Angular steps
+        Nt = 32  # Time step
+        Is = ImportMatrixVal(
+            value=np.array(
+                [
+                    [1.73191211247099e-15, 24.4948974278318, -24.4948974278318],
+                    [-0.925435413499285, 24.9445002597334, -24.0190648462341],
+                    [-1.84987984757817, 25.3673918959653, -23.5175120483872],
+                    [-2.77234338398183, 25.7631194935712, -22.9907761095894],
+                    [-3.69183822565029, 26.1312592975275, -22.4394210718773],
+                    [-4.60737975447626, 26.4714170945114, -21.8640373400352],
+                    [-5.51798758565886, 26.7832286350338, -21.2652410493749],
+                    [-6.42268661752422, 27.0663600234871, -20.6436734059628],
+                    [-7.32050807568877, 27.3205080756888, -20.0000000000000],
+                    [-8.21049055044714, 27.5454006435389, -19.3349100930918],
+                    [-9.09168102627374, 27.7407969064430, -18.6491158801692],
+                    [-9.96313590233562, 27.9064876291883, -17.9433517268527],
+                    [-10.8239220029239, 28.0422953859991, -17.2183733830752],
+                    [-11.6731175767218, 28.1480747505277, -16.4749571738058],
+                    [-12.5098132838389, 28.2237124515809, -15.7138991677421],
+                    [-13.3331131695549, 28.2691274944141, -14.9360143248592],
+                    [-14.1421356237309, 28.2842712474619, -14.1421356237310],
+                    [-14.9360143248592, 28.2691274944141, -13.3331131695549],
+                    [-15.7138991677420, 28.2237124515809, -12.5098132838389],
+                    [-16.4749571738058, 28.1480747505277, -11.6731175767219],
+                    [-17.2183733830752, 28.0422953859991, -10.8239220029240],
+                    [-17.9433517268527, 27.9064876291883, -9.96313590233564],
+                    [-18.6491158801692, 27.7407969064430, -9.09168102627375],
+                    [-19.3349100930918, 27.5454006435389, -8.21049055044716],
+                    [-20, 27.3205080756888, -7.32050807568879],
+                    [-20.6436734059628, 27.0663600234871, -6.42268661752424],
+                    [-21.2652410493749, 26.7832286350338, -5.51798758565888],
+                    [-21.8640373400352, 26.4714170945114, -4.60737975447627],
+                    [-22.4394210718772, 26.1312592975275, -3.69183822565031],
+                    [-22.9907761095894, 25.7631194935712, -2.77234338398184],
+                    [-23.5175120483872, 25.3673918959653, -1.84987984757819],
+                    [-24.0190648462341, 24.9445002597334, -0.925435413499304],
+                ]
+            )
+        )
+        Nr = ImportMatrixVal(value=np.ones(Nt) * 400)
+        Ir = ImportMatrixVal(value=np.zeros((Nt, 28)))
+        time = ImportGenVectLin(
+            start=0, stop=1 / (400 / 60) / 24, num=Nt, endpoint=False
+        )
+        angle = ImportGenVectLin(start=0, stop=2 * np.pi, num=Na, endpoint=False)
+
+        SPMSM_001.name = (
+            "Default SPMSM machine"  # Rename the machine to have the good plot title
+        )
+
+        # Definition of the simulation
+        simu = Simu1(name="Default simulation", machine=SPMSM_001)
+
+        simu.input = InCurrent(
+            Is=Is,
+            Ir=Ir,  # zero current for the rotor
+            Nr=Nr,
+            angle_rotor=None,  # Will be computed
+            time=time,
+            angle=angle,
+            angle_rotor_initial=0.39,
+        )
+
+        # Definition of the magnetic simulation
+        simu.mag = MagFEMM(
+            is_stator_linear_BH=2,
+            is_rotor_linear_BH=2,
+            is_symmetry_a=True,
+            is_antiper_a=False,
+        )
+
+        simu.mag.sym_a = 4
+        simu.struct = None
+
+        # Default Output
+        output = Output(simu=simu)
+
+        # Modify magnet width and the slot opening height
+        output.simu.machine.stator.slot.H0 = 0.001
+        output.simu.machine.rotor.slot.magnet[0].Wmag *= 0.98
+
+        # FIG19 Display default machine
+        output.simu.machine.plot()
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "fig_19_Machine_topology_before_optimization.png"))
+
+        # -------------------- #
+        # OPTIMIZATION PROBLEM #
+        # -------------------- #
+
+        # Objective functions
+
+        def harm1(output):
+            """Return the first torque harmonic opposite (opposite to be maximized)"""
+            N = output.simu.input.time.num
+            x = output.mag.Tem[:, 0]
+            sp = np.fft.rfft(x)
+            sp = 2 / N * np.abs(sp)
+            return -sp[0] / 2
+
+        def harm2(output):
+            """Return the second torque harmonic """
+            N = output.simu.input.time.num
+            x = output.mag.Tem[:, 0]
+            sp = np.fft.rfft(x)
+            sp = 2 / N * np.abs(sp)
+            return sp[1]
+
+        objs = {
+            "First torque harmonic opposite": OptiObjFunc(
+                description="Maximization of the first torque harmonic", func=harm1,
+            ),
+            "Second torque harmonic": OptiObjFunc(
+                description="Minimization of the second torque harmonic", func=harm2,
+            ),
+        }
+
+        # Design variables
+        my_vars = {
+            "sta slot W": OptiDesignVar(
+                name="output.simu.machine.stator.slot.W0",
+                type_var="interval",
+                space=[
+                    0.2 * output.simu.machine.stator.slot.W2,
+                    output.simu.machine.stator.slot.W2,
+                ],
+                function=lambda space: random.uniform(*space),
+            ),
+            "rot magnet W": OptiDesignVar(
+                name="output.simu.machine.rotor.slot.magnet[0].Wmag",
+                type_var="interval",
+                space=[
+                    0.5 * output.simu.machine.rotor.slot.W0,
+                    0.99 * output.simu.machine.rotor.slot.W0,
+                ],  # May generate error in FEMM
+                function=lambda space: random.uniform(*space),
+            ),
+        }
+
+        # Problem creation
+        my_prob = OptiProblem(output=output, design_var=my_vars, obj_func=objs)
+
+        # Solve problem
+
+        # Use NSGA-II to solve the problem :
+        solver = OptiGenAlgNsga2Deap(
+            problem=my_prob, size_pop=12, nb_gen=40, p_mutate=0.5
+        )
+        res = solver.solve()
+
+        # ------------- #
+        # PLOTS RESULTS #
+        # ------------- #
+
+        res.plot_generation()
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "fig_20_Individuals_in_fitness_space.png"))
+
+        res.plot_pareto()
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "fig_21_Pareto_front_in_fitness_space.png"))
+
+        # Extraction of best topologies for every objective
+        pareto = res.get_pareto()  # Extraction of the pareto front
+
+        out1 = [pareto[0]["output"], pareto[0]["fitness"]]  # First objective
+        out2 = [pareto[0]["output"], pareto[0]["fitness"]]  # Second objective
+
+        for pm in pareto:
+            if pm["fitness"][0] < out1[1][0]:
+                out1 = [pm["output"], pm["fitness"]]
+            if pm["fitness"][1] < out2[1][1]:
+                out2 = [pm["output"], pm["fitness"]]
+
+        # Rename machine to modify the title
+        out1[0].simu.machine.name = (
+            "Machine that maximizes the first torque harmonic ("
+            + str(abs(out1[1][0]))
+            + "Nm)"
+        )
+        out2[0].simu.machine.name = (
+            "Machine that minimizes the second torque harmonic ("
+            + str(abs(out1[1][1]))
+            + "Nm)"
+        )
+
+        # plot the machine
+        out1[0].simu.machine.plot()
+        fig = plt.gcf()
+        fig.savefig(
+            join(save_path, "fig_23_Topology_to_maximize_first_torque_harmonic.png")
+        )
+
+        out2[0].simu.machine.plot()
+        fig = plt.gcf()
+        fig.savefig(
+            join(save_path, "fig_23_Topology_to_minimize_second_torque_harmonic.png")
+        )
+
