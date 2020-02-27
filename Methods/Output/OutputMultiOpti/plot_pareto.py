@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 def plot_pareto(self, obj1=0, obj2=1):
-    """Plot every fitness values with the pareto front for 2 objective functions
+    """Plot the pareto front for 2 objective functions
     
     Parameters
     ----------
@@ -44,12 +44,13 @@ def plot_pareto(self, obj1=0, obj2=1):
 
     # Keep only valid values
     indx = np.where(is_valid)[0]
-
     fitness = fitness[indx]
     ngen = ngen[indx]
+    design_var = design_var[indx]
 
     # Get pareto front
-    pareto = list(np.unique(fitness, axis=0))
+    fitness.tolist()
+    pareto = fitness
 
     # Get dominated values
     idx_non_dom = list(range(len(pareto)))
@@ -72,7 +73,7 @@ def plot_pareto(self, obj1=0, obj2=1):
         for d_var in d_v_v_iterator:
             legend += "{:11.10}=".format(self.design_var_names[d_var])  # sim[d_var])
             if isinstance(sim[d_var], float):
-                legend += " {:.3e}\n".format(sim[d_var])
+                legend += " {:3.3e}\n".format(sim[d_var])
             else:
                 legend += "{:>11.10}\n".format(str(sim[d_var]))
         legend_annot.append(legend[:-2])
