@@ -25,6 +25,25 @@ try:
 except ImportError as error:
     plot_generation = error
 
+try:
+    from pyleecan.Methods.Output.OutputMultiOpti.get_pareto import get_pareto
+except ImportError as error:
+    get_pareto = error
+
+try:
+    from pyleecan.Methods.Output.OutputMultiOpti.plot_pareto_design_space import (
+        plot_pareto_design_space,
+    )
+except ImportError as error:
+    plot_pareto_design_space = error
+
+try:
+    from pyleecan.Methods.Output.OutputMultiOpti.plot_generation_design_space import (
+        plot_generation_design_space,
+    )
+except ImportError as error:
+    plot_generation_design_space = error
+
 
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Output import Output
@@ -69,6 +88,41 @@ class OutputMultiOpti(OutputMulti):
         )
     else:
         plot_generation = plot_generation
+    # cf Methods.Output.OutputMultiOpti.get_pareto
+    if isinstance(get_pareto, ImportError):
+        get_pareto = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutputMultiOpti method get_pareto: " + str(get_pareto)
+                )
+            )
+        )
+    else:
+        get_pareto = get_pareto
+    # cf Methods.Output.OutputMultiOpti.plot_pareto_design_space
+    if isinstance(plot_pareto_design_space, ImportError):
+        plot_pareto_design_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutputMultiOpti method plot_pareto_design_space: "
+                    + str(plot_pareto_design_space)
+                )
+            )
+        )
+    else:
+        plot_pareto_design_space = plot_pareto_design_space
+    # cf Methods.Output.OutputMultiOpti.plot_generation_design_space
+    if isinstance(plot_generation_design_space, ImportError):
+        plot_generation_design_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OutputMultiOpti method plot_generation_design_space: "
+                    + str(plot_generation_design_space)
+                )
+            )
+        )
+    else:
+        plot_generation_design_space = plot_generation_design_space
     # save method is available in all object
     save = save
 
