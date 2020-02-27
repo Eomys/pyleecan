@@ -136,7 +136,9 @@ def generate_str(gen_dict, class_dict):
             )
         elif is_dict_pyleecan_type(prop["type"]):
             var_str += TAB2 + "if len(self." + prop["name"] + ") == 0:\n"
-            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = dict()"\n'
+            var_str += (
+                TAB3 + class_name + '_str += "' + prop["name"] + ' = dict()"+linesep\n'
+            )
             var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
             var_str += (
                 TAB3

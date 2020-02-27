@@ -121,11 +121,11 @@ class CondType12(Conductor):
 
     def __init__(
         self,
-        Wwire=1.50e-02,
-        Wins_cond=1.50e-02,
+        Wwire=0.015,
+        Wins_cond=0.015,
         Nwppc=1,
         Wins_wire=0,
-        Kwoh=5.00e-01,
+        Kwoh=0.5,
         cond_mat=-1,
         ins_mat=-1,
         init_dict=None,

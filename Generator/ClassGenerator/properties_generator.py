@@ -40,7 +40,6 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB3 + "if obj is not None:\n"
             prop_str += TAB4 + "obj.parent = self\n"
             prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
-
         elif prop["type"] == "function":
             prop_str += TAB2 + "return self._" + prop["name"] + "[0]\n\n"
         else:
@@ -56,13 +55,7 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB4 + "value = array(value)\n"
             prop_str += TAB3 + "except:\n"
             prop_str += TAB4 + "pass\n"
-
         elif prop["type"] == "{ndarray}":
-            prop_str += TAB2 + "for key, obj in value.items():\n"
-            prop_str += TAB3 + "if type(obj) is list:\n"
-            prop_str += TAB4 + "try:\n"
-            prop_str += TAB5 + "obj = array(obj)\n"
-            prop_str += TAB4 + "except:\n"
             prop_str += TAB5 + "pass\n"
 
         # Add check_var("var_name",value, "var_type", min=var_min, max=var_max)

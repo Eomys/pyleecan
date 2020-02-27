@@ -59,7 +59,7 @@ class CondType22(Conductor):
     # save method is available in all object
     save = save
 
-    def __init__(self, Sbar=1.00e-02, cond_mat=-1, ins_mat=-1, init_dict=None):
+    def __init__(self, Sbar=0.01, cond_mat=-1, ins_mat=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix

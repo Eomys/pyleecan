@@ -43,7 +43,8 @@ simu.mag = MagFEMM(
     is_antiper_a=True,
     Kgeo_fineness=0.75,
 )
-simu.struct.force = ForceMT()
+simu.struct = None
+# simu.struct.force = ForceMT()
 # Copy the simu and activate the symmetry
 simu_sym = Simu1(init_dict=simu.as_dict())
 simu_sym.mag.is_symmetry_a = True
@@ -82,9 +83,9 @@ class test_EM_IPMSM_FL_002(TestCase):
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_EM_IPMSM_FL_002_sym.png"))
 
-        # Plot the surface magnetic forces
-        plt.close("all")
-        out.plot_force_space(j_t0=0, is_deg=False, out_list=[])
+        # # Plot the surface magnetic forces
+        # plt.close("all")
+        # out.plot_force_space(j_t0=0, is_deg=False, out_list=[])
 
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_EM_IPMSM_FL_002_force.png"))
+        # fig = plt.gcf()
+        # fig.savefig(join(save_path, "test_EM_IPMSM_FL_002_force.png"))

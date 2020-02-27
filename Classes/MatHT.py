@@ -20,7 +20,7 @@ class MatHT(FrozenClass):
     save = save
 
     def __init__(
-        self, lambda_x=1, lambda_y=1, lambda_z=1, Cp=1, alpha=3.93e-03, init_dict=None
+        self, lambda_x=1, lambda_y=1, lambda_z=1, Cp=1, alpha=0.00393, init_dict=None
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values

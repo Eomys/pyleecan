@@ -250,7 +250,7 @@ class Mesh(FrozenClass):
         else:
             Mesh_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if len(self.element) == 0:
-            Mesh_str += "element = dict()"
+            Mesh_str += "element = dict()" + linesep
         for key, obj in self.element.items():
             tmp = self.element[key].__str__().replace(linesep, linesep + "\t") + linesep
             Mesh_str += "element[" + key + "] =" + tmp + linesep + linesep

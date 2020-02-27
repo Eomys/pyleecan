@@ -200,11 +200,11 @@ class HoleM52(HoleMag):
 
     def __init__(
         self,
-        H0=3.00e-03,
-        W0=3.00e-03,
+        H0=0.003,
+        W0=0.003,
         H1=0,
-        W3=1.30e-02,
-        H2=2.00e-02,
+        W3=0.013,
+        H2=0.02,
         magnet_0=-1,
         Zh=36,
         mat_void=-1,

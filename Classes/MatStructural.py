@@ -22,8 +22,8 @@ class MatStructural(FrozenClass):
     def __init__(
         self,
         rho=7650,
-        Ex=2.15e11,
-        Ey=2.15e11,
+        Ex=215000000000.0,
+        Ey=215000000000.0,
         Ez=80000000000,
         nu_xy=0.3,
         nu_xz=0.03,

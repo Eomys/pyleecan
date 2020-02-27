@@ -138,13 +138,7 @@ class Slot19(Slot):
     save = save
 
     def __init__(
-        self,
-        W0=1.30e-02,
-        H0=2.00e-02,
-        W1=1.00e-02,
-        Wx_is_rad=False,
-        Zs=36,
-        init_dict=None,
+        self, W0=0.013, H0=0.02, W1=0.01, Wx_is_rad=False, Zs=36, init_dict=None
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values

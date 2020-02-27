@@ -77,8 +77,8 @@ class MagnetType10(MagnetFlat):
 
     def __init__(
         self,
-        Wmag=2.00e-03,
-        Hmag=1.00e-03,
+        Wmag=0.002,
+        Hmag=0.001,
         mat_type=-1,
         type_magnetization=0,
         Lmag=0.95,

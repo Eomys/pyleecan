@@ -19,7 +19,7 @@ class MatEconomical(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, cost_unit=1.27e-01, unit_name="$", init_dict=None):
+    def __init__(self, cost_unit=0.127, unit_name="$", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
