@@ -1,6 +1,6 @@
 from os import makedirs
 from os.path import join
-from unittest import TestCase
+from unittest import TestCase, skip
 from shutil import copyfile
 
 import matplotlib.pyplot as plt
@@ -503,6 +503,7 @@ class test_ICEM_2020(TestCase):
         fig = plt.gcf()
         fig.savefig(join(save_path, "fig_18_transform_list.png"))
 
+    @skip("Optimization test is too long")
     def test_Optimization_problem(self):
         """
         Figure19: Machine topology before optimization
@@ -611,6 +612,7 @@ class test_ICEM_2020(TestCase):
         output.simu.machine.plot()
         fig = plt.gcf()
         fig.savefig(join(save_path, "fig_19_Machine_topology_before_optimization.png"))
+        plt.close(fig)
 
         # -------------------- #
         # OPTIMIZATION PROBLEM #
@@ -683,10 +685,12 @@ class test_ICEM_2020(TestCase):
         res.plot_generation()
         fig = plt.gcf()
         fig.savefig(join(save_path, "fig_20_Individuals_in_fitness_space.png"))
+        plt.close(fig)
 
-        res.plot_pareto()
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "fig_21_Pareto_front_in_fitness_space.png"))
+        # res.plot_pareto()
+        # fig = plt.gcf()
+        # fig.savefig(join(save_path, "fig__Pareto_front_in_fitness_space.png"))
+        # plt.close(fig)
 
         # Extraction of best topologies for every objective
         pareto = res.get_pareto()  # Extraction of the pareto front
@@ -716,12 +720,14 @@ class test_ICEM_2020(TestCase):
         out1[0].simu.machine.plot()
         fig = plt.gcf()
         fig.savefig(
-            join(save_path, "fig_23_Topology_to_maximize_first_torque_harmonic.png")
+            join(save_path, "fig_21_left_Topology_to_maximize_first_torque_harmonic.png")
         )
+        plt.close(fig)
 
         out2[0].simu.machine.plot()
         fig = plt.gcf()
         fig.savefig(
-            join(save_path, "fig_23_Topology_to_minimize_second_torque_harmonic.png")
+            join(save_path, "fig_21_right_Topology_to_minimize_second_torque_harmonic.png")
         )
+        plt.close(fig)
 
