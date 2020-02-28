@@ -102,8 +102,8 @@ def plot_mesh(
             color = ROTOR_COLOR
         elif grp == GROUP_IN:
             color = SHAFT_COLOR
-        elif grp == GROUP_FM:
-            color = MAGNET_COLOR
+        elif grp == GROUP_RW:
+            color = "r"
         elif grp == GROUP_SV or grp == GROUP_RV:
             color = VENT_COLOR
         else:
