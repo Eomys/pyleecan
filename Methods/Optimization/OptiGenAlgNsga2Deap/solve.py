@@ -139,10 +139,6 @@ def solve(self):
             if indiv.fitness.valid == False:
                 to_eval.append(indiv)
 
-        for indiv in to_eval:
-            evaluate(self, indiv)
-
-        # Evaluate the population
         nb_error = 0
         for i in range(len(to_eval)):
             nb_error += evaluate(self, to_eval[i])
