@@ -632,7 +632,7 @@ class test_ICEM_2020(TestCase):
         # Objective functions
 
         def harm1(output):
-            """Return the first torque harmonic opposite (opposite to be maximized)"""
+            """Return the average torque opposite (opposite to be maximized)"""
             N = output.simu.input.time.num
             x = output.mag.Tem[:, 0]
             sp = np.fft.rfft(x)
@@ -640,7 +640,7 @@ class test_ICEM_2020(TestCase):
             return -sp[0] / 2
 
         def harm2(output):
-            """Return the second torque harmonic """
+            """Return the first torque harmonic """
             N = output.simu.input.time.num
             x = output.mag.Tem[:, 0]
             sp = np.fft.rfft(x)
@@ -648,17 +648,17 @@ class test_ICEM_2020(TestCase):
             return sp[1]
 
         objs = {
-            "First torque harmonic opposite": OptiObjFunc(
-                description="Maximization of the first torque harmonic", func=harm1
+            "Opposite average torque (Nm)": OptiObjFunc(
+                description="Maximization of the average torque", func=harm1
             ),
-            "Second torque harmonic": OptiObjFunc(
-                description="Minimization of the second torque harmonic", func=harm2
+            "First torque harmonic (Nm)": OptiObjFunc(
+                description="Minimization of the first torque harmonic", func=harm2
             ),
         }
 
         # Design variables
         my_vars = {
-            "sta slot W": OptiDesignVar(
+            "design var 1": OptiDesignVar(
                 name="output.simu.machine.stator.slot.W0",
                 type_var="interval",
                 space=[
@@ -667,7 +667,7 @@ class test_ICEM_2020(TestCase):
                 ],
                 function=lambda space: random.uniform(*space),
             ),
-            "rot magnet W": OptiDesignVar(
+            "design var 2": OptiDesignVar(
                 name="output.simu.machine.rotor.slot.magnet[0].Wmag",
                 type_var="interval",
                 space=[
@@ -716,35 +716,34 @@ class test_ICEM_2020(TestCase):
                 out2 = [pm["output"], pm["fitness"]]
 
         # Rename machine to modify the title
-        out1[0].simu.machine.name = (
-            "Machine that maximizes the first torque harmonic ("
-            + str(abs(out1[1][0]))
-            + "Nm)"
+        name1 = "Machine that maximizes the average torque ({:.3f} Nm)".format(
+            abs(out1[1][0])
         )
-        out2[0].simu.machine.name = (
-            "Machine that minimizes the second torque harmonic ("
-            + str(abs(out1[1][1]))
-            + "Nm)"
+        out1[0].simu.machine.name = name1
+        name2 = "Machine that minimizes the first torque harmonic ({:.4f}Nm)".format(
+            abs(out1[1][1])
         )
+        out2[0].simu.machine.name = name2
 
         # plot the machine
         out1[0].simu.machine.plot()
         fig = plt.gcf()
         fig.savefig(
-            join(save_path, "fig_21_Topology_to_maximize_first_torque_harmonic.png"),
+            join(save_path, "fig_21_Topology_to_maximize_average_torque.png"),
             format="png",
         )
         fig.savefig(
-            join(save_path, "fig_21_Topology_to_maximize_first_torque_harmonic.svg"),
+            join(save_path, "fig_21_Topology_to_maximize_average_torque.svg"),
             format="svg",
         )
 
         out2[0].simu.machine.plot()
         fig = plt.gcf()
         fig.savefig(
-            join(save_path, "fig_21_Topology_to_minimize_second_torque_harmonic.png")
+            join(save_path, "fig_21_Topology_to_minimize_first_torque_harmonic.png"),
+            format="png",
         )
         fig.savefig(
-            join(save_path, "fig_21_Topology_to_minimize_second_torque_harmonic.svg"),
+            join(save_path, "fig_21_Topology_to_minimize_first_torque_harmonic.svg"),
             format="svg",
         )
