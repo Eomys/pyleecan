@@ -4445,7 +4445,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "OptiGenAlgNsga2Deap"
+        ],
         "desc": "Genetic algorithm class",
         "is_internal": false,
         "methods": [],
@@ -4534,6 +4536,37 @@
                 "type": "OptiProblem",
                 "unit": "-",
                 "value": ""
+            }
+        ]
+    },
+    "OptiGenAlgNsga2Deap": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Multi-objectives optimization problem with some constraints",
+        "is_internal": false,
+        "methods": [
+            "solve",
+            "mutate",
+            "create_toolbox"
+        ],
+        "mother": "OptiGenAlg",
+        "name": "OptiGenAlgNsga2Deap",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv",
+        "properties": [
+            {
+                "desc": "DEAP toolbox",
+                "max": "",
+                "min": "",
+                "name": "toolbox",
+                "type": "deap.base.Toolbox",
+                "unit": "",
+                "value": "None"
             }
         ]
     },

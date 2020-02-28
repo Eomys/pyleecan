@@ -22,7 +22,7 @@ from pyleecan.Classes.OptiObjFunc import OptiObjFunc
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes._OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
+from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 
 import numpy as np
 import random
@@ -706,9 +706,7 @@ class test_ICEM_2020(TestCase):
 
         # Rename machine to modify the title
         out1[0].simu.machine.name = (
-            "Machine that maximizes the first torque harmonic ("
-            + str(abs(out1[1][0]))
-            + "Nm)"
+            "Machine that maximizes the average torque (" + str(abs(out1[1][0])) + "Nm)"
         )
         out2[0].simu.machine.name = (
             "Machine that minimizes the second torque harmonic ("
@@ -720,14 +718,18 @@ class test_ICEM_2020(TestCase):
         out1[0].simu.machine.plot()
         fig = plt.gcf()
         fig.savefig(
-            join(save_path, "fig_21_left_Topology_to_maximize_first_torque_harmonic.png")
+            join(
+                save_path, "fig_21_left_Topology_to_maximize_first_torque_harmonic.png"
+            )
         )
         plt.close(fig)
 
         out2[0].simu.machine.plot()
         fig = plt.gcf()
         fig.savefig(
-            join(save_path, "fig_21_right_Topology_to_minimize_second_torque_harmonic.png")
+            join(
+                save_path,
+                "fig_21_right_Topology_to_minimize_second_torque_harmonic.png",
+            )
         )
         plt.close(fig)
-

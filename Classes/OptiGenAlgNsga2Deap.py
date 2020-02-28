@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""File generated according to pyleecan/Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv
+WARNING! All changes made in this file will be lost!
+"""
 
 from os import linesep
 from pyleecan.Classes._check import check_init_dict, check_var, raise_
@@ -24,16 +27,22 @@ try:
 except ImportError as error:
     create_toolbox = error
 
+
 from inspect import getsource
 from cloudpickle import dumps, loads
 from pyleecan.Classes._check import CheckTypeError
+
+try:
+    import deap.base
+except ImportError:
+    deap.base = ImportError
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.OutputMultiOpti import OutputMultiOpti
 from pyleecan.Classes.OptiProblem import OptiProblem
 
 
 class OptiGenAlgNsga2Deap(OptiGenAlg):
-    """Multi-objectives optimization problem solver using DEAP"""
+    """Multi-objectives optimization problem with some constraints"""
 
     VERSION = 1
 
@@ -58,7 +67,6 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         )
     else:
         mutate = mutate
-
     # cf Methods.Optimization.OptiGenAlgNsga2Deap.create_toolbox
     if isinstance(create_toolbox, ImportError):
         create_toolbox = property(
@@ -76,26 +84,70 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
 
     def __init__(
         self,
+        toolbox=None,
         multi_output=-1,
         selector=None,
         crossover=None,
         mutator=None,
         p_cross=0.9,
         p_mutate=0.1,
-        size_pop=50,
-        nb_gen=200,
+        size_pop=40,
+        nb_gen=100,
         problem=-1,
+        init_dict=None,
     ):
-        """Constructor of the class."""
+        """Constructor of the class. Can be use in two ways :
+        - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
+            for Matrix, None will initialise the property with an empty Matrix
+            for pyleecan type, None will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+
+        ndarray or list can be given for Vector and Matrix
+        object or dict can be given for pyleecan Object"""
 
         if multi_output == -1:
             multi_output = OutputMultiOpti()
         if problem == -1:
             problem = OptiProblem()
-
+        if init_dict is not None:  # Initialisation by dict
+            check_init_dict(
+                init_dict,
+                [
+                    "toolbox",
+                    "multi_output",
+                    "selector",
+                    "crossover",
+                    "mutator",
+                    "p_cross",
+                    "p_mutate",
+                    "size_pop",
+                    "nb_gen",
+                    "problem",
+                ],
+            )
+            # Overwrite default value with init_dict content
+            if "toolbox" in list(init_dict.keys()):
+                toolbox = init_dict["toolbox"]
+            if "multi_output" in list(init_dict.keys()):
+                multi_output = init_dict["multi_output"]
+            if "selector" in list(init_dict.keys()):
+                selector = init_dict["selector"]
+            if "crossover" in list(init_dict.keys()):
+                crossover = init_dict["crossover"]
+            if "mutator" in list(init_dict.keys()):
+                mutator = init_dict["mutator"]
+            if "p_cross" in list(init_dict.keys()):
+                p_cross = init_dict["p_cross"]
+            if "p_mutate" in list(init_dict.keys()):
+                p_mutate = init_dict["p_mutate"]
+            if "size_pop" in list(init_dict.keys()):
+                size_pop = init_dict["size_pop"]
+            if "nb_gen" in list(init_dict.keys()):
+                nb_gen = init_dict["nb_gen"]
+            if "problem" in list(init_dict.keys()):
+                problem = init_dict["problem"]
         # Initialisation by argument
-        self.toolbox = None
-
+        self.toolbox = toolbox
         # Call OptiGenAlg init
         super(OptiGenAlgNsga2Deap, self).__init__(
             multi_output=multi_output,
@@ -116,8 +168,8 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
 
         OptiGenAlgNsga2Deap_str = ""
         # Get the properties inherited from OptiGenAlg
-        OptiGenAlgNsga2Deap_str += super(OptiGenAlgNsga2Deap, self).__str__() + linesep
-        OptiGenAlgNsga2Deap_str += "toolbox = " + linesep + str(None)
+        OptiGenAlgNsga2Deap_str += super(OptiGenAlgNsga2Deap, self).__str__()
+        OptiGenAlgNsga2Deap_str += "toolbox = " + str(self.toolbox) + linesep + linesep
         return OptiGenAlgNsga2Deap_str
 
     def __eq__(self, other):
@@ -139,7 +191,14 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
 
         # Get the properties inherited from OptiGenAlg
         OptiGenAlgNsga2Deap_dict = super(OptiGenAlgNsga2Deap, self).as_dict()
-        OptiGenAlgNsga2Deap_dict["toolbox"] = None
+        if self.toolbox is None:
+            OptiGenAlgNsga2Deap_dict["toolbox"] = None
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            OptiGenAlgNsga2Deap_dict["toolbox"] = {
+                "__class__": str(type(self._toolbox)),
+                "__repr__": str(self._toolbox.__repr__()),
+                "serialized": dumps(self._toolbox).decode("ISO-8859-2"),
+            }
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         OptiGenAlgNsga2Deap_dict["__class__"] = "OptiGenAlgNsga2Deap"
@@ -158,10 +217,18 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
 
     def _set_toolbox(self, value):
         """setter of toolbox"""
-        self._toolbox = value
+        try:  # Check the type
+            check_var("toolbox", value, "dict")
+        except CheckTypeError:
+            check_var("toolbox", value, "deap.base.Toolbox")
+            # property can be set from a list to handle loads
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._toolbox = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._toolbox = value
 
-    # Toolbox to use DEAP tools
-    # Type : list
-    toolbox = property(
-        fget=_get_toolbox, fset=_set_toolbox, doc=u"""Toolbox to use DEAP tools"""
-    )
+    # DEAP toolbox
+    # Type : deap.base.Toolbox
+    toolbox = property(fget=_get_toolbox, fset=_set_toolbox, doc=u"""DEAP toolbox""")
