@@ -716,16 +716,14 @@ class test_ICEM_2020(TestCase):
                 out2 = [pm["output"], pm["fitness"]]
 
         # Rename machine to modify the title
-        out1[
-            0
-        ].simu.machine.name = "Machine that maximizes the average torque ({:.3f} Nm)".format(
+        name1 = "Machine that maximizes the average torque ({:.3f} Nm)".format(
             abs(out1[1][0])
         )
-        out2[
-            0
-        ].simu.machine.name = "Machine that minimizes the first torque harmonic ({:.4f}Nm)".format(
+        out1[0].simu.machine.name = name1
+        name2 = "Machine that minimizes the first torque harmonic ({:.4f}Nm)".format(
             abs(out1[1][1])
         )
+        out2[0].simu.machine.name = name2
 
         # plot the machine
         out1[0].simu.machine.plot()
