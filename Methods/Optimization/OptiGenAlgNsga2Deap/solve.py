@@ -75,7 +75,7 @@ def solve(self):
     nb_infeasible = 0
     if len(self.problem.constraint) > 0:
         for indiv in pop:
-            nb_infeasible += check_cstr(self, indiv)
+            nb_infeasible += check_cstr(self, indiv) == False
     print(
         "\r{}  gen {:>5}: 100%, {:>4} errors,{:>4} infeasible.".format(
             time_start_gen, 0, nb_error, nb_infeasible - nb_error
@@ -139,9 +139,6 @@ def solve(self):
             if indiv.fitness.valid == False:
                 to_eval.append(indiv)
 
-        for indiv in to_eval:
-            evaluate(self, indiv)
-
         # Evaluate the population
         nb_error = 0
         for i in range(len(to_eval)):
@@ -157,7 +154,7 @@ def solve(self):
         nb_infeasible = 0
         if len(self.problem.constraint) > 0:
             for indiv in to_eval:
-                nb_infeasible += check_cstr(self, indiv)
+                nb_infeasible += check_cstr(self, indiv) == False
         print(
             "\r{}  gen {:>5}: 100%, {:>4} errors,{:>4} infeasible.".format(
                 time_start_gen, ngen, nb_error, nb_infeasible - nb_error

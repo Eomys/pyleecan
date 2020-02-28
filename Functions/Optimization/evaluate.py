@@ -18,8 +18,8 @@ def evaluate(solver, indiv):
     
     Returns
     -------
-    bool : bool
-        success of the evaluation
+    evaluation_failure : bool
+        failure of the evaluation
 
     """
 
@@ -27,9 +27,9 @@ def evaluate(solver, indiv):
     orig_stdout = sys.stdout
     orig_stderr = sys.stderr
     file_name = datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f") + ".log"
-    with open(file_name, "w") as f:
-        sys.stdout = f
-        sys.stderr = f
+    with open(file_name, "w") as log_file:
+        sys.stdout = log_file
+        sys.stderr = log_file
 
         try:
             if solver.problem.eval_func == None:
@@ -52,7 +52,8 @@ def evaluate(solver, indiv):
             # Reset standard output and error
             sys.stdout = orig_stdout
             sys.stderr = orig_stderr
-            output = 0
+
+            evaluation_failure = False  # Evaluation succeed
 
         except KeyboardInterrupt:
             print("Stopped by the user.")
@@ -64,6 +65,7 @@ def evaluate(solver, indiv):
         except:
             # TODO logging
             traceback.print_exc()
+
             # Sort the obj_func
             keys = list(solver.problem.obj_func.keys())
             keys.sort()
@@ -75,7 +77,7 @@ def evaluate(solver, indiv):
             # Reset standard output and error
             sys.stdout = orig_stdout
             sys.stderr = orig_stderr
-            output = 1
+            evaluation_failure = True  # Evaluation failed
 
     if stat(file_name).st_size == 0:  # Delete the file if empty
         remove(file_name)
@@ -91,4 +93,4 @@ def evaluate(solver, indiv):
         with open(file_name, "w") as f:
             f.writelines(lines)
 
-    return output
+    return evaluation_failure
