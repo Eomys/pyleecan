@@ -50,7 +50,7 @@ def plot_mesh_field(
             if not ax:
                 ax = plt.gca()
 
-            verts = mesh.get_vertice(elem_type)
+            verts, nb_elem = mesh.get_vertice(elem_type)
             pc = matplotlib.collections.PolyCollection(verts, **kwargs)
             pc.set_array(values)
             ax.add_collection(pc)
