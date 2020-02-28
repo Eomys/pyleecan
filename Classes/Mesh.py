@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -56,6 +56,7 @@ except ImportError as error:
     get_vertice = error
 
 
+from numpy import array, array_equal
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Element import Element
 from pyleecan.Classes.Node import Node
@@ -161,7 +162,9 @@ class Mesh(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(self, element=dict(), node=-1, submesh=list(), init_dict=None):
+    def __init__(
+        self, element=dict(), node=-1, submesh=list(), group=None, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -174,7 +177,7 @@ class Mesh(FrozenClass):
         if node == -1:
             node = Node()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["element", "node", "submesh"])
+            check_init_dict(init_dict, ["element", "node", "submesh", "group"])
             # Overwrite default value with init_dict content
             if "element" in list(init_dict.keys()):
                 element = init_dict["element"]
@@ -182,6 +185,8 @@ class Mesh(FrozenClass):
                 node = init_dict["node"]
             if "submesh" in list(init_dict.keys()):
                 submesh = init_dict["submesh"]
+            if "group" in list(init_dict.keys()):
+                group = init_dict["group"]
         # Initialisation by argument
         self.parent = None
         # element can be None or a dict of Element object
@@ -237,6 +242,8 @@ class Mesh(FrozenClass):
             self.submesh = list()
         else:
             self.submesh = submesh
+        # group can be None, a ndarray or a list
+        set_array(self, "group", group)
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -264,6 +271,13 @@ class Mesh(FrozenClass):
         for ii in range(len(self.submesh)):
             tmp = self.submesh[ii].__str__().replace(linesep, linesep + "\t") + linesep
             Mesh_str += "submesh[" + str(ii) + "] =" + tmp + linesep + linesep
+        Mesh_str += (
+            "group = "
+            + linesep
+            + str(self.group).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return Mesh_str
 
     def __eq__(self, other):
@@ -276,6 +290,8 @@ class Mesh(FrozenClass):
         if other.node != self.node:
             return False
         if other.submesh != self.submesh:
+            return False
+        if not array_equal(other.group, self.group):
             return False
         return True
 
@@ -294,6 +310,10 @@ class Mesh(FrozenClass):
         Mesh_dict["submesh"] = list()
         for obj in self.submesh:
             Mesh_dict["submesh"].append(obj.as_dict())
+        if self.group is None:
+            Mesh_dict["group"] = None
+        else:
+            Mesh_dict["group"] = self.group.tolist()
         # The class name is added to the dict fordeserialisation purpose
         Mesh_dict["__class__"] = "Mesh"
         return Mesh_dict
@@ -307,6 +327,7 @@ class Mesh(FrozenClass):
             self.node._set_None()
         for obj in self.submesh:
             obj._set_None()
+        self.group = None
 
     def _get_element(self):
         """getter of element"""
@@ -364,4 +385,24 @@ class Mesh(FrozenClass):
         fget=_get_submesh,
         fset=_set_submesh,
         doc=u"""Storing submeshes. Node and element numbers/tags or group must be the same.""",
+    )
+
+    def _get_group(self):
+        """getter of group"""
+        return self._group
+
+    def _set_group(self, value):
+        """setter of group"""
+        if type(value) is list:
+            try:
+                value = array(value)
+            except:
+                pass
+        check_var("group", value, "ndarray")
+        self._group = value
+
+    # Contain all possible group numbers
+    # Type : ndarray
+    group = property(
+        fget=_get_group, fset=_set_group, doc=u"""Contain all possible group numbers"""
     )

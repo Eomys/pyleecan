@@ -34,4 +34,4 @@ def get_vertice(self, elem_type=None, group=None):
         for ie in range(nb_elem):
             vertices[ie, :, :] = self.node.get_coord(connect_select[ie, :])
 
-    return vertices
+    return vertices, nb_elem
