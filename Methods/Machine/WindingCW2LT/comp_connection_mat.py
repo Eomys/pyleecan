@@ -86,7 +86,7 @@ def comp_connection_mat(self, Zs=None):
                     wind_mat[
                         0, 1, int(mod((q) * Ncgr + (k) * qs * Ncgr - 1 + (l), Zs)), q
                     ] = (
-                        -(-1) ** (l + q - 1 + k) * Ntcoil
+                        -((-1) ** (l + q - 1 + k)) * Ntcoil
                     )  # left / bottom / 1
                     wind_mat[
                         0,
@@ -94,7 +94,7 @@ def comp_connection_mat(self, Zs=None):
                         int(mod((q) * Ncgr + 1 + (k) * qs * Ncgr - 1 + (l), Zs)),
                         q,
                     ] = (
-                        +(-1) ** (l + q - 1 + k) * Ntcoil
+                        +((-1) ** (l + q - 1 + k)) * Ntcoil
                     )  # right / top / 2
 
     else:

@@ -6,7 +6,12 @@
 from os import remove, getcwd
 from os.path import isfile, join
 from unittest import TestCase
-from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
+
+try:
+    from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
+except Exception as err:
+    gen_3D_mesh = None
+
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Tests import save_validation_path as save_path
@@ -18,6 +23,9 @@ class test_gmsh(TestCase):
     def test_slot_10(self):
         """Check that you can generate the 3D mesh of Slot 10
         """
+        if gen_3D_mesh == None:
+            raise err
+
         # SetUp
         stator = LamSlotWind(
             Rint=0.1325,
