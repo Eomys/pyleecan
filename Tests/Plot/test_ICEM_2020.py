@@ -199,6 +199,7 @@ class test_ICEM_2020(TestCase):
         """Figure 12: Check that you can plot a machine with 4 laminations
         """
         machine = MachineUD()
+        machine.name = "Machine with 4 laminations"
 
         # Main geometry parameter
         Rext = 170e-3  # Exterior radius of outter lamination
@@ -303,6 +304,7 @@ class test_ICEM_2020(TestCase):
         # Enfore first point on rotor bore
         Rrotor = abs(0.205917893677990 - 0.107339745962156j)
         machine = MachineSRM()
+        machine.name = "User-Defined Slot"
         # Stator definintion
         machine.stator = LamSlotWind(
             Rint=Rrotor + 5e-3, Rext=Rrotor + 120e-3, is_internal=False, is_stator=True
@@ -354,6 +356,7 @@ class test_ICEM_2020(TestCase):
         """
         plt.close("all")
         machine = MachineDFIM()
+        machine.name = "User Defined Winding"
         # Rotor definition
         machine.rotor = LamSlotWind(
             Rint=0.2,

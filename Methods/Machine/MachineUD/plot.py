@@ -71,7 +71,10 @@ def plot(
         raise ValueError("Comp_machine is not available for MachineUD")
     axes.set_xlabel("(m)")
     axes.set_ylabel("(m)")
-    axes.set_title("Machine")
+    if self.name in [None, ""]:
+        axes.set_title("Machine")
+    else:
+        axes.set_title(self.name)
 
     # Axis Setup
     axis("equal")
