@@ -62,6 +62,8 @@ class test_CEFC_002(TestCase):
         out.post.legend_name = "Slotless lamination"
         simu.run()
 
+        out.plot_mesh(mesh=out.mag.meshsolution.mesh[0], title="FEA Mesh")
+
         # out.plot_mesh_field(meshsolution=out.mag.meshsolution, title="Permeability")
         out.plot_mesh_field(
             mesh=out.mag.meshsolution.mesh[0],

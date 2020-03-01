@@ -99,6 +99,8 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
         mesh.node = NodeMat(
             coordinate=listNd[:, 0:2], nb_node=NbNd, tag=np.linspace(0, NbNd - 1, NbNd)
         )
+
+        mesh.group = np.unique(listElem0[:, 6])
     else:
         mesh = None
 

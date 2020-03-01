@@ -101,11 +101,11 @@ def plot(
 
         # Add the legend
         if not is_edge_only:
-            if self.is_stator:
+            if self.is_stator and "Stator" not in label_leg:
                 patch_leg.append(Patch(color=STATOR_COLOR))
                 label_leg.append("Stator")
                 axes.set_title("Stator with Winding")
-            else:
+            elif not self.is_stator and "Rotor" not in label_leg:
                 patch_leg.append(Patch(color=ROTOR_COLOR))
                 label_leg.append("Rotor")
                 axes.set_title("Rotor with Winding")
