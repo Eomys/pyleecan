@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+from numpy import int32
 
 
 def get_all_connectivity(self, group=None):
@@ -29,8 +30,8 @@ def get_all_connectivity(self, group=None):
     tag_select = np.array([], dtype=int)
 
     if group is not None:
-
-        if isinstance(group, (int, float, complex)):
+        group = int32(group)
+        if isinstance(group, (int, int32, float, complex)):
             group = np.array([group], dtype=int)
 
         if type(group) is list or type(group) is np.ndarray:

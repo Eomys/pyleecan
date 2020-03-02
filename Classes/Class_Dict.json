@@ -4123,6 +4123,15 @@
                 "type": "[Mesh]",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "desc": "Contain all possible group numbers",
+                "max": "",
+                "min": "",
+                "name": "group",
+                "type": "ndarray",
+                "unit": "",
+                "value": ""
             }
         ]
     },
@@ -5183,7 +5192,8 @@
             "getter.get_angle_rotor",
             "plot.Magnetic.plot_B_space",
             "plot.Structural.plot_force_space",
-            "plot.Magnetic.plot_mesh_field"
+            "plot.Magnetic.plot_mesh_field",
+            "plot.Magnetic.plot_mesh"
         ],
         "mother": "",
         "name": "Output",

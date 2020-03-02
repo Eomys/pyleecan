@@ -31,7 +31,7 @@ class unittest_get_vertice(TestCase):
         """unittest with ElementMat object. Test for empty Mesh"""
 
         solution = 0
-        result = self.mesh.get_vertice("Quad4")
+        result = self.mesh.get_vertice("Quad4")[0]
         testA = result.size
         msg = (
             "Wrong output: returned "
@@ -46,7 +46,7 @@ class unittest_get_vertice(TestCase):
         """unittest with ElementMat object. Test for empty Mesh"""
 
         solution = 4
-        result = self.mesh.get_vertice("Segment2")
+        result = self.mesh.get_vertice("Segment2")[0]
         testA = result.size
         msg = (
             "Wrong output: returned "
@@ -61,7 +61,7 @@ class unittest_get_vertice(TestCase):
         """unittest with ElementMat object. Test for empty Mesh"""
 
         solution = 18
-        result = self.mesh.get_vertice("Triangle3")
+        result = self.mesh.get_vertice("Triangle3")[0]
         testA = result.size
         msg = (
             "Wrong output: returned "

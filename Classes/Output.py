@@ -49,6 +49,11 @@ try:
 except ImportError as error:
     plot_mesh_field = error
 
+try:
+    from pyleecan.Methods.Output.Output.plot.Magnetic.plot_mesh import plot_mesh
+except ImportError as error:
+    plot_mesh = error
+
 
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Simulation import Simulation
@@ -142,6 +147,15 @@ class Output(FrozenClass):
         )
     else:
         plot_mesh_field = plot_mesh_field
+    # cf Methods.Output.Output.plot.Magnetic.plot_mesh
+    if isinstance(plot_mesh, ImportError):
+        plot_mesh = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method plot_mesh: " + str(plot_mesh))
+            )
+        )
+    else:
+        plot_mesh = plot_mesh
     # save method is available in all object
     save = save
 
