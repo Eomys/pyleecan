@@ -12,6 +12,7 @@ def gen_3D_mesh(
     user_mesh_dict=None,
     is_rect=False,
     Nlayer=20,
+    display=True,
 ):
     """Draw 3D mesh of the lamination
     Parameters
@@ -30,7 +31,8 @@ def gen_3D_mesh(
         To use rectangular elements
     Nlayer : int
         Number of mesh layer on Z axis
-
+    display : bool
+        To display gmsh logs
     Returns
     -------
     None
@@ -50,7 +52,9 @@ def gen_3D_mesh(
 
     # Start a new model
     gmsh.initialize(sys.argv)
-    gmsh.option.setNumber("General.Terminal", 1)
+
+    gmsh.option.setNumber("General.Terminal", int(display))
+
     gmsh.option.setNumber("Geometry.CopyMeshingMethod", 1)
     model.add("Pyleecan")
 
