@@ -5,3 +5,4 @@ Wgap_mec,m,mechanical airgap width (minimal distance between the lamination incl
 Wgap_mag,m,the magnetic airgap width (distance beetween the two Laminations bore radius),0,float,None,,,,,,,,,
 Rgap_mec,m,radius of the center of the mecanical airgap,0,float,None,,,,,,,,,
 Lgap,m,Airgap active length,0,float,None,,,,,,,,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.OutGeo,,,,,,,,,

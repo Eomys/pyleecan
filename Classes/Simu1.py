@@ -4,6 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Simulation import Simulation
@@ -41,7 +42,15 @@ class Simu1(Simulation):
     save = save
 
     def __init__(
-        self, mag=-1, struct=-1, name="", desc="", machine=-1, input=-1, init_dict=None
+        self,
+        mag=-1,
+        struct=-1,
+        name="",
+        desc="",
+        machine=-1,
+        input=-1,
+        logger_name="Pyleecan.Simulation",
+        init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -62,7 +71,8 @@ class Simu1(Simulation):
             input = Input()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict, ["mag", "struct", "name", "desc", "machine", "input"]
+                init_dict,
+                ["mag", "struct", "name", "desc", "machine", "input", "logger_name"],
             )
             # Overwrite default value with init_dict content
             if "mag" in list(init_dict.keys()):
@@ -77,6 +87,8 @@ class Simu1(Simulation):
                 machine = init_dict["machine"]
             if "input" in list(init_dict.keys()):
                 input = init_dict["input"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Initialisation by argument
         # mag can be None, a Magnetics object or a dict
         if isinstance(mag, dict):
@@ -98,7 +110,9 @@ class Simu1(Simulation):
         else:
             self.struct = struct
         # Call Simulation init
-        super(Simu1, self).__init__(name=name, desc=desc, machine=machine, input=input)
+        super(Simu1, self).__init__(
+            name=name, desc=desc, machine=machine, input=input, logger_name=logger_name
+        )
         # The class is frozen (in Simulation init), for now it's impossible to
         # add new properties
 
@@ -163,6 +177,15 @@ class Simu1(Simulation):
             self.struct._set_None()
         # Set to None the properties inherited from Simulation
         super(Simu1, self)._set_None()
+
+    def get_logger(self):
+        """getter of the logger"""
+        if hasattr(self, "logger_name"):
+            return getLogger(self.logger_name)
+        elif self.parent != None:
+            return self.parent.get_logger()
+        else:
+            return getLogger("Pyleecan")
 
     def _get_mag(self):
         """getter of mag"""

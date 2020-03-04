@@ -21,6 +21,16 @@ def generate_properties(gen_dict, class_dict):
 
     prop_str = ""  # This string is for the generated code
 
+    # Add get_logger method
+    prop_str += TAB + "def get_logger(self):\n"
+    prop_str += TAB2 + '"""getter of the logger"""\n'
+    prop_str += TAB2 + "if hasattr(self,'logger_name'):\n"
+    prop_str += TAB3 + "return getLogger(self.logger_name)\n"
+    prop_str += TAB2 + "elif self.parent != None:\n"
+    prop_str += TAB3 + "return self.parent.get_logger()\n"
+    prop_str += TAB2 + "else:\n"
+    prop_str += TAB3 + "return getLogger('Pyleecan')\n\n"
+
     for prop in class_dict["properties"]:
         # Getter
         prop_str += TAB + "def _get_" + prop["name"] + "(self):\n"
