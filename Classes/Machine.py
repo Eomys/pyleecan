@@ -4,6 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
@@ -227,6 +228,7 @@ class Machine(FrozenClass):
         name="default_machine",
         desc="",
         type_machine=1,
+        logger_name="Pyleecan.Machine",
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -244,7 +246,8 @@ class Machine(FrozenClass):
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
-                init_dict, ["frame", "shaft", "name", "desc", "type_machine"]
+                init_dict,
+                ["frame", "shaft", "name", "desc", "type_machine", "logger_name"],
             )
             # Overwrite default value with init_dict content
             if "frame" in list(init_dict.keys()):
@@ -257,6 +260,8 @@ class Machine(FrozenClass):
                 desc = init_dict["desc"]
             if "type_machine" in list(init_dict.keys()):
                 type_machine = init_dict["type_machine"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Initialisation by argument
         self.parent = None
         # frame can be None, a Frame object or a dict
@@ -272,6 +277,7 @@ class Machine(FrozenClass):
         self.name = name
         self.desc = desc
         self.type_machine = type_machine
+        self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -297,6 +303,7 @@ class Machine(FrozenClass):
         Machine_str += 'name = "' + str(self.name) + '"' + linesep
         Machine_str += 'desc = "' + str(self.desc) + '"' + linesep
         Machine_str += "type_machine = " + str(self.type_machine) + linesep
+        Machine_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return Machine_str
 
     def __eq__(self, other):
@@ -313,6 +320,8 @@ class Machine(FrozenClass):
         if other.desc != self.desc:
             return False
         if other.type_machine != self.type_machine:
+            return False
+        if other.logger_name != self.logger_name:
             return False
         return True
 
@@ -332,6 +341,7 @@ class Machine(FrozenClass):
         Machine_dict["name"] = self.name
         Machine_dict["desc"] = self.desc
         Machine_dict["type_machine"] = self.type_machine
+        Machine_dict["logger_name"] = self.logger_name
         # The class name is added to the dict fordeserialisation purpose
         Machine_dict["__class__"] = "Machine"
         return Machine_dict
@@ -346,6 +356,16 @@ class Machine(FrozenClass):
         self.name = None
         self.desc = None
         self.type_machine = None
+        self.logger_name = None
+
+    def get_logger(self):
+        """getter of the logger"""
+        if hasattr(self, "logger_name"):
+            return getLogger(self.logger_name)
+        elif self.parent != None:
+            return self.parent.get_logger()
+        else:
+            return getLogger("Pyleecan")
 
     def _get_frame(self):
         """getter of frame"""
@@ -420,4 +440,21 @@ class Machine(FrozenClass):
         fget=_get_type_machine,
         fset=_set_type_machine,
         doc=u"""Integer to store the machine type (for the GUI, should be replaced by a test of the object type)""",
+    )
+
+    def _get_logger_name(self):
+        """getter of logger_name"""
+        return self._logger_name
+
+    def _set_logger_name(self, value):
+        """setter of logger_name"""
+        check_var("logger_name", value, "str")
+        self._logger_name = value
+
+    # Name of the logger to use
+    # Type : str
+    logger_name = property(
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use""",
     )

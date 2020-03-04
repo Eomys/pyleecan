@@ -4,6 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.MachineSync import MachineSync
@@ -67,6 +68,7 @@ class MachineSRM(MachineSync):
         name="default_machine",
         desc="",
         type_machine=1,
+        logger_name="Pyleecan.Machine",
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -89,7 +91,16 @@ class MachineSRM(MachineSync):
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
                 init_dict,
-                ["rotor", "stator", "frame", "shaft", "name", "desc", "type_machine"],
+                [
+                    "rotor",
+                    "stator",
+                    "frame",
+                    "shaft",
+                    "name",
+                    "desc",
+                    "type_machine",
+                    "logger_name",
+                ],
             )
             # Overwrite default value with init_dict content
             if "rotor" in list(init_dict.keys()):
@@ -106,6 +117,8 @@ class MachineSRM(MachineSync):
                 desc = init_dict["desc"]
             if "type_machine" in list(init_dict.keys()):
                 type_machine = init_dict["type_machine"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Initialisation by argument
         # rotor can be None, a LamSlot object or a dict
         if isinstance(rotor, dict):
@@ -142,7 +155,12 @@ class MachineSRM(MachineSync):
             self.stator = stator
         # Call MachineSync init
         super(MachineSRM, self).__init__(
-            frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine
+            frame=frame,
+            shaft=shaft,
+            name=name,
+            desc=desc,
+            type_machine=type_machine,
+            logger_name=logger_name,
         )
         # The class is frozen (in MachineSync init), for now it's impossible to
         # add new properties
@@ -208,6 +226,15 @@ class MachineSRM(MachineSync):
             self.stator._set_None()
         # Set to None the properties inherited from MachineSync
         super(MachineSRM, self)._set_None()
+
+    def get_logger(self):
+        """getter of the logger"""
+        if hasattr(self, "logger_name"):
+            return getLogger(self.logger_name)
+        elif self.parent != None:
+            return self.parent.get_logger()
+        else:
+            return getLogger("Pyleecan")
 
     def _get_rotor(self):
         """getter of rotor"""

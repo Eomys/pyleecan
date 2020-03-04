@@ -4,6 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
@@ -36,6 +37,7 @@ class OutMag(FrozenClass):
         emf=None,
         meshsolution=-1,
         FEMM_dict=None,
+        logger_name="Pyleecan.OutMag",
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -66,6 +68,7 @@ class OutMag(FrozenClass):
                     "emf",
                     "meshsolution",
                     "FEMM_dict",
+                    "logger_name",
                 ],
             )
             # Overwrite default value with init_dict content
@@ -95,6 +98,8 @@ class OutMag(FrozenClass):
                 meshsolution = init_dict["meshsolution"]
             if "FEMM_dict" in list(init_dict.keys()):
                 FEMM_dict = init_dict["FEMM_dict"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -121,6 +126,7 @@ class OutMag(FrozenClass):
         else:
             self.meshsolution = meshsolution
         self.FEMM_dict = FEMM_dict
+        self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -196,6 +202,7 @@ class OutMag(FrozenClass):
         else:
             OutMag_str += "meshsolution = None" + linesep + linesep
         OutMag_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
+        OutMag_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return OutMag_str
 
     def __eq__(self, other):
@@ -228,6 +235,8 @@ class OutMag(FrozenClass):
         if other.meshsolution != self.meshsolution:
             return False
         if other.FEMM_dict != self.FEMM_dict:
+            return False
+        if other.logger_name != self.logger_name:
             return False
         return True
 
@@ -273,6 +282,7 @@ class OutMag(FrozenClass):
         else:
             OutMag_dict["meshsolution"] = self.meshsolution.as_dict()
         OutMag_dict["FEMM_dict"] = self.FEMM_dict
+        OutMag_dict["logger_name"] = self.logger_name
         # The class name is added to the dict fordeserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -294,6 +304,16 @@ class OutMag(FrozenClass):
         if self.meshsolution is not None:
             self.meshsolution._set_None()
         self.FEMM_dict = None
+        self.logger_name = None
+
+    def get_logger(self):
+        """getter of the logger"""
+        if hasattr(self, "logger_name"):
+            return getLogger(self.logger_name)
+        elif self.parent != None:
+            return self.parent.get_logger()
+        else:
+            return getLogger("Pyleecan")
 
     def _get_time(self):
         """getter of time"""
@@ -524,4 +544,21 @@ class OutMag(FrozenClass):
         fget=_get_FEMM_dict,
         fset=_set_FEMM_dict,
         doc=u"""Dictionnary containing the main FEMM parameter""",
+    )
+
+    def _get_logger_name(self):
+        """getter of logger_name"""
+        return self._logger_name
+
+    def _set_logger_name(self, value):
+        """setter of logger_name"""
+        check_var("logger_name", value, "str")
+        self._logger_name = value
+
+    # Name of the logger to use
+    # Type : str
+    logger_name = property(
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use""",
     )

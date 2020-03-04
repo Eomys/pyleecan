@@ -4,6 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Machine import Machine
@@ -64,6 +65,7 @@ class MachineUD(Machine):
         name="default_machine",
         desc="",
         type_machine=1,
+        logger_name="Pyleecan.Machine",
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -82,7 +84,15 @@ class MachineUD(Machine):
         if init_dict is not None:  # Initialisation by dict
             check_init_dict(
                 init_dict,
-                ["lam_list", "frame", "shaft", "name", "desc", "type_machine"],
+                [
+                    "lam_list",
+                    "frame",
+                    "shaft",
+                    "name",
+                    "desc",
+                    "type_machine",
+                    "logger_name",
+                ],
             )
             # Overwrite default value with init_dict content
             if "lam_list" in list(init_dict.keys()):
@@ -97,6 +107,8 @@ class MachineUD(Machine):
                 desc = init_dict["desc"]
             if "type_machine" in list(init_dict.keys()):
                 type_machine = init_dict["type_machine"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Initialisation by argument
         # lam_list can be None or a list of Lamination object
         self.lam_list = list()
@@ -135,7 +147,12 @@ class MachineUD(Machine):
             self.lam_list = lam_list
         # Call Machine init
         super(MachineUD, self).__init__(
-            frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine
+            frame=frame,
+            shaft=shaft,
+            name=name,
+            desc=desc,
+            type_machine=type_machine,
+            logger_name=logger_name,
         )
         # The class is frozen (in Machine init), for now it's impossible to
         # add new properties
@@ -187,6 +204,15 @@ class MachineUD(Machine):
             obj._set_None()
         # Set to None the properties inherited from Machine
         super(MachineUD, self)._set_None()
+
+    def get_logger(self):
+        """getter of the logger"""
+        if hasattr(self, "logger_name"):
+            return getLogger(self.logger_name)
+        elif self.parent != None:
+            return self.parent.get_logger()
+        else:
+            return getLogger("Pyleecan")
 
     def _get_lam_list(self):
         """getter of lam_list"""

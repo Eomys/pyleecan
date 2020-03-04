@@ -4,6 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
@@ -35,6 +36,7 @@ class OptiGenAlg(FrozenClass):
         size_pop=40,
         nb_gen=100,
         problem=-1,
+        logger_name="Pyleecan.OptiGenAlg",
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -63,6 +65,7 @@ class OptiGenAlg(FrozenClass):
                     "size_pop",
                     "nb_gen",
                     "problem",
+                    "logger_name",
                 ],
             )
             # Overwrite default value with init_dict content
@@ -84,6 +87,8 @@ class OptiGenAlg(FrozenClass):
                 nb_gen = init_dict["nb_gen"]
             if "problem" in list(init_dict.keys()):
                 problem = init_dict["problem"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Initialisation by argument
         self.parent = None
         # multi_output can be None, a OutputMultiOpti object or a dict
@@ -103,6 +108,7 @@ class OptiGenAlg(FrozenClass):
             self.problem = OptiProblem(init_dict=problem)
         else:
             self.problem = problem
+        self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -151,6 +157,7 @@ class OptiGenAlg(FrozenClass):
             OptiGenAlg_str += "problem = " + tmp
         else:
             OptiGenAlg_str += "problem = None" + linesep + linesep
+        OptiGenAlg_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return OptiGenAlg_str
 
     def __eq__(self, other):
@@ -175,6 +182,8 @@ class OptiGenAlg(FrozenClass):
         if other.nb_gen != self.nb_gen:
             return False
         if other.problem != self.problem:
+            return False
+        if other.logger_name != self.logger_name:
             return False
         return True
 
@@ -216,6 +225,7 @@ class OptiGenAlg(FrozenClass):
             OptiGenAlg_dict["problem"] = None
         else:
             OptiGenAlg_dict["problem"] = self.problem.as_dict()
+        OptiGenAlg_dict["logger_name"] = self.logger_name
         # The class name is added to the dict fordeserialisation purpose
         OptiGenAlg_dict["__class__"] = "OptiGenAlg"
         return OptiGenAlg_dict
@@ -234,6 +244,16 @@ class OptiGenAlg(FrozenClass):
         self.nb_gen = None
         if self.problem is not None:
             self.problem._set_None()
+        self.logger_name = None
+
+    def get_logger(self):
+        """getter of the logger"""
+        if hasattr(self, "logger_name"):
+            return getLogger(self.logger_name)
+        elif self.parent != None:
+            return self.parent.get_logger()
+        else:
+            return getLogger("Pyleecan")
 
     def _get_multi_output(self):
         """getter of multi_output"""
@@ -418,4 +438,21 @@ class OptiGenAlg(FrozenClass):
     # Type : OptiProblem
     problem = property(
         fget=_get_problem, fset=_set_problem, doc=u"""Problem to solve"""
+    )
+
+    def _get_logger_name(self):
+        """getter of logger_name"""
+        return self._logger_name
+
+    def _set_logger_name(self, value):
+        """setter of logger_name"""
+        check_var("logger_name", value, "str")
+        self._logger_name = value
+
+    # Name of the logger to use
+    # Type : str
+    logger_name = property(
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use""",
     )

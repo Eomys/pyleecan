@@ -4,6 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotWind import SlotWind
@@ -239,6 +240,15 @@ class SlotW12(SlotWind):
         self.R2 = None
         # Set to None the properties inherited from SlotWind
         super(SlotW12, self)._set_None()
+
+    def get_logger(self):
+        """getter of the logger"""
+        if hasattr(self, "logger_name"):
+            return getLogger(self.logger_name)
+        elif self.parent != None:
+            return self.parent.get_logger()
+        else:
+            return getLogger("Pyleecan")
 
     def _get_H0(self):
         """getter of H0"""
