@@ -27,6 +27,13 @@ try:
 except ImportError as error:
     create_toolbox = error
 
+try:
+    from pyleecan.Methods.Optimization.OptiGenAlgNsga2Deap.check_optimization_input import (
+        check_optimization_input,
+    )
+except ImportError as error:
+    check_optimization_input = error
+
 
 from inspect import getsource
 from cloudpickle import dumps, loads
@@ -79,6 +86,18 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         )
     else:
         create_toolbox = create_toolbox
+    # cf Methods.Optimization.OptiGenAlgNsga2Deap.check_optimization_input
+    if isinstance(check_optimization_input, ImportError):
+        check_optimization_input = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OptiGenAlgNsga2Deap method check_optimization_input: "
+                    + str(check_optimization_input)
+                )
+            )
+        )
+    else:
+        check_optimization_input = check_optimization_input
     # save method is available in all object
     save = save
 

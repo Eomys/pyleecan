@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import logging
+from logging import WARNING
 import traceback
 import sys
 from os import stat, remove
@@ -20,7 +20,6 @@ def evaluate(solver, indiv):
     -------
     evaluation_failure : bool
         failure of the evaluation
-
     """
 
     # Keep previous stdout
@@ -38,13 +37,13 @@ def evaluate(solver, indiv):
                 solver.problem.eval_func(indiv.output)
 
             # Sort the obj_func
-            keys = list(solver.problem.obj_func.keys())
-            keys.sort()
+            obj_func_list = list(solver.problem.obj_func.keys())
+            obj_func_list.sort()
 
             # Add the fitness values
             fitness = []
-            for key in keys:
-                fitness.append(solver.problem.obj_func[key].func(indiv.output))
+            for of in obj_func_list:
+                fitness.append(solver.problem.obj_func[of].func(indiv.output))
 
             indiv.fitness.values = fitness
             indiv.is_simu_valid = True
@@ -63,15 +62,21 @@ def evaluate(solver, indiv):
             raise KeyboardInterrupt("Stopped by the user.")
 
         except:
+            # print("---------------------------------------")
+            # print("The following simulation failed:")
+            # print("Design variables:")
+            # for i, design_variable in enumerate(indiv.design_var_name_list):
+            #     print(design_variable + " : " + str(indiv[i]))
+
             # TODO logging
             traceback.print_exc()
 
             # Sort the obj_func
-            keys = list(solver.problem.obj_func.keys())
-            keys.sort()
+            obj_func_list = list(solver.problem.obj_func.keys())
+            obj_func_list.sort()
 
             # Set fitness as inf
-            indiv.fitness.values = [float("inf") for _ in keys]
+            indiv.fitness.values = [float("inf") for _ in obj_func_list]
             indiv.is_simu_valid = False
 
             # Reset standard output and error
@@ -85,8 +90,8 @@ def evaluate(solver, indiv):
         with open(file_name, "r") as f:
             f_lines = f.readlines()
             lines = ["Design variables :\n"]
-        for i in range(len(indiv.keys)):
-            lines.append(indiv.keys[i] + " : " + str(indiv[i]) + "\n")
+        for i, design_variable in enumerate(indiv.design_var_name_list):
+            lines.append(design_variable + " : " + str(indiv[i]) + "\n")
 
         lines.append("\nExecution:\n")
         lines.extend(f_lines)

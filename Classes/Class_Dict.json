@@ -4561,7 +4561,8 @@
         "methods": [
             "solve",
             "mutate",
-            "create_toolbox"
+            "create_toolbox",
+            "check_optimization_input"
         ],
         "mother": "OptiGenAlg",
         "name": "OptiGenAlgNsga2Deap",
