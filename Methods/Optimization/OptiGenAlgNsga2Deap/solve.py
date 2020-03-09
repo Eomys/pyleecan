@@ -35,10 +35,8 @@ def solve(self):
         class containing the results
     """
 
-    if self.problem == None:
-        raise MissingProblem(
-            "The problem has not been defined, please add a problem to OptiGenAlgNsga2Deap"
-        )
+    # Check input parameters
+    self.check_optimization_input()
 
     # Create the toolbox
     self.create_toolbox()
