@@ -4,6 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_init_dict, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.OptiGenAlg import OptiGenAlg
@@ -19,6 +20,11 @@ try:
     from pyleecan.Methods.Optimization.OptiGenAlgNsga2Deap.mutate import mutate
 except ImportError as error:
     mutate = error
+
+try:
+    from pyleecan.Methods.Optimization.OptiGenAlgNsga2Deap.cross import cross
+except ImportError as error:
+    cross = error
 
 try:
     from pyleecan.Methods.Optimization.OptiGenAlgNsga2Deap.create_toolbox import (
@@ -74,6 +80,15 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         )
     else:
         mutate = mutate
+    # cf Methods.Optimization.OptiGenAlgNsga2Deap.cross
+    if isinstance(cross, ImportError):
+        cross = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OptiGenAlgNsga2Deap method cross: " + str(cross))
+            )
+        )
+    else:
+        cross = cross
     # cf Methods.Optimization.OptiGenAlgNsga2Deap.create_toolbox
     if isinstance(create_toolbox, ImportError):
         create_toolbox = property(
@@ -113,6 +128,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         size_pop=40,
         nb_gen=100,
         problem=-1,
+        logger_name="Pyleecan.OptiGenAlg",
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -142,6 +158,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
                     "size_pop",
                     "nb_gen",
                     "problem",
+                    "logger_name",
                 ],
             )
             # Overwrite default value with init_dict content
@@ -165,6 +182,8 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
                 nb_gen = init_dict["nb_gen"]
             if "problem" in list(init_dict.keys()):
                 problem = init_dict["problem"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Initialisation by argument
         self.toolbox = toolbox
         # Call OptiGenAlg init
@@ -178,6 +197,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             size_pop=size_pop,
             nb_gen=nb_gen,
             problem=problem,
+            logger_name=logger_name,
         )
         # The class is frozen (in OptiGenAlg init), for now it's impossible to
         # add new properties
@@ -229,6 +249,15 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         self.toolbox = None
         # Set to None the properties inherited from OptiGenAlg
         super(OptiGenAlgNsga2Deap, self)._set_None()
+
+    def get_logger(self):
+        """getter of the logger"""
+        if hasattr(self, "logger_name"):
+            return getLogger(self.logger_name)
+        elif self.parent != None:
+            return self.parent.get_logger()
+        else:
+            return getLogger("Pyleecan")
 
     def _get_toolbox(self):
         """getter of toolbox"""

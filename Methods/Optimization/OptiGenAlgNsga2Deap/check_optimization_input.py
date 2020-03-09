@@ -51,7 +51,7 @@ def check_optimization_input(self):
 
     # Check the problem contains at least one objective function
     if self.problem.design_var == None or (
-        isinstance(self.problem.obj, dict) and len(self.problem.design_var) == 0
+        isinstance(self.problem.design_var, dict) and len(self.problem.design_var) == 0
     ):
         raise OptimizationAttributeError(
             "Optimization problem must contain at least one design variable"
@@ -65,4 +65,3 @@ def check_optimization_input(self):
                     name, ["<=", "<", "==", "=", ">=", ">"], cstr.type_const
                 )
                 raise OptimizationAttributeError(mess)
-

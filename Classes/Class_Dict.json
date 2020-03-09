@@ -4579,6 +4579,7 @@
         "methods": [
             "solve",
             "mutate",
+            "cross",
             "create_toolbox",
             "check_optimization_input"
         ],
