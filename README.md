@@ -25,6 +25,7 @@ In the long-term basis Pyleecan will include 5 physics and several model for eac
 EOMYS has started an open and non-commercial project named Pyleecan (Python Library for Electrical Engineering Computational Analysis). The starting code of Pyleecan is based on [MANATEE](https://eomys.com/produits/manatee/article/logiciel-manatee) (EOMYS commercial software) but Pyleecan is not an EOMYS only project: The initial maintainers includes other company and university. We are welcoming everyone that want to contribute.
 
 The first model is complete and enables to compute the airgap flux density with FEMM on several machine type. The corresponding project are available in the [Validation folder](https://github.com/Eomys/pyleecan/tree/master/Tests/Validation) and can be used as example for your own simulation. More information on this coupling are available in the [first newsletter of pyleecan](https://mailchi.mp/51e852c72abd/pyleecan-news-website-and-first-simulations-coupling-with-femm?e=[UNIQID]). 
+A coupling with gmsh to generate 3D mesh and an optimization module is also available in the current version. 
 
 If you are interested by a topology or a specific model, you can [open an issue](https://github.com/Eomys/pyleecan/issues) on this Github repository to talk about it. We will gladly explain how to add it yourself or we will add it to the development list for further release.
 
