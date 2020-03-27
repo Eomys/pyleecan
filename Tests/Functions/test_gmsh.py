@@ -9,7 +9,7 @@ from unittest import TestCase
 
 try:
     from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
-except Exception as err:
+except:
     gen_3D_mesh = None
 
 from pyleecan.Classes.LamSlotWind import LamSlotWind
@@ -24,7 +24,7 @@ class test_gmsh(TestCase):
         """Check that you can generate the 3D mesh of Slot 10
         """
         if gen_3D_mesh == None:
-            raise err
+            raise Exception("Fail to import gen_3D_mesh (gmsh package missing)")
 
         # SetUp
         stator = LamSlotWind(
