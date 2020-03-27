@@ -26,7 +26,6 @@ EXT_GUI = True
 
 if __name__ == "__main__":
     # Default material data path
-    
 
     # Script to be used to test in dev
     a = QApplication(argv)

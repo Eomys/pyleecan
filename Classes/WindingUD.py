@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise_
+from pyleecan.Classes._check import set_array, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Winding import Winding
 
@@ -86,21 +86,7 @@ class WindingUD(Winding):
         if conductor == -1:
             conductor = Conductor()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "user_wind_mat",
-                    "is_reverse_wind",
-                    "Nslot_shift_wind",
-                    "qs",
-                    "Ntcoil",
-                    "Npcpp",
-                    "type_connection",
-                    "p",
-                    "Lewout",
-                    "conductor",
-                ],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "user_wind_mat" in list(init_dict.keys()):
                 user_wind_mat = init_dict["user_wind_mat"]

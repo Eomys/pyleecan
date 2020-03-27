@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise_
+from pyleecan.Classes._check import set_array, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -50,24 +50,7 @@ class OutMag(FrozenClass):
         if meshsolution == -1:
             meshsolution = MeshSolution()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "time",
-                    "angle",
-                    "Nt_tot",
-                    "Na_tot",
-                    "Br",
-                    "Bt",
-                    "Tem",
-                    "Tem_av",
-                    "Tem_rip",
-                    "Phi_wind_stator",
-                    "emf",
-                    "meshsolution",
-                    "FEMM_dict",
-                ],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]

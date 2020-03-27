@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Simulation import Simulation
 
@@ -61,9 +61,7 @@ class Simu1(Simulation):
         if input == -1:
             input = Input()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["mag", "struct", "name", "desc", "machine", "input"]
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "mag" in list(init_dict.keys()):
                 mag = init_dict["mag"]

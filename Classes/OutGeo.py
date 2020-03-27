@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -44,10 +44,7 @@ class OutGeo(FrozenClass):
         if rotor == -1:
             rotor = OutGeoLam()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["stator", "rotor", "Wgap_mec", "Wgap_mag", "Rgap_mec", "Lgap"],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "stator" in list(init_dict.keys()):
                 stator = init_dict["stator"]

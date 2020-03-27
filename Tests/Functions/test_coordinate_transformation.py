@@ -43,4 +43,3 @@ class unittest_InCurrentDQ_meth(TestCase):
 
     assert_array_almost_equal(ab2dq(X_ab, th_90), X_dq90)
     assert_array_almost_equal(ab2dq(X_ab, th_180), X_dq180)
-

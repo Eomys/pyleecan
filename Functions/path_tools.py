@@ -18,10 +18,10 @@ def importName(modulename, name, ignore_error=False):
             return None
         else:
             raise ImportError(
-                f"ERROR: wildcard <{name}> could not be imported " + 
-                f"from module {modulename}"
+                f"ERROR: wildcard <{name}> could not be imported "
+                + f"from module {modulename}"
             )
-    
+
 
 def rel_file_path(file, wildcard):
     """ try to generate relative file path with given wildcard
@@ -35,8 +35,9 @@ def rel_file_path(file, wildcard):
         # print(f"file:          {file_[:idx]}")
         if file_[:idx].lower() == root_path.lower():
             file = f"<{wildcard}>" + file_[idx:]
-    
+
     return file
+
 
 def abs_file_path(file, is_check=True):
     """ check a file path for a wildcard and replace it to get the abs path
@@ -82,12 +83,11 @@ if __name__ == "__main__":
     file = "MATLIB_DIR>\Magnet1.json"
     print(abs_file_path(file, is_check=False))
 
-    file = join(MATLIB_DIR, 'test.json')
-    print(rel_file_path(file, 'MATLIB_DIR'))
+    file = join(MATLIB_DIR, "test.json")
+    print(rel_file_path(file, "MATLIB_DIR"))
 
-    file = 'c:/test.json'
-    print(rel_file_path(file, 'MATLIB_DIR'))
+    file = "c:/test.json"
+    print(rel_file_path(file, "MATLIB_DIR"))
 
-    file = join(MATLIB_DIR, 'test.json')
-    print(rel_file_path(file, 'invalid_DIR'))
-    
+    file = join(MATLIB_DIR, "test.json")
+    print(rel_file_path(file, "invalid_DIR"))

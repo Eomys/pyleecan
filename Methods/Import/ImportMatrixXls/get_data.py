@@ -10,6 +10,7 @@ from os.path import isfile
 
 from pyleecan.Functions.path_tools import abs_file_path
 
+
 def get_data(self):
     """Return the object's matrix
 
@@ -28,10 +29,6 @@ def get_data(self):
     if not isfile(file_path):
         raise XlsFileError("ERROR: The xls file doesn't exist " + self.file_path)
     df = read_excel(
-        file_path,
-        self.sheet,
-        header=None,
-        usecols=self.usecols,
-        skiprows=self.skiprows,
+        file_path, self.sheet, header=None, usecols=self.usecols, skiprows=self.skiprows
     )
     return self.edit_matrix(df.values)

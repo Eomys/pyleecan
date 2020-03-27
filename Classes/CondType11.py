@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Conductor import Conductor
 
@@ -133,21 +133,7 @@ class CondType11(Conductor):
         if ins_mat == -1:
             ins_mat = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "Hwire",
-                    "Wwire",
-                    "Nwppc_rad",
-                    "Nwppc_tan",
-                    "Wins_wire",
-                    "Wins_coil",
-                    "type_winding_shape",
-                    "alpha_ew",
-                    "cond_mat",
-                    "ins_mat",
-                ],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Hwire" in list(init_dict.keys()):
                 Hwire = init_dict["Hwire"]

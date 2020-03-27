@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotMag import SlotMag
 
@@ -138,7 +138,7 @@ class SlotMPolar(SlotMag):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["W0", "H0", "magnet", "W3", "Zs"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "W0" in list(init_dict.keys()):
                 W0 = init_dict["W0"]

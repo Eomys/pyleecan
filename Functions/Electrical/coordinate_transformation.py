@@ -118,4 +118,3 @@ def dq2ab(Z_dq, theta):
     Z_b = Z_dq[:, 0] * sin_theta + Z_dq[:, 1] * cos_theta
 
     return reshape([Z_a, Z_b], (2, -1)).transpose()
-

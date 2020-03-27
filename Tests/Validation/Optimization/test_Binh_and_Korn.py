@@ -141,7 +141,7 @@ def test_Binh_and_Korn():
 
     # ### Solving the problem
 
-    solver = OptiGenAlgNsga2Deap(problem=my_prob, size_pop=20, nb_gen=40, p_mutate=0.5,)
+    solver = OptiGenAlgNsga2Deap(problem=my_prob, size_pop=20, nb_gen=40, p_mutate=0.5)
     res = solver.solve()
 
     # ### Plot results

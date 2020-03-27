@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Notch import Notch
 
@@ -53,7 +53,7 @@ class NotchEvenDist(Notch):
         if notch_shape == -1:
             notch_shape = Slot()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["alpha", "notch_shape"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "alpha" in list(init_dict.keys()):
                 alpha = init_dict["alpha"]

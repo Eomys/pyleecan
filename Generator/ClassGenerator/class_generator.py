@@ -70,13 +70,10 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     if "ndarray" in import_type_list:
         class_file.write(
-            "from pyleecan.Classes._check import set_array, "
-            + "check_init_dict, check_var, raise_\n"
+            "from pyleecan.Classes._check import set_array, " + "check_var, raise_\n"
         )
     else:
-        class_file.write(
-            "from pyleecan.Classes._check import check_init_dict, check_var, raise_\n"
-        )
+        class_file.write("from pyleecan.Classes._check import check_var, raise_\n")
     # Save function
     class_file.write("from pyleecan.Functions.save import save\n")
 

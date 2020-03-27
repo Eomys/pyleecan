@@ -18,4 +18,3 @@ DATA_DIR = join(MAIN_DIR, "Data")  # Absolute path to default data dir
 MATLIB_DIR = join(DATA_DIR, "Material")
 
 TEST_DIR = join(MAIN_DIR, "Tests")
-

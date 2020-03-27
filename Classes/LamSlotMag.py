@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.LamSlot import LamSlot
 
@@ -166,23 +166,7 @@ class LamSlotMag(LamSlot):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "slot",
-                    "L1",
-                    "mat_type",
-                    "Nrvd",
-                    "Wrvd",
-                    "Kf1",
-                    "is_internal",
-                    "Rint",
-                    "Rext",
-                    "is_stator",
-                    "axial_vent",
-                    "notch",
-                ],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "slot" in list(init_dict.keys()):
                 slot = init_dict["slot"]

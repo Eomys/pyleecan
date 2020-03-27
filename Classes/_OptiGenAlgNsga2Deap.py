@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.OptiGenAlg import OptiGenAlg
 

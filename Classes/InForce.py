@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Input import Input
 
@@ -56,7 +56,7 @@ class InForce(Input):
         if Ptan == -1:
             Ptan = Import()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["time", "angle", "Prad", "Ptan"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]

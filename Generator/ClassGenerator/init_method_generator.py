@@ -223,11 +223,6 @@ def generate_init(gen_dict, class_dict):
             # To initialize the pyleecan Type default (-1)
             init_MType += TAB2 + "if " + prop["name"] + " == -1:\n"
             init_MType += TAB3 + prop["name"] + " = " + prop["type"] + "()\n"
-        # For check_init_dict
-        if check_dict == "":  # First variable
-            check_dict += '"' + prop["name"] + '"'
-        else:
-            check_dict += ', "' + prop["name"] + '"'
 
     # Code generation in init_str
     init_str += TAB + "def __init__(self" + arg_list + ", init_dict=None):\n"
@@ -249,7 +244,7 @@ def generate_init(gen_dict, class_dict):
 
     init_str += init_MType
     init_str += TAB2 + "if init_dict is not None:  # Initialisation by dict\n"
-    init_str += TAB3 + "check_init_dict(init_dict, [" + check_dict + "])\n"
+    init_str += TAB3 + "assert(type(init_dict) is dict)\n"
     init_str += TAB3 + "# Overwrite default value with init_dict content\n"
     init_str += init_by_dict
     init_str += TAB2 + "# Initialisation by argument\n"

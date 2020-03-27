@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.MagnetPolar import MagnetPolar
 
@@ -81,10 +81,7 @@ class MagnetType14(MagnetPolar):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["Wmag", "Hmag", "Rtop", "mat_type", "type_magnetization", "Lmag"],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Wmag" in list(init_dict.keys()):
                 Wmag = init_dict["Wmag"]

@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Machine import Machine
 
@@ -80,10 +80,7 @@ class MachineUD(Machine):
         if shaft == -1:
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["lam_list", "frame", "shaft", "name", "desc", "type_machine"],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "lam_list" in list(init_dict.keys()):
                 lam_list = init_dict["lam_list"]

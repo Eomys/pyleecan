@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotWind import SlotWind
 
@@ -194,10 +194,7 @@ class SlotW27(SlotWind):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["H0", "H1", "H2", "W0", "W1", "W2", "W3", "is_trap_wind", "Zs"],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "H0" in list(init_dict.keys()):
                 H0 = init_dict["H0"]

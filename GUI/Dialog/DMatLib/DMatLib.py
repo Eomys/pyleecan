@@ -20,6 +20,7 @@ from pyleecan.definitions import DATA_DIR
 
 from pyleecan.Functions.path_tools import abs_file_path
 
+
 class DMatLib(Gen_DMatLib, QDialog):
     """Material Library Dialog to view and modify material data."""
 

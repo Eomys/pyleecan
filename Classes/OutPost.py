@@ -4,7 +4,7 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -30,7 +30,7 @@ class OutPost(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["legend_name", "line_color"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "legend_name" in list(init_dict.keys()):
                 legend_name = init_dict["legend_name"]

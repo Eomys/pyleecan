@@ -110,10 +110,7 @@ InCurrentDQ_Error_test.append(
 test_obj = Simulation(machine=M2)
 test_obj.input = InCurrentDQ(time=time, angle=angle, Is=I_1)
 InCurrentDQ_Error_test.append(
-    {
-        "test_obj": test_obj,
-        "exp": "ERROR: 'comp_initial_angle' method not implemented",
-    }
+    {"test_obj": test_obj, "exp": "ERROR: 'comp_initial_angle' method not implemented"}
 )
 
 # Wrong Nr, alpha_rotor
@@ -192,22 +189,15 @@ class unittest_InCurrentDQ_meth(TestCase):
         time = ImportGenVectLin(0, 1, 7)
         angle = ImportGenVectLin(0, 2 * pi, 20)
         Is = ImportMatrixVal(
-            value=transpose(
-                array(
-                    [
-                        [2, 2, 2, 2, 2, 2, 2],
-                        [0, 0, 0, 0, 0, 0, 0],
-                    ]
-                )
-            )
+            value=transpose(array([[2, 2, 2, 2, 2, 2, 2], [0, 0, 0, 0, 0, 0, 0]]))
         )
-        
+
         Is_exp = transpose(
             array(
                 [
-                    [ 2,  1, -1, -2, -1,  1,  2],
-                    [-1,  1,  2,  1, -1, -2, -1],
-                    [-1, -2, -1,  1,  2,  1, -1],
+                    [2, 1, -1, -2, -1, 1, 2],
+                    [-1, 1, 2, 1, -1, -2, -1],
+                    [-1, -2, -1, 1, 2, 1, -1],
                 ]
             )
         )
@@ -215,8 +205,8 @@ class unittest_InCurrentDQ_meth(TestCase):
         zp = M1.stator.get_pole_pair_number()
         angle_rotor_initial = M1.comp_initial_angle()
         angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
-        
-        Nr = ImportMatrixVal(value=ones(7) * 60 / zp )
+
+        Nr = ImportMatrixVal(value=ones(7) * 60 / zp)
         test_obj.input = InCurrentDQ(
             time=time,
             angle=angle,
@@ -225,7 +215,7 @@ class unittest_InCurrentDQ_meth(TestCase):
             angle_rotor=None,
             Nr=Nr,
             angle_rotor_initial=angle_rotor_initial,
-            rot_dir=1
+            rot_dir=1,
         )
 
         test_obj.input.gen_input()
@@ -233,4 +223,4 @@ class unittest_InCurrentDQ_meth(TestCase):
         assert_array_almost_equal(output.elec.angle, linspace(0, 2 * pi, 20))
         assert_array_almost_equal(output.elec.Is, Is_exp)
         assert_array_almost_equal(output.elec.angle_rotor, angle_rotor_exp)
-        assert_array_almost_equal(output.elec.Nr, ones(7) * 60 / zp) 
+        assert_array_almost_equal(output.elec.Nr, ones(7) * 60 / zp)
