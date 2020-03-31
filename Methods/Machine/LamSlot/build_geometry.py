@@ -56,28 +56,20 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         # Check for symmetry
         assert (Zs % sym) == 0
 
-        slot_pitch = 2 * pi / Zs
-        op_angle = self.slot.comp_angle_opening()
-        t_angle = slot_pitch - op_angle
-
-        # getting the Lines that delimit one slot
-        Slot_lines = self.slot.build_geometry()
-
-        # By convention, the first tooth is centered on X+ axis
-        for line in Slot_lines:
-            line.rotate(slot_pitch / 2)
-        # Generate all the Slot and Bore lines
-        a0 = slot_pitch - t_angle / 2
-        a1 = slot_pitch + t_angle / 2
-        line_list = list()
-        for ii in range(Zs // sym):
-            # Duplicate and rotate the slot + bore for each slot
-            for line in Slot_lines:
-                new_line = type(line)(init_dict=line.as_dict())
-                new_line.rotate(ii * slot_pitch)
-                line_list.append(new_line)
-            bore_lines = self.get_bore_line(a0 + ii * slot_pitch, a1 + ii * slot_pitch)
-            line_list.extend(bore_lines)
+        bore_desc = self.get_bore_desc(sym=sym)
+        bore_list = list()
+        for bore in bore_desc:
+            if type(bore["obj"]) is Arc1:
+                bore_list.append(bore["obj"])
+            elif "lines" in bore:  # Duplicated slot
+                for line in bore["lines"]:
+                    bore_list.append(type(line)(init_dict=line.as_dict()))
+                    bore_list[-1].rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
+            else:  # Notches
+                lines = bore["obj"].build_geometry()
+                for line in lines:
+                    line.rotate((bore["begin_angle"] + bore["end_angle"]) / 2)
+                bore_list.extend(lines)
     else:  # No slot
         return build_geo(self, sym=sym, alpha=alpha, delta=delta)
 
@@ -86,7 +78,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     if sym == 1:  # Complete lamination
         # Create Slot surface
         surf_slot = SurfLine(
-            line_list=line_list, label="Lamination_" + ll + "_Bore_" + ls
+            line_list=bore_list, label="Lamination_" + ll + "_Bore_" + ls
         )
         if self.is_internal:
             surf_slot.point_ref = Ryoke + (H_yoke / 2)
@@ -110,24 +102,12 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
             surf_list.append(surf_yoke)
             surf_list.append(surf_slot)
     else:  # Only one surface
-        # Modify the bore radius
-        if len(bore_lines) > 0:
-            line_list.pop(-1)
-            start_angle = angle(line_list[-1].get_end())
-            line_list.extend(
-                self.get_bore_line(
-                    start_angle, start_angle + t_angle / 2, label="Bore_Line"
-                )
-            )
-            line_list.insert(
-                0, self.get_bore_line(0, t_angle / 2, label="Bore_Line")[0]
-            )
         # Add the Yoke part
         Zy1 = Ryoke
         Zy2 = Ryoke * exp(1j * 2 * pi / sym)
-        line_list.append(Segment(line_list[-1].get_end(), Zy2, label=ll + "_Yoke_Side"))
+        bore_list.append(Segment(bore_list[-1].get_end(), Zy2, label=ll + "_Yoke_Side"))
         if Ryoke > 0:  # For internal lamination
-            line_list.append(
+            bore_list.append(
                 Arc1(
                     begin=Zy2,
                     end=Zy1,
@@ -136,8 +116,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
                     label=ll + "_Yoke_Radius",
                 )
             )
-        line_list.append(
-            Segment(Zy1, line_list[0].get_begin(), label=ll + "_Yoke_Side")
+        bore_list.append(
+            Segment(Zy1, bore_list[0].get_begin(), label=ll + "_Yoke_Side")
         )
         # Create a Surface for the slot
         if self.is_internal:
@@ -145,7 +125,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         else:
             point_ref = (Ryoke - H_yoke / 2) * exp(1j * pi / sym)
         surf_slot = SurfLine(
-            line_list=line_list,
+            line_list=bore_list,
             label="Lamination_" + ll + "_Bore_" + ls,
             point_ref=point_ref,
         )
