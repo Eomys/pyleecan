@@ -36,9 +36,9 @@ except ImportError as error:
     comp_length = error
 
 try:
-    from pyleecan.Methods.Geometry.SurfLine.get_patch import get_patch
+    from pyleecan.Methods.Geometry.SurfLine.get_patches import get_patches
 except ImportError as error:
-    get_patch = error
+    get_patches = error
 
 try:
     from pyleecan.Methods.Geometry.SurfLine.discretize import discretize
@@ -113,15 +113,17 @@ class SurfLine(Surface):
         )
     else:
         comp_length = comp_length
-    # cf Methods.Geometry.SurfLine.get_patch
-    if isinstance(get_patch, ImportError):
-        get_patch = property(
+    # cf Methods.Geometry.SurfLine.get_patches
+    if isinstance(get_patches, ImportError):
+        get_patches = property(
             fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method get_patch: " + str(get_patch))
+                ImportError(
+                    "Can't use SurfLine method get_patches: " + str(get_patches)
+                )
             )
         )
     else:
-        get_patch = get_patch
+        get_patches = get_patches
     # cf Methods.Geometry.SurfLine.discretize
     if isinstance(discretize, ImportError):
         discretize = property(

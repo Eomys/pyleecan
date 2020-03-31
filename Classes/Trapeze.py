@@ -36,9 +36,9 @@ except ImportError as error:
     get_lines = error
 
 try:
-    from pyleecan.Methods.Geometry.Trapeze.get_patch import get_patch
+    from pyleecan.Methods.Geometry.Trapeze.get_patches import get_patches
 except ImportError as error:
-    get_patch = error
+    get_patches = error
 
 try:
     from pyleecan.Methods.Geometry.Trapeze.rotate import rotate
@@ -107,15 +107,15 @@ class Trapeze(Surface):
         )
     else:
         get_lines = get_lines
-    # cf Methods.Geometry.Trapeze.get_patch
-    if isinstance(get_patch, ImportError):
-        get_patch = property(
+    # cf Methods.Geometry.Trapeze.get_patches
+    if isinstance(get_patches, ImportError):
+        get_patches = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Trapeze method get_patch: " + str(get_patch))
+                ImportError("Can't use Trapeze method get_patches: " + str(get_patches))
             )
         )
     else:
-        get_patch = get_patch
+        get_patches = get_patches
     # cf Methods.Geometry.Trapeze.rotate
     if isinstance(rotate, ImportError):
         rotate = property(
