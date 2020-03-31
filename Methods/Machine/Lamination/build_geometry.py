@@ -7,6 +7,7 @@ from pyleecan.Classes.Circle import Circle
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.SurfLine import SurfLine
+from pyleecan.Classes.SurfRing import SurfRing
 from numpy import pi, exp
 
 
@@ -43,20 +44,27 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         ly = "_Bore_"
 
     surf_list = list()
-
     if sym == 1:  # Complete lamination
-        surface_yoke = Circle(
+        out_surf = Circle(
             radius=self.Rext,
             label=label + ly + "Ext",
             center=0,
             point_ref=self.Rint + (self.Rext - self.Rint) / 2,
         )
-        surf_list.append(surface_yoke)
+        in_surf = Circle(
+            radius=self.Rint, label=label + ls + "Int", center=0, point_ref=0
+        )
         if self.Rint > 0:
-            surface = Circle(
-                radius=self.Rint, label=label + ls + "Int", center=0, point_ref=0
+            surf_list.append(
+                SurfRing(
+                    out_surf=out_surf,
+                    in_surf=in_surf,
+                    label=label,
+                    point_ref=self.Rint + (self.Rext - self.Rint) / 2,
+                )
             )
-            surf_list.append(surface)
+        else:
+            surf_list.append(out_surf)
     else:  # Part of the lamination by symmetry
         Z0 = self.Rint
         Z1 = self.Rext

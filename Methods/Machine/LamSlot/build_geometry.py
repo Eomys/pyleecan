@@ -9,6 +9,7 @@ from pyleecan.Classes.Circle import Circle
 from pyleecan.Classes.SurfLine import SurfLine
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Segment import Segment
+from pyleecan.Classes.SurfRing import SurfRing
 from pyleecan.Methods.Machine.Lamination.build_geometry import (
     build_geometry as build_geo,
 )
@@ -76,31 +77,43 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     # Create the lamination surface(s)
     surf_list = list()
     if sym == 1:  # Complete lamination
+        if self.is_internal:
+            point_ref = Ryoke + (H_yoke / 2)
+        else:
+            point_ref = Ryoke - (H_yoke / 2)
         # Create Slot surface
         surf_slot = SurfLine(
-            line_list=bore_list, label="Lamination_" + ll + "_Bore_" + ls
+            line_list=bore_list,
+            label="Lamination_" + ll + "_Bore_" + ls,
+            point_ref=point_ref,
         )
-        if self.is_internal:
-            surf_slot.point_ref = Ryoke + (H_yoke / 2)
-        else:
-            surf_slot.point_ref = Ryoke - (H_yoke / 2)
         # Create yoke circle surface
-        if Ryoke > 0:
-            surf_yoke = Circle(
-                radius=Ryoke,
-                label="Lamination_" + ll + "_Yoke_" + ly,
-                line_label=ll + "_Yoke_Radius",
-                center=0,
+        surf_yoke = Circle(
+            radius=Ryoke,
+            label="Lamination_" + ll + "_Yoke_" + ly,
+            line_label=ll + "_Yoke_Radius",
+            center=0,
+        )
+        if self.Rint == 0:
+            surf_list = [surf_slot]
+        elif self.is_internal:
+            surf_list.append(
+                SurfRing(
+                    out_surf=surf_slot,
+                    in_surf=surf_yoke,
+                    label="Lamination_" + ll,
+                    point_ref=point_ref,
+                )
             )
-        # The order matters when plotting
-        if self.is_internal:
-            surf_list.append(surf_slot)
-            if Ryoke > 0:
-                surf_list.append(surf_yoke)
         else:
-            surf_yoke.point_ref = None  # No need to set the surface
-            surf_list.append(surf_yoke)
-            surf_list.append(surf_slot)
+            surf_list.append(
+                SurfRing(
+                    out_surf=surf_yoke,
+                    in_surf=surf_slot,
+                    label="Lamination_" + ll,
+                    point_ref=point_ref,
+                )
+            )
     else:  # Only one surface
         # Add the Yoke part
         Zy1 = Ryoke

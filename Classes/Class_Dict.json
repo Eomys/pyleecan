@@ -294,7 +294,7 @@
             "comp_surface",
             "discretize",
             "get_lines",
-            "get_patch",
+            "get_patches",
             "rotate",
             "translate"
         ],
@@ -2234,7 +2234,8 @@
             "get_pole_pair_number",
             "plot",
             "comp_height_yoke",
-            "get_Zs"
+            "get_Zs",
+            "get_bore_desc"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -5367,7 +5368,7 @@
             "check",
             "comp_length",
             "discretize",
-            "get_patch",
+            "get_patches",
             "comp_surface"
         ],
         "mother": "Surface",
@@ -7635,7 +7636,7 @@
             "translate",
             "check",
             "comp_length",
-            "get_patch",
+            "get_patches",
             "discretize",
             "comp_surface",
             "plot_lines"
@@ -7656,6 +7657,52 @@
             }
         ]
     },
+    "SurfRing": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "SurfRing is a surface between two closed surfaces (lamination surfaces for instance)",
+        "is_internal": false,
+        "methods": [
+            "get_lines",
+            "rotate",
+            "translate",
+            "check",
+            "comp_length",
+            "get_patches",
+            "discretize",
+            "comp_surface",
+            "plot_lines"
+        ],
+        "mother": "Surface",
+        "name": "SurfRing",
+        "package": "Geometry",
+        "path": "pyleecan/Generator/ClassesRef/Geometry/SurfRing.csv",
+        "properties": [
+            {
+                "desc": "Outter surface",
+                "max": "",
+                "min": "",
+                "name": "out_surf",
+                "type": "Surface",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Inner surface",
+                "max": "",
+                "min": "",
+                "name": "in_surf",
+                "type": "Surface",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "Surface": {
         "constants": [
             {
@@ -7664,9 +7711,11 @@
             }
         ],
         "daughters": [
+            "Surface",
             "Circle",
             "PolarArc",
             "SurfLine",
+            "SurfRing",
             "Trapeze"
         ],
         "desc": "SurfLine define by list of lines that delimit it, label and point reference.",
@@ -7717,7 +7766,7 @@
             "comp_surface",
             "discretize",
             "get_lines",
-            "get_patch",
+            "get_patches",
             "rotate",
             "translate"
         ],

@@ -35,7 +35,7 @@ def plot(self, fig=None, display_field=False):
     surf_list = self.build_geometry()
     patches = list()
     for surf in surf_list:
-        patches.append(surf.get_patch(color=MAGNET_COLOR))
+        patches.extend(surf.get_patches(color=MAGNET_COLOR))
 
     # Display the result
     (fig, axes, patch_leg, label_leg) = init_fig(fig)

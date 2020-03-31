@@ -37,9 +37,11 @@ def plot(self, fig=None):
 
     # Add the slot to the fig
     if self.get_is_stator:
-        axes.add_patch(surf.get_patch(color=STATOR_COLOR))
+        patches = surf.get_patches(color=STATOR_COLOR)
     else:
-        axes.add_patch(surf.get_patch(color=ROTOR_COLOR))
+        patches = surf.get_patch(color=ROTOR_COLOR)
+    for patch in patches:
+        axes.add_patch(patch)
 
     # Axis Setup
     axis("equal")

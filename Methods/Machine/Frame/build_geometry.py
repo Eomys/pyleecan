@@ -7,6 +7,7 @@ from pyleecan.Classes.Circle import Circle
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.SurfLine import SurfLine
+from pyleecan.Classes.SurfRing import SurfRing
 from numpy import exp, pi
 
 
@@ -34,17 +35,23 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     # If there is a frame...
     if self.comp_height_eq() != 0:
         if sym == 1:  # No symmetry / full frame
-            surf_frame = Circle(
+            out_surf = Circle(
                 radius=self.Rext,
-                label="Frame",
+                label="Frame_Outter",
                 center=0,
                 point_ref=self.Rint + (self.Rext - self.Rint) / 2,
             )
-
-            surface = Circle(radius=self.Rint, label=None, center=0, point_ref=0)
-            surf_list.append(surf_frame)
-            surf_list.append(surface)
-
+            in_surf = Circle(
+                radius=self.Rint, label="Frame_Inner", center=0, point_ref=0
+            )
+            surf_list = [
+                SurfRing(
+                    out_surf=out_surf,
+                    in_surf=in_surf,
+                    label="Frame",
+                    point_ref=self.Rint + (self.Rext - self.Rint) / 2,
+                )
+            ]
         else:  # Part of the frame
             Z0 = self.Rint
             Z3 = Z0 * exp(1j * 2 * pi / sym)

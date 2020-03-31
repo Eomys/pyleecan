@@ -132,6 +132,7 @@ load_switch = {
     "Solution": Solution,
     "Structural": Structural,
     "SurfLine": SurfLine,
+    "SurfRing": SurfRing,
     "Surface": Surface,
     "Trapeze": Trapeze,
     "Unit": Unit,

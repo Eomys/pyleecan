@@ -41,9 +41,9 @@ def plot(self, fig=None, display_magnet=True):
     patches = list()
     for surf in surf_hole:
         if "Magnet" in surf.label and display_magnet:
-            patches.append(surf.get_patch(color=MAGNET_COLOR))
+            patches.extend(surf.get_patches(color=MAGNET_COLOR))
         else:
-            patches.append(surf.get_patch(color=color))
+            patches.extend(surf.get_patches(color=color))
 
     # Display the result
     (fig, axes, patch_leg, label_leg) = init_fig(fig)

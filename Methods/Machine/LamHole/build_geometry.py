@@ -8,6 +8,7 @@ from numpy import pi, exp
 
 from pyleecan.Classes.Circle import Circle
 from pyleecan.Classes.SurfLine import SurfLine
+from pyleecan.Classes.SurfRing import SurfRing
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Segment import Segment
 
@@ -61,31 +62,46 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
     # Lamination surface(s)
     if sym == 1:  # Complete lamination
         if self.bore is None:
-            surf_list.append(
-                SurfLine(
-                    line_list=self.get_bore_line(0, 2 * pi, label=label_bore),
-                    label="Lamination_" + label + "_Bore_" + label1,
-                    point_ref=ref_point,
-                )
+            bore_surf = SurfLine(
+                line_list=self.get_bore_line(0, 2 * pi, label=label_bore),
+                label="Lamination_" + label + "_Bore_" + label1,
+                point_ref=ref_point,
             )
         else:
-            surf_list.append(
-                SurfLine(
-                    line_list=self.bore.get_bore_line(label=label_bore),
-                    label="Lamination_" + label + "_Bore_" + label1,
-                    point_ref=ref_point,
-                )
+            bore_surf = SurfLine(
+                line_list=self.bore.get_bore_line(label=label_bore),
+                label="Lamination_" + label + "_Bore_" + label1,
+                point_ref=ref_point,
             )
+        yoke_surf = Circle(
+            radius=Ryoke,
+            label="Lamination_" + label + "_Yoke_" + label2,
+            point_ref=0,
+            center=0,
+            line_label=label_yoke,
+        )
         if Ryoke > 0:
-            surf_list.append(
-                Circle(
-                    radius=Ryoke,
-                    label="Lamination_" + label + "_Yoke_" + label2,
-                    point_ref=0,
-                    center=0,
-                    line_label=label_yoke,
+            if self.is_internal:
+                surf_list.append(
+                    SurfRing(
+                        out_surf=bore_surf,
+                        in_surf=yoke_surf,
+                        label="Lamination_" + label,
+                        point_ref=ref_point,
+                    )
                 )
-            )
+            else:
+                surf_list.append(
+                    SurfRing(
+                        out_surf=yoke_surf,
+                        in_surf=bore_surf,
+                        label="Lamination_" + label,
+                        point_ref=ref_point,
+                    )
+                )
+        else:
+            surf_list.append(bore_surf)
+
     else:  # Symmetry lamination
         alpha_begin = 0
         alpha_end = 2 * pi / sym
