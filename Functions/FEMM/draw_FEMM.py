@@ -6,6 +6,7 @@
 
 import femm
 from pyleecan.Classes.Lamination import Lamination
+from pyleecan.Classes.Circle import Circle
 from pyleecan.Functions.FEMM import (
     hidebc,
     is_eddies,
@@ -110,6 +111,10 @@ def draw_FEMM(
     surf_list = list()
     lam_ext = machine.get_lamination(is_internal=False)
     lam_int = machine.get_lamination(is_internal=True)
+
+    # Adding no_mesh for shaft if needed
+    if lam_int.Rint > 0 and sym == 1:
+        surf_list.append(Circle(point_ref=0, radius=lam_int.Rint, label="No_mesh"))
     # adding Internal Lamination surface
     surf_list.extend(lam_int.build_geometry(sym=sym))
 
