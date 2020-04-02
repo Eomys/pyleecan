@@ -175,7 +175,7 @@ def generate_init(gen_dict, class_dict):
     check_dict = ""  # list of all the property expectable in the init_dict
     init_by_dict = ""  # To overwrite the parameter from init_dict
     arg_list = ""  # For the argument with default value
-    init_MType = ""  # To initialize the pyleecan Type default (-1)
+    init_P_Type = ""  # To initialize the pyleecan Type default (-1)
     for prop in all_properties:
         # To overwrite the parameter from init_dict
         init_by_dict += TAB3 + 'if "' + prop["name"] + '" in list(init_dict.keys()):\n'
@@ -213,6 +213,9 @@ def generate_init(gen_dict, class_dict):
         else:  # pyleecan type
             if prop["value"] == "":
                 arg_list += ", " + prop["name"] + "=-1"
+            elif type(prop["value"]) is str and "()" in prop["value"]:
+                # Initialization by a pyleecan class (different from default one)
+                arg_list += ", " + prop["name"] + "=-1"
             else:  # Default value (most likely None)
                 arg_list += (
                     ", "
@@ -221,8 +224,11 @@ def generate_init(gen_dict, class_dict):
                     + get_value_str(prop["value"], prop["type"])
                 )
             # To initialize the pyleecan Type default (-1)
-            init_MType += TAB2 + "if " + prop["name"] + " == -1:\n"
-            init_MType += TAB3 + prop["name"] + " = " + prop["type"] + "()\n"
+            init_P_Type += TAB2 + "if " + prop["name"] + " == -1:\n"
+            if type(prop["value"]) is str and "()" in prop["value"]:
+                init_P_Type += TAB3 + prop["name"] + " = " + prop["value"] + "\n"
+            else:
+                init_P_Type += TAB3 + prop["name"] + " = " + prop["type"] + "()\n"
 
     # Code generation in init_str
     init_str += TAB + "def __init__(self" + arg_list + ", init_dict=None):\n"
@@ -242,7 +248,7 @@ def generate_init(gen_dict, class_dict):
     init_str += TAB2 + "ndarray or list can be given for Vector and Matrix\n"
     init_str += TAB2 + 'object or dict can be given for pyleecan Object"""\n\n'
 
-    init_str += init_MType
+    init_str += init_P_Type
     init_str += TAB2 + "if init_dict is not None:  # Initialisation by dict\n"
     init_str += TAB3 + "assert(type(init_dict) is dict)\n"
     init_str += TAB3 + "# Overwrite default value with init_dict content\n"

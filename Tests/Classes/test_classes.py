@@ -106,6 +106,15 @@ class test_all_Classes(TestCase):
                     + " for property: "
                     + prop["name"],
                 )
+            elif type(prop["value"]) is str and "()" in prop["value"]:
+                self.assertEqual(
+                    result,
+                    eval(prop["value"]),
+                    msg="Error for class "
+                    + class_dict["name"]
+                    + " for property: "
+                    + prop["name"],
+                )
             elif prop["value"] != "":
                 self.assertEqual(
                     result,
@@ -140,6 +149,8 @@ class test_all_Classes(TestCase):
                     d[prop["name"]] = list()
             elif prop["value"] in ["None", None]:
                 d[prop["name"]] = None
+            elif type(prop["value"]) is str and "()" in prop["value"]:
+                d[prop["name"]] = eval(prop["value"] + ".as_dict()")
             elif prop["type"] in PYTHON_TYPE:
                 d[prop["name"]] = prop["value"]
             elif prop["type"] == "dict":
