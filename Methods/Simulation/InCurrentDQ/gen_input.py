@@ -156,6 +156,7 @@ def gen_input(self):
     # calculate/get rotor angle and calculate phase currents
     angle_rotor = self.parent.parent.get_angle_rotor()
     angle = angle_rotor - init_angle
+    zp = simu.machine.stator.get_pole_pair_number()
 
     # add stator current
-    output.Is = ab2uvw(dq2ab(IsDQ, angle))
+    output.Is = ab2uvw(dq2ab(IsDQ, angle * zp))

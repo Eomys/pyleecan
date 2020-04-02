@@ -131,6 +131,7 @@ from pyleecan.Classes.SlotWind import SlotWind
 from pyleecan.Classes.Solution import Solution
 from pyleecan.Classes.Structural import Structural
 from pyleecan.Classes.SurfLine import SurfLine
+from pyleecan.Classes.SurfRing import SurfRing
 from pyleecan.Classes.Surface import Surface
 from pyleecan.Classes.Trapeze import Trapeze
 from pyleecan.Classes.Unit import Unit

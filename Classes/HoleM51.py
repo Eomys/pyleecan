@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.HoleMag import HoleMag
 
@@ -221,27 +221,7 @@ class HoleM51(HoleMag):
         if mat_void == -1:
             mat_void = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "H0",
-                    "H1",
-                    "H2",
-                    "W0",
-                    "W1",
-                    "W2",
-                    "W3",
-                    "W4",
-                    "W5",
-                    "W6",
-                    "W7",
-                    "magnet_0",
-                    "magnet_1",
-                    "magnet_2",
-                    "Zh",
-                    "mat_void",
-                ],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "H0" in list(init_dict.keys()):
                 H0 = init_dict["H0"]

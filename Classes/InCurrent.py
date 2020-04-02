@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Input import Input
 
@@ -16,9 +16,15 @@ try:
 except ImportError as error:
     gen_input = error
 
+try:
+    from pyleecan.Methods.Simulation.InCurrent.set_Nr import set_Nr
+except ImportError as error:
+    set_Nr = error
+
 
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Import import Import
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
 
 class InCurrent(Input):
@@ -26,6 +32,7 @@ class InCurrent(Input):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.InCurrent.gen_input
     if isinstance(gen_input, ImportError):
         gen_input = property(
@@ -35,17 +42,26 @@ class InCurrent(Input):
         )
     else:
         gen_input = gen_input
+    # cf Methods.Simulation.InCurrent.set_Nr
+    if isinstance(set_Nr, ImportError):
+        set_Nr = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use InCurrent method set_Nr: " + str(set_Nr))
+            )
+        )
+    else:
+        set_Nr = set_Nr
     # save method is available in all object
     save = save
 
     def __init__(
         self,
-        time=None,
-        angle=None,
-        Is=None,
-        Ir=None,
+        time=-1,
+        angle=-1,
+        Is=-1,
+        Ir=-1,
         angle_rotor=None,
-        Nr=None,
+        Nr=-1,
         rot_dir=-1,
         angle_rotor_initial=0,
         init_dict=None,
@@ -60,31 +76,19 @@ class InCurrent(Input):
         object or dict can be given for pyleecan Object"""
 
         if time == -1:
-            time = Import()
+            time = ImportMatrixVal()
         if angle == -1:
-            angle = Import()
+            angle = ImportMatrixVal()
         if Is == -1:
-            Is = Import()
+            Is = ImportMatrixVal()
         if Ir == -1:
-            Ir = Import()
+            Ir = ImportMatrixVal()
         if angle_rotor == -1:
             angle_rotor = Import()
         if Nr == -1:
-            Nr = Import()
+            Nr = ImportMatrixVal()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "time",
-                    "angle",
-                    "Is",
-                    "Ir",
-                    "angle_rotor",
-                    "Nr",
-                    "rot_dir",
-                    "angle_rotor_initial",
-                ],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]

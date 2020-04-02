@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Slot import Slot
 
@@ -50,7 +50,7 @@ class SlotUD(Slot):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["point_list", "is_sym", "Zs"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "point_list" in list(init_dict.keys()):
                 point_list = init_dict["point_list"]

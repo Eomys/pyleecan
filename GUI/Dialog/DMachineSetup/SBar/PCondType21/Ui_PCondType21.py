@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
-# File generated according to PCondType21.ui
+# Form implementation generated from reading ui file 'C:\Users\eomys\OneDrive\Documents\PYLEECAN\pyleecan\GUI\Dialog\DMachineSetup\SBar\PCondType21\PCondType21.ui'
+#
+# Created by: PyQt5 UI code generator 5.14.1
+#
 # WARNING! All changes made in this file will be lost!
+
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 

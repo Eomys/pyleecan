@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.OptiGenAlg import OptiGenAlg
 
@@ -145,22 +145,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         if problem == -1:
             problem = OptiProblem()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "toolbox",
-                    "multi_output",
-                    "selector",
-                    "crossover",
-                    "mutator",
-                    "p_cross",
-                    "p_mutate",
-                    "size_pop",
-                    "nb_gen",
-                    "problem",
-                    "logger_name",
-                ],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "toolbox" in list(init_dict.keys()):
                 toolbox = init_dict["toolbox"]

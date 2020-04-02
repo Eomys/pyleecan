@@ -294,7 +294,7 @@
             "comp_surface",
             "discretize",
             "get_lines",
-            "get_patch",
+            "get_patches",
             "rotate",
             "translate"
         ],
@@ -1858,7 +1858,8 @@
         "desc": "Input to skip the electrical module and start with the magnetic one",
         "is_internal": false,
         "methods": [
-            "gen_input"
+            "gen_input",
+            "set_Nr"
         ],
         "mother": "Input",
         "name": "InCurrent",
@@ -1872,7 +1873,7 @@
                 "name": "time",
                 "type": "Import",
                 "unit": "s",
-                "value": null
+                "value": "ImportMatrixVal()"
             },
             {
                 "desc": "Electrical position vector (no symmetry) to import",
@@ -1881,7 +1882,7 @@
                 "name": "angle",
                 "type": "Import",
                 "unit": "rad",
-                "value": null
+                "value": "ImportMatrixVal()"
             },
             {
                 "desc": "Stator currents as a function of time (each column correspond to one phase) to import",
@@ -1890,7 +1891,7 @@
                 "name": "Is",
                 "type": "Import",
                 "unit": "A",
-                "value": null
+                "value": "ImportMatrixVal()"
             },
             {
                 "desc": "Rotor currents as a function of time (each column correspond to one phase) to import",
@@ -1899,7 +1900,7 @@
                 "name": "Ir",
                 "type": "Import",
                 "unit": "A",
-                "value": null
+                "value": "ImportMatrixVal()"
             },
             {
                 "desc": "Rotor angular position as a function of time (if None computed according to Nr) to import",
@@ -1917,7 +1918,7 @@
                 "name": "Nr",
                 "type": "Import",
                 "unit": "rpm",
-                "value": null
+                "value": "ImportMatrixVal()"
             },
             {
                 "desc": "Rotation direction of the rotor 1 trigo, -1 clockwise",
@@ -2234,7 +2235,8 @@
             "get_pole_pair_number",
             "plot",
             "comp_height_yoke",
-            "get_Zs"
+            "get_Zs",
+            "get_bore_desc"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -5465,7 +5467,7 @@
             "check",
             "comp_length",
             "discretize",
-            "get_patch",
+            "get_patches",
             "comp_surface"
         ],
         "mother": "Surface",
@@ -7742,7 +7744,7 @@
             "translate",
             "check",
             "comp_length",
-            "get_patch",
+            "get_patches",
             "discretize",
             "comp_surface",
             "plot_lines"
@@ -7763,6 +7765,52 @@
             }
         ]
     },
+    "SurfRing": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "SurfRing is a surface between two closed surfaces (lamination surfaces for instance)",
+        "is_internal": false,
+        "methods": [
+            "get_lines",
+            "rotate",
+            "translate",
+            "check",
+            "comp_length",
+            "get_patches",
+            "discretize",
+            "comp_surface",
+            "plot_lines"
+        ],
+        "mother": "Surface",
+        "name": "SurfRing",
+        "package": "Geometry",
+        "path": "pyleecan/Generator/ClassesRef/Geometry/SurfRing.csv",
+        "properties": [
+            {
+                "desc": "Outter surface",
+                "max": "",
+                "min": "",
+                "name": "out_surf",
+                "type": "Surface",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Inner surface",
+                "max": "",
+                "min": "",
+                "name": "in_surf",
+                "type": "Surface",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "Surface": {
         "constants": [
             {
@@ -7771,9 +7819,11 @@
             }
         ],
         "daughters": [
+            "Surface",
             "Circle",
             "PolarArc",
             "SurfLine",
+            "SurfRing",
             "Trapeze"
         ],
         "desc": "SurfLine define by list of lines that delimit it, label and point reference.",
@@ -7824,7 +7874,7 @@
             "comp_surface",
             "discretize",
             "get_lines",
-            "get_patch",
+            "get_patches",
             "rotate",
             "translate"
         ],

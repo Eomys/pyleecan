@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 from pyleecan.Tests import save_validation_path as save_path
 
 from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Tests.Validation.Machine.SIPMSM_001 import SIPMSM_001
 
 from pyleecan.Classes.InCurrent import InCurrent
 from pyleecan.Classes.InFlux import InFlux
@@ -16,6 +15,7 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Tests import DATA_DIR
+from pyleecan.Tests.Validation.Machine.SIPMSM_001 import SIPMSM_001
 
 simu = Simu1(name="EM_SIPMSM_AL_001", machine=SIPMSM_001)
 

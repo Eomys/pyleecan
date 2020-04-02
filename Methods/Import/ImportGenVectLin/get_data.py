@@ -24,7 +24,7 @@ def get_data(self):
     """
 
     vect = linspace(
-        start=self.start, stop=self.stop, num=self.num, endpoint=self.endpoint
+        start=self.start, stop=self.stop, num=int(self.num), endpoint=self.endpoint
     )
 
     return self.edit_matrix(vect)

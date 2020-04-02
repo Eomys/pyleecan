@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
@@ -42,9 +42,9 @@ except ImportError as error:
     discretize = error
 
 try:
-    from pyleecan.Methods.Geometry.PolarArc.get_patch import get_patch
+    from pyleecan.Methods.Geometry.PolarArc.get_patches import get_patches
 except ImportError as error:
-    get_patch = error
+    get_patches = error
 
 try:
     from pyleecan.Methods.Geometry.PolarArc.comp_surface import comp_surface
@@ -117,15 +117,17 @@ class PolarArc(Surface):
         )
     else:
         discretize = discretize
-    # cf Methods.Geometry.PolarArc.get_patch
-    if isinstance(get_patch, ImportError):
-        get_patch = property(
+    # cf Methods.Geometry.PolarArc.get_patches
+    if isinstance(get_patches, ImportError):
+        get_patches = property(
             fget=lambda x: raise_(
-                ImportError("Can't use PolarArc method get_patch: " + str(get_patch))
+                ImportError(
+                    "Can't use PolarArc method get_patches: " + str(get_patches)
+                )
             )
         )
     else:
-        get_patch = get_patch
+        get_patches = get_patches
     # cf Methods.Geometry.PolarArc.comp_surface
     if isinstance(comp_surface, ImportError):
         comp_surface = property(
@@ -151,7 +153,7 @@ class PolarArc(Surface):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["angle", "height", "point_ref", "label"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "angle" in list(init_dict.keys()):
                 angle = init_dict["angle"]

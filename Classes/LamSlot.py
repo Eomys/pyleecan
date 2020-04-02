@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Lamination import Lamination
 
@@ -52,6 +52,11 @@ try:
     from pyleecan.Methods.Machine.LamSlot.get_Zs import get_Zs
 except ImportError as error:
     get_Zs = error
+
+try:
+    from pyleecan.Methods.Machine.LamSlot.get_bore_desc import get_bore_desc
+except ImportError as error:
+    get_bore_desc = error
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
@@ -151,6 +156,17 @@ class LamSlot(Lamination):
         )
     else:
         get_Zs = get_Zs
+    # cf Methods.Machine.LamSlot.get_bore_desc
+    if isinstance(get_bore_desc, ImportError):
+        get_bore_desc = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlot method get_bore_desc: " + str(get_bore_desc)
+                )
+            )
+        )
+    else:
+        get_bore_desc = get_bore_desc
     # save method is available in all object
     save = save
 
@@ -184,23 +200,7 @@ class LamSlot(Lamination):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "slot",
-                    "L1",
-                    "mat_type",
-                    "Nrvd",
-                    "Wrvd",
-                    "Kf1",
-                    "is_internal",
-                    "Rint",
-                    "Rext",
-                    "is_stator",
-                    "axial_vent",
-                    "notch",
-                ],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "slot" in list(init_dict.keys()):
                 slot = init_dict["slot"]

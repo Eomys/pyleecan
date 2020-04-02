@@ -111,9 +111,7 @@ def test_zdt3():
         output=output, design_var=my_vars, obj_func=objs, eval_func=evaluate
     )
 
-    solver = OptiGenAlgNsga2Deap(
-        problem=my_prob, size_pop=40, nb_gen=100, p_mutate=0.5,
-    )
+    solver = OptiGenAlgNsga2Deap(problem=my_prob, size_pop=40, nb_gen=100, p_mutate=0.5)
     res = solver.solve()
 
     def plot_pareto(self):

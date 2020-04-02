@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -53,7 +53,7 @@ class Conductor(FrozenClass):
         if ins_mat == -1:
             ins_mat = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["cond_mat", "ins_mat"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "cond_mat" in list(init_dict.keys()):
                 cond_mat = init_dict["cond_mat"]

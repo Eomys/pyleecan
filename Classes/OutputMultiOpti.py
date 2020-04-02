@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.OutputMulti import OutputMulti
 
@@ -152,20 +152,7 @@ class OutputMultiOpti(OutputMulti):
         if output_ref == -1:
             output_ref = Output()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "fitness",
-                    "constraint",
-                    "ngen",
-                    "fitness_names",
-                    "output_ref",
-                    "outputs",
-                    "is_valid",
-                    "design_var",
-                    "design_var_names",
-                ],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "fitness" in list(init_dict.keys()):
                 fitness = init_dict["fitness"]

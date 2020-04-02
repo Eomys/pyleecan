@@ -34,41 +34,6 @@ def set_array(obj, prop, value):
     setattr(obj, prop, value)
 
 
-def check_init_dict(init_dict, key_list):
-    """Check if init_dict is correct to initialize the Object (all the keys of init_dict are in key_list)
-
-    Parameters
-    ----------
-    init_dict : dict
-        The dictionary to check
-    key_list : list
-        List of the expected key (str)
-
-    Returns
-    -------
-    None
-
-    Raises
-    ------
-    NotADictError
-        init_dict is not a dictionary
-    MissingInitDictKeyError
-        A key is missing in init_dict
-
-    """
-
-    if not isinstance(init_dict, dict):
-        raise NotADictError("Init by dict : init_dict must be a dict")
-    msg = "Second argument is the list of variable needed in init_dict"
-    assert isinstance(key_list, list), msg
-
-    # Check that every key of init_dict is expected for this object
-    key_list.append("__class__")  # Not a property, added for load
-    for key in list(init_dict.keys()):
-        if key not in key_list:
-            raise UnknowInitDictKeyError("Init by dict : " + key + " is not a property")
-
-
 def check_var(var_name, value, expect_type, Vmin=None, Vmax=None):
     """Check if var_name can be set with value
 

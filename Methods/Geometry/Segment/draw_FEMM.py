@@ -13,7 +13,7 @@ def draw_FEMM(
     self,
     nodeprop=None,
     propname=None,
-    elementsize=None,
+    element_size=None,
     automesh=None,
     hide=False,
     group=None,
@@ -28,12 +28,12 @@ def draw_FEMM(
     propname :
         Boundary property ’propname’
          (Default value = None)
-    elementsize :
-        Local element size along segment no greater than elementsize
+    element_size :
+        Local element size along segment no greater than element_size
          (Default value = None)
     automesh :
         0 = mesher defers to the element constraint defined by
-        elementsize, 1 = mesher automatically chooses mesh size along
+        element_size, 1 = mesher automatically chooses mesh size along
         the selected segments
         (Default value = None)
     hide :
@@ -68,5 +68,5 @@ def draw_FEMM(
     femm.mi_addsegment(X1, Y1, X2, Y2)
     # Set property
     femm.mi_selectsegment((X1 + X2) / 2, (Y1 + Y2) / 2)
-    femm.mi_setsegmentprop(propname, elementsize, automesh, hide, group)
+    femm.mi_setsegmentprop(propname, element_size, automesh, hide, group)
     femm.mi_clearselected()

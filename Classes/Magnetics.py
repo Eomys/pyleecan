@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -96,24 +96,7 @@ class Magnetics(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "is_remove_slotS",
-                    "is_remove_slotR",
-                    "is_remove_vent",
-                    "is_mmfs",
-                    "is_mmfr",
-                    "is_stator_linear_BH",
-                    "is_rotor_linear_BH",
-                    "is_symmetry_t",
-                    "sym_t",
-                    "is_antiper_t",
-                    "is_symmetry_a",
-                    "sym_a",
-                    "is_antiper_a",
-                ],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
