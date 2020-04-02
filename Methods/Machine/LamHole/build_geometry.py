@@ -38,9 +38,9 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
 
     # Lamination label
     if self.is_stator:
-        label = "Stator"
+        label = "Lamination_Stator"
     else:
-        label = "Rotor"
+        label = "Lamination_Rotor"
 
     if self.is_internal:
         Ryoke = self.Rint
@@ -53,8 +53,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         label2 = "Ext"
         label1 = "Int"
 
-    label_bore = label + "_Bore_Radius"
-    label_yoke = label + "_Yoke_Radius"
+    label_bore = label + "_Bore_Radius_" + label1
+    label_yoke = label + "_Yoke_Radius_" + label2
 
     ref_point = self.comp_radius_mid_yoke() * exp(1j * pi / sym)
 
@@ -64,21 +64,17 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
         if self.bore is None:
             bore_surf = SurfLine(
                 line_list=self.get_bore_line(0, 2 * pi, label=label_bore),
-                label="Lamination_" + label + "_Bore_" + label1,
+                label=label_bore,
                 point_ref=ref_point,
             )
         else:
             bore_surf = SurfLine(
                 line_list=self.bore.get_bore_line(label=label_bore),
-                label="Lamination_" + label + "_Bore_" + label1,
+                label=label_bore,
                 point_ref=ref_point,
             )
         yoke_surf = Circle(
-            radius=Ryoke,
-            label="Lamination_" + label + "_Yoke_" + label2,
-            point_ref=0,
-            center=0,
-            line_label=label_yoke,
+            radius=Ryoke, label=label_yoke, point_ref=0, center=0, line_label=label_yoke
         )
         if Ryoke > 0:
             if self.is_internal:
@@ -86,7 +82,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
                     SurfRing(
                         out_surf=bore_surf,
                         in_surf=yoke_surf,
-                        label="Lamination_" + label,
+                        label=label,
                         point_ref=ref_point,
                     )
                 )
@@ -95,7 +91,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
                     SurfRing(
                         out_surf=yoke_surf,
                         in_surf=bore_surf,
-                        label="Lamination_" + label,
+                        label=label,
                         point_ref=ref_point,
                     )
                 )
@@ -125,11 +121,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
                 )
             )
         surf_list.append(
-            SurfLine(
-                line_list=line_list,
-                label="Lamination_" + label + "_Bore_" + label1,
-                point_ref=ref_point,
-            )
+            SurfLine(line_list=line_list, label=label_bore, point_ref=ref_point)
         )
 
     # Holes surface(s)
