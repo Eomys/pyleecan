@@ -65,7 +65,7 @@
                             "mur_lin": 1.05
                         },
                         "name": "Magnet1",
-                        "path": "D:\\GitHub\\pyleecan\\Data\\Material\\Magnet1.json",
+                        "path": "pyleecan\\Data\\Material\\Magnet1.json",
                         "struct": {
                             "Ex": null,
                             "Ey": null,
@@ -121,7 +121,7 @@
                             "mur_lin": 1.05
                         },
                         "name": "Magnet1",
-                        "path": "D:\\GitHub\\pyleecan\\Data\\Material\\Magnet1.json",
+                        "path": "pyleecan\\Data\\Material\\Magnet1.json",
                         "struct": {
                             "Ex": null,
                             "Ey": null,
@@ -219,7 +219,7 @@
             "mag": {
                 "BH_curve": {
                     "__class__": "ImportMatrixXls",
-                    "file_path": "d:\\GitHub\\pyleecan\\Tests\\Validation\\Material\\M400-50A.xlsx",
+                    "file_path": "pyleecan\\Tests\\Validation\\Material\\M400-50A.xlsx",
                     "is_transpose": false,
                     "sheet": "BH",
                     "skiprows": 0,
@@ -344,7 +344,7 @@
             "mag": {
                 "BH_curve": {
                     "__class__": "ImportMatrixXls",
-                    "file_path": "d:\\GitHub\\pyleecan\\Tests\\Validation\\Material\\M400-50A.xlsx",
+                    "file_path": ".",
                     "is_transpose": false,
                     "sheet": "BH",
                     "skiprows": 0,
