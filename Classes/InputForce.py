@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Simulation/InForce.csv
+"""File generated according to pyleecan/Generator/ClassesRef/Simulation/InputForce.csv
 WARNING! All changes made in this file will be lost!
 """
 
@@ -11,7 +11,7 @@ from pyleecan.Classes.Input import Input
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Simulation.InForce.gen_input import gen_input
+    from pyleecan.Methods.Simulation.InputForce.gen_input import gen_input
 except ImportError as error:
     gen_input = error
 
@@ -20,16 +20,16 @@ from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Import import Import
 
 
-class InForce(Input):
+class InputForce(Input):
     """Input to start with the structural one """
 
     VERSION = 1
 
-    # cf Methods.Simulation.InForce.gen_input
+    # cf Methods.Simulation.InputForce.gen_input
     if isinstance(gen_input, ImportError):
         gen_input = property(
             fget=lambda x: raise_(
-                ImportError("Can't use InForce method gen_input: " + str(gen_input))
+                ImportError("Can't use InputForce method gen_input: " + str(gen_input))
             )
         )
     else:
@@ -160,37 +160,37 @@ class InForce(Input):
         else:
             self.Ptan = Ptan
         # Call Input init
-        super(InForce, self).__init__()
+        super(InputForce, self).__init__()
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
-        InForce_str = ""
+        InputForce_str = ""
         # Get the properties inherited from Input
-        InForce_str += super(InForce, self).__str__()
+        InputForce_str += super(InputForce, self).__str__()
         if self.time is not None:
             tmp = self.time.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InForce_str += "time = " + tmp
+            InputForce_str += "time = " + tmp
         else:
-            InForce_str += "time = None" + linesep + linesep
+            InputForce_str += "time = None" + linesep + linesep
         if self.angle is not None:
             tmp = self.angle.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InForce_str += "angle = " + tmp
+            InputForce_str += "angle = " + tmp
         else:
-            InForce_str += "angle = None" + linesep + linesep
+            InputForce_str += "angle = None" + linesep + linesep
         if self.Prad is not None:
             tmp = self.Prad.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InForce_str += "Prad = " + tmp
+            InputForce_str += "Prad = " + tmp
         else:
-            InForce_str += "Prad = None" + linesep + linesep
+            InputForce_str += "Prad = None" + linesep + linesep
         if self.Ptan is not None:
             tmp = self.Ptan.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InForce_str += "Ptan = " + tmp
+            InputForce_str += "Ptan = " + tmp
         else:
-            InForce_str += "Ptan = None" + linesep + linesep
-        return InForce_str
+            InputForce_str += "Ptan = None" + linesep + linesep
+        return InputForce_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -199,7 +199,7 @@ class InForce(Input):
             return False
 
         # Check the properties inherited from Input
-        if not super(InForce, self).__eq__(other):
+        if not super(InputForce, self).__eq__(other):
             return False
         if other.time != self.time:
             return False
@@ -216,27 +216,27 @@ class InForce(Input):
         """
 
         # Get the properties inherited from Input
-        InForce_dict = super(InForce, self).as_dict()
+        InputForce_dict = super(InputForce, self).as_dict()
         if self.time is None:
-            InForce_dict["time"] = None
+            InputForce_dict["time"] = None
         else:
-            InForce_dict["time"] = self.time.as_dict()
+            InputForce_dict["time"] = self.time.as_dict()
         if self.angle is None:
-            InForce_dict["angle"] = None
+            InputForce_dict["angle"] = None
         else:
-            InForce_dict["angle"] = self.angle.as_dict()
+            InputForce_dict["angle"] = self.angle.as_dict()
         if self.Prad is None:
-            InForce_dict["Prad"] = None
+            InputForce_dict["Prad"] = None
         else:
-            InForce_dict["Prad"] = self.Prad.as_dict()
+            InputForce_dict["Prad"] = self.Prad.as_dict()
         if self.Ptan is None:
-            InForce_dict["Ptan"] = None
+            InputForce_dict["Ptan"] = None
         else:
-            InForce_dict["Ptan"] = self.Ptan.as_dict()
+            InputForce_dict["Ptan"] = self.Ptan.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
-        InForce_dict["__class__"] = "InForce"
-        return InForce_dict
+        InputForce_dict["__class__"] = "InputForce"
+        return InputForce_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -250,7 +250,7 @@ class InForce(Input):
         if self.Ptan is not None:
             self.Ptan._set_None()
         # Set to None the properties inherited from Input
-        super(InForce, self)._set_None()
+        super(InputForce, self)._set_None()
 
     def _get_time(self):
         """getter of time"""

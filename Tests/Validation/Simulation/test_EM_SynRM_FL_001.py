@@ -7,8 +7,8 @@ from pyleecan.Tests import save_validation_path as save_path
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Tests.Validation.Machine.SynRM_001 import SynRM_001
 
-from pyleecan.Classes.InCurrent import InCurrent
-from pyleecan.Classes.InFlux import InFlux
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.InputFlux import InputFlux
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportMatlab import ImportMatlab
@@ -65,7 +65,7 @@ time_obj = ImportMatrixVal(value=time)
 angle = ImportGenVectLin(start=0, stop=2 * pi, num=2016, endpoint=False)
 alpha_rotor = ImportMatrixVal(value=array([0, pi / 9, 2 * pi / 9]) + 2.6180)
 
-simu.input = InCurrent(
+simu.input = InputCurrent(
     Is=None,
     Ir=None,  # No winding on the rotor
     Nr=None,

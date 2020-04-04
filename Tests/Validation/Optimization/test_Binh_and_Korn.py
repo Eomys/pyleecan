@@ -10,7 +10,7 @@ In Proceedings of the third international Conference on Genetic Algorithms (Mend
 
 import pytest
 from pyleecan.Tests.Validation.Machine.SCIM_001 import SCIM_001
-from pyleecan.Classes.InCurrent import InCurrent
+from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
@@ -54,7 +54,7 @@ def test_Binh_and_Korn():
     # Definition of the simulation
     simu = Simu1(name="Test_machine", machine=SCIM_001)
 
-    simu.input = InCurrent(
+    simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
         Nr=Nr,

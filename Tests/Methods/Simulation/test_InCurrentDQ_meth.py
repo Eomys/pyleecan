@@ -14,7 +14,7 @@ from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.InCurrentDQ import InCurrentDQ
+from pyleecan.Classes.InputCurrentDQ import InputCurrentDQ
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
 from pyleecan.Classes.MachineDFIM import MachineDFIM
@@ -23,7 +23,7 @@ from pyleecan.Classes.Output import Output
 from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Methods.Simulation.Input import InputError
 
-InCurrentDQ_Error_test = list()
+InputCurrentDQ_Error_test = list()
 time_wrong = ImportMatrixVal(value=zeros((10, 2)))
 time = ImportGenVectLin(0, 10, 100)
 
@@ -58,120 +58,120 @@ M2.rotor.winding = None
 
 # Wrong time
 test_obj = Simulation()
-test_obj.input = InCurrentDQ(time=None)
-InCurrentDQ_Error_test.append(
-    {"test_obj": test_obj, "exp": "ERROR: InCurrentDQ.time missing"}
+test_obj.input = InputCurrentDQ(time=None)
+InputCurrentDQ_Error_test.append(
+    {"test_obj": test_obj, "exp": "ERROR: InputCurrentDQ.time missing"}
 )
 test_obj = Simulation()
-test_obj.input = InCurrentDQ(time=time_wrong)
-InCurrentDQ_Error_test.append(
+test_obj.input = InputCurrentDQ(time=time_wrong)
+InputCurrentDQ_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InCurrentDQ.time should be a vector, (10, 2) shape found",
+        "exp": "ERROR: InputCurrentDQ.time should be a vector, (10, 2) shape found",
     }
 )
 # Wrong angle
 test_obj = Simulation()
-test_obj.input = InCurrentDQ(time=time, angle=None)
-InCurrentDQ_Error_test.append(
-    {"test_obj": test_obj, "exp": "ERROR: InCurrentDQ.angle missing"}
+test_obj.input = InputCurrentDQ(time=time, angle=None)
+InputCurrentDQ_Error_test.append(
+    {"test_obj": test_obj, "exp": "ERROR: InputCurrentDQ.angle missing"}
 )
 test_obj = Simulation()
-test_obj.input = InCurrentDQ(time=time, angle=angle_wrong)
-InCurrentDQ_Error_test.append(
+test_obj.input = InputCurrentDQ(time=time, angle=angle_wrong)
+InputCurrentDQ_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InCurrentDQ.angle should be a vector, (10, 4) shape found",
+        "exp": "ERROR: InputCurrentDQ.angle should be a vector, (10, 4) shape found",
     }
 )
 # Wrong Is
 test_obj = Simulation(machine=M1)
-test_obj.input = InCurrentDQ(time=time, angle=angle, Is=None)
-InCurrentDQ_Error_test.append(
-    {"test_obj": test_obj, "exp": "ERROR: InCurrentDQ.Is missing"}
+test_obj.input = InputCurrentDQ(time=time, angle=angle, Is=None)
+InputCurrentDQ_Error_test.append(
+    {"test_obj": test_obj, "exp": "ERROR: InputCurrentDQ.Is missing"}
 )
 test_obj = Simulation(machine=M1)
-test_obj.input = InCurrentDQ(time=time, angle=angle, Is=I_3)
-InCurrentDQ_Error_test.append(
+test_obj.input = InputCurrentDQ(time=time, angle=angle, Is=I_3)
+InputCurrentDQ_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InCurrentDQ.Is must be a matrix with the shape (100, 2) (len(time), stator phase number), (2, 100) returned",
+        "exp": "ERROR: InputCurrentDQ.Is must be a matrix with the shape (100, 2) (len(time), stator phase number), (2, 100) returned",
     }
 )
 test_obj = Simulation(machine=M1)
-test_obj.input = InCurrentDQ(time=time, angle=angle, Is=I_4)
-InCurrentDQ_Error_test.append(
+test_obj.input = InputCurrentDQ(time=time, angle=angle, Is=I_4)
+InputCurrentDQ_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InCurrentDQ.Is must be a matrix with the shape (100, 2) (len(time), stator phase number), (100,) returned",
+        "exp": "ERROR: InputCurrentDQ.Is must be a matrix with the shape (100, 2) (len(time), stator phase number), (100,) returned",
     }
 )
 # 'comp_initial_angle' method not implemented
 test_obj = Simulation(machine=M2)
-test_obj.input = InCurrentDQ(time=time, angle=angle, Is=I_1)
-InCurrentDQ_Error_test.append(
+test_obj.input = InputCurrentDQ(time=time, angle=angle, Is=I_1)
+InputCurrentDQ_Error_test.append(
     {"test_obj": test_obj, "exp": "ERROR: 'comp_initial_angle' method not implemented"}
 )
 
 # Wrong Nr, alpha_rotor
 test_obj = Simulation(machine=M1)
-test_obj.input = InCurrentDQ(
+test_obj.input = InputCurrentDQ(
     time=time, angle=angle, Is=I_1, Ir=None, angle_rotor=None, Nr=None
 )
-InCurrentDQ_Error_test.append(
+InputCurrentDQ_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InCurrentDQ.angle_rotor and InCurrentDQ.Nr can't be None at the same time",
+        "exp": "ERROR: InputCurrentDQ.angle_rotor and InputCurrentDQ.Nr can't be None at the same time",
     }
 )
 test_obj = Simulation(machine=M1)
-test_obj.input = InCurrentDQ(
+test_obj.input = InputCurrentDQ(
     time=time, angle=angle, Is=I_1, Ir=None, angle_rotor=angle_rotor_wrong, Nr=None
 )
-InCurrentDQ_Error_test.append(
+InputCurrentDQ_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InCurrentDQ.angle_rotor should be a vector of the same length as time, (10, 2) shape found, (100,) expected",
+        "exp": "ERROR: InputCurrentDQ.angle_rotor should be a vector of the same length as time, (10, 2) shape found, (100,) expected",
     }
 )
 test_obj = Simulation(machine=M1)
-test_obj.input = InCurrentDQ(
+test_obj.input = InputCurrentDQ(
     time=time, angle=angle, Is=I_1, Ir=None, angle_rotor=angle_rotor_wrong2, Nr=None
 )
-InCurrentDQ_Error_test.append(
+InputCurrentDQ_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InCurrentDQ.angle_rotor should be a vector of the same length as time, (102,) shape found, (100,) expected",
+        "exp": "ERROR: InputCurrentDQ.angle_rotor should be a vector of the same length as time, (102,) shape found, (100,) expected",
     }
 )
 test_obj = Simulation(machine=M1)
-test_obj.input = InCurrentDQ(
+test_obj.input = InputCurrentDQ(
     time=time, angle=angle, Is=I_1, Ir=None, angle_rotor=angle_rotor, Nr=Nr_wrong
 )
-InCurrentDQ_Error_test.append(
+InputCurrentDQ_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InCurrentDQ.Nr should be a vector of the same length as time, (10, 2) shape found, (100,) expected",
+        "exp": "ERROR: InputCurrentDQ.Nr should be a vector of the same length as time, (10, 2) shape found, (100,) expected",
     }
 )
 test_obj = Simulation(machine=M1)
-test_obj.input = InCurrentDQ(
+test_obj.input = InputCurrentDQ(
     time=time, angle=angle, Is=I_1, Ir=None, angle_rotor=angle_rotor, Nr=Nr_wrong2
 )
-InCurrentDQ_Error_test.append(
+InputCurrentDQ_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InCurrentDQ.Nr should be a vector of the same length as time, (102,) shape found, (100,) expected",
+        "exp": "ERROR: InputCurrentDQ.Nr should be a vector of the same length as time, (102,) shape found, (100,) expected",
     }
 )
 
 
 @ddt
-class unittest_InCurrentDQ_meth(TestCase):
-    """unittest for InCurrentDQ object methods"""
+class unittest_InputCurrentDQ_meth(TestCase):
+    """unittest for InputCurrentDQ object methods"""
 
-    @data(*InCurrentDQ_Error_test)
-    def test_InCurrentDQ_Error_test(self, test_dict):
+    @data(*InputCurrentDQ_Error_test)
+    def test_InputCurrentDQ_Error_test(self, test_dict):
         """Check that the input current raises the correct errors
         """
         output = Output(simu=test_dict["test_obj"])
@@ -181,7 +181,7 @@ class unittest_InCurrentDQ_meth(TestCase):
             output.simu.input.gen_input()
         self.assertEqual(test_dict["exp"], str(context.exception))
 
-    def test_InCurrentDQ_Ok(self):
+    def test_InputCurrentDQ_Ok(self):
         """Check that the input current can return a correct output
         """
         test_obj = Simulation(machine=M1)
@@ -207,7 +207,7 @@ class unittest_InCurrentDQ_meth(TestCase):
         angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
 
         Nr = ImportMatrixVal(value=ones(7) * 60 / zp)
-        test_obj.input = InCurrentDQ(
+        test_obj.input = InputCurrentDQ(
             time=time,
             angle=angle,
             Is=Is,

@@ -7,8 +7,8 @@ from pyleecan.Tests import save_validation_path as save_path
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Tests.Validation.Machine.SPMSM_015 import SPMSM_015
 
-from pyleecan.Classes.InCurrent import InCurrent
-from pyleecan.Classes.InFlux import InFlux
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.InputFlux import InputFlux
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportMatlab import ImportMatlab
@@ -25,7 +25,7 @@ Is = ImportMatrixVal(value=array([[0, 0, 0]]))
 time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=True)
 angle = ImportGenVectLin(start=0, stop=2 * 2 * pi / 9, num=2043, endpoint=False)
 
-simu.input = InCurrent(
+simu.input = InputCurrent(
     Is=Is,
     Ir=None,  # No winding on the rotor
     Nr=Nr,
@@ -51,7 +51,7 @@ mat_file = join(DATA_DIR, "EM_SPMSM_NL_001_MANATEE_SDM.mat")
 Br = ImportMatlab(file_path=mat_file, var_name="Br")
 Bt = ImportMatlab(file_path=mat_file, var_name="Bt")
 angle2 = ImportGenVectLin(start=0, stop=2 * pi / 9, num=2048 / 9, endpoint=False)
-simu_load.input = InFlux(time=time, angle=angle2, Br=Br, Bt=Bt)
+simu_load.input = InputFlux(time=time, angle=angle2, Br=Br, Bt=Bt)
 
 
 class test_EM_SIPMSM_AL_001(TestCase):

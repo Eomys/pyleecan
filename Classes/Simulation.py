@@ -82,10 +82,10 @@ class Simulation(FrozenClass):
             class_name = input.get("__class__")
             if class_name not in [
                 "Input",
-                "InCurrent",
-                "InCurrentDQ",
-                "InFlux",
-                "InForce",
+                "InputCurrent",
+                "InputCurrentDQ",
+                "InputFlux",
+                "InputForce",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for input"

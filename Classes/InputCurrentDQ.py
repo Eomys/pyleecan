@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Simulation/InCurrent.csv
+"""File generated according to pyleecan/Generator/ClassesRef/Simulation/InputCurrentDQ.csv
 WARNING! All changes made in this file will be lost!
 """
 
@@ -11,56 +11,42 @@ from pyleecan.Classes.Input import Input
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Simulation.InCurrent.gen_input import gen_input
+    from pyleecan.Methods.Simulation.InputCurrentDQ.gen_input import gen_input
 except ImportError as error:
     gen_input = error
-
-try:
-    from pyleecan.Methods.Simulation.InCurrent.set_Nr import set_Nr
-except ImportError as error:
-    set_Nr = error
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Import import Import
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
 
-class InCurrent(Input):
-    """Input to skip the electrical module and start with the magnetic one"""
+class InputCurrentDQ(Input):
+    """Input to set the electrical module output"""
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.InCurrent.gen_input
+    # cf Methods.Simulation.InputCurrentDQ.gen_input
     if isinstance(gen_input, ImportError):
         gen_input = property(
             fget=lambda x: raise_(
-                ImportError("Can't use InCurrent method gen_input: " + str(gen_input))
+                ImportError(
+                    "Can't use InputCurrentDQ method gen_input: " + str(gen_input)
+                )
             )
         )
     else:
         gen_input = gen_input
-    # cf Methods.Simulation.InCurrent.set_Nr
-    if isinstance(set_Nr, ImportError):
-        set_Nr = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use InCurrent method set_Nr: " + str(set_Nr))
-            )
-        )
-    else:
-        set_Nr = set_Nr
     # save method is available in all object
     save = save
 
     def __init__(
         self,
-        time=-1,
-        angle=-1,
-        Is=-1,
-        Ir=-1,
+        time=None,
+        angle=None,
+        Is=None,
+        Ir=None,
         angle_rotor=None,
-        Nr=-1,
+        Nr=None,
         rot_dir=-1,
         angle_rotor_initial=0,
         init_dict=None,
@@ -75,17 +61,17 @@ class InCurrent(Input):
         object or dict can be given for pyleecan Object"""
 
         if time == -1:
-            time = ImportMatrixVal()
+            time = Import()
         if angle == -1:
-            angle = ImportMatrixVal()
+            angle = Import()
         if Is == -1:
-            Is = ImportMatrixVal()
+            Is = Import()
         if Ir == -1:
-            Ir = ImportMatrixVal()
+            Ir = Import()
         if angle_rotor == -1:
             angle_rotor = Import()
         if Nr == -1:
-            Nr = ImportMatrixVal()
+            Nr = Import()
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -247,53 +233,53 @@ class InCurrent(Input):
         self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
         # Call Input init
-        super(InCurrent, self).__init__()
+        super(InputCurrentDQ, self).__init__()
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
-        InCurrent_str = ""
+        InputCurrentDQ_str = ""
         # Get the properties inherited from Input
-        InCurrent_str += super(InCurrent, self).__str__()
+        InputCurrentDQ_str += super(InputCurrentDQ, self).__str__()
         if self.time is not None:
             tmp = self.time.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "time = " + tmp
+            InputCurrentDQ_str += "time = " + tmp
         else:
-            InCurrent_str += "time = None" + linesep + linesep
+            InputCurrentDQ_str += "time = None" + linesep + linesep
         if self.angle is not None:
             tmp = self.angle.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "angle = " + tmp
+            InputCurrentDQ_str += "angle = " + tmp
         else:
-            InCurrent_str += "angle = None" + linesep + linesep
+            InputCurrentDQ_str += "angle = None" + linesep + linesep
         if self.Is is not None:
             tmp = self.Is.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "Is = " + tmp
+            InputCurrentDQ_str += "Is = " + tmp
         else:
-            InCurrent_str += "Is = None" + linesep + linesep
+            InputCurrentDQ_str += "Is = None" + linesep + linesep
         if self.Ir is not None:
             tmp = self.Ir.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "Ir = " + tmp
+            InputCurrentDQ_str += "Ir = " + tmp
         else:
-            InCurrent_str += "Ir = None" + linesep + linesep
+            InputCurrentDQ_str += "Ir = None" + linesep + linesep
         if self.angle_rotor is not None:
             tmp = (
                 self.angle_rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             )
-            InCurrent_str += "angle_rotor = " + tmp
+            InputCurrentDQ_str += "angle_rotor = " + tmp
         else:
-            InCurrent_str += "angle_rotor = None" + linesep + linesep
+            InputCurrentDQ_str += "angle_rotor = None" + linesep + linesep
         if self.Nr is not None:
             tmp = self.Nr.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "Nr = " + tmp
+            InputCurrentDQ_str += "Nr = " + tmp
         else:
-            InCurrent_str += "Nr = None" + linesep + linesep
-        InCurrent_str += "rot_dir = " + str(self.rot_dir) + linesep
-        InCurrent_str += (
+            InputCurrentDQ_str += "Nr = None" + linesep + linesep
+        InputCurrentDQ_str += "rot_dir = " + str(self.rot_dir) + linesep
+        InputCurrentDQ_str += (
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         )
-        return InCurrent_str
+        return InputCurrentDQ_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -302,7 +288,7 @@ class InCurrent(Input):
             return False
 
         # Check the properties inherited from Input
-        if not super(InCurrent, self).__eq__(other):
+        if not super(InputCurrentDQ, self).__eq__(other):
             return False
         if other.time != self.time:
             return False
@@ -327,37 +313,37 @@ class InCurrent(Input):
         """
 
         # Get the properties inherited from Input
-        InCurrent_dict = super(InCurrent, self).as_dict()
+        InputCurrentDQ_dict = super(InputCurrentDQ, self).as_dict()
         if self.time is None:
-            InCurrent_dict["time"] = None
+            InputCurrentDQ_dict["time"] = None
         else:
-            InCurrent_dict["time"] = self.time.as_dict()
+            InputCurrentDQ_dict["time"] = self.time.as_dict()
         if self.angle is None:
-            InCurrent_dict["angle"] = None
+            InputCurrentDQ_dict["angle"] = None
         else:
-            InCurrent_dict["angle"] = self.angle.as_dict()
+            InputCurrentDQ_dict["angle"] = self.angle.as_dict()
         if self.Is is None:
-            InCurrent_dict["Is"] = None
+            InputCurrentDQ_dict["Is"] = None
         else:
-            InCurrent_dict["Is"] = self.Is.as_dict()
+            InputCurrentDQ_dict["Is"] = self.Is.as_dict()
         if self.Ir is None:
-            InCurrent_dict["Ir"] = None
+            InputCurrentDQ_dict["Ir"] = None
         else:
-            InCurrent_dict["Ir"] = self.Ir.as_dict()
+            InputCurrentDQ_dict["Ir"] = self.Ir.as_dict()
         if self.angle_rotor is None:
-            InCurrent_dict["angle_rotor"] = None
+            InputCurrentDQ_dict["angle_rotor"] = None
         else:
-            InCurrent_dict["angle_rotor"] = self.angle_rotor.as_dict()
+            InputCurrentDQ_dict["angle_rotor"] = self.angle_rotor.as_dict()
         if self.Nr is None:
-            InCurrent_dict["Nr"] = None
+            InputCurrentDQ_dict["Nr"] = None
         else:
-            InCurrent_dict["Nr"] = self.Nr.as_dict()
-        InCurrent_dict["rot_dir"] = self.rot_dir
-        InCurrent_dict["angle_rotor_initial"] = self.angle_rotor_initial
+            InputCurrentDQ_dict["Nr"] = self.Nr.as_dict()
+        InputCurrentDQ_dict["rot_dir"] = self.rot_dir
+        InputCurrentDQ_dict["angle_rotor_initial"] = self.angle_rotor_initial
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
-        InCurrent_dict["__class__"] = "InCurrent"
-        return InCurrent_dict
+        InputCurrentDQ_dict["__class__"] = "InputCurrentDQ"
+        return InputCurrentDQ_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -377,7 +363,7 @@ class InCurrent(Input):
         self.rot_dir = None
         self.angle_rotor_initial = None
         # Set to None the properties inherited from Input
-        super(InCurrent, self)._set_None()
+        super(InputCurrentDQ, self)._set_None()
 
     def _get_time(self):
         """getter of time"""
@@ -431,12 +417,12 @@ class InCurrent(Input):
         if self._Is is not None:
             self._Is.parent = self
 
-    # Stator currents as a function of time (each column correspond to one phase) to import
+    # Stator dq-currents as a function of time to import
     # Type : Import
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
-        doc=u"""Stator currents as a function of time (each column correspond to one phase) to import""",
+        doc=u"""Stator dq-currents as a function of time to import""",
     )
 
     def _get_Ir(self):
@@ -451,12 +437,12 @@ class InCurrent(Input):
         if self._Ir is not None:
             self._Ir.parent = self
 
-    # Rotor currents as a function of time (each column correspond to one phase) to import
+    # Rotor currents as a function of time to import
     # Type : Import
     Ir = property(
         fget=_get_Ir,
         fset=_set_Ir,
-        doc=u"""Rotor currents as a function of time (each column correspond to one phase) to import""",
+        doc=u"""Rotor currents as a function of time to import""",
     )
 
     def _get_angle_rotor(self):

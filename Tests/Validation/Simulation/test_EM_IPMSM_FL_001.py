@@ -7,7 +7,7 @@ from pyleecan.Tests import save_validation_path as save_path
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Tests.Validation.Machine.IPMSM_xxx import IPMSM_xxx
 
-from pyleecan.Classes.InCurrent import InCurrent
+from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
@@ -17,7 +17,7 @@ from pyleecan.Classes.Output import Output
 simu = Simu1(name="EM_IPMSM_FL_001", machine=IPMSM_xxx)
 
 # Initialization of the simulation starting point
-simu.input = InCurrent()
+simu.input = InputCurrent()
 # Set time and space discretization
 simu.input.time.value = linspace(start=0, stop=0.015, num=4, endpoint=True)
 simu.input.angle.value = linspace(start=0, stop=2 * pi, num=1024, endpoint=False)
