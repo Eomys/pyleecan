@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -37,6 +38,9 @@ class OutputMulti(FrozenClass):
         add_output = add_output
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, output_ref=-1, outputs=list(), is_valid=[], design_var=[], design_var_names=[], init_dict=None):
         """Constructor of the class. Can be use in two ways :
@@ -160,15 +164,6 @@ class OutputMulti(FrozenClass):
         self.is_valid = None
         self.design_var = None
         self.design_var_names = None
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self,'logger_name'):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger('Pyleecan')
 
     def _get_output_ref(self):
         """getter of output_ref"""

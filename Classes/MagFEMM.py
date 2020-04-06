@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Magnetics import Magnetics
 
@@ -102,6 +103,9 @@ class MagFEMM(Magnetics):
         get_path_save_fem = get_path_save_fem
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, Kmesh_fineness=1, Kgeo_fineness=1, type_calc_leakage=0, file_name="", FEMM_dict={}, angle_stator=0, is_get_mesh=False, is_save_FEA=False, is_sliding_band=True, transform_list=[], is_remove_slotS=False, is_remove_slotR=False, is_remove_vent=False, is_mmfs=True, is_mmfr=True, is_stator_linear_BH=0, is_rotor_linear_BH=0, is_symmetry_t=False, sym_t=1, is_antiper_t=False, is_symmetry_a=False, sym_a=1, is_antiper_a=False, init_dict=None):
         """Constructor of the class. Can be use in two ways :
@@ -263,15 +267,6 @@ class MagFEMM(Magnetics):
         self.transform_list = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self,'logger_name'):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger('Pyleecan')
 
     def _get_Kmesh_fineness(self):
         """getter of Kmesh_fineness"""

@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Magnet import Magnet
 
@@ -20,6 +21,9 @@ class MagnetFlat(Magnet):
 
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, mat_type=-1, type_magnetization=0, Lmag=0.95, init_dict=None):
         """Constructor of the class. Can be use in two ways :

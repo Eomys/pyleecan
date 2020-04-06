@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -52,6 +53,9 @@ class MatMagnetics(FrozenClass):
         plot_BH = plot_BH
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, mur_lin=1, Hc=0, Brm20=0, alpha_Br=0, Wlam=0, BH_curve=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
@@ -170,15 +174,6 @@ class MatMagnetics(FrozenClass):
         self.Wlam = None
         if self.BH_curve is not None:
             self.BH_curve._set_None()
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self,'logger_name'):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger('Pyleecan')
 
     def _get_mur_lin(self):
         """getter of mur_lin"""

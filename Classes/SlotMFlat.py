@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotMag import SlotMag
 
@@ -140,6 +141,9 @@ class SlotMFlat(SlotMag):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, H0=0, W0=0.0122, W0_is_rad=False, magnet=list(), W3=0, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -263,15 +267,6 @@ class SlotMFlat(SlotMag):
             obj._set_None()
         # Set to None the properties inherited from SlotMag
         super(SlotMFlat, self)._set_None()
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self,'logger_name'):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger('Pyleecan')
 
     def _get_H0(self):
         """getter of H0"""

@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Input import Input
 
@@ -55,6 +56,9 @@ class InputCurrent(Input):
         set_Nr = set_Nr
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, time=-1, angle=-1, Is=-1, Ir=-1, angle_rotor=None, Nr=-1, rot_dir=-1, angle_rotor_initial=0, init_dict=None):
         """Constructor of the class. Can be use in two ways :
@@ -300,15 +304,6 @@ class InputCurrent(Input):
         self.angle_rotor_initial = None
         # Set to None the properties inherited from Input
         super(InputCurrent, self)._set_None()
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self,'logger_name'):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger('Pyleecan')
 
     def _get_time(self):
         """getter of time"""

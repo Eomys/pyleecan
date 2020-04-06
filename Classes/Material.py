@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -23,6 +24,9 @@ class Material(FrozenClass):
 
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, name="M400-50A", is_isotropic=False, elec=-1, mag=-1, struct=-1, HT=-1, eco=-1, desc="Lamination M400-50A", path="", init_dict=None):
         """Constructor of the class. Can be use in two ways :
@@ -214,15 +218,6 @@ class Material(FrozenClass):
             self.eco._set_None()
         self.desc = None
         self.path = None
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self,'logger_name'):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger('Pyleecan')
 
     def _get_name(self):
         """getter of name"""
