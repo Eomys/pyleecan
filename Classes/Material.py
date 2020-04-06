@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -24,19 +24,7 @@ class Material(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        name="M400-50A",
-        is_isotropic=False,
-        elec=-1,
-        mag=-1,
-        struct=-1,
-        HT=-1,
-        eco=-1,
-        desc="Lamination M400-50A",
-        path="",
-        init_dict=None,
-    ):
+    def __init__(self, name="M400-50A", is_isotropic=False, elec=-1, mag=-1, struct=-1, HT=-1, eco=-1, desc="Lamination M400-50A", path="", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -57,20 +45,7 @@ class Material(FrozenClass):
         if eco == -1:
             eco = MatEconomical()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "name",
-                    "is_isotropic",
-                    "elec",
-                    "mag",
-                    "struct",
-                    "HT",
-                    "eco",
-                    "desc",
-                    "path",
-                ],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
@@ -137,27 +112,27 @@ class Material(FrozenClass):
         Material_str += "is_isotropic = " + str(self.is_isotropic) + linesep
         if self.elec is not None:
             tmp = self.elec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "elec = " + tmp
+            Material_str += "elec = "+ tmp
         else:
             Material_str += "elec = None" + linesep + linesep
         if self.mag is not None:
             tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "mag = " + tmp
+            Material_str += "mag = "+ tmp
         else:
             Material_str += "mag = None" + linesep + linesep
         if self.struct is not None:
             tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "struct = " + tmp
+            Material_str += "struct = "+ tmp
         else:
             Material_str += "struct = None" + linesep + linesep
         if self.HT is not None:
             tmp = self.HT.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "HT = " + tmp
+            Material_str += "HT = "+ tmp
         else:
             Material_str += "HT = None" + linesep + linesep
         if self.eco is not None:
             tmp = self.eco.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "eco = " + tmp
+            Material_str += "eco = "+ tmp
         else:
             Material_str += "eco = None" + linesep + linesep
         Material_str += 'desc = "' + str(self.desc) + '"' + linesep
@@ -242,12 +217,12 @@ class Material(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_name(self):
         """getter of name"""
@@ -260,7 +235,9 @@ class Material(FrozenClass):
 
     # name of the material
     # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""name of the material""")
+    name = property(
+        fget=_get_name, fset=_set_name, doc=u"""name of the material"""
+    )
 
     def _get_is_isotropic(self):
         """getter of is_isotropic"""
@@ -274,9 +251,7 @@ class Material(FrozenClass):
     # If True, uniformity in all orientations
     # Type : bool
     is_isotropic = property(
-        fget=_get_is_isotropic,
-        fset=_set_is_isotropic,
-        doc=u"""If True, uniformity in all orientations""",
+        fget=_get_is_isotropic, fset=_set_is_isotropic, doc=u"""If True, uniformity in all orientations"""
     )
 
     def _get_elec(self):
@@ -290,7 +265,6 @@ class Material(FrozenClass):
 
         if self._elec is not None:
             self._elec.parent = self
-
     # Electrical properties of the material
     # Type : MatElectrical
     elec = property(
@@ -308,7 +282,6 @@ class Material(FrozenClass):
 
         if self._mag is not None:
             self._mag.parent = self
-
     # Magnetic properties of the material
     # Type : MatMagnetics
     mag = property(
@@ -326,13 +299,10 @@ class Material(FrozenClass):
 
         if self._struct is not None:
             self._struct.parent = self
-
     # Structural properties of the material
     # Type : MatStructural
     struct = property(
-        fget=_get_struct,
-        fset=_set_struct,
-        doc=u"""Structural properties of the material""",
+        fget=_get_struct, fset=_set_struct, doc=u"""Structural properties of the material"""
     )
 
     def _get_HT(self):
@@ -346,7 +316,6 @@ class Material(FrozenClass):
 
         if self._HT is not None:
             self._HT.parent = self
-
     # Heat Transfer properties of the material
     # Type : MatHT
     HT = property(
@@ -364,7 +333,6 @@ class Material(FrozenClass):
 
         if self._eco is not None:
             self._eco.parent = self
-
     # Economical properties of the material
     # Type : MatEconomical
     eco = property(
@@ -382,7 +350,9 @@ class Material(FrozenClass):
 
     # material description
     # Type : str
-    desc = property(fget=_get_desc, fset=_set_desc, doc=u"""material description""")
+    desc = property(
+        fget=_get_desc, fset=_set_desc, doc=u"""material description"""
+    )
 
     def _get_path(self):
         """getter of path"""

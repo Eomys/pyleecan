@@ -9,7 +9,7 @@ from pyleecan.Methods.Machine import (
 )
 
 
-def get_patch(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False):
+def get_patches(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False):
     """Returns the Circle Patch to be display in matplotlib
 
     Parameters
@@ -25,8 +25,8 @@ def get_patch(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False)
 
     Returns
     -------
-    patch : matplotlib.patches.Circle
-        The patch corresponding to the surface
+    patch_list : list of matplotlib.patches.Circle
+        List of patches corresponding to the surface
     """
 
     # check if the Circle is correct
@@ -39,4 +39,6 @@ def get_patch(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False)
         color = PATCH_COLOR_ALPHA
         edgecolor = PATCH_EDGE_ALPHA
 
-    return Circle(xy=(Zr, Zi), radius=self.radius, facecolor=color, edgecolor=edgecolor)
+    return [
+        Circle(xy=(Zr, Zi), radius=self.radius, facecolor=color, edgecolor=edgecolor)
+    ]

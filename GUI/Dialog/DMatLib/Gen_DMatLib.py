@@ -47,30 +47,22 @@ class Gen_DMatLib(Ui_DMatLib):
         self.out_alpha.setToolTip(txt)
 
         # Setup of out_L
-        txt = self.tr(
-            u"""thermal conductivity (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""thermal conductivity (XY is lamination plane, Z is rotation axis)""")
         self.out_L.setWhatsThis(txt)
         self.out_L.setToolTip(txt)
 
         # Setup of out_LX
-        txt = self.tr(
-            u"""thermal conductivity (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""thermal conductivity (XY is lamination plane, Z is rotation axis)""")
         self.out_LX.setWhatsThis(txt)
         self.out_LX.setToolTip(txt)
 
         # Setup of out_LY
-        txt = self.tr(
-            u"""thermal conductivity (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""thermal conductivity (XY is lamination plane, Z is rotation axis)""")
         self.out_LY.setWhatsThis(txt)
         self.out_LY.setToolTip(txt)
 
         # Setup of out_LZ
-        txt = self.tr(
-            u"""thermal conductivity (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""thermal conductivity (XY is lamination plane, Z is rotation axis)""")
         self.out_LZ.setWhatsThis(txt)
         self.out_LZ.setToolTip(txt)
 
@@ -80,86 +72,62 @@ class Gen_DMatLib(Ui_DMatLib):
         self.out_rho_meca.setToolTip(txt)
 
         # Setup of out_E
-        txt = self.tr(
-            u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)""")
         self.out_E.setWhatsThis(txt)
         self.out_E.setToolTip(txt)
 
         # Setup of out_EX
-        txt = self.tr(
-            u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)""")
         self.out_EX.setWhatsThis(txt)
         self.out_EX.setToolTip(txt)
 
         # Setup of out_EY
-        txt = self.tr(
-            u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)""")
         self.out_EY.setWhatsThis(txt)
         self.out_EY.setToolTip(txt)
 
         # Setup of out_EZ
-        txt = self.tr(
-            u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""equivalent Young modulus (XY is lamination plane, Z is rotation axis)""")
         self.out_EZ.setWhatsThis(txt)
         self.out_EZ.setToolTip(txt)
 
         # Setup of out_G
-        txt = self.tr(
-            u"""shear modulus in XZ plane (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""shear modulus in XZ plane (XY is lamination plane, Z is rotation axis)""")
         self.out_G.setWhatsThis(txt)
         self.out_G.setToolTip(txt)
 
         # Setup of out_GXY
-        txt = self.tr(
-            u"""shear modulus in XZ plane (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""shear modulus in XZ plane (XY is lamination plane, Z is rotation axis)""")
         self.out_GXY.setWhatsThis(txt)
         self.out_GXY.setToolTip(txt)
 
         # Setup of out_GXZ
-        txt = self.tr(
-            u"""shear modulus in XY plane (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""shear modulus in XY plane (XY is lamination plane, Z is rotation axis)""")
         self.out_GXZ.setWhatsThis(txt)
         self.out_GXZ.setToolTip(txt)
 
         # Setup of out_GYZ
-        txt = self.tr(
-            u"""shear modulus in YZ plane (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""shear modulus in YZ plane (XY is lamination plane, Z is rotation axis)""")
         self.out_GYZ.setWhatsThis(txt)
         self.out_GYZ.setToolTip(txt)
 
         # Setup of out_nu
-        txt = self.tr(
-            u"""equivalent Poisson ratio in the XY plane (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""equivalent Poisson ratio in the XY plane (XY is lamination plane, Z is rotation axis)""")
         self.out_nu.setWhatsThis(txt)
         self.out_nu.setToolTip(txt)
 
         # Setup of out_nu_XY
-        txt = self.tr(
-            u"""equivalent Poisson ratio in the XY plane (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""equivalent Poisson ratio in the XY plane (XY is lamination plane, Z is rotation axis)""")
         self.out_nu_XY.setWhatsThis(txt)
         self.out_nu_XY.setToolTip(txt)
 
         # Setup of out_nu_XZ
-        txt = self.tr(
-            u"""equivalent Poisson ratio in the XZ plane (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""equivalent Poisson ratio in the XZ plane (XY is lamination plane, Z is rotation axis)""")
         self.out_nu_XZ.setWhatsThis(txt)
         self.out_nu_XZ.setToolTip(txt)
 
         # Setup of out_nu_YZ
-        txt = self.tr(
-            u"""equivalent Poisson ratio in the YZ plane (XY is lamination plane, Z is rotation axis)"""
-        )
+        txt = self.tr(u"""equivalent Poisson ratio in the YZ plane (XY is lamination plane, Z is rotation axis)""")
         self.out_nu_YZ.setWhatsThis(txt)
         self.out_nu_YZ.setToolTip(txt)
 
@@ -174,15 +142,11 @@ class Gen_DMatLib(Ui_DMatLib):
         self.out_Brm20.setToolTip(txt)
 
         # Setup of out_alpha_Br
-        txt = self.tr(
-            u"""temperature coefficient for remanent flux density /degC compared to 20degC"""
-        )
+        txt = self.tr(u"""temperature coefficient for remanent flux density /degC compared to 20degC""")
         self.out_alpha_Br.setWhatsThis(txt)
         self.out_alpha_Br.setToolTip(txt)
 
         # Setup of out_wlam
-        txt = self.tr(
-            u"""lamination sheet width without insulation [m] (0 == not laminated)"""
-        )
+        txt = self.tr(u"""lamination sheet width without insulation [m] (0 == not laminated)""")
         self.out_wlam.setWhatsThis(txt)
         self.out_wlam.setToolTip(txt)

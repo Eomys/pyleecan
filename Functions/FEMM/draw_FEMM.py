@@ -6,6 +6,7 @@
 
 import femm
 from pyleecan.Classes.Lamination import Lamination
+from pyleecan.Classes.Circle import Circle
 from pyleecan.Functions.FEMM import (
     hidebc,
     is_eddies,
@@ -16,7 +17,6 @@ from pyleecan.Functions.FEMM import (
 )
 from pyleecan.Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
 from pyleecan.Functions.FEMM.comp_FEMM_dict import comp_FEMM_dict
-from pyleecan.Functions.FEMM.get_mesh_param import get_mesh_param
 from pyleecan.Functions.FEMM.create_FEMM_boundary_conditions import (
     create_FEMM_boundary_conditions,
 )
@@ -110,6 +110,10 @@ def draw_FEMM(
     surf_list = list()
     lam_ext = machine.get_lamination(is_internal=False)
     lam_int = machine.get_lamination(is_internal=True)
+
+    # Adding no_mesh for shaft if needed
+    if lam_int.Rint > 0 and sym == 1:
+        surf_list.append(Circle(point_ref=0, radius=lam_int.Rint, label="No_mesh"))
     # adding Internal Lamination surface
     surf_list.extend(lam_int.build_geometry(sym=sym))
 
@@ -180,18 +184,15 @@ def draw_FEMM(
     for surf in surf_list:
         label = surf.label
         # Get the correct element size and group according to the label
-        mesh_dict = get_mesh_param(label, FEMM_dict)
         surf.draw_FEMM(
             nodeprop="None",
             maxseg=FEMM_dict["arcspan"],  # max span of arc element in degrees
             propname="None",
-            elementsize=mesh_dict["element_size"],
-            automesh=mesh_dict["automesh"],
+            FEMM_dict=FEMM_dict,
             hide=False,
-            group=mesh_dict["group"],
         )
         assign_FEMM_surface(
-            surf, prop_dict[label], mesh_dict, machine.rotor, machine.stator
+            surf, prop_dict[label], FEMM_dict, machine.rotor, machine.stator
         )
 
     femm.mi_zoomnatural()  # Zoom out

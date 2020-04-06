@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
@@ -37,9 +37,9 @@ except ImportError as error:
     comp_length = error
 
 try:
-    from pyleecan.Methods.Geometry.SurfLine.get_patch import get_patch
+    from pyleecan.Methods.Geometry.SurfLine.get_patches import get_patches
 except ImportError as error:
-    get_patch = error
+    get_patches = error
 
 try:
     from pyleecan.Methods.Geometry.SurfLine.discretize import discretize
@@ -114,15 +114,17 @@ class SurfLine(Surface):
         )
     else:
         comp_length = comp_length
-    # cf Methods.Geometry.SurfLine.get_patch
-    if isinstance(get_patch, ImportError):
-        get_patch = property(
+    # cf Methods.Geometry.SurfLine.get_patches
+    if isinstance(get_patches, ImportError):
+        get_patches = property(
             fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method get_patch: " + str(get_patch))
+                ImportError(
+                    "Can't use SurfLine method get_patches: " + str(get_patches)
+                )
             )
         )
     else:
-        get_patch = get_patch
+        get_patches = get_patches
     # cf Methods.Geometry.SurfLine.discretize
     if isinstance(discretize, ImportError):
         discretize = property(
@@ -166,7 +168,7 @@ class SurfLine(Surface):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["line_list", "point_ref", "label"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "line_list" in list(init_dict.keys()):
                 line_list = init_dict["line_list"]
@@ -184,14 +186,7 @@ class SurfLine(Surface):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Line",
-                        "Arc",
-                        "Arc1",
-                        "Arc2",
-                        "Arc3",
-                        "Segment",
-                    ]:
+                    if class_name not in ['Line', 'Arc', 'Arc1', 'Arc2', 'Arc3', 'Segment']:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -223,10 +218,8 @@ class SurfLine(Surface):
         if len(self.line_list) == 0:
             SurfLine_str += "line_list = []" + linesep
         for ii in range(len(self.line_list)):
-            tmp = (
-                self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            SurfLine_str += "line_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            tmp = self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            SurfLine_str += "line_list["+str(ii)+"] ="+ tmp + linesep + linesep
         return SurfLine_str
 
     def __eq__(self, other):
@@ -266,12 +259,12 @@ class SurfLine(Surface):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_line_list(self):
         """getter of line_list"""
@@ -289,7 +282,7 @@ class SurfLine(Surface):
             if obj is not None:
                 obj.parent = self
 
-    # List of Lines
+    # List of Lines 
     # Type : [Line]
     line_list = property(
         fget=_get_line_list, fset=_set_line_list, doc=u"""List of Lines """

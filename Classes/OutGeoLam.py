@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise_
+from pyleecan.Classes._check import set_array, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -21,18 +21,7 @@ class OutGeoLam(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        name_phase=None,
-        BH_curve=None,
-        Ksfill=None,
-        S_slot=None,
-        S_slot_wind=None,
-        S_wind_act=None,
-        sym=None,
-        is_asym_wind=None,
-        init_dict=None,
-    ):
+    def __init__(self, name_phase=None, BH_curve=None, Ksfill=None, S_slot=None, S_slot_wind=None, S_wind_act=None, sym=None, is_asym_wind=None, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -43,19 +32,7 @@ class OutGeoLam(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "name_phase",
-                    "BH_curve",
-                    "Ksfill",
-                    "S_slot",
-                    "S_slot_wind",
-                    "S_wind_act",
-                    "sym",
-                    "is_asym_wind",
-                ],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "name_phase" in list(init_dict.keys()):
                 name_phase = init_dict["name_phase"]
@@ -96,19 +73,8 @@ class OutGeoLam(FrozenClass):
             OutGeoLam_str += "parent = None " + linesep
         else:
             OutGeoLam_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutGeoLam_str += (
-            "name_phase = "
-            + linesep
-            + str(self.name_phase).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        OutGeoLam_str += (
-            "BH_curve = "
-            + linesep
-            + str(self.BH_curve).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutGeoLam_str += "name_phase = " + linesep + str(self.name_phase).replace(linesep, linesep + "\t") + linesep
+        OutGeoLam_str += "BH_curve = " + linesep + str(self.BH_curve).replace(linesep, linesep + "\t") + linesep + linesep
         OutGeoLam_str += "Ksfill = " + str(self.Ksfill) + linesep
         OutGeoLam_str += "S_slot = " + str(self.S_slot) + linesep
         OutGeoLam_str += "S_slot_wind = " + str(self.S_slot_wind) + linesep
@@ -174,12 +140,12 @@ class OutGeoLam(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_name_phase(self):
         """getter of name_phase"""
@@ -231,7 +197,9 @@ class OutGeoLam(FrozenClass):
 
     # Slot fill factor
     # Type : float
-    Ksfill = property(fget=_get_Ksfill, fset=_set_Ksfill, doc=u"""Slot fill factor""")
+    Ksfill = property(
+        fget=_get_Ksfill, fset=_set_Ksfill, doc=u"""Slot fill factor"""
+    )
 
     def _get_S_slot(self):
         """getter of S_slot"""
@@ -305,7 +273,5 @@ class OutGeoLam(FrozenClass):
     # True if the winding has a asymmetry
     # Type : bool
     is_asym_wind = property(
-        fget=_get_is_asym_wind,
-        fset=_set_is_asym_wind,
-        doc=u"""True if the winding has a asymmetry""",
+        fget=_get_is_asym_wind, fset=_set_is_asym_wind, doc=u"""True if the winding has a asymmetry"""
     )

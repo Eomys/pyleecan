@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -21,17 +21,7 @@ class OutGeo(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        stator=None,
-        rotor=None,
-        Wgap_mec=None,
-        Wgap_mag=None,
-        Rgap_mec=None,
-        Lgap=None,
-        logger_name="Pyleecan.OutGeo",
-        init_dict=None,
-    ):
+    def __init__(self, stator=None, rotor=None, Wgap_mec=None, Wgap_mag=None, Rgap_mec=None, Lgap=None, logger_name="Pyleecan.OutGeo", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -46,18 +36,7 @@ class OutGeo(FrozenClass):
         if rotor == -1:
             rotor = OutGeoLam()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "stator",
-                    "rotor",
-                    "Wgap_mec",
-                    "Wgap_mag",
-                    "Rgap_mec",
-                    "Lgap",
-                    "logger_name",
-                ],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "stator" in list(init_dict.keys()):
                 stator = init_dict["stator"]
@@ -104,12 +83,12 @@ class OutGeo(FrozenClass):
             OutGeo_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.stator is not None:
             tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutGeo_str += "stator = " + tmp
+            OutGeo_str += "stator = "+ tmp
         else:
             OutGeo_str += "stator = None" + linesep + linesep
         if self.rotor is not None:
             tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutGeo_str += "rotor = " + tmp
+            OutGeo_str += "rotor = "+ tmp
         else:
             OutGeo_str += "rotor = None" + linesep + linesep
         OutGeo_str += "Wgap_mec = " + str(self.Wgap_mec) + linesep
@@ -177,12 +156,12 @@ class OutGeo(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_stator(self):
         """getter of stator"""
@@ -195,7 +174,6 @@ class OutGeo(FrozenClass):
 
         if self._stator is not None:
             self._stator.parent = self
-
     # Geometry output of the stator
     # Type : OutGeoLam
     stator = property(
@@ -213,7 +191,6 @@ class OutGeo(FrozenClass):
 
         if self._rotor is not None:
             self._rotor.parent = self
-
     # Geometry output of the rotor
     # Type : OutGeoLam
     rotor = property(
@@ -282,7 +259,9 @@ class OutGeo(FrozenClass):
 
     # Airgap active length
     # Type : float
-    Lgap = property(fget=_get_Lgap, fset=_set_Lgap, doc=u"""Airgap active length""")
+    Lgap = property(
+        fget=_get_Lgap, fset=_set_Lgap, doc=u"""Airgap active length"""
+    )
 
     def _get_logger_name(self):
         """getter of logger_name"""
@@ -296,7 +275,5 @@ class OutGeo(FrozenClass):
     # Name of the logger to use
     # Type : str
     logger_name = property(
-        fget=_get_logger_name,
-        fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        fget=_get_logger_name, fset=_set_logger_name, doc=u"""Name of the logger to use"""
     )

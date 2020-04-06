@@ -16,7 +16,9 @@ from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox
 from pyleecan.Functions.load import load_matlib
 from pyleecan.GUI.Dialog.DMatLib.Gen_DMatLib import Gen_DMatLib
 from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
-from pyleecan.GUI import DATA_DIR
+from pyleecan.definitions import DATA_DIR
+
+from pyleecan.Functions.path_tools import abs_file_path
 
 
 class DMatLib(Gen_DMatLib, QDialog):
@@ -139,6 +141,7 @@ class DMatLib(Gen_DMatLib, QDialog):
             old_path = self.matlib[mat_id].path
             # keep material object
             self.matlib[mat_id].__init__(init_dict=self.mat_win.mat.as_dict())
+            new_path = abs_file_path(self.matlib[mat_id].path, is_check=False)
             if old_name != self.matlib[mat_id].name:
                 # Update the material name list only if modified
                 index = self.nav_mat.currentRow()
@@ -148,8 +151,8 @@ class DMatLib(Gen_DMatLib, QDialog):
                 else:
                     self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
                 # Rename the saving file
-                rename(old_path, self.matlib[mat_id].path)
-            self.matlib[mat_id].save(self.matlib[mat_id].path)
+                rename(old_path, new_path)
+            self.matlib[mat_id].save(new_path)
             self.update_out()
 
             # Signal set by WMatSelect to update Combobox
@@ -177,7 +180,8 @@ class DMatLib(Gen_DMatLib, QDialog):
         if return_code == QDialog.Accepted:
             # Update the material only if the user validate at the end
             self.matlib.append(self.mat_win.mat)
-            self.matlib[-1].save(self.matlib[-1].path)
+            new_path = abs_file_path(self.matlib[-1].path, is_check=False)
+            self.matlib[-1].save(new_path)
             self.update_mat_list()
             self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
             self.update_out()

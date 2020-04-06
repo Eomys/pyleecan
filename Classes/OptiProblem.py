@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -44,15 +44,7 @@ class OptiProblem(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        output=-1,
-        design_var=dict(),
-        obj_func=dict(),
-        eval_func=None,
-        constraint=dict(),
-        init_dict=None,
-    ):
+    def __init__(self, output=-1, design_var=dict(), obj_func=dict(), eval_func=None, constraint=dict(), init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -65,10 +57,7 @@ class OptiProblem(FrozenClass):
         if output == -1:
             output = Output()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["output", "design_var", "obj_func", "eval_func", "constraint"],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "output" in list(init_dict.keys()):
                 output = init_dict["output"]
@@ -98,7 +87,7 @@ class OptiProblem(FrozenClass):
         elif design_var is None:
             self.design_var = dict()
         else:
-            self.design_var = design_var  # Should raise an error
+            self.design_var = design_var# Should raise an error
         # obj_func can be None or a dict of OptiObjFunc object
         self.obj_func = dict()
         if type(obj_func) is dict:
@@ -110,7 +99,7 @@ class OptiProblem(FrozenClass):
         elif obj_func is None:
             self.obj_func = dict()
         else:
-            self.obj_func = obj_func  # Should raise an error
+            self.obj_func = obj_func# Should raise an error
         self.eval_func = eval_func
         # constraint can be None or a dict of OptiConstraint object
         self.constraint = dict()
@@ -123,7 +112,7 @@ class OptiProblem(FrozenClass):
         elif constraint is None:
             self.constraint = dict()
         else:
-            self.constraint = constraint  # Should raise an error
+            self.constraint = constraint# Should raise an error
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -135,43 +124,31 @@ class OptiProblem(FrozenClass):
         if self.parent is None:
             OptiProblem_str += "parent = None " + linesep
         else:
-            OptiProblem_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            OptiProblem_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.output is not None:
             tmp = self.output.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OptiProblem_str += "output = " + tmp
+            OptiProblem_str += "output = "+ tmp
         else:
             OptiProblem_str += "output = None" + linesep + linesep
         if len(self.design_var) == 0:
-            OptiProblem_str += "design_var = dict()" + linesep
+            OptiProblem_str += "design_var = dict()"+linesep
         for key, obj in self.design_var.items():
-            tmp = (
-                self.design_var[key].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            OptiProblem_str += "design_var[" + key + "] =" + tmp + linesep + linesep
+            tmp = self.design_var[key].__str__().replace(linesep, linesep + "\t")+ linesep 
+            OptiProblem_str += "design_var["+key+"] ="+ tmp + linesep + linesep
         if len(self.obj_func) == 0:
-            OptiProblem_str += "obj_func = dict()" + linesep
+            OptiProblem_str += "obj_func = dict()"+linesep
         for key, obj in self.obj_func.items():
-            tmp = (
-                self.obj_func[key].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            OptiProblem_str += "obj_func[" + key + "] =" + tmp + linesep + linesep
+            tmp = self.obj_func[key].__str__().replace(linesep, linesep + "\t")+ linesep 
+            OptiProblem_str += "obj_func["+key+"] ="+ tmp + linesep + linesep
         if self._eval_func[1] is None:
             OptiProblem_str += "eval_func = " + str(self._eval_func[1])
         else:
-            OptiProblem_str += (
-                "eval_func = " + linesep + str(self._eval_func[1]) + linesep + linesep
-            )
+            OptiProblem_str += "eval_func = " + linesep + str(self._eval_func[1]) + linesep + linesep
         if len(self.constraint) == 0:
-            OptiProblem_str += "constraint = dict()" + linesep
+            OptiProblem_str += "constraint = dict()"+linesep
         for key, obj in self.constraint.items():
-            tmp = (
-                self.constraint[key].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            OptiProblem_str += "constraint[" + key + "] =" + tmp + linesep + linesep
+            tmp = self.constraint[key].__str__().replace(linesep, linesep + "\t")+ linesep 
+            OptiProblem_str += "constraint["+key+"] ="+ tmp + linesep + linesep
         return OptiProblem_str
 
     def __eq__(self, other):
@@ -209,10 +186,7 @@ class OptiProblem(FrozenClass):
         if self.eval_func is None:
             OptiProblem_dict["eval_func"] = None
         else:
-            OptiProblem_dict["eval_func"] = [
-                dumps(self._eval_func[0]).decode("ISO-8859-2"),
-                self._eval_func[1],
-            ]
+            OptiProblem_dict["eval_func"] = [dumps(self._eval_func[0]).decode('ISO-8859-2'), self._eval_func[1]]
         OptiProblem_dict["constraint"] = dict()
         for key, obj in self.constraint.items():
             OptiProblem_dict["constraint"][key] = obj.as_dict()
@@ -235,12 +209,12 @@ class OptiProblem(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_output(self):
         """getter of output"""
@@ -253,8 +227,7 @@ class OptiProblem(FrozenClass):
 
         if self._output is not None:
             self._output.parent = self
-
-    # Default output to define the default simulation.
+    # Default output to define the default simulation. 
     # Type : Output
     output = property(
         fget=_get_output,
@@ -308,17 +281,14 @@ class OptiProblem(FrozenClass):
             check_var("eval_func", value, "list")
         except CheckTypeError:
             check_var("eval_func", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._eval_func = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        if isinstance(value,list): # Load function from saved dict
+            self._eval_func = [loads(value[0].encode('ISO-8859-2')),value[1]]
         elif value is None:
-            self._eval_func = [None, None]
+            self._eval_func = [None,None]
         elif callable(value):
-            self._eval_func = [value, getsource(value)]
+            self._eval_func = [value,getsource(value)]
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
-            )
-
+            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
     # Function to evaluate before computing obj function and constraints
     # Type : function
     eval_func = property(
@@ -339,10 +309,8 @@ class OptiProblem(FrozenClass):
         check_var("constraint", value, "{OptiConstraint}")
         self._constraint = value
 
-    # Dict containing the constraints
+    # Dict containing the constraints 
     # Type : {OptiConstraint}
     constraint = property(
-        fget=_get_constraint,
-        fset=_set_constraint,
-        doc=u"""Dict containing the constraints """,
+        fget=_get_constraint, fset=_set_constraint, doc=u"""Dict containing the constraints """
     )

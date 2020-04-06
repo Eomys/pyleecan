@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotWind import SlotWind
 
@@ -17,9 +17,7 @@ except ImportError as error:
     _comp_W = error
 
 try:
-    from pyleecan.Methods.Slot.SlotW23._comp_point_coordinate import (
-        _comp_point_coordinate,
-    )
+    from pyleecan.Methods.Slot.SlotW23._comp_point_coordinate import _comp_point_coordinate
 except ImportError as error:
     _comp_point_coordinate = error
 
@@ -153,8 +151,7 @@ class SlotW23(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW23 method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotW23 method comp_height_wind: " + str(comp_height_wind)
                 )
             )
         )
@@ -186,20 +183,7 @@ class SlotW23(SlotWind):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        W0=0.003,
-        H0=0.003,
-        H1=0,
-        W1=0.013,
-        H2=0.02,
-        W2=0.01,
-        W3=0.01,
-        H1_is_rad=False,
-        is_cstt_tooth=False,
-        Zs=36,
-        init_dict=None,
-    ):
+    def __init__(self, W0=0.003, H0=0.003, H1=0, W1=0.013, H2=0.02, W2=0.01, W3=0.01, H1_is_rad=False, is_cstt_tooth=False, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -210,21 +194,7 @@ class SlotW23(SlotWind):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "W0",
-                    "H0",
-                    "H1",
-                    "W1",
-                    "H2",
-                    "W2",
-                    "W3",
-                    "H1_is_rad",
-                    "is_cstt_tooth",
-                    "Zs",
-                ],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "W0" in list(init_dict.keys()):
                 W0 = init_dict["W0"]
@@ -344,12 +314,12 @@ class SlotW23(SlotWind):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_W0(self):
         """getter of W0"""
@@ -414,9 +384,11 @@ class SlotW23(SlotWind):
         check_var("H2", value, "float", Vmin=0)
         self._H2 = value
 
-    # Slot height below wedge
+    # Slot height below wedge 
     # Type : float, min = 0
-    H2 = property(fget=_get_H2, fset=_set_H2, doc=u"""Slot height below wedge """)
+    H2 = property(
+        fget=_get_H2, fset=_set_H2, doc=u"""Slot height below wedge """
+    )
 
     def _get_W2(self):
         """getter of W2"""

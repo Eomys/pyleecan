@@ -5,16 +5,14 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.Slot.build_geometry_half_tooth import (
-        build_geometry_half_tooth,
-    )
+    from pyleecan.Methods.Slot.Slot.build_geometry_half_tooth import build_geometry_half_tooth
 except ImportError as error:
     build_geometry_half_tooth = error
 
@@ -201,7 +199,7 @@ class Slot(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["Zs"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
@@ -249,12 +247,12 @@ class Slot(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_Zs(self):
         """getter of Zs"""

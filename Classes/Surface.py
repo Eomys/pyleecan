@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -79,7 +79,7 @@ class Surface(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["point_ref", "label"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "point_ref" in list(init_dict.keys()):
                 point_ref = init_dict["point_ref"]
@@ -135,12 +135,12 @@ class Surface(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_point_ref(self):
         """getter of point_ref"""
@@ -168,4 +168,6 @@ class Surface(FrozenClass):
 
     # Label of the surface
     # Type : str
-    label = property(fget=_get_label, fset=_set_label, doc=u"""Label of the surface""")
+    label = property(
+        fget=_get_label, fset=_set_label, doc=u"""Label of the surface"""
+    )

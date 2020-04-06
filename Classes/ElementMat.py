@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise_
+from pyleecan.Classes._check import set_array, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Element import Element
 
@@ -32,9 +32,7 @@ except ImportError as error:
     get_connectivity = error
 
 try:
-    from pyleecan.Methods.Mesh.ElementMat.get_all_connectivity import (
-        get_all_connectivity,
-    )
+    from pyleecan.Methods.Mesh.ElementMat.get_all_connectivity import get_all_connectivity
 except ImportError as error:
     get_all_connectivity = error
 
@@ -172,15 +170,7 @@ class ElementMat(Element):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        connectivity=None,
-        nb_elem=0,
-        nb_node_per_element=0,
-        group=None,
-        tag=None,
-        init_dict=None,
-    ):
+    def __init__(self, connectivity=None, nb_elem=0, nb_node_per_element=0, group=None, tag=None, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -191,10 +181,7 @@ class ElementMat(Element):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["connectivity", "nb_elem", "nb_node_per_element", "group", "tag"],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "connectivity" in list(init_dict.keys()):
                 connectivity = init_dict["connectivity"]
@@ -226,31 +213,11 @@ class ElementMat(Element):
         ElementMat_str = ""
         # Get the properties inherited from Element
         ElementMat_str += super(ElementMat, self).__str__()
-        ElementMat_str += (
-            "connectivity = "
-            + linesep
-            + str(self.connectivity).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        ElementMat_str += "connectivity = " + linesep + str(self.connectivity).replace(linesep, linesep + "\t") + linesep + linesep
         ElementMat_str += "nb_elem = " + str(self.nb_elem) + linesep
-        ElementMat_str += (
-            "nb_node_per_element = " + str(self.nb_node_per_element) + linesep
-        )
-        ElementMat_str += (
-            "group = "
-            + linesep
-            + str(self.group).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        ElementMat_str += (
-            "tag = "
-            + linesep
-            + str(self.tag).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        ElementMat_str += "nb_node_per_element = " + str(self.nb_node_per_element) + linesep
+        ElementMat_str += "group = " + linesep + str(self.group).replace(linesep, linesep + "\t") + linesep + linesep
+        ElementMat_str += "tag = " + linesep + str(self.tag).replace(linesep, linesep + "\t") + linesep + linesep
         return ElementMat_str
 
     def __eq__(self, other):
@@ -312,12 +279,12 @@ class ElementMat(Element):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_connectivity(self):
         """getter of connectivity"""
@@ -368,9 +335,7 @@ class ElementMat(Element):
     # Define the number of node per element
     # Type : int
     nb_node_per_element = property(
-        fget=_get_nb_node_per_element,
-        fset=_set_nb_node_per_element,
-        doc=u"""Define the number of node per element""",
+        fget=_get_nb_node_per_element, fset=_set_nb_node_per_element, doc=u"""Define the number of node per element"""
     )
 
     def _get_group(self):

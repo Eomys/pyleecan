@@ -3,9 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.Ui_PVentTrap import (
-    Ui_PVentTrap,
-)
+from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.Ui_PVentTrap import Ui_PVentTrap
 
 
 class Gen_PVentTrap(Ui_PVentTrap):

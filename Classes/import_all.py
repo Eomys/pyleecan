@@ -37,11 +37,11 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
-from pyleecan.Classes.InCurrent import InCurrent
-from pyleecan.Classes.InCurrentDQ import InCurrentDQ
-from pyleecan.Classes.InFlux import InFlux
-from pyleecan.Classes.InForce import InForce
 from pyleecan.Classes.Input import Input
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.InputCurrentDQ import InputCurrentDQ
+from pyleecan.Classes.InputFlux import InputFlux
+from pyleecan.Classes.InputForce import InputForce
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.LamSlotMag import LamSlotMag
@@ -131,6 +131,7 @@ from pyleecan.Classes.SlotWind import SlotWind
 from pyleecan.Classes.Solution import Solution
 from pyleecan.Classes.Structural import Structural
 from pyleecan.Classes.SurfLine import SurfLine
+from pyleecan.Classes.SurfRing import SurfRing
 from pyleecan.Classes.Surface import Surface
 from pyleecan.Classes.Trapeze import Trapeze
 from pyleecan.Classes.Unit import Unit

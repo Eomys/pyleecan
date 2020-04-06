@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 
@@ -69,7 +69,7 @@ class ImportGenMatrixSin(ImportMatrix):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["sin_list", "is_transpose"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "sin_list" in list(init_dict.keys()):
                 sin_list = init_dict["sin_list"]
@@ -105,9 +105,7 @@ class ImportGenMatrixSin(ImportMatrix):
             ImportGenMatrixSin_str += "sin_list = []" + linesep
         for ii in range(len(self.sin_list)):
             tmp = self.sin_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            ImportGenMatrixSin_str += (
-                "sin_list[" + str(ii) + "] =" + tmp + linesep + linesep
-            )
+            ImportGenMatrixSin_str += "sin_list["+str(ii)+"] ="+ tmp + linesep + linesep
         return ImportGenMatrixSin_str
 
     def __eq__(self, other):
@@ -147,12 +145,12 @@ class ImportGenMatrixSin(ImportMatrix):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_sin_list(self):
         """getter of sin_list"""

@@ -3,6 +3,7 @@
 # File generated according to SWPole.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -31,15 +32,11 @@ class Ui_SWPole(object):
         self.out_Slot_pitch = QtWidgets.QLabel(SWPole)
         self.out_Slot_pitch.setObjectName("out_Slot_pitch")
         self.horizontalLayout_2.addWidget(self.out_Slot_pitch)
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
         self.main_layout.addLayout(self.horizontalLayout_2)
         self.w_slot = QtWidgets.QWidget(SWPole)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.w_slot.sizePolicy().hasHeightForWidth())
@@ -48,9 +45,7 @@ class Ui_SWPole(object):
         self.main_layout.addWidget(self.w_slot)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem1 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.b_plot = QtWidgets.QPushButton(SWPole)
         self.b_plot.setObjectName("b_plot")
@@ -76,7 +71,5 @@ class Ui_SWPole(object):
         self.b_plot.setText(_translate("SWPole", "Preview"))
         self.b_previous.setText(_translate("SWPole", "Previous"))
         self.b_next.setText(_translate("SWPole", "Next"))
-
-
 from pyleecan.GUI.Tools.HelpButton import HelpButton
 from pyleecan.GUI.Resources import pyleecan_rc

@@ -115,11 +115,11 @@ def read_file(path):
                 prop_dict["value"] = class_csv[rx][DEF_VAL_COL]
                 if prop_dict["type"] == "float":
                     prop_dict["value"] = prop_dict["value"].replace(",", ".")
-
                 if (
                     prop_dict["value"] != ""
                     and prop_dict["type"] != "str"
                     and "." not in prop_dict["type"]
+                    and "()" not in prop_dict["value"]
                 ):
                     prop_dict["value"] = eval(prop_dict["value"])
                 desc = class_csv[rx][EN_DESC_COL]
@@ -252,6 +252,13 @@ def find_import_type(gen_dict, class_dict, pyleecan_type=[]):
         # Store the non python type once and avoid empty line
         if prop_type not in PYTHON_TYPE and prop_type not in pyleecan_type:
             pyleecan_type.append(prop_type)
+        # Default value as pyleecan type
+        if (
+            type(prop["value"]) is str
+            and "()" in prop["value"]
+            and prop["value"][:-2] not in pyleecan_type
+        ):
+            pyleecan_type.append(prop["value"][:-2])
     return pyleecan_type
 
 

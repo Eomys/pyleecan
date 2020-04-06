@@ -5,16 +5,14 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Conductor import Conductor
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.CondType21.comp_surface_active import (
-        comp_surface_active,
-    )
+    from pyleecan.Methods.Machine.CondType21.comp_surface_active import comp_surface_active
 except ImportError as error:
     comp_surface_active = error
 
@@ -106,9 +104,7 @@ class CondType21(Conductor):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self, Hbar=0.01, Wbar=0.01, Wins=0, cond_mat=-1, ins_mat=-1, init_dict=None
-    ):
+    def __init__(self, Hbar=0.01, Wbar=0.01, Wins=0, cond_mat=-1, ins_mat=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -123,7 +119,7 @@ class CondType21(Conductor):
         if ins_mat == -1:
             ins_mat = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["Hbar", "Wbar", "Wins", "cond_mat", "ins_mat"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "Hbar" in list(init_dict.keys()):
                 Hbar = init_dict["Hbar"]
@@ -197,12 +193,12 @@ class CondType21(Conductor):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_Hbar(self):
         """getter of Hbar"""
@@ -241,4 +237,6 @@ class CondType21(Conductor):
 
     # Width of insulation
     # Type : float, min = 0
-    Wins = property(fget=_get_Wins, fset=_set_Wins, doc=u"""Width of insulation""")
+    Wins = property(
+        fget=_get_Wins, fset=_set_Wins, doc=u"""Width of insulation"""
+    )

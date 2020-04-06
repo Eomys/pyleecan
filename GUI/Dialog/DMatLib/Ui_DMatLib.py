@@ -3,6 +3,7 @@
 # File generated according to DMatLib.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -23,13 +24,9 @@ class Ui_DMatLib(object):
         self.horizontalLayout_9.addWidget(self.le_search)
         self.img_search = QtWidgets.QLabel(DMatLib)
         self.img_search.setText("")
-        self.img_search.setPixmap(
-            QtGui.QPixmap(
-                "\n"
-                "                                                    :/images/images/icon/search.png\n"
-                "                                                "
-            )
-        )
+        self.img_search.setPixmap(QtGui.QPixmap("C:\\Users\\eomys\\OneDrive\\Documents\\PR_logger\\pyleecan\\GUI\\Dialog\\DMatLib\\\n"
+"                                                    :/images/images/icon/search.png\n"
+"                                                "))
         self.img_search.setScaledContents(True)
         self.img_search.setObjectName("img_search")
         self.horizontalLayout_9.addWidget(self.img_search)
@@ -146,9 +143,7 @@ class Ui_DMatLib(object):
         self.in_E.setObjectName("in_E")
         self.gridLayout_2.addWidget(self.in_E, 1, 0, 1, 1)
         self.out_EX = QtWidgets.QLabel(self.page_nios_meca)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.out_EX.sizePolicy().hasHeightForWidth())
@@ -159,9 +154,7 @@ class Ui_DMatLib(object):
         self.out_EX.setObjectName("out_EX")
         self.gridLayout_2.addWidget(self.out_EX, 1, 1, 1, 1)
         self.out_EY = QtWidgets.QLabel(self.page_nios_meca)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.out_EY.sizePolicy().hasHeightForWidth())
@@ -172,9 +165,7 @@ class Ui_DMatLib(object):
         self.out_EY.setObjectName("out_EY")
         self.gridLayout_2.addWidget(self.out_EY, 1, 2, 1, 1)
         self.out_EZ = QtWidgets.QLabel(self.page_nios_meca)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.out_EZ.sizePolicy().hasHeightForWidth())
@@ -188,9 +179,7 @@ class Ui_DMatLib(object):
         self.in_nu.setObjectName("in_nu")
         self.gridLayout_2.addWidget(self.in_nu, 3, 0, 1, 1)
         self.out_nu_XY = QtWidgets.QLabel(self.page_nios_meca)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.out_nu_XY.sizePolicy().hasHeightForWidth())
@@ -201,9 +190,7 @@ class Ui_DMatLib(object):
         self.out_nu_XY.setObjectName("out_nu_XY")
         self.gridLayout_2.addWidget(self.out_nu_XY, 3, 1, 1, 1)
         self.out_nu_XZ = QtWidgets.QLabel(self.page_nios_meca)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.out_nu_XZ.sizePolicy().hasHeightForWidth())
@@ -214,9 +201,7 @@ class Ui_DMatLib(object):
         self.out_nu_XZ.setObjectName("out_nu_XZ")
         self.gridLayout_2.addWidget(self.out_nu_XZ, 3, 2, 1, 1)
         self.out_nu_YZ = QtWidgets.QLabel(self.page_nios_meca)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.out_nu_YZ.sizePolicy().hasHeightForWidth())
@@ -230,9 +215,7 @@ class Ui_DMatLib(object):
         self.in_G.setObjectName("in_G")
         self.gridLayout_2.addWidget(self.in_G, 4, 0, 1, 1)
         self.out_GXY = QtWidgets.QLabel(self.page_nios_meca)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.out_GXY.sizePolicy().hasHeightForWidth())
@@ -243,9 +226,7 @@ class Ui_DMatLib(object):
         self.out_GXY.setObjectName("out_GXY")
         self.gridLayout_2.addWidget(self.out_GXY, 4, 1, 1, 1)
         self.out_GXZ = QtWidgets.QLabel(self.page_nios_meca)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.out_GXZ.sizePolicy().hasHeightForWidth())
@@ -256,9 +237,7 @@ class Ui_DMatLib(object):
         self.out_GXZ.setObjectName("out_GXZ")
         self.gridLayout_2.addWidget(self.out_GXZ, 4, 2, 1, 1)
         self.out_GYZ = QtWidgets.QLabel(self.page_nios_meca)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.out_GYZ.sizePolicy().hasHeightForWidth())
@@ -312,23 +291,17 @@ class Ui_DMatLib(object):
         self.in_BH_curve.setObjectName("in_BH_curve")
         self.horizontalLayout.addWidget(self.in_BH_curve)
         self.out_BH = QtWidgets.QLabel(self.g_mag)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.out_BH.sizePolicy().hasHeightForWidth())
         self.out_BH.setSizePolicy(sizePolicy)
-        self.out_BH.setAlignment(
-            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
-        )
+        self.out_BH.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.out_BH.setObjectName("out_BH")
         self.horizontalLayout.addWidget(self.out_BH)
         self.verticalLayout_8.addLayout(self.horizontalLayout)
         self.verticalLayout_10.addWidget(self.g_mag)
-        spacerItem = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_10.addItem(spacerItem)
         self.horizontalLayout_2.addLayout(self.verticalLayout_10)
         self.verticalLayout_11.addLayout(self.horizontalLayout_2)
@@ -358,9 +331,7 @@ class Ui_DMatLib(object):
         self.out_rho_elec.setText(_translate("DMatLib", "rho = 10e-3 ohm.m"))
         self.out_epsr.setText(_translate("DMatLib", "epsr = 0.5"))
         self.g_eco.setTitle(_translate("DMatLib", "Economical"))
-        self.out_cost_unit.setText(
-            _translate("DMatLib", "cost_unit = 10.5 €/kg          ")
-        )
+        self.out_cost_unit.setText(_translate("DMatLib", "cost_unit = 10.5 €/kg          "))
         self.g_thermics.setTitle(_translate("DMatLib", "Thermics"))
         self.out_Cp.setText(_translate("DMatLib", "Cp = 0.52 W/kg/K            "))
         self.out_alpha.setText(_translate("DMatLib", "alpha = 0.52"))
@@ -374,80 +345,35 @@ class Ui_DMatLib(object):
         self.out_nu.setText(_translate("DMatLib", "nu = 0.5"))
         self.out_G.setText(_translate("DMatLib", "G = 10.000 Pa"))
         self.in_E.setText(_translate("DMatLib", "E"))
-        self.out_EX.setText(
-            _translate(
-                "DMatLib",
-                "\n"
-                "                                                                                1.23e+10\n"
-                "                                                                            ",
-            )
-        )
-        self.out_EY.setText(
-            _translate(
-                "DMatLib",
-                "\n"
-                "                                                                                10\n"
-                "                                                                            ",
-            )
-        )
-        self.out_EZ.setText(
-            _translate(
-                "DMatLib",
-                "\n"
-                "                                                                                55.3\n"
-                "                                                                            ",
-            )
-        )
+        self.out_EX.setText(_translate("DMatLib", "\n"
+"                                                                                1.23e+10\n"
+"                                                                            "))
+        self.out_EY.setText(_translate("DMatLib", "\n"
+"                                                                                10\n"
+"                                                                            "))
+        self.out_EZ.setText(_translate("DMatLib", "\n"
+"                                                                                55.3\n"
+"                                                                            "))
         self.in_nu.setText(_translate("DMatLib", "nu"))
-        self.out_nu_XY.setText(
-            _translate(
-                "DMatLib",
-                "\n"
-                "                                                                                0.5\n"
-                "                                                                            ",
-            )
-        )
-        self.out_nu_XZ.setText(
-            _translate(
-                "DMatLib",
-                "\n"
-                "                                                                                0.5\n"
-                "                                                                            ",
-            )
-        )
-        self.out_nu_YZ.setText(
-            _translate(
-                "DMatLib",
-                "\n"
-                "                                                                                0.6\n"
-                "                                                                            ",
-            )
-        )
+        self.out_nu_XY.setText(_translate("DMatLib", "\n"
+"                                                                                0.5\n"
+"                                                                            "))
+        self.out_nu_XZ.setText(_translate("DMatLib", "\n"
+"                                                                                0.5\n"
+"                                                                            "))
+        self.out_nu_YZ.setText(_translate("DMatLib", "\n"
+"                                                                                0.6\n"
+"                                                                            "))
         self.in_G.setText(_translate("DMatLib", "G"))
-        self.out_GXY.setText(
-            _translate(
-                "DMatLib",
-                "\n"
-                "                                                                                1023\n"
-                "                                                                            ",
-            )
-        )
-        self.out_GXZ.setText(
-            _translate(
-                "DMatLib",
-                "\n"
-                "                                                                                1024\n"
-                "                                                                            ",
-            )
-        )
-        self.out_GYZ.setText(
-            _translate(
-                "DMatLib",
-                "\n"
-                "                                                                                1024\n"
-                "                                                                            ",
-            )
-        )
+        self.out_GXY.setText(_translate("DMatLib", "\n"
+"                                                                                1023\n"
+"                                                                            "))
+        self.out_GXZ.setText(_translate("DMatLib", "\n"
+"                                                                                1024\n"
+"                                                                            "))
+        self.out_GYZ.setText(_translate("DMatLib", "\n"
+"                                                                                1024\n"
+"                                                                            "))
         self.in_XY.setText(_translate("DMatLib", "XY"))
         self.in_XZ.setText(_translate("DMatLib", "XZ"))
         self.in_Y.setText(_translate("DMatLib", "Y"))
@@ -461,6 +387,4 @@ class Ui_DMatLib(object):
         self.out_wlam.setText(_translate("DMatLib", "wlam = 0.5 m"))
         self.in_BH_curve.setText(_translate("DMatLib", "BH curve:"))
         self.out_BH.setText(_translate("DMatLib", "-"))
-
-
 from pyleecan.GUI.Resources import pyleecan_rc

@@ -52,15 +52,15 @@ def plot(
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
     for surf in surf_list:
-        if "Ext" in surf.label:
-            patches.append(surf.get_patch(color=lam_color, is_edge_only=is_edge_only))
+        if "Lamination" in surf.label:
+            patches.extend(surf.get_patches(color=lam_color, is_edge_only=is_edge_only))
         elif "Magnet" in surf.label:
             if not is_lam_only:
-                patches.append(
-                    surf.get_patch(color=MAGNET_COLOR, is_edge_only=is_edge_only)
+                patches.extend(
+                    surf.get_patches(color=MAGNET_COLOR, is_edge_only=is_edge_only)
                 )
         else:
-            patches.append(surf.get_patch(is_edge_only=is_edge_only))
+            patches.extend(surf.get_patches(is_edge_only=is_edge_only))
     # Display the result
     (fig, axes, patch_leg, label_leg) = init_fig(fig)
     axes.set_xlabel("(m)")

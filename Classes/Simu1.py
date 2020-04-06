@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Simulation import Simulation
 
@@ -41,17 +41,7 @@ class Simu1(Simulation):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        mag=-1,
-        struct=-1,
-        name="",
-        desc="",
-        machine=-1,
-        input=-1,
-        logger_name="Pyleecan.Simulation",
-        init_dict=None,
-    ):
+    def __init__(self, mag=-1, struct=-1, name="", desc="", machine=-1, input=-1, logger_name="Pyleecan.Simulation", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -70,10 +60,7 @@ class Simu1(Simulation):
         if input == -1:
             input = Input()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["mag", "struct", "name", "desc", "machine", "input", "logger_name"],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "mag" in list(init_dict.keys()):
                 mag = init_dict["mag"]
@@ -93,14 +80,12 @@ class Simu1(Simulation):
         # mag can be None, a Magnetics object or a dict
         if isinstance(mag, dict):
             # Check that the type is correct (including daughter)
-            class_name = mag.get("__class__")
-            if class_name not in ["Magnetics", "MagFEMM"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for mag"
-                )
+            class_name = mag.get('__class__')
+            if class_name not in ['Magnetics', 'MagFEMM']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for mag")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.mag = class_obj(init_dict=mag)
         else:
             self.mag = mag
@@ -110,9 +95,7 @@ class Simu1(Simulation):
         else:
             self.struct = struct
         # Call Simulation init
-        super(Simu1, self).__init__(
-            name=name, desc=desc, machine=machine, input=input, logger_name=logger_name
-        )
+        super(Simu1, self).__init__(name=name, desc=desc, machine=machine, input=input, logger_name=logger_name)
         # The class is frozen (in Simulation init), for now it's impossible to
         # add new properties
 
@@ -124,12 +107,12 @@ class Simu1(Simulation):
         Simu1_str += super(Simu1, self).__str__()
         if self.mag is not None:
             tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "mag = " + tmp
+            Simu1_str += "mag = "+ tmp
         else:
             Simu1_str += "mag = None" + linesep + linesep
         if self.struct is not None:
             tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "struct = " + tmp
+            Simu1_str += "struct = "+ tmp
         else:
             Simu1_str += "struct = None" + linesep + linesep
         return Simu1_str
@@ -180,12 +163,12 @@ class Simu1(Simulation):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_mag(self):
         """getter of mag"""
@@ -198,7 +181,6 @@ class Simu1(Simulation):
 
         if self._mag is not None:
             self._mag.parent = self
-
     # Magnetic module
     # Type : Magnetics
     mag = property(fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module""")
@@ -214,7 +196,8 @@ class Simu1(Simulation):
 
         if self._struct is not None:
             self._struct.parent = self
-
     # Structural module
     # Type : Structural
-    struct = property(fget=_get_struct, fset=_set_struct, doc=u"""Structural module""")
+    struct = property(
+        fget=_get_struct, fset=_set_struct, doc=u"""Structural module"""
+    )

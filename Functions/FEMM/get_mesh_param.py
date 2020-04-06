@@ -72,7 +72,7 @@ def get_mesh_param(label, FEMM_dict):
             mesh_dict["element_size"] = FEMM_dict["elementsize_magnetR"]
             mesh_dict["meshsize"] = FEMM_dict["meshsize_magnetR"]
             mesh_dict["group"] = FEMM_dict["groups"]["GROUP_RW"]
-    elif "Airgap" in label:
+    elif "airgap" in label.lower() or "sliding" in label:
         mesh_dict["automesh"] = FEMM_dict["automesh_airgap"]
         mesh_dict["element_size"] = FEMM_dict["elementsize_airgap"]
         mesh_dict["meshsize"] = FEMM_dict["meshsize_airgap"]

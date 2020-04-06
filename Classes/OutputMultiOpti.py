@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.OutputMulti import OutputMulti
 
@@ -32,16 +32,12 @@ except ImportError as error:
     get_pareto = error
 
 try:
-    from pyleecan.Methods.Output.OutputMultiOpti.plot_pareto_design_space import (
-        plot_pareto_design_space,
-    )
+    from pyleecan.Methods.Output.OutputMultiOpti.plot_pareto_design_space import plot_pareto_design_space
 except ImportError as error:
     plot_pareto_design_space = error
 
 try:
-    from pyleecan.Methods.Output.OutputMultiOpti.plot_generation_design_space import (
-        plot_generation_design_space,
-    )
+    from pyleecan.Methods.Output.OutputMultiOpti.plot_generation_design_space import plot_generation_design_space
 except ImportError as error:
     plot_generation_design_space = error
 
@@ -52,6 +48,7 @@ from pyleecan.Classes.Output import Output
 
 class OutputMultiOpti(OutputMulti):
     """Optimization results"""
+
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Output.OutputMultiOpti.add_evaluation
@@ -127,19 +124,7 @@ class OutputMultiOpti(OutputMulti):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        fitness=[],
-        constraint=[],
-        ngen=[],
-        fitness_names=[],
-        output_ref=-1,
-        outputs=list(),
-        is_valid=[],
-        design_var=[],
-        design_var_names=[],
-        init_dict=None,
-    ):
+    def __init__(self, fitness=[], constraint=[], ngen=[], fitness_names=[], output_ref=-1, outputs=list(), is_valid=[], design_var=[], design_var_names=[], init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -152,20 +137,7 @@ class OutputMultiOpti(OutputMulti):
         if output_ref == -1:
             output_ref = Output()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "fitness",
-                    "constraint",
-                    "ngen",
-                    "fitness_names",
-                    "output_ref",
-                    "outputs",
-                    "is_valid",
-                    "design_var",
-                    "design_var_names",
-                ],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "fitness" in list(init_dict.keys()):
                 fitness = init_dict["fitness"]
@@ -191,13 +163,7 @@ class OutputMultiOpti(OutputMulti):
         self.ngen = ngen
         self.fitness_names = fitness_names
         # Call OutputMulti init
-        super(OutputMultiOpti, self).__init__(
-            output_ref=output_ref,
-            outputs=outputs,
-            is_valid=is_valid,
-            design_var=design_var,
-            design_var_names=design_var_names,
-        )
+        super(OutputMultiOpti, self).__init__(output_ref=output_ref, outputs=outputs, is_valid=is_valid, design_var=design_var, design_var_names=design_var_names)
         # The class is frozen (in OutputMulti init), for now it's impossible to
         # add new properties
 
@@ -207,30 +173,10 @@ class OutputMultiOpti(OutputMulti):
         OutputMultiOpti_str = ""
         # Get the properties inherited from OutputMulti
         OutputMultiOpti_str += super(OutputMultiOpti, self).__str__()
-        OutputMultiOpti_str += (
-            "fitness = "
-            + linesep
-            + str(self.fitness).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        OutputMultiOpti_str += (
-            "constraint = "
-            + linesep
-            + str(self.constraint).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        OutputMultiOpti_str += (
-            "ngen = "
-            + linesep
-            + str(self.ngen).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        OutputMultiOpti_str += (
-            "fitness_names = "
-            + linesep
-            + str(self.fitness_names).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        OutputMultiOpti_str += "fitness = " + linesep + str(self.fitness).replace(linesep, linesep + "\t") + linesep
+        OutputMultiOpti_str += "constraint = " + linesep + str(self.constraint).replace(linesep, linesep + "\t") + linesep
+        OutputMultiOpti_str += "ngen = " + linesep + str(self.ngen).replace(linesep, linesep + "\t") + linesep
+        OutputMultiOpti_str += "fitness_names = " + linesep + str(self.fitness_names).replace(linesep, linesep + "\t") + linesep
         return OutputMultiOpti_str
 
     def __eq__(self, other):
@@ -279,12 +225,12 @@ class OutputMultiOpti(OutputMulti):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_fitness(self):
         """getter of fitness"""
@@ -347,7 +293,5 @@ class OutputMultiOpti(OutputMulti):
     # Names of the objectives functions
     # Type : list
     fitness_names = property(
-        fget=_get_fitness_names,
-        fset=_set_fitness_names,
-        doc=u"""Names of the objectives functions""",
+        fget=_get_fitness_names, fset=_set_fitness_names, doc=u"""Names of the objectives functions"""
     )

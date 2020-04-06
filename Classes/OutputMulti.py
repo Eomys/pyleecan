@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -23,6 +23,7 @@ from pyleecan.Classes.Output import Output
 
 class OutputMulti(FrozenClass):
 
+
     # cf Methods.Output.OutputMulti.add_output
     if isinstance(add_output, ImportError):
         add_output = property(
@@ -37,15 +38,7 @@ class OutputMulti(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        output_ref=-1,
-        outputs=list(),
-        is_valid=[],
-        design_var=[],
-        design_var_names=[],
-        init_dict=None,
-    ):
+    def __init__(self, output_ref=-1, outputs=list(), is_valid=[], design_var=[], design_var_names=[], init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -58,10 +51,7 @@ class OutputMulti(FrozenClass):
         if output_ref == -1:
             output_ref = Output()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["output_ref", "outputs", "is_valid", "design_var", "design_var_names"],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "output_ref" in list(init_dict.keys()):
                 output_ref = init_dict["output_ref"]
@@ -108,39 +98,20 @@ class OutputMulti(FrozenClass):
         if self.parent is None:
             OutputMulti_str += "parent = None " + linesep
         else:
-            OutputMulti_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            OutputMulti_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.output_ref is not None:
-            tmp = (
-                self.output_ref.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            )
-            OutputMulti_str += "output_ref = " + tmp
+            tmp = self.output_ref.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            OutputMulti_str += "output_ref = "+ tmp
         else:
             OutputMulti_str += "output_ref = None" + linesep + linesep
         if len(self.outputs) == 0:
             OutputMulti_str += "outputs = []" + linesep
         for ii in range(len(self.outputs)):
             tmp = self.outputs[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            OutputMulti_str += "outputs[" + str(ii) + "] =" + tmp + linesep + linesep
-        OutputMulti_str += (
-            "is_valid = "
-            + linesep
-            + str(self.is_valid).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        OutputMulti_str += (
-            "design_var = "
-            + linesep
-            + str(self.design_var).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        OutputMulti_str += (
-            "design_var_names = "
-            + linesep
-            + str(self.design_var_names).replace(linesep, linesep + "\t")
-            + linesep
-        )
+            OutputMulti_str += "outputs["+str(ii)+"] ="+ tmp + linesep + linesep
+        OutputMulti_str += "is_valid = " + linesep + str(self.is_valid).replace(linesep, linesep + "\t") + linesep
+        OutputMulti_str += "design_var = " + linesep + str(self.design_var).replace(linesep, linesep + "\t") + linesep
+        OutputMulti_str += "design_var_names = " + linesep + str(self.design_var_names).replace(linesep, linesep + "\t") + linesep
         return OutputMulti_str
 
     def __eq__(self, other):
@@ -192,12 +163,12 @@ class OutputMulti(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_output_ref(self):
         """getter of output_ref"""
@@ -210,13 +181,10 @@ class OutputMulti(FrozenClass):
 
         if self._output_ref is not None:
             self._output_ref.parent = self
-
     # Reference output of the multi simulation
     # Type : Output
     output_ref = property(
-        fget=_get_output_ref,
-        fset=_set_output_ref,
-        doc=u"""Reference output of the multi simulation""",
+        fget=_get_output_ref, fset=_set_output_ref, doc=u"""Reference output of the multi simulation"""
     )
 
     def _get_outputs(self):
@@ -238,9 +206,7 @@ class OutputMulti(FrozenClass):
     # list of output from the multi-simulation
     # Type : [Output]
     outputs = property(
-        fget=_get_outputs,
-        fset=_set_outputs,
-        doc=u"""list of output from the multi-simulation""",
+        fget=_get_outputs, fset=_set_outputs, doc=u"""list of output from the multi-simulation"""
     )
 
     def _get_is_valid(self):

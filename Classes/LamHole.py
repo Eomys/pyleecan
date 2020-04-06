@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Lamination import Lamination
 
@@ -37,9 +37,7 @@ except ImportError as error:
     comp_volumes = error
 
 try:
-    from pyleecan.Methods.Machine.LamHole.get_pole_pair_number import (
-        get_pole_pair_number,
-    )
+    from pyleecan.Methods.Machine.LamHole.get_pole_pair_number import get_pole_pair_number
 except ImportError as error:
     get_pole_pair_number = error
 
@@ -49,9 +47,7 @@ except ImportError as error:
     plot = error
 
 try:
-    from pyleecan.Methods.Machine.LamHole.comp_radius_mid_yoke import (
-        comp_radius_mid_yoke,
-    )
+    from pyleecan.Methods.Machine.LamHole.comp_radius_mid_yoke import comp_radius_mid_yoke
 except ImportError as error:
     comp_radius_mid_yoke = error
 
@@ -85,8 +81,7 @@ class LamHole(Lamination):
         comp_height_yoke = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamHole method comp_height_yoke: "
-                    + str(comp_height_yoke)
+                    "Can't use LamHole method comp_height_yoke: " + str(comp_height_yoke)
                 )
             )
         )
@@ -159,23 +154,7 @@ class LamHole(Lamination):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        hole=list(),
-        bore=None,
-        L1=0.35,
-        mat_type=-1,
-        Nrvd=0,
-        Wrvd=0,
-        Kf1=0.95,
-        is_internal=True,
-        Rint=0,
-        Rext=1,
-        is_stator=True,
-        axial_vent=list(),
-        notch=list(),
-        init_dict=None,
-    ):
+    def __init__(self, hole=list(), bore=None, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), notch=list(), init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -190,24 +169,7 @@ class LamHole(Lamination):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "hole",
-                    "bore",
-                    "L1",
-                    "mat_type",
-                    "Nrvd",
-                    "Wrvd",
-                    "Kf1",
-                    "is_internal",
-                    "Rint",
-                    "Rext",
-                    "is_stator",
-                    "axial_vent",
-                    "notch",
-                ],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "hole" in list(init_dict.keys()):
                 hole = init_dict["hole"]
@@ -245,20 +207,11 @@ class LamHole(Lamination):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Hole",
-                        "HoleM50",
-                        "HoleM51",
-                        "HoleM52",
-                        "HoleM53",
-                        "HoleM54",
-                        "HoleMag",
-                        "VentilationCirc",
-                        "VentilationPolar",
-                        "VentilationTrap",
-                    ]:
+                    if class_name not in ['Hole', 'HoleM50', 'HoleM51', 'HoleM52', 'HoleM53', 'HoleM54', 'HoleMag', 'VentilationCirc', 'VentilationPolar', 'VentilationTrap']:
                         raise InitUnKnowClassError(
-                            "Unknow class name " + class_name + " in init_dict for hole"
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for hole"
                         )
                     # Dynamic import to call the correct constructor
                     module = __import__(
@@ -275,31 +228,17 @@ class LamHole(Lamination):
         # bore can be None, a Bore object or a dict
         if isinstance(bore, dict):
             # Check that the type is correct (including daughter)
-            class_name = bore.get("__class__")
-            if class_name not in ["Bore", "BoreFlower"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for bore"
-                )
+            class_name = bore.get('__class__')
+            if class_name not in ['Bore', 'BoreFlower']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for bore")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.bore = class_obj(init_dict=bore)
         else:
             self.bore = bore
         # Call Lamination init
-        super(LamHole, self).__init__(
-            L1=L1,
-            mat_type=mat_type,
-            Nrvd=Nrvd,
-            Wrvd=Wrvd,
-            Kf1=Kf1,
-            is_internal=is_internal,
-            Rint=Rint,
-            Rext=Rext,
-            is_stator=is_stator,
-            axial_vent=axial_vent,
-            notch=notch,
-        )
+        super(LamHole, self).__init__(L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
 
@@ -313,10 +252,10 @@ class LamHole(Lamination):
             LamHole_str += "hole = []" + linesep
         for ii in range(len(self.hole)):
             tmp = self.hole[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            LamHole_str += "hole[" + str(ii) + "] =" + tmp + linesep + linesep
+            LamHole_str += "hole["+str(ii)+"] ="+ tmp + linesep + linesep
         if self.bore is not None:
             tmp = self.bore.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            LamHole_str += "bore = " + tmp
+            LamHole_str += "bore = "+ tmp
         else:
             LamHole_str += "bore = None" + linesep + linesep
         return LamHole_str
@@ -366,12 +305,12 @@ class LamHole(Lamination):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_hole(self):
         """getter of hole"""
@@ -404,7 +343,6 @@ class LamHole(Lamination):
 
         if self._bore is not None:
             self._bore.parent = self
-
     # Bore Shape
     # Type : Bore
     bore = property(fget=_get_bore, fset=_set_bore, doc=u"""Bore Shape""")

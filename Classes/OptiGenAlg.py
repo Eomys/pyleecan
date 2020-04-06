@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -25,20 +25,7 @@ class OptiGenAlg(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        multi_output=-1,
-        selector=None,
-        crossover=None,
-        mutator=None,
-        p_cross=0.9,
-        p_mutate=0.1,
-        size_pop=40,
-        nb_gen=100,
-        problem=-1,
-        logger_name="Pyleecan.OptiGenAlg",
-        init_dict=None,
-    ):
+    def __init__(self, multi_output=-1, selector=None, crossover=None, mutator=None, p_cross=0.9, p_mutate=0.1, size_pop=40, nb_gen=100, problem=-1, logger_name="Pyleecan.OptiGenAlg", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -53,21 +40,7 @@ class OptiGenAlg(FrozenClass):
         if problem == -1:
             problem = OptiProblem()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "multi_output",
-                    "selector",
-                    "crossover",
-                    "mutator",
-                    "p_cross",
-                    "p_mutate",
-                    "size_pop",
-                    "nb_gen",
-                    "problem",
-                    "logger_name",
-                ],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "multi_output" in list(init_dict.keys()):
                 multi_output = init_dict["multi_output"]
@@ -122,39 +95,29 @@ class OptiGenAlg(FrozenClass):
         else:
             OptiGenAlg_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.multi_output is not None:
-            tmp = (
-                self.multi_output.__str__()
-                .replace(linesep, linesep + "\t")
-                .rstrip("\t")
-            )
-            OptiGenAlg_str += "multi_output = " + tmp
+            tmp = self.multi_output.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            OptiGenAlg_str += "multi_output = "+ tmp
         else:
             OptiGenAlg_str += "multi_output = None" + linesep + linesep
         if self._selector[1] is None:
             OptiGenAlg_str += "selector = " + str(self._selector[1])
         else:
-            OptiGenAlg_str += (
-                "selector = " + linesep + str(self._selector[1]) + linesep + linesep
-            )
+            OptiGenAlg_str += "selector = " + linesep + str(self._selector[1]) + linesep + linesep
         if self._crossover[1] is None:
             OptiGenAlg_str += "crossover = " + str(self._crossover[1])
         else:
-            OptiGenAlg_str += (
-                "crossover = " + linesep + str(self._crossover[1]) + linesep + linesep
-            )
+            OptiGenAlg_str += "crossover = " + linesep + str(self._crossover[1]) + linesep + linesep
         if self._mutator[1] is None:
             OptiGenAlg_str += "mutator = " + str(self._mutator[1])
         else:
-            OptiGenAlg_str += (
-                "mutator = " + linesep + str(self._mutator[1]) + linesep + linesep
-            )
+            OptiGenAlg_str += "mutator = " + linesep + str(self._mutator[1]) + linesep + linesep
         OptiGenAlg_str += "p_cross = " + str(self.p_cross) + linesep
         OptiGenAlg_str += "p_mutate = " + str(self.p_mutate) + linesep
         OptiGenAlg_str += "size_pop = " + str(self.size_pop) + linesep
         OptiGenAlg_str += "nb_gen = " + str(self.nb_gen) + linesep
         if self.problem is not None:
             tmp = self.problem.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OptiGenAlg_str += "problem = " + tmp
+            OptiGenAlg_str += "problem = "+ tmp
         else:
             OptiGenAlg_str += "problem = None" + linesep + linesep
         OptiGenAlg_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
@@ -199,24 +162,15 @@ class OptiGenAlg(FrozenClass):
         if self.selector is None:
             OptiGenAlg_dict["selector"] = None
         else:
-            OptiGenAlg_dict["selector"] = [
-                dumps(self._selector[0]).decode("ISO-8859-2"),
-                self._selector[1],
-            ]
+            OptiGenAlg_dict["selector"] = [dumps(self._selector[0]).decode('ISO-8859-2'), self._selector[1]]
         if self.crossover is None:
             OptiGenAlg_dict["crossover"] = None
         else:
-            OptiGenAlg_dict["crossover"] = [
-                dumps(self._crossover[0]).decode("ISO-8859-2"),
-                self._crossover[1],
-            ]
+            OptiGenAlg_dict["crossover"] = [dumps(self._crossover[0]).decode('ISO-8859-2'), self._crossover[1]]
         if self.mutator is None:
             OptiGenAlg_dict["mutator"] = None
         else:
-            OptiGenAlg_dict["mutator"] = [
-                dumps(self._mutator[0]).decode("ISO-8859-2"),
-                self._mutator[1],
-            ]
+            OptiGenAlg_dict["mutator"] = [dumps(self._mutator[0]).decode('ISO-8859-2'), self._mutator[1]]
         OptiGenAlg_dict["p_cross"] = self.p_cross
         OptiGenAlg_dict["p_mutate"] = self.p_mutate
         OptiGenAlg_dict["size_pop"] = self.size_pop
@@ -248,12 +202,12 @@ class OptiGenAlg(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_multi_output(self):
         """getter of multi_output"""
@@ -266,7 +220,6 @@ class OptiGenAlg(FrozenClass):
 
         if self._multi_output is not None:
             self._multi_output.parent = self
-
     # Optimization results containing every output
     # Type : OutputMultiOpti
     multi_output = property(
@@ -285,23 +238,18 @@ class OptiGenAlg(FrozenClass):
             check_var("selector", value, "list")
         except CheckTypeError:
             check_var("selector", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._selector = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        if isinstance(value,list): # Load function from saved dict
+            self._selector = [loads(value[0].encode('ISO-8859-2')),value[1]]
         elif value is None:
-            self._selector = [None, None]
+            self._selector = [None,None]
         elif callable(value):
-            self._selector = [value, getsource(value)]
+            self._selector = [value,getsource(value)]
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
-            )
-
+            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
     # Selector of the genetic algorithm
     # Type : function
     selector = property(
-        fget=_get_selector,
-        fset=_set_selector,
-        doc=u"""Selector of the genetic algorithm""",
+        fget=_get_selector, fset=_set_selector, doc=u"""Selector of the genetic algorithm"""
     )
 
     def _get_crossover(self):
@@ -314,23 +262,18 @@ class OptiGenAlg(FrozenClass):
             check_var("crossover", value, "list")
         except CheckTypeError:
             check_var("crossover", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._crossover = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        if isinstance(value,list): # Load function from saved dict
+            self._crossover = [loads(value[0].encode('ISO-8859-2')),value[1]]
         elif value is None:
-            self._crossover = [None, None]
+            self._crossover = [None,None]
         elif callable(value):
-            self._crossover = [value, getsource(value)]
+            self._crossover = [value,getsource(value)]
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
-            )
-
+            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
     # Crossover of the genetic algorithm
     # Type : function
     crossover = property(
-        fget=_get_crossover,
-        fset=_set_crossover,
-        doc=u"""Crossover of the genetic algorithm""",
+        fget=_get_crossover, fset=_set_crossover, doc=u"""Crossover of the genetic algorithm"""
     )
 
     def _get_mutator(self):
@@ -343,23 +286,18 @@ class OptiGenAlg(FrozenClass):
             check_var("mutator", value, "list")
         except CheckTypeError:
             check_var("mutator", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._mutator = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        if isinstance(value,list): # Load function from saved dict
+            self._mutator = [loads(value[0].encode('ISO-8859-2')),value[1]]
         elif value is None:
-            self._mutator = [None, None]
+            self._mutator = [None,None]
         elif callable(value):
-            self._mutator = [value, getsource(value)]
+            self._mutator = [value,getsource(value)]
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
-            )
-
+            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
     # Mutator of the genetic algorithm
     # Type : function
     mutator = property(
-        fget=_get_mutator,
-        fset=_set_mutator,
-        doc=u"""Mutator of the genetic algorithm""",
+        fget=_get_mutator, fset=_set_mutator, doc=u"""Mutator of the genetic algorithm"""
     )
 
     def _get_p_cross(self):
@@ -386,7 +324,7 @@ class OptiGenAlg(FrozenClass):
         check_var("p_mutate", value, "float", Vmin=0, Vmax=1)
         self._p_mutate = value
 
-    # Probability of mutation
+    # Probability of mutation 
     # Type : float, min = 0, max = 1
     p_mutate = property(
         fget=_get_p_mutate, fset=_set_p_mutate, doc=u"""Probability of mutation """
@@ -433,7 +371,6 @@ class OptiGenAlg(FrozenClass):
 
         if self._problem is not None:
             self._problem.parent = self
-
     # Problem to solve
     # Type : OptiProblem
     problem = property(
@@ -452,7 +389,5 @@ class OptiGenAlg(FrozenClass):
     # Name of the logger to use
     # Type : str
     logger_name = property(
-        fget=_get_logger_name,
-        fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        fget=_get_logger_name, fset=_set_logger_name, doc=u"""Name of the logger to use"""
     )

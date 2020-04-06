@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 from pyleecan.Tests import save_validation_path as save_path
 
 from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Tests.Validation.Machine.SCIM_006 import SCIM_006
 
-from pyleecan.Classes.InCurrent import InCurrent
-from pyleecan.Classes.InFlux import InFlux
+
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.InputFlux import InputFlux
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportMatlab import ImportMatlab
@@ -16,6 +16,7 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Tests import DATA_DIR
+from pyleecan.Tests.Validation.Machine.SCIM_006 import SCIM_006
 
 simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
 
@@ -26,7 +27,7 @@ Ir = ImportMatrixVal(value=zeros((1, 28)))
 time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=False)
 angle = ImportGenVectLin(start=0, stop=2 * pi, num=4096, endpoint=False)
 
-simu.input = InCurrent(
+simu.input = InputCurrent(
     Is=Is,
     Ir=Ir,  # zero current for the rotor
     Nr=Nr,
@@ -52,7 +53,7 @@ simu_load.mag = None
 mat_file = join(DATA_DIR, "EM_SCIM_NL_006_MANATEE_MMF.mat")
 Br = ImportMatlab(file_path=mat_file, var_name="XBr")
 angle2 = ImportGenVectLin(start=0, stop=pi, num=4096 / 2, endpoint=False)
-simu_load.input = InFlux(time=time, angle=angle2, Br=Br, Bt=None)
+simu_load.input = InputFlux(time=time, angle=angle2, Br=Br, Bt=None)
 
 
 class test_EM_SCIM_NL_006(TestCase):

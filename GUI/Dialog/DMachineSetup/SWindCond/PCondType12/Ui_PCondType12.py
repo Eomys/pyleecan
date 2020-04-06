@@ -3,6 +3,7 @@
 # File generated according to PCondType12.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -16,9 +17,7 @@ class Ui_PCondType12(object):
         self.img_cond.setMinimumSize(QtCore.QSize(0, 0))
         self.img_cond.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.img_cond.setText("")
-        self.img_cond.setPixmap(
-            QtGui.QPixmap(":/images/images/MachineSetup/WindParam/Cond_1_2.PNG")
-        )
+        self.img_cond.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/WindParam/Cond_1_2.PNG"))
         self.img_cond.setScaledContents(True)
         self.img_cond.setObjectName("img_cond")
         self.horizontalLayout.addWidget(self.img_cond)
@@ -76,9 +75,7 @@ class Ui_PCondType12(object):
         self.w_out = WCondOut(PCondType12)
         self.w_out.setObjectName("w_out")
         self.verticalLayout_2.addWidget(self.w_out)
-        spacerItem = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
@@ -97,8 +94,6 @@ class Ui_PCondType12(object):
         self.unit_Wins_wire.setText(_translate("PCondType12", "m"))
         self.in_Wins_cond.setText(_translate("PCondType12", "Wins_cond :"))
         self.unit_Wins_cond.setText(_translate("PCondType12", "m"))
-
-
 from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.WCondOut.WCondOut import WCondOut
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

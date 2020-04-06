@@ -13,7 +13,7 @@ from pyleecan.Tests.Plot.LamWind import wind_mat
 from pyleecan.Tests.Validation.Machine.SCIM_006 import SCIM_006
 from pyleecan.Tests.Validation.Machine.SPMSM_015 import SPMSM_015
 from pyleecan.Functions.load import load
-from pyleecan.Classes.InCurrent import InCurrent
+from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
@@ -51,7 +51,7 @@ class test_ICEM_2020(TestCase):
         Ir = ImportMatrixVal(value=zeros((1, 28)))
         time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=False)
         angle = ImportGenVectLin(start=0, stop=2 * pi, num=4096, endpoint=False)
-        simu.input = InCurrent(
+        simu.input = InputCurrent(
             Is=Is,
             Ir=Ir,  # zero current for the rotor
             Nr=Nr,
@@ -457,7 +457,7 @@ class test_ICEM_2020(TestCase):
         Is = ImportMatrixVal(value=array([[0, 0, 0]]))
         time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=True)
         angle = ImportGenVectLin(start=0, stop=2 * 2 * pi / 9, num=2043, endpoint=False)
-        simu.input = InCurrent(
+        simu.input = InputCurrent(
             Is=Is,
             Ir=None,  # No winding on the rotor
             Nr=Nr,
@@ -588,7 +588,7 @@ class test_ICEM_2020(TestCase):
         # Definition of the simulation
         simu = Simu1(name="Default simulation", machine=SPMSM_001)
 
-        simu.input = InCurrent(
+        simu.input = InputCurrent(
             Is=Is,
             Ir=Ir,  # zero current for the rotor
             Nr=Nr,

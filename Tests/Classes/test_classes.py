@@ -8,7 +8,7 @@ from ddt import ddt, data
 from numpy import array_equal, empty, array
 from pyleecan.Generator.read_fct import read_all
 from pyleecan.Generator.ClassGenerator.init_method_generator import get_mother_attr
-from pyleecan.Generator import DOC_DIR
+from pyleecan.definitions import DOC_DIR
 from pyleecan.Tests.find import (
     find_test_value,
     is_type_list,
@@ -106,6 +106,15 @@ class test_all_Classes(TestCase):
                     + " for property: "
                     + prop["name"],
                 )
+            elif type(prop["value"]) is str and "()" in prop["value"]:
+                self.assertEqual(
+                    result,
+                    eval(prop["value"]),
+                    msg="Error for class "
+                    + class_dict["name"]
+                    + " for property: "
+                    + prop["name"],
+                )
             elif prop["value"] != "":
                 self.assertEqual(
                     result,
@@ -140,6 +149,8 @@ class test_all_Classes(TestCase):
                     d[prop["name"]] = list()
             elif prop["value"] in ["None", None]:
                 d[prop["name"]] = None
+            elif type(prop["value"]) is str and "()" in prop["value"]:
+                d[prop["name"]] = eval(prop["value"] + ".as_dict()")
             elif prop["type"] in PYTHON_TYPE:
                 d[prop["name"]] = prop["value"]
             elif prop["type"] == "dict":

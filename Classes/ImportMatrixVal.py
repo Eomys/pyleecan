@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise_
+from pyleecan.Classes._check import set_array, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 
@@ -51,7 +51,7 @@ class ImportMatrixVal(ImportMatrix):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["value", "is_transpose"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "value" in list(init_dict.keys()):
                 value = init_dict["value"]
@@ -71,13 +71,7 @@ class ImportMatrixVal(ImportMatrix):
         ImportMatrixVal_str = ""
         # Get the properties inherited from ImportMatrix
         ImportMatrixVal_str += super(ImportMatrixVal, self).__str__()
-        ImportMatrixVal_str += (
-            "value = "
-            + linesep
-            + str(self.value).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        ImportMatrixVal_str += "value = " + linesep + str(self.value).replace(linesep, linesep + "\t") + linesep + linesep
         return ImportMatrixVal_str
 
     def __eq__(self, other):
@@ -117,12 +111,12 @@ class ImportMatrixVal(ImportMatrix):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_value(self):
         """getter of value"""
@@ -140,4 +134,6 @@ class ImportMatrixVal(ImportMatrix):
 
     # The matrix to return
     # Type : ndarray
-    value = property(fget=_get_value, fset=_set_value, doc=u"""The matrix to return""")
+    value = property(
+        fget=_get_value, fset=_set_value, doc=u"""The matrix to return"""
+    )

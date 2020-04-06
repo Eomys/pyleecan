@@ -5,16 +5,14 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotWind import SlotWind
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.SlotW28._comp_point_coordinate import (
-        _comp_point_coordinate,
-    )
+    from pyleecan.Methods.Slot.SlotW28._comp_point_coordinate import _comp_point_coordinate
 except ImportError as error:
     _comp_point_coordinate = error
 
@@ -133,8 +131,7 @@ class SlotW28(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW28 method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotW28 method comp_height_wind: " + str(comp_height_wind)
                 )
             )
         )
@@ -154,9 +151,7 @@ class SlotW28(SlotWind):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self, W0=0.0122, H0=0.001, R1=0.003, W3=0.005, H3=0.003, Zs=36, init_dict=None
-    ):
+    def __init__(self, W0=0.0122, H0=0.001, R1=0.003, W3=0.005, H3=0.003, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -167,7 +162,7 @@ class SlotW28(SlotWind):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["W0", "H0", "R1", "W3", "H3", "Zs"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "W0" in list(init_dict.keys()):
                 W0 = init_dict["W0"]
@@ -255,12 +250,12 @@ class SlotW28(SlotWind):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_W0(self):
         """getter of W0"""

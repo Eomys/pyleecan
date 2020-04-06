@@ -3,6 +3,7 @@
 # File generated according to DAVDuct.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -14,9 +15,7 @@ class Ui_DAVDuct(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
         self.b_new = QtWidgets.QPushButton(DAVDuct)
         self.b_new.setObjectName("b_new")
@@ -29,9 +28,7 @@ class Ui_DAVDuct(object):
         self.b_help.setPixmap(QtGui.QPixmap(":/images/images/icon/help_16.png"))
         self.b_help.setObjectName("b_help")
         self.horizontalLayout_2.addWidget(self.b_help)
-        spacerItem1 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.tab_vent = QtWidgets.QTabWidget(DAVDuct)
@@ -45,9 +42,7 @@ class Ui_DAVDuct(object):
         self.verticalLayout.addWidget(self.tab_vent)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        spacerItem2 = QtWidgets.QSpacerItem(
-            218, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem2 = QtWidgets.QSpacerItem(218, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem2)
         self.b_plot = QtWidgets.QPushButton(DAVDuct)
         self.b_plot.setObjectName("b_plot")
@@ -68,16 +63,10 @@ class Ui_DAVDuct(object):
         DAVDuct.setWindowTitle(_translate("DAVDuct", "Set axial ventilation duct"))
         self.b_new.setText(_translate("DAVDuct", "Add New Set"))
         self.b_remove.setText(_translate("DAVDuct", "Remove Last Set"))
-        self.tab_vent.setTabText(
-            self.tab_vent.indexOf(self.tab), _translate("DAVDuct", "Tab 1")
-        )
-        self.tab_vent.setTabText(
-            self.tab_vent.indexOf(self.tab_2), _translate("DAVDuct", "Tab 2")
-        )
+        self.tab_vent.setTabText(self.tab_vent.indexOf(self.tab), _translate("DAVDuct", "Tab 1"))
+        self.tab_vent.setTabText(self.tab_vent.indexOf(self.tab_2), _translate("DAVDuct", "Tab 2"))
         self.b_plot.setText(_translate("DAVDuct", "Preview"))
         self.b_cancel.setText(_translate("DAVDuct", "Cancel"))
         self.b_ok.setText(_translate("DAVDuct", "Ok"))
-
-
 from pyleecan.GUI.Tools.HelpButton import HelpButton
 from pyleecan.GUI.Resources import pyleecan_rc

@@ -8,6 +8,8 @@ from pandas import read_excel
 from pyleecan.Methods.Import.ImportMatrixXls import XlsFileError
 from os.path import isfile
 
+from pyleecan.Functions.path_tools import abs_file_path
+
 
 def get_data(self):
     """Return the object's matrix
@@ -23,14 +25,10 @@ def get_data(self):
         The object's matrix
 
     """
-
-    if not isfile(self.file_path):
+    file_path = abs_file_path(self.file_path, is_check=False)
+    if not isfile(file_path):
         raise XlsFileError("ERROR: The xls file doesn't exist " + self.file_path)
     df = read_excel(
-        self.file_path,
-        self.sheet,
-        header=None,
-        usecols=self.usecols,
-        skiprows=self.skiprows,
+        file_path, self.sheet, header=None, usecols=self.usecols, skiprows=self.skiprows
     )
     return self.edit_matrix(df.values)

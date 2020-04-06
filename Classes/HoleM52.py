@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.HoleMag import HoleMag
 
@@ -199,18 +199,7 @@ class HoleM52(HoleMag):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        H0=0.003,
-        W0=0.003,
-        H1=0,
-        W3=0.013,
-        H2=0.02,
-        magnet_0=-1,
-        Zh=36,
-        mat_void=-1,
-        init_dict=None,
-    ):
+    def __init__(self, H0=0.003, W0=0.003, H1=0, W3=0.013, H2=0.02, magnet_0=-1, Zh=36, mat_void=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -225,9 +214,7 @@ class HoleM52(HoleMag):
         if mat_void == -1:
             mat_void = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["H0", "W0", "H1", "W3", "H2", "magnet_0", "Zh", "mat_void"]
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "H0" in list(init_dict.keys()):
                 H0 = init_dict["H0"]
@@ -254,23 +241,12 @@ class HoleM52(HoleMag):
         # magnet_0 can be None, a Magnet object or a dict
         if isinstance(magnet_0, dict):
             # Check that the type is correct (including daughter)
-            class_name = magnet_0.get("__class__")
-            if class_name not in [
-                "Magnet",
-                "MagnetFlat",
-                "MagnetPolar",
-                "MagnetType10",
-                "MagnetType11",
-                "MagnetType12",
-                "MagnetType13",
-                "MagnetType14",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for magnet_0"
-                )
+            class_name = magnet_0.get('__class__')
+            if class_name not in ['Magnet', 'MagnetFlat', 'MagnetPolar', 'MagnetType10', 'MagnetType11', 'MagnetType12', 'MagnetType13', 'MagnetType14']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for magnet_0")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.magnet_0 = class_obj(init_dict=magnet_0)
         else:
             self.magnet_0 = magnet_0
@@ -292,7 +268,7 @@ class HoleM52(HoleMag):
         HoleM52_str += "H2 = " + str(self.H2) + linesep
         if self.magnet_0 is not None:
             tmp = self.magnet_0.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            HoleM52_str += "magnet_0 = " + tmp
+            HoleM52_str += "magnet_0 = "+ tmp
         else:
             HoleM52_str += "magnet_0 = None" + linesep + linesep
         return HoleM52_str
@@ -355,12 +331,12 @@ class HoleM52(HoleMag):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_H0(self):
         """getter of H0"""
@@ -440,7 +416,6 @@ class HoleM52(HoleMag):
 
         if self._magnet_0 is not None:
             self._magnet_0.parent = self
-
     # Magnet of the hole
     # Type : Magnet
     magnet_0 = property(

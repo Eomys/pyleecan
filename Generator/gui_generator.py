@@ -12,14 +12,9 @@ from os.path import abspath, join, isfile
 from re import match
 from subprocess import PIPE, Popen
 from json import load as jload
-from pyleecan.Generator import GEN_DIR, TAB, TAB2, TAB3
+from pyleecan.definitions import GEN_DIR, GUI_DIR, RES_NAME, RES_PATH
+from pyleecan.Generator import TAB, TAB2, TAB3
 from pyleecan.Functions.short_filepath import short_filepath
-
-GUI_DIR = abspath(join(GEN_DIR, "..", "GUI"))
-ROOT_DIR = abspath(join(GEN_DIR, ".."))
-
-RES_PATH = join(GUI_DIR, "Resources")  # Default Resouces folder name
-RES_NAME = "pyleecan.qrc"  # Default Resouces file name
 
 # SpinBox Must have min and max value, if not provided in csv use these one
 MIN_SPIN = -999999

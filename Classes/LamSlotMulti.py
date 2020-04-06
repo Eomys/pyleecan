@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise_
+from pyleecan.Classes._check import set_array, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Lamination import Lamination
 
@@ -32,9 +32,7 @@ except ImportError as error:
     comp_surfaces = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotMulti.get_pole_pair_number import (
-        get_pole_pair_number,
-    )
+    from pyleecan.Methods.Machine.LamSlotMulti.get_pole_pair_number import get_pole_pair_number
 except ImportError as error:
     get_pole_pair_number = error
 
@@ -173,23 +171,7 @@ class LamSlotMulti(Lamination):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        slot_list=list(),
-        alpha=None,
-        L1=0.35,
-        mat_type=-1,
-        Nrvd=0,
-        Wrvd=0,
-        Kf1=0.95,
-        is_internal=True,
-        Rint=0,
-        Rext=1,
-        is_stator=True,
-        axial_vent=list(),
-        notch=list(),
-        init_dict=None,
-    ):
+    def __init__(self, slot_list=list(), alpha=None, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), notch=list(), init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -202,24 +184,7 @@ class LamSlotMulti(Lamination):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "slot_list",
-                    "alpha",
-                    "L1",
-                    "mat_type",
-                    "Nrvd",
-                    "Wrvd",
-                    "Kf1",
-                    "is_internal",
-                    "Rint",
-                    "Rext",
-                    "is_stator",
-                    "axial_vent",
-                    "notch",
-                ],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "slot_list" in list(init_dict.keys()):
                 slot_list = init_dict["slot_list"]
@@ -257,33 +222,7 @@ class LamSlotMulti(Lamination):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Slot",
-                        "Slot19",
-                        "SlotMFlat",
-                        "SlotMPolar",
-                        "SlotMag",
-                        "SlotUD",
-                        "SlotW10",
-                        "SlotW11",
-                        "SlotW12",
-                        "SlotW13",
-                        "SlotW14",
-                        "SlotW15",
-                        "SlotW16",
-                        "SlotW21",
-                        "SlotW22",
-                        "SlotW23",
-                        "SlotW24",
-                        "SlotW25",
-                        "SlotW26",
-                        "SlotW27",
-                        "SlotW28",
-                        "SlotW29",
-                        "SlotW60",
-                        "SlotW61",
-                        "SlotWind",
-                    ]:
+                    if class_name not in ['Slot', 'Slot19', 'SlotMFlat', 'SlotMPolar', 'SlotMag', 'SlotUD', 'SlotW10', 'SlotW11', 'SlotW12', 'SlotW13', 'SlotW14', 'SlotW15', 'SlotW16', 'SlotW21', 'SlotW22', 'SlotW23', 'SlotW24', 'SlotW25', 'SlotW26', 'SlotW27', 'SlotW28', 'SlotW29', 'SlotW60', 'SlotW61', 'SlotWind']:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -304,19 +243,7 @@ class LamSlotMulti(Lamination):
         # alpha can be None, a ndarray or a list
         set_array(self, "alpha", alpha)
         # Call Lamination init
-        super(LamSlotMulti, self).__init__(
-            L1=L1,
-            mat_type=mat_type,
-            Nrvd=Nrvd,
-            Wrvd=Wrvd,
-            Kf1=Kf1,
-            is_internal=is_internal,
-            Rint=Rint,
-            Rext=Rext,
-            is_stator=is_stator,
-            axial_vent=axial_vent,
-            notch=notch,
-        )
+        super(LamSlotMulti, self).__init__(L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
 
@@ -329,17 +256,9 @@ class LamSlotMulti(Lamination):
         if len(self.slot_list) == 0:
             LamSlotMulti_str += "slot_list = []" + linesep
         for ii in range(len(self.slot_list)):
-            tmp = (
-                self.slot_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            LamSlotMulti_str += "slot_list[" + str(ii) + "] =" + tmp + linesep + linesep
-        LamSlotMulti_str += (
-            "alpha = "
-            + linesep
-            + str(self.alpha).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+            tmp = self.slot_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            LamSlotMulti_str += "slot_list["+str(ii)+"] ="+ tmp + linesep + linesep
+        LamSlotMulti_str += "alpha = " + linesep + str(self.alpha).replace(linesep, linesep + "\t") + linesep + linesep
         return LamSlotMulti_str
 
     def __eq__(self, other):
@@ -386,12 +305,12 @@ class LamSlotMulti(Lamination):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_slot_list(self):
         """getter of slot_list"""

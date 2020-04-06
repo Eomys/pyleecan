@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise_
+from pyleecan.Classes._check import set_array, check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -21,19 +21,7 @@ class OutElec(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        time=None,
-        angle=None,
-        Is=None,
-        Ir=None,
-        angle_rotor=None,
-        Nr=None,
-        rot_dir=-1,
-        angle_rotor_initial=0,
-        logger_name="Pyleecan.OutElec",
-        init_dict=None,
-    ):
+    def __init__(self, time=None, angle=None, Is=None, Ir=None, angle_rotor=None, Nr=None, rot_dir=-1, angle_rotor_initial=0, logger_name="Pyleecan.OutElec", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -44,20 +32,7 @@ class OutElec(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "time",
-                    "angle",
-                    "Is",
-                    "Ir",
-                    "angle_rotor",
-                    "Nr",
-                    "rot_dir",
-                    "angle_rotor_initial",
-                    "logger_name",
-                ],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
@@ -106,52 +81,14 @@ class OutElec(FrozenClass):
             OutElec_str += "parent = None " + linesep
         else:
             OutElec_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutElec_str += (
-            "time = "
-            + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutElec_str += (
-            "angle = "
-            + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutElec_str += (
-            "Is = "
-            + linesep
-            + str(self.Is).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutElec_str += (
-            "Ir = "
-            + linesep
-            + str(self.Ir).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutElec_str += (
-            "angle_rotor = "
-            + linesep
-            + str(self.angle_rotor).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutElec_str += (
-            "Nr = "
-            + linesep
-            + str(self.Nr).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutElec_str += "time = " + linesep + str(self.time).replace(linesep, linesep + "\t") + linesep + linesep
+        OutElec_str += "angle = " + linesep + str(self.angle).replace(linesep, linesep + "\t") + linesep + linesep
+        OutElec_str += "Is = " + linesep + str(self.Is).replace(linesep, linesep + "\t") + linesep + linesep
+        OutElec_str += "Ir = " + linesep + str(self.Ir).replace(linesep, linesep + "\t") + linesep + linesep
+        OutElec_str += "angle_rotor = " + linesep + str(self.angle_rotor).replace(linesep, linesep + "\t") + linesep + linesep
+        OutElec_str += "Nr = " + linesep + str(self.Nr).replace(linesep, linesep + "\t") + linesep + linesep
         OutElec_str += "rot_dir = " + str(self.rot_dir) + linesep
-        OutElec_str += (
-            "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
-        )
+        OutElec_str += "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return OutElec_str
 
@@ -231,12 +168,12 @@ class OutElec(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_time(self):
         """getter of time"""
@@ -275,9 +212,7 @@ class OutElec(FrozenClass):
     # Electrical position vector (no symmetry)
     # Type : ndarray
     angle = property(
-        fget=_get_angle,
-        fset=_set_angle,
-        doc=u"""Electrical position vector (no symmetry)""",
+        fget=_get_angle, fset=_set_angle, doc=u"""Electrical position vector (no symmetry)"""
     )
 
     def _get_Is(self):
@@ -412,7 +347,5 @@ class OutElec(FrozenClass):
     # Name of the logger to use
     # Type : str
     logger_name = property(
-        fget=_get_logger_name,
-        fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        fget=_get_logger_name, fset=_set_logger_name, doc=u"""Name of the logger to use"""
     )

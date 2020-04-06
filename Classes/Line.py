@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -31,7 +31,7 @@ class Line(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["label"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
@@ -79,12 +79,12 @@ class Line(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_label(self):
         """getter of label"""
@@ -98,7 +98,5 @@ class Line(FrozenClass):
     # the label of the Line (EX: Yoke_side)
     # Type : str
     label = property(
-        fget=_get_label,
-        fset=_set_label,
-        doc=u"""the label of the Line (EX: Yoke_side)""",
+        fget=_get_label, fset=_set_label, doc=u"""the label of the Line (EX: Yoke_side)"""
     )

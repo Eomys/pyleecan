@@ -42,7 +42,7 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False):
     surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
     patches = list()
     for surf in surf_list:
-        patches.append(surf.get_patch(color=SHAFT_COLOR, is_edge_only=is_edge_only))
+        patches.extend(surf.get_patches(color=SHAFT_COLOR, is_edge_only=is_edge_only))
     axes.set_xlabel("(m)")
     axes.set_ylabel("(m)")
     axes.set_title("Shaft")

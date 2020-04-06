@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Line import Line
 
@@ -219,7 +219,7 @@ class Segment(Line):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["begin", "end", "label"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "begin" in list(init_dict.keys()):
                 begin = init_dict["begin"]
@@ -283,12 +283,12 @@ class Segment(Line):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_begin(self):
         """getter of begin"""
@@ -316,4 +316,6 @@ class Segment(Line):
 
     # end point of the line
     # Type : complex
-    end = property(fget=_get_end, fset=_set_end, doc=u"""end point of the line""")
+    end = property(
+        fget=_get_end, fset=_set_end, doc=u"""end point of the line"""
+    )

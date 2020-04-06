@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
@@ -37,9 +37,9 @@ except ImportError as error:
     get_lines = error
 
 try:
-    from pyleecan.Methods.Geometry.Trapeze.get_patch import get_patch
+    from pyleecan.Methods.Geometry.Trapeze.get_patches import get_patches
 except ImportError as error:
-    get_patch = error
+    get_patches = error
 
 try:
     from pyleecan.Methods.Geometry.Trapeze.rotate import rotate
@@ -108,15 +108,15 @@ class Trapeze(Surface):
         )
     else:
         get_lines = get_lines
-    # cf Methods.Geometry.Trapeze.get_patch
-    if isinstance(get_patch, ImportError):
-        get_patch = property(
+    # cf Methods.Geometry.Trapeze.get_patches
+    if isinstance(get_patches, ImportError):
+        get_patches = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Trapeze method get_patch: " + str(get_patch))
+                ImportError("Can't use Trapeze method get_patches: " + str(get_patches))
             )
         )
     else:
-        get_patch = get_patch
+        get_patches = get_patches
     # cf Methods.Geometry.Trapeze.rotate
     if isinstance(rotate, ImportError):
         rotate = property(
@@ -149,7 +149,7 @@ class Trapeze(Surface):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["height", "W2", "W1", "point_ref", "label"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "height" in list(init_dict.keys()):
                 height = init_dict["height"]
@@ -223,12 +223,12 @@ class Trapeze(Surface):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_height(self):
         """getter of height"""
@@ -256,7 +256,9 @@ class Trapeze(Surface):
 
     # the big base of Trapeze
     # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""the big base of Trapeze""")
+    W2 = property(
+        fget=_get_W2, fset=_set_W2, doc=u"""the big base of Trapeze"""
+    )
 
     def _get_W1(self):
         """getter of W1"""
@@ -269,4 +271,6 @@ class Trapeze(Surface):
 
     # the small base of the Trapeze
     # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""the small base of the Trapeze""")
+    W1 = property(
+        fget=_get_W1, fset=_set_W1, doc=u"""the small base of the Trapeze"""
+    )

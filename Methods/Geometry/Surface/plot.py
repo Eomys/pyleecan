@@ -32,10 +32,11 @@ def plot(self, fig=None, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=F
     axes.set_xlabel("(m)")
     axes.set_ylabel("(m)")
 
-    axes.add_patch(
-        self.get_patch(color=color, edgecolor=edgecolor, is_edge_only=is_edge_only)
+    patches = self.get_patches(
+        color=color, edgecolor=edgecolor, is_edge_only=is_edge_only
     )
-
+    for patch in patches:
+        axes.add_patch(patch)
     # Axis Setup
     axis("equal")
 

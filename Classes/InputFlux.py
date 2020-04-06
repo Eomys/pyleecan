@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Simulation/InFlux.csv
+"""File generated according to pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv
 WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Input import Input
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Simulation.InFlux.gen_input import gen_input
+    from pyleecan.Methods.Simulation.InputFlux.gen_input import gen_input
 except ImportError as error:
     gen_input = error
 
@@ -21,16 +21,16 @@ from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Import import Import
 
 
-class InFlux(Input):
+class InputFlux(Input):
     """Input to skip the magnetic module and start with the structural one"""
 
     VERSION = 1
 
-    # cf Methods.Simulation.InFlux.gen_input
+    # cf Methods.Simulation.InputFlux.gen_input
     if isinstance(gen_input, ImportError):
         gen_input = property(
             fget=lambda x: raise_(
-                ImportError("Can't use InFlux method gen_input: " + str(gen_input))
+                ImportError("Can't use InputFlux method gen_input: " + str(gen_input))
             )
         )
     else:
@@ -57,7 +57,7 @@ class InFlux(Input):
         if Bt == -1:
             Bt = Import()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["time", "angle", "Br", "Bt"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
@@ -71,127 +71,83 @@ class InFlux(Input):
         # time can be None, a Import object or a dict
         if isinstance(time, dict):
             # Check that the type is correct (including daughter)
-            class_name = time.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for time"
-                )
+            class_name = time.get('__class__')
+            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for time")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.time = class_obj(init_dict=time)
         else:
             self.time = time
         # angle can be None, a Import object or a dict
         if isinstance(angle, dict):
             # Check that the type is correct (including daughter)
-            class_name = angle.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for angle"
-                )
+            class_name = angle.get('__class__')
+            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for angle")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.angle = class_obj(init_dict=angle)
         else:
             self.angle = angle
         # Br can be None, a Import object or a dict
         if isinstance(Br, dict):
             # Check that the type is correct (including daughter)
-            class_name = Br.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Br"
-                )
+            class_name = Br.get('__class__')
+            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for Br")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.Br = class_obj(init_dict=Br)
         else:
             self.Br = Br
         # Bt can be None, a Import object or a dict
         if isinstance(Bt, dict):
             # Check that the type is correct (including daughter)
-            class_name = Bt.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Bt"
-                )
+            class_name = Bt.get('__class__')
+            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for Bt")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.Bt = class_obj(init_dict=Bt)
         else:
             self.Bt = Bt
         # Call Input init
-        super(InFlux, self).__init__()
+        super(InputFlux, self).__init__()
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
-        InFlux_str = ""
+        InputFlux_str = ""
         # Get the properties inherited from Input
-        InFlux_str += super(InFlux, self).__str__()
+        InputFlux_str += super(InputFlux, self).__str__()
         if self.time is not None:
             tmp = self.time.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InFlux_str += "time = " + tmp
+            InputFlux_str += "time = "+ tmp
         else:
-            InFlux_str += "time = None" + linesep + linesep
+            InputFlux_str += "time = None" + linesep + linesep
         if self.angle is not None:
             tmp = self.angle.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InFlux_str += "angle = " + tmp
+            InputFlux_str += "angle = "+ tmp
         else:
-            InFlux_str += "angle = None" + linesep + linesep
+            InputFlux_str += "angle = None" + linesep + linesep
         if self.Br is not None:
             tmp = self.Br.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InFlux_str += "Br = " + tmp
+            InputFlux_str += "Br = "+ tmp
         else:
-            InFlux_str += "Br = None" + linesep + linesep
+            InputFlux_str += "Br = None" + linesep + linesep
         if self.Bt is not None:
             tmp = self.Bt.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InFlux_str += "Bt = " + tmp
+            InputFlux_str += "Bt = "+ tmp
         else:
-            InFlux_str += "Bt = None" + linesep + linesep
-        return InFlux_str
+            InputFlux_str += "Bt = None" + linesep + linesep
+        return InputFlux_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -200,7 +156,7 @@ class InFlux(Input):
             return False
 
         # Check the properties inherited from Input
-        if not super(InFlux, self).__eq__(other):
+        if not super(InputFlux, self).__eq__(other):
             return False
         if other.time != self.time:
             return False
@@ -217,27 +173,27 @@ class InFlux(Input):
         """
 
         # Get the properties inherited from Input
-        InFlux_dict = super(InFlux, self).as_dict()
+        InputFlux_dict = super(InputFlux, self).as_dict()
         if self.time is None:
-            InFlux_dict["time"] = None
+            InputFlux_dict["time"] = None
         else:
-            InFlux_dict["time"] = self.time.as_dict()
+            InputFlux_dict["time"] = self.time.as_dict()
         if self.angle is None:
-            InFlux_dict["angle"] = None
+            InputFlux_dict["angle"] = None
         else:
-            InFlux_dict["angle"] = self.angle.as_dict()
+            InputFlux_dict["angle"] = self.angle.as_dict()
         if self.Br is None:
-            InFlux_dict["Br"] = None
+            InputFlux_dict["Br"] = None
         else:
-            InFlux_dict["Br"] = self.Br.as_dict()
+            InputFlux_dict["Br"] = self.Br.as_dict()
         if self.Bt is None:
-            InFlux_dict["Bt"] = None
+            InputFlux_dict["Bt"] = None
         else:
-            InFlux_dict["Bt"] = self.Bt.as_dict()
+            InputFlux_dict["Bt"] = self.Bt.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
-        InFlux_dict["__class__"] = "InFlux"
-        return InFlux_dict
+        InputFlux_dict["__class__"] = "InputFlux"
+        return InputFlux_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -251,16 +207,16 @@ class InFlux(Input):
         if self.Bt is not None:
             self.Bt._set_None()
         # Set to None the properties inherited from Input
-        super(InFlux, self)._set_None()
+        super(InputFlux, self)._set_None()
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_time(self):
         """getter of time"""
@@ -273,7 +229,6 @@ class InFlux(Input):
 
         if self._time is not None:
             self._time.parent = self
-
     # Electrical time vector (no symmetry) to import
     # Type : Import
     time = property(
@@ -293,7 +248,6 @@ class InFlux(Input):
 
         if self._angle is not None:
             self._angle.parent = self
-
     # Electrical position vector (no symmetry) to import
     # Type : Import
     angle = property(
@@ -313,10 +267,11 @@ class InFlux(Input):
 
         if self._Br is not None:
             self._Br.parent = self
-
     # Radial airgap flux density
     # Type : Import
-    Br = property(fget=_get_Br, fset=_set_Br, doc=u"""Radial airgap flux density""")
+    Br = property(
+        fget=_get_Br, fset=_set_Br, doc=u"""Radial airgap flux density"""
+    )
 
     def _get_Bt(self):
         """getter of Bt"""
@@ -329,7 +284,8 @@ class InFlux(Input):
 
         if self._Bt is not None:
             self._Bt.parent = self
-
     # Tangential airgap flux density
     # Type : Import
-    Bt = property(fget=_get_Bt, fset=_set_Bt, doc=u"""Tangential airgap flux density""")
+    Bt = property(
+        fget=_get_Bt, fset=_set_Bt, doc=u"""Tangential airgap flux density"""
+    )

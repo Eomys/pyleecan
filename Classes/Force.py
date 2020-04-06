@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -65,7 +65,7 @@ class Force(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["is_comp_nodal_force"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "is_comp_nodal_force" in list(init_dict.keys()):
                 is_comp_nodal_force = init_dict["is_comp_nodal_force"]
@@ -113,12 +113,12 @@ class Force(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_is_comp_nodal_force(self):
         """getter of is_comp_nodal_force"""
@@ -132,7 +132,5 @@ class Force(FrozenClass):
     # 1 to compute lumped tooth forces
     # Type : bool
     is_comp_nodal_force = property(
-        fget=_get_is_comp_nodal_force,
-        fset=_set_is_comp_nodal_force,
-        doc=u"""1 to compute lumped tooth forces""",
+        fget=_get_is_comp_nodal_force, fset=_set_is_comp_nodal_force, doc=u"""1 to compute lumped tooth forces"""
     )

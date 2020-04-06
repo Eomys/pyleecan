@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 
@@ -39,9 +39,7 @@ class ImportGenVectSin(ImportMatrix):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self, f=100, A=1, Phi=0, N=1024, Tf=1, is_transpose=False, init_dict=None
-    ):
+    def __init__(self, f=100, A=1, Phi=0, N=1024, Tf=1, is_transpose=False, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -52,7 +50,7 @@ class ImportGenVectSin(ImportMatrix):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["f", "A", "Phi", "N", "Tf", "is_transpose"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "f" in list(init_dict.keys()):
                 f = init_dict["f"]
@@ -140,12 +138,12 @@ class ImportGenVectSin(ImportMatrix):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_f(self):
         """getter of f"""
@@ -203,7 +201,9 @@ class ImportGenVectSin(ImportMatrix):
 
     # Length of the vector to generate
     # Type : int, min = 0
-    N = property(fget=_get_N, fset=_set_N, doc=u"""Length of the vector to generate""")
+    N = property(
+        fget=_get_N, fset=_set_N, doc=u"""Length of the vector to generate"""
+    )
 
     def _get_Tf(self):
         """getter of Tf"""

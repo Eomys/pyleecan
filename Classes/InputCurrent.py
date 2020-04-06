@@ -1,55 +1,62 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Simulation/InCurrent.csv
+"""File generated according to pyleecan/Generator/ClassesRef/Simulation/InputCurrent.csv
 WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Input import Input
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Simulation.InCurrent.gen_input import gen_input
+    from pyleecan.Methods.Simulation.InputCurrent.gen_input import gen_input
 except ImportError as error:
     gen_input = error
+
+try:
+    from pyleecan.Methods.Simulation.InputCurrent.set_Nr import set_Nr
+except ImportError as error:
+    set_Nr = error
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Import import Import
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
 
-class InCurrent(Input):
+class InputCurrent(Input):
     """Input to skip the electrical module and start with the magnetic one"""
 
     VERSION = 1
 
-    # cf Methods.Simulation.InCurrent.gen_input
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Simulation.InputCurrent.gen_input
     if isinstance(gen_input, ImportError):
         gen_input = property(
             fget=lambda x: raise_(
-                ImportError("Can't use InCurrent method gen_input: " + str(gen_input))
+                ImportError(
+                    "Can't use InputCurrent method gen_input: " + str(gen_input)
+                )
             )
         )
     else:
         gen_input = gen_input
+    # cf Methods.Simulation.InputCurrent.set_Nr
+    if isinstance(set_Nr, ImportError):
+        set_Nr = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use InputCurrent method set_Nr: " + str(set_Nr))
+            )
+        )
+    else:
+        set_Nr = set_Nr
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        time=None,
-        angle=None,
-        Is=None,
-        Ir=None,
-        angle_rotor=None,
-        Nr=None,
-        rot_dir=-1,
-        angle_rotor_initial=0,
-        init_dict=None,
-    ):
+    def __init__(self, time=-1, angle=-1, Is=-1, Ir=-1, angle_rotor=None, Nr=-1, rot_dir=-1, angle_rotor_initial=0, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -60,31 +67,19 @@ class InCurrent(Input):
         object or dict can be given for pyleecan Object"""
 
         if time == -1:
-            time = Import()
+            time = ImportMatrixVal()
         if angle == -1:
-            angle = Import()
+            angle = ImportMatrixVal()
         if Is == -1:
-            Is = Import()
+            Is = ImportMatrixVal()
         if Ir == -1:
-            Ir = Import()
+            Ir = ImportMatrixVal()
         if angle_rotor == -1:
             angle_rotor = Import()
         if Nr == -1:
-            Nr = Import()
+            Nr = ImportMatrixVal()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "time",
-                    "angle",
-                    "Is",
-                    "Ir",
-                    "angle_rotor",
-                    "Nr",
-                    "rot_dir",
-                    "angle_rotor_initial",
-                ],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
@@ -106,191 +101,121 @@ class InCurrent(Input):
         # time can be None, a Import object or a dict
         if isinstance(time, dict):
             # Check that the type is correct (including daughter)
-            class_name = time.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for time"
-                )
+            class_name = time.get('__class__')
+            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for time")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.time = class_obj(init_dict=time)
         else:
             self.time = time
         # angle can be None, a Import object or a dict
         if isinstance(angle, dict):
             # Check that the type is correct (including daughter)
-            class_name = angle.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for angle"
-                )
+            class_name = angle.get('__class__')
+            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for angle")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.angle = class_obj(init_dict=angle)
         else:
             self.angle = angle
         # Is can be None, a Import object or a dict
         if isinstance(Is, dict):
             # Check that the type is correct (including daughter)
-            class_name = Is.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Is"
-                )
+            class_name = Is.get('__class__')
+            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for Is")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.Is = class_obj(init_dict=Is)
         else:
             self.Is = Is
         # Ir can be None, a Import object or a dict
         if isinstance(Ir, dict):
             # Check that the type is correct (including daughter)
-            class_name = Ir.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Ir"
-                )
+            class_name = Ir.get('__class__')
+            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for Ir")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.Ir = class_obj(init_dict=Ir)
         else:
             self.Ir = Ir
         # angle_rotor can be None, a Import object or a dict
         if isinstance(angle_rotor, dict):
             # Check that the type is correct (including daughter)
-            class_name = angle_rotor.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for angle_rotor"
-                )
+            class_name = angle_rotor.get('__class__')
+            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for angle_rotor")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.angle_rotor = class_obj(init_dict=angle_rotor)
         else:
             self.angle_rotor = angle_rotor
         # Nr can be None, a Import object or a dict
         if isinstance(Nr, dict):
             # Check that the type is correct (including daughter)
-            class_name = Nr.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Nr"
-                )
+            class_name = Nr.get('__class__')
+            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for Nr")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.Nr = class_obj(init_dict=Nr)
         else:
             self.Nr = Nr
         self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
         # Call Input init
-        super(InCurrent, self).__init__()
+        super(InputCurrent, self).__init__()
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
-        InCurrent_str = ""
+        InputCurrent_str = ""
         # Get the properties inherited from Input
-        InCurrent_str += super(InCurrent, self).__str__()
+        InputCurrent_str += super(InputCurrent, self).__str__()
         if self.time is not None:
             tmp = self.time.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "time = " + tmp
+            InputCurrent_str += "time = "+ tmp
         else:
-            InCurrent_str += "time = None" + linesep + linesep
+            InputCurrent_str += "time = None" + linesep + linesep
         if self.angle is not None:
             tmp = self.angle.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "angle = " + tmp
+            InputCurrent_str += "angle = "+ tmp
         else:
-            InCurrent_str += "angle = None" + linesep + linesep
+            InputCurrent_str += "angle = None" + linesep + linesep
         if self.Is is not None:
             tmp = self.Is.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "Is = " + tmp
+            InputCurrent_str += "Is = "+ tmp
         else:
-            InCurrent_str += "Is = None" + linesep + linesep
+            InputCurrent_str += "Is = None" + linesep + linesep
         if self.Ir is not None:
             tmp = self.Ir.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "Ir = " + tmp
+            InputCurrent_str += "Ir = "+ tmp
         else:
-            InCurrent_str += "Ir = None" + linesep + linesep
+            InputCurrent_str += "Ir = None" + linesep + linesep
         if self.angle_rotor is not None:
-            tmp = (
-                self.angle_rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            )
-            InCurrent_str += "angle_rotor = " + tmp
+            tmp = self.angle_rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            InputCurrent_str += "angle_rotor = "+ tmp
         else:
-            InCurrent_str += "angle_rotor = None" + linesep + linesep
+            InputCurrent_str += "angle_rotor = None" + linesep + linesep
         if self.Nr is not None:
             tmp = self.Nr.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "Nr = " + tmp
+            InputCurrent_str += "Nr = "+ tmp
         else:
-            InCurrent_str += "Nr = None" + linesep + linesep
-        InCurrent_str += "rot_dir = " + str(self.rot_dir) + linesep
-        InCurrent_str += (
-            "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
-        )
-        return InCurrent_str
+            InputCurrent_str += "Nr = None" + linesep + linesep
+        InputCurrent_str += "rot_dir = " + str(self.rot_dir) + linesep
+        InputCurrent_str += "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
+        return InputCurrent_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -299,7 +224,7 @@ class InCurrent(Input):
             return False
 
         # Check the properties inherited from Input
-        if not super(InCurrent, self).__eq__(other):
+        if not super(InputCurrent, self).__eq__(other):
             return False
         if other.time != self.time:
             return False
@@ -324,37 +249,37 @@ class InCurrent(Input):
         """
 
         # Get the properties inherited from Input
-        InCurrent_dict = super(InCurrent, self).as_dict()
+        InputCurrent_dict = super(InputCurrent, self).as_dict()
         if self.time is None:
-            InCurrent_dict["time"] = None
+            InputCurrent_dict["time"] = None
         else:
-            InCurrent_dict["time"] = self.time.as_dict()
+            InputCurrent_dict["time"] = self.time.as_dict()
         if self.angle is None:
-            InCurrent_dict["angle"] = None
+            InputCurrent_dict["angle"] = None
         else:
-            InCurrent_dict["angle"] = self.angle.as_dict()
+            InputCurrent_dict["angle"] = self.angle.as_dict()
         if self.Is is None:
-            InCurrent_dict["Is"] = None
+            InputCurrent_dict["Is"] = None
         else:
-            InCurrent_dict["Is"] = self.Is.as_dict()
+            InputCurrent_dict["Is"] = self.Is.as_dict()
         if self.Ir is None:
-            InCurrent_dict["Ir"] = None
+            InputCurrent_dict["Ir"] = None
         else:
-            InCurrent_dict["Ir"] = self.Ir.as_dict()
+            InputCurrent_dict["Ir"] = self.Ir.as_dict()
         if self.angle_rotor is None:
-            InCurrent_dict["angle_rotor"] = None
+            InputCurrent_dict["angle_rotor"] = None
         else:
-            InCurrent_dict["angle_rotor"] = self.angle_rotor.as_dict()
+            InputCurrent_dict["angle_rotor"] = self.angle_rotor.as_dict()
         if self.Nr is None:
-            InCurrent_dict["Nr"] = None
+            InputCurrent_dict["Nr"] = None
         else:
-            InCurrent_dict["Nr"] = self.Nr.as_dict()
-        InCurrent_dict["rot_dir"] = self.rot_dir
-        InCurrent_dict["angle_rotor_initial"] = self.angle_rotor_initial
+            InputCurrent_dict["Nr"] = self.Nr.as_dict()
+        InputCurrent_dict["rot_dir"] = self.rot_dir
+        InputCurrent_dict["angle_rotor_initial"] = self.angle_rotor_initial
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
-        InCurrent_dict["__class__"] = "InCurrent"
-        return InCurrent_dict
+        InputCurrent_dict["__class__"] = "InputCurrent"
+        return InputCurrent_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -374,16 +299,16 @@ class InCurrent(Input):
         self.rot_dir = None
         self.angle_rotor_initial = None
         # Set to None the properties inherited from Input
-        super(InCurrent, self)._set_None()
+        super(InputCurrent, self)._set_None()
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_time(self):
         """getter of time"""
@@ -396,7 +321,6 @@ class InCurrent(Input):
 
         if self._time is not None:
             self._time.parent = self
-
     # Electrical time vector (no symmetry) to import
     # Type : Import
     time = property(
@@ -416,7 +340,6 @@ class InCurrent(Input):
 
         if self._angle is not None:
             self._angle.parent = self
-
     # Electrical position vector (no symmetry) to import
     # Type : Import
     angle = property(
@@ -436,7 +359,6 @@ class InCurrent(Input):
 
         if self._Is is not None:
             self._Is.parent = self
-
     # Stator currents as a function of time (each column correspond to one phase) to import
     # Type : Import
     Is = property(
@@ -456,7 +378,6 @@ class InCurrent(Input):
 
         if self._Ir is not None:
             self._Ir.parent = self
-
     # Rotor currents as a function of time (each column correspond to one phase) to import
     # Type : Import
     Ir = property(
@@ -476,7 +397,6 @@ class InCurrent(Input):
 
         if self._angle_rotor is not None:
             self._angle_rotor.parent = self
-
     # Rotor angular position as a function of time (if None computed according to Nr) to import
     # Type : Import
     angle_rotor = property(
@@ -496,7 +416,6 @@ class InCurrent(Input):
 
         if self._Nr is not None:
             self._Nr.parent = self
-
     # Rotor speed as a function of time to import
     # Type : Import
     Nr = property(

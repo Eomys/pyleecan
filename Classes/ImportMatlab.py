@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Import import Import
 
@@ -48,7 +48,7 @@ class ImportMatlab(Import):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["file_path", "var_name"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "file_path" in list(init_dict.keys()):
                 file_path = init_dict["file_path"]
@@ -110,12 +110,12 @@ class ImportMatlab(Import):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_file_path(self):
         """getter of file_path"""

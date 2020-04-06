@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -27,9 +27,7 @@ except ImportError as error:
     comp_phasor_angle = error
 
 try:
-    from pyleecan.Methods.Machine.Winding.comp_resistance_norm import (
-        comp_resistance_norm,
-    )
+    from pyleecan.Methods.Machine.Winding.comp_resistance_norm import comp_resistance_norm
 except ImportError as error:
     comp_resistance_norm = error
 
@@ -106,19 +104,7 @@ class Winding(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        is_reverse_wind=False,
-        Nslot_shift_wind=0,
-        qs=3,
-        Ntcoil=7,
-        Npcpp=2,
-        type_connection=0,
-        p=3,
-        Lewout=0.015,
-        conductor=-1,
-        init_dict=None,
-    ):
+    def __init__(self, is_reverse_wind=False, Nslot_shift_wind=0, qs=3, Ntcoil=7, Npcpp=2, type_connection=0, p=3, Lewout=0.015, conductor=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -131,20 +117,7 @@ class Winding(FrozenClass):
         if conductor == -1:
             conductor = Conductor()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "is_reverse_wind",
-                    "Nslot_shift_wind",
-                    "qs",
-                    "Ntcoil",
-                    "Npcpp",
-                    "type_connection",
-                    "p",
-                    "Lewout",
-                    "conductor",
-                ],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "is_reverse_wind" in list(init_dict.keys()):
                 is_reverse_wind = init_dict["is_reverse_wind"]
@@ -177,20 +150,12 @@ class Winding(FrozenClass):
         # conductor can be None, a Conductor object or a dict
         if isinstance(conductor, dict):
             # Check that the type is correct (including daughter)
-            class_name = conductor.get("__class__")
-            if class_name not in [
-                "Conductor",
-                "CondType11",
-                "CondType12",
-                "CondType21",
-                "CondType22",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for conductor"
-                )
+            class_name = conductor.get('__class__')
+            if class_name not in ['Conductor', 'CondType11', 'CondType12', 'CondType21', 'CondType22']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for conductor")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.conductor = class_obj(init_dict=conductor)
         else:
             self.conductor = conductor
@@ -216,7 +181,7 @@ class Winding(FrozenClass):
         Winding_str += "Lewout = " + str(self.Lewout) + linesep
         if self.conductor is not None:
             tmp = self.conductor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Winding_str += "conductor = " + tmp
+            Winding_str += "conductor = "+ tmp
         else:
             Winding_str += "conductor = None" + linesep + linesep
         return Winding_str
@@ -283,12 +248,12 @@ class Winding(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_is_reverse_wind(self):
         """getter of is_reverse_wind"""
@@ -333,7 +298,7 @@ class Winding(FrozenClass):
         check_var("qs", value, "int", Vmin=1, Vmax=100)
         self._qs = value
 
-    # number of phases
+    # number of phases 
     # Type : int, min = 1, max = 100
     qs = property(fget=_get_qs, fset=_set_qs, doc=u"""number of phases """)
 
@@ -408,7 +373,7 @@ class Winding(FrozenClass):
         check_var("Lewout", value, "float", Vmin=0, Vmax=100)
         self._Lewout = value
 
-    # straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length
+    # straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length 
     # Type : float, min = 0, max = 100
     Lewout = property(
         fget=_get_Lewout,
@@ -427,7 +392,6 @@ class Winding(FrozenClass):
 
         if self._conductor is not None:
             self._conductor.parent = self
-
     # Winding's conductor
     # Type : Conductor
     conductor = property(

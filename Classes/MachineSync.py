@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Machine import Machine
 
@@ -17,9 +17,7 @@ except ImportError as error:
     is_synchronous = error
 
 try:
-    from pyleecan.Methods.Machine.MachineSync.comp_initial_angle import (
-        comp_initial_angle,
-    )
+    from pyleecan.Methods.Machine.MachineSync.comp_initial_angle import comp_initial_angle
 except ImportError as error:
     comp_initial_angle = error
 
@@ -40,8 +38,7 @@ class MachineSync(Machine):
         is_synchronous = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MachineSync method is_synchronous: "
-                    + str(is_synchronous)
+                    "Can't use MachineSync method is_synchronous: " + str(is_synchronous)
                 )
             )
         )
@@ -62,16 +59,7 @@ class MachineSync(Machine):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        frame=-1,
-        shaft=-1,
-        name="default_machine",
-        desc="",
-        type_machine=1,
-        logger_name="Pyleecan.Machine",
-        init_dict=None,
-    ):
+    def __init__(self, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -86,10 +74,7 @@ class MachineSync(Machine):
         if shaft == -1:
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["frame", "shaft", "name", "desc", "type_machine", "logger_name"],
-            )
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "frame" in list(init_dict.keys()):
                 frame = init_dict["frame"]
@@ -105,14 +90,7 @@ class MachineSync(Machine):
                 logger_name = init_dict["logger_name"]
         # Initialisation by argument
         # Call Machine init
-        super(MachineSync, self).__init__(
-            frame=frame,
-            shaft=shaft,
-            name=name,
-            desc=desc,
-            type_machine=type_machine,
-            logger_name=logger_name,
-        )
+        super(MachineSync, self).__init__(frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine, logger_name=logger_name)
         # The class is frozen (in Machine init), for now it's impossible to
         # add new properties
 

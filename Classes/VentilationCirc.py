@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Hole import Hole
 
@@ -84,8 +84,7 @@ class VentilationCirc(Hole):
         comp_surface = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VentilationCirc method comp_surface: "
-                    + str(comp_surface)
+                    "Can't use VentilationCirc method comp_surface: " + str(comp_surface)
                 )
             )
         )
@@ -118,7 +117,7 @@ class VentilationCirc(Hole):
         if mat_void == -1:
             mat_void = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["Alpha0", "D0", "H0", "Zh", "mat_void"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "Alpha0" in list(init_dict.keys()):
                 Alpha0 = init_dict["Alpha0"]
@@ -192,12 +191,12 @@ class VentilationCirc(Hole):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_Alpha0(self):
         """getter of Alpha0"""
@@ -240,4 +239,6 @@ class VentilationCirc(Hole):
 
     # Diameter of the hole centers
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Diameter of the hole centers""")
+    H0 = property(
+        fget=_get_H0, fset=_set_H0, doc=u"""Diameter of the hole centers"""
+    )

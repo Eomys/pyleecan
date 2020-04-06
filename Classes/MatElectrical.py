@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -31,7 +31,7 @@ class MatElectrical(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["rho", "epsr", "alpha"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "rho" in list(init_dict.keys()):
                 rho = init_dict["rho"]
@@ -55,9 +55,7 @@ class MatElectrical(FrozenClass):
         if self.parent is None:
             MatElectrical_str += "parent = None " + linesep
         else:
-            MatElectrical_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            MatElectrical_str += "parent = " + str(type(self.parent)) + " object" + linesep
         MatElectrical_str += "rho = " + str(self.rho) + linesep
         MatElectrical_str += "epsr = " + str(self.epsr) + linesep
         MatElectrical_str += "alpha = " + str(self.alpha) + linesep
@@ -97,12 +95,12 @@ class MatElectrical(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_rho(self):
         """getter of rho"""
@@ -115,7 +113,9 @@ class MatElectrical(FrozenClass):
 
     # Resistivity at 20 deg C
     # Type : float, min = 0
-    rho = property(fget=_get_rho, fset=_set_rho, doc=u"""Resistivity at 20 deg C""")
+    rho = property(
+        fget=_get_rho, fset=_set_rho, doc=u"""Resistivity at 20 deg C"""
+    )
 
     def _get_epsr(self):
         """getter of epsr"""
@@ -143,4 +143,6 @@ class MatElectrical(FrozenClass):
 
     # Thermal Coefficient
     # Type : float, min = 0
-    alpha = property(fget=_get_alpha, fset=_set_alpha, doc=u"""Thermal Coefficient""")
+    alpha = property(
+        fget=_get_alpha, fset=_set_alpha, doc=u"""Thermal Coefficient"""
+    )

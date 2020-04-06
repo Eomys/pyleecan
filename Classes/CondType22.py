@@ -5,16 +5,14 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Conductor import Conductor
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.CondType22.comp_surface_active import (
-        comp_surface_active,
-    )
+    from pyleecan.Methods.Machine.CondType22.comp_surface_active import comp_surface_active
 except ImportError as error:
     comp_surface_active = error
 
@@ -75,7 +73,7 @@ class CondType22(Conductor):
         if ins_mat == -1:
             ins_mat = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["Sbar", "cond_mat", "ins_mat"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "Sbar" in list(init_dict.keys()):
                 Sbar = init_dict["Sbar"]
@@ -133,12 +131,12 @@ class CondType22(Conductor):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_Sbar(self):
         """getter of Sbar"""
@@ -151,4 +149,6 @@ class CondType22(Conductor):
 
     # Surface of the Slot
     # Type : float, min = 0
-    Sbar = property(fget=_get_Sbar, fset=_set_Sbar, doc=u"""Surface of the Slot""")
+    Sbar = property(
+        fget=_get_Sbar, fset=_set_Sbar, doc=u"""Surface of the Slot"""
+    )

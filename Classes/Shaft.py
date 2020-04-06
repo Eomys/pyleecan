@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from pyleecan.Classes._check import check_var, raise_
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -82,7 +82,7 @@ class Shaft(FrozenClass):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["Lshaft", "mat_type", "Drsh"])
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "Lshaft" in list(init_dict.keys()):
                 Lshaft = init_dict["Lshaft"]
@@ -114,7 +114,7 @@ class Shaft(FrozenClass):
         Shaft_str += "Lshaft = " + str(self.Lshaft) + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Shaft_str += "mat_type = " + tmp
+            Shaft_str += "mat_type = "+ tmp
         else:
             Shaft_str += "mat_type = None" + linesep + linesep
         Shaft_str += "Drsh = " + str(self.Drsh) + linesep
@@ -158,12 +158,12 @@ class Shaft(FrozenClass):
 
     def get_logger(self):
         """getter of the logger"""
-        if hasattr(self, "logger_name"):
+        if hasattr(self,'logger_name'):
             return getLogger(self.logger_name)
         elif self.parent != None:
             return self.parent.get_logger()
         else:
-            return getLogger("Pyleecan")
+            return getLogger('Pyleecan')
 
     def _get_Lshaft(self):
         """getter of Lshaft"""
@@ -193,7 +193,6 @@ class Shaft(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
-
     # Shaft's Material
     # Type : Material
     mat_type = property(

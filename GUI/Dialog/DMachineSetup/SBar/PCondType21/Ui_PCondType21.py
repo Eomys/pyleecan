@@ -3,6 +3,7 @@
 # File generated according to PCondType21.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -62,8 +63,6 @@ class Ui_PCondType21(object):
         self.unit_Hbar.setText(_translate("PCondType21", "m"))
         self.unit_Wbar.setText(_translate("PCondType21", "m"))
         self.in_Wbar.setText(_translate("PCondType21", "Wbar :"))
-
-
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.WBarOut.WBarOut import WBarOut
 from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
