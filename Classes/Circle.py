@@ -50,6 +50,11 @@ try:
 except ImportError as error:
     translate = error
 
+try:
+    from pyleecan.Methods.Geometry.Circle.comp_point_ref import comp_point_ref
+except ImportError as error:
+    comp_point_ref = error
+
 
 from pyleecan.Classes._check import InitUnKnowClassError
 
@@ -134,6 +139,17 @@ class Circle(Surface):
         )
     else:
         translate = translate
+    # cf Methods.Geometry.Circle.comp_point_ref
+    if isinstance(comp_point_ref, ImportError):
+        comp_point_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Circle method comp_point_ref: " + str(comp_point_ref)
+                )
+            )
+        )
+    else:
+        comp_point_ref = comp_point_ref
     # save method is available in all object
     save = save
 

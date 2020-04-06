@@ -55,6 +55,11 @@ try:
 except ImportError as error:
     plot_lines = error
 
+try:
+    from pyleecan.Methods.Geometry.SurfRing.comp_point_ref import comp_point_ref
+except ImportError as error:
+    comp_point_ref = error
+
 
 from pyleecan.Classes._check import InitUnKnowClassError
 from pyleecan.Classes.Surface import Surface
@@ -153,6 +158,17 @@ class SurfRing(Surface):
         )
     else:
         plot_lines = plot_lines
+    # cf Methods.Geometry.SurfRing.comp_point_ref
+    if isinstance(comp_point_ref, ImportError):
+        comp_point_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SurfRing method comp_point_ref: " + str(comp_point_ref)
+                )
+            )
+        )
+    else:
+        comp_point_ref = comp_point_ref
     # save method is available in all object
     save = save
 

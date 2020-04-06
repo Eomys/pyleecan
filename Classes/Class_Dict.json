@@ -296,7 +296,8 @@
             "get_lines",
             "get_patches",
             "rotate",
-            "translate"
+            "translate",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "Circle",
@@ -5370,7 +5371,8 @@
             "comp_length",
             "discretize",
             "get_patches",
-            "comp_surface"
+            "comp_surface",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "PolarArc",
@@ -7640,7 +7642,8 @@
             "get_patches",
             "discretize",
             "comp_surface",
-            "plot_lines"
+            "plot_lines",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "SurfLine",
@@ -7677,7 +7680,8 @@
             "get_patches",
             "discretize",
             "comp_surface",
-            "plot_lines"
+            "plot_lines",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "SurfRing",
@@ -7724,7 +7728,8 @@
         "methods": [
             "comp_mesh_dict",
             "draw_FEMM",
-            "plot"
+            "plot",
+            "split_line"
         ],
         "mother": "",
         "name": "Surface",
@@ -7769,7 +7774,8 @@
             "get_lines",
             "get_patches",
             "rotate",
-            "translate"
+            "translate",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "Trapeze",
