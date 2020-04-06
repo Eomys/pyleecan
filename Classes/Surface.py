@@ -25,6 +25,11 @@ try:
 except ImportError as error:
     plot = error
 
+try:
+    from pyleecan.Methods.Geometry.Surface.split_line import split_line
+except ImportError as error:
+    split_line = error
+
 
 from pyleecan.Classes._check import InitUnKnowClassError
 
@@ -64,6 +69,15 @@ class Surface(FrozenClass):
         )
     else:
         plot = plot
+    # cf Methods.Geometry.Surface.split_line
+    if isinstance(split_line, ImportError):
+        split_line = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Surface method split_line: " + str(split_line))
+            )
+        )
+    else:
+        split_line = split_line
     # save method is available in all object
     save = save
 
