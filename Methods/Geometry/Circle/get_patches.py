@@ -9,7 +9,9 @@ from pyleecan.Methods.Machine import (
 )
 
 
-def get_patches(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False):
+def get_patches(
+    self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False, linestyle=None
+):
     """Returns the Circle Patch to be display in matplotlib
 
     Parameters
@@ -22,6 +24,8 @@ def get_patches(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=Fals
         edgecolor of the Patch (Default value = PATCH_EDGE)
     is_edge_only: bool
         To set the transparancy of the face color to 0 and 1 for the edge color
+    linestyle : str
+        Line style of the edge {'-', '--', '-.', ':', '', (offset, on-off-seq), ...}
 
     Returns
     -------
@@ -40,5 +44,11 @@ def get_patches(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=Fals
         edgecolor = PATCH_EDGE_ALPHA
 
     return [
-        Circle(xy=(Zr, Zi), radius=self.radius, facecolor=color, edgecolor=edgecolor)
+        Circle(
+            xy=(Zr, Zi),
+            radius=self.radius,
+            facecolor=color,
+            edgecolor=edgecolor,
+            linestyle=linestyle,
+        )
     ]
