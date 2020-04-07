@@ -135,6 +135,7 @@ class test_ICEM_2020(TestCase):
             user_mesh_dict=mesh_dict,
             is_rect=True,
             Nlayer=18,
+            display=False,
         )
         # To see the resulting mesh, gmsh_mesh_dict.msh need to be
         # opened in Gmsh
@@ -191,6 +192,7 @@ class test_ICEM_2020(TestCase):
             sym=4,
             mesh_size=20e-3,
             Nlayer=20,
+            display=False,
         )
         # To see the resulting mesh, gmsh_SlotMulti.msh need to be
         # opened in Gmsh
