@@ -17,13 +17,13 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 
 simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
 
-csv_file_Br = join(DATA_DIR, "default_proj_Br_time_angle.csv")
-csv_file_time = join(DATA_DIR, "default_proj_time.csv")
-csv_file_angle = join(DATA_DIR, "default_proj_angle.csv")
-csv_file_aswl = join(DATA_DIR, "default_proj_LwiA.csv")
-csv_file_freqs = join(DATA_DIR, "default_proj_freqs.csv")
-csv_file_MTr_freqs = join(DATA_DIR, "default_proj_MTr_freqs.csv")
-csv_file_MTr_wavenumber = join(DATA_DIR, "default_proj_MTr_wavenumber.csv")
+mat_file_Br = join(DATA_DIR, "default_proj_Br.mat")
+mat_file_time = join(DATA_DIR, "default_proj_time.mat")
+mat_file_angle = join(DATA_DIR, "default_proj_angle.mat")
+mat_file_aswl = join(DATA_DIR, "default_proj_aswl.mat")
+mat_file_freqs = join(DATA_DIR, "default_proj_aswl_freqs.mat")
+mat_file_MTr_freqs = join(DATA_DIR, "default_proj_MTr_freqs.mat")
+mat_file_MTr_wavenumber = join(DATA_DIR, "default_proj_MTr_wavenumber.mat")
 mat_file_MTr = join(DATA_DIR, "default_proj_MTr.mat")
 mat_file_Br_cfft2 = join(DATA_DIR, "default_proj_Br_cfft2.mat")
 mat_file_Brfreqs = join(DATA_DIR, "default_proj_Brfreqs.mat")
@@ -34,21 +34,19 @@ wav_file_pinknoise = join(DATA_DIR, "PinkNoise_40dBpHz@1000Hz.wav")
 wav_file_trafic = join(DATA_DIR, "trafic.wav")
 
 # Read input files from Manatee
-Br = genfromtxt(csv_file_Br, delimiter=",")
-Br[0, 0] = -0.179266312
-time = genfromtxt(csv_file_time, delimiter=",")
-time[0] = 0
-angle = genfromtxt(csv_file_angle, delimiter=",")
-angle[0] = 0
-aswl = genfromtxt(csv_file_aswl, delimiter=",")
-aswl[0] = 0
-freqs = genfromtxt(csv_file_freqs, delimiter=",")
-freqs[0] = 0
-
-MTr_freqs = genfromtxt(csv_file_MTr_freqs, delimiter=",")
-MTr_freqs[0] = 0
-MTr_wavenumber = genfromtxt(csv_file_MTr_wavenumber, delimiter=",")
-MTr_wavenumber[0] = -8
+Br = squeeze(ImportMatlab(file_path=mat_file_Br, var_name="XBr").get_data())
+time = squeeze(ImportMatlab(file_path=mat_file_time, var_name="timec").get_data())
+angle = squeeze(
+    ImportMatlab(file_path=mat_file_angle, var_name="alpha_radc").get_data()
+)
+aswl = squeeze(ImportMatlab(file_path=mat_file_aswl, var_name="LwiA").get_data())
+freqs = squeeze(ImportMatlab(file_path=mat_file_freqs, var_name="freqs").get_data())
+MTr_freqs = squeeze(
+    ImportMatlab(file_path=mat_file_MTr_freqs, var_name="freqs").get_data()
+)
+MTr_wavenumber = squeeze(
+    ImportMatlab(file_path=mat_file_MTr_wavenumber, var_name="orders_circ").get_data()
+)
 MTr = squeeze(ImportMatlab(file_path=mat_file_MTr, var_name="XPwr").get_data())
 Br_cfft2 = squeeze(ImportMatlab(file_path=mat_file_Br_cfft2, var_name="Fwr").get_data())
 freqs_Br = squeeze(
@@ -64,6 +62,7 @@ colormap = ListedColormap(newcolors)
 freq_max = 13000
 r_max = 78
 
+# Read audio files
 rate_sinus, sinus = read(wav_file_sinus)
 if sinus.dtype == "int16":
     nb_bits = 16  # -> 16-bit wav files
