@@ -24,7 +24,20 @@ class MatStructural(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, rho=7650, Ex=215000000000.0, Ey=215000000000.0, Ez=80000000000, nu_xy=0.3, nu_xz=0.03, nu_yz=0.03, Gxz=2000000000, Gxy=0, Gyz=2000000000, init_dict=None):
+    def __init__(
+        self,
+        rho=7650,
+        Ex=215000000000.0,
+        Ey=215000000000.0,
+        Ez=80000000000,
+        nu_xy=0.3,
+        nu_xz=0.03,
+        nu_yz=0.03,
+        Gxz=2000000000,
+        Gxy=0,
+        Gyz=2000000000,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -35,7 +48,7 @@ class MatStructural(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "rho" in list(init_dict.keys()):
                 rho = init_dict["rho"]
@@ -80,7 +93,9 @@ class MatStructural(FrozenClass):
         if self.parent is None:
             MatStructural_str += "parent = None " + linesep
         else:
-            MatStructural_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            MatStructural_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         MatStructural_str += "rho = " + str(self.rho) + linesep
         MatStructural_str += "Ex = " + str(self.Ex) + linesep
         MatStructural_str += "Ey = " + str(self.Ey) + linesep

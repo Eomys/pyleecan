@@ -169,7 +169,7 @@ class Trapeze(Surface):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "height" in list(init_dict.keys()):
                 height = init_dict["height"]
@@ -267,9 +267,7 @@ class Trapeze(Surface):
 
     # the big base of Trapeze
     # Type : float, min = 0
-    W2 = property(
-        fget=_get_W2, fset=_set_W2, doc=u"""the big base of Trapeze"""
-    )
+    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""the big base of Trapeze""")
 
     def _get_W1(self):
         """getter of W1"""
@@ -282,6 +280,4 @@ class Trapeze(Surface):
 
     # the small base of the Trapeze
     # Type : float, min = 0
-    W1 = property(
-        fget=_get_W1, fset=_set_W1, doc=u"""the small base of the Trapeze"""
-    )
+    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""the small base of the Trapeze""")

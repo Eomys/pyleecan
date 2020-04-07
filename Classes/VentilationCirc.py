@@ -85,7 +85,8 @@ class VentilationCirc(Hole):
         comp_surface = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VentilationCirc method comp_surface: " + str(comp_surface)
+                    "Can't use VentilationCirc method comp_surface: "
+                    + str(comp_surface)
                 )
             )
         )
@@ -121,7 +122,7 @@ class VentilationCirc(Hole):
         if mat_void == -1:
             mat_void = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Alpha0" in list(init_dict.keys()):
                 Alpha0 = init_dict["Alpha0"]
@@ -234,6 +235,4 @@ class VentilationCirc(Hole):
 
     # Diameter of the hole centers
     # Type : float, min = 0
-    H0 = property(
-        fget=_get_H0, fset=_set_H0, doc=u"""Diameter of the hole centers"""
-    )
+    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Diameter of the hole centers""")

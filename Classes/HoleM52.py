@@ -203,7 +203,18 @@ class HoleM52(HoleMag):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, H0=0.003, W0=0.003, H1=0, W3=0.013, H2=0.02, magnet_0=-1, Zh=36, mat_void=-1, init_dict=None):
+    def __init__(
+        self,
+        H0=0.003,
+        W0=0.003,
+        H1=0,
+        W3=0.013,
+        H2=0.02,
+        magnet_0=-1,
+        Zh=36,
+        mat_void=-1,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -218,7 +229,7 @@ class HoleM52(HoleMag):
         if mat_void == -1:
             mat_void = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "H0" in list(init_dict.keys()):
                 H0 = init_dict["H0"]
@@ -245,12 +256,23 @@ class HoleM52(HoleMag):
         # magnet_0 can be None, a Magnet object or a dict
         if isinstance(magnet_0, dict):
             # Check that the type is correct (including daughter)
-            class_name = magnet_0.get('__class__')
-            if class_name not in ['Magnet', 'MagnetFlat', 'MagnetPolar', 'MagnetType10', 'MagnetType11', 'MagnetType12', 'MagnetType13', 'MagnetType14']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for magnet_0")
+            class_name = magnet_0.get("__class__")
+            if class_name not in [
+                "Magnet",
+                "MagnetFlat",
+                "MagnetPolar",
+                "MagnetType10",
+                "MagnetType11",
+                "MagnetType12",
+                "MagnetType13",
+                "MagnetType14",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for magnet_0"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.magnet_0 = class_obj(init_dict=magnet_0)
         else:
             self.magnet_0 = magnet_0
@@ -272,7 +294,7 @@ class HoleM52(HoleMag):
         HoleM52_str += "H2 = " + str(self.H2) + linesep
         if self.magnet_0 is not None:
             tmp = self.magnet_0.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            HoleM52_str += "magnet_0 = "+ tmp
+            HoleM52_str += "magnet_0 = " + tmp
         else:
             HoleM52_str += "magnet_0 = None" + linesep + linesep
         return HoleM52_str
@@ -411,6 +433,7 @@ class HoleM52(HoleMag):
 
         if self._magnet_0 is not None:
             self._magnet_0.parent = self
+
     # Magnet of the hole
     # Type : Magnet
     magnet_0 = property(

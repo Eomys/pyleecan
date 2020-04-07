@@ -221,7 +221,7 @@ class Arc2(Arc):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "begin" in list(init_dict.keys()):
                 begin = init_dict["begin"]
@@ -317,9 +317,7 @@ class Arc2(Arc):
 
     # center of the arc
     # Type : complex
-    center = property(
-        fget=_get_center, fset=_set_center, doc=u"""center of the arc"""
-    )
+    center = property(fget=_get_center, fset=_set_center, doc=u"""center of the arc""")
 
     def _get_angle(self):
         """getter of angle"""

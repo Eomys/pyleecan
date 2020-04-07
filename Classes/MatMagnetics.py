@@ -57,7 +57,9 @@ class MatMagnetics(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, mur_lin=1, Hc=0, Brm20=0, alpha_Br=0, Wlam=0, BH_curve=-1, init_dict=None):
+    def __init__(
+        self, mur_lin=1, Hc=0, Brm20=0, alpha_Br=0, Wlam=0, BH_curve=-1, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -70,7 +72,7 @@ class MatMagnetics(FrozenClass):
         if BH_curve == -1:
             BH_curve = ImportMatrix()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "mur_lin" in list(init_dict.keys()):
                 mur_lin = init_dict["mur_lin"]
@@ -94,12 +96,21 @@ class MatMagnetics(FrozenClass):
         # BH_curve can be None, a ImportMatrix object or a dict
         if isinstance(BH_curve, dict):
             # Check that the type is correct (including daughter)
-            class_name = BH_curve.get('__class__')
-            if class_name not in ['ImportMatrix', 'ImportGenMatrixSin', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatrixVal', 'ImportMatrixXls']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for BH_curve")
+            class_name = BH_curve.get("__class__")
+            if class_name not in [
+                "ImportMatrix",
+                "ImportGenMatrixSin",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for BH_curve"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.BH_curve = class_obj(init_dict=BH_curve)
         else:
             self.BH_curve = BH_curve
@@ -114,7 +125,9 @@ class MatMagnetics(FrozenClass):
         if self.parent is None:
             MatMagnetics_str += "parent = None " + linesep
         else:
-            MatMagnetics_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            MatMagnetics_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         MatMagnetics_str += "mur_lin = " + str(self.mur_lin) + linesep
         MatMagnetics_str += "Hc = " + str(self.Hc) + linesep
         MatMagnetics_str += "Brm20 = " + str(self.Brm20) + linesep
@@ -122,7 +135,7 @@ class MatMagnetics(FrozenClass):
         MatMagnetics_str += "Wlam = " + str(self.Wlam) + linesep
         if self.BH_curve is not None:
             tmp = self.BH_curve.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MatMagnetics_str += "BH_curve = "+ tmp
+            MatMagnetics_str += "BH_curve = " + tmp
         else:
             MatMagnetics_str += "BH_curve = None" + linesep + linesep
         return MatMagnetics_str
@@ -215,7 +228,9 @@ class MatMagnetics(FrozenClass):
     # magnet remanence induction at 20degC
     # Type : float
     Brm20 = property(
-        fget=_get_Brm20, fset=_set_Brm20, doc=u"""magnet remanence induction at 20degC"""
+        fget=_get_Brm20,
+        fset=_set_Brm20,
+        doc=u"""magnet remanence induction at 20degC""",
     )
 
     def _get_alpha_Br(self):
@@ -263,6 +278,7 @@ class MatMagnetics(FrozenClass):
 
         if self._BH_curve is not None:
             self._BH_curve.parent = self
+
     # nonlinear B(H) curve (two columns matrix, H and B(H))
     # Type : ImportMatrix
     BH_curve = property(

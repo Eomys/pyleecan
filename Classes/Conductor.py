@@ -57,7 +57,7 @@ class Conductor(FrozenClass):
         if ins_mat == -1:
             ins_mat = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "cond_mat" in list(init_dict.keys()):
                 cond_mat = init_dict["cond_mat"]
@@ -89,12 +89,12 @@ class Conductor(FrozenClass):
             Conductor_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.cond_mat is not None:
             tmp = self.cond_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Conductor_str += "cond_mat = "+ tmp
+            Conductor_str += "cond_mat = " + tmp
         else:
             Conductor_str += "cond_mat = None" + linesep + linesep
         if self.ins_mat is not None:
             tmp = self.ins_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Conductor_str += "ins_mat = "+ tmp
+            Conductor_str += "ins_mat = " + tmp
         else:
             Conductor_str += "ins_mat = None" + linesep + linesep
         return Conductor_str
@@ -146,6 +146,7 @@ class Conductor(FrozenClass):
 
         if self._cond_mat is not None:
             self._cond_mat.parent = self
+
     # Material of the conductor
     # Type : Material
     cond_mat = property(
@@ -163,6 +164,7 @@ class Conductor(FrozenClass):
 
         if self._ins_mat is not None:
             self._ins_mat.parent = self
+
     # Material of the insulation
     # Type : Material
     ins_mat = property(

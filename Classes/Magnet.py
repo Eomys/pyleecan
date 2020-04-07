@@ -162,7 +162,7 @@ class Magnet(FrozenClass):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "mat_type" in list(init_dict.keys()):
                 mat_type = init_dict["mat_type"]
@@ -193,7 +193,7 @@ class Magnet(FrozenClass):
             Magnet_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Magnet_str += "mat_type = "+ tmp
+            Magnet_str += "mat_type = " + tmp
         else:
             Magnet_str += "mat_type = None" + linesep + linesep
         Magnet_str += "type_magnetization = " + str(self.type_magnetization) + linesep
@@ -247,6 +247,7 @@ class Magnet(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     # The Magnet material
     # Type : Material
     mat_type = property(
@@ -281,6 +282,4 @@ class Magnet(FrozenClass):
 
     # Magnet axial length
     # Type : float, min = 0
-    Lmag = property(
-        fget=_get_Lmag, fset=_set_Lmag, doc=u"""Magnet axial length"""
-    )
+    Lmag = property(fget=_get_Lmag, fset=_set_Lmag, doc=u"""Magnet axial length""")

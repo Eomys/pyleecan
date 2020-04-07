@@ -128,7 +128,7 @@ class Hole(FrozenClass):
         if mat_void == -1:
             mat_void = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Zh" in list(init_dict.keys()):
                 Zh = init_dict["Zh"]
@@ -157,7 +157,7 @@ class Hole(FrozenClass):
         Hole_str += "Zh = " + str(self.Zh) + linesep
         if self.mat_void is not None:
             tmp = self.mat_void.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Hole_str += "mat_void = "+ tmp
+            Hole_str += "mat_void = " + tmp
         else:
             Hole_str += "mat_void = None" + linesep + linesep
         return Hole_str
@@ -220,6 +220,7 @@ class Hole(FrozenClass):
 
         if self._mat_void is not None:
             self._mat_void.parent = self
+
     # Material of the void part of the hole (Air in general)
     # Type : Material
     mat_void = property(

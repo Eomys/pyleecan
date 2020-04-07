@@ -69,7 +69,7 @@ class Force(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "is_comp_nodal_force" in list(init_dict.keys()):
                 is_comp_nodal_force = init_dict["is_comp_nodal_force"]
@@ -127,5 +127,7 @@ class Force(FrozenClass):
     # 1 to compute lumped tooth forces
     # Type : bool
     is_comp_nodal_force = property(
-        fget=_get_is_comp_nodal_force, fset=_set_is_comp_nodal_force, doc=u"""1 to compute lumped tooth forces"""
+        fget=_get_is_comp_nodal_force,
+        fset=_set_is_comp_nodal_force,
+        doc=u"""1 to compute lumped tooth forces""",
     )

@@ -3,7 +3,9 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.Ui_PVentCirc import Ui_PVentCirc
+from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.Ui_PVentCirc import (
+    Ui_PVentCirc,
+)
 
 
 class Gen_PVentCirc(Ui_PVentCirc):

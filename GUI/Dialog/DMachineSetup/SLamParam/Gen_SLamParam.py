@@ -12,14 +12,18 @@ class Gen_SLamParam(Ui_SLamParam):
         """
         Ui_SLamParam.setupUi(self, SLamParam)
         # Setup of in_L1
-        txt = self.tr(u"""Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets""")
+        txt = self.tr(
+            u"""Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets"""
+        )
         self.in_L1.setWhatsThis(txt)
         self.in_L1.setToolTip(txt)
 
         # Setup of lf_L1
         self.lf_L1.validator().setBottom(0)
         self.lf_L1.validator().setTop(100)
-        txt = self.tr(u"""Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets""")
+        txt = self.tr(
+            u"""Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets"""
+        )
         self.lf_L1.setWhatsThis(txt)
         self.lf_L1.setToolTip(txt)
 

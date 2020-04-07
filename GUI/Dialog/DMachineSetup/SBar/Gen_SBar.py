@@ -44,14 +44,18 @@ class Gen_SBar(Ui_SBar):
         self.unit_Lscr.setToolTip(txt)
 
         # Setup of in_Lewout
-        txt = self.tr(u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length """)
+        txt = self.tr(
+            u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length """
+        )
         self.in_Lewout.setWhatsThis(txt)
         self.in_Lewout.setToolTip(txt)
 
         # Setup of lf_Lewout
         self.lf_Lewout.validator().setBottom(0)
         self.lf_Lewout.validator().setTop(100)
-        txt = self.tr(u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length """)
+        txt = self.tr(
+            u"""straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length """
+        )
         self.lf_Lewout.setWhatsThis(txt)
         self.lf_Lewout.setToolTip(txt)
 

@@ -43,7 +43,15 @@ class ImportMatrixXls(ImportMatrix):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, file_path="", sheet="", skiprows=0, usecols=None, is_transpose=False, init_dict=None):
+    def __init__(
+        self,
+        file_path="",
+        sheet="",
+        skiprows=0,
+        usecols=None,
+        is_transpose=False,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -54,7 +62,7 @@ class ImportMatrixXls(ImportMatrix):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "file_path" in list(init_dict.keys()):
                 file_path = init_dict["file_path"]
@@ -174,7 +182,9 @@ class ImportMatrixXls(ImportMatrix):
     # To skip some rows in the file (header)
     # Type : int, min = 0
     skiprows = property(
-        fget=_get_skiprows, fset=_set_skiprows, doc=u"""To skip some rows in the file (header)"""
+        fget=_get_skiprows,
+        fset=_set_skiprows,
+        doc=u"""To skip some rows in the file (header)""",
     )
 
     def _get_usecols(self):
@@ -189,5 +199,7 @@ class ImportMatrixXls(ImportMatrix):
     # To select the range of column to use
     # Type : str
     usecols = property(
-        fget=_get_usecols, fset=_set_usecols, doc=u"""To select the range of column to use"""
+        fget=_get_usecols,
+        fset=_set_usecols,
+        doc=u"""To select the range of column to use""",
     )

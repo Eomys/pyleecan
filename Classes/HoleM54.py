@@ -107,7 +107,9 @@ class HoleM54(Hole):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, H0=0.003, H1=0, W0=0.013, R1=0.02, Zh=36, mat_void=-1, init_dict=None):
+    def __init__(
+        self, H0=0.003, H1=0, W0=0.013, R1=0.02, Zh=36, mat_void=-1, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -120,7 +122,7 @@ class HoleM54(Hole):
         if mat_void == -1:
             mat_void = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "H0" in list(init_dict.keys()):
                 H0 = init_dict["H0"]

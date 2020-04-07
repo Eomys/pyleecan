@@ -18,26 +18,36 @@ class Ui_PWSlot22(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.img_slot = QtWidgets.QLabel(PWSlot22)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.img_slot.sizePolicy().hasHeightForWidth())
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.img_slot.setText("")
-        self.img_slot.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/WSlot/Slot 22.PNG"))
+        self.img_slot.setPixmap(
+            QtGui.QPixmap(":/images/images/MachineSetup/WSlot/Slot 22.PNG")
+        )
         self.img_slot.setScaledContents(True)
         self.img_slot.setObjectName("img_slot")
         self.verticalLayout_2.addWidget(self.img_slot)
         self.txt_constraint = QtWidgets.QTextEdit(PWSlot22)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.txt_constraint.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.txt_constraint.sizePolicy().hasHeightForWidth()
+        )
         self.txt_constraint.setSizePolicy(sizePolicy)
         self.txt_constraint.setMaximumSize(QtCore.QSize(16777215, 75))
         self.txt_constraint.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.txt_constraint.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
+        self.txt_constraint.setTextInteractionFlags(
+            QtCore.Qt.TextSelectableByKeyboard | QtCore.Qt.TextSelectableByMouse
+        )
         self.txt_constraint.setObjectName("txt_constraint")
         self.verticalLayout_2.addWidget(self.txt_constraint)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
@@ -103,13 +113,18 @@ class Ui_PWSlot22(object):
     def retranslateUi(self, PWSlot22):
         _translate = QtCore.QCoreApplication.translate
         PWSlot22.setWindowTitle(_translate("PWSlot22", "Form"))
-        self.txt_constraint.setHtml(_translate("PWSlot22", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt; font-weight:600; text-decoration: underline;\">Constraints :</span></p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">W0 &lt;= W2</span></p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">W2 &lt;= 2*pi/Zs</span></p></body></html>"))
+        self.txt_constraint.setHtml(
+            _translate(
+                "PWSlot22",
+                '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
+                '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
+                "p, li { white-space: pre-wrap; }\n"
+                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:12pt; font-weight:600; text-decoration: underline;">Constraints :</span></p>\n'
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:14pt;">W0 &lt;= W2</span></p>\n'
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:14pt;">W2 &lt;= 2*pi/Zs</span></p></body></html>',
+            )
+        )
         self.in_W0.setText(_translate("PWSlot22", "W0 :"))
         self.in_W2.setText(_translate("PWSlot22", "W2 :"))
         self.in_H0.setText(_translate("PWSlot22", "H0 :"))
@@ -120,6 +135,8 @@ class Ui_PWSlot22(object):
         self.c_W0_unit.setItemText(1, _translate("PWSlot22", "deg"))
         self.c_W2_unit.setItemText(0, _translate("PWSlot22", "rad"))
         self.c_W2_unit.setItemText(1, _translate("PWSlot22", "deg"))
+
+
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

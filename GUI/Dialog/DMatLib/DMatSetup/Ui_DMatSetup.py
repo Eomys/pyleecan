@@ -63,7 +63,9 @@ class Ui_DMatSetup(object):
         self.in_rho_elec.setFont(font)
         self.in_rho_elec.setObjectName("in_rho_elec")
         self.gridLayout_2.addWidget(self.in_rho_elec, 0, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_2.addItem(spacerItem, 2, 1, 1, 1)
         self.nav_phy.addTab(self.tab_elec, "")
         self.tab_mag = QtWidgets.QWidget()
@@ -81,7 +83,9 @@ class Ui_DMatSetup(object):
         self.lf_alpha_Br = FloatEdit(self.tab_mag)
         self.lf_alpha_Br.setObjectName("lf_alpha_Br")
         self.gridLayout.addWidget(self.lf_alpha_Br, 2, 1, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout.addItem(spacerItem1, 5, 1, 1, 1)
         self.in_Wlam = QtWidgets.QLabel(self.tab_mag)
         font = QtGui.QFont()
@@ -138,12 +142,16 @@ class Ui_DMatSetup(object):
         self.gridLayout_4.setContentsMargins(4, 4, 4, 4)
         self.gridLayout_4.setObjectName("gridLayout_4")
         self.in_BH_file = QtWidgets.QLabel(self.group_BH)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.in_BH_file.sizePolicy().hasHeightForWidth())
         self.in_BH_file.setSizePolicy(sizePolicy)
-        self.in_BH_file.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.in_BH_file.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.in_BH_file.setObjectName("in_BH_file")
         self.gridLayout_4.addWidget(self.in_BH_file, 0, 1, 1, 1)
         self.in_file = QtWidgets.QLabel(self.group_BH)
@@ -153,7 +161,9 @@ class Ui_DMatSetup(object):
         self.horizontalLayout_8.setContentsMargins(0, -1, 0, -1)
         self.horizontalLayout_8.setSpacing(1)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_8.addItem(spacerItem2)
         self.b_new = QtWidgets.QPushButton(self.group_BH)
         self.b_new.setEnabled(False)
@@ -323,7 +333,9 @@ class Ui_DMatSetup(object):
         self.lf_Gyz.setObjectName("lf_Gyz")
         self.horizontalLayout_4.addWidget(self.lf_Gyz)
         self.verticalLayout_4.addWidget(self.g_shear)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.verticalLayout_4.addItem(spacerItem3)
         self.nav_meca.addWidget(self.page_niso_mec)
         self.page_iso_mec = QtWidgets.QWidget()
@@ -341,7 +353,9 @@ class Ui_DMatSetup(object):
         self.lf_G = FloatEdit(self.page_iso_mec)
         self.lf_G.setObjectName("lf_G")
         self.gridLayout_6.addWidget(self.lf_G, 2, 2, 1, 2)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem4 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_6.addItem(spacerItem4, 4, 3, 1, 1)
         self.unit_G = QtWidgets.QLabel(self.page_iso_mec)
         self.unit_G.setObjectName("unit_G")
@@ -477,7 +491,9 @@ class Ui_DMatSetup(object):
         self.lf_Cp.setObjectName("lf_Cp")
         self.gridLayout_3.addWidget(self.lf_Cp, 0, 1, 1, 1)
         self.verticalLayout_2.addLayout(self.gridLayout_3)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem5 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.verticalLayout_2.addItem(spacerItem5)
         self.nav_phy.addTab(self.tab_ther, "")
         self.tab_eco = QtWidgets.QWidget()
@@ -501,13 +517,17 @@ class Ui_DMatSetup(object):
         self.unit_cost_unit.setObjectName("unit_cost_unit")
         self.horizontalLayout_6.addWidget(self.unit_cost_unit)
         self.verticalLayout_6.addLayout(self.horizontalLayout_6)
-        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem6 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.verticalLayout_6.addItem(spacerItem6)
         self.nav_phy.addTab(self.tab_eco, "")
         self.verticalLayout.addWidget(self.nav_phy)
         self.b_close = QtWidgets.QDialogButtonBox(DMatSetup)
         self.b_close.setOrientation(QtCore.Qt.Horizontal)
-        self.b_close.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Save)
+        self.b_close.setStandardButtons(
+            QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Save
+        )
         self.b_close.setObjectName("b_close")
         self.verticalLayout.addWidget(self.b_close)
 
@@ -527,7 +547,9 @@ class Ui_DMatSetup(object):
         self.unit_rho_elec.setText(_translate("DMatSetup", "ohm.m"))
         self.in_epsr.setText(_translate("DMatSetup", "epsr"))
         self.in_rho_elec.setText(_translate("DMatSetup", "rho"))
-        self.nav_phy.setTabText(self.nav_phy.indexOf(self.tab_elec), _translate("DMatSetup", "Electrical"))
+        self.nav_phy.setTabText(
+            self.nav_phy.indexOf(self.tab_elec), _translate("DMatSetup", "Electrical")
+        )
         self.unit_Brm20.setText(_translate("DMatSetup", "T"))
         self.in_Wlam.setText(_translate("DMatSetup", "Wlam"))
         self.in_mur_lin.setText(_translate("DMatSetup", "mur_lin"))
@@ -542,7 +564,9 @@ class Ui_DMatSetup(object):
         self.b_plot.setText(_translate("DMatSetup", "Plot"))
         self.b_xls.setText(_translate("DMatSetup", "XLS Import"))
         self.b_csv.setText(_translate("DMatSetup", "CSV Import"))
-        self.nav_phy.setTabText(self.nav_phy.indexOf(self.tab_mag), _translate("DMatSetup", "Magnetics"))
+        self.nav_phy.setTabText(
+            self.nav_phy.indexOf(self.tab_mag), _translate("DMatSetup", "Magnetics")
+        )
         self.in_rho_meca.setText(_translate("DMatSetup", "rho"))
         self.unit_rho_meca.setText(_translate("DMatSetup", "kg/m^3"))
         self.g_young.setTitle(_translate("DMatSetup", "Equivalent Yong Modulus [Pa]"))
@@ -562,7 +586,9 @@ class Ui_DMatSetup(object):
         self.in_G.setText(_translate("DMatSetup", "G"))
         self.in_nu.setText(_translate("DMatSetup", "nu"))
         self.unit_E.setText(_translate("DMatSetup", "Pa"))
-        self.nav_phy.setTabText(self.nav_phy.indexOf(self.tab_mec), _translate("DMatSetup", "Mechanics"))
+        self.nav_phy.setTabText(
+            self.nav_phy.indexOf(self.tab_mec), _translate("DMatSetup", "Mechanics")
+        )
         self.g_lambda.setTitle(_translate("DMatSetup", "Lambda [W/K]"))
         self.in_Lx.setText(_translate("DMatSetup", "X"))
         self.in_Ly.setText(_translate("DMatSetup", "Y"))
@@ -572,9 +598,15 @@ class Ui_DMatSetup(object):
         self.in_alpha.setText(_translate("DMatSetup", "alpha"))
         self.in_Cp.setText(_translate("DMatSetup", "Cp"))
         self.unit_Cp.setText(_translate("DMatSetup", "W / kg / K"))
-        self.nav_phy.setTabText(self.nav_phy.indexOf(self.tab_ther), _translate("DMatSetup", "Thermics"))
+        self.nav_phy.setTabText(
+            self.nav_phy.indexOf(self.tab_ther), _translate("DMatSetup", "Thermics")
+        )
         self.in_cost_unit.setText(_translate("DMatSetup", "cost_unit"))
         self.unit_cost_unit.setText(_translate("DMatSetup", "€ / kg"))
-        self.nav_phy.setTabText(self.nav_phy.indexOf(self.tab_eco), _translate("DMatSetup", "Economical"))
+        self.nav_phy.setTabText(
+            self.nav_phy.indexOf(self.tab_eco), _translate("DMatSetup", "Economical")
+        )
+
+
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

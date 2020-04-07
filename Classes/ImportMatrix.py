@@ -54,7 +54,7 @@ class ImportMatrix(Import):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "is_transpose" in list(init_dict.keys()):
                 is_transpose = init_dict["is_transpose"]

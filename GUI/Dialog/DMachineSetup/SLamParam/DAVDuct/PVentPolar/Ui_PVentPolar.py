@@ -18,14 +18,18 @@ class Ui_PVentPolar(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.img_vent = QtWidgets.QLabel(PVentPolar)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.img_vent.sizePolicy().hasHeightForWidth())
         self.img_vent.setSizePolicy(sizePolicy)
         self.img_vent.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.img_vent.setText("")
-        self.img_vent.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/LamParam/PolarVentDuct.png"))
+        self.img_vent.setPixmap(
+            QtGui.QPixmap(":/images/images/MachineSetup/LamParam/PolarVentDuct.png")
+        )
         self.img_vent.setScaledContents(True)
         self.img_vent.setObjectName("img_vent")
         self.verticalLayout_2.addWidget(self.img_vent)
@@ -99,6 +103,10 @@ class Ui_PVentPolar(object):
         self.unit_W1.setText(_translate("PVentPolar", "rad"))
         self.in_Alpha0.setText(_translate("PVentPolar", "Alpha0 :"))
         self.unit_Alpha0.setText(_translate("PVentPolar", "rad"))
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut import WVentOut
+
+
+from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut import (
+    WVentOut,
+)
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

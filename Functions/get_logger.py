@@ -1,5 +1,6 @@
 from logging import getLogger
 
+
 def get_logger(obj):
     """Get the object logger or its parent's one
 
@@ -14,9 +15,9 @@ def get_logger(obj):
         Pyleecan object dedicated logger
     """
 
-    if hasattr(obj,'logger_name'): # Object logger
+    if hasattr(obj, "logger_name"):  # Object logger
         return getLogger(obj.logger_name)
-    elif obj.parent != None: # Parent logger
+    elif obj.parent != None:  # Parent logger
         return obj.parent.get_logger()
-    else: # Default logger
-        return getLogger('Pyleecan')
+    else:  # Default logger
+        return getLogger("Pyleecan")

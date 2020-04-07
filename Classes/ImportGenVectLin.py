@@ -43,7 +43,15 @@ class ImportGenVectLin(ImportMatrix):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, start=0, stop=1, num=100, endpoint=True, is_transpose=False, init_dict=None):
+    def __init__(
+        self,
+        start=0,
+        stop=1,
+        num=100,
+        endpoint=True,
+        is_transpose=False,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -54,7 +62,7 @@ class ImportGenVectLin(ImportMatrix):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "start" in list(init_dict.keys()):
                 start = init_dict["start"]

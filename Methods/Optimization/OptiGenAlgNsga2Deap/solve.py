@@ -155,7 +155,7 @@ def solve(self):
 
                 # Add the indiv to the multi_output
                 self.multi_output.add_evaluation(
-                    indiv.output, is_valid, list(indiv), indiv.fitness.values, ngen,
+                    indiv.output, is_valid, list(indiv), indiv.fitness.values, ngen
                 )
 
             # Sorting the population according to NSGA2

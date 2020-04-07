@@ -55,7 +55,7 @@ class HoleMag(Hole):
         if mat_void == -1:
             mat_void = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Zh" in list(init_dict.keys()):
                 Zh = init_dict["Zh"]

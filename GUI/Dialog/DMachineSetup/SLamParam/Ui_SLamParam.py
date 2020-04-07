@@ -26,7 +26,9 @@ class Ui_SLamParam(object):
         self.unit_L1 = QtWidgets.QLabel(SLamParam)
         self.unit_L1.setObjectName("unit_L1")
         self.horizontalLayout.addWidget(self.unit_L1)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout.addItem(spacerItem)
         self.main_layout.addLayout(self.horizontalLayout)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
@@ -42,7 +44,9 @@ class Ui_SLamParam(object):
         self.w_mat.setMinimumSize(QtCore.QSize(100, 0))
         self.w_mat.setObjectName("w_mat")
         self.horizontalLayout_2.addWidget(self.w_mat)
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_2.addItem(spacerItem1)
         self.main_layout.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
@@ -56,7 +60,9 @@ class Ui_SLamParam(object):
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.label = QtWidgets.QLabel(self.g_ax_vent)
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/LamParam/CircVentDuct.png"))
+        self.label.setPixmap(
+            QtGui.QPixmap(":/images/images/MachineSetup/LamParam/CircVentDuct.png")
+        )
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
         self.verticalLayout_3.addWidget(self.label)
@@ -68,7 +74,9 @@ class Ui_SLamParam(object):
         self.b_axial_duct = QtWidgets.QPushButton(self.g_ax_vent)
         self.b_axial_duct.setObjectName("b_axial_duct")
         self.horizontalLayout_5.addWidget(self.b_axial_duct)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_5.addItem(spacerItem2)
         self.verticalLayout_3.addLayout(self.horizontalLayout_5)
         self.horizontalLayout_3.addWidget(self.g_ax_vent)
@@ -83,7 +91,9 @@ class Ui_SLamParam(object):
         self.img_rad_duct = QtWidgets.QLabel(self.g_rad_vent)
         self.img_rad_duct.setMinimumSize(QtCore.QSize(300, 0))
         self.img_rad_duct.setText("")
-        self.img_rad_duct.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/LamParam/RadVentDuct.png"))
+        self.img_rad_duct.setPixmap(
+            QtGui.QPixmap(":/images/images/MachineSetup/LamParam/RadVentDuct.png")
+        )
         self.img_rad_duct.setScaledContents(True)
         self.img_rad_duct.setObjectName("img_rad_duct")
         self.verticalLayout_2.addWidget(self.img_rad_duct)
@@ -107,7 +117,9 @@ class Ui_SLamParam(object):
         self.unit_Wrvd = QtWidgets.QLabel(self.g_rad_vent)
         self.unit_Wrvd.setObjectName("unit_Wrvd")
         self.horizontalLayout_4.addWidget(self.unit_Wrvd)
-        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_4.addItem(spacerItem3)
         self.verticalLayout_2.addLayout(self.horizontalLayout_4)
         self.out_length = QtWidgets.QLabel(self.g_rad_vent)
@@ -119,7 +131,9 @@ class Ui_SLamParam(object):
         self.main_layout.addLayout(self.horizontalLayout_3)
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem4 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_6.addItem(spacerItem4)
         self.b_plot = QtWidgets.QPushButton(SLamParam)
         self.b_plot.setObjectName("b_plot")
@@ -152,10 +166,14 @@ class Ui_SLamParam(object):
         self.in_Nrvd.setText(_translate("SLamParam", "Nrvd :"))
         self.in_Wrvd.setText(_translate("SLamParam", "Wrvd :"))
         self.unit_Wrvd.setText(_translate("SLamParam", "m"))
-        self.out_length.setText(_translate("SLamParam", "stator total length = L1 + Nrvd * Wrvd = ?"))
+        self.out_length.setText(
+            _translate("SLamParam", "stator total length = L1 + Nrvd * Wrvd = ?")
+        )
         self.b_plot.setText(_translate("SLamParam", "Preview"))
         self.b_previous.setText(_translate("SLamParam", "Previous"))
         self.b_next.setText(_translate("SLamParam", "Next"))
+
+
 from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

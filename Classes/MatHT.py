@@ -24,7 +24,9 @@ class MatHT(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, lambda_x=1, lambda_y=1, lambda_z=1, Cp=1, alpha=0.00393, init_dict=None):
+    def __init__(
+        self, lambda_x=1, lambda_y=1, lambda_z=1, Cp=1, alpha=0.00393, init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -35,7 +37,7 @@ class MatHT(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "lambda_x" in list(init_dict.keys()):
                 lambda_x = init_dict["lambda_x"]
@@ -175,9 +177,7 @@ class MatHT(FrozenClass):
 
     # specific heat capacity
     # Type : float, min = 0
-    Cp = property(
-        fget=_get_Cp, fset=_set_Cp, doc=u"""specific heat capacity"""
-    )
+    Cp = property(fget=_get_Cp, fset=_set_Cp, doc=u"""specific heat capacity""")
 
     def _get_alpha(self):
         """getter of alpha"""

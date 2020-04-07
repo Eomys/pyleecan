@@ -26,5 +26,7 @@ class Ui_PCondType22(object):
     def retranslateUi(self, PCondType22):
         _translate = QtCore.QCoreApplication.translate
         PCondType22.setWindowTitle(_translate("PCondType22", "Form"))
+
+
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.WBarOut.WBarOut import WBarOut
 from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect

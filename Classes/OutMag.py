@@ -26,7 +26,24 @@ class OutMag(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, time=None, angle=None, Nt_tot=None, Na_tot=None, Br=None, Bt=None, Tem=None, Tem_av=None, Tem_rip=None, Phi_wind_stator=None, emf=None, meshsolution=-1, FEMM_dict=None, logger_name="Pyleecan.OutMag", init_dict=None):
+    def __init__(
+        self,
+        time=None,
+        angle=None,
+        Nt_tot=None,
+        Na_tot=None,
+        Br=None,
+        Bt=None,
+        Tem=None,
+        Tem_av=None,
+        Tem_rip=None,
+        Phi_wind_stator=None,
+        emf=None,
+        meshsolution=-1,
+        FEMM_dict=None,
+        logger_name="Pyleecan.OutMag",
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -39,7 +56,7 @@ class OutMag(FrozenClass):
         if meshsolution == -1:
             meshsolution = MeshSolution()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
@@ -108,20 +125,66 @@ class OutMag(FrozenClass):
             OutMag_str += "parent = None " + linesep
         else:
             OutMag_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutMag_str += "time = " + linesep + str(self.time).replace(linesep, linesep + "\t") + linesep + linesep
-        OutMag_str += "angle = " + linesep + str(self.angle).replace(linesep, linesep + "\t") + linesep + linesep
+        OutMag_str += (
+            "time = "
+            + linesep
+            + str(self.time).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutMag_str += (
+            "angle = "
+            + linesep
+            + str(self.angle).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         OutMag_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutMag_str += "Na_tot = " + str(self.Na_tot) + linesep
-        OutMag_str += "Br = " + linesep + str(self.Br).replace(linesep, linesep + "\t") + linesep + linesep
-        OutMag_str += "Bt = " + linesep + str(self.Bt).replace(linesep, linesep + "\t") + linesep + linesep
-        OutMag_str += "Tem = " + linesep + str(self.Tem).replace(linesep, linesep + "\t") + linesep + linesep
+        OutMag_str += (
+            "Br = "
+            + linesep
+            + str(self.Br).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutMag_str += (
+            "Bt = "
+            + linesep
+            + str(self.Bt).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutMag_str += (
+            "Tem = "
+            + linesep
+            + str(self.Tem).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         OutMag_str += "Tem_av = " + str(self.Tem_av) + linesep
         OutMag_str += "Tem_rip = " + str(self.Tem_rip) + linesep
-        OutMag_str += "Phi_wind_stator = " + linesep + str(self.Phi_wind_stator).replace(linesep, linesep + "\t") + linesep + linesep
-        OutMag_str += "emf = " + linesep + str(self.emf).replace(linesep, linesep + "\t") + linesep + linesep
+        OutMag_str += (
+            "Phi_wind_stator = "
+            + linesep
+            + str(self.Phi_wind_stator).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutMag_str += (
+            "emf = "
+            + linesep
+            + str(self.emf).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         if self.meshsolution is not None:
-            tmp = self.meshsolution.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutMag_str += "meshsolution = "+ tmp
+            tmp = (
+                self.meshsolution.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            OutMag_str += "meshsolution = " + tmp
         else:
             OutMag_str += "meshsolution = None" + linesep + linesep
         OutMag_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
@@ -266,7 +329,9 @@ class OutMag(FrozenClass):
     # Magnetic position vector (no symmetry)
     # Type : ndarray
     angle = property(
-        fget=_get_angle, fset=_set_angle, doc=u"""Magnetic position vector (no symmetry)"""
+        fget=_get_angle,
+        fset=_set_angle,
+        doc=u"""Magnetic position vector (no symmetry)""",
     )
 
     def _get_Nt_tot(self):
@@ -315,9 +380,7 @@ class OutMag(FrozenClass):
 
     # Radial airgap flux density
     # Type : ndarray
-    Br = property(
-        fget=_get_Br, fset=_set_Br, doc=u"""Radial airgap flux density"""
-    )
+    Br = property(fget=_get_Br, fset=_set_Br, doc=u"""Radial airgap flux density""")
 
     def _get_Bt(self):
         """getter of Bt"""
@@ -335,9 +398,7 @@ class OutMag(FrozenClass):
 
     # Tangential airgap flux density
     # Type : ndarray
-    Bt = property(
-        fget=_get_Bt, fset=_set_Bt, doc=u"""Tangential airgap flux density"""
-    )
+    Bt = property(fget=_get_Bt, fset=_set_Bt, doc=u"""Tangential airgap flux density""")
 
     def _get_Tem(self):
         """getter of Tem"""
@@ -355,9 +416,7 @@ class OutMag(FrozenClass):
 
     # Electromagnetic torque
     # Type : ndarray
-    Tem = property(
-        fget=_get_Tem, fset=_set_Tem, doc=u"""Electromagnetic torque"""
-    )
+    Tem = property(fget=_get_Tem, fset=_set_Tem, doc=u"""Electromagnetic torque""")
 
     def _get_Tem_av(self):
         """getter of Tem_av"""
@@ -385,9 +444,7 @@ class OutMag(FrozenClass):
 
     # Torque ripple
     # Type : float
-    Tem_rip = property(
-        fget=_get_Tem_rip, fset=_set_Tem_rip, doc=u"""Torque ripple"""
-    )
+    Tem_rip = property(fget=_get_Tem_rip, fset=_set_Tem_rip, doc=u"""Torque ripple""")
 
     def _get_Phi_wind_stator(self):
         """getter of Phi_wind_stator"""
@@ -406,7 +463,9 @@ class OutMag(FrozenClass):
     # Stator winding flux
     # Type : ndarray
     Phi_wind_stator = property(
-        fget=_get_Phi_wind_stator, fset=_set_Phi_wind_stator, doc=u"""Stator winding flux"""
+        fget=_get_Phi_wind_stator,
+        fset=_set_Phi_wind_stator,
+        doc=u"""Stator winding flux""",
     )
 
     def _get_emf(self):
@@ -438,10 +497,13 @@ class OutMag(FrozenClass):
 
         if self._meshsolution is not None:
             self._meshsolution.parent = self
+
     # FEA software mesh and solution
     # Type : MeshSolution
     meshsolution = property(
-        fget=_get_meshsolution, fset=_set_meshsolution, doc=u"""FEA software mesh and solution"""
+        fget=_get_meshsolution,
+        fset=_set_meshsolution,
+        doc=u"""FEA software mesh and solution""",
     )
 
     def _get_FEMM_dict(self):
@@ -473,5 +535,7 @@ class OutMag(FrozenClass):
     # Name of the logger to use
     # Type : str
     logger_name = property(
-        fget=_get_logger_name, fset=_set_logger_name, doc=u"""Name of the logger to use"""
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use""",
     )

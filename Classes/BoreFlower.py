@@ -54,7 +54,7 @@ class BoreFlower(Bore):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "N" in list(init_dict.keys()):
                 N = init_dict["N"]
@@ -146,9 +146,7 @@ class BoreFlower(Bore):
 
     # Radius of the flower arc
     # Type : float, min = 0
-    Rarc = property(
-        fget=_get_Rarc, fset=_set_Rarc, doc=u"""Radius of the flower arc"""
-    )
+    Rarc = property(fget=_get_Rarc, fset=_set_Rarc, doc=u"""Radius of the flower arc""")
 
     def _get_alpha(self):
         """getter of alpha"""

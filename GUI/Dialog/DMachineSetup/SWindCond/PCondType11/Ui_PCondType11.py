@@ -17,7 +17,9 @@ class Ui_PCondType11(object):
         self.img_cond.setMinimumSize(QtCore.QSize(0, 0))
         self.img_cond.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.img_cond.setText("")
-        self.img_cond.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/WindParam/Cond_1_1.PNG"))
+        self.img_cond.setPixmap(
+            QtGui.QPixmap(":/images/images/MachineSetup/WindParam/Cond_1_1.PNG")
+        )
         self.img_cond.setScaledContents(True)
         self.img_cond.setObjectName("img_cond")
         self.horizontalLayout.addWidget(self.img_cond)
@@ -85,7 +87,9 @@ class Ui_PCondType11(object):
         self.w_out = WCondOut(PCondType11)
         self.w_out.setObjectName("w_out")
         self.verticalLayout_2.addWidget(self.w_out)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.verticalLayout_2.addItem(spacerItem)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
@@ -107,6 +111,8 @@ class Ui_PCondType11(object):
         self.in_Nwpc1_rad.setText(_translate("PCondType11", "Nwpc1_rad :"))
         self.in_Wins_wire.setText(_translate("PCondType11", "Wins_wire :"))
         self.in_Hwire.setText(_translate("PCondType11", "Hwire :"))
+
+
 from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.WCondOut.WCondOut import WCondOut
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

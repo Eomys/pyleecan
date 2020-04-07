@@ -26,7 +26,15 @@ class Simulation(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", desc="", machine=-1, input=-1, logger_name="Pyleecan.Simulation", init_dict=None):
+    def __init__(
+        self,
+        name="",
+        desc="",
+        machine=-1,
+        input=-1,
+        logger_name="Pyleecan.Simulation",
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -41,7 +49,7 @@ class Simulation(FrozenClass):
         if input == -1:
             input = Input()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
@@ -60,24 +68,46 @@ class Simulation(FrozenClass):
         # machine can be None, a Machine object or a dict
         if isinstance(machine, dict):
             # Check that the type is correct (including daughter)
-            class_name = machine.get('__class__')
-            if class_name not in ['Machine', 'MachineAsync', 'MachineDFIM', 'MachineIPMSM', 'MachineSCIM', 'MachineSIPMSM', 'MachineSRM', 'MachineSyRM', 'MachineSync', 'MachineUD', 'MachineWRSM']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for machine")
+            class_name = machine.get("__class__")
+            if class_name not in [
+                "Machine",
+                "MachineAsync",
+                "MachineDFIM",
+                "MachineIPMSM",
+                "MachineSCIM",
+                "MachineSIPMSM",
+                "MachineSRM",
+                "MachineSyRM",
+                "MachineSync",
+                "MachineUD",
+                "MachineWRSM",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for machine"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.machine = class_obj(init_dict=machine)
         else:
             self.machine = machine
         # input can be None, a Input object or a dict
         if isinstance(input, dict):
             # Check that the type is correct (including daughter)
-            class_name = input.get('__class__')
-            if class_name not in ['Input', 'InputCurrent', 'InputCurrentDQ', 'InputFlux', 'InputForce']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for input")
+            class_name = input.get("__class__")
+            if class_name not in [
+                "Input",
+                "InputCurrent",
+                "InputCurrentDQ",
+                "InputFlux",
+                "InputForce",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for input"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.input = class_obj(init_dict=input)
         else:
             self.input = input
@@ -98,12 +128,12 @@ class Simulation(FrozenClass):
         Simulation_str += 'desc = "' + str(self.desc) + '"' + linesep
         if self.machine is not None:
             tmp = self.machine.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "machine = "+ tmp
+            Simulation_str += "machine = " + tmp
         else:
             Simulation_str += "machine = None" + linesep + linesep
         if self.input is not None:
             tmp = self.input.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "input = "+ tmp
+            Simulation_str += "input = " + tmp
         else:
             Simulation_str += "input = None" + linesep + linesep
         Simulation_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
@@ -168,9 +198,7 @@ class Simulation(FrozenClass):
 
     # Name of the simulation
     # Type : str
-    name = property(
-        fget=_get_name, fset=_set_name, doc=u"""Name of the simulation"""
-    )
+    name = property(fget=_get_name, fset=_set_name, doc=u"""Name of the simulation""")
 
     def _get_desc(self):
         """getter of desc"""
@@ -183,9 +211,7 @@ class Simulation(FrozenClass):
 
     # Simulation description
     # Type : str
-    desc = property(
-        fget=_get_desc, fset=_set_desc, doc=u"""Simulation description"""
-    )
+    desc = property(fget=_get_desc, fset=_set_desc, doc=u"""Simulation description""")
 
     def _get_machine(self):
         """getter of machine"""
@@ -198,6 +224,7 @@ class Simulation(FrozenClass):
 
         if self._machine is not None:
             self._machine.parent = self
+
     # Machine to simulate
     # Type : Machine
     machine = property(
@@ -215,6 +242,7 @@ class Simulation(FrozenClass):
 
         if self._input is not None:
             self._input.parent = self
+
     # Input of the simulation
     # Type : Input
     input = property(
@@ -233,5 +261,7 @@ class Simulation(FrozenClass):
     # Name of the logger to use
     # Type : str
     logger_name = property(
-        fget=_get_logger_name, fset=_set_logger_name, doc=u"""Name of the logger to use"""
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use""",
     )

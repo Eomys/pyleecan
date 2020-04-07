@@ -46,7 +46,8 @@ class ForceMT(Force):
         comp_force_nodal = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ForceMT method comp_force_nodal: " + str(comp_force_nodal)
+                    "Can't use ForceMT method comp_force_nodal: "
+                    + str(comp_force_nodal)
                 )
             )
         )
@@ -69,7 +70,7 @@ class ForceMT(Force):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "is_comp_nodal_force" in list(init_dict.keys()):
                 is_comp_nodal_force = init_dict["is_comp_nodal_force"]

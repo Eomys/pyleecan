@@ -37,11 +37,15 @@ class Ui_SWSlot(object):
         self.out_Slot_pitch = QtWidgets.QLabel(SWSlot)
         self.out_Slot_pitch.setObjectName("out_Slot_pitch")
         self.horizontalLayout_2.addWidget(self.out_Slot_pitch)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_2.addItem(spacerItem)
         self.main_layout.addLayout(self.horizontalLayout_2)
         self.w_slot = QtWidgets.QWidget(SWSlot)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.w_slot.sizePolicy().hasHeightForWidth())
@@ -50,7 +54,9 @@ class Ui_SWSlot(object):
         self.main_layout.addWidget(self.w_slot)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout.addItem(spacerItem1)
         self.b_plot = QtWidgets.QPushButton(SWSlot)
         self.b_plot.setObjectName("b_plot")
@@ -77,5 +83,7 @@ class Ui_SWSlot(object):
         self.b_plot.setText(_translate("SWSlot", "Preview"))
         self.b_previous.setText(_translate("SWSlot", "Previous"))
         self.b_next.setText(_translate("SWSlot", "Next"))
+
+
 from pyleecan.GUI.Tools.HelpButton import HelpButton
 from pyleecan.GUI.Resources import pyleecan_rc

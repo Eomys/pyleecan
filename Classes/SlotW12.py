@@ -120,7 +120,8 @@ class SlotW12(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW12 method comp_height_wind: " + str(comp_height_wind)
+                    "Can't use SlotW12 method comp_height_wind: "
+                    + str(comp_height_wind)
                 )
             )
         )
@@ -166,7 +167,7 @@ class SlotW12(SlotWind):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "H0" in list(init_dict.keys()):
                 H0 = init_dict["H0"]

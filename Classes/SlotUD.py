@@ -54,7 +54,7 @@ class SlotUD(Slot):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "point_list" in list(init_dict.keys()):
                 point_list = init_dict["point_list"]
@@ -76,7 +76,12 @@ class SlotUD(Slot):
         SlotUD_str = ""
         # Get the properties inherited from Slot
         SlotUD_str += super(SlotUD, self).__str__()
-        SlotUD_str += "point_list = " + linesep + str(self.point_list).replace(linesep, linesep + "\t") + linesep
+        SlotUD_str += (
+            "point_list = "
+            + linesep
+            + str(self.point_list).replace(linesep, linesep + "\t")
+            + linesep
+        )
         SlotUD_str += "is_sym = " + str(self.is_sym) + linesep
         return SlotUD_str
 

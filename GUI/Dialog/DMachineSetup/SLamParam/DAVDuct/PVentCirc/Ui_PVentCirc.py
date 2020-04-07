@@ -18,14 +18,18 @@ class Ui_PVentCirc(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.img_vent = QtWidgets.QLabel(PVentCirc)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.img_vent.sizePolicy().hasHeightForWidth())
         self.img_vent.setSizePolicy(sizePolicy)
         self.img_vent.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.img_vent.setText("")
-        self.img_vent.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/LamParam/CircVentDuct.png"))
+        self.img_vent.setPixmap(
+            QtGui.QPixmap(":/images/images/MachineSetup/LamParam/CircVentDuct.png")
+        )
         self.img_vent.setScaledContents(True)
         self.img_vent.setObjectName("img_vent")
         self.verticalLayout_2.addWidget(self.img_vent)
@@ -88,6 +92,10 @@ class Ui_PVentCirc(object):
         self.in_H0.setText(_translate("PVentCirc", "H0 :"))
         self.in_D0.setText(_translate("PVentCirc", "D0 :"))
         self.in_Zh.setText(_translate("PVentCirc", "Zh :"))
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut import WVentOut
+
+
+from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut import (
+    WVentOut,
+)
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

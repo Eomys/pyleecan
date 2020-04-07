@@ -57,7 +57,9 @@ class Solution(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, nodal=dict(), edge=dict(), face=dict(), volume=dict(), init_dict=None):
+    def __init__(
+        self, nodal=dict(), edge=dict(), face=dict(), volume=dict(), init_dict=None
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -68,7 +70,7 @@ class Solution(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "nodal" in list(init_dict.keys()):
                 nodal = init_dict["nodal"]
@@ -92,7 +94,7 @@ class Solution(FrozenClass):
         elif nodal is None:
             self.nodal = dict()
         else:
-            self.nodal = nodal# Should raise an error
+            self.nodal = nodal  # Should raise an error
         # edge can be None or a dict of ndarray
         self.edge = dict()
         if type(edge) is dict:
@@ -105,7 +107,7 @@ class Solution(FrozenClass):
         elif edge is None:
             self.edge = dict()
         else:
-            self.edge = edge# Should raise an error
+            self.edge = edge  # Should raise an error
         # face can be None or a dict of ndarray
         self.face = dict()
         if type(face) is dict:
@@ -118,7 +120,7 @@ class Solution(FrozenClass):
         elif face is None:
             self.face = dict()
         else:
-            self.face = face# Should raise an error
+            self.face = face  # Should raise an error
         # volume can be None or a dict of ndarray
         self.volume = dict()
         if type(volume) is dict:
@@ -131,7 +133,7 @@ class Solution(FrozenClass):
         elif volume is None:
             self.volume = dict()
         else:
-            self.volume = volume# Should raise an error
+            self.volume = volume  # Should raise an error
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -147,19 +149,27 @@ class Solution(FrozenClass):
         if len(self.nodal) == 0:
             Solution_str += "nodal = dict()"
         for key, obj in self.nodal.items():
-            Solution_str += "nodal["+key+"] = "+str(self.nodal[key]) + linesep + linesep
+            Solution_str += (
+                "nodal[" + key + "] = " + str(self.nodal[key]) + linesep + linesep
+            )
         if len(self.edge) == 0:
             Solution_str += "edge = dict()"
         for key, obj in self.edge.items():
-            Solution_str += "edge["+key+"] = "+str(self.edge[key]) + linesep + linesep
+            Solution_str += (
+                "edge[" + key + "] = " + str(self.edge[key]) + linesep + linesep
+            )
         if len(self.face) == 0:
             Solution_str += "face = dict()"
         for key, obj in self.face.items():
-            Solution_str += "face["+key+"] = "+str(self.face[key]) + linesep + linesep
+            Solution_str += (
+                "face[" + key + "] = " + str(self.face[key]) + linesep + linesep
+            )
         if len(self.volume) == 0:
             Solution_str += "volume = dict()"
         for key, obj in self.volume.items():
-            Solution_str += "volume["+key+"] = "+str(self.volume[key]) + linesep + linesep
+            Solution_str += (
+                "volume[" + key + "] = " + str(self.volume[key]) + linesep + linesep
+            )
         return Solution_str
 
     def __eq__(self, other):

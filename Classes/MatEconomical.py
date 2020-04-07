@@ -35,7 +35,7 @@ class MatEconomical(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "cost_unit" in list(init_dict.keys()):
                 cost_unit = init_dict["cost_unit"]
@@ -56,7 +56,9 @@ class MatEconomical(FrozenClass):
         if self.parent is None:
             MatEconomical_str += "parent = None " + linesep
         else:
-            MatEconomical_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            MatEconomical_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         MatEconomical_str += "cost_unit = " + str(self.cost_unit) + linesep
         MatEconomical_str += 'unit_name = "' + str(self.unit_name) + '"' + linesep
         return MatEconomical_str
@@ -101,7 +103,9 @@ class MatEconomical(FrozenClass):
     # Cost of one kilo of material
     # Type : float, min = 0
     cost_unit = property(
-        fget=_get_cost_unit, fset=_set_cost_unit, doc=u"""Cost of one kilo of material"""
+        fget=_get_cost_unit,
+        fset=_set_cost_unit,
+        doc=u"""Cost of one kilo of material""",
     )
 
     def _get_unit_name(self):

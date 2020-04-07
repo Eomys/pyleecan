@@ -73,7 +73,7 @@ class ImportGenMatrixSin(ImportMatrix):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "sin_list" in list(init_dict.keys()):
                 sin_list = init_dict["sin_list"]
@@ -109,7 +109,9 @@ class ImportGenMatrixSin(ImportMatrix):
             ImportGenMatrixSin_str += "sin_list = []" + linesep
         for ii in range(len(self.sin_list)):
             tmp = self.sin_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            ImportGenMatrixSin_str += "sin_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            ImportGenMatrixSin_str += (
+                "sin_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         return ImportGenMatrixSin_str
 
     def __eq__(self, other):

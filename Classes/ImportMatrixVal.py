@@ -55,7 +55,7 @@ class ImportMatrixVal(ImportMatrix):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "value" in list(init_dict.keys()):
                 value = init_dict["value"]
@@ -75,7 +75,13 @@ class ImportMatrixVal(ImportMatrix):
         ImportMatrixVal_str = ""
         # Get the properties inherited from ImportMatrix
         ImportMatrixVal_str += super(ImportMatrixVal, self).__str__()
-        ImportMatrixVal_str += "value = " + linesep + str(self.value).replace(linesep, linesep + "\t") + linesep + linesep
+        ImportMatrixVal_str += (
+            "value = "
+            + linesep
+            + str(self.value).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return ImportMatrixVal_str
 
     def __eq__(self, other):
@@ -129,6 +135,4 @@ class ImportMatrixVal(ImportMatrix):
 
     # The matrix to return
     # Type : ndarray
-    value = property(
-        fget=_get_value, fset=_set_value, doc=u"""The matrix to return"""
-    )
+    value = property(fget=_get_value, fset=_set_value, doc=u"""The matrix to return""")

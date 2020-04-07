@@ -13,7 +13,9 @@ from pyleecan.Classes.SlotWind import SlotWind
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.SlotW27._comp_point_coordinate import _comp_point_coordinate
+    from pyleecan.Methods.Slot.SlotW27._comp_point_coordinate import (
+        _comp_point_coordinate,
+    )
 except ImportError as error:
     _comp_point_coordinate = error
 
@@ -138,7 +140,8 @@ class SlotW27(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW27 method comp_height_wind: " + str(comp_height_wind)
+                    "Can't use SlotW27 method comp_height_wind: "
+                    + str(comp_height_wind)
                 )
             )
         )
@@ -173,7 +176,19 @@ class SlotW27(SlotWind):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, H0=0.003, H1=0, H2=0.02, W0=0.003, W1=0.013, W2=0.01, W3=0.003, is_trap_wind=False, Zs=36, init_dict=None):
+    def __init__(
+        self,
+        H0=0.003,
+        H1=0,
+        H2=0.02,
+        W0=0.003,
+        W1=0.013,
+        W2=0.01,
+        W3=0.003,
+        is_trap_wind=False,
+        Zs=36,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -184,7 +199,7 @@ class SlotW27(SlotWind):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "H0" in list(init_dict.keys()):
                 H0 = init_dict["H0"]
@@ -318,9 +333,7 @@ class SlotW27(SlotWind):
 
     # Slot first part height
     # Type : float, min = 0
-    H1 = property(
-        fget=_get_H1, fset=_set_H1, doc=u"""Slot first part height"""
-    )
+    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Slot first part height""")
 
     def _get_H2(self):
         """getter of H2"""
@@ -333,9 +346,7 @@ class SlotW27(SlotWind):
 
     # Slot second part height
     # Type : float, min = 0
-    H2 = property(
-        fget=_get_H2, fset=_set_H2, doc=u"""Slot second part height"""
-    )
+    H2 = property(fget=_get_H2, fset=_set_H2, doc=u"""Slot second part height""")
 
     def _get_W0(self):
         """getter of W0"""

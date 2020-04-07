@@ -18,19 +18,25 @@ class Ui_PWSlot25(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.img_slot = QtWidgets.QLabel(PWSlot25)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.img_slot.sizePolicy().hasHeightForWidth())
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.img_slot.setText("")
-        self.img_slot.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/WSlot/Slot_25.PNG"))
+        self.img_slot.setPixmap(
+            QtGui.QPixmap(":/images/images/MachineSetup/WSlot/Slot_25.PNG")
+        )
         self.img_slot.setScaledContents(True)
         self.img_slot.setObjectName("img_slot")
         self.verticalLayout_2.addWidget(self.img_slot)
         self.textEdit = QtWidgets.QTextEdit(PWSlot25)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.textEdit.sizePolicy().hasHeightForWidth())
@@ -92,12 +98,17 @@ class Ui_PWSlot25(object):
     def retranslateUi(self, PWSlot25):
         _translate = QtCore.QCoreApplication.translate
         PWSlot25.setWindowTitle(_translate("PWSlot25", "Form"))
-        self.textEdit.setHtml(_translate("PWSlot25", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">Constant tooth width</span></p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">Slot edges are not radial</span></p></body></html>"))
+        self.textEdit.setHtml(
+            _translate(
+                "PWSlot25",
+                '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
+                '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
+                "p, li { white-space: pre-wrap; }\n"
+                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:14pt;">Constant tooth width</span></p>\n'
+                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:14pt;">Slot edges are not radial</span></p></body></html>',
+            )
+        )
         self.in_W3.setText(_translate("PWSlot25", "W3 :"))
         self.unit_W3.setText(_translate("PWSlot25", "m"))
         self.in_W4.setText(_translate("PWSlot25", "W4 :"))
@@ -106,6 +117,8 @@ class Ui_PWSlot25(object):
         self.unit_H1.setText(_translate("PWSlot25", "m"))
         self.in_H2.setText(_translate("PWSlot25", "H2 :"))
         self.unit_H2.setText(_translate("PWSlot25", "m"))
+
+
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

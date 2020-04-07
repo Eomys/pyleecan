@@ -25,7 +25,9 @@ class Ui_WVent(object):
         self.c_vent_type.addItem("")
         self.c_vent_type.addItem("")
         self.horizontalLayout.addWidget(self.c_vent_type)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout.addItem(spacerItem)
         self.main_layout.addLayout(self.horizontalLayout)
         self.w_vent = QtWidgets.QWidget(WVent)

@@ -13,7 +13,9 @@ from pyleecan.Classes._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.Slot.build_geometry_half_tooth import build_geometry_half_tooth
+    from pyleecan.Methods.Slot.Slot.build_geometry_half_tooth import (
+        build_geometry_half_tooth,
+    )
 except ImportError as error:
     build_geometry_half_tooth = error
 
@@ -203,7 +205,7 @@ class Slot(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]

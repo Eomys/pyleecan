@@ -86,7 +86,7 @@ class Shaft(FrozenClass):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Lshaft" in list(init_dict.keys()):
                 Lshaft = init_dict["Lshaft"]
@@ -118,7 +118,7 @@ class Shaft(FrozenClass):
         Shaft_str += "Lshaft = " + str(self.Lshaft) + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Shaft_str += "mat_type = "+ tmp
+            Shaft_str += "mat_type = " + tmp
         else:
             Shaft_str += "mat_type = None" + linesep + linesep
         Shaft_str += "Drsh = " + str(self.Drsh) + linesep
@@ -188,6 +188,7 @@ class Shaft(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     # Shaft's Material
     # Type : Material
     mat_type = property(

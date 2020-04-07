@@ -25,7 +25,17 @@ class OutStruct(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, time=None, angle=None, Nt_tot=None, Na_tot=None, Prad=None, Ptan=None, logger_name="Pyleecan.OutStruct", init_dict=None):
+    def __init__(
+        self,
+        time=None,
+        angle=None,
+        Nt_tot=None,
+        Na_tot=None,
+        Prad=None,
+        Ptan=None,
+        logger_name="Pyleecan.OutStruct",
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -36,7 +46,7 @@ class OutStruct(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
@@ -77,12 +87,36 @@ class OutStruct(FrozenClass):
             OutStruct_str += "parent = None " + linesep
         else:
             OutStruct_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutStruct_str += "time = " + linesep + str(self.time).replace(linesep, linesep + "\t") + linesep + linesep
-        OutStruct_str += "angle = " + linesep + str(self.angle).replace(linesep, linesep + "\t") + linesep + linesep
+        OutStruct_str += (
+            "time = "
+            + linesep
+            + str(self.time).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutStruct_str += (
+            "angle = "
+            + linesep
+            + str(self.angle).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         OutStruct_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutStruct_str += "Na_tot = " + str(self.Na_tot) + linesep
-        OutStruct_str += "Prad = " + linesep + str(self.Prad).replace(linesep, linesep + "\t") + linesep + linesep
-        OutStruct_str += "Ptan = " + linesep + str(self.Ptan).replace(linesep, linesep + "\t") + linesep + linesep
+        OutStruct_str += (
+            "Prad = "
+            + linesep
+            + str(self.Prad).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        OutStruct_str += (
+            "Ptan = "
+            + linesep
+            + str(self.Ptan).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         OutStruct_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return OutStruct_str
 
@@ -183,7 +217,9 @@ class OutStruct(FrozenClass):
     # Structural position vector (no symmetry)
     # Type : ndarray
     angle = property(
-        fget=_get_angle, fset=_set_angle, doc=u"""Structural position vector (no symmetry)"""
+        fget=_get_angle,
+        fset=_set_angle,
+        doc=u"""Structural position vector (no symmetry)""",
     )
 
     def _get_Nt_tot(self):
@@ -270,5 +306,7 @@ class OutStruct(FrozenClass):
     # Name of the logger to use
     # Type : str
     logger_name = property(
-        fget=_get_logger_name, fset=_set_logger_name, doc=u"""Name of the logger to use"""
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use""",
     )

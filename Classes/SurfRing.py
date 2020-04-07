@@ -192,7 +192,7 @@ class SurfRing(Surface):
         if in_surf == -1:
             in_surf = Surface()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "out_surf" in list(init_dict.keys()):
                 out_surf = init_dict["out_surf"]
@@ -206,24 +206,42 @@ class SurfRing(Surface):
         # out_surf can be None, a Surface object or a dict
         if isinstance(out_surf, dict):
             # Check that the type is correct (including daughter)
-            class_name = out_surf.get('__class__')
-            if class_name not in ['Surface', 'Circle', 'PolarArc', 'SurfLine', 'SurfRing', 'Trapeze']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for out_surf")
+            class_name = out_surf.get("__class__")
+            if class_name not in [
+                "Surface",
+                "Circle",
+                "PolarArc",
+                "SurfLine",
+                "SurfRing",
+                "Trapeze",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for out_surf"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.out_surf = class_obj(init_dict=out_surf)
         else:
             self.out_surf = out_surf
         # in_surf can be None, a Surface object or a dict
         if isinstance(in_surf, dict):
             # Check that the type is correct (including daughter)
-            class_name = in_surf.get('__class__')
-            if class_name not in ['Surface', 'Circle', 'PolarArc', 'SurfLine', 'SurfRing', 'Trapeze']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for in_surf")
+            class_name = in_surf.get("__class__")
+            if class_name not in [
+                "Surface",
+                "Circle",
+                "PolarArc",
+                "SurfLine",
+                "SurfRing",
+                "Trapeze",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for in_surf"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.in_surf = class_obj(init_dict=in_surf)
         else:
             self.in_surf = in_surf
@@ -240,12 +258,12 @@ class SurfRing(Surface):
         SurfRing_str += super(SurfRing, self).__str__()
         if self.out_surf is not None:
             tmp = self.out_surf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            SurfRing_str += "out_surf = "+ tmp
+            SurfRing_str += "out_surf = " + tmp
         else:
             SurfRing_str += "out_surf = None" + linesep + linesep
         if self.in_surf is not None:
             tmp = self.in_surf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            SurfRing_str += "in_surf = "+ tmp
+            SurfRing_str += "in_surf = " + tmp
         else:
             SurfRing_str += "in_surf = None" + linesep + linesep
         return SurfRing_str
@@ -305,6 +323,7 @@ class SurfRing(Surface):
 
         if self._out_surf is not None:
             self._out_surf.parent = self
+
     # Outter surface
     # Type : Surface
     out_surf = property(
@@ -322,8 +341,7 @@ class SurfRing(Surface):
 
         if self._in_surf is not None:
             self._in_surf.parent = self
+
     # Inner surface
     # Type : Surface
-    in_surf = property(
-        fget=_get_in_surf, fset=_set_in_surf, doc=u"""Inner surface"""
-    )
+    in_surf = property(fget=_get_in_surf, fset=_set_in_surf, doc=u"""Inner surface""")

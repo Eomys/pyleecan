@@ -3,7 +3,9 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.Ui_SMachineType import Ui_SMachineType
+from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.Ui_SMachineType import (
+    Ui_SMachineType,
+)
 
 
 class Gen_SMachineType(Ui_SMachineType):

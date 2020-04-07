@@ -35,7 +35,7 @@ class SlotMag(Slot):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "W3" in list(init_dict.keys()):
                 W3 = init_dict["W3"]

@@ -38,7 +38,7 @@ class MagnetPolar(Magnet):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "mat_type" in list(init_dict.keys()):
                 mat_type = init_dict["mat_type"]
@@ -48,7 +48,9 @@ class MagnetPolar(Magnet):
                 Lmag = init_dict["Lmag"]
         # Initialisation by argument
         # Call Magnet init
-        super(MagnetPolar, self).__init__(mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag)
+        super(MagnetPolar, self).__init__(
+            mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag
+        )
         # The class is frozen (in Magnet init), for now it's impossible to
         # add new properties
 

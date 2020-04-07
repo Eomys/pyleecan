@@ -13,7 +13,9 @@ from pyleecan.Classes.Conductor import Conductor
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.CondType11.comp_surface_active import comp_surface_active
+    from pyleecan.Methods.Machine.CondType11.comp_surface_active import (
+        comp_surface_active,
+    )
 except ImportError as error:
     comp_surface_active = error
 
@@ -108,7 +110,20 @@ class CondType11(Conductor):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Hwire=0.01, Wwire=0.01, Nwppc_rad=1, Nwppc_tan=1, Wins_wire=0, Wins_coil=0, type_winding_shape=0, alpha_ew=58, cond_mat=-1, ins_mat=-1, init_dict=None):
+    def __init__(
+        self,
+        Hwire=0.01,
+        Wwire=0.01,
+        Nwppc_rad=1,
+        Nwppc_tan=1,
+        Wins_wire=0,
+        Wins_coil=0,
+        type_winding_shape=0,
+        alpha_ew=58,
+        cond_mat=-1,
+        ins_mat=-1,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -123,7 +138,7 @@ class CondType11(Conductor):
         if ins_mat == -1:
             ins_mat = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Hwire" in list(init_dict.keys()):
                 Hwire = init_dict["Hwire"]
@@ -171,7 +186,9 @@ class CondType11(Conductor):
         CondType11_str += "Nwppc_tan = " + str(self.Nwppc_tan) + linesep
         CondType11_str += "Wins_wire = " + str(self.Wins_wire) + linesep
         CondType11_str += "Wins_coil = " + str(self.Wins_coil) + linesep
-        CondType11_str += "type_winding_shape = " + str(self.type_winding_shape) + linesep
+        CondType11_str += (
+            "type_winding_shape = " + str(self.type_winding_shape) + linesep
+        )
         CondType11_str += "alpha_ew = " + str(self.alpha_ew) + linesep
         return CondType11_str
 

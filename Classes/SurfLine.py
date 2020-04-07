@@ -188,7 +188,7 @@ class SurfLine(Surface):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "line_list" in list(init_dict.keys()):
                 line_list = init_dict["line_list"]
@@ -206,7 +206,14 @@ class SurfLine(Surface):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in ['Line', 'Arc', 'Arc1', 'Arc2', 'Arc3', 'Segment']:
+                    if class_name not in [
+                        "Line",
+                        "Arc",
+                        "Arc1",
+                        "Arc2",
+                        "Arc3",
+                        "Segment",
+                    ]:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -238,8 +245,10 @@ class SurfLine(Surface):
         if len(self.line_list) == 0:
             SurfLine_str += "line_list = []" + linesep
         for ii in range(len(self.line_list)):
-            tmp = self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            SurfLine_str += "line_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            )
+            SurfLine_str += "line_list[" + str(ii) + "] =" + tmp + linesep + linesep
         return SurfLine_str
 
     def __eq__(self, other):
@@ -293,7 +302,7 @@ class SurfLine(Surface):
             if obj is not None:
                 obj.parent = self
 
-    # List of Lines 
+    # List of Lines
     # Type : [Line]
     line_list = property(
         fget=_get_line_list, fset=_set_line_list, doc=u"""List of Lines """

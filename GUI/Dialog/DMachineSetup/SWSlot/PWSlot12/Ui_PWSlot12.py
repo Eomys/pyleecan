@@ -18,14 +18,18 @@ class Ui_PWSlot12(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.img_slot = QtWidgets.QLabel(PWSlot12)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.img_slot.sizePolicy().hasHeightForWidth())
         self.img_slot.setSizePolicy(sizePolicy)
         self.img_slot.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.img_slot.setText("")
-        self.img_slot.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/WSlot/Slot 12.PNG"))
+        self.img_slot.setPixmap(
+            QtGui.QPixmap(":/images/images/MachineSetup/WSlot/Slot 12.PNG")
+        )
         self.img_slot.setScaledContents(True)
         self.img_slot.setObjectName("img_slot")
         self.verticalLayout_2.addWidget(self.img_slot)
@@ -93,6 +97,8 @@ class Ui_PWSlot12(object):
         self.unit_H0.setText(_translate("PWSlot12", "m"))
         self.in_H1.setText(_translate("PWSlot12", "H1 :"))
         self.unit_H1.setText(_translate("PWSlot12", "m"))
+
+
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

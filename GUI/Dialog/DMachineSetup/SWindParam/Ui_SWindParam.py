@@ -19,7 +19,9 @@ class Ui_SWindParam(object):
         self.img_wind_geo = QtWidgets.QLabel(SWindParam)
         self.img_wind_geo.setMinimumSize(QtCore.QSize(300, 300))
         self.img_wind_geo.setText("")
-        self.img_wind_geo.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/WindParam/Winding param.PNG"))
+        self.img_wind_geo.setPixmap(
+            QtGui.QPixmap(":/images/images/MachineSetup/WindParam/Winding param.PNG")
+        )
         self.img_wind_geo.setScaledContents(True)
         self.img_wind_geo.setObjectName("img_wind_geo")
         self.horizontalLayout_3.addWidget(self.img_wind_geo)
@@ -32,7 +34,9 @@ class Ui_SWindParam(object):
         self.in_Npcpp.setObjectName("in_Npcpp")
         self.horizontalLayout.addWidget(self.in_Npcpp)
         self.si_Npcpp = QtWidgets.QSpinBox(SWindParam)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.si_Npcpp.sizePolicy().hasHeightForWidth())
@@ -50,7 +54,9 @@ class Ui_SWindParam(object):
         self.in_Ntcoil.setObjectName("in_Ntcoil")
         self.horizontalLayout_2.addWidget(self.in_Ntcoil)
         self.si_Ntcoil = QtWidgets.QSpinBox(SWindParam)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.si_Ntcoil.sizePolicy().hasHeightForWidth())
@@ -81,13 +87,17 @@ class Ui_SWindParam(object):
         self.out_Ncspc.setObjectName("out_Ncspc")
         self.verticalLayout.addWidget(self.out_Ncspc)
         self.verticalLayout_2.addWidget(self.groupBox)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.verticalLayout_2.addItem(spacerItem)
         self.horizontalLayout_3.addLayout(self.verticalLayout_2)
         self.verticalLayout_3.addLayout(self.horizontalLayout_3)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.horizontalLayout_4.addItem(spacerItem1)
         self.b_previous = QtWidgets.QPushButton(SWindParam)
         self.b_previous.setObjectName("b_previous")
@@ -109,14 +119,24 @@ class Ui_SWindParam(object):
         self.in_qs.setText(_translate("SWindParam", " qs : ?"))
         self.in_Zs.setWhatsThis(_translate("SWindParam", "Number of slot"))
         self.in_Zs.setText(_translate("SWindParam", " Zs : ?"))
-        self.in_Nlay.setWhatsThis(_translate("SWindParam", "Number of winding layer in each slot"))
+        self.in_Nlay.setWhatsThis(
+            _translate("SWindParam", "Number of winding layer in each slot")
+        )
         self.in_Nlay.setText(_translate("SWindParam", " Nlay : ?"))
         self.groupBox.setTitle(_translate("SWindParam", "Output"))
-        self.out_Ntspc.setToolTip(_translate("SWindParam", "Winding number of turns in series per phase"))
-        self.out_Ntspc.setWhatsThis(_translate("SWindParam", "Winding number of turns in series per phase"))
+        self.out_Ntspc.setToolTip(
+            _translate("SWindParam", "Winding number of turns in series per phase")
+        )
+        self.out_Ntspc.setWhatsThis(
+            _translate("SWindParam", "Winding number of turns in series per phase")
+        )
         self.out_Ntspc.setText(_translate("SWindParam", "Ntsp1 : ?"))
-        self.out_Ncspc.setWhatsThis(_translate("SWindParam", "Number of coils in series per parallel circuit"))
+        self.out_Ncspc.setWhatsThis(
+            _translate("SWindParam", "Number of coils in series per parallel circuit")
+        )
         self.out_Ncspc.setText(_translate("SWindParam", "Ncspc1 : ?"))
         self.b_previous.setText(_translate("SWindParam", "Previous"))
         self.b_next.setText(_translate("SWindParam", "Next"))
+
+
 from pyleecan.GUI.Resources import pyleecan_rc

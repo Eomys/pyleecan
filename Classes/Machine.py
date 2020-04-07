@@ -28,12 +28,16 @@ except ImportError as error:
     comp_masses = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.comp_width_airgap_mag import comp_width_airgap_mag
+    from pyleecan.Methods.Machine.Machine.comp_width_airgap_mag import (
+        comp_width_airgap_mag,
+    )
 except ImportError as error:
     comp_width_airgap_mag = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.comp_width_airgap_mec import comp_width_airgap_mec
+    from pyleecan.Methods.Machine.Machine.comp_width_airgap_mec import (
+        comp_width_airgap_mec,
+    )
 except ImportError as error:
     comp_width_airgap_mec = error
 
@@ -58,7 +62,9 @@ except ImportError as error:
     comp_output_geo = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.comp_length_airgap_active import comp_length_airgap_active
+    from pyleecan.Methods.Machine.Machine.comp_length_airgap_active import (
+        comp_length_airgap_active,
+    )
 except ImportError as error:
     comp_length_airgap_active = error
 
@@ -219,7 +225,16 @@ class Machine(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict=None):
+    def __init__(
+        self,
+        frame=-1,
+        shaft=-1,
+        name="default_machine",
+        desc="",
+        type_machine=1,
+        logger_name="Pyleecan.Machine",
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -234,7 +249,7 @@ class Machine(FrozenClass):
         if shaft == -1:
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "frame" in list(init_dict.keys()):
                 frame = init_dict["frame"]
@@ -278,12 +293,12 @@ class Machine(FrozenClass):
             Machine_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.frame is not None:
             tmp = self.frame.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Machine_str += "frame = "+ tmp
+            Machine_str += "frame = " + tmp
         else:
             Machine_str += "frame = None" + linesep + linesep
         if self.shaft is not None:
             tmp = self.shaft.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Machine_str += "shaft = "+ tmp
+            Machine_str += "shaft = " + tmp
         else:
             Machine_str += "shaft = None" + linesep + linesep
         Machine_str += 'name = "' + str(self.name) + '"' + linesep
@@ -355,6 +370,7 @@ class Machine(FrozenClass):
 
         if self._frame is not None:
             self._frame.parent = self
+
     # Machine's Frame
     # Type : Frame
     frame = property(fget=_get_frame, fset=_set_frame, doc=u"""Machine's Frame""")
@@ -370,6 +386,7 @@ class Machine(FrozenClass):
 
         if self._shaft is not None:
             self._shaft.parent = self
+
     # Machine's Shaft
     # Type : Shaft
     shaft = property(fget=_get_shaft, fset=_set_shaft, doc=u"""Machine's Shaft""")
@@ -385,9 +402,7 @@ class Machine(FrozenClass):
 
     # Name of the machine
     # Type : str
-    name = property(
-        fget=_get_name, fset=_set_name, doc=u"""Name of the machine"""
-    )
+    name = property(fget=_get_name, fset=_set_name, doc=u"""Name of the machine""")
 
     def _get_desc(self):
         """getter of desc"""
@@ -400,9 +415,7 @@ class Machine(FrozenClass):
 
     # Machine description
     # Type : str
-    desc = property(
-        fget=_get_desc, fset=_set_desc, doc=u"""Machine description"""
-    )
+    desc = property(fget=_get_desc, fset=_set_desc, doc=u"""Machine description""")
 
     def _get_type_machine(self):
         """getter of type_machine"""
@@ -433,5 +446,7 @@ class Machine(FrozenClass):
     # Name of the logger to use
     # Type : str
     logger_name = property(
-        fget=_get_logger_name, fset=_set_logger_name, doc=u"""Name of the logger to use"""
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use""",
     )

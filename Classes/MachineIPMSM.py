@@ -63,7 +63,18 @@ class MachineIPMSM(MachineSync):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, rotor=-1, stator=-1, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict=None):
+    def __init__(
+        self,
+        rotor=-1,
+        stator=-1,
+        frame=-1,
+        shaft=-1,
+        name="default_machine",
+        desc="",
+        type_machine=1,
+        logger_name="Pyleecan.Machine",
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -82,7 +93,7 @@ class MachineIPMSM(MachineSync):
         if shaft == -1:
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "rotor" in list(init_dict.keys()):
                 rotor = init_dict["rotor"]
@@ -109,17 +120,26 @@ class MachineIPMSM(MachineSync):
         # stator can be None, a LamSlotWind object or a dict
         if isinstance(stator, dict):
             # Check that the type is correct (including daughter)
-            class_name = stator.get('__class__')
-            if class_name not in ['LamSlotWind', 'LamSquirrelCage']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for stator")
+            class_name = stator.get("__class__")
+            if class_name not in ["LamSlotWind", "LamSquirrelCage"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for stator"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.stator = class_obj(init_dict=stator)
         else:
             self.stator = stator
         # Call MachineSync init
-        super(MachineIPMSM, self).__init__(frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine, logger_name=logger_name)
+        super(MachineIPMSM, self).__init__(
+            frame=frame,
+            shaft=shaft,
+            name=name,
+            desc=desc,
+            type_machine=type_machine,
+            logger_name=logger_name,
+        )
         # The class is frozen (in MachineSync init), for now it's impossible to
         # add new properties
 
@@ -131,12 +151,12 @@ class MachineIPMSM(MachineSync):
         MachineIPMSM_str += super(MachineIPMSM, self).__str__()
         if self.rotor is not None:
             tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MachineIPMSM_str += "rotor = "+ tmp
+            MachineIPMSM_str += "rotor = " + tmp
         else:
             MachineIPMSM_str += "rotor = None" + linesep + linesep
         if self.stator is not None:
             tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MachineIPMSM_str += "stator = "+ tmp
+            MachineIPMSM_str += "stator = " + tmp
         else:
             MachineIPMSM_str += "stator = None" + linesep + linesep
         return MachineIPMSM_str
@@ -196,6 +216,7 @@ class MachineIPMSM(MachineSync):
 
         if self._rotor is not None:
             self._rotor.parent = self
+
     # Machine's Rotor
     # Type : LamHole
     rotor = property(fget=_get_rotor, fset=_set_rotor, doc=u"""Machine's Rotor""")
@@ -211,8 +232,7 @@ class MachineIPMSM(MachineSync):
 
         if self._stator is not None:
             self._stator.parent = self
+
     # Machine's Stator
     # Type : LamSlotWind
-    stator = property(
-        fget=_get_stator, fset=_set_stator, doc=u"""Machine's Stator"""
-    )
+    stator = property(fget=_get_stator, fset=_set_stator, doc=u"""Machine's Stator""")

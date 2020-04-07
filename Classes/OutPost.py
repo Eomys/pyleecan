@@ -35,7 +35,7 @@ class OutPost(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "legend_name" in list(init_dict.keys()):
                 legend_name = init_dict["legend_name"]
@@ -118,5 +118,7 @@ class OutPost(FrozenClass):
     # Color to use in case of comparison
     # Type : str
     line_color = property(
-        fget=_get_line_color, fset=_set_line_color, doc=u"""Color to use in case of comparison"""
+        fget=_get_line_color,
+        fset=_set_line_color,
+        doc=u"""Color to use in case of comparison""",
     )

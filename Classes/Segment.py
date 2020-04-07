@@ -223,7 +223,7 @@ class Segment(Line):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "begin" in list(init_dict.keys()):
                 begin = init_dict["begin"]
@@ -311,6 +311,4 @@ class Segment(Line):
 
     # end point of the line
     # Type : complex
-    end = property(
-        fget=_get_end, fset=_set_end, doc=u"""end point of the line"""
-    )
+    end = property(fget=_get_end, fset=_set_end, doc=u"""end point of the line""")

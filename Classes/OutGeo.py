@@ -25,7 +25,17 @@ class OutGeo(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, stator=None, rotor=None, Wgap_mec=None, Wgap_mag=None, Rgap_mec=None, Lgap=None, logger_name="Pyleecan.OutGeo", init_dict=None):
+    def __init__(
+        self,
+        stator=None,
+        rotor=None,
+        Wgap_mec=None,
+        Wgap_mag=None,
+        Rgap_mec=None,
+        Lgap=None,
+        logger_name="Pyleecan.OutGeo",
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -40,7 +50,7 @@ class OutGeo(FrozenClass):
         if rotor == -1:
             rotor = OutGeoLam()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "stator" in list(init_dict.keys()):
                 stator = init_dict["stator"]
@@ -87,12 +97,12 @@ class OutGeo(FrozenClass):
             OutGeo_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.stator is not None:
             tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutGeo_str += "stator = "+ tmp
+            OutGeo_str += "stator = " + tmp
         else:
             OutGeo_str += "stator = None" + linesep + linesep
         if self.rotor is not None:
             tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutGeo_str += "rotor = "+ tmp
+            OutGeo_str += "rotor = " + tmp
         else:
             OutGeo_str += "rotor = None" + linesep + linesep
         OutGeo_str += "Wgap_mec = " + str(self.Wgap_mec) + linesep
@@ -169,6 +179,7 @@ class OutGeo(FrozenClass):
 
         if self._stator is not None:
             self._stator.parent = self
+
     # Geometry output of the stator
     # Type : OutGeoLam
     stator = property(
@@ -186,6 +197,7 @@ class OutGeo(FrozenClass):
 
         if self._rotor is not None:
             self._rotor.parent = self
+
     # Geometry output of the rotor
     # Type : OutGeoLam
     rotor = property(
@@ -254,9 +266,7 @@ class OutGeo(FrozenClass):
 
     # Airgap active length
     # Type : float
-    Lgap = property(
-        fget=_get_Lgap, fset=_set_Lgap, doc=u"""Airgap active length"""
-    )
+    Lgap = property(fget=_get_Lgap, fset=_set_Lgap, doc=u"""Airgap active length""")
 
     def _get_logger_name(self):
         """getter of logger_name"""
@@ -270,5 +280,7 @@ class OutGeo(FrozenClass):
     # Name of the logger to use
     # Type : str
     logger_name = property(
-        fget=_get_logger_name, fset=_set_logger_name, doc=u"""Name of the logger to use"""
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use""",
     )

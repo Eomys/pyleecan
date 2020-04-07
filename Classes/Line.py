@@ -35,7 +35,7 @@ class Line(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
@@ -93,5 +93,7 @@ class Line(FrozenClass):
     # the label of the Line (EX: Yoke_side)
     # Type : str
     label = property(
-        fget=_get_label, fset=_set_label, doc=u"""the label of the Line (EX: Yoke_side)"""
+        fget=_get_label,
+        fset=_set_label,
+        doc=u"""the label of the Line (EX: Yoke_side)""",
     )

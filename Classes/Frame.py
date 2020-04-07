@@ -144,7 +144,7 @@ class Frame(FrozenClass):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Lfra" in list(init_dict.keys()):
                 Lfra = init_dict["Lfra"]
@@ -181,7 +181,7 @@ class Frame(FrozenClass):
         Frame_str += "Rext = " + str(self.Rext) + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Frame_str += "mat_type = "+ tmp
+            Frame_str += "mat_type = " + tmp
         else:
             Frame_str += "mat_type = None" + linesep + linesep
         return Frame_str
@@ -250,9 +250,7 @@ class Frame(FrozenClass):
 
     # frame internal radius
     # Type : float, min = 0
-    Rint = property(
-        fget=_get_Rint, fset=_set_Rint, doc=u"""frame internal radius"""
-    )
+    Rint = property(fget=_get_Rint, fset=_set_Rint, doc=u"""frame internal radius""")
 
     def _get_Rext(self):
         """getter of Rext"""
@@ -265,9 +263,7 @@ class Frame(FrozenClass):
 
     # Frame external radius
     # Type : float, min = 0
-    Rext = property(
-        fget=_get_Rext, fset=_set_Rext, doc=u"""Frame external radius"""
-    )
+    Rext = property(fget=_get_Rext, fset=_set_Rext, doc=u"""Frame external radius""")
 
     def _get_mat_type(self):
         """getter of mat_type"""
@@ -280,6 +276,7 @@ class Frame(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     # Frame material
     # Type : Material
     mat_type = property(

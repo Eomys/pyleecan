@@ -11,7 +11,9 @@ class Ui_WMatSelect(object):
     def setupUi(self, WMatSelect):
         WMatSelect.setObjectName("WMatSelect")
         WMatSelect.resize(283, 30)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(WMatSelect.sizePolicy().hasHeightForWidth())
@@ -46,4 +48,6 @@ class Ui_WMatSelect(object):
         self.c_mat_type.setItemText(1, _translate("WMatSelect", "M350-50A"))
         self.c_mat_type.setItemText(2, _translate("WMatSelect", "M330-35A"))
         self.b_matlib.setText(_translate("WMatSelect", "Edit Materials"))
+
+
 from pyleecan.GUI.Resources import pyleecan_rc

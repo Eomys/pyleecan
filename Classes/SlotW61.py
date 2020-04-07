@@ -13,7 +13,9 @@ from pyleecan.Classes.SlotWind import SlotWind
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.SlotW61._comp_point_coordinate import _comp_point_coordinate
+    from pyleecan.Methods.Slot.SlotW61._comp_point_coordinate import (
+        _comp_point_coordinate,
+    )
 except ImportError as error:
     _comp_point_coordinate = error
 
@@ -137,7 +139,8 @@ class SlotW61(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW61 method comp_height_wind: " + str(comp_height_wind)
+                    "Can't use SlotW61 method comp_height_wind: "
+                    + str(comp_height_wind)
                 )
             )
         )
@@ -172,7 +175,20 @@ class SlotW61(SlotWind):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, W0=0.314, W1=0.02, W2=0.03, H0=0.003, H1=0.05, H2=0.15, H3=0, H4=0, W3=0, Zs=36, init_dict=None):
+    def __init__(
+        self,
+        W0=0.314,
+        W1=0.02,
+        W2=0.03,
+        H0=0.003,
+        H1=0.05,
+        H2=0.15,
+        H3=0,
+        H4=0,
+        W3=0,
+        Zs=36,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -183,7 +199,7 @@ class SlotW61(SlotWind):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "W0" in list(init_dict.keys()):
                 W0 = init_dict["W0"]
@@ -364,9 +380,7 @@ class SlotW61(SlotWind):
 
     # Pole intermediate height
     # Type : float, min = 0
-    H1 = property(
-        fget=_get_H1, fset=_set_H1, doc=u"""Pole intermediate height"""
-    )
+    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Pole intermediate height""")
 
     def _get_H2(self):
         """getter of H2"""
@@ -390,11 +404,9 @@ class SlotW61(SlotWind):
         check_var("H3", value, "float", Vmin=0)
         self._H3 = value
 
-    # Top Distance Ploe-coil 
+    # Top Distance Ploe-coil
     # Type : float, min = 0
-    H3 = property(
-        fget=_get_H3, fset=_set_H3, doc=u"""Top Distance Ploe-coil """
-    )
+    H3 = property(fget=_get_H3, fset=_set_H3, doc=u"""Top Distance Ploe-coil """)
 
     def _get_H4(self):
         """getter of H4"""
@@ -405,11 +417,9 @@ class SlotW61(SlotWind):
         check_var("H4", value, "float", Vmin=0)
         self._H4 = value
 
-    # Bottom Distance Ploe-coil 
+    # Bottom Distance Ploe-coil
     # Type : float, min = 0
-    H4 = property(
-        fget=_get_H4, fset=_set_H4, doc=u"""Bottom Distance Ploe-coil """
-    )
+    H4 = property(fget=_get_H4, fset=_set_H4, doc=u"""Bottom Distance Ploe-coil """)
 
     def _get_W3(self):
         """getter of W3"""
@@ -420,8 +430,6 @@ class SlotW61(SlotWind):
         check_var("W3", value, "float", Vmin=0)
         self._W3 = value
 
-    # Edge Distance Ploe-coil 
+    # Edge Distance Ploe-coil
     # Type : float, min = 0
-    W3 = property(
-        fget=_get_W3, fset=_set_W3, doc=u"""Edge Distance Ploe-coil """
-    )
+    W3 = property(fget=_get_W3, fset=_set_W3, doc=u"""Edge Distance Ploe-coil """)

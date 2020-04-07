@@ -38,7 +38,9 @@ except ImportError as error:
     comp_volumes = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotWind.get_pole_pair_number import get_pole_pair_number
+    from pyleecan.Methods.Machine.LamSlotWind.get_pole_pair_number import (
+        get_pole_pair_number,
+    )
 except ImportError as error:
     get_pole_pair_number = error
 
@@ -92,7 +94,8 @@ class LamSlotWind(LamSlot):
         build_geometry = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotWind method build_geometry: " + str(build_geometry)
+                    "Can't use LamSlotWind method build_geometry: "
+                    + str(build_geometry)
                 )
             )
         )
@@ -157,7 +160,8 @@ class LamSlotWind(LamSlot):
         get_name_phase = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotWind method get_name_phase: " + str(get_name_phase)
+                    "Can't use LamSlotWind method get_name_phase: "
+                    + str(get_name_phase)
                 )
             )
         )
@@ -224,7 +228,24 @@ class LamSlotWind(LamSlot):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Ksfill=None, winding=-1, slot=-1, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), notch=list(), init_dict=None):
+    def __init__(
+        self,
+        Ksfill=None,
+        winding=-1,
+        slot=-1,
+        L1=0.35,
+        mat_type=-1,
+        Nrvd=0,
+        Wrvd=0,
+        Kf1=0.95,
+        is_internal=True,
+        Rint=0,
+        Rext=1,
+        is_stator=True,
+        axial_vent=list(),
+        notch=list(),
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -241,7 +262,7 @@ class LamSlotWind(LamSlot):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Ksfill" in list(init_dict.keys()):
                 Ksfill = init_dict["Ksfill"]
@@ -276,17 +297,41 @@ class LamSlotWind(LamSlot):
         # winding can be None, a Winding object or a dict
         if isinstance(winding, dict):
             # Check that the type is correct (including daughter)
-            class_name = winding.get('__class__')
-            if class_name not in ['Winding', 'WindingCW1L', 'WindingCW2LR', 'WindingCW2LT', 'WindingDW1L', 'WindingDW2L', 'WindingSC', 'WindingUD']:
-                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for winding")
+            class_name = winding.get("__class__")
+            if class_name not in [
+                "Winding",
+                "WindingCW1L",
+                "WindingCW2LR",
+                "WindingCW2LT",
+                "WindingDW1L",
+                "WindingDW2L",
+                "WindingSC",
+                "WindingUD",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for winding"
+                )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.winding = class_obj(init_dict=winding)
         else:
             self.winding = winding
         # Call LamSlot init
-        super(LamSlotWind, self).__init__(slot=slot, L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
+        super(LamSlotWind, self).__init__(
+            slot=slot,
+            L1=L1,
+            mat_type=mat_type,
+            Nrvd=Nrvd,
+            Wrvd=Wrvd,
+            Kf1=Kf1,
+            is_internal=is_internal,
+            Rint=Rint,
+            Rext=Rext,
+            is_stator=is_stator,
+            axial_vent=axial_vent,
+            notch=notch,
+        )
         # The class is frozen (in LamSlot init), for now it's impossible to
         # add new properties
 
@@ -299,7 +344,7 @@ class LamSlotWind(LamSlot):
         LamSlotWind_str += "Ksfill = " + str(self.Ksfill) + linesep
         if self.winding is not None:
             tmp = self.winding.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            LamSlotWind_str += "winding = "+ tmp
+            LamSlotWind_str += "winding = " + tmp
         else:
             LamSlotWind_str += "winding = None" + linesep + linesep
         return LamSlotWind_str
@@ -372,6 +417,7 @@ class LamSlotWind(LamSlot):
 
         if self._winding is not None:
             self._winding.parent = self
+
     # Lamination's Winding
     # Type : Winding
     winding = property(

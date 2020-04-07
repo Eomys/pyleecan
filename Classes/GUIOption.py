@@ -37,7 +37,7 @@ class GUIOption(FrozenClass):
         if unit == -1:
             unit = Unit()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "unit" in list(init_dict.keys()):
                 unit = init_dict["unit"]
@@ -62,7 +62,7 @@ class GUIOption(FrozenClass):
             GUIOption_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.unit is not None:
             tmp = self.unit.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            GUIOption_str += "unit = "+ tmp
+            GUIOption_str += "unit = " + tmp
         else:
             GUIOption_str += "unit = None" + linesep + linesep
         return GUIOption_str
@@ -106,6 +106,7 @@ class GUIOption(FrozenClass):
 
         if self._unit is not None:
             self._unit.parent = self
+
     # Unit options
     # Type : Unit
     unit = property(fget=_get_unit, fset=_set_unit, doc=u"""Unit options""")

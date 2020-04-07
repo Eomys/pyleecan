@@ -18,7 +18,9 @@ except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Machine.CondType12.comp_surface_active import comp_surface_active
+    from pyleecan.Methods.Machine.CondType12.comp_surface_active import (
+        comp_surface_active,
+    )
 except ImportError as error:
     comp_surface_active = error
 
@@ -122,7 +124,17 @@ class CondType12(Conductor):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Wwire=0.015, Wins_cond=0.015, Nwppc=1, Wins_wire=0, Kwoh=0.5, cond_mat=-1, ins_mat=-1, init_dict=None):
+    def __init__(
+        self,
+        Wwire=0.015,
+        Wins_cond=0.015,
+        Nwppc=1,
+        Wins_wire=0,
+        Kwoh=0.5,
+        cond_mat=-1,
+        ins_mat=-1,
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -137,7 +149,7 @@ class CondType12(Conductor):
         if ins_mat == -1:
             ins_mat = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Wwire" in list(init_dict.keys()):
                 Wwire = init_dict["Wwire"]

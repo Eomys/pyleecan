@@ -61,7 +61,17 @@ class MachineUD(Machine):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, lam_list=list(), frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict=None):
+    def __init__(
+        self,
+        lam_list=list(),
+        frame=-1,
+        shaft=-1,
+        name="default_machine",
+        desc="",
+        type_machine=1,
+        logger_name="Pyleecan.Machine",
+        init_dict=None,
+    ):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -76,7 +86,7 @@ class MachineUD(Machine):
         if shaft == -1:
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
-            assert(type(init_dict) is dict)
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "lam_list" in list(init_dict.keys()):
                 lam_list = init_dict["lam_list"]
@@ -102,7 +112,15 @@ class MachineUD(Machine):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in ['Lamination', 'LamHole', 'LamSlot', 'LamSlotMag', 'LamSlotMulti', 'LamSlotWind', 'LamSquirrelCage']:
+                    if class_name not in [
+                        "Lamination",
+                        "LamHole",
+                        "LamSlot",
+                        "LamSlotMag",
+                        "LamSlotMulti",
+                        "LamSlotWind",
+                        "LamSquirrelCage",
+                    ]:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -121,7 +139,14 @@ class MachineUD(Machine):
         else:
             self.lam_list = lam_list
         # Call Machine init
-        super(MachineUD, self).__init__(frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine, logger_name=logger_name)
+        super(MachineUD, self).__init__(
+            frame=frame,
+            shaft=shaft,
+            name=name,
+            desc=desc,
+            type_machine=type_machine,
+            logger_name=logger_name,
+        )
         # The class is frozen (in Machine init), for now it's impossible to
         # add new properties
 
@@ -135,7 +160,7 @@ class MachineUD(Machine):
             MachineUD_str += "lam_list = []" + linesep
         for ii in range(len(self.lam_list)):
             tmp = self.lam_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            MachineUD_str += "lam_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            MachineUD_str += "lam_list[" + str(ii) + "] =" + tmp + linesep + linesep
         return MachineUD_str
 
     def __eq__(self, other):
