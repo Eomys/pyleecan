@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
@@ -41,14 +43,19 @@ except ImportError as error:
     discretize = error
 
 try:
-    from pyleecan.Methods.Geometry.PolarArc.get_patch import get_patch
+    from pyleecan.Methods.Geometry.PolarArc.get_patches import get_patches
 except ImportError as error:
-    get_patch = error
+    get_patches = error
 
 try:
     from pyleecan.Methods.Geometry.PolarArc.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
+
+try:
+    from pyleecan.Methods.Geometry.PolarArc.comp_point_ref import comp_point_ref
+except ImportError as error:
+    comp_point_ref = error
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
@@ -116,15 +123,17 @@ class PolarArc(Surface):
         )
     else:
         discretize = discretize
-    # cf Methods.Geometry.PolarArc.get_patch
-    if isinstance(get_patch, ImportError):
-        get_patch = property(
+    # cf Methods.Geometry.PolarArc.get_patches
+    if isinstance(get_patches, ImportError):
+        get_patches = property(
             fget=lambda x: raise_(
-                ImportError("Can't use PolarArc method get_patch: " + str(get_patch))
+                ImportError(
+                    "Can't use PolarArc method get_patches: " + str(get_patches)
+                )
             )
         )
     else:
-        get_patch = get_patch
+        get_patches = get_patches
     # cf Methods.Geometry.PolarArc.comp_surface
     if isinstance(comp_surface, ImportError):
         comp_surface = property(
@@ -136,8 +145,22 @@ class PolarArc(Surface):
         )
     else:
         comp_surface = comp_surface
+    # cf Methods.Geometry.PolarArc.comp_point_ref
+    if isinstance(comp_point_ref, ImportError):
+        comp_point_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use PolarArc method comp_point_ref: " + str(comp_point_ref)
+                )
+            )
+        )
+    else:
+        comp_point_ref = comp_point_ref
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, angle=1, height=1, point_ref=0, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :
@@ -150,7 +173,7 @@ class PolarArc(Surface):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["angle", "height", "point_ref", "label"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "angle" in list(init_dict.keys()):
                 angle = init_dict["angle"]

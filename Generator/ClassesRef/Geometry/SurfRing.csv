@@ -1,0 +1,11 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+out_surf,-,Outter surface,0,Surface,,,,,Geometry,Surface,get_lines,VERSION,1,SurfRing is a surface between two closed surfaces (lamination surfaces for instance)
+in_surf,-,Inner surface,0,Surface,,,,,,,rotate,,,
+,,,,,,,,,,,translate,,,
+,,,,,,,,,,,check,,,
+,,,,,,,,,,,comp_length,,,
+,,,,,,,,,,,get_patches,,,
+,,,,,,,,,,,discretize,,,
+,,,,,,,,,,,comp_surface,,,
+,,,,,,,,,,,plot_lines,,,
+,,,,,,,,,,,comp_point_ref,,,

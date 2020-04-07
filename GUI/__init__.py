@@ -11,10 +11,6 @@ from matplotlib import use
 from pyleecan.Classes.GUIOption import GUIOption
 from os.path import abspath, dirname, join, normpath
 
-GUI_DIR = normpath(abspath(dirname(__file__)))
-MAIN_DIR = normpath(abspath(join(dirname(__file__), "..")))
-DATA_DIR = normpath(join(MAIN_DIR, "Data"))  # Absolute path to default data dir
-
 # Set Matplotlib backend
 use("Qt5Agg")  # Use PyQt5 backend
 

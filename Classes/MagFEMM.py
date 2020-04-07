@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Magnetics import Magnetics
 
@@ -104,6 +106,9 @@ class MagFEMM(Magnetics):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self,
         Kmesh_fineness=1,
@@ -141,34 +146,7 @@ class MagFEMM(Magnetics):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "Kmesh_fineness",
-                    "Kgeo_fineness",
-                    "type_calc_leakage",
-                    "file_name",
-                    "FEMM_dict",
-                    "angle_stator",
-                    "is_get_mesh",
-                    "is_save_FEA",
-                    "is_sliding_band",
-                    "transform_list",
-                    "is_remove_slotS",
-                    "is_remove_slotR",
-                    "is_remove_vent",
-                    "is_mmfs",
-                    "is_mmfr",
-                    "is_stator_linear_BH",
-                    "is_rotor_linear_BH",
-                    "is_symmetry_t",
-                    "sym_t",
-                    "is_antiper_t",
-                    "is_symmetry_a",
-                    "sym_a",
-                    "is_antiper_a",
-                ],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Kmesh_fineness" in list(init_dict.keys()):
                 Kmesh_fineness = init_dict["Kmesh_fineness"]

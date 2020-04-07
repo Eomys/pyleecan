@@ -2,4 +2,4 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 point_ref,-,Center of symmetry,0,complex,0,,,,Geometry,,comp_mesh_dict,VERSION,1,"SurfLine define by list of lines that delimit it, label and point reference."
 label,-,Label of the surface,0,str,,,,,,,draw_FEMM,,,
 ,,,,,,,,,,,plot,,,
-,,,,,,,,,,,,,,
+,,,,,,,,,,,split_line,,,

@@ -55,9 +55,10 @@ def plot_anim_rotor(self, Nframe, Tanim, Nrot=1, is_loop=True):
         """
         for ii in range(len(Rsurf)):
             Rsurf[ii].rotate(Dalpha)
-            patch = Rsurf[ii].get_patch()
-            if type(patch) is Polygon:
-                axes.patches[-len(Rsurf) + ii].xy = patch.xy
+            patches = Rsurf[ii].get_patches()
+            for patch in patches:
+                if type(patch) is Polygon:
+                    axes.patches[-len(Rsurf) + ii].xy = patch.xy
             # elif type(patch) is Circle:
             #     pass
 

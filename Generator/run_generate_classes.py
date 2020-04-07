@@ -11,7 +11,7 @@ sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", ".."))))
 
 from pyleecan.Generator.ClassGenerator.class_generator import generate_class
 from pyleecan.Generator.read_fct import read_all
-from pyleecan.Generator import MAIN_DIR, DOC_DIR, INT_DIR
+from pyleecan.definitions import MAIN_DIR, DOC_DIR, INT_DIR
 
 # List of the main packages (to sort the classes)
 PACKAGE_LIST = ["Geometry", "Machine", "Material", "Slot", "Import"]

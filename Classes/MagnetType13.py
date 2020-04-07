@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.MagnetFlat import MagnetFlat
 
@@ -75,6 +77,9 @@ class MagnetType13(MagnetFlat):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self,
         Wmag=0.002,
@@ -97,10 +102,7 @@ class MagnetType13(MagnetFlat):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["Wmag", "Hmag", "Rtop", "mat_type", "type_magnetization", "Lmag"],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Wmag" in list(init_dict.keys()):
                 Wmag = init_dict["Wmag"]

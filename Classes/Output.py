@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -159,6 +161,9 @@ class Output(FrozenClass):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self,
         simu=-1,
@@ -168,6 +173,7 @@ class Output(FrozenClass):
         mag=-1,
         struct=-1,
         post=-1,
+        logger_name="Pyleecan.Output",
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -192,9 +198,7 @@ class Output(FrozenClass):
         if post == -1:
             post = OutPost()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["simu", "path_res", "geo", "elec", "mag", "struct", "post"]
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "simu" in list(init_dict.keys()):
                 simu = init_dict["simu"]
@@ -210,6 +214,8 @@ class Output(FrozenClass):
                 struct = init_dict["struct"]
             if "post" in list(init_dict.keys()):
                 post = init_dict["post"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Initialisation by argument
         self.parent = None
         # simu can be None, a Simulation object or a dict
@@ -252,6 +258,7 @@ class Output(FrozenClass):
             self.post = OutPost(init_dict=post)
         else:
             self.post = post
+        self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -295,6 +302,7 @@ class Output(FrozenClass):
             Output_str += "post = " + tmp
         else:
             Output_str += "post = None" + linesep + linesep
+        Output_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return Output_str
 
     def __eq__(self, other):
@@ -315,6 +323,8 @@ class Output(FrozenClass):
         if other.struct != self.struct:
             return False
         if other.post != self.post:
+            return False
+        if other.logger_name != self.logger_name:
             return False
         return True
 
@@ -348,6 +358,7 @@ class Output(FrozenClass):
             Output_dict["post"] = None
         else:
             Output_dict["post"] = self.post.as_dict()
+        Output_dict["logger_name"] = self.logger_name
         # The class name is added to the dict fordeserialisation purpose
         Output_dict["__class__"] = "Output"
         return Output_dict
@@ -368,6 +379,7 @@ class Output(FrozenClass):
             self.struct._set_None()
         if self.post is not None:
             self.post._set_None()
+        self.logger_name = None
 
     def _get_simu(self):
         """getter of simu"""
@@ -487,3 +499,20 @@ class Output(FrozenClass):
     # Post-Processing settings
     # Type : OutPost
     post = property(fget=_get_post, fset=_set_post, doc=u"""Post-Processing settings""")
+
+    def _get_logger_name(self):
+        """getter of logger_name"""
+        return self._logger_name
+
+    def _set_logger_name(self, value):
+        """setter of logger_name"""
+        check_var("logger_name", value, "str")
+        self._logger_name = value
+
+    # Name of the logger to use
+    # Type : str
+    logger_name = property(
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use""",
+    )

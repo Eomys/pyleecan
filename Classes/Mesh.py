@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import set_array, check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import set_array, check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -162,6 +164,9 @@ class Mesh(FrozenClass):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self, element=dict(), node=-1, submesh=list(), group=None, init_dict=None
     ):
@@ -177,7 +182,7 @@ class Mesh(FrozenClass):
         if node == -1:
             node = Node()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["element", "node", "submesh", "group"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "element" in list(init_dict.keys()):
                 element = init_dict["element"]

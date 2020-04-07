@@ -294,9 +294,10 @@
             "comp_surface",
             "discretize",
             "get_lines",
-            "get_patch",
+            "get_patches",
             "rotate",
-            "translate"
+            "translate",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "Circle",
@@ -1847,7 +1848,30 @@
             }
         ]
     },
-    "InCurrent": {
+    "Input": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "Input",
+            "InputCurrent",
+            "InputCurrentDQ",
+            "InputFlux",
+            "InputForce"
+        ],
+        "desc": "Abstract class to set the starting data of the simulation",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "Input",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/Input.csv",
+        "properties": []
+    },
+    "InputCurrent": {
         "constants": [
             {
                 "name": "VERSION",
@@ -1858,12 +1882,13 @@
         "desc": "Input to skip the electrical module and start with the magnetic one",
         "is_internal": false,
         "methods": [
-            "gen_input"
+            "gen_input",
+            "set_Nr"
         ],
         "mother": "Input",
-        "name": "InCurrent",
+        "name": "InputCurrent",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InCurrent.csv",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/InputCurrent.csv",
         "properties": [
             {
                 "desc": "Electrical time vector (no symmetry) to import",
@@ -1872,7 +1897,7 @@
                 "name": "time",
                 "type": "Import",
                 "unit": "s",
-                "value": null
+                "value": "ImportMatrixVal()"
             },
             {
                 "desc": "Electrical position vector (no symmetry) to import",
@@ -1881,7 +1906,7 @@
                 "name": "angle",
                 "type": "Import",
                 "unit": "rad",
-                "value": null
+                "value": "ImportMatrixVal()"
             },
             {
                 "desc": "Stator currents as a function of time (each column correspond to one phase) to import",
@@ -1890,7 +1915,7 @@
                 "name": "Is",
                 "type": "Import",
                 "unit": "A",
-                "value": null
+                "value": "ImportMatrixVal()"
             },
             {
                 "desc": "Rotor currents as a function of time (each column correspond to one phase) to import",
@@ -1899,7 +1924,7 @@
                 "name": "Ir",
                 "type": "Import",
                 "unit": "A",
-                "value": null
+                "value": "ImportMatrixVal()"
             },
             {
                 "desc": "Rotor angular position as a function of time (if None computed according to Nr) to import",
@@ -1917,7 +1942,7 @@
                 "name": "Nr",
                 "type": "Import",
                 "unit": "rpm",
-                "value": null
+                "value": "ImportMatrixVal()"
             },
             {
                 "desc": "Rotation direction of the rotor 1 trigo, -1 clockwise",
@@ -1939,7 +1964,7 @@
             }
         ]
     },
-    "InCurrentDQ": {
+    "InputCurrentDQ": {
         "constants": [
             {
                 "name": "VERSION",
@@ -1953,9 +1978,9 @@
             "gen_input"
         ],
         "mother": "Input",
-        "name": "InCurrentDQ",
+        "name": "InputCurrentDQ",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InCurrentDQ.csv",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/InputCurrentDQ.csv",
         "properties": [
             {
                 "desc": "Electrical time vector (no symmetry) to import",
@@ -2031,7 +2056,7 @@
             }
         ]
     },
-    "InFlux": {
+    "InputFlux": {
         "constants": [
             {
                 "name": "VERSION",
@@ -2045,9 +2070,9 @@
             "gen_input"
         ],
         "mother": "Input",
-        "name": "InFlux",
+        "name": "InputFlux",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InFlux.csv",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv",
         "properties": [
             {
                 "desc": "Electrical time vector (no symmetry) to import",
@@ -2087,7 +2112,7 @@
             }
         ]
     },
-    "InForce": {
+    "InputForce": {
         "constants": [
             {
                 "name": "VERSION",
@@ -2101,9 +2126,9 @@
             "gen_input"
         ],
         "mother": "Input",
-        "name": "InForce",
+        "name": "InputForce",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InForce.csv",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/InputForce.csv",
         "properties": [
             {
                 "desc": "Electrical time vector (no symmetry) to import",
@@ -2142,29 +2167,6 @@
                 "value": null
             }
         ]
-    },
-    "Input": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "Input",
-            "InCurrent",
-            "InCurrentDQ",
-            "InFlux",
-            "InForce"
-        ],
-        "desc": "Abstract class to set the starting data of the simulation",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "Input",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/Input.csv",
-        "properties": []
     },
     "LamHole": {
         "constants": [
@@ -2234,7 +2236,8 @@
             "get_pole_pair_number",
             "plot",
             "comp_height_yoke",
-            "get_Zs"
+            "get_Zs",
+            "get_bore_desc"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -2688,6 +2691,15 @@
                 "type": "int",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Machine"
             }
         ]
     },
@@ -4454,7 +4466,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "OptiGenAlgNsga2Deap"
+        ],
         "desc": "Genetic algorithm class",
         "is_internal": false,
         "methods": [],
@@ -4543,6 +4557,48 @@
                 "type": "OptiProblem",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OptiGenAlg"
+            }
+        ]
+    },
+    "OptiGenAlgNsga2Deap": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Multi-objectives optimization problem with some constraints",
+        "is_internal": false,
+        "methods": [
+            "solve",
+            "mutate",
+            "cross",
+            "create_toolbox",
+            "check_optimization_input"
+        ],
+        "mother": "OptiGenAlg",
+        "name": "OptiGenAlgNsga2Deap",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv",
+        "properties": [
+            {
+                "desc": "DEAP toolbox",
+                "max": "",
+                "min": "",
+                "name": "toolbox",
+                "type": "deap.base.Toolbox",
+                "unit": "",
+                "value": "None"
             }
         ]
     },
@@ -4734,6 +4790,15 @@
                 "type": "float",
                 "unit": "",
                 "value": 0
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OutElec"
             }
         ]
     },
@@ -4806,6 +4871,15 @@
                 "type": "float",
                 "unit": "m",
                 "value": null
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OutGeo"
             }
         ]
     },
@@ -5031,6 +5105,15 @@
                 "type": "dict",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OutMag"
             }
         ]
     },
@@ -5139,6 +5222,15 @@
                 "type": "ndarray",
                 "unit": "N.m^2",
                 "value": null
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OutStruct"
             }
         ]
     },
@@ -5229,6 +5321,15 @@
                 "type": "OutPost",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Output"
             }
         ]
     },
@@ -5367,8 +5468,9 @@
             "check",
             "comp_length",
             "discretize",
-            "get_patch",
-            "comp_surface"
+            "get_patches",
+            "comp_surface",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "PolarArc",
@@ -5586,6 +5688,15 @@
                 "type": "Input",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Simulation"
             }
         ]
     },
@@ -7635,10 +7746,11 @@
             "translate",
             "check",
             "comp_length",
-            "get_patch",
+            "get_patches",
             "discretize",
             "comp_surface",
-            "plot_lines"
+            "plot_lines",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "SurfLine",
@@ -7656,6 +7768,53 @@
             }
         ]
     },
+    "SurfRing": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "SurfRing is a surface between two closed surfaces (lamination surfaces for instance)",
+        "is_internal": false,
+        "methods": [
+            "get_lines",
+            "rotate",
+            "translate",
+            "check",
+            "comp_length",
+            "get_patches",
+            "discretize",
+            "comp_surface",
+            "plot_lines",
+            "comp_point_ref"
+        ],
+        "mother": "Surface",
+        "name": "SurfRing",
+        "package": "Geometry",
+        "path": "pyleecan/Generator/ClassesRef/Geometry/SurfRing.csv",
+        "properties": [
+            {
+                "desc": "Outter surface",
+                "max": "",
+                "min": "",
+                "name": "out_surf",
+                "type": "Surface",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Inner surface",
+                "max": "",
+                "min": "",
+                "name": "in_surf",
+                "type": "Surface",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "Surface": {
         "constants": [
             {
@@ -7664,9 +7823,11 @@
             }
         ],
         "daughters": [
+            "Surface",
             "Circle",
             "PolarArc",
             "SurfLine",
+            "SurfRing",
             "Trapeze"
         ],
         "desc": "SurfLine define by list of lines that delimit it, label and point reference.",
@@ -7674,7 +7835,8 @@
         "methods": [
             "comp_mesh_dict",
             "draw_FEMM",
-            "plot"
+            "plot",
+            "split_line"
         ],
         "mother": "",
         "name": "Surface",
@@ -7717,9 +7879,10 @@
             "comp_surface",
             "discretize",
             "get_lines",
-            "get_patch",
+            "get_patches",
             "rotate",
-            "translate"
+            "translate",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "Trapeze",

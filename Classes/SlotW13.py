@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotWind import SlotWind
 
@@ -171,6 +173,9 @@ class SlotW13(SlotWind):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self,
         W0=0.0122,
@@ -194,9 +199,7 @@ class SlotW13(SlotWind):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["W0", "H0", "H1", "W1", "H2", "W2", "W3", "H1_is_rad", "Zs"]
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "W0" in list(init_dict.keys()):
                 W0 = init_dict["W0"]
@@ -344,9 +347,7 @@ class SlotW13(SlotWind):
     # Slot wedge radial height or wedge angle .
     # Type : float, min = 0
     H1 = property(
-        fget=_get_H1,
-        fset=_set_H1,
-        doc=u"""Slot wedge radial height or wedge angle .""",
+        fget=_get_H1, fset=_set_H1, doc=u"""Slot wedge radial height or wedge angle ."""
     )
 
     def _get_W1(self):

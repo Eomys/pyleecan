@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Machine import Machine
 
@@ -56,6 +58,9 @@ class MachineUD(Machine):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self,
         lam_list=list(),
@@ -64,6 +69,7 @@ class MachineUD(Machine):
         name="default_machine",
         desc="",
         type_machine=1,
+        logger_name="Pyleecan.Machine",
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -80,10 +86,7 @@ class MachineUD(Machine):
         if shaft == -1:
             shaft = Shaft()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["lam_list", "frame", "shaft", "name", "desc", "type_machine"],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "lam_list" in list(init_dict.keys()):
                 lam_list = init_dict["lam_list"]
@@ -97,6 +100,8 @@ class MachineUD(Machine):
                 desc = init_dict["desc"]
             if "type_machine" in list(init_dict.keys()):
                 type_machine = init_dict["type_machine"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Initialisation by argument
         # lam_list can be None or a list of Lamination object
         self.lam_list = list()
@@ -135,7 +140,12 @@ class MachineUD(Machine):
             self.lam_list = lam_list
         # Call Machine init
         super(MachineUD, self).__init__(
-            frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine
+            frame=frame,
+            shaft=shaft,
+            name=name,
+            desc=desc,
+            type_machine=type_machine,
+            logger_name=logger_name,
         )
         # The class is frozen (in Machine init), for now it's impossible to
         # add new properties

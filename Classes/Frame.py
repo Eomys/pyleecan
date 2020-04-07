@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -126,6 +128,9 @@ class Frame(FrozenClass):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, Lfra=0.35, Rint=0.2, Rext=0.2, mat_type=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -139,7 +144,7 @@ class Frame(FrozenClass):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["Lfra", "Rint", "Rext", "mat_type"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Lfra" in list(init_dict.keys()):
                 Lfra = init_dict["Lfra"]

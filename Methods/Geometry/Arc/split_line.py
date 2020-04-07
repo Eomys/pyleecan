@@ -1,9 +1,10 @@
 from numpy import exp, angle, abs as np_abs
+from pyleecan.Classes.Segment import Segment
 
 DELTA = 1e-9  # To remove computing noise
 
 
-def split_line(self, Z1, Z2, is_top=True):
+def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
     """Cut the Arc according to a line defined by two complex
 
     Parameters
@@ -16,7 +17,11 @@ def split_line(self, Z1, Z2, is_top=True):
         Second point of the cutting Line
     is_top : bool
         True to keep the part above the cutting line.
-        "Above" is in the coordinate system with Z1 in 0 and Z2 on the X>0 axis 
+        "Above" is in the coordinate system with Z1 in 0 and Z2 on the X>0 axis
+    is_join : bool
+        True to join the split_list with Segment if there is more that one remaining parts
+    label_join : str
+        Label of the join line
 
     Returns
     -------
@@ -153,6 +158,8 @@ def split_line(self, Z1, Z2, is_top=True):
                 line3.radius = -1 * line3.radius
         else:  # Intersection == End
             line3 = None
+        # Line Intersection 1 => Intersection 2 for join
+        seg_join = Segment(begin=Z_int[0], end=Z_int[1], label=label_join)
 
         # If the intersetion points are begin and end
         if (
@@ -177,7 +184,10 @@ def split_line(self, Z1, Z2, is_top=True):
                 line_list.append(line1)
             if line3:
                 line_list.append(line3)
-            return line_list
+            if len(line_list) == 2 and is_join:
+                return [line1, seg_join, line3]
+            else:
+                return line_list
         if Zb.imag > DELTA and not is_top:
             return [line2]
         if Zb.imag < -DELTA and is_top:
@@ -187,7 +197,10 @@ def split_line(self, Z1, Z2, is_top=True):
                 line_list.append(line1)
             if line3:
                 line_list.append(line3)
-            return line_list
+            if len(line_list) == 2 and is_join:
+                return [line1, seg_join, line3]
+            else:
+                return line_list
         # Begin on cutting line
         if Ze.imag > DELTA and is_top:
             return [line3]

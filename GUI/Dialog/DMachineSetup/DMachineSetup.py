@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import QFileDialog, QMessageBox, QWidget
 from pyleecan.Functions.load import load, load_matlib
 from pyleecan.GUI.Dialog.DMachineSetup import mach_index, mach_list
 from pyleecan.GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
-from pyleecan.GUI import DATA_DIR
+from pyleecan.definitions import DATA_DIR
 from pyleecan.Classes.Machine import Machine
 
 # Flag for set the enable property of w_nav (List_Widget)

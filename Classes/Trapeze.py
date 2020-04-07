@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
@@ -36,9 +38,9 @@ except ImportError as error:
     get_lines = error
 
 try:
-    from pyleecan.Methods.Geometry.Trapeze.get_patch import get_patch
+    from pyleecan.Methods.Geometry.Trapeze.get_patches import get_patches
 except ImportError as error:
-    get_patch = error
+    get_patches = error
 
 try:
     from pyleecan.Methods.Geometry.Trapeze.rotate import rotate
@@ -49,6 +51,11 @@ try:
     from pyleecan.Methods.Geometry.Trapeze.translate import translate
 except ImportError as error:
     translate = error
+
+try:
+    from pyleecan.Methods.Geometry.Trapeze.comp_point_ref import comp_point_ref
+except ImportError as error:
+    comp_point_ref = error
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
@@ -107,15 +114,15 @@ class Trapeze(Surface):
         )
     else:
         get_lines = get_lines
-    # cf Methods.Geometry.Trapeze.get_patch
-    if isinstance(get_patch, ImportError):
-        get_patch = property(
+    # cf Methods.Geometry.Trapeze.get_patches
+    if isinstance(get_patches, ImportError):
+        get_patches = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Trapeze method get_patch: " + str(get_patch))
+                ImportError("Can't use Trapeze method get_patches: " + str(get_patches))
             )
         )
     else:
-        get_patch = get_patch
+        get_patches = get_patches
     # cf Methods.Geometry.Trapeze.rotate
     if isinstance(rotate, ImportError):
         rotate = property(
@@ -134,8 +141,22 @@ class Trapeze(Surface):
         )
     else:
         translate = translate
+    # cf Methods.Geometry.Trapeze.comp_point_ref
+    if isinstance(comp_point_ref, ImportError):
+        comp_point_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Trapeze method comp_point_ref: " + str(comp_point_ref)
+                )
+            )
+        )
+    else:
+        comp_point_ref = comp_point_ref
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, height=1, W2=1, W1=1, point_ref=0, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :
@@ -148,7 +169,7 @@ class Trapeze(Surface):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["height", "W2", "W1", "point_ref", "label"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "height" in list(init_dict.keys()):
                 height = init_dict["height"]

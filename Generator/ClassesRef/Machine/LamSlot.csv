@@ -7,3 +7,4 @@ slot,,lamination Slot,,Slot,,,,,Machine,Lamination,build_geometry,VERSION,1,Lami
 ,,,,,,,,,,,plot,,,
 ,,,,,,,,,,,comp_height_yoke,,,
 ,,,,,,,,,,,get_Zs,,,
+,,,,,,,,,,,get_bore_desc,,,

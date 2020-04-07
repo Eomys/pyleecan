@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -52,6 +54,9 @@ class MatMagnetics(FrozenClass):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self, mur_lin=1, Hc=0, Brm20=0, alpha_Br=0, Wlam=0, BH_curve=-1, init_dict=None
     ):
@@ -67,9 +72,7 @@ class MatMagnetics(FrozenClass):
         if BH_curve == -1:
             BH_curve = ImportMatrix()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["mur_lin", "Hc", "Brm20", "alpha_Br", "Wlam", "BH_curve"]
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "mur_lin" in list(init_dict.keys()):
                 mur_lin = init_dict["mur_lin"]

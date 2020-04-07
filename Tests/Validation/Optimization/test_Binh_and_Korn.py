@@ -10,7 +10,7 @@ In Proceedings of the third international Conference on Genetic Algorithms (Mend
 
 import pytest
 from pyleecan.Tests.Validation.Machine.SCIM_001 import SCIM_001
-from pyleecan.Classes.InCurrent import InCurrent
+from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
@@ -20,7 +20,7 @@ from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes._OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
+from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 
 import matplotlib.pyplot as plt
 import matplotlib.image as img
@@ -54,7 +54,7 @@ def test_Binh_and_Korn():
     # Definition of the simulation
     simu = Simu1(name="Test_machine", machine=SCIM_001)
 
-    simu.input = InCurrent(
+    simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
         Nr=Nr,
@@ -141,7 +141,7 @@ def test_Binh_and_Korn():
 
     # ### Solving the problem
 
-    solver = OptiGenAlgNsga2Deap(problem=my_prob, size_pop=20, nb_gen=40, p_mutate=0.5,)
+    solver = OptiGenAlgNsga2Deap(problem=my_prob, size_pop=20, nb_gen=40, p_mutate=0.5)
     res = solver.solve()
 
     # ### Plot results
@@ -212,7 +212,7 @@ def test_Binh_and_Korn():
             axs[1].imshow(img_to_find, aspect="auto")
             axs[1].axis("off")
             axs[1].set_title("Pareto front of the problem")
-        except TypeError:
+        except (TypeError, ValueError):
             print("Pillow is needed to import jpg files")
 
         return fig

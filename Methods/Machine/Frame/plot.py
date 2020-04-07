@@ -43,12 +43,9 @@ def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False):
         surf_list = self.build_geometry(sym=sym, alpha=alpha, delta=delta)
         patches = list()
         for surf in surf_list:
-            if surf.label is not None and surf.label == "Frame":
-                patches.append(
-                    surf.get_patch(color=FRAME_COLOR, is_edge_only=is_edge_only)
-                )
-            else:
-                patches.append(surf.get_patch(is_edge_only=is_edge_only))
+            patches.extend(
+                surf.get_patches(color=FRAME_COLOR, is_edge_only=is_edge_only)
+            )
 
         axes.set_xlabel("(m)")
         axes.set_ylabel("(m)")
