@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotMag import SlotMag
 
@@ -21,9 +23,7 @@ except ImportError as error:
     comp_angle_opening = error
 
 try:
-    from pyleecan.Methods.Slot.SlotMPolar.comp_angle_opening_magnet import (
-        comp_angle_opening_magnet,
-    )
+    from pyleecan.Methods.Slot.SlotMPolar.comp_angle_opening_magnet import comp_angle_opening_magnet
 except ImportError as error:
     comp_angle_opening_magnet = error
 
@@ -127,6 +127,9 @@ class SlotMPolar(SlotMag):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, W0=0.314, H0=0, magnet=list(), W3=0, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -138,7 +141,7 @@ class SlotMPolar(SlotMag):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "W0" in list(init_dict.keys()):
                 W0 = init_dict["W0"]
@@ -162,11 +165,7 @@ class SlotMPolar(SlotMag):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in [
-                        "MagnetPolar",
-                        "MagnetType11",
-                        "MagnetType14",
-                    ]:
+                    if class_name not in ['MagnetPolar', 'MagnetType11', 'MagnetType14']:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -201,7 +200,7 @@ class SlotMPolar(SlotMag):
             SlotMPolar_str += "magnet = []" + linesep
         for ii in range(len(self.magnet)):
             tmp = self.magnet[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            SlotMPolar_str += "magnet[" + str(ii) + "] =" + tmp + linesep + linesep
+            SlotMPolar_str += "magnet["+str(ii)+"] ="+ tmp + linesep + linesep
         return SlotMPolar_str
 
     def __eq__(self, other):
@@ -291,4 +290,6 @@ class SlotMPolar(SlotMag):
 
     # List of magnet
     # Type : [MagnetPolar]
-    magnet = property(fget=_get_magnet, fset=_set_magnet, doc=u"""List of magnet""")
+    magnet = property(
+        fget=_get_magnet, fset=_set_magnet, doc=u"""List of magnet"""
+    )

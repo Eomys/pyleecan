@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import set_array, check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -20,16 +22,10 @@ class OutStruct(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        time=None,
-        angle=None,
-        Nt_tot=None,
-        Na_tot=None,
-        Prad=None,
-        Ptan=None,
-        init_dict=None,
-    ):
+    # get_logger method is available in all object
+    get_logger = get_logger
+
+    def __init__(self, time=None, angle=None, Nt_tot=None, Na_tot=None, Prad=None, Ptan=None, logger_name="Pyleecan.OutStruct", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -40,7 +36,7 @@ class OutStruct(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
@@ -54,6 +50,8 @@ class OutStruct(FrozenClass):
                 Prad = init_dict["Prad"]
             if "Ptan" in list(init_dict.keys()):
                 Ptan = init_dict["Ptan"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -66,6 +64,7 @@ class OutStruct(FrozenClass):
         set_array(self, "Prad", Prad)
         # Ptan can be None, a ndarray or a list
         set_array(self, "Ptan", Ptan)
+        self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -78,36 +77,13 @@ class OutStruct(FrozenClass):
             OutStruct_str += "parent = None " + linesep
         else:
             OutStruct_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutStruct_str += (
-            "time = "
-            + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutStruct_str += (
-            "angle = "
-            + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutStruct_str += "time = " + linesep + str(self.time).replace(linesep, linesep + "\t") + linesep + linesep
+        OutStruct_str += "angle = " + linesep + str(self.angle).replace(linesep, linesep + "\t") + linesep + linesep
         OutStruct_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutStruct_str += "Na_tot = " + str(self.Na_tot) + linesep
-        OutStruct_str += (
-            "Prad = "
-            + linesep
-            + str(self.Prad).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutStruct_str += (
-            "Ptan = "
-            + linesep
-            + str(self.Ptan).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutStruct_str += "Prad = " + linesep + str(self.Prad).replace(linesep, linesep + "\t") + linesep + linesep
+        OutStruct_str += "Ptan = " + linesep + str(self.Ptan).replace(linesep, linesep + "\t") + linesep + linesep
+        OutStruct_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return OutStruct_str
 
     def __eq__(self, other):
@@ -126,6 +102,8 @@ class OutStruct(FrozenClass):
         if not array_equal(other.Prad, self.Prad):
             return False
         if not array_equal(other.Ptan, self.Ptan):
+            return False
+        if other.logger_name != self.logger_name:
             return False
         return True
 
@@ -152,6 +130,7 @@ class OutStruct(FrozenClass):
             OutStruct_dict["Ptan"] = None
         else:
             OutStruct_dict["Ptan"] = self.Ptan.tolist()
+        OutStruct_dict["logger_name"] = self.logger_name
         # The class name is added to the dict fordeserialisation purpose
         OutStruct_dict["__class__"] = "OutStruct"
         return OutStruct_dict
@@ -165,6 +144,7 @@ class OutStruct(FrozenClass):
         self.Na_tot = None
         self.Prad = None
         self.Ptan = None
+        self.logger_name = None
 
     def _get_time(self):
         """getter of time"""
@@ -203,9 +183,7 @@ class OutStruct(FrozenClass):
     # Structural position vector (no symmetry)
     # Type : ndarray
     angle = property(
-        fget=_get_angle,
-        fset=_set_angle,
-        doc=u"""Structural position vector (no symmetry)""",
+        fget=_get_angle, fset=_set_angle, doc=u"""Structural position vector (no symmetry)"""
     )
 
     def _get_Nt_tot(self):
@@ -278,4 +256,19 @@ class OutStruct(FrozenClass):
         fget=_get_Ptan,
         fset=_set_Ptan,
         doc=u"""Tangential magnetic air-gap surface force""",
+    )
+
+    def _get_logger_name(self):
+        """getter of logger_name"""
+        return self._logger_name
+
+    def _set_logger_name(self, value):
+        """setter of logger_name"""
+        check_var("logger_name", value, "str")
+        self._logger_name = value
+
+    # Name of the logger to use
+    # Type : str
+    logger_name = property(
+        fget=_get_logger_name, fset=_set_logger_name, doc=u"""Name of the logger to use"""
     )

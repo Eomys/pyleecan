@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -18,6 +20,9 @@ class Import(FrozenClass):
 
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, init_dict=None):
         """Constructor of the class. Can be use in two ways :
@@ -63,3 +68,4 @@ class Import(FrozenClass):
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
+

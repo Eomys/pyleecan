@@ -3,6 +3,7 @@
 # File generated according to SWindCond.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -28,9 +29,7 @@ class Ui_SWindCond(object):
         self.w_mat.setMinimumSize(QtCore.QSize(100, 0))
         self.w_mat.setObjectName("w_mat")
         self.horizontalLayout.addWidget(self.w_mat)
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.main_layout.addLayout(self.horizontalLayout)
         self.w_cond = QtWidgets.QWidget(SWindCond)
@@ -38,9 +37,7 @@ class Ui_SWindCond(object):
         self.main_layout.addWidget(self.w_cond)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem1 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
         self.b_previous = QtWidgets.QPushButton(SWindCond)
         self.b_previous.setObjectName("b_previous")
@@ -57,13 +54,9 @@ class Ui_SWindCond(object):
         _translate = QtCore.QCoreApplication.translate
         SWindCond.setWindowTitle(_translate("SWindCond", "Form"))
         self.in_cond_type.setText(_translate("SWindCond", "Conductor type :"))
-        self.c_cond_type.setItemText(
-            0, _translate("SWindCond", "Preformed Rectangular")
-        )
+        self.c_cond_type.setItemText(0, _translate("SWindCond", "Preformed Rectangular"))
         self.c_cond_type.setItemText(1, _translate("SWindCond", "Random Round Wire"))
         self.b_previous.setText(_translate("SWindCond", "Previous"))
         self.b_next.setText(_translate("SWindCond", "Next"))
-
-
 from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 from pyleecan.GUI.Resources import pyleecan_rc

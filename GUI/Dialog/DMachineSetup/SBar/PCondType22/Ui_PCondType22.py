@@ -3,6 +3,7 @@
 # File generated according to PCondType22.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -25,7 +26,5 @@ class Ui_PCondType22(object):
     def retranslateUi(self, PCondType22):
         _translate = QtCore.QCoreApplication.translate
         PCondType22.setWindowTitle(_translate("PCondType22", "Form"))
-
-
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.WBarOut.WBarOut import WBarOut
 from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect

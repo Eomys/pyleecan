@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Hole import Hole
 
@@ -104,6 +106,9 @@ class VentilationPolar(Hole):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, Alpha0=0, D0=1, H0=1, W1=1, Zh=36, mat_void=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -117,7 +122,7 @@ class VentilationPolar(Hole):
         if mat_void == -1:
             mat_void = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "Alpha0" in list(init_dict.keys()):
                 Alpha0 = init_dict["Alpha0"]
@@ -238,7 +243,9 @@ class VentilationPolar(Hole):
 
     # Radius of the bottom of Hole
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Radius of the bottom of Hole""")
+    H0 = property(
+        fget=_get_H0, fset=_set_H0, doc=u"""Radius of the bottom of Hole"""
+    )
 
     def _get_W1(self):
         """getter of W1"""

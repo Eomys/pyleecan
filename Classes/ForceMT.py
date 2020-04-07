@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Force import Force
 
@@ -44,8 +46,7 @@ class ForceMT(Force):
         comp_force_nodal = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ForceMT method comp_force_nodal: "
-                    + str(comp_force_nodal)
+                    "Can't use ForceMT method comp_force_nodal: " + str(comp_force_nodal)
                 )
             )
         )
@@ -53,6 +54,9 @@ class ForceMT(Force):
         comp_force_nodal = comp_force_nodal
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, is_comp_nodal_force=False, init_dict=None):
         """Constructor of the class. Can be use in two ways :
@@ -65,7 +69,7 @@ class ForceMT(Force):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "is_comp_nodal_force" in list(init_dict.keys()):
                 is_comp_nodal_force = init_dict["is_comp_nodal_force"]

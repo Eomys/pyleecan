@@ -15,7 +15,7 @@ from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes._OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
+from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 
 import matplotlib.pyplot as plt
 import matplotlib.image as img
@@ -179,7 +179,7 @@ def test_zdt3():
             axs[1].imshow(img_to_find, aspect="auto")
             axs[1].axis("off")
             axs[1].set_title("Pareto front of the problem")
-        except TypeError:
+        except (TypeError,ValueError):
             print("Pillow is needed to import jpg files")
 
         return fig

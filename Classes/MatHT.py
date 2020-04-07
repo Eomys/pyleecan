@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -19,9 +21,10 @@ class MatHT(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self, lambda_x=1, lambda_y=1, lambda_z=1, Cp=1, alpha=0.00393, init_dict=None
-    ):
+    # get_logger method is available in all object
+    get_logger = get_logger
+
+    def __init__(self, lambda_x=1, lambda_y=1, lambda_z=1, Cp=1, alpha=0.00393, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -32,7 +35,7 @@ class MatHT(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "lambda_x" in list(init_dict.keys()):
                 lambda_x = init_dict["lambda_x"]
@@ -172,7 +175,9 @@ class MatHT(FrozenClass):
 
     # specific heat capacity
     # Type : float, min = 0
-    Cp = property(fget=_get_Cp, fset=_set_Cp, doc=u"""specific heat capacity""")
+    Cp = property(
+        fget=_get_Cp, fset=_set_Cp, doc=u"""specific heat capacity"""
+    )
 
     def _get_alpha(self):
         """getter of alpha"""

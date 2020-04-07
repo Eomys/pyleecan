@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 
@@ -57,6 +59,9 @@ class ImportGenMatrixSin(ImportMatrix):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, sin_list=list(), is_transpose=False, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -68,7 +73,7 @@ class ImportGenMatrixSin(ImportMatrix):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "sin_list" in list(init_dict.keys()):
                 sin_list = init_dict["sin_list"]
@@ -104,9 +109,7 @@ class ImportGenMatrixSin(ImportMatrix):
             ImportGenMatrixSin_str += "sin_list = []" + linesep
         for ii in range(len(self.sin_list)):
             tmp = self.sin_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            ImportGenMatrixSin_str += (
-                "sin_list[" + str(ii) + "] =" + tmp + linesep + linesep
-            )
+            ImportGenMatrixSin_str += "sin_list["+str(ii)+"] ="+ tmp + linesep + linesep
         return ImportGenMatrixSin_str
 
     def __eq__(self, other):

@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Slot import Slot
 
@@ -38,6 +40,9 @@ class SlotUD(Slot):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, point_list=[], is_sym=False, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -49,7 +54,7 @@ class SlotUD(Slot):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "point_list" in list(init_dict.keys()):
                 point_list = init_dict["point_list"]
@@ -71,12 +76,7 @@ class SlotUD(Slot):
         SlotUD_str = ""
         # Get the properties inherited from Slot
         SlotUD_str += super(SlotUD, self).__str__()
-        SlotUD_str += (
-            "point_list = "
-            + linesep
-            + str(self.point_list).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        SlotUD_str += "point_list = " + linesep + str(self.point_list).replace(linesep, linesep + "\t") + linesep
         SlotUD_str += "is_sym = " + str(self.is_sym) + linesep
         return SlotUD_str
 

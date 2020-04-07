@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotWind import SlotWind
 
@@ -119,8 +121,7 @@ class SlotW22(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW22 method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotW22 method comp_height_wind: " + str(comp_height_wind)
                 )
             )
         )
@@ -152,9 +153,10 @@ class SlotW22(SlotWind):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self, W0=0.043633, H0=0.006, H2=0.04, W2=0.08725, Zs=36, init_dict=None
-    ):
+    # get_logger method is available in all object
+    get_logger = get_logger
+
+    def __init__(self, W0=0.043633, H0=0.006, H2=0.04, W2=0.08725, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -165,7 +167,7 @@ class SlotW22(SlotWind):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "W0" in list(init_dict.keys()):
                 W0 = init_dict["W0"]
@@ -269,7 +271,9 @@ class SlotW22(SlotWind):
 
     # Slot isthmus radial height.
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus radial height.""")
+    H0 = property(
+        fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus radial height."""
+    )
 
     def _get_H2(self):
         """getter of H2"""
@@ -280,7 +284,7 @@ class SlotW22(SlotWind):
         check_var("H2", value, "float", Vmin=0)
         self._H2 = value
 
-    # Slot radial height below wedge
+    # Slot radial height below wedge 
     # Type : float, min = 0
     H2 = property(
         fget=_get_H2, fset=_set_H2, doc=u"""Slot radial height below wedge """
@@ -297,4 +301,6 @@ class SlotW22(SlotWind):
 
     # Angle between slot edges
     # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""Angle between slot edges""")
+    W2 = property(
+        fget=_get_W2, fset=_set_W2, doc=u"""Angle between slot edges"""
+    )

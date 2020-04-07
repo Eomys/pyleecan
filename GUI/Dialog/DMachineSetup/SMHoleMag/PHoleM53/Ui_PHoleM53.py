@@ -3,6 +3,7 @@
 # File generated according to PHoleM53.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -17,9 +18,7 @@ class Ui_PHoleM53(object):
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.img_slot = QtWidgets.QLabel(PHoleM53)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.img_slot.sizePolicy().hasHeightForWidth())
@@ -27,33 +26,23 @@ class Ui_PHoleM53(object):
         self.img_slot.setMinimumSize(QtCore.QSize(500, 191))
         self.img_slot.setMaximumSize(QtCore.QSize(500, 191))
         self.img_slot.setText("")
-        self.img_slot.setPixmap(
-            QtGui.QPixmap(":/images/images/MachineSetup/WSlot/Slot_53.PNG")
-        )
+        self.img_slot.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/WSlot/Slot_53.PNG"))
         self.img_slot.setScaledContents(True)
         self.img_slot.setObjectName("img_slot")
         self.verticalLayout_3.addWidget(self.img_slot)
         self.txt_constraint = QtWidgets.QTextEdit(PHoleM53)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.txt_constraint.sizePolicy().hasHeightForWidth()
-        )
+        sizePolicy.setHeightForWidth(self.txt_constraint.sizePolicy().hasHeightForWidth())
         self.txt_constraint.setSizePolicy(sizePolicy)
         self.txt_constraint.setMinimumSize(QtCore.QSize(200, 0))
         self.txt_constraint.setMaximumSize(QtCore.QSize(16777215, 100))
         self.txt_constraint.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.txt_constraint.setTextInteractionFlags(
-            QtCore.Qt.TextSelectableByKeyboard | QtCore.Qt.TextSelectableByMouse
-        )
+        self.txt_constraint.setTextInteractionFlags(QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
         self.txt_constraint.setObjectName("txt_constraint")
         self.verticalLayout_3.addWidget(self.txt_constraint)
-        spacerItem = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem)
         self.horizontalLayout.addLayout(self.verticalLayout_3)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
@@ -156,9 +145,7 @@ class Ui_PHoleM53(object):
         self.out_W5 = QtWidgets.QLabel(self.g_output)
         self.out_W5.setObjectName("out_W5")
         self.verticalLayout.addWidget(self.out_W5)
-        spacerItem1 = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem1)
         self.verticalLayout_2.addWidget(self.g_output)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
@@ -177,17 +164,12 @@ class Ui_PHoleM53(object):
     def retranslateUi(self, PHoleM53):
         _translate = QtCore.QCoreApplication.translate
         PHoleM53.setWindowTitle(_translate("PHoleM53", "Form"))
-        self.txt_constraint.setHtml(
-            _translate(
-                "PHoleM53",
-                '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">\n'
-                '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
-                "p, li { white-space: pre-wrap; }\n"
-                "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:12pt; font-weight:600; text-decoration: underline;">Constraints :</span></p>\n'
-                '<p align="center" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-family:\'MS Shell Dlg 2\'; font-size:14pt;">H2 &lt; H3</span></p></body></html>',
-            )
-        )
+        self.txt_constraint.setHtml(_translate("PHoleM53", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:12pt; font-weight:600; text-decoration: underline;\">Constraints :</span></p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:\'MS Shell Dlg 2\'; font-size:14pt;\">H2 &lt; H3</span></p></body></html>"))
         self.in_H0.setText(_translate("PHoleM53", "H0 :"))
         self.unit_H0.setText(_translate("PHoleM53", "m"))
         self.in_H1.setText(_translate("PHoleM53", "H1 :"))
@@ -205,15 +187,9 @@ class Ui_PHoleM53(object):
         self.in_W4.setText(_translate("PHoleM53", "W4 :"))
         self.unit_W4.setText(_translate("PHoleM53", "rad"))
         self.g_output.setTitle(_translate("PHoleM53", "Output"))
-        self.out_slot_surface.setText(
-            _translate("PHoleM53", "Slot suface (2 part) : ?")
-        )
-        self.out_magnet_surface.setText(
-            _translate("PHoleM53", "Single Magnet surface : ?")
-        )
+        self.out_slot_surface.setText(_translate("PHoleM53", "Slot suface (2 part) : ?"))
+        self.out_magnet_surface.setText(_translate("PHoleM53", "Single Magnet surface : ?"))
         self.out_W5.setText(_translate("PHoleM53", "W5 : ?"))
-
-
 from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

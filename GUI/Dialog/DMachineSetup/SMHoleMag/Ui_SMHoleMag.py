@@ -3,6 +3,7 @@
 # File generated according to SMHoleMag.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -10,9 +11,7 @@ class Ui_SMHoleMag(object):
     def setupUi(self, SMHoleMag):
         SMHoleMag.setObjectName("SMHoleMag")
         SMHoleMag.resize(780, 640)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(SMHoleMag.sizePolicy().hasHeightForWidth())
@@ -30,9 +29,7 @@ class Ui_SMHoleMag(object):
         self.out_hole_pitch = QtWidgets.QLabel(SMHoleMag)
         self.out_hole_pitch.setObjectName("out_hole_pitch")
         self.horizontalLayout_2.addWidget(self.out_hole_pitch)
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
@@ -43,14 +40,10 @@ class Ui_SMHoleMag(object):
         self.b_remove = QtWidgets.QPushButton(SMHoleMag)
         self.b_remove.setObjectName("b_remove")
         self.horizontalLayout_3.addWidget(self.b_remove)
-        spacerItem1 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem1)
         self.verticalLayout.addLayout(self.horizontalLayout_3)
-        spacerItem2 = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred
-        )
+        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
         self.verticalLayout.addItem(spacerItem2)
         self.tab_hole = QtWidgets.QTabWidget(SMHoleMag)
         self.tab_hole.setMinimumSize(QtCore.QSize(770, 500))
@@ -58,9 +51,7 @@ class Ui_SMHoleMag(object):
         self.verticalLayout.addWidget(self.tab_hole)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem3 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem3)
         self.b_plot = QtWidgets.QPushButton(SMHoleMag)
         self.b_plot.setObjectName("b_plot")
@@ -81,15 +72,11 @@ class Ui_SMHoleMag(object):
     def retranslateUi(self, SMHoleMag):
         _translate = QtCore.QCoreApplication.translate
         SMHoleMag.setWindowTitle(_translate("SMHoleMag", "Form"))
-        self.out_hole_pitch.setText(
-            _translate("SMHoleMag", "Slot pitch = 2*Pi / Zs = ")
-        )
+        self.out_hole_pitch.setText(_translate("SMHoleMag", "Slot pitch = 2*Pi / Zs = "))
         self.b_add.setText(_translate("SMHoleMag", "Add new slots"))
         self.b_remove.setText(_translate("SMHoleMag", "Remove last slot"))
         self.b_plot.setText(_translate("SMHoleMag", "Preview"))
         self.b_previous.setText(_translate("SMHoleMag", "Previous"))
         self.b_next.setText(_translate("SMHoleMag", "Save"))
-
-
 from pyleecan.GUI.Tools.HelpButton import HelpButton
 from pyleecan.GUI.Resources import pyleecan_rc

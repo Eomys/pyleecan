@@ -3,6 +3,7 @@
 # File generated according to SBar.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -19,9 +20,7 @@ class Ui_SBar(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.c_bar_type = QtWidgets.QComboBox(self.g_bar)
         self.c_bar_type.setMinimumSize(QtCore.QSize(100, 0))
@@ -29,9 +28,7 @@ class Ui_SBar(object):
         self.c_bar_type.addItem("")
         self.c_bar_type.addItem("")
         self.horizontalLayout.addWidget(self.c_bar_type)
-        spacerItem1 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.w_bar = QtWidgets.QWidget(self.g_bar)
@@ -45,9 +42,7 @@ class Ui_SBar(object):
         self.img_ring = QtWidgets.QLabel(self.g_ring)
         self.img_ring.setMaximumSize(QtCore.QSize(300, 300))
         self.img_ring.setText("")
-        self.img_ring.setPixmap(
-            QtGui.QPixmap(":/images/images/MachineSetup/Bar/Ring.PNG")
-        )
+        self.img_ring.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/Bar/Ring.PNG"))
         self.img_ring.setScaledContents(True)
         self.img_ring.setObjectName("img_ring")
         self.horizontalLayout_2.addWidget(self.img_ring)
@@ -98,17 +93,13 @@ class Ui_SBar(object):
         self.w_mat = WMatSelect(self.g_ring)
         self.w_mat.setObjectName("w_mat")
         self.verticalLayout_3.addWidget(self.w_mat)
-        spacerItem2 = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem2)
         self.horizontalLayout_2.addLayout(self.verticalLayout_3)
         self.verticalLayout_2.addWidget(self.g_ring)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        spacerItem3 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem3)
         self.b_plot = QtWidgets.QPushButton(SBar)
         self.b_plot.setObjectName("b_plot")
@@ -146,8 +137,6 @@ class Ui_SBar(object):
         self.b_plot.setText(_translate("SBar", "Preview"))
         self.b_previous.setText(_translate("SBar", "Previous"))
         self.b_next.setText(_translate("SBar", "Save"))
-
-
 from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -36,16 +38,12 @@ except ImportError as error:
     plot_B_space = error
 
 try:
-    from pyleecan.Methods.Output.Output.plot.Structural.plot_force_space import (
-        plot_force_space,
-    )
+    from pyleecan.Methods.Output.Output.plot.Structural.plot_force_space import plot_force_space
 except ImportError as error:
     plot_force_space = error
 
 try:
-    from pyleecan.Methods.Output.Output.plot.Magnetic.plot_mesh_field import (
-        plot_mesh_field,
-    )
+    from pyleecan.Methods.Output.Output.plot.Magnetic.plot_mesh_field import plot_mesh_field
 except ImportError as error:
     plot_mesh_field = error
 
@@ -159,17 +157,10 @@ class Output(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        simu=-1,
-        path_res="",
-        geo=-1,
-        elec=-1,
-        mag=-1,
-        struct=-1,
-        post=-1,
-        init_dict=None,
-    ):
+    # get_logger method is available in all object
+    get_logger = get_logger
+
+    def __init__(self, simu=-1, path_res="", geo=-1, elec=-1, mag=-1, struct=-1, post=-1, logger_name="Pyleecan.Output", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -192,7 +183,7 @@ class Output(FrozenClass):
         if post == -1:
             post = OutPost()
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "simu" in list(init_dict.keys()):
                 simu = init_dict["simu"]
@@ -208,19 +199,19 @@ class Output(FrozenClass):
                 struct = init_dict["struct"]
             if "post" in list(init_dict.keys()):
                 post = init_dict["post"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Initialisation by argument
         self.parent = None
         # simu can be None, a Simulation object or a dict
         if isinstance(simu, dict):
             # Check that the type is correct (including daughter)
-            class_name = simu.get("__class__")
-            if class_name not in ["Simulation", "Simu1"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for simu"
-                )
+            class_name = simu.get('__class__')
+            if class_name not in ['Simulation', 'Simu1']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for simu")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.simu = class_obj(init_dict=simu)
         else:
             self.simu = simu
@@ -250,6 +241,7 @@ class Output(FrozenClass):
             self.post = OutPost(init_dict=post)
         else:
             self.post = post
+        self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -264,35 +256,36 @@ class Output(FrozenClass):
             Output_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.simu is not None:
             tmp = self.simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "simu = " + tmp
+            Output_str += "simu = "+ tmp
         else:
             Output_str += "simu = None" + linesep + linesep
         Output_str += 'path_res = "' + str(self.path_res) + '"' + linesep
         if self.geo is not None:
             tmp = self.geo.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "geo = " + tmp
+            Output_str += "geo = "+ tmp
         else:
             Output_str += "geo = None" + linesep + linesep
         if self.elec is not None:
             tmp = self.elec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "elec = " + tmp
+            Output_str += "elec = "+ tmp
         else:
             Output_str += "elec = None" + linesep + linesep
         if self.mag is not None:
             tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "mag = " + tmp
+            Output_str += "mag = "+ tmp
         else:
             Output_str += "mag = None" + linesep + linesep
         if self.struct is not None:
             tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "struct = " + tmp
+            Output_str += "struct = "+ tmp
         else:
             Output_str += "struct = None" + linesep + linesep
         if self.post is not None:
             tmp = self.post.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "post = " + tmp
+            Output_str += "post = "+ tmp
         else:
             Output_str += "post = None" + linesep + linesep
+        Output_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return Output_str
 
     def __eq__(self, other):
@@ -313,6 +306,8 @@ class Output(FrozenClass):
         if other.struct != self.struct:
             return False
         if other.post != self.post:
+            return False
+        if other.logger_name != self.logger_name:
             return False
         return True
 
@@ -346,6 +341,7 @@ class Output(FrozenClass):
             Output_dict["post"] = None
         else:
             Output_dict["post"] = self.post.as_dict()
+        Output_dict["logger_name"] = self.logger_name
         # The class name is added to the dict fordeserialisation purpose
         Output_dict["__class__"] = "Output"
         return Output_dict
@@ -366,6 +362,7 @@ class Output(FrozenClass):
             self.struct._set_None()
         if self.post is not None:
             self.post._set_None()
+        self.logger_name = None
 
     def _get_simu(self):
         """getter of simu"""
@@ -378,7 +375,6 @@ class Output(FrozenClass):
 
         if self._simu is not None:
             self._simu.parent = self
-
     # Simulation object that generated the Output
     # Type : Simulation
     simu = property(
@@ -399,9 +395,7 @@ class Output(FrozenClass):
     # Path to the folder to same the results
     # Type : str
     path_res = property(
-        fget=_get_path_res,
-        fset=_set_path_res,
-        doc=u"""Path to the folder to same the results""",
+        fget=_get_path_res, fset=_set_path_res, doc=u"""Path to the folder to same the results"""
     )
 
     def _get_geo(self):
@@ -415,7 +409,6 @@ class Output(FrozenClass):
 
         if self._geo is not None:
             self._geo.parent = self
-
     # Geometry output
     # Type : OutGeo
     geo = property(fget=_get_geo, fset=_set_geo, doc=u"""Geometry output""")
@@ -431,10 +424,11 @@ class Output(FrozenClass):
 
         if self._elec is not None:
             self._elec.parent = self
-
     # Electrical module output
     # Type : OutElec
-    elec = property(fget=_get_elec, fset=_set_elec, doc=u"""Electrical module output""")
+    elec = property(
+        fget=_get_elec, fset=_set_elec, doc=u"""Electrical module output"""
+    )
 
     def _get_mag(self):
         """getter of mag"""
@@ -447,10 +441,11 @@ class Output(FrozenClass):
 
         if self._mag is not None:
             self._mag.parent = self
-
     # Magnetic module output
     # Type : OutMag
-    mag = property(fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module output""")
+    mag = property(
+        fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module output"""
+    )
 
     def _get_struct(self):
         """getter of struct"""
@@ -463,7 +458,6 @@ class Output(FrozenClass):
 
         if self._struct is not None:
             self._struct.parent = self
-
     # Structural module output
     # Type : OutStruct
     struct = property(
@@ -481,7 +475,23 @@ class Output(FrozenClass):
 
         if self._post is not None:
             self._post.parent = self
-
     # Post-Processing settings
     # Type : OutPost
-    post = property(fget=_get_post, fset=_set_post, doc=u"""Post-Processing settings""")
+    post = property(
+        fget=_get_post, fset=_set_post, doc=u"""Post-Processing settings"""
+    )
+
+    def _get_logger_name(self):
+        """getter of logger_name"""
+        return self._logger_name
+
+    def _set_logger_name(self, value):
+        """setter of logger_name"""
+        check_var("logger_name", value, "str")
+        self._logger_name = value
+
+    # Name of the logger to use
+    # Type : str
+    logger_name = property(
+        fget=_get_logger_name, fset=_set_logger_name, doc=u"""Name of the logger to use"""
+    )

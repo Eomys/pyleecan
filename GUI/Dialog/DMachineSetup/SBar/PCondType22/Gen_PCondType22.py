@@ -3,9 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType22.Ui_PCondType22 import (
-    Ui_PCondType22,
-)
+from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType22.Ui_PCondType22 import Ui_PCondType22
 
 
 class Gen_PCondType22(Ui_PCondType22):

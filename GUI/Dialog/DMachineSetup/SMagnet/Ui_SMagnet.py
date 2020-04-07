@@ -3,6 +3,7 @@
 # File generated according to SMagnet.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -33,9 +34,7 @@ class Ui_SMagnet(object):
         self.out_Nmag = QtWidgets.QLabel(SMagnet)
         self.out_Nmag.setObjectName("out_Nmag")
         self.horizontalLayout_3.addWidget(self.out_Nmag)
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem)
         self.main_layout.addLayout(self.horizontalLayout_3)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -58,9 +57,7 @@ class Ui_SMagnet(object):
         self.main_layout.addWidget(self.w_mag)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem1 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
         self.b_plot = QtWidgets.QPushButton(SMagnet)
         self.b_plot.setObjectName("b_plot")
@@ -93,8 +90,6 @@ class Ui_SMagnet(object):
         self.b_plot.setText(_translate("SMagnet", "Preview"))
         self.b_previous.setText(_translate("SMagnet", "Previous"))
         self.b_next.setText(_translate("SMagnet", "Save"))
-
-
 from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 from pyleecan.GUI.Tools.HelpButton import HelpButton
 from pyleecan.GUI.Resources import pyleecan_rc

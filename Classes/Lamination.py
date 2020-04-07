@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -36,9 +38,7 @@ except ImportError as error:
     comp_radius_mec = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.comp_surface_axial_vent import (
-        comp_surface_axial_vent,
-    )
+    from pyleecan.Methods.Machine.Lamination.comp_surface_axial_vent import comp_surface_axial_vent
 except ImportError as error:
     comp_surface_axial_vent = error
 
@@ -312,21 +312,10 @@ class Lamination(FrozenClass):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        L1=0.35,
-        mat_type=-1,
-        Nrvd=0,
-        Wrvd=0,
-        Kf1=0.95,
-        is_internal=True,
-        Rint=0,
-        Rext=1,
-        is_stator=True,
-        axial_vent=list(),
-        notch=list(),
-        init_dict=None,
-    ):
+    # get_logger method is available in all object
+    get_logger = get_logger
+
+    def __init__(self, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), notch=list(), init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -339,7 +328,7 @@ class Lamination(FrozenClass):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "L1" in list(init_dict.keys()):
                 L1 = init_dict["L1"]
@@ -387,18 +376,7 @@ class Lamination(FrozenClass):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Hole",
-                        "HoleM50",
-                        "HoleM51",
-                        "HoleM52",
-                        "HoleM53",
-                        "HoleM54",
-                        "HoleMag",
-                        "VentilationCirc",
-                        "VentilationPolar",
-                        "VentilationTrap",
-                    ]:
+                    if class_name not in ['Hole', 'HoleM50', 'HoleM51', 'HoleM52', 'HoleM53', 'HoleM54', 'HoleMag', 'VentilationCirc', 'VentilationPolar', 'VentilationTrap']:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -425,7 +403,7 @@ class Lamination(FrozenClass):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in ["Notch", "NotchEvenDist"]:
+                    if class_name not in ['Notch', 'NotchEvenDist']:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -458,7 +436,7 @@ class Lamination(FrozenClass):
         Lamination_str += "L1 = " + str(self.L1) + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Lamination_str += "mat_type = " + tmp
+            Lamination_str += "mat_type = "+ tmp
         else:
             Lamination_str += "mat_type = None" + linesep + linesep
         Lamination_str += "Nrvd = " + str(self.Nrvd) + linesep
@@ -471,15 +449,13 @@ class Lamination(FrozenClass):
         if len(self.axial_vent) == 0:
             Lamination_str += "axial_vent = []" + linesep
         for ii in range(len(self.axial_vent)):
-            tmp = (
-                self.axial_vent[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            Lamination_str += "axial_vent[" + str(ii) + "] =" + tmp + linesep + linesep
+            tmp = self.axial_vent[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            Lamination_str += "axial_vent["+str(ii)+"] ="+ tmp + linesep + linesep
         if len(self.notch) == 0:
             Lamination_str += "notch = []" + linesep
         for ii in range(len(self.notch)):
             tmp = self.notch[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            Lamination_str += "notch[" + str(ii) + "] =" + tmp + linesep + linesep
+            Lamination_str += "notch["+str(ii)+"] ="+ tmp + linesep + linesep
         return Lamination_str
 
     def __eq__(self, other):
@@ -584,7 +560,6 @@ class Lamination(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
-
     # Lamination's material
     # Type : Material
     mat_type = property(

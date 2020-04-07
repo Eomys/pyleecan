@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -19,6 +21,9 @@ class MatEconomical(FrozenClass):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, cost_unit=0.127, unit_name="$", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -30,7 +35,7 @@ class MatEconomical(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "cost_unit" in list(init_dict.keys()):
                 cost_unit = init_dict["cost_unit"]
@@ -51,9 +56,7 @@ class MatEconomical(FrozenClass):
         if self.parent is None:
             MatEconomical_str += "parent = None " + linesep
         else:
-            MatEconomical_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            MatEconomical_str += "parent = " + str(type(self.parent)) + " object" + linesep
         MatEconomical_str += "cost_unit = " + str(self.cost_unit) + linesep
         MatEconomical_str += 'unit_name = "' + str(self.unit_name) + '"' + linesep
         return MatEconomical_str
@@ -98,9 +101,7 @@ class MatEconomical(FrozenClass):
     # Cost of one kilo of material
     # Type : float, min = 0
     cost_unit = property(
-        fget=_get_cost_unit,
-        fset=_set_cost_unit,
-        doc=u"""Cost of one kilo of material""",
+        fget=_get_cost_unit, fset=_set_cost_unit, doc=u"""Cost of one kilo of material"""
     )
 
     def _get_unit_name(self):

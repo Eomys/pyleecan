@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Magnet import Magnet
 
@@ -20,6 +22,9 @@ class MagnetFlat(Magnet):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, mat_type=-1, type_magnetization=0, Lmag=0.95, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -33,7 +38,7 @@ class MagnetFlat(Magnet):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "mat_type" in list(init_dict.keys()):
                 mat_type = init_dict["mat_type"]
@@ -43,9 +48,7 @@ class MagnetFlat(Magnet):
                 Lmag = init_dict["Lmag"]
         # Initialisation by argument
         # Call Magnet init
-        super(MagnetFlat, self).__init__(
-            mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag
-        )
+        super(MagnetFlat, self).__init__(mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag)
         # The class is frozen (in Magnet init), for now it's impossible to
         # add new properties
 

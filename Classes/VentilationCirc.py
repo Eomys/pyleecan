@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Hole import Hole
 
@@ -83,8 +85,7 @@ class VentilationCirc(Hole):
         comp_surface = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VentilationCirc method comp_surface: "
-                    + str(comp_surface)
+                    "Can't use VentilationCirc method comp_surface: " + str(comp_surface)
                 )
             )
         )
@@ -104,6 +105,9 @@ class VentilationCirc(Hole):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, Alpha0=0, D0=1, H0=1, Zh=36, mat_void=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -117,7 +121,7 @@ class VentilationCirc(Hole):
         if mat_void == -1:
             mat_void = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "Alpha0" in list(init_dict.keys()):
                 Alpha0 = init_dict["Alpha0"]
@@ -230,4 +234,6 @@ class VentilationCirc(Hole):
 
     # Diameter of the hole centers
     # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Diameter of the hole centers""")
+    H0 = property(
+        fget=_get_H0, fset=_set_H0, doc=u"""Diameter of the hole centers"""
+    )

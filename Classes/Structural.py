@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -55,6 +57,9 @@ class Structural(FrozenClass):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, force=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -68,7 +73,7 @@ class Structural(FrozenClass):
         if force == -1:
             force = Force()
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "force" in list(init_dict.keys()):
                 force = init_dict["force"]
@@ -77,14 +82,12 @@ class Structural(FrozenClass):
         # force can be None, a Force object or a dict
         if isinstance(force, dict):
             # Check that the type is correct (including daughter)
-            class_name = force.get("__class__")
-            if class_name not in ["Force", "ForceMT"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for force"
-                )
+            class_name = force.get('__class__')
+            if class_name not in ['Force', 'ForceMT']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for force")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.force = class_obj(init_dict=force)
         else:
             self.force = force
@@ -102,7 +105,7 @@ class Structural(FrozenClass):
             Structural_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.force is not None:
             tmp = self.force.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Structural_str += "force = " + tmp
+            Structural_str += "force = "+ tmp
         else:
             Structural_str += "force = None" + linesep + linesep
         return Structural_str
@@ -146,7 +149,6 @@ class Structural(FrozenClass):
 
         if self._force is not None:
             self._force.parent = self
-
     # Force module
     # Type : Force
     force = property(fget=_get_force, fset=_set_force, doc=u"""Force module""")

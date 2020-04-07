@@ -24,24 +24,18 @@ class Gen_SWindPat(Ui_SWindPat):
         self.si_qs.setToolTip(txt)
 
         # Setup of is_reverse
-        txt = self.tr(
-            u"""1 to reverse the default winding algorithm along the airgap (c, b, a instead of a, b, c along the trigonometric direction)"""
-        )
+        txt = self.tr(u"""1 to reverse the default winding algorithm along the airgap (c, b, a instead of a, b, c along the trigonometric direction)""")
         self.is_reverse.setWhatsThis(txt)
         self.is_reverse.setToolTip(txt)
 
         # Setup of in_Nslot
-        txt = self.tr(
-            u"""0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)"""
-        )
+        txt = self.tr(u"""0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)""")
         self.in_Nslot.setWhatsThis(txt)
         self.in_Nslot.setToolTip(txt)
 
         # Setup of si_Nslot
         self.si_Nslot.setMinimum(-999999)
         self.si_Nslot.setMaximum(999999)
-        txt = self.tr(
-            u"""0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)"""
-        )
+        txt = self.tr(u"""0 not to change the stator winding connection matrix built by pyleecan number of slots to shift the coils obtained with pyleecan winding algorithm (a, b, c becomes b, c, a with Nslot_shift_wind1=1)""")
         self.si_Nslot.setWhatsThis(txt)
         self.si_Nslot.setToolTip(txt)

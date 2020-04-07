@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Magnetics import Magnetics
 
@@ -50,8 +52,7 @@ class MagFEMM(Magnetics):
         comp_flux_airgap = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MagFEMM method comp_flux_airgap: "
-                    + str(comp_flux_airgap)
+                    "Can't use MagFEMM method comp_flux_airgap: " + str(comp_flux_airgap)
                 )
             )
         )
@@ -82,8 +83,7 @@ class MagFEMM(Magnetics):
         get_meshsolution = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MagFEMM method get_meshsolution: "
-                    + str(get_meshsolution)
+                    "Can't use MagFEMM method get_meshsolution: " + str(get_meshsolution)
                 )
             )
         )
@@ -104,33 +104,10 @@ class MagFEMM(Magnetics):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        Kmesh_fineness=1,
-        Kgeo_fineness=1,
-        type_calc_leakage=0,
-        file_name="",
-        FEMM_dict={},
-        angle_stator=0,
-        is_get_mesh=False,
-        is_save_FEA=False,
-        is_sliding_band=True,
-        transform_list=[],
-        is_remove_slotS=False,
-        is_remove_slotR=False,
-        is_remove_vent=False,
-        is_mmfs=True,
-        is_mmfr=True,
-        is_stator_linear_BH=0,
-        is_rotor_linear_BH=0,
-        is_symmetry_t=False,
-        sym_t=1,
-        is_antiper_t=False,
-        is_symmetry_a=False,
-        sym_a=1,
-        is_antiper_a=False,
-        init_dict=None,
-    ):
+    # get_logger method is available in all object
+    get_logger = get_logger
+
+    def __init__(self, Kmesh_fineness=1, Kgeo_fineness=1, type_calc_leakage=0, file_name="", FEMM_dict={}, angle_stator=0, is_get_mesh=False, is_save_FEA=False, is_sliding_band=True, transform_list=[], is_remove_slotS=False, is_remove_slotR=False, is_remove_vent=False, is_mmfs=True, is_mmfr=True, is_stator_linear_BH=0, is_rotor_linear_BH=0, is_symmetry_t=False, sym_t=1, is_antiper_t=False, is_symmetry_a=False, sym_a=1, is_antiper_a=False, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -141,7 +118,7 @@ class MagFEMM(Magnetics):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "Kmesh_fineness" in list(init_dict.keys()):
                 Kmesh_fineness = init_dict["Kmesh_fineness"]
@@ -201,21 +178,7 @@ class MagFEMM(Magnetics):
         self.is_sliding_band = is_sliding_band
         self.transform_list = transform_list
         # Call Magnetics init
-        super(MagFEMM, self).__init__(
-            is_remove_slotS=is_remove_slotS,
-            is_remove_slotR=is_remove_slotR,
-            is_remove_vent=is_remove_vent,
-            is_mmfs=is_mmfs,
-            is_mmfr=is_mmfr,
-            is_stator_linear_BH=is_stator_linear_BH,
-            is_rotor_linear_BH=is_rotor_linear_BH,
-            is_symmetry_t=is_symmetry_t,
-            sym_t=sym_t,
-            is_antiper_t=is_antiper_t,
-            is_symmetry_a=is_symmetry_a,
-            sym_a=sym_a,
-            is_antiper_a=is_antiper_a,
-        )
+        super(MagFEMM, self).__init__(is_remove_slotS=is_remove_slotS, is_remove_slotR=is_remove_slotR, is_remove_vent=is_remove_vent, is_mmfs=is_mmfs, is_mmfr=is_mmfr, is_stator_linear_BH=is_stator_linear_BH, is_rotor_linear_BH=is_rotor_linear_BH, is_symmetry_t=is_symmetry_t, sym_t=sym_t, is_antiper_t=is_antiper_t, is_symmetry_a=is_symmetry_a, sym_a=sym_a, is_antiper_a=is_antiper_a)
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
 
@@ -234,12 +197,7 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "is_get_mesh = " + str(self.is_get_mesh) + linesep
         MagFEMM_str += "is_save_FEA = " + str(self.is_save_FEA) + linesep
         MagFEMM_str += "is_sliding_band = " + str(self.is_sliding_band) + linesep
-        MagFEMM_str += (
-            "transform_list = "
-            + linesep
-            + str(self.transform_list).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        MagFEMM_str += "transform_list = " + linesep + str(self.transform_list).replace(linesep, linesep + "\t") + linesep
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -353,7 +311,7 @@ class MagFEMM(Magnetics):
         check_var("type_calc_leakage", value, "int", Vmin=0, Vmax=1)
         self._type_calc_leakage = value
 
-    # 0 no leakage calculation /  1 calculation using single slot
+    # 0 no leakage calculation /  1 calculation using single slot 
     # Type : int, min = 0, max = 1
     type_calc_leakage = property(
         fget=_get_type_calc_leakage,
@@ -373,9 +331,7 @@ class MagFEMM(Magnetics):
     # Name of the file to save the FEMM model
     # Type : str
     file_name = property(
-        fget=_get_file_name,
-        fset=_set_file_name,
-        doc=u"""Name of the file to save the FEMM model""",
+        fget=_get_file_name, fset=_set_file_name, doc=u"""Name of the file to save the FEMM model"""
     )
 
     def _get_FEMM_dict(self):
@@ -387,7 +343,7 @@ class MagFEMM(Magnetics):
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 
-    # To enforce user-defined values for FEMM main parameters
+    # To enforce user-defined values for FEMM main parameters 
     # Type : dict
     FEMM_dict = property(
         fget=_get_FEMM_dict,
@@ -407,9 +363,7 @@ class MagFEMM(Magnetics):
     # Angular position shift of the stator
     # Type : float
     angle_stator = property(
-        fget=_get_angle_stator,
-        fset=_set_angle_stator,
-        doc=u"""Angular position shift of the stator""",
+        fget=_get_angle_stator, fset=_set_angle_stator, doc=u"""Angular position shift of the stator"""
     )
 
     def _get_is_get_mesh(self):
@@ -421,7 +375,7 @@ class MagFEMM(Magnetics):
         check_var("is_get_mesh", value, "bool")
         self._is_get_mesh = value
 
-    # To save FEA mesh for latter post-procesing
+    # To save FEA mesh for latter post-procesing 
     # Type : bool
     is_get_mesh = property(
         fget=_get_is_get_mesh,
@@ -458,9 +412,7 @@ class MagFEMM(Magnetics):
     # 0 to desactivate the sliding band
     # Type : bool
     is_sliding_band = property(
-        fget=_get_is_sliding_band,
-        fset=_set_is_sliding_band,
-        doc=u"""0 to desactivate the sliding band""",
+        fget=_get_is_sliding_band, fset=_set_is_sliding_band, doc=u"""0 to desactivate the sliding band"""
     )
 
     def _get_transform_list(self):

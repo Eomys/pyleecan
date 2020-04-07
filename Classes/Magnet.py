@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -144,6 +146,9 @@ class Magnet(FrozenClass):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, mat_type=-1, type_magnetization=0, Lmag=0.95, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -157,7 +162,7 @@ class Magnet(FrozenClass):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "mat_type" in list(init_dict.keys()):
                 mat_type = init_dict["mat_type"]
@@ -188,7 +193,7 @@ class Magnet(FrozenClass):
             Magnet_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Magnet_str += "mat_type = " + tmp
+            Magnet_str += "mat_type = "+ tmp
         else:
             Magnet_str += "mat_type = None" + linesep + linesep
         Magnet_str += "type_magnetization = " + str(self.type_magnetization) + linesep
@@ -242,7 +247,6 @@ class Magnet(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
-
     # The Magnet material
     # Type : Material
     mat_type = property(
@@ -277,4 +281,6 @@ class Magnet(FrozenClass):
 
     # Magnet axial length
     # Type : float, min = 0
-    Lmag = property(fget=_get_Lmag, fset=_set_Lmag, doc=u"""Magnet axial length""")
+    Lmag = property(
+        fget=_get_Lmag, fset=_set_Lmag, doc=u"""Magnet axial length"""
+    )

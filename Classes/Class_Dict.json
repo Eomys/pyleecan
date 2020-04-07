@@ -2691,6 +2691,15 @@
                 "type": "int",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Machine"
             }
         ]
     },
@@ -4457,7 +4466,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "OptiGenAlgNsga2Deap"
+        ],
         "desc": "Genetic algorithm class",
         "is_internal": false,
         "methods": [],
@@ -4546,6 +4557,48 @@
                 "type": "OptiProblem",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OptiGenAlg"
+            }
+        ]
+    },
+    "OptiGenAlgNsga2Deap": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Multi-objectives optimization problem with some constraints",
+        "is_internal": false,
+        "methods": [
+            "solve",
+            "mutate",
+            "cross",
+            "create_toolbox",
+            "check_optimization_input"
+        ],
+        "mother": "OptiGenAlg",
+        "name": "OptiGenAlgNsga2Deap",
+        "package": "Optimization",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv",
+        "properties": [
+            {
+                "desc": "DEAP toolbox",
+                "max": "",
+                "min": "",
+                "name": "toolbox",
+                "type": "deap.base.Toolbox",
+                "unit": "",
+                "value": "None"
             }
         ]
     },
@@ -4737,6 +4790,15 @@
                 "type": "float",
                 "unit": "",
                 "value": 0
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OutElec"
             }
         ]
     },
@@ -4809,6 +4871,15 @@
                 "type": "float",
                 "unit": "m",
                 "value": null
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OutGeo"
             }
         ]
     },
@@ -5034,6 +5105,15 @@
                 "type": "dict",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OutMag"
             }
         ]
     },
@@ -5142,6 +5222,15 @@
                 "type": "ndarray",
                 "unit": "N.m^2",
                 "value": null
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OutStruct"
             }
         ]
     },
@@ -5232,6 +5321,15 @@
                 "type": "OutPost",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Output"
             }
         ]
     },
@@ -5590,6 +5688,15 @@
                 "type": "Input",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.Simulation"
             }
         ]
     },

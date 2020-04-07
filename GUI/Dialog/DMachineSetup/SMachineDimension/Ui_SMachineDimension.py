@@ -3,6 +3,7 @@
 # File generated according to SMachineDimension.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -17,9 +18,7 @@ class Ui_SMachineDimension(object):
         self.img_machine.setMinimumSize(QtCore.QSize(400, 400))
         self.img_machine.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.img_machine.setText("")
-        self.img_machine.setPixmap(
-            QtGui.QPixmap(":/images/images/MachineSetup/MachineDimension/Dim_IRS.png")
-        )
+        self.img_machine.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/MachineDimension/Dim_IRS.png"))
         self.img_machine.setScaledContents(True)
         self.img_machine.setObjectName("img_machine")
         self.horizontalLayout_2.addWidget(self.img_machine)
@@ -40,9 +39,7 @@ class Ui_SMachineDimension(object):
         self.lf_SRext.setObjectName("lf_SRext")
         self.gridLayout_2.addWidget(self.lf_SRext, 0, 1, 1, 1)
         self.unit_SRext = QtWidgets.QLabel(self.g_stator)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.unit_SRext.sizePolicy().hasHeightForWidth())
@@ -58,9 +55,7 @@ class Ui_SMachineDimension(object):
         self.lf_SRint.setObjectName("lf_SRint")
         self.gridLayout_2.addWidget(self.lf_SRint, 1, 1, 1, 1)
         self.unit_SRint = QtWidgets.QLabel(self.g_stator)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.unit_SRint.sizePolicy().hasHeightForWidth())
@@ -81,9 +76,7 @@ class Ui_SMachineDimension(object):
         self.lf_RRext.setObjectName("lf_RRext")
         self.gridLayout_3.addWidget(self.lf_RRext, 0, 1, 1, 1)
         self.unit_RRext = QtWidgets.QLabel(self.g_rotor)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.unit_RRext.sizePolicy().hasHeightForWidth())
@@ -99,9 +92,7 @@ class Ui_SMachineDimension(object):
         self.lf_RRint.setObjectName("lf_RRint")
         self.gridLayout_3.addWidget(self.lf_RRint, 1, 1, 1, 1)
         self.unit_RRint = QtWidgets.QLabel(self.g_rotor)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.unit_RRint.sizePolicy().hasHeightForWidth())
@@ -148,15 +139,11 @@ class Ui_SMachineDimension(object):
         self.unit_Lfra.setObjectName("unit_Lfra")
         self.gridLayout.addWidget(self.unit_Lfra, 1, 2, 1, 1)
         self.verticalLayout.addWidget(self.g_frame)
-        spacerItem = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem1 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.b_previous = QtWidgets.QPushButton(SMachineDimension)
         self.b_previous.setObjectName("b_previous")
@@ -168,54 +155,33 @@ class Ui_SMachineDimension(object):
         self.horizontalLayout_2.addLayout(self.verticalLayout)
 
         self.retranslateUi(SMachineDimension)
-        self.g_shaft.toggled["bool"].connect(self.out_Drsh.setVisible)
-        self.g_frame.toggled["bool"].connect(self.in_Lfra.setVisible)
-        self.g_frame.toggled["bool"].connect(self.unit_Lfra.setVisible)
+        self.g_shaft.toggled['bool'].connect(self.out_Drsh.setVisible)
+        self.g_frame.toggled['bool'].connect(self.in_Lfra.setVisible)
+        self.g_frame.toggled['bool'].connect(self.unit_Lfra.setVisible)
         QtCore.QMetaObject.connectSlotsByName(SMachineDimension)
 
     def retranslateUi(self, SMachineDimension):
         _translate = QtCore.QCoreApplication.translate
         SMachineDimension.setWindowTitle(_translate("SMachineDimension", "Form"))
         self.g_stator.setTitle(_translate("SMachineDimension", "Stator"))
-        self.in_SRext.setToolTip(
-            _translate("SMachineDimension", "Stator external radius")
-        )
+        self.in_SRext.setToolTip(_translate("SMachineDimension", "Stator external radius"))
         self.in_SRext.setText(_translate("SMachineDimension", "Rext:"))
-        self.lf_SRext.setToolTip(
-            _translate("SMachineDimension", "Stator external radius")
-        )
+        self.lf_SRext.setToolTip(_translate("SMachineDimension", "Stator external radius"))
         self.unit_SRext.setText(_translate("SMachineDimension", "m"))
-        self.in_SRint.setToolTip(
-            _translate("SMachineDimension", "Stator internal radius")
-        )
+        self.in_SRint.setToolTip(_translate("SMachineDimension", "Stator internal radius"))
         self.in_SRint.setText(_translate("SMachineDimension", "Rint:"))
-        self.lf_SRint.setToolTip(
-            _translate("SMachineDimension", "Stator internal radius")
-        )
+        self.lf_SRint.setToolTip(_translate("SMachineDimension", "Stator internal radius"))
         self.unit_SRint.setText(_translate("SMachineDimension", "m"))
         self.g_rotor.setTitle(_translate("SMachineDimension", "Rotor"))
-        self.in_RRext.setToolTip(
-            _translate("SMachineDimension", "Rotor external radius")
-        )
+        self.in_RRext.setToolTip(_translate("SMachineDimension", "Rotor external radius"))
         self.in_RRext.setText(_translate("SMachineDimension", "Rext:"))
-        self.lf_RRext.setToolTip(
-            _translate("SMachineDimension", "Rotor external radius")
-        )
+        self.lf_RRext.setToolTip(_translate("SMachineDimension", "Rotor external radius"))
         self.unit_RRext.setText(_translate("SMachineDimension", "m"))
-        self.in_RRint.setToolTip(
-            _translate("SMachineDimension", "Rotor internal radius")
-        )
+        self.in_RRint.setToolTip(_translate("SMachineDimension", "Rotor internal radius"))
         self.in_RRint.setText(_translate("SMachineDimension", "Rint:"))
-        self.lf_RRint.setToolTip(
-            _translate("SMachineDimension", "Rotor internal radius")
-        )
+        self.lf_RRint.setToolTip(_translate("SMachineDimension", "Rotor internal radius"))
         self.unit_RRint.setText(_translate("SMachineDimension", "m"))
-        self.out_airgap.setToolTip(
-            _translate(
-                "SMachineDimension",
-                "mechanical airgap width (distance between stator bore and rotor bore radii)",
-            )
-        )
+        self.out_airgap.setToolTip(_translate("SMachineDimension", "mechanical airgap width (distance between stator bore and rotor bore radii)"))
         self.out_airgap.setText(_translate("SMachineDimension", "airgap = "))
         self.g_shaft.setTitle(_translate("SMachineDimension", "Shaft"))
         self.out_Drsh.setToolTip(_translate("SMachineDimension", "Shaft Diameter"))
@@ -239,7 +205,5 @@ class Ui_SMachineDimension(object):
         self.unit_Lfra.setText(_translate("SMachineDimension", "m"))
         self.b_previous.setText(_translate("SMachineDimension", "Previous"))
         self.b_next.setText(_translate("SMachineDimension", "Next"))
-
-
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

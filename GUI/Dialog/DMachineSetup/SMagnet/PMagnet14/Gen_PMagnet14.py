@@ -3,9 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet14.Ui_PMagnet14 import (
-    Ui_PMagnet14,
-)
+from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet14.Ui_PMagnet14 import Ui_PMagnet14
 
 
 class Gen_PMagnet14(Ui_PMagnet14):

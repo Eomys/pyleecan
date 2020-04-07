@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotMag import SlotMag
 
@@ -21,9 +23,7 @@ except ImportError as error:
     comp_angle_opening = error
 
 try:
-    from pyleecan.Methods.Slot.SlotMFlat.comp_angle_opening_magnet import (
-        comp_angle_opening_magnet,
-    )
+    from pyleecan.Methods.Slot.SlotMFlat.comp_angle_opening_magnet import comp_angle_opening_magnet
 except ImportError as error:
     comp_angle_opening_magnet = error
 
@@ -141,16 +141,10 @@ class SlotMFlat(SlotMag):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        H0=0,
-        W0=0.0122,
-        W0_is_rad=False,
-        magnet=list(),
-        W3=0,
-        Zs=36,
-        init_dict=None,
-    ):
+    # get_logger method is available in all object
+    get_logger = get_logger
+
+    def __init__(self, H0=0, W0=0.0122, W0_is_rad=False, magnet=list(), W3=0, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -161,7 +155,7 @@ class SlotMFlat(SlotMag):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "H0" in list(init_dict.keys()):
                 H0 = init_dict["H0"]
@@ -188,12 +182,7 @@ class SlotMFlat(SlotMag):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in [
-                        "MagnetFlat",
-                        "MagnetType10",
-                        "MagnetType12",
-                        "MagnetType13",
-                    ]:
+                    if class_name not in ['MagnetFlat', 'MagnetType10', 'MagnetType12', 'MagnetType13']:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -229,7 +218,7 @@ class SlotMFlat(SlotMag):
             SlotMFlat_str += "magnet = []" + linesep
         for ii in range(len(self.magnet)):
             tmp = self.magnet[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            SlotMFlat_str += "magnet[" + str(ii) + "] =" + tmp + linesep + linesep
+            SlotMFlat_str += "magnet["+str(ii)+"] ="+ tmp + linesep + linesep
         return SlotMFlat_str
 
     def __eq__(self, other):
@@ -338,4 +327,6 @@ class SlotMFlat(SlotMag):
 
     # List of magnet
     # Type : [MagnetFlat]
-    magnet = property(fget=_get_magnet, fset=_set_magnet, doc=u"""List of magnet""")
+    magnet = property(
+        fget=_get_magnet, fset=_set_magnet, doc=u"""List of magnet"""
+    )

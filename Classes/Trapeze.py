@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
@@ -153,6 +155,9 @@ class Trapeze(Surface):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, height=1, W2=1, W1=1, point_ref=0, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -164,7 +169,7 @@ class Trapeze(Surface):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "height" in list(init_dict.keys()):
                 height = init_dict["height"]
@@ -262,7 +267,9 @@ class Trapeze(Surface):
 
     # the big base of Trapeze
     # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""the big base of Trapeze""")
+    W2 = property(
+        fget=_get_W2, fset=_set_W2, doc=u"""the big base of Trapeze"""
+    )
 
     def _get_W1(self):
         """getter of W1"""
@@ -275,4 +282,6 @@ class Trapeze(Surface):
 
     # the small base of the Trapeze
     # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""the small base of the Trapeze""")
+    W1 = property(
+        fget=_get_W1, fset=_set_W1, doc=u"""the small base of the Trapeze"""
+    )

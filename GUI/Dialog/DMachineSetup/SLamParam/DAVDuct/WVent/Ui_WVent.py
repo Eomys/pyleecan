@@ -3,6 +3,7 @@
 # File generated according to WVent.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -24,9 +25,7 @@ class Ui_WVent(object):
         self.c_vent_type.addItem("")
         self.c_vent_type.addItem("")
         self.horizontalLayout.addWidget(self.c_vent_type)
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
         self.main_layout.addLayout(self.horizontalLayout)
         self.w_vent = QtWidgets.QWidget(WVent)

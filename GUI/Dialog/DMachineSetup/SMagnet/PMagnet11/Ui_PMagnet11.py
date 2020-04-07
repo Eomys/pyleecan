@@ -3,6 +3,7 @@
 # File generated according to PMagnet11.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -17,11 +18,7 @@ class Ui_PMagnet11(object):
         self.img_magnet.setMinimumSize(QtCore.QSize(300, 200))
         self.img_magnet.setMaximumSize(QtCore.QSize(550, 350))
         self.img_magnet.setText("")
-        self.img_magnet.setPixmap(
-            QtGui.QPixmap(
-                ":/images/images/MachineSetup/P_Magnet/Surface Magnet type 10.PNG"
-            )
-        )
+        self.img_magnet.setPixmap(QtGui.QPixmap(":/images/images/MachineSetup/P_Magnet/Surface Magnet type 10.PNG"))
         self.img_magnet.setScaledContents(True)
         self.img_magnet.setObjectName("img_magnet")
         self.horizontalLayout.addWidget(self.img_magnet)
@@ -66,9 +63,7 @@ class Ui_PMagnet11(object):
         self.w_out = WMagnetOut(PMagnet11)
         self.w_out.setObjectName("w_out")
         self.verticalLayout.addWidget(self.w_out)
-        spacerItem = QtWidgets.QSpacerItem(
-            17, 18, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
+        spacerItem = QtWidgets.QSpacerItem(17, 18, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
         self.horizontalLayout.addLayout(self.verticalLayout)
 
@@ -86,8 +81,6 @@ class Ui_PMagnet11(object):
         self.in_Hmag.setText(_translate("PMagnet11", "Hmag  :"))
         self.unit_H0.setText(_translate("PMagnet11", "m"))
         self.in_Wmag.setText(_translate("PMagnet11", "Wmag :"))
-
-
 from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.WMagnetOut.WMagnetOut import WMagnetOut
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -37,6 +39,9 @@ class Conductor(FrozenClass):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, cond_mat=-1, ins_mat=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -52,7 +57,7 @@ class Conductor(FrozenClass):
         if ins_mat == -1:
             ins_mat = Material()
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "cond_mat" in list(init_dict.keys()):
                 cond_mat = init_dict["cond_mat"]
@@ -84,12 +89,12 @@ class Conductor(FrozenClass):
             Conductor_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.cond_mat is not None:
             tmp = self.cond_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Conductor_str += "cond_mat = " + tmp
+            Conductor_str += "cond_mat = "+ tmp
         else:
             Conductor_str += "cond_mat = None" + linesep + linesep
         if self.ins_mat is not None:
             tmp = self.ins_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Conductor_str += "ins_mat = " + tmp
+            Conductor_str += "ins_mat = "+ tmp
         else:
             Conductor_str += "ins_mat = None" + linesep + linesep
         return Conductor_str
@@ -141,7 +146,6 @@ class Conductor(FrozenClass):
 
         if self._cond_mat is not None:
             self._cond_mat.parent = self
-
     # Material of the conductor
     # Type : Material
     cond_mat = property(
@@ -159,7 +163,6 @@ class Conductor(FrozenClass):
 
         if self._ins_mat is not None:
             self._ins_mat.parent = self
-
     # Material of the insulation
     # Type : Material
     ins_mat = property(

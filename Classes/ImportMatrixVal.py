@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import set_array, check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 
@@ -39,6 +41,9 @@ class ImportMatrixVal(ImportMatrix):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, value=None, is_transpose=False, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -50,7 +55,7 @@ class ImportMatrixVal(ImportMatrix):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "value" in list(init_dict.keys()):
                 value = init_dict["value"]
@@ -70,13 +75,7 @@ class ImportMatrixVal(ImportMatrix):
         ImportMatrixVal_str = ""
         # Get the properties inherited from ImportMatrix
         ImportMatrixVal_str += super(ImportMatrixVal, self).__str__()
-        ImportMatrixVal_str += (
-            "value = "
-            + linesep
-            + str(self.value).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        ImportMatrixVal_str += "value = " + linesep + str(self.value).replace(linesep, linesep + "\t") + linesep + linesep
         return ImportMatrixVal_str
 
     def __eq__(self, other):
@@ -130,4 +129,6 @@ class ImportMatrixVal(ImportMatrix):
 
     # The matrix to return
     # Type : ndarray
-    value = property(fget=_get_value, fset=_set_value, doc=u"""The matrix to return""")
+    value = property(
+        fget=_get_value, fset=_set_value, doc=u"""The matrix to return"""
+    )

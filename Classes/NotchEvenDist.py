@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Notch import Notch
 
@@ -40,6 +42,9 @@ class NotchEvenDist(Notch):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, alpha=0, notch_shape=-1, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -53,7 +58,7 @@ class NotchEvenDist(Notch):
         if notch_shape == -1:
             notch_shape = Slot()
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "alpha" in list(init_dict.keys()):
                 alpha = init_dict["alpha"]
@@ -64,40 +69,12 @@ class NotchEvenDist(Notch):
         # notch_shape can be None, a Slot object or a dict
         if isinstance(notch_shape, dict):
             # Check that the type is correct (including daughter)
-            class_name = notch_shape.get("__class__")
-            if class_name not in [
-                "Slot",
-                "Slot19",
-                "SlotMFlat",
-                "SlotMPolar",
-                "SlotMag",
-                "SlotUD",
-                "SlotW10",
-                "SlotW11",
-                "SlotW12",
-                "SlotW13",
-                "SlotW14",
-                "SlotW15",
-                "SlotW16",
-                "SlotW21",
-                "SlotW22",
-                "SlotW23",
-                "SlotW24",
-                "SlotW25",
-                "SlotW26",
-                "SlotW27",
-                "SlotW28",
-                "SlotW29",
-                "SlotW60",
-                "SlotW61",
-                "SlotWind",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for notch_shape"
-                )
+            class_name = notch_shape.get('__class__')
+            if class_name not in ['Slot', 'Slot19', 'SlotMFlat', 'SlotMPolar', 'SlotMag', 'SlotUD', 'SlotW10', 'SlotW11', 'SlotW12', 'SlotW13', 'SlotW14', 'SlotW15', 'SlotW16', 'SlotW21', 'SlotW22', 'SlotW23', 'SlotW24', 'SlotW25', 'SlotW26', 'SlotW27', 'SlotW28', 'SlotW29', 'SlotW60', 'SlotW61', 'SlotWind']:
+                raise InitUnKnowClassError("Unknow class name "+class_name+" in init_dict for notch_shape")
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.notch_shape = class_obj(init_dict=notch_shape)
         else:
             self.notch_shape = notch_shape
@@ -114,10 +91,8 @@ class NotchEvenDist(Notch):
         NotchEvenDist_str += super(NotchEvenDist, self).__str__()
         NotchEvenDist_str += "alpha = " + str(self.alpha) + linesep
         if self.notch_shape is not None:
-            tmp = (
-                self.notch_shape.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            )
-            NotchEvenDist_str += "notch_shape = " + tmp
+            tmp = self.notch_shape.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            NotchEvenDist_str += "notch_shape = "+ tmp
         else:
             NotchEvenDist_str += "notch_shape = None" + linesep + linesep
         return NotchEvenDist_str
@@ -188,7 +163,6 @@ class NotchEvenDist(Notch):
 
         if self._notch_shape is not None:
             self._notch_shape.parent = self
-
     # Shape of the Notch
     # Type : Slot
     notch_shape = property(

@@ -4,16 +4,16 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
+from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotWind import SlotWind
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.SlotW60._comp_point_coordinate import (
-        _comp_point_coordinate,
-    )
+    from pyleecan.Methods.Slot.SlotW60._comp_point_coordinate import _comp_point_coordinate
 except ImportError as error:
     _comp_point_coordinate = error
 
@@ -137,8 +137,7 @@ class SlotW60(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW60 method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotW60 method comp_height_wind: " + str(comp_height_wind)
                 )
             )
         )
@@ -170,19 +169,10 @@ class SlotW60(SlotWind):
     # save method is available in all object
     save = save
 
-    def __init__(
-        self,
-        W1=0.02,
-        W2=0.03,
-        H1=0.05,
-        H2=0.15,
-        R1=0.03,
-        H3=0,
-        H4=0,
-        W3=0,
-        Zs=36,
-        init_dict=None,
-    ):
+    # get_logger method is available in all object
+    get_logger = get_logger
+
+    def __init__(self, W1=0.02, W2=0.03, H1=0.05, H2=0.15, R1=0.03, H3=0, H4=0, W3=0, Zs=36, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -193,7 +183,7 @@ class SlotW60(SlotWind):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert type(init_dict) is dict
+            assert(type(init_dict) is dict)
             # Overwrite default value with init_dict content
             if "W1" in list(init_dict.keys()):
                 W1 = init_dict["W1"]
@@ -377,9 +367,11 @@ class SlotW60(SlotWind):
         check_var("H3", value, "float", Vmin=0)
         self._H3 = value
 
-    # Top Distance Ploe-coil
+    # Top Distance Ploe-coil 
     # Type : float, min = 0
-    H3 = property(fget=_get_H3, fset=_set_H3, doc=u"""Top Distance Ploe-coil """)
+    H3 = property(
+        fget=_get_H3, fset=_set_H3, doc=u"""Top Distance Ploe-coil """
+    )
 
     def _get_H4(self):
         """getter of H4"""
@@ -390,9 +382,11 @@ class SlotW60(SlotWind):
         check_var("H4", value, "float", Vmin=0)
         self._H4 = value
 
-    # Bottom Distance Ploe-coil
+    # Bottom Distance Ploe-coil 
     # Type : float, min = 0
-    H4 = property(fget=_get_H4, fset=_set_H4, doc=u"""Bottom Distance Ploe-coil """)
+    H4 = property(
+        fget=_get_H4, fset=_set_H4, doc=u"""Bottom Distance Ploe-coil """
+    )
 
     def _get_W3(self):
         """getter of W3"""
@@ -403,6 +397,8 @@ class SlotW60(SlotWind):
         check_var("W3", value, "float", Vmin=0)
         self._W3 = value
 
-    # Edge Distance Ploe-coil
+    # Edge Distance Ploe-coil 
     # Type : float, min = 0
-    W3 = property(fget=_get_W3, fset=_set_W3, doc=u"""Edge Distance Ploe-coil """)
+    W3 = property(
+        fget=_get_W3, fset=_set_W3, doc=u"""Edge Distance Ploe-coil """
+    )

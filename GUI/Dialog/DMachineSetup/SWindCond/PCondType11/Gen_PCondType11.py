@@ -3,9 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType11.Ui_PCondType11 import (
-    Ui_PCondType11,
-)
+from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType11.Ui_PCondType11 import Ui_PCondType11
 
 
 class Gen_PCondType11(Ui_PCondType11):
@@ -14,34 +12,26 @@ class Gen_PCondType11(Ui_PCondType11):
         """
         Ui_PCondType11.setupUi(self, PCondType11)
         # Setup of in_Nwpc1_tan
-        txt = self.tr(
-            u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction"""
-        )
+        txt = self.tr(u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction""")
         self.in_Nwpc1_tan.setWhatsThis(txt)
         self.in_Nwpc1_tan.setToolTip(txt)
 
         # Setup of si_Nwpc1_tan
         self.si_Nwpc1_tan.setMinimum(1)
         self.si_Nwpc1_tan.setMaximum(999999)
-        txt = self.tr(
-            u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction"""
-        )
+        txt = self.tr(u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along tangential (horizontal) direction""")
         self.si_Nwpc1_tan.setWhatsThis(txt)
         self.si_Nwpc1_tan.setToolTip(txt)
 
         # Setup of in_Nwpc1_rad
-        txt = self.tr(
-            u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction"""
-        )
+        txt = self.tr(u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction""")
         self.in_Nwpc1_rad.setWhatsThis(txt)
         self.in_Nwpc1_rad.setToolTip(txt)
 
         # Setup of si_Nwpc1_rad
         self.si_Nwpc1_rad.setMinimum(1)
         self.si_Nwpc1_rad.setMaximum(999999)
-        txt = self.tr(
-            u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction"""
-        )
+        txt = self.tr(u"""cf schematics, stator winding number of preformed wires (strands) in parallel per coil along radial (vertical) direction""")
         self.si_Nwpc1_rad.setWhatsThis(txt)
         self.si_Nwpc1_rad.setToolTip(txt)
 
@@ -68,16 +58,12 @@ class Gen_PCondType11(Ui_PCondType11):
         self.lf_Wwire.setToolTip(txt)
 
         # Setup of in_Wins_wire
-        txt = self.tr(
-            u"""(advanced) cf schematics, winding strand insulation thickness [m]"""
-        )
+        txt = self.tr(u"""(advanced) cf schematics, winding strand insulation thickness [m]""")
         self.in_Wins_wire.setWhatsThis(txt)
         self.in_Wins_wire.setToolTip(txt)
 
         # Setup of lf_Wins_wire
         self.lf_Wins_wire.validator().setBottom(0)
-        txt = self.tr(
-            u"""(advanced) cf schematics, winding strand insulation thickness [m]"""
-        )
+        txt = self.tr(u"""(advanced) cf schematics, winding strand insulation thickness [m]""")
         self.lf_Wins_wire.setWhatsThis(txt)
         self.lf_Wins_wire.setToolTip(txt)
