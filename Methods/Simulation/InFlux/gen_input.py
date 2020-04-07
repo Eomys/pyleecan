@@ -69,10 +69,9 @@ def gen_input(self):
     )
     output.Br = DataTime(
         name="Airgap radial flux density",
-        unit="H",
-        symmetries={},
+        unit="T",
+        symbol="B_r",
         axes=[Time, Angle],
-        normalizations={},
         values=Br,
     )
     if not isinstance(output.Br, DataND) or Br.shape != (Nt_tot, Na_tot):
@@ -88,10 +87,9 @@ def gen_input(self):
         Bt = self.Bt.get_data()
         output.Bt = DataTime(
             name="Airgap tangential flux density",
-            unit="H",
-            symmetries={},
+            unit="T",
+            symbol="B_t",
             axes=[Time, Angle],
-            normalizations={},
             values=Bt,
         )
         if not isinstance(output.Bt, DataND) or Bt.shape != (Nt_tot, Na_tot):

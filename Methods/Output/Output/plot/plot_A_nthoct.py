@@ -34,7 +34,7 @@ def plot_A_nthoct(
         B_list.append(getattr(Phys, Data_str.split(".")[1]))
 
     # Set plot
-    fig = plt.figure(constrained_layout=True, figsize=(20, 10))
+    fig = plt.figure(tight_layout=True, figsize=(20, 10))
     legend_list = [self.post.legend_name]
     for out in out_list:
         legend_list.append(out.post.legend_name)

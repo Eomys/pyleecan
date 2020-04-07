@@ -74,7 +74,7 @@ def plot_A_3D(
     """
 
     if is_newfig:
-        fig = plt.figure(constrained_layout=True, figsize=(20, 10))
+        fig = plt.figure(tight_layout=True, figsize=(20, 10))
         if type != "pcolor":
             ax = fig.add_subplot(111, projection="3d")
         else:

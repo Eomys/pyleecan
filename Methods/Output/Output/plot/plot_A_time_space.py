@@ -57,7 +57,7 @@ def plot_A_time_space(
         B_list.append(getattr(Phys, Data_str.split(".")[1]))
 
     # Set plot
-    fig, axs = plt.subplots(3, 2, constrained_layout=True, figsize=(20, 10))
+    fig, axs = plt.subplots(3, 2, tight_layout=True, figsize=(20, 10))
     legend_list = [self.post.legend_name]
     for out in out_list:
         legend_list.append(out.post.legend_name)
@@ -151,7 +151,7 @@ def plot_A_time_space(
     )
 
     # fft time
-    ylabel = r"$\widehat{" + A.symbol + "}\, [" + unit + "]$"
+    ylabel = r"$|\widehat{" + A.symbol + "}|\, [" + unit + "]$"
     if is_elecorder:
         elec_max = freq_max / A.normalizations.get("elec_order")
         xlabel = "Electrical order []"

@@ -72,7 +72,7 @@ def plot_A_cfft2(
         y_str = "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]"
     if unit == "SI":
         unit = A.unit
-    zlabel = r"$\widehat{" + A.symbol + "}\, [" + unit + "]$"
+    zlabel = r"$|\widehat{" + A.symbol + "}|\, [" + unit + "]$"
 
     # Extract the field
     (F_flat, R_flat, B_FT_flat) = A.get_harmonics(

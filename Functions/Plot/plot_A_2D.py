@@ -64,7 +64,7 @@ def plot_A_2D(
     """
 
     if is_newfig:
-        fig = plt.figure(constrained_layout=True, figsize=(20, 10))
+        fig = plt.figure(tight_layout=True, figsize=(20, 10))
         ax = fig.add_subplot(111)
     elif is_autostack:
         n = len(fig.axes)

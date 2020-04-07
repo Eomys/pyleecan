@@ -51,7 +51,7 @@ def plot_A_time(
         B_list.append(getattr(Phys, Data_str.split(".")[1]))
 
     # Set plot
-    fig = plt.figure(constrained_layout=True, figsize=(20, 10))
+    fig = plt.figure(tight_layout=True, figsize=(20, 10))
     legend_list = [self.post.legend_name]
     for out in out_list:
         legend_list.append(out.post.legend_name)
@@ -93,7 +93,7 @@ def plot_A_time(
 
     if is_fft:
         title = "FFT of " + A.name
-        ylabel = r"$\widehat{" + A.symbol + "}\, [" + unit + "]$"
+        ylabel = r"$|\widehat{" + A.symbol + "}|\, [" + unit + "]$"
 
         if is_elecorder:
             elec_max = freq_max / A.normalizations.get("elec_order")

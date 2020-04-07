@@ -131,18 +131,16 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     )
     output.mag.Br = DataTime(
         name="Airgap radial flux density",
-        unit="H",
-        symmetries={},
+        unit="T",
+        symbol="B_r",
         axes=[Time, Angle],
-        normalizations={},
         values=Br,
     )
     output.mag.Bt = DataTime(
         name="Airgap tangential flux density",
-        unit="H",
-        symmetries={},
+        unit="T",
+        symbol="B_r",
         axes=[Time, Angle],
-        normalizations={},
         values=Bt,
     )
     output.mag.Tem = Tem

@@ -55,7 +55,7 @@ def plot_A_fft2(
         B_list.append(getattr(Phys, Data_str.split(".")[1]))
 
     # Set plot
-    fig = plt.figure(constrained_layout=True, figsize=(20, 10))
+    fig = plt.figure(tight_layout=True, figsize=(20, 10))
     title = "FFT2 of " + A.name
     if is_elecorder:
         xlabel = "Electrical order []"
@@ -83,7 +83,7 @@ def plot_A_fft2(
     freqs = append(freqs, freqs[-1] + 1)
     wavenumber_map, freqs_map = meshgrid(wavenumber, freqs)
 
-    zlabel = r"$\widehat{" + A.symbol + "}\, [" + unit + "]$"
+    zlabel = r"$|\widehat{" + A.symbol + "}|\, [" + unit + "]$"
 
     # Plot the original graph
     plot_A_3D(
