@@ -120,17 +120,18 @@ def gen_3D_mesh(
     # Extrude the lamination
     for surf in surf_list:
         if is_rect == True:
-            ov = factory.extrude([(2, surf)], 0, 0, L, numElements=[Nlayer], recombine=True)
+            ov = factory.extrude(
+                [(2, surf)], 0, 0, L, numElements=[Nlayer], recombine=True
+            )
         else:
-            ov = factory.extrude([(2, surf)], 0, 0, L, numElements=[Nlayer], recombine=False)
+            ov = factory.extrude(
+                [(2, surf)], 0, 0, L, numElements=[Nlayer], recombine=False
+            )
     model.addPhysicalGroup(3, list(range(1, Zs + 1)), 1)
     if lamination.is_stator:
         model.setPhysicalName(3, 1, "stator")
     else:
         model.setPhysicalName(3, 1, "rotor")
-
-
-    
 
     # Generate the 3D mesh
     factory.synchronize()

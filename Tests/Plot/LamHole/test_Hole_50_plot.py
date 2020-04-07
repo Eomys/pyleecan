@@ -6,7 +6,7 @@
 """
 
 from os.path import join
-from unittest import TestCase
+import pytest
 
 import matplotlib.pyplot as plt
 from numpy import pi
@@ -24,150 +24,157 @@ from pyleecan.Classes.BoreFlower import BoreFlower
 from pyleecan.Tests import save_plot_path as save_path
 
 
-class test_Hole_50_plot(TestCase):
-    """unittest for Machine with Hole 50 plot"""
+"""unittest for Machine with Hole 50 plot"""
 
-    def setUp(self):
-        """Run at the begining of every test to setup the machine"""
-        plt.close("all")
-        test_obj = MachineIPMSM()
-        test_obj.rotor = LamHole(
-            is_internal=True, Rint=0.021, Rext=0.075, is_stator=False, L1=0.7
+
+@pytest.fixture
+def machine():
+    """Run at the begining of every test to setup the machine"""
+    plt.close("all")
+    test_obj = MachineIPMSM()
+    test_obj.rotor = LamHole(
+        is_internal=True, Rint=0.021, Rext=0.075, is_stator=False, L1=0.7
+    )
+    test_obj.rotor.bore = BoreFlower(N=8, Rarc=0.05, alpha=pi / 8)
+    test_obj.rotor.hole = list()
+    test_obj.rotor.hole.append(
+        HoleM50(
+            Zh=8,
+            W0=50e-3,
+            W1=2e-3,
+            W2=1e-3,
+            W3=1e-3,
+            W4=20.6e-3,
+            H0=17.3e-3,
+            H1=3e-3,
+            H2=0.5e-3,
+            H3=6.8e-3,
+            H4=0,
         )
-        test_obj.rotor.bore = BoreFlower(N=8, Rarc=0.05, alpha=pi / 8)
-        test_obj.rotor.hole = list()
-        test_obj.rotor.hole.append(
-            HoleM50(
-                Zh=8,
-                W0=50e-3,
-                W1=2e-3,
-                W2=1e-3,
-                W3=1e-3,
-                W4=20.6e-3,
-                H0=17.3e-3,
-                H1=3e-3,
-                H2=0.5e-3,
-                H3=6.8e-3,
-                H4=0,
-            )
-        )
-        test_obj.rotor.axial_vent = list()
-        test_obj.rotor.axial_vent.append(
-            VentilationCirc(Zh=8, Alpha0=0, D0=5e-3, H0=40e-3)
-        )
-        test_obj.rotor.axial_vent.append(
-            VentilationCirc(Zh=8, Alpha0=pi / 8, D0=7e-3, H0=40e-3)
-        )
-        test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1.2)
+    )
+    test_obj.rotor.axial_vent = list()
+    test_obj.rotor.axial_vent.append(VentilationCirc(Zh=8, Alpha0=0, D0=5e-3, H0=40e-3))
+    test_obj.rotor.axial_vent.append(
+        VentilationCirc(Zh=8, Alpha0=pi / 8, D0=7e-3, H0=40e-3)
+    )
+    test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1.2)
 
-        test_obj.stator = LamSlotWind(
-            Rint=0.078, Rext=0.104, is_internal=False, is_stator=True, L1=0.8
-        )
-        test_obj.stator.slot = None
-        test_obj.stator.axial_vent.append(
-            VentilationPolar(Zh=8, H0=0.08, D0=0.01, W1=pi / 8, Alpha0=pi / 8)
-        )
-        test_obj.stator.axial_vent.append(
-            VentilationPolar(Zh=8, H0=0.092, D0=0.01, W1=pi / 8, Alpha0=0)
-        )
-        test_obj.frame = Frame(Rint=0.104, Rext=0.114, Lfra=1)
+    test_obj.stator = LamSlotWind(
+        Rint=0.078, Rext=0.104, is_internal=False, is_stator=True, L1=0.8
+    )
+    test_obj.stator.slot = None
+    test_obj.stator.axial_vent.append(
+        VentilationPolar(Zh=8, H0=0.08, D0=0.01, W1=pi / 8, Alpha0=pi / 8)
+    )
+    test_obj.stator.axial_vent.append(
+        VentilationPolar(Zh=8, H0=0.092, D0=0.01, W1=pi / 8, Alpha0=0)
+    )
+    test_obj.frame = Frame(Rint=0.104, Rext=0.114, Lfra=1)
 
-        self.test_obj = test_obj
+    return test_obj
 
-    def test_Lam_Hole_50_W01(self):
-        """Test machine plot hole 50 with W1 > 0 and both magnets
-        """
-        self.test_obj.plot()
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_s50_Machine.png"))
-        self.assertEqual(len(fig.axes[0].patches), 87)
 
-        self.test_obj.rotor.plot()
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_s50_Rotor_W01.png"))
-        # 2 for lam + (3*2)*8 for holes + 16 vents
-        self.assertEqual(len(fig.axes[0].patches), 66)
+def test_Lam_Hole_50_W01(machine):
+    """Test machine plot hole 50 with W1 > 0 and both magnets
+    """
+    machine.plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "test_Lam_Hole_s50_Machine.png"))
+    assert len(fig.axes[0].patches) == 87
 
-    def test_Lam_Hole_50_N01(self):
-        """Test machine plot hole 50 with W1 = 0 and both magnets
-        """
-        self.test_obj.rotor.hole[0].W1 = 0
-        self.test_obj.rotor.hole[0].magnet_0 = Magnet()
-        self.test_obj.rotor.hole[0].magnet_1 = Magnet()
-        self.test_obj.rotor.plot()
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorN01.png"))
-        # 2 for lam + 5*8 for holes + 16 vents
-        self.assertEqual(len(fig.axes[0].patches), 58)
+    machine.rotor.plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "test_Lam_Hole_s50_Rotor_W01.png"))
+    # 2 for lam + (3*2)*8 for holes + 16 vents
+    assert len(fig.axes[0].patches) == 66
 
-    def test_Lam_Hole_50_WN1(self):
-        """Test machine plot hole 50 with W1 > 0 and only magnet_1
-        """
-        self.test_obj.rotor.hole[0].W1 = 2e-3
-        self.test_obj.rotor.hole[0].magnet_0 = None
-        self.test_obj.rotor.hole[0].magnet_1 = Magnet()
-        self.test_obj.rotor.plot()
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorWN1.png"))
-        # 2 for lam + (1+3)*8 for holes + 16 vents
-        self.assertEqual(len(fig.axes[0].patches), 50)
 
-    def test_Lam_Hole_50_NN1(self):
-        """Test machine plot hole 50 with W1 = 0 and no magnet_0
-        """
-        self.test_obj.rotor.hole[0].W1 = 0
-        self.test_obj.rotor.hole[0].magnet_0 = None
-        self.test_obj.rotor.hole[0].magnet_1 = Magnet()
-        self.test_obj.rotor.plot()
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorNN1.png"))
-        # 2 for lam + 3*8 for holes + 16 vents
-        self.assertEqual(len(fig.axes[0].patches), 42)
+def test_Lam_Hole_50_N01(machine):
+    """Test machine plot hole 50 with W1 = 0 and both magnets
+    """
+    machine.rotor.hole[0].W1 = 0
+    machine.rotor.hole[0].magnet_0 = Magnet()
+    machine.rotor.hole[0].magnet_1 = Magnet()
+    machine.rotor.plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorN01.png"))
+    # 2 for lam + 5*8 for holes + 16 vents
+    assert len(fig.axes[0].patches) == 58
 
-    def test_Lam_Hole_50_W0N(self):
-        """Test machine plot hole 50 with W1 > 0 and no magnet_1
-        """
-        self.test_obj.rotor.hole[0].W1 = 2e-3
-        self.test_obj.rotor.hole[0].magnet_0 = Magnet()
-        self.test_obj.rotor.hole[0].magnet_1 = None
-        self.test_obj.rotor.plot()
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorW0N.png"))
-        # 2 for lam + 4*8 for holes + 16 vents
-        self.assertEqual(len(fig.axes[0].patches), 50)
 
-    def test_Lam_Hole_50_N0N(self):
-        """Test machine plot hole 50 with W1 =0 and no magnet_1
-        """
-        self.test_obj.rotor.hole[0].W1 = 0
-        self.test_obj.rotor.hole[0].magnet_0 = Magnet()
-        self.test_obj.rotor.hole[0].magnet_1 = None
-        self.test_obj.rotor.plot()
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorN0N.png"))
-        # 2 for lam + (1+2)*8 for holes + 16 vents
-        self.assertEqual(len(fig.axes[0].patches), 42)
+def test_Lam_Hole_50_WN1(machine):
+    """Test machine plot hole 50 with W1 > 0 and only magnet_1
+    """
+    machine.rotor.hole[0].W1 = 2e-3
+    machine.rotor.hole[0].magnet_0 = None
+    machine.rotor.hole[0].magnet_1 = Magnet()
+    machine.rotor.plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorWN1.png"))
+    # 2 for lam + (1+3)*8 for holes + 16 vents
+    assert len(fig.axes[0].patches) == 50
 
-    def test_Lam_Hole_50_WNN(self):
-        """Test machine plot hole 50 with W1 > 0 and no magnets
-        """
-        self.test_obj.rotor.hole[0].W1 = 2e-3
-        self.test_obj.rotor.hole[0].magnet_0 = None
-        self.test_obj.rotor.hole[0].magnet_1 = None
-        self.test_obj.rotor.plot()
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorWNN.png"))
-        # 2 for lam + (1+1)*8 for holes + 16 vents
-        self.assertEqual(len(fig.axes[0].patches), 34)
 
-    def test_Lam_Hole_50_NNN(self):
-        """Test machine plot hole 50 with W1 = 0 and no magnets
-        """
-        self.test_obj.rotor.hole[0].W1 = 0
-        self.test_obj.rotor.hole[0].magnet_0 = None
-        self.test_obj.rotor.hole[0].magnet_1 = None
-        self.test_obj.rotor.plot()
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorNNN.png"))
-        # 2 for lam + 1*8 for holes + 16 vents
-        self.assertEqual(len(fig.axes[0].patches), 26)
+def test_Lam_Hole_50_NN1(machine):
+    """Test machine plot hole 50 with W1 = 0 and no magnet_0
+    """
+    machine.rotor.hole[0].W1 = 0
+    machine.rotor.hole[0].magnet_0 = None
+    machine.rotor.hole[0].magnet_1 = Magnet()
+    machine.rotor.plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorNN1.png"))
+    # 2 for lam + 3*8 for holes + 16 vents
+    assert len(fig.axes[0].patches) == 42
+
+
+def test_Lam_Hole_50_W0N(machine):
+    """Test machine plot hole 50 with W1 > 0 and no magnet_1
+    """
+    machine.rotor.hole[0].W1 = 2e-3
+    machine.rotor.hole[0].magnet_0 = Magnet()
+    machine.rotor.hole[0].magnet_1 = None
+    machine.rotor.plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorW0N.png"))
+    # 2 for lam + 4*8 for holes + 16 vents
+    assert len(fig.axes[0].patches) == 50
+
+
+def test_Lam_Hole_50_N0N(machine):
+    """Test machine plot hole 50 with W1 =0 and no magnet_1
+    """
+    machine.rotor.hole[0].W1 = 0
+    machine.rotor.hole[0].magnet_0 = Magnet()
+    machine.rotor.hole[0].magnet_1 = None
+    machine.rotor.plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorN0N.png"))
+    # 2 for lam + (1+2)*8 for holes + 16 vents
+    assert len(fig.axes[0].patches) == 42
+
+
+def test_Lam_Hole_50_WNN(machine):
+    """Test machine plot hole 50 with W1 > 0 and no magnets
+    """
+    machine.rotor.hole[0].W1 = 2e-3
+    machine.rotor.hole[0].magnet_0 = None
+    machine.rotor.hole[0].magnet_1 = None
+    machine.rotor.plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorWNN.png"))
+    # 2 for lam + (1+1)*8 for holes + 16 vents
+    assert len(fig.axes[0].patches) == 34
+
+
+def test_Lam_Hole_50_NNN(machine):
+    """Test machine plot hole 50 with W1 = 0 and no magnets
+    """
+    machine.rotor.hole[0].W1 = 0
+    machine.rotor.hole[0].magnet_0 = None
+    machine.rotor.hole[0].magnet_1 = None
+    machine.rotor.plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorNNN.png"))
+    # 2 for lam + 1*8 for holes + 16 vents
+    assert len(fig.axes[0].patches) == 26
