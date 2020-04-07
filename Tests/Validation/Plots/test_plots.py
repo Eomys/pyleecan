@@ -84,7 +84,7 @@ pinknoise = pinknoise / (
 rate_trafic, trafic = read(wav_file_trafic)
 
 
-class tests_dataobj(TestCase):
+class tests_plots(TestCase):
     # @unittest.skip
     def test_default_proj_Br_time_space(self):
 

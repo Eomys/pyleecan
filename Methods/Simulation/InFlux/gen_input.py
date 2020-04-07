@@ -7,6 +7,7 @@
 
 from pyleecan.Classes.OutMag import OutMag
 from pyleecan.Methods.Simulation.Input import InputError
+from SciDataTool import DataND, DataLinspace, DataTime
 from numpy import ndarray
 
 
@@ -49,24 +50,56 @@ def gen_input(self):
 
     if self.Br is None:
         raise InputError("ERROR: InFlux.Br missing")
-    output.Br = self.Br.get_data()
-    if not isinstance(output.Br, ndarray) or output.Br.shape != (Nt_tot, Na_tot):
+    Br = self.Br.get_data()
+    Time = DataLinspace(
+        name="time",
+        unit="s",
+        symmetries={},
+        initial=output.time[0],
+        final=output.time[-1],
+        number=Nt_tot,
+    )
+    Angle = DataLinspace(
+        name="angle",
+        unit="rad",
+        symmetries={},
+        initial=output.angle[0],
+        final=output.angle[-1],
+        number=Na_tot,
+    )
+    output.Br = DataTime(
+        name="Airgap radial flux density",
+        unit="H",
+        symmetries={},
+        axes=[Time, Angle],
+        normalizations={},
+        values=Br,
+    )
+    if not isinstance(output.Br, DataND) or Br.shape != (Nt_tot, Na_tot):
         raise InputError(
             "ERROR: InFlux.Br must be a matrix with the shape "
             + str((Nt_tot, Na_tot))
             + " (len(time), stator phase number), "
-            + str(output.Br.shape)
+            + str(Br.shape)
             + " returned"
         )
 
     if self.Bt is not None:
-        output.Bt = self.Bt.get_data()
-        if not isinstance(output.Bt, ndarray) or output.Bt.shape != (Nt_tot, Na_tot):
+        Bt = self.Bt.get_data()
+        output.Bt = DataTime(
+            name="Airgap tangential flux density",
+            unit="H",
+            symmetries={},
+            axes=[Time, Angle],
+            normalizations={},
+            values=Bt,
+        )
+        if not isinstance(output.Bt, DataND) or Bt.shape != (Nt_tot, Na_tot):
             raise InputError(
                 "ERROR: InFlux.Bt must be a matrix with the shape "
                 + str((Nt_tot, Na_tot))
                 + " (len(time), rotor phase number), "
-                + str(output.Bt.shape)
+                + str(Bt.shape)
                 + " returned"
             )
     else:
