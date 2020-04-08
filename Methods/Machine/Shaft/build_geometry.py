@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package build_geometry
-@date Created on juil. 25 10:02 2018
-@author franco_i
-"""
 from pyleecan.Classes.Circle import Circle
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Segment import Segment

@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotMFlat.comp_W0m
-SlotMFlat Computation of W0m method
-@date Created on Tue Aug 07 14:25:11 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import sin
 

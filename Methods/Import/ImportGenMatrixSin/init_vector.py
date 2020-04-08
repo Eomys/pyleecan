@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Thu Mar 07 12:57:30 2019
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
 from pyleecan.Methods.Import.ImportGenMatrixSin import InitSinMatDimError

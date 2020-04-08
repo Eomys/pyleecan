@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Mon Sep 26 10:16:16 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-@todo unittest it
-"""
 
 from os import getcwd, rename
 from os.path import join, dirname, abspath, split

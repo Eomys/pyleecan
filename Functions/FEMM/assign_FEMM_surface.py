@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package assign_FEMM_Machine_part
-@date Created on août 09 14:12 2018
-@author franco_i
-@todo "Radial" magnetization for HoleMx-Class
-"""
 import femm
 from numpy import angle, pi, floor_divide
 from pyleecan.Classes.HoleM50 import HoleM50

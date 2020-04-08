@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Winding._comp_wind_type_0
-Compute the Winding Matrix (for type 0) Method
-@date Created on Mon Dec 15 15:47:19 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-@todo check that every elements are integer
-"""
 
 from pyleecan.Methods.Machine.Winding import WindingError
 

@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW27.comp_surface_wind
-SlotW27 Computation of winding surface method
-@date Created on Mon Mar 07 17:42:35 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 
 def comp_surface_wind(self):

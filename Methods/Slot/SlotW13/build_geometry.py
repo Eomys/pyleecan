@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW13.build_geometry
-SlotW13 build_geometry method
-@date Created on Mon Jul 11 12:39:27 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-@todo unittest it
-"""
 
 from pyleecan.Classes.Segment import Segment
 

@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Slot.Slot.comp_angle_opening
-Slot Computation of average opening angle method
-@date Created on Tue Dec 09 16:28:38 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import angle
 

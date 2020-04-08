@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotMPolar.comp_surface
-SlotMPolar Computation of surface method
-@date Created on Mon Dec 22 13:25:11 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import pi
 

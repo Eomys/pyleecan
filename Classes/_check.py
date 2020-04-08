@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Classes.check
-check function for classes
-@date Created on Wed Nov 05 10:10:34 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import array, empty, int32
 from importlib import import_module

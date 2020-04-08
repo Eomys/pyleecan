@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.PBSlot.PBSlot51.PHoleM51
-HoleM51 Setup Page
-@date Created on Thu Dec 06 13:50:35 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import pi
 from PyQt5.QtCore import pyqtSignal

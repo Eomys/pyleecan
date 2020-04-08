@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW27.build_geometry_wind
-SlotW27 build_geometry_wind method
-@date Created on Mon Mar 07 16:10:15 2015
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import angle
 from scipy.optimize import fsolve

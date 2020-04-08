@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Magnet_Type_2.comp_surface
-Compute the Magnet surface method
-@date Created on Wed Dec 17 16:06:11 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 from numpy import pi
 
 

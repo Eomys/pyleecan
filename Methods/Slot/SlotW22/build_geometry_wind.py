@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW22.build_geometry_wind
-SlotW22 build_geometry_wind method
-@date Created on Mon Jan 12 16:20:43 2015
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import exp, linspace, meshgrid
 

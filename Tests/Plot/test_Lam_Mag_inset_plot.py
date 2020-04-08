@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Wed Jan 13 17:33:49 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 from os.path import join
 from unittest import TestCase
 

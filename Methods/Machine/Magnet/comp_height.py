@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Magnet.comp_height
-Magnet numerical Computation of height method
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import array
 

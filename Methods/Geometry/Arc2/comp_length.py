@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.Arc2.comp_length
-Computation of Arc2 length method
-@date Created on Mon Dec 08 13:25:51 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 from numpy import pi
 
 

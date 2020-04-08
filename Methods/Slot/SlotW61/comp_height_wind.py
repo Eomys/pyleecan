@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@packageMethods.Machine.SlotW60.comp_height_wind
-Slot Type_6_0 computation of the height of the winding area method
-@date Created on Wed Aug 01 12:31:16 2018
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import pi, exp
 

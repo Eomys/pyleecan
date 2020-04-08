@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Mon Sep 19 10:16:45 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-@todo unittest it
-"""
 
 from numpy import pi
 

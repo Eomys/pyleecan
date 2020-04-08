@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar
-Last Page of the Machine (Type 1 only) Setup: Rotor Bar
-@date Created on Thu Jul 30 10:47:56 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 
 from PyQt5.QtCore import pyqtSignal

@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW29.build_geometry
-SlotW29 build_geometry method
-@date Created on Thu Feb 23 10:36:36 2017
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 from pyleecan.Classes.Segment import Segment
 
 

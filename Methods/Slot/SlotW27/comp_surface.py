@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW27.comp_surface
-SlotW27 Computation of surface method
-@date Created on Mon Mar 07 17:34:45 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import sin
 

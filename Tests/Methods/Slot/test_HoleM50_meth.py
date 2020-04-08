@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Fri Jan 08 16:11:22 2016
-@author pierre_b
-"""
 
 from unittest import TestCase
 

@@ -1,13 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.LamSlot.check
-Check that the Lamination is correct
-@date Created on Thu Jan 22 17:30:32 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-@todo check tooth widths
-@todo Check that the Slot don't colide (use width tooth)
-"""
 
 from pyleecan.Methods.Machine.Lamination.check import LaminationCheckError
 

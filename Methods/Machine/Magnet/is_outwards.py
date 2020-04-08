@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Magnet.check
-Check that the Magnet is correct
-@date Created on Mon Aug 06 15:47:19 2018
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from pyleecan.Methods import ParentMissingError
 

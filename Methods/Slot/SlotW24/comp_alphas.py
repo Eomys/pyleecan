@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW24._comp_alpha
-SlotW24 compute opening angle method
-@date Created on Mon Jul 06 11:40:07 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import arcsin, pi
 

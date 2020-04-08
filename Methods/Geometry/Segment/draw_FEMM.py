@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package draw_FEMM
-@date Created on juil. 30 15:31 2018
-@author franco_i
-"""
 
 import femm
 

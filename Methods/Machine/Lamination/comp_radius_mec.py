@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Lamination.comp_mec_radius
-Computation of the mechanical radius of the Lamination
-@date Created on Tue Mar 15 16:15:07 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 
 def comp_radius_mec(self):

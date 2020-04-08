@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.VentilationTrap.comp_radius
-Compute the radius of the two circle that contains all the ventilation ducts
-@date Created on Wed Dec 09 17:43:57 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import sqrt
 

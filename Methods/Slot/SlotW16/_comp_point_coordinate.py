@@ -1,8 +1,3 @@
-"""
-Created on 23 avr. 2018
-
-@author: pierre_b
-"""
 
 from numpy import arcsin, exp, pi, sqrt
 

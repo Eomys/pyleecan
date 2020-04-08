@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW27.check
-Check that the SlotW27 is correct
-@date Created on Wed Mar 07 12:57:47 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from pyleecan.Methods.Slot.Slot.check import SlotCheckError
 

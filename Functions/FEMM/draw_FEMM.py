@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package draw_FEMM
-@date Created on juil. 30 17:34 2018
-@author franco_i
-"""
 
 import femm
 from pyleecan.Classes.Lamination import Lamination

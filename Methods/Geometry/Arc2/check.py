@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.Arc2.check
-Check Arc2 method
-@date Created on Mon Dec 08 13:20:16 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 from numpy import pi
 
 

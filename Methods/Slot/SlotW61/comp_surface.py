@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW60.comp_surface
-SlotW60 Computation of surface method
-@date Created on Wed Aug 01 10:22:33 2018
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import pi, arcsin, sin
 

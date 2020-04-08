@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW10.comp_surface
-SlotW10 Computation of surface method
-@date Created on Mon Dec 08 17:22:33 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import sin, tan
 

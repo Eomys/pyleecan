@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Lamination.plot
-Lamination plot method
-@date Created on Mon Apr 20 15:23:02 2015
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend

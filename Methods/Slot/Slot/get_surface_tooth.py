@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package get_surface
-@date Created on juil. 02 11:03 2018
-@author franco_i
-"""
 from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.SurfLine import SurfLine

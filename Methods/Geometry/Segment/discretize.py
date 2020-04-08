@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.Segment.discretize
-Discretize a Segment method
-@date Created on Fri Dec 05 09:57:59 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 from numpy import linspace
 
 from pyleecan.Methods.Machine import LINE_NPOINT_D

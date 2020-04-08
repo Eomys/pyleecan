@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.LamSlotWind.plot
-Lamination with Winding plot method
-@date Created on Wed Dec 10 10:35:39 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend

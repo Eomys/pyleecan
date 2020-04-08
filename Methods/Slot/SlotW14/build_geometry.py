@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Thu Mar 30 14:30:21 2017
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-@todo unittest it
-"""
 
 from pyleecan.Classes.Segment import Segment
 

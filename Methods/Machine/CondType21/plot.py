@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.CondType21.plot
-Conductor Type 2_1 plot method
-@date Created on Mon Jan 12 13:07:11 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from matplotlib.patches import Patch, Rectangle
 from matplotlib.pyplot import axis, legend, subplots

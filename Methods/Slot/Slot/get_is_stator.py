@@ -1,7 +1,3 @@
-"""
-created on June 19th 2018
-@author franco_i
-"""
 
 from pyleecan.Methods import ParentMissingError
 

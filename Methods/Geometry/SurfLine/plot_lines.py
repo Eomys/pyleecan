@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.SurfLine.plot_lines
-Surface Contour Line plot method
-@date Created on Wed Dec 10 10:35:39 2014
-@author sebastian_g
-"""
 
 from matplotlib.pyplot import axis, legend
 from numpy import real, imag

@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Sat Feb 22 21:37:30 2020
-@author sebastian_g
-"""
 from os.path import isfile, join, normpath, abspath
 import re
 

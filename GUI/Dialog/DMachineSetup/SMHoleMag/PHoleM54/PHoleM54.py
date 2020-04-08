@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.PBSlot.PBSlot54.PHoleM54
-HoleM54 Setup Page
-@date Created on Wed Dec 12 14:30:54 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget

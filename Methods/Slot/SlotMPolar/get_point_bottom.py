@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package get_point_bottom
-@date Created on juil. 12 14:31 2018
-@author pierre_b
-"""
 from numpy import arcsin, exp
 
 

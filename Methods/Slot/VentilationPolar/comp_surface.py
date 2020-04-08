@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.VentilationPolar.comp_surface
-Compute polar ventulation ducts surface
-@date Created on Wed Mar 07 17:36:45 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import pi
 

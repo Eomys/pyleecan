@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package comp_element_size
-@date Created on août 07 10:53 2018
-@author franco_i
-"""
 
 from pyleecan.Classes.LamSlot import LamSlot
 from pyleecan.Classes.LamHole import LamHole

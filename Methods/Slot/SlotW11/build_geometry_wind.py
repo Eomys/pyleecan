@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW11.build_geometry_wind
-SlotW11 build_geometry_wind method
-@date Created on Tue Jun 30 14:54:30 2015
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-@todo Add the possibility to split
-"""
 
 from numpy import angle
 from scipy.optimize import fsolve

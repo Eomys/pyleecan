@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Shaft.plot
-Shaft plot methods
-@date Created on Fri Jan 09 16:09:52 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend

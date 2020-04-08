@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot11.PWSlot11
-SlotW11 Setup Page
-@date Created on Wed Jul 15 14:30:54 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 import PyQt5.QtCore
 from numpy import pi

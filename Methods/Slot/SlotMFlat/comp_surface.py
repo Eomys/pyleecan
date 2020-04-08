@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotMFlat.comp_surface
-SlotMFlat Computation of surface method
-@date Created on Mon Dec 22 13:25:11 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import sin
 

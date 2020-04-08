@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package comp_flux_airgap
-@date Created on août 01 15:46 2018
-@author franco_i
-"""
 
 from pyleecan.Functions.FEMM.draw_FEMM import draw_FEMM
 

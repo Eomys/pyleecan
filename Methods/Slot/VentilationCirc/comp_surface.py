@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.VentilationCirc.comp_surface
-Compute circular ventulation ducts surface
-@date Created on Wed Dec 09 16:59:18 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import pi
 

@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW26.comp_height_wind
-Slot Type_2_6 computation of the height of the winding area method
-@date Created on Mon Feb 22 12:06:14 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import arcsin, cos
 

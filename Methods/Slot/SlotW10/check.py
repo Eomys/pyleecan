@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW10.check
-Check that the SlotW10 is correct
-@date Created on Wed Feb 04 12:50:47 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import pi
 

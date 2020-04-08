@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotMFlat.comp_angle_opening
-SlotMFlat Computation of average opening angle method
-@date Created on Mon Dec 22 13:24:56 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import arcsin
 

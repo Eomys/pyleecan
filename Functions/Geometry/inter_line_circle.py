@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package inter_line_circle
-@date Created on mars 16 09:58 2018
-@author pierre_b
-"""
 from numpy import sqrt, abs as np_abs
 
 

@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType
-First Page of Machine setup: Machine type
-@date Created on Mon May 18 14:36:59 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap

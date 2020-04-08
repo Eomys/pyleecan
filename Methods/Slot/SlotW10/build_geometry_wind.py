@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW10.build_geometry_wind
-SlotW10 build_geometry_wind method
-@date Created on Mon Jan 12 14:26:59 2015
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import linspace, zeros
 

@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Winding.comp_winding_factor
-Compute the Winding Factor of Phase 1 
-@date Created on 13:36 02.08.2019
-@author sebastian_g
-@todo unittest
-@todo check for balanced system
-"""
 from numpy import abs, exp, pi, sum, array, linspace
 
 

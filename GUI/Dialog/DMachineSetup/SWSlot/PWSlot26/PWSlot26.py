@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot26.PWSlot26
-SlotW26 Setup Page
-@date Created on Tue Mar 01 17:45:37 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 import PyQt5.QtCore
 from PyQt5.QtCore import pyqtSignal

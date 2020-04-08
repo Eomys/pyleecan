@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Mon Jan 11 13:15:50 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from matplotlib.patches import Patch, Polygon
 from matplotlib.pyplot import axis, legend

@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package build_geometry
-@date Created on juil. 10 10:31 2018
-@author franco_i
-@todo: modify side segments for other bore radii (due to notches)
-"""
 from numpy import pi, exp
 
 from pyleecan.Classes.Circle import Circle

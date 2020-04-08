@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Dec 08 11:31:14 2014
-
-@author: pierre_b
-"""
 from unittest import TestCase
 from os.path import join
 

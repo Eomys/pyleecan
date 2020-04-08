@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Nov 26 14:19:09 2014
-
-@author: pierre_b
-"""
 from unittest import TestCase
 
 from pyleecan.Classes.Arc2 import Arc2

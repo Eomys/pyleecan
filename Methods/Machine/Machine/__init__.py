@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Dec 10 14:58:40 2014
-
-@author: pierre_b
-"""
 
 # List of all the direct variable translation matlab <=> python
 trad_list = list()

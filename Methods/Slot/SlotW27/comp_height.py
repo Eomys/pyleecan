@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW27.comp_height
-SlotW27 Computation of height method
-@date Created on Tue Mar 07 16:11:49 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import cos
 

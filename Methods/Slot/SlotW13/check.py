@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW13.check
-Check that the SlotW13 is correct
-@date Created on Mon Jul 11 13:48:02 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-@todo unittest it
-"""
 
 from numpy import pi
 

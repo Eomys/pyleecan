@@ -1,12 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Slot19.build_geometry
-Slot19 build_geometry method
-@date Created on Mon Jun 29 15:28:55 2015
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-@todo add constant tooth support
-@todo unittest it
-"""
 
 from numpy import arcsin, exp, angle
 

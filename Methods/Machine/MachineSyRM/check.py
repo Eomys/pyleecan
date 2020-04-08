@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@date Created on Thu Nov 29 18:01:54 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.LamSlotWind import LamSlotWind

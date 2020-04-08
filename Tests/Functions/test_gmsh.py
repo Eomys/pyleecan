@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@author: pierre_b
-"""
 
 from os import remove, getcwd
 from os.path import isfile, join

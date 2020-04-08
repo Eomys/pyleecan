@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Jul 21 14:33:46 2017
-
-@author: pierre_b
-"""
 
 
 def get_m2(self, value):

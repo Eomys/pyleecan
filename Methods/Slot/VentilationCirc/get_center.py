@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.VentilationCirc.get_center
-Get the coordinate of the ventilation center methods
-@date Created on Tue Mar 15 16:30:08 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import exp, pi
 

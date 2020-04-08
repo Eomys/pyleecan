@@ -1,7 +1,3 @@
-"""Created on June 18th 2018
-
-@author: franco_i
-"""
 from numpy import arcsin, exp
 
 

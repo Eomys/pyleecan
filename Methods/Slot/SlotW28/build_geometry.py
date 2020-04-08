@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW28.build_geometry
-SlotW28 build_geometry method
-@date Created on Wed Jul 13 10:58:11 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-@todo unittest it
-"""
 
 from numpy import arcsin, exp, pi, sqrt
 

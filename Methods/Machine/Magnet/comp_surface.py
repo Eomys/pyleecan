@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Magnet.comp_surface
-Magnet Computation of surface (Numerical) method
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 
 def comp_surface(self):

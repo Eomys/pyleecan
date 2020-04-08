@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Functions.gen_phase_list
-Generate color and name for phase functions
-@date Created on Tue Jan 27 14:58:26 2015
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from random import choice
 

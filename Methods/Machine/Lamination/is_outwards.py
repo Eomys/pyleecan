@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Lamination.is_outwards
-Check if the Slot is outwards or inwards
-@date Created on Wed Feb 04 12:47:19 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo: method name is a little confusing - sebastian_g
-"""
 
 
 def is_outwards(self):

@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot13.PWSlot13
-SlotW13 Setup Page
-@date Created on Mon Jul 11 14:04:32 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-@todo unittest it
-"""
 
 import PyQt5.QtCore
 from numpy import pi

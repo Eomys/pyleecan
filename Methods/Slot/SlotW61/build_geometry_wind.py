@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW61.build_geometry_wind
-SlotW61 build_geometry_wind method
-@date Created on Wed Aug 01 09:26:59 2018
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from pyleecan.Methods.Slot.Slot.check import SlotCheckError
 from numpy import pi, exp

@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.HoleM53.build_geometry
-HoleM53 build_geometry method
-@date Created on Fri Mar 16 11:03:07 2018
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import cos, exp, sin
 

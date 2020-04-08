@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SLamParam.SLamParam
-3rd Page of the Machine Setup: Stator Setup
-@date Created on Tue May 26 17:58:28 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from matplotlib.pyplot import gcf
 from PyQt5.QtCore import pyqtSignal

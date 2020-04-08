@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SWSlot.SWPole
-Winding Slot Setup Page
-@date Created on Wed Jul 15 14:14:29 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import pi
 from PyQt5.QtCore import pyqtSignal

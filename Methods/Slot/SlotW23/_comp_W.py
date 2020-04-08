@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW23._comp_W
-SlotW23 compute W1 and W2 method (cste tooth compatibility)
-@date Created on Wed Jul 22 17:42:20 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import abs as np_abs, arcsin, exp, pi, sin
 

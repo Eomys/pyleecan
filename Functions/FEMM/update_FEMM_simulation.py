@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package solve_FEMM
-@date Created on août 22 16:55 2018
-@author franco_i
-"""
 import femm
 from numpy import pi
 

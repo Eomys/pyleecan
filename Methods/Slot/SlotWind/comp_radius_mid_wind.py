@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotWind.comp_angle_eq
-SlotW10 Computation of average angle method
-@date Created on Tue Dec 09 17:07:09 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 
 def comp_radius_mid_wind(self):

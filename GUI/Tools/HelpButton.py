@@ -1,8 +1,3 @@
-"""
-Created on 3 oct. 2017
-
-@author: pierre_b
-"""
 
 from PyQt5.QtCore import QUrl, Qt
 from PyQt5.QtGui import QCursor, QDesktopServices, QPixmap

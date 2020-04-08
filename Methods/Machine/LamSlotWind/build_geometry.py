@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package build_geometry
-@date Created on juin 20 14:04 2018
-@author franco_i
-"""
 from numpy import pi
 
 from pyleecan.Classes.Winding import Winding

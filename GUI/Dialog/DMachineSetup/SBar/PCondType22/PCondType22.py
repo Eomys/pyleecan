@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22
-Cond Type 2_2 setup widget
-@date Created on Thu Jul 30 15:47:56 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget

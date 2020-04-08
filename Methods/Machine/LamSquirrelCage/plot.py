@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.LamSquirrelCage.plot
-LamSquirrelCage plot method
-@date Created on Tue Jan 27 13:53:39 2015
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from matplotlib.patches import Patch, Polygon, Wedge
 from matplotlib.pyplot import axis, legend

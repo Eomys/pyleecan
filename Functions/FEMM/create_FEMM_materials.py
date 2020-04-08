@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package set_FEMM_materials
-@date Created on août 06 17:04 2018
-@author franco_i+
-@todo: why is the label "Lamination_Stator_Bore" and not "Lamination_Stator"
-"""
 
 import femm
 from numpy import exp, pi

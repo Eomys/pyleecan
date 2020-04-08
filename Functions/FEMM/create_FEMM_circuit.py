@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package set_FEMM_circuit
-@date Created on août 09 17:25 2018
-@author franco_i
-"""
 
 import femm
 from numpy import linalg as LA, pi, sign, sqrt

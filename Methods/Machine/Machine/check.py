@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Machine.check
-Check that the machine is correct
-@date Created on Thu Jan 22 15:53:15 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from pyleecan.Methods.Machine import MachineCheckError
 

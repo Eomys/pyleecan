@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Frame.get_length
-Length dictionary method
-@date Created on Mon Apr 04 14:17:17 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 
 def get_length(self):

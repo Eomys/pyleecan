@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on 
-@author pierre_b
-@todo add BH curve editing and csv import
-@todo unittest it
-"""
 from os.path import join, dirname, split
 from PyQt5.QtWidgets import QDialog, QMessageBox, QFileDialog
 from PyQt5.QtCore import Qt

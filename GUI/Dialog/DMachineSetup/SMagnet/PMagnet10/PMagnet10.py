@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Tue Dec 15 13:43:22 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QPixmap

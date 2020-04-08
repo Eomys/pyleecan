@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Frame.comp_volume
-Frame computation the volume methods
-@date Created on Thu Jan 29 13:20:03 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import pi
 

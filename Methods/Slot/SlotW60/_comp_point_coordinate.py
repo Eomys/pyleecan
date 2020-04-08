@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW60._comp_point_coordinate
-SlotW60 _comp_point_coordinate method
-@date Created on Tue Jul 31 12:05:43 2018
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 from numpy import pi, exp, cos, arcsin
 
 

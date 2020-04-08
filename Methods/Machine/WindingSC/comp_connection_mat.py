@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Winding._comp_wind_type_10
-Compute the Winding Matrix (for type 10) Method
-@date Created on Tue Jan 27 11:55:02 2015
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import zeros
 

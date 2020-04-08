@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package build_geometry
-@date Created on juil. 12 13:48 2018
-@author franco_i
-"""
 from numpy import pi
 
 from pyleecan.Methods.Machine.LamSlot.build_geometry import build_geometry as build_geo

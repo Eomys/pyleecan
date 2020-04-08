@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Notch.check
-Check that the Notch is Outward
-@date Created on Wed Feb 04 12:47:19 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from pyleecan.Methods import ParentMissingError
 

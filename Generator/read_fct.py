@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""Created on Mon Nov 17 11:18:59 2014
-@author: pierre_b
-"""
 from os import walk
 from os.path import isfile, join
 

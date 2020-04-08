@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW26.comp_height
-SlotW26 Computation of height method
-@date Created on Mon Feb 22 12:00:58 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import arcsin, cos
 

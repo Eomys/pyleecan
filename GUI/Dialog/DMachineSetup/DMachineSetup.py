@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup
-Main windows of the Machine Setup Tools
-@date Created on Mon May 18 14:43:41 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo Add the Machine_Type_2 support
-"""
 
 from os import getcwd, rename
 from os.path import basename, join, isfile, dirname

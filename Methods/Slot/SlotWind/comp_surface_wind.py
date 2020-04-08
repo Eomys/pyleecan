@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotWind.comp_surface_wind
-Slot Winding Computation of surface (Numerical) method
-@date Created on Wed Jul 25 14:22:33 2018
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 
 def comp_surface_wind(self):

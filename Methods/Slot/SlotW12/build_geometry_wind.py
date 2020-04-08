@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW12.build_geometry_wind
-SlotW12 build_geometry_wind method
-@date Created on Tue Mar 07 14:54:30 2015
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import arcsin, exp
 

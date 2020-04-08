@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Slot.HoleM54.check
-Check that the HoleM54 is correct
-@date Created on Wed Dec 05 12:53:23 2018
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import pi
 

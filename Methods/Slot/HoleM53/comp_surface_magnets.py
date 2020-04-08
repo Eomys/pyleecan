@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Functions.comp_magnet_surface
-Computation the HoleM53 magnet surface method
-@date Created on Fri Mar 16 17:15:15 2018
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 
 def comp_surface_magnets(self):

@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.CondType12.check
-Check that the Conductor is correct
-@date Created on Thu Jan 22 17:38:03 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import pi, power
 

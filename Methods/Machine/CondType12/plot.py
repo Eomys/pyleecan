@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.CondType12.plot
-Conductor Type 1_2 plot method
-@date Created on Mon Jan 12 13:40:11 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo Find formula for more than 4
-"""
 
 from matplotlib.patches import Circle, Patch
 from matplotlib.pyplot import axis, legend, subplots

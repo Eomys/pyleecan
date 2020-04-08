@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""Created on Tue Nov 04 09:01:21 2014
-@author: pierre_b
-"""
 from os.path import join
 
 from pyleecan.Generator import PYTHON_TYPE, TAB, TAB2, TAB3, TAB4, TAB5, TAB6, TAB7

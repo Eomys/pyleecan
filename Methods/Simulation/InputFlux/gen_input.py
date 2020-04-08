@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Thu Mar 07 14:05:30 2019
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from pyleecan.Classes.OutMag import OutMag
 from pyleecan.Methods.Simulation.Input import InputError

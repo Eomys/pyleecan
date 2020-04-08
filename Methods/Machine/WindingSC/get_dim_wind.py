@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Winding.get_dim_wind
-Compute the Winding Matrix Dimension Method
-@date Created on Fri Jan 15 11:03:49 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from pyleecan.Methods import NotImplementedYetError
 

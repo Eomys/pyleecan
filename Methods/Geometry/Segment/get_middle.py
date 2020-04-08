@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.Segment.get_middle
-Compute the coordinate of the middle of a Segment method
-@date Created on Wed May 04 11:07:56 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 
 def get_middle(self):

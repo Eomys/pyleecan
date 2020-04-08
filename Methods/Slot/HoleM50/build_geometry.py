@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.HoleM50.build_geometry
-HoleM50 build_geometry method
-@date Created on Thu Dec 17 11:03:07 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import arcsin, arctan, cos, exp, array, angle, pi
 from numpy import imag as np_imag

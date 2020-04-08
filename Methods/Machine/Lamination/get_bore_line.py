@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package get_bore_line
-@date Created on juin 20 10:56 2018
-@author franco_i
-"""
 from numpy import pi, exp, linspace
 
 from pyleecan.Classes.Arc1 import Arc1

@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Winding._comp_wind_type_5
-Compute the Winding Matrix (for type 5) Method
-@date Created on Wed Jan 27 09:40:33 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 from numpy import array, mod, zeros
 
 from pyleecan.Methods.Machine.Winding import WindingError

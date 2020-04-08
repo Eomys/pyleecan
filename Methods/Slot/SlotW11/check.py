@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW11.check
-Check that the SlotW11 is correct
-@date Created on Tue Jun 30 14:54:30 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo add R1 = H2 compatibility
-"""
 
 from numpy import pi
 

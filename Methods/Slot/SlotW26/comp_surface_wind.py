@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW26.comp_surface_wind
-SlotW26 Computation of winding surface method
-@date Created on Mon Feb 22 12:11:27 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import arcsin, sin, pi
 

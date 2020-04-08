@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW25.check
-Check that the SlotW25 is correct
-@date Created on Mon Jul 06 11:40:07 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import arcsin, pi
 

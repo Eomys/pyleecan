@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package build_geometry_half_tooth
-@date Created on 11:31 31.07.2019
-@author sebastian_g
-@todo distinguish between different bore geometries (line, arc, ...)
-"""
 from numpy import imag, pi, exp
 from numpy import abs as np_abs
 from pyleecan.Classes.Circle import Circle

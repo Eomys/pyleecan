@@ -1,11 +1,4 @@
 ﻿# -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Thu Jul 30 17:18:07 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 
 from PyQt5.QtCore import QSize

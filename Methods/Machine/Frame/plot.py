@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Frame.plot
-Frame plot methods
-@date Created on Mon Jan 26 17:45:37 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis

@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.LamHole.comp_surfaces
-Lamination with Buried Magnets computation of all surfaces method
-@date Created on Mon Jan 12 17:09:42 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import pi
 from pyleecan.Classes.Lamination import Lamination

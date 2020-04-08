@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.MagnetType14.build_geometry
-MagnetType14 build_geometry method
-@date Created on Wed Dec 17 16:09:15 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import angle, exp
 

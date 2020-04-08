@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""Created on Mon Nov 10 15:44:20 2014
-@author: pierre_b
-"""
 import sys
 from os.path import dirname, abspath, normpath, join
 from os import listdir, remove

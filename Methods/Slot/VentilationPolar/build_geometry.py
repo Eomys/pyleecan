@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Ventilation_Polar.build_geometry
-Ventilation_Polar build_geometry method
-@date Created on Tue Mar 08 11:38:33 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import exp, pi
 

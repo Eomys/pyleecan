@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Dec 01 15:41:23 2014
-
-@author: pierre_b
-"""
 
 from os import remove, getcwd
 from os.path import isfile, join

@@ -1,8 +1,3 @@
-"""
-Created on 14 June. 2018
-
-@author: franco_i
-"""
 
 from numpy import angle, arcsin, arctan, cos, exp, pi, sin, sqrt
 

@@ -1,8 +1,3 @@
-"""
-Created on June 15th 2018
-
-@author: pierre_b
-"""
 from numpy import angle, arcsin, exp, tan
 from pyleecan.Methods import ParentMissingError
 

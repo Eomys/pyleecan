@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Slot.Hole.plot
-Hole plot methods
-@date Created on Thu Dec 17 13:45:37 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend

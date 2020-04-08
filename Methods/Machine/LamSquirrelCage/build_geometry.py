@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package build_geometry
-@date Created on août 10 10:42 2018
-@author franco_i
-"""
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):

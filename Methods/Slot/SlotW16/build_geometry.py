@@ -1,8 +1,3 @@
-"""
-Created on 23 avr. 2018
-
-@author: pierre_b
-"""
 # -*- coding: utf-8 -*-
 
 from pyleecan.Classes.Arc1 import Arc1

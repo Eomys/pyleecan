@@ -1,12 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Winding._comp_wind_type_1
-Compute the Winding Matrix (for type 1) Method
-@date Created on Mon Dec 15 14:21:45 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it for every ms case
-@todo link every winding type to a validation case and an article
-"""
 from numpy import array, mod, zeros
 
 from pyleecan.Methods.Machine.Winding import WindingError

@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW27.build_geometry
-SlotW27 build_geometry method
-@date Created on Tue Mar 07 10:52:09 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import arcsin, exp
 

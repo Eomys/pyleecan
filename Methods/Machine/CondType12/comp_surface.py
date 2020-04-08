@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.CondType12.comp_surface
-Conductor Type 1_2 comp_surface method
-@date Created on Wed Jan 21 13:52:19 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import pi
 

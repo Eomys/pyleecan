@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Thu Mar 07 14:52:32 2019
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 from pyleecan.Functions.Winding.gen_phase_list import gen_name
 
 

@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""Created on 2020-02-18 18:11:50
-@author: sebastian_g
-"""
 import sys
 from os.path import dirname, abspath, normpath, join, isfile, split
 
