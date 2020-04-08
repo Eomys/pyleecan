@@ -4,9 +4,9 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
-from .....GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import (
-    Gen_SMachineType,
-)
+from .....GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import Gen_SMachineType
+
+from .....definitions import PACKAGE_NAME
 
 
 class SMachineType(Gen_SMachineType, QWidget):
@@ -43,7 +43,7 @@ class SMachineType(Gen_SMachineType, QWidget):
 
         # Dynamic import to avoid import loop
         module = __import__(
-            "pyleecan.GUI.Dialog.DMachineSetup", fromlist=["DMachineSetup"]
+            PACKAGE_NAME + ".GUI.Dialog.DMachineSetup", fromlist=["DMachineSetup"]
         )
         self.mach_list = getattr(module, "mach_list")
         self.mach_index = getattr(module, "mach_index")

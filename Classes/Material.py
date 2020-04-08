@@ -5,17 +5,17 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes._frozen import FrozenClass
+from ._frozen import FrozenClass
 
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.MatElectrical import MatElectrical
-from ..Classes.MatMagnetics import MatMagnetics
-from ..Classes.MatStructural import MatStructural
-from ..Classes.MatHT import MatHT
-from ..Classes.MatEconomical import MatEconomical
+from ._check import InitUnKnowClassError
+from .MatElectrical import MatElectrical
+from .MatMagnetics import MatMagnetics
+from .MatStructural import MatStructural
+from .MatHT import MatHT
+from .MatEconomical import MatEconomical
 
 
 class Material(FrozenClass):

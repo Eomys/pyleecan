@@ -5,10 +5,10 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes._frozen import FrozenClass
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -28,16 +28,12 @@ except ImportError as error:
     comp_masses = error
 
 try:
-    from ..Methods.Machine.Machine.comp_width_airgap_mag import (
-        comp_width_airgap_mag,
-    )
+    from ..Methods.Machine.Machine.comp_width_airgap_mag import comp_width_airgap_mag
 except ImportError as error:
     comp_width_airgap_mag = error
 
 try:
-    from ..Methods.Machine.Machine.comp_width_airgap_mec import (
-        comp_width_airgap_mec,
-    )
+    from ..Methods.Machine.Machine.comp_width_airgap_mec import comp_width_airgap_mec
 except ImportError as error:
     comp_width_airgap_mec = error
 
@@ -79,9 +75,9 @@ except ImportError as error:
     plot_anim_rotor = error
 
 
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.Frame import Frame
-from ..Classes.Shaft import Shaft
+from ._check import InitUnKnowClassError
+from .Frame import Frame
+from .Shaft import Shaft
 
 
 class Machine(FrozenClass):

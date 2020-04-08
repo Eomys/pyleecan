@@ -1,14 +1,26 @@
 # -*- coding: utf-8 -*-
 import sys
-from os.path import dirname, abspath, normpath, join
+from os.path import dirname, abspath, normpath, join, realpath
 from os import listdir, remove
 import json
 
-sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", ".."))))
+begin = len(normpath(abspath(join(dirname(__file__), "../.."))))
+end = len(normpath(abspath(join(dirname(__file__), ".."))))
+MAIN_DIR = dirname(realpath(__file__))
 
-from ..Generator.ClassGenerator.class_generator import generate_class
-from ..Generator.read_fct import read_all
-from ..definitions import MAIN_DIR, DOC_DIR, INT_DIR
+package_name = MAIN_DIR[begin + 1 : end]
+
+# Add the directory to the python path
+sys.path.append(MAIN_DIR[:begin])
+
+exec(
+    "from "
+    + package_name
+    + ".Generator.ClassGenerator.class_generator import generate_class"
+)
+exec("from " + package_name + ".Generator.read_fct import read_all")
+exec("from " + package_name + ".definitions import MAIN_DIR, DOC_DIR, INT_DIR")
+
 
 # List of the main packages (to sort the classes)
 PACKAGE_LIST = ["Geometry", "Machine", "Material", "Slot", "Import"]
@@ -33,7 +45,7 @@ def generate_code(root_path, gen_dict=None):
     print("Reading classes csv in: " + DOC_DIR)
     print("Saving generated files in: " + CLASS_DIR)
 
-    path = __file__[__file__.index("pyleecan") :]
+    path = __file__[__file__.index(package_name) :]
     path = path.replace("\\", "/")
 
     # Deleting all the previous class

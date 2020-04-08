@@ -257,6 +257,6 @@ class Ui_PHoleM51(object):
         self.out_Whole.setText(_translate("PHoleM51", "Wslot : ?"))
 
 
-from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
-from ......GUI.Tools.FloatEdit import FloatEdit
-from ......GUI.Resources import pyleecan_rc
+from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+from pyleecan.GUI.Tools.FloatEdit import FloatEdit
+from pyleecan.GUI.Resources import pyleecan_rc

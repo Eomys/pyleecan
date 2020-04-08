@@ -7,9 +7,7 @@ from PyQt5.QtWidgets import QDialog, QMessageBox
 from ......Classes.MagnetType11 import MagnetType11
 from ......Classes.SlotMPolar import SlotMPolar
 from ......GUI import gui_option
-from ......GUI.Dialog.DMachineSetup.SMagnet.PMagnet11.Gen_PMagnet11 import (
-    Gen_PMagnet11,
-)
+from ......GUI.Dialog.DMachineSetup.SMagnet.PMagnet11.Gen_PMagnet11 import Gen_PMagnet11
 
 
 class PMagnet11(Gen_PMagnet11, QDialog):

@@ -13,13 +13,9 @@ from ...Generator.ClassGenerator.init_method_generator import generate_init
 from ...Generator.ClassGenerator.str_method_generator import generate_str
 from ...Generator.ClassGenerator.as_dict_method_generator import generate_as_dict
 from ...Generator.ClassGenerator.properties_generator import generate_properties
-from ...Generator.ClassGenerator.init_void_method_generator import (
-    generate_init_void,
-)
+from ...Generator.ClassGenerator.init_void_method_generator import generate_init_void
 from ...Generator.ClassGenerator.eq_method_generator import generate_eq
-from ...Generator.ClassGenerator.set_None_method_generator import (
-    generate_set_None,
-)
+from ...Generator.ClassGenerator.set_None_method_generator import generate_set_None
 
 
 def generate_class(gen_dict, class_name, path_to_gen):
@@ -67,30 +63,24 @@ def generate_class(gen_dict, class_name, path_to_gen):
     class_file.write("from logging import getLogger\n")
 
     if "ndarray" in import_type_list:
-        class_file.write(
-            "from ...Classes._check import set_array, " + "check_var, raise_\n"
-        )
+        class_file.write("from ._check import set_array, " + "check_var, raise_\n")
     else:
-        class_file.write("from ...Classes._check import check_var, raise_\n")
+        class_file.write("from ._check import check_var, raise_\n")
 
     # Get logger function
-    class_file.write("from ...Functions.get_logger import get_logger\n")
+    class_file.write("from ..Functions.get_logger import get_logger\n")
 
     # Save function
-    class_file.write("from ...Functions.save import save\n")
+    class_file.write("from ..Functions.save import save\n")
 
     # Import of the mother_class (FrozenClass by default)
     # All the classes file are in the Classes folder (regardless of their main package)
     if class_dict["mother"] != "":
         class_file.write(
-            "from ...Classes."
-            + class_dict["mother"]
-            + " import "
-            + class_dict["mother"]
-            + "\n\n"
+            "from ." + class_dict["mother"] + " import " + class_dict["mother"] + "\n\n"
         )
     else:
-        class_file.write("from ...Classes._frozen import FrozenClass\n\n")
+        class_file.write("from ._frozen import FrozenClass\n\n")
 
     # Import all the methods of the class
     # The methods are in Methods.<Main package>.<class name>, one file per method
@@ -122,7 +112,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
         cloudpickle_imported = True
         class_file.write("from inspect import getsource\n")
         class_file.write("from cloudpickle import dumps, loads\n")
-        class_file.write("from ...Classes._check import CheckTypeError\n")
+        class_file.write("from ._check import CheckTypeError\n")
         import_type_list.remove("function")
 
     # Import types from other package
@@ -132,7 +122,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
             if cloudpickle_imported == False:
                 cloudpickle_imported = True
                 class_file.write("from cloudpickle import dumps, loads\n")
-                class_file.write("from ...Classes._check import CheckTypeError\n")
+                class_file.write("from ._check import CheckTypeError\n")
 
             # Extract import name
             type_name = import_type[: import_type.rfind(".")]
@@ -147,15 +137,11 @@ def generate_class(gen_dict, class_name, path_to_gen):
                 types_imported.append(type_name)
 
     # Import of all needed pyleecan type for empty init
-    class_file.write("from ...Classes._check import InitUnKnowClassError\n")
+    class_file.write("from ._check import InitUnKnowClassError\n")
     for pyleecan_type in import_type_list:
         if "." not in pyleecan_type:
             class_file.write(
-                "from ...Classes."
-                + pyleecan_type
-                + " import "
-                + pyleecan_type
-                + "\n"
+                "from ." + pyleecan_type + " import " + pyleecan_type + "\n"
             )
 
     # Class declaration

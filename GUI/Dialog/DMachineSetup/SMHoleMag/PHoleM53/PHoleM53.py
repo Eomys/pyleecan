@@ -6,9 +6,7 @@ from PyQt5.QtWidgets import QWidget
 
 from ......Classes.HoleM53 import HoleM53
 from ......GUI import gui_option
-from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM53.Gen_PHoleM53 import (
-    Gen_PHoleM53,
-)
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM53.Gen_PHoleM53 import Gen_PHoleM53
 from ......Methods.Slot.Slot.check import SlotCheckError
 
 

@@ -1,4 +1,5 @@
 from ....Classes.Segment import Segment
+from ....definitions import PACKAGE_NAME
 
 
 def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
@@ -27,7 +28,7 @@ def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
     """
 
     # Dynamic import to avoid import loop
-    module = __import__("pyleecan.Classes.SurfLine", fromlist=["SurfLine"])
+    module = __import__(PACKAGE_NAME + ".Classes.SurfLine", fromlist=["SurfLine"])
     SurfLine = getattr(module, "SurfLine")
 
     # Split all the lines of the surface

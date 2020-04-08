@@ -5,17 +5,15 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes.Conductor import Conductor
+from .Conductor import Conductor
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Machine.CondType11.comp_surface_active import (
-        comp_surface_active,
-    )
+    from ..Methods.Machine.CondType11.comp_surface_active import comp_surface_active
 except ImportError as error:
     comp_surface_active = error
 
@@ -40,8 +38,8 @@ except ImportError as error:
     plot = error
 
 
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.Material import Material
+from ._check import InitUnKnowClassError
+from .Material import Material
 
 
 class CondType11(Conductor):

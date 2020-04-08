@@ -3,7 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot28.Ui_PWSlot28 import Ui_PWSlot28
+from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot28.Ui_PWSlot28 import Ui_PWSlot28
 
 
 class Gen_PWSlot28(Ui_PWSlot28):

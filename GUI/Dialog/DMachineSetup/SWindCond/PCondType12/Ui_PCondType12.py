@@ -100,6 +100,6 @@ class Ui_PCondType12(object):
         self.unit_Wins_cond.setText(_translate("PCondType12", "m"))
 
 
-from ......GUI.Dialog.DMachineSetup.SWindCond.WCondOut.WCondOut import WCondOut
-from ......GUI.Tools.FloatEdit import FloatEdit
-from ......GUI.Resources import pyleecan_rc
+from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.WCondOut.WCondOut import WCondOut
+from pyleecan.GUI.Tools.FloatEdit import FloatEdit
+from pyleecan.GUI.Resources import pyleecan_rc

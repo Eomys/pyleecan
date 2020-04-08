@@ -140,6 +140,6 @@ class Ui_PWSlot28(object):
         self.in_W3.setText(_translate("PWSlot28", "W3:"))
 
 
-from ......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
-from ......GUI.Tools.FloatEdit import FloatEdit
-from ......GUI.Resources import pyleecan_rc
+from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
+from pyleecan.GUI.Tools.FloatEdit import FloatEdit
+from pyleecan.GUI.Resources import pyleecan_rc

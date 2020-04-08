@@ -64,4 +64,4 @@ class Ui_DMachineSetup(object):
         self.b_load.setText(_translate("DMachineSetup", "Load"))
 
 
-from ....GUI.Resources import pyleecan_rc
+from pyleecan.GUI.Resources import pyleecan_rc

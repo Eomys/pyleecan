@@ -5,10 +5,10 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes.OptiGenAlg import OptiGenAlg
+from .OptiGenAlg import OptiGenAlg
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -28,9 +28,7 @@ except ImportError as error:
     cross = error
 
 try:
-    from ..Methods.Optimization.OptiGenAlgNsga2Deap.create_toolbox import (
-        create_toolbox,
-    )
+    from ..Methods.Optimization.OptiGenAlgNsga2Deap.create_toolbox import create_toolbox
 except ImportError as error:
     create_toolbox = error
 
@@ -44,15 +42,15 @@ except ImportError as error:
 
 from inspect import getsource
 from cloudpickle import dumps, loads
-from ..Classes._check import CheckTypeError
+from ._check import CheckTypeError
 
 try:
     import deap.base
 except ImportError:
     deap.base = ImportError
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.OutputMultiOpti import OutputMultiOpti
-from ..Classes.OptiProblem import OptiProblem
+from ._check import InitUnKnowClassError
+from .OutputMultiOpti import OutputMultiOpti
+from .OptiProblem import OptiProblem
 
 
 class OptiGenAlgNsga2Deap(OptiGenAlg):

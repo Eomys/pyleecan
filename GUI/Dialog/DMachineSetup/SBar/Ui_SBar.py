@@ -149,6 +149,6 @@ class Ui_SBar(object):
         self.b_next.setText(_translate("SBar", "Save"))
 
 
-from .....GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
-from .....GUI.Tools.FloatEdit import FloatEdit
-from .....GUI.Resources import pyleecan_rc
+from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+from pyleecan.GUI.Tools.FloatEdit import FloatEdit
+from pyleecan.GUI.Resources import pyleecan_rc

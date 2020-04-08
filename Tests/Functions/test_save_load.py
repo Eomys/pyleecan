@@ -154,7 +154,7 @@ class test_save_load_fct(TestCase):
             "SlotDoesntExist is not a pyleecan class", str(context.exception)
         )
 
-    @patch.dict("pyleecan.Functions.load_switch.load_switch", {"list": None})
+    @patch.dict("...Functions.load_switch.load_switch", {"list": None})
     def test_load_switch(self):
         """Test that the load function can detect wrong load_switch dict
         """

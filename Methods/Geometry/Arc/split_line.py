@@ -1,5 +1,6 @@
 from numpy import exp, angle, abs as np_abs
 from ....Classes.Segment import Segment
+from ....definitions import PACKAGE_NAME
 
 DELTA = 1e-9  # To remove computing noise
 
@@ -30,7 +31,7 @@ def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):
     """
 
     # Dynamic import of Arc1 to prevent import loop from code generator
-    module = __import__("pyleecan.Classes.Arc1", fromlist=["Arc1"])
+    module = __import__(PACKAGE_NAME + ".Classes.Arc1", fromlist=["Arc1"])
     Arc1 = getattr(module, "Arc1")
 
     # Get the intersection point

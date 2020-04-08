@@ -5,10 +5,10 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import set_array, check_var, raise_
+from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes._frozen import FrozenClass
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -59,9 +59,9 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.Element import Element
-from ..Classes.Node import Node
+from ._check import InitUnKnowClassError
+from .Element import Element
+from .Node import Node
 
 
 class Mesh(FrozenClass):

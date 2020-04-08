@@ -139,4 +139,4 @@ class Ui_SWindParam(object):
         self.b_next.setText(_translate("SWindParam", "Next"))
 
 
-from .....GUI.Resources import pyleecan_rc
+from pyleecan.GUI.Resources import pyleecan_rc

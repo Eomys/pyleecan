@@ -45,7 +45,7 @@ def create_indiv(create, output, design_var):
     ----------
     creator : function
         function to create the individual
-    output : pyleecan.Classes.Output
+    output : ....Classes.Output
         output of the individual
     design_var : dict
         Design variables  

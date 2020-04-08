@@ -5,10 +5,10 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes._frozen import FrozenClass
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -23,8 +23,8 @@ except ImportError as error:
     comp_time_angle = error
 
 
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.Force import Force
+from ._check import InitUnKnowClassError
+from .Force import Force
 
 
 class Structural(FrozenClass):

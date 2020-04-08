@@ -5,10 +5,10 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes.MachineAsync import MachineAsync
+from .MachineAsync import MachineAsync
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -23,10 +23,10 @@ except ImportError as error:
     get_machine_type = error
 
 
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.LamSlotWind import LamSlotWind
-from ..Classes.Frame import Frame
-from ..Classes.Shaft import Shaft
+from ._check import InitUnKnowClassError
+from .LamSlotWind import LamSlotWind
+from .Frame import Frame
+from .Shaft import Shaft
 
 
 class MachineDFIM(MachineAsync):

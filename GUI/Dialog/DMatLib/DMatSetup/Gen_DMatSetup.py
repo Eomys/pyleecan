@@ -3,7 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from .....GUI.Dialog.DMatLib.DMatSetup.Ui_DMatSetup import Ui_DMatSetup
+from pyleecan.GUI.Dialog.DMatLib.DMatSetup.Ui_DMatSetup import Ui_DMatSetup
 
 
 class Gen_DMatSetup(Ui_DMatSetup):

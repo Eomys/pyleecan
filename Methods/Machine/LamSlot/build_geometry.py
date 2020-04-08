@@ -6,9 +6,7 @@ from ....Classes.SurfLine import SurfLine
 from ....Classes.Arc1 import Arc1
 from ....Classes.Segment import Segment
 from ....Classes.SurfRing import SurfRing
-from ....Methods.Machine.Lamination.build_geometry import (
-    build_geometry as build_geo,
-)
+from ....Methods.Machine.Lamination.build_geometry import build_geometry as build_geo
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0):

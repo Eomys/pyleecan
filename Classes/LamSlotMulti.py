@@ -5,10 +5,10 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import set_array, check_var, raise_
+from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes.Lamination import Lamination
+from .Lamination import Lamination
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -33,9 +33,7 @@ except ImportError as error:
     comp_surfaces = error
 
 try:
-    from ..Methods.Machine.LamSlotMulti.get_pole_pair_number import (
-        get_pole_pair_number,
-    )
+    from ..Methods.Machine.LamSlotMulti.get_pole_pair_number import get_pole_pair_number
 except ImportError as error:
     get_pole_pair_number = error
 
@@ -61,11 +59,11 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.Slot import Slot
-from ..Classes.Material import Material
-from ..Classes.Hole import Hole
-from ..Classes.Notch import Notch
+from ._check import InitUnKnowClassError
+from .Slot import Slot
+from .Material import Material
+from .Hole import Hole
+from .Notch import Notch
 
 
 class LamSlotMulti(Lamination):

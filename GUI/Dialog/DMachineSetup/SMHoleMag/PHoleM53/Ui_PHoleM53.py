@@ -215,6 +215,6 @@ class Ui_PHoleM53(object):
         self.out_W5.setText(_translate("PHoleM53", "W5 : ?"))
 
 
-from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
-from ......GUI.Tools.FloatEdit import FloatEdit
-from ......GUI.Resources import pyleecan_rc
+from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+from pyleecan.GUI.Tools.FloatEdit import FloatEdit
+from pyleecan.GUI.Resources import pyleecan_rc

@@ -7,7 +7,7 @@ from os.path import abspath, join, isfile
 from re import match
 from subprocess import PIPE, Popen
 from json import load as jload
-from ..definitions import GEN_DIR, GUI_DIR, RES_NAME, RES_PATH
+from ..definitions import GEN_DIR, GUI_DIR, RES_NAME, RES_PATH, PACKAGE_NAME
 from ..Generator import TAB, TAB2, TAB3
 from ..Functions.short_filepath import short_filepath
 
@@ -84,7 +84,7 @@ def gen_gui_edit_file(path, class_name, gen_dict, gen_list):
     # split_path list
     # from ["C:", "Users",..., "GUI", "Dialog",...] to ["GUI", "Dialog"...]
     split_path.reverse()
-    split_path = split_path[: split_path.index("pyleecan") + 1]
+    split_path = split_path[: split_path.index(PACKAGE_NAME) + 1]
     split_path.reverse()
     # from ["GUI", "Dialog", ...] to GUI.Dialog...
     import_path = ".".join(split_path)
@@ -162,7 +162,7 @@ def gen_gui_class_file(path, class_name, gen_dict, gen_list):
     # split_path list
     # from ["C:", "Users",..., "GUI", "Dialog",...] to ["GUI", "Dialog"...]
     split_path.reverse()
-    split_path = split_path[: split_path.index("pyleecan") + 1]
+    split_path = split_path[: split_path.index(PACKAGE_NAME) + 1]
     split_path.reverse()
     # from ["GUI", "Dialog", ...] to GUI.Dialog...
     import_path = ".".join(split_path)
@@ -494,14 +494,18 @@ def ui_to_py(path, file_name):
     path_out = join(path, "Ui_" + file_name[:-3] + ".py")  # Output file
 
     print(
-        'pyuic5 --import-from=pyleecan.GUI.Resources "'
+        "pyuic5 --import-from="
+        + PACKAGE_NAME
+        + '.GUI.Resources "'
         + short_filepath(path_in, length=40)
         + '" -o "'
         + short_filepath(path_out, length=40)
         + '"'
     )
     system(
-        'pyuic5 --import-from=pyleecan.GUI.Resources "'
+        "pyuic5 --import-from="
+        + PACKAGE_NAME
+        + '.GUI.Resources "'
         + path_in
         + '" -o "'
         + path_out

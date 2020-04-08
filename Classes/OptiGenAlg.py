@@ -5,17 +5,17 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes._frozen import FrozenClass
+from ._frozen import FrozenClass
 
 from inspect import getsource
 from cloudpickle import dumps, loads
-from ..Classes._check import CheckTypeError
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.OutputMultiOpti import OutputMultiOpti
-from ..Classes.OptiProblem import OptiProblem
+from ._check import CheckTypeError
+from ._check import InitUnKnowClassError
+from .OutputMultiOpti import OutputMultiOpti
+from .OptiProblem import OptiProblem
 
 
 class OptiGenAlg(FrozenClass):

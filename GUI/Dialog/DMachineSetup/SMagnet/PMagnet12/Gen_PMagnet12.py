@@ -3,7 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from ......GUI.Dialog.DMachineSetup.SMagnet.PMagnet12.Ui_PMagnet12 import (
+from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet12.Ui_PMagnet12 import (
     Ui_PMagnet12,
 )
 

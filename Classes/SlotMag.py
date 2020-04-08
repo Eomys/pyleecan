@@ -5,12 +5,12 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes.Slot import Slot
+from .Slot import Slot
 
-from ..Classes._check import InitUnKnowClassError
+from ._check import InitUnKnowClassError
 
 
 class SlotMag(Slot):

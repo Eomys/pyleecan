@@ -7,9 +7,7 @@ from PyQt5.QtWidgets import QWidget
 
 from ......Classes.HoleM50 import HoleM50
 from ......GUI import gui_option
-from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.Gen_PHoleM50 import (
-    Gen_PHoleM50,
-)
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.Gen_PHoleM50 import Gen_PHoleM50
 from ......Methods.Slot.Slot.check import SlotCheckError
 
 

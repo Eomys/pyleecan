@@ -5,17 +5,15 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes.Winding import Winding
+from .Winding import Winding
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Machine.WindingSC.comp_connection_mat import (
-        comp_connection_mat,
-    )
+    from ..Methods.Machine.WindingSC.comp_connection_mat import comp_connection_mat
 except ImportError as error:
     comp_connection_mat = error
 
@@ -25,8 +23,8 @@ except ImportError as error:
     get_dim_wind = error
 
 
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.Conductor import Conductor
+from ._check import InitUnKnowClassError
+from .Conductor import Conductor
 
 
 class WindingSC(Winding):

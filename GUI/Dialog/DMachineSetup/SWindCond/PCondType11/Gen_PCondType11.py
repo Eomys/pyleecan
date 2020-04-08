@@ -3,7 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from ......GUI.Dialog.DMachineSetup.SWindCond.PCondType11.Ui_PCondType11 import (
+from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType11.Ui_PCondType11 import (
     Ui_PCondType11,
 )
 

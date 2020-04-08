@@ -4,6 +4,7 @@ from ...Generator.read_fct import (
     is_list_pyleecan_type,
     is_dict_pyleecan_type,
 )
+from ...definitions import PACKAGE_NAME
 
 
 def generate_init(gen_dict, class_dict):
@@ -318,7 +319,10 @@ def generate_set_class_by_dict_list(prop_name, prop_type, daug_list):
         class_dict_str += TAB5 + "# Dynamic import to call the correct constructor\n"
         class_dict_str += TAB5 + "module = __import__(\n"
         class_dict_str += (
-            TAB6 + '"pyleecan.Classes." + class_name, fromlist=[class_name]\n'
+            TAB6
+            + '"'
+            + PACKAGE_NAME
+            + '.Classes." + class_name, fromlist=[class_name]\n'
         )
         class_dict_str += TAB5 + ")\n"
         class_dict_str += TAB5 + "class_obj = getattr(module, class_name)\n"
@@ -369,7 +373,9 @@ def generate_set_class_by_dict_dict(prop_name, prop_type, daug_list):
         class_dict_str += TAB5 + "# Dynamic import to call the correct constructor\n"
         class_dict_str += (
             TAB5
-            + 'module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])\n'
+            + 'module = __import__("'
+            + PACKAGE_NAME
+            + '.Classes."+class_name, fromlist=[class_name])\n'
         )
         class_dict_str += TAB5 + "class_obj = getattr(module,class_name)\n"
         class_dict_str += (
@@ -420,7 +426,9 @@ def generate_set_class_by_dict(prop_name, prop_type, daug_list):
         class_dict_str += TAB3 + "# Dynamic import to call the correct constructor\n"
         class_dict_str += (
             TAB3
-            + 'module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])\n'
+            + 'module = __import__("'
+            + PACKAGE_NAME
+            + '.Classes."+class_name, fromlist=[class_name])\n'
         )
         class_dict_str += TAB3 + "class_obj = getattr(module,class_name)\n"
         class_dict_str += (

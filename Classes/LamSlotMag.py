@@ -5,10 +5,10 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes.LamSlot import LamSlot
+from .LamSlot import LamSlot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -48,11 +48,11 @@ except ImportError as error:
     plot = error
 
 
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.Slot import Slot
-from ..Classes.Material import Material
-from ..Classes.Hole import Hole
-from ..Classes.Notch import Notch
+from ._check import InitUnKnowClassError
+from .Slot import Slot
+from .Material import Material
+from .Hole import Hole
+from .Notch import Notch
 
 
 class LamSlotMag(LamSlot):

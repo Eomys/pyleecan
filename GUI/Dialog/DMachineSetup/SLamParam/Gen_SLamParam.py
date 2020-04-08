@@ -3,7 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from .....GUI.Dialog.DMachineSetup.SLamParam.Ui_SLamParam import Ui_SLamParam
+from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.Ui_SLamParam import Ui_SLamParam
 
 
 class Gen_SLamParam(Ui_SLamParam):

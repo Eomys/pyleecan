@@ -6,12 +6,8 @@ from PyQt5.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.CondType11 import CondType11
 from .....Classes.CondType12 import CondType12
-from .....GUI.Dialog.DMachineSetup.SWindCond.PCondType11.PCondType11 import (
-    PCondType11,
-)
-from .....GUI.Dialog.DMachineSetup.SWindCond.PCondType12.PCondType12 import (
-    PCondType12,
-)
+from .....GUI.Dialog.DMachineSetup.SWindCond.PCondType11.PCondType11 import PCondType11
+from .....GUI.Dialog.DMachineSetup.SWindCond.PCondType12.PCondType12 import PCondType12
 from .....GUI.Dialog.DMachineSetup.SWindCond.Ui_SWindCond import Ui_SWindCond
 
 # For the Conductor combobox

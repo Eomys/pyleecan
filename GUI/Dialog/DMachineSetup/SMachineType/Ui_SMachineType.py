@@ -131,4 +131,4 @@ class Ui_SMachineType(object):
         self.b_next.setText(_translate("SMachineType", "Next"))
 
 
-from .....GUI.Resources import pyleecan_rc
+from pyleecan.GUI.Resources import pyleecan_rc

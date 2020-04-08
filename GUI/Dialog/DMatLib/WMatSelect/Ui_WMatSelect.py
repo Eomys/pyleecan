@@ -50,4 +50,4 @@ class Ui_WMatSelect(object):
         self.b_matlib.setText(_translate("WMatSelect", "Edit Materials"))
 
 
-from .....GUI.Resources import pyleecan_rc
+from pyleecan.GUI.Resources import pyleecan_rc

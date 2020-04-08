@@ -5,10 +5,10 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes.SlotMag import SlotMag
+from .SlotMag import SlotMag
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -45,8 +45,8 @@ except ImportError as error:
     get_point_bottom = error
 
 
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.MagnetPolar import MagnetPolar
+from ._check import InitUnKnowClassError
+from .MagnetPolar import MagnetPolar
 
 
 class SlotMPolar(SlotMag):

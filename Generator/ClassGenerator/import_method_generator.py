@@ -24,7 +24,7 @@ def import_method(class_pack, class_name, meth):
     code = "try:\n"
     code += (
         TAB
-        + "from ...Methods."
+        + "from ..Methods."
         + class_pack
         + "."
         + class_name

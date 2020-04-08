@@ -3,7 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from .....GUI.Dialog.DMachineSetup.SWindPat.Ui_SWindPat import Ui_SWindPat
+from pyleecan.GUI.Dialog.DMachineSetup.SWindPat.Ui_SWindPat import Ui_SWindPat
 
 
 class Gen_SWindPat(Ui_SWindPat):

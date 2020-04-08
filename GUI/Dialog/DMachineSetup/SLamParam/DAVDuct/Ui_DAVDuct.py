@@ -80,5 +80,5 @@ class Ui_DAVDuct(object):
         self.b_ok.setText(_translate("DAVDuct", "Ok"))
 
 
-from ......GUI.Tools.HelpButton import HelpButton
-from ......GUI.Resources import pyleecan_rc
+from pyleecan.GUI.Tools.HelpButton import HelpButton
+from pyleecan.GUI.Resources import pyleecan_rc

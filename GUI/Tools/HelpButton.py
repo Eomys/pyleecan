@@ -1,4 +1,3 @@
-
 from PyQt5.QtCore import QUrl, Qt
 from PyQt5.QtGui import QCursor, QDesktopServices, QPixmap
 from PyQt5.QtWidgets import QLabel

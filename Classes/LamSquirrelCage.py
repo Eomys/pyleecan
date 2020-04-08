@@ -5,10 +5,10 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes.LamSlotWind import LamSlotWind
+from .LamSlotWind import LamSlotWind
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -23,9 +23,7 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCage.comp_length_ring import (
-        comp_length_ring,
-    )
+    from ..Methods.Machine.LamSquirrelCage.comp_length_ring import comp_length_ring
 except ImportError as error:
     comp_length_ring = error
 
@@ -35,12 +33,12 @@ except ImportError as error:
     plot = error
 
 
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.Material import Material
-from ..Classes.Winding import Winding
-from ..Classes.Slot import Slot
-from ..Classes.Hole import Hole
-from ..Classes.Notch import Notch
+from ._check import InitUnKnowClassError
+from .Material import Material
+from .Winding import Winding
+from .Slot import Slot
+from .Hole import Hole
+from .Notch import Notch
 
 
 class LamSquirrelCage(LamSlotWind):

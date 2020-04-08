@@ -1,4 +1,3 @@
-
 from numpy import angle, arcsin, arctan, cos, exp, pi, sin, sqrt
 
 from ....Methods.Slot.SlotW15 import S15InnerError

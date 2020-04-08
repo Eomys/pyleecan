@@ -5,17 +5,15 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes.SlotWind import SlotWind
+from .SlotWind import SlotWind
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Slot.SlotW11._comp_point_coordinate import (
-        _comp_point_coordinate,
-    )
+    from ..Methods.Slot.SlotW11._comp_point_coordinate import _comp_point_coordinate
 except ImportError as error:
     _comp_point_coordinate = error
 
@@ -60,7 +58,7 @@ except ImportError as error:
     comp_surface_wind = error
 
 
-from ..Classes._check import InitUnKnowClassError
+from ._check import InitUnKnowClassError
 
 
 class SlotW11(SlotWind):

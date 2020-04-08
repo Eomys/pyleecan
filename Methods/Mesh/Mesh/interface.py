@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from ....Classes.NodeMat import NodeMat
 from ....Classes.ElementMat import ElementMat
+from ....definitions import PACKAGE_NAME
 from collections import Counter
 import numpy as np
 
@@ -21,7 +22,7 @@ def interface(self, other_mesh):
     """
 
     # Dynamic import
-    module = __import__("pyleecan.Classes." + "Mesh", fromlist=["Mesh"])
+    module = __import__(PACKAGE_NAME + ".Classes." + "Mesh", fromlist=["Mesh"])
     new_mesh = getattr(module, "Mesh")()
     new_mesh.node = NodeMat()
     new_mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)

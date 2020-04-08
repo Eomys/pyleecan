@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ....definitions import PACKAGE_NAME
 
 import numpy as np
 
@@ -19,7 +20,7 @@ def get_group(self, element):
          a Node object corresponding to Element
 
      """
-    module = __import__("pyleecan.Classes." + "NodeMat", fromlist=["NodeMat"])
+    module = __import__(PACKAGE_NAME + ".Classes." + "NodeMat", fromlist=["NodeMat"])
     node = getattr(module, "NodeMat")()
 
     node_tags = element.get_all_node_tags()

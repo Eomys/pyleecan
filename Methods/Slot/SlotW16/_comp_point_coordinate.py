@@ -1,4 +1,3 @@
-
 from numpy import arcsin, exp, pi, sqrt
 
 from ....Methods.Slot.SlotW16 import S16OutterError

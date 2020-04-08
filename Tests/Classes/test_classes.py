@@ -40,7 +40,7 @@ class test_all_Classes(TestCase):
         by __init__ with the default value"""
         # Import and init the class
         # module = import_module(
-        #     "pyleecan.Classes." + class_dict["package"] + "." + class_dict["name"]
+        #     "...Classes." + class_dict["package"] + "." + class_dict["name"]
         # )
         # class_to_test = getattr(module, class_dict["name"])
 

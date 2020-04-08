@@ -22,7 +22,7 @@ def importName(modulename, name, ignore_error=False):
 def rel_file_path(file, wildcard):
     """ try to generate relative file path with given wildcard
     """
-    root_path = importName("pyleecan.definitions", wildcard, ignore_error=True)
+    root_path = importName("..definitions", wildcard, ignore_error=True)
     if root_path:
         root_path = normpath(abspath(root_path))
         file_ = normpath(abspath(file))
@@ -40,7 +40,7 @@ def abs_file_path(file, is_check=True):
     """
     if "<" in file and ">\\" in file:
         wildcard = re.search(r"\<([A-Za-z0-9_]+)\>", file).group(1)
-        root_path = importName("pyleecan.definitions", wildcard)
+        root_path = importName("..definitions", wildcard)
         file = join(root_path, file.replace(f"<{wildcard}>\\", ""))
 
     if not isfile(file) and is_check:

@@ -5,10 +5,10 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes.LamSlot import LamSlot
+from .LamSlot import LamSlot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -38,9 +38,7 @@ except ImportError as error:
     comp_volumes = error
 
 try:
-    from ..Methods.Machine.LamSlotWind.get_pole_pair_number import (
-        get_pole_pair_number,
-    )
+    from ..Methods.Machine.LamSlotWind.get_pole_pair_number import get_pole_pair_number
 except ImportError as error:
     get_pole_pair_number = error
 
@@ -75,12 +73,12 @@ except ImportError as error:
     get_polar_eq = error
 
 
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.Winding import Winding
-from ..Classes.Slot import Slot
-from ..Classes.Material import Material
-from ..Classes.Hole import Hole
-from ..Classes.Notch import Notch
+from ._check import InitUnKnowClassError
+from .Winding import Winding
+from .Slot import Slot
+from .Material import Material
+from .Hole import Hole
+from .Notch import Notch
 
 
 class LamSlotWind(LamSlot):

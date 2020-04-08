@@ -5,10 +5,10 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ..Classes._check import check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ..Classes._frozen import FrozenClass
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -45,9 +45,7 @@ except ImportError as error:
     plot_force_space = error
 
 try:
-    from ..Methods.Output.Output.plot.Magnetic.plot_mesh_field import (
-        plot_mesh_field,
-    )
+    from ..Methods.Output.Output.plot.Magnetic.plot_mesh_field import plot_mesh_field
 except ImportError as error:
     plot_mesh_field = error
 
@@ -57,13 +55,13 @@ except ImportError as error:
     plot_mesh = error
 
 
-from ..Classes._check import InitUnKnowClassError
-from ..Classes.Simulation import Simulation
-from ..Classes.OutGeo import OutGeo
-from ..Classes.OutElec import OutElec
-from ..Classes.OutMag import OutMag
-from ..Classes.OutStruct import OutStruct
-from ..Classes.OutPost import OutPost
+from ._check import InitUnKnowClassError
+from .Simulation import Simulation
+from .OutGeo import OutGeo
+from .OutElec import OutElec
+from .OutMag import OutMag
+from .OutStruct import OutStruct
+from .OutPost import OutPost
 
 
 class Output(FrozenClass):

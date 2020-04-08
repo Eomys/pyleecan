@@ -1,5 +1,3 @@
-
-
 def comp_height_wind(self):
     """Compute the height of the winding area
 

@@ -10,15 +10,11 @@ from ....Classes.VentilationCirc import VentilationCirc
 from ....Classes.VentilationPolar import VentilationPolar
 from ....Classes.VentilationTrap import VentilationTrap
 from ....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.DAVDuct import DAVDuct
-from ....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.PVentCirc import (
-    PVentCirc,
-)
+from ....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.PVentCirc import PVentCirc
 from ....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.PVentPolar import (
     PVentPolar,
 )
-from ....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.PVentTrap import (
-    PVentTrap,
-)
+from ....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.PVentTrap import PVentTrap
 
 
 class test_DAVDuct(TestCase):

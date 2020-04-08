@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from ....definitions import PACKAGE_NAME
 
 
 def set_submesh(self, group_number):
@@ -16,7 +17,7 @@ def set_submesh(self, group_number):
 
      """
     # Dynamic import of MeshFEMM
-    module = __import__("pyleecan.Classes." + "Mesh", fromlist=["Mesh"])
+    module = __import__(PACKAGE_NAME + ".Classes." + "Mesh", fromlist=["Mesh"])
     submesh = getattr(module, "Mesh")()
 
     for i_group in range(len(group_number)):

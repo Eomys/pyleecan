@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from definitions import ROOT_DIR, DATA_DIR, MATLIB_DIR
+from definitions import ROOT_DIR, DATA_DIR, MATLIB_DIR, PACKAGE_NAME
 
 import sys
 from os.path import dirname, abspath, normpath, join
@@ -14,13 +14,21 @@ from PyQt5.QtCore import QTranslator
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QIcon
 
-from .GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
-from .GUI.Dialog.DMatLib.DMatLib import DMatLib
-from .GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+exec(
+    "from "
+    + PACKAGE_NAME
+    + ".GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup"
+)
+exec("from " + PACKAGE_NAME + ".GUI.Dialog.DMatLib.DMatLib import DMatLib")
+exec(
+    "from "
+    + PACKAGE_NAME
+    + ".GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect"
+)
 
-from .GUI.Tools.SidebarWindow import SidebarWindow
-from .GUI.Tools.MachinePlotWidget import MachinePlotWidget
-from .GUI.Tools.TreeView import TreeView
+exec("from " + PACKAGE_NAME + ".GUI.Tools.SidebarWindow import SidebarWindow")
+exec("from " + PACKAGE_NAME + ".GUI.Tools.MachinePlotWidget import MachinePlotWidget")
+exec("from " + PACKAGE_NAME + ".GUI.Tools.TreeView import TreeView")
 
 EXT_GUI = True
 
