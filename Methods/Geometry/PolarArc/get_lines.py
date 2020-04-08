@@ -1,8 +1,8 @@
 # -*-- coding: utf-8 -*
 from numpy import angle, exp
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
 
 
 def get_lines(self):

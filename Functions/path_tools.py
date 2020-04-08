@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
     sys.path.insert(0, ROOT_DIR)
 
-    from pyleecan.definitions import MATLIB_DIR
+    from ..definitions import MATLIB_DIR
 
     file = "<MATLIB_DIR>\Magnet1.json"
     print(abs_file_path(file, is_check=False))

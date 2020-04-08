@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from numpy import exp, pi
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Circle import Circle
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
+from ...Classes.Arc1 import Arc1
+from ...Classes.Circle import Circle
+from ...Classes.Segment import Segment
+from ...Classes.SurfLine import SurfLine
 
 
 def get_sliding_band(sym, lam_int, lam_ext):

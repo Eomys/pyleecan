@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from numpy import pi, angle, exp
 
-from pyleecan.Classes.Circle import Circle
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfRing import SurfRing
-from pyleecan.Methods.Machine.Lamination.build_geometry import (
+from ....Classes.Circle import Circle
+from ....Classes.SurfLine import SurfLine
+from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
+from ....Classes.SurfRing import SurfRing
+from ....Methods.Machine.Lamination.build_geometry import (
     build_geometry as build_geo,
 )
 

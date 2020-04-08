@@ -5,26 +5,26 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Simulation.Structural.run import run
+    from ..Methods.Simulation.Structural.run import run
 except ImportError as error:
     run = error
 
 try:
-    from pyleecan.Methods.Simulation.Structural.comp_time_angle import comp_time_angle
+    from ..Methods.Simulation.Structural.comp_time_angle import comp_time_angle
 except ImportError as error:
     comp_time_angle = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Force import Force
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Force import Force
 
 
 class Structural(FrozenClass):

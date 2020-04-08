@@ -5,66 +5,66 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Surface import Surface
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.Surface import Surface
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Geometry.SurfLine.get_lines import get_lines
+    from ..Methods.Geometry.SurfLine.get_lines import get_lines
 except ImportError as error:
     get_lines = error
 
 try:
-    from pyleecan.Methods.Geometry.SurfLine.rotate import rotate
+    from ..Methods.Geometry.SurfLine.rotate import rotate
 except ImportError as error:
     rotate = error
 
 try:
-    from pyleecan.Methods.Geometry.SurfLine.translate import translate
+    from ..Methods.Geometry.SurfLine.translate import translate
 except ImportError as error:
     translate = error
 
 try:
-    from pyleecan.Methods.Geometry.SurfLine.check import check
+    from ..Methods.Geometry.SurfLine.check import check
 except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Geometry.SurfLine.comp_length import comp_length
+    from ..Methods.Geometry.SurfLine.comp_length import comp_length
 except ImportError as error:
     comp_length = error
 
 try:
-    from pyleecan.Methods.Geometry.SurfLine.get_patches import get_patches
+    from ..Methods.Geometry.SurfLine.get_patches import get_patches
 except ImportError as error:
     get_patches = error
 
 try:
-    from pyleecan.Methods.Geometry.SurfLine.discretize import discretize
+    from ..Methods.Geometry.SurfLine.discretize import discretize
 except ImportError as error:
     discretize = error
 
 try:
-    from pyleecan.Methods.Geometry.SurfLine.comp_surface import comp_surface
+    from ..Methods.Geometry.SurfLine.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
 
 try:
-    from pyleecan.Methods.Geometry.SurfLine.plot_lines import plot_lines
+    from ..Methods.Geometry.SurfLine.plot_lines import plot_lines
 except ImportError as error:
     plot_lines = error
 
 try:
-    from pyleecan.Methods.Geometry.SurfLine.comp_point_ref import comp_point_ref
+    from ..Methods.Geometry.SurfLine.comp_point_ref import comp_point_ref
 except ImportError as error:
     comp_point_ref = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Line import Line
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Line import Line
 
 
 class SurfLine(Surface):

@@ -3,8 +3,8 @@
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
 
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Methods.Machine import MAGNET_COLOR
+from ....Functions.init_fig import init_fig
+from ....Methods.Machine import MAGNET_COLOR
 
 
 def plot(self, fig=None, display_magnet=True):

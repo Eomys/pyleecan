@@ -105,8 +105,8 @@ class Ui_PVentPolar(object):
         self.unit_Alpha0.setText(_translate("PVentPolar", "rad"))
 
 
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut import (
+from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut import (
     WVentOut,
 )
-from pyleecan.GUI.Tools.FloatEdit import FloatEdit
-from pyleecan.GUI.Resources import pyleecan_rc
+from .......GUI.Tools.FloatEdit import FloatEdit
+from .......GUI.Resources import pyleecan_rc

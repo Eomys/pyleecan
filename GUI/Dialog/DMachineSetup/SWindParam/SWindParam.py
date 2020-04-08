@@ -3,7 +3,7 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
-from pyleecan.GUI.Dialog.DMachineSetup.SWindParam.Gen_SWindParam import Gen_SWindParam
+from .....GUI.Dialog.DMachineSetup.SWindParam.Gen_SWindParam import Gen_SWindParam
 
 
 class SWindParam(Gen_SWindParam, QWidget):

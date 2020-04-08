@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
-from pyleecan.Methods.Import.ImportGenMatrixSin import InitSinMatDimError
+from ....Classes.ImportGenVectSin import ImportGenVectSin
+from ....Methods.Import.ImportGenMatrixSin import InitSinMatDimError
 
 
 def init_vector(self, f, A, Phi, N, Tf):

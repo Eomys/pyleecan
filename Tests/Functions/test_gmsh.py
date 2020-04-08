@@ -5,13 +5,13 @@ from os.path import isfile, join
 from unittest import TestCase
 
 try:
-    from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
+    from ...Functions.GMSH.gen_3D_mesh import gen_3D_mesh
 except:
     gen_3D_mesh = None
 
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.SlotW10 import SlotW10
-from pyleecan.Tests import save_validation_path as save_path
+from ...Classes.LamSlotWind import LamSlotWind
+from ...Classes.SlotW10 import SlotW10
+from ...Tests import save_validation_path as save_path
 
 
 class test_gmsh(TestCase):

@@ -4,10 +4,10 @@ import PyQt5.QtCore
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from pyleecan.Classes.SlotW29 import SlotW29
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot29.Gen_PWSlot29 import Gen_PWSlot29
-from pyleecan.Methods.Slot.Slot.check import SlotCheckError
+from ......Classes.SlotW29 import SlotW29
+from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot29.Gen_PWSlot29 import Gen_PWSlot29
+from ......Methods.Slot.Slot.check import SlotCheckError
 
 translate = PyQt5.QtCore.QCoreApplication.translate
 

@@ -5,80 +5,80 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Arc import Arc
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.Arc import Arc
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Geometry.Arc3.check import check
+    from ..Methods.Geometry.Arc3.check import check
 except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc3.comp_length import comp_length
+    from ..Methods.Geometry.Arc3.comp_length import comp_length
 except ImportError as error:
     comp_length = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc3.comp_radius import comp_radius
+    from ..Methods.Geometry.Arc3.comp_radius import comp_radius
 except ImportError as error:
     comp_radius = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc3.discretize import discretize
+    from ..Methods.Geometry.Arc3.discretize import discretize
 except ImportError as error:
     discretize = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc3.get_angle import get_angle
+    from ..Methods.Geometry.Arc3.get_angle import get_angle
 except ImportError as error:
     get_angle = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc3.get_begin import get_begin
+    from ..Methods.Geometry.Arc3.get_begin import get_begin
 except ImportError as error:
     get_begin = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc3.get_center import get_center
+    from ..Methods.Geometry.Arc3.get_center import get_center
 except ImportError as error:
     get_center = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc3.get_end import get_end
+    from ..Methods.Geometry.Arc3.get_end import get_end
 except ImportError as error:
     get_end = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc3.get_middle import get_middle
+    from ..Methods.Geometry.Arc3.get_middle import get_middle
 except ImportError as error:
     get_middle = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc3.reverse import reverse
+    from ..Methods.Geometry.Arc3.reverse import reverse
 except ImportError as error:
     reverse = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc3.rotate import rotate
+    from ..Methods.Geometry.Arc3.rotate import rotate
 except ImportError as error:
     rotate = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc3.split_half import split_half
+    from ..Methods.Geometry.Arc3.split_half import split_half
 except ImportError as error:
     split_half = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc3.translate import translate
+    from ..Methods.Geometry.Arc3.translate import translate
 except ImportError as error:
     translate = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
+from ..Classes._check import InitUnKnowClassError
 
 
 class Arc3(Arc):

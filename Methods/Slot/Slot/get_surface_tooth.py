@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Methods import ParentMissingError
+from ....Classes.Segment import Segment
+from ....Classes.Arc1 import Arc1
+from ....Classes.SurfLine import SurfLine
+from ....Methods import ParentMissingError
 from numpy import exp, pi
 
 

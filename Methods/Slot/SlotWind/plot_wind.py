@@ -4,8 +4,8 @@ from matplotlib.patches import Patch, Polygon
 from matplotlib.pyplot import axis, legend
 from numpy import array, exp, pi
 
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Methods.Machine import PHASE_COLOR, PHASE_NAME
+from ....Functions.init_fig import init_fig
+from ....Methods.Machine import PHASE_COLOR, PHASE_NAME
 
 
 def plot_wind(self, wind_mat=None, fig=None, is_bar=False):

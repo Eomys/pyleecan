@@ -5,24 +5,24 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Simulation import Simulation
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.Simulation import Simulation
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Simulation.Simu1.run import run
+    from ..Methods.Simulation.Simu1.run import run
 except ImportError as error:
     run = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Magnetics import Magnetics
-from pyleecan.Classes.Structural import Structural
-from pyleecan.Classes.Machine import Machine
-from pyleecan.Classes.Input import Input
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Magnetics import Magnetics
+from ..Classes.Structural import Structural
+from ..Classes.Machine import Machine
+from ..Classes.Input import Input
 
 
 class Simu1(Simulation):

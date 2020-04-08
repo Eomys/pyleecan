@@ -2,7 +2,7 @@
 
 from numpy import pi, power
 
-from pyleecan.Methods.Machine.Conductor.check import CondCheckError
+from ....Methods.Machine.Conductor.check import CondCheckError
 
 
 def check(self):

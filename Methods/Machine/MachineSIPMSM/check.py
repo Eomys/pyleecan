@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Methods.Machine import MachineCheckError
+from ....Classes.LamSlotMag import LamSlotMag
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Methods.Machine import MachineCheckError
 
 
 def check(self):

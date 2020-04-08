@@ -5,28 +5,28 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.MachineSync import MachineSync
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.MachineSync import MachineSync
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.MachineWRSM.check import check
+    from ..Methods.Machine.MachineWRSM.check import check
 except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Machine.MachineWRSM.get_machine_type import get_machine_type
+    from ..Methods.Machine.MachineWRSM.get_machine_type import get_machine_type
 except ImportError as error:
     get_machine_type = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.Frame import Frame
-from pyleecan.Classes.Shaft import Shaft
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.LamSlotWind import LamSlotWind
+from ..Classes.Frame import Frame
+from ..Classes.Shaft import Shaft
 
 
 class MachineWRSM(MachineSync):

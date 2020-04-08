@@ -4,8 +4,8 @@ from json import load as jload
 from os.path import isfile, isdir, join
 from os import walk
 from re import match
-from pyleecan.Functions.load_switch import load_switch
-from pyleecan.Classes.Material import Material
+from ..Functions.load_switch import load_switch
+from ..Classes.Material import Material
 
 
 def load_json(file_path):

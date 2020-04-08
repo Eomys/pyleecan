@@ -3,8 +3,8 @@
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
 
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Methods.Machine import ROTOR_COLOR, STATOR_COLOR, VENT_COLOR, VENT_EDGE
+from ....Functions.init_fig import init_fig
+from ....Methods.Machine import ROTOR_COLOR, STATOR_COLOR, VENT_COLOR, VENT_EDGE
 
 
 def plot(

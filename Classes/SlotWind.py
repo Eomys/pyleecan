@@ -5,40 +5,40 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Slot import Slot
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.Slot import Slot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.SlotWind.comp_angle_wind_eq import comp_angle_wind_eq
+    from ..Methods.Slot.SlotWind.comp_angle_wind_eq import comp_angle_wind_eq
 except ImportError as error:
     comp_angle_wind_eq = error
 
 try:
-    from pyleecan.Methods.Slot.SlotWind.comp_height_wind import comp_height_wind
+    from ..Methods.Slot.SlotWind.comp_height_wind import comp_height_wind
 except ImportError as error:
     comp_height_wind = error
 
 try:
-    from pyleecan.Methods.Slot.SlotWind.comp_radius_mid_wind import comp_radius_mid_wind
+    from ..Methods.Slot.SlotWind.comp_radius_mid_wind import comp_radius_mid_wind
 except ImportError as error:
     comp_radius_mid_wind = error
 
 try:
-    from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+    from ..Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
 except ImportError as error:
     comp_surface_wind = error
 
 try:
-    from pyleecan.Methods.Slot.SlotWind.plot_wind import plot_wind
+    from ..Methods.Slot.SlotWind.plot_wind import plot_wind
 except ImportError as error:
     plot_wind = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
+from ..Classes._check import InitUnKnowClassError
 
 
 class SlotWind(Slot):

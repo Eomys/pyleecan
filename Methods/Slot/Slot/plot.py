@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from matplotlib.pyplot import axis
-from pyleecan.Methods.Machine import ROTOR_COLOR, STATOR_COLOR
+from ....Methods.Machine import ROTOR_COLOR, STATOR_COLOR
 
-from pyleecan.Functions.init_fig import init_fig
+from ....Functions.init_fig import init_fig
 
 
 def plot(self, fig=None):

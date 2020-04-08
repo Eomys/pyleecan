@@ -7,9 +7,9 @@ from os.path import abspath, join, isfile
 from re import match
 from subprocess import PIPE, Popen
 from json import load as jload
-from pyleecan.definitions import GEN_DIR, GUI_DIR, RES_NAME, RES_PATH
-from pyleecan.Generator import TAB, TAB2, TAB3
-from pyleecan.Functions.short_filepath import short_filepath
+from ..definitions import GEN_DIR, GUI_DIR, RES_NAME, RES_PATH
+from ..Generator import TAB, TAB2, TAB3
+from ..Functions.short_filepath import short_filepath
 
 # SpinBox Must have min and max value, if not provided in csv use these one
 MIN_SPIN = -999999

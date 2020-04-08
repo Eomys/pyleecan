@@ -4,10 +4,10 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMessageBox, QWidget, QSizePolicy
 
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.Material import Material
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.Ui_SMHoleMag import Ui_SMHoleMag
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.WHoleMag import WHoleMag
+from .....Classes.HoleM50 import HoleM50
+from .....Classes.Material import Material
+from .....GUI.Dialog.DMachineSetup.SMHoleMag.Ui_SMHoleMag import Ui_SMHoleMag
+from .....GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.WHoleMag import WHoleMag
 
 
 class SMHoleMag(Ui_SMHoleMag, QWidget):

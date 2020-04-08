@@ -4,8 +4,8 @@ from matplotlib.patches import Patch, Polygon, Wedge
 from matplotlib.pyplot import axis, legend
 from numpy import array, exp, pi
 
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Methods.Machine import BAR_COLOR, SCR_COLOR
+from ....Functions.init_fig import init_fig
+from ....Methods.Machine import BAR_COLOR, SCR_COLOR
 
 
 def plot(

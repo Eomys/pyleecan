@@ -2,8 +2,8 @@
 
 from numpy import exp, sin
 
-from pyleecan.Functions.Geometry.inter_line_circle import inter_line_circle
-from pyleecan.Methods.Slot.HoleM53 import Slot53InterError
+from ....Functions.Geometry.inter_line_circle import inter_line_circle
+from ....Methods.Slot.HoleM53 import Slot53InterError
 
 
 def comp_W5(self):

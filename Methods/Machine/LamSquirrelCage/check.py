@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.CondType21 import CondType21
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Methods.Machine.LamSlotWind.check import Lam_WindCheckError
+from ....Classes.CondType21 import CondType21
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Methods.Machine.LamSlotWind.check import Lam_WindCheckError
 
 
 def check(self):

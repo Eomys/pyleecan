@@ -146,5 +146,5 @@ class Ui_PHoleM54(object):
         self.out_slot_surface.setText(_translate("PHoleM54", "Slot suface : ?"))
 
 
-from pyleecan.GUI.Tools.FloatEdit import FloatEdit
-from pyleecan.GUI.Resources import pyleecan_rc
+from ......GUI.Tools.FloatEdit import FloatEdit
+from ......GUI.Resources import pyleecan_rc

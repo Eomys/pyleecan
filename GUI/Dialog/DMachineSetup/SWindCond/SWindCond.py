@@ -4,15 +4,15 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
-from pyleecan.Classes.CondType11 import CondType11
-from pyleecan.Classes.CondType12 import CondType12
-from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType11.PCondType11 import (
+from .....Classes.CondType11 import CondType11
+from .....Classes.CondType12 import CondType12
+from .....GUI.Dialog.DMachineSetup.SWindCond.PCondType11.PCondType11 import (
     PCondType11,
 )
-from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType12.PCondType12 import (
+from .....GUI.Dialog.DMachineSetup.SWindCond.PCondType12.PCondType12 import (
     PCondType12,
 )
-from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.Ui_SWindCond import Ui_SWindCond
+from .....GUI.Dialog.DMachineSetup.SWindCond.Ui_SWindCond import Ui_SWindCond
 
 # For the Conductor combobox
 wid_list = [PCondType11, PCondType12]

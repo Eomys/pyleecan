@@ -206,5 +206,5 @@ class Ui_PWSlot60(object):
         self.out_tooth_width.setText(_translate("PWSlot60", "Tooth average width : ?"))
 
 
-from pyleecan.GUI.Tools.FloatEdit import FloatEdit
-from pyleecan.GUI.Resources import pyleecan_rc
+from ......GUI.Tools.FloatEdit import FloatEdit
+from ......GUI.Resources import pyleecan_rc

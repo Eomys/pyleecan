@@ -7,15 +7,15 @@ from unittest import TestCase
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
-from pyleecan.Classes.CondType21 import CondType21
-from pyleecan.Classes.CondType22 import CondType22
-from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
-from pyleecan.Classes.MachineSCIM import MachineSCIM
-from pyleecan.Classes.Material import Material
-from pyleecan.Classes.SlotW22 import SlotW22
-from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType21.PCondType21 import PCondType21
-from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22 import PCondType22
-from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
+from ....Classes.CondType21 import CondType21
+from ....Classes.CondType22 import CondType22
+from ....Classes.LamSquirrelCage import LamSquirrelCage
+from ....Classes.MachineSCIM import MachineSCIM
+from ....Classes.Material import Material
+from ....Classes.SlotW22 import SlotW22
+from ....GUI.Dialog.DMachineSetup.SBar.PCondType21.PCondType21 import PCondType21
+from ....GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22 import PCondType22
+from ....GUI.Dialog.DMachineSetup.SBar.SBar import SBar
 
 
 class test_SBar(TestCase):

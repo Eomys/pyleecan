@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.OutStruct import OutStruct
-from pyleecan.Methods.Simulation.Input import InputError
+from ....Classes.OutStruct import OutStruct
+from ....Methods.Simulation.Input import InputError
 from numpy import ndarray
 
 

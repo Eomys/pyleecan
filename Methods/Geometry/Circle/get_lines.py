@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pyleecan.Classes.Arc3 import Arc3
+from ....Classes.Arc3 import Arc3
 
 
 def get_lines(self):

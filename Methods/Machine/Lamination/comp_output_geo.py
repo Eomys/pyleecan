@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.OutGeoLam import OutGeoLam
+from ....Classes.OutGeoLam import OutGeoLam
 
 
 def comp_output_geo(self):

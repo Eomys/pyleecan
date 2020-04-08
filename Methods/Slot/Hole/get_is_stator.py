@@ -1,5 +1,5 @@
 
-from pyleecan.Methods import ParentMissingError
+from ....Methods import ParentMissingError
 
 
 def get_is_stator(self):

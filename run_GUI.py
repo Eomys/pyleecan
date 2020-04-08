@@ -14,13 +14,13 @@ from PyQt5.QtCore import QTranslator
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QIcon
 
-from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
-from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
-from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+from .GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
+from .GUI.Dialog.DMatLib.DMatLib import DMatLib
+from .GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 
-from pyleecan.GUI.Tools.SidebarWindow import SidebarWindow
-from pyleecan.GUI.Tools.MachinePlotWidget import MachinePlotWidget
-from pyleecan.GUI.Tools.TreeView import TreeView
+from .GUI.Tools.SidebarWindow import SidebarWindow
+from .GUI.Tools.MachinePlotWidget import MachinePlotWidget
+from .GUI.Tools.TreeView import TreeView
 
 EXT_GUI = True
 

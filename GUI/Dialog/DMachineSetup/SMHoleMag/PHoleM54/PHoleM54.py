@@ -3,12 +3,12 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from pyleecan.Classes.HoleM54 import HoleM54
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.Gen_PHoleM54 import (
+from ......Classes.HoleM54 import HoleM54
+from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.Gen_PHoleM54 import (
     Gen_PHoleM54,
 )
-from pyleecan.Methods.Slot.Slot.check import SlotCheckError
+from ......Methods.Slot.Slot.check import SlotCheckError
 
 
 class PHoleM54(Gen_PHoleM54, QWidget):

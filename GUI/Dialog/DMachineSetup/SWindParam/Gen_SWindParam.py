@@ -3,7 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from pyleecan.GUI.Dialog.DMachineSetup.SWindParam.Ui_SWindParam import Ui_SWindParam
+from .....GUI.Dialog.DMachineSetup.SWindParam.Ui_SWindParam import Ui_SWindParam
 
 
 class Gen_SWindParam(Ui_SWindParam):

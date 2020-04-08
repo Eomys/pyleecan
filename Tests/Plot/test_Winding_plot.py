@@ -6,17 +6,17 @@ from unittest import TestCase
 import matplotlib.pyplot as plt
 from numpy import pi
 
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingCW1L import WindingCW1L
-from pyleecan.Classes.WindingDW2L import WindingDW2L
-from pyleecan.Classes.WindingDW1L import WindingDW1L
-from pyleecan.Classes.WindingCW2LR import WindingCW2LR
-from pyleecan.Classes.WindingSC import WindingSC
-from pyleecan.Classes.SlotW21 import SlotW21
-from pyleecan.Classes.SlotW22 import SlotW22
-from pyleecan.Tests import save_plot_path as save_path
+from ...Classes.LamSlotWind import LamSlotWind
+from ...Classes.WindingUD import WindingUD
+from ...Classes.WindingCW2LT import WindingCW2LT
+from ...Classes.WindingCW1L import WindingCW1L
+from ...Classes.WindingDW2L import WindingDW2L
+from ...Classes.WindingDW1L import WindingDW1L
+from ...Classes.WindingCW2LR import WindingCW2LR
+from ...Classes.WindingSC import WindingSC
+from ...Classes.SlotW21 import SlotW21
+from ...Classes.SlotW22 import SlotW22
+from ...Tests import save_plot_path as save_path
 
 
 class test_Winding_plot(TestCase):

@@ -6,18 +6,18 @@ from ddt import data, ddt
 from numpy import linspace, ones, pi, zeros, array, sqrt, transpose
 from numpy.testing import assert_array_almost_equal
 
-from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.InputCurrentDQ import InputCurrentDQ
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
-from pyleecan.Classes.MachineDFIM import MachineDFIM
-from pyleecan.Classes.Simulation import Simulation
-from pyleecan.Classes.Output import Output
-from pyleecan.Classes.WindingDW1L import WindingDW1L
-from pyleecan.Methods.Simulation.Input import InputError
+from ....Classes.ImportGenMatrixSin import ImportGenMatrixSin
+from ....Classes.ImportGenVectLin import ImportGenVectLin
+from ....Classes.ImportGenVectSin import ImportGenVectSin
+from ....Classes.ImportMatrixVal import ImportMatrixVal
+from ....Classes.InputCurrentDQ import InputCurrentDQ
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.MachineIPMSM import MachineIPMSM
+from ....Classes.MachineDFIM import MachineDFIM
+from ....Classes.Simulation import Simulation
+from ....Classes.Output import Output
+from ....Classes.WindingDW1L import WindingDW1L
+from ....Methods.Simulation.Input import InputError
 
 InputCurrentDQ_Error_test = list()
 time_wrong = ImportMatrixVal(value=zeros((10, 2)))

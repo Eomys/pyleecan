@@ -3,8 +3,8 @@
 from numpy import angle
 from scipy.optimize import fsolve
 
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
+from ....Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
 
 
 def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):

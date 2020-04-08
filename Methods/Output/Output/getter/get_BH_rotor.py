@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Methods.Output.Output.getter import GetOutError
+from .....Methods.Output.Output.getter import GetOutError
 
 
 def get_BH_rotor(self):

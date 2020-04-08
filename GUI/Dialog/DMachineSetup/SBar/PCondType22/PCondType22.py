@@ -3,9 +3,9 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from pyleecan.Classes.CondType22 import CondType22
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType22.Gen_PCondType22 import (
+from ......Classes.CondType22 import CondType22
+from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.SBar.PCondType22.Gen_PCondType22 import (
     Gen_PCondType22,
 )
 

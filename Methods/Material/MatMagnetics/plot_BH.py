@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from matplotlib.pyplot import subplots
-from pyleecan.Functions.init_fig import init_fig
+from ....Functions.init_fig import init_fig
 
 
 def plot_BH(self, fig=None, grid=True):

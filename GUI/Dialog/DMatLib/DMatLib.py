@@ -6,12 +6,12 @@ from re import match
 
 from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox
 
-from pyleecan.Functions.load import load_matlib
-from pyleecan.GUI.Dialog.DMatLib.Gen_DMatLib import Gen_DMatLib
-from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
-from pyleecan.definitions import DATA_DIR
+from ....Functions.load import load_matlib
+from ....GUI.Dialog.DMatLib.Gen_DMatLib import Gen_DMatLib
+from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
+from ....definitions import DATA_DIR
 
-from pyleecan.Functions.path_tools import abs_file_path
+from ....Functions.path_tools import abs_file_path
 
 
 class DMatLib(Gen_DMatLib, QDialog):

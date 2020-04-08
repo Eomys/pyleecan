@@ -2,7 +2,7 @@
 
 from numpy import exp, pi
 
-from pyleecan.Classes.PolarArc import PolarArc
+from ....Classes.PolarArc import PolarArc
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_stator=True):

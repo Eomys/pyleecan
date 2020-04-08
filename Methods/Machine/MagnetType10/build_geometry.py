@@ -2,9 +2,9 @@
 
 from numpy import abs, angle, array, exp
 
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Methods import ParentMissingError
+from ....Classes.SurfLine import SurfLine
+from ....Classes.Segment import Segment
+from ....Methods import ParentMissingError
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import femm
-from pyleecan.Functions.FEMM import boundary_prop
+from ....Functions.FEMM import boundary_prop
 from numpy import abs, exp
 
 

@@ -1,4 +1,4 @@
-from pyleecan.Methods.Import import ImportError
+from ....Methods.Import import ImportError
 
 
 class MatFileError(ImportError):

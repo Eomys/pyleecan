@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.MachineSync import MachineSync
-from pyleecan.Classes.OutElec import OutElec
-from pyleecan.Methods.Simulation.Input import InputError
-from pyleecan.Functions.Electrical.coordinate_transformation import dq2ab, ab2uvw
+from ....Classes.MachineSync import MachineSync
+from ....Classes.OutElec import OutElec
+from ....Methods.Simulation.Input import InputError
+from ....Functions.Electrical.coordinate_transformation import dq2ab, ab2uvw
 from numpy import ndarray
 
 

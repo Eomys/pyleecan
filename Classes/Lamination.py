@@ -5,110 +5,110 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.Lamination.build_geometry import build_geometry
+    from ..Methods.Machine.Lamination.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.check import check
+    from ..Methods.Machine.Lamination.check import check
 except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.comp_length import comp_length
+    from ..Methods.Machine.Lamination.comp_length import comp_length
 except ImportError as error:
     comp_length = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.comp_masses import comp_masses
+    from ..Methods.Machine.Lamination.comp_masses import comp_masses
 except ImportError as error:
     comp_masses = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.comp_radius_mec import comp_radius_mec
+    from ..Methods.Machine.Lamination.comp_radius_mec import comp_radius_mec
 except ImportError as error:
     comp_radius_mec = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.comp_surface_axial_vent import (
+    from ..Methods.Machine.Lamination.comp_surface_axial_vent import (
         comp_surface_axial_vent,
     )
 except ImportError as error:
     comp_surface_axial_vent = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.comp_surfaces import comp_surfaces
+    from ..Methods.Machine.Lamination.comp_surfaces import comp_surfaces
 except ImportError as error:
     comp_surfaces = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.comp_volumes import comp_volumes
+    from ..Methods.Machine.Lamination.comp_volumes import comp_volumes
 except ImportError as error:
     comp_volumes = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.get_bore_line import get_bore_line
+    from ..Methods.Machine.Lamination.get_bore_line import get_bore_line
 except ImportError as error:
     get_bore_line = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.get_Rbo import get_Rbo
+    from ..Methods.Machine.Lamination.get_Rbo import get_Rbo
 except ImportError as error:
     get_Rbo = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.get_Ryoke import get_Ryoke
+    from ..Methods.Machine.Lamination.get_Ryoke import get_Ryoke
 except ImportError as error:
     get_Ryoke = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.get_name_phase import get_name_phase
+    from ..Methods.Machine.Lamination.get_name_phase import get_name_phase
 except ImportError as error:
     get_name_phase = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.plot import plot
+    from ..Methods.Machine.Lamination.plot import plot
 except ImportError as error:
     plot = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.comp_output_geo import comp_output_geo
+    from ..Methods.Machine.Lamination.comp_output_geo import comp_output_geo
 except ImportError as error:
     comp_output_geo = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.get_polar_eq import get_polar_eq
+    from ..Methods.Machine.Lamination.get_polar_eq import get_polar_eq
 except ImportError as error:
     get_polar_eq = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.is_outwards import is_outwards
+    from ..Methods.Machine.Lamination.is_outwards import is_outwards
 except ImportError as error:
     is_outwards = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.comp_height_yoke import comp_height_yoke
+    from ..Methods.Machine.Lamination.comp_height_yoke import comp_height_yoke
 except ImportError as error:
     comp_height_yoke = error
 
 try:
-    from pyleecan.Methods.Machine.Lamination.get_notch_list import get_notch_list
+    from ..Methods.Machine.Lamination.get_notch_list import get_notch_list
 except ImportError as error:
     get_notch_list = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Material import Material
-from pyleecan.Classes.Hole import Hole
-from pyleecan.Classes.Notch import Notch
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Material import Material
+from ..Classes.Hole import Hole
+from ..Classes.Notch import Notch
 
 
 class Lamination(FrozenClass):

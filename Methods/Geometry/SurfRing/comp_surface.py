@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Functions.Geometry.comp_surface_num import comp_surface_num
+from ....Functions.Geometry.comp_surface_num import comp_surface_num
 
 
 def comp_surface(self):

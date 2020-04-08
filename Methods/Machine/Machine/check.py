@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Methods.Machine import MachineCheckError
+from ....Methods.Machine import MachineCheckError
 
 
 def check(self):

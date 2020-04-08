@@ -1,5 +1,5 @@
-from pyleecan.Functions.Geometry.merge_notch_list import merge_notch_list
-from pyleecan.Classes.Arc1 import Arc1
+from ....Functions.Geometry.merge_notch_list import merge_notch_list
+from ....Classes.Arc1 import Arc1
 from numpy import exp, pi
 
 

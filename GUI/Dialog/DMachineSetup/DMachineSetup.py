@@ -6,11 +6,11 @@ from os.path import basename, join, isfile, dirname
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QWidget
 
-from pyleecan.Functions.load import load, load_matlib
-from pyleecan.GUI.Dialog.DMachineSetup import mach_index, mach_list
-from pyleecan.GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
-from pyleecan.definitions import DATA_DIR
-from pyleecan.Classes.Machine import Machine
+from ....Functions.load import load, load_matlib
+from ....GUI.Dialog.DMachineSetup import mach_index, mach_list
+from ....GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
+from ....definitions import DATA_DIR
+from ....Classes.Machine import Machine
 
 # Flag for set the enable property of w_nav (List_Widget)
 DISABLE_ITEM = Qt.NoItemFlags

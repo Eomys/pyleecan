@@ -1,4 +1,4 @@
-from pyleecan.Methods import NotImplementedYetError
+from ....Methods import NotImplementedYetError
 
 
 def comp_force_nodal(self, output):

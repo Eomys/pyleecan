@@ -8,9 +8,9 @@ from numpy import pi
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.SlotW16 import SlotW16
-from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot16.PWSlot16 import PWSlot16
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.SlotW16 import SlotW16
+from ....GUI.Dialog.DMachineSetup.SWSlot.PWSlot16.PWSlot16 import PWSlot16
 
 
 class test_PWSlot16(TestCase):

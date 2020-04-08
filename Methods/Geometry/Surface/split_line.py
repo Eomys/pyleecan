@@ -1,4 +1,4 @@
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Segment import Segment
 
 
 def split_line(self, Z1, Z2, is_top=True, is_join=False, label_join=""):

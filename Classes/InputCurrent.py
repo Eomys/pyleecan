@@ -5,27 +5,27 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Input import Input
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.Input import Input
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Simulation.InputCurrent.gen_input import gen_input
+    from ..Methods.Simulation.InputCurrent.gen_input import gen_input
 except ImportError as error:
     gen_input = error
 
 try:
-    from pyleecan.Methods.Simulation.InputCurrent.set_Nr import set_Nr
+    from ..Methods.Simulation.InputCurrent.set_Nr import set_Nr
 except ImportError as error:
     set_Nr = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Import import Import
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Import import Import
+from ..Classes.ImportMatrixVal import ImportMatrixVal
 
 
 class InputCurrent(Input):

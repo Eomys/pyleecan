@@ -1,17 +1,17 @@
 from numpy import ones, pi, array, linspace
 from os.path import join
 import matplotlib.pyplot as plt
-from pyleecan.Tests import save_validation_path as save_path
+from ....Tests import save_validation_path as save_path
 
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Tests.Validation.Machine.IPMSM_xxx import IPMSM_xxx
+from ....Classes.Simu1 import Simu1
+from ....Tests.Validation.Machine.IPMSM_xxx import IPMSM_xxx
 
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from ....Classes.InputCurrent import InputCurrent
+from ....Classes.ImportGenVectLin import ImportGenVectLin
+from ....Classes.ImportMatrixVal import ImportMatrixVal
 
-from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.Output import Output
+from ....Classes.MagFEMM import MagFEMM
+from ....Classes.Output import Output
 
 
 def test_EM_IPMSM_FL_001():

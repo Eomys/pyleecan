@@ -5,22 +5,22 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Machine import Machine
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.Machine import Machine
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.MachineAsync.is_synchronous import is_synchronous
+    from ..Methods.Machine.MachineAsync.is_synchronous import is_synchronous
 except ImportError as error:
     is_synchronous = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Frame import Frame
-from pyleecan.Classes.Shaft import Shaft
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Frame import Frame
+from ..Classes.Shaft import Shaft
 
 
 class MachineAsync(Machine):

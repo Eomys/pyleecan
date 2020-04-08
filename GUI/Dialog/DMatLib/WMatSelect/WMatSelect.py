@@ -1,7 +1,7 @@
-from pyleecan.GUI.Dialog.DMatLib.WMatSelect.Ui_WMatSelect import Ui_WMatSelect
-from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+from .....GUI.Dialog.DMatLib.WMatSelect.Ui_WMatSelect import Ui_WMatSelect
+from .....GUI.Dialog.DMatLib.DMatLib import DMatLib
 from PyQt5.QtWidgets import QWidget, QMessageBox, QDialog
-from pyleecan.Classes.Material import Material
+from .....Classes.Material import Material
 from PyQt5.QtCore import pyqtSignal
 
 

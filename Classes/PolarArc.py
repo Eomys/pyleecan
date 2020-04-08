@@ -5,60 +5,60 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Surface import Surface
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.Surface import Surface
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Geometry.PolarArc.get_lines import get_lines
+    from ..Methods.Geometry.PolarArc.get_lines import get_lines
 except ImportError as error:
     get_lines = error
 
 try:
-    from pyleecan.Methods.Geometry.PolarArc.rotate import rotate
+    from ..Methods.Geometry.PolarArc.rotate import rotate
 except ImportError as error:
     rotate = error
 
 try:
-    from pyleecan.Methods.Geometry.PolarArc.translate import translate
+    from ..Methods.Geometry.PolarArc.translate import translate
 except ImportError as error:
     translate = error
 
 try:
-    from pyleecan.Methods.Geometry.PolarArc.check import check
+    from ..Methods.Geometry.PolarArc.check import check
 except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Geometry.PolarArc.comp_length import comp_length
+    from ..Methods.Geometry.PolarArc.comp_length import comp_length
 except ImportError as error:
     comp_length = error
 
 try:
-    from pyleecan.Methods.Geometry.PolarArc.discretize import discretize
+    from ..Methods.Geometry.PolarArc.discretize import discretize
 except ImportError as error:
     discretize = error
 
 try:
-    from pyleecan.Methods.Geometry.PolarArc.get_patches import get_patches
+    from ..Methods.Geometry.PolarArc.get_patches import get_patches
 except ImportError as error:
     get_patches = error
 
 try:
-    from pyleecan.Methods.Geometry.PolarArc.comp_surface import comp_surface
+    from ..Methods.Geometry.PolarArc.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
 
 try:
-    from pyleecan.Methods.Geometry.PolarArc.comp_point_ref import comp_point_ref
+    from ..Methods.Geometry.PolarArc.comp_point_ref import comp_point_ref
 except ImportError as error:
     comp_point_ref = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
+from ..Classes._check import InitUnKnowClassError
 
 
 class PolarArc(Surface):

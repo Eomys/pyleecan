@@ -3,12 +3,12 @@ import numpy as np
 from os.path import basename, splitext
 
 from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
-from pyleecan.Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
-from pyleecan.Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
-from pyleecan.Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
-from pyleecan.Classes.MeshSolution import MeshSolution
-from pyleecan.Classes.Mesh import Mesh
-from pyleecan.Classes.Solution import Solution
+from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
+from ....Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
+from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
+from ....Classes.MeshSolution import MeshSolution
+from ....Classes.Mesh import Mesh
+from ....Classes.Solution import Solution
 from os.path import join
 
 

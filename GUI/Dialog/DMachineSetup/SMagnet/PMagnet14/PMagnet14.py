@@ -3,10 +3,10 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QDialog, QMessageBox
 
-from pyleecan.Classes.MagnetType14 import MagnetType14
-from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet14.Gen_PMagnet14 import (
+from ......Classes.MagnetType14 import MagnetType14
+from ......Classes.SlotMPolar import SlotMPolar
+from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.SMagnet.PMagnet14.Gen_PMagnet14 import (
     Gen_PMagnet14,
 )
 

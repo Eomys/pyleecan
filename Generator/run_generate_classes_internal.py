@@ -4,9 +4,9 @@ from os.path import dirname, abspath, normpath, join
 
 sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", ".."))))
 
-from pyleecan.Generator.run_generate_classes import generate_code
-from pyleecan.Generator.read_fct import read_all
-from pyleecan.definitions import MAIN_DIR, DOC_DIR, INT_DIR
+from ..Generator.run_generate_classes import generate_code
+from ..Generator.read_fct import read_all
+from ..definitions import MAIN_DIR, DOC_DIR, INT_DIR
 
 if __name__ == "__main__":
     gen_dict = read_all(DOC_DIR, is_internal=True, in_path=INT_DIR)

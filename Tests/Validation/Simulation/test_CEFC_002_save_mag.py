@@ -1,20 +1,20 @@
 from numpy import zeros, ones, pi, array
 
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
+from ....Classes.Simu1 import Simu1
+from ....Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
 
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.Output import Output
-from pyleecan.Tests import save_validation_path as save_path
+from ....Classes.InputCurrent import InputCurrent
+from ....Classes.ImportGenVectLin import ImportGenVectLin
+from ....Classes.ImportMatrixVal import ImportMatrixVal
+from ....Classes.MagFEMM import MagFEMM
+from ....Classes.Output import Output
+from ....Tests import save_validation_path as save_path
 from os.path import join
 
 import matplotlib.pyplot as plt
 import json
 import numpy as np
-from pyleecan.Functions.FEMM import GROUP_SC
+from ....Functions.FEMM import GROUP_SC
 
 
 def test_CEFC_002():

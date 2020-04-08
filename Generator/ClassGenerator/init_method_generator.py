@@ -1,5 +1,5 @@
-from pyleecan.Generator import PYTHON_TYPE, TAB, TAB2, TAB3, TAB4, TAB5, TAB6, TAB7
-from pyleecan.Generator.read_fct import (
+from ...Generator import PYTHON_TYPE, TAB, TAB2, TAB3, TAB4, TAB5, TAB6, TAB7
+from ...Generator.read_fct import (
     get_value_str,
     is_list_pyleecan_type,
     is_dict_pyleecan_type,

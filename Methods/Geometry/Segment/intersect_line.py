@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Functions.Geometry.inter_line_line import inter_line_line
+from ....Functions.Geometry.inter_line_line import inter_line_line
 from numpy import abs as np_abs
 
 

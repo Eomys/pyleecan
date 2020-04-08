@@ -11,17 +11,17 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtTest import QTest
 from PyQt5.QtWidgets import QDialogButtonBox
 
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
-from pyleecan.Classes.Material import Material
-from pyleecan.Functions.load import load_matlib
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
-from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
-from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
+from ....Classes.LamHole import LamHole
+from ....Classes.HoleM50 import HoleM50
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.MachineIPMSM import MachineIPMSM
+from ....Classes.Material import Material
+from ....Functions.load import load_matlib
+from ....GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
+from ....GUI.Dialog.DMatLib.DMatLib import DMatLib
+from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 
-from pyleecan.Tests import save_load_path as save_path, DATA_DIR, is_clean_result
+from ....Tests import save_load_path as save_path, DATA_DIR, is_clean_result
 
 
 class test_Workflow_DMatLib(TestCase):

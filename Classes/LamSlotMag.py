@@ -5,54 +5,54 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.LamSlot import LamSlot
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.LamSlot import LamSlot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.LamSlotMag.build_geometry import build_geometry
+    from ..Methods.Machine.LamSlotMag.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotMag.check import check
+    from ..Methods.Machine.LamSlotMag.check import check
 except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotMag.comp_masses import comp_masses
+    from ..Methods.Machine.LamSlotMag.comp_masses import comp_masses
 except ImportError as error:
     comp_masses = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotMag.comp_radius_mec import comp_radius_mec
+    from ..Methods.Machine.LamSlotMag.comp_radius_mec import comp_radius_mec
 except ImportError as error:
     comp_radius_mec = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotMag.comp_surfaces import comp_surfaces
+    from ..Methods.Machine.LamSlotMag.comp_surfaces import comp_surfaces
 except ImportError as error:
     comp_surfaces = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotMag.comp_volumes import comp_volumes
+    from ..Methods.Machine.LamSlotMag.comp_volumes import comp_volumes
 except ImportError as error:
     comp_volumes = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotMag.plot import plot
+    from ..Methods.Machine.LamSlotMag.plot import plot
 except ImportError as error:
     plot = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Slot import Slot
-from pyleecan.Classes.Material import Material
-from pyleecan.Classes.Hole import Hole
-from pyleecan.Classes.Notch import Notch
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Slot import Slot
+from ..Classes.Material import Material
+from ..Classes.Hole import Hole
+from ..Classes.Notch import Notch
 
 
 class LamSlotMag(LamSlot):

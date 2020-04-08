@@ -5,43 +5,43 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.Winding.comp_Ncspc import comp_Ncspc
+    from ..Methods.Machine.Winding.comp_Ncspc import comp_Ncspc
 except ImportError as error:
     comp_Ncspc = error
 
 try:
-    from pyleecan.Methods.Machine.Winding.comp_Ntspc import comp_Ntspc
+    from ..Methods.Machine.Winding.comp_Ntspc import comp_Ntspc
 except ImportError as error:
     comp_Ntspc = error
 
 try:
-    from pyleecan.Methods.Machine.Winding.comp_phasor_angle import comp_phasor_angle
+    from ..Methods.Machine.Winding.comp_phasor_angle import comp_phasor_angle
 except ImportError as error:
     comp_phasor_angle = error
 
 try:
-    from pyleecan.Methods.Machine.Winding.comp_resistance_norm import (
+    from ..Methods.Machine.Winding.comp_resistance_norm import (
         comp_resistance_norm,
     )
 except ImportError as error:
     comp_resistance_norm = error
 
 try:
-    from pyleecan.Methods.Machine.Winding.comp_winding_factor import comp_winding_factor
+    from ..Methods.Machine.Winding.comp_winding_factor import comp_winding_factor
 except ImportError as error:
     comp_winding_factor = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Conductor import Conductor
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Conductor import Conductor
 
 
 class Winding(FrozenClass):

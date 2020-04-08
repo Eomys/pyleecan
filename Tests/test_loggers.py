@@ -1,8 +1,8 @@
 import pytest
 from logging import Logger
-from pyleecan.Generator.read_fct import read_all
-from pyleecan.definitions import DOC_DIR
-from pyleecan.Classes.import_all import *
+from ..Generator.read_fct import read_all
+from ..definitions import DOC_DIR
+from ..Classes.import_all import *
 
 # Get the dict of all the classes and their information
 gen_dict = read_all(DOC_DIR)  # dict of class dict

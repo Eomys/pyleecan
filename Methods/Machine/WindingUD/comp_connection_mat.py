@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Methods.Machine.Winding import WindingError
+from ....Methods.Machine.Winding import WindingError
 
 
 def comp_connection_mat(self, Zs=None):

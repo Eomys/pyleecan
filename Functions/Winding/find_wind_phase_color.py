@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pyleecan.Methods.Machine import PHASE_COLOR
+from ...Methods.Machine import PHASE_COLOR
 
 
 def find_wind_phase_color(label, wind_mat):

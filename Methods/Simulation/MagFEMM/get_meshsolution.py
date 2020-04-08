@@ -1,11 +1,11 @@
 import os
 import numpy as np
 
-from pyleecan.definitions import MAIN_DIR
-from pyleecan.Classes.Mesh import Mesh
-from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.Solution import Solution
+from ....definitions import MAIN_DIR
+from ....Classes.Mesh import Mesh
+from ....Classes.ElementMat import ElementMat
+from ....Classes.NodeMat import NodeMat
+from ....Classes.Solution import Solution
 from femm import callfemm
 from os.path import join
 

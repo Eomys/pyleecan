@@ -5,38 +5,38 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.MagnetPolar import MagnetPolar
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.MagnetPolar import MagnetPolar
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.MagnetType11._comp_point_coordinate import (
+    from ..Methods.Machine.MagnetType11._comp_point_coordinate import (
         _comp_point_coordinate,
     )
 except ImportError as error:
     _comp_point_coordinate = error
 
 try:
-    from pyleecan.Methods.Machine.MagnetType11.build_geometry import build_geometry
+    from ..Methods.Machine.MagnetType11.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
 
 try:
-    from pyleecan.Methods.Machine.MagnetType11.comp_height import comp_height
+    from ..Methods.Machine.MagnetType11.comp_height import comp_height
 except ImportError as error:
     comp_height = error
 
 try:
-    from pyleecan.Methods.Machine.MagnetType11.comp_surface import comp_surface
+    from ..Methods.Machine.MagnetType11.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Material import Material
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Material import Material
 
 
 class MagnetType11(MagnetPolar):

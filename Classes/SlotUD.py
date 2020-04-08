@@ -5,20 +5,20 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Slot import Slot
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.Slot import Slot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.SlotUD.build_geometry import build_geometry
+    from ..Methods.Slot.SlotUD.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
+from ..Classes._check import InitUnKnowClassError
 
 
 class SlotUD(Slot):

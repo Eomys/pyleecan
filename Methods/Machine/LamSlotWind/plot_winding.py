@@ -4,8 +4,8 @@ from matplotlib.lines import Line2D
 from matplotlib.pyplot import axis, legend, plot, subplots, title
 from numpy import array, linspace, meshgrid
 
-from pyleecan.Functions.Winding.comp_wind_sym import comp_wind_sym
-from pyleecan.Functions.Winding.gen_phase_list import gen_color, gen_name
+from ....Functions.Winding.comp_wind_sym import comp_wind_sym
+from ....Functions.Winding.gen_phase_list import gen_color, gen_name
 
 
 def plot_winding(self, wind_mat=None, all_slot=False):

@@ -3,7 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM51.Ui_PHoleM51 import Ui_PHoleM51
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM51.Ui_PHoleM51 import Ui_PHoleM51
 
 
 class Gen_PHoleM51(Ui_PHoleM51):

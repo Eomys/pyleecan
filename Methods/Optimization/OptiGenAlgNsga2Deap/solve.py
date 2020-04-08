@@ -4,11 +4,11 @@ from deap.tools import selNSGA2
 from copy import deepcopy
 from datetime import datetime
 
-from pyleecan.Classes.Output import Output
-from pyleecan.Functions.Optimization.evaluate import evaluate
-from pyleecan.Functions.Optimization.update import update
-from pyleecan.Functions.Optimization.check_cstr import check_cstr
-from pyleecan.Functions.Optimization.tournamentDCD import tournamentDCD
+from ....Classes.Output import Output
+from ....Functions.Optimization.evaluate import evaluate
+from ....Functions.Optimization.update import update
+from ....Functions.Optimization.check_cstr import check_cstr
+from ....Functions.Optimization.tournamentDCD import tournamentDCD
 
 
 def solve(self):

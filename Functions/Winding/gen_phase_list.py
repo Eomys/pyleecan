@@ -2,7 +2,7 @@
 
 from random import choice
 
-from pyleecan.Methods.Machine import PHASE_COLOR, PHASE_NAME
+from ...Methods.Machine import PHASE_COLOR, PHASE_NAME
 
 
 def gen_color(N):

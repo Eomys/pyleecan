@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.Lamination import Lamination
-from pyleecan.Methods.Machine.Lamination.check import LaminationCheckError
+from ....Classes.Lamination import Lamination
+from ....Methods.Machine.Lamination.check import LaminationCheckError
 
 
 def check(self):

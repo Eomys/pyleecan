@@ -4,7 +4,7 @@ from os.path import isfile, join
 
 from csv import reader
 
-from pyleecan.Generator import PYTHON_TYPE
+from ..Generator import PYTHON_TYPE
 
 # Constants for csv reading, i.e. column number of data
 NAME_COL = 0  # attribue name

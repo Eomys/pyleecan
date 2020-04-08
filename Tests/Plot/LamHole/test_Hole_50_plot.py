@@ -6,17 +6,17 @@ import pytest
 import matplotlib.pyplot as plt
 from numpy import pi
 
-from pyleecan.Classes.Frame import Frame
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
-from pyleecan.Classes.Magnet import Magnet
-from pyleecan.Classes.Shaft import Shaft
-from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.VentilationPolar import VentilationPolar
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.BoreFlower import BoreFlower
-from pyleecan.Tests import save_plot_path as save_path
+from ....Classes.Frame import Frame
+from ....Classes.LamHole import LamHole
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.MachineIPMSM import MachineIPMSM
+from ....Classes.Magnet import Magnet
+from ....Classes.Shaft import Shaft
+from ....Classes.VentilationCirc import VentilationCirc
+from ....Classes.VentilationPolar import VentilationPolar
+from ....Classes.HoleM50 import HoleM50
+from ....Classes.BoreFlower import BoreFlower
+from ....Tests import save_plot_path as save_path
 
 
 """unittest for Machine with Hole 50 plot"""

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Methods import ParentMissingError
+from ....Methods import ParentMissingError
 
 
 def is_outwards(self):

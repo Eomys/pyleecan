@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from pyleecan.Classes.LamSlot import LamSlot
+from ....Classes.LamSlot import LamSlot
 
 
 def comp_surfaces(self):

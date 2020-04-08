@@ -2,14 +2,14 @@
 
 from numpy import sin
 
-from pyleecan.Classes.MagnetType10 import MagnetType10
-from pyleecan.Classes.MagnetType11 import MagnetType11
-from pyleecan.Classes.MagnetType13 import MagnetType13
-from pyleecan.Classes.SlotMFlat import SlotMFlat
-from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.Classes.SlotMFlat import SlotMFlat
-from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.Methods.Machine.Lamination.check import LaminationCheckError
+from ....Classes.MagnetType10 import MagnetType10
+from ....Classes.MagnetType11 import MagnetType11
+from ....Classes.MagnetType13 import MagnetType13
+from ....Classes.SlotMFlat import SlotMFlat
+from ....Classes.SlotMPolar import SlotMPolar
+from ....Classes.SlotMFlat import SlotMFlat
+from ....Classes.SlotMPolar import SlotMPolar
+from ....Methods.Machine.Lamination.check import LaminationCheckError
 
 
 def check(self):

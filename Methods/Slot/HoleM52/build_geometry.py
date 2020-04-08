@@ -2,8 +2,8 @@
 
 from numpy import exp
 
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
+from ....Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):

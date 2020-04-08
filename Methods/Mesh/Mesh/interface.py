@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.ElementMat import ElementMat
+from ....Classes.NodeMat import NodeMat
+from ....Classes.ElementMat import ElementMat
 from collections import Counter
 import numpy as np
 

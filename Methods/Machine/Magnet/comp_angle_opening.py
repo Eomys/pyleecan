@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from numpy import arcsin
-from pyleecan.Methods import ParentMissingError
+from ....Methods import ParentMissingError
 
 
 def comp_angle_opening(self):

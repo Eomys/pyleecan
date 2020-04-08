@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from numpy import vstack, column_stack
-from pyleecan.Methods.Import.ImportGenMatrixSin import (
+from ....Methods.Import.ImportGenMatrixSin import (
     GenSinEmptyError,
     GenSinDimError,
     GenSinTransposeError,

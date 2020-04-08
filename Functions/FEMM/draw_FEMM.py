@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import femm
-from pyleecan.Classes.Lamination import Lamination
-from pyleecan.Classes.Circle import Circle
-from pyleecan.Functions.FEMM import (
+from ...Classes.Lamination import Lamination
+from ...Classes.Circle import Circle
+from ...Functions.FEMM import (
     hidebc,
     is_eddies,
     is_middleag,
@@ -11,14 +11,14 @@ from pyleecan.Functions.FEMM import (
     precision,
     type_yokeS,
 )
-from pyleecan.Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
-from pyleecan.Functions.FEMM.comp_FEMM_dict import comp_FEMM_dict
-from pyleecan.Functions.FEMM.create_FEMM_boundary_conditions import (
+from ...Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
+from ...Functions.FEMM.comp_FEMM_dict import comp_FEMM_dict
+from ...Functions.FEMM.create_FEMM_boundary_conditions import (
     create_FEMM_boundary_conditions,
 )
-from pyleecan.Functions.FEMM.create_FEMM_materials import create_FEMM_materials
-from pyleecan.Functions.FEMM.get_sliding_band import get_sliding_band
-from pyleecan.Functions.FEMM.get_airgap_surface import get_airgap_surface
+from ...Functions.FEMM.create_FEMM_materials import create_FEMM_materials
+from ...Functions.FEMM.get_sliding_band import get_sliding_band
+from ...Functions.FEMM.get_airgap_surface import get_airgap_surface
 
 
 def draw_FEMM(

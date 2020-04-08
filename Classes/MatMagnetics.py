@@ -5,26 +5,26 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Material.MatMagnetics.get_BH import get_BH
+    from ..Methods.Material.MatMagnetics.get_BH import get_BH
 except ImportError as error:
     get_BH = error
 
 try:
-    from pyleecan.Methods.Material.MatMagnetics.plot_BH import plot_BH
+    from ..Methods.Material.MatMagnetics.plot_BH import plot_BH
 except ImportError as error:
     plot_BH = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.ImportMatrix import ImportMatrix
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.ImportMatrix import ImportMatrix
 
 
 class MatMagnetics(FrozenClass):

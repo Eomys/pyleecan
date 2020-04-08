@@ -6,22 +6,22 @@ from unittest import TestCase
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
-from pyleecan.Classes.MagnetType10 import MagnetType10
-from pyleecan.Classes.MagnetType11 import MagnetType11
-from pyleecan.Classes.MagnetType12 import MagnetType12
-from pyleecan.Classes.MagnetType13 import MagnetType13
-from pyleecan.Classes.MagnetType14 import MagnetType14
-from pyleecan.Classes.SlotMFlat import SlotMFlat
-from pyleecan.Classes.Material import Material
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.SMagnet import SMagnet
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet10.PMagnet10 import PMagnet10
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet11.PMagnet11 import PMagnet11
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet12.PMagnet12 import PMagnet12
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet13.PMagnet13 import PMagnet13
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet14.PMagnet14 import PMagnet14
+from ....Classes.LamSlotMag import LamSlotMag
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.MachineSIPMSM import MachineSIPMSM
+from ....Classes.MagnetType10 import MagnetType10
+from ....Classes.MagnetType11 import MagnetType11
+from ....Classes.MagnetType12 import MagnetType12
+from ....Classes.MagnetType13 import MagnetType13
+from ....Classes.MagnetType14 import MagnetType14
+from ....Classes.SlotMFlat import SlotMFlat
+from ....Classes.Material import Material
+from ....GUI.Dialog.DMachineSetup.SMagnet.SMagnet import SMagnet
+from ....GUI.Dialog.DMachineSetup.SMagnet.PMagnet10.PMagnet10 import PMagnet10
+from ....GUI.Dialog.DMachineSetup.SMagnet.PMagnet11.PMagnet11 import PMagnet11
+from ....GUI.Dialog.DMachineSetup.SMagnet.PMagnet12.PMagnet12 import PMagnet12
+from ....GUI.Dialog.DMachineSetup.SMagnet.PMagnet13.PMagnet13 import PMagnet13
+from ....GUI.Dialog.DMachineSetup.SMagnet.PMagnet14.PMagnet14 import PMagnet14
 
 
 class test_SMagnet_surface(TestCase):

@@ -242,5 +242,5 @@ class Ui_SMachineDimension(object):
         self.b_next.setText(_translate("SMachineDimension", "Next"))
 
 
-from pyleecan.GUI.Tools.FloatEdit import FloatEdit
-from pyleecan.GUI.Resources import pyleecan_rc
+from .....GUI.Tools.FloatEdit import FloatEdit
+from .....GUI.Resources import pyleecan_rc

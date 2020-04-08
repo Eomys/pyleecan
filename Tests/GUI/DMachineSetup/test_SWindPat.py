@@ -8,20 +8,20 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtTest import QTest
 
-from pyleecan.Classes.Winding import Winding
-from pyleecan.Classes.WindingUD import WindingUD
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingCW1L import WindingCW1L
-from pyleecan.Classes.WindingDW2L import WindingDW2L
-from pyleecan.Classes.WindingDW1L import WindingDW1L
-from pyleecan.Classes.WindingCW2LR import WindingCW2LR
-from pyleecan.Classes.WindingSC import WindingSC
+from ....Classes.Winding import Winding
+from ....Classes.WindingUD import WindingUD
+from ....Classes.WindingCW2LT import WindingCW2LT
+from ....Classes.WindingCW1L import WindingCW1L
+from ....Classes.WindingDW2L import WindingDW2L
+from ....Classes.WindingDW1L import WindingDW1L
+from ....Classes.WindingCW2LR import WindingCW2LR
+from ....Classes.WindingSC import WindingSC
 
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.MachineSCIM import MachineSCIM
-from pyleecan.Classes.MachineWRSM import MachineWRSM
-from pyleecan.Classes.SlotW22 import SlotW22
-from pyleecan.GUI.Dialog.DMachineSetup.SWindPat.SWindPat import SWindPat
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.MachineSCIM import MachineSCIM
+from ....Classes.MachineWRSM import MachineWRSM
+from ....Classes.SlotW22 import SlotW22
+from ....GUI.Dialog.DMachineSetup.SWindPat.SWindPat import SWindPat
 
 
 class test_SWindPat(TestCase):

@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 from numpy import pi
-from pyleecan.Classes.CondType11 import CondType11
-from pyleecan.Classes.CondType21 import CondType21
-from pyleecan.Classes.Frame import Frame
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.MachineSCIM import MachineSCIM
-from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
-from pyleecan.Classes.Shaft import Shaft
-from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.WindingDW2L import WindingDW2L
-from pyleecan.Classes.WindingSC import WindingSC
-from pyleecan.Classes.SlotW10 import SlotW10
-from pyleecan.Classes.SlotW21 import SlotW21
-from pyleecan.Tests.Validation.Material.Copper1 import Copper1
-from pyleecan.Tests.Validation.Material.M400_50A import M400_50A
+from ....Classes.CondType11 import CondType11
+from ....Classes.CondType21 import CondType21
+from ....Classes.Frame import Frame
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.MachineSCIM import MachineSCIM
+from ....Classes.LamSquirrelCage import LamSquirrelCage
+from ....Classes.Shaft import Shaft
+from ....Classes.VentilationCirc import VentilationCirc
+from ....Classes.WindingDW2L import WindingDW2L
+from ....Classes.WindingSC import WindingSC
+from ....Classes.SlotW10 import SlotW10
+from ....Classes.SlotW21 import SlotW21
+from ....Tests.Validation.Material.Copper1 import Copper1
+from ....Tests.Validation.Material.M400_50A import M400_50A
 
 # Stator setup
 stator = LamSlotWind(

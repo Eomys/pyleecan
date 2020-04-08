@@ -5,82 +5,82 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.LamSlot import LamSlot
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.LamSlot import LamSlot
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.LamSlotWind.build_geometry import build_geometry
+    from ..Methods.Machine.LamSlotWind.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotWind.check import check
+    from ..Methods.Machine.LamSlotWind.check import check
 except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotWind.comp_masses import comp_masses
+    from ..Methods.Machine.LamSlotWind.comp_masses import comp_masses
 except ImportError as error:
     comp_masses = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotWind.comp_surfaces import comp_surfaces
+    from ..Methods.Machine.LamSlotWind.comp_surfaces import comp_surfaces
 except ImportError as error:
     comp_surfaces = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotWind.comp_volumes import comp_volumes
+    from ..Methods.Machine.LamSlotWind.comp_volumes import comp_volumes
 except ImportError as error:
     comp_volumes = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotWind.get_pole_pair_number import (
+    from ..Methods.Machine.LamSlotWind.get_pole_pair_number import (
         get_pole_pair_number,
     )
 except ImportError as error:
     get_pole_pair_number = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotWind.get_name_phase import get_name_phase
+    from ..Methods.Machine.LamSlotWind.get_name_phase import get_name_phase
 except ImportError as error:
     get_name_phase = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotWind.plot import plot
+    from ..Methods.Machine.LamSlotWind.plot import plot
 except ImportError as error:
     plot = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotWind.plot_winding import plot_winding
+    from ..Methods.Machine.LamSlotWind.plot_winding import plot_winding
 except ImportError as error:
     plot_winding = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotWind.comp_fill_factor import comp_fill_factor
+    from ..Methods.Machine.LamSlotWind.comp_fill_factor import comp_fill_factor
 except ImportError as error:
     comp_fill_factor = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotWind.comp_output_geo import comp_output_geo
+    from ..Methods.Machine.LamSlotWind.comp_output_geo import comp_output_geo
 except ImportError as error:
     comp_output_geo = error
 
 try:
-    from pyleecan.Methods.Machine.LamSlotWind.get_polar_eq import get_polar_eq
+    from ..Methods.Machine.LamSlotWind.get_polar_eq import get_polar_eq
 except ImportError as error:
     get_polar_eq = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Winding import Winding
-from pyleecan.Classes.Slot import Slot
-from pyleecan.Classes.Material import Material
-from pyleecan.Classes.Hole import Hole
-from pyleecan.Classes.Notch import Notch
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Winding import Winding
+from ..Classes.Slot import Slot
+from ..Classes.Material import Material
+from ..Classes.Hole import Hole
+from ..Classes.Notch import Notch
 
 
 class LamSlotWind(LamSlot):

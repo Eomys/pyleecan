@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from numpy import pi
 
-from pyleecan.Methods.Machine.Winding import WindingError
+from ....Methods.Machine.Winding import WindingError
 
 
 def comp_initial_angle(self):

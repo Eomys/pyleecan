@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from numpy import pi, exp, linspace
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Arc3 import Arc3
-from pyleecan.Methods import NotImplementedYetError
+from ....Classes.Arc1 import Arc1
+from ....Classes.Arc3 import Arc3
+from ....Methods import NotImplementedYetError
 
 
 def get_bore_line(self, alpha1, alpha2, label="", ignore_notches=False):

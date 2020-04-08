@@ -1,5 +1,5 @@
 from numpy import exp, angle, abs as np_abs
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Segment import Segment
 
 DELTA = 1e-9  # To remove computing noise
 

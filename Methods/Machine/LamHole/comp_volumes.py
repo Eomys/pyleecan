@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from pyleecan.Classes.Lamination import Lamination
+from ....Classes.Lamination import Lamination
 
 
 def comp_volumes(self):

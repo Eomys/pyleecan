@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Functions.FEMM.draw_FEMM import draw_FEMM
+from ....Functions.FEMM.draw_FEMM import draw_FEMM
 
 
 def comp_flux_airgap(self, output):

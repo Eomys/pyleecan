@@ -3,7 +3,7 @@
 import sys
 from logging import ERROR, INFO, basicConfig, getLogger
 from matplotlib import use
-from pyleecan.Classes.GUIOption import GUIOption
+from ..Classes.GUIOption import GUIOption
 from os.path import abspath, dirname, join, normpath
 
 # Set Matplotlib backend

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from pyleecan.Classes.Circle import Circle
+from ....Classes.Circle import Circle
 from numpy import exp, pi
 
 

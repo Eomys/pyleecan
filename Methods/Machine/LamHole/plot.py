@@ -3,8 +3,8 @@
 from matplotlib.patches import Circle, Patch
 from matplotlib.pyplot import axis, legend
 
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Methods.Machine import (
+from ....Functions.init_fig import init_fig
+from ....Methods.Machine import (
     PATCH_COLOR,
     MAGNET_COLOR,
     ROTOR_COLOR,

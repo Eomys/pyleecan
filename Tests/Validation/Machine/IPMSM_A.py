@@ -8,24 +8,24 @@ Z. Yang, M. Krishnamurthy and I. P. Brown,
 Electric Machines & Drives Conference (IEMDC), 2013 IEEE International, Chicago, IL, 2013, pp. 295-302.
 """
 from numpy import pi
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
+from ....Classes.MachineIPMSM import MachineIPMSM
 
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.SlotW11 import SlotW11
-from pyleecan.Classes.WindingDW1L import WindingDW1L
-from pyleecan.Classes.CondType11 import CondType11
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.SlotW11 import SlotW11
+from ....Classes.WindingDW1L import WindingDW1L
+from ....Classes.CondType11 import CondType11
 
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.HoleM50 import HoleM50
+from ....Classes.LamHole import LamHole
+from ....Classes.HoleM50 import HoleM50
 
-from pyleecan.Classes.Frame import Frame
-from pyleecan.Classes.Shaft import Shaft
-from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
+from ....Classes.Frame import Frame
+from ....Classes.Shaft import Shaft
+from ....Classes.ImportMatrixXls import ImportMatrixXls
 
-from pyleecan.Classes.Material import Material
-from pyleecan.Tests.Validation.Material.M400_50A import M400_50A
-from pyleecan.Tests.Validation.Material.Magnet_prius import Magnet_prius
-from pyleecan.Tests.Validation.Material.Copper1 import Copper1
+from ....Classes.Material import Material
+from ....Tests.Validation.Material.M400_50A import M400_50A
+from ....Tests.Validation.Material.Magnet_prius import Magnet_prius
+from ....Tests.Validation.Material.Copper1 import Copper1
 
 # Stator setup
 stator = LamSlotWind(

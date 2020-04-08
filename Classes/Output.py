@@ -5,65 +5,65 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Output.Output.getter.get_BH_stator import get_BH_stator
+    from ..Methods.Output.Output.getter.get_BH_stator import get_BH_stator
 except ImportError as error:
     get_BH_stator = error
 
 try:
-    from pyleecan.Methods.Output.Output.getter.get_BH_rotor import get_BH_rotor
+    from ..Methods.Output.Output.getter.get_BH_rotor import get_BH_rotor
 except ImportError as error:
     get_BH_rotor = error
 
 try:
-    from pyleecan.Methods.Output.Output.getter.get_path_result import get_path_result
+    from ..Methods.Output.Output.getter.get_path_result import get_path_result
 except ImportError as error:
     get_path_result = error
 
 try:
-    from pyleecan.Methods.Output.Output.getter.get_angle_rotor import get_angle_rotor
+    from ..Methods.Output.Output.getter.get_angle_rotor import get_angle_rotor
 except ImportError as error:
     get_angle_rotor = error
 
 try:
-    from pyleecan.Methods.Output.Output.plot.Magnetic.plot_B_space import plot_B_space
+    from ..Methods.Output.Output.plot.Magnetic.plot_B_space import plot_B_space
 except ImportError as error:
     plot_B_space = error
 
 try:
-    from pyleecan.Methods.Output.Output.plot.Structural.plot_force_space import (
+    from ..Methods.Output.Output.plot.Structural.plot_force_space import (
         plot_force_space,
     )
 except ImportError as error:
     plot_force_space = error
 
 try:
-    from pyleecan.Methods.Output.Output.plot.Magnetic.plot_mesh_field import (
+    from ..Methods.Output.Output.plot.Magnetic.plot_mesh_field import (
         plot_mesh_field,
     )
 except ImportError as error:
     plot_mesh_field = error
 
 try:
-    from pyleecan.Methods.Output.Output.plot.Magnetic.plot_mesh import plot_mesh
+    from ..Methods.Output.Output.plot.Magnetic.plot_mesh import plot_mesh
 except ImportError as error:
     plot_mesh = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Simulation import Simulation
-from pyleecan.Classes.OutGeo import OutGeo
-from pyleecan.Classes.OutElec import OutElec
-from pyleecan.Classes.OutMag import OutMag
-from pyleecan.Classes.OutStruct import OutStruct
-from pyleecan.Classes.OutPost import OutPost
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Simulation import Simulation
+from ..Classes.OutGeo import OutGeo
+from ..Classes.OutElec import OutElec
+from ..Classes.OutMag import OutMag
+from ..Classes.OutStruct import OutStruct
+from ..Classes.OutPost import OutPost
 
 
 class Output(FrozenClass):

@@ -1,19 +1,19 @@
 from numpy import ones, pi, array, zeros
 from os.path import join
 import matplotlib.pyplot as plt
-from pyleecan.Tests import save_validation_path as save_path
+from ....Tests import save_validation_path as save_path
 
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.InputFlux import InputFlux
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportMatlab import ImportMatlab
+from ....Classes.Simu1 import Simu1
+from ....Classes.InputCurrent import InputCurrent
+from ....Classes.InputFlux import InputFlux
+from ....Classes.ImportGenVectLin import ImportGenVectLin
+from ....Classes.ImportMatrixVal import ImportMatrixVal
+from ....Classes.ImportMatlab import ImportMatlab
 
-from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.Output import Output
-from pyleecan.Tests import DATA_DIR
-from pyleecan.Tests.Validation.Machine.SCIM_006 import SCIM_006
+from ....Classes.MagFEMM import MagFEMM
+from ....Classes.Output import Output
+from ....Tests import DATA_DIR
+from ....Tests.Validation.Machine.SCIM_006 import SCIM_006
 
 
 def test_Magnetic_FEMM_sym():

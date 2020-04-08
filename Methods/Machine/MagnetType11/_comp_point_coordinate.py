@@ -1,5 +1,5 @@
 from numpy import angle, arcsin, exp, tan
-from pyleecan.Methods import ParentMissingError
+from ....Methods import ParentMissingError
 
 
 def _comp_point_coordinate(self):

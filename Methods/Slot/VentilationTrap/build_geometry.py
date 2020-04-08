@@ -2,7 +2,7 @@
 
 from numpy import exp, pi
 
-from pyleecan.Classes.Trapeze import Trapeze
+from ....Classes.Trapeze import Trapeze
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_stator=True):

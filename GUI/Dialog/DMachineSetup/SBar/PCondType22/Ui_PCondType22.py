@@ -28,5 +28,5 @@ class Ui_PCondType22(object):
         PCondType22.setWindowTitle(_translate("PCondType22", "Form"))
 
 
-from pyleecan.GUI.Dialog.DMachineSetup.SBar.WBarOut.WBarOut import WBarOut
-from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+from ......GUI.Dialog.DMachineSetup.SBar.WBarOut.WBarOut import WBarOut
+from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect

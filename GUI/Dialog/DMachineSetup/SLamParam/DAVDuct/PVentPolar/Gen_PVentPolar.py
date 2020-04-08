@@ -3,7 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.Ui_PVentPolar import (
+from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.Ui_PVentPolar import (
     Ui_PVentPolar,
 )
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.LamSlot import LamSlot
+from ....Classes.LamSlot import LamSlot
 
 
 def comp_masses(self):

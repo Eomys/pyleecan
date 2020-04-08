@@ -3,8 +3,8 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.Gen_PVentCirc import (
+from .......GUI import gui_option
+from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.Gen_PVentCirc import (
     Gen_PVentCirc,
 )
 

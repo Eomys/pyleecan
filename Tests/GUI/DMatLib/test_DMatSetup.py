@@ -11,10 +11,10 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtTest import QTest
 
-from pyleecan.Classes.MatMagnetics import MatMagnetics
-from pyleecan.Classes.Material import Material
-from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
-from pyleecan.Tests import save_load_path as save_path, DATA_DIR
+from ....Classes.MatMagnetics import MatMagnetics
+from ....Classes.Material import Material
+from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
+from ....Tests import save_load_path as save_path, DATA_DIR
 
 
 class test_DMatSetup(TestCase):

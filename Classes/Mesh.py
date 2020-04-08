@@ -5,63 +5,63 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import set_array, check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ..Classes._check import set_array, check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Mesh.Mesh.set_submesh import set_submesh
+    from ..Methods.Mesh.Mesh.set_submesh import set_submesh
 except ImportError as error:
     set_submesh = error
 
 try:
-    from pyleecan.Methods.Mesh.Mesh.get_all_node_coord import get_all_node_coord
+    from ..Methods.Mesh.Mesh.get_all_node_coord import get_all_node_coord
 except ImportError as error:
     get_all_node_coord = error
 
 try:
-    from pyleecan.Methods.Mesh.Mesh.add_element import add_element
+    from ..Methods.Mesh.Mesh.add_element import add_element
 except ImportError as error:
     add_element = error
 
 try:
-    from pyleecan.Methods.Mesh.Mesh.get_all_connectivity import get_all_connectivity
+    from ..Methods.Mesh.Mesh.get_all_connectivity import get_all_connectivity
 except ImportError as error:
     get_all_connectivity = error
 
 try:
-    from pyleecan.Methods.Mesh.Mesh.get_connectivity import get_connectivity
+    from ..Methods.Mesh.Mesh.get_connectivity import get_connectivity
 except ImportError as error:
     get_connectivity = error
 
 try:
-    from pyleecan.Methods.Mesh.Mesh.get_new_tag import get_new_tag
+    from ..Methods.Mesh.Mesh.get_new_tag import get_new_tag
 except ImportError as error:
     get_new_tag = error
 
 try:
-    from pyleecan.Methods.Mesh.Mesh.interface import interface
+    from ..Methods.Mesh.Mesh.interface import interface
 except ImportError as error:
     interface = error
 
 try:
-    from pyleecan.Methods.Mesh.Mesh.get_node_tags import get_node_tags
+    from ..Methods.Mesh.Mesh.get_node_tags import get_node_tags
 except ImportError as error:
     get_node_tags = error
 
 try:
-    from pyleecan.Methods.Mesh.Mesh.get_vertice import get_vertice
+    from ..Methods.Mesh.Mesh.get_vertice import get_vertice
 except ImportError as error:
     get_vertice = error
 
 
 from numpy import array, array_equal
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Element import Element
-from pyleecan.Classes.Node import Node
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Element import Element
+from ..Classes.Node import Node
 
 
 class Mesh(FrozenClass):

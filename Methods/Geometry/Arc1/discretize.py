@@ -2,7 +2,7 @@
 
 from numpy import angle as np_angle, exp, linspace
 
-from pyleecan.Methods.Machine import ARC_NPOINT_D
+from ....Methods.Machine import ARC_NPOINT_D
 
 
 def discretize(self, nb_point=ARC_NPOINT_D):

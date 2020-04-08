@@ -174,6 +174,6 @@ class Ui_SLamParam(object):
         self.b_next.setText(_translate("SLamParam", "Next"))
 
 
-from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
-from pyleecan.GUI.Tools.FloatEdit import FloatEdit
-from pyleecan.GUI.Resources import pyleecan_rc
+from .....GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+from .....GUI.Tools.FloatEdit import FloatEdit
+from .....GUI.Resources import pyleecan_rc

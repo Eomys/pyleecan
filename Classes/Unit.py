@@ -5,45 +5,45 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.GUI_Option.Unit.get_m import get_m
+    from ..Methods.GUI_Option.Unit.get_m import get_m
 except ImportError as error:
     get_m = error
 
 try:
-    from pyleecan.Methods.GUI_Option.Unit.get_m2 import get_m2
+    from ..Methods.GUI_Option.Unit.get_m2 import get_m2
 except ImportError as error:
     get_m2 = error
 
 try:
-    from pyleecan.Methods.GUI_Option.Unit.get_m_name import get_m_name
+    from ..Methods.GUI_Option.Unit.get_m_name import get_m_name
 except ImportError as error:
     get_m_name = error
 
 try:
-    from pyleecan.Methods.GUI_Option.Unit.get_m2_name import get_m2_name
+    from ..Methods.GUI_Option.Unit.get_m2_name import get_m2_name
 except ImportError as error:
     get_m2_name = error
 
 try:
-    from pyleecan.Methods.GUI_Option.Unit.set_m import set_m
+    from ..Methods.GUI_Option.Unit.set_m import set_m
 except ImportError as error:
     set_m = error
 
 try:
-    from pyleecan.Methods.GUI_Option.Unit.set_m2 import set_m2
+    from ..Methods.GUI_Option.Unit.set_m2 import set_m2
 except ImportError as error:
     set_m2 = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
+from ..Classes._check import InitUnKnowClassError
 
 
 class Unit(FrozenClass):

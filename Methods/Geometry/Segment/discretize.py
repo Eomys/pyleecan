@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from numpy import linspace
 
-from pyleecan.Methods.Machine import LINE_NPOINT_D
+from ....Methods.Machine import LINE_NPOINT_D
 
 
 def discretize(self, nb_point=LINE_NPOINT_D):

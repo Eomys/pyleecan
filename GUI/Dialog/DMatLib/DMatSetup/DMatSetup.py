@@ -3,15 +3,15 @@ from os.path import join, dirname, split
 from PyQt5.QtWidgets import QDialog, QMessageBox, QFileDialog
 from PyQt5.QtCore import Qt
 
-from pyleecan.GUI.Dialog.DMatLib.DMatSetup.Gen_DMatSetup import Gen_DMatSetup
-from pyleecan.GUI.Tools.MPLCanvas import MPLCanvas
+from .....GUI.Dialog.DMatLib.DMatSetup.Gen_DMatSetup import Gen_DMatSetup
+from .....GUI.Tools.MPLCanvas import MPLCanvas
 
-from pyleecan.Classes.Material import Material
-from pyleecan.Classes.MatMagnetics import MatMagnetics
-from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from .....Classes.Material import Material
+from .....Classes.MatMagnetics import MatMagnetics
+from .....Classes.ImportMatrixXls import ImportMatrixXls
+from .....Classes.ImportMatrixVal import ImportMatrixVal
 
-from pyleecan.Functions.path_tools import abs_file_path, rel_file_path
+from .....Functions.path_tools import abs_file_path, rel_file_path
 
 from numpy import array
 

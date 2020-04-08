@@ -3,7 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from pyleecan.GUI.Dialog.DMachineSetup.SBar.Ui_SBar import Ui_SBar
+from .....GUI.Dialog.DMachineSetup.SBar.Ui_SBar import Ui_SBar
 
 
 class Gen_SBar(Ui_SBar):

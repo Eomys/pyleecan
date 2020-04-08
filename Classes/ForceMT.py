@@ -5,25 +5,25 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Force import Force
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.Force import Force
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Simulation.ForceMT.comp_force import comp_force
+    from ..Methods.Simulation.ForceMT.comp_force import comp_force
 except ImportError as error:
     comp_force = error
 
 try:
-    from pyleecan.Methods.Simulation.ForceMT.comp_force_nodal import comp_force_nodal
+    from ..Methods.Simulation.ForceMT.comp_force_nodal import comp_force_nodal
 except ImportError as error:
     comp_force_nodal = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
+from ..Classes._check import InitUnKnowClassError
 
 
 class ForceMT(Force):

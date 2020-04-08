@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.Arc2 import Arc2
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Arc2 import Arc2
+from ....Classes.Segment import Segment
 
 
 def build_geometry(self):

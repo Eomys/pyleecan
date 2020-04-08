@@ -2,11 +2,11 @@
 
 from numpy import cos, exp, sin
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Functions.Geometry.inter_line_circle import inter_line_circle
-from pyleecan.Methods.Slot.HoleM53 import Slot53InterError
+from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
+from ....Functions.Geometry.inter_line_circle import inter_line_circle
+from ....Methods.Slot.HoleM53 import Slot53InterError
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):

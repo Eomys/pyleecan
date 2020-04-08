@@ -3,20 +3,20 @@
 https://sourceforge.net/projects/syr-e/
 """
 from numpy import pi
-from pyleecan.Classes.MachineSyRM import MachineSyRM
+from ....Classes.MachineSyRM import MachineSyRM
 
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.SlotW11 import SlotW11
-from pyleecan.Classes.WindingDW1L import WindingDW1L
-from pyleecan.Classes.CondType12 import CondType12
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.SlotW11 import SlotW11
+from ....Classes.WindingDW1L import WindingDW1L
+from ....Classes.CondType12 import CondType12
 
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.HoleM54 import HoleM54
+from ....Classes.LamHole import LamHole
+from ....Classes.HoleM54 import HoleM54
 
-from pyleecan.Classes.Shaft import Shaft
+from ....Classes.Shaft import Shaft
 
-from pyleecan.Tests.Validation.Material.M530_65A import M530_65A
-from pyleecan.Tests.Validation.Material.Copper1 import Copper1
+from ....Tests.Validation.Material.M530_65A import M530_65A
+from ....Tests.Validation.Material.Copper1 import Copper1
 
 # Stator setup
 stator = LamSlotWind(

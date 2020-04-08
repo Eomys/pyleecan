@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from matplotlib.pyplot import axis, subplots
-from pyleecan.Functions.init_fig import init_fig
+from ....Functions.init_fig import init_fig
 
 
 def plot(

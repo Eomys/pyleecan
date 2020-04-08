@@ -2,11 +2,11 @@
 
 from numpy import pi, exp
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Arc3 import Arc3
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Functions.Geometry.inter_line_circle import inter_line_circle
+from ....Classes.Arc1 import Arc1
+from ....Classes.Arc3 import Arc3
+from ....Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
+from ....Functions.Geometry.inter_line_circle import inter_line_circle
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):

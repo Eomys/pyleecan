@@ -2,9 +2,9 @@
 
 from numpy import arcsin, exp, angle
 
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Segment import Segment
 
-from pyleecan.Classes.Arc1 import Arc1
+from ....Classes.Arc1 import Arc1
 
 
 def build_geometry(self):

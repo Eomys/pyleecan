@@ -4,10 +4,10 @@ from unittest import TestCase
 
 from ddt import ddt, data
 
-from pyleecan.Classes.Arc2 import Arc2
+from ....Classes.Arc2 import Arc2
 
-from pyleecan.Methods.Geometry.Arc2.check import PointArc2Error, AngleArc2Error
-from pyleecan.Methods.Geometry.Arc2.discretize import NbPointArc2DError
+from ....Methods.Geometry.Arc2.check import PointArc2Error, AngleArc2Error
+from ....Methods.Geometry.Arc2.discretize import NbPointArc2DError
 from numpy import pi, array, sqrt, exp, angle
 
 

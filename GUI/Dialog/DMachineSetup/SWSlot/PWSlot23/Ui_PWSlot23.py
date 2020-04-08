@@ -169,6 +169,6 @@ class Ui_PWSlot23(object):
         self.unit_H1.setText(_translate("PWSlot23", "m"))
 
 
-from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
-from pyleecan.GUI.Tools.FloatEdit import FloatEdit
-from pyleecan.GUI.Resources import pyleecan_rc
+from ......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut import WWSlotOut
+from ......GUI.Tools.FloatEdit import FloatEdit
+from ......GUI.Resources import pyleecan_rc

@@ -5,27 +5,27 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Optimization.OptiProblem.eval_pb import eval_pb
+    from ..Methods.Optimization.OptiProblem.eval_pb import eval_pb
 except ImportError as error:
     eval_pb = error
 
 
 from inspect import getsource
 from cloudpickle import dumps, loads
-from pyleecan.Classes._check import CheckTypeError
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Output import Output
-from pyleecan.Classes.OptiDesignVar import OptiDesignVar
-from pyleecan.Classes.OptiObjFunc import OptiObjFunc
-from pyleecan.Classes.OptiConstraint import OptiConstraint
+from ..Classes._check import CheckTypeError
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Output import Output
+from ..Classes.OptiDesignVar import OptiDesignVar
+from ..Classes.OptiObjFunc import OptiObjFunc
+from ..Classes.OptiConstraint import OptiConstraint
 
 
 class OptiProblem(FrozenClass):

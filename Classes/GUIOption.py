@@ -5,13 +5,13 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes._frozen import FrozenClass
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Unit import Unit
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Unit import Unit
 
 
 class GUIOption(FrozenClass):

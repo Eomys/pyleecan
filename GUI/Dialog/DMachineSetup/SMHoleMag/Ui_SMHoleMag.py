@@ -92,5 +92,5 @@ class Ui_SMHoleMag(object):
         self.b_next.setText(_translate("SMHoleMag", "Save"))
 
 
-from pyleecan.GUI.Tools.HelpButton import HelpButton
-from pyleecan.GUI.Resources import pyleecan_rc
+from .....GUI.Tools.HelpButton import HelpButton
+from .....GUI.Resources import pyleecan_rc

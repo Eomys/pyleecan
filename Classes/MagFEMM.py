@@ -5,40 +5,40 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Magnetics import Magnetics
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.Magnetics import Magnetics
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Simulation.MagFEMM.comp_flux_airgap import comp_flux_airgap
+    from ..Methods.Simulation.MagFEMM.comp_flux_airgap import comp_flux_airgap
 except ImportError as error:
     comp_flux_airgap = error
 
 try:
-    from pyleecan.Methods.Simulation.MagFEMM.get_path_save import get_path_save
+    from ..Methods.Simulation.MagFEMM.get_path_save import get_path_save
 except ImportError as error:
     get_path_save = error
 
 try:
-    from pyleecan.Methods.Simulation.MagFEMM.solve_FEMM import solve_FEMM
+    from ..Methods.Simulation.MagFEMM.solve_FEMM import solve_FEMM
 except ImportError as error:
     solve_FEMM = error
 
 try:
-    from pyleecan.Methods.Simulation.MagFEMM.get_meshsolution import get_meshsolution
+    from ..Methods.Simulation.MagFEMM.get_meshsolution import get_meshsolution
 except ImportError as error:
     get_meshsolution = error
 
 try:
-    from pyleecan.Methods.Simulation.MagFEMM.get_path_save_fem import get_path_save_fem
+    from ..Methods.Simulation.MagFEMM.get_path_save_fem import get_path_save_fem
 except ImportError as error:
     get_path_save_fem = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
+from ..Classes._check import InitUnKnowClassError
 
 
 class MagFEMM(Magnetics):

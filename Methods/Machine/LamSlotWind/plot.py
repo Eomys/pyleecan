@@ -3,10 +3,10 @@
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
 
-from pyleecan.Functions.Winding.find_wind_phase_color import find_wind_phase_color
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Methods.Machine import PHASE_COLOR, PHASE_NAME, ROTOR_COLOR, STATOR_COLOR
-from pyleecan.Classes.WindingSC import WindingSC
+from ....Functions.Winding.find_wind_phase_color import find_wind_phase_color
+from ....Functions.init_fig import init_fig
+from ....Methods.Machine import PHASE_COLOR, PHASE_NAME, ROTOR_COLOR, STATOR_COLOR
+from ....Classes.WindingSC import WindingSC
 
 
 def plot(

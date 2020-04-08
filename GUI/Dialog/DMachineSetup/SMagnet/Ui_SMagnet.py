@@ -96,6 +96,6 @@ class Ui_SMagnet(object):
         self.b_next.setText(_translate("SMagnet", "Save"))
 
 
-from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
-from pyleecan.GUI.Tools.HelpButton import HelpButton
-from pyleecan.GUI.Resources import pyleecan_rc
+from .....GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+from .....GUI.Tools.HelpButton import HelpButton
+from .....GUI.Resources import pyleecan_rc

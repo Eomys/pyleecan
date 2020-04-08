@@ -1,7 +1,7 @@
 
 from numpy import arcsin, exp, pi, sqrt
 
-from pyleecan.Methods.Slot.SlotW16 import S16OutterError
+from ....Methods.Slot.SlotW16 import S16OutterError
 
 
 def _comp_point_coordinate(self):

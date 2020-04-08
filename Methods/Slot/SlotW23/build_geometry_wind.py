@@ -2,9 +2,9 @@
 
 from numpy import angle, exp, linspace, zeros
 
-from pyleecan.Classes.Arc2 import Arc2
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
+from ....Classes.Arc2 import Arc2
+from ....Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
 
 
 def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):

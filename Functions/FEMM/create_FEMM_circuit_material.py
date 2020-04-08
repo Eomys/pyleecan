@@ -3,10 +3,10 @@
 import femm
 from numpy import linalg as LA, pi, sign, sqrt
 
-from pyleecan.Functions.FEMM.comp_FEMM_Jcus import comp_FEMM_Jcus
-from pyleecan.Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
-from pyleecan.Functions.Winding.find_wind_phase_color import get_phase_id
-from pyleecan.Functions.FEMM.set_FEMM_wind_material import set_FEMM_wind_material
+from ...Functions.FEMM.comp_FEMM_Jcus import comp_FEMM_Jcus
+from ...Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
+from ...Functions.Winding.find_wind_phase_color import get_phase_id
+from ...Functions.FEMM.set_FEMM_wind_material import set_FEMM_wind_material
 
 
 def create_FEMM_circuit_material(

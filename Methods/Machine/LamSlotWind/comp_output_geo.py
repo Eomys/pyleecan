@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.Lamination import Lamination
+from ....Classes.Lamination import Lamination
 
 
 def comp_output_geo(self):

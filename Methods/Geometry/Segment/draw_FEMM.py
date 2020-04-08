@@ -2,7 +2,7 @@
 
 import femm
 
-from pyleecan.Functions.FEMM import boundary_prop
+from ....Functions.FEMM import boundary_prop
 
 
 def draw_FEMM(

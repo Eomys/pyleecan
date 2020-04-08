@@ -5,80 +5,80 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Line import Line
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.Line import Line
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Geometry.Segment.check import check
+    from ..Methods.Geometry.Segment.check import check
 except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Geometry.Segment.comp_length import comp_length
+    from ..Methods.Geometry.Segment.comp_length import comp_length
 except ImportError as error:
     comp_length = error
 
 try:
-    from pyleecan.Methods.Geometry.Segment.discretize import discretize
+    from ..Methods.Geometry.Segment.discretize import discretize
 except ImportError as error:
     discretize = error
 
 try:
-    from pyleecan.Methods.Geometry.Segment.draw_FEMM import draw_FEMM
+    from ..Methods.Geometry.Segment.draw_FEMM import draw_FEMM
 except ImportError as error:
     draw_FEMM = error
 
 try:
-    from pyleecan.Methods.Geometry.Segment.get_begin import get_begin
+    from ..Methods.Geometry.Segment.get_begin import get_begin
 except ImportError as error:
     get_begin = error
 
 try:
-    from pyleecan.Methods.Geometry.Segment.get_end import get_end
+    from ..Methods.Geometry.Segment.get_end import get_end
 except ImportError as error:
     get_end = error
 
 try:
-    from pyleecan.Methods.Geometry.Segment.get_middle import get_middle
+    from ..Methods.Geometry.Segment.get_middle import get_middle
 except ImportError as error:
     get_middle = error
 
 try:
-    from pyleecan.Methods.Geometry.Segment.intersect_line import intersect_line
+    from ..Methods.Geometry.Segment.intersect_line import intersect_line
 except ImportError as error:
     intersect_line = error
 
 try:
-    from pyleecan.Methods.Geometry.Segment.reverse import reverse
+    from ..Methods.Geometry.Segment.reverse import reverse
 except ImportError as error:
     reverse = error
 
 try:
-    from pyleecan.Methods.Geometry.Segment.rotate import rotate
+    from ..Methods.Geometry.Segment.rotate import rotate
 except ImportError as error:
     rotate = error
 
 try:
-    from pyleecan.Methods.Geometry.Segment.split_half import split_half
+    from ..Methods.Geometry.Segment.split_half import split_half
 except ImportError as error:
     split_half = error
 
 try:
-    from pyleecan.Methods.Geometry.Segment.split_line import split_line
+    from ..Methods.Geometry.Segment.split_line import split_line
 except ImportError as error:
     split_line = error
 
 try:
-    from pyleecan.Methods.Geometry.Segment.translate import translate
+    from ..Methods.Geometry.Segment.translate import translate
 except ImportError as error:
     translate = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
+from ..Classes._check import InitUnKnowClassError
 
 
 class Segment(Line):

@@ -5,10 +5,10 @@ from numpy import pi
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from pyleecan.Classes.SlotW13 import SlotW13
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot13.Gen_PWSlot13 import Gen_PWSlot13
-from pyleecan.Methods.Slot.Slot.check import SlotCheckError
+from ......Classes.SlotW13 import SlotW13
+from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot13.Gen_PWSlot13 import Gen_PWSlot13
+from ......Methods.Slot.Slot.check import SlotCheckError
 
 translate = PyQt5.QtCore.QCoreApplication.translate
 

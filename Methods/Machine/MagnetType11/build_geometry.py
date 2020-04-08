@@ -2,9 +2,9 @@
 
 from numpy import array, exp, arctan
 
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
+from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):

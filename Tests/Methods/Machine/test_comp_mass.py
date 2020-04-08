@@ -6,14 +6,14 @@ from ddt import ddt, data
 from mock import MagicMock
 from numpy import array, pi, zeros
 
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.VentilationPolar import VentilationPolar
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.Frame import Frame
-from pyleecan.Classes.Shaft import Shaft
+from ....Classes.MachineIPMSM import MachineIPMSM
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.LamHole import LamHole
+from ....Classes.VentilationCirc import VentilationCirc
+from ....Classes.VentilationPolar import VentilationPolar
+from ....Classes.HoleM50 import HoleM50
+from ....Classes.Frame import Frame
+from ....Classes.Shaft import Shaft
 
 # For AlmostEqual
 DELTA = 1e-4

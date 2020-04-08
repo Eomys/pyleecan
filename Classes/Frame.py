@@ -5,51 +5,51 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.Frame.build_geometry import build_geometry
+    from ..Methods.Machine.Frame.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
 
 try:
-    from pyleecan.Methods.Machine.Frame.comp_height_eq import comp_height_eq
+    from ..Methods.Machine.Frame.comp_height_eq import comp_height_eq
 except ImportError as error:
     comp_height_eq = error
 
 try:
-    from pyleecan.Methods.Machine.Frame.comp_mass import comp_mass
+    from ..Methods.Machine.Frame.comp_mass import comp_mass
 except ImportError as error:
     comp_mass = error
 
 try:
-    from pyleecan.Methods.Machine.Frame.comp_surface import comp_surface
+    from ..Methods.Machine.Frame.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
 
 try:
-    from pyleecan.Methods.Machine.Frame.comp_volume import comp_volume
+    from ..Methods.Machine.Frame.comp_volume import comp_volume
 except ImportError as error:
     comp_volume = error
 
 try:
-    from pyleecan.Methods.Machine.Frame.get_length import get_length
+    from ..Methods.Machine.Frame.get_length import get_length
 except ImportError as error:
     get_length = error
 
 try:
-    from pyleecan.Methods.Machine.Frame.plot import plot
+    from ..Methods.Machine.Frame.plot import plot
 except ImportError as error:
     plot = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Material import Material
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Material import Material
 
 
 class Frame(FrozenClass):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.OutElec import OutElec
-from pyleecan.Methods.Simulation.Input import InputError
+from ....Classes.OutElec import OutElec
+from ....Methods.Simulation.Input import InputError
 from numpy import ndarray
 
 

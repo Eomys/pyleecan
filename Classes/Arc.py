@@ -5,35 +5,35 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Line import Line
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.Line import Line
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Geometry.Arc.draw_FEMM import draw_FEMM
+    from ..Methods.Geometry.Arc.draw_FEMM import draw_FEMM
 except ImportError as error:
     draw_FEMM = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc.intersect_line import intersect_line
+    from ..Methods.Geometry.Arc.intersect_line import intersect_line
 except ImportError as error:
     intersect_line = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc.is_on_arc import is_on_arc
+    from ..Methods.Geometry.Arc.is_on_arc import is_on_arc
 except ImportError as error:
     is_on_arc = error
 
 try:
-    from pyleecan.Methods.Geometry.Arc.split_line import split_line
+    from ..Methods.Geometry.Arc.split_line import split_line
 except ImportError as error:
     split_line = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
+from ..Classes._check import InitUnKnowClassError
 
 
 class Arc(Line):

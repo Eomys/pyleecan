@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from numpy import imag, pi, exp
 from numpy import abs as np_abs
-from pyleecan.Classes.Circle import Circle
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Classes.Arc import Arc
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Circle import Circle
+from ....Classes.SurfLine import SurfLine
+from ....Classes.Arc import Arc
+from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
 
 
 def build_geometry_half_tooth(self, is_top=False, alpha=0, delta=0):

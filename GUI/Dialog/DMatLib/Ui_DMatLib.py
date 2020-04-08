@@ -464,4 +464,4 @@ class Ui_DMatLib(object):
         self.out_BH.setText(_translate("DMatLib", "-"))
 
 
-from pyleecan.GUI.Resources import pyleecan_rc
+from ....GUI.Resources import pyleecan_rc

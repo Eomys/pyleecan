@@ -2,7 +2,7 @@
 
 from numpy import arcsin, exp
 
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Segment import Segment
 
 
 def build_geometry(self):

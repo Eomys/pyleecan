@@ -1,4 +1,4 @@
-from pyleecan.Classes.Output import Output
+from ....Classes.Output import Output
 import numpy as np
 
 

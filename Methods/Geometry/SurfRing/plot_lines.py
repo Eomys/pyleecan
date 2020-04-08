@@ -1,7 +1,7 @@
 from matplotlib.pyplot import axis, legend
 from numpy import real, imag
 
-from pyleecan.Functions.init_fig import init_fig
+from ....Functions.init_fig import init_fig
 
 
 def plot_lines(self, fig=None):

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.MeshSolution import MeshSolution
-from pyleecan.Classes.Mesh import Mesh
-from pyleecan.Classes.Solution import Solution
+from ....Classes.MeshSolution import MeshSolution
+from ....Classes.Mesh import Mesh
+from ....Classes.Solution import Solution
 
 
 def init_mechanical_model(self, output, group):

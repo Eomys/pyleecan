@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Methods.Machine.LamSlotWind.check import Lam_WindCheckError
+from ....Methods.Machine.LamSlotWind.check import Lam_WindCheckError
 
 
 def check(self):

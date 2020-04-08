@@ -3,12 +3,12 @@
 import femm
 from numpy import exp, pi
 
-from pyleecan.Functions.FEMM import GROUP_FM
-from pyleecan.Functions.FEMM.create_FEMM_bar import create_FEMM_bar
-from pyleecan.Functions.FEMM.create_FEMM_circuit_material import (
+from ...Functions.FEMM import GROUP_FM
+from ...Functions.FEMM.create_FEMM_bar import create_FEMM_bar
+from ...Functions.FEMM.create_FEMM_circuit_material import (
     create_FEMM_circuit_material,
 )
-from pyleecan.Functions.FEMM.create_FEMM_magnet import create_FEMM_magnet
+from ...Functions.FEMM.create_FEMM_magnet import create_FEMM_magnet
 
 
 def create_FEMM_materials(

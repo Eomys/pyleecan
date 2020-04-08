@@ -5,18 +5,18 @@ from unittest import TestCase
 
 from PyQt5 import QtWidgets
 
-from pyleecan.Classes.Lamination import Lamination
-from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.VentilationPolar import VentilationPolar
-from pyleecan.Classes.VentilationTrap import VentilationTrap
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.DAVDuct import DAVDuct
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.PVentCirc import (
+from ....Classes.Lamination import Lamination
+from ....Classes.VentilationCirc import VentilationCirc
+from ....Classes.VentilationPolar import VentilationPolar
+from ....Classes.VentilationTrap import VentilationTrap
+from ....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.DAVDuct import DAVDuct
+from ....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.PVentCirc import (
     PVentCirc,
 )
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.PVentPolar import (
+from ....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.PVentPolar import (
     PVentPolar,
 )
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.PVentTrap import (
+from ....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.PVentTrap import (
     PVentTrap,
 )
 

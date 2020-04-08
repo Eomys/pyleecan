@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
-from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import (
+from .....GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import (
     Gen_SMachineType,
 )
 

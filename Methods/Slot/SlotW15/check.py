@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Methods.Slot.SlotW15 import S15InnerError
+from ....Methods.Slot.SlotW15 import S15InnerError
 
 
 def check(self):

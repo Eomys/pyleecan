@@ -79,5 +79,5 @@ class Ui_SWPole(object):
         self.b_next.setText(_translate("SWPole", "Next"))
 
 
-from pyleecan.GUI.Tools.HelpButton import HelpButton
-from pyleecan.GUI.Resources import pyleecan_rc
+from .....GUI.Tools.HelpButton import HelpButton
+from .....GUI.Resources import pyleecan_rc

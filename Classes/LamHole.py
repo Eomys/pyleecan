@@ -5,63 +5,63 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Lamination import Lamination
+from ..Classes._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ..Classes.Lamination import Lamination
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.LamHole.build_geometry import build_geometry
+    from ..Methods.Machine.LamHole.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
 
 try:
-    from pyleecan.Methods.Machine.LamHole.comp_height_yoke import comp_height_yoke
+    from ..Methods.Machine.LamHole.comp_height_yoke import comp_height_yoke
 except ImportError as error:
     comp_height_yoke = error
 
 try:
-    from pyleecan.Methods.Machine.LamHole.comp_masses import comp_masses
+    from ..Methods.Machine.LamHole.comp_masses import comp_masses
 except ImportError as error:
     comp_masses = error
 
 try:
-    from pyleecan.Methods.Machine.LamHole.comp_surfaces import comp_surfaces
+    from ..Methods.Machine.LamHole.comp_surfaces import comp_surfaces
 except ImportError as error:
     comp_surfaces = error
 
 try:
-    from pyleecan.Methods.Machine.LamHole.comp_volumes import comp_volumes
+    from ..Methods.Machine.LamHole.comp_volumes import comp_volumes
 except ImportError as error:
     comp_volumes = error
 
 try:
-    from pyleecan.Methods.Machine.LamHole.get_pole_pair_number import (
+    from ..Methods.Machine.LamHole.get_pole_pair_number import (
         get_pole_pair_number,
     )
 except ImportError as error:
     get_pole_pair_number = error
 
 try:
-    from pyleecan.Methods.Machine.LamHole.plot import plot
+    from ..Methods.Machine.LamHole.plot import plot
 except ImportError as error:
     plot = error
 
 try:
-    from pyleecan.Methods.Machine.LamHole.comp_radius_mid_yoke import (
+    from ..Methods.Machine.LamHole.comp_radius_mid_yoke import (
         comp_radius_mid_yoke,
     )
 except ImportError as error:
     comp_radius_mid_yoke = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Hole import Hole
-from pyleecan.Classes.Bore import Bore
-from pyleecan.Classes.Material import Material
-from pyleecan.Classes.Notch import Notch
+from ..Classes._check import InitUnKnowClassError
+from ..Classes.Hole import Hole
+from ..Classes.Bore import Bore
+from ..Classes.Material import Material
+from ..Classes.Notch import Notch
 
 
 class LamHole(Lamination):

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from pandas import read_excel
-from pyleecan.Methods.Import.ImportMatrixXls import XlsFileError
+from ....Methods.Import.ImportMatrixXls import XlsFileError
 from os.path import isfile
 
-from pyleecan.Functions.path_tools import abs_file_path
+from ....Functions.path_tools import abs_file_path
 
 
 def get_data(self):

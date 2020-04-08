@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Methods import NotImplementedYetError
+from ....Methods import NotImplementedYetError
 
 
 def get_polar_eq(self):

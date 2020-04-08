@@ -1,4 +1,4 @@
-from pyleecan.Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot.check import SlotCheckError
 
 
 class S16OutterError(SlotCheckError):

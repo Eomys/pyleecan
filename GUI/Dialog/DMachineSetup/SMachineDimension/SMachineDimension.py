@@ -4,12 +4,12 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
-from pyleecan.Classes.Frame import Frame
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.Ui_SMachineDimension import (
+from .....Classes.Frame import Frame
+from .....GUI import gui_option
+from .....GUI.Dialog.DMachineSetup.SMachineDimension.Ui_SMachineDimension import (
     Ui_SMachineDimension,
 )
-from pyleecan.GUI.Resources import pixmap_dict
+from .....GUI.Resources import pixmap_dict
 
 
 class SMachineDimension(Ui_SMachineDimension, QWidget):

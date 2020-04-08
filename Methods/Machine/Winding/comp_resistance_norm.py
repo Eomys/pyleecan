@@ -1,4 +1,4 @@
-# from pyleecan.Methods.Machine.Winding import WindingError
+# from ....Methods.Machine.Winding import WindingError
 
 
 def comp_resistance_norm(self, T=20):

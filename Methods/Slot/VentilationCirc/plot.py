@@ -4,7 +4,7 @@ from matplotlib.patches import Circle, Patch
 from matplotlib.pyplot import axis, legend
 from numpy import exp, pi
 
-from pyleecan.Functions.init_fig import init_fig
+from ....Functions.init_fig import init_fig
 
 
 def plot(self, fig=None):

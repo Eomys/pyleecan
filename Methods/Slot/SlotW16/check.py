@@ -1,5 +1,5 @@
 
-from pyleecan.Methods.Slot.SlotW16 import S16OutterError
+from ....Methods.Slot.SlotW16 import S16OutterError
 
 
 def check(self):

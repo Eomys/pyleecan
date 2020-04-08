@@ -4,9 +4,9 @@ from numpy import arcsin, arctan, cos, exp, array, angle, pi
 from numpy import imag as np_imag
 from scipy.optimize import fsolve
 
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
+from ....Classes.Arc1 import Arc1
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):

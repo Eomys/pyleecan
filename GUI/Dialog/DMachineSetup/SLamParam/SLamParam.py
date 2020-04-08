@@ -4,12 +4,12 @@ from matplotlib.pyplot import gcf
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QDialog, QMessageBox, QWidget
 
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.Lamination import Lamination
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.DAVDuct import DAVDuct
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.Gen_SLamParam import Gen_SLamParam
+from .....Classes.LamHole import LamHole
+from .....Classes.Lamination import Lamination
+from .....Classes.LamSlotMag import LamSlotMag
+from .....GUI import gui_option
+from .....GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.DAVDuct import DAVDuct
+from .....GUI.Dialog.DMachineSetup.SLamParam.Gen_SLamParam import Gen_SLamParam
 
 
 class SLamParam(Gen_SLamParam, QWidget):

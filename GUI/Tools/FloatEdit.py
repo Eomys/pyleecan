@@ -5,7 +5,7 @@ from PyQt5 import QtGui
 from PyQt5.QtGui import QDoubleValidator
 from PyQt5.QtWidgets import QLineEdit
 
-from pyleecan.GUI import gui_option
+from ...GUI import gui_option
 
 _float_re = compile(r"(([+-]?\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)")
 

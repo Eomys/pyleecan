@@ -2,10 +2,10 @@
 
 from unittest import TestCase
 
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Classes.MagnetType10 import MagnetType10
+from ....Classes.HoleM50 import HoleM50
+from ....Classes.LamHole import LamHole
+from ....Classes.SurfLine import SurfLine
+from ....Classes.MagnetType10 import MagnetType10
 
 # For AlmostEqual
 DELTA = 1e-4
