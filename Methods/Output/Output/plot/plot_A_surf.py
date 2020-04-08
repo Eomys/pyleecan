@@ -10,7 +10,7 @@ def plot_A_surf(
     is_deg=True,
     t_max=1.0,
     a_max=400,
-    mag_max=1.5,
+    mag_max=1.0,
     is_norm=False,
     unit="SI",
     colormap="RdBu",

@@ -14,7 +14,7 @@ def plot_A_time_space(
     is_spaceorder=False,
     freq_max=20000,
     r_max=100,
-    mag_max=1,
+    mag_max=1.0,
     is_norm=False,
     unit="SI",
     colormap="RdBu",
