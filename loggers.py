@@ -31,7 +31,7 @@ LOGGING_CONFIG_CONSOLE = {
     "version": 1,
     # Define loggers
     "loggers": {
-        "": {"level": "NOTSET", "handlers": [],},  # root logger
+        "": {"level": "NOTSET", "handlers": []},  # root logger
         "Pyleecan": {
             "level": "DEBUG",
             "propagate": False,
@@ -43,29 +43,25 @@ LOGGING_CONFIG_CONSOLE = {
                 "critical_console_handler",
             ],
         },
-        "Pyleecan.Output": {"level": DEFAULT_LEVEL, "propagate": True, "handlers": [],},
+        "Pyleecan.Output": {"level": DEFAULT_LEVEL, "propagate": True, "handlers": []},
         "Pyleecan.Simulation": {
             "level": DEFAULT_LEVEL,
             "propagate": True,
             "handlers": [],
         },
-        "Pyleecan.Machine": {
-            "level": DEFAULT_LEVEL,
-            "propagate": True,
-            "handlers": [],
-        },
+        "Pyleecan.Machine": {"level": DEFAULT_LEVEL, "propagate": True, "handlers": []},
         "Pyleecan.OutElec": {
             "level": DEFAULT_LEVEL,
             "propagate": True,
             "handlers": [],  # Different handler enable to use differents formats, and to handle different stream (stdout, stderr,...)
         },
-        "Pyleecan.OutMag": {"level": DEFAULT_LEVEL, "propagate": True, "handlers": [],},
+        "Pyleecan.OutMag": {"level": DEFAULT_LEVEL, "propagate": True, "handlers": []},
         "Pyleecan.OutStruct": {
             "level": DEFAULT_LEVEL,
             "propagate": True,
             "handlers": [],
         },
-        "Pyleecan.OutGeo": {"level": DEFAULT_LEVEL, "propagate": True, "handlers": [],},
+        "Pyleecan.OutGeo": {"level": DEFAULT_LEVEL, "propagate": True, "handlers": []},
         "Pyleecan.OptiGenAlg": {
             "level": DEFAULT_LEVEL,
             "propagate": False,
@@ -128,11 +124,11 @@ LOGGING_CONFIG_CONSOLE = {
     },
     # Define filters
     "filters": {
-        "debug_filter": {"()": LevelFilter, "level": DEBUG,},
-        "info_filter": {"()": LevelFilter, "level": INFO,},
-        "warning_filter": {"()": LevelFilter, "level": WARNING,},
-        "error_filter": {"()": LevelFilter, "level": ERROR,},
-        "critical_filter": {"()": LevelFilter, "level": CRITICAL,},
+        "debug_filter": {"()": LevelFilter, "level": DEBUG},
+        "info_filter": {"()": LevelFilter, "level": INFO},
+        "warning_filter": {"()": LevelFilter, "level": WARNING},
+        "error_filter": {"()": LevelFilter, "level": ERROR},
+        "critical_filter": {"()": LevelFilter, "level": CRITICAL},
     },
     # Define formatters
     "formatters": {
@@ -148,7 +144,7 @@ LOGGING_CONFIG_FILE = {
     "version": 1,
     # Define loggers
     "loggers": {
-        "": {"level": "NOTSET", "handlers": [],},  # root logger
+        "": {"level": "NOTSET", "handlers": []},  # root logger
         "Pyleecan": {
             "level": DEFAULT_LEVEL,
             "propagate": False,
@@ -174,11 +170,7 @@ LOGGING_CONFIG_FILE = {
             "propagate": False,
             "handlers": ["OutElec_fh"],
         },
-        "Pyleecan.OutMag": {
-            "level": DEFAULT_LEVEL,
-            "propagate": False,
-            "handlers": [],
-        },
+        "Pyleecan.OutMag": {"level": DEFAULT_LEVEL, "propagate": False, "handlers": []},
         "Pyleecan.OutStruct": {
             "level": DEFAULT_LEVEL,
             "propagate": False,
@@ -274,11 +266,11 @@ LOGGING_CONFIG_FILE = {
     },
     # Define filters
     "filters": {
-        "debug_filter": {"()": LevelFilter, "level": DEBUG,},
-        "info_filter": {"()": LevelFilter, "level": INFO,},
-        "warning_filter": {"()": LevelFilter, "level": WARNING,},
-        "error_filter": {"()": LevelFilter, "level": ERROR,},
-        "critical_filter": {"()": LevelFilter, "level": CRITICAL,},
+        "debug_filter": {"()": LevelFilter, "level": DEBUG},
+        "info_filter": {"()": LevelFilter, "level": INFO},
+        "warning_filter": {"()": LevelFilter, "level": WARNING},
+        "error_filter": {"()": LevelFilter, "level": ERROR},
+        "critical_filter": {"()": LevelFilter, "level": CRITICAL},
     },
     # Define formatters
     "formatters": {

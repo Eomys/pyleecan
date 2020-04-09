@@ -7,8 +7,8 @@ def set_Nr(self, value):
 
     Parameters
     ----------
-    self : InCurrent
-        An InCurrent object
+    self : InputCurrent
+        An InputCurrent object
     value: float
         Nr value to enforce
     """

@@ -17,20 +17,20 @@ def gen_input(self):
 
     Parameters
     ----------
-    self : InCurrentDQ
-        An InCurrentDQ object
+    self : InputCurrentDQ
+        An InputCurrentDQ object
     """
 
     output = OutElec()
     # Load and check time
     if self.time is None:
-        raise InputError("ERROR: InCurrentDQ.time missing")
+        raise InputError("ERROR: InputCurrentDQ.time missing")
     output.time = self.time.get_data()
 
     if not isinstance(output.time, ndarray) or len(output.time.shape) != 1:
         # time should be a vector
         raise InputError(
-            "ERROR: InCurrentDQ.time should be a vector, "
+            "ERROR: InputCurrentDQ.time should be a vector, "
             + str(output.time.shape)
             + " shape found"
         )
@@ -38,12 +38,12 @@ def gen_input(self):
 
     # Load and check angle
     if self.angle is None:
-        raise InputError("ERROR: InCurrentDQ.angle missing")
+        raise InputError("ERROR: InputCurrentDQ.angle missing")
     output.angle = self.angle.get_data()
     if not isinstance(output.angle, ndarray) or len(output.angle.shape) != 1:
         # angle should be a vector
         raise InputError(
-            "ERROR: InCurrentDQ.angle should be a vector, "
+            "ERROR: InputCurrentDQ.angle should be a vector, "
             + str(output.angle.shape)
             + " shape found"
         )
@@ -51,7 +51,7 @@ def gen_input(self):
     # Get the phase number for verifications
     if self.parent is None:
         raise InputError(
-            "ERROR: InCurrentDQ object should be inside a Simulation object"
+            "ERROR: InputCurrentDQ object should be inside a Simulation object"
         )
     simu = self.parent
     # Number of winding phases for stator/rotor
@@ -66,11 +66,11 @@ def gen_input(self):
     # Load and check Is
     if qs > 0:
         if self.Is is None:
-            raise InputError("ERROR: InCurrentDQ.Is missing")
+            raise InputError("ERROR: InputCurrentDQ.Is missing")
         IsDQ = self.Is.get_data()
         if not isinstance(IsDQ, ndarray) or IsDQ.shape != (Nt_tot, 2):
             raise InputError(
-                "ERROR: InCurrentDQ.Is must be a matrix with the shape "
+                "ERROR: InputCurrentDQ.Is must be a matrix with the shape "
                 + str((Nt_tot, 2))
                 + " (len(time), stator phase number), "
                 + str(IsDQ.shape)
@@ -80,11 +80,11 @@ def gen_input(self):
     # Load and check Ir is needed
     if qr > 0:
         if self.Ir is None:
-            raise InputError("ERROR: InCurrentDQ.Ir missing")
+            raise InputError("ERROR: InputCurrentDQ.Ir missing")
         output.Ir = self.Ir.get_data()
         if not isinstance(output.Ir, ndarray) or output.Ir.shape != (Nt_tot, qr):
             raise InputError(
-                "ERROR: InCurrentDQ.Ir must be a matrix with the shape "
+                "ERROR: InputCurrentDQ.Ir must be a matrix with the shape "
                 + str((Nt_tot, qr))
                 + " (len(time), rotor phase number), "
                 + str(output.Ir.shape)
@@ -94,7 +94,7 @@ def gen_input(self):
     # Load and check alpha_rotor and Nr
     if self.angle_rotor is None and self.Nr is None:
         raise InputError(
-            "ERROR: InCurrentDQ.angle_rotor and InCurrentDQ.Nr can't be None at the same time"
+            "ERROR: InputCurrentDQ.angle_rotor and InputCurrentDQ.Nr can't be None at the same time"
         )
     if self.angle_rotor is not None:
         output.angle_rotor = self.angle_rotor.get_data()
@@ -105,7 +105,7 @@ def gen_input(self):
         ):
             # angle_rotor should be a vector of same length as time
             raise InputError(
-                "ERROR: InCurrentDQ.angle_rotor should be a vector of the same length as time, "
+                "ERROR: InputCurrentDQ.angle_rotor should be a vector of the same length as time, "
                 + str(output.angle_rotor.shape)
                 + " shape found, "
                 + str(output.time.shape)
@@ -120,7 +120,7 @@ def gen_input(self):
         ):
             # angle_rotor should be a vector of same length as time
             raise InputError(
-                "ERROR: InCurrentDQ.Nr should be a vector of the same length as time, "
+                "ERROR: InputCurrentDQ.Nr should be a vector of the same length as time, "
                 + str(output.Nr.shape)
                 + " shape found, "
                 + str(output.time.shape)
@@ -147,7 +147,7 @@ def gen_input(self):
     if qs != 3:
         if self.Is is None:
             raise InputError(
-                "ERROR: InCurrentDQ: only 3 phase stator currents implemented yet"
+                "ERROR: InputCurrentDQ: only 3 phase stator currents implemented yet"
             )
 
     # save the Output in the correct place

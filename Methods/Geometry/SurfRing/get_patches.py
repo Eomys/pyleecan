@@ -8,7 +8,9 @@ from pyleecan.Methods.Machine import (
 )
 
 
-def get_patches(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False):
+def get_patches(
+    self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False, linestyle=None
+):
     """Returns the PolarArc Patch to be display in matplotlib
 
     Parameters
@@ -21,6 +23,8 @@ def get_patches(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=Fals
         the edge color of the patch (Default value = PATCH_EDGE)
     is_edge_only: bool
         To set the transparancy of the face color to 0 and 1 for the edge color
+    linestyle : str
+        Line style of the edge {'-', '--', '-.', ':', '', (offset, on-off-seq), ...}
 
     Returns
     -------
@@ -29,8 +33,10 @@ def get_patches(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=Fals
 
     """
     patch_list = self.out_surf.get_patches(
-        color=color, edgecolor=edgecolor, is_edge_only=is_edge_only
+        color=color, edgecolor=edgecolor, is_edge_only=is_edge_only, linestyle=linestyle
     )
     # No color for inner surface
-    patch_list.extend(self.in_surf.get_patches(is_edge_only=is_edge_only))
+    patch_list.extend(
+        self.in_surf.get_patches(is_edge_only=is_edge_only, linestyle=linestyle)
+    )
     return patch_list

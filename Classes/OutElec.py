@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import set_array, check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -20,6 +21,9 @@ class OutElec(FrozenClass):
 
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(
         self,
@@ -215,15 +219,6 @@ class OutElec(FrozenClass):
         self.rot_dir = None
         self.angle_rotor_initial = None
         self.logger_name = None
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self, "logger_name"):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger("Pyleecan")
 
     def _get_time(self):
         """getter of time"""

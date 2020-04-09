@@ -296,7 +296,8 @@
             "get_lines",
             "get_patches",
             "rotate",
-            "translate"
+            "translate",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "Circle",
@@ -1847,7 +1848,30 @@
             }
         ]
     },
-    "InCurrent": {
+    "Input": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "Input",
+            "InputCurrent",
+            "InputCurrentDQ",
+            "InputFlux",
+            "InputForce"
+        ],
+        "desc": "Abstract class to set the starting data of the simulation",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "Input",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/Input.csv",
+        "properties": []
+    },
+    "InputCurrent": {
         "constants": [
             {
                 "name": "VERSION",
@@ -1862,9 +1886,9 @@
             "set_Nr"
         ],
         "mother": "Input",
-        "name": "InCurrent",
+        "name": "InputCurrent",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InCurrent.csv",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/InputCurrent.csv",
         "properties": [
             {
                 "desc": "Electrical time vector (no symmetry) to import",
@@ -1940,7 +1964,7 @@
             }
         ]
     },
-    "InCurrentDQ": {
+    "InputCurrentDQ": {
         "constants": [
             {
                 "name": "VERSION",
@@ -1954,9 +1978,9 @@
             "gen_input"
         ],
         "mother": "Input",
-        "name": "InCurrentDQ",
+        "name": "InputCurrentDQ",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InCurrentDQ.csv",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/InputCurrentDQ.csv",
         "properties": [
             {
                 "desc": "Electrical time vector (no symmetry) to import",
@@ -2032,7 +2056,7 @@
             }
         ]
     },
-    "InFlux": {
+    "InputFlux": {
         "constants": [
             {
                 "name": "VERSION",
@@ -2046,9 +2070,9 @@
             "gen_input"
         ],
         "mother": "Input",
-        "name": "InFlux",
+        "name": "InputFlux",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InFlux.csv",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv",
         "properties": [
             {
                 "desc": "Electrical time vector (no symmetry) to import",
@@ -2088,7 +2112,7 @@
             }
         ]
     },
-    "InForce": {
+    "InputForce": {
         "constants": [
             {
                 "name": "VERSION",
@@ -2102,9 +2126,9 @@
             "gen_input"
         ],
         "mother": "Input",
-        "name": "InForce",
+        "name": "InputForce",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InForce.csv",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/InputForce.csv",
         "properties": [
             {
                 "desc": "Electrical time vector (no symmetry) to import",
@@ -2143,29 +2167,6 @@
                 "value": null
             }
         ]
-    },
-    "Input": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "Input",
-            "InCurrent",
-            "InCurrentDQ",
-            "InFlux",
-            "InForce"
-        ],
-        "desc": "Abstract class to set the starting data of the simulation",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "Input",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/Input.csv",
-        "properties": []
     },
     "LamHole": {
         "constants": [
@@ -5468,7 +5469,8 @@
             "comp_length",
             "discretize",
             "get_patches",
-            "comp_surface"
+            "comp_surface",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "PolarArc",
@@ -7747,7 +7749,8 @@
             "get_patches",
             "discretize",
             "comp_surface",
-            "plot_lines"
+            "plot_lines",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "SurfLine",
@@ -7784,7 +7787,8 @@
             "get_patches",
             "discretize",
             "comp_surface",
-            "plot_lines"
+            "plot_lines",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "SurfRing",
@@ -7831,7 +7835,8 @@
         "methods": [
             "comp_mesh_dict",
             "draw_FEMM",
-            "plot"
+            "plot",
+            "split_line"
         ],
         "mother": "",
         "name": "Surface",
@@ -7876,7 +7881,8 @@
             "get_lines",
             "get_patches",
             "rotate",
-            "translate"
+            "translate",
+            "comp_point_ref"
         ],
         "mother": "Surface",
         "name": "Trapeze",

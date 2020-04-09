@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.MagnetPolar import MagnetPolar
 
@@ -95,6 +96,9 @@ class MagnetType11(MagnetPolar):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self,
         Wmag=0.002,
@@ -183,15 +187,6 @@ class MagnetType11(MagnetPolar):
         self.Hmag = None
         # Set to None the properties inherited from MagnetPolar
         super(MagnetType11, self)._set_None()
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self, "logger_name"):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger("Pyleecan")
 
     def _get_Wmag(self):
         """getter of Wmag"""

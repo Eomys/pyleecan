@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotWind import SlotWind
 
@@ -171,6 +172,9 @@ class SlotW11(SlotWind):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self,
         W0=0.003,
@@ -303,15 +307,6 @@ class SlotW11(SlotWind):
         self.R1 = None
         # Set to None the properties inherited from SlotWind
         super(SlotW11, self)._set_None()
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self, "logger_name"):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger("Pyleecan")
 
     def _get_W0(self):
         """getter of W0"""

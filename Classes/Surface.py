@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -25,6 +26,11 @@ try:
     from pyleecan.Methods.Geometry.Surface.plot import plot
 except ImportError as error:
     plot = error
+
+try:
+    from pyleecan.Methods.Geometry.Surface.split_line import split_line
+except ImportError as error:
+    split_line = error
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
@@ -65,8 +71,20 @@ class Surface(FrozenClass):
         )
     else:
         plot = plot
+    # cf Methods.Geometry.Surface.split_line
+    if isinstance(split_line, ImportError):
+        split_line = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Surface method split_line: " + str(split_line))
+            )
+        )
+    else:
+        split_line = split_line
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, point_ref=0, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :
@@ -132,15 +150,6 @@ class Surface(FrozenClass):
 
         self.point_ref = None
         self.label = None
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self, "logger_name"):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger("Pyleecan")
 
     def _get_point_ref(self):
         """getter of point_ref"""

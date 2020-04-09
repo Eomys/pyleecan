@@ -8,3 +8,4 @@ line_list,-,List of Lines ,0,[Line],[],,,,Geometry,Surface,get_lines,VERSION,1,"
 ,,,,,,,,,,,discretize,,,
 ,,,,,,,,,,,comp_surface,,,
 ,,,,,,,,,,,plot_lines,,,
+,,,,,,,,,,,comp_point_ref,,,

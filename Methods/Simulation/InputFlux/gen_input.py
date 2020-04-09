@@ -5,30 +5,30 @@
 @author pierre_b
 """
 
-from pyleecan.Classes.OutStruct import OutStruct
+from pyleecan.Classes.OutMag import OutMag
 from pyleecan.Methods.Simulation.Input import InputError
 from numpy import ndarray
 
 
 def gen_input(self):
-    """Generate the input for the structural module (skip force computation)
+    """Generate the input for the structural module (magnetic output)
 
     Parameters
     ----------
-    self : InForce
-        An InForce object
+    self : InputFlux
+        An InputFlux object
     """
 
-    output = OutStruct()
+    output = OutMag()
     # Load and check time
     if self.time is None:
-        raise InputError("ERROR: InForce.time missing")
+        raise InputError("ERROR: InputFlux.time missing")
     output.time = self.time.get_data()
 
     if not isinstance(output.time, ndarray) or len(output.time.shape) != 1:
         # time should be a vector
         raise InputError(
-            "ERROR: InForce.time should be a vector, "
+            "ERROR: InputFlux.time should be a vector, "
             + str(output.time.shape)
             + " shape found"
         )
@@ -36,48 +36,45 @@ def gen_input(self):
 
     # Load and check angle
     if self.angle is None:
-        raise InputError("ERROR: InForce.angle missing")
+        raise InputError("ERROR: InputFlux.angle missing")
     output.angle = self.angle.get_data()
     if not isinstance(output.angle, ndarray) or len(output.angle.shape) != 1:
         # angle should be a vector
         raise InputError(
-            "ERROR: InForce.angle should be a vector, "
+            "ERROR: InputFlux.angle should be a vector, "
             + str(output.angle.shape)
             + " shape found"
         )
     Na_tot = len(output.angle)
 
-    if self.Prad is None:
-        raise InputError("ERROR: InForce.Prad missing")
-    output.Prad = self.Prad.get_data()
-    if not isinstance(output.Prad, ndarray) or output.Prad.shape != (Nt_tot, Na_tot):
+    if self.Br is None:
+        raise InputError("ERROR: InputFlux.Br missing")
+    output.Br = self.Br.get_data()
+    if not isinstance(output.Br, ndarray) or output.Br.shape != (Nt_tot, Na_tot):
         raise InputError(
-            "ERROR: InForce.Prad must be a matrix with the shape "
+            "ERROR: InputFlux.Br must be a matrix with the shape "
             + str((Nt_tot, Na_tot))
             + " (len(time), stator phase number), "
-            + str(output.Prad.shape)
+            + str(output.Br.shape)
             + " returned"
         )
 
-    if self.Ptan is not None:
-        output.Ptan = self.Ptan.get_data()
-        if not isinstance(output.Ptan, ndarray) or output.Ptan.shape != (
-            Nt_tot,
-            Na_tot,
-        ):
+    if self.Bt is not None:
+        output.Bt = self.Bt.get_data()
+        if not isinstance(output.Bt, ndarray) or output.Bt.shape != (Nt_tot, Na_tot):
             raise InputError(
-                "ERROR: InForce.Ptan must be a matrix with the shape "
+                "ERROR: InputFlux.Bt must be a matrix with the shape "
                 + str((Nt_tot, Na_tot))
                 + " (len(time), rotor phase number), "
-                + str(output.Ptan.shape)
+                + str(output.Bt.shape)
                 + " returned"
             )
     else:
-        output.Ptan = None
+        output.Bt = None
 
     if self.parent.parent is None:
         raise InputError(
             "ERROR: The Simulation object must be in an Output object to run"
         )
     # Save the Output in the correct place
-    self.parent.parent.struct = output
+    self.parent.parent.mag = output

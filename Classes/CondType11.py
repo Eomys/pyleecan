@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Conductor import Conductor
 
@@ -105,6 +106,9 @@ class CondType11(Conductor):
         plot = plot
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(
         self,
@@ -247,15 +251,6 @@ class CondType11(Conductor):
         self.alpha_ew = None
         # Set to None the properties inherited from Conductor
         super(CondType11, self)._set_None()
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self, "logger_name"):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger("Pyleecan")
 
     def _get_Hwire(self):
         """getter of Hwire"""

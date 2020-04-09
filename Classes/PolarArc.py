@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
@@ -50,6 +51,11 @@ try:
     from pyleecan.Methods.Geometry.PolarArc.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
+
+try:
+    from pyleecan.Methods.Geometry.PolarArc.comp_point_ref import comp_point_ref
+except ImportError as error:
+    comp_point_ref = error
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
@@ -139,8 +145,22 @@ class PolarArc(Surface):
         )
     else:
         comp_surface = comp_surface
+    # cf Methods.Geometry.PolarArc.comp_point_ref
+    if isinstance(comp_point_ref, ImportError):
+        comp_point_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use PolarArc method comp_point_ref: " + str(comp_point_ref)
+                )
+            )
+        )
+    else:
+        comp_point_ref = comp_point_ref
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, angle=1, height=1, point_ref=0, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :
@@ -216,15 +236,6 @@ class PolarArc(Surface):
         self.height = None
         # Set to None the properties inherited from Surface
         super(PolarArc, self)._set_None()
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self, "logger_name"):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger("Pyleecan")
 
     def _get_angle(self):
         """getter of angle"""

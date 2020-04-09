@@ -9,7 +9,9 @@ from pyleecan.Methods.Machine import (
 )
 
 
-def get_patches(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False):
+def get_patches(
+    self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=False, linestyle=None
+):
     """Returns the Trapeze Patch to be display in matplotlib
 
     Parameters
@@ -23,6 +25,8 @@ def get_patches(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=Fals
         the color of the patch's edges (Default value = PATCH_EDGE)
     is_edge_only: bool
         To set the transparancy of the face color to 0 and 1 for the edge color
+    linestyle : str
+        Line style of the edge {'-', '--', '-.', ':', '', (offset, on-off-seq), ...}
 
     Returns
     -------
@@ -52,4 +56,12 @@ def get_patches(self, color=PATCH_COLOR, edgecolor=PATCH_EDGE, is_edge_only=Fals
         Zr_list.append(Z_list[ii].real)
         Zi_list.append(Z_list[ii].imag)
     point_list = list(zip(Zr_list, Zi_list))
-    return [Polygon(point_list, closed=True, facecolor=color, edgecolor=edgecolor)]
+    return [
+        Polygon(
+            point_list,
+            closed=True,
+            facecolor=color,
+            edgecolor=edgecolor,
+            linestyle=linestyle,
+        )
+    ]

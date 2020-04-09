@@ -23,4 +23,4 @@ M400_50A.struct.nu_xy = 0.3
 M400_50A.struct.nu_xz = 0.03
 M400_50A.struct.nu_yz = 0.03
 
-M400_50A.save(file_path[:-4]+'.json')
+M400_50A.save(file_path[:-4] + ".json")

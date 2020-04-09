@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
@@ -50,6 +51,11 @@ try:
     from pyleecan.Methods.Geometry.Circle.translate import translate
 except ImportError as error:
     translate = error
+
+try:
+    from pyleecan.Methods.Geometry.Circle.comp_point_ref import comp_point_ref
+except ImportError as error:
+    comp_point_ref = error
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
@@ -135,8 +141,22 @@ class Circle(Surface):
         )
     else:
         translate = translate
+    # cf Methods.Geometry.Circle.comp_point_ref
+    if isinstance(comp_point_ref, ImportError):
+        comp_point_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Circle method comp_point_ref: " + str(comp_point_ref)
+                )
+            )
+        )
+    else:
+        comp_point_ref = comp_point_ref
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(
         self, radius=1, center=0, line_label="", point_ref=0, label="", init_dict=None
@@ -222,15 +242,6 @@ class Circle(Surface):
         self.line_label = None
         # Set to None the properties inherited from Surface
         super(Circle, self)._set_None()
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self, "logger_name"):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger("Pyleecan")
 
     def _get_radius(self):
         """getter of radius"""

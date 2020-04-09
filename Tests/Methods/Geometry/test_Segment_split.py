@@ -142,40 +142,44 @@ class test_Segment_split_meth(TestCase):
 
         # Check split_line is_top=True
         seg2 = seg.split_line(test_dict["Z1"], test_dict["Z2"], is_top=True)
-        if seg2 is not None:
+        self.assertEqual(type(seg2), list)
+        if len(seg2) > 0:
+            self.assertEqual(len(seg2), 1)
             msg = (
                 "Wrong begin with is_top: returned "
-                + str(seg2.begin)
+                + str(seg2[0].begin)
                 + ", expected: "
                 + str(test_dict["Zb_top"])
             )
-            self.assertAlmostEqual(abs(seg2.begin - test_dict["Zb_top"]), 0, msg=msg)
+            self.assertAlmostEqual(abs(seg2[0].begin - test_dict["Zb_top"]), 0, msg=msg)
             msg = (
                 "Wrong end with is_top: returned "
-                + str(seg2.end)
+                + str(seg2[0].end)
                 + ", expected: "
                 + str(test_dict["Ze_top"])
             )
-            self.assertAlmostEqual(abs(seg2.end - test_dict["Ze_top"]), 0, msg=msg)
+            self.assertAlmostEqual(abs(seg2[0].end - test_dict["Ze_top"]), 0, msg=msg)
         else:  # No intersection
             self.assertIsNone(test_dict["Zb_top"])
 
         # Check split_line is_top=False
         seg3 = seg.split_line(test_dict["Z1"], test_dict["Z2"], is_top=False)
-        if seg3 is not None:
+        self.assertEqual(type(seg3), list)
+        if len(seg3) > 0:
+            self.assertEqual(len(seg3), 1)
             msg = (
                 "Wrong begin with not is_top: returned "
-                + str(seg3.begin)
+                + str(seg3[0].begin)
                 + ", expected: "
                 + str(test_dict["Zb_bot"])
             )
-            self.assertAlmostEqual(abs(seg3.begin - test_dict["Zb_bot"]), 0, msg=msg)
+            self.assertAlmostEqual(abs(seg3[0].begin - test_dict["Zb_bot"]), 0, msg=msg)
             msg = (
                 "Wrong end with not is_top: returned "
-                + str(seg3.end)
+                + str(seg3[0].end)
                 + ", expected: "
                 + str(test_dict["Ze_bot"])
             )
-            self.assertAlmostEqual(abs(seg3.end - test_dict["Ze_bot"]), 0, msg=msg)
+            self.assertAlmostEqual(abs(seg3[0].end - test_dict["Ze_bot"]), 0, msg=msg)
         else:  # No intersection
             self.assertIsNone(test_dict["Zb_bot"])

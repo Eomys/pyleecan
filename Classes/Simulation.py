@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -21,6 +22,9 @@ class Simulation(FrozenClass):
 
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(
         self,
@@ -93,10 +97,10 @@ class Simulation(FrozenClass):
             class_name = input.get("__class__")
             if class_name not in [
                 "Input",
-                "InCurrent",
-                "InCurrentDQ",
-                "InFlux",
-                "InForce",
+                "InputCurrent",
+                "InputCurrentDQ",
+                "InputFlux",
+                "InputForce",
             ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for input"
@@ -182,15 +186,6 @@ class Simulation(FrozenClass):
         if self.input is not None:
             self.input._set_None()
         self.logger_name = None
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self, "logger_name"):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger("Pyleecan")
 
     def _get_name(self):
         """getter of name"""

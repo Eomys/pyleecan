@@ -6,6 +6,7 @@ WARNING! All changes made in this file will be lost!
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
@@ -55,6 +56,11 @@ try:
     from pyleecan.Methods.Geometry.SurfLine.plot_lines import plot_lines
 except ImportError as error:
     plot_lines = error
+
+try:
+    from pyleecan.Methods.Geometry.SurfLine.comp_point_ref import comp_point_ref
+except ImportError as error:
+    comp_point_ref = error
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
@@ -154,8 +160,22 @@ class SurfLine(Surface):
         )
     else:
         plot_lines = plot_lines
+    # cf Methods.Geometry.SurfLine.comp_point_ref
+    if isinstance(comp_point_ref, ImportError):
+        comp_point_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SurfLine method comp_point_ref: " + str(comp_point_ref)
+                )
+            )
+        )
+    else:
+        comp_point_ref = comp_point_ref
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, line_list=list(), point_ref=0, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :
@@ -265,15 +285,6 @@ class SurfLine(Surface):
             obj._set_None()
         # Set to None the properties inherited from Surface
         super(SurfLine, self)._set_None()
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self, "logger_name"):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger("Pyleecan")
 
     def _get_line_list(self):
         """getter of line_list"""

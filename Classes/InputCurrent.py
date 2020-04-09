@@ -1,23 +1,24 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Simulation/InCurrent.csv
+"""File generated according to pyleecan/Generator/ClassesRef/Simulation/InputCurrent.csv
 WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
 from logging import getLogger
 from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Input import Input
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Simulation.InCurrent.gen_input import gen_input
+    from pyleecan.Methods.Simulation.InputCurrent.gen_input import gen_input
 except ImportError as error:
     gen_input = error
 
 try:
-    from pyleecan.Methods.Simulation.InCurrent.set_Nr import set_Nr
+    from pyleecan.Methods.Simulation.InputCurrent.set_Nr import set_Nr
 except ImportError as error:
     set_Nr = error
 
@@ -27,32 +28,37 @@ from pyleecan.Classes.Import import Import
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
 
-class InCurrent(Input):
+class InputCurrent(Input):
     """Input to skip the electrical module and start with the magnetic one"""
 
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.InCurrent.gen_input
+    # cf Methods.Simulation.InputCurrent.gen_input
     if isinstance(gen_input, ImportError):
         gen_input = property(
             fget=lambda x: raise_(
-                ImportError("Can't use InCurrent method gen_input: " + str(gen_input))
+                ImportError(
+                    "Can't use InputCurrent method gen_input: " + str(gen_input)
+                )
             )
         )
     else:
         gen_input = gen_input
-    # cf Methods.Simulation.InCurrent.set_Nr
+    # cf Methods.Simulation.InputCurrent.set_Nr
     if isinstance(set_Nr, ImportError):
         set_Nr = property(
             fget=lambda x: raise_(
-                ImportError("Can't use InCurrent method set_Nr: " + str(set_Nr))
+                ImportError("Can't use InputCurrent method set_Nr: " + str(set_Nr))
             )
         )
     else:
         set_Nr = set_Nr
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(
         self,
@@ -248,53 +254,53 @@ class InCurrent(Input):
         self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
         # Call Input init
-        super(InCurrent, self).__init__()
+        super(InputCurrent, self).__init__()
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
-        InCurrent_str = ""
+        InputCurrent_str = ""
         # Get the properties inherited from Input
-        InCurrent_str += super(InCurrent, self).__str__()
+        InputCurrent_str += super(InputCurrent, self).__str__()
         if self.time is not None:
             tmp = self.time.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "time = " + tmp
+            InputCurrent_str += "time = " + tmp
         else:
-            InCurrent_str += "time = None" + linesep + linesep
+            InputCurrent_str += "time = None" + linesep + linesep
         if self.angle is not None:
             tmp = self.angle.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "angle = " + tmp
+            InputCurrent_str += "angle = " + tmp
         else:
-            InCurrent_str += "angle = None" + linesep + linesep
+            InputCurrent_str += "angle = None" + linesep + linesep
         if self.Is is not None:
             tmp = self.Is.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "Is = " + tmp
+            InputCurrent_str += "Is = " + tmp
         else:
-            InCurrent_str += "Is = None" + linesep + linesep
+            InputCurrent_str += "Is = None" + linesep + linesep
         if self.Ir is not None:
             tmp = self.Ir.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "Ir = " + tmp
+            InputCurrent_str += "Ir = " + tmp
         else:
-            InCurrent_str += "Ir = None" + linesep + linesep
+            InputCurrent_str += "Ir = None" + linesep + linesep
         if self.angle_rotor is not None:
             tmp = (
                 self.angle_rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             )
-            InCurrent_str += "angle_rotor = " + tmp
+            InputCurrent_str += "angle_rotor = " + tmp
         else:
-            InCurrent_str += "angle_rotor = None" + linesep + linesep
+            InputCurrent_str += "angle_rotor = None" + linesep + linesep
         if self.Nr is not None:
             tmp = self.Nr.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InCurrent_str += "Nr = " + tmp
+            InputCurrent_str += "Nr = " + tmp
         else:
-            InCurrent_str += "Nr = None" + linesep + linesep
-        InCurrent_str += "rot_dir = " + str(self.rot_dir) + linesep
-        InCurrent_str += (
+            InputCurrent_str += "Nr = None" + linesep + linesep
+        InputCurrent_str += "rot_dir = " + str(self.rot_dir) + linesep
+        InputCurrent_str += (
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         )
-        return InCurrent_str
+        return InputCurrent_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -303,7 +309,7 @@ class InCurrent(Input):
             return False
 
         # Check the properties inherited from Input
-        if not super(InCurrent, self).__eq__(other):
+        if not super(InputCurrent, self).__eq__(other):
             return False
         if other.time != self.time:
             return False
@@ -328,37 +334,37 @@ class InCurrent(Input):
         """
 
         # Get the properties inherited from Input
-        InCurrent_dict = super(InCurrent, self).as_dict()
+        InputCurrent_dict = super(InputCurrent, self).as_dict()
         if self.time is None:
-            InCurrent_dict["time"] = None
+            InputCurrent_dict["time"] = None
         else:
-            InCurrent_dict["time"] = self.time.as_dict()
+            InputCurrent_dict["time"] = self.time.as_dict()
         if self.angle is None:
-            InCurrent_dict["angle"] = None
+            InputCurrent_dict["angle"] = None
         else:
-            InCurrent_dict["angle"] = self.angle.as_dict()
+            InputCurrent_dict["angle"] = self.angle.as_dict()
         if self.Is is None:
-            InCurrent_dict["Is"] = None
+            InputCurrent_dict["Is"] = None
         else:
-            InCurrent_dict["Is"] = self.Is.as_dict()
+            InputCurrent_dict["Is"] = self.Is.as_dict()
         if self.Ir is None:
-            InCurrent_dict["Ir"] = None
+            InputCurrent_dict["Ir"] = None
         else:
-            InCurrent_dict["Ir"] = self.Ir.as_dict()
+            InputCurrent_dict["Ir"] = self.Ir.as_dict()
         if self.angle_rotor is None:
-            InCurrent_dict["angle_rotor"] = None
+            InputCurrent_dict["angle_rotor"] = None
         else:
-            InCurrent_dict["angle_rotor"] = self.angle_rotor.as_dict()
+            InputCurrent_dict["angle_rotor"] = self.angle_rotor.as_dict()
         if self.Nr is None:
-            InCurrent_dict["Nr"] = None
+            InputCurrent_dict["Nr"] = None
         else:
-            InCurrent_dict["Nr"] = self.Nr.as_dict()
-        InCurrent_dict["rot_dir"] = self.rot_dir
-        InCurrent_dict["angle_rotor_initial"] = self.angle_rotor_initial
+            InputCurrent_dict["Nr"] = self.Nr.as_dict()
+        InputCurrent_dict["rot_dir"] = self.rot_dir
+        InputCurrent_dict["angle_rotor_initial"] = self.angle_rotor_initial
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
-        InCurrent_dict["__class__"] = "InCurrent"
-        return InCurrent_dict
+        InputCurrent_dict["__class__"] = "InputCurrent"
+        return InputCurrent_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -378,16 +384,7 @@ class InCurrent(Input):
         self.rot_dir = None
         self.angle_rotor_initial = None
         # Set to None the properties inherited from Input
-        super(InCurrent, self)._set_None()
-
-    def get_logger(self):
-        """getter of the logger"""
-        if hasattr(self, "logger_name"):
-            return getLogger(self.logger_name)
-        elif self.parent != None:
-            return self.parent.get_logger()
-        else:
-            return getLogger("Pyleecan")
+        super(InputCurrent, self)._set_None()
 
     def _get_time(self):
         """getter of time"""
