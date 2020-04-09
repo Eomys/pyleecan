@@ -7,22 +7,22 @@ A. Rahideh and T. Korakianitis,
 vol. 48, no. 10, pp. 2633–2649, 2012.
 """
 from numpy import pi
-from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
+from ....Classes.MachineSIPMSM import MachineSIPMSM
 
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.SlotW22 import SlotW22
-from pyleecan.Classes.WindingCW1L import WindingCW1L
-from pyleecan.Classes.CondType12 import CondType12
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.SlotW22 import SlotW22
+from ....Classes.WindingCW1L import WindingCW1L
+from ....Classes.CondType12 import CondType12
 
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.Classes.MagnetType11 import MagnetType11
+from ....Classes.LamSlotMag import LamSlotMag
+from ....Classes.SlotMPolar import SlotMPolar
+from ....Classes.MagnetType11 import MagnetType11
 
-from pyleecan.Classes.Shaft import Shaft
+from ....Classes.Shaft import Shaft
 
-from pyleecan.Tests.Validation.Material.M400_50A import M400_50A
-from pyleecan.Tests.Validation.Material.Magnet1 import Magnet1
-from pyleecan.Tests.Validation.Material.Copper1 import Copper1
+from ....Tests.Validation.Material.M400_50A import M400_50A
+from ....Tests.Validation.Material.Magnet1 import Magnet1
+from ....Tests.Validation.Material.Copper1 import Copper1
 
 # Stator setup
 stator = LamSlotWind(

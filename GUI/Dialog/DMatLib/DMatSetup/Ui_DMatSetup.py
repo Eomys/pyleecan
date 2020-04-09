@@ -608,5 +608,5 @@ class Ui_DMatSetup(object):
         )
 
 
-from pyleecan.GUI.Tools.FloatEdit import FloatEdit
+from .....GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

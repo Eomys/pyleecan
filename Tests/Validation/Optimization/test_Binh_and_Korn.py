@@ -9,6 +9,7 @@ In Proceedings of the third international Conference on Genetic Algorithms (Mend
 # Imports
 
 import pytest
+from ....definitions import PACKAGE_NAME
 from ....Tests.Validation.Machine.SCIM_001 import SCIM_001
 from ....Classes.InputCurrent import InputCurrent
 from ....Classes.MagFEMM import MagFEMM
@@ -205,10 +206,7 @@ def test_Binh_and_Korn():
         axs[0].set_xlabel(r"$f_1(x)$")
         axs[0].set_ylabel(r"$f_2(x)$")
         try:
-            img_to_find = img.imread(
-                "pyleecan\\Tests\\Validation\\Optimization\\Binh_and_Korn_function.jpg",
-                format="jpg",
-            )
+            img_to_find = img.imread("Binh_and_Korn_function.jpg", format="jpg",)
             axs[1].imshow(img_to_find, aspect="auto")
             axs[1].axis("off")
             axs[1].set_title("Pareto front of the problem")
@@ -218,4 +216,4 @@ def test_Binh_and_Korn():
         return fig
 
     fig = plot_pareto(res)
-    plt.savefig("pyleecan\\Tests\\Results\\Validation\\test_Binh_and_Korn.png")
+    fig.savefig(PACKAGE_NAME + "/Tests/Results/Validation/test_Binh_and_Korn.png")

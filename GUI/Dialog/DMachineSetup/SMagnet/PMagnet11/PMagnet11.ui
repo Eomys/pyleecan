@@ -165,12 +165,12 @@
   <customwidget>
    <class>FloatEdit</class>
    <extends>QLineEdit</extends>
-   <header>pyleecan.GUI/Tools/FloatEdit.h</header>
+   <header>......GUI/Tools/FloatEdit.h</header>
   </customwidget>
   <customwidget>
    <class>WMagnetOut</class>
    <extends>QWidget</extends>
-   <header>pyleecan.GUI.Dialog.DMachineSetup.SMagnet.WMagnetOut.WMagnetOut.h</header>
+   <header>......GUI.Dialog.DMachineSetup.SMagnet.WMagnetOut.WMagnetOut.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -200,43 +200,42 @@ class test_save_load_fct(TestCase):
         test_list[0] = None
         self.assertEqual(result_list, test_list)
 
+    def test_save_load_dict(self):
+        """Test the save and load function of data structures
+            """
+        # SetUp
+        test_obj_1 = MachineSIPMSM(name="test", desc="test\non\nseveral lines")
+        test_obj_1.stator = LamSlotWind(L1=0.45)
+        test_obj_1.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
+        test_obj_1.stator.winding = WindingDW1L(qs=5)
+        test_obj_1.rotor = LamSlotMag(L1=0.55)
+        test_obj_1.rotor.slot = SlotMPolar(W0=pi / 4)
+        test_obj_1.rotor.slot.magnet = [MagnetType11(Wmag=pi / 4, Hmag=3)]
+        test_obj_1.shaft = Shaft(Lshaft=0.65)
+        test_obj_1.frame = None
 
-def test_save_load_dict(self):
-    """Test the save and load function of data structures
-        """
-    # SetUp
-    test_obj_1 = MachineSIPMSM(name="test", desc="test\non\nseveral lines")
-    test_obj_1.stator = LamSlotWind(L1=0.45)
-    test_obj_1.stator.slot = SlotW10(Zs=10, H0=0.21, W0=0.23)
-    test_obj_1.stator.winding = WindingDW1L(qs=5)
-    test_obj_1.rotor = LamSlotMag(L1=0.55)
-    test_obj_1.rotor.slot = SlotMPolar(W0=pi / 4)
-    test_obj_1.rotor.slot.magnet = [MagnetType11(Wmag=pi / 4, Hmag=3)]
-    test_obj_1.shaft = Shaft(Lshaft=0.65)
-    test_obj_1.frame = None
+        test_obj_2 = LamSlotWind(L1=0.45)
 
-    test_obj_2 = LamSlotWind(L1=0.45)
+        test_obj_3 = {"H0": 0.001, "Zs": 10, "__class__": "ClassDoesntExist"}
 
-    test_obj_3 = {"H0": 0.001, "Zs": 10, "__class__": "ClassDoesntExist"}
+        test_obj_4 = tuple([1, 2, 3])
 
-    test_obj_4 = tuple([1, 2, 3])
+        test_dict = {
+            "tuple": test_obj_4,
+            "list": [test_obj_1, None],
+            "dict": {"test_obj_2": test_obj_2, "test_obj_list": [test_obj_3, None]},
+        }
 
-    test_dict = {
-        "tuple": test_obj_4,
-        "list": [test_obj_1, None],
-        "dict": {"test_obj_2": test_obj_2, "test_obj_list": [test_obj_3, None]},
-    }
+        # Save Test
+        file_path = join(save_path, "test_dict.json")
+        if isfile(file_path):
+            remove(file_path)
+        self.assertFalse(isfile(file_path))
+        save_data(test_dict, file_path)
+        self.assertTrue(isfile(file_path))
 
-    # Save Test
-    file_path = join(save_path, "test_dict.json")
-    if isfile(file_path):
-        remove(file_path)
-    self.assertFalse(isfile(file_path))
-    save_data(test_dict, file_path)
-    self.assertTrue(isfile(file_path))
-
-    # Load Test
-    result_dict = load_dict(file_path)
-    # set tuple to None as save will do
-    test_dict["tuple"] = None
-    self.assertEqual(result_dict, test_dict)
+        # Load Test
+        result_dict = load_dict(file_path)
+        # set tuple to None as save will do
+        test_dict["tuple"] = None
+        self.assertEqual(result_dict, test_dict)

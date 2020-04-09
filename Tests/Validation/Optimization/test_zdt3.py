@@ -4,6 +4,7 @@
 Test Pyleecan optimization module using Zitzler–Deb–Thiele's function N. 3
 """
 import pytest
+from ....definitions import PACKAGE_NAME
 from ....Tests.Validation.Machine.SCIM_001 import SCIM_001
 from ....Classes.InputCurrent import InputCurrent
 from ....Classes.MagFEMM import MagFEMM
@@ -185,4 +186,4 @@ def test_zdt3():
         return fig
 
     fig = plot_pareto(res)
-    plt.savefig("pyleecan\\Tests\\Results\\Validation\\test_zdt3.png")
+    fig.savefig(PACKAGE_NAME + "/Tests/Results/Validation/test_zdt3.png")

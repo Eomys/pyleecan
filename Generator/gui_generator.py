@@ -514,6 +514,13 @@ def ui_to_py(path, file_name):
     # Remove header part of the generated file (to avoid "commit noise")
     with open(path_out, "r") as py_file:
         data = py_file.read().splitlines(True)
+
+    # Set the good imports in the generated files
+    if PACKAGE_NAME != "pyleecan":
+        for idx, line in enumerate(data):
+            if line.startswith("from pyleecan"):
+                data[idx] = line.replace("from pyleecan", "from " + PACKAGE_NAME)
+
     with open(path_out, "w") as py_file:
         py_file.write(data[0])
         py_file.write("\n# File generated according to " + file_name + "\n")

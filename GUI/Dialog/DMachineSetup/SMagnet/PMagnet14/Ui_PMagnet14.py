@@ -103,6 +103,6 @@ class Ui_PMagnet14(object):
         self.unit_H0.setText(_translate("PMagnet14", "m"))
 
 
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.WMagnetOut.WMagnetOut import WMagnetOut
-from pyleecan.GUI.Tools.FloatEdit import FloatEdit
+from ......GUI.Dialog.DMachineSetup.SMagnet.WMagnetOut.WMagnetOut import WMagnetOut
+from ......GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

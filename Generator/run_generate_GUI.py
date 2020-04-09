@@ -12,7 +12,6 @@ package_name = MAIN_DIR[begin + 1 : end]
 # Add the directory to the python path
 sys.path.append(MAIN_DIR[:begin])
 
-exec("from " + package_name + ".Generator.class_generator import generate_class")
 exec("from " + package_name + ".Generator.gui_generator import generate_gui")
 exec("from " + package_name + ".Generator.read_fct import read_all")
 exec("from " + package_name + ".definitions import MAIN_DIR")

@@ -116,8 +116,6 @@ class Ui_PVentTrap(object):
         self.unit_Alpha0.setText(_translate("PVentTrap", "rad"))
 
 
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut import (
-    WVentOut,
-)
-from pyleecan.GUI.Tools.FloatEdit import FloatEdit
+from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut import WVentOut
+from .......GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc
