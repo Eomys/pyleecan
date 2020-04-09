@@ -9,6 +9,7 @@ from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
 from ....Classes.MeshSolution import MeshSolution
 from ....Classes.Mesh import Mesh
 from ....Classes.Solution import Solution
+from SciDataTool import DataLinspace, DataTime
 from os.path import join
 
 
@@ -112,8 +113,36 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     Bt = roll(Bt, roll_id, axis=1)
 
     # Store the results
-    output.mag.Br = Br
-    output.mag.Bt = Bt
+    Time = DataLinspace(
+        name="time",
+        unit="s",
+        symmetries={},
+        initial=output.mag.time[0],
+        final=output.mag.time[-1],
+        number=Nt_tot,
+    )
+    Angle = DataLinspace(
+        name="angle",
+        unit="rad",
+        symmetries={},
+        initial=angle[0],
+        final=angle[-1],
+        number=Na_tot,
+    )
+    output.mag.Br = DataTime(
+        name="Airgap radial flux density",
+        unit="T",
+        symbol="B_r",
+        axes=[Time, Angle],
+        values=Br,
+    )
+    output.mag.Bt = DataTime(
+        name="Airgap tangential flux density",
+        unit="T",
+        symbol="B_r",
+        axes=[Time, Angle],
+        values=Bt,
+    )
     output.mag.Tem = Tem
     output.mag.Tem_av = mean(Tem)
     if output.mag.Tem_av != 0:

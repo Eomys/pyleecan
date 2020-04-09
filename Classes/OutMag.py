@@ -11,6 +11,13 @@ from ..Functions.save import save
 from ._frozen import FrozenClass
 
 from numpy import array, array_equal
+from cloudpickle import dumps, loads
+from ._check import CheckTypeError
+
+try:
+    import SciDataTool.Classes.DataND
+except ImportError:
+    SciDataTool.Classes.DataND = ImportError
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
 
@@ -94,10 +101,8 @@ class OutMag(FrozenClass):
         set_array(self, "angle", angle)
         self.Nt_tot = Nt_tot
         self.Na_tot = Na_tot
-        # Br can be None, a ndarray or a list
-        set_array(self, "Br", Br)
-        # Bt can be None, a ndarray or a list
-        set_array(self, "Bt", Bt)
+        self.Br = Br
+        self.Bt = Bt
         # Tem can be None, a ndarray or a list
         set_array(self, "Tem", Tem)
         self.Tem_av = Tem_av
@@ -141,20 +146,8 @@ class OutMag(FrozenClass):
         )
         OutMag_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutMag_str += "Na_tot = " + str(self.Na_tot) + linesep
-        OutMag_str += (
-            "Br = "
-            + linesep
-            + str(self.Br).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutMag_str += (
-            "Bt = "
-            + linesep
-            + str(self.Bt).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutMag_str += "Br = " + str(self.Br) + linesep + linesep
+        OutMag_str += "Bt = " + str(self.Bt) + linesep + linesep
         OutMag_str += (
             "Tem = "
             + linesep
@@ -204,9 +197,9 @@ class OutMag(FrozenClass):
             return False
         if other.Na_tot != self.Na_tot:
             return False
-        if not array_equal(other.Br, self.Br):
+        if other.Br != self.Br:
             return False
-        if not array_equal(other.Bt, self.Bt):
+        if other.Bt != self.Bt:
             return False
         if not array_equal(other.Tem, self.Tem):
             return False
@@ -243,12 +236,20 @@ class OutMag(FrozenClass):
         OutMag_dict["Na_tot"] = self.Na_tot
         if self.Br is None:
             OutMag_dict["Br"] = None
-        else:
-            OutMag_dict["Br"] = self.Br.tolist()
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutMag_dict["Br"] = {
+                "__class__": str(type(self._Br)),
+                "__repr__": str(self._Br.__repr__()),
+                "serialized": dumps(self._Br).decode("ISO-8859-2"),
+            }
         if self.Bt is None:
             OutMag_dict["Bt"] = None
-        else:
-            OutMag_dict["Bt"] = self.Bt.tolist()
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutMag_dict["Bt"] = {
+                "__class__": str(type(self._Bt)),
+                "__repr__": str(self._Bt.__repr__()),
+                "serialized": dumps(self._Bt).decode("ISO-8859-2"),
+            }
         if self.Tem is None:
             OutMag_dict["Tem"] = None
         else:
@@ -370,16 +371,20 @@ class OutMag(FrozenClass):
 
     def _set_Br(self, value):
         """setter of Br"""
-        if type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Br", value, "ndarray")
-        self._Br = value
+        try:  # Check the type
+            check_var("Br", value, "dict")
+        except CheckTypeError:
+            check_var("Br", value, "SciDataTool.Classes.DataND.DataND")
+            # property can be set from a list to handle loads
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Br = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._Br = value
 
     # Radial airgap flux density
-    # Type : ndarray
+    # Type : SciDataTool.Classes.DataND.DataND
     Br = property(fget=_get_Br, fset=_set_Br, doc=u"""Radial airgap flux density""")
 
     def _get_Bt(self):
@@ -388,16 +393,20 @@ class OutMag(FrozenClass):
 
     def _set_Bt(self, value):
         """setter of Bt"""
-        if type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Bt", value, "ndarray")
-        self._Bt = value
+        try:  # Check the type
+            check_var("Bt", value, "dict")
+        except CheckTypeError:
+            check_var("Bt", value, "SciDataTool.Classes.DataND.DataND")
+            # property can be set from a list to handle loads
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Bt = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._Bt = value
 
     # Tangential airgap flux density
-    # Type : ndarray
+    # Type : SciDataTool.Classes.DataND.DataND
     Bt = property(fget=_get_Bt, fset=_set_Bt, doc=u"""Tangential airgap flux density""")
 
     def _get_Tem(self):
