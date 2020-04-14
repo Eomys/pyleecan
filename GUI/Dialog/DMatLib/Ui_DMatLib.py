@@ -26,7 +26,7 @@ class Ui_DMatLib(object):
         self.img_search.setText("")
         self.img_search.setPixmap(
             QtGui.QPixmap(
-                "C:\\Users\\eomys\\OneDrive\\Documents\\PR_logger\\pyleecan\\GUI\\Dialog\\DMatLib\\\n"
+                "C:\\Users\\eomys\\OneDrive\\Documents\\PYLEECAN\\pyleecan\\GUI\\Dialog\\DMatLib\\\n"
                 "                                                    :/images/images/icon/search.png\n"
                 "                                                "
             )
