@@ -67,16 +67,18 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Import
     class_file.write("from os import linesep\n")
+    class_file.write("from logging import getLogger\n")
 
     if "ndarray" in import_type_list:
         class_file.write(
-            "from pyleecan.Classes._check import set_array, "
-            + "check_init_dict, check_var, raise_\n"
+            "from pyleecan.Classes._check import set_array, " + "check_var, raise_\n"
         )
     else:
-        class_file.write(
-            "from pyleecan.Classes._check import check_init_dict, check_var, raise_\n"
-        )
+        class_file.write("from pyleecan.Classes._check import check_var, raise_\n")
+
+    # Get logger function
+    class_file.write("from pyleecan.Functions.get_logger import get_logger\n")
+
     # Save function
     class_file.write("from pyleecan.Functions.save import save\n")
 
@@ -225,6 +227,9 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write(TAB2 + meth_name + " = " + meth_name + "\n")
     class_file.write(TAB + "# save method is available in all object\n")
     class_file.write(TAB + "save = save\n\n")
+
+    class_file.write(TAB + "# get_logger method is available in all object\n")
+    class_file.write(TAB + "get_logger = get_logger\n\n")
 
     # Add the __init__ method
     if len(class_dict["properties"]) == 0 and class_dict["mother"] == "":

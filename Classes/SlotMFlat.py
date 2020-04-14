@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.SlotMag import SlotMag
 
@@ -141,6 +143,9 @@ class SlotMFlat(SlotMag):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self,
         H0=0,
@@ -161,7 +166,7 @@ class SlotMFlat(SlotMag):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["H0", "W0", "W0_is_rad", "magnet", "W3", "Zs"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "H0" in list(init_dict.keys()):
                 H0 = init_dict["H0"]

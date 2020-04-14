@@ -15,16 +15,13 @@ def choseDCD(indiv_1, indiv_2):
 
     """
     if indiv_1.cstr_viol == 0 and indiv_2.cstr_viol > 0:  # only indiv_1 feasible
-        # print("v")
         return indiv_1
-    if indiv_1.cstr_viol > 0 and indiv_2.cstr_viol == 0:  # only indiv_1 feasible
-        # print("v")
+    elif indiv_1.cstr_viol > 0 and indiv_2.cstr_viol == 0:  # only indiv_2 feasible
         return indiv_2
     elif (
         indiv_1.cstr_viol > 0 and indiv_2.cstr_viol > 0
     ):  # indiv_1 and indiv_2 unfeasible
         # Compare the number of constraint violations
-        # print("v")
         if indiv_1.cstr_viol < indiv_2.cstr_viol:
             return indiv_1
         elif indiv_1.cstr_viol > indiv_2.cstr_viol:
@@ -64,11 +61,11 @@ def tournamentDCD(pop, size):
     """
 
     if len(pop) % 4 != 0:
-        raise ValueError("OptiDEAPSelTournamentDCD: pop length must be a multiple of 4")
+        raise ValueError("TournamentDCD: pop length must be a multiple of 4")
 
     if size % 4 != 0:
         raise ValueError(
-            "OptiDEAPSelTournamentDCD: number of individuals to select must be a multiple of 4"
+            "TournamentDCD: number of individuals to select must be a multiple of 4"
         )
 
     # Sample the population

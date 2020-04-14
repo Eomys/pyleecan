@@ -13,28 +13,23 @@ def check_cstr(solver, indiv):
 
         Returns
         -------
-        is_infeasible : bool
+        is_feasible : bool
             Individual feasibility     
     """
 
-    keys = list(solver.problem.constraint.keys())
-    keys.sort()
-
     # Non valid simulation violate every constraints
     if indiv.is_simu_valid == False:
-        indiv.cstr_viol = len(keys)
-        return True
+        indiv.cstr_viol = len(solver.problem.constraint)
+        return False
 
     # Browse constraints
-    for key in keys:
-        constraint = solver.problem.constraint[key]
-
+    for _, constraint in solver.problem.constraint.items():
         # Compute value to compare
         var_val = constraint.get_variable(indiv.output)
 
         # Compare the value with the constraint
         type_const = constraint.type_const
-        # print(var_val, type_const, constraint.value)
+
         if type_const == "<=":
             if var_val > constraint.value:
                 indiv.cstr_viol += 1
@@ -53,4 +48,4 @@ def check_cstr(solver, indiv):
         else:
             raise ValueError("Wrong type of constraint")
 
-    return indiv.cstr_viol > 0
+    return indiv.cstr_viol == 0

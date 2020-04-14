@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 def check(self):
-    """assert the Surface is correct (the radius > 0)
+    """assert the Surface is correct
 
     Parameters
     ----------
-    self : Surface
-        A Surface object
+    self : SurfLine
+        A SurfLine object
 
     Returns
     -------

@@ -3,3 +3,4 @@ name,-,Name of the simulation,0,str,,,,,Simulation,,,VERSION,1,Abstract class fo
 desc,-,Simulation description,0,str,,,,,,,,,,
 machine,-,Machine to simulate,0,Machine,,,,,,,,,,
 input,-,Input of the simulation,0,Input,,,,,,,,,,
+logger_name,-,Name of the logger to use,0,str,Pyleecan.Simulation,,,,,,,,,

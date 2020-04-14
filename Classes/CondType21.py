@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Conductor import Conductor
 
@@ -105,6 +107,9 @@ class CondType21(Conductor):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self, Hbar=0.01, Wbar=0.01, Wins=0, cond_mat=-1, ins_mat=-1, init_dict=None
     ):
@@ -122,7 +127,7 @@ class CondType21(Conductor):
         if ins_mat == -1:
             ins_mat = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["Hbar", "Wbar", "Wins", "cond_mat", "ins_mat"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Hbar" in list(init_dict.keys()):
                 Hbar = init_dict["Hbar"]

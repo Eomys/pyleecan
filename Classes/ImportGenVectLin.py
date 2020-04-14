@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.ImportMatrix import ImportMatrix
 
@@ -38,6 +40,9 @@ class ImportGenVectLin(ImportMatrix):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self,
         start=0,
@@ -57,9 +62,7 @@ class ImportGenVectLin(ImportMatrix):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["start", "stop", "num", "endpoint", "is_transpose"]
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "start" in list(init_dict.keys()):
                 start = init_dict["start"]

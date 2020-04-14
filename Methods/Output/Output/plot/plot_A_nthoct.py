@@ -5,7 +5,7 @@ from pyleecan.Functions.Plot.plot_A_2D import plot_A_2D
 
 
 def plot_A_nthoct(
-    self, Data_str, freq_max=10000, is_norm=False, unit="SI", out_list=[],
+    self, Data_str, n, freq_max=10000, is_norm=False, unit="SI", out_list=[],
 ):
     """Plots a field as a function of time
 
@@ -15,6 +15,8 @@ def plot_A_nthoct(
         an Output object
     Data_str : str
         name of the Data Object to plot (e.g. "mag.Br")
+    n : int
+        fraction of octave band
     freq_max : int
         maximum frequency to be displayed
     is_norm : bool
@@ -49,9 +51,9 @@ def plot_A_nthoct(
     else:
         ylabel = r"$" + A.symbol + "\, [" + unit + "]$"
 
-    (freq_oct, A_oct) = self.get_nthoctave(3, 0, freq_max, unit=unit)
+    (freq_oct, A_oct) = self.get_nthoctave(n, 0, freq_max, unit=unit)
 
-    title = "FFT of " + A.name + " in 1/3 octave base"
+    title = "FFT of " + A.name + " in 1/" + str(n) + " octave base"
 
     # Plot the original graph
     plot_A_2D(

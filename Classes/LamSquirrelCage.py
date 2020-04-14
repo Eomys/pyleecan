@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 
@@ -92,6 +94,9 @@ class LamSquirrelCage(LamSlotWind):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self,
         Hscr=0.03,
@@ -131,28 +136,7 @@ class LamSquirrelCage(LamSlotWind):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "Hscr",
-                    "Lscr",
-                    "ring_mat",
-                    "Ksfill",
-                    "winding",
-                    "slot",
-                    "L1",
-                    "mat_type",
-                    "Nrvd",
-                    "Wrvd",
-                    "Kf1",
-                    "is_internal",
-                    "Rint",
-                    "Rext",
-                    "is_stator",
-                    "axial_vent",
-                    "notch",
-                ],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Hscr" in list(init_dict.keys()):
                 Hscr = init_dict["Hscr"]

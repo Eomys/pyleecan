@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Winding import Winding
 
@@ -59,6 +61,9 @@ class WindingCW2LT(Winding):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self,
         is_reverse_wind=False,
@@ -84,20 +89,7 @@ class WindingCW2LT(Winding):
         if conductor == -1:
             conductor = Conductor()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                [
-                    "is_reverse_wind",
-                    "Nslot_shift_wind",
-                    "qs",
-                    "Ntcoil",
-                    "Npcpp",
-                    "type_connection",
-                    "p",
-                    "Lewout",
-                    "conductor",
-                ],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "is_reverse_wind" in list(init_dict.keys()):
                 is_reverse_wind = init_dict["is_reverse_wind"]

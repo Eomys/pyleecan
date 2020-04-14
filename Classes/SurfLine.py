@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
@@ -36,9 +38,9 @@ except ImportError as error:
     comp_length = error
 
 try:
-    from pyleecan.Methods.Geometry.SurfLine.get_patch import get_patch
+    from pyleecan.Methods.Geometry.SurfLine.get_patches import get_patches
 except ImportError as error:
-    get_patch = error
+    get_patches = error
 
 try:
     from pyleecan.Methods.Geometry.SurfLine.discretize import discretize
@@ -54,6 +56,11 @@ try:
     from pyleecan.Methods.Geometry.SurfLine.plot_lines import plot_lines
 except ImportError as error:
     plot_lines = error
+
+try:
+    from pyleecan.Methods.Geometry.SurfLine.comp_point_ref import comp_point_ref
+except ImportError as error:
+    comp_point_ref = error
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
@@ -113,15 +120,17 @@ class SurfLine(Surface):
         )
     else:
         comp_length = comp_length
-    # cf Methods.Geometry.SurfLine.get_patch
-    if isinstance(get_patch, ImportError):
-        get_patch = property(
+    # cf Methods.Geometry.SurfLine.get_patches
+    if isinstance(get_patches, ImportError):
+        get_patches = property(
             fget=lambda x: raise_(
-                ImportError("Can't use SurfLine method get_patch: " + str(get_patch))
+                ImportError(
+                    "Can't use SurfLine method get_patches: " + str(get_patches)
+                )
             )
         )
     else:
-        get_patch = get_patch
+        get_patches = get_patches
     # cf Methods.Geometry.SurfLine.discretize
     if isinstance(discretize, ImportError):
         discretize = property(
@@ -151,8 +160,22 @@ class SurfLine(Surface):
         )
     else:
         plot_lines = plot_lines
+    # cf Methods.Geometry.SurfLine.comp_point_ref
+    if isinstance(comp_point_ref, ImportError):
+        comp_point_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SurfLine method comp_point_ref: " + str(comp_point_ref)
+                )
+            )
+        )
+    else:
+        comp_point_ref = comp_point_ref
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(self, line_list=list(), point_ref=0, label="", init_dict=None):
         """Constructor of the class. Can be use in two ways :
@@ -165,7 +188,7 @@ class SurfLine(Surface):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["line_list", "point_ref", "label"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "line_list" in list(init_dict.keys()):
                 line_list = init_dict["line_list"]

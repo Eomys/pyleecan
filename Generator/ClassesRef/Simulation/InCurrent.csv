@@ -1,9 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-time,s,Electrical time vector (no symmetry) to import,Nt_tot,Import,None,,,,Simulation,Input,gen_input,VERSION,1,Input to skip the electrical module and start with the magnetic one
-angle,rad,Electrical position vector (no symmetry) to import,Na_tot,Import,None,,,,,,,,,
-Is,A,Stator currents as a function of time (each column correspond to one phase) to import,"(Nt_tot, qs)",Import,None,,,,,,,,,
-Ir,A,Rotor currents as a function of time (each column correspond to one phase) to import,"(Nt_tot, qs)",Import,None,,,,,,,,,
-angle_rotor,rad,Rotor angular position as a function of time (if None computed according to Nr) to import,Nt_tot,Import,None,,,,,,,,,
-Nr,rpm,Rotor speed as a function of time to import,Nt_tot,Import,None,,,,,,,,,
-rot_dir,-,"Rotation direction of the rotor 1 trigo, -1 clockwise",,float,-1,-1,1,,,,,,,
-angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,,,,

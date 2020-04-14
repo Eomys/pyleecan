@@ -11,9 +11,10 @@ from pyleecan.Classes.HoleM51 import HoleM51
 from pyleecan.Classes.HoleM52 import HoleM52
 from pyleecan.Classes.HoleM53 import HoleM53
 from pyleecan.Methods import NotImplementedYetError
+from pyleecan.Functions.FEMM.get_mesh_param import get_mesh_param
 
 
-def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
+def assign_FEMM_surface(surf, prop, FEMM_dict, rotor, stator):
     """Assign the property given in parameter to surface having the label given
     Parameters
     ----------
@@ -21,8 +22,8 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
         the surface to assign
     prop : str
         The property to assign in FEMM
-    mesh_dict : dict
-        Dictionnary containing the mesh parameters corresponding to the surface
+    FEMM_dict : dict
+        Dictionnary containing the main parameters of FEMM
     rotor : Lamination
         The rotor of the machine
     stator : Lamination
@@ -32,6 +33,8 @@ def assign_FEMM_surface(surf, prop, mesh_dict, rotor, stator):
     None
 
     """
+
+    mesh_dict = get_mesh_param(surf.label, FEMM_dict)
     label = surf.label
     Clabel = 0  # By default no circuit
     Ntcoil = 0  # By default no circuit

@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -20,6 +22,9 @@ class OutGeo(FrozenClass):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(
         self,
         stator=None,
@@ -28,6 +33,7 @@ class OutGeo(FrozenClass):
         Wgap_mag=None,
         Rgap_mec=None,
         Lgap=None,
+        logger_name="Pyleecan.OutGeo",
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -44,10 +50,7 @@ class OutGeo(FrozenClass):
         if rotor == -1:
             rotor = OutGeoLam()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict,
-                ["stator", "rotor", "Wgap_mec", "Wgap_mag", "Rgap_mec", "Lgap"],
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "stator" in list(init_dict.keys()):
                 stator = init_dict["stator"]
@@ -61,6 +64,8 @@ class OutGeo(FrozenClass):
                 Rgap_mec = init_dict["Rgap_mec"]
             if "Lgap" in list(init_dict.keys()):
                 Lgap = init_dict["Lgap"]
+            if "logger_name" in list(init_dict.keys()):
+                logger_name = init_dict["logger_name"]
         # Initialisation by argument
         self.parent = None
         # stator can be None, a OutGeoLam object or a dict
@@ -77,6 +82,7 @@ class OutGeo(FrozenClass):
         self.Wgap_mag = Wgap_mag
         self.Rgap_mec = Rgap_mec
         self.Lgap = Lgap
+        self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -103,6 +109,7 @@ class OutGeo(FrozenClass):
         OutGeo_str += "Wgap_mag = " + str(self.Wgap_mag) + linesep
         OutGeo_str += "Rgap_mec = " + str(self.Rgap_mec) + linesep
         OutGeo_str += "Lgap = " + str(self.Lgap) + linesep
+        OutGeo_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return OutGeo_str
 
     def __eq__(self, other):
@@ -121,6 +128,8 @@ class OutGeo(FrozenClass):
         if other.Rgap_mec != self.Rgap_mec:
             return False
         if other.Lgap != self.Lgap:
+            return False
+        if other.logger_name != self.logger_name:
             return False
         return True
 
@@ -141,6 +150,7 @@ class OutGeo(FrozenClass):
         OutGeo_dict["Wgap_mag"] = self.Wgap_mag
         OutGeo_dict["Rgap_mec"] = self.Rgap_mec
         OutGeo_dict["Lgap"] = self.Lgap
+        OutGeo_dict["logger_name"] = self.logger_name
         # The class name is added to the dict fordeserialisation purpose
         OutGeo_dict["__class__"] = "OutGeo"
         return OutGeo_dict
@@ -156,6 +166,7 @@ class OutGeo(FrozenClass):
         self.Wgap_mag = None
         self.Rgap_mec = None
         self.Lgap = None
+        self.logger_name = None
 
     def _get_stator(self):
         """getter of stator"""
@@ -256,3 +267,20 @@ class OutGeo(FrozenClass):
     # Airgap active length
     # Type : float
     Lgap = property(fget=_get_Lgap, fset=_set_Lgap, doc=u"""Airgap active length""")
+
+    def _get_logger_name(self):
+        """getter of logger_name"""
+        return self._logger_name
+
+    def _set_logger_name(self, value):
+        """setter of logger_name"""
+        check_var("logger_name", value, "str")
+        self._logger_name = value
+
+    # Name of the logger to use
+    # Type : str
+    logger_name = property(
+        fget=_get_logger_name,
+        fset=_set_logger_name,
+        doc=u"""Name of the logger to use""",
+    )

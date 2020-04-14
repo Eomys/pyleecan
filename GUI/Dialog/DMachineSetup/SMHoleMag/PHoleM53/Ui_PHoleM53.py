@@ -3,6 +3,7 @@
 # File generated according to PHoleM53.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 

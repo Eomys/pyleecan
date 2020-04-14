@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes._frozen import FrozenClass
 
@@ -68,6 +70,9 @@ class Shaft(FrozenClass):
     # save method is available in all object
     save = save
 
+    # get_logger method is available in all object
+    get_logger = get_logger
+
     def __init__(self, Lshaft=0.442, mat_type=-1, Drsh=0.045, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -81,7 +86,7 @@ class Shaft(FrozenClass):
         if mat_type == -1:
             mat_type = Material()
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(init_dict, ["Lshaft", "mat_type", "Drsh"])
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "Lshaft" in list(init_dict.keys()):
                 Lshaft = init_dict["Lshaft"]

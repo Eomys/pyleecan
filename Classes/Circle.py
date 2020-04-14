@@ -4,7 +4,9 @@ WARNING! All changes made in this file will be lost!
 """
 
 from os import linesep
-from pyleecan.Classes._check import check_init_dict, check_var, raise_
+from logging import getLogger
+from pyleecan.Classes._check import check_var, raise_
+from pyleecan.Functions.get_logger import get_logger
 from pyleecan.Functions.save import save
 from pyleecan.Classes.Surface import Surface
 
@@ -36,9 +38,9 @@ except ImportError as error:
     get_lines = error
 
 try:
-    from pyleecan.Methods.Geometry.Circle.get_patch import get_patch
+    from pyleecan.Methods.Geometry.Circle.get_patches import get_patches
 except ImportError as error:
-    get_patch = error
+    get_patches = error
 
 try:
     from pyleecan.Methods.Geometry.Circle.rotate import rotate
@@ -49,6 +51,11 @@ try:
     from pyleecan.Methods.Geometry.Circle.translate import translate
 except ImportError as error:
     translate = error
+
+try:
+    from pyleecan.Methods.Geometry.Circle.comp_point_ref import comp_point_ref
+except ImportError as error:
+    comp_point_ref = error
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
@@ -107,15 +114,15 @@ class Circle(Surface):
         )
     else:
         get_lines = get_lines
-    # cf Methods.Geometry.Circle.get_patch
-    if isinstance(get_patch, ImportError):
-        get_patch = property(
+    # cf Methods.Geometry.Circle.get_patches
+    if isinstance(get_patches, ImportError):
+        get_patches = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Circle method get_patch: " + str(get_patch))
+                ImportError("Can't use Circle method get_patches: " + str(get_patches))
             )
         )
     else:
-        get_patch = get_patch
+        get_patches = get_patches
     # cf Methods.Geometry.Circle.rotate
     if isinstance(rotate, ImportError):
         rotate = property(
@@ -134,8 +141,22 @@ class Circle(Surface):
         )
     else:
         translate = translate
+    # cf Methods.Geometry.Circle.comp_point_ref
+    if isinstance(comp_point_ref, ImportError):
+        comp_point_ref = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Circle method comp_point_ref: " + str(comp_point_ref)
+                )
+            )
+        )
+    else:
+        comp_point_ref = comp_point_ref
     # save method is available in all object
     save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
 
     def __init__(
         self, radius=1, center=0, line_label="", point_ref=0, label="", init_dict=None
@@ -150,9 +171,7 @@ class Circle(Surface):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            check_init_dict(
-                init_dict, ["radius", "center", "line_label", "point_ref", "label"]
-            )
+            assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "radius" in list(init_dict.keys()):
                 radius = init_dict["radius"]
