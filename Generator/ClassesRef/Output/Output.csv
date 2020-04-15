@@ -16,6 +16,3 @@ logger_name,-,Name of the logger to use,0,str,Pyleecan.Output,,,,,,plot.plot_A_t
 ,,,,,,,,,,,plot.Magnetic.plot_B_space,,,
 ,,,,,,,,,,,plot.Structural.plot_force_space,,,
 ,,,,,,,,,,,plot.Magnetic.plot_mesh_field,,,
-,,,,,,,,,,,plot.Magnetic.plot_Br_time_compare,,,
-,,,,,,,,,,,plot.Magnetic.plot_Br_fft2,,,
-,,,,,,,,,,,plot.Magnetic.plot_ASWL,,,

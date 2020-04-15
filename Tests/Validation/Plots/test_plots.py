@@ -1,6 +1,4 @@
-from numpy import genfromtxt, squeeze, linspace, sin, abs as np_abs
-from matplotlib.colors import ListedColormap
-from scipy.io.wavfile import read
+from numpy import squeeze, linspace, sin
 from unittest import TestCase
 from os.path import join
 import matplotlib.pyplot as plt
@@ -17,21 +15,15 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 
 simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
 
-mat_file_Br = join(DATA_DIR, "default_proj_Br.mat")
-mat_file_time = join(DATA_DIR, "default_proj_time.mat")
-mat_file_angle = join(DATA_DIR, "default_proj_angle.mat")
-mat_file_aswl = join(DATA_DIR, "default_proj_aswl.mat")
-mat_file_freqs = join(DATA_DIR, "default_proj_aswl_freqs.mat")
-mat_file_MTr_freqs = join(DATA_DIR, "default_proj_MTr_freqs.mat")
-mat_file_MTr_wavenumber = join(DATA_DIR, "default_proj_MTr_wavenumber.mat")
-mat_file_MTr = join(DATA_DIR, "default_proj_MTr.mat")
-mat_file_Br_cfft2 = join(DATA_DIR, "default_proj_Br_cfft2.mat")
-mat_file_Brfreqs = join(DATA_DIR, "default_proj_Brfreqs.mat")
-mat_file_Brwavenumber = join(DATA_DIR, "default_proj_Brwavenumber.mat")
-mat_file_colormap = join(DATA_DIR, "MANATEE_colormap.mat")
-wav_file_sinus = join(DATA_DIR, "sinus_1000Hz_60dBSPL.wav")
-wav_file_pinknoise = join(DATA_DIR, "PinkNoise_40dBpHz@1000Hz.wav")
-wav_file_trafic = join(DATA_DIR, "trafic.wav")
+mat_file_Br = join(DATA_DIR, "Plots/default_proj_Br.mat")
+mat_file_time = join(DATA_DIR, "Plots/default_proj_time.mat")
+mat_file_angle = join(DATA_DIR, "Plots/default_proj_angle.mat")
+mat_file_MTr_freqs = join(DATA_DIR, "Plots/default_proj_MTr_freqs.mat")
+mat_file_MTr_wavenumber = join(DATA_DIR, "Plots/default_proj_MTr_wavenumber.mat")
+mat_file_MTr = join(DATA_DIR, "Plots/default_proj_MTr.mat")
+mat_file_Br_cfft2 = join(DATA_DIR, "Plots/default_proj_Br_cfft2.mat")
+mat_file_Brfreqs = join(DATA_DIR, "Plots/default_proj_Brfreqs.mat")
+mat_file_Brwavenumber = join(DATA_DIR, "Plots/default_proj_Brwavenumber.mat")
 
 # Read input files from Manatee
 Br = squeeze(ImportMatlab(file_path=mat_file_Br, var_name="XBr").get_data())
@@ -39,8 +31,6 @@ time = squeeze(ImportMatlab(file_path=mat_file_time, var_name="timec").get_data(
 angle = squeeze(
     ImportMatlab(file_path=mat_file_angle, var_name="alpha_radc").get_data()
 )
-aswl = squeeze(ImportMatlab(file_path=mat_file_aswl, var_name="LwiA").get_data())
-freqs = squeeze(ImportMatlab(file_path=mat_file_freqs, var_name="freqs").get_data())
 MTr_freqs = squeeze(
     ImportMatlab(file_path=mat_file_MTr_freqs, var_name="freqs").get_data()
 )
@@ -55,33 +45,10 @@ freqs_Br = squeeze(
 wavenumber = squeeze(
     ImportMatlab(file_path=mat_file_Brwavenumber, var_name="orders").get_data()
 )
-newcolors = squeeze(
-    ImportMatlab(file_path=mat_file_colormap, var_name="mymap").get_data()
-)
-colormap = ListedColormap(newcolors)
+
+# Plot parameters
 freq_max = 13000
 r_max = 78
-
-# Read audio files
-rate_sinus, sinus = read(wav_file_sinus)
-if sinus.dtype == "int16":
-    nb_bits = 16  # -> 16-bit wav files
-elif sinus.dtype == "int32":
-    nb_bits = 32  # -> 32-bit wav files
-max_nb_bit = float(2 ** (nb_bits - 1))
-sinus = sinus / (
-    max_nb_bit
-)  # samples is a numpy array of float representing the samples
-rate_pinknoise, pinknoise = read(wav_file_pinknoise)
-if pinknoise.dtype == "int16":
-    nb_bits = 16  # -> 16-bit wav files
-elif pinknoise.dtype == "int32":
-    nb_bits = 32  # -> 32-bit wav files
-max_nb_bit = float(2 ** (nb_bits - 1))
-pinknoise = pinknoise / (
-    max_nb_bit
-)  # samples is a numpy array of float representing the samples
-rate_trafic, trafic = read(wav_file_trafic)
 
 
 class tests_plots(TestCase):
@@ -252,94 +219,6 @@ class tests_plots(TestCase):
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_default_proj_Br_dataobj_cfft2.png"))
 
-    @unittest.skip
-    def test_sinus_thirdoct(self):
-
-        out = Output(simu=simu)
-
-        # Build the data objects
-        Time = DataLinspace(
-            name="time",
-            unit="s",
-            symmetries={},
-            initial=0,
-            final=1.0,
-            number=rate_sinus,
-            include_endpoint=False,
-        )
-        SPL = DataTime(
-            symbol="SPL",
-            name="Sound Pressure Level",
-            unit="Pa",
-            symmetries={},
-            axes=[Time],
-            normalizations={"Pa": 2.0e-5},
-            values=sinus[1:],
-        )
-
-        # Plot the result by comparing the two simulation (sym / no sym)
-        plt.close("all")
-        out.plot_ASWL(SPL)
-
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_sinus_thirdoct_dataobj.png"))
-
-    @unittest.skip
-    def test_pinknoise_thirdoct(self):
-
-        out = Output(simu=simu)
-
-        # Build the data objects
-        Time = DataLinspace(
-            name="time",
-            unit="s",
-            symmetries={},
-            initial=0,
-            final=1.0,
-            number=rate_pinknoise + 1,
-            include_endpoint=False,
-        )
-        SPL = DataTime(
-            symbol="SPL",
-            name="Sound Pressure Level",
-            unit="Pa",
-            symmetries={},
-            axes=[Time],
-            normalizations={"Pa": 2.0e-5},
-            values=pinknoise,
-        )
-
-        # Plot the result by comparing the two simulation (sym / no sym)
-        plt.close("all")
-        out.plot_ASWL(SPL)
-
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_pinknoise_thirdoct_dataobj.png"))
-
-    @unittest.skip
-    def test_default_proj_aswl_thirdoct(self):
-
-        out = Output(simu=simu)
-
-        # Build the data objects
-        Freqs = Data1D(name="freqs", unit="Hz", symmetries={}, values=freqs)
-        ASWL = DataFreq(
-            symbol="ASWL",
-            name="A-weighted Sound Power Level",
-            unit="dBA",
-            symmetries={},
-            axes=[Freqs],
-            normalizations={},
-            values=aswl,
-        )
-
-        # Plot the result by comparing the two simulation (sym / no sym)
-        plt.close("all")
-        out.plot_ASWL(ASWL, is_dBA=True)
-
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_default_proj_ASWL_thirdoct_dataobj.png"))
-
     # @unittest.skip
     def test_default_proj_surf(self):
 
@@ -362,7 +241,7 @@ class tests_plots(TestCase):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_A_surf("mag.Br", t_max=0.06, colormap=colormap)
+        out.plot_A_surf("mag.Br", t_max=0.06)
 
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_default_proj_Br_surf_dataobj.png"))
@@ -448,9 +327,7 @@ class tests_plots(TestCase):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_A_fft2(
-            "mag.Br", freq_max=13000, r_max=8, mag_max=50, colormap=colormap
-        )
+        out.plot_A_fft2("mag.Br", freq_max=13000, r_max=8, mag_max=50)
 
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_default_proj_MTr_fft2_dataobj.png"))
@@ -475,9 +352,7 @@ class tests_plots(TestCase):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_A_time_space(
-            "mag.Br", colormap=colormap, freq_max=freq_max, r_max=r_max
-        )
+        out.plot_A_time_space("mag.Br", freq_max=freq_max, r_max=r_max)
 
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_default_proj_Br_time_space_dataobj.png"))

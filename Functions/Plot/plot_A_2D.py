@@ -23,7 +23,7 @@ def plot_A_2D(
     type="curve",
     is_fund=False,
 ):
-    """Plots a 2D graph (curve, bargraph or barchart), comparisons allowed with args list
+    """Plots a 2D graph (curve, bargraph or barchart) comparing fields in Ydatas
 
     Parameters
     ----------

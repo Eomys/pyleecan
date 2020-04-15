@@ -5261,10 +5261,7 @@
             "plot.plot_A_fft2",
             "plot.Magnetic.plot_B_space",
             "plot.Structural.plot_force_space",
-            "plot.Magnetic.plot_mesh_field",
-            "plot.Magnetic.plot_Br_time_compare",
-            "plot.Magnetic.plot_Br_fft2",
-            "plot.Magnetic.plot_ASWL"
+            "plot.Magnetic.plot_mesh_field"
         ],
         "mother": "",
         "name": "Output",
