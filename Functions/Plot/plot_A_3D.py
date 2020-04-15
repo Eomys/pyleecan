@@ -27,7 +27,7 @@ def plot_A_3D(
     is_disp_title=True,
     type="stem",
 ):
-    """Plots a 2D graph (curve, bargraph or barchart), comparisons allowed with args list
+    """Plots a 3D graph ("stem", "surf" or "pcolor")
 
     Parameters
     ----------
@@ -114,7 +114,6 @@ def plot_A_3D(
         ax.zaxis.pane.set_edgecolor("w")
         if is_logscale_z:
             ax.zscale("log")
-
     elif type == "surf":
         ax.plot_surface(Xdata, Ydata, Zdata, cmap=colormap)
         ax.set_xlim3d(x_max, 0)
@@ -131,7 +130,6 @@ def plot_A_3D(
         ax.zaxis.pane.set_edgecolor("w")
         if is_logscale_z:
             ax.zscale("log")
-
     elif type == "pcolor":
         c = ax.pcolormesh(Xdata, Ydata, Zdata, cmap=colormap, vmin=z_min, vmax=z_max)
         clb = fig.colorbar(c, ax=ax)
