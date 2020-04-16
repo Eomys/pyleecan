@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import matplotlib.pyplot as plt
+from pyleecan.Functions.init_fig import init_fig
 from pyleecan.Functions.Plot.plot_A_3D import plot_A_3D
 from numpy import meshgrid, append, pi
 
@@ -55,7 +55,7 @@ def plot_A_fft2(
         B_list.append(getattr(Phys, Data_str.split(".")[1]))
 
     # Set plot
-    fig = plt.figure(tight_layout=True, figsize=(20, 10))
+    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
     title = "FFT2 of " + A.name
     if is_elecorder:
         xlabel = "Electrical order []"
@@ -97,7 +97,6 @@ def plot_A_fft2(
         xlabel=xlabel,
         ylabel=ylabel,
         zlabel=zlabel,
-        is_newfig=False,
         fig=fig,
         type="pcolor",
     )
@@ -124,7 +123,6 @@ def plot_A_fft2(
             xlabel=xlabel,
             ylabel=ylabel,
             zlabel=zlabel,
-            is_newfig=False,
             fig=fig,
             type="pcolor",
         )

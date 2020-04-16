@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import matplotlib.pyplot as plt
+from pyleecan.Functions.init_fig import init_fig
 from pyleecan.Functions.Plot.plot_A_2D import plot_A_2D
 
 
@@ -51,7 +51,7 @@ def plot_A_time(
         B_list.append(getattr(Phys, Data_str.split(".")[1]))
 
     # Set plot
-    fig = plt.figure(tight_layout=True, figsize=(20, 10))
+    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
     legend_list = [self.post.legend_name]
     for out in out_list:
         legend_list.append(out.post.legend_name)
@@ -84,7 +84,6 @@ def plot_A_time(
         Ydata,
         legend_list=legend_list,
         color_list=color_list,
-        is_newfig=False,
         fig=fig,
         title=title,
         xlabel=xlabel,
@@ -121,7 +120,6 @@ def plot_A_time(
             Ydata,
             legend_list=legend_list,
             color_list=color_list,
-            is_newfig=False,
             fig=fig,
             title=title,
             xlabel=xlabel,

@@ -3,6 +3,8 @@
 import matplotlib.pyplot as plt
 from numpy import where
 
+from pyleecan.Functions.init_fig import init_fig, init_subplot
+
 
 def plot_A_2D(
     Xdata,
@@ -12,10 +14,8 @@ def plot_A_2D(
     title="",
     xlabel="",
     ylabel="",
-    is_newfig=True,
-    is_autostack=True,
     fig=None,
-    ax=None,
+    subplot_index=None,
     is_logscale_x=False,
     is_logscale_y=False,
     is_disp_title=True,
@@ -41,14 +41,10 @@ def plot_A_2D(
         label for the x-axis
     ylabel : str
         label for the y-axis
-    is_newfig : bool
-        boolean indicating if a new figure must be created
-    is_autostack : bool
-        boolean indicating if this new plot must be stacked underneath the former ones
-    fig : figure object
+    fig : Matplotlib.figure.Figure
         existing figure to use if is_newfig=False
-    ax : figure object
-        existing axes to use when is_autostack=False
+    subplot_index : int
+        index of subplot in which to plot
     is_logscale_x : bool
         boolean indicating if the x-axis must be set in logarithmic scale
     is_logscale_y : bool
@@ -63,15 +59,10 @@ def plot_A_2D(
         boolean indicating if the bar corresponding to the fundamental must be displayed in red
     """
 
-    if is_newfig:
-        fig = plt.figure(tight_layout=True, figsize=(20, 10))
-        ax = fig.add_subplot(111)
-    elif is_autostack:
-        n = len(fig.axes)
-        for i in range(n):
-            fig.axes[i].change_geometry(n + 1, 1, i + 1)
-        ax = fig.add_subplot(n + 1, 1, n + 1)
+    # Set figure/subplot
+    fig, ax = init_subplot(fig=fig, subplot_index=subplot_index)
 
+    # Plot
     if type == "curve":
         for i in range(len(Ydatas)):
             ax.plot(Xdata, Ydatas[i], color_list[i], label=legend_list[i])

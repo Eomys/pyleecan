@@ -3,6 +3,8 @@
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.art3d as art3d
 
+from pyleecan.Functions.init_fig import init_fig, init_subplot
+
 
 def plot_A_3D(
     Xdata,
@@ -17,10 +19,8 @@ def plot_A_3D(
     xlabel="",
     ylabel="",
     zlabel="",
-    is_newfig=True,
-    is_autostack=True,
     fig=None,
-    ax=None,
+    subplot_index=None,
     is_logscale_x=False,
     is_logscale_y=False,
     is_logscale_z=False,
@@ -53,14 +53,10 @@ def plot_A_3D(
         label for the y-axis
     zlabel : str
         label for the z-axis
-    is_newfig : bool
-        boolean indicating if a new figure must be created
-    is_autostack : bool
-        boolean indicating if this new plot must be stacked underneath the former ones
-    fig : figure object
+    fig : Matplotlib.figure.Figure
         existing figure to use if is_newfig=False
-    ax : figure object
-        existing axes to use when is_autostack=False
+    subplot_index : int
+        index of subplot in which to plot
     is_logscale_x : bool
         boolean indicating if the x-axis must be set in logarithmic scale
     is_logscale_y : bool
@@ -73,21 +69,13 @@ def plot_A_3D(
         type of 3D graph : "stem", "surf" or "pcolor"
     """
 
-    if is_newfig:
-        fig = plt.figure(tight_layout=True, figsize=(20, 10))
-        if type != "pcolor":
-            ax = fig.add_subplot(111, projection="3d")
-        else:
-            ax = fig.add_subplot(111)
-    elif is_autostack:
-        n = len(fig.axes)
-        for i in range(n):
-            fig.axes[i].change_geometry(n + 1, 1, i + 1)
-        if type != "pcolor":
-            ax = fig.add_subplot(n + 1, 1, n + 1, projection="3d")
-        else:
-            ax = fig.add_subplot(n + 1, 1, n + 1)
+    # Set figure/subplot
+    is_3d = False
+    if type != "pcolor":
+        is_3d = True
+    fig, ax = init_subplot(fig=fig, subplot_index=subplot_index, is_3d=is_3d)
 
+    # Plot
     if type == "stem":
         for xi, yi, zi in zip(Xdata, Ydata, Zdata):
             line = art3d.Line3D(
