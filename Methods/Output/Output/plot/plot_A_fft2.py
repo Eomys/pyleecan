@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import matplotlib.pyplot as plt
-from pyleecan.Functions.Plot.plot_A_3D import plot_A_3D
+from .....Functions.Plot.plot_A_3D import plot_A_3D
 from numpy import meshgrid, append, pi
 
 

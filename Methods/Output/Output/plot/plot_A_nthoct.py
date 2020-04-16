@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import matplotlib.pyplot as plt
-from pyleecan.Functions.Plot.plot_A_2D import plot_A_2D
+from .....Functions.Plot.plot_A_2D import plot_A_2D
 
 
 def plot_A_nthoct(
