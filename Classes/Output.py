@@ -33,11 +33,6 @@ except ImportError as error:
     get_angle_rotor = error
 
 try:
-    from pyleecan.Methods.Output.Output.plot.Magnetic.plot_B_space import plot_B_space
-except ImportError as error:
-    plot_B_space = error
-
-try:
     from pyleecan.Methods.Output.Output.plot.Structural.plot_force_space import (
         plot_force_space,
     )
@@ -55,6 +50,60 @@ try:
     from pyleecan.Methods.Output.Output.plot.Magnetic.plot_mesh import plot_mesh
 except ImportError as error:
     plot_mesh = error
+
+try:
+    from pyleecan.Methods.Output.Output.plot.plot_A_time import plot_A_time
+except ImportError as error:
+    plot_A_time = error
+
+try:
+    from pyleecan.Methods.Output.Output.plot.plot_A_space import plot_A_space
+except ImportError as error:
+    plot_A_space = error
+
+try:
+    from pyleecan.Methods.Output.Output.plot.plot_A_time_space import plot_A_time_space
+except ImportError as error:
+    plot_A_time_space = error
+
+try:
+    from pyleecan.Methods.Output.Output.plot.plot_A_surf import plot_A_surf
+except ImportError as error:
+    plot_A_surf = error
+
+try:
+    from pyleecan.Methods.Output.Output.plot.plot_A_cfft2 import plot_A_cfft2
+except ImportError as error:
+    plot_A_cfft2 = error
+
+try:
+    from pyleecan.Methods.Output.Output.plot.plot_A_nthoctave import plot_A_nthoctave
+except ImportError as error:
+    plot_A_nthoctave = error
+
+try:
+    from pyleecan.Methods.Output.Output.plot.plot_A_fft2 import plot_A_fft2
+except ImportError as error:
+    plot_A_fft2 = error
+
+try:
+    from pyleecan.Methods.Output.Output.plot.Magnetic.plot_B_space import plot_B_space
+except ImportError as error:
+    plot_B_space = error
+
+try:
+    from pyleecan.Methods.Output.Output.plot.Structural.plot_force_space import (
+        plot_force_space,
+    )
+except ImportError as error:
+    plot_force_space = error
+
+try:
+    from pyleecan.Methods.Output.Output.plot.Magnetic.plot_mesh_field import (
+        plot_mesh_field,
+    )
+except ImportError as error:
+    plot_mesh_field = error
 
 
 from pyleecan.Classes._check import InitUnKnowClassError
@@ -116,6 +165,109 @@ class Output(FrozenClass):
         )
     else:
         get_angle_rotor = get_angle_rotor
+    # cf Methods.Output.Output.plot.Structural.plot_force_space
+    if isinstance(plot_force_space, ImportError):
+        plot_force_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_force_space: " + str(plot_force_space)
+                )
+            )
+        )
+    else:
+        plot_force_space = plot_force_space
+    # cf Methods.Output.Output.plot.Magnetic.plot_mesh_field
+    if isinstance(plot_mesh_field, ImportError):
+        plot_mesh_field = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_mesh_field: " + str(plot_mesh_field)
+                )
+            )
+        )
+    else:
+        plot_mesh_field = plot_mesh_field
+    # cf Methods.Output.Output.plot.Magnetic.plot_mesh
+    if isinstance(plot_mesh, ImportError):
+        plot_mesh = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method plot_mesh: " + str(plot_mesh))
+            )
+        )
+    else:
+        plot_mesh = plot_mesh
+    # cf Methods.Output.Output.plot.plot_A_time
+    if isinstance(plot_A_time, ImportError):
+        plot_A_time = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method plot_A_time: " + str(plot_A_time))
+            )
+        )
+    else:
+        plot_A_time = plot_A_time
+    # cf Methods.Output.Output.plot.plot_A_space
+    if isinstance(plot_A_space, ImportError):
+        plot_A_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_space: " + str(plot_A_space)
+                )
+            )
+        )
+    else:
+        plot_A_space = plot_A_space
+    # cf Methods.Output.Output.plot.plot_A_time_space
+    if isinstance(plot_A_time_space, ImportError):
+        plot_A_time_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_time_space: "
+                    + str(plot_A_time_space)
+                )
+            )
+        )
+    else:
+        plot_A_time_space = plot_A_time_space
+    # cf Methods.Output.Output.plot.plot_A_surf
+    if isinstance(plot_A_surf, ImportError):
+        plot_A_surf = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method plot_A_surf: " + str(plot_A_surf))
+            )
+        )
+    else:
+        plot_A_surf = plot_A_surf
+    # cf Methods.Output.Output.plot.plot_A_cfft2
+    if isinstance(plot_A_cfft2, ImportError):
+        plot_A_cfft2 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_cfft2: " + str(plot_A_cfft2)
+                )
+            )
+        )
+    else:
+        plot_A_cfft2 = plot_A_cfft2
+    # cf Methods.Output.Output.plot.plot_A_nthoctave
+    if isinstance(plot_A_nthoctave, ImportError):
+        plot_A_nthoctave = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_nthoctave: " + str(plot_A_nthoctave)
+                )
+            )
+        )
+    else:
+        plot_A_nthoctave = plot_A_nthoctave
+    # cf Methods.Output.Output.plot.plot_A_fft2
+    if isinstance(plot_A_fft2, ImportError):
+        plot_A_fft2 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method plot_A_fft2: " + str(plot_A_fft2))
+            )
+        )
+    else:
+        plot_A_fft2 = plot_A_fft2
     # cf Methods.Output.Output.plot.Magnetic.plot_B_space
     if isinstance(plot_B_space, ImportError):
         plot_B_space = property(
@@ -149,15 +301,6 @@ class Output(FrozenClass):
         )
     else:
         plot_mesh_field = plot_mesh_field
-    # cf Methods.Output.Output.plot.Magnetic.plot_mesh
-    if isinstance(plot_mesh, ImportError):
-        plot_mesh = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method plot_mesh: " + str(plot_mesh))
-            )
-        )
-    else:
-        plot_mesh = plot_mesh
     # save method is available in all object
     save = save
 

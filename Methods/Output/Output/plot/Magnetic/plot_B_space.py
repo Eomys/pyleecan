@@ -18,29 +18,29 @@ def plot_B_space(self, j_t0=0, is_deg=True, out_list=[]):
         List of Output object to compare
     """
 
-    # Adapt the unit
+    # Extract the field
     if is_deg:
-        unit = "[°]"
-        angle = self.mag.angle * 180 / pi
+        unit = "°"
     else:
-        unit = "[rad]"
-        angle = self.mag.angle
+        unit = "rad"
+    [angle, Br] = self.mag.Br.get_along(
+        "angle{" + unit + "}", "time[" + str(j_t0) + "]"
+    )
+    [angle, Bt] = self.mag.Bt.get_along(
+        "angle{" + unit + "}", "time[" + str(j_t0) + "]"
+    )
 
     # Plot the original graph
     fig, axs = plt.subplots(1, 2, constrained_layout=True)
-    axs[0].plot(
-        angle, self.mag.Br[j_t0, :], self.post.line_color, label=self.post.legend_name
-    )
-    axs[0].set_title("Radial Flux")
-    axs[0].set_xlabel("Position " + unit)
-    axs[0].set_ylabel("Flux [T]")
+    axs[0].plot(angle, Br, self.post.line_color, label=self.post.legend_name)
+    axs[0].set_title(self.mag.Br.name)
+    axs[0].set_xlabel("Position [" + unit + "]")
+    axs[0].set_ylabel("Flux [" + self.mag.Br.unit + "]")
 
-    axs[1].plot(
-        angle, self.mag.Bt[j_t0, :], self.post.line_color, label=self.post.legend_name
-    )
-    axs[1].set_title("Tangential Flux")
-    axs[1].set_xlabel("Position " + unit)
-    axs[1].set_ylabel("Flux [T]")
+    axs[1].plot(angle, Bt, self.post.line_color, label=self.post.legend_name)
+    axs[1].set_title(self.mag.Bt.name)
+    axs[0].set_xlabel("Position [" + unit + "]")
+    axs[0].set_ylabel("Flux [" + self.mag.Bt.unit + "]")
 
     title = (
         "Airgap total flux density over space time["
@@ -54,23 +54,19 @@ def plot_B_space(self, j_t0=0, is_deg=True, out_list=[]):
 
     # Add all the other output to compare (if needed)
     for out in out_list:
-        if is_deg:
-            angle_out = out.mag.angle * 180 / pi
-        else:
-            angle_out = out.mag.angle
         if out.mag.Br is not None:
+            [angle_out, Br_out] = out.mag.Br.get_along(
+                "angle{" + unit + "}", "time[" + str(j_t0) + "]"
+            )
             axs[0].plot(
-                angle_out,
-                out.mag.Br[j_t0, :],
-                out.post.line_color,
-                label=out.post.legend_name,
+                angle_out, Br_out, out.post.line_color, label=out.post.legend_name,
             )
         if out.mag.Bt is not None:
+            [angle_out, Bt_out] = out.mag.Bt.get_along(
+                "angle{" + unit + "}", "time[" + str(j_t0) + "]"
+            )
             axs[1].plot(
-                angle_out,
-                out.mag.Bt[j_t0, :],
-                out.post.line_color,
-                label=out.post.legend_name,
+                angle_out, Bt_out, out.post.line_color, label=out.post.legend_name,
             )
 
     # Add the legend (if the list is not empty)
