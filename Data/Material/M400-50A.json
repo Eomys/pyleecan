@@ -1,23 +1,44 @@
 {
+    "HT": {
+        "Cp": 1,
+        "__class__": "MatHT",
+        "alpha": 0.00393,
+        "lambda_x": 1,
+        "lambda_y": 1,
+        "lambda_z": 1
+    },
     "__class__": "Material",
-    "desc": "LAMINATION M400-50A",
+    "desc": "Lamination M400-50A",
     "eco": {
-        "unit_name": "$",
         "__class__": "MatEconomical",
-        "cost_unit": 8.0
+        "cost_unit": 0.127,
+        "unit_name": "$"
     },
     "elec": {
         "__class__": "MatElectrical",
-        "epsr": null,
-        "rho": null
+        "alpha": 1,
+        "epsr": 1,
+        "rho": 1
     },
     "is_isotropic": false,
     "mag": {
-        "BH_curve": null,
+        "BH_curve": {
+            "__class__": "ImportMatrixXls",
+            "file_path": "pyleecan\\Tests\\Validation\\Material\\M400-50A.xlsx",
+            "is_transpose": false,
+            "sheet": "BH",
+            "skiprows": 0,
+            "usecols": null
+        },
+        "Brm20": 0,
+        "Hc": 0,
         "Wlam": 0.0005,
-        "__class__": "MatLamination",
+        "__class__": "MatMagnetics",
+        "alpha_Br": 0,
         "mur_lin": 2500.0
     },
+    "name": "M400-50A",
+    "path": "",
     "struct": {
         "Ex": 215000000000.0,
         "Ey": 215000000000.0,
@@ -30,15 +51,5 @@
         "nu_xz": 0.03,
         "nu_yz": 0.03,
         "rho": 7650.0
-    },
-    "name": "M400-50A",
-    "path": null,
-    "HT": {
-        "Cp": 460.0,
-        "__class__": "MatHT",
-        "alpha": null,
-        "lambda_x": 25.0,
-        "lambda_y": 25.0,
-        "lambda_z": null
     }
 }
