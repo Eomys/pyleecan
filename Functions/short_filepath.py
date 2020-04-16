@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""Created on 2020-01-08 23:19:12
-@author: sebastian_g
-"""
 import os
 
 

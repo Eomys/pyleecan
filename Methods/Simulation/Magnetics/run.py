@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Methods.Simulation.Input import InputError
+from ....Methods.Simulation.Input import InputError
 
 
 def run(self):

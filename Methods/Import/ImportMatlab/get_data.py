@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from scipy.io import loadmat
-from pyleecan.Methods.Import.ImportMatlab import MatFileError
+from ....Methods.Import.ImportMatlab import MatFileError
 from os.path import isfile
 
 

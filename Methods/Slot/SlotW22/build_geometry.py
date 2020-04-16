@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW22.build_geometry
-SlotW22 build_geometry method
-@date Created on Tue Dec 09 17:49:59 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import exp
 
-from pyleecan.Classes.Arc2 import Arc2
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Arc2 import Arc2
+from ....Classes.Segment import Segment
 
 
 def build_geometry(self):

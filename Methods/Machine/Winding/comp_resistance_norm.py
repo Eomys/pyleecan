@@ -1,10 +1,4 @@
-"""@package Output\Magnetic\comp_resistance_norm
-Compute the Winding Resistance normalized to 1 m per Coil Side
-@date Created on 16-08-2019 21:41
-@author sebastian_g
-@todo:
-"""
-# from pyleecan.Methods.Machine.Winding import WindingError
+# from ....Methods.Machine.Winding import WindingError
 
 
 def comp_resistance_norm(self, T=20):

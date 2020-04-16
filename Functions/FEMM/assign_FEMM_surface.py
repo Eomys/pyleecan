@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
-"""@package assign_FEMM_Machine_part
-@date Created on août 09 14:12 2018
-@author franco_i
-@todo "Radial" magnetization for HoleMx-Class
-"""
 import femm
 from numpy import angle, pi, floor_divide
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.HoleM51 import HoleM51
-from pyleecan.Classes.HoleM52 import HoleM52
-from pyleecan.Classes.HoleM53 import HoleM53
-from pyleecan.Methods import NotImplementedYetError
-from pyleecan.Functions.FEMM.get_mesh_param import get_mesh_param
+from ...Classes.HoleM50 import HoleM50
+from ...Classes.HoleM51 import HoleM51
+from ...Classes.HoleM52 import HoleM52
+from ...Classes.HoleM53 import HoleM53
+from ...Methods import NotImplementedYetError
+from ...Functions.FEMM.get_mesh_param import get_mesh_param
 
 
 def assign_FEMM_surface(surf, prop, FEMM_dict, rotor, stator):

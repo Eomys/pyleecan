@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Mon Sep 19 10:12:24 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-@todo unittest it
-"""
 
 from numpy import arcsin
-from pyleecan.Methods import ParentMissingError
+from ....Methods import ParentMissingError
 
 
 def comp_angle_opening(self):

@@ -114,7 +114,7 @@
   <customwidget>
    <class>WMatSelect</class>
    <extends>QWidget</extends>
-   <header>pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect.h</header>
+   <header>.....GUI.Dialog.DMatLib.WMatSelect.WMatSelect.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

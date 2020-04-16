@@ -1,18 +1,12 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.MagnetType14.build_geometry
-MagnetType14 build_geometry method
-@date Created on Wed Dec 17 16:09:15 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import angle, exp
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Functions.Geometry.comp_flower_arc import comp_flower_arc
-from pyleecan.Methods import ParentMissingError
+from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
+from ....Functions.Geometry.comp_flower_arc import comp_flower_arc
+from ....Methods import ParentMissingError
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):

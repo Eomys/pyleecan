@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pyleecan.Classes.Output import Output
+from ...Classes.Output import Output
 
 
 def update(indiv):

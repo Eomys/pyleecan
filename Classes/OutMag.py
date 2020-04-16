@@ -5,21 +5,21 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import set_array, check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ._check import set_array, check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ._frozen import FrozenClass
 
 from numpy import array, array_equal
 from cloudpickle import dumps, loads
-from pyleecan.Classes._check import CheckTypeError
+from ._check import CheckTypeError
 
 try:
     import SciDataTool.Classes.DataND
 except ImportError:
     SciDataTool.Classes.DataND = ImportError
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.MeshSolution import MeshSolution
+from ._check import InitUnKnowClassError
+from .MeshSolution import MeshSolution
 
 
 class OutMag(FrozenClass):

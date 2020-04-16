@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Slot.HoleM50.comp_alpha
-Compute the alpha angle of slot type 5_0
-@date Created on Fri Jan 08 11:19:18 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import arcsin, arctan, cos
 

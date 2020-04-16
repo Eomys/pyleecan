@@ -94,8 +94,6 @@ class Ui_PVentCirc(object):
         self.in_Zh.setText(_translate("PVentCirc", "Zh :"))
 
 
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut import (
-    WVentOut,
-)
-from pyleecan.GUI.Tools.FloatEdit import FloatEdit
+from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVentOut.WVentOut import WVentOut
+from .......GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

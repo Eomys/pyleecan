@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Tue Apr 25 12:02:09 2017
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-"""
 
 import sys
 from random import uniform
@@ -12,9 +7,9 @@ from unittest import TestCase
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.SlotW13 import SlotW13
-from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot13.PWSlot13 import PWSlot13
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.SlotW13 import SlotW13
+from ....GUI.Dialog.DMachineSetup.SWSlot.PWSlot13.PWSlot13 import PWSlot13
 
 
 class test_PWSlot13(TestCase):

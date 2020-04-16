@@ -1,16 +1,8 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.LamSquirrelCage.check
-Check that the Lamination is correct
-@date Created on Tue Jan 27 13:49:54 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-@todo check winding
-"""
 
-from pyleecan.Classes.CondType21 import CondType21
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Methods.Machine.LamSlotWind.check import Lam_WindCheckError
+from ....Classes.CondType21 import CondType21
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Methods.Machine.LamSlotWind.check import Lam_WindCheckError
 
 
 def check(self):

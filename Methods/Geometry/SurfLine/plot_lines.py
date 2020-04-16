@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.SurfLine.plot_lines
-Surface Contour Line plot method
-@date Created on Wed Dec 10 10:35:39 2014
-@author sebastian_g
-"""
 
 from matplotlib.pyplot import axis, legend
 from numpy import real, imag
 
-from pyleecan.Functions.init_fig import init_fig
+from ....Functions.init_fig import init_fig
 
 
 def plot_lines(self, fig=None):

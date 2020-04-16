@@ -5,17 +5,17 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ._frozen import FrozenClass
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.MatElectrical import MatElectrical
-from pyleecan.Classes.MatMagnetics import MatMagnetics
-from pyleecan.Classes.MatStructural import MatStructural
-from pyleecan.Classes.MatHT import MatHT
-from pyleecan.Classes.MatEconomical import MatEconomical
+from ._check import InitUnKnowClassError
+from .MatElectrical import MatElectrical
+from .MatMagnetics import MatMagnetics
+from .MatStructural import MatStructural
+from .MatHT import MatHT
+from .MatEconomical import MatEconomical
 
 
 class Material(FrozenClass):

@@ -1,29 +1,22 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.PMventMag.WVentMag
-Buried Slot Setup Page
-@date Created on Wed Jul 15 14:14:29 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
-from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.VentilationPolar import VentilationPolar
-from pyleecan.Classes.VentilationTrap import VentilationTrap
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.PVentCirc import (
+from .......Classes.VentilationCirc import VentilationCirc
+from .......Classes.VentilationPolar import VentilationPolar
+from .......Classes.VentilationTrap import VentilationTrap
+from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.PVentCirc import (
     PVentCirc,
 )
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.PVentPolar import (
+from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.PVentPolar import (
     PVentPolar,
 )
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.PVentTrap import (
+from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.PVentTrap import (
     PVentTrap,
 )
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVent.Ui_WVent import Ui_WVent
+from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVent.Ui_WVent import Ui_WVent
 
 # List to convert index of combobox to slot type
 INIT_INDEX = [VentilationCirc, VentilationTrap, VentilationPolar]

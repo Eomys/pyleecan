@@ -5,37 +5,35 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.OptiGenAlg import OptiGenAlg
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from .OptiGenAlg import OptiGenAlg
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Optimization.OptiGenAlgNsga2Deap.solve import solve
+    from ..Methods.Optimization.OptiGenAlgNsga2Deap.solve import solve
 except ImportError as error:
     solve = error
 
 try:
-    from pyleecan.Methods.Optimization.OptiGenAlgNsga2Deap.mutate import mutate
+    from ..Methods.Optimization.OptiGenAlgNsga2Deap.mutate import mutate
 except ImportError as error:
     mutate = error
 
 try:
-    from pyleecan.Methods.Optimization.OptiGenAlgNsga2Deap.cross import cross
+    from ..Methods.Optimization.OptiGenAlgNsga2Deap.cross import cross
 except ImportError as error:
     cross = error
 
 try:
-    from pyleecan.Methods.Optimization.OptiGenAlgNsga2Deap.create_toolbox import (
-        create_toolbox,
-    )
+    from ..Methods.Optimization.OptiGenAlgNsga2Deap.create_toolbox import create_toolbox
 except ImportError as error:
     create_toolbox = error
 
 try:
-    from pyleecan.Methods.Optimization.OptiGenAlgNsga2Deap.check_optimization_input import (
+    from ..Methods.Optimization.OptiGenAlgNsga2Deap.check_optimization_input import (
         check_optimization_input,
     )
 except ImportError as error:
@@ -44,15 +42,15 @@ except ImportError as error:
 
 from inspect import getsource
 from cloudpickle import dumps, loads
-from pyleecan.Classes._check import CheckTypeError
+from ._check import CheckTypeError
 
 try:
     import deap.base
 except ImportError:
     deap.base = ImportError
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.OutputMultiOpti import OutputMultiOpti
-from pyleecan.Classes.OptiProblem import OptiProblem
+from ._check import InitUnKnowClassError
+from .OutputMultiOpti import OutputMultiOpti
+from .OptiProblem import OptiProblem
 
 
 class OptiGenAlgNsga2Deap(OptiGenAlg):

@@ -1,11 +1,3 @@
-"""@package Functions.Electrical.coordinate_transformation
-Reference Frame Transformation Functions
-@date Created on 15-08-2019 16:13
-@copyright (C) Krebs Engineers
-@author sebastian_g
-@todo: check input size
-@todo: extend to multiple phase
-"""
 from numpy import array, matmul, sqrt, cos, sin, reshape, newaxis, finfo, log10, floor
 
 EPS = int(floor(-log10(finfo(float).eps)))

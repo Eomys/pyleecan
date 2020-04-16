@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Functions.Plot.plot_A_2D import plot_A_2D
+from .....Functions.init_fig import init_fig
+from .....Functions.Plot.plot_A_2D import plot_A_2D
 
 
 def plot_A_nthoct(

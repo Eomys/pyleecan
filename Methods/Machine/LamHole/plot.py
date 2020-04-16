@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.LamHole.plot
-Lamination with Buried Magnets plot method
-@date Created on Mon Dec 22 14:22:39 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from matplotlib.patches import Circle, Patch
 from matplotlib.pyplot import axis, legend
 
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Methods.Machine import (
+from ....Functions.init_fig import init_fig
+from ....Methods.Machine import (
     PATCH_COLOR,
     MAGNET_COLOR,
     ROTOR_COLOR,

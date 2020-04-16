@@ -1,19 +1,12 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType
-First Page of Machine setup: Machine type
-@date Created on Mon May 18 14:36:59 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
-from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import (
-    Gen_SMachineType,
-)
+from .....GUI.Dialog.DMachineSetup.SMachineType.Gen_SMachineType import Gen_SMachineType
+
+from .....definitions import PACKAGE_NAME
 
 
 class SMachineType(Gen_SMachineType, QWidget):
@@ -50,7 +43,7 @@ class SMachineType(Gen_SMachineType, QWidget):
 
         # Dynamic import to avoid import loop
         module = __import__(
-            "pyleecan.GUI.Dialog.DMachineSetup", fromlist=["DMachineSetup"]
+            PACKAGE_NAME + ".GUI.Dialog.DMachineSetup", fromlist=["DMachineSetup"]
         )
         self.mach_list = getattr(module, "mach_list")
         self.mach_index = getattr(module, "mach_index")

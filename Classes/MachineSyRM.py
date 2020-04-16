@@ -5,29 +5,29 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.MachineSync import MachineSync
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from .MachineSync import MachineSync
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.MachineSyRM.check import check
+    from ..Methods.Machine.MachineSyRM.check import check
 except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Machine.MachineSyRM.get_machine_type import get_machine_type
+    from ..Methods.Machine.MachineSyRM.get_machine_type import get_machine_type
 except ImportError as error:
     get_machine_type = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.Frame import Frame
-from pyleecan.Classes.Shaft import Shaft
+from ._check import InitUnKnowClassError
+from .LamHole import LamHole
+from .LamSlotWind import LamSlotWind
+from .Frame import Frame
+from .Shaft import Shaft
 
 
 class MachineSyRM(MachineSync):

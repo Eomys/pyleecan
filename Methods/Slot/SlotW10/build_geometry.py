@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW10.build_geometry
-SlotW10 build_geometry method
-@date Created on Mon Dec 08 15:05:43 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Segment import Segment
 
 
 def build_geometry(self):

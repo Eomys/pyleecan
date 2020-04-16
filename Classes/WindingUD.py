@@ -5,29 +5,27 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import set_array, check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Winding import Winding
+from ._check import set_array, check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from .Winding import Winding
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.WindingUD.comp_connection_mat import (
-        comp_connection_mat,
-    )
+    from ..Methods.Machine.WindingUD.comp_connection_mat import comp_connection_mat
 except ImportError as error:
     comp_connection_mat = error
 
 try:
-    from pyleecan.Methods.Machine.WindingUD.get_dim_wind import get_dim_wind
+    from ..Methods.Machine.WindingUD.get_dim_wind import get_dim_wind
 except ImportError as error:
     get_dim_wind = error
 
 
 from numpy import array, array_equal
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Conductor import Conductor
+from ._check import InitUnKnowClassError
+from .Conductor import Conductor
 
 
 class WindingUD(Winding):

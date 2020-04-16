@@ -1,10 +1,3 @@
-"""
-Created on 23 avr. 2018
-
-@author: pierre_b
-"""
-
-
 def comp_height(self):
     """Compute the height of the Slot.
     Caution, the bottom of the Slot is an Arc

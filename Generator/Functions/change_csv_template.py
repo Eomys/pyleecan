@@ -1,7 +1,7 @@
 import os
 from os import walk
 from os.path import isfile, join
-from pyleecan.definitions import MAIN_DIR, DOC_DIR, INT_DIR
+from ...definitions import MAIN_DIR, DOC_DIR, INT_DIR
 import csv
 
 if __name__ == "__main__":

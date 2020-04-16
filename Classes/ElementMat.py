@@ -5,63 +5,61 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import set_array, check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Element import Element
+from ._check import set_array, check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from .Element import Element
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Mesh.ElementMat.get_node2element import get_node2element
+    from ..Methods.Mesh.ElementMat.get_node2element import get_node2element
 except ImportError as error:
     get_node2element = error
 
 try:
-    from pyleecan.Methods.Mesh.ElementMat.convert_element import convert_element
+    from ..Methods.Mesh.ElementMat.convert_element import convert_element
 except ImportError as error:
     convert_element = error
 
 try:
-    from pyleecan.Methods.Mesh.ElementMat.add_element import add_element
+    from ..Methods.Mesh.ElementMat.add_element import add_element
 except ImportError as error:
     add_element = error
 
 try:
-    from pyleecan.Methods.Mesh.ElementMat.get_connectivity import get_connectivity
+    from ..Methods.Mesh.ElementMat.get_connectivity import get_connectivity
 except ImportError as error:
     get_connectivity = error
 
 try:
-    from pyleecan.Methods.Mesh.ElementMat.get_all_connectivity import (
-        get_all_connectivity,
-    )
+    from ..Methods.Mesh.ElementMat.get_all_connectivity import get_all_connectivity
 except ImportError as error:
     get_all_connectivity = error
 
 try:
-    from pyleecan.Methods.Mesh.ElementMat.is_exist import is_exist
+    from ..Methods.Mesh.ElementMat.is_exist import is_exist
 except ImportError as error:
     is_exist = error
 
 try:
-    from pyleecan.Methods.Mesh.ElementMat.get_new_tag import get_new_tag
+    from ..Methods.Mesh.ElementMat.get_new_tag import get_new_tag
 except ImportError as error:
     get_new_tag = error
 
 try:
-    from pyleecan.Methods.Mesh.ElementMat.get_all_node_tags import get_all_node_tags
+    from ..Methods.Mesh.ElementMat.get_all_node_tags import get_all_node_tags
 except ImportError as error:
     get_all_node_tags = error
 
 try:
-    from pyleecan.Methods.Mesh.ElementMat.get_group import get_group
+    from ..Methods.Mesh.ElementMat.get_group import get_group
 except ImportError as error:
     get_group = error
 
 
 from numpy import array, array_equal
-from pyleecan.Classes._check import InitUnKnowClassError
+from ._check import InitUnKnowClassError
 
 
 class ElementMat(Element):

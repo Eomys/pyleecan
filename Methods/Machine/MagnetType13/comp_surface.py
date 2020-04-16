@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Magnet_Type_3.comp_surface
-Compute the Magnet surface method
-@date Created on Wed Dec 17 15:33:08 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import arcsin, sin
 

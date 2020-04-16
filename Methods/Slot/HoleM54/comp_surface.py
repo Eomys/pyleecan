@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Slot.HoleM54.comp_surface
-Compute the HoleM54 surface methode
-@date Created on Wed Dec 05 15:22:11 2018
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 from numpy import pi
 
 

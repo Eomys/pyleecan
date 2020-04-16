@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.CondType21.comp_width
-Conductor Type 2_1 width computation method
-@date Created on Tue Jan 20 15:24:57 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 
 def comp_width(self):

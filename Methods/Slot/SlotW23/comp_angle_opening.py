@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW23.comp_angle_opening
-SlotW23 Computation of average opening angle method
-@date Created on Mon Jun 29 15:28:55 2015
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-@todo check definition
-"""
 
 from numpy import arcsin
 

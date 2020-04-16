@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW21.build_geometry
-SlotW21 build_geometry method
-@date Created on Tue Dec 09 10:52:09 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Segment import Segment
 
 
 def build_geometry(self):

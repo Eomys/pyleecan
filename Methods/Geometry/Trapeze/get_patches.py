@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from matplotlib.patches import Polygon
 
-from pyleecan.Methods.Machine import (
+from ....Methods.Machine import (
     PATCH_COLOR,
     PATCH_EDGE,
     PATCH_COLOR_ALPHA,

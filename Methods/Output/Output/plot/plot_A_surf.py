@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Functions.Plot.plot_A_3D import plot_A_3D
+from .....Functions.Plot.plot_A_3D import plot_A_3D
 from numpy import meshgrid
 
 

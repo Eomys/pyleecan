@@ -1,6 +1,6 @@
 from numpy import linalg as LA, sign
 
-from pyleecan.Functions.Winding.find_wind_phase_color import get_phase_id
+from ...Functions.Winding.find_wind_phase_color import get_phase_id
 
 
 def comp_FEMM_Jcus(lam, cname, I, j_t0, is_mmf):

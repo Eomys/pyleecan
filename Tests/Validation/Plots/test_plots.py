@@ -3,15 +3,15 @@ from unittest import TestCase
 from os.path import join
 import matplotlib.pyplot as plt
 import unittest
-from pyleecan.Tests import save_validation_path as save_path
+from ....Tests import save_validation_path as save_path
 
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Tests.Validation.Machine.SCIM_006 import SCIM_006
+from ....Classes.Simu1 import Simu1
+from ...Validation.Machine.SCIM_006 import SCIM_006
 
-from pyleecan.Classes.Output import Output
+from ....Classes.Output import Output
 from SciDataTool import DataTime, Data1D, DataLinspace, DataFreq
-from pyleecan.Tests import DATA_DIR
-from pyleecan.Classes.ImportMatlab import ImportMatlab
+from ....Tests import DATA_DIR
+from ....Classes.ImportMatlab import ImportMatlab
 
 simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
 

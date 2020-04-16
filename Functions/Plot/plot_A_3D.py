@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.art3d as art3d
 
-from pyleecan.Functions.init_fig import init_fig, init_subplot
+from ...Functions.init_fig import init_fig, init_subplot
 
 
 def plot_A_3D(

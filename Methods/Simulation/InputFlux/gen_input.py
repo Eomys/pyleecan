@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Thu Mar 07 14:05:30 2019
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
-from pyleecan.Classes.OutMag import OutMag
-from pyleecan.Methods.Simulation.Input import InputError
+from ....Classes.OutMag import OutMag
+from ....Methods.Simulation.Input import InputError
 from SciDataTool import DataND, DataLinspace, DataTime
 from numpy import ndarray
 
@@ -16,20 +11,20 @@ def gen_input(self):
 
     Parameters
     ----------
-    self : InputFlux
-        An InputFlux object
+    self : InFlux
+        An InFlux object
     """
 
     output = OutMag()
     # Load and check time
     if self.time is None:
-        raise InputError("ERROR: InputFlux.time missing")
+        raise InputError("ERROR: InFlux.time missing")
     output.time = self.time.get_data()
 
     if not isinstance(output.time, ndarray) or len(output.time.shape) != 1:
         # time should be a vector
         raise InputError(
-            "ERROR: InputFlux.time should be a vector, "
+            "ERROR: InFlux.time should be a vector, "
             + str(output.time.shape)
             + " shape found"
         )
@@ -37,12 +32,12 @@ def gen_input(self):
 
     # Load and check angle
     if self.angle is None:
-        raise InputError("ERROR: InputFlux.angle missing")
+        raise InputError("ERROR: InFlux.angle missing")
     output.angle = self.angle.get_data()
     if not isinstance(output.angle, ndarray) or len(output.angle.shape) != 1:
         # angle should be a vector
         raise InputError(
-            "ERROR: InputFlux.angle should be a vector, "
+            "ERROR: InFlux.angle should be a vector, "
             + str(output.angle.shape)
             + " shape found"
         )
@@ -76,7 +71,7 @@ def gen_input(self):
     )
     if not isinstance(output.Br, DataND) or Br.shape != (Nt_tot, Na_tot):
         raise InputError(
-            "ERROR: InputFlux.Br must be a matrix with the shape "
+            "ERROR: InFlux.Br must be a matrix with the shape "
             + str((Nt_tot, Na_tot))
             + " (len(time), stator phase number), "
             + str(Br.shape)
@@ -94,7 +89,7 @@ def gen_input(self):
         )
         if not isinstance(output.Bt, DataND) or Bt.shape != (Nt_tot, Na_tot):
             raise InputError(
-                "ERROR: InputFlux.Bt must be a matrix with the shape "
+                "ERROR: InFlux.Bt must be a matrix with the shape "
                 + str((Nt_tot, Na_tot))
                 + " (len(time), rotor phase number), "
                 + str(Bt.shape)

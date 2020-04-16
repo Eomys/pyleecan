@@ -1,24 +1,17 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SWSlot.SWPole
-Winding Slot Setup Page
-@date Created on Wed Jul 15 14:14:29 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import pi
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.Slot import Slot
-from pyleecan.Classes.SlotW60 import SlotW60
-from pyleecan.Classes.SlotW61 import SlotW61
-from pyleecan.Classes.SlotWind import SlotWind
-from pyleecan.GUI.Dialog.DMachineSetup.SWPole.PWSlot60.PWSlot60 import PWSlot60
-from pyleecan.GUI.Dialog.DMachineSetup.SWPole.PWSlot61.PWSlot61 import PWSlot61
-from pyleecan.GUI.Dialog.DMachineSetup.SWPole.Ui_SWPole import Ui_SWPole
+from .....Classes.LamSlotWind import LamSlotWind
+from .....Classes.Slot import Slot
+from .....Classes.SlotW60 import SlotW60
+from .....Classes.SlotW61 import SlotW61
+from .....Classes.SlotWind import SlotWind
+from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot60.PWSlot60 import PWSlot60
+from .....GUI.Dialog.DMachineSetup.SWPole.PWSlot61.PWSlot61 import PWSlot61
+from .....GUI.Dialog.DMachineSetup.SWPole.Ui_SWPole import Ui_SWPole
 
 # List to convert index of combobox to slot type
 INIT_INDEX = [SlotW60, SlotW61]

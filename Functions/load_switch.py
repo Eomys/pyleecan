@@ -3,7 +3,7 @@
 WARNING! All changes made in this file will be lost!
 """
 
-from pyleecan.Classes.import_all import *
+from ..Classes.import_all import *
 
 load_switch = {
     "Arc": Arc,

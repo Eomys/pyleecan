@@ -1,18 +1,13 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Dec 08 14:24:26 2014
-
-@author: pierre_b
-"""
 
 from unittest import TestCase
 
 from ddt import ddt, data
 
-from pyleecan.Classes.Arc2 import Arc2
+from ....Classes.Arc2 import Arc2
 
-from pyleecan.Methods.Geometry.Arc2.check import PointArc2Error, AngleArc2Error
-from pyleecan.Methods.Geometry.Arc2.discretize import NbPointArc2DError
+from ....Methods.Geometry.Arc2.check import PointArc2Error, AngleArc2Error
+from ....Methods.Geometry.Arc2.discretize import NbPointArc2DError
 from numpy import pi, array, sqrt, exp, angle
 
 

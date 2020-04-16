@@ -1,20 +1,13 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot23.PWSlot23
-SlotW23 Setup Page
-@date Created on Wed Jul 15 14:30:54 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 import PyQt5.QtCore
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from pyleecan.Classes.SlotW23 import SlotW23
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot23.Gen_PWSlot23 import Gen_PWSlot23
-from pyleecan.Methods.Slot.Slot.check import SlotCheckError
+from ......Classes.SlotW23 import SlotW23
+from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot23.Gen_PWSlot23 import Gen_PWSlot23
+from ......Methods.Slot.Slot.check import SlotCheckError
 
 translate = PyQt5.QtCore.QCoreApplication.translate
 

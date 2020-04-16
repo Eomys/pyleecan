@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-"""@package build_geometry
-@date Created on juil. 12 13:48 2018
-@author franco_i
-"""
 from numpy import pi
 
-from pyleecan.Methods.Machine.LamSlot.build_geometry import build_geometry as build_geo
+from ....Methods.Machine.LamSlot.build_geometry import build_geometry as build_geo
 
 
 def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=False):

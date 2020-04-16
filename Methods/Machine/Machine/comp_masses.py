@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Machine.comp_masses
-Compute the masses of the machine method
-@date Created on Thu Jan 29 13:09:38 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 
 def comp_masses(self):

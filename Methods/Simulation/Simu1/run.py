@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Wed Mar 13 15:05:30 2019
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
-from pyleecan.Methods.Simulation.Input import InputError
+from ....Methods.Simulation.Input import InputError
 
 
 def run(self):

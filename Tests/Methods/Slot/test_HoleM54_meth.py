@@ -1,19 +1,14 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Tue Feb 02 11:31:45 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from unittest import TestCase
 from ddt import ddt, data
 
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Arc3 import Arc3
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.HoleM54 import HoleM54
+from ....Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
+from ....Classes.Arc1 import Arc1
+from ....Classes.Arc3 import Arc3
+from ....Classes.LamHole import LamHole
+from ....Classes.HoleM54 import HoleM54
 from numpy import exp, arcsin, ndarray, pi
 
 # For AlmostEqual

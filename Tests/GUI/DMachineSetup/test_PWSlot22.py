@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Wed Jan 20 14:10:24 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 import sys
 from unittest import TestCase
@@ -12,9 +7,9 @@ from numpy import pi
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.SlotW22 import SlotW22
-from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot22.PWSlot22 import PWSlot22
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.SlotW22 import SlotW22
+from ....GUI.Dialog.DMachineSetup.SWSlot.PWSlot22.PWSlot22 import PWSlot22
 
 
 class test_PWSlot22(TestCase):

@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.LamSlot.plot
-Lamination with empty Slot plot method
-@date Created on Wed Dec 10 10:35:39 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
 
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Methods.Machine import ROTOR_COLOR, STATOR_COLOR
+from ....Functions.init_fig import init_fig
+from ....Methods.Machine import ROTOR_COLOR, STATOR_COLOR
 
 
 def plot(

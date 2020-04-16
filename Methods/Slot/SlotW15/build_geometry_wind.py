@@ -1,18 +1,11 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW15.build_geometry_wind
-SlotW15 build_geometry_wind method
-@date Created on Mon Nov 27 15:58:38 2017
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-@todo unittest it
-"""
 
 from numpy import angle
 from scipy.optimize import fsolve
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
+from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
 
 
 def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0):

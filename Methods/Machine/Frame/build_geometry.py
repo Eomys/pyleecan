@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-"""@package build_geometry
-@date Created on juil. 25 10:20 2018
-@author franco_i
-"""
-from pyleecan.Classes.Circle import Circle
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Classes.SurfRing import SurfRing
+from ....Classes.Circle import Circle
+from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
+from ....Classes.SurfRing import SurfRing
 from numpy import exp, pi
 
 

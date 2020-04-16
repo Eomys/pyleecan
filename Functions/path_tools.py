@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Sat Feb 22 21:37:30 2020
-@author sebastian_g
-"""
 from os.path import isfile, join, normpath, abspath
 import re
 
@@ -26,7 +22,7 @@ def importName(modulename, name, ignore_error=False):
 def rel_file_path(file, wildcard):
     """ try to generate relative file path with given wildcard
     """
-    root_path = importName("pyleecan.definitions", wildcard, ignore_error=True)
+    root_path = importName("..definitions", wildcard, ignore_error=True)
     if root_path:
         root_path = normpath(abspath(root_path))
         file_ = normpath(abspath(file))
@@ -44,7 +40,7 @@ def abs_file_path(file, is_check=True):
     """
     if "<" in file and ">\\" in file:
         wildcard = re.search(r"\<([A-Za-z0-9_]+)\>", file).group(1)
-        root_path = importName("pyleecan.definitions", wildcard)
+        root_path = importName("..definitions", wildcard)
         file = join(root_path, file.replace(f"<{wildcard}>\\", ""))
 
     if not isfile(file) and is_check:
@@ -75,7 +71,7 @@ if __name__ == "__main__":
 
     sys.path.insert(0, ROOT_DIR)
 
-    from pyleecan.definitions import MATLIB_DIR
+    from ..definitions import MATLIB_DIR
 
     file = "<MATLIB_DIR>\Magnet1.json"
     print(abs_file_path(file, is_check=False))

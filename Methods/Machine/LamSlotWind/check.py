@@ -1,16 +1,7 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.LamSlotWind.check
-Check that the Lamination is correct
-@date Created on Thu Jan 22 16:47:24 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-@todo check winding
-@todo check tooth widths
-"""
 
-from pyleecan.Classes.Lamination import Lamination
-from pyleecan.Methods.Machine.Lamination.check import LaminationCheckError
+from ....Classes.Lamination import Lamination
+from ....Methods.Machine.Lamination.check import LaminationCheckError
 
 
 def check(self):

@@ -1,12 +1,6 @@
-"""
-Created on 14 June. 2018
-
-@author: franco_i
-"""
-
 from numpy import angle, arcsin, arctan, cos, exp, pi, sin, sqrt
 
-from pyleecan.Methods.Slot.SlotW15 import S15InnerError
+from ....Methods.Slot.SlotW15 import S15InnerError
 
 
 def _comp_point_coordinate(self):

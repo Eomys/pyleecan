@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Functions.comp_num_surface
-Computation of the surface of a Polygon function
-@date Created on Mon Feb 02 13:54:40 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import array
 

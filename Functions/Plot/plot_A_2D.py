@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 from numpy import where
 
-from pyleecan.Functions.init_fig import init_fig, init_subplot
+from ...Functions.init_fig import init_fig, init_subplot
 
 
 def plot_A_2D(

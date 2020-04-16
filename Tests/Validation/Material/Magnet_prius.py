@@ -1,5 +1,5 @@
-from pyleecan.Classes.Material import Material
-from pyleecan.Classes.MatMagnetics import MatMagnetics
+from ....Classes.Material import Material
+from ....Classes.MatMagnetics import MatMagnetics
 
 
 Magnet_prius = Material(name="Magnet_prius")

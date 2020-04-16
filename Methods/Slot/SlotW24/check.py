@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW24.check
-Check that the SlotW24 is correct
-@date Created on Mon Jul 06 11:40:07 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import arcsin, pi
 
-from pyleecan.Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot.check import SlotCheckError
 
 
 def check(self):

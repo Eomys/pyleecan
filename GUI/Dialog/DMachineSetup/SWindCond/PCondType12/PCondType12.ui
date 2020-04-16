@@ -209,12 +209,12 @@
   <customwidget>
    <class>FloatEdit</class>
    <extends>QLineEdit</extends>
-   <header>pyleecan.GUI/Tools/FloatEdit.h</header>
+   <header>......GUI/Tools/FloatEdit.h</header>
   </customwidget>
   <customwidget>
    <class>WCondOut</class>
    <extends>QWidget</extends>
-   <header>pyleecan.GUI.Dialog.DMachineSetup.SWindCond.WCondOut.WCondOut.h</header>
+   <header>......GUI.Dialog.DMachineSetup.SWindCond.WCondOut.WCondOut.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

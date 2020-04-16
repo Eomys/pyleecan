@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 from numpy import pi
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
+from ....Classes.MachineIPMSM import MachineIPMSM
 
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.SlotW21 import SlotW21
-from pyleecan.Classes.WindingDW1L import WindingDW1L
-from pyleecan.Classes.CondType12 import CondType12
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.SlotW21 import SlotW21
+from ....Classes.WindingDW1L import WindingDW1L
+from ....Classes.CondType12 import CondType12
 
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.Frame import Frame
+from ....Classes.LamHole import LamHole
+from ....Classes.HoleM50 import HoleM50
+from ....Classes.VentilationCirc import VentilationCirc
+from ....Classes.Frame import Frame
 
-from pyleecan.Classes.Shaft import Shaft
+from ....Classes.Shaft import Shaft
 
-from pyleecan.Tests.Validation.Material.M400_50A import M400_50A
-from pyleecan.Tests.Validation.Material.Magnet3 import Magnet3
-from pyleecan.Tests.Validation.Material.Copper1 import Copper1
+from ....Tests.Validation.Material.M400_50A import M400_50A
+from ....Tests.Validation.Material.Magnet3 import Magnet3
+from ....Tests.Validation.Material.Copper1 import Copper1
 
 
 mm = 1e-3  # Millimeter

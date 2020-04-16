@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-from pyleecan.Classes.Mesh import Mesh
-from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.NodeMat import NodeMat
+from ....Classes.Mesh import Mesh
+from ....Classes.ElementMat import ElementMat
+from ....Classes.NodeMat import NodeMat
 import numpy as np
 
 

@@ -5,46 +5,46 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.Hole.comp_radius import comp_radius
+    from ..Methods.Slot.Hole.comp_radius import comp_radius
 except ImportError as error:
     comp_radius = error
 
 try:
-    from pyleecan.Methods.Slot.Hole.comp_surface import comp_surface
+    from ..Methods.Slot.Hole.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
 
 try:
-    from pyleecan.Methods.Slot.Hole.get_is_stator import get_is_stator
+    from ..Methods.Slot.Hole.get_is_stator import get_is_stator
 except ImportError as error:
     get_is_stator = error
 
 try:
-    from pyleecan.Methods.Slot.Hole.get_Rbo import get_Rbo
+    from ..Methods.Slot.Hole.get_Rbo import get_Rbo
 except ImportError as error:
     get_Rbo = error
 
 try:
-    from pyleecan.Methods.Slot.Hole.has_magnet import has_magnet
+    from ..Methods.Slot.Hole.has_magnet import has_magnet
 except ImportError as error:
     has_magnet = error
 
 try:
-    from pyleecan.Methods.Slot.Hole.plot import plot
+    from ..Methods.Slot.Hole.plot import plot
 except ImportError as error:
     plot = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Material import Material
+from ._check import InitUnKnowClassError
+from .Material import Material
 
 
 class Hole(FrozenClass):

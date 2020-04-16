@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package set_FEMM_magnet
-@date Created on août 09 17:40 2018
-@author franco_i
-@TODO: it would be better to have the magnets as input instead of the lamination
-@TODO: decision about the magnet renaming, removed at the moment
-"""
 import femm
 from re import findall
 

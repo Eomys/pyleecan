@@ -1,23 +1,14 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.PBSlot.PBSlot50.PHoleM50
-HoleM50 Setup Page
-@date Created on Wed Jul 15 14:30:54 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import pi
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget
 
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.Gen_PHoleM50 import (
-    Gen_PHoleM50,
-)
-from pyleecan.Methods.Slot.Slot.check import SlotCheckError
+from ......Classes.HoleM50 import HoleM50
+from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.Gen_PHoleM50 import Gen_PHoleM50
+from ......Methods.Slot.Slot.check import SlotCheckError
 
 
 class PHoleM50(Gen_PHoleM50, QWidget):

@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.MachineDFIM.check
-Check that the machine is correct
-@date Created on Mon Aug 22 10:33:04 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-@todo unittest it
-"""
 
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Methods.Machine import MachineCheckError
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Methods.Machine import MachineCheckError
 
 
 def check(self):

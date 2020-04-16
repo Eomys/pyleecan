@@ -1,18 +1,11 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Tools.FloatEdit
-A Line Edit Widget optimize to input float
-@date Created on Fri Jul 17 10:34:01 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 from re import compile, search
 
 from PyQt5 import QtGui
 from PyQt5.QtGui import QDoubleValidator
 from PyQt5.QtWidgets import QLineEdit
 
-from pyleecan.GUI import gui_option
+from ...GUI import gui_option
 
 _float_re = compile(r"(([+-]?\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)")
 

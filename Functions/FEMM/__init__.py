@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package __init__.py
-@date Created on août 01 10:50 2018
-@author franco_i
-"""
 
 # regions ID
 GROUP_AG = 0  # airgap GROUP for segments added between the rotor and

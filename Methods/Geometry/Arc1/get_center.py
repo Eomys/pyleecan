@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.Arc1.get_center
-Compute the coordinate of the center of an Arc1 method
-@date Created on Fri Dec 05 13:37:19 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 from numpy import abs as np_abs, angle as np_angle, arcsin, exp, pi, sqrt
 
 

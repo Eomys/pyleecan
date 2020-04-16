@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Functions.get_height_magnet
-Getter for magnet height of the HoleM53
-@date Created on Fri Apr 12 12:05:00 2019
-@author sebastian_g
-@todo unittest it
-"""
 
 
 def get_height_magnet(self):

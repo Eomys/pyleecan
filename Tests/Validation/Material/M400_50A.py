@@ -1,6 +1,6 @@
-from pyleecan.Classes.Material import Material
-from pyleecan.Classes.MatMagnetics import MatMagnetics
-from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
+from ....Classes.Material import Material
+from ....Classes.MatMagnetics import MatMagnetics
+from ....Classes.ImportMatrixXls import ImportMatrixXls
 from os.path import dirname, abspath, join
 
 file_path = abspath(join(dirname(__file__), "M400-50A.xlsx"))

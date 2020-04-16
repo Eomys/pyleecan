@@ -1,10 +1,3 @@
-"""
-Created on 23 avr. 2018
-
-@author: pierre_b
-"""
-
-
 def comp_angle_opening(self):
     """Compute the average opening angle of the Slot
 

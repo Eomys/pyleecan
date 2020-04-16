@@ -1,16 +1,9 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Wed May 04 11:46:18 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from unittest import TestCase
 from ddt import ddt, data
-from pyleecan.Classes.Arc3 import Arc3
-from pyleecan.Classes.Arc2 import Arc2
+from ....Classes.Arc3 import Arc3
+from ....Classes.Arc2 import Arc2
 from numpy import pi, exp, sqrt, linspace
 
 # For AlmostEqual

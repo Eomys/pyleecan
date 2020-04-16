@@ -5,28 +5,26 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Conductor import Conductor
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from .Conductor import Conductor
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.CondType22.comp_surface_active import (
-        comp_surface_active,
-    )
+    from ..Methods.Machine.CondType22.comp_surface_active import comp_surface_active
 except ImportError as error:
     comp_surface_active = error
 
 try:
-    from pyleecan.Methods.Machine.CondType22.comp_surface import comp_surface
+    from ..Methods.Machine.CondType22.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Material import Material
+from ._check import InitUnKnowClassError
+from .Material import Material
 
 
 class CondType22(Conductor):

@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.MagnetType10.build_geometry
-MagnetType10 build_geometry method
-@date Created on Wed Dec 17 15:03:10 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import abs, angle, array, exp
 
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Methods import ParentMissingError
+from ....Classes.SurfLine import SurfLine
+from ....Classes.Segment import Segment
+from ....Methods import ParentMissingError
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):

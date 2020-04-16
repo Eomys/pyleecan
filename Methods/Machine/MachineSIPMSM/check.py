@@ -1,15 +1,8 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Machine_Type_2.check
-Check that the machine is correct
-@date Created on Mon Dec 14 14:42:34 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Methods.Machine import MachineCheckError
+from ....Classes.LamSlotMag import LamSlotMag
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Methods.Machine import MachineCheckError
 
 
 def check(self):

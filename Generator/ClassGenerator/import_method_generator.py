@@ -1,4 +1,4 @@
-from pyleecan.Generator import TAB
+from ...Generator import TAB
 
 
 def import_method(class_pack, class_name, meth):
@@ -24,7 +24,7 @@ def import_method(class_pack, class_name, meth):
     code = "try:\n"
     code += (
         TAB
-        + "from pyleecan.Methods."
+        + "from ..Methods."
         + class_pack
         + "."
         + class_name

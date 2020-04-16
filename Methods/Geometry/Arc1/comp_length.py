@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.Arc1.comp_length
-Computation of Arc1 length method
-@date Created on Fri Dec 05 14:25:08 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 from numpy import pi, arcsin
 
 

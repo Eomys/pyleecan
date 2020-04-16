@@ -1,21 +1,14 @@
 ﻿# -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Thu Jul 30 17:18:07 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QDialog, QMessageBox, QSpinBox, QTableWidgetItem
 
-from pyleecan.Classes.Lamination import Lamination
-from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.Ui_DAVDuct import Ui_DAVDuct
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVent.WVent import WVent
+from ......Classes.Lamination import Lamination
+from ......Classes.VentilationCirc import VentilationCirc
+from ......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.Ui_DAVDuct import Ui_DAVDuct
+from ......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVent.WVent import WVent
 
 
 class DAVDuct(Ui_DAVDuct, QDialog):

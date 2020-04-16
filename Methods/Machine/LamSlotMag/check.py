@@ -1,23 +1,15 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.LamSlotMag.check
-Check that the Lamination is correct
-@date Created on Thu Jan 22 17:33:50 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo check magnet
-@todo check tooth widths
-"""
 
 from numpy import sin
 
-from pyleecan.Classes.MagnetType10 import MagnetType10
-from pyleecan.Classes.MagnetType11 import MagnetType11
-from pyleecan.Classes.MagnetType13 import MagnetType13
-from pyleecan.Classes.SlotMFlat import SlotMFlat
-from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.Classes.SlotMFlat import SlotMFlat
-from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.Methods.Machine.Lamination.check import LaminationCheckError
+from ....Classes.MagnetType10 import MagnetType10
+from ....Classes.MagnetType11 import MagnetType11
+from ....Classes.MagnetType13 import MagnetType13
+from ....Classes.SlotMFlat import SlotMFlat
+from ....Classes.SlotMPolar import SlotMPolar
+from ....Classes.SlotMFlat import SlotMFlat
+from ....Classes.SlotMPolar import SlotMPolar
+from ....Methods.Machine.Lamination.check import LaminationCheckError
 
 
 def check(self):

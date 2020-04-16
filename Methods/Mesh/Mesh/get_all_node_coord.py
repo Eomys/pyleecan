@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.NodeMat import NodeMat
+from ....Classes.NodeMat import NodeMat
 import numpy as np
 
 

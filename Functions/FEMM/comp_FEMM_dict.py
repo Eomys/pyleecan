@@ -1,18 +1,14 @@
 # -*- coding: utf-8 -*-
-"""@package comp_element_size
-@date Created on août 07 10:53 2018
-@author franco_i
-"""
 
-from pyleecan.Classes.LamSlot import LamSlot
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.HoleM51 import HoleM51
-from pyleecan.Classes.HoleM52 import HoleM52
-from pyleecan.Classes.HoleM53 import HoleM53
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Functions.FEMM import acsolver, pbtype, precision, minangle
-from pyleecan.Functions.FEMM import (
+from ...Classes.LamSlot import LamSlot
+from ...Classes.LamHole import LamHole
+from ...Classes.HoleM50 import HoleM50
+from ...Classes.HoleM51 import HoleM51
+from ...Classes.HoleM52 import HoleM52
+from ...Classes.HoleM53 import HoleM53
+from ...Classes.LamSlotMag import LamSlotMag
+from ...Functions.FEMM import acsolver, pbtype, precision, minangle
+from ...Functions.FEMM import (
     GROUP_RC,
     GROUP_RH,
     GROUP_RV,

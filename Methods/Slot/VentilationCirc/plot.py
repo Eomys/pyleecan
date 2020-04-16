@@ -1,17 +1,10 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.VentilationCirc.plot
-
-@date Created on Wed Jan 14 14:27:38 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from matplotlib.patches import Circle, Patch
 from matplotlib.pyplot import axis, legend
 from numpy import exp, pi
 
-from pyleecan.Functions.init_fig import init_fig
+from ....Functions.init_fig import init_fig
 
 
 def plot(self, fig=None):

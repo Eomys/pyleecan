@@ -1,6 +1,6 @@
 from numpy import diff, zeros, newaxis
 
-from pyleecan.Methods.Simulation.Input import InputError
+from ....Methods.Simulation.Input import InputError
 
 
 def comp_emf(self):

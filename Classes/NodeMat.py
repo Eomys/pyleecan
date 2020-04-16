@@ -5,41 +5,41 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import set_array, check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Node import Node
+from ._check import set_array, check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from .Node import Node
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Mesh.NodeMat.get_coord import get_coord
+    from ..Methods.Mesh.NodeMat.get_coord import get_coord
 except ImportError as error:
     get_coord = error
 
 try:
-    from pyleecan.Methods.Mesh.NodeMat.get_tag import get_tag
+    from ..Methods.Mesh.NodeMat.get_tag import get_tag
 except ImportError as error:
     get_tag = error
 
 try:
-    from pyleecan.Methods.Mesh.NodeMat.get_group import get_group
+    from ..Methods.Mesh.NodeMat.get_group import get_group
 except ImportError as error:
     get_group = error
 
 try:
-    from pyleecan.Methods.Mesh.NodeMat.add_node import add_node
+    from ..Methods.Mesh.NodeMat.add_node import add_node
 except ImportError as error:
     add_node = error
 
 try:
-    from pyleecan.Methods.Mesh.NodeMat.is_exist import is_exist
+    from ..Methods.Mesh.NodeMat.is_exist import is_exist
 except ImportError as error:
     is_exist = error
 
 
 from numpy import array, array_equal
-from pyleecan.Classes._check import InitUnKnowClassError
+from ._check import InitUnKnowClassError
 
 
 class NodeMat(Node):

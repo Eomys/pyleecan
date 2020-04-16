@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.Arc1.get_middle
-Compute the coordinate of the middle of an Arc1 method
-@date Created on Wed May 04 10:51:43 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import abs as np_abs, angle as np_angle, exp
 

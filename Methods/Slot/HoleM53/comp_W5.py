@@ -1,16 +1,9 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Fri Jan 08 11:26:43 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import exp, sin
 
-from pyleecan.Functions.Geometry.inter_line_circle import inter_line_circle
-from pyleecan.Methods.Slot.HoleM53 import Slot53InterError
+from ....Functions.Geometry.inter_line_circle import inter_line_circle
+from ....Methods.Slot.HoleM53 import Slot53InterError
 
 
 def comp_W5(self):

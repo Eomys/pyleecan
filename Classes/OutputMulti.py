@@ -5,21 +5,21 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Output.OutputMulti.add_output import add_output
+    from ..Methods.Output.OutputMulti.add_output import add_output
 except ImportError as error:
     add_output = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Output import Output
+from ._check import InitUnKnowClassError
+from .Output import Output
 
 
 class OutputMulti(FrozenClass):

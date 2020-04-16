@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-"""@package build_geometry
-@date Created on juin 20 14:04 2018
-@author franco_i
-"""
 from numpy import pi
 
-from pyleecan.Classes.Winding import Winding
-from pyleecan.Methods import NotImplementedYetError
-from pyleecan.Methods.Machine.LamSlot.build_geometry import build_geometry as build_geo
+from ....Classes.Winding import Winding
+from ....Methods import NotImplementedYetError
+from ....Methods.Machine.LamSlot.build_geometry import build_geometry as build_geo
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):

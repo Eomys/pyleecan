@@ -5,21 +5,21 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.Conductor.check import check
+    from ..Methods.Machine.Conductor.check import check
 except ImportError as error:
     check = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Material import Material
+from ._check import InitUnKnowClassError
+from .Material import Material
 
 
 class Conductor(FrozenClass):

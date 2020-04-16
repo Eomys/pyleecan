@@ -157,12 +157,12 @@
   <customwidget>
    <class>FloatEdit</class>
    <extends>QLineEdit</extends>
-   <header>pyleecan.GUI/Tools/FloatEdit.h</header>
+   <header>......GUI/Tools/FloatEdit.h</header>
   </customwidget>
   <customwidget>
    <class>WWSlotOut</class>
    <extends>QWidget</extends>
-   <header>pyleecan.GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut.h</header>
+   <header>......GUI.Dialog.DMachineSetup.SWSlot.WWSlotOut.WWSlotOut.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

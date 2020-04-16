@@ -5,29 +5,27 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Machine import Machine
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from .Machine import Machine
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.MachineSync.is_synchronous import is_synchronous
+    from ..Methods.Machine.MachineSync.is_synchronous import is_synchronous
 except ImportError as error:
     is_synchronous = error
 
 try:
-    from pyleecan.Methods.Machine.MachineSync.comp_initial_angle import (
-        comp_initial_angle,
-    )
+    from ..Methods.Machine.MachineSync.comp_initial_angle import comp_initial_angle
 except ImportError as error:
     comp_initial_angle = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Frame import Frame
-from pyleecan.Classes.Shaft import Shaft
+from ._check import InitUnKnowClassError
+from .Frame import Frame
+from .Shaft import Shaft
 
 
 class MachineSync(Machine):

@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW10.comp_height
-SlotW10 Computation of height method
-@date Created on Tue Dec 09 16:07:35 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import cos, tan
 

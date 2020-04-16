@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.SurfLine.comp_surface
-Compute the SurfLine surface method
-@date Created on Thu Jul 27 13:51:43 2018
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
-from pyleecan.Functions.Geometry.comp_surface_num import comp_surface_num
+from ....Functions.Geometry.comp_surface_num import comp_surface_num
 
 
 def comp_surface(self):

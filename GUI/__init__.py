@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 18 16:06:24 2014
-
-@author: pierre_b
-"""
 
 import sys
 from logging import ERROR, INFO, basicConfig, getLogger
 from matplotlib import use
-from pyleecan.Classes.GUIOption import GUIOption
+from ..Classes.GUIOption import GUIOption
 from os.path import abspath, dirname, join, normpath
 
 # Set Matplotlib backend

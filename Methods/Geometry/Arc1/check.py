@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.Arc1.check
-Check Arc1 method
-@date Created on Fri Dec 05 13:33:05 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 
 def check(self):

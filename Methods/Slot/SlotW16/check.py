@@ -1,10 +1,4 @@
-"""
-Created on 23 avr. 2018
-
-@author: pierre_b
-"""
-
-from pyleecan.Methods.Slot.SlotW16 import S16OutterError
+from ....Methods.Slot.SlotW16 import S16OutterError
 
 
 def check(self):

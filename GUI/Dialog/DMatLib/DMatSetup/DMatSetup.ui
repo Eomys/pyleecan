@@ -922,7 +922,7 @@
   <customwidget>
    <class>FloatEdit</class>
    <extends>QLineEdit</extends>
-   <header>pyleecan/GUI/Tools/FloatEdit.h</header>
+   <header>.....GUI/Tools/FloatEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources>

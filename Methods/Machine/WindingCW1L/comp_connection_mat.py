@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Winding._comp_wind_type_2
-Compute the Winding Matrix (for type 2) Method
-@date Created on Mon Dec 15 16:04:48 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import array, power, zeros
 
-from pyleecan.Methods.Machine.Winding import WindingError
-from pyleecan.Functions.Winding.reverse_wind_mat import reverse_wind_mat
-from pyleecan.Functions.Winding.shift_wind_mat import shift_wind_mat
+from ....Methods.Machine.Winding import WindingError
+from ....Functions.Winding.reverse_wind_mat import reverse_wind_mat
+from ....Functions.Winding.shift_wind_mat import shift_wind_mat
 
 
 def comp_connection_mat(self, Zs=None):

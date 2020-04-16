@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.LamSlotWind._comp_masses
-Lamination with Winding computation of all masses method
-@date Created on Tue Jan 13 15:26:49 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
-from pyleecan.Classes.Lamination import Lamination
+from ....Classes.Lamination import Lamination
 
 
 def comp_output_geo(self):

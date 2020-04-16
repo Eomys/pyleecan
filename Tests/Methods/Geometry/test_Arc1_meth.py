@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Dec 08 11:31:14 2014
-
-@author: pierre_b
-"""
 from unittest import TestCase
 from os.path import join
 
@@ -11,10 +6,10 @@ import matplotlib.pyplot as plt
 from ddt import data, ddt
 from numpy import array, exp, pi, sqrt
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Methods.Geometry.Arc1.check import PointArc1Error, RadiusArc1Error
-from pyleecan.Methods.Geometry.Arc1.discretize import NbPointArc1DError
-from pyleecan.Tests import save_plot_path as save_path
+from ....Classes.Arc1 import Arc1
+from ....Methods.Geometry.Arc1.check import PointArc1Error, RadiusArc1Error
+from ....Methods.Geometry.Arc1.discretize import NbPointArc1DError
+from ....Tests import save_plot_path as save_path
 
 # For AlmostEqual
 DELTA = 1e-6

@@ -5,50 +5,50 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.OutputMulti import OutputMulti
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from .OutputMulti import OutputMulti
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Output.OutputMultiOpti.add_evaluation import add_evaluation
+    from ..Methods.Output.OutputMultiOpti.add_evaluation import add_evaluation
 except ImportError as error:
     add_evaluation = error
 
 try:
-    from pyleecan.Methods.Output.OutputMultiOpti.plot_pareto import plot_pareto
+    from ..Methods.Output.OutputMultiOpti.plot_pareto import plot_pareto
 except ImportError as error:
     plot_pareto = error
 
 try:
-    from pyleecan.Methods.Output.OutputMultiOpti.plot_generation import plot_generation
+    from ..Methods.Output.OutputMultiOpti.plot_generation import plot_generation
 except ImportError as error:
     plot_generation = error
 
 try:
-    from pyleecan.Methods.Output.OutputMultiOpti.get_pareto import get_pareto
+    from ..Methods.Output.OutputMultiOpti.get_pareto import get_pareto
 except ImportError as error:
     get_pareto = error
 
 try:
-    from pyleecan.Methods.Output.OutputMultiOpti.plot_pareto_design_space import (
+    from ..Methods.Output.OutputMultiOpti.plot_pareto_design_space import (
         plot_pareto_design_space,
     )
 except ImportError as error:
     plot_pareto_design_space = error
 
 try:
-    from pyleecan.Methods.Output.OutputMultiOpti.plot_generation_design_space import (
+    from ..Methods.Output.OutputMultiOpti.plot_generation_design_space import (
         plot_generation_design_space,
     )
 except ImportError as error:
     plot_generation_design_space = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Output import Output
+from ._check import InitUnKnowClassError
+from .Output import Output
 
 
 class OutputMultiOpti(OutputMulti):

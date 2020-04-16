@@ -1,39 +1,39 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
-from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
+from ....GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
+from ....GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
     SMachineDimension,
 )
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
-from pyleecan.GUI.Dialog.DMachineSetup.SWindPat.SWindPat import SWindPat
-from pyleecan.GUI.Dialog.DMachineSetup.SWindParam.SWindParam import SWindParam
-from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
-from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
-from pyleecan.GUI.Dialog.DMachineSetup.SWPole.SWPole import SWPole
-from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.SMagnet import SMagnet
+from ....GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
+from ....GUI.Dialog.DMachineSetup.SWindPat.SWindPat import SWindPat
+from ....GUI.Dialog.DMachineSetup.SWindParam.SWindParam import SWindParam
+from ....GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
+from ....GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
+from ....GUI.Dialog.DMachineSetup.SWPole.SWPole import SWPole
+from ....GUI.Dialog.DMachineSetup.SBar.SBar import SBar
+from ....GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
+from ....GUI.Dialog.DMachineSetup.SMagnet.SMagnet import SMagnet
 
-from pyleecan.Classes.Magnet import Magnet
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.LamSlot import LamSlot
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
-from pyleecan.Classes.MachineSyRM import MachineSyRM
-from pyleecan.Classes.MachineDFIM import MachineDFIM
-from pyleecan.Classes.MachineSCIM import MachineSCIM
-from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
-from pyleecan.Classes.MachineWRSM import MachineWRSM
-from pyleecan.Classes.MachineSRM import MachineSRM
-from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.WindingDW2L import WindingDW2L
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingSC import WindingSC
-from pyleecan.Classes.MagnetType11 import MagnetType11
-from pyleecan.GUI.Resources import pixmap_dict
+from ....Classes.Magnet import Magnet
+from ....Classes.LamHole import LamHole
+from ....Classes.LamSlot import LamSlot
+from ....Classes.LamSlotMag import LamSlotMag
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.LamSquirrelCage import LamSquirrelCage
+from ....Classes.MachineIPMSM import MachineIPMSM
+from ....Classes.MachineSyRM import MachineSyRM
+from ....Classes.MachineDFIM import MachineDFIM
+from ....Classes.MachineSCIM import MachineSCIM
+from ....Classes.MachineSIPMSM import MachineSIPMSM
+from ....Classes.MachineWRSM import MachineWRSM
+from ....Classes.MachineSRM import MachineSRM
+from ....Classes.SlotMPolar import SlotMPolar
+from ....Classes.HoleM50 import HoleM50
+from ....Classes.WindingDW2L import WindingDW2L
+from ....Classes.WindingCW2LT import WindingCW2LT
+from ....Classes.WindingSC import WindingSC
+from ....Classes.MagnetType11 import MagnetType11
+from ....GUI.Resources import pixmap_dict
 
 # Steps needed to setup a LamSlotWind
 LSW_step = [SLamParam, SWSlot, SWindPat, SWindParam, SWindCond]

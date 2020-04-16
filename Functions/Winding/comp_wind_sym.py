@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Functions.comp_wind_sym
-computes the winding pattern periodicity and symmetries function
-@date Created on Tue Dec 23 09:51:35 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import array_equal, roll, squeeze, sum as np_sum
 from numpy.linalg import norm

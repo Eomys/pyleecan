@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QWidget
 
-from pyleecan.GUI import gui_option
+from ......GUI import gui_option
 
 
 class WCondOut(QGroupBox):

@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
-"""Created on 2020-02-18 18:11:50
-@author: sebastian_g
-"""
 import sys
-from os.path import dirname, abspath, normpath, join, isfile, split
+from os.path import dirname, abspath, normpath, join, isfile, split, realpath
+from os import listdir, remove
+
+begin = len(normpath(abspath(join(dirname(__file__), "../.."))))
+end = len(normpath(abspath(join(dirname(__file__), ".."))))
+MAIN_DIR = dirname(realpath(__file__))
+
+package_name = MAIN_DIR[begin + 1 : end]
 
 from json import load as jload
 
@@ -102,6 +106,8 @@ class GenerateUMLMissingFileError(Exception):
 
 
 if __name__ == "__main__":
+    # Add the directory to the python path
+    sys.path.append(MAIN_DIR[:begin])
     root_path = normpath(abspath(join(dirname(__file__), "..", "..")))
-    file_path = join(root_path, "pyleecan", "Classes", "class_dict.json")
+    file_path = join(root_path, package_name, "Classes", "class_dict.json")
     generate_uml(file_path)

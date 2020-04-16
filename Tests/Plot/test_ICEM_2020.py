@@ -6,23 +6,23 @@ from shutil import copyfile
 import matplotlib.pyplot as plt
 from numpy import array, linspace, ones, pi, zeros
 
-from pyleecan.Classes.import_all import *
-from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
-from pyleecan.Tests import save_plot_path
-from pyleecan.Tests.Plot.LamWind import wind_mat
-from pyleecan.Tests.Validation.Machine.SCIM_006 import SCIM_006
-from pyleecan.Tests.Validation.Machine.SPMSM_015 import SPMSM_015
-from pyleecan.Functions.load import load
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.Classes.Output import Output
-from pyleecan.Classes.OptiDesignVar import OptiDesignVar
-from pyleecan.Classes.OptiObjFunc import OptiObjFunc
-from pyleecan.Classes.OptiProblem import OptiProblem
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
+from ...Classes.import_all import *
+from ...Functions.GMSH.gen_3D_mesh import gen_3D_mesh
+from ...Tests import save_plot_path
+from ...Tests.Plot.LamWind import wind_mat
+from ...Tests.Validation.Machine.SCIM_006 import SCIM_006
+from ...Tests.Validation.Machine.SPMSM_015 import SPMSM_015
+from ...Functions.load import load
+from ...Classes.InputCurrent import InputCurrent
+from ...Classes.MagFEMM import MagFEMM
+from ...Classes.Simu1 import Simu1
+from ...Classes.Output import Output
+from ...Classes.OptiDesignVar import OptiDesignVar
+from ...Classes.OptiObjFunc import OptiObjFunc
+from ...Classes.OptiProblem import OptiProblem
+from ...Classes.ImportMatrixVal import ImportMatrixVal
+from ...Classes.ImportGenVectLin import ImportGenVectLin
+from ...Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 
 import numpy as np
 import random

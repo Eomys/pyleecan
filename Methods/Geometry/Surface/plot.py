@@ -2,8 +2,8 @@
 
 from matplotlib.pyplot import axis, legend
 
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Methods.Machine import PATCH_COLOR, PATCH_EDGE
+from ....Functions.init_fig import init_fig
+from ....Methods.Machine import PATCH_COLOR, PATCH_EDGE
 
 
 def plot(

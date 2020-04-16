@@ -1,10 +1,3 @@
-"""
-Created on 23 avr. 2018
-
-@author: pierre_b
-"""
-
-
 def comp_height_wind(self):
     """Compute the height of the winding area
 

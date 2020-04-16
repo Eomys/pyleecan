@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Methods.Output.Output.getter import GetOutError
+from .....Methods.Output.Output.getter import GetOutError
 from numpy import pi, cumsum, roll, size, ones
 
 

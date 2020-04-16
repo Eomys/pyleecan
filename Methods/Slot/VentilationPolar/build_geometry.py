@@ -1,15 +1,8 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Ventilation_Polar.build_geometry
-Ventilation_Polar build_geometry method
-@date Created on Tue Mar 08 11:38:33 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import exp, pi
 
-from pyleecan.Classes.PolarArc import PolarArc
+from ....Classes.PolarArc import PolarArc
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_stator=True):

@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
-"""@package build_geometry
-@date Created on juil. 10 10:31 2018
-@author franco_i
-@todo: modify side segments for other bore radii (due to notches)
-"""
 from numpy import pi, exp
 
-from pyleecan.Classes.Circle import Circle
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Classes.SurfRing import SurfRing
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Circle import Circle
+from ....Classes.SurfLine import SurfLine
+from ....Classes.SurfRing import SurfRing
+from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
 
 
 def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):

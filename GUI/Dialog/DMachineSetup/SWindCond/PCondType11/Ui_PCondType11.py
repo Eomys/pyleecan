@@ -113,6 +113,6 @@ class Ui_PCondType11(object):
         self.in_Hwire.setText(_translate("PCondType11", "Hwire :"))
 
 
-from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.WCondOut.WCondOut import WCondOut
-from pyleecan.GUI.Tools.FloatEdit import FloatEdit
+from ......GUI.Dialog.DMachineSetup.SWindCond.WCondOut.WCondOut import WCondOut
+from ......GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

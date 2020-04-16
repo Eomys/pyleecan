@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Winding.comp_phasor_angle
-Compute the Phasor Angle of the Winding Phases
-@date Created on Thu Jul 30 14:34:00 2019
-@author sebastian_g
-@todo unittest
-@todo check for balanced system
-"""
 from numpy import angle, exp, linspace, pi, sum, zeros
 
 

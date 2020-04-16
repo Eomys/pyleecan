@@ -1,26 +1,19 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Tue Dec 15 13:43:22 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import pi
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QDialog, QMessageBox
 
-from pyleecan.Classes.Magnet import Magnet
-from pyleecan.Classes.MagnetType13 import MagnetType13
-from pyleecan.Classes.Slot import Slot
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet10.PMagnet10 import PMagnet10
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet11.PMagnet11 import PMagnet11
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet12.PMagnet12 import PMagnet12
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet13.PMagnet13 import PMagnet13
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet14.PMagnet14 import PMagnet14
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.Ui_SMagnet import Ui_SMagnet
+from .....Classes.Magnet import Magnet
+from .....Classes.MagnetType13 import MagnetType13
+from .....Classes.Slot import Slot
+from .....GUI.Dialog.DMachineSetup.SMagnet.PMagnet10.PMagnet10 import PMagnet10
+from .....GUI.Dialog.DMachineSetup.SMagnet.PMagnet11.PMagnet11 import PMagnet11
+from .....GUI.Dialog.DMachineSetup.SMagnet.PMagnet12.PMagnet12 import PMagnet12
+from .....GUI.Dialog.DMachineSetup.SMagnet.PMagnet13.PMagnet13 import PMagnet13
+from .....GUI.Dialog.DMachineSetup.SMagnet.PMagnet14.PMagnet14 import PMagnet14
+from .....GUI.Dialog.DMachineSetup.SMagnet.Ui_SMagnet import Ui_SMagnet
 
 
 class SMagnet(Ui_SMagnet, QDialog):

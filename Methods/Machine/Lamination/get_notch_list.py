@@ -1,4 +1,4 @@
-from pyleecan.Functions.Geometry.merge_notch_list import merge_notch_list
+from ....Functions.Geometry.merge_notch_list import merge_notch_list
 
 
 def get_notch_list(self, sym=1):

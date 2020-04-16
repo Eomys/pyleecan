@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Functions.reverse_wind_mat
-Reverse a Winding matrix function
-@date Created on Tue Dec 16 15:12:10 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 
 def reverse_wind_mat(wind_mat):

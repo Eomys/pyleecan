@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Machine.plot
-Machine plot method
-@date Created on Wed Dec 10 14:58:51 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 from matplotlib.pyplot import axis, subplots
-from pyleecan.Functions.init_fig import init_fig
+from ....Functions.init_fig import init_fig
 
 
 def plot(

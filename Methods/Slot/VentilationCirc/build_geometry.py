@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.VentilationCirc.build_geometry
-VentilationCirc build_geometry method
-@date Created on Tue Mar 08 10:28:27 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 
-from pyleecan.Classes.Circle import Circle
+from ....Classes.Circle import Circle
 from numpy import exp, pi
 
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Functions.Geometry.inter_line_circle import inter_line_circle
+from ....Functions.Geometry.inter_line_circle import inter_line_circle
 from numpy import exp, pi, angle, abs as np_abs
 
 

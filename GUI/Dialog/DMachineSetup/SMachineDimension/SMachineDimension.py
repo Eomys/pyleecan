@@ -1,22 +1,15 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension
-Second Page of the Machine Setup: Machine Dimension
-@date Created on Thu May 21 17:38:19 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
-from pyleecan.Classes.Frame import Frame
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.Ui_SMachineDimension import (
+from .....Classes.Frame import Frame
+from .....GUI import gui_option
+from .....GUI.Dialog.DMachineSetup.SMachineDimension.Ui_SMachineDimension import (
     Ui_SMachineDimension,
 )
-from pyleecan.GUI.Resources import pixmap_dict
+from .....GUI.Resources import pixmap_dict
 
 
 class SMachineDimension(Ui_SMachineDimension, QWidget):

@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""@package find_wind_phase
-@date Created on juil. 02 12:17 2018
-@author franco_i
-"""
-from pyleecan.Methods.Machine import PHASE_COLOR
+from ...Methods.Machine import PHASE_COLOR
 
 
 def find_wind_phase_color(label, wind_mat):

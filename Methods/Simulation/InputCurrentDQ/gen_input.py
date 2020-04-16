@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Thu Mar 07 14:05:30 2019
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
-from pyleecan.Classes.MachineSync import MachineSync
-from pyleecan.Classes.OutElec import OutElec
-from pyleecan.Methods.Simulation.Input import InputError
-from pyleecan.Functions.Electrical.coordinate_transformation import dq2ab, ab2uvw
+from ....Classes.MachineSync import MachineSync
+from ....Classes.OutElec import OutElec
+from ....Methods.Simulation.Input import InputError
+from ....Functions.Electrical.coordinate_transformation import dq2ab, ab2uvw
 from numpy import ndarray
 
 

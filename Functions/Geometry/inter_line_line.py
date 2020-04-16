@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package inter_line_line
-@date Created on aug 08 09:58 2018
-@author pierre_b
-"""
 
 
 def inter_line_line(Z1, Z2, Z3, Z4):

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.collections
 import numpy as np
 
-from pyleecan.Methods.Machine import (
+from ......Methods.Machine import (
     STATOR_COLOR,
     ROTOR_COLOR,
     SHAFT_COLOR,
@@ -15,7 +15,7 @@ from pyleecan.Methods.Machine import (
     VENT_COLOR,
     VENT_EDGE,
 )
-from pyleecan.Functions.FEMM import (
+from ......Functions.FEMM import (
     GROUP_SC,
     GROUP_AG,
     GROUP_RC,

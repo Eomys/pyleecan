@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-"""@package solve_FEMM
-@date Created on août 22 16:55 2018
-@author franco_i
-"""
 import femm
 from numpy import pi
 
-from pyleecan.Functions.FEMM.comp_FEMM_Jcus import comp_FEMM_Jcus
-from pyleecan.Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
-from pyleecan.Functions.FEMM.set_FEMM_wind_material import set_FEMM_wind_material
+from ...Functions.FEMM.comp_FEMM_Jcus import comp_FEMM_Jcus
+from ...Functions.FEMM.set_FEMM_circuit_prop import set_FEMM_circuit_prop
+from ...Functions.FEMM.set_FEMM_wind_material import set_FEMM_wind_material
 
 
 def update_FEMM_simulation(

@@ -5,48 +5,48 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.SlotMag import SlotMag
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from .SlotMag import SlotMag
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.SlotMPolar.build_geometry import build_geometry
+    from ..Methods.Slot.SlotMPolar.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
 
 try:
-    from pyleecan.Methods.Slot.SlotMPolar.comp_angle_opening import comp_angle_opening
+    from ..Methods.Slot.SlotMPolar.comp_angle_opening import comp_angle_opening
 except ImportError as error:
     comp_angle_opening = error
 
 try:
-    from pyleecan.Methods.Slot.SlotMPolar.comp_angle_opening_magnet import (
+    from ..Methods.Slot.SlotMPolar.comp_angle_opening_magnet import (
         comp_angle_opening_magnet,
     )
 except ImportError as error:
     comp_angle_opening_magnet = error
 
 try:
-    from pyleecan.Methods.Slot.SlotMPolar.comp_height import comp_height
+    from ..Methods.Slot.SlotMPolar.comp_height import comp_height
 except ImportError as error:
     comp_height = error
 
 try:
-    from pyleecan.Methods.Slot.SlotMPolar.comp_surface import comp_surface
+    from ..Methods.Slot.SlotMPolar.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
 
 try:
-    from pyleecan.Methods.Slot.SlotMPolar.get_point_bottom import get_point_bottom
+    from ..Methods.Slot.SlotMPolar.get_point_bottom import get_point_bottom
 except ImportError as error:
     get_point_bottom = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.MagnetPolar import MagnetPolar
+from ._check import InitUnKnowClassError
+from .MagnetPolar import MagnetPolar
 
 
 class SlotMPolar(SlotMag):

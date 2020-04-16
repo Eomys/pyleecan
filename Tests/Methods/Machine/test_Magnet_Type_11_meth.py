@@ -1,23 +1,18 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Thu Dec 18 13:56:33 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from unittest import TestCase
 
 from ddt import ddt, data
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
 
-from pyleecan.Classes.MagnetType11 import MagnetType11
-from pyleecan.Classes.LamSlotMag import LamSlotMag
+from ....Classes.MagnetType11 import MagnetType11
+from ....Classes.LamSlotMag import LamSlotMag
 
-from pyleecan.Classes.SlotMPolar import SlotMPolar
+from ....Classes.SlotMPolar import SlotMPolar
 from numpy import pi, exp, angle, array
-from pyleecan.Methods.Machine.Magnet.comp_surface import comp_surface
+from ....Methods.Machine.Magnet.comp_surface import comp_surface
 
 Mag11_test = list()
 # Internal Slot surface

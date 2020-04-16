@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.Arc3.get_middle
-Compute the coordinate of the middle of an Arc3 method
-@date Created on Wed May 04 11:04:12 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import abs as np_abs, angle as np_angle, exp, pi
 

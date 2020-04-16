@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW61.check
-Check that the SlotW61 is correct
-@date Created on Tue Jul 31 16:35:43 2018
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
-from pyleecan.Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot.check import SlotCheckError
 
 
 def check(self):

@@ -1,6 +1,6 @@
-from pyleecan.Functions.Geometry.comp_flower_arc import comp_flower_arc
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Methods import ParentMissingError
+from ....Functions.Geometry.comp_flower_arc import comp_flower_arc
+from ....Classes.Arc1 import Arc1
+from ....Methods import ParentMissingError
 from numpy import pi, exp
 
 

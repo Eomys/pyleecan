@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.HoleM53.check
-Check that the HoleM53 is correct
-@date Created on Fri Mar 16 12:53:23 2018
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import pi
 
-from pyleecan.Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot.check import SlotCheckError
 
 
 def check(self):

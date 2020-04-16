@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package set_FEMM_boundary_conditions
-@date Created on août 20 14:50 2018
-@author franco_i
-"""
 
 
 from femm import mi_addboundprop

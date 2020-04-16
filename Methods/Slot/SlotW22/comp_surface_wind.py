@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW22.comp_surface_wind
-SlotW22 Computation of winding surface method
-@date Created on Tue Dec 09 17:39:57 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import pi
 

@@ -123,7 +123,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/WindingPattern/Type_Wind_6.png</pixmap>
+      <pixmap resource="../../../Resources/.....qrc">:/images/images/MachineSetup/WindingPattern/Type_Wind_6.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>

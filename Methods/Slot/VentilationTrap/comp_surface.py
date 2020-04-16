@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.VentilationTrap.comp_surface
-Compute trapezoidal ventulation ducts surface
-@date Created on Wed Dec 09 17:36:45 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 
 def comp_surface(self):

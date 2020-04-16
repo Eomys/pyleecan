@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-"""@package draw_FEMM
-@date Created on juil. 30 15:30 2018
-@author franco_i
-"""
 
 import femm
-from pyleecan.Functions.FEMM import boundary_prop
+from ....Functions.FEMM import boundary_prop
 from numpy import abs, exp
 
 

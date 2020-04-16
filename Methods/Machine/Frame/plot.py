@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Frame.plot
-Frame plot methods
-@date Created on Mon Jan 26 17:45:37 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis
 
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Methods.Machine import FRAME_COLOR
+from ....Functions.init_fig import init_fig
+from ....Methods.Machine import FRAME_COLOR
 
 
 def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False):

@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Thu Dec 18 13:56:45 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from unittest import TestCase
 
 from ddt import ddt, data
 
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.SlotMFlat import SlotMFlat
-from pyleecan.Classes.MagnetType13 import MagnetType13
+from ....Classes.LamSlotMag import LamSlotMag
+from ....Classes.SlotMFlat import SlotMFlat
+from ....Classes.MagnetType13 import MagnetType13
 from numpy import pi, exp, sqrt
 
 Mag13_test = list()

@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Slot.HoleM.comp_radius
-Compute the radius of the Hole method
-@date Created on Fri Mar 16 09:51:15 2018
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import cos, exp
 from numpy import abs as np_abs

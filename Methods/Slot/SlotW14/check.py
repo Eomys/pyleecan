@@ -1,13 +1,6 @@
 # -*- coding: utf-8 -*-
-"""@package
 
-@date Created on Fri Mar 31 12:19:16 2017
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-@todo unittest it
-"""
-
-from pyleecan.Methods.Slot.Slot.check import SlotCheckError
+from ....Methods.Slot.Slot.check import SlotCheckError
 
 
 def check(self):

@@ -11,10 +11,10 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtTest import QTest
 from PyQt5.QtWidgets import QDialogButtonBox
 
-from pyleecan.Functions.load import load
-from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
-from pyleecan.Tests import DATA_DIR
-from pyleecan.Tests import save_load_path as save_path
+from ....Functions.load import load
+from ....GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
+from ....Tests import DATA_DIR
+from ....Tests import save_load_path as save_path
 
 
 class test_save_load_matlib(TestCase):

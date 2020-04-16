@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.MachineSync.comp_initial_angle
-Compute the initial angle between the d-axis and the alpha-axis of the machine
-@date Created on Thu Jul 30 21:56:00 2019
-@author sebastian_g
-@todo unittest it 
-"""
 from numpy import pi
 
-from pyleecan.Methods.Machine.Winding import WindingError
+from ....Methods.Machine.Winding import WindingError
 
 
 def comp_initial_angle(self):

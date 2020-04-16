@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW60.comp_height
-SlotW60 Computation of height method
-@date Created on Wed Aug 01 10:07:35 2018
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 
 def comp_height(self):

@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Lamination.comp_total_length
-Computation of the Lamination length (including radial ventilations duct) Methods
-@date Created on Mon Jan 19 15:23:43 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 
 def comp_length(self):

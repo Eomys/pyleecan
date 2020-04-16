@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Thu May 21 09:20:25 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from codecs import open as open_co
 from imp import load_source
@@ -12,9 +7,9 @@ from os.path import abspath, join, isfile
 from re import match
 from subprocess import PIPE, Popen
 from json import load as jload
-from pyleecan.definitions import GEN_DIR, GUI_DIR, RES_NAME, RES_PATH
-from pyleecan.Generator import TAB, TAB2, TAB3
-from pyleecan.Functions.short_filepath import short_filepath
+from ..definitions import GEN_DIR, GUI_DIR, RES_NAME, RES_PATH, PACKAGE_NAME
+from ..Generator import TAB, TAB2, TAB3
+from ..Functions.short_filepath import short_filepath
 
 # SpinBox Must have min and max value, if not provided in csv use these one
 MIN_SPIN = -999999
@@ -89,7 +84,7 @@ def gen_gui_edit_file(path, class_name, gen_dict, gen_list):
     # split_path list
     # from ["C:", "Users",..., "GUI", "Dialog",...] to ["GUI", "Dialog"...]
     split_path.reverse()
-    split_path = split_path[: split_path.index("pyleecan") + 1]
+    split_path = split_path[: split_path.index(PACKAGE_NAME) + 1]
     split_path.reverse()
     # from ["GUI", "Dialog", ...] to GUI.Dialog...
     import_path = ".".join(split_path)
@@ -167,7 +162,7 @@ def gen_gui_class_file(path, class_name, gen_dict, gen_list):
     # split_path list
     # from ["C:", "Users",..., "GUI", "Dialog",...] to ["GUI", "Dialog"...]
     split_path.reverse()
-    split_path = split_path[: split_path.index("pyleecan") + 1]
+    split_path = split_path[: split_path.index(PACKAGE_NAME) + 1]
     split_path.reverse()
     # from ["GUI", "Dialog", ...] to GUI.Dialog...
     import_path = ".".join(split_path)
@@ -499,14 +494,18 @@ def ui_to_py(path, file_name):
     path_out = join(path, "Ui_" + file_name[:-3] + ".py")  # Output file
 
     print(
-        'pyuic5 --import-from=pyleecan.GUI.Resources "'
+        "pyuic5 --import-from="
+        + PACKAGE_NAME
+        + '.GUI.Resources "'
         + short_filepath(path_in, length=40)
         + '" -o "'
         + short_filepath(path_out, length=40)
         + '"'
     )
     system(
-        'pyuic5 --import-from=pyleecan.GUI.Resources "'
+        "pyuic5 --import-from="
+        + PACKAGE_NAME
+        + '.GUI.Resources "'
         + path_in
         + '" -o "'
         + path_out
@@ -515,6 +514,13 @@ def ui_to_py(path, file_name):
     # Remove header part of the generated file (to avoid "commit noise")
     with open(path_out, "r") as py_file:
         data = py_file.read().splitlines(True)
+
+    # Set the good imports in the generated files
+    if PACKAGE_NAME != "pyleecan":
+        for idx, line in enumerate(data):
+            if line.startswith("from pyleecan"):
+                data[idx] = line.replace("from pyleecan", "from " + PACKAGE_NAME)
+
     with open(path_out, "w") as py_file:
         py_file.write(data[0])
         py_file.write("\n# File generated according to " + file_name + "\n")

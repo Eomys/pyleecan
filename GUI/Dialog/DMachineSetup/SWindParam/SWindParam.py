@@ -1,16 +1,9 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SWindParam.SWindParam
-6th Page of the Machine Setup: Winding Paramters Setup
-@date Created on Thu May 21 17:38:19 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
-from pyleecan.GUI.Dialog.DMachineSetup.SWindParam.Gen_SWindParam import Gen_SWindParam
+from .....GUI.Dialog.DMachineSetup.SWindParam.Gen_SWindParam import Gen_SWindParam
 
 
 class SWindParam(Gen_SWindParam, QWidget):

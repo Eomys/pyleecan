@@ -5,41 +5,41 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.Hole import Hole
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from .Hole import Hole
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Slot.VentilationCirc.build_geometry import build_geometry
+    from ..Methods.Slot.VentilationCirc.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
 
 try:
-    from pyleecan.Methods.Slot.VentilationCirc.check import check
+    from ..Methods.Slot.VentilationCirc.check import check
 except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Slot.VentilationCirc.comp_radius import comp_radius
+    from ..Methods.Slot.VentilationCirc.comp_radius import comp_radius
 except ImportError as error:
     comp_radius = error
 
 try:
-    from pyleecan.Methods.Slot.VentilationCirc.comp_surface import comp_surface
+    from ..Methods.Slot.VentilationCirc.comp_surface import comp_surface
 except ImportError as error:
     comp_surface = error
 
 try:
-    from pyleecan.Methods.Slot.VentilationCirc.get_center import get_center
+    from ..Methods.Slot.VentilationCirc.get_center import get_center
 except ImportError as error:
     get_center = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Material import Material
+from ._check import InitUnKnowClassError
+from .Material import Material
 
 
 class VentilationCirc(Hole):

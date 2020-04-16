@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package set_FEMM_bare
-@date Created on août 13 09:32 2018
-@author franco_i
-"""
 
 import femm
 

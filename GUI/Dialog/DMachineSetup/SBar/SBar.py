@@ -1,20 +1,13 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar
-Last Page of the Machine (Type 1 only) Setup: Rotor Bar
-@date Created on Thu Jul 30 10:47:56 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SBar.Gen_SBar import Gen_SBar
-from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType21.PCondType21 import PCondType21
-from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22 import PCondType22
+from .....GUI import gui_option
+from .....GUI.Dialog.DMachineSetup.SBar.Gen_SBar import Gen_SBar
+from .....GUI.Dialog.DMachineSetup.SBar.PCondType21.PCondType21 import PCondType21
+from .....GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22 import PCondType22
 
 # Information to fill the conductor type combobox
 WIDGET_LIST = [PCondType21, PCondType22]

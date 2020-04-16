@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Wed Dec 07 13:45:40 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-"""
 
 import sys
 from random import uniform
@@ -13,16 +7,16 @@ from unittest import TestCase
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.MachineIPMSM import MachineIPMSM
-from pyleecan.Classes.MachineSCIM import MachineSCIM
-from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
-from pyleecan.Classes.VentilationCirc import VentilationCirc
-from pyleecan.Classes.VentilationTrap import VentilationTrap
-from pyleecan.Classes.Material import Material
-from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
+from ....Classes.LamHole import LamHole
+from ....Classes.LamSlotMag import LamSlotMag
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.MachineIPMSM import MachineIPMSM
+from ....Classes.MachineSCIM import MachineSCIM
+from ....Classes.MachineSIPMSM import MachineSIPMSM
+from ....Classes.VentilationCirc import VentilationCirc
+from ....Classes.VentilationTrap import VentilationTrap
+from ....Classes.Material import Material
+from ....GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
 
 
 class test_SLamParam(TestCase):

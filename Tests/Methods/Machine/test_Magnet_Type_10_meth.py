@@ -1,19 +1,14 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Thu Dec 18 13:56:20 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from unittest import TestCase
 
 from ddt import ddt, data
 
-from pyleecan.Classes.LamSlotMag import LamSlotMag
-from pyleecan.Classes.SlotMFlat import SlotMFlat
-from pyleecan.Classes.MagnetType10 import MagnetType10
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Methods.Machine.Magnet.comp_surface import comp_surface
+from ....Classes.LamSlotMag import LamSlotMag
+from ....Classes.SlotMFlat import SlotMFlat
+from ....Classes.MagnetType10 import MagnetType10
+from ....Classes.Segment import Segment
+from ....Methods.Machine.Magnet.comp_surface import comp_surface
 
 from numpy import exp
 

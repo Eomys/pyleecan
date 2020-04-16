@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Lamination.comp_masses
-Lamination computation of masses method
-@date Created on Thu Jan 29 13:27:57 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 
 def comp_masses(self):

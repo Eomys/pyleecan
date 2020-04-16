@@ -2,8 +2,8 @@ from numpy import pi
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QWidget
 
-from pyleecan.Classes.Lamination import Lamination
-from pyleecan.GUI import gui_option
+from .......Classes.Lamination import Lamination
+from .......GUI import gui_option
 
 
 class WVentOut(QGroupBox):

@@ -1,20 +1,13 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag
-Buried Slot Setup Page
-@date Created on Wed Jul 15 14:14:29 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMessageBox, QWidget, QSizePolicy
 
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.Classes.Material import Material
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.Ui_SMHoleMag import Ui_SMHoleMag
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.WHoleMag import WHoleMag
+from .....Classes.HoleM50 import HoleM50
+from .....Classes.Material import Material
+from .....GUI.Dialog.DMachineSetup.SMHoleMag.Ui_SMHoleMag import Ui_SMHoleMag
+from .....GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.WHoleMag import WHoleMag
 
 
 class SMHoleMag(Ui_SMHoleMag, QWidget):

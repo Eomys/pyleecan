@@ -1,17 +1,10 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotMPolar.build_geometry
-SlotMPolar build_geometry method
-@date Created on Mon Dec 22 13:00:07 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-@todo: case W3 == 0
-"""
 
 from numpy import exp
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Arc2 import Arc2
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Arc1 import Arc1
+from ....Classes.Arc2 import Arc2
+from ....Classes.Segment import Segment
 
 
 def build_geometry(self):

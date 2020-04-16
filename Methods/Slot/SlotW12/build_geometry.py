@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW12.build_geometry
-SlotW12 build_geometry method
-@date Created on Tue Mar 07 14:54:30 2015
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import arcsin, exp
 
-from pyleecan.Classes.Arc3 import Arc3
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Arc3 import Arc3
+from ....Classes.Segment import Segment
 
 
 def build_geometry(self):

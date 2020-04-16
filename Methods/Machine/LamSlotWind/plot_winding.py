@@ -1,19 +1,11 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.LamSlotWind.plot_winding
-Plot the Lamination's Winding Methods
-@date Created on Tue Dec 16 16:39:48 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-@todo Matrix Zs*Qs for display (cf doc database/articles/electrical machines/
-analytical modelling of electrical machines/modeling of AC windings)
-"""
 
 from matplotlib.lines import Line2D
 from matplotlib.pyplot import axis, legend, plot, subplots, title
 from numpy import array, linspace, meshgrid
 
-from pyleecan.Functions.Winding.comp_wind_sym import comp_wind_sym
-from pyleecan.Functions.Winding.gen_phase_list import gen_color, gen_name
+from ....Functions.Winding.comp_wind_sym import comp_wind_sym
+from ....Functions.Winding.gen_phase_list import gen_color, gen_name
 
 
 def plot_winding(self, wind_mat=None, all_slot=False):

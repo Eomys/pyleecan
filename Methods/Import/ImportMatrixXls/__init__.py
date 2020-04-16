@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pyleecan.Methods.Import import ImportError
+from ....Methods.Import import ImportError
 
 
 class XlsFileError(ImportError):

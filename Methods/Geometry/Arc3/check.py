@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.Arc3.check
-Check Arc3 method
-@date Created on Tue Mar 01 10:18:09 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 
 def check(self):

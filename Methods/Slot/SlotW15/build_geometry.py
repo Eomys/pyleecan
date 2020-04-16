@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
-"""@package
 
-@date Created on Mon Nov 27 14:30:21 2017
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-@todo unittest it
-"""
-
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
 
 
 def build_geometry(self):

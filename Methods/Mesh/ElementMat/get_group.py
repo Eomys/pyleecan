@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+from ....definitions import PACKAGE_NAME
 
 
 def get_group(self, group_number):
@@ -19,7 +20,9 @@ def get_group(self, group_number):
          an ElementMat which is a submesh of parent mesh self related to group_number
 
      """
-    module = __import__("pyleecan.Classes." + "ElementMat", fromlist=["ElementMat"])
+    module = __import__(
+        PACKAGE_NAME + ".Classes." + "ElementMat", fromlist=["ElementMat"]
+    )
     grp_elem = getattr(module, "ElementMat")()
 
     connect_parent = self.connectivity

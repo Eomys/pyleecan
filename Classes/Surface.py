@@ -5,35 +5,35 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Geometry.Surface.comp_mesh_dict import comp_mesh_dict
+    from ..Methods.Geometry.Surface.comp_mesh_dict import comp_mesh_dict
 except ImportError as error:
     comp_mesh_dict = error
 
 try:
-    from pyleecan.Methods.Geometry.Surface.draw_FEMM import draw_FEMM
+    from ..Methods.Geometry.Surface.draw_FEMM import draw_FEMM
 except ImportError as error:
     draw_FEMM = error
 
 try:
-    from pyleecan.Methods.Geometry.Surface.plot import plot
+    from ..Methods.Geometry.Surface.plot import plot
 except ImportError as error:
     plot = error
 
 try:
-    from pyleecan.Methods.Geometry.Surface.split_line import split_line
+    from ..Methods.Geometry.Surface.split_line import split_line
 except ImportError as error:
     split_line = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
+from ._check import InitUnKnowClassError
 
 
 class Surface(FrozenClass):

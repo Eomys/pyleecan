@@ -1,22 +1,13 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Tue Dec 15 13:43:22 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QDialog, QMessageBox
 
-from pyleecan.Classes.MagnetType12 import MagnetType12
-from pyleecan.Classes.SlotMFlat import SlotMFlat
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet12.Gen_PMagnet12 import (
-    Gen_PMagnet12,
-)
+from ......Classes.MagnetType12 import MagnetType12
+from ......Classes.SlotMFlat import SlotMFlat
+from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.SMagnet.PMagnet12.Gen_PMagnet12 import Gen_PMagnet12
 
 
 class PMagnet12(Gen_PMagnet12, QDialog):

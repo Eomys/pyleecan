@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Fri Dec 09 09:32:58 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-"""
 
 import sys
 from random import uniform
@@ -13,11 +7,11 @@ from unittest import TestCase
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.MachineSCIM import MachineSCIM
-from pyleecan.Classes.Winding import Winding
-from pyleecan.Classes.SlotW22 import SlotW22
-from pyleecan.GUI.Dialog.DMachineSetup.SWindParam.SWindParam import SWindParam
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.MachineSCIM import MachineSCIM
+from ....Classes.Winding import Winding
+from ....Classes.SlotW22 import SlotW22
+from ....GUI.Dialog.DMachineSetup.SWindParam.SWindParam import SWindParam
 
 
 class test_SWindParam(TestCase):

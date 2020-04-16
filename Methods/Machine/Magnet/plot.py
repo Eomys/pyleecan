@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Magnet.plot
-Magnet plot method
-@date Created on Wed Dec 17 15:08:33 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from matplotlib.patches import Patch, Polygon
 from matplotlib.pyplot import axis, legend
 from numpy import array, exp, pi
 
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Methods.Machine import MAGNET_COLOR
+from ....Functions.init_fig import init_fig
+from ....Methods.Machine import MAGNET_COLOR
 
 
 def plot(self, fig=None, display_field=False):

@@ -5,42 +5,40 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.LamSlotWind import LamSlotWind
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from .LamSlotWind import LamSlotWind
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.LamSquirrelCage.build_geometry import build_geometry
+    from ..Methods.Machine.LamSquirrelCage.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
 
 try:
-    from pyleecan.Methods.Machine.LamSquirrelCage.check import check
+    from ..Methods.Machine.LamSquirrelCage.check import check
 except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Machine.LamSquirrelCage.comp_length_ring import (
-        comp_length_ring,
-    )
+    from ..Methods.Machine.LamSquirrelCage.comp_length_ring import comp_length_ring
 except ImportError as error:
     comp_length_ring = error
 
 try:
-    from pyleecan.Methods.Machine.LamSquirrelCage.plot import plot
+    from ..Methods.Machine.LamSquirrelCage.plot import plot
 except ImportError as error:
     plot = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Material import Material
-from pyleecan.Classes.Winding import Winding
-from pyleecan.Classes.Slot import Slot
-from pyleecan.Classes.Hole import Hole
-from pyleecan.Classes.Notch import Notch
+from ._check import InitUnKnowClassError
+from .Material import Material
+from .Winding import Winding
+from .Slot import Slot
+from .Hole import Hole
+from .Notch import Notch
 
 
 class LamSquirrelCage(LamSlotWind):

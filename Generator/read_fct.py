@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Created on Mon Nov 17 11:18:59 2014
-@author: pierre_b
-"""
 from os import walk
 from os.path import isfile, join
 
 from csv import reader
 
-from pyleecan.Generator import PYTHON_TYPE
+from ..Generator import PYTHON_TYPE
+from ..definitions import PACKAGE_NAME
 
 # Constants for csv reading, i.e. column number of data
 NAME_COL = 0  # attribue name
@@ -92,7 +90,7 @@ def read_file(path):
     # The class name is the csv file name
     class_dict["name"] = path.split("\\")[-1][:-4]
     try:  # Cleanup path to avoid "commit noise"
-        class_dict["path"] = path[path.index("pyleecan") :]
+        class_dict["path"] = path[path.index(PACKAGE_NAME) :]
     except ValueError:  # Path doesn't contain pyleecan
         class_dict["path"] = path
     # Cleanup \ to avoid errors

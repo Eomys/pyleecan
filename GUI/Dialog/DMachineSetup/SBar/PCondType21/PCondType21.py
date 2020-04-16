@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType21.PCondType21
-Cond Type 2_1 setup widget
-@date Created on Thu Jul 30 11:47:56 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from pyleecan.Classes.CondType21 import CondType21
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType21.Gen_PCondType21 import (
+from ......Classes.CondType21 import CondType21
+from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.SBar.PCondType21.Gen_PCondType21 import (
     Gen_PCondType21,
 )
 

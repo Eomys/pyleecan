@@ -5,83 +5,79 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Machine.Machine.build_geometry import build_geometry
+    from ..Methods.Machine.Machine.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.check import check
+    from ..Methods.Machine.Machine.check import check
 except ImportError as error:
     check = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.comp_masses import comp_masses
+    from ..Methods.Machine.Machine.comp_masses import comp_masses
 except ImportError as error:
     comp_masses = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.comp_width_airgap_mag import (
-        comp_width_airgap_mag,
-    )
+    from ..Methods.Machine.Machine.comp_width_airgap_mag import comp_width_airgap_mag
 except ImportError as error:
     comp_width_airgap_mag = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.comp_width_airgap_mec import (
-        comp_width_airgap_mec,
-    )
+    from ..Methods.Machine.Machine.comp_width_airgap_mec import comp_width_airgap_mec
 except ImportError as error:
     comp_width_airgap_mec = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.get_lamination import get_lamination
+    from ..Methods.Machine.Machine.get_lamination import get_lamination
 except ImportError as error:
     get_lamination = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.comp_Rgap_mec import comp_Rgap_mec
+    from ..Methods.Machine.Machine.comp_Rgap_mec import comp_Rgap_mec
 except ImportError as error:
     comp_Rgap_mec = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.plot import plot
+    from ..Methods.Machine.Machine.plot import plot
 except ImportError as error:
     plot = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.comp_output_geo import comp_output_geo
+    from ..Methods.Machine.Machine.comp_output_geo import comp_output_geo
 except ImportError as error:
     comp_output_geo = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.comp_length_airgap_active import (
+    from ..Methods.Machine.Machine.comp_length_airgap_active import (
         comp_length_airgap_active,
     )
 except ImportError as error:
     comp_length_airgap_active = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.get_polar_eq import get_polar_eq
+    from ..Methods.Machine.Machine.get_polar_eq import get_polar_eq
 except ImportError as error:
     get_polar_eq = error
 
 try:
-    from pyleecan.Methods.Machine.Machine.plot_anim_rotor import plot_anim_rotor
+    from ..Methods.Machine.Machine.plot_anim_rotor import plot_anim_rotor
 except ImportError as error:
     plot_anim_rotor = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.Frame import Frame
-from pyleecan.Classes.Shaft import Shaft
+from ._check import InitUnKnowClassError
+from .Frame import Frame
+from .Shaft import Shaft
 
 
 class Machine(FrozenClass):

@@ -5,26 +5,26 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes.ImportMatrix import ImportMatrix
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from .ImportMatrix import ImportMatrix
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Import.ImportGenMatrixSin.get_data import get_data
+    from ..Methods.Import.ImportGenMatrixSin.get_data import get_data
 except ImportError as error:
     get_data = error
 
 try:
-    from pyleecan.Methods.Import.ImportGenMatrixSin.init_vector import init_vector
+    from ..Methods.Import.ImportGenMatrixSin.init_vector import init_vector
 except ImportError as error:
     init_vector = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
-from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
+from ._check import InitUnKnowClassError
+from .ImportGenVectSin import ImportGenVectSin
 
 
 class ImportGenMatrixSin(ImportMatrix):

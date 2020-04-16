@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Shaft.plot
-Shaft plot methods
-@date Created on Fri Jan 09 16:09:52 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
 
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Methods.Machine import SHAFT_COLOR
+from ....Functions.init_fig import init_fig
+from ....Methods.Machine import SHAFT_COLOR
 
 
 def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False):

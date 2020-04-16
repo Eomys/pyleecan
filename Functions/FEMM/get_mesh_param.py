@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package get_element_size_from_label
-@date Created on août 09 14:00 2018
-@author franco_i
-"""
 
 
 def get_mesh_param(label, FEMM_dict):

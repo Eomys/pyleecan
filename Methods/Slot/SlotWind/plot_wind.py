@@ -1,18 +1,11 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Mon Jan 11 13:15:50 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from matplotlib.patches import Patch, Polygon
 from matplotlib.pyplot import axis, legend
 from numpy import array, exp, pi
 
-from pyleecan.Functions.init_fig import init_fig
-from pyleecan.Methods.Machine import PHASE_COLOR, PHASE_NAME
+from ....Functions.init_fig import init_fig
+from ....Methods.Machine import PHASE_COLOR, PHASE_NAME
 
 
 def plot_wind(self, wind_mat=None, fig=None, is_bar=False):

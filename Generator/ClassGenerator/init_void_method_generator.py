@@ -1,4 +1,4 @@
-from pyleecan.Generator import TAB, TAB2, TAB3
+from ...Generator import TAB, TAB2, TAB3
 
 
 def generate_init_void():

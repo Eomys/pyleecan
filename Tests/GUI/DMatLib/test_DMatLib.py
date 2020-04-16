@@ -1,18 +1,13 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Thu Apr 27 14:05:46 2017
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-"""
 
 import sys
 from unittest import TestCase
 
 from PyQt5 import QtWidgets
 
-from pyleecan.Classes.MatMagnetics import MatMagnetics
-from pyleecan.Classes.Material import Material
-from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+from ....Classes.MatMagnetics import MatMagnetics
+from ....Classes.Material import Material
+from ....GUI.Dialog.DMatLib.DMatLib import DMatLib
 
 
 class test_DMatLib(TestCase):

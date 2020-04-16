@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Thu Dec 08 11:47:01 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-"""
 
 import sys
 from random import uniform
@@ -13,11 +7,11 @@ from unittest import TestCase
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
-from pyleecan.Classes.Frame import Frame
-from pyleecan.Classes.Shaft import Shaft
-from pyleecan.Classes.LamSlotWind import LamSlotWind
-from pyleecan.Classes.MachineSCIM import MachineSCIM
-from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
+from ....Classes.Frame import Frame
+from ....Classes.Shaft import Shaft
+from ....Classes.LamSlotWind import LamSlotWind
+from ....Classes.MachineSCIM import MachineSCIM
+from ....GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
     SMachineDimension,
 )
 

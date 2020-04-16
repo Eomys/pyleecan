@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Arc2 import Arc2
-from pyleecan.Classes.Arc3 import Arc3
-from pyleecan.Functions.FEMM.get_mesh_param import get_mesh_param
+from ....Classes.Arc1 import Arc1
+from ....Classes.Arc2 import Arc2
+from ....Classes.Arc3 import Arc3
+from ....Functions.FEMM.get_mesh_param import get_mesh_param
 
 
 def draw_FEMM(

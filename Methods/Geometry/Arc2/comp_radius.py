@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.Arc2.comp_radius
-Computation of Arc2 radius method
-@date Created on Fri Feb 12 09:52:45 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import abs as np_abs
 

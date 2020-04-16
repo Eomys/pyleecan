@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.Slot.plot
-Slot for Magnet plot methods
-@date Created on Tue Dec 09 09:43:33 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from matplotlib.pyplot import axis
-from pyleecan.Methods.Machine import ROTOR_COLOR, STATOR_COLOR
+from ....Methods.Machine import ROTOR_COLOR, STATOR_COLOR
 
-from pyleecan.Functions.init_fig import init_fig
+from ....Functions.init_fig import init_fig
 
 
 def plot(self, fig=None):

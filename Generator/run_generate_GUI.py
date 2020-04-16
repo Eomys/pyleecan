@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
-"""Created on Mon Nov 10 15:44:20 2014
-@author: pierre_b
-"""
 import sys
-from os.path import dirname, abspath, normpath, join
+from os.path import dirname, abspath, normpath, join, realpath, isdir
+from os import listdir, remove, mkdir
 
-sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", ".."))))
+begin = len(normpath(abspath(join(dirname(__file__), "../.."))))
+end = len(normpath(abspath(join(dirname(__file__), ".."))))
+MAIN_DIR = dirname(realpath(__file__))
 
-from os import mkdir
-from os.path import isdir
+package_name = MAIN_DIR[begin + 1 : end]
 
-from pyleecan.Generator.class_generator import generate_class
-from pyleecan.Generator.gui_generator import generate_gui
-from pyleecan.Generator.read_fct import read_all
-from pyleecan.definitions import MAIN_DIR
+# Add the directory to the python path
+sys.path.append(MAIN_DIR[:begin])
+
+exec("from " + package_name + ".Generator.gui_generator import generate_gui")
+exec("from " + package_name + ".Generator.read_fct import read_all")
+exec("from " + package_name + ".definitions import MAIN_DIR")
 
 
 if __name__ == "__main__":

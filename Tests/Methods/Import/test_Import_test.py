@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Fri Feb 22 13:36:22 2019
-@author pierre_b
-"""
 
 from unittest import TestCase
 
@@ -11,17 +7,17 @@ from numpy import array, array_equal, linspace, pi, sqrt, transpose
 from numpy.random import uniform
 from numpy.testing import assert_array_almost_equal
 
-from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
-from pyleecan.Methods.Import.ImportGenMatrixSin import (
+from ....Classes.ImportGenMatrixSin import ImportGenMatrixSin
+from ....Classes.ImportGenVectLin import ImportGenVectLin
+from ....Classes.ImportGenVectSin import ImportGenVectSin
+from ....Classes.ImportMatrixVal import ImportMatrixVal
+from ....Classes.ImportMatrixXls import ImportMatrixXls
+from ....Methods.Import.ImportGenMatrixSin import (
     GenSinDimError,
     GenSinEmptyError,
     GenSinTransposeError,
 )
-from pyleecan.Tests.Methods.Import import test_file
+from ....Tests.Methods.Import import test_file
 
 ImportMatrix_test = list()
 mat = uniform(0, 1, (4, 4))

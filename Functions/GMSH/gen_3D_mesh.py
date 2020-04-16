@@ -1,5 +1,5 @@
 from numpy import pi
-from pyleecan.Classes.Arc import Arc
+from ...Classes.Arc import Arc
 import sys
 import gmsh
 

@@ -1,25 +1,14 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SWindCond.SWindCond
-6th Page of the Machine Setup: Winding Paramters Setup
-@date Created on Thu May 21 17:38:19 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
-from pyleecan.Classes.CondType11 import CondType11
-from pyleecan.Classes.CondType12 import CondType12
-from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType11.PCondType11 import (
-    PCondType11,
-)
-from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType12.PCondType12 import (
-    PCondType12,
-)
-from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.Ui_SWindCond import Ui_SWindCond
+from .....Classes.CondType11 import CondType11
+from .....Classes.CondType12 import CondType12
+from .....GUI.Dialog.DMachineSetup.SWindCond.PCondType11.PCondType11 import PCondType11
+from .....GUI.Dialog.DMachineSetup.SWindCond.PCondType12.PCondType12 import PCondType12
+from .....GUI.Dialog.DMachineSetup.SWindCond.Ui_SWindCond import Ui_SWindCond
 
 # For the Conductor combobox
 wid_list = [PCondType11, PCondType12]

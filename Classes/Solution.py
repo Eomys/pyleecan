@@ -5,26 +5,26 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Mesh.Solution.get_field import get_field
+    from ..Methods.Mesh.Solution.get_field import get_field
 except ImportError as error:
     get_field = error
 
 try:
-    from pyleecan.Methods.Mesh.Solution.set_field import set_field
+    from ..Methods.Mesh.Solution.set_field import set_field
 except ImportError as error:
     set_field = error
 
 
 from numpy import array, empty
-from pyleecan.Classes._check import InitUnKnowClassError
+from ._check import InitUnKnowClassError
 
 
 class Solution(FrozenClass):

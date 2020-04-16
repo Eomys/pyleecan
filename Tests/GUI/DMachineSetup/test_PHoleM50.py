@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Wed Jan 20 14:10:24 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 import sys
 from random import uniform
@@ -12,11 +7,11 @@ from unittest import TestCase
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
-from pyleecan.Classes.LamHole import LamHole
-from pyleecan.Classes.HoleM50 import HoleM50
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.PHoleM50 import PHoleM50
-from pyleecan.Tests.GUI import gui_option  # Set unit to m
-from pyleecan.Classes.Material import Material
+from ....Classes.LamHole import LamHole
+from ....Classes.HoleM50 import HoleM50
+from ....GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.PHoleM50 import PHoleM50
+from ....Tests.GUI import gui_option  # Set unit to m
+from ....Classes.Material import Material
 
 
 class test_PHoleM50(TestCase):

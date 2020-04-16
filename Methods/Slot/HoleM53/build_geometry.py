@@ -1,18 +1,12 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.HoleM53.build_geometry
-HoleM53 build_geometry method
-@date Created on Fri Mar 16 11:03:07 2018
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import cos, exp, sin
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Segment import Segment
-from pyleecan.Classes.SurfLine import SurfLine
-from pyleecan.Functions.Geometry.inter_line_circle import inter_line_circle
-from pyleecan.Methods.Slot.HoleM53 import Slot53InterError
+from ....Classes.Arc1 import Arc1
+from ....Classes.Segment import Segment
+from ....Classes.SurfLine import SurfLine
+from ....Functions.Geometry.inter_line_circle import inter_line_circle
+from ....Methods.Slot.HoleM53 import Slot53InterError
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):

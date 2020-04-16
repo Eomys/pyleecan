@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.CondType22.comp_active_surface
-Conductor Type 2_2 comp_active_surface method
-@date Created on Thu Jul 30 15:07:56 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 
 def comp_surface_active(self):

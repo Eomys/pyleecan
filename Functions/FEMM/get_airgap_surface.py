@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from numpy import exp, pi
 
-from pyleecan.Classes.SurfLine import SurfLine
+from ...Classes.SurfLine import SurfLine
 
 
 def get_airgap_surface(lam_int, lam_ext):

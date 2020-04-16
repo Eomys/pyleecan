@@ -5,25 +5,25 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from pyleecan.Classes._check import check_var, raise_
-from pyleecan.Functions.get_logger import get_logger
-from pyleecan.Functions.save import save
-from pyleecan.Classes._frozen import FrozenClass
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from pyleecan.Methods.Mesh.Node.get_group import get_group
+    from ..Methods.Mesh.Node.get_group import get_group
 except ImportError as error:
     get_group = error
 
 try:
-    from pyleecan.Methods.Mesh.Node.get_coord import get_coord
+    from ..Methods.Mesh.Node.get_coord import get_coord
 except ImportError as error:
     get_coord = error
 
 
-from pyleecan.Classes._check import InitUnKnowClassError
+from ._check import InitUnKnowClassError
 
 
 class Node(FrozenClass):

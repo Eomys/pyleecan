@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Geometry.Arc2.discretize
-Discretize an Arc2 method
-@date Created on Mon Dec 08 13:27:33 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 from numpy import angle as np_angle, exp, linspace
 
-from pyleecan.Methods.Machine import ARC_NPOINT_D
+from ....Methods.Machine import ARC_NPOINT_D
 
 
 def discretize(self, nb_point=ARC_NPOINT_D):

@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package get_Rgap_mec
-@date Created on août 17 09:35 2018
-@author franco_i
-"""
 
 
 def comp_Rgap_mec(self):

@@ -1,5 +1,5 @@
 from numpy import ones
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from ....Classes.ImportMatrixVal import ImportMatrixVal
 
 
 def set_Nr(self, value):

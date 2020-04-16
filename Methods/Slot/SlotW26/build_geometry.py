@@ -1,17 +1,10 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.SlotW26.build_geometry
-SlotW26 build_geometry method
-@date Created on Mon Feb 22 11:24:38 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from numpy import arcsin, exp, sqrt
 
-from pyleecan.Classes.Arc1 import Arc1
-from pyleecan.Classes.Arc3 import Arc3
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Arc1 import Arc1
+from ....Classes.Arc3 import Arc3
+from ....Classes.Segment import Segment
 
 
 def build_geometry(self):

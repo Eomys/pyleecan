@@ -1,26 +1,19 @@
 # -*- coding: utf-8 -*-
-"""@package pyleecan.GUI.Dialog.DMachineSetup.SWindPat.SWindPat
-5th Page of Machine setup: Winding Pattern Setup
-@date Created on Mon May 18 14:36:59 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMessageBox, QWidget
 
-from pyleecan.Classes.Winding import Winding
-from pyleecan.Classes.WindingCW1L import WindingCW1L
-from pyleecan.Classes.WindingCW2LR import WindingCW2LR
-from pyleecan.Classes.WindingCW2LT import WindingCW2LT
-from pyleecan.Classes.WindingDW1L import WindingDW1L
-from pyleecan.Classes.WindingDW2L import WindingDW2L
-from pyleecan.Functions.Winding.comp_wind_sym import comp_wind_sym
-from pyleecan.GUI.Dialog.DMachineSetup.SWindPat.Gen_SWindPat import Gen_SWindPat
-from pyleecan.GUI.Resources import pixmap_dict
-from pyleecan.Methods.Machine.Winding import WindingError
+from .....Classes.Winding import Winding
+from .....Classes.WindingCW1L import WindingCW1L
+from .....Classes.WindingCW2LR import WindingCW2LR
+from .....Classes.WindingCW2LT import WindingCW2LT
+from .....Classes.WindingDW1L import WindingDW1L
+from .....Classes.WindingDW2L import WindingDW2L
+from .....Functions.Winding.comp_wind_sym import comp_wind_sym
+from .....GUI.Dialog.DMachineSetup.SWindPat.Gen_SWindPat import Gen_SWindPat
+from .....GUI.Resources import pixmap_dict
+from .....Methods.Machine.Winding import WindingError
 
 # For the Pattern combobox
 TYPE_INDEX = [WindingCW2LT, WindingCW1L, WindingDW2L, WindingDW1L, WindingCW2LR]

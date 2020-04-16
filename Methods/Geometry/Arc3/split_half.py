@@ -1,4 +1,4 @@
-from pyleecan.Classes.Arc2 import Arc2
+from ....Classes.Arc2 import Arc2
 from numpy import pi
 
 

@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Fri Feb 22 12:57:30 2015
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import vstack, column_stack
-from pyleecan.Methods.Import.ImportGenMatrixSin import (
+from ....Methods.Import.ImportGenMatrixSin import (
     GenSinEmptyError,
     GenSinDimError,
     GenSinTransposeError,

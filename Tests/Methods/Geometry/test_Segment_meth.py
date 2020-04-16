@@ -1,18 +1,13 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Dec 05 11:19:47 2014
-
-@author: pierre_b
-"""
 
 from unittest import TestCase
 
 from ddt import ddt, data
 
-from pyleecan.Classes.Segment import Segment
+from ....Classes.Segment import Segment
 
-from pyleecan.Methods.Geometry.Segment.check import PointSegmentError
-from pyleecan.Methods.Geometry.Segment.discretize import NbPointSegmentDError
+from ....Methods.Geometry.Segment.check import PointSegmentError
+from ....Methods.Geometry.Segment.discretize import NbPointSegmentDError
 from numpy import pi, array, exp
 
 
