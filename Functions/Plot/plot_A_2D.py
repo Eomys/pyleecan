@@ -23,7 +23,7 @@ def plot_A_2D(
     type="curve",
     is_fund=False,
 ):
-    """Plots a 2D graph (curve, bargraph or barchart), comparisons allowed with args list
+    """Plots a 2D graph (curve, bargraph or barchart) comparing fields in Ydatas
 
     Parameters
     ----------
@@ -34,7 +34,7 @@ def plot_A_2D(
     legend_list : list
         list of legends
     color_list : list
-        list of colors to use foe each curve
+        list of colors to use for each curve
     title : str
         title of the graph
     xlabel : str
@@ -75,7 +75,6 @@ def plot_A_2D(
     if type == "curve":
         for i in range(len(Ydatas)):
             ax.plot(Xdata, Ydatas[i], color_list[i], label=legend_list[i])
-
     elif type == "bargraph":
         for i in range(len(Ydatas)):
             width = Xdata[1] - Xdata[0]
@@ -116,7 +115,6 @@ def plot_A_2D(
                 mag_max = max(Ydatas[i])
                 imax = int(where(Ydatas[i] == mag_max)[0])
                 barlist[imax].set_color("r")
-
     elif type == "barchart":
         for i in range(len(Ydatas)):
             if i == 0:

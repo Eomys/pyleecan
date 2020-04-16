@@ -101,28 +101,6 @@ try:
 except ImportError as error:
     plot_mesh_field = error
 
-try:
-    from ..Methods.Output.Output.plot.Magnetic.plot_Br_time_compare import (
-        plot_Br_time_compare,
-    )
-except ImportError as error:
-    plot_Br_time_compare = error
-
-try:
-    from ..Methods.Output.Output.plot.Magnetic.plot_Br_fft2 import plot_Br_fft2
-except ImportError as error:
-    plot_Br_fft2 = error
-
-try:
-    from ..Methods.Output.Output.plot.Magnetic.plot_ASWL import plot_ASWL
-except ImportError as error:
-    plot_ASWL = error
-
-try:
-    from ..Methods.Output.Output.plot.Magnetic.plot_mesh import plot_mesh
-except ImportError as error:
-    plot_mesh = error
-
 
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
@@ -319,47 +297,6 @@ class Output(FrozenClass):
         )
     else:
         plot_mesh_field = plot_mesh_field
-    # cf Methods.Output.Output.plot.Magnetic.plot_Br_time_compare
-    if isinstance(plot_Br_time_compare, ImportError):
-        plot_Br_time_compare = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_Br_time_compare: "
-                    + str(plot_Br_time_compare)
-                )
-            )
-        )
-    else:
-        plot_Br_time_compare = plot_Br_time_compare
-    # cf Methods.Output.Output.plot.Magnetic.plot_Br_fft2
-    if isinstance(plot_Br_fft2, ImportError):
-        plot_Br_fft2 = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_Br_fft2: " + str(plot_Br_fft2)
-                )
-            )
-        )
-    else:
-        plot_Br_fft2 = plot_Br_fft2
-    # cf Methods.Output.Output.plot.Magnetic.plot_ASWL
-    if isinstance(plot_ASWL, ImportError):
-        plot_ASWL = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method plot_ASWL: " + str(plot_ASWL))
-            )
-        )
-    else:
-        plot_ASWL = plot_ASWL
-    # cf Methods.Output.Output.plot.Magnetic.plot_mesh
-    if isinstance(plot_mesh, ImportError):
-        plot_mesh = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method plot_mesh: " + str(plot_mesh))
-            )
-        )
-    else:
-        plot_mesh = plot_mesh
     # save method is available in all object
     save = save
 
