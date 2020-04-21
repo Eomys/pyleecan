@@ -8,17 +8,17 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtTest import QTest
 
-from ....Classes.LamHole import LamHole
-from ....Classes.LamSlotMag import LamSlotMag
-from ....Classes.LamSlotWind import LamSlotWind
-from ....Classes.MachineSyRM import MachineSyRM
-from ....Classes.MachineIPMSM import MachineIPMSM
-from ....Classes.MachineDFIM import MachineDFIM
-from ....Classes.MachineSCIM import MachineSCIM
-from ....Classes.MachineSIPMSM import MachineSIPMSM
-from ....Classes.MachineWRSM import MachineWRSM
-from ....GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
-from ....Classes.HoleM50 import HoleM50
+from pyleecan.Classes.LamHole import LamHole
+from pyleecan.Classes.LamSlotMag import LamSlotMag
+from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.MachineSyRM import MachineSyRM
+from pyleecan.Classes.MachineIPMSM import MachineIPMSM
+from pyleecan.Classes.MachineDFIM import MachineDFIM
+from pyleecan.Classes.MachineSCIM import MachineSCIM
+from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
+from pyleecan.Classes.MachineWRSM import MachineWRSM
+from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
+from pyleecan.Classes.HoleM50 import HoleM50
 
 
 class test_SMachineType(TestCase):

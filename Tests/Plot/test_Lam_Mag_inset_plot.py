@@ -5,21 +5,21 @@ from unittest import TestCase
 import matplotlib.pyplot as plt
 from numpy import pi
 
-from ...Classes.Frame import Frame
-from ...Classes.LamSlotMag import LamSlotMag
-from ...Classes.Lamination import Lamination
-from ...Classes.MagnetType10 import MagnetType10
-from ...Classes.MagnetType11 import MagnetType11
-from ...Classes.MagnetType12 import MagnetType12
-from ...Classes.MagnetType13 import MagnetType13
-from ...Classes.MagnetType14 import MagnetType14
-from ...Classes.Shaft import Shaft
-from ...Classes.VentilationCirc import VentilationCirc
-from ...Classes.VentilationTrap import VentilationTrap
-from ...Classes.MatMagnetics import MatMagnetics
-from ...Classes.SlotMFlat import SlotMFlat
-from ...Classes.SlotMPolar import SlotMPolar
-from ...Tests import save_plot_path as save_path
+from pyleecan.Classes.Frame import Frame
+from pyleecan.Classes.LamSlotMag import LamSlotMag
+from pyleecan.Classes.Lamination import Lamination
+from pyleecan.Classes.MagnetType10 import MagnetType10
+from pyleecan.Classes.MagnetType11 import MagnetType11
+from pyleecan.Classes.MagnetType12 import MagnetType12
+from pyleecan.Classes.MagnetType13 import MagnetType13
+from pyleecan.Classes.MagnetType14 import MagnetType14
+from pyleecan.Classes.Shaft import Shaft
+from pyleecan.Classes.VentilationCirc import VentilationCirc
+from pyleecan.Classes.VentilationTrap import VentilationTrap
+from pyleecan.Classes.MatMagnetics import MatMagnetics
+from pyleecan.Classes.SlotMFlat import SlotMFlat
+from pyleecan.Classes.SlotMPolar import SlotMPolar
+from Tests import save_plot_path as save_path
 
 
 class test_Lam_Mag_inset_plot(TestCase):

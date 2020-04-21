@@ -18,4 +18,4 @@ RES_NAME = ".qrc"  # Default Resouces file name
 DATA_DIR = join(MAIN_DIR, "Data")  # Absolute path to default data dir
 MATLIB_DIR = join(DATA_DIR, "Material")
 
-TEST_DIR = join(MAIN_DIR, "Tests")
+TEST_DIR = join(MAIN_DIR, "../Tests")

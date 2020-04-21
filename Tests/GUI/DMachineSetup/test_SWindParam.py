@@ -7,11 +7,11 @@ from unittest import TestCase
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
-from ....Classes.LamSlotWind import LamSlotWind
-from ....Classes.MachineSCIM import MachineSCIM
-from ....Classes.Winding import Winding
-from ....Classes.SlotW22 import SlotW22
-from ....GUI.Dialog.DMachineSetup.SWindParam.SWindParam import SWindParam
+from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.MachineSCIM import MachineSCIM
+from pyleecan.Classes.Winding import Winding
+from pyleecan.Classes.SlotW22 import SlotW22
+from pyleecan.GUI.Dialog.DMachineSetup.SWindParam.SWindParam import SWindParam
 
 
 class test_SWindParam(TestCase):

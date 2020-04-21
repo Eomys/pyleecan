@@ -12,7 +12,7 @@ from ddt import ddt
 from numpy import pi, array
 from numpy.testing import assert_array_almost_equal
 
-from ...Functions.Electrical.coordinate_transformation import (
+from pyleecan.Functions.Electrical.coordinate_transformation import (
     ab2uvw,
     uvw2ab,
     dq2ab,

@@ -9,25 +9,25 @@ from ddt import ddt, data
 import mock  # for unittest of raw_input
 from PyQt5 import QtWidgets
 
-from ....Classes.MachineSyRM import MachineSyRM
-from ....Classes.MachineIPMSM import MachineIPMSM
-from ....Classes.MachineDFIM import MachineDFIM
-from ....Classes.MachineSCIM import MachineSCIM
-from ....Classes.MachineSIPMSM import MachineSIPMSM
-from ....Classes.MachineWRSM import MachineWRSM
-from ....Classes.MachineSRM import MachineSRM
-from ....GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
-from ....Tests import save_gui_path as save_path
+from pyleecan.Classes.MachineSyRM import MachineSyRM
+from pyleecan.Classes.MachineIPMSM import MachineIPMSM
+from pyleecan.Classes.MachineDFIM import MachineDFIM
+from pyleecan.Classes.MachineSCIM import MachineSCIM
+from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
+from pyleecan.Classes.MachineWRSM import MachineWRSM
+from pyleecan.Classes.MachineSRM import MachineSRM
+from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
+from Tests import save_gui_path as save_path
 
-from ....GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
-from ....GUI.Dialog.DMachineSetup.SMagnet.SMagnet import SMagnet
-from ....GUI.Dialog.DMachineSetup.SWindParam.SWindParam import SWindParam
-from ....GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
-from ....GUI.Dialog.DMachineSetup.SBar.SBar import SBar
-from ....GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
-from ....GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
+from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
+from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.SMagnet import SMagnet
+from pyleecan.GUI.Dialog.DMachineSetup.SWindParam.SWindParam import SWindParam
+from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.SWindCond import SWindCond
+from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
+from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
+from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
 import matplotlib.pyplot as plt
-from ....Tests import DATA_DIR
+from Tests import DATA_DIR
 
 load_test = list()
 load_test.append(  # 1

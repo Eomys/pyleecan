@@ -1,14 +1,14 @@
 from numpy import ones, pi, array
 
-from ....Classes.Simu1 import Simu1
-from ....Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
+from pyleecan.Classes.Simu1 import Simu1
+from Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
 
-from ....Classes.InputCurrent import InputCurrent
-from ....Classes.ImportGenVectLin import ImportGenVectLin
-from ....Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
-from ....Classes.MagFEMM import MagFEMM
-from ....Classes.Output import Output
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.Output import Output
 
 
 def test_CEFC_001():

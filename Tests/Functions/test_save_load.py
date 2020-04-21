@@ -8,16 +8,16 @@ from unittest.mock import patch  # for unittest of input
 from ddt import data, ddt
 from numpy import pi
 
-from ...Classes.LamSlotMag import LamSlotMag
-from ...Classes.LamSlotWind import LamSlotWind
-from ...Classes.MachineSIPMSM import MachineSIPMSM
-from ...Classes.MagnetType11 import MagnetType11
-from ...Classes.SlotMPolar import SlotMPolar
-from ...Classes.SlotW10 import SlotW10
-from ...Classes.WindingDW1L import WindingDW1L
-from ...Classes.Shaft import Shaft
-from ...Tests import DATA_DIR, save_load_path as save_path
-from ...Functions.load import (
+from pyleecan.Classes.LamSlotMag import LamSlotMag
+from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
+from pyleecan.Classes.MagnetType11 import MagnetType11
+from pyleecan.Classes.SlotMPolar import SlotMPolar
+from pyleecan.Classes.SlotW10 import SlotW10
+from pyleecan.Classes.WindingDW1L import WindingDW1L
+from pyleecan.Classes.Shaft import Shaft
+from Tests import DATA_DIR, save_load_path as save_path
+from pyleecan.Functions.load import (
     load,
     load_list,
     load_dict,
@@ -26,7 +26,7 @@ from ...Functions.load import (
     LoadWrongTypeError,
     LoadSwitchError,
 )
-from ...Functions.save import save_data
+from pyleecan.Functions.save import save_data
 
 load_file_1 = join(DATA_DIR, "test_wrong_slot_load_1.json")
 load_file_2 = join(DATA_DIR, "test_wrong_slot_load_2.json")

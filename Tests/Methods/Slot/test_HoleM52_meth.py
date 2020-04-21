@@ -3,11 +3,11 @@
 from unittest import TestCase
 from ddt import ddt, data
 
-from ....Classes.Segment import Segment
-from ....Classes.SurfLine import SurfLine
+from pyleecan.Classes.Segment import Segment
+from pyleecan.Classes.SurfLine import SurfLine
 
-from ....Classes.LamHole import LamHole
-from ....Classes.HoleM52 import HoleM52
+from pyleecan.Classes.LamHole import LamHole
+from pyleecan.Classes.HoleM52 import HoleM52
 from numpy import exp, arcsin, ndarray, pi
 
 # For AlmostEqual

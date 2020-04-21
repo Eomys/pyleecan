@@ -5,22 +5,22 @@ from os.path import join
 import matplotlib.pyplot as plt
 from numpy import array, pi, zeros
 
-from ....Classes.Frame import Frame
-from ....Classes.LamSlotWind import LamSlotWind
-from ....Classes.LamSquirrelCage import LamSquirrelCage
-from ....Classes.MachineDFIM import MachineDFIM
-from ....Classes.Shaft import Shaft
-from ....Classes.VentilationCirc import VentilationCirc
-from ....Classes.VentilationPolar import VentilationPolar
-from ....Classes.VentilationTrap import VentilationTrap
-from ....Classes.Winding import Winding
-from ....Classes.WindingUD import WindingUD
-from ....Classes.WindingCW2LT import WindingCW2LT
-from ....Classes.WindingDW2L import WindingDW2L
-from ....Classes.SlotW15 import SlotW15
+from pyleecan.Classes.Frame import Frame
+from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
+from pyleecan.Classes.MachineDFIM import MachineDFIM
+from pyleecan.Classes.Shaft import Shaft
+from pyleecan.Classes.VentilationCirc import VentilationCirc
+from pyleecan.Classes.VentilationPolar import VentilationPolar
+from pyleecan.Classes.VentilationTrap import VentilationTrap
+from pyleecan.Classes.Winding import Winding
+from pyleecan.Classes.WindingUD import WindingUD
+from pyleecan.Classes.WindingCW2LT import WindingCW2LT
+from pyleecan.Classes.WindingDW2L import WindingDW2L
+from pyleecan.Classes.SlotW15 import SlotW15
 
-from ....Tests import save_plot_path as save_path
-from ....Tests.Plot.LamWind import wind_mat
+from Tests import save_plot_path as save_path
+from Tests.Plot.LamWind import wind_mat
 
 
 """unittest for Lamination with winding plot"""

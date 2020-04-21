@@ -6,10 +6,10 @@ from importlib import import_module
 from unittest import TestCase
 from ddt import ddt, data
 from numpy import array_equal, empty, array
-from ...Generator.read_fct import read_all
-from ...Generator.ClassGenerator.init_method_generator import get_mother_attr
-from ...definitions import DOC_DIR
-from ...Tests.find import (
+from pyleecan.Generator.read_fct import read_all
+from pyleecan.Generator.ClassGenerator.init_method_generator import get_mother_attr
+from pyleecan.definitions import DOC_DIR
+from Tests.find import (
     find_test_value,
     is_type_list,
     is_type_dict,
@@ -17,15 +17,15 @@ from ...Tests.find import (
     PYTHON_TYPE,
 )
 
-from ...Classes._check import CheckMinError, CheckTypeError, CheckMaxError
-from ...Classes._check import NotADictError
-from ...Classes._frozen import FrozenClass, FrozenError
+from pyleecan.Classes._check import CheckMinError, CheckTypeError, CheckMaxError
+from pyleecan.Classes._check import NotADictError
+from pyleecan.Classes._frozen import FrozenClass, FrozenError
 
 # Get the dict of all the classes and their information
 gen_dict = read_all(DOC_DIR)  # dict of class dict
 # Remove one list level (packages Machine, Simulation, Material...)
 class_list = list(gen_dict.values())
-from ...Classes.import_all import *
+from pyleecan.Classes.import_all import *
 
 
 @ddt
