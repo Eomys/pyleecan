@@ -8,7 +8,7 @@ import sys
 
 from matplotlib import use
 
-sys.path.append('..')
+sys.path.append("..")
 
 use("Qt5Agg")  # Use PyQt5 backend
 print(TEST_DIR)

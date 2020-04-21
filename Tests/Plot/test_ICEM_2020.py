@@ -32,11 +32,11 @@ save_path = join(save_plot_path, "ICEM_2020")
 makedirs(save_path)
 
 
-
 """This test gather all the images/project for the ICEM 2020 publication:
 "Design optimization of innovative electrical machines topologies based
 on Pyleecan open-source object-oriented software"
 """
+
 
 @pytest.mark.FEMM
 def test_FEMM_sym():
@@ -87,6 +87,7 @@ def test_FEMM_sym():
         join(save_path, "fig_09_FEMM_sym_model.fem"),
     )
 
+
 @pytest.mark.GMSH
 def test_gmsh_mesh_dict():
     """Figure 10: Generate a 3D mesh with Gmsh by setting the
@@ -111,7 +112,7 @@ def test_gmsh_mesh_dict():
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_10_ref_lamination.png"))
     fig.savefig(join(save_path, "fig_10_ref_lamination.svg"), format="svg")
-    self.assertEqual(len(fig.axes[0].patches), 2)
+    assert len(fig.axes[0].patches) == 2
 
     # Definition of the number of each element on each line
     mesh_dict = {
@@ -141,6 +142,7 @@ def test_gmsh_mesh_dict():
     )
     # To see the resulting mesh, gmsh_mesh_dict.msh need to be
     # opened in Gmsh
+
 
 @pytest.mark.GMSH
 def test_SlotMulti_sym():
@@ -186,7 +188,7 @@ def test_SlotMulti_sym():
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_11_SlotMulti_sym.png"))
     fig.savefig(join(save_path, "fig_11_SlotMulti_sym.svg"), format="svg")
-    self.assertEqual(len(fig.axes[0].patches), 1)
+    assert len(fig.axes[0].patches) == 1
 
     # Generate the gmsh equivalent
     gen_3D_mesh(
@@ -230,9 +232,7 @@ def test_MachineUD():
         is_internal=True,
         is_stator=False,
     )
-    lam2.slot = SlotW10(
-        Zs=22, W0=25e-3, W1=25e-3, W2=15e-3, H0=0, H1=0, H2=W2 * 0.75
-    )
+    lam2.slot = SlotW10(Zs=22, W0=25e-3, W1=25e-3, W2=15e-3, H0=0, H1=0, H2=W2 * 0.75)
     # Inner rotor
     lam3 = LamSlot(
         Rext=lam2.Rint - A2,
@@ -245,14 +245,9 @@ def test_MachineUD():
     )
     # Inner stator
     lam4 = LamSlotWind(
-        Rext=lam3.Rint - A3,
-        Rint=lam3.Rint - A3 - W4,
-        is_internal=True,
-        is_stator=True,
+        Rext=lam3.Rint - A3, Rint=lam3.Rint - A3 - W4, is_internal=True, is_stator=True,
     )
-    lam4.slot = SlotW10(
-        Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75
-    )
+    lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
     lam4.winding = WindingCW2LT(qs=3, p=3)
     # Machine definition
     machine.lam_list = [lam1, lam2, lam3, lam4]
@@ -262,7 +257,8 @@ def test_MachineUD():
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_12_MachineUD.png"))
     fig.savefig(join(save_path, "fig_12_MachineUD.svg"), format="svg")
-    self.assertEqual(len(fig.axes[0].patches), 56)
+    assert len(fig.axes[0].patches) == 56
+
 
 def test_SlotMulti():
     """Figure 13: Check that you can plot a LamSlotMulti (two slots kind + notches)
@@ -300,7 +296,8 @@ def test_SlotMulti():
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_13_LamSlotMulti.png"))
     fig.savefig(join(save_path, "fig_13_LamSlotMulti.svg"), format="svg")
-    self.assertEqual(len(fig.axes[0].patches), 2)
+    assert len(fig.axes[0].patches) == 2
+
 
 def test_SlotUD():
     """Figure 14: User Defined slot "snowflake"
@@ -321,9 +318,7 @@ def test_SlotUD():
     machine.stator.winding = WindingDW2L(qs=3, p=3, coil_pitch=5)
 
     # Rotor definition
-    machine.rotor = LamSlot(
-        Rint=0.02, Rext=Rrotor, is_internal=True, is_stator=False
-    )
+    machine.rotor = LamSlot(Rint=0.02, Rext=Rrotor, is_internal=True, is_stator=False)
     machine.rotor.axial_vent = [
         VentilationTrap(Zh=6, Alpha0=0, D0=0.025, H0=0.025, W1=0.015, W2=0.04)
     ]
@@ -352,9 +347,10 @@ def test_SlotUD():
     # Plot, check and save
     machine.plot()
     fig = plt.gcf()
-    self.assertEqual(len(fig.axes[0].patches), 83)
+    assert len(fig.axes[0].patches) == 83
     fig.savefig(join(save_path, "fig_14_SlotUD.png"))
     fig.savefig(join(save_path, "fig_14_SlotUD.svg"), format="svg")
+
 
 def test_WindingUD():
     """Figure 16: User-defined Winding
@@ -377,9 +373,7 @@ def test_WindingUD():
         VentilationPolar(Zh=6, Alpha0=pi / 6, W1=pi / 6, D0=100e-3, H0=0.3)
     ]
     machine.rotor.slot = SlotW12(Zs=6, R2=35e-3, H0=20e-3, R1=17e-3, H1=130e-3)
-    machine.rotor.winding = WindingUD(
-        user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
-    )
+    machine.rotor.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
     machine.rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
     # Stator definion
     machine.stator = LamSlotWind(
@@ -405,16 +399,15 @@ def test_WindingUD():
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_16_WindingUD.png"))
     fig.savefig(join(save_path, "fig_16_WindingUD.svg"), format="svg")
-    self.assertEqual(len(fig.axes[0].patches), 73)
+    assert len(fig.axes[0].patches) == 73
+
 
 def test_BoreFlower():
     """Figure 18: LamHole with uneven bore shape
     From pyleecan/Tests/Plot/LamHole/test_Hole_50_plot.py
     """
     # Rotor definition
-    rotor = LamHole(
-        is_internal=True, Rint=0.021, Rext=0.075, is_stator=False, L1=0.7
-    )
+    rotor = LamHole(is_internal=True, Rint=0.021, Rext=0.075, is_stator=False, L1=0.7)
     rotor.hole = list()
     rotor.hole.append(
         HoleM50(
@@ -446,7 +439,8 @@ def test_BoreFlower():
     fig.savefig(join(save_path, "fig_18_BoreFlower.png"))
     fig.savefig(join(save_path, "fig_18_BoreFlower.svg"), format="svg")
     # 2 for lam + 3*8 for holes + 16 vents
-    self.assertEqual(len(fig.axes[0].patches), 42)
+    assert len(fig.axes[0].patches) == 42
+
 
 @pytest.mark.FEMM
 def test_ecc_FEMM():
@@ -493,9 +487,7 @@ def test_ecc_FEMM():
         {"type": "rotate", "value": 0.08, "label": "MagnetRotorRadial_S_R0_T0_S3"}
     ]
     # Then Translate the rotor
-    transform_list.append(
-        {"type": "translate", "value": gap * 0.75, "label": "Rotor"}
-    )
+    transform_list.append({"type": "translate", "value": gap * 0.75, "label": "Rotor"})
     simu.mag.transform_list = transform_list
 
     # Run the simulation
@@ -517,8 +509,10 @@ def test_ecc_FEMM():
     fig.savefig(join(save_path, "fig_19_transform_list.png"))
     fig.savefig(join(save_path, "fig_19_transform_list.svg"), format="svg")
 
+
 @pytest.mark.skip
 @pytest.mark.long
+@pytest.mark.DEAP
 def test_Optimization_problem():
     """
     Figure19: Machine topology before optimization
@@ -584,9 +578,7 @@ def test_Optimization_problem():
     )
     Nr = ImportMatrixVal(value=np.ones(Nt) * 400)
     Ir = ImportMatrixVal(value=np.zeros((Nt, 28)))
-    time = ImportGenVectLin(
-        start=0, stop=1 / (400 / 60) / 24, num=Nt, endpoint=False
-    )
+    time = ImportGenVectLin(start=0, stop=1 / (400 / 60) / 24, num=Nt, endpoint=False)
     angle = ImportGenVectLin(start=0, stop=2 * np.pi, num=Na, endpoint=False)
 
     SPMSM_001.name = (
@@ -690,9 +682,7 @@ def test_Optimization_problem():
     my_prob = OptiProblem(output=output, design_var=my_vars, obj_func=objs)
 
     # Solve problem with NSGA-II
-    solver = OptiGenAlgNsga2Deap(
-        problem=my_prob, size_pop=12, nb_gen=40, p_mutate=0.5
-    )
+    solver = OptiGenAlgNsga2Deap(problem=my_prob, size_pop=12, nb_gen=40, p_mutate=0.5)
     res = solver.solve()
 
     # ------------- #
@@ -737,12 +727,10 @@ def test_Optimization_problem():
     out1[0].simu.machine.plot()
     fig = plt.gcf()
     fig.savefig(
-        join(save_path, "fig_21_Topology_to_maximize_average_torque.png"),
-        format="png",
+        join(save_path, "fig_21_Topology_to_maximize_average_torque.png"), format="png",
     )
     fig.savefig(
-        join(save_path, "fig_21_Topology_to_maximize_average_torque.svg"),
-        format="svg",
+        join(save_path, "fig_21_Topology_to_maximize_average_torque.svg"), format="svg",
     )
 
     out2[0].simu.machine.plot()

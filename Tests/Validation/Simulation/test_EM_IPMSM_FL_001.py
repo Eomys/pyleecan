@@ -12,8 +12,12 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
+import pytest
 
 
+@pytest.mark.long
+@pytest.mark.validation
+@pytest.mark.FEMM
 def test_EM_IPMSM_FL_001():
     """Test compute the Flux in FEMM of machine IPMSM_xxx, with and without symmetry
     """

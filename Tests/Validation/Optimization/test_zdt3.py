@@ -25,7 +25,8 @@ import random
 
 
 @pytest.mark.validation
-@pytest.mark.optimization
+@pytest.mark.long
+@pytest.mark.DEAP
 def test_zdt3():
     # ### Defining reference Output
 

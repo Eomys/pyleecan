@@ -18,7 +18,7 @@ from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotMPolar import SlotMPolar
 from pyleecan.Classes.MagnetType11 import MagnetType11
 
-from pyleecan.Classes.Shaft import Shaft    
+from pyleecan.Classes.Shaft import Shaft
 
 from Tests.Validation.Material.M400_50A import M400_50A
 from Tests.Validation.Material.Magnet1 import Magnet1

@@ -15,8 +15,12 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from Tests import DATA_DIR
+import pytest
 
 
+@pytest.mark.long
+@pytest.mark.validation
+@pytest.mark.FEMM
 def test_Magnetic_Phi0():
     """Validation of a SynRM machine from Syr-e r29 open source software
     https://sourceforge.net/projects/syr-e/

@@ -9,8 +9,12 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
+import pytest
 
 
+@pytest.mark.long
+@pytest.mark.validation
+@pytest.mark.FEMM
 def test_CEFC_001():
     """Test compute the Flux in FEMM without slots and without sliding band.
     """

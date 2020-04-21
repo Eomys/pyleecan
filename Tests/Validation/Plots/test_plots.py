@@ -4,6 +4,7 @@ from os.path import join
 import matplotlib.pyplot as plt
 import unittest
 from Tests import save_validation_path as save_path
+import pytest
 
 from pyleecan.Classes.Simu1 import Simu1
 from Tests.Validation.Machine.SCIM_006 import SCIM_006
@@ -51,6 +52,7 @@ freq_max = 13000
 r_max = 78
 
 
+@pytest.mark.validation
 class tests_plots(TestCase):
     # @unittest.skip
     def test_default_proj_Br_time_space(self):

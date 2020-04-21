@@ -15,8 +15,12 @@ import matplotlib.pyplot as plt
 import json
 import numpy as np
 from pyleecan.Functions.FEMM import GROUP_SC
+import pytest
 
 
+@pytest.mark.long
+@pytest.mark.validation
+@pytest.mark.FEMM
 def test_CEFC_002():
     """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
     50 kW peak, 400 Nm peak at 1500 rpm from publication

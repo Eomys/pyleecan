@@ -30,7 +30,8 @@ import random
 
 
 @pytest.mark.validation
-@pytest.mark.optimization
+@pytest.mark.long
+@pytest.mark.DEAP
 def test_Binh_and_Korn():
     # Defining reference Output
     # Definition of the enforced output of the electrical module

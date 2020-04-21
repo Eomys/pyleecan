@@ -15,8 +15,12 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from Tests import DATA_DIR
 from Tests.Validation.Machine.SIPMSM_001 import SIPMSM_001
+import pytest
 
 
+@pytest.mark.long
+@pytest.mark.validation
+@pytest.mark.FEMM
 def test_Magnetic_FEMM_sym():
     """Validation of a polar SIPMSM with inset magnet
     Armature load (magnet field canceled by is_mmfr=False)

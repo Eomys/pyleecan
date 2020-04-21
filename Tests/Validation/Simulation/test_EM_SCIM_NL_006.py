@@ -14,8 +14,12 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from Tests import DATA_DIR
 from Tests.Validation.Machine.SCIM_006 import SCIM_006
+import pytest
 
 
+@pytest.mark.long
+@pytest.mark.validation
+@pytest.mark.FEMM
 def test_Magnetic_FEMM_sym():
     """Validation of the FEMM model of a polar SCIM machine
     Only one time step
