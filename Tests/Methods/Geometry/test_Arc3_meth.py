@@ -2,8 +2,8 @@
 
 from unittest import TestCase
 from ddt import ddt, data
-from ....Classes.Arc3 import Arc3
-from ....Classes.Arc2 import Arc2
+from pyleecan.Classes.Arc3 import Arc3
+from pyleecan.Classes.Arc2 import Arc2
 from numpy import pi, exp, sqrt, linspace
 
 # For AlmostEqual

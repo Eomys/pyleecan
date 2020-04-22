@@ -6,9 +6,9 @@ from unittest import TestCase
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
-from ....Classes.LamSlotWind import LamSlotWind
-from ....Classes.SlotW10 import SlotW10
-from ....GUI.Dialog.DMachineSetup.SWSlot.PWSlot10.PWSlot10 import PWSlot10
+from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.SlotW10 import SlotW10
+from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot10.PWSlot10 import PWSlot10
 
 
 class test_PWSlot10(TestCase):

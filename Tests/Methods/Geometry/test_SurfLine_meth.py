@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
 from mock import MagicMock
-from ....Classes.Arc1 import Arc1
-from ....Classes.Arc2 import Arc2
-from ....Classes.Segment import Segment
-from ....Classes.SurfLine import SurfLine
+from pyleecan.Classes.Arc1 import Arc1
+from pyleecan.Classes.Arc2 import Arc2
+from pyleecan.Classes.Segment import Segment
+from pyleecan.Classes.SurfLine import SurfLine
 from numpy import pi
 
 

@@ -1,22 +1,26 @@
 from numpy import zeros, ones, pi, array
 
-from ....Classes.Simu1 import Simu1
-from ....Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
+from pyleecan.Classes.Simu1 import Simu1
+from Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
 
-from ....Classes.InputCurrent import InputCurrent
-from ....Classes.ImportGenVectLin import ImportGenVectLin
-from ....Classes.ImportMatrixVal import ImportMatrixVal
-from ....Classes.MagFEMM import MagFEMM
-from ....Classes.Output import Output
-from ....Tests import save_validation_path as save_path
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.Output import Output
+from Tests import save_validation_path as save_path
 from os.path import join
 
 import matplotlib.pyplot as plt
 import json
 import numpy as np
-from ....Functions.FEMM import GROUP_SC
+from pyleecan.Functions.FEMM import GROUP_SC
+import pytest
 
 
+@pytest.mark.long
+@pytest.mark.validation
+@pytest.mark.FEMM
 def test_CEFC_002():
     """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
     50 kW peak, 400 Nm peak at 1500 rpm from publication

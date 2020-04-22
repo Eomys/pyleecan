@@ -6,10 +6,10 @@ from unittest import TestCase
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
-from ....Classes.LamHole import LamHole
-from ....Classes.HoleM54 import HoleM54
-from ....GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.PHoleM54 import PHoleM54
-from ....Classes.Material import Material
+from pyleecan.Classes.LamHole import LamHole
+from pyleecan.Classes.HoleM54 import HoleM54
+from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.PHoleM54 import PHoleM54
+from pyleecan.Classes.Material import Material
 
 
 class test_PHoleM54(TestCase):

@@ -6,20 +6,20 @@ Hanoi university of science and technology 2012
 """
 
 from numpy import pi
-from ....Classes.MachineSIPMSM import MachineSIPMSM
+from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 
-from ....Classes.LamSlotWind import LamSlotWind
-from ....Classes.SlotW23 import SlotW23
-from ....Classes.WindingCW2LT import WindingCW2LT
-from ....Classes.CondType12 import CondType12
+from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.SlotW23 import SlotW23
+from pyleecan.Classes.WindingCW2LT import WindingCW2LT
+from pyleecan.Classes.CondType12 import CondType12
 
-from ....Classes.LamSlotMag import LamSlotMag
-from ....Classes.SlotMPolar import SlotMPolar
-from ....Classes.MagnetType11 import MagnetType11
+from pyleecan.Classes.LamSlotMag import LamSlotMag
+from pyleecan.Classes.SlotMPolar import SlotMPolar
+from pyleecan.Classes.MagnetType11 import MagnetType11
 
-from ....Tests.Validation.Material.M400_50A import M400_50A
-from ....Tests.Validation.Material.Magnet5 import Magnet5
-from ....Tests.Validation.Material.Copper1 import Copper1
+from Tests.Validation.Material.M400_50A import M400_50A
+from Tests.Validation.Material.Magnet5 import Magnet5
+from Tests.Validation.Material.Copper1 import Copper1
 
 # Stator setup
 stator = LamSlotWind(

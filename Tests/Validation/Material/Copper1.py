@@ -1,4 +1,4 @@
-from ....Classes.Material import Material
+from pyleecan.Classes.Material import Material
 
 
 Copper1 = Material(name="Copper1")

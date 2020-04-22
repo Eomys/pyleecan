@@ -3,12 +3,15 @@ import logging
 from os.path import normpath, join, abspath, dirname, isdir
 from os import makedirs
 from shutil import rmtree
-from ..definitions import TEST_DIR
+from pyleecan.definitions import TEST_DIR
+import sys
 
 from matplotlib import use
 
-use("Qt5Agg")  # Use PyQt5 backend
+sys.path.append("..")
 
+use("Qt5Agg")  # Use PyQt5 backend
+print(TEST_DIR)
 DATA_DIR = join(TEST_DIR, "Data")
 LOG_DIR = join(TEST_DIR, "logtest.txt")
 

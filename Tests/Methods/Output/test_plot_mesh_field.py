@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-from ....Classes.Mesh import Mesh
-from ....Classes.ElementMat import ElementMat
-from ....Classes.NodeMat import NodeMat
-from ....Classes.Simulation import Simulation
-from ....Classes.Output import Output
+from pyleecan.Classes.Mesh import Mesh
+from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.NodeMat import NodeMat
+from pyleecan.Classes.Simulation import Simulation
+from pyleecan.Classes.Output import Output
 from os.path import join
 import matplotlib.pyplot as plt
-from ....Tests import save_validation_path as save_path
+from Tests import save_validation_path as save_path
 import numpy as np
 
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
-from ....Classes.Circle import Circle
-from ....Classes.Arc3 import Arc3
-from ....Methods.Geometry.Circle.rotate import AngleRotationCircleError
-from ....Methods.Geometry.Circle.translate import PointTranslateCircleError
+from pyleecan.Classes.Circle import Circle
+from pyleecan.Classes.Arc3 import Arc3
+from pyleecan.Methods.Geometry.Circle.rotate import AngleRotationCircleError
+from pyleecan.Methods.Geometry.Circle.translate import PointTranslateCircleError
 from numpy import pi, sqrt, exp, linspace
 from ddt import ddt, data
 
