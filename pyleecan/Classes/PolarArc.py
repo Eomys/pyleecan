@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Geometry/PolarArc.csv
+"""File generated according to Generator/ClassesRef/Geometry/PolarArc.csv
 WARNING! All changes made in this file will be lost!
 """
 

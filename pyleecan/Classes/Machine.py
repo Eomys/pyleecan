@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Machine/Machine.csv
+"""File generated according to Generator/ClassesRef/Machine/Machine.csv
 WARNING! All changes made in this file will be lost!
 """
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Import/ImportGenMatrixSin.csv
+"""File generated according to Generator/ClassesRef/Import/ImportGenMatrixSin.csv
 WARNING! All changes made in this file will be lost!
 """
 

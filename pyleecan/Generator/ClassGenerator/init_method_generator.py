@@ -3,6 +3,7 @@ from ...Generator.read_fct import (
     get_value_str,
     is_list_pyleecan_type,
     is_dict_pyleecan_type,
+    find_import_type,
 )
 from ...definitions import PACKAGE_NAME
 
@@ -26,6 +27,7 @@ def generate_init(gen_dict, class_dict):
     """
 
     class_name = class_dict["name"]
+    ext_imported_types = []  # Contains the external imported types names
     init_str = ""  # This string is for the generated code
 
     init_by_var = ""  # For the initialisation with the argument
@@ -34,12 +36,35 @@ def generate_init(gen_dict, class_dict):
         init_by_var += TAB2 + "self.parent = None\n"
 
     for prop in class_dict["properties"]:
-        if (
-            prop["type"] in PYTHON_TYPE
-            or prop["type"] == "function"
-            or "." in prop["type"]
-        ):
+        if prop["type"] in PYTHON_TYPE or prop["type"] == "function":
             # Add => "self.my_var = my_var\n" to init_by_var
+            init_by_var += TAB2 + "self." + prop["name"] + " = " + prop["name"] + "\n"
+        elif "." in prop["type"]:
+            # Add => "self.my_var = my_var\n" to init_by_var
+            if (
+                prop["type"] not in ext_imported_types
+            ):  # Check if the type has been imported with success
+                ext_imported_types.append(prop["type"])
+                init_by_var += (
+                    TAB2
+                    + "# Check if the type "
+                    + prop["type"][prop["type"].rfind(".") + 1 :]
+                    + " has been imported with success\n"
+                )
+                init_by_var += (
+                    TAB2
+                    + "if isinstance("
+                    + prop["type"][prop["type"].rfind(".") + 1 :]
+                    + ", ImportError):\n"
+                )
+                init_by_var += (
+                    TAB3
+                    + "raise ImportError('Unknown type "
+                    + prop["type"][prop["type"].rfind(".") + 1 :]
+                    + " please install "
+                    + prop["type"][: prop["type"].find(".")]
+                    + "')\n"
+                )
             init_by_var += TAB2 + "self." + prop["name"] + " = " + prop["name"] + "\n"
         elif prop["type"] == "ndarray":
             # Default value is None which should call the corresponding init

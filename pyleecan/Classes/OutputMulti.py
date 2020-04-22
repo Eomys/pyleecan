@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Output/OutputMulti.csv
+"""File generated according to Generator/ClassesRef/Output/OutputMulti.csv
 WARNING! All changes made in this file will be lost!
 """
 

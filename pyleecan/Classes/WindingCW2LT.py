@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Machine/WindingCW2LT.csv
+"""File generated according to Generator/ClassesRef/Machine/WindingCW2LT.csv
 WARNING! All changes made in this file will be lost!
 """
 

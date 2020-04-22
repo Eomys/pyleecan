@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Optimization/OptiObjFunc.csv
+"""File generated according to Generator/ClassesRef/Optimization/OptiObjFunc.csv
 WARNING! All changes made in this file will be lost!
 """
 

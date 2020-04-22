@@ -51,7 +51,11 @@ def generate_class(gen_dict, class_name, path_to_gen):
     class_file.write("# -*- coding: utf-8 -*-\n")
 
     # Warning
-    class_file.write('"""File generated according to ' + class_dict["path"] + "\n")
+    class_file.write(
+        '"""File generated according to '
+        + class_dict["path"][class_dict["path"].find("Generator") :]
+        + "\n"
+    )
     if class_dict["is_internal"]:
         class_file.write(
             "WARNING! Internal version of the class: DO NOT SHARE ON GITHUB !\n"
@@ -125,14 +129,17 @@ def generate_class(gen_dict, class_name, path_to_gen):
                 class_file.write("from ._check import CheckTypeError\n")
 
             # Extract import name
-            type_name = import_type[: import_type.rfind(".")]
-
+            from_name = import_type[: import_type.rfind(".")]
+            type_name = import_type[import_type.rfind(".") + 1 :]
+            print(type_name, import_type, from_name)
             # Import the type if not already imported
             if type_name not in types_imported:
                 class_file.write("try :\n")
-                class_file.write(TAB + "import  " + type_name + "\n")
+                class_file.write(
+                    TAB + "from " + from_name + " import " + type_name + "\n"
+                )
                 class_file.write("except ImportError :\n")
-                class_file.write(TAB + type_name + "= ImportError\n")
+                class_file.write(TAB + type_name + " = ImportError\n")
 
                 types_imported.append(type_name)
 

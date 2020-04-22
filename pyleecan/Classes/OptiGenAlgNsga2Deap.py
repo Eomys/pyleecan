@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv
+"""File generated according to Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv
 WARNING! All changes made in this file will be lost!
 """
 
@@ -45,9 +45,9 @@ from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
 try:
-    import deap.base
+    from deap.base import Toolbox
 except ImportError:
-    deap.base = ImportError
+    Toolbox = ImportError
 from ._check import InitUnKnowClassError
 from .OutputMultiOpti import OutputMultiOpti
 from .OptiProblem import OptiProblem
@@ -172,6 +172,9 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
         # Initialisation by argument
+        # Check if the type Toolbox has been imported with success
+        if isinstance(Toolbox, ImportError):
+            raise ImportError("Unknown type Toolbox please install deap")
         self.toolbox = toolbox
         # Call OptiGenAlg init
         super(OptiGenAlgNsga2Deap, self).__init__(

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Slot/SlotW14.csv
+"""File generated according to Generator/ClassesRef/Slot/SlotW14.csv
 WARNING! All changes made in this file will be lost!
 """
 

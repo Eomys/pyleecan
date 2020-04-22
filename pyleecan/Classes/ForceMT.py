@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Simulation/ForceMT.csv
+"""File generated according to Generator/ClassesRef/Simulation/ForceMT.csv
 WARNING! All changes made in this file will be lost!
 """
 

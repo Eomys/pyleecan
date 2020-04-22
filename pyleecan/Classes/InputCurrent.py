@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Simulation/InputCurrent.csv
+"""File generated according to Generator/ClassesRef/Simulation/InputCurrent.csv
 WARNING! All changes made in this file will be lost!
 """
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to pyleecan/Generator/ClassesRef/Output/OutMag.csv
+"""File generated according to Generator/ClassesRef/Output/OutMag.csv
 WARNING! All changes made in this file will be lost!
 """
 
@@ -15,9 +15,9 @@ from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
 try:
-    import SciDataTool.Classes.DataND
+    from SciDataTool.Classes.DataND import DataND
 except ImportError:
-    SciDataTool.Classes.DataND = ImportError
+    DataND = ImportError
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
 
@@ -101,6 +101,9 @@ class OutMag(FrozenClass):
         set_array(self, "angle", angle)
         self.Nt_tot = Nt_tot
         self.Na_tot = Na_tot
+        # Check if the type DataND has been imported with success
+        if isinstance(DataND, ImportError):
+            raise ImportError("Unknown type DataND please install SciDataTool")
         self.Br = Br
         self.Bt = Bt
         # Tem can be None, a ndarray or a list
