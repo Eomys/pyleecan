@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import matplotlib.pyplot as plt
-from numpy import where
+from numpy import where, argmin, abs
 
-from ...Functions.init_fig import init_fig, init_subplot
+from ...Functions.init_fig import init_subplot
 
 
 def plot_A_2D(
@@ -22,6 +22,7 @@ def plot_A_2D(
     is_grid=True,
     type="curve",
     is_fund=False,
+    fund_harm=None,
 ):
     """Plots a 2D graph (curve, bargraph or barchart) comparing fields in Ydatas
 
@@ -57,6 +58,8 @@ def plot_A_2D(
         type of 2D graph : "curve", "bargraph" or "barchart"
     is_fund : bool
         boolean indicating if the bar corresponding to the fundamental must be displayed in red
+    fund_harm : float
+        frequency of the fundamental harmonic    
     """
 
     # Set figure/subplot
@@ -103,8 +106,11 @@ def plot_A_2D(
                         label=legend_list[i],
                     )
             if is_fund:  # Find fundamental
-                mag_max = max(Ydatas[i])
-                imax = int(where(Ydatas[i] == mag_max)[0])
+                if fund_harm is None:
+                    mag_max = max(Ydatas[i])
+                    imax = int(where(Ydatas[i] == mag_max)[0])
+                else:
+                    imax = argmin(abs(Xdata-fund_harm))
                 barlist[imax].set_color("r")
     elif type == "barchart":
         for i in range(len(Ydatas)):

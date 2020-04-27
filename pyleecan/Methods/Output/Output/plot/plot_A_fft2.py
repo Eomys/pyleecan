@@ -14,10 +14,10 @@ def plot_A_fft2(
     is_spaceorder=False,
     freq_max=20000,
     r_max=100,
-    mag_max=100,
+    mag_max=1.0,
     is_norm=False,
     unit="SI",
-    colormap="RdBu",
+    colormap="RdBu_r",
     out_list=[],
 ):
     """2D color plot of the 2D Fourier Transform of a field
