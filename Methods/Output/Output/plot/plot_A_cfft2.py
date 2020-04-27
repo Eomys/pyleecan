@@ -12,6 +12,7 @@ def plot_A_cfft2(
     r_max=100,
     mag_max=1.0,
     N_stem=100,
+    disp_negative=False,
     is_norm=False,
     unit="SI",
     out_list=[],
@@ -36,6 +37,8 @@ def plot_A_cfft2(
         maximum value of the magnitude
     N_stem : int
         number of stems to plot
+    disp_negative : bool
+        plot negative frequencies
     is_norm : bool
         boolean indicating if the field must be normalized
     unit : str
@@ -56,11 +59,21 @@ def plot_A_cfft2(
     title = "Complex FFT2 of " + A.name
     if is_elecorder:
         xlabel = "Electrical order []"
-        elec_max = freq_max / A.normalizations.get("elec_order")
-        x_str = "freqs=[-" + str(elec_max) + "," + str(elec_max) + "]{elec_order}"
+        freq_max = freq_max / A.normalizations.get("elec_order")
+        if disp_negative:
+            x_str = "freqs=[-" + str(freq_max) + "," + str(freq_max) + "]{elec_order}"
+            x_min = -freq_max
+        else:
+            x_str = "freqs=[0," + str(freq_max) + "]{elec_order}"
+            x_min = 0
     else:
         xlabel = "Frequency [Hz]"
-        x_str = "freqs=[-" + str(freq_max) + "," + str(freq_max) + "]"
+        if disp_negative:
+            x_str = "freqs=[-" + str(freq_max) + "," + str(freq_max) + "]"
+            x_min = -freq_max
+        else:
+            x_str = "freqs=[0," + str(freq_max) + "]"
+            x_min = 0
     if is_spaceorder:
         ylabel = "Spatial order []"
         order_max = r_max / A.normalizations.get("space_order")
@@ -84,6 +97,7 @@ def plot_A_cfft2(
         F_flat,
         R_flat,
         B_FT_flat,
+        x_min=x_min,
         x_max=freq_max,
         y_max=r_max,
         z_max=mag_max,
