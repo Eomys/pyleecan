@@ -39,6 +39,7 @@ on Pyleecan open-source object-oriented software"
 
 
 @pytest.mark.FEMM
+@pytest.mark.long
 def test_FEMM_sym():
     """Figure 9: Check that the FEMM can handle symmetry
     From pyleecan/Tests/Validation/Simulation/test_EM_SCIM_NL_006.py
@@ -443,6 +444,7 @@ def test_BoreFlower():
 
 
 @pytest.mark.FEMM
+@pytest.mark.long
 def test_ecc_FEMM():
     """Figure 19: transfrom_list in FEMM for eccentricities
     """

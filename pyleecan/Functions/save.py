@@ -96,4 +96,9 @@ def save(self, save_path=""):
     save_path: str
         path to the folder to save the object
     """
+    from ..Classes.Simulation import Simulation
+
+    if isinstance(self, Simulation):
+        print("ok")
+        pass
     save_data(self, save_path=save_path)
