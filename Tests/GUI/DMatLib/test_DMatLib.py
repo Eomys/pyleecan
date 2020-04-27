@@ -5,9 +5,9 @@ from unittest import TestCase
 
 from PyQt5 import QtWidgets
 
-from ....Classes.MatMagnetics import MatMagnetics
-from ....Classes.Material import Material
-from ....GUI.Dialog.DMatLib.DMatLib import DMatLib
+from pyleecan.Classes.MatMagnetics import MatMagnetics
+from pyleecan.Classes.Material import Material
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 
 
 class test_DMatLib(TestCase):

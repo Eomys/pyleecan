@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
 
-from ....Classes.SlotW27 import SlotW27
+from pyleecan.Classes.SlotW27 import SlotW27
 from numpy import ndarray, arcsin, exp
-from ....Classes.LamSlot import LamSlot
-from ....Classes.Segment import Segment
+from pyleecan.Classes.LamSlot import LamSlot
+from pyleecan.Classes.Segment import Segment
 from ddt import ddt, data
-from ....Methods.Slot.Slot.comp_height import comp_height
-from ....Methods.Slot.Slot.comp_surface import comp_surface
-from ....Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
-from ....Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Methods.Slot.Slot.comp_height import comp_height
+from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
+from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
+from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
 
 # For AlmostEqual
 DELTA = 1e-4

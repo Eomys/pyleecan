@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
-from ....Classes.Trapeze import Trapeze
-from ....Classes.Segment import Segment
+from pyleecan.Classes.Trapeze import Trapeze
+from pyleecan.Classes.Segment import Segment
 from mock import MagicMock
 from numpy import pi
 

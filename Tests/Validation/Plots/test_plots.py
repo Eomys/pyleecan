@@ -3,15 +3,16 @@ from unittest import TestCase
 from os.path import join
 import matplotlib.pyplot as plt
 import unittest
-from ....Tests import save_validation_path as save_path
+from Tests import save_validation_path as save_path
+import pytest
 
-from ....Classes.Simu1 import Simu1
-from ...Validation.Machine.SCIM_006 import SCIM_006
+from pyleecan.Classes.Simu1 import Simu1
+from Tests.Validation.Machine.SCIM_006 import SCIM_006
 
-from ....Classes.Output import Output
+from pyleecan.Classes.Output import Output
 from SciDataTool import DataTime, Data1D, DataLinspace, DataFreq
-from ....Tests import DATA_DIR
-from ....Classes.ImportMatlab import ImportMatlab
+from Tests import DATA_DIR
+from pyleecan.Classes.ImportMatlab import ImportMatlab
 
 simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
 
@@ -51,6 +52,7 @@ freq_max = 13000
 r_max = 78
 
 
+@pytest.mark.validation
 class tests_plots(TestCase):
     # @unittest.skip
     def test_default_proj_Br_time_space(self):

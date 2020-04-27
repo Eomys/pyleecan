@@ -3,11 +3,11 @@ from unittest import TestCase
 from ddt import ddt, data
 from numpy import pi
 
-from ....Classes.LamSlot import LamSlot
-from ....Classes.SlotW60 import SlotW60
-from ....Methods.Slot.Slot.comp_height import comp_height
-from ....Methods.Slot.Slot.comp_surface import comp_surface
-from ....Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
+from pyleecan.Classes.LamSlot import LamSlot
+from pyleecan.Classes.SlotW60 import SlotW60
+from pyleecan.Methods.Slot.Slot.comp_height import comp_height
+from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
+from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 
 # For AlmostEqual
 DELTA = 1e-5

@@ -7,16 +7,16 @@ from unittest import TestCase
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
-from ....Classes.LamHole import LamHole
-from ....Classes.LamSlotMag import LamSlotMag
-from ....Classes.LamSlotWind import LamSlotWind
-from ....Classes.MachineIPMSM import MachineIPMSM
-from ....Classes.MachineSCIM import MachineSCIM
-from ....Classes.MachineSIPMSM import MachineSIPMSM
-from ....Classes.VentilationCirc import VentilationCirc
-from ....Classes.VentilationTrap import VentilationTrap
-from ....Classes.Material import Material
-from ....GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
+from pyleecan.Classes.LamHole import LamHole
+from pyleecan.Classes.LamSlotMag import LamSlotMag
+from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.MachineIPMSM import MachineIPMSM
+from pyleecan.Classes.MachineSCIM import MachineSCIM
+from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
+from pyleecan.Classes.VentilationCirc import VentilationCirc
+from pyleecan.Classes.VentilationTrap import VentilationTrap
+from pyleecan.Classes.Material import Material
+from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
 
 
 class test_SLamParam(TestCase):

@@ -1,20 +1,24 @@
 from numpy import zeros, ones, pi, array
 from os.path import join
 import matplotlib.pyplot as plt
-from ....Tests import save_validation_path as save_path
+from Tests import save_validation_path as save_path
 
-from ....Classes.Simu1 import Simu1
-from ....Tests.Validation.Machine.IPMSM_A import IPMSM_A
+from pyleecan.Classes.Simu1 import Simu1
+from Tests.Validation.Machine.IPMSM_A import IPMSM_A
 
-from ....Classes.InputCurrent import InputCurrent
-from ....Classes.ImportGenVectLin import ImportGenVectLin
-from ....Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
-from ....Classes.MagFEMM import MagFEMM
-from ....Classes.ForceMT import ForceMT
-from ....Classes.Output import Output
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.ForceMT import ForceMT
+from pyleecan.Classes.Output import Output
+import pytest
 
 
+@pytest.mark.long
+@pytest.mark.validation
+@pytest.mark.FEMM
 def test_EM_IPMSM_FL_002():
     """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
     50 kW peak, 400 Nm peak at 1500 rpm from publication

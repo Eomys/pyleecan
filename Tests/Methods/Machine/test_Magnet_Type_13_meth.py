@@ -4,9 +4,9 @@ from unittest import TestCase
 
 from ddt import ddt, data
 
-from ....Classes.LamSlotMag import LamSlotMag
-from ....Classes.SlotMFlat import SlotMFlat
-from ....Classes.MagnetType13 import MagnetType13
+from pyleecan.Classes.LamSlotMag import LamSlotMag
+from pyleecan.Classes.SlotMFlat import SlotMFlat
+from pyleecan.Classes.MagnetType13 import MagnetType13
 from numpy import pi, exp, sqrt
 
 Mag13_test = list()

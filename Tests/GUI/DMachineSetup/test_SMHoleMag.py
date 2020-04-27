@@ -5,18 +5,18 @@ from unittest import TestCase
 
 from PyQt5 import QtWidgets
 
-from ....Classes.LamHole import LamHole
-from ....Classes.LamSlotWind import LamSlotWind
-from ....Classes.MachineIPMSM import MachineIPMSM
-from ....Classes.MachineSyRM import MachineSyRM
-from ....Classes.Magnet import Magnet
-from ....Classes.HoleM50 import HoleM50
-from ....Classes.HoleM51 import HoleM51
-from ....Classes.HoleM52 import HoleM52
-from ....Classes.HoleM53 import HoleM53
-from ....Classes.HoleM54 import HoleM54
-from ....GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
-from ....Classes.Material import Material
+from pyleecan.Classes.LamHole import LamHole
+from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.MachineIPMSM import MachineIPMSM
+from pyleecan.Classes.MachineSyRM import MachineSyRM
+from pyleecan.Classes.Magnet import Magnet
+from pyleecan.Classes.HoleM50 import HoleM50
+from pyleecan.Classes.HoleM51 import HoleM51
+from pyleecan.Classes.HoleM52 import HoleM52
+from pyleecan.Classes.HoleM53 import HoleM53
+from pyleecan.Classes.HoleM54 import HoleM54
+from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
+from pyleecan.Classes.Material import Material
 
 
 class test_SMHoleMag(TestCase):

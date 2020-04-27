@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from unittest import TestCase
-from ....Classes.PolarArc import PolarArc
-from ....Classes.Arc1 import Arc1
-from ....Classes.Segment import Segment
+from pyleecan.Classes.PolarArc import PolarArc
+from pyleecan.Classes.Arc1 import Arc1
+from pyleecan.Classes.Segment import Segment
 from numpy import pi
 from mock import MagicMock
 from ddt import ddt, data

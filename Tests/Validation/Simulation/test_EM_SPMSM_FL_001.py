@@ -1,22 +1,26 @@
 from numpy import ones, pi, array
 from os.path import join
 import matplotlib.pyplot as plt
-from ....Tests import save_validation_path as save_path
+from Tests import save_validation_path as save_path
 
-from ....Classes.Simu1 import Simu1
-from ....Tests.Validation.Machine.SPMSM_003 import SPMSM_003
+from pyleecan.Classes.Simu1 import Simu1
+from Tests.Validation.Machine.SPMSM_003 import SPMSM_003
 
-from ....Classes.InputCurrent import InputCurrent
-from ....Classes.InputFlux import InputFlux
-from ....Classes.ImportGenVectLin import ImportGenVectLin
-from ....Classes.ImportMatrixVal import ImportMatrixVal
-from ....Classes.ImportMatlab import ImportMatlab
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.InputFlux import InputFlux
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.ImportMatlab import ImportMatlab
 
-from ....Classes.MagFEMM import MagFEMM
-from ....Classes.Output import Output
-from ....Tests import DATA_DIR
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.Output import Output
+from Tests import DATA_DIR
+import pytest
 
 
+@pytest.mark.long
+@pytest.mark.validation
+@pytest.mark.FEMM
 def test_Magnetic_FEMM_sym():
     """Validation of a polar SIPMSM with surface magnet
     Linear lamination material
