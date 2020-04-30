@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Mon Dec 19 15:59:20 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-"""
 
 import sys
 from os import mkdir
@@ -20,7 +14,7 @@ from PyQt5.QtTest import QTest
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
-from pyleecan.Tests import save_load_path as save_path, DATA_DIR
+from Tests import save_load_path as save_path, DATA_DIR
 
 
 class test_DMatSetup(TestCase):

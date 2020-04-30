@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Wed Dec 07 09:48:52 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-"""
 
 import sys
 from random import uniform

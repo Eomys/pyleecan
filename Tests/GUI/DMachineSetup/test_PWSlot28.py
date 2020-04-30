@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Tue Apr 25 12:15:23 2017
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-"""
 
 import sys
 from random import uniform

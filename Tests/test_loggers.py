@@ -10,7 +10,6 @@ gen_dict = read_all(DOC_DIR)  # dict of class dict
 class_list = list(gen_dict.values())
 
 
-@pytest.mark.logger
 @pytest.mark.parametrize("class_dict", class_list)
 def test_loggers(class_dict):
     test_obj = eval(class_dict["name"] + "()")

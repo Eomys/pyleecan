@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Tue Dec 16 16:45:07 2014
-@copyright (C) 2014-2015 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from os.path import join
 from unittest import TestCase
@@ -21,7 +16,7 @@ from pyleecan.Classes.WindingCW2LR import WindingCW2LR
 from pyleecan.Classes.WindingSC import WindingSC
 from pyleecan.Classes.SlotW21 import SlotW21
 from pyleecan.Classes.SlotW22 import SlotW22
-from pyleecan.Tests import save_plot_path as save_path
+from Tests import save_plot_path as save_path
 
 
 class test_Winding_plot(TestCase):

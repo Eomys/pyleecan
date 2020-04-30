@@ -4,7 +4,7 @@ from unittest import TestCase
 import matplotlib.pyplot as plt
 from numpy import pi
 from pyleecan.Classes.Circle import Circle
-from pyleecan.Tests import save_plot_path as save_path
+from Tests import save_plot_path as save_path
 
 
 class test_split_line(TestCase):

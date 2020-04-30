@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Fri Feb 22 13:36:22 2019
-@author pierre_b
-"""
 
 from unittest import TestCase
 
@@ -21,7 +17,7 @@ from pyleecan.Methods.Import.ImportGenMatrixSin import (
     GenSinEmptyError,
     GenSinTransposeError,
 )
-from pyleecan.Tests.Methods.Import import test_file
+from Tests.Methods.Import import test_file
 
 ImportMatrix_test = list()
 mat = uniform(0, 1, (4, 4))

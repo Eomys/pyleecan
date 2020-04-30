@@ -15,8 +15,8 @@ from pyleecan.Classes.HoleM54 import HoleM54
 
 from pyleecan.Classes.Shaft import Shaft
 
-from pyleecan.Tests.Validation.Material.M530_65A import M530_65A
-from pyleecan.Tests.Validation.Material.Copper1 import Copper1
+from Tests.Validation.Material.M530_65A import M530_65A
+from Tests.Validation.Material.Copper1 import Copper1
 
 # Stator setup
 stator = LamSlotWind(

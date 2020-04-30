@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-@author: pierre_b
-"""
 
-from unittest import TestCase
-
-from ddt import ddt, data
+import pytest
 
 from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Arc2 import Arc2
@@ -801,171 +796,130 @@ split_test.append(
 )
 
 
-@ddt
-class test_Arc_split_meth(TestCase):
-    """unittest for Arc split methods"""
+"""unittest for Arc split methods"""
 
-    @data(*split_test)
-    def test_split_line(self, test_dict):
-        """Check that the intersection and the split_line is computed correctly
-        """
-        arc_obj = test_dict["arc"]
 
-        # Check center
-        Zc = arc_obj.get_center()
-        msg = (
-            "Wrong center: returned "
-            + str(Zc)
-            + ", expected: "
-            + str(test_dict["center"])
+@pytest.mark.parametrize("test_dict", split_test)
+def test_split_line(test_dict):
+    """Check that the intersection and the split_line is computed correctly
+    """
+    arc_obj = test_dict["arc"]
+
+    # Check center
+    Zc = arc_obj.get_center()
+    msg = (
+        "Wrong center: returned " + str(Zc) + ", expected: " + str(test_dict["center"])
+    )
+    assert abs(Zc - test_dict["center"]) == pytest.approx(0, abs=DELTA), msg
+
+    # Check intersection
+    result = arc_obj.intersect_line(test_dict["Z1"], test_dict["Z2"])
+    assert len(result) == len(test_dict["Zi"])
+    msg = (
+        "Wrong intersection: returned "
+        + str(result)
+        + ", expected: "
+        + str(test_dict["Zi"])
+    )
+    for ii in range(len(result)):
+        assert result[ii] == pytest.approx(test_dict["Zi"][ii], abs=DELTA), msg
+
+    # Check split_line is_top=True
+    split_list = arc_obj.split_line(test_dict["Z1"], test_dict["Z2"], is_top=True)
+    assert len(split_list) == len(test_dict["Zs_top"])
+    msg = "Wrong split top: returned [\n"
+    for split in split_list:
+        msg += (
+            "beg:"
+            + str(split.get_begin())
+            + ", end:"
+            + str(split.get_end())
+            + ", R:"
+            + str(split.comp_radius())
+            + ", alpha:"
+            + str(split.get_angle())
+            + "\n"
         )
-        self.assertAlmostEqual(abs(Zc - test_dict["center"]), 0, msg=msg)
-
-        # Check intersection
-        result = arc_obj.intersect_line(test_dict["Z1"], test_dict["Z2"])
-        self.assertEqual(len(result), len(test_dict["Zi"]))
-        msg = (
-            "Wrong intersection: returned "
-            + str(result)
-            + ", expected: "
-            + str(test_dict["Zi"])
+    msg += "], expected: [\n"
+    for split in test_dict["Zs_top"]:
+        msg += (
+            "beg:"
+            + str(split.get_begin())
+            + ", end:"
+            + str(split.get_end())
+            + ", R:"
+            + str(split.comp_radius())
+            + ", alpha:"
+            + str(split.get_angle())
+            + "\n"
         )
-        for ii in range(len(result)):
-            self.assertAlmostEqual(
-                abs(result[ii] - test_dict["Zi"][ii]), 0, delta=DELTA, msg=msg
-            )
+    msg += "]"
+    for ii in range(len(split_list)):
+        assert type(split_list[ii]) == type(test_dict["Zs_top"][ii]), (
+            "Type error for index " + str(ii) + " returned " + str(type(split_list[ii]))
+        )
+        assert abs(split_list[ii].get_center() - test_dict["center"]) == pytest.approx(
+            0, abs=DELTA
+        ), ("Center error: " + msg)
+        assert abs(
+            split_list[ii].get_begin() - test_dict["Zs_top"][ii].get_begin()
+        ) == pytest.approx(0, abs=DELTA), ("Begin error: " + msg)
+        assert abs(
+            split_list[ii].get_end() - test_dict["Zs_top"][ii].get_end()
+        ) == pytest.approx(0, abs=DELTA), ("End error: " + msg)
+        assert split_list[ii].comp_radius() == test_dict["Zs_top"][ii].comp_radius(), (
+            "Radius error: " + msg
+        )
+        assert split_list[ii].get_angle() == pytest.approx(
+            test_dict["Zs_top"][ii].get_angle(), abs=DELTA
+        ), ("Angle error: " + msg)
 
-        # Check split_line is_top=True
-        split_list = arc_obj.split_line(test_dict["Z1"], test_dict["Z2"], is_top=True)
-        self.assertEqual(len(split_list), len(test_dict["Zs_top"]))
-        msg = "Wrong split top: returned [\n"
-        for split in split_list:
-            msg += (
-                "beg:"
-                + str(split.get_begin())
-                + ", end:"
-                + str(split.get_end())
-                + ", R:"
-                + str(split.comp_radius())
-                + ", alpha:"
-                + str(split.get_angle())
-                + "\n"
-            )
-        msg += "], expected: [\n"
-        for split in test_dict["Zs_top"]:
-            msg += (
-                "beg:"
-                + str(split.get_begin())
-                + ", end:"
-                + str(split.get_end())
-                + ", R:"
-                + str(split.comp_radius())
-                + ", alpha:"
-                + str(split.get_angle())
-                + "\n"
-            )
-        msg += "]"
-        for ii in range(len(split_list)):
-            self.assertEqual(
-                type(split_list[ii]),
-                type(test_dict["Zs_top"][ii]),
-                msg="Type error for index "
-                + str(ii)
-                + " returned "
-                + str(type(split_list[ii])),
-            )
-            self.assertAlmostEqual(
-                abs(split_list[ii].get_center() - test_dict["center"]),
-                0,
-                msg="Center error: " + msg,
-            )
-            self.assertAlmostEqual(
-                abs(split_list[ii].get_begin() - test_dict["Zs_top"][ii].get_begin()),
-                0,
-                delta=DELTA,
-                msg="Begin error: " + msg,
-            )
-            self.assertAlmostEqual(
-                abs(split_list[ii].get_end() - test_dict["Zs_top"][ii].get_end()),
-                0,
-                delta=DELTA,
-                msg="End error: " + msg,
-            )
-            self.assertEqual(
-                split_list[ii].comp_radius(),
-                test_dict["Zs_top"][ii].comp_radius(),
-                msg="Radius error: " + msg,
-            )
-            self.assertAlmostEqual(
-                split_list[ii].get_angle(),
-                test_dict["Zs_top"][ii].get_angle(),
-                delta=DELTA,
-                msg="Angle error: " + msg,
-            )
-        # Check split_line is_top=False
-        split_list = arc_obj.split_line(test_dict["Z1"], test_dict["Z2"], is_top=False)
-        self.assertEqual(len(split_list), len(test_dict["Zs_bot"]))
-        msg = "Wrong split bot: returned [\n"
-        for split in split_list:
-            msg += (
-                "beg:"
-                + str(split.get_begin())
-                + ", end:"
-                + str(split.get_end())
-                + ", R:"
-                + str(split.comp_radius())
-                + ", alpha:"
-                + str(split.get_angle())
-                + "\n"
-            )
-        msg += "\n], expected: [\n"
-        for split in test_dict["Zs_bot"]:
-            msg += (
-                "beg:"
-                + str(split.get_begin())
-                + ", end:"
-                + str(split.get_end())
-                + ", R:"
-                + str(split.comp_radius())
-                + ", alpha:"
-                + str(split.get_angle())
-                + "\n"
-            )
-        msg += "]"
-        for ii in range(len(split_list)):
-            self.assertEqual(
-                type(split_list[ii]),
-                type(test_dict["Zs_bot"][ii]),
-                msg="Type error for index "
-                + str(ii)
-                + " returned "
-                + str(type(split_list[ii])),
-            )
-            self.assertAlmostEqual(
-                abs(split_list[ii].get_center() - test_dict["center"]),
-                0,
-                msg="Center error: " + msg,
-            )
-            self.assertAlmostEqual(
-                abs(split_list[ii].get_begin() - test_dict["Zs_bot"][ii].get_begin()),
-                0,
-                delta=DELTA,
-                msg="Begin error: " + msg,
-            )
-            self.assertAlmostEqual(
-                abs(split_list[ii].get_end() - test_dict["Zs_bot"][ii].get_end()),
-                0,
-                delta=DELTA,
-                msg="End error: " + msg,
-            )
-            self.assertEqual(
-                split_list[ii].comp_radius(),
-                test_dict["Zs_bot"][ii].comp_radius(),
-                msg="Radius error: " + msg,
-            )
-            self.assertAlmostEqual(
-                split_list[ii].get_angle(),
-                test_dict["Zs_bot"][ii].get_angle(),
-                delta=DELTA,
-                msg="Angle error: " + msg,
-            )
+    # Check split_line is_top=False
+    split_list = arc_obj.split_line(test_dict["Z1"], test_dict["Z2"], is_top=False)
+    assert len(split_list) == len(test_dict["Zs_bot"])
+    msg = "Wrong split bot: returned [\n"
+    for split in split_list:
+        msg += (
+            "beg:"
+            + str(split.get_begin())
+            + ", end:"
+            + str(split.get_end())
+            + ", R:"
+            + str(split.comp_radius())
+            + ", alpha:"
+            + str(split.get_angle())
+            + "\n"
+        )
+    msg += "\n], expected: [\n"
+    for split in test_dict["Zs_bot"]:
+        msg += (
+            "beg:"
+            + str(split.get_begin())
+            + ", end:"
+            + str(split.get_end())
+            + ", R:"
+            + str(split.comp_radius())
+            + ", alpha:"
+            + str(split.get_angle())
+            + "\n"
+        )
+    msg += "]"
+    for ii in range(len(split_list)):
+        assert type(split_list[ii]) == type(test_dict["Zs_bot"][ii]), (
+            "Type error for index " + str(ii) + " returned " + str(type(split_list[ii]))
+        )
+        assert abs(split_list[ii].get_center() - test_dict["center"]) == pytest.approx(
+            0, abs=DELTA
+        ), ("Center error: " + msg)
+        assert abs(
+            split_list[ii].get_begin() - test_dict["Zs_bot"][ii].get_begin()
+        ) == pytest.approx(0, abs=DELTA), ("Begin error: " + msg)
+        assert abs(
+            split_list[ii].get_end() - test_dict["Zs_bot"][ii].get_end()
+        ) == pytest.approx(0, abs=DELTA), ("End error: " + msg)
+        assert split_list[ii].comp_radius() == test_dict["Zs_bot"][ii].comp_radius(), (
+            "Radius error: " + msg
+        )
+        assert split_list[ii].get_angle() == pytest.approx(
+            test_dict["Zs_bot"][ii].get_angle(), abs=DELTA
+        ), ("Angle error: " + msg)

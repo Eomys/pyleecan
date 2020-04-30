@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 18 17:04:08 2014
-
-@author: pierre_b
-"""
 import sys
 
 from pyleecan.GUI import gui_option

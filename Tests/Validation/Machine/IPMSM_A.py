@@ -23,9 +23,9 @@ from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.ImportMatrixXls import ImportMatrixXls
 
 from pyleecan.Classes.Material import Material
-from pyleecan.Tests.Validation.Material.M400_50A import M400_50A
-from pyleecan.Tests.Validation.Material.Magnet_prius import Magnet_prius
-from pyleecan.Tests.Validation.Material.Copper1 import Copper1
+from Tests.Validation.Material.M400_50A import M400_50A
+from Tests.Validation.Material.Magnet_prius import Magnet_prius
+from Tests.Validation.Material.Copper1 import Copper1
 
 # Stator setup
 stator = LamSlotWind(

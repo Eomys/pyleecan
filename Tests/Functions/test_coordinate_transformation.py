@@ -6,9 +6,7 @@ Last Modified: Thursday, 5th March 2020 11:33:16 am
 Author: Sebastian Guenther
 """
 
-from unittest import TestCase
 
-from ddt import ddt
 from numpy import pi, array
 from numpy.testing import assert_array_almost_equal
 
@@ -20,13 +18,12 @@ from pyleecan.Functions.Electrical.coordinate_transformation import (
 )
 
 
-@ddt
-class unittest_InCurrentDQ_meth(TestCase):
-    """unittest for coordinate transformation functions"""
+"""unittest for coordinate transformation functions"""
 
-    def test_coordinate_transformation_Ok(self):
-        """Check that the coordinate transformations can return a correct output
-        """
+
+def test_coordinate_transformation_Ok():
+    """Check that the coordinate transformations can return a correct output
+    """
 
     X_uvw = array([[1, -0.5, -0.5], [-1, 0.5, 0.5]])
     X_ab = array([[1, 0], [0, 1]])

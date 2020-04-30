@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Fri Jan 22 13:17:02 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 import sys
 from unittest import TestCase

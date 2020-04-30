@@ -20,9 +20,9 @@ from pyleecan.Classes.MagnetType11 import MagnetType11
 
 from pyleecan.Classes.Shaft import Shaft
 
-from pyleecan.Tests.Validation.Material.M400_50A import M400_50A
-from pyleecan.Tests.Validation.Material.Magnet3 import Magnet3
-from pyleecan.Tests.Validation.Material.Copper1 import Copper1
+from Tests.Validation.Material.M400_50A import M400_50A
+from Tests.Validation.Material.Magnet3 import Magnet3
+from Tests.Validation.Material.Copper1 import Copper1
 
 # Stator setup
 stator = LamSlotWind(

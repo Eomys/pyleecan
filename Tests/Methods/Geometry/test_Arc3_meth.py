@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Wed May 04 11:46:18 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from unittest import TestCase
 from ddt import ddt, data

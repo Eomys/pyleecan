@@ -8,7 +8,7 @@ from pyleecan.Classes.Simulation import Simulation
 from pyleecan.Classes.Output import Output
 from os.path import join
 import matplotlib.pyplot as plt
-from pyleecan.Tests import save_validation_path as save_path
+from Tests import save_validation_path as save_path
 import numpy as np
 
 
