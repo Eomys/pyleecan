@@ -33,13 +33,7 @@ def test_Lam_Wind_12_wind_22():
     plt.close("all")
     test_obj = MachineDFIM()
     test_obj.rotor = LamSlotWind(
-        Rint=0.2,
-        Rext=0.5,
-        is_internal=True,
-        is_stator=False,
-        L1=0.9,
-        Nrvd=2,
-        Wrvd=0.05,
+        Rint=0.2, Rext=0.5, is_internal=True, is_stator=False, L1=0.9, Nrvd=2, Wrvd=0.05
     )
     test_obj.rotor.axial_vent = [
         VentilationPolar(Zh=6, Alpha0=pi / 6, W1=pi / 6, D0=100e-3, H0=0.3)

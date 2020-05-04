@@ -3,6 +3,7 @@
 from .....Functions.init_fig import init_fig
 from .....Functions.Plot.plot_A_2D import plot_A_2D
 
+
 def plot_A_time(
     self,
     Data_str,

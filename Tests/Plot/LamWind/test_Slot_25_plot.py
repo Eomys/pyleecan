@@ -33,7 +33,7 @@ def test_Lam_Wind_25_wind_22():
     plt.close("all")
     test_obj = MachineDFIM()
     test_obj.rotor = LamSlotWind(
-        Rint=0, Rext=0.5, is_internal=True, is_stator=False, L1=0.9, Nrvd=1, Wrvd=0.1,
+        Rint=0, Rext=0.5, is_internal=True, is_stator=False, L1=0.9, Nrvd=1, Wrvd=0.1
     )
     test_obj.rotor.slot = SlotW25(Zs=6, W4=150e-3, W3=75e-3, H1=30e-3, H2=150e-3)
     test_obj.rotor.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=100e-3)
@@ -41,13 +41,7 @@ def test_Lam_Wind_25_wind_22():
     test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 
     test_obj.stator = LamSlotWind(
-        Rint=0.51,
-        Rext=0.8,
-        is_internal=False,
-        is_stator=True,
-        L1=0.9,
-        Nrvd=1,
-        Wrvd=0.1,
+        Rint=0.51, Rext=0.8, is_internal=False, is_stator=True, L1=0.9, Nrvd=1, Wrvd=0.1
     )
     test_obj.stator.slot = SlotW25(Zs=18, W4=150e-3, W3=75e-3, H1=30e-3, H2=150e-3)
     test_obj.stator.winding = WindingDW2L(qs=3, p=3)

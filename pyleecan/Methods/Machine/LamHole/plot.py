@@ -4,12 +4,7 @@ from matplotlib.patches import Circle, Patch
 from matplotlib.pyplot import axis, legend
 
 from ....Functions.init_fig import init_fig
-from ....Methods.Machine import (
-    PATCH_COLOR,
-    MAGNET_COLOR,
-    ROTOR_COLOR,
-    STATOR_COLOR,
-)
+from ....Methods.Machine import PATCH_COLOR, MAGNET_COLOR, ROTOR_COLOR, STATOR_COLOR
 
 
 def plot(

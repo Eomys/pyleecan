@@ -44,7 +44,7 @@ def test_Lam_Wind_21_wind_22():
         Wrvd=0.05,
     )
     test_obj.rotor.slot = SlotW21(
-        Zs=6, W0=40e-3, W1=60e-3, W2=40e-3, H0=20e-3, H1=0, H2=130e-3, H1_is_rad=False,
+        Zs=6, W0=40e-3, W1=60e-3, W2=40e-3, H0=20e-3, H1=0, H2=130e-3, H1_is_rad=False
     )
     test_obj.rotor.axial_vent.append(
         VentilationTrap(Zh=6, Alpha0=pi / 6, W1=30e-3, W2=60e-3, D0=0.05, H0=0.3)

@@ -53,13 +53,7 @@ def test_Lam_Wind_14_wind_22():
     test_obj.rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
     test_obj.stator = LamSlotWind(
-        Rint=0.51,
-        Rext=1,
-        is_internal=False,
-        is_stator=True,
-        L1=0.95,
-        Nrvd=1,
-        Wrvd=0.05,
+        Rint=0.51, Rext=1, is_internal=False, is_stator=True, L1=0.95, Nrvd=1, Wrvd=0.05
     )
     test_obj.stator.slot = SlotW14(
         Zs=6, W0=100e-3, W3=200e-3, H0=15e-3, H1=25e-3, H3=140e-3

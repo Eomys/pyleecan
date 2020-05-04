@@ -207,7 +207,7 @@ def test_Binh_and_Korn():
         axs[0].set_xlabel(r"$f_1(x)$")
         axs[0].set_ylabel(r"$f_2(x)$")
         try:
-            img_to_find = img.imread("Binh_and_Korn_function.jpg", format="jpg",)
+            img_to_find = img.imread("Binh_and_Korn_function.jpg", format="jpg")
             axs[1].imshow(img_to_find, aspect="auto")
             axs[1].axis("off")
             axs[1].set_title("Pareto front of the problem")
