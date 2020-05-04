@@ -19,6 +19,7 @@ try:  # Import if pyleecan is installed with pip
 except ImportError:  # Import for dev version
     from definitions import PACKAGE_NAME, DATA_DIR, MATLIB_DIR, ROOT_DIR
 
+    sys.path.insert(0, ROOT_DIR)
     exec(
         "from "
         + PACKAGE_NAME
@@ -36,7 +37,6 @@ except ImportError:  # Import for dev version
     )
     exec("from " + PACKAGE_NAME + ".GUI.Tools.TreeView import TreeView")
 
-    sys.path.insert(0, ROOT_DIR)
 
 EXT_GUI = True
 
