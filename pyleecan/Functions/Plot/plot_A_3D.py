@@ -11,6 +11,7 @@ def plot_A_3D(
     Ydata,
     Zdata,
     colormap="RdBu",
+    x_min=None,
     x_max=None,
     y_max=None,
     z_max=None,
@@ -86,7 +87,7 @@ def plot_A_3D(
                 markevery=(1, 1)
             )
             ax.add_line(line)
-        ax.set_xlim3d(x_max, -x_max)
+        ax.set_xlim3d(x_max, x_min)
         ax.set_ylim3d(y_max, -y_max)
         ax.set_zlim3d(0, z_max)
         # set correct angle

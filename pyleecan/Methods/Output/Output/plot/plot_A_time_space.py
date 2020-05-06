@@ -14,10 +14,10 @@ def plot_A_time_space(
     is_spaceorder=False,
     freq_max=20000,
     r_max=100,
-    mag_max=1.0,
+    z_max=1.0,
     is_norm=False,
     unit="SI",
-    colormap="RdBu",
+    colormap="RdBu_r",
     out_list=[],
 ):
     """Plots a field as a function of time and space (angle)
@@ -34,10 +34,12 @@ def plot_A_time_space(
         boolean indicating if we want to use the electrical order for the fft axis
     is_spaceorder : bool
         boolean indicating if we want to use the spatial order for the fft axis
-    freq_max : int
+    freq_max : float
         maximum value of the frequency for the fft axis
     r_max : int
         maximum value of the wavenumber for the fft axis
+    z_max : float
+        maximum value for the field
     is_norm : bool
         boolean indicating if the field must be normalized
     unit : str
@@ -90,8 +92,8 @@ def plot_A_time_space(
         angle_map,
         time_map,
         transpose(A_t_s),
-        z_max=mag_max,
-        z_min=-mag_max,
+        z_max=z_max,
+        z_min=-z_max,
         colormap=colormap,
         xlabel=xlabel,
         ylabel=ylabel,
@@ -218,4 +220,5 @@ def plot_A_time_space(
     axs[0, 1].axis("off")
 
     fig.canvas.set_window_title(title)
-    fig.suptitle(title, fontsize=16)
+    fig.suptitle(title, x=0.65, fontsize=16)
+    fig.tight_layout()

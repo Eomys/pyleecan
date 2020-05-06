@@ -258,6 +258,7 @@ class LamHole(Lamination):
                         "HoleM52",
                         "HoleM53",
                         "HoleM54",
+                        "HoleM58",
                         "HoleMag",
                         "VentilationCirc",
                         "VentilationPolar",

@@ -873,6 +873,7 @@
             "HoleM52",
             "HoleM53",
             "HoleM54",
+            "HoleM58",
             "HoleMag",
             "VentilationCirc",
             "VentilationPolar",
@@ -1488,6 +1489,118 @@
             }
         ]
     },
+    "HoleM58": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "One magnet with circular notches",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "check",
+            "comp_mass_magnets",
+            "comp_radius",
+            "comp_surface_magnets",
+            "comp_volume_magnets",
+            "get_height_magnet",
+            "remove_magnet"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM58",
+        "package": "Slot",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/HoleM58.csv",
+        "properties": [
+            {
+                "desc": "Slot depth",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.003
+            },
+            {
+                "desc": "Slot width",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.003
+            },
+            {
+                "desc": "Distance from the lamination Bore",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": 0
+            },
+            {
+                "desc": "Magnet width",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.013
+            },
+            {
+                "desc": "Magnet Height",
+                "max": "",
+                "min": "0",
+                "name": "H2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.02
+            },
+            {
+                "desc": "Distance Magnet to side of the notch",
+                "max": "",
+                "min": "0",
+                "name": "W2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "Tooth angular opening width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "rad",
+                "value": 0.01
+            },
+            {
+                "desc": "Notch radius",
+                "max": "",
+                "min": "0",
+                "name": "R0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "HoleMag": {
         "constants": [
             {
@@ -1499,7 +1612,8 @@
             "HoleM50",
             "HoleM51",
             "HoleM52",
-            "HoleM53"
+            "HoleM53",
+            "HoleM58"
         ],
         "desc": "Hole with magnets for lamination (abstract)",
         "is_internal": false,

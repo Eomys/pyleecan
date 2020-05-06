@@ -13,6 +13,7 @@ def plot_A_space(
     is_fft=False,
     is_spaceorder=False,
     r_max=100,
+    fund_harm=None,
     is_norm=False,
     unit="SI",
     out_list=[],
@@ -37,6 +38,8 @@ def plot_A_space(
         boolean indicating if we want to use the spatial order for the fft axis
     r_max : int
         maximum value of the wavenumber for the fft axis
+    fund_harm : float
+        frequency of the fundamental harmonic
     is_norm : bool
         boolean indicating if the field must be normalized
     unit : str
@@ -137,4 +140,5 @@ def plot_A_space(
             ylabel=ylabel,
             type="bargraph",
             is_fund=True,
+            fund_harm=fund_harm,
         )

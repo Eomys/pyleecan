@@ -17,7 +17,7 @@ INT_DIR = join(GEN_DIR, "Internal")  # Absolute path to  internal classes ref. d
 
 GUI_DIR = join(MAIN_DIR, "GUI")
 RES_PATH = join(GUI_DIR, "Resources")  # Default Resouces folder name
-RES_NAME = ".qrc"  # Default Resouces file name
+RES_NAME = "pyleecan.qrc"  # Default Resouces file name
 
 TEST_DIR = join(MAIN_DIR, "../Tests")
 

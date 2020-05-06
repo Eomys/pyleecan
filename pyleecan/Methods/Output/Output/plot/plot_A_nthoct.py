@@ -5,7 +5,7 @@ from .....Functions.Plot.plot_A_2D import plot_A_2D
 
 
 def plot_A_nthoct(
-    self, Data_str, n, freq_max=10000, is_norm=False, unit="SI", out_list=[],
+    self, Data_str, n, freq_max=10000, is_norm=False, unit="SI", out_list=[]
 ):
     """Plots a field as a function of time
 

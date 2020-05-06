@@ -10,10 +10,10 @@ def plot_A_surf(
     is_deg=True,
     t_max=1.0,
     a_max=400,
-    mag_max=1.0,
+    z_max=1.0,
     is_norm=False,
     unit="SI",
-    colormap="RdBu",
+    colormap="RdBu_r",
 ):
     """Plots the isosurface of a field in 3D
 
@@ -29,7 +29,7 @@ def plot_A_surf(
         maximum value of the time for the x axis
     a_max : float
         maximum value of the angle for the y axis
-    mag_max : float
+    z_max : float
         maximum value of the magnitude for the z axis
     is_norm : bool
         boolean indicating if the field must be normalized
@@ -75,7 +75,7 @@ def plot_A_surf(
         colormap=colormap,
         x_max=t_max,
         y_max=a_max,
-        z_max=mag_max,
+        z_max=z_max,
         title=title,
         xlabel=xlabel,
         ylabel=ylabel,
