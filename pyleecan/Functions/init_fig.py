@@ -30,11 +30,11 @@ def init_fig(fig, shape="default", is_3d=False):
             if is_3d:
                 fig, axes = subplots(
                     tight_layout=True,
-                    figsize=(20, 10),
+                    figsize=(15, 10),
                     subplot_kw=dict(projection="3d"),
                 )
             else:
-                fig, axes = subplots(tight_layout=True, figsize=(20, 10))
+                fig, axes = subplots(tight_layout=True, figsize=(15, 10))
                 axes.set_visible(False)
         else:
             if is_3d:
