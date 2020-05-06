@@ -66,11 +66,11 @@ class Structural(FrozenClass):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if force == -1:
             force = Force()
@@ -101,6 +101,8 @@ class Structural(FrozenClass):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.force = class_obj(init_dict=force)
+        elif isinstance(force, str):
+            self.force = Force(init_str=force)
         else:
             self.force = force
 

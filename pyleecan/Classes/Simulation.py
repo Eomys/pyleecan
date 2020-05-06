@@ -41,11 +41,11 @@ class Simulation(FrozenClass):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if machine == -1:
             machine = Machine()
@@ -104,6 +104,8 @@ class Simulation(FrozenClass):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.machine = class_obj(init_dict=machine)
+        elif isinstance(machine, str):
+            self.machine = Machine(init_str=machine)
         else:
             self.machine = machine
         # input can be None, a Input object or a dict
@@ -124,6 +126,8 @@ class Simulation(FrozenClass):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.input = class_obj(init_dict=input)
+        elif isinstance(input, str):
+            self.input = Input(init_str=input)
         else:
             self.input = input
         self.logger_name = logger_name

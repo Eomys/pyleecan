@@ -47,11 +47,11 @@ class Material(FrozenClass):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if elec == -1:
             elec = MatElectrical()
@@ -107,26 +107,36 @@ class Material(FrozenClass):
         # elec can be None, a MatElectrical object or a dict
         if isinstance(elec, dict):
             self.elec = MatElectrical(init_dict=elec)
+        elif isinstance(elec, str):
+            self.elec = MatElectrical(init_str=elec)
         else:
             self.elec = elec
         # mag can be None, a MatMagnetics object or a dict
         if isinstance(mag, dict):
             self.mag = MatMagnetics(init_dict=mag)
+        elif isinstance(mag, str):
+            self.mag = MatMagnetics(init_str=mag)
         else:
             self.mag = mag
         # struct can be None, a MatStructural object or a dict
         if isinstance(struct, dict):
             self.struct = MatStructural(init_dict=struct)
+        elif isinstance(struct, str):
+            self.struct = MatStructural(init_str=struct)
         else:
             self.struct = struct
         # HT can be None, a MatHT object or a dict
         if isinstance(HT, dict):
             self.HT = MatHT(init_dict=HT)
+        elif isinstance(HT, str):
+            self.HT = MatHT(init_str=HT)
         else:
             self.HT = HT
         # eco can be None, a MatEconomical object or a dict
         if isinstance(eco, dict):
             self.eco = MatEconomical(init_dict=eco)
+        elif isinstance(eco, str):
+            self.eco = MatEconomical(init_str=eco)
         else:
             self.eco = eco
         self.desc = desc

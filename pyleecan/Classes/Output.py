@@ -321,11 +321,11 @@ class Output(FrozenClass):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if simu == -1:
             simu = Simulation()
@@ -387,32 +387,44 @@ class Output(FrozenClass):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.simu = class_obj(init_dict=simu)
+        elif isinstance(simu, str):
+            self.simu = Simulation(init_str=simu)
         else:
             self.simu = simu
         self.path_res = path_res
         # geo can be None, a OutGeo object or a dict
         if isinstance(geo, dict):
             self.geo = OutGeo(init_dict=geo)
+        elif isinstance(geo, str):
+            self.geo = OutGeo(init_str=geo)
         else:
             self.geo = geo
         # elec can be None, a OutElec object or a dict
         if isinstance(elec, dict):
             self.elec = OutElec(init_dict=elec)
+        elif isinstance(elec, str):
+            self.elec = OutElec(init_str=elec)
         else:
             self.elec = elec
         # mag can be None, a OutMag object or a dict
         if isinstance(mag, dict):
             self.mag = OutMag(init_dict=mag)
+        elif isinstance(mag, str):
+            self.mag = OutMag(init_str=mag)
         else:
             self.mag = mag
         # struct can be None, a OutStruct object or a dict
         if isinstance(struct, dict):
             self.struct = OutStruct(init_dict=struct)
+        elif isinstance(struct, str):
+            self.struct = OutStruct(init_str=struct)
         else:
             self.struct = struct
         # post can be None, a OutPost object or a dict
         if isinstance(post, dict):
             self.post = OutPost(init_dict=post)
+        elif isinstance(post, str):
+            self.post = OutPost(init_str=post)
         else:
             self.post = post
         self.logger_name = logger_name

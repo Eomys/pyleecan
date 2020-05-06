@@ -121,11 +121,11 @@ class Hole(FrozenClass):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if mat_void == -1:
             mat_void = Material()
@@ -151,6 +151,8 @@ class Hole(FrozenClass):
         # mat_void can be None, a Material object or a dict
         if isinstance(mat_void, dict):
             self.mat_void = Material(init_dict=mat_void)
+        elif isinstance(mat_void, str):
+            self.mat_void = Material(init_str=mat_void)
         else:
             self.mat_void = mat_void
 

@@ -191,11 +191,11 @@ class SurfRing(Surface):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if out_surf == -1:
             out_surf = Surface()
@@ -243,6 +243,8 @@ class SurfRing(Surface):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.out_surf = class_obj(init_dict=out_surf)
+        elif isinstance(out_surf, str):
+            self.out_surf = Surface(init_str=out_surf)
         else:
             self.out_surf = out_surf
         # in_surf can be None, a Surface object or a dict
@@ -264,6 +266,8 @@ class SurfRing(Surface):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.in_surf = class_obj(init_dict=in_surf)
+        elif isinstance(in_surf, str):
+            self.in_surf = Surface(init_str=in_surf)
         else:
             self.in_surf = in_surf
         # Call Surface init

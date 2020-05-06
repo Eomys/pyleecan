@@ -50,11 +50,11 @@ class InputForce(Input):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if time == -1:
             time = Import()
@@ -108,6 +108,8 @@ class InputForce(Input):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.time = class_obj(init_dict=time)
+        elif isinstance(time, str):
+            self.time = Import(init_str=time)
         else:
             self.time = time
         # angle can be None, a Import object or a dict
@@ -131,6 +133,8 @@ class InputForce(Input):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.angle = class_obj(init_dict=angle)
+        elif isinstance(angle, str):
+            self.angle = Import(init_str=angle)
         else:
             self.angle = angle
         # Prad can be None, a Import object or a dict
@@ -154,6 +158,8 @@ class InputForce(Input):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.Prad = class_obj(init_dict=Prad)
+        elif isinstance(Prad, str):
+            self.Prad = Import(init_str=Prad)
         else:
             self.Prad = Prad
         # Ptan can be None, a Import object or a dict
@@ -177,6 +183,8 @@ class InputForce(Input):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.Ptan = class_obj(init_dict=Ptan)
+        elif isinstance(Ptan, str):
+            self.Ptan = Import(init_str=Ptan)
         else:
             self.Ptan = Ptan
         # Call Input init

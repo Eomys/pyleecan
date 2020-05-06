@@ -81,11 +81,11 @@ class MachineSRM(MachineSync):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if rotor == -1:
             rotor = LamSlot()
@@ -147,6 +147,8 @@ class MachineSRM(MachineSync):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.rotor = class_obj(init_dict=rotor)
+        elif isinstance(rotor, str):
+            self.rotor = LamSlot(init_str=rotor)
         else:
             self.rotor = rotor
         # stator can be None, a LamSlotWind object or a dict
@@ -161,6 +163,8 @@ class MachineSRM(MachineSync):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.stator = class_obj(init_dict=stator)
+        elif isinstance(stator, str):
+            self.stator = LamSlotWind(init_str=stator)
         else:
             self.stator = stator
         # Call MachineSync init

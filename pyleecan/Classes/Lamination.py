@@ -338,11 +338,11 @@ class Lamination(FrozenClass):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if mat_type == -1:
             mat_type = Material()
@@ -395,6 +395,8 @@ class Lamination(FrozenClass):
         # mat_type can be None, a Material object or a dict
         if isinstance(mat_type, dict):
             self.mat_type = Material(init_dict=mat_type)
+        elif isinstance(mat_type, str):
+            self.mat_type = Material(init_str=mat_type)
         else:
             self.mat_type = mat_type
         self.Nrvd = Nrvd

@@ -122,11 +122,11 @@ class LamSquirrelCage(LamSlotWind):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if ring_mat == -1:
             ring_mat = Material()
@@ -203,6 +203,8 @@ class LamSquirrelCage(LamSlotWind):
         # ring_mat can be None, a Material object or a dict
         if isinstance(ring_mat, dict):
             self.ring_mat = Material(init_dict=ring_mat)
+        elif isinstance(ring_mat, str):
+            self.ring_mat = Material(init_str=ring_mat)
         else:
             self.ring_mat = ring_mat
         # Call LamSlotWind init

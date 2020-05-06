@@ -273,15 +273,15 @@ def generate_init(gen_dict, class_dict):
     init_str += TAB3 + "for pyleecan type, None will call the default " "constructor\n"
     init_str += (
         TAB2 + "- __init__ (init_dict = d) d must be a dictionnary "
-        "with every properties as keys\n\n"
+        "with every properties as keys\n"
     )
-    init_str += TAB2 + "ndarray or list can be given for Vector and Matrix\n"
-    init_str += TAB2 + "object or dict can be given for pyleecan Object\n"
     init_str += TAB2 + "- __init__ (init_str = s) s must be a string\n"
-    init_str += TAB2 + 's is the file path to load """\n\n'
+    init_str += TAB2 + "s is the file path to load\n\n"
+    init_str += TAB2 + "ndarray or list can be given for Vector and Matrix\n"
+    init_str += TAB2 + 'object or dict can be given for pyleecan Object"""\n\n'
 
     init_str += init_P_Type
-    init_str += TAB2 + "if init_str is not None:  # Initialisation by str\n"
+    init_str += TAB2 + "if init_str is not None :  # Initialisation by str\n"
     init_str += TAB3 + "from ..Functions.load import load\n"
     init_str += TAB3 + "assert type(init_str) is str\n"
     init_str += TAB3 + "# load the object from a file\n"
@@ -489,6 +489,19 @@ def generate_set_class_by_dict(prop_name, prop_type, daug_list):
             + prop_name
             + ")\n"
         )
+
+    class_dict_str += TAB2 + "elif isinstance(" + prop_name + ", str):\n"
+
+    class_dict_str += (
+        TAB3
+        + "self."
+        + prop_name
+        + " = "
+        + prop_type
+        + "(init_str="
+        + prop_name
+        + ")\n"
+    )
     return class_dict_str
 
 

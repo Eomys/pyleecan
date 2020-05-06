@@ -237,11 +237,11 @@ class Machine(FrozenClass):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if frame == -1:
             frame = Frame()
@@ -280,11 +280,15 @@ class Machine(FrozenClass):
         # frame can be None, a Frame object or a dict
         if isinstance(frame, dict):
             self.frame = Frame(init_dict=frame)
+        elif isinstance(frame, str):
+            self.frame = Frame(init_str=frame)
         else:
             self.frame = frame
         # shaft can be None, a Shaft object or a dict
         if isinstance(shaft, dict):
             self.shaft = Shaft(init_dict=shaft)
+        elif isinstance(shaft, str):
+            self.shaft = Shaft(init_str=shaft)
         else:
             self.shaft = shaft
         self.name = name

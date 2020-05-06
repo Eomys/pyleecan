@@ -127,11 +127,11 @@ class Winding(FrozenClass):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if conductor == -1:
             conductor = Conductor()
@@ -200,6 +200,8 @@ class Winding(FrozenClass):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.conductor = class_obj(init_dict=conductor)
+        elif isinstance(conductor, str):
+            self.conductor = Conductor(init_str=conductor)
         else:
             self.conductor = conductor
 

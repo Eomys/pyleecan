@@ -62,11 +62,11 @@ class Simu1(Simulation):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if mag == -1:
             mag = Magnetics()
@@ -120,11 +120,15 @@ class Simu1(Simulation):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.mag = class_obj(init_dict=mag)
+        elif isinstance(mag, str):
+            self.mag = Magnetics(init_str=mag)
         else:
             self.mag = mag
         # struct can be None, a Structural object or a dict
         if isinstance(struct, dict):
             self.struct = Structural(init_dict=struct)
+        elif isinstance(struct, str):
+            self.struct = Structural(init_str=struct)
         else:
             self.struct = struct
         # Call Simulation init

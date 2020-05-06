@@ -194,11 +194,11 @@ class LamSlot(Lamination):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if slot == -1:
             slot = Slot()
@@ -289,6 +289,8 @@ class LamSlot(Lamination):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.slot = class_obj(init_dict=slot)
+        elif isinstance(slot, str):
+            self.slot = Slot(init_str=slot)
         else:
             self.slot = slot
         # Call Lamination init

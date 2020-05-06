@@ -42,11 +42,11 @@ class OutGeo(FrozenClass):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if stator == -1:
             stator = OutGeoLam()
@@ -88,11 +88,15 @@ class OutGeo(FrozenClass):
         # stator can be None, a OutGeoLam object or a dict
         if isinstance(stator, dict):
             self.stator = OutGeoLam(init_dict=stator)
+        elif isinstance(stator, str):
+            self.stator = OutGeoLam(init_str=stator)
         else:
             self.stator = stator
         # rotor can be None, a OutGeoLam object or a dict
         if isinstance(rotor, dict):
             self.rotor = OutGeoLam(init_dict=rotor)
+        elif isinstance(rotor, str):
+            self.rotor = OutGeoLam(init_str=rotor)
         else:
             self.rotor = rotor
         self.Wgap_mec = Wgap_mec

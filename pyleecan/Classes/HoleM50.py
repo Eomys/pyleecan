@@ -211,11 +211,11 @@ class HoleM50(HoleMag):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if magnet_0 == -1:
             magnet_0 = Magnet()
@@ -307,6 +307,8 @@ class HoleM50(HoleMag):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.magnet_0 = class_obj(init_dict=magnet_0)
+        elif isinstance(magnet_0, str):
+            self.magnet_0 = Magnet(init_str=magnet_0)
         else:
             self.magnet_0 = magnet_0
         # magnet_1 can be None, a Magnet object or a dict
@@ -330,6 +332,8 @@ class HoleM50(HoleMag):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.magnet_1 = class_obj(init_dict=magnet_1)
+        elif isinstance(magnet_1, str):
+            self.magnet_1 = Magnet(init_str=magnet_1)
         else:
             self.magnet_1 = magnet_1
         # Call HoleMag init

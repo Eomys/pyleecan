@@ -56,11 +56,11 @@ class OutputMulti(FrozenClass):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if output_ref == -1:
             output_ref = Output()
@@ -94,6 +94,8 @@ class OutputMulti(FrozenClass):
         # output_ref can be None, a Output object or a dict
         if isinstance(output_ref, dict):
             self.output_ref = Output(init_dict=output_ref)
+        elif isinstance(output_ref, str):
+            self.output_ref = Output(init_str=output_ref)
         else:
             self.output_ref = output_ref
         # outputs can be None or a list of Output object

@@ -49,11 +49,11 @@ class OptiGenAlg(FrozenClass):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if multi_output == -1:
             multi_output = OutputMultiOpti()
@@ -104,6 +104,8 @@ class OptiGenAlg(FrozenClass):
         # multi_output can be None, a OutputMultiOpti object or a dict
         if isinstance(multi_output, dict):
             self.multi_output = OutputMultiOpti(init_dict=multi_output)
+        elif isinstance(multi_output, str):
+            self.multi_output = OutputMultiOpti(init_str=multi_output)
         else:
             self.multi_output = multi_output
         self.selector = selector
@@ -116,6 +118,8 @@ class OptiGenAlg(FrozenClass):
         # problem can be None, a OptiProblem object or a dict
         if isinstance(problem, dict):
             self.problem = OptiProblem(init_dict=problem)
+        elif isinstance(problem, str):
+            self.problem = OptiProblem(init_str=problem)
         else:
             self.problem = problem
         self.logger_name = logger_name

@@ -51,11 +51,11 @@ class NotchEvenDist(Notch):
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
         - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
-        object or dict can be given for pyleecan Object
-        - __init__ (init_str = s) s must be a string
-        s is the file path to load """
+        object or dict can be given for pyleecan Object"""
 
         if notch_shape == -1:
             notch_shape = Slot()
@@ -115,6 +115,8 @@ class NotchEvenDist(Notch):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.notch_shape = class_obj(init_dict=notch_shape)
+        elif isinstance(notch_shape, str):
+            self.notch_shape = Slot(init_str=notch_shape)
         else:
             self.notch_shape = notch_shape
         # Call Notch init
