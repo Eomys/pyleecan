@@ -59,14 +59,14 @@ def plot_B_space(self, j_t0=0, is_deg=True, out_list=[]):
                 "angle{" + unit + "}", "time[" + str(j_t0) + "]"
             )
             axs[0].plot(
-                angle_out, Br_out, out.post.line_color, label=out.post.legend_name,
+                angle_out, Br_out, out.post.line_color, label=out.post.legend_name
             )
         if out.mag.Bt is not None:
             [angle_out, Bt_out] = out.mag.Bt.get_along(
                 "angle{" + unit + "}", "time[" + str(j_t0) + "]"
             )
             axs[1].plot(
-                angle_out, Bt_out, out.post.line_color, label=out.post.legend_name,
+                angle_out, Bt_out, out.post.line_color, label=out.post.legend_name
             )
 
     # Add the legend (if the list is not empty)

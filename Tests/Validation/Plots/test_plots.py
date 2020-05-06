@@ -151,9 +151,9 @@ class tests_plots(TestCase):
         out4.post.line_color = "r--"
 
         # Build the data objects
-        Freqs = Data1D(name="freqs", unit="Hz", symmetries={}, values=freqs_Br,)
+        Freqs = Data1D(name="freqs", unit="Hz", symmetries={}, values=freqs_Br)
         Wavenumber = Data1D(
-            name="wavenumber", unit="", symmetries={}, values=wavenumber,
+            name="wavenumber", unit="", symmetries={}, values=wavenumber
         )
         out4.mag.Br = DataFreq(
             symbol="B_r",
@@ -227,9 +227,9 @@ class tests_plots(TestCase):
         out = Output(simu=simu)
 
         # Build the data objects
-        Freqs = Data1D(name="freqs", unit="Hz", symmetries={}, values=freqs_Br,)
+        Freqs = Data1D(name="freqs", unit="Hz", symmetries={}, values=freqs_Br)
         Wavenumber = Data1D(
-            name="wavenumber", unit="", symmetries={}, values=wavenumber,
+            name="wavenumber", unit="", symmetries={}, values=wavenumber
         )
         out.mag.Br = DataFreq(
             symbol="B_r",

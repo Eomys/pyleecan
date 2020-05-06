@@ -110,7 +110,7 @@ def plot_A_2D(
                     mag_max = max(Ydatas[i])
                     imax = int(where(Ydatas[i] == mag_max)[0])
                 else:
-                    imax = argmin(abs(Xdata-fund_harm))
+                    imax = argmin(abs(Xdata - fund_harm))
                 barlist[imax].set_color("r")
     elif type == "barchart":
         for i in range(len(Ydatas)):
