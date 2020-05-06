@@ -62,5 +62,6 @@
         <file>images/MachineSetup/SCIM.png</file>
         <file>images/MachineSetup/SPMSM.png</file>
         <file>images/MachineSetup/WRSM.png</file>
+        <file>images/MachineSetup/WSlot/Slot_58.PNG</file>
     </qresource>
 </RCC>

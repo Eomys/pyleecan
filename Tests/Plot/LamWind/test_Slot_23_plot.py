@@ -33,7 +33,7 @@ def test_Lam_Wind_23_wind_22():
     plt.close("all")
     test_obj = MachineDFIM()
     test_obj.rotor = LamSlotWind(
-        Rint=0, Rext=0.5, is_internal=True, is_stator=False, L1=0.9, Nrvd=5, Wrvd=0.02,
+        Rint=0, Rext=0.5, is_internal=True, is_stator=False, L1=0.9, Nrvd=5, Wrvd=0.02
     )
     test_obj.rotor.slot = SlotW23(
         Zs=6, W0=50e-3, W1=90e-3, W2=100e-3, H0=20e-3, H1=35e-3, H2=130e-3

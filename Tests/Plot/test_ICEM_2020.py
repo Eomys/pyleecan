@@ -153,13 +153,7 @@ def test_SlotMulti_sym():
     plt.close("all")
     # Rotor definition
     rotor = LamSlotMulti(
-        Rint=0.2,
-        Rext=0.7,
-        is_internal=True,
-        is_stator=False,
-        L1=0.9,
-        Nrvd=2,
-        Wrvd=0.05,
+        Rint=0.2, Rext=0.7, is_internal=True, is_stator=False, L1=0.9, Nrvd=2, Wrvd=0.05
     )
 
     # Reference Slot
@@ -227,10 +221,7 @@ def test_MachineUD():
     lam1.winding = WindingCW2LT(qs=3, p=3)
     # Outer rotor
     lam2 = LamSlot(
-        Rext=lam1.Rint - A1,
-        Rint=lam1.Rint - A1 - W2,
-        is_internal=True,
-        is_stator=False,
+        Rext=lam1.Rint - A1, Rint=lam1.Rint - A1 - W2, is_internal=True, is_stator=False
     )
     lam2.slot = SlotW10(Zs=22, W0=25e-3, W1=25e-3, W2=15e-3, H0=0, H1=0, H2=W2 * 0.75)
     # Inner rotor
@@ -245,7 +236,7 @@ def test_MachineUD():
     )
     # Inner stator
     lam4 = LamSlotWind(
-        Rext=lam3.Rint - A3, Rint=lam3.Rint - A3 - W4, is_internal=True, is_stator=True,
+        Rext=lam3.Rint - A3, Rint=lam3.Rint - A3 - W4, is_internal=True, is_stator=True
     )
     lam4.slot = SlotW10(Zs=12, W0=25e-3, W1=25e-3, W2=1e-3, H0=0, H1=0, H2=W4 * 0.75)
     lam4.winding = WindingCW2LT(qs=3, p=3)
@@ -361,13 +352,7 @@ def test_WindingUD():
     machine.name = "User Defined Winding"
     # Rotor definition
     machine.rotor = LamSlotWind(
-        Rint=0.2,
-        Rext=0.5,
-        is_internal=True,
-        is_stator=False,
-        L1=0.9,
-        Nrvd=2,
-        Wrvd=0.05,
+        Rint=0.2, Rext=0.5, is_internal=True, is_stator=False, L1=0.9, Nrvd=2, Wrvd=0.05
     )
     machine.rotor.axial_vent = [
         VentilationPolar(Zh=6, Alpha0=pi / 6, W1=pi / 6, D0=100e-3, H0=0.3)
@@ -621,8 +606,7 @@ def test_Optimization_problem():
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_21_Machine_topology_before_optimization.png"))
     fig.savefig(
-        join(save_path, "fig_21_Machine_topology_before_optimization.svg"),
-        format="svg",
+        join(save_path, "fig_21_Machine_topology_before_optimization.svg"), format="svg"
     )
 
     # -------------------- #
@@ -727,10 +711,10 @@ def test_Optimization_problem():
     out1[0].simu.machine.plot()
     fig = plt.gcf()
     fig.savefig(
-        join(save_path, "fig_21_Topology_to_maximize_average_torque.png"), format="png",
+        join(save_path, "fig_21_Topology_to_maximize_average_torque.png"), format="png"
     )
     fig.savefig(
-        join(save_path, "fig_21_Topology_to_maximize_average_torque.svg"), format="svg",
+        join(save_path, "fig_21_Topology_to_maximize_average_torque.svg"), format="svg"
     )
 
     out2[0].simu.machine.plot()
