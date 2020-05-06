@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from os.path import join
-from os import remove 
+from os import remove
 
 import pytest
 from importlib import import_module
@@ -120,6 +120,7 @@ def test_class_init_default(class_dict):
                 + prop["name"],
             )
 
+
 @pytest.mark.parametrize("class_dict", class_list)
 def test_class_init_str(class_dict):
     """Check if the class can be initiate from a file"""
@@ -134,6 +135,7 @@ def test_class_init_str(class_dict):
 
     # Compare the two objects
     assert test_obj == test_obj2
+
 
 @pytest.mark.parametrize("class_dict", class_list)
 def test_class_as_dict(class_dict):

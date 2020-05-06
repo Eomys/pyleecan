@@ -2,7 +2,7 @@
 
 from json import load as jload
 from os.path import isfile, isdir, join
-from os import walk
+from os import walk, getcwd, chdir
 from re import match
 from ..Functions.load_switch import load_switch
 from ..Classes.Material import Material
@@ -18,11 +18,16 @@ def load_json(file_path):
 
     Returns
     -------
+    file_path: str
+        edited path to the file to load 
     json_data: json decoded data type
         data of the json file
     """
+    if isdir(file_path):
+        i = max(file_path.rfind("\\"), file_path.rfind("/"))
+        file_path += file_path[i:] + ".json"
     # The file_name must end with .json
-    if not match(".*\.json", file_path):
+    elif not match(".*\.json", file_path):
         file_path += ".json"  # If it doesn't, we add .json at the end
 
     # The file (and the folder) should exist
@@ -33,10 +38,10 @@ def load_json(file_path):
     with open(file_path, "r") as load_file:
         json_data = jload(load_file)
 
-    return json_data
+    return file_path, json_data
 
 
-def init_data(obj):
+def init_data(obj, file_path):
     """ 
     Initialize pyleecan objects (by init_dict) within list and/or dict data structure.
     Non pyleecan, list or dict type data will be kept as they are.
@@ -46,16 +51,27 @@ def init_data(obj):
     obj: object
         list/dict containing pyleecan init_dict data
 
+    file_path: str
+        path of the obj loaded
+        
     Returns
     -------
     data: 
         initialized pyleecan objects within a list or dict
     """
+
+    # Find the folder path
+    idx = max(file_path.rfind("/"), file_path.rfind("\\"))
+    if idx == -1:
+        folder_path = ""
+    else:
+        folder_path = file_path[: idx + 1]
+
     # --- list type ---
     if isinstance(obj, list):
         data = []
         for elem in obj:
-            data.append(init_data(elem))
+            data.append(init_data(elem, file_path))
         return data
     # --- dict type ---
     if isinstance(obj, dict):
@@ -64,12 +80,23 @@ def init_data(obj):
         if "__class__" in obj:
             # Check if data is a pyleecan class
             if obj["__class__"] in load_switch:
-                return load_switch[obj["__class__"]](init_dict=obj)
+                if "init_str" in obj:  # Load from file
+                    return load_switch[obj["__class__"]](
+                        init_str=folder_path + obj["init_str"]
+                    )
+                elif folder_path != "":
+                    wd = getcwd()
+                    chdir(folder_path)
+                    new_obj = load_switch[obj["__class__"]](init_dict=obj)
+                    chdir(wd)
+                    return new_obj
+                else:
+                    return load_switch[obj["__class__"]](init_dict=obj)
 
         # --- 'normal' dict ---
         data = dict()
         for key in obj:
-            data[key] = init_data(obj[key])
+            data[key] = init_data(obj[key], file_path)
         return data
 
     # --- other type ---
@@ -86,7 +113,8 @@ def load(file_path):
     file_path: str
         path to the file to load
     """
-    init_dict = load_json(file_path)
+
+    file_path, init_dict = load_json(file_path)
 
     # Check that loaded data are of type dict
     if not isinstance(init_dict, dict):
@@ -104,7 +132,7 @@ def load(file_path):
             init_dict["__class__"] + " is not a pyleecan class"
         )
 
-    return init_data(init_dict)
+    return init_data(init_dict, file_path)
 
 
 def _load(file_path, cls_type=None):
@@ -115,7 +143,7 @@ def _load(file_path, cls_type=None):
     file_path: str
         path to the file to load
     """
-    obj = load_json(file_path)
+    _, obj = load_json(file_path)
 
     # check the initial object's type if set
     if cls_type is not None:
@@ -132,7 +160,7 @@ def _load(file_path, cls_type=None):
     if ("list" in load_switch) or ("dict" in load_switch):
         raise LoadSwitchError("'list' or 'dict' should not be in load_switch dict.")
 
-    return init_data(obj)
+    return init_data(obj, file_path)
 
 
 def load_list(file_path):

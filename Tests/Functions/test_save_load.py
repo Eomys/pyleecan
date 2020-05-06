@@ -15,7 +15,8 @@ from pyleecan.Classes.SlotMPolar import SlotMPolar
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Classes.Shaft import Shaft
-from Tests import DATA_DIR, save_load_path as save_path
+from pyleecan.Functions.load import load
+from Tests import DATA_DIR, save_load_path as save_path, x as logger
 from pyleecan.Functions.load import (
     load,
     load_list,
@@ -30,7 +31,7 @@ from pyleecan.Functions.save import save_data
 load_file_1 = join(DATA_DIR, "test_wrong_slot_load_1.json")
 load_file_2 = join(DATA_DIR, "test_wrong_slot_load_2.json")
 load_file_3 = join(DATA_DIR, "test_wrong_slot_load_3.json")
-
+logger.info(save_path)
 
 """test for save and load fonctions"""
 
@@ -92,18 +93,21 @@ def test_save_load_machine():
     assert result.frame == None
 
 
-def test_save_folder_path():
+def test_save_load_folder_path():
     """Save with a folder path
     """
-
     test_obj = LamSlotWind(L1=0.45)
-
-    file_path = join(save_path, "LamSlotWind.json")
+    loc_save_path = join(save_path, "FolderSaved")
+    file_path = join(loc_save_path, "FolderSaved.json")
+    logger.debug(loc_save_path)
+    logger.debug(file_path)
     if isfile(file_path):
         remove(file_path)
     assert isfile(file_path) == False
-    test_obj.save(save_path)
+    test_obj.save(loc_save_path, is_folder=True)
     assert isfile(file_path)
+    test_obj2 = load(loc_save_path)
+    assert test_obj == test_obj2
 
 
 def test_save_load_just_name():
