@@ -62,9 +62,9 @@ def draw_FEMM(
     is_remove_slotR : bool
         True to solve without slot effect on the Rotor (Default value = False)
     type_BH_stator: int
-        1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
+        2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
     type_BH_rotor: bool
-        1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
+        2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
     kgeo_fineness : float
         global coefficient to adjust geometry fineness
         in FEMM (1: default ; > 1: finner ; < 1: less fine)
