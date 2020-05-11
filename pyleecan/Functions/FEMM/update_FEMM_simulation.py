@@ -22,7 +22,6 @@ def update_FEMM_simulation(
     angle_rotor = output.get_angle_rotor()
 
     if is_sliding_band:  # No rotation without sliding band.
-
         # Rotor rotation using sliding band
         if output.simu.machine.rotor.is_internal:
             femm.mi_modifyboundprop("bc_ag2", 10, 180 * angle_rotor[j_t0] / pi)
