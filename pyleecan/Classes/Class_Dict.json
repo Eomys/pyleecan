@@ -624,6 +624,153 @@
             }
         ]
     },
+    "ElecFEMM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module: Finite Element model with FEMM",
+        "is_internal": false,
+        "methods": [
+            "comp_inductance",
+            "comp_fluxlinkage",
+            "get_path_save",
+            "solve_FEMM",
+            "get_meshsolution",
+            "get_path_save_fem"
+        ],
+        "mother": "Electrical",
+        "name": "ElecFEMM",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/ElecFEMM.csv",
+        "properties": [
+            {
+                "desc": "global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)",
+                "max": "",
+                "min": "",
+                "name": "Kmesh_fineness",
+                "type": "float",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)",
+                "max": "",
+                "min": "",
+                "name": "Kgeo_fineness",
+                "type": "float",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "0 no leakage calculation /  1 calculation using single slot ",
+                "max": "1",
+                "min": "0",
+                "name": "type_calc_leakage",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Name of the file to save the FEMM model",
+                "max": "",
+                "min": "",
+                "name": "file_name",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "To enforce user-defined values for FEMM main parameters ",
+                "max": "",
+                "min": "",
+                "name": "FEMM_dict",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Angular position shift of the stator",
+                "max": "",
+                "min": "",
+                "name": "angle_stator",
+                "type": "float",
+                "unit": "rad",
+                "value": 0
+            },
+            {
+                "desc": "To save FEA mesh for latter post-procesing ",
+                "max": "",
+                "min": "",
+                "name": "is_get_mesh",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "To save FEA mesh and solution in .dat file",
+                "max": "",
+                "min": "",
+                "name": "is_save_FEA",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "0 to desactivate the sliding band",
+                "max": "",
+                "min": "",
+                "name": "is_sliding_band",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)",
+                "max": "",
+                "min": "",
+                "name": "transform_list",
+                "type": "list",
+                "unit": "",
+                "value": []
+            }
+        ]
+    },
+    "Electrical": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "ElecFEMM"
+        ],
+        "desc": "Electric module abstract object",
+        "is_internal": false,
+        "methods": [
+            "run",
+            "comp_time_angle"
+        ],
+        "mother": "",
+        "name": "Electrical",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Electrical.csv",
+        "properties": [
+            {
+                "desc": "1 to compute the rotor magnetomotive force / rotor magnetic field",
+                "max": "",
+                "min": "",
+                "name": "is_mmfr",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
+            }
+        ]
+    },
     "Element": {
         "constants": [
             {
@@ -3701,7 +3848,7 @@
                 "desc": "0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)",
                 "max": "2",
                 "min": "0",
-                "name": "is_stator_linear_BH",
+                "name": "type_BH_stator",
                 "type": "int",
                 "unit": "-",
                 "value": 0
@@ -3710,7 +3857,7 @@
                 "desc": "0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)",
                 "max": "2",
                 "min": "0",
-                "name": "is_rotor_linear_BH",
+                "name": "type_BH_rotor",
                 "type": "int",
                 "unit": "-",
                 "value": 0

@@ -139,7 +139,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     output.mag.Bt = DataTime(
         name="Airgap tangential flux density",
         unit="T",
-        symbol="B_r",
+        symbol="B_t",
         axes=[Time, Angle],
         values=Bt,
     )

@@ -31,8 +31,8 @@ def draw_FEMM(
     is_remove_vent=False,
     is_remove_slotS=False,
     is_remove_slotR=False,
-    is_stator_linear_BH=False,
-    is_rotor_linear_BH=False,
+    type_BH_stator=0,
+    type_BH_rotor=0,
     kgeo_fineness=1,
     kmesh_fineness=1,
     user_FEMM_dict={},
@@ -61,10 +61,10 @@ def draw_FEMM(
         True to solve without slot effect on the Stator (Default value = False)
     is_remove_slotR : bool
         True to solve without slot effect on the Rotor (Default value = False)
-    is_stator_linear_BH: bool
-        1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
-    is_rotor_linear_BH: bool
-        1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
+    type_BH_stator: int
+        2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
+    type_BH_rotor: bool
+        2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
     kgeo_fineness : float
         global coefficient to adjust geometry fineness
         in FEMM (1: default ; > 1: finner ; < 1: less fine)
@@ -169,8 +169,8 @@ def draw_FEMM(
         BHr,
         is_mmfs,
         is_mmfr,
-        is_stator_linear_BH,
-        is_rotor_linear_BH,
+        type_BH_stator,
+        type_BH_rotor,
         is_eddies,
         j_t0=0,
     )
