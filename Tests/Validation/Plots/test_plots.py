@@ -123,9 +123,9 @@ class tests_plots(TestCase):
             unit="s",
             symmetries={},
             initial=t0,
-            final=tf,
+            final=tf + deltat,
             step=deltat,
-            include_endpoint=True,
+            include_endpoint=False,
         )
         Angle = DataLinspace(
             name="angle",

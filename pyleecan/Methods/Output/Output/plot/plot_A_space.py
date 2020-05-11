@@ -86,7 +86,7 @@ def plot_A_space(
             "angle{°}", t_str, data_list=B_list, unit=unit, is_norm=is_norm
         )
     else:
-        (angle, A_angle) = A.compare_along(
+        (angle, Ydata) = A.compare_along(
             "angle", t_str, data_list=B_list, unit=unit, is_norm=is_norm
         )
 
