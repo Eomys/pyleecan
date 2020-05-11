@@ -16,6 +16,8 @@ from ..Classes.CondType12 import CondType12
 from ..Classes.CondType21 import CondType21
 from ..Classes.CondType22 import CondType22
 from ..Classes.Conductor import Conductor
+from ..Classes.ElecFEMM import ElecFEMM
+from ..Classes.Electrical import Electrical
 from ..Classes.Element import Element
 from ..Classes.ElementMat import ElementMat
 from ..Classes.Force import Force

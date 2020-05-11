@@ -18,8 +18,8 @@ def create_FEMM_materials(
     BHr,
     is_mmfs,
     is_mmfr,
-    is_stator_linear_BH,
-    is_rotor_linear_BH,
+    type_BH_stator,
+    type_BH_rotor,
     is_eddies,
     j_t0,
 ):
@@ -43,9 +43,9 @@ def create_FEMM_materials(
         1 to compute the stator magnetomotive force/stator magnetic field
     is_mmfr : bool
         1 to compute the rotor magnetomotive force / rotor magnetic field
-    is_stator_linear_BH: bool
+    type_BH_stator: int
         1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
-    is_rotor_linear_BH: bool
+    type_BH_rotor: int
         1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
     is_eddies : bool
         1 to calculate eddy currents
@@ -69,7 +69,7 @@ def create_FEMM_materials(
     for surf in surf_list:
         label = surf.label
         if "Lamination_Stator" in label:  # Stator
-            if is_stator_linear_BH == 2:
+            if type_BH_stator == 2:
                 mu_is = 100000  # Infinite permeability
             else:
                 mu_is = stator.mat_type.mag.mur_lin  # Relative
@@ -83,7 +83,7 @@ def create_FEMM_materials(
             prop_dict[label] = "Stator Iron"
         elif "Lamination_Rotor" in label:  # Rotor
             # Initialisation from the rotor of the machine
-            if is_rotor_linear_BH == 2:
+            if type_BH_rotor == 2:
                 mu_ir = 100000  # Infinite permeability
             else:
                 mu_ir = rotor.mat_type.mag.mur_lin  # Relative
@@ -143,10 +143,10 @@ def create_FEMM_materials(
             prop_dict[label] = "<No Mesh>"
 
     # Set Rotor and Stator BH curves (if needed)
-    if is_stator_linear_BH == 0:
+    if type_BH_stator == 0:
         for ii in range(BHs.shape[0]):
             femm.mi_addbhpoint("Stator Iron", BHs[ii][1], BHs[ii][0])
-    if is_rotor_linear_BH == 0:
+    if type_BH_rotor == 0:
         for ii in range(BHr.shape[0]):
             femm.mi_addbhpoint("Rotor Iron", BHr[ii][1], BHr[ii][0])
 

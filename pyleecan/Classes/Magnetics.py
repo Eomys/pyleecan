@@ -80,8 +80,8 @@ class Magnetics(FrozenClass):
         is_remove_vent=False,
         is_mmfs=True,
         is_mmfr=True,
-        is_stator_linear_BH=0,
-        is_rotor_linear_BH=0,
+        type_BH_stator=0,
+        type_BH_rotor=0,
         is_symmetry_t=False,
         sym_t=1,
         is_antiper_t=False,
@@ -112,10 +112,10 @@ class Magnetics(FrozenClass):
                 is_mmfs = init_dict["is_mmfs"]
             if "is_mmfr" in list(init_dict.keys()):
                 is_mmfr = init_dict["is_mmfr"]
-            if "is_stator_linear_BH" in list(init_dict.keys()):
-                is_stator_linear_BH = init_dict["is_stator_linear_BH"]
-            if "is_rotor_linear_BH" in list(init_dict.keys()):
-                is_rotor_linear_BH = init_dict["is_rotor_linear_BH"]
+            if "type_BH_stator" in list(init_dict.keys()):
+                type_BH_stator = init_dict["type_BH_stator"]
+            if "type_BH_rotor" in list(init_dict.keys()):
+                type_BH_rotor = init_dict["type_BH_rotor"]
             if "is_symmetry_t" in list(init_dict.keys()):
                 is_symmetry_t = init_dict["is_symmetry_t"]
             if "sym_t" in list(init_dict.keys()):
@@ -135,8 +135,8 @@ class Magnetics(FrozenClass):
         self.is_remove_vent = is_remove_vent
         self.is_mmfs = is_mmfs
         self.is_mmfr = is_mmfr
-        self.is_stator_linear_BH = is_stator_linear_BH
-        self.is_rotor_linear_BH = is_rotor_linear_BH
+        self.type_BH_stator = type_BH_stator
+        self.type_BH_rotor = type_BH_rotor
         self.is_symmetry_t = is_symmetry_t
         self.sym_t = sym_t
         self.is_antiper_t = is_antiper_t
@@ -160,12 +160,8 @@ class Magnetics(FrozenClass):
         Magnetics_str += "is_remove_vent = " + str(self.is_remove_vent) + linesep
         Magnetics_str += "is_mmfs = " + str(self.is_mmfs) + linesep
         Magnetics_str += "is_mmfr = " + str(self.is_mmfr) + linesep
-        Magnetics_str += (
-            "is_stator_linear_BH = " + str(self.is_stator_linear_BH) + linesep
-        )
-        Magnetics_str += (
-            "is_rotor_linear_BH = " + str(self.is_rotor_linear_BH) + linesep
-        )
+        Magnetics_str += "type_BH_stator = " + str(self.type_BH_stator) + linesep
+        Magnetics_str += "type_BH_rotor = " + str(self.type_BH_rotor) + linesep
         Magnetics_str += "is_symmetry_t = " + str(self.is_symmetry_t) + linesep
         Magnetics_str += "sym_t = " + str(self.sym_t) + linesep
         Magnetics_str += "is_antiper_t = " + str(self.is_antiper_t) + linesep
@@ -189,9 +185,9 @@ class Magnetics(FrozenClass):
             return False
         if other.is_mmfr != self.is_mmfr:
             return False
-        if other.is_stator_linear_BH != self.is_stator_linear_BH:
+        if other.type_BH_stator != self.type_BH_stator:
             return False
-        if other.is_rotor_linear_BH != self.is_rotor_linear_BH:
+        if other.type_BH_rotor != self.type_BH_rotor:
             return False
         if other.is_symmetry_t != self.is_symmetry_t:
             return False
@@ -217,8 +213,8 @@ class Magnetics(FrozenClass):
         Magnetics_dict["is_remove_vent"] = self.is_remove_vent
         Magnetics_dict["is_mmfs"] = self.is_mmfs
         Magnetics_dict["is_mmfr"] = self.is_mmfr
-        Magnetics_dict["is_stator_linear_BH"] = self.is_stator_linear_BH
-        Magnetics_dict["is_rotor_linear_BH"] = self.is_rotor_linear_BH
+        Magnetics_dict["type_BH_stator"] = self.type_BH_stator
+        Magnetics_dict["type_BH_rotor"] = self.type_BH_rotor
         Magnetics_dict["is_symmetry_t"] = self.is_symmetry_t
         Magnetics_dict["sym_t"] = self.sym_t
         Magnetics_dict["is_antiper_t"] = self.is_antiper_t
@@ -237,8 +233,8 @@ class Magnetics(FrozenClass):
         self.is_remove_vent = None
         self.is_mmfs = None
         self.is_mmfr = None
-        self.is_stator_linear_BH = None
-        self.is_rotor_linear_BH = None
+        self.type_BH_stator = None
+        self.type_BH_rotor = None
         self.is_symmetry_t = None
         self.sym_t = None
         self.is_antiper_t = None
@@ -331,37 +327,37 @@ class Magnetics(FrozenClass):
         doc=u"""1 to compute the rotor magnetomotive force / rotor magnetic field""",
     )
 
-    def _get_is_stator_linear_BH(self):
-        """getter of is_stator_linear_BH"""
-        return self._is_stator_linear_BH
+    def _get_type_BH_stator(self):
+        """getter of type_BH_stator"""
+        return self._type_BH_stator
 
-    def _set_is_stator_linear_BH(self, value):
-        """setter of is_stator_linear_BH"""
-        check_var("is_stator_linear_BH", value, "int", Vmin=0, Vmax=2)
-        self._is_stator_linear_BH = value
+    def _set_type_BH_stator(self, value):
+        """setter of type_BH_stator"""
+        check_var("type_BH_stator", value, "int", Vmin=0, Vmax=2)
+        self._type_BH_stator = value
 
     # 0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)
     # Type : int, min = 0, max = 2
-    is_stator_linear_BH = property(
-        fget=_get_is_stator_linear_BH,
-        fset=_set_is_stator_linear_BH,
+    type_BH_stator = property(
+        fget=_get_type_BH_stator,
+        fset=_set_type_BH_stator,
         doc=u"""0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)""",
     )
 
-    def _get_is_rotor_linear_BH(self):
-        """getter of is_rotor_linear_BH"""
-        return self._is_rotor_linear_BH
+    def _get_type_BH_rotor(self):
+        """getter of type_BH_rotor"""
+        return self._type_BH_rotor
 
-    def _set_is_rotor_linear_BH(self, value):
-        """setter of is_rotor_linear_BH"""
-        check_var("is_rotor_linear_BH", value, "int", Vmin=0, Vmax=2)
-        self._is_rotor_linear_BH = value
+    def _set_type_BH_rotor(self, value):
+        """setter of type_BH_rotor"""
+        check_var("type_BH_rotor", value, "int", Vmin=0, Vmax=2)
+        self._type_BH_rotor = value
 
     # 0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)
     # Type : int, min = 0, max = 2
-    is_rotor_linear_BH = property(
-        fget=_get_is_rotor_linear_BH,
-        fset=_set_is_rotor_linear_BH,
+    type_BH_rotor = property(
+        fget=_get_type_BH_rotor,
+        fset=_set_type_BH_rotor,
         doc=u"""0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)""",
     )
 

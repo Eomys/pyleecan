@@ -55,8 +55,8 @@ def test_Magnetic_FEMM_sym():
 
     # Definition of the magnetic simulation (is_mmfr=False => no flux from the magnets)
     simu.mag = MagFEMM(
-        is_stator_linear_BH=2,
-        is_rotor_linear_BH=2,
+        type_BH_stator=2,
+        type_BH_rotor=2,
         is_symmetry_a=False,
         is_mmfr=False,
         angle_stator=-pi / 6,
