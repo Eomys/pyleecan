@@ -18,6 +18,8 @@ load_switch = {
     "CondType21": CondType21,
     "CondType22": CondType22,
     "Conductor": Conductor,
+    "ElecFEMM": ElecFEMM,
+    "Electrical": Electrical,
     "Element": Element,
     "ElementMat": ElementMat,
     "Force": Force,

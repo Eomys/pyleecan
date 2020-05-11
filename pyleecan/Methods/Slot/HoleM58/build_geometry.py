@@ -64,12 +64,24 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         - R0
         * Y2
         * sqrt(
-            -R0 ** 2 + X2 ** 2 - 2 * X2 * Xc + Xc ** 2 + Y2 ** 2 - 2 * Y2 * Yc + Yc ** 2
+            -(R0 ** 2)
+            + X2 ** 2
+            - 2 * X2 * Xc
+            + Xc ** 2
+            + Y2 ** 2
+            - 2 * Y2 * Yc
+            + Yc ** 2
         )
         + R0
         * Yc
         * sqrt(
-            -R0 ** 2 + X2 ** 2 - 2 * X2 * Xc + Xc ** 2 + Y2 ** 2 - 2 * Y2 * Yc + Yc ** 2
+            -(R0 ** 2)
+            + X2 ** 2
+            - 2 * X2 * Xc
+            + Xc ** 2
+            + Y2 ** 2
+            - 2 * Y2 * Yc
+            + Yc ** 2
         )
         + X2 ** 2 * Xc
         - 2 * X2 * Xc ** 2
@@ -84,7 +96,13 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         + R0
         * (X2 - Xc)
         * sqrt(
-            -R0 ** 2 + X2 ** 2 - 2 * X2 * Xc + Xc ** 2 + Y2 ** 2 - 2 * Y2 * Yc + Yc ** 2
+            -(R0 ** 2)
+            + X2 ** 2
+            - 2 * X2 * Xc
+            + Xc ** 2
+            + Y2 ** 2
+            - 2 * Y2 * Yc
+            + Yc ** 2
         )
         + X2 ** 2 * Yc
         - 2 * X2 * Xc * Yc
@@ -104,12 +122,24 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         + R0
         * Y5
         * sqrt(
-            -R0 ** 2 + X5 ** 2 - 2 * X5 * Xc + Xc ** 2 + Y5 ** 2 - 2 * Y5 * Yc + Yc ** 2
+            -(R0 ** 2)
+            + X5 ** 2
+            - 2 * X5 * Xc
+            + Xc ** 2
+            + Y5 ** 2
+            - 2 * Y5 * Yc
+            + Yc ** 2
         )
         - R0
         * Yc
         * sqrt(
-            -R0 ** 2 + X5 ** 2 - 2 * X5 * Xc + Xc ** 2 + Y5 ** 2 - 2 * Y5 * Yc + Yc ** 2
+            -(R0 ** 2)
+            + X5 ** 2
+            - 2 * X5 * Xc
+            + Xc ** 2
+            + Y5 ** 2
+            - 2 * Y5 * Yc
+            + Yc ** 2
         )
         + X5 ** 2 * Xc
         - 2 * X5 * Xc ** 2
@@ -124,7 +154,13 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
         - R0
         * (X5 - Xc)
         * sqrt(
-            -R0 ** 2 + X5 ** 2 - 2 * X5 * Xc + Xc ** 2 + Y5 ** 2 - 2 * Y5 * Yc + Yc ** 2
+            -(R0 ** 2)
+            + X5 ** 2
+            - 2 * X5 * Xc
+            + Xc ** 2
+            + Y5 ** 2
+            - 2 * Y5 * Yc
+            + Yc ** 2
         )
         + X5 ** 2 * Yc
         - 2 * X5 * Xc * Yc
