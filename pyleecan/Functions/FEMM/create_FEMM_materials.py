@@ -44,9 +44,9 @@ def create_FEMM_materials(
     is_mmfr : bool
         1 to compute the rotor magnetomotive force / rotor magnetic field
     type_BH_stator: int
-        1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
+        2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
     type_BH_rotor: int
-        1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
+        2 Infinite permeability, 1 to use linear B(H) curve according to mur_lin, 0 to use the B(H) curve
     is_eddies : bool
         1 to calculate eddy currents
     jt_0 : int
