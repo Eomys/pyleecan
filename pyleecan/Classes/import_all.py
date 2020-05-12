@@ -93,6 +93,7 @@ from ..Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 from ..Classes.OptiObjFunc import OptiObjFunc
 from ..Classes.OptiProblem import OptiProblem
 from ..Classes.OutElec import OutElec
+from ..Classes.OutForce import OutForce
 from ..Classes.OutGeo import OutGeo
 from ..Classes.OutGeoLam import OutGeoLam
 from ..Classes.OutMag import OutMag

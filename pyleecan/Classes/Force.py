@@ -13,14 +13,19 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Simulation.Force.run import run
+except ImportError as error:
+    run = error
+
+try:
     from ..Methods.Simulation.Force.comp_force import comp_force
 except ImportError as error:
     comp_force = error
 
 try:
-    from ..Methods.Simulation.Force.comp_force_nodal import comp_force_nodal
+    from ..Methods.Simulation.Force.comp_time_angle import comp_time_angle
 except ImportError as error:
-    comp_force_nodal = error
+    comp_time_angle = error
 
 
 from ._check import InitUnKnowClassError
@@ -32,6 +37,15 @@ class Force(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Simulation.Force.run
+    if isinstance(run, ImportError):
+        run = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Force method run: " + str(run))
+            )
+        )
+    else:
+        run = run
     # cf Methods.Simulation.Force.comp_force
     if isinstance(comp_force, ImportError):
         comp_force = property(
@@ -41,17 +55,17 @@ class Force(FrozenClass):
         )
     else:
         comp_force = comp_force
-    # cf Methods.Simulation.Force.comp_force_nodal
-    if isinstance(comp_force_nodal, ImportError):
-        comp_force_nodal = property(
+    # cf Methods.Simulation.Force.comp_time_angle
+    if isinstance(comp_time_angle, ImportError):
+        comp_time_angle = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Force method comp_force_nodal: " + str(comp_force_nodal)
+                    "Can't use Force method comp_time_angle: " + str(comp_time_angle)
                 )
             )
         )
     else:
-        comp_force_nodal = comp_force_nodal
+        comp_time_angle = comp_time_angle
     # save method is available in all object
     save = save
 

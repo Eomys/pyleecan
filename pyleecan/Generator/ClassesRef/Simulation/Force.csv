@@ -1,4 +1,4 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe file
 is_comp_nodal_force,-,1 to compute lumped tooth forces,0,bool,0,,,,Simulation,,run,VERSION,1,Forces module abstract object,ForceMT
 ,,,,,,,,,,,comp_force,,,,
-,,,,,,,,,,,comp_force_nodal,,,,
+,,,,,,,,,,,comp_time_angle,,,,

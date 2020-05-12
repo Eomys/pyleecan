@@ -26,6 +26,9 @@ def run(self):
     #     self.elec.run()
     if self.mag is not None:
         self.mag.run()
+
+    if self.force is not None:
+        self.force.run()
     # if self.HT is not None:
     #     self.HT.run()
     if self.struct is not None:

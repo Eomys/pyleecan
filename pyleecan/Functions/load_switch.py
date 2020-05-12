@@ -95,6 +95,7 @@ load_switch = {
     "OptiObjFunc": OptiObjFunc,
     "OptiProblem": OptiProblem,
     "OutElec": OutElec,
+    "OutForce": OutForce,
     "OutGeo": OutGeo,
     "OutGeoLam": OutGeoLam,
     "OutMag": OutMag,
