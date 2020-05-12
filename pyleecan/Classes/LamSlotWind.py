@@ -72,6 +72,16 @@ try:
 except ImportError as error:
     get_polar_eq = error
 
+try:
+    from ..Methods.Machine.LamSlotWind.comp_wind_function import comp_wind_function
+except ImportError as error:
+    comp_wind_function = error
+
+try:
+    from ..Methods.Machine.LamSlotWind.plot_mmf_unit import plot_mmf_unit
+except ImportError as error:
+    plot_mmf_unit = error
+
 
 from ._check import InitUnKnowClassError
 from .Winding import Winding
@@ -220,6 +230,29 @@ class LamSlotWind(LamSlot):
         )
     else:
         get_polar_eq = get_polar_eq
+    # cf Methods.Machine.LamSlotWind.comp_wind_function
+    if isinstance(comp_wind_function, ImportError):
+        comp_wind_function = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_wind_function: "
+                    + str(comp_wind_function)
+                )
+            )
+        )
+    else:
+        comp_wind_function = comp_wind_function
+    # cf Methods.Machine.LamSlotWind.plot_mmf_unit
+    if isinstance(plot_mmf_unit, ImportError):
+        plot_mmf_unit = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method plot_mmf_unit: " + str(plot_mmf_unit)
+                )
+            )
+        )
+    else:
+        plot_mmf_unit = plot_mmf_unit
     # save method is available in all object
     save = save
 

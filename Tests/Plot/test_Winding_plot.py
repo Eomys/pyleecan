@@ -4,9 +4,10 @@ from os.path import join
 from unittest import TestCase
 
 import matplotlib.pyplot as plt
-from numpy import pi
+from numpy import pi, linspace
 
 from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.WindingUD import WindingUD
 from pyleecan.Classes.WindingCW2LT import WindingCW2LT
 from pyleecan.Classes.WindingCW1L import WindingCW1L
@@ -164,3 +165,25 @@ class test_Winding_plot(TestCase):
         test_obj.plot_winding()
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Wind_CW2LR_wind2.png"))
+
+    def test_plot_mmf_unit(self):
+        """Test plot unit mmf
+        """
+        stator = LamSlotWind(
+            Rint=0.1325,
+            Rext=0.2,
+            Nrvd=0,
+            L1=0.35,
+            Kf1=0.95,
+            is_internal=False,
+            is_stator=True,
+        )
+        stator.slot = SlotW10(
+            Zs=36, H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3
+        )
+        stator.winding = WindingDW2L(
+            qs=3, Lewout=15e-3, p=3, coil_pitch=5, Ntcoil=7, Npcpp=2
+        )
+        stator.plot_mmf_unit()
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_unit_mmf.png"))
