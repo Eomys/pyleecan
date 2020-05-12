@@ -1,0 +1,120 @@
+# -*- coding: utf-8 -*-
+"""File generated according to Generator/ClassesRef/Simulation/Drive.csv
+WARNING! All changes made in this file will be lost!
+"""
+
+from os import linesep
+from logging import getLogger
+from ._check import check_var, raise_
+from ..Functions.get_logger import get_logger
+from ..Functions.save import save
+from ._frozen import FrozenClass
+
+from ._check import InitUnKnowClassError
+
+
+class Drive(FrozenClass):
+    """Abstract Drive class"""
+
+    VERSION = 1
+
+    # save method is available in all object
+    save = save
+
+    # get_logger method is available in all object
+    get_logger = get_logger
+
+    def __init__(self, Umax=800, Imax=800, init_dict=None):
+        """Constructor of the class. Can be use in two ways :
+        - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
+            for Matrix, None will initialise the property with an empty Matrix
+            for pyleecan type, None will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+
+        ndarray or list can be given for Vector and Matrix
+        object or dict can be given for pyleecan Object"""
+
+        if init_dict is not None:  # Initialisation by dict
+            assert type(init_dict) is dict
+            # Overwrite default value with init_dict content
+            if "Umax" in list(init_dict.keys()):
+                Umax = init_dict["Umax"]
+            if "Imax" in list(init_dict.keys()):
+                Imax = init_dict["Imax"]
+        # Initialisation by argument
+        self.parent = None
+        self.Umax = Umax
+        self.Imax = Imax
+
+        # The class is frozen, for now it's impossible to add new properties
+        self._freeze()
+
+    def __str__(self):
+        """Convert this objet in a readeable string (for print)"""
+
+        Drive_str = ""
+        if self.parent is None:
+            Drive_str += "parent = None " + linesep
+        else:
+            Drive_str += "parent = " + str(type(self.parent)) + " object" + linesep
+        Drive_str += "Umax = " + str(self.Umax) + linesep
+        Drive_str += "Imax = " + str(self.Imax) + linesep
+        return Drive_str
+
+    def __eq__(self, other):
+        """Compare two objects (skip parent)"""
+
+        if type(other) != type(self):
+            return False
+        if other.Umax != self.Umax:
+            return False
+        if other.Imax != self.Imax:
+            return False
+        return True
+
+    def as_dict(self):
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
+
+        Drive_dict = dict()
+        Drive_dict["Umax"] = self.Umax
+        Drive_dict["Imax"] = self.Imax
+        # The class name is added to the dict fordeserialisation purpose
+        Drive_dict["__class__"] = "Drive"
+        return Drive_dict
+
+    def _set_None(self):
+        """Set all the properties to None (except pyleecan object)"""
+
+        self.Umax = None
+        self.Imax = None
+
+    def _get_Umax(self):
+        """getter of Umax"""
+        return self._Umax
+
+    def _set_Umax(self, value):
+        """setter of Umax"""
+        check_var("Umax", value, "float", Vmin=0)
+        self._Umax = value
+
+    # Maximum RMS voltage of the Drive
+    # Type : float, min = 0
+    Umax = property(
+        fget=_get_Umax, fset=_set_Umax, doc=u"""Maximum RMS voltage of the Drive"""
+    )
+
+    def _get_Imax(self):
+        """getter of Imax"""
+        return self._Imax
+
+    def _set_Imax(self, value):
+        """setter of Imax"""
+        check_var("Imax", value, "float", Vmin=0)
+        self._Imax = value
+
+    # Maximum RMS current of the Drive
+    # Type : float, min = 0
+    Imax = property(
+        fget=_get_Imax, fset=_set_Imax, doc=u"""Maximum RMS current of the Drive"""
+    )

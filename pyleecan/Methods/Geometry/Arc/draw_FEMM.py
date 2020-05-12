@@ -32,8 +32,9 @@ def draw_FEMM(self, nodeprop=None, maxseg=None, propname=None, hide=False, group
     """
 
     # Get BC (if any)
-    if self.label in boundary_prop:
-        propname = boundary_prop[self.label]
+    for bound_label in boundary_prop:
+        if bound_label in self.label:
+            propname = boundary_prop[bound_label]
 
     # split if arc angle > 180
     angle = self.get_angle(is_deg=True)

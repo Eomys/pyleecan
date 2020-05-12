@@ -52,7 +52,7 @@ def test_Magnetic_FEMM_sym():
 
     # Definition of the magnetic simulation (is_mmfr=False => no flux from the magnets)
     simu.mag = MagFEMM(
-        type_BH_stator=0, type_BH_rotor=0, is_symmetry_a=True, is_mmfs=False, sym_a=9,
+        type_BH_stator=0, type_BH_rotor=0, is_symmetry_a=True, is_mmfs=False, sym_a=9
     )
     simu.struct = None
     # Just load the Output and ends (we could also have directly filled the Output object)
