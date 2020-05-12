@@ -2,8 +2,7 @@
 import matplotlib.pyplot as plt
 from numpy import pi, linspace, zeros, sqrt, dot, array
 from SciDataTool import Data1D, DataLinspace, DataTime
-from ....Functions.Electrical.coordinate_transformation import dq2ab, ab2uvw
-from ....Methods import NotImplementedYetError
+from ....Functions.Electrical.coordinate_transformation import dq2n
 
 
 def plot_mmf_unit(self, Na=2048):
@@ -27,9 +26,7 @@ def plot_mmf_unit(self, Na=2048):
     out = Output()
 
     # Compute unit mmf
-    if qs != 3:
-        raise NotImplementedYetError("plot_mmf_unit is available only for winding.qs=3")
-    I = ab2uvw(dq2ab(array([1, 0]), 0))
+    I = dq2n(array([1, 0]), 0, n=qs)
     mmf_u = dot(I, wf)
 
     result = zeros((qs + 1, Na))
