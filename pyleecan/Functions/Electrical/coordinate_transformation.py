@@ -1,39 +1,44 @@
-from numpy import array, matmul, sqrt, cos, sin, reshape, newaxis, finfo, log10, floor
+from numpy import matmul, sqrt, cos, sin, reshape, newaxis, finfo, log10, floor, pi, linspace, column_stack, vstack
 
 EPS = int(floor(-log10(finfo(float).eps)))
 SQRT3 = sqrt(3)
 
 
-def ab2uvw(Z_ab):
+def ab2n(Z_ab, n=3):
     """
-    2 phase equivalent to 3 phase coordinate transformation, i.e. Clarke transformation
+    2 phase equivalent to n phase coordinate transformation, i.e. Clarke transformation
 
     Parameters
     ----------
     Z_ab : numpy array
         matrix (N x 2) of 2 phase equivalent values
+    n : int
+        number of phases
 
     Outputs
     -------
-    Z_uwv : numpy array
-        transformed matrix (N x 3) of 3 phase values
+    Z_n : numpy array
+        transformed matrix (N x n) of n phase values
 
     """
+    ii = linspace(0, n-1, n)
+    alpha = 2*ii*pi/n
+    
     # Transformation matrix
-    ab_2_uvw = 1 / 2 * array([[2, -1, -1], [0, SQRT3, -SQRT3]])
+    ab_2_n = column_stack((cos(alpha), -sin(alpha)))
 
-    Z_uvw = matmul(Z_ab, ab_2_uvw)
+    Z_n = matmul(Z_ab, ab_2_n)
 
-    return Z_uvw
+    return Z_n
 
 
-def uvw2ab(Z_uvw):
-    """3 phase to 2 phase equivalent coordinate transformation, i.e. Clarke transformation
+def n2ab(Z_n, n=3):
+    """n phase to 2 phase equivalent coordinate transformation, i.e. Clarke transformation
 
     Parameters
     ----------
-    Z_uvw : numpy array 
-        matrix (N x 3) of 3 phase values
+    Z_n : numpy array 
+        matrix (N x n) of n phase values
 
     Outputs
     -------
@@ -42,10 +47,13 @@ def uvw2ab(Z_uvw):
 
 
     """
+    ii = linspace(0, n-1, n)
+    alpha = 2*ii*pi/n
+    
     # Transformation matrix
-    uvw_2_ab = 2 / 3 * array([[1, 0], [-1 / 2, SQRT3 / 2], [-1 / 2, -SQRT3 / 2]])
+    n_2_ab = 2 / n * vstack((cos(alpha), -sin(alpha)))
 
-    Z_ab = matmul(Z_uvw, uvw_2_ab)
+    Z_ab = matmul(Z_n, n_2_ab)
 
     return Z_ab
 
