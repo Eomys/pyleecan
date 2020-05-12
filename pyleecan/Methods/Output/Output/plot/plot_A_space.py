@@ -2,11 +2,12 @@
 
 from .....Functions.init_fig import init_fig
 from .....Functions.Plot.plot_A_2D import plot_A_2D
-
+from numpy import squeeze
 
 def plot_A_space(
     self,
     Data_str,
+    index_list=[0],
     t=None,
     t_index=0,
     is_deg=True,
@@ -16,7 +17,9 @@ def plot_A_space(
     fund_harm=None,
     is_norm=False,
     unit="SI",
-    out_list=[],
+    data_list=[],
+    legend_list=[],
+    color_list=["tab:blue","tab:red","tab:olive","k","tab:orange","tab:pink"]
 ):
     """Plots a field as a function of space (angle)
 
@@ -49,48 +52,53 @@ def plot_A_space(
     """
 
     # Get Data object names
-    Phys = getattr(self, Data_str.split(".")[0])
-    A = getattr(Phys, Data_str.split(".")[1])
-    B_list = []
-    for out in out_list:
-        Phys = getattr(out, Data_str.split(".")[0])
-        B_list.append(getattr(Phys, Data_str.split(".")[1]))
+    phys = getattr(self, Data_str.split(".")[0])
+    data = getattr(phys, Data_str.split(".")[1])
 
     # Set plot
     (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
-    legend_list = [self.post.legend_name]
-    for out in out_list:
-        legend_list.append(out.post.legend_name)
-    color_list = [self.post.line_color]
-    for out in out_list:
-        color_list.append(out.post.line_color)
+    is_multiple = False
+    for axis in data.axes:
+        if axis.is_multiple:
+            is_multiple = True
+            legend_list = [axis.values.tolist()[i] for i in index_list] + legend_list
+            list_str = axis.name
+    if not is_multiple:
+        legend_list = [self.post.legend_name] + legend_list
+    if unit == "SI":
+        unit = data.unit
+    if is_norm:
+        ylabel = r"$\frac{" + data.symbol + "}{" + data.symbol + "_0}\, [" + unit + "]$"
+    else:
+        ylabel = r"$" + data.symbol + "\, [" + unit + "]$"
+
+    # Prepare the extractions
     if is_deg:
+        a_str = "angle{°}"
         xlabel = "Angle [°]"
     else:
+        a_str = "angle"
         xlabel = "Angle [rad]"
-    if unit == "SI":
-        unit = A.unit
-    if is_norm:
-        ylabel = r"$\frac{" + A.symbol + "}{" + A.symbol + "_0}\, [" + unit + "]$"
-    else:
-        ylabel = r"$" + A.symbol + "\, [" + unit + "]$"
-
-    # Extract the fields
     if t != None:
         t_str = "time=" + str(t)
     else:
         t_str = "time[" + str(t_index) + "]"
 
-    if is_deg:
-        (angle, Ydata) = A.compare_along(
-            "angle{°}", t_str, data_list=B_list, unit=unit, is_norm=is_norm
-        )
+    # Extract the fields
+    if is_multiple:
+        Ydata = []
+        for i in index_list:
+            (angle, Ydatas) = data.compare_along(
+                a_str, t_str, list_str+"["+str(i)+"]", data_list=data_list, unit=unit, is_norm=is_norm
+            )
+            Ydata.append(Ydatas[0])
+        Ydata.append(Ydatas[-1])
     else:
-        (angle, Ydata) = A.compare_along(
-            "angle", t_str, data_list=B_list, unit=unit, is_norm=is_norm
+        (angle, Ydata) = data.compare_along(
+            a_str, t_str, data_list=data_list, unit=unit, is_norm=is_norm
         )
 
-    title = A.name + " over space at " + t_str
+    title = data.name + " over space at " + t_str
 
     # Plot the original graph
     plot_A_2D(
@@ -105,26 +113,30 @@ def plot_A_space(
     )
 
     if is_fft:
-        title = "FFT of " + A.name
-        ylabel = r"$|\widehat{" + A.symbol + "}|\, [" + unit + "]$"
+        title = "FFT of " + data.name
+        if data.symbol == "Magnitude":
+            ylabel = "Magnitude [" + unit + "]"
+        else:
+            ylabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
+        legend_list = [legend_list[0]] + [legend_list[-1]]
 
         if is_spaceorder:
-            order_max = r_max / A.normalizations.get("space_order")
+            order_max = r_max / data.normalizations.get("space_order")
             xlabel = "Space order []"
-            (wavenumber, Ydata) = A.compare_magnitude_along(
+            (wavenumber, Ydata) = data.compare_magnitude_along(
                 "wavenumber=[0," + str(order_max) + "]{space_order}",
                 t_str,
-                data_list=B_list,
+                data_list=data_list,
                 unit=unit,
                 is_norm=False,
             )
 
         else:
             xlabel = "Wavenumber []"
-            (wavenumber, Ydata) = A.compare_magnitude_along(
+            (wavenumber, Ydata) = data.compare_magnitude_along(
                 "wavenumber=[0," + str(r_max) + "]",
                 t_str,
-                data_list=B_list,
+                data_list=data_list,
                 unit=unit,
                 is_norm=False,
             )
