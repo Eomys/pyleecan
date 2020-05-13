@@ -34,6 +34,7 @@ from ..Classes.HoleM58 import HoleM58
 from ..Classes.HoleMag import HoleMag
 from ..Classes.Import import Import
 from ..Classes.ImportGenMatrixSin import ImportGenMatrixSin
+from ..Classes.ImportGenToothSaw import ImportGenToothSaw
 from ..Classes.ImportGenVectLin import ImportGenVectLin
 from ..Classes.ImportGenVectSin import ImportGenVectSin
 from ..Classes.ImportMatlab import ImportMatlab

@@ -68,6 +68,7 @@ class DriveWave(FrozenClass):
             if class_name not in [
                 "Import",
                 "ImportGenMatrixSin",
+                "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",
