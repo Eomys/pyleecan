@@ -129,7 +129,7 @@ def save_separated_obj(classes_list, obj_dict, folder_path, logger):
                     if not isfile(join(folder_path, name)):
                         with open(join(folder_path, name), "w") as json_file:
                             logger.info(
-                                "Saving", val["name"], "in", join(folder_path, name)
+                                "Saving "+ val["name"] + " in " + join(folder_path, name)
                             )
                             dump(
                                 val,

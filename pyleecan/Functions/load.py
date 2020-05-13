@@ -25,7 +25,10 @@ def load_json(file_path):
     """
     if isdir(file_path):
         i = max(file_path.rfind("\\"), file_path.rfind("/"))
-        file_path += file_path[i:] + ".json"
+        if i !=-1:
+            file_path += file_path[i:] + ".json"
+        else:
+            file_path += "/"+ file_path + ".json"
     # The file_name must end with .json
     elif not match(".*\.json", file_path):
         file_path += ".json"  # If it doesn't, we add .json at the end
@@ -191,7 +194,7 @@ def load_matlib(mat_path):
 
     # Get and Read all the file to create a list dictionary : variable name <=> value
     matlib = list()
-    for (dirpath, dirnames, filenames) in walk(mat_path):
+    for (dirpath, _, filenames) in walk(mat_path):
         for file_name in filenames:
             # For all json file in the folder and subfolder
             if file_name[-5:] == ".json":
