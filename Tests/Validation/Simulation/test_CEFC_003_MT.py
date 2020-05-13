@@ -23,13 +23,10 @@ import pytest
 @pytest.mark.validation
 @pytest.mark.FEMM
 def test_CEFC_003_t0():
-    """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
-    50 kW peak, 400 Nm peak at 1500 rpm from publication
+    """Validation of magnetic air-gap surface force calculation based on Maxwell Tensor with an academic slotless machine.
 
     from publication
-    Z. Yang, M. Krishnamurthy and I. P. Brown,
-    "Electromagnetic and vibrational characteristic of IPM over full torque-speed range,"
-    Electric Machines & Drives Conference (IEMDC), 2013 IEEE International, Chicago, IL, 2013, pp. 295-302.
+
     """
 
     simu = Simu1(name="FM_CEFC_003_MT", machine=CEFC_Lam, struct=None)
