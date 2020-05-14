@@ -2,7 +2,7 @@
 
 from .....Functions.init_fig import init_fig
 from .....Functions.Plot.plot_A_2D import plot_A_2D
-from numpy import squeeze
+from numpy import squeeze, split
 
 def plot_A_space(
     self,
@@ -57,14 +57,23 @@ def plot_A_space(
 
     # Set plot
     (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
-    is_multiple = False
-    for axis in data.axes:
-        if axis.is_multiple:
-            is_multiple = True
-            legend_list = [axis.values.tolist()[i] for i in index_list] + legend_list
-            list_str = axis.name
-    if not is_multiple:
-        legend_list = [self.post.legend_name] + legend_list
+    data_list2 = [data] + data_list
+    if legend_list == []:
+        legend_list = [d.name for d in data_list2]
+    legends = []
+    list_str = None
+    for i, d in enumerate(data_list2):
+        is_components = False
+        for axis in d.axes:
+            try:
+                if axis.is_components:
+                    is_components = True
+                    legends += [legend_list[i] + ": " + axis.values.tolist()[j] for j in index_list]
+                    list_str = axis.name
+            except:
+                is_components = False
+        if not is_components:
+            legends += [legend_list[i]]
     if unit == "SI":
         unit = data.unit
     if is_norm:
@@ -83,28 +92,33 @@ def plot_A_space(
         t_str = "time=" + str(t)
     else:
         t_str = "time[" + str(t_index) + "]"
+    if data_list == []:
+        title = data.name + " over space at " + t_str
+    else:
+        title = "Comparison over space at " + t_str
 
     # Extract the fields
-    if is_multiple:
+    if list_str is not None:
+        (angle, Ydatas) = data.compare_along(
+            a_str, t_str, list_str+str(index_list), data_list=data_list, unit=unit, is_norm=is_norm
+        )
         Ydata = []
-        for i in index_list:
-            (angle, Ydatas) = data.compare_along(
-                a_str, t_str, list_str+"["+str(i)+"]", data_list=data_list, unit=unit, is_norm=is_norm
-            )
-            Ydata.append(Ydatas[0])
-        Ydata.append(Ydatas[-1])
+        for d in Ydatas:
+            if d.ndim != 1:
+                Ydata += split(d, len(index_list))
+            else:
+                Ydata += [d]
+        Ydata = [squeeze(d) for d in Ydata]
     else:
         (angle, Ydata) = data.compare_along(
             a_str, t_str, data_list=data_list, unit=unit, is_norm=is_norm
         )
 
-    title = data.name + " over space at " + t_str
-
     # Plot the original graph
     plot_A_2D(
         angle,
         Ydata,
-        legend_list=legend_list,
+        legend_list=legends,
         color_list=color_list,
         fig=fig,
         title=title,
