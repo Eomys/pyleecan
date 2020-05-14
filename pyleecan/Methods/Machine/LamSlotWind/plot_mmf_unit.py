@@ -29,14 +29,9 @@ def plot_mmf_unit(self, Na=2048):
     I = dq2n(array([1, 0]), 0, n=qs)
     mmf_u = dot(I, wf)
 
-    result = zeros((qs + 1, Na))
-    result[0, :] = mmf_u
-    for ii in range(qs):
-        result[ii + 1, :] = wf[ii, :]
-
     # Create a Data object
     Phase = Data1D(
-        name="phase", unit="", values=["Phase A", "Phase B", "Phase C", "Unit MMF"]
+        name="phase", unit="", values=["Phase A", "Phase B", "Phase C"], is_components=True
     )
     Angle = DataLinspace(
         name="angle",
@@ -48,11 +43,18 @@ def plot_mmf_unit(self, Na=2048):
         include_endpoint=False,
     )
     out.mag.Br = DataTime(
-        name="Unit MMF",
+        name="WF",
         unit="p.u.",
         symbol="Magnitude",
         axes=[Phase, Angle],
-        values=result,
+        values=wf,
+    )
+    out.mag.Bt = DataTime(
+        name="Unit MMF",
+        unit="p.u.",
+        symbol="Magnitude",
+        axes=[Angle],
+        values=mmf_u,
     )
 
-    out.plot_A_space_compare("mag.Br", is_fft=True, index_list=[0, 1, 2, 3])
+    out.plot_A_space("mag.Br", is_fft=True, index_list=[0, 1, 2], data_list=[out.mag.Bt])
