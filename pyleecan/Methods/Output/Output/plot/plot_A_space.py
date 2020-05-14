@@ -4,6 +4,7 @@ from .....Functions.init_fig import init_fig
 from .....Functions.Plot.plot_A_2D import plot_A_2D
 from numpy import squeeze, split
 
+
 def plot_A_space(
     self,
     Data_str,
@@ -19,7 +20,7 @@ def plot_A_space(
     unit="SI",
     data_list=[],
     legend_list=[],
-    color_list=["tab:blue","tab:red","tab:olive","k","tab:orange","tab:pink"]
+    color_list=["tab:blue", "tab:red", "tab:olive", "k", "tab:orange", "tab:pink"],
 ):
     """Plots a field as a function of space (angle)
 
@@ -74,7 +75,10 @@ def plot_A_space(
             try:
                 if axis.is_components:
                     is_components = True
-                    legends += [legend_list[i] + ": " + axis.values.tolist()[j] for j in index_list]
+                    legends += [
+                        legend_list[i] + ": " + axis.values.tolist()[j]
+                        for j in index_list
+                    ]
                     list_str = axis.name
             except:
                 is_components = False
@@ -106,7 +110,12 @@ def plot_A_space(
     # Extract the fields
     if list_str is not None:
         (angle, Ydatas) = data.compare_along(
-            a_str, t_str, list_str+str(index_list), data_list=data_list, unit=unit, is_norm=is_norm
+            a_str,
+            t_str,
+            list_str + str(index_list),
+            data_list=data_list,
+            unit=unit,
+            is_norm=is_norm,
         )
         Ydata = []
         for d in Ydatas:

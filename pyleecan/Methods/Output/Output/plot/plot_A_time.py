@@ -18,7 +18,7 @@ def plot_A_time(
     unit="SI",
     data_list=[],
     legend_list=[],
-    color_list=["tab:blue","tab:red","tab:olive","k","tab:orange","tab:pink"]
+    color_list=["tab:blue", "tab:red", "tab:olive", "k", "tab:orange", "tab:pink"],
 ):
     """Plots a field as a function of time
 
@@ -69,7 +69,10 @@ def plot_A_time(
             try:
                 if axis.is_components:
                     is_components = True
-                    legends += [legend_list[i] + ": " + axis.values.tolist()[j] for j in index_list]
+                    legends += [
+                        legend_list[i] + ": " + axis.values.tolist()[j]
+                        for j in index_list
+                    ]
                     list_str = axis.name
             except:
                 is_components = False
@@ -82,7 +85,7 @@ def plot_A_time(
         ylabel = r"$\frac{" + data.symbol + "}{" + data.symbol + "_0}\, [" + unit + "]$"
     else:
         ylabel = r"$" + data.symbol + "\, [" + unit + "]$"
-    
+
     # Prepare the extractions
     if alpha != None:
         alpha_str = "angle=" + str(alpha)
@@ -96,7 +99,12 @@ def plot_A_time(
     # Extract the fields
     if list_str is not None:
         (time, Ydatas) = data.compare_along(
-            "time", alpha_str, list_str+str(index_list), data_list=data_list, unit=unit, is_norm=is_norm
+            "time",
+            alpha_str,
+            list_str + str(index_list),
+            data_list=data_list,
+            unit=unit,
+            is_norm=is_norm,
         )
         Ydata = []
         for d in Ydatas:

@@ -37,8 +37,6 @@ def plot_A_surf(
         unit in which to plot the field
     colormap : colormap object
         colormap prescribed by user
-    out_list : list
-        list of Output objects to compare
     """
 
     # Get Data object name
@@ -61,9 +59,13 @@ def plot_A_surf(
 
     # Extract the field
     if is_deg:
-        (time, angle, Br) = data.get_along("time", "angle{°}", unit=unit, is_norm=is_norm)
+        (time, angle, Br) = data.get_along(
+            "time", "angle{°}", unit=unit, is_norm=is_norm
+        )
     else:
-        (time, angle, Br) = data.get_along("time", "angle{°}", unit=unit, is_norm=is_norm)
+        (time, angle, Br) = data.get_along(
+            "time", "angle{°}", unit=unit, is_norm=is_norm
+        )
 
     time_map, angle_map = meshgrid(time, angle)
 

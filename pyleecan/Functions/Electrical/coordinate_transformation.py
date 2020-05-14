@@ -1,4 +1,19 @@
-from numpy import array, matmul, sqrt, cos, sin, reshape, newaxis, finfo, log10, floor, pi, linspace, column_stack, vstack
+from numpy import (
+    array,
+    matmul,
+    sqrt,
+    cos,
+    sin,
+    reshape,
+    newaxis,
+    finfo,
+    log10,
+    floor,
+    pi,
+    linspace,
+    column_stack,
+    vstack,
+)
 
 EPS = int(floor(-log10(finfo(float).eps)))
 SQRT3 = sqrt(3)
@@ -21,12 +36,12 @@ def ab2n(Z_ab, n=3):
         transformed matrix (N x n) of n phase values
 
     """
-    ii = linspace(0, n-1, n)
-    alpha = 2*ii*pi/n
-    
+    ii = linspace(0, n - 1, n)
+    alpha = 2 * ii * pi / n
+
     # Transformation matrix
     ab_2_n = vstack((cos(alpha).round(decimals=EPS), -sin(alpha).round(decimals=EPS)))
-    
+
     Z_n = matmul(Z_ab, ab_2_n)
 
     return Z_n
@@ -46,12 +61,18 @@ def n2ab(Z_n, n=3):
         transformed matrix (N x 2) of 2 phase equivalent values
 
     """
-    ii = linspace(0, n-1, n)
-    alpha = 2*ii*pi/n
-    
+    ii = linspace(0, n - 1, n)
+    alpha = 2 * ii * pi / n
+
     # Transformation matrix
-    n_2_ab = 2/n * column_stack((cos(alpha).round(decimals=EPS), -sin(alpha).round(decimals=EPS)))
-    
+    n_2_ab = (
+        2
+        / n
+        * column_stack(
+            (cos(alpha).round(decimals=EPS), -sin(alpha).round(decimals=EPS))
+        )
+    )
+
     Z_ab = matmul(Z_n, n_2_ab)
 
     return Z_ab

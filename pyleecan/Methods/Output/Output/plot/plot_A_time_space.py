@@ -74,7 +74,9 @@ def plot_A_time_space(
             "time", "angle{°}", unit=unit, is_norm=is_norm
         )
     else:
-        (time, angle, A_t_s) = data.get_along("time", "angle", unit=unit, is_norm=is_norm)
+        (time, angle, A_t_s) = data.get_along(
+            "time", "angle", unit=unit, is_norm=is_norm
+        )
     angle_map, time_map = meshgrid(angle, time)
     plot_A_3D(
         angle_map,
@@ -99,9 +101,7 @@ def plot_A_time_space(
         ylabel = r"$\frac{" + data.symbol + "}{" + data.symbol + "_0}\, [" + unit + "]$"
     else:
         ylabel = r"$" + data.symbol + "\, [" + unit + "]$"
-    (time, Ydata) = data.compare_along(
-        "time", unit=unit, is_norm=is_norm
-    )
+    (time, Ydata) = data.compare_along("time", unit=unit, is_norm=is_norm)
     # Plot the original graph
     plot_A_2D(
         time,
@@ -118,9 +118,7 @@ def plot_A_time_space(
         xlabel = "Angle [°]"
     else:
         xlabel = "Angle [rad]"
-    (angle, Ydata) = data.compare_along(
-        "angle", unit=unit, is_norm=is_norm
-    )
+    (angle, Ydata) = data.compare_along("angle", unit=unit, is_norm=is_norm)
     # Plot the original graph
     plot_A_2D(
         angle,
@@ -141,16 +139,12 @@ def plot_A_time_space(
         elec_max = freq_max / data.normalizations.get("elec_order")
         xlabel = "Electrical order []"
         (freqs, Ydata) = data.compare_magnitude_along(
-            "freqs=[0," + str(elec_max) + "]{elec_order}",
-            unit=unit,
-            is_norm=False,
+            "freqs=[0," + str(elec_max) + "]{elec_order}", unit=unit, is_norm=False,
         )
     else:
         xlabel = "Frequency [Hz]"
         (freqs, Ydata) = data.compare_magnitude_along(
-            "freqs=[0," + str(freq_max) + "]",
-            unit=unit,
-            is_norm=False,
+            "freqs=[0," + str(freq_max) + "]", unit=unit, is_norm=False,
         )
     plot_A_2D(
         freqs,
@@ -174,7 +168,7 @@ def plot_A_time_space(
         )
     else:
         xlabel = "Wavenumber []"
-        (wavenumber, Ydata) = data.get_magnitude_along(
+        (wavenumber, Ydata) = data.compare_magnitude_along(
             "wavenumber=[0," + str(r_max) + "]", unit=unit, is_norm=False
         )
     plot_A_2D(

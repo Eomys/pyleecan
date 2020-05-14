@@ -104,7 +104,9 @@ def plot_A_fft2(
             zlabel = r"$Angle(" + data.symbol + ")\, [°]$"
             mag_max = 180
         else:
-            (freqs, wavenumber, A_phase) = data.get_phase_along(x_str, y_str, unit="rad")
+            (freqs, wavenumber, A_phase) = data.get_phase_along(
+                x_str, y_str, unit="rad"
+            )
             zlabel = r"$Angle(" + data.symbol + ")\, [rad]$"
             mag_max = pi
 

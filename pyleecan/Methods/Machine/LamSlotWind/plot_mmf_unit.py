@@ -31,7 +31,10 @@ def plot_mmf_unit(self, Na=2048):
 
     # Create a Data object
     Phase = Data1D(
-        name="phase", unit="", values=["Phase A", "Phase B", "Phase C"], is_components=True
+        name="phase",
+        unit="",
+        values=["Phase A", "Phase B", "Phase C"],
+        is_components=True,
     )
     Angle = DataLinspace(
         name="angle",
@@ -43,18 +46,10 @@ def plot_mmf_unit(self, Na=2048):
         include_endpoint=False,
     )
     out.mag.Br = DataTime(
-        name="WF",
-        unit="p.u.",
-        symbol="Magnitude",
-        axes=[Phase, Angle],
-        values=wf,
+        name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf,
     )
     MMF = DataTime(
-        name="Unit MMF",
-        unit="p.u.",
-        symbol="Magnitude",
-        axes=[Angle],
-        values=mmf_u,
+        name="Unit MMF", unit="p.u.", symbol="Magnitude", axes=[Angle], values=mmf_u,
     )
 
     out.plot_A_space("mag.Br", is_fft=True, index_list=[0, 1, 2], data_list=[MMF])
