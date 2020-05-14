@@ -17,12 +17,12 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from Tests import DATA_DIR
 import pytest
-
+import json
 
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
-def test_Magnetic_Phi0():
+def test_Magnetic_AGSF():
     """Validation of a SynRM machine from Syr-e r29 open source software
     https://sourceforge.net/projects/syr-e/
     Test compute air-gap surface force with Maxwell Tensor.
@@ -83,7 +83,38 @@ def test_Magnetic_Phi0():
     fig.savefig(join(save_path, "test_FM_SynRM_FL_001_plot_force_space"))
 
     # Plot the AGSF as a function of time with the time fft
-    freq_max = 60
+    freq_max = 1000
+    out.plot_A_time("force.Prad", alpha=0, is_fft=True, freq_max=freq_max)
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "test_FM_SynRM_FL_001_plot_force_time"))
+
+    # Plot the AGSF as a function of space with the spatial fft
+    out.plot_A_space("force.Ptan", is_fft=True, r_max=r_max)
+
+    # Plot the AGSF as a function of time with the time fft
+    out.plot_A_time("force.Ptan", alpha=0, is_fft=True, freq_max=freq_max)
+
+    # Test save with MeshSolution object in out
+    out.save(save_path=save_path)
+    # ------------------------------------------------------
+
+def test_Magnetic_load():
+
+    load_path = join("C:\\Users\\Raphael\\Desktop\\Git\\EOMYS-Public\\pyleecan\\pyleecan\\Results\\FM_SynRM_FL_001",
+                     "Output.json")
+    # Test to load the Meshsolution object (inside the output):
+    with open(load_path) as json_file:
+        json_tmp = json.load(json_file)
+        out = Output(init_dict=json_tmp)
+
+    # Plot the AGSF as a function of space with the spatial fft
+    r_max = 78
+    out.plot_A_space("force.Prad", is_fft=True, r_max=r_max)
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "test_FM_SynRM_FL_001_plot_force_space"))
+
+    # Plot the AGSF as a function of time with the time fft
+    freq_max = 1000
     out.plot_A_time("force.Prad", alpha=0, is_fft=True, freq_max=freq_max)
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_FM_SynRM_FL_001_plot_force_time"))
@@ -91,4 +122,9 @@ def test_Magnetic_Phi0():
     out.plot_A_fft2("force.Prad", freq_max=freq_max, r_max=r_max)
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_FM_SynRM_FL_001_plot_force_fft2"))
+
+    out.plot_A_cfft2("force.Prad", freq_max=freq_max, r_max=r_max)
+
+    out.plot_A_time_space("force.Prad", freq_max=freq_max, r_max=r_max)
+    out.plot_A_time_space("mag.Br", freq_max=freq_max, r_max=r_max, z_max=100)
     # ------------------------------------------------------
