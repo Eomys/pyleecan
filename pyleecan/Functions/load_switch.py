@@ -36,6 +36,7 @@ load_switch = {
     "HoleMag": HoleMag,
     "Import": Import,
     "ImportGenMatrixSin": ImportGenMatrixSin,
+    "ImportGenToothSaw": ImportGenToothSaw,
     "ImportGenVectLin": ImportGenVectLin,
     "ImportGenVectSin": ImportGenVectSin,
     "ImportMatlab": ImportMatlab,

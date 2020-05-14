@@ -1702,6 +1702,7 @@
         "daughters": [
             "Import",
             "ImportGenMatrixSin",
+            "ImportGenToothSaw",
             "ImportGenVectLin",
             "ImportGenVectSin",
             "ImportMatlab",
@@ -1745,6 +1746,80 @@
                 "type": "[ImportGenVectSin]",
                 "unit": "-",
                 "value": ""
+            }
+        ]
+    },
+    "ImportGenToothSaw": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "To generate a toothsaw vector",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "ImportMatrix",
+        "name": "ImportGenToothSaw",
+        "package": "Import",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/ImportGenToothSaw.csv",
+        "properties": [
+            {
+                "desc": "0: Forward toothsaw, 1: Backwards toothsaw, 2: symmetrical toothsaw",
+                "max": "2",
+                "min": "0",
+                "name": "type_signal",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Frequency of the signal to generate",
+                "max": "",
+                "min": "0",
+                "name": "f",
+                "type": "float",
+                "unit": "Hz",
+                "value": 100
+            },
+            {
+                "desc": "Amplitude of the signal to generate",
+                "max": "",
+                "min": "",
+                "name": "A",
+                "type": "float",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Length of the signal to generate",
+                "max": "",
+                "min": "0",
+                "name": "N",
+                "type": "int",
+                "unit": "-",
+                "value": 1024
+            },
+            {
+                "desc": "End time of the signal generation",
+                "max": "",
+                "min": "0",
+                "name": "Tf",
+                "type": "float",
+                "unit": "s",
+                "value": 1
+            },
+            {
+                "desc": "Time offset",
+                "max": "",
+                "min": "",
+                "name": "Dt",
+                "type": "float",
+                "unit": "s",
+                "value": 0
             }
         ]
     },
@@ -1917,6 +1992,7 @@
         "daughters": [
             "ImportMatrix",
             "ImportGenMatrixSin",
+            "ImportGenToothSaw",
             "ImportGenVectLin",
             "ImportGenVectSin",
             "ImportMatrixVal",
@@ -2531,7 +2607,9 @@
             "plot_winding",
             "comp_fill_factor",
             "comp_output_geo",
-            "get_polar_eq"
+            "get_polar_eq",
+            "comp_wind_function",
+            "plot_mmf_unit"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
@@ -5531,7 +5609,8 @@
             "plot.plot_A_fft2",
             "plot.Magnetic.plot_B_space",
             "plot.Structural.plot_force_space",
-            "plot.Magnetic.plot_mesh_field"
+            "plot.Magnetic.plot_mesh_field",
+            "plot.plot_A_space_compare"
         ],
         "mother": "",
         "name": "Output",

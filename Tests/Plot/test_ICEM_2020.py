@@ -427,6 +427,7 @@ def test_BoreFlower():
     assert len(fig.axes[0].patches) == 42
 
 
+@pytest.mark.long
 @pytest.mark.FEMM
 def test_ecc_FEMM():
     """Figure 19: transfrom_list in FEMM for eccentricities
