@@ -37,33 +37,35 @@ def plot_A_surf(
         unit in which to plot the field
     colormap : colormap object
         colormap prescribed by user
-    out_list : list
-        list of Output objects to compare
     """
 
     # Get Data object name
-    Phys = getattr(self, Data_str.split(".")[0])
-    A = getattr(Phys, Data_str.split(".")[1])
+    phys = getattr(self, Data_str.split(".")[0])
+    data = getattr(phys, Data_str.split(".")[1])
 
     # Set plot
-    title = A.name + " as a function of time and space"
+    title = data.name + " as a function of time and space"
     xlabel = "Time [s]"
     if is_deg:
         ylabel = "Angle [°]"
     else:
         ylabel = "Angle [rad]"
     if unit == "SI":
-        unit = A.unit
+        unit = data.unit
     if is_norm:
-        zlabel = r"$\frac{" + A.symbol + "}{" + A.symbol + "_0}\, [" + unit + "]$"
+        zlabel = r"$\frac{" + data.symbol + "}{" + data.symbol + "_0}\, [" + unit + "]$"
     else:
-        zlabel = r"$" + A.symbol + "\, [" + unit + "]$"
+        zlabel = r"$" + data.symbol + "\, [" + unit + "]$"
 
     # Extract the field
     if is_deg:
-        (time, angle, Br) = A.get_along("time", "angle{°}", unit=unit, is_norm=is_norm)
+        (time, angle, Br) = data.get_along(
+            "time", "angle{°}", unit=unit, is_norm=is_norm
+        )
     else:
-        (time, angle, Br) = A.get_along("time", "angle{°}", unit=unit, is_norm=is_norm)
+        (time, angle, Br) = data.get_along(
+            "time", "angle{°}", unit=unit, is_norm=is_norm
+        )
 
     time_map, angle_map = meshgrid(time, angle)
 
