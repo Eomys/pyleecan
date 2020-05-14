@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
-from numpy import pi, linspace, zeros, sqrt, dot, array
+from numpy import pi, linspace, zeros, sqrt, dot, array, squeeze
 from SciDataTool import Data1D, DataLinspace, DataTime
 from ....Functions.Electrical.coordinate_transformation import dq2n
 
@@ -27,7 +27,7 @@ def plot_mmf_unit(self, Na=2048):
 
     # Compute unit mmf
     I = dq2n(array([1, 0]), 0, n=qs)
-    mmf_u = dot(I, wf)
+    mmf_u = squeeze(dot(I, wf))
 
     # Create a Data object
     Phase = Data1D(
@@ -49,7 +49,7 @@ def plot_mmf_unit(self, Na=2048):
         axes=[Phase, Angle],
         values=wf,
     )
-    out.mag.Bt = DataTime(
+    MMF = DataTime(
         name="Unit MMF",
         unit="p.u.",
         symbol="Magnitude",
@@ -57,4 +57,4 @@ def plot_mmf_unit(self, Na=2048):
         values=mmf_u,
     )
 
-    out.plot_A_space("mag.Br", is_fft=True, index_list=[0, 1, 2], data_list=[out.mag.Bt])
+    out.plot_A_space("mag.Br", is_fft=True, index_list=[0, 1, 2], data_list=[MMF])
