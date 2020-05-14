@@ -28,7 +28,9 @@ def plot_A_space(
     self : Output
         an Output object
     Data_str : str
-        name of the Data Object to plot (e.g. "mag.Br")
+        name of the Data object to plot (e.g. "mag.Br")
+    index_list : list
+        list of indices to take from a components axis
     t : float
         time value at which to slice
     t_index : int
@@ -47,8 +49,12 @@ def plot_A_space(
         boolean indicating if the field must be normalized
     unit : str
         unit in which to plot the field
-    out_list : list
-        list of Output objects to compare
+    data_list : list
+        list of Data objects to compare
+    legend_list : list
+        list of legends to use for each Data object (including reference one) instead of data.name
+    color_list : list
+        list of colors to use for each Data object
     """
 
     # Get Data object names
@@ -127,7 +133,10 @@ def plot_A_space(
     )
 
     if is_fft:
-        title = "FFT of " + data.name
+        if data_list == []:
+            title = "FFT of " + data.name
+        else:
+            title = "Comparison of FFT"
         if data.symbol == "Magnitude":
             ylabel = "Magnitude [" + unit + "]"
         else:
