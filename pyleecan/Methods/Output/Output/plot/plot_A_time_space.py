@@ -81,7 +81,7 @@ def plot_A_time_space(
     plot_A_3D(
         angle_map,
         time_map,
-        transpose(A_t_s),
+        A_t_s,
         z_max=z_max,
         z_min=-z_max,
         colormap=colormap,
@@ -118,7 +118,11 @@ def plot_A_time_space(
         xlabel = "Angle [°]"
     else:
         xlabel = "Angle [rad]"
-    (angle, Ydata) = data.compare_along("angle", unit=unit, is_norm=is_norm)
+    if is_deg:
+        (angle, Ydata) = data.compare_along("angle{°}", unit=unit, is_norm=is_norm)
+    else:
+        (angle, Ydata) = data.compare_along("angle", unit=unit, is_norm=is_norm)
+    
     # Plot the original graph
     plot_A_2D(
         angle,

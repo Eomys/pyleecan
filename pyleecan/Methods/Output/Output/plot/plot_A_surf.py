@@ -67,7 +67,7 @@ def plot_A_surf(
             "time", "angle{°}", unit=unit, is_norm=is_norm
         )
 
-    time_map, angle_map = meshgrid(time, angle)
+    angle_map, time_map = meshgrid(angle, time)
 
     # Plot the original graph
     plot_A_3D(
