@@ -37,6 +37,8 @@ def test_CEFC_001():
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=0, is_sliding_band=False)
+    simu.force = None
+    simu.struct = None
 
     out = Output(simu=simu)
     out.post.legend_name = "Slotless lamination"

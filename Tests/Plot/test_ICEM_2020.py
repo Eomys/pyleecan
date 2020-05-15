@@ -72,6 +72,7 @@ def test_FEMM_sym():
         is_antiper_a=True,
     )
     # Stop after magnetic computation
+    simu.force = None
     simu.struct = None
     # Run simulation
     out = Output(simu=simu)
@@ -465,6 +466,7 @@ def test_ecc_FEMM():
         is_save_FEA=True,
         sym_a=1,
     )
+    simu.force = None
     simu.struct = None
 
     # Set two transformations

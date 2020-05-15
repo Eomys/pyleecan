@@ -19,6 +19,7 @@ from Tests import DATA_DIR
 import pytest
 import json
 
+
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
@@ -32,7 +33,7 @@ def test_Magnetic_AGSF():
     freq0 = 50  # supply frequency [Hz]
     qs = 3  # Number of phases
     p = 2  # Number of pole pairs
-    Nt_tot = 2**6  # Number of time step for each current angle Phi0
+    Nt_tot = 2 ** 6  # Number of time step for each current angle Phi0
     Imax = 28.6878  # Nominal stator current magnitude [A]
     # to have one torque ripple period since torque ripple appears at multiple of 6*freq0
     Nrev = 1
@@ -46,7 +47,7 @@ def test_Magnetic_AGSF():
     simu = Simu1(name="FM_SynRM_FL_001", machine=SynRM_001)
     time_obj = ImportMatrixVal(value=time)
     angle = ImportGenVectLin(start=0, stop=2 * pi, num=2016, endpoint=False)
-    alpha_rotor = ImportGenVectLin(start=0, stop= 2*pi, num=Nt_tot, endpoint=False)
+    alpha_rotor = ImportGenVectLin(start=0, stop=2 * pi, num=Nt_tot, endpoint=False)
 
     simu.input = InputCurrent(
         Is=None,
@@ -98,10 +99,13 @@ def test_Magnetic_AGSF():
     out.save(save_path=save_path)
     # ------------------------------------------------------
 
+
 def test_Magnetic_load():
 
-    load_path = join("C:\\Users\\Raphael\\Desktop\\Git\\EOMYS-Public\\pyleecan\\pyleecan\\Results\\FM_SynRM_FL_001",
-                     "Output.json")
+    load_path = join(
+        "C:\\Users\\Raphael\\Desktop\\Git\\EOMYS-Public\\pyleecan\\pyleecan\\Results\\FM_SynRM_FL_001",
+        "Output.json",
+    )
     # Test to load the Meshsolution object (inside the output):
     with open(load_path) as json_file:
         json_tmp = json.load(json_file)

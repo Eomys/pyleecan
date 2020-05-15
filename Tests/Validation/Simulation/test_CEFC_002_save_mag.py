@@ -56,6 +56,8 @@ def test_CEFC_002():
         is_save_FEA=True,
         is_sliding_band=False,
     )
+    simu.force = None
+    simu.struct = None
 
     out = Output(simu=simu)
     out.post.legend_name = "Slotless lamination"

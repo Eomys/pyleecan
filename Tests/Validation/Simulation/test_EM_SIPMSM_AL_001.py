@@ -61,6 +61,7 @@ def test_Magnetic_FEMM_sym():
         is_mmfr=False,
         angle_stator=-pi / 6,
     )
+    simu.force = None
     simu.struct = None
     # Just load the Output and ends (we could also have directly filled the Output object)
     simu_load = Simu1(init_dict=simu.as_dict())
