@@ -1,3 +1,4 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 mag,-,Magnetic module,0,Magnetics,,,,,Simulation,Simulation,run,VERSION,1,Five sequential weak coupling multi physics simulation
 struct,-,Structural module,0,Structural,,,,,,,,,,
+force,-,Force moduale,0,Force,,,,,,,,,,

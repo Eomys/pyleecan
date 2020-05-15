@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
-from numpy import pi, linspace, zeros, sqrt, dot, array
+from numpy import pi, linspace, zeros, sqrt, dot, array, squeeze
 from SciDataTool import Data1D, DataLinspace, DataTime
-from ....Functions.Electrical.coordinate_transformation import dq2ab, ab2uvw
-from ....Methods import NotImplementedYetError
+from ....Functions.Electrical.coordinate_transformation import dq2n
 
 
 def plot_mmf_unit(self, Na=2048):
@@ -27,19 +26,15 @@ def plot_mmf_unit(self, Na=2048):
     out = Output()
 
     # Compute unit mmf
-    if qs != 3:
-        raise NotImplementedYetError("plot_mmf_unit is available only for winding.qs=3")
-    I = ab2uvw(dq2ab(array([1, 0]), 0))
-    mmf_u = dot(I, wf)
-
-    result = zeros((qs + 1, Na))
-    result[0, :] = mmf_u
-    for ii in range(qs):
-        result[ii + 1, :] = wf[ii, :]
+    I = dq2n(array([1, 0]), 0, n=qs)
+    mmf_u = squeeze(dot(I, wf))
 
     # Create a Data object
     Phase = Data1D(
-        name="phase", unit="", values=["Phase A", "Phase B", "Phase C", "Unit MMF"]
+        name="phase",
+        unit="",
+        values=["Phase A", "Phase B", "Phase C"],
+        is_components=True,
     )
     Angle = DataLinspace(
         name="angle",
@@ -51,11 +46,10 @@ def plot_mmf_unit(self, Na=2048):
         include_endpoint=False,
     )
     out.mag.Br = DataTime(
-        name="Unit MMF",
-        unit="p.u.",
-        symbol="Magnitude",
-        axes=[Phase, Angle],
-        values=result,
+        name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf,
+    )
+    MMF = DataTime(
+        name="Unit MMF", unit="p.u.", symbol="Magnitude", axes=[Angle], values=mmf_u,
     )
 
-    out.plot_A_space_compare("mag.Br", is_fft=True, index_list=[0, 1, 2, 3])
+    out.plot_A_space("mag.Br", is_fft=True, index_list=[0, 1, 2], data_list=[MMF])

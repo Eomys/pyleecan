@@ -796,8 +796,9 @@
         "desc": "Forces module abstract object",
         "is_internal": false,
         "methods": [
+            "run",
             "comp_force",
-            "comp_force_nodal"
+            "comp_time_angle"
         ],
         "mother": "",
         "name": "Force",
@@ -5059,6 +5060,87 @@
             }
         ]
     },
+    "OutForce": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Gather the structural module outputs",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "OutForce",
+        "package": "Output",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutForce.csv",
+        "properties": [
+            {
+                "desc": "Structural time vector (no symmetry)",
+                "max": "",
+                "min": "",
+                "name": "time",
+                "type": "ndarray",
+                "unit": "s",
+                "value": null
+            },
+            {
+                "desc": "Structural position vector (no symmetry)",
+                "max": "",
+                "min": "",
+                "name": "angle",
+                "type": "ndarray",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "desc": "Length of the time vector",
+                "max": "",
+                "min": "",
+                "name": "Nt_tot",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Length of the angle vector",
+                "max": "",
+                "min": "",
+                "name": "Na_tot",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Radial magnetic air-gap surface force",
+                "max": "",
+                "min": "",
+                "name": "Prad",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "N.m^2",
+                "value": "None"
+            },
+            {
+                "desc": "Tangential magnetic air-gap surface force",
+                "max": "",
+                "min": "",
+                "name": "Ptan",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "N.m^2",
+                "value": "None"
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OutStruct"
+            }
+        ]
+    },
     "OutGeo": {
         "constants": [
             {
@@ -5463,24 +5545,6 @@
                 "value": null
             },
             {
-                "desc": "Radial magnetic air-gap surface force",
-                "max": "",
-                "min": "",
-                "name": "Prad",
-                "type": "ndarray",
-                "unit": "N.m^2",
-                "value": null
-            },
-            {
-                "desc": "Tangential magnetic air-gap surface force",
-                "max": "",
-                "min": "",
-                "name": "Ptan",
-                "type": "ndarray",
-                "unit": "N.m^2",
-                "value": null
-            },
-            {
                 "desc": "Name of the logger to use",
                 "max": "",
                 "min": "",
@@ -5488,6 +5552,33 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutStruct"
+            },
+            {
+                "desc": "Displacement output",
+                "max": "",
+                "min": "",
+                "name": "Yr",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "m",
+                "value": "None"
+            },
+            {
+                "desc": "Velocity output",
+                "max": "",
+                "min": "",
+                "name": "Vr",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "m/s",
+                "value": "None"
+            },
+            {
+                "desc": "Acceleration output",
+                "max": "",
+                "min": "",
+                "name": "Ar",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "m/s^2",
+                "value": "None"
             }
         ]
     },
@@ -5597,6 +5688,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Output"
+            },
+            {
+                "desc": "Force module output",
+                "max": "",
+                "min": "",
+                "name": "force",
+                "type": "OutForce",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
@@ -5896,6 +5996,15 @@
                 "min": "",
                 "name": "struct",
                 "type": "Structural",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Force moduale",
+                "max": "",
+                "min": "",
+                "name": "force",
+                "type": "Force",
                 "unit": "-",
                 "value": ""
             }

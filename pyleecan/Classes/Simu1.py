@@ -21,6 +21,7 @@ except ImportError as error:
 from ._check import InitUnKnowClassError
 from .Magnetics import Magnetics
 from .Structural import Structural
+from .Force import Force
 from .Machine import Machine
 from .Input import Input
 
@@ -49,6 +50,7 @@ class Simu1(Simulation):
         self,
         mag=-1,
         struct=-1,
+        force=-1,
         name="",
         desc="",
         machine=-1,
@@ -69,6 +71,8 @@ class Simu1(Simulation):
             mag = Magnetics()
         if struct == -1:
             struct = Structural()
+        if force == -1:
+            force = Force()
         if machine == -1:
             machine = Machine()
         if input == -1:
@@ -80,6 +84,8 @@ class Simu1(Simulation):
                 mag = init_dict["mag"]
             if "struct" in list(init_dict.keys()):
                 struct = init_dict["struct"]
+            if "force" in list(init_dict.keys()):
+                force = init_dict["force"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "desc" in list(init_dict.keys()):
@@ -110,6 +116,20 @@ class Simu1(Simulation):
             self.struct = Structural(init_dict=struct)
         else:
             self.struct = struct
+        # force can be None, a Force object or a dict
+        if isinstance(force, dict):
+            # Check that the type is correct (including daughter)
+            class_name = force.get("__class__")
+            if class_name not in ["Force", "ForceMT"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for force"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.force = class_obj(init_dict=force)
+        else:
+            self.force = force
         # Call Simulation init
         super(Simu1, self).__init__(
             name=name, desc=desc, machine=machine, input=input, logger_name=logger_name
@@ -133,6 +153,11 @@ class Simu1(Simulation):
             Simu1_str += "struct = " + tmp
         else:
             Simu1_str += "struct = None" + linesep + linesep
+        if self.force is not None:
+            tmp = self.force.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Simu1_str += "force = " + tmp
+        else:
+            Simu1_str += "force = None" + linesep + linesep
         return Simu1_str
 
     def __eq__(self, other):
@@ -147,6 +172,8 @@ class Simu1(Simulation):
         if other.mag != self.mag:
             return False
         if other.struct != self.struct:
+            return False
+        if other.force != self.force:
             return False
         return True
 
@@ -164,6 +191,10 @@ class Simu1(Simulation):
             Simu1_dict["struct"] = None
         else:
             Simu1_dict["struct"] = self.struct.as_dict()
+        if self.force is None:
+            Simu1_dict["force"] = None
+        else:
+            Simu1_dict["force"] = self.force.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         Simu1_dict["__class__"] = "Simu1"
@@ -176,6 +207,8 @@ class Simu1(Simulation):
             self.mag._set_None()
         if self.struct is not None:
             self.struct._set_None()
+        if self.force is not None:
+            self.force._set_None()
         # Set to None the properties inherited from Simulation
         super(Simu1, self)._set_None()
 
@@ -210,3 +243,19 @@ class Simu1(Simulation):
     # Structural module
     # Type : Structural
     struct = property(fget=_get_struct, fset=_set_struct, doc=u"""Structural module""")
+
+    def _get_force(self):
+        """getter of force"""
+        return self._force
+
+    def _set_force(self, value):
+        """setter of force"""
+        check_var("force", value, "Force")
+        self._force = value
+
+        if self._force is not None:
+            self._force.parent = self
+
+    # Force moduale
+    # Type : Force
+    force = property(fget=_get_force, fset=_set_force, doc=u"""Force moduale""")
