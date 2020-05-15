@@ -122,7 +122,7 @@ def plot_A_time_space(
         (angle, Ydata) = data.compare_along("angle{°}", unit=unit, is_norm=is_norm)
     else:
         (angle, Ydata) = data.compare_along("angle", unit=unit, is_norm=is_norm)
-    
+
     # Plot the original graph
     plot_A_2D(
         angle,
@@ -143,12 +143,12 @@ def plot_A_time_space(
         elec_max = freq_max / data.normalizations.get("elec_order")
         xlabel = "Electrical order []"
         (freqs, Ydata) = data.compare_magnitude_along(
-            "freqs=[0," + str(elec_max) + "]{elec_order}", unit=unit, is_norm=False,
+            "freqs=[0," + str(elec_max) + "]{elec_order}", unit=unit, is_norm=False
         )
     else:
         xlabel = "Frequency [Hz]"
         (freqs, Ydata) = data.compare_magnitude_along(
-            "freqs=[0," + str(freq_max) + "]", unit=unit, is_norm=False,
+            "freqs=[0," + str(freq_max) + "]", unit=unit, is_norm=False
         )
     plot_A_2D(
         freqs,

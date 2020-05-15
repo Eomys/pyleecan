@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from numpy import pi, linspace, zeros, sqrt, dot, array, squeeze
 from SciDataTool import Data1D, DataLinspace, DataTime
 from ....Functions.Electrical.coordinate_transformation import dq2n
+from ....Functions.Winding.gen_phase_list import gen_name
 
 
 def plot_mmf_unit(self, Na=2048):
@@ -33,7 +34,7 @@ def plot_mmf_unit(self, Na=2048):
     Phase = Data1D(
         name="phase",
         unit="",
-        values=["Phase A", "Phase B", "Phase C"],
+        values=gen_name(qs, is_add_phase=True),
         is_components=True,
     )
     Angle = DataLinspace(
@@ -46,10 +47,10 @@ def plot_mmf_unit(self, Na=2048):
         include_endpoint=False,
     )
     out.mag.Br = DataTime(
-        name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf,
+        name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf
     )
     MMF = DataTime(
-        name="Unit MMF", unit="p.u.", symbol="Magnitude", axes=[Angle], values=mmf_u,
+        name="Unit MMF", unit="p.u.", symbol="Magnitude", axes=[Angle], values=mmf_u
     )
 
     out.plot_A_space("mag.Br", is_fft=True, index_list=[0, 1, 2], data_list=[MMF])

@@ -101,6 +101,11 @@ try:
 except ImportError as error:
     plot_mesh_field = error
 
+try:
+    from ..Methods.Output.Output.plot.plot_A_space_compare import plot_A_space_compare
+except ImportError as error:
+    plot_A_space_compare = error
+
 
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
@@ -298,6 +303,18 @@ class Output(FrozenClass):
         )
     else:
         plot_mesh_field = plot_mesh_field
+    # cf Methods.Output.Output.plot.plot_A_space_compare
+    if isinstance(plot_A_space_compare, ImportError):
+        plot_A_space_compare = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_space_compare: "
+                    + str(plot_A_space_compare)
+                )
+            )
+        )
+    else:
+        plot_A_space_compare = plot_A_space_compare
     # save method is available in all object
     save = save
 
