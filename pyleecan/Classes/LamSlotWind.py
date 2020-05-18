@@ -82,6 +82,11 @@ try:
 except ImportError as error:
     plot_mmf_unit = error
 
+try:
+    from ..Methods.Machine.LamSlotWind.comp_resistance_wind import comp_resistance_wind
+except ImportError as error:
+    comp_resistance_wind = error
+
 
 from ._check import InitUnKnowClassError
 from .Winding import Winding
@@ -253,6 +258,18 @@ class LamSlotWind(LamSlot):
         )
     else:
         plot_mmf_unit = plot_mmf_unit
+    # cf Methods.Machine.LamSlotWind.comp_resistance_wind
+    if isinstance(comp_resistance_wind, ImportError):
+        comp_resistance_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_resistance_wind: "
+                    + str(comp_resistance_wind)
+                )
+            )
+        )
+    else:
+        comp_resistance_wind = comp_resistance_wind
     # save method is available in all object
     save = save
 
