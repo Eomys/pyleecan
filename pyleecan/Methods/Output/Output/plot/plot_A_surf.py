@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from .....Functions.Plot.plot_A_3D import plot_A_3D
-from numpy import meshgrid
+from .....Functions.Plot.plot_A_surf import plot_A_surf as plot_A_surf_fct
 
 
 def plot_A_surf(
     self,
     Data_str,
     is_deg=True,
-    t_max=1.0,
+    t_max=None,
     a_max=400,
-    z_max=1.0,
+    z_max=None,
     is_norm=False,
     unit="SI",
     colormap="RdBu_r",
@@ -43,44 +42,14 @@ def plot_A_surf(
     phys = getattr(self, Data_str.split(".")[0])
     data = getattr(phys, Data_str.split(".")[1])
 
-    # Set plot
-    title = data.name + " as a function of time and space"
-    xlabel = "Time [s]"
-    if is_deg:
-        ylabel = "Angle [°]"
-    else:
-        ylabel = "Angle [rad]"
-    if unit == "SI":
-        unit = data.unit
-    if is_norm:
-        zlabel = r"$\frac{" + data.symbol + "}{" + data.symbol + "_0}\, [" + unit + "]$"
-    else:
-        zlabel = r"$" + data.symbol + "\, [" + unit + "]$"
-
-    # Extract the field
-    if is_deg:
-        (time, angle, Br) = data.get_along(
-            "time", "angle{°}", unit=unit, is_norm=is_norm
-        )
-    else:
-        (time, angle, Br) = data.get_along(
-            "time", "angle{°}", unit=unit, is_norm=is_norm
-        )
-
-    angle_map, time_map = meshgrid(angle, time)
-
-    # Plot the original graph
-    plot_A_3D(
-        time_map,
-        angle_map,
-        Br,
-        colormap=colormap,
-        x_max=t_max,
-        y_max=a_max,
+    # Call the plot function
+    plot_A_surf_fct(
+        data,
+        is_deg=is_deg,
+        t_max=t_max,
+        a_max=a_max,
         z_max=z_max,
-        title=title,
-        xlabel=xlabel,
-        ylabel=ylabel,
-        zlabel=zlabel,
-        type="surf",
+        is_norm=is_norm,
+        unit=unit,
+        colormap=colormap,
     )
