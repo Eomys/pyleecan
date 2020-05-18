@@ -1004,7 +1004,8 @@
             "comp_volume_magnets",
             "comp_W5",
             "get_height_magnet",
-            "remove_magnet"
+            "remove_magnet",
+            "has_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM50",
@@ -1145,7 +1146,8 @@
             "comp_volume_magnets",
             "comp_width",
             "get_height_magnet",
-            "remove_magnet"
+            "remove_magnet",
+            "has_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM51",
@@ -1305,7 +1307,8 @@
             "comp_volume_magnets",
             "comp_W1",
             "get_height_magnet",
-            "remove_magnet"
+            "remove_magnet",
+            "has_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM52",
@@ -1392,7 +1395,8 @@
             "comp_volume_magnets",
             "comp_W5",
             "get_height_magnet",
-            "remove_magnet"
+            "remove_magnet",
+            "has_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM53",
@@ -1577,7 +1581,8 @@
             "comp_surface_magnets",
             "comp_volume_magnets",
             "get_height_magnet",
-            "remove_magnet"
+            "remove_magnet",
+            "has_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM58",
@@ -2442,7 +2447,9 @@
             "comp_volumes",
             "get_pole_pair_number",
             "plot",
-            "comp_radius_mid_yoke"
+            "comp_radius_mid_yoke",
+            "has_magnet",
+            "comp_angle_d_axis"
         ],
         "mother": "Lamination",
         "name": "LamHole",
@@ -2528,7 +2535,8 @@
             "comp_radius_mec",
             "comp_surfaces",
             "comp_volumes",
-            "plot"
+            "plot",
+            "comp_angle_d_axis"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",
@@ -2723,7 +2731,8 @@
             "get_polar_eq",
             "is_outwards",
             "comp_height_yoke",
-            "get_notch_list"
+            "get_notch_list",
+            "comp_angle_q_axis"
         ],
         "mother": "",
         "name": "Lamination",
