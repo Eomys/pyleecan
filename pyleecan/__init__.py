@@ -9,4 +9,4 @@ if not isdir(PYLEECAN_USER_DIR):  # Create Pyleecan user folder
 
     create_folder()
 
-dictConfig(LOGGING_CONFIG_CONSOLE) 
+dictConfig(LOGGING_CONFIG_CONSOLE)

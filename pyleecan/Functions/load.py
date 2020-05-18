@@ -25,10 +25,10 @@ def load_json(file_path):
     """
     if isdir(file_path):
         i = max(file_path.rfind("\\"), file_path.rfind("/"))
-        if i !=-1:
+        if i != -1:
             file_path += file_path[i:] + ".json"
         else:
-            file_path += "/"+ file_path + ".json"
+            file_path += "/" + file_path + ".json"
     # The file_name must end with .json
     elif not match(".*\.json", file_path):
         file_path += ".json"  # If it doesn't, we add .json at the end
@@ -190,7 +190,9 @@ def load_matlib(mat_path):
 
     # Check that the dir exist
     if not isdir(mat_path):
-        raise LoadMissingFolderError("The given path doesn't lead to a directory")
+        raise LoadMissingFolderError(
+            "The following given path doesn't lead to a directory: " + mat_path
+        )
 
     # Get and Read all the file to create a list dictionary : variable name <=> value
     matlib = list()
