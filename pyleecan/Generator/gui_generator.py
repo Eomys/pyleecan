@@ -79,7 +79,8 @@ def gen_gui_edit_file(path, class_name, gen_dict, gen_list):
     # Generate the import path
     # from "C:\\Users...\\GUI\\Dialog..." to ["C:", "Users",..., "GUI",
     # "Dialog",...]
-    split_path = path.split("\\")  # Split the path arount the \\
+    path = path.replace("\\", "/")
+    split_path = path.split("/")  # Split the path arount the /
     # The import path start at "GUI", we remove everything before GUI in
     # split_path list
     # from ["C:", "Users",..., "GUI", "Dialog",...] to ["GUI", "Dialog"...]

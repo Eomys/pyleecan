@@ -11,6 +11,8 @@ from ....GUI.Dialog.DMachineSetup import mach_index, mach_list
 from ....GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
 from ....definitions import DATA_DIR
 from ....Classes.Machine import Machine
+from ....Classes.Material import Material
+from logging import getLogger
 
 # Flag for set the enable property of w_nav (List_Widget)
 DISABLE_ITEM = Qt.NoItemFlags
@@ -24,7 +26,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
     machineChanged = pyqtSignal()
     rejected = pyqtSignal()
 
-    def __init__(self, machine=None, machine_path="", matlib_path=""):
+    def __init__(self, machine=None, mat_widget=None, machine_path=""):
         """Initialize the GUI according to machine type
 
         Parameters
@@ -38,6 +40,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         self.setupUi(self)
 
         self.is_save_needed = False
+        self.mat_widget = mat_widget
 
         # Saving arguments
         self.machine = machine
@@ -46,20 +49,12 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         else:
             self.machine_path = machine_path
 
-        if matlib_path == "":
-            self.matlib_path = join(DATA_DIR, "Material")
-        else:
-            self.matlib_path = matlib_path
-        # Load all the materials
-        try:
-            self.matlib = load_matlib(self.matlib_path)
-        except Exception:
-            self.matlib = list()
         # Initialize the machine if needed
         if machine is None:
             self.machine = type(mach_list[0]["init_machine"])(
                 init_dict=mach_list[0]["init_machine"].as_dict()
             )
+
         self.update_nav()
         self.set_nav(0)
 
@@ -170,6 +165,34 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                 machine = load(load_path)
                 if isinstance(machine, Machine):
                     self.machine = machine
+                    self.mat_widget.matlib = self.mat_widget.matlib[
+                        : self.mat_widget.index_first_matlib_mach
+                    ]
+                    materials = get_materials(machine)
+                    for material in materials:
+                        if material not in self.mat_widget.matlib:
+                            matlib_names = [mat.name for mat in self.mat_widget.matlib]
+                            name = material.name
+                            if name is None or name == "":
+                                name = "Untitled"
+                            while name in matlib_names:
+                                if "(" in name and name.endswith(")"):
+                                    idx = name.rfind("(") + 1
+                                    try:
+                                        name = (
+                                            name[:idx]
+                                            + str(int(name[idx:-1]) + 1)
+                                            + ")"
+                                        )
+                                    except ValueError:
+                                        name += "(1)"
+                                else:
+                                    name += "(1)"
+
+                            material.name = name
+                            self.mat_widget.matlib.append(material)
+                            self.mat_widget.update_mat_list()
+
                 else:
                     QMessageBox().critical(
                         self,
@@ -284,7 +307,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         # Regenerate the step with the current values
         self.w_step.setParent(None)
         self.w_step = step_list[index](
-            machine=self.machine, matlib=self.matlib, is_stator=is_stator
+            machine=self.machine, matlib=self.mat_widget.matlib, is_stator=is_stator
         )
         self.w_step.b_previous.clicked.connect(self.s_previous)
         if index != len(step_list) - 1:
@@ -333,3 +356,36 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         next_index = self.nav_step.currentRow() - 1
         self.nav_step.setCurrentRow(next_index)
         # As the current row have change, set_nav is called
+
+
+def get_materials(obj):
+    """
+    Get the list of unique materials contained in a pyleecan object 
+
+    Parameters
+    ----------
+    obj : Pyleecan object 
+
+    Returns
+    -------
+    materials : list of unique materials contained in the object 
+    """
+    materials = []
+    for key, value in obj.as_dict().items():
+        # Get an object attribute
+        sub_obj = getattr(obj, key)
+
+        # Add it if it's a Material
+        if isinstance(sub_obj, Material):
+            materials.append(sub_obj)
+
+        # Check the sub object if it's a Pyleecan object
+        elif isinstance(value, dict) and "__class__" in value:
+            materials.extend(get_materials(sub_obj))
+
+    # Return a unique list
+    for material in materials[:]:
+        while materials.count(material) > 1:
+            materials.remove(material)
+
+    return materials

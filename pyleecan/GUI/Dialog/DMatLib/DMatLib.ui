@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>746</width>
-    <height>534</height>
+    <height>536</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,10 +41,27 @@
         </layout>
        </item>
        <item>
-        <widget class="QListWidget" name="nav_mat"/>
+        <layout class="QVBoxLayout" name="verticalLayout_12">
+         <item>
+          <widget class="QListWidget" name="nav_mat"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="in_machine_mat">
+           <property name="text">
+            <string>Machine materials</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListWidget" name="nav_mat_mach"/>
+         </item>
+        </layout>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
          <item>
           <widget class="QPushButton" name="b_edit">
            <property name="text">
@@ -150,7 +167,7 @@
             <item>
              <widget class="QStackedWidget" name="nav_iso_therm">
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="page_iso_therm">
                <layout class="QVBoxLayout" name="verticalLayout">
@@ -209,7 +226,7 @@
             <item>
              <widget class="QStackedWidget" name="nav_iso_meca">
               <property name="currentIndex">
-               <number>1</number>
+               <number>0</number>
               </property>
               <widget class="QWidget" name="page_iso_meca">
                <layout class="QVBoxLayout" name="verticalLayout_7">
