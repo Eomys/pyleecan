@@ -2618,7 +2618,9 @@
             "get_polar_eq",
             "comp_wind_function",
             "plot_mmf_unit",
-            "comp_resistance_wind"
+            "comp_resistance_wind",
+            "comp_angle_d_axis",
+            "comp_mmf_unit"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
@@ -5067,6 +5069,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutElec"
+            },
+            {
+                "desc": "Unit magnetomotive force",
+                "max": "",
+                "min": "",
+                "name": "mmf_unit",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "-",
+                "value": "None"
             }
         ]
     },

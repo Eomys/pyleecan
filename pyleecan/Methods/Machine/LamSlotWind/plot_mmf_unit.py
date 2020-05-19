@@ -20,15 +20,12 @@ def plot_mmf_unit(self, Na=2048):
     # Create an empty Output object to use the generic plot methods
     module = __import__("pyleecan.Classes.Output", fromlist=["Output"])
     Output = getattr(module, "Output")
+    out = Output()
 
     # Compute the winding function and mmf
     wf = self.comp_wind_function(Na=Na)
     qs = self.winding.qs
-    out = Output()
-
-    # Compute unit mmf
-    I = dq2n(array([1, 0]), 0, n=qs)
-    mmf_u = squeeze(dot(I, wf))
+    mmf_u = self.comp_mmf_unit(Na=Na)
 
     # Create a Data object
     Phase = Data1D(
@@ -49,8 +46,5 @@ def plot_mmf_unit(self, Na=2048):
     out.mag.Br = DataTime(
         name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf
     )
-    MMF = DataTime(
-        name="Unit MMF", unit="p.u.", symbol="Magnitude", axes=[Angle], values=mmf_u
-    )
 
-    out.plot_A_space("mag.Br", is_fft=True, index_list=[0, 1, 2], data_list=[MMF])
+    out.plot_A_space("mag.Br", is_fft=True, index_list=[0, 1, 2], data_list=[mmf_u])
