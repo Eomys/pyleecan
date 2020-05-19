@@ -17,6 +17,6 @@ def comp_angle_q_axis(self):
         angle between the X axis and the first d+ axis
     """
 
-    q_angle = self.comp_angle_q_axis()
+    q_angle = self.comp_angle_d_axis()
     p = self.get_pole_pair_number()
     return q_angle + pi / p / 2

@@ -17,7 +17,7 @@ def comp_angle_d_axis(self):
     """
 
     MMF = self.comp_mmf_unit()
-    p = self.get_polt_pair_number()
+    p = self.get_pole_pair_number()
 
     # Get the unit mmf FFT and angle values
     (angle_rotor, mmmf_a) = MMF.get_along("angle")
