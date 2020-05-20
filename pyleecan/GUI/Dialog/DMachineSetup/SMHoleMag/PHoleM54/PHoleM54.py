@@ -19,7 +19,7 @@ class PHoleM54(Gen_PHoleM54, QWidget):
     hole_name = "Slot Type 54"
     hole_type = HoleM54
 
-    def __init__(self, hole=None, matlib=[]):
+    def __init__(self, hole=None, w_matlib=None):
         """Initialize the widget according to hole
 
         Parameters
@@ -28,8 +28,8 @@ class PHoleM54(Gen_PHoleM54, QWidget):
             A PHoleM54 widget
         hole : HoleM54
             current hole to edit
-        matlib : list
-            List of available Material
+        w_matlib : DMatLib
+            Material Library Dialog to view and modify material data
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)
@@ -47,7 +47,7 @@ class PHoleM54(Gen_PHoleM54, QWidget):
         for wid in wid_list:
             wid.setText(self.u.get_m_name())
 
-        self.matlib = matlib
+        self.w_matlib = w_matlib
         self.hole = hole
 
         # Fill the fields with the machine values (if they're filled)

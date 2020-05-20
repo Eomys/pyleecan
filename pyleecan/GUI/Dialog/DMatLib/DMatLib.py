@@ -17,7 +17,7 @@ from ....Functions.path_tools import abs_file_path
 class DMatLib(Gen_DMatLib, QDialog):
     """Material Library Dialog to view and modify material data."""
 
-    def __init__(self, matlib_path, selected=0):
+    def __init__(self, matlib_path, matlib=[], index_first_matlib_mach=0, selected=0):
         """Init the Matlib GUI
 
         Parameters
@@ -67,10 +67,8 @@ class DMatLib(Gen_DMatLib, QDialog):
         # self.out_iso.hide()
         self.out_epsr.hide()
 
-        self.nav_mat.currentRowChanged.connect(lambda: self.update_out(on_matlib=True))
-        self.nav_mat_mach.currentRowChanged.connect(
-            lambda: self.update_out(on_matlib=False)
-        )
+        self.nav_mat.clicked.connect(lambda: self.update_out(on_matlib=True))
+        self.nav_mat_mach.clicked.connect(lambda: self.update_out(on_matlib=False))
         self.le_search.textChanged.connect(self.filter_material)
 
         self.b_edit.clicked.connect(self.edit_material)
@@ -135,16 +133,18 @@ class DMatLib(Gen_DMatLib, QDialog):
         -------
 
         """
+
         # Get the current material (filtering index)
-        if self.nav_mat.currentItem():
+        if len(self.nav_mat.selectedItems()) > 0:
             mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1
         else:
             mat_id = int(self.nav_mat_mach.currentItem().text()[:3]) - 1
         # Open the setup GUI
         # (creates a copy of the material, i.e. self.matlib won't be edited directly)
-        self.mat_win = DMatSetup(self.matlib[mat_id])
+        self.mat_win = DMatSetup(self.matlib[mat_id], self.mat_selected_in_matlib)
         return_code = self.mat_win.exec_()
-        if return_code == QDialog.Accepted:
+
+        if return_code > 0:
             # Update the material only if the user save changes
             old_name = self.matlib[mat_id].name
             old_path = self.matlib[mat_id].path
@@ -164,9 +164,29 @@ class DMatLib(Gen_DMatLib, QDialog):
                 if self.mat_selected_in_matlib:
                     # Rename the saving file
                     rename(old_path, new_path)
-            if self.mat_selected_in_matlib:
+            if return_code == 2:
+                # Move the material into the Material library
+                mat = self.matlib.pop(mat_id)
+                mat_id = self.index_first_matlib_mach
+                self.index_first_matlib_mach += 1
+                self.matlib.insert(mat_id, mat)
+                self.update_mat_list()
+                # Set the path of the new matlib material
+                new_path = join(MATLIB_DIR, self.matlib[mat_id].name + ".json").replace(
+                    "\\", "/"
+                )
+                self.matlib[mat_id].path = new_path
+
+            if self.mat_selected_in_matlib or return_code == 2:
                 self.matlib[mat_id].save(new_path)
-            self.update_out()
+
+            self.update_mat_list()
+            if self.mat_selected_in_matlib:
+                self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
+                self.update_out(on_matlib=True)
+            else:
+                self.nav_mat_mach.setCurrentRow(self.nav_mat_mach.count() - 1)
+                self.update_out(on_matlib=False)
 
             # Signal set by WMatSelect to update Combobox
             self.accepted.emit()
@@ -192,11 +212,11 @@ class DMatLib(Gen_DMatLib, QDialog):
 
         # Open the setup GUI
         # (creates a copy of the material, i.e. self.matlib won't be edited directly)
-        self.mat_win = DMatSetup(self.matlib[mat_id])
+        self.mat_win = DMatSetup(self.matlib[mat_id], self.mat_selected_in_matlib)
         return_code = self.mat_win.exec_()
-        if return_code == QDialog.Accepted:
+        if return_code > 0:
             # Update the material only if the user validate at the end
-            if mat_id < self.index_first_matlib_mach:
+            if self.mat_selected_in_matlib or return_code == 2:
                 self.matlib.insert(self.index_first_matlib_mach, self.mat_win.mat)
                 index_machine = self.index_first_matlib_mach
                 self.index_first_matlib_mach += 1
@@ -205,19 +225,32 @@ class DMatLib(Gen_DMatLib, QDialog):
                 GUI_logger.info(
                     "Creating the material: " + self.matlib[index_machine].path
                 )
-                new_path = abs_file_path(
-                    self.matlib[index_machine].path, is_check=False
-                )
+                if self.mat_selected_in_matlib:
+                    new_path = abs_file_path(
+                        self.matlib[index_machine].path, is_check=False
+                    )
+                else:  # Edit material path
+                    new_path = join(
+                        MATLIB_DIR, self.matlib[index_machine].name + ".json"
+                    ).replace("\\", "/")
+                    self.matlib[index_machine].path = new_path
+                    self.mat_selected_in_matlib = True
+
                 self.matlib[index_machine].save(new_path)
+                self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
             else:
                 self.matlib.append(self.mat_win.mat)
                 # Check if the name is duplicated
                 self.check_duplicated_material(len(self.matlib) - 1)
-                new_path = abs_file_path(self.matlib[-1].path, is_check=False)
+                self.nav_mat_mach.setCurrentRow(self.nav_mat_mach.count() - 1)
 
             self.update_mat_list()
-            self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
-            self.update_out()
+            if self.mat_selected_in_matlib:
+                self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
+                self.update_out()
+            else:
+                self.nav_mat_mach.setCurrentRow(self.nav_mat_mach.count() - 1)
+                self.update_out(on_matlib=False)
 
             # Signal set by WMatSelect to update Combobox
             self.accepted.emit()
@@ -288,7 +321,7 @@ class DMatLib(Gen_DMatLib, QDialog):
         self.update_mat_list()
         self.nav_mat.setCurrentRow(0)
 
-    def update_mat_list(self):
+    def update_mat_list(self, selected_id=-1):
         """Update the list of Material with the current content of MatLib
 
         Parameters
@@ -356,85 +389,78 @@ class DMatLib(Gen_DMatLib, QDialog):
             mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1  # for filtering
             self.mat_selected_in_matlib = True
             # Deselect item in nav_mat_mach
-            if self.nav_mat_mach.currentItem():
-                self.nav_mat_mach.currentItem().setSelected(False)
-
-        elif self.nav_mat_mach.currentItem():
+            self.nav_mat_mach.clearSelection()
+        else:
             mat_id = (
                 int(self.nav_mat_mach.currentItem().text()[:3]) - 1
             )  # for filtering
             self.mat_selected_in_matlib = False
             # Deselect item in nav_mat
-            if self.nav_mat.currentItem():
-                self.nav_mat.currentItem().setSelected(False)
+            self.nav_mat.clearSelection()
+        mat = self.matlib[mat_id]
+
+        # mat = [mat for mat in self.matlib if mat.name == curr_name][0]
+
+        # Update Main parameters
+        self.out_name.setText(self.tr("name: ") + mat.name)
+        if mat.is_isotropic:
+            self.out_iso.setText(self.tr("type: isotropic"))
         else:
-            mat_id = None
+            self.out_iso.setText(self.tr("type: anisotropic"))
 
-        if mat_id != None:
-            mat = self.matlib[mat_id]
+        # Update Electrical parameters
+        if mat.elec is not None:
+            update_text(self.out_rho_elec, "rho", mat.elec.rho, "ohm.m")
+            # update_text(self.out_epsr,"epsr",mat.elec.epsr,None)
 
-            # mat = [mat for mat in self.matlib if mat.name == curr_name][0]
+        # Update Economical parameters
+        if mat.eco is not None:
+            update_text(self.out_cost_unit, "cost_unit", mat.eco.cost_unit, u"€/kg")
 
-            # Update Main parameters
-            self.out_name.setText(self.tr("name: ") + mat.name)
+        # Update Thermics parameters
+        if mat.HT is not None:
+            update_text(self.out_Cp, "Cp", mat.HT.Cp, "W/kg/K")
+            update_text(self.out_alpha, "alpha", mat.HT.alpha, None)
             if mat.is_isotropic:
-                self.out_iso.setText(self.tr("type: isotropic"))
+                self.nav_iso_therm.setCurrentIndex(0)
+                update_text(self.out_L, "Lambda", mat.HT.lambda_x, "W/K")
             else:
-                self.out_iso.setText(self.tr("type: anisotropic"))
+                self.nav_iso_therm.setCurrentIndex(1)
+                update_text(self.out_LX, "Lambda X", mat.HT.lambda_x, "W/K")
+                update_text(self.out_LY, "Lambda Y", mat.HT.lambda_y, "W/K")
+                update_text(self.out_LZ, "Lambda Z", mat.HT.lambda_z, "W/K")
 
-            # Update Electrical parameters
-            if mat.elec is not None:
-                update_text(self.out_rho_elec, "rho", mat.elec.rho, "ohm.m")
-                # update_text(self.out_epsr,"epsr",mat.elec.epsr,None)
+        # Update Structural parameters
+        if mat.struct is not None:
+            update_text(self.out_rho_meca, "rho", mat.struct.rho, "kg/m^3")
+            if mat.is_isotropic:
+                self.nav_iso_meca.setCurrentIndex(0)
+                update_text(self.out_E, "E", mat.struct.Ex, "Pa")
+                update_text(self.out_G, "G", mat.struct.Gxy, "Pa")
+                update_text(self.out_nu, "nu", mat.struct.nu_xy, None)
+            else:
+                self.nav_iso_meca.setCurrentIndex(1)
+                update_text(self.out_EX, None, mat.struct.Ex, None)
+                update_text(self.out_GXY, None, mat.struct.Gxy, None)
+                update_text(self.out_nu_XY, None, mat.struct.nu_xy, None)
+                update_text(self.out_EY, None, mat.struct.Ey, None)
+                update_text(self.out_GYZ, None, mat.struct.Gyz, None)
+                update_text(self.out_nu_YZ, None, mat.struct.nu_yz, None)
+                update_text(self.out_EZ, None, mat.struct.Ez, None)
+                update_text(self.out_GXZ, None, mat.struct.Gxz, None)
+                update_text(self.out_nu_XZ, None, mat.struct.nu_xz, None)
 
-            # Update Economical parameters
-            if mat.eco is not None:
-                update_text(self.out_cost_unit, "cost_unit", mat.eco.cost_unit, u"€/kg")
-
-            # Update Thermics parameters
-            if mat.HT is not None:
-                update_text(self.out_Cp, "Cp", mat.HT.Cp, "W/kg/K")
-                update_text(self.out_alpha, "alpha", mat.HT.alpha, None)
-                if mat.is_isotropic:
-                    self.nav_iso_therm.setCurrentIndex(0)
-                    update_text(self.out_L, "Lambda", mat.HT.lambda_x, "W/K")
-                else:
-                    self.nav_iso_therm.setCurrentIndex(1)
-                    update_text(self.out_LX, "Lambda X", mat.HT.lambda_x, "W/K")
-                    update_text(self.out_LY, "Lambda Y", mat.HT.lambda_y, "W/K")
-                    update_text(self.out_LZ, "Lambda Z", mat.HT.lambda_z, "W/K")
-
-            # Update Structural parameters
-            if mat.struct is not None:
-                update_text(self.out_rho_meca, "rho", mat.struct.rho, "kg/m^3")
-                if mat.is_isotropic:
-                    self.nav_iso_meca.setCurrentIndex(0)
-                    update_text(self.out_E, "E", mat.struct.Ex, "Pa")
-                    update_text(self.out_G, "G", mat.struct.Gxy, "Pa")
-                    update_text(self.out_nu, "nu", mat.struct.nu_xy, None)
-                else:
-                    self.nav_iso_meca.setCurrentIndex(1)
-                    update_text(self.out_EX, None, mat.struct.Ex, None)
-                    update_text(self.out_GXY, None, mat.struct.Gxy, None)
-                    update_text(self.out_nu_XY, None, mat.struct.nu_xy, None)
-                    update_text(self.out_EY, None, mat.struct.Ey, None)
-                    update_text(self.out_GYZ, None, mat.struct.Gyz, None)
-                    update_text(self.out_nu_YZ, None, mat.struct.nu_yz, None)
-                    update_text(self.out_EZ, None, mat.struct.Ez, None)
-                    update_text(self.out_GXZ, None, mat.struct.Gxz, None)
-                    update_text(self.out_nu_XZ, None, mat.struct.nu_xz, None)
-
-            # Update Magnetics parameters
-            if mat.mag is not None:
-                update_text(self.out_mur_lin, "mur_lin", mat.mag.mur_lin, None)
-                update_text(self.out_Brm20, "Brm20", mat.mag.Brm20, "T")
-                update_text(self.out_alpha_Br, "alpha_Br", mat.mag.alpha_Br, None)
-                update_text(self.out_wlam, "wlam", mat.mag.Wlam, "m")
-                if type(mat.mag.BH_curve).__name__ == "ImportMatrixXls":
-                    text = split(mat.mag.BH_curve.file_path)[1]
-                else:
-                    text = "-"
-                self.out_BH.setText(text)
+        # Update Magnetics parameters
+        if mat.mag is not None:
+            update_text(self.out_mur_lin, "mur_lin", mat.mag.mur_lin, None)
+            update_text(self.out_Brm20, "Brm20", mat.mag.Brm20, "T")
+            update_text(self.out_alpha_Br, "alpha_Br", mat.mag.alpha_Br, None)
+            update_text(self.out_wlam, "wlam", mat.mag.Wlam, "m")
+            if type(mat.mag.BH_curve).__name__ == "ImportMatrixXls":
+                text = split(mat.mag.BH_curve.file_path)[1]
+            else:
+                text = "-"
+            self.out_BH.setText(text)
 
     def add_material(self, material):
         """
@@ -482,13 +508,6 @@ class DMatLib(Gen_DMatLib, QDialog):
                 self.matlib[index].path = (
                     path[: idx + 1] + self.matlib[index].name + ".json"
                 )
-
-    def add_mach_mat_in_matlib(self, event):
-        print("Matlib")
-        print(dir(event.mimeData()))
-
-    def dragEnterEvent(self):
-        print("DragEnterEvent")
 
 
 def update_text(label, name, value, unit):

@@ -20,7 +20,7 @@ class PCondType22(Gen_PCondType22, QWidget):
     cond_name = "Die cast bar"
     cond_type = CondType22
 
-    def __init__(self, machine=None, matlib=[]):
+    def __init__(self, machine=None, w_matlib=None):
         """Initialize the widget according to machine
 
         Parameters
@@ -38,7 +38,7 @@ class PCondType22(Gen_PCondType22, QWidget):
         self.setupUi(self)
 
         # Set material combobox according to matlib names
-        self.matlib = matlib
+        self.w_matlib = w_matlib
         self.w_mat.def_mat = "Copper1"
 
         # Set unit name (m ou mm)
@@ -53,7 +53,7 @@ class PCondType22(Gen_PCondType22, QWidget):
             self.machine.rotor.winding.conductor = CondType22()
             self.machine.rotor.winding.conductor._set_None()
 
-        self.w_mat.update(conductor, "cond_mat", matlib)
+        self.w_mat.update(conductor, "cond_mat", self.wmatlib)
 
         # Update active surface for output display
         self.machine.rotor.winding.conductor.Sbar = (

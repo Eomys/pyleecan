@@ -28,7 +28,7 @@ class SWindPat(Gen_SWindPat, QWidget):
     # Information for DMachineSetup nav
     step_name = "Winding Pattern"
 
-    def __init__(self, machine, matlib=[], is_stator=False):
+    def __init__(self, machine, w_matlib, is_stator=False):
         """Initialize the GUI according to machine
 
         Parameters
@@ -37,8 +37,8 @@ class SWindPat(Gen_SWindPat, QWidget):
             A SWindPat widget
         machine : Machine
             current machine to edit
-        matlib : list
-            List of available Material
+        w_matlib : DMatLib Dialog
+            Material Library Dialog to view and modify material data
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -53,7 +53,8 @@ class SWindPat(Gen_SWindPat, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.w_matlib = w_matlib
+        self.matlib = w_matlib.matlib
         self.is_stator = is_stator
 
         # Fill the fields with the machine values (if they're filled)

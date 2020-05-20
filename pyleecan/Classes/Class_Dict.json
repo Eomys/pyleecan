@@ -2754,7 +2754,8 @@
             "comp_output_geo",
             "comp_length_airgap_active",
             "get_polar_eq",
-            "plot_anim_rotor"
+            "plot_anim_rotor",
+            "get_material_list"
         ],
         "mother": "",
         "name": "Machine",

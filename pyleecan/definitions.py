@@ -40,7 +40,9 @@ if isfile(PYLEECAN_USER_DIR + "/config.json"):  # Load the config file if it exi
 else:  # Default values
     config_dict = dict(
         DATA_DIR=PYLEECAN_USER_DIR + "/Data",
-        MATLIB_DIR=PYLEECAN_USER_DIR + "/Data/Material",
+        MATLIB_DIR=PYLEECAN_USER_DIR + "/Data/Material",  # Material library directory
+        UNIT_M=1,  # length unit: 0 for m, 1 for mm
+        UNIT_M2=1,  # Surface unit: 0 for m^2, 1 for mm^2
     )
 
 
@@ -64,11 +66,6 @@ def create_folder():
             __file__[: max(__file__.rfind("/"), __file__.rfind("\\"))] + "/Data",
             PYLEECAN_USER_DIR + "/Data",
         )
-
-    config_dict = dict(
-        DATA_DIR=PYLEECAN_USER_DIR + "/Data",
-        MATLIB_DIR=PYLEECAN_USER_DIR + "/Data/Material",
-    )
 
     with open(PYLEECAN_USER_DIR + "/config.json", "w") as config_file:
         dump(

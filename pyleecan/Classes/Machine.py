@@ -74,6 +74,11 @@ try:
 except ImportError as error:
     plot_anim_rotor = error
 
+try:
+    from ..Methods.Machine.Machine.get_material_list import get_material_list
+except ImportError as error:
+    get_material_list = error
+
 
 from ._check import InitUnKnowClassError
 from .Frame import Frame
@@ -215,6 +220,18 @@ class Machine(FrozenClass):
         )
     else:
         plot_anim_rotor = plot_anim_rotor
+    # cf Methods.Machine.Machine.get_material_list
+    if isinstance(get_material_list, ImportError):
+        get_material_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_material_list: "
+                    + str(get_material_list)
+                )
+            )
+        )
+    else:
+        get_material_list = get_material_list
     # save method is available in all object
     save = save
 

@@ -25,7 +25,7 @@ class SMagnet(Ui_SMagnet, QDialog):
     # Information for DMachineType nav
     step_name = "Magnet"
 
-    def __init__(self, machine, matlib=[], is_stator=False):
+    def __init__(self, machine, w_matlib, is_stator=False):
         """Initialize the widget according to machine
 
         Parameters
@@ -34,8 +34,8 @@ class SMagnet(Ui_SMagnet, QDialog):
             A SMagnet widget
         machine : Machine
             current machine to edit
-        matlib : list
-            List of available Material
+        w_matlib : DMatLib Dialog
+            Material Library Dialog to view and modify material data
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -45,7 +45,7 @@ class SMagnet(Ui_SMagnet, QDialog):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.w_matlib = w_matlib
         self.is_stator = is_stator
 
         # Get the correct available widgets according to the machine
@@ -104,7 +104,7 @@ class SMagnet(Ui_SMagnet, QDialog):
         # Set material
         self.w_mat.setText(self.tr("mat_mag:"))
         self.w_mat.def_mat = "Magnet1"
-        self.w_mat.update(self.machine.rotor.slot.magnet[0], "mat_type", matlib)
+        self.w_mat.update(self.machine.rotor.slot.magnet[0], "mat_type", self.w_matlib)
 
         # Connect signals
         self.c_type.currentIndexChanged.connect(self.set_type)

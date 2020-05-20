@@ -6,6 +6,10 @@ from os.path import basename, join, isfile, dirname
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QWidget
 
+from ....Functions.Material.compare_material import compare_material
+from ....Functions.Material.replace_material_pyleecan_obj import (
+    replace_material_pyleecan_obj,
+)
 from ....Functions.load import load, load_matlib
 from ....GUI.Dialog.DMachineSetup import mach_index, mach_list
 from ....GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
@@ -168,11 +172,28 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                     self.mat_widget.matlib = self.mat_widget.matlib[
                         : self.mat_widget.index_first_matlib_mach
                     ]
-                    materials = get_materials(machine)
+                    materials = machine.get_material_list()
+
+                    # Copy the matlib and remove the name and the path to compare the materials
+                    matlib_without_name = [
+                        Material(init_dict=material.as_dict())
+                        for material in self.mat_widget.matlib
+                    ]
+                    for material in matlib_without_name:
+                        material.name = ""
+                        material.path = ""
+
+                    # Add the material to machine material if it is not already contained in the Matlib
                     for material in materials:
-                        if material not in self.mat_widget.matlib:
+                        name = material.name
+                        path = material.path
+                        material.name = ""
+                        material.path = ""
+
+                        # Add the material if not in matlib
+                        if material not in matlib_without_name:
                             matlib_names = [mat.name for mat in self.mat_widget.matlib]
-                            name = material.name
+
                             if name is None or name == "":
                                 name = "Untitled"
                             while name in matlib_names:
@@ -190,8 +211,18 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                                     name += "(1)"
 
                             material.name = name
+                            material.path = path
                             self.mat_widget.matlib.append(material)
                             self.mat_widget.update_mat_list()
+                        # Else replace the machine material by the matlib one
+                        else:
+                            for matlib_material in self.mat_widget.matlib:
+                                # Find the material in the matlib
+                                if compare_material(material, matlib_material):
+                                    replace_material_pyleecan_obj(
+                                        machine, material, matlib_material
+                                    )
+                                    break
 
                 else:
                     QMessageBox().critical(
@@ -307,7 +338,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         # Regenerate the step with the current values
         self.w_step.setParent(None)
         self.w_step = step_list[index](
-            machine=self.machine, matlib=self.mat_widget.matlib, is_stator=is_stator
+            machine=self.machine, w_matlib=self.mat_widget, is_stator=is_stator
         )
         self.w_step.b_previous.clicked.connect(self.s_previous)
         if index != len(step_list) - 1:
@@ -356,36 +387,3 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         next_index = self.nav_step.currentRow() - 1
         self.nav_step.setCurrentRow(next_index)
         # As the current row have change, set_nav is called
-
-
-def get_materials(obj):
-    """
-    Get the list of unique materials contained in a pyleecan object 
-
-    Parameters
-    ----------
-    obj : Pyleecan object 
-
-    Returns
-    -------
-    materials : list of unique materials contained in the object 
-    """
-    materials = []
-    for key, value in obj.as_dict().items():
-        # Get an object attribute
-        sub_obj = getattr(obj, key)
-
-        # Add it if it's a Material
-        if isinstance(sub_obj, Material):
-            materials.append(sub_obj)
-
-        # Check the sub object if it's a Pyleecan object
-        elif isinstance(value, dict) and "__class__" in value:
-            materials.extend(get_materials(sub_obj))
-
-    # Return a unique list
-    for material in materials[:]:
-        while materials.count(material) > 1:
-            materials.remove(material)
-
-    return materials

@@ -28,7 +28,7 @@ class SWPole(Ui_SWPole, QWidget):
     # Information for DMachineSetup
     step_name = "Pole"
 
-    def __init__(self, machine, matlib=[], is_stator=False):
+    def __init__(self, machine, w_matlib, is_stator=False):
         """Initialize the GUI according to machine
 
         Parameters
@@ -37,8 +37,8 @@ class SWPole(Ui_SWPole, QWidget):
             A SWPole widget
         machine : Machine
             current machine to edit
-        matlib : list
-            List of available Material
+        w_matlib : DMatLib Dialog
+            Material Library Dialog to view and modify material data
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -49,7 +49,8 @@ class SWPole(Ui_SWPole, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.matlib = matlib
+        self.w_matlib = w_matlib
+        self.matlib = w_matlib.matlib
         self.is_stator = is_stator
 
         self.b_help.url = "https://eomys.com/produits/manatee/howtos/article/"

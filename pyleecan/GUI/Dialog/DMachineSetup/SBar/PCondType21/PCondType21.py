@@ -20,7 +20,7 @@ class PCondType21(Gen_PCondType21, QWidget):
     cond_name = "Rectangular bar"
     cond_type = CondType21
 
-    def __init__(self, machine=None, matlib=[]):
+    def __init__(self, machine=None, w_matlib=None):
         """Initialize the widget according to machine
 
         Parameters
@@ -37,7 +37,7 @@ class PCondType21(Gen_PCondType21, QWidget):
         self.setupUi(self)
 
         # Setup material combobox according to matlib names
-        self.matlib = matlib
+        self.w_matlib = w_matlib
         self.w_mat.def_mat = "Copper1"
 
         # Set FloatEdit unit
@@ -62,7 +62,7 @@ class PCondType21(Gen_PCondType21, QWidget):
         self.lf_Hbar.setValue(conductor.Hbar)
         self.lf_Wbar.setValue(conductor.Wbar)
 
-        self.w_mat.update(conductor, "cond_mat", matlib)
+        self.w_mat.update(conductor, "cond_mat", self.w_matlib)
 
         # Display the main output
         self.w_out.comp_output()

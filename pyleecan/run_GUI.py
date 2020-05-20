@@ -84,7 +84,7 @@ def run_GUI(argv):
         tree_fcn = lambda: tree.generate(getattr(c, "machine"))
         window.addSubWindow("TreeView", tree, tree_fcn)
 
-        option = WGuiOption(machine_setup=c, wmatlib=mat_widget)
+        option = WGuiOption(machine_setup=c, dmatlib=mat_widget)
         window.addSubWindow("Option", option)
         window.show()
 
