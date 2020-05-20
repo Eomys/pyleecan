@@ -24,6 +24,10 @@ from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 from Tests import save_load_path as save_path, DATA_DIR, is_clean_result
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_Workflow_DMatLib(TestCase):
     """Test that the widget DMatLib behave like it should when called from a Widget
     """

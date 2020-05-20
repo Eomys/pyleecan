@@ -18,6 +18,10 @@ from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22 import PCond
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_SBar(TestCase):
     """Test that the widget SBar behave like it should"""
 

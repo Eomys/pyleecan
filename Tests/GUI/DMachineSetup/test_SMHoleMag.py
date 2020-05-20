@@ -20,6 +20,10 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
 from pyleecan.Classes.Material import Material
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_SMHoleMag(TestCase):
     """Test that the widget SMHoleMag behave like it should"""
 

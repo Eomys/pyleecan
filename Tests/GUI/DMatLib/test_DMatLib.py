@@ -8,8 +8,14 @@ from PyQt5 import QtWidgets
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+from os import mkdir
+from os.path import isdir
+from shutil import rmtree
+
+import pytest
 
 
+@pytest.mark.GUI
 class test_DMatLib(TestCase):
     """Test that the widget DMatLib behave like it should"""
 
@@ -45,7 +51,15 @@ class test_DMatLib(TestCase):
         mat_lib.append(Material(name="test_material_6"))
         mat_lib.append(Material(name="test_material_7"))
 
-        self.widget = DMatLib(matlib=mat_lib)
+        # Save material in a tmp folder
+        tmp_folder = "Tests/GUI/DMatLib/tmp_matlib"
+        if isdir(tmp_folder):
+            rmtree(tmp_folder)
+        mkdir(tmp_folder)
+        for mat in mat_lib:
+            mat.save(tmp_folder + "/" + mat.name + ".json")
+
+        self.widget = DMatLib(tmp_folder)
 
     @classmethod
     def setUpClass(cls):
@@ -57,6 +71,7 @@ class test_DMatLib(TestCase):
     def tearDownClass(cls):
         """Exit the app after the test"""
         cls.app.quit()
+        rmtree("Tests/GUI/DMatLib/tmp_matlib")
 
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""

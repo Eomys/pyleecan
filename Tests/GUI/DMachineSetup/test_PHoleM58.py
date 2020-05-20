@@ -14,6 +14,10 @@ from Tests.GUI import gui_option  # Set unit to m
 from pyleecan.Classes.Material import Material
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_PHoleM58(TestCase):
     """Test that the widget PHoleM58 behave like it should"""
 

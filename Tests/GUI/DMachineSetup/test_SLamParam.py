@@ -19,6 +19,10 @@ from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_SLamParam(TestCase):
     """Test that the widget SLamParam behave like it should"""
 

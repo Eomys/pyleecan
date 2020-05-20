@@ -25,6 +25,10 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet13.PMagnet13 import PMagne
 from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet14.PMagnet14 import PMagnet14
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_SMagnet_inset(TestCase):
     """Test that the widget SMagnet behave like it should (for SPMSM)"""
 
