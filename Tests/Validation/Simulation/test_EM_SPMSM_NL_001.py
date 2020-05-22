@@ -54,6 +54,7 @@ def test_Magnetic_FEMM_sym():
     simu.mag = MagFEMM(
         type_BH_stator=0, type_BH_rotor=0, is_symmetry_a=True, is_mmfs=False, sym_a=9
     )
+    simu.force = None
     simu.struct = None
     # Just load the Output and ends (we could also have directly filled the Output object)
     simu_load = Simu1(init_dict=simu.as_dict())

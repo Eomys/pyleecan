@@ -72,6 +72,7 @@ def test_FEMM_sym():
         is_antiper_a=True,
     )
     # Stop after magnetic computation
+    simu.force = None
     simu.struct = None
     # Run simulation
     out = Output(simu=simu)
@@ -427,6 +428,7 @@ def test_BoreFlower():
     assert len(fig.axes[0].patches) == 42
 
 
+@pytest.mark.long
 @pytest.mark.FEMM
 def test_ecc_FEMM():
     """Figure 19: transfrom_list in FEMM for eccentricities
@@ -464,6 +466,7 @@ def test_ecc_FEMM():
         is_save_FEA=True,
         sym_a=1,
     )
+    simu.force = None
     simu.struct = None
 
     # Set two transformations

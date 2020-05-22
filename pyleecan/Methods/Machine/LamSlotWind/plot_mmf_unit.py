@@ -3,12 +3,11 @@ import matplotlib.pyplot as plt
 from numpy import pi, linspace, zeros, sqrt, dot, array, squeeze
 from SciDataTool import Data1D, DataLinspace, DataTime
 from ....Functions.Electrical.coordinate_transformation import dq2n
-from ....Functions.Plot.plot_A_space import plot_A_space
+from ....Functions.Winding.gen_phase_list import gen_name
 
 
 def plot_mmf_unit(self, Na=2048):
     """Plot the winding unit mmf as a function of space
-
     Parameters
     ----------
     self : LamSlotWind
@@ -17,19 +16,21 @@ def plot_mmf_unit(self, Na=2048):
         Space discretization
     """
 
+    # Create an empty Output object to use the generic plot methods
+    module = __import__("pyleecan.Classes.Output", fromlist=["Output"])
+    Output = getattr(module, "Output")
+    out = Output()
+
     # Compute the winding function and mmf
     wf = self.comp_wind_function(Na=Na)
     qs = self.winding.qs
-
-    # Compute unit mmf
-    I = dq2n(array([1, 0]), 0, n=qs)
-    mmf_u = squeeze(dot(I, wf))
+    mmf_u = self.comp_mmf_unit(Na=Na)
 
     # Create a Data object
     Phase = Data1D(
         name="phase",
         unit="",
-        values=["Phase A", "Phase B", "Phase C"],
+        values=gen_name(qs, is_add_phase=True),
         is_components=True,
     )
     Angle = DataLinspace(
@@ -41,11 +42,8 @@ def plot_mmf_unit(self, Na=2048):
         number=Na,
         include_endpoint=False,
     )
-    WF = DataTime(
-        name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf,
-    )
-    MMF = DataTime(
-        name="Unit MMF", unit="p.u.", symbol="Magnitude", axes=[Angle], values=mmf_u,
+    out.mag.Br = DataTime(
+        name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf
     )
 
-    plot_A_space(WF, is_fft=True, index_list=[0, 1, 2], data_list=[MMF])
+    out.plot_A_space("mag.Br", is_fft=True, index_list=[0, 1, 2], data_list=[mmf_u])

@@ -6,8 +6,8 @@ def get_pole_pair_number(self):
 
     Parameters
     ----------
-    self : LamSlotMag
-        A LamSlotMag object
+    self : LamHole
+        A LamHole object
 
     Returns
     -------
@@ -16,4 +16,4 @@ def get_pole_pair_number(self):
 
     """
 
-    return self.Nmag // 2
+    return self.hole[0].Zh // 2

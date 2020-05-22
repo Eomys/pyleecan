@@ -104,6 +104,7 @@ class InputCurrentDQ(Input):
             if class_name not in [
                 "Import",
                 "ImportGenMatrixSin",
+                "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",
@@ -127,6 +128,7 @@ class InputCurrentDQ(Input):
             if class_name not in [
                 "Import",
                 "ImportGenMatrixSin",
+                "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",
@@ -150,6 +152,7 @@ class InputCurrentDQ(Input):
             if class_name not in [
                 "Import",
                 "ImportGenMatrixSin",
+                "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",
@@ -173,6 +176,7 @@ class InputCurrentDQ(Input):
             if class_name not in [
                 "Import",
                 "ImportGenMatrixSin",
+                "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",
@@ -196,6 +200,7 @@ class InputCurrentDQ(Input):
             if class_name not in [
                 "Import",
                 "ImportGenMatrixSin",
+                "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",
@@ -219,6 +224,7 @@ class InputCurrentDQ(Input):
             if class_name not in [
                 "Import",
                 "ImportGenMatrixSin",
+                "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",

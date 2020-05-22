@@ -79,6 +79,7 @@ class InputForce(Input):
             if class_name not in [
                 "Import",
                 "ImportGenMatrixSin",
+                "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",
@@ -102,6 +103,7 @@ class InputForce(Input):
             if class_name not in [
                 "Import",
                 "ImportGenMatrixSin",
+                "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",
@@ -125,6 +127,7 @@ class InputForce(Input):
             if class_name not in [
                 "Import",
                 "ImportGenMatrixSin",
+                "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",
@@ -148,6 +151,7 @@ class InputForce(Input):
             if class_name not in [
                 "Import",
                 "ImportGenMatrixSin",
+                "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",

@@ -104,6 +104,11 @@ try:
 except ImportError as error:
     get_notch_list = error
 
+try:
+    from ..Methods.Machine.Lamination.comp_angle_q_axis import comp_angle_q_axis
+except ImportError as error:
+    comp_angle_q_axis = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -311,6 +316,18 @@ class Lamination(FrozenClass):
         )
     else:
         get_notch_list = get_notch_list
+    # cf Methods.Machine.Lamination.comp_angle_q_axis
+    if isinstance(comp_angle_q_axis, ImportError):
+        comp_angle_q_axis = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_angle_q_axis: "
+                    + str(comp_angle_q_axis)
+                )
+            )
+        )
+    else:
+        comp_angle_q_axis = comp_angle_q_axis
     # save method is available in all object
     save = save
 

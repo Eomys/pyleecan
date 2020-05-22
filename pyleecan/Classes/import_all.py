@@ -21,8 +21,6 @@ from ..Classes.DriveWave import DriveWave
 from ..Classes.Electrical import Electrical
 from ..Classes.Element import Element
 from ..Classes.ElementMat import ElementMat
-from ..Classes.FluxLink import FluxLink
-from ..Classes.FluxLinkFEMM import FluxLinkFEMM
 from ..Classes.Force import Force
 from ..Classes.ForceMT import ForceMT
 from ..Classes.Frame import Frame
@@ -37,14 +35,13 @@ from ..Classes.HoleM58 import HoleM58
 from ..Classes.HoleMag import HoleMag
 from ..Classes.Import import Import
 from ..Classes.ImportGenMatrixSin import ImportGenMatrixSin
+from ..Classes.ImportGenToothSaw import ImportGenToothSaw
 from ..Classes.ImportGenVectLin import ImportGenVectLin
 from ..Classes.ImportGenVectSin import ImportGenVectSin
 from ..Classes.ImportMatlab import ImportMatlab
 from ..Classes.ImportMatrix import ImportMatrix
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from ..Classes.ImportMatrixXls import ImportMatrixXls
-from ..Classes.IndMag import IndMag
-from ..Classes.IndMagFEMM import IndMagFEMM
 from ..Classes.Input import Input
 from ..Classes.InputCurrent import InputCurrent
 from ..Classes.InputCurrentDQ import InputCurrentDQ
@@ -98,6 +95,7 @@ from ..Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 from ..Classes.OptiObjFunc import OptiObjFunc
 from ..Classes.OptiProblem import OptiProblem
 from ..Classes.OutElec import OutElec
+from ..Classes.OutForce import OutForce
 from ..Classes.OutGeo import OutGeo
 from ..Classes.OutGeoLam import OutGeoLam
 from ..Classes.OutMag import OutMag

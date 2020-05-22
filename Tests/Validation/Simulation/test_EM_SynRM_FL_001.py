@@ -93,6 +93,7 @@ def test_Magnetic_Phi0():
         is_antiper_a=True,
         sym_a=2,
     )
+    simu.force = None
     simu.struct = None
     # Expected results
     Tem = [

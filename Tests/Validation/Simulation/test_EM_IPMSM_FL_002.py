@@ -63,6 +63,7 @@ def test_EM_IPMSM_FL_002():
         is_antiper_a=True,
         Kgeo_fineness=0.75,
     )
+    simu.force = None
     simu.struct = None
     # simu.struct.force = ForceMT()
     # Copy the simu and activate the symmetry
