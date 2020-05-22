@@ -21,6 +21,7 @@ def plot_A_space(
     data_list=[],
     legend_list=[],
     color_list=[],
+    save_path=None,
 ):
     """Plots a field as a function of space (angle)
 
@@ -182,5 +183,8 @@ def plot_A_space(
             is_fund=True,
             fund_harm=fund_harm,
         )
+        
+    if save_path is not None:
+        fig.savefig(save_path)
 
     return ax
