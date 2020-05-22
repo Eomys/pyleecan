@@ -20,7 +20,6 @@ load_switch = {
     "Conductor": Conductor,
     "Drive": Drive,
     "DriveWave": DriveWave,
-    "ElecFEMM": ElecFEMM,
     "Electrical": Electrical,
     "Element": Element,
     "ElementMat": ElementMat,

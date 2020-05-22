@@ -61,10 +61,10 @@ def plot_A_surf(
         )
 
     angle_map, time_map = meshgrid(angle, time)
-    
+
     if t_max is None:
         t_max = np_max(time)
-    
+
     if z_max is None:
         z_max = np_max(Ydata)
 

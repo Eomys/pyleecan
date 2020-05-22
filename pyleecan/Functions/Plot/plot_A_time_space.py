@@ -98,12 +98,7 @@ def plot_A_time_space(
     (time, Ydata) = data.compare_along("time", unit=unit, is_norm=is_norm)
     # Plot the original graph
     plot_A_2D(
-        time,
-        Ydata,
-        fig=fig,
-        subplot_index=2,
-        xlabel=xlabel,
-        ylabel=ylabel,
+        time, Ydata, fig=fig, subplot_index=2, xlabel=xlabel, ylabel=ylabel,
     )
 
     # angle
@@ -118,12 +113,7 @@ def plot_A_time_space(
 
     # Plot the original graph
     plot_A_2D(
-        angle,
-        Ydata,
-        fig=fig,
-        subplot_index=4,
-        xlabel=xlabel,
-        ylabel=ylabel,
+        angle, Ydata, fig=fig, subplot_index=4, xlabel=xlabel, ylabel=ylabel,
     )
 
     # fft time

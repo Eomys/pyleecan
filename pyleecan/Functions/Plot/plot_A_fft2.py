@@ -74,7 +74,7 @@ def plot_A_fft2(
     wavenumber_map, freqs_map = meshgrid(wavenumber, freqs)
 
     zlabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
-    
+
     if mag_max is None:
         mag_max = np_max(A_mag)
 

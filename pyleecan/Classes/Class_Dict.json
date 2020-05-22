@@ -689,6 +689,46 @@
             }
         ]
     },
+    "Electrical": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module abstract object",
+        "is_internal": false,
+        "methods": [
+            "run",
+            "comp_fluxlinkage",
+            "comp_inductance"
+        ],
+        "mother": "",
+        "name": "Electrical",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Electrical.csv",
+        "properties": [
+            {
+                "desc": "Flux Linkage",
+                "max": "",
+                "min": "",
+                "name": "fluxlink",
+                "type": "FluxLink",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Magnetic Inductance",
+                "max": "",
+                "min": "",
+                "name": "indmag",
+                "type": "IndMag",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "Element": {
         "constants": [
             {
@@ -779,6 +819,140 @@
                 "type": "ndarray",
                 "unit": "",
                 "value": ""
+            }
+        ]
+    },
+    "FluxLink": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "FluxLink",
+            "FluxLinkFEMM"
+        ],
+        "desc": "Electric module: Flux Linkage",
+        "is_internal": false,
+        "methods": [
+            "comp_fluxlinkage"
+        ],
+        "mother": "",
+        "name": "FluxLink",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/FluxLink.csv",
+        "properties": [
+            {
+                "desc": "a",
+                "max": "",
+                "min": "",
+                "name": "a",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            }
+        ]
+    },
+    "FluxLinkFEMM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module: Flux Linkage with FEMM",
+        "is_internal": false,
+        "methods": [
+            "comp_fluxlinkage",
+            "solve_FEMM"
+        ],
+        "mother": "FluxLink",
+        "name": "FluxLinkFEMM",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/FluxLinkFEMM.csv",
+        "properties": [
+            {
+                "desc": "To enforce user-defined values for FEMM main parameters ",
+                "max": "",
+                "min": "",
+                "name": "FEMM_dict",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "0 no leakage calculation /  1 calculation using single slot ",
+                "max": "1",
+                "min": "0",
+                "name": "type_calc_leakage",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "0 to desactivate the sliding band",
+                "max": "",
+                "min": "",
+                "name": "is_sliding_band",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a",
+                "max": "",
+                "min": "",
+                "name": "is_symmetry_a",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Number of symmetry for the angle vector",
+                "max": "",
+                "min": "1",
+                "name": "sym_a",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "To add an antiperiodicity to the angle vector",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_a",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "1 to compute the stator magnetomotive force / stator armature magnetic field",
+                "max": "",
+                "min": "",
+                "name": "is_mmfs",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "1 to compute the rotor magnetomotive force / rotor magnetic field",
+                "max": "",
+                "min": "",
+                "name": "is_mmfr",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Number of time steps for the FEMM simulation",
+                "max": "",
+                "min": "",
+                "name": "Nt_tot",
+                "type": "int",
+                "unit": "-",
+                "value": 20
             }
         ]
     },
@@ -2024,6 +2198,140 @@
                 "type": "str",
                 "unit": "-",
                 "value": "None"
+            }
+        ]
+    },
+    "IndMag": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "IndMag",
+            "IndMagFEMM"
+        ],
+        "desc": "Electric module: Magnetic Inductance",
+        "is_internal": false,
+        "methods": [
+            "comp_inductance"
+        ],
+        "mother": "",
+        "name": "IndMag",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/IndMag.csv",
+        "properties": [
+            {
+                "desc": "a",
+                "max": "",
+                "min": "",
+                "name": "a",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            }
+        ]
+    },
+    "IndMagFEMM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module: Magnetic Inductance with FEMM",
+        "is_internal": false,
+        "methods": [
+            "comp_inductance",
+            "solve_FEMM"
+        ],
+        "mother": "IndMag",
+        "name": "IndMagFEMM",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/IndMagFEMM.csv",
+        "properties": [
+            {
+                "desc": "To enforce user-defined values for FEMM main parameters ",
+                "max": "",
+                "min": "",
+                "name": "FEMM_dict",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "0 no leakage calculation /  1 calculation using single slot ",
+                "max": "1",
+                "min": "0",
+                "name": "type_calc_leakage",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "0 to desactivate the sliding band",
+                "max": "",
+                "min": "",
+                "name": "is_sliding_band",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a",
+                "max": "",
+                "min": "",
+                "name": "is_symmetry_a",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Number of symmetry for the angle vector",
+                "max": "",
+                "min": "1",
+                "name": "sym_a",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "To add an antiperiodicity to the angle vector",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_a",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "1 to compute the stator magnetomotive force / stator armature magnetic field",
+                "max": "",
+                "min": "",
+                "name": "is_mmfs",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "1 to compute the rotor magnetomotive force / rotor magnetic field",
+                "max": "",
+                "min": "",
+                "name": "is_mmfr",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Number of time steps for the FEMM simulation",
+                "max": "",
+                "min": "",
+                "name": "Nt_tot",
+                "type": "int",
+                "unit": "-",
+                "value": 20
             }
         ]
     },
@@ -4980,6 +5288,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutElec"
+            },
+            {
+                "desc": "Dictionary of the Electrical Equivalent Circuit",
+                "max": "",
+                "min": "",
+                "name": "EEC_dict",
+                "type": "dict",
+                "unit": "-",
+                "value": {}
             }
         ]
     },
@@ -5442,8 +5759,7 @@
             "plot.plot_A_fft2",
             "plot.Magnetic.plot_B_space",
             "plot.Structural.plot_force_space",
-            "plot.Magnetic.plot_mesh_field",
-            "plot.plot_A_space_compare"
+            "plot.Magnetic.plot_mesh_field"
         ],
         "mother": "",
         "name": "Output",
@@ -5805,6 +6121,15 @@
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Simu1.csv",
         "properties": [
+            {
+                "desc": "Electrical module",
+                "max": "",
+                "min": "",
+                "name": "elec",
+                "type": "Electrical",
+                "unit": "-",
+                "value": ""
+            },
             {
                 "desc": "Magnetic module",
                 "max": "",

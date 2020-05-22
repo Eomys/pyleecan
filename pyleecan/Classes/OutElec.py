@@ -36,6 +36,7 @@ class OutElec(FrozenClass):
         rot_dir=-1,
         angle_rotor_initial=0,
         logger_name="Pyleecan.OutElec",
+        EEC_dict={},
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -68,6 +69,8 @@ class OutElec(FrozenClass):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "EEC_dict" in list(init_dict.keys()):
+                EEC_dict = init_dict["EEC_dict"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -85,6 +88,7 @@ class OutElec(FrozenClass):
         self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
         self.logger_name = logger_name
+        self.EEC_dict = EEC_dict
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -144,6 +148,7 @@ class OutElec(FrozenClass):
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         )
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        OutElec_str += "EEC_dict = " + str(self.EEC_dict) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -168,6 +173,8 @@ class OutElec(FrozenClass):
         if other.angle_rotor_initial != self.angle_rotor_initial:
             return False
         if other.logger_name != self.logger_name:
+            return False
+        if other.EEC_dict != self.EEC_dict:
             return False
         return True
 
@@ -203,6 +210,7 @@ class OutElec(FrozenClass):
         OutElec_dict["rot_dir"] = self.rot_dir
         OutElec_dict["angle_rotor_initial"] = self.angle_rotor_initial
         OutElec_dict["logger_name"] = self.logger_name
+        OutElec_dict["EEC_dict"] = self.EEC_dict
         # The class name is added to the dict fordeserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -219,6 +227,7 @@ class OutElec(FrozenClass):
         self.rot_dir = None
         self.angle_rotor_initial = None
         self.logger_name = None
+        self.EEC_dict = None
 
     def _get_time(self):
         """getter of time"""
@@ -397,4 +406,21 @@ class OutElec(FrozenClass):
         fget=_get_logger_name,
         fset=_set_logger_name,
         doc=u"""Name of the logger to use""",
+    )
+
+    def _get_EEC_dict(self):
+        """getter of EEC_dict"""
+        return self._EEC_dict
+
+    def _set_EEC_dict(self, value):
+        """setter of EEC_dict"""
+        check_var("EEC_dict", value, "dict")
+        self._EEC_dict = value
+
+    # Dictionary of the Electrical Equivalent Circuit
+    # Type : dict
+    EEC_dict = property(
+        fget=_get_EEC_dict,
+        fset=_set_EEC_dict,
+        doc=u"""Dictionary of the Electrical Equivalent Circuit""",
     )

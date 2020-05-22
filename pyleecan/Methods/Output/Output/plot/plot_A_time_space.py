@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from .....Functions.Plot.plot_A_time_space import plot_A_time_space as plot_A_time_space_fct
+from .....Functions.Plot.plot_A_time_space import (
+    plot_A_time_space as plot_A_time_space_fct,
+)
 
 
 def plot_A_time_space(
