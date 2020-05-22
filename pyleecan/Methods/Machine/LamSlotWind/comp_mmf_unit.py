@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
-from numpy import pi, linspace, zeros, sqrt, dot, array, squeeze
+from numpy import pi, linspace, zeros, ones, sqrt, dot, array, squeeze
 from SciDataTool import Data1D, DataLinspace, DataTime
 from ....Functions.Electrical.coordinate_transformation import dq2n
 from ....Functions.Winding.gen_phase_list import gen_name
 from ....Functions.check_parent import check_parent
 
 
-def comp_mmf_unit(self, Na=2048):
+def comp_mmf_unit(self, Na=2048, Nt=50):
     """Compute the winding Unit magnetomotive force
 
     Parameters
@@ -16,7 +16,8 @@ def comp_mmf_unit(self, Na=2048):
         an LamSlotWind object
     Na : int
         Space discretization for offline computation (otherwise use out.elec.angle)
-
+    Nt : int
+        Time discretization for offline computation (otherwise use out.elec.time)
     Returns
     -------
     mmf_unit : SciDataTool.Classes.DataND.DataND
@@ -35,18 +36,24 @@ def comp_mmf_unit(self, Na=2048):
         # Use Electrical module discretization
         angle = self.parent.parent.parent.elec.angle
         Na = angle.size
+        time = self.parent.parent.parent.elec.time
+        Nt = time.size
     else:
         angle = linspace(0, 2 * pi, Na, endpoint=False)
+        time = linspace(0, 1 / 50, Nt, endpoint=False)  # freq = 50Hz
 
     # Compute the winding function and mmf
     wf = self.comp_wind_function(angle=angle)
     qs = self.winding.qs
 
     # Compute unit mmf
-    I = dq2n(array([1, 0]), 0, n=qs)
+    Idq = zeros((Nt, 2))
+    Idq[:, 0] = ones(Nt)
+    I = dq2n(Idq, 0, n=qs)
     mmf_u = squeeze(dot(I, wf))
 
     # Create a Data object
+    Time = Data1D(name="time", unit="s", values=time)
     Angle = DataLinspace(
         name="angle",
         unit="rad",
@@ -57,7 +64,11 @@ def comp_mmf_unit(self, Na=2048):
         include_endpoint=False,
     )
     MMF = DataTime(
-        name="Unit MMF", unit="p.u.", symbol="Magnitude", axes=[Angle], values=mmf_u
+        name="Unit MMF",
+        unit="p.u.",
+        symbol="Magnitude",
+        axes=[Time, Angle],
+        values=mmf_u,
     )
 
     if is_out:  # Store the result if the Output is available
