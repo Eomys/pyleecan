@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from numpy import pi, linspace, zeros, sqrt, dot, array, squeeze
 from SciDataTool import Data1D, DataLinspace, DataTime
 from ....Functions.Electrical.coordinate_transformation import dq2n
+from ....Functions.Plot.plot_A_space import plot_A_space
 
 
 def plot_mmf_unit(self, Na=2048):
@@ -16,14 +17,9 @@ def plot_mmf_unit(self, Na=2048):
         Space discretization
     """
 
-    # Create an empty Output object to use the generic plot methods
-    module = __import__("pyleecan.Classes.Output", fromlist=["Output"])
-    Output = getattr(module, "Output")
-
     # Compute the winding function and mmf
     wf = self.comp_wind_function(Na=Na)
     qs = self.winding.qs
-    out = Output()
 
     # Compute unit mmf
     I = dq2n(array([1, 0]), 0, n=qs)
@@ -45,11 +41,11 @@ def plot_mmf_unit(self, Na=2048):
         number=Na,
         include_endpoint=False,
     )
-    out.mag.Br = DataTime(
+    WF = DataTime(
         name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf,
     )
     MMF = DataTime(
         name="Unit MMF", unit="p.u.", symbol="Magnitude", axes=[Angle], values=mmf_u,
     )
 
-    out.plot_A_space("mag.Br", is_fft=True, index_list=[0, 1, 2], data_list=[MMF])
+    plot_A_space(WF, is_fft=True, index_list=[0, 1, 2], data_list=[MMF])
