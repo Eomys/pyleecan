@@ -20,7 +20,6 @@ def update_FEMM_simulation(
         Output object
     """
     angle_rotor = output.get_angle_rotor()
-    print(angle_rotor)
 
     if is_sliding_band:  # No rotation without sliding band.
         # Rotor rotation using sliding band

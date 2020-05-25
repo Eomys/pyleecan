@@ -7,7 +7,7 @@ from glob import glob
 
 
 def animate_as_gif(
-    func, data, save_path, file_name, t_index_max, **kwargs
+    func, data, save_path="./", file_name="animated_plot.gif", t_index_max=50, **kwargs
 ):
     """Animate an existing plot command as a gif
 

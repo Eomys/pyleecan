@@ -8,6 +8,7 @@ from numpy import (
     linspace,
     pi,
     split,
+    mean,
 )
 import matplotlib.pyplot as plt
 
@@ -65,7 +66,7 @@ def comp_inductance(self, output):
     # Geometry building and assigning property in FEMM
     FEMM_dict = draw_FEMM(
         output,
-        is_mmfr=0,  # to remove the magnets
+        is_mmfr=self.is_mmfr,  # to remove the magnets
         is_mmfs=self.is_mmfs,
         sym=sym,
         is_antiper=self.is_antiper_a,
@@ -77,18 +78,22 @@ def comp_inductance(self, output):
     Flux_link = min(n2dq(Phi_wind, p * mmf_angle, n=qs)[0])
     output.elec.EEC_dict["Ld"] = Flux_link
 
-    # time = linspace(0, Nt_tot, Nt_tot)
-    # flux = split(Phi_wind, 3, axis=1)
-    # fluxdq = split(n2dq(Phi_wind, p * mmf_angle, n=qs), 2, axis=1)
-    # fig = plt.figure()
-    # plt.plot(time, flux[0], color="tab:blue", label="A")
-    # plt.plot(time, flux[1], color="tab:red", label="B")
-    # plt.plot(time, flux[2], color="tab:olive", label="C")
-    # plt.plot(time, fluxdq[0], color="k", label="D")
-    # plt.plot(time, fluxdq[1], color="g", label="Q")
-    # plt.legend()
-    # fig.savefig("C:\\Users\\HP\\Documents\\Helene\\test_inductanceD.png")
-
+    time = linspace(0, Nt_tot, Nt_tot)
+    flux = split(Phi_wind, 3, axis=1)
+    fluxdq = split(n2dq(Phi_wind, p * mmf_angle, n=qs), 2, axis=1)
+    fig = plt.figure()
+    plt.plot(time, flux[0], color="tab:blue", label="A")
+    plt.plot(time, flux[1], color="tab:red", label="B")
+    plt.plot(time, flux[2], color="tab:olive", label="C")
+    plt.plot(time, fluxdq[0]-output.elec.EEC_dict["Phi_wind"], color="k", label="D")
+    plt.plot(time, fluxdq[1], color="g", label="Q")
+    plt.legend()
+    fig.savefig("C:\\Users\\HP\\Documents\\Helene\\test_inductanceD.png")
+    print("Flux linkage:")
+    print(output.elec.EEC_dict["Phi_wind"])
+    print("Ld:")
+    print(mean(fluxdq[0]))
+    
     # Set currents at 1A + Park transformation for the Iq FEMM simulation
     output.elec.Is = dq2n(array([0, 1]), p * mmf_angle, n=qs)
     output.elec.Ir = zeros((Nt_tot, qs))
@@ -109,18 +114,21 @@ def comp_inductance(self, output):
     Flux_link = min(n2dq(Phi_wind, p * mmf_angle, n=qs)[1])
     output.elec.EEC_dict["Lq"] = Flux_link
 
-    # flux = split(Phi_wind, 3, axis=1)
-    # fluxdq = split(n2dq(Phi_wind, p * mmf_angle, n=qs), 2, axis=1)
-    # fig = plt.figure()
-    # plt.plot(time, flux[0], color="tab:blue", label="A")
-    # plt.plot(time, flux[1], color="tab:red", label="B")
-    # plt.plot(time, flux[2], color="tab:olive", label="C")
-    # plt.plot(time, fluxdq[0], color="k", label="D")
-    # plt.plot(time, fluxdq[1], color="g", label="Q")
-    # plt.legend()
-    # fig.savefig("C:\\Users\\HP\\Documents\\Helene\\test_inductanceQ.png")
+    flux = split(Phi_wind, 3, axis=1)
+    fluxdq = split(n2dq(Phi_wind, p * mmf_angle, n=qs), 2, axis=1)
+    fig = plt.figure()
+    plt.plot(time, flux[0], color="tab:blue", label="A")
+    plt.plot(time, flux[1], color="tab:red", label="B")
+    plt.plot(time, flux[2], color="tab:olive", label="C")
+    plt.plot(time, fluxdq[0], color="k", label="D")
+    plt.plot(time, fluxdq[1], color="g", label="Q")
+    plt.legend()
+    fig.savefig("C:\\Users\\HP\\Documents\\Helene\\test_inductanceQ.png")
+    print("Lq:")
+    print(mean(fluxdq[1]))
 
     # Reinitialize replaced data
     output.elec.angle_rotor = angle_rotor
     output.elec.Is = Is
     output.elec.Ir = Ir
+    print(A)

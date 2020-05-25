@@ -7,9 +7,9 @@ from numpy import (
     linspace,
     pi,
     split,
+    mean,
 )
-
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 
 def comp_fluxlinkage(self, output):
@@ -74,20 +74,21 @@ def comp_fluxlinkage(self, output):
 
     # Solve for all time step and store all the results in output
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
-    Flux_link = min(n2dq(Phi_wind, p * mmf_angle, n=qs)[0])
-    output.elec.EEC_dict["Phi_wind"] = Flux_link
+    
 
-    # time = linspace(0, Nt_tot, Nt_tot)
-    # flux = split(Phi_wind, 3, axis=1)
-    # fluxdq = split(n2dq(Phi_wind, p * mmf_angle, n=qs), 2, axis=1)
-    # fig = plt.figure()
-    # plt.plot(time, flux[0], color="tab:blue", label="A")
-    # plt.plot(time, flux[1], color="tab:red", label="B")
-    # plt.plot(time, flux[2], color="tab:olive", label="C")
-    # plt.plot(time, fluxdq[0], color="k", label="D")
-    # plt.plot(time, fluxdq[1], color="g", label="Q")
-    # plt.legend()
-    # fig.savefig("C:\\Users\\HP\\Documents\\Helene\\test_fluxlinkage_dq.png")
+    time = linspace(0, Nt_tot, Nt_tot)
+    flux = split(Phi_wind, 3, axis=1)
+    fluxdq = split(n2dq(Phi_wind, p * mmf_angle, n=qs), 2, axis=1)
+    Flux_link = mean(fluxdq[0])
+    output.elec.EEC_dict["Phi_wind"] = Flux_link
+    fig = plt.figure()
+    plt.plot(time, flux[0], color="tab:blue", label="A")
+    plt.plot(time, flux[1], color="tab:red", label="B")
+    plt.plot(time, flux[2], color="tab:olive", label="C")
+    plt.plot(time, fluxdq[0], color="k", label="D")
+    plt.plot(time, fluxdq[1], color="g", label="Q")
+    plt.legend()
+    fig.savefig("C:\\Users\\HP\\Documents\\Helene\\test_fluxlinkage_dq.png")
 
     # Reinitialize replaced data
     output.elec.angle_rotor = angle_rotor

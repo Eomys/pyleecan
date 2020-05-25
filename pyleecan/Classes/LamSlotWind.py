@@ -97,6 +97,11 @@ try:
 except ImportError as error:
     comp_mmf_unit = error
 
+try:
+    from ..Methods.Machine.LamSlotWind.comp_rot_dir import comp_rot_dir
+except ImportError as error:
+    comp_rot_dir = error
+
 
 from ._check import InitUnKnowClassError
 from .Winding import Winding
@@ -303,6 +308,17 @@ class LamSlotWind(LamSlot):
         )
     else:
         comp_mmf_unit = comp_mmf_unit
+    # cf Methods.Machine.LamSlotWind.comp_rot_dir
+    if isinstance(comp_rot_dir, ImportError):
+        comp_rot_dir = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_rot_dir: " + str(comp_rot_dir)
+                )
+            )
+        )
+    else:
+        comp_rot_dir = comp_rot_dir
     # save method is available in all object
     save = save
 

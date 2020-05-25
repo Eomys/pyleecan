@@ -2928,7 +2928,8 @@
             "plot_mmf_unit",
             "comp_resistance_wind",
             "comp_angle_d_axis",
-            "comp_mmf_unit"
+            "comp_mmf_unit",
+            "comp_rot_dir"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
