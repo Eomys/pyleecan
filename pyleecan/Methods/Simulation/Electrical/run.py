@@ -16,6 +16,14 @@ def run(self):
         )
 
     output = self.parent.parent
-
-    self.fluxlink.comp_fluxlinkage(output)
-    self.indmag.comp_inductance(output)
+    
+    # Generate drive
+    self.gen_drive(output)
+    # Compute parameters of the equivalent electrical circuit
+    self.eec.comp_EEC_parameters(output)
+    # Solve the equivalent electrical circuit
+    self.eec.solve_EEC(output)
+    # Compute losses due to Joule effects
+    self.eec.comp_losses(output)
+    # Compute torque
+    self.eec.comp_torque(output)

@@ -9,7 +9,7 @@ from numpy import (
     split,
     mean,
 )
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 
 def comp_fluxlinkage(self, output):
@@ -17,8 +17,8 @@ def comp_fluxlinkage(self, output):
 
     Parameters
     ----------
-    self : MagFEMM
-        a MagFEMM object
+    self : FluxLinkFEMM
+        a FluxLinkFEMM object
     output : Output
         an Output object
     """
@@ -26,9 +26,11 @@ def comp_fluxlinkage(self, output):
     qs = output.simu.machine.stator.winding.qs
     p = output.simu.machine.stator.winding.p
     Nt_tot = self.Nt_tot
+    d_angle_diff = output.geo.get_d_angle_diff()
+    rot_dir = output.geo.get_rot_dir()
 
     # Store data to be replaced
-    angle_rotor = output.elec.angle_rotor
+    angle_rotor = output.get_angle_rotor()
     Is = output.elec.Is
     Ir = output.elec.Ir
 
@@ -48,18 +50,12 @@ def comp_fluxlinkage(self, output):
     else:
         sym = 1
 
-    # Compute initial angle from unit mmf
-    alpha_0 = 1.31 - pi / 2 / p  # TODO replace by comp_angle_d_axis
-
-    # Compute rotation direction from unit mmf
-    rot_dir = 1  # TODO replace by comp_rot_dir
-
     # Set rotor angle for the FEMM simulation
     angle = linspace(0, 2 * pi / sym, Nt_tot)
     output.elec.angle_rotor = angle
 
-    # Define angle for the flux linkage postprocessing
-    mmf_angle = rot_dir * (angle - alpha_0)
+    # Define d axis angle for the d,q transform
+    d_angle = rot_dir * (angle - d_angle_diff)
 
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
@@ -74,23 +70,23 @@ def comp_fluxlinkage(self, output):
 
     # Solve for all time step and store all the results in output
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
-    
-
-    time = linspace(0, Nt_tot, Nt_tot)
-    flux = split(Phi_wind, 3, axis=1)
-    fluxdq = split(n2dq(Phi_wind, p * mmf_angle, n=qs), 2, axis=1)
+    fluxdq = split(n2dq(Phi_wind, p * d_angle, n=qs), 2, axis=1)
     Flux_link = mean(fluxdq[0])
-    output.elec.EEC_dict["Phi_wind"] = Flux_link
-    fig = plt.figure()
-    plt.plot(time, flux[0], color="tab:blue", label="A")
-    plt.plot(time, flux[1], color="tab:red", label="B")
-    plt.plot(time, flux[2], color="tab:olive", label="C")
-    plt.plot(time, fluxdq[0], color="k", label="D")
-    plt.plot(time, fluxdq[1], color="g", label="Q")
-    plt.legend()
-    fig.savefig("C:\\Users\\HP\\Documents\\Helene\\test_fluxlinkage_dq.png")
+
+    # time = linspace(0, Nt_tot, Nt_tot)
+    # flux = split(Phi_wind, 3, axis=1)
+    # fig = plt.figure()
+    # plt.plot(time, flux[0], color="tab:blue", label="A")
+    # plt.plot(time, flux[1], color="tab:red", label="B")
+    # plt.plot(time, flux[2], color="tab:olive", label="C")
+    # plt.plot(time, fluxdq[0], color="k", label="D")
+    # plt.plot(time, fluxdq[1], color="g", label="Q")
+    # plt.legend()
+    # fig.savefig("C:\\Users\\HP\\Documents\\Helene\\test_fluxlinkage_dq.png")
 
     # Reinitialize replaced data
     output.elec.angle_rotor = angle_rotor
     output.elec.Is = Is
     output.elec.Ir = Ir
+    
+    return Flux_link
