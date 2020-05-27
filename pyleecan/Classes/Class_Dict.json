@@ -657,6 +657,15 @@
                 "type": "float",
                 "unit": "A",
                 "value": 800
+            },
+            {
+                "desc": "True to generate current waveform, False for voltage",
+                "max": "",
+                "min": "",
+                "name": "is_current",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
             }
         ]
     },
