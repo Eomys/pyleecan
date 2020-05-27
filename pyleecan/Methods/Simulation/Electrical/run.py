@@ -19,9 +19,9 @@ def run(self):
     
     # Generate drive
     self.gen_drive(output)
-    # Compute parameters of the equivalent electrical circuit
+    # Compute parameters of the electrical equivalent circuit
     self.eec.comp_EEC_parameters(output)
-    # Solve the equivalent electrical circuit
+    # Solve the electrical equivalent circuit
     self.eec.solve_EEC(output)
     # Compute losses due to Joule effects
     self.eec.comp_losses(output)
