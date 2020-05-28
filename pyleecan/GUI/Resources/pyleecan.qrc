@@ -63,5 +63,7 @@
         <file>images/MachineSetup/SPMSM.png</file>
         <file>images/MachineSetup/WRSM.png</file>
         <file>images/MachineSetup/WSlot/Slot_58.PNG</file>
+        <file>images/MachineSetup/WSlot/Slot_57.PNG</file>
+        <file>images/MachineSetup/WSlot/Slot_57_no_mag.PNG</file>
     </qresource>
 </RCC>

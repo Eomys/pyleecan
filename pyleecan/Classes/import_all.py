@@ -30,6 +30,7 @@ from ..Classes.HoleM51 import HoleM51
 from ..Classes.HoleM52 import HoleM52
 from ..Classes.HoleM53 import HoleM53
 from ..Classes.HoleM54 import HoleM54
+from ..Classes.HoleM57 import HoleM57
 from ..Classes.HoleM58 import HoleM58
 from ..Classes.HoleMag import HoleMag
 from ..Classes.Import import Import

@@ -3,7 +3,6 @@
 # File generated according to WVent.ui
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 

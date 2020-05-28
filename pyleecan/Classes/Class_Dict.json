@@ -948,6 +948,7 @@
             "HoleM52",
             "HoleM53",
             "HoleM54",
+            "HoleM57",
             "HoleM58",
             "HoleMag",
             "VentilationCirc",
@@ -1568,6 +1569,118 @@
             }
         ]
     },
+    "HoleM57": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "V shape slot for buried magnet",
+        "is_internal": false,
+        "methods": [
+            "_to_m_file",
+            "build_geometry",
+            "check",
+            "comp_mass_magnets",
+            "comp_radius",
+            "comp_surface_magnets",
+            "comp_volume_magnets",
+            "remove_magnet"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM57",
+        "package": "Slot",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/HoleM57.csv",
+        "properties": [
+            {
+                "desc": "V angle",
+                "max": "3.15",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "rad",
+                "value": 0.2
+            },
+            {
+                "desc": "Distance from the lamination Bore",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": 0
+            },
+            {
+                "desc": "Tooth width (at V bottom)",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.013
+            },
+            {
+                "desc": "Magnet height",
+                "max": "",
+                "min": "0",
+                "name": "H2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.02
+            },
+            {
+                "desc": "Distance Magnet to top of the V",
+                "max": "",
+                "min": "0",
+                "name": "W2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "Tooth width (at V top)",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "Magnet Width",
+                "max": "",
+                "min": "0",
+                "name": "W4",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "First Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Second Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_1",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "HoleM58": {
         "constants": [
             {
@@ -1693,6 +1806,7 @@
             "HoleM51",
             "HoleM52",
             "HoleM53",
+            "HoleM57",
             "HoleM58"
         ],
         "desc": "Hole with magnets for lamination (abstract)",
