@@ -183,7 +183,7 @@ def plot_A_space(
             is_fund=True,
             fund_harm=fund_harm,
         )
-        
+
     if save_path is not None:
         fig.savefig(save_path)
 

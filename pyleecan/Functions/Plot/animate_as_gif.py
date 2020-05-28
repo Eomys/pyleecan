@@ -7,9 +7,16 @@ from glob import glob
 
 
 def animate_as_gif(
-    func, data, save_path="./", file_name="animated_plot.gif", t_index_max=50, **kwargs
+    func,
+    data_list,
+    save_path="./",
+    file_name="animated_plot.gif",
+    index_var="t_index",
+    index_max=50,
+    index_step=1,
+    **kwargs
 ):
-    """Animate an existing plot command as a gif
+    """Animate an existing plot command as a gif: animate
 
     Parameters
     ----------
@@ -26,15 +33,23 @@ def animate_as_gif(
     kwargs : dict
         parameters of func
     """
-    
-    with imageio.get_writer(join(save_path, file_name), mode='I') as writer:
-        for i in range(t_index_max):
-            save_path_temp = save_path + "\\temp_" + str(i) + ".png"
-            kwargs["t_index"] = i
-            kwargs["save_path"] = save_path_temp
-            func(data, **kwargs)
-            image = imageio.imread(save_path_temp)
-            writer.append_data(image)
-    
+
+    with imageio.get_writer(join(save_path, file_name), mode="I") as writer:
+        if isinstance(data_list, list):
+            for i, data in enumerate(data_list):
+                save_path_temp = save_path + "\\temp_" + str(i) + ".png"
+                kwargs["save_path"] = save_path_temp
+                func(data, **kwargs)
+                image = imageio.imread(save_path_temp)
+                writer.append_data(image)
+        else:
+            for i in range(index_max):
+                save_path_temp = save_path + "\\temp_" + str(i) + ".png"
+                kwargs[index_var] = i
+                kwargs["save_path"] = save_path_temp
+                func(data_list, **kwargs)
+                image = imageio.imread(save_path_temp)
+                writer.append_data(image)
+
     for file in glob(save_path + "\\temp_*"):
         remove(file)
