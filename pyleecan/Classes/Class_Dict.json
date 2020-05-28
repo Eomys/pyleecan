@@ -2132,14 +2132,35 @@
             "InputFlux",
             "InputForce"
         ],
-        "desc": "Abstract class to set the starting data of the simulation",
+        "desc": "Starting data of the simulation",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "gen_input"
+        ],
         "mother": "",
         "name": "Input",
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Input.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Electrical time vector (no symmetry) to import",
+                "max": "",
+                "min": "",
+                "name": "time",
+                "type": "Import",
+                "unit": "s",
+                "value": "ImportMatrixVal()"
+            },
+            {
+                "desc": "Electrical position vector (no symmetry) to import",
+                "max": "",
+                "min": "",
+                "name": "angle",
+                "type": "Import",
+                "unit": "rad",
+                "value": "ImportMatrixVal()"
+            }
+        ]
     },
     "InputCurrent": {
         "constants": [
@@ -2160,24 +2181,6 @@
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputCurrent.csv",
         "properties": [
-            {
-                "desc": "Electrical time vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "time",
-                "type": "Import",
-                "unit": "s",
-                "value": "ImportMatrixVal()"
-            },
-            {
-                "desc": "Electrical position vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "angle",
-                "type": "Import",
-                "unit": "rad",
-                "value": "ImportMatrixVal()"
-            },
             {
                 "desc": "Stator currents as a function of time (each column correspond to one phase) to import",
                 "max": "",
@@ -2253,24 +2256,6 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputCurrentDQ.csv",
         "properties": [
             {
-                "desc": "Electrical time vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "time",
-                "type": "Import",
-                "unit": "s",
-                "value": null
-            },
-            {
-                "desc": "Electrical position vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "angle",
-                "type": "Import",
-                "unit": "rad",
-                "value": null
-            },
-            {
                 "desc": "Stator dq-currents as a function of time to import",
                 "max": "",
                 "min": "",
@@ -2345,24 +2330,6 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv",
         "properties": [
             {
-                "desc": "Electrical time vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "time",
-                "type": "Import",
-                "unit": "s",
-                "value": null
-            },
-            {
-                "desc": "Electrical position vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "angle",
-                "type": "Import",
-                "unit": "rad",
-                "value": null
-            },
-            {
                 "desc": "Radial airgap flux density",
                 "max": "",
                 "min": "",
@@ -2400,24 +2367,6 @@
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputForce.csv",
         "properties": [
-            {
-                "desc": "Electrical time vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "time",
-                "type": "Import",
-                "unit": "s",
-                "value": null
-            },
-            {
-                "desc": "Electrical position vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "angle",
-                "type": "Import",
-                "unit": "rad",
-                "value": null
-            },
             {
                 "desc": "Radial magnetic air-gap surface force",
                 "max": "",
