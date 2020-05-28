@@ -2,6 +2,9 @@
 
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Functions.Electrical.coordinate_transformation import n2dq, dq2n
+from SciDataTool import Data1D, DataLinspace, DataTime
+from ....Functions.Winding.gen_phase_list import gen_name
+
 from numpy import (
     array,
     zeros,
@@ -10,6 +13,7 @@ from numpy import (
     split,
     mean,
 )
+
 # import matplotlib.pyplot as plt
 
 
@@ -27,8 +31,8 @@ def comp_inductance(self, output):
     qs = output.simu.machine.stator.winding.qs
     p = output.simu.machine.stator.winding.p
     Nt_tot = self.Nt_tot
-    d_angle_diff = output.geo.get_d_angle_diff()
-    rot_dir = output.geo.get_rot_dir()
+    d_angle_diff = output.get_d_angle_diff()
+    rot_dir = output.get_rot_dir()
 
     # Store data to be replaced
     angle_rotor = output.get_angle_rotor()
@@ -89,21 +93,10 @@ def comp_inductance(self, output):
     # print(output.elec.EEC_dict["Phi_wind"])
     # print("Ld:")
     # print(mean(fluxdq[0]))
-    
+
     # Set currents at 1A + Park transformation for the Iq FEMM simulation
     output.elec.Is = dq2n(array([0, 1]), p * d_angle, n=qs)
     output.elec.Ir = zeros((Nt_tot, qs))
-
-    # Setup the FEMM simulation
-    # Geometry building and assigning property in FEMM
-    FEMM_dict = draw_FEMM(
-        output,
-        is_mmfr=0,  # to remove the magnets
-        is_mmfs=self.is_mmfs,
-        sym=sym,
-        is_antiper=self.is_antiper_a,
-        type_calc_leakage=self.type_calc_leakage,
-    )
 
     # Solve for Lq
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
@@ -127,5 +120,5 @@ def comp_inductance(self, output):
     output.elec.angle_rotor = angle_rotor
     output.elec.Is = Is
     output.elec.Ir = Ir
-    
+
     return (Lmd, Lmq)

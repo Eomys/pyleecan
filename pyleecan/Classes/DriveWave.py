@@ -8,7 +8,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ._frozen import FrozenClass
+from .Drive import Drive
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -22,7 +22,7 @@ from ._check import InitUnKnowClassError
 from .Import import Import
 
 
-class DriveWave(FrozenClass):
+class DriveWave(Drive):
     """Drive to generate a wave according to an Import object"""
 
     VERSION = 1
@@ -42,7 +42,7 @@ class DriveWave(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, wave=-1, init_dict=None):
+    def __init__(self, wave=-1, Umax=800, Imax=800, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -59,8 +59,11 @@ class DriveWave(FrozenClass):
             # Overwrite default value with init_dict content
             if "wave" in list(init_dict.keys()):
                 wave = init_dict["wave"]
+            if "Umax" in list(init_dict.keys()):
+                Umax = init_dict["Umax"]
+            if "Imax" in list(init_dict.keys()):
+                Imax = init_dict["Imax"]
         # Initialisation by argument
-        self.parent = None
         # wave can be None, a Import object or a dict
         if isinstance(wave, dict):
             # Check that the type is correct (including daughter)
@@ -85,18 +88,17 @@ class DriveWave(FrozenClass):
             self.wave = class_obj(init_dict=wave)
         else:
             self.wave = wave
-
-        # The class is frozen, for now it's impossible to add new properties
-        self._freeze()
+        # Call Drive init
+        super(DriveWave, self).__init__(Umax=Umax, Imax=Imax)
+        # The class is frozen (in Drive init), for now it's impossible to
+        # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
         DriveWave_str = ""
-        if self.parent is None:
-            DriveWave_str += "parent = None " + linesep
-        else:
-            DriveWave_str += "parent = " + str(type(self.parent)) + " object" + linesep
+        # Get the properties inherited from Drive
+        DriveWave_str += super(DriveWave, self).__str__()
         if self.wave is not None:
             tmp = self.wave.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             DriveWave_str += "wave = " + tmp
@@ -109,6 +111,10 @@ class DriveWave(FrozenClass):
 
         if type(other) != type(self):
             return False
+
+        # Check the properties inherited from Drive
+        if not super(DriveWave, self).__eq__(other):
+            return False
         if other.wave != self.wave:
             return False
         return True
@@ -117,12 +123,14 @@ class DriveWave(FrozenClass):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        DriveWave_dict = dict()
+        # Get the properties inherited from Drive
+        DriveWave_dict = super(DriveWave, self).as_dict()
         if self.wave is None:
             DriveWave_dict["wave"] = None
         else:
             DriveWave_dict["wave"] = self.wave.as_dict()
         # The class name is added to the dict fordeserialisation purpose
+        # Overwrite the mother class name
         DriveWave_dict["__class__"] = "DriveWave"
         return DriveWave_dict
 
@@ -131,6 +139,8 @@ class DriveWave(FrozenClass):
 
         if self.wave is not None:
             self.wave._set_None()
+        # Set to None the properties inherited from Drive
+        super(DriveWave, self)._set_None()
 
     def _get_wave(self):
         """getter of wave"""

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 def get_rot_dir(self):
     """Return the rotation direction
 

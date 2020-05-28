@@ -631,7 +631,10 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "Drive",
+            "DriveWave"
+        ],
         "desc": "Abstract Drive class",
         "is_internal": false,
         "methods": [],
@@ -673,7 +676,7 @@
         "methods": [
             "get_wave"
         ],
-        "mother": "",
+        "mother": "Drive",
         "name": "DriveWave",
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/DriveWave.csv",
@@ -689,6 +692,95 @@
             }
         ]
     },
+    "EEC": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "EEC",
+            "EEC_PMSM"
+        ],
+        "desc": "Electric module: Equivalent Electrical Circuit abstract class",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "EEC",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/EEC.csv",
+        "properties": []
+    },
+    "EEC_PMSM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module: Electrical Equivalent Circuit",
+        "is_internal": false,
+        "methods": [
+            "comp_parameters",
+            "solve_EEC",
+            "comp_losses",
+            "comp_torque",
+            "gen_drive"
+        ],
+        "mother": "EEC",
+        "name": "EEC_PMSM",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/EEC_PMSM.csv",
+        "properties": [
+            {
+                "desc": "Magnetic inductance",
+                "max": "",
+                "min": "",
+                "name": "indmag",
+                "type": "IndMag",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Flux Linkage",
+                "max": "",
+                "min": "",
+                "name": "fluxlink",
+                "type": "FluxLink",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Parameters of the EEC",
+                "max": "",
+                "min": "",
+                "name": "parameters",
+                "type": "dict",
+                "unit": "-",
+                "value": {}
+            },
+            {
+                "desc": "",
+                "max": "",
+                "min": "",
+                "name": "freq0",
+                "type": "float",
+                "unit": "Hz",
+                "value": null
+            },
+            {
+                "desc": "Drive",
+                "max": "",
+                "min": "",
+                "name": "drive",
+                "type": "Drive",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
     "Electrical": {
         "constants": [
             {
@@ -700,9 +792,7 @@
         "desc": "Electric module abstract object",
         "is_internal": false,
         "methods": [
-            "run",
-            "comp_fluxlinkage",
-            "comp_inductance"
+            "run"
         ],
         "mother": "",
         "name": "Electrical",
@@ -710,22 +800,13 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Electrical.csv",
         "properties": [
             {
-                "desc": "Flux Linkage",
+                "desc": "Electrical Equivalent Circuit",
                 "max": "",
                 "min": "",
-                "name": "fluxlink",
-                "type": "FluxLink",
+                "name": "eec",
+                "type": "EEC",
                 "unit": "-",
-                "value": ""
-            },
-            {
-                "desc": "Magnetic Inductance",
-                "max": "",
-                "min": "",
-                "name": "indmag",
-                "type": "IndMag",
-                "unit": "-",
-                "value": ""
+                "value": null
             }
         ]
     },
@@ -5389,13 +5470,13 @@
                 "value": "None"
             },
             {
-                "desc": "Dictionary of the Electrical Equivalent Circuit",
+                "desc": "Currents",
                 "max": "",
                 "min": "",
-                "name": "EEC_dict",
-                "type": "dict",
+                "name": "Currents",
+                "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "-",
-                "value": {}
+                "value": ""
             }
         ]
     },
@@ -5558,6 +5639,24 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutGeo"
+            },
+            {
+                "desc": "Difference between the d axis angle of the stator and the rotor",
+                "max": "",
+                "min": "",
+                "name": "d_angle_diff",
+                "type": "float",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "desc": "Rotation direction",
+                "max": "1",
+                "min": "-1",
+                "name": "rot_dir",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -5936,6 +6035,8 @@
             "getter.get_BH_rotor",
             "getter.get_path_result",
             "getter.get_angle_rotor",
+            "getter.get_d_angle_diff",
+            "getter.get_rot_dir",
             "plot.Structural.plot_force_space",
             "plot.Magnetic.plot_mesh_field",
             "plot.Magnetic.plot_mesh",

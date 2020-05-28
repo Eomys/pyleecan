@@ -44,7 +44,7 @@ class OutElec(FrozenClass):
         angle_rotor_initial=0,
         logger_name="Pyleecan.OutElec",
         mmf_unit=None,
-        EEC_dict={},
+        Currents=None,
         init_dict=None,
     ):
         """Constructor of the class. Can be use in two ways :
@@ -79,8 +79,8 @@ class OutElec(FrozenClass):
                 logger_name = init_dict["logger_name"]
             if "mmf_unit" in list(init_dict.keys()):
                 mmf_unit = init_dict["mmf_unit"]
-            if "EEC_dict" in list(init_dict.keys()):
-                EEC_dict = init_dict["EEC_dict"]
+            if "Currents" in list(init_dict.keys()):
+                Currents = init_dict["Currents"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -102,7 +102,7 @@ class OutElec(FrozenClass):
         if isinstance(DataND, ImportError):
             raise ImportError("Unknown type DataND please install SciDataTool")
         self.mmf_unit = mmf_unit
-        self.EEC_dict = EEC_dict
+        self.Currents = Currents
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -163,7 +163,7 @@ class OutElec(FrozenClass):
         )
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         OutElec_str += "mmf_unit = " + str(self.mmf_unit) + linesep + linesep
-        OutElec_str += "EEC_dict = " + str(self.EEC_dict) + linesep
+        OutElec_str += "Currents = " + str(self.Currents) + linesep + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -191,7 +191,7 @@ class OutElec(FrozenClass):
             return False
         if other.mmf_unit != self.mmf_unit:
             return False
-        if other.EEC_dict != self.EEC_dict:
+        if other.Currents != self.Currents:
             return False
         return True
 
@@ -235,7 +235,14 @@ class OutElec(FrozenClass):
                 "__repr__": str(self._mmf_unit.__repr__()),
                 "serialized": dumps(self._mmf_unit).decode("ISO-8859-2"),
             }
-        OutElec_dict["EEC_dict"] = self.EEC_dict
+        if self.Currents is None:
+            OutElec_dict["Currents"] = None
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutElec_dict["Currents"] = {
+                "__class__": str(type(self._Currents)),
+                "__repr__": str(self._Currents.__repr__()),
+                "serialized": dumps(self._Currents).decode("ISO-8859-2"),
+            }
         # The class name is added to the dict fordeserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -253,7 +260,7 @@ class OutElec(FrozenClass):
         self.angle_rotor_initial = None
         self.logger_name = None
         self.mmf_unit = None
-        self.EEC_dict = None
+        self.Currents = None
 
     def _get_time(self):
         """getter of time"""
@@ -458,19 +465,24 @@ class OutElec(FrozenClass):
         fget=_get_mmf_unit, fset=_set_mmf_unit, doc=u"""Unit magnetomotive force"""
     )
 
-    def _get_EEC_dict(self):
-        """getter of EEC_dict"""
-        return self._EEC_dict
+    def _get_Currents(self):
+        """getter of Currents"""
+        return self._Currents
 
-    def _set_EEC_dict(self, value):
-        """setter of EEC_dict"""
-        check_var("EEC_dict", value, "dict")
-        self._EEC_dict = value
+    def _set_Currents(self, value):
+        """setter of Currents"""
+        try:  # Check the type
+            check_var("Currents", value, "dict")
+        except CheckTypeError:
+            check_var("Currents", value, "SciDataTool.Classes.DataND.DataND")
+            # property can be set from a list to handle loads
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Currents = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._Currents = value
 
-    # Dictionary of the Electrical Equivalent Circuit
-    # Type : dict
-    EEC_dict = property(
-        fget=_get_EEC_dict,
-        fset=_set_EEC_dict,
-        doc=u"""Dictionary of the Electrical Equivalent Circuit""",
-    )
+    # Currents
+    # Type : SciDataTool.Classes.DataND.DataND
+    Currents = property(fget=_get_Currents, fset=_set_Currents, doc=u"""Currents""")

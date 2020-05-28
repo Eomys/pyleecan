@@ -17,20 +17,9 @@ try:
 except ImportError as error:
     run = error
 
-try:
-    from ..Methods.Simulation.Electrical.comp_fluxlinkage import comp_fluxlinkage
-except ImportError as error:
-    comp_fluxlinkage = error
-
-try:
-    from ..Methods.Simulation.Electrical.comp_inductance import comp_inductance
-except ImportError as error:
-    comp_inductance = error
-
 
 from ._check import InitUnKnowClassError
-from .FluxLink import FluxLink
-from .IndMag import IndMag
+from .EEC import EEC
 
 
 class Electrical(FrozenClass):
@@ -38,7 +27,6 @@ class Electrical(FrozenClass):
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.Electrical.run
     if isinstance(run, ImportError):
         run = property(
@@ -48,37 +36,13 @@ class Electrical(FrozenClass):
         )
     else:
         run = run
-    # cf Methods.Simulation.Electrical.comp_fluxlinkage
-    if isinstance(comp_fluxlinkage, ImportError):
-        comp_fluxlinkage = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Electrical method comp_fluxlinkage: "
-                    + str(comp_fluxlinkage)
-                )
-            )
-        )
-    else:
-        comp_fluxlinkage = comp_fluxlinkage
-    # cf Methods.Simulation.Electrical.comp_inductance
-    if isinstance(comp_inductance, ImportError):
-        comp_inductance = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Electrical method comp_inductance: "
-                    + str(comp_inductance)
-                )
-            )
-        )
-    else:
-        comp_inductance = comp_inductance
     # save method is available in all object
     save = save
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, fluxlink=-1, indmag=-1, init_dict=None):
+    def __init__(self, eec=None, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -88,47 +52,29 @@ class Electrical(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if fluxlink == -1:
-            fluxlink = FluxLink()
-        if indmag == -1:
-            indmag = IndMag()
+        if eec == -1:
+            eec = EEC()
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "fluxlink" in list(init_dict.keys()):
-                fluxlink = init_dict["fluxlink"]
-            if "indmag" in list(init_dict.keys()):
-                indmag = init_dict["indmag"]
+            if "eec" in list(init_dict.keys()):
+                eec = init_dict["eec"]
         # Initialisation by argument
         self.parent = None
-        # fluxlink can be None, a FluxLink object or a dict
-        if isinstance(fluxlink, dict):
+        # eec can be None, a EEC object or a dict
+        if isinstance(eec, dict):
             # Check that the type is correct (including daughter)
-            class_name = fluxlink.get("__class__")
-            if class_name not in ["FluxLink", "FluxLinkFEMM"]:
+            class_name = eec.get("__class__")
+            if class_name not in ["EEC", "EEC_PMSM"]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for fluxlink"
+                    "Unknow class name " + class_name + " in init_dict for eec"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
-            self.fluxlink = class_obj(init_dict=fluxlink)
+            self.eec = class_obj(init_dict=eec)
         else:
-            self.fluxlink = fluxlink
-        # indmag can be None, a IndMag object or a dict
-        if isinstance(indmag, dict):
-            # Check that the type is correct (including daughter)
-            class_name = indmag.get("__class__")
-            if class_name not in ["IndMag", "IndMagFEMM"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for indmag"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.indmag = class_obj(init_dict=indmag)
-        else:
-            self.indmag = indmag
+            self.eec = eec
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -141,16 +87,11 @@ class Electrical(FrozenClass):
             Electrical_str += "parent = None " + linesep
         else:
             Electrical_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        if self.fluxlink is not None:
-            tmp = self.fluxlink.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Electrical_str += "fluxlink = " + tmp
+        if self.eec is not None:
+            tmp = self.eec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Electrical_str += "eec = " + tmp
         else:
-            Electrical_str += "fluxlink = None" + linesep + linesep
-        if self.indmag is not None:
-            tmp = self.indmag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Electrical_str += "indmag = " + tmp
-        else:
-            Electrical_str += "indmag = None" + linesep + linesep
+            Electrical_str += "eec = None" + linesep + linesep
         return Electrical_str
 
     def __eq__(self, other):
@@ -158,9 +99,7 @@ class Electrical(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.fluxlink != self.fluxlink:
-            return False
-        if other.indmag != self.indmag:
+        if other.eec != self.eec:
             return False
         return True
 
@@ -169,14 +108,10 @@ class Electrical(FrozenClass):
         """
 
         Electrical_dict = dict()
-        if self.fluxlink is None:
-            Electrical_dict["fluxlink"] = None
+        if self.eec is None:
+            Electrical_dict["eec"] = None
         else:
-            Electrical_dict["fluxlink"] = self.fluxlink.as_dict()
-        if self.indmag is None:
-            Electrical_dict["indmag"] = None
-        else:
-            Electrical_dict["indmag"] = self.indmag.as_dict()
+            Electrical_dict["eec"] = self.eec.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         Electrical_dict["__class__"] = "Electrical"
         return Electrical_dict
@@ -184,41 +119,23 @@ class Electrical(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.fluxlink is not None:
-            self.fluxlink._set_None()
-        if self.indmag is not None:
-            self.indmag._set_None()
+        if self.eec is not None:
+            self.eec._set_None()
 
-    def _get_fluxlink(self):
-        """getter of fluxlink"""
-        return self._fluxlink
+    def _get_eec(self):
+        """getter of eec"""
+        return self._eec
 
-    def _set_fluxlink(self, value):
-        """setter of fluxlink"""
-        check_var("fluxlink", value, "FluxLink")
-        self._fluxlink = value
+    def _set_eec(self, value):
+        """setter of eec"""
+        check_var("eec", value, "EEC")
+        self._eec = value
 
-        if self._fluxlink is not None:
-            self._fluxlink.parent = self
+        if self._eec is not None:
+            self._eec.parent = self
 
-    # Flux Linkage
-    # Type : FluxLink
-    fluxlink = property(fget=_get_fluxlink, fset=_set_fluxlink, doc=u"""Flux Linkage""")
-
-    def _get_indmag(self):
-        """getter of indmag"""
-        return self._indmag
-
-    def _set_indmag(self, value):
-        """setter of indmag"""
-        check_var("indmag", value, "IndMag")
-        self._indmag = value
-
-        if self._indmag is not None:
-            self._indmag.parent = self
-
-    # Magnetic Inductance
-    # Type : IndMag
-    indmag = property(
-        fget=_get_indmag, fset=_set_indmag, doc=u"""Magnetic Inductance"""
+    # Electrical Equivalent Circuit
+    # Type : EEC
+    eec = property(
+        fget=_get_eec, fset=_set_eec, doc=u"""Electrical Equivalent Circuit"""
     )

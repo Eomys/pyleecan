@@ -38,9 +38,13 @@ def comp_mmf_unit(self, Na=2048, Nt=50):
         Na = angle.size
     else:
         angle = linspace(0, 2 * pi, Na, endpoint=False)
-        
+
     # Define the time dicretization
-    if is_out and self.parent.parent.parent.elec.time is not None and self.parent.parent.parent.elec.time.size!=1:
+    if (
+        is_out
+        and self.parent.parent.parent.elec.time is not None
+        and self.parent.parent.parent.elec.time.size != 1
+    ):
         time = self.parent.parent.parent.elec.time
         Nt = time.size
     else:

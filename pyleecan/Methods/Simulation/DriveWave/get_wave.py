@@ -9,7 +9,7 @@ def get_wave(self):
     Returns
     -------
     wave : ndarray
-        Voltage / current waveform (qs, Nt)
+        Voltage / current waveform (Nt, qs)
     """
 
     return self.wave.get_data()

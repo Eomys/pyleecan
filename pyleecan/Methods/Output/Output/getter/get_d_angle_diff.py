@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 def get_d_angle_diff(self):
     """Return the initial d axis angle
 
@@ -19,4 +20,7 @@ def get_d_angle_diff(self):
     if self.geo.d_angle_diff is not None and self.geo.d_angle_diff.size > 0:
         return self.geo.d_angle_diff
     else:  # Compute
-        return self.simu.machine.stator.comp_angle_d_axis() - self.simu.machine.rotor.comp_angle_d_axis()
+        return (
+            self.simu.machine.stator.comp_angle_d_axis()
+            - self.simu.machine.rotor.comp_angle_d_axis()
+        )
