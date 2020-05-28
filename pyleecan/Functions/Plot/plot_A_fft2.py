@@ -17,6 +17,7 @@ def plot_A_fft2(
     is_norm=False,
     unit="SI",
     colormap="RdBu_r",
+    save_path=None,
 ):
     """2D color plot of the 2D Fourier Transform of a field
 
@@ -42,6 +43,8 @@ def plot_A_fft2(
         unit in which to plot the field
     colormap : colormap object
         colormap prescribed by user
+    save_path : str
+        path and name of the png file to save
     """
 
     # Set plot
@@ -121,3 +124,6 @@ def plot_A_fft2(
             fig=fig,
             type="pcolor",
         )
+    
+    if save_path is not None:
+        fig.savefig(save_path)

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from ..init_fig import init_fig
 from .plot_A_3D import plot_A_3D
 from numpy import max as np_max
 
@@ -15,6 +16,7 @@ def plot_A_cfft2(
     disp_negative=False,
     is_norm=False,
     unit="SI",
+    save_path=None,
 ):
     """3D stem plot of the 2D Fourier Transform of a field
 
@@ -40,9 +42,12 @@ def plot_A_cfft2(
         boolean indicating if the field must be normalized
     unit : str
         unit in which to plot the field
+    save_path : str
+        path and name of the png file to save
     """
 
     # Set plot
+    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
     title = "Complex FFT2 of " + data.name
     if is_elecorder:
         xlabel = "Electrical order []"
@@ -63,9 +68,9 @@ def plot_A_cfft2(
             x_min = 0
     if is_spaceorder:
         ylabel = "Spatial order []"
-        order_max = r_max / data.normalizations.get("space_order")
+        r_max = r_max / data.normalizations.get("space_order")
         y_str = (
-            "wavenumber=[-" + str(order_max) + "," + str(order_max) + "]{space_order}"
+            "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]{space_order}"
         )
     else:
         ylabel = "Wavenumber []"
@@ -86,9 +91,12 @@ def plot_A_cfft2(
         F_flat,
         R_flat,
         B_FT_flat,
+        fig=fig,
         x_min=x_min,
         x_max=freq_max,
+        y_min=-r_max,
         y_max=r_max,
+        z_min=0,
         z_max=mag_max,
         title=title,
         xlabel=xlabel,
@@ -96,3 +104,6 @@ def plot_A_cfft2(
         zlabel=zlabel,
         type="stem",
     )
+    
+    if save_path is not None:
+        fig.savefig(save_path)

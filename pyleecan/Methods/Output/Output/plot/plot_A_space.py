@@ -20,6 +20,9 @@ def plot_A_space(
     legend_list=[],
     color_list=[],
     save_path=None,
+    y_min=None,
+    y_max=None,
+    mag_max=None,
 ):
     """Plots a field as a function of space (angle)
 
@@ -55,6 +58,14 @@ def plot_A_space(
         list of legends to use for each Data object (including reference one) instead of data.name
     color_list : list
         list of colors to use for each Data object
+    save_path : str
+        path and name of the png file to save
+    y_min : float
+        minimum value for the y-axis
+    y_max : float
+        maximum value for the y-axis
+    mag_max : float
+        maximum alue for the y-axis of the fft
     """
 
     # Get Data object names
@@ -78,4 +89,7 @@ def plot_A_space(
         legend_list=legend_list,
         color_list=color_list,
         save_path=save_path,
+        y_min=y_min,
+        y_max=y_max,
+        mag_max=mag_max,
     )

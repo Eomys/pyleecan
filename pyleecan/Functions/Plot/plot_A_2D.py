@@ -23,6 +23,8 @@ def plot_A_2D(
     type="curve",
     is_fund=False,
     fund_harm=None,
+    y_min=None,
+    y_max=None,
 ):
     """Plots a 2D graph (curve, bargraph or barchart) comparing fields in Ydatas
 
@@ -59,7 +61,11 @@ def plot_A_2D(
     is_fund : bool
         boolean indicating if the bar corresponding to the fundamental must be displayed in red
     fund_harm : float
-        frequency of the fundamental harmonic    
+        frequency of the fundamental harmonic
+    y_min : float
+        minimum value for the y-axis
+    y_max : float
+        maximum value for the y-axis
     """
 
     # Set figure/subplot
@@ -128,6 +134,7 @@ def plot_A_2D(
 
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
+    ax.set_ylim([y_min, y_max])
 
     if is_logscale_x:
         ax.xscale("log")

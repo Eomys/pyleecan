@@ -17,6 +17,7 @@ def plot_A_time_space(
     is_norm=False,
     unit="SI",
     colormap="RdBu_r",
+    save_path=None,
 ):
     """Plots a field as a function of time and space (angle)
 
@@ -42,6 +43,8 @@ def plot_A_time_space(
         unit in which to plot the field
     colormap : colormap object
         colormap prescribed by user
+    save_path : str
+        path and name of the png file to save
     """
 
     # Set plot
@@ -171,3 +174,6 @@ def plot_A_time_space(
     fig.canvas.set_window_title(title)
     fig.suptitle(title, x=0.65, fontsize=16)
     fig.tight_layout()
+    
+    if save_path is not None:
+        fig.savefig(save_path)

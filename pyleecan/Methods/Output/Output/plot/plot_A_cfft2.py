@@ -15,6 +15,7 @@ def plot_A_cfft2(
     disp_negative=False,
     is_norm=False,
     unit="SI",
+    save_path=None,
 ):
     """3D stem plot of the 2D Fourier Transform of a field
 
@@ -42,6 +43,8 @@ def plot_A_cfft2(
         boolean indicating if the field must be normalized
     unit : str
         unit in which to plot the field
+    save_path : str
+        path and name of the png file to save
     """
 
     # Get Data object names
@@ -60,4 +63,5 @@ def plot_A_cfft2(
         disp_negative=disp_negative,
         is_norm=is_norm,
         unit=unit,
+        save_path=save_path,
     )

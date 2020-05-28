@@ -13,9 +13,10 @@ def plot_A_3D(
     colormap="RdBu",
     x_min=None,
     x_max=None,
+    y_min=None,
     y_max=None,
-    z_max=None,
     z_min=None,
+    z_max=None,
     title="",
     xlabel="",
     ylabel="",
@@ -40,10 +41,16 @@ def plot_A_3D(
         array of z-axis values
     colormap : colormap object
         colormap prescribed by user
+    x_min : float
+        minimum value for the x-axis (no automated scaling in 3D)
     x_max : float
         maximum value for the x-axis (no automated scaling in 3D)
+    y_min : float
+        minimum value for the y-axis (no automated scaling in 3D)
     y_max : float
         maximum value for the y-axis (no automated scaling in 3D)
+    z_min : float
+        minimum value for the z-axis (no automated scaling in 3D)
     z_max : float
         maximum value for the z-axis (no automated scaling in 3D)
     title : str
@@ -88,8 +95,8 @@ def plot_A_3D(
             )
             ax.add_line(line)
         ax.set_xlim3d(x_max, x_min)
-        ax.set_ylim3d(y_max, -y_max)
-        ax.set_zlim3d(0, z_max)
+        ax.set_ylim3d(y_min, y_max)
+        ax.set_zlim3d(z_min, z_max)
         # set correct angle
         ax.view_init(elev=20.0, azim=45)
         ax.zaxis.set_rotate_label(False)
@@ -105,9 +112,9 @@ def plot_A_3D(
             ax.zscale("log")
     elif type == "surf":
         ax.plot_surface(Xdata, Ydata, Zdata, cmap=colormap)
-        ax.set_xlim3d(x_max, 0)
-        ax.set_ylim3d(0, y_max)
-        ax.set_zlim3d(-z_max, z_max)
+        ax.set_xlim3d(x_max, x_min)
+        ax.set_ylim3d(y_min, y_max)
+        ax.set_zlim3d(z_min, z_max)
         ax.zaxis.set_rotate_label(False)
         ax.set_zlabel(zlabel, rotation=0)
         # white background

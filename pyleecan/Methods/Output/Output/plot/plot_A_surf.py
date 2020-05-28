@@ -9,10 +9,12 @@ def plot_A_surf(
     is_deg=True,
     t_max=None,
     a_max=400,
+    z_min=None,
     z_max=None,
     is_norm=False,
     unit="SI",
     colormap="RdBu_r",
+    save_path=None,
 ):
     """Plots the isosurface of a field in 3D
 
@@ -28,14 +30,18 @@ def plot_A_surf(
         maximum value of the time for the x axis
     a_max : float
         maximum value of the angle for the y axis
+    z_min : float
+        minimum value of the amplitude for the z axis
     z_max : float
-        maximum value of the magnitude for the z axis
+        maximum value of the amplitude for the z axis
     is_norm : bool
         boolean indicating if the field must be normalized
     unit : str
         unit in which to plot the field
     colormap : colormap object
         colormap prescribed by user
+    save_path : str
+        path and name of the png file to save
     """
 
     # Get Data object name
@@ -48,8 +54,10 @@ def plot_A_surf(
         is_deg=is_deg,
         t_max=t_max,
         a_max=a_max,
+        z_min=z_min,
         z_max=z_max,
         is_norm=is_norm,
         unit=unit,
         colormap=colormap,
+        save_path=save_path,
     )
