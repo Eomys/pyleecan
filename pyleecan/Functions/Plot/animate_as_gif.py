@@ -22,14 +22,18 @@ def animate_as_gif(
     ----------
     func : function
         plot command
-    data : Data
-        Data object to plot
+    data_list : Data or [Data]
+        Data object or list to plot
     save_path : str
         path where to save the gif
     file_name : str
         name of the gif file
-    t_index_max : int
-        maximum time index for the animation
+    index_var : str
+        name of the plot parameter along which to animate
+    index_max : int
+        maximum value of the index
+    index_step : int
+        step for the index (number of frames = index_max / index_step)
     kwargs : dict
         parameters of func
     """
