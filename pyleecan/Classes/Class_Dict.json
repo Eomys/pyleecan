@@ -660,6 +660,15 @@
                 "type": "float",
                 "unit": "A",
                 "value": 800
+            },
+            {
+                "desc": "True to generate current waveform, False for voltage",
+                "max": "",
+                "min": "",
+                "name": "is_current",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
             }
         ]
     },
@@ -1194,6 +1203,7 @@
             "HoleM52",
             "HoleM53",
             "HoleM54",
+            "HoleM57",
             "HoleM58",
             "HoleMag",
             "VentilationCirc",
@@ -1814,6 +1824,118 @@
             }
         ]
     },
+    "HoleM57": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "V shape slot for buried magnet",
+        "is_internal": false,
+        "methods": [
+            "_to_m_file",
+            "build_geometry",
+            "check",
+            "comp_mass_magnets",
+            "comp_radius",
+            "comp_surface_magnets",
+            "comp_volume_magnets",
+            "remove_magnet"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM57",
+        "package": "Slot",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/HoleM57.csv",
+        "properties": [
+            {
+                "desc": "V angle",
+                "max": "3.15",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "rad",
+                "value": 0.2
+            },
+            {
+                "desc": "Distance from the lamination Bore",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": 0
+            },
+            {
+                "desc": "Tooth width (at V bottom)",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.013
+            },
+            {
+                "desc": "Magnet height",
+                "max": "",
+                "min": "0",
+                "name": "H2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.02
+            },
+            {
+                "desc": "Distance Magnet to top of the V",
+                "max": "",
+                "min": "0",
+                "name": "W2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "Tooth width (at V top)",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "Magnet Width",
+                "max": "",
+                "min": "0",
+                "name": "W4",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "First Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Second Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_1",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "HoleM58": {
         "constants": [
             {
@@ -1939,6 +2061,7 @@
             "HoleM51",
             "HoleM52",
             "HoleM53",
+            "HoleM57",
             "HoleM58"
         ],
         "desc": "Hole with magnets for lamination (abstract)",
@@ -2512,14 +2635,35 @@
             "InputFlux",
             "InputForce"
         ],
-        "desc": "Abstract class to set the starting data of the simulation",
+        "desc": "Starting data of the simulation",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "gen_input"
+        ],
         "mother": "",
         "name": "Input",
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Input.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Electrical time vector (no symmetry) to import",
+                "max": "",
+                "min": "",
+                "name": "time",
+                "type": "Import",
+                "unit": "s",
+                "value": "ImportMatrixVal()"
+            },
+            {
+                "desc": "Electrical position vector (no symmetry) to import",
+                "max": "",
+                "min": "",
+                "name": "angle",
+                "type": "Import",
+                "unit": "rad",
+                "value": "ImportMatrixVal()"
+            }
+        ]
     },
     "InputCurrent": {
         "constants": [
@@ -2540,24 +2684,6 @@
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputCurrent.csv",
         "properties": [
-            {
-                "desc": "Electrical time vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "time",
-                "type": "Import",
-                "unit": "s",
-                "value": "ImportMatrixVal()"
-            },
-            {
-                "desc": "Electrical position vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "angle",
-                "type": "Import",
-                "unit": "rad",
-                "value": "ImportMatrixVal()"
-            },
             {
                 "desc": "Stator currents as a function of time (each column correspond to one phase) to import",
                 "max": "",
@@ -2633,24 +2759,6 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputCurrentDQ.csv",
         "properties": [
             {
-                "desc": "Electrical time vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "time",
-                "type": "Import",
-                "unit": "s",
-                "value": null
-            },
-            {
-                "desc": "Electrical position vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "angle",
-                "type": "Import",
-                "unit": "rad",
-                "value": null
-            },
-            {
                 "desc": "Stator dq-currents as a function of time to import",
                 "max": "",
                 "min": "",
@@ -2725,24 +2833,6 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv",
         "properties": [
             {
-                "desc": "Electrical time vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "time",
-                "type": "Import",
-                "unit": "s",
-                "value": null
-            },
-            {
-                "desc": "Electrical position vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "angle",
-                "type": "Import",
-                "unit": "rad",
-                "value": null
-            },
-            {
                 "desc": "Radial airgap flux density",
                 "max": "",
                 "min": "",
@@ -2780,24 +2870,6 @@
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputForce.csv",
         "properties": [
-            {
-                "desc": "Electrical time vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "time",
-                "type": "Import",
-                "unit": "s",
-                "value": null
-            },
-            {
-                "desc": "Electrical position vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "angle",
-                "type": "Import",
-                "unit": "rad",
-                "value": null
-            },
             {
                 "desc": "Radial magnetic air-gap surface force",
                 "max": "",

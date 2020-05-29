@@ -24,7 +24,7 @@ class Drive(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Umax=800, Imax=800, init_dict=None):
+    def __init__(self, Umax=800, Imax=800, is_current=False, init_dict=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -41,10 +41,13 @@ class Drive(FrozenClass):
                 Umax = init_dict["Umax"]
             if "Imax" in list(init_dict.keys()):
                 Imax = init_dict["Imax"]
+            if "is_current" in list(init_dict.keys()):
+                is_current = init_dict["is_current"]
         # Initialisation by argument
         self.parent = None
         self.Umax = Umax
         self.Imax = Imax
+        self.is_current = is_current
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -59,6 +62,7 @@ class Drive(FrozenClass):
             Drive_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Drive_str += "Umax = " + str(self.Umax) + linesep
         Drive_str += "Imax = " + str(self.Imax) + linesep
+        Drive_str += "is_current = " + str(self.is_current) + linesep
         return Drive_str
 
     def __eq__(self, other):
@@ -70,6 +74,8 @@ class Drive(FrozenClass):
             return False
         if other.Imax != self.Imax:
             return False
+        if other.is_current != self.is_current:
+            return False
         return True
 
     def as_dict(self):
@@ -79,6 +85,7 @@ class Drive(FrozenClass):
         Drive_dict = dict()
         Drive_dict["Umax"] = self.Umax
         Drive_dict["Imax"] = self.Imax
+        Drive_dict["is_current"] = self.is_current
         # The class name is added to the dict fordeserialisation purpose
         Drive_dict["__class__"] = "Drive"
         return Drive_dict
@@ -88,6 +95,7 @@ class Drive(FrozenClass):
 
         self.Umax = None
         self.Imax = None
+        self.is_current = None
 
     def _get_Umax(self):
         """getter of Umax"""
@@ -117,4 +125,21 @@ class Drive(FrozenClass):
     # Type : float, min = 0
     Imax = property(
         fget=_get_Imax, fset=_set_Imax, doc=u"""Maximum RMS current of the Drive"""
+    )
+
+    def _get_is_current(self):
+        """getter of is_current"""
+        return self._is_current
+
+    def _set_is_current(self, value):
+        """setter of is_current"""
+        check_var("is_current", value, "bool")
+        self._is_current = value
+
+    # True to generate current waveform, False for voltage
+    # Type : bool
+    is_current = property(
+        fget=_get_is_current,
+        fset=_set_is_current,
+        doc=u"""True to generate current waveform, False for voltage""",
     )
