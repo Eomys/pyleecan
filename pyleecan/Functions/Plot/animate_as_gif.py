@@ -43,7 +43,7 @@ def animate_as_gif(
                 image = imageio.imread(save_path_temp)
                 writer.append_data(image)
         else:
-            for i in range(index_max):
+            for i in range(0, index_max, index_step):
                 save_path_temp = save_path + "\\temp_" + str(i) + ".png"
                 kwargs[index_var] = i
                 kwargs["save_path"] = save_path_temp
