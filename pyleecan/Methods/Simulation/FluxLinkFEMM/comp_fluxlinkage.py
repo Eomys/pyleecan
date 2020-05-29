@@ -2,8 +2,6 @@
 
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Functions.Electrical.coordinate_transformation import n2dq
-from SciDataTool import Data1D, DataLinspace, DataTime
-from ....Functions.Winding.gen_phase_list import gen_name
 
 from numpy import (
     zeros,
@@ -12,8 +10,6 @@ from numpy import (
     split,
     mean,
 )
-
-# import matplotlib.pyplot as plt
 
 
 def comp_fluxlinkage(self, output):
@@ -76,17 +72,6 @@ def comp_fluxlinkage(self, output):
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
     fluxdq = split(n2dq(Phi_wind, p * d_angle, n=qs), 2, axis=1)
     Flux_link = mean(fluxdq[0])
-
-    # time = linspace(0, Nt_tot, Nt_tot)
-    # flux = split(Phi_wind, 3, axis=1)
-    # fig = plt.figure()
-    # plt.plot(time, flux[0], color="tab:blue", label="A")
-    # plt.plot(time, flux[1], color="tab:red", label="B")
-    # plt.plot(time, flux[2], color="tab:olive", label="C")
-    # plt.plot(time, fluxdq[0], color="k", label="D")
-    # plt.plot(time, fluxdq[1], color="g", label="Q")
-    # plt.legend()
-    # fig.savefig("C:\\Users\\HP\\Documents\\Helene\\test_fluxlinkage_dq.png")
 
     # Reinitialize replaced data
     output.elec.angle_rotor = angle_rotor
