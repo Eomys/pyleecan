@@ -101,6 +101,9 @@ def plot_A_3D(
         ax.view_init(elev=20.0, azim=45)
         ax.zaxis.set_rotate_label(False)
         ax.set_zlabel(zlabel, rotation=0)
+        ax.xaxis.labelpad=30
+        ax.yaxis.labelpad=30
+        ax.zaxis.labelpad=30
         # white background
         ax.xaxis.pane.fill = False
         ax.yaxis.pane.fill = False
@@ -117,6 +120,9 @@ def plot_A_3D(
         ax.set_zlim3d(z_min, z_max)
         ax.zaxis.set_rotate_label(False)
         ax.set_zlabel(zlabel, rotation=0)
+        ax.xaxis.labelpad=30
+        ax.yaxis.labelpad=30
+        ax.zaxis.labelpad=30
         # white background
         ax.xaxis.pane.fill = False
         ax.yaxis.pane.fill = False
@@ -129,7 +135,8 @@ def plot_A_3D(
     elif type == "pcolor":
         c = ax.pcolormesh(Xdata, Ydata, Zdata, cmap=colormap, vmin=z_min, vmax=z_max)
         clb = fig.colorbar(c, ax=ax)
-        clb.ax.set_title(zlabel)
+        clb.ax.set_title(zlabel, fontsize=18)
+        clb.ax.tick_params(labelsize=18)
 
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
@@ -142,3 +149,13 @@ def plot_A_3D(
 
     if is_disp_title:
         ax.set_title(title)
+    
+    if is_3d:
+        for item in ([ax.xaxis.label, ax.yaxis.label, ax.zaxis.label] +
+             ax.get_xticklabels() + ax.get_yticklabels() + ax.get_zticklabels()):
+            item.set_fontsize(18)
+    else:
+        for item in ([ax.xaxis.label, ax.yaxis.label] +
+             ax.get_xticklabels() + ax.get_yticklabels()):
+            item.set_fontsize(18)
+    ax.title.set_fontsize(22)

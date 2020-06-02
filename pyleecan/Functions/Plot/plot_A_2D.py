@@ -152,4 +152,8 @@ def plot_A_2D(
         ax.legend()
 
     plt.tight_layout()
+    for item in ([ax.xaxis.label, ax.yaxis.label] +
+             ax.get_xticklabels() + ax.get_yticklabels()):
+        item.set_fontsize(18)
+    ax.title.set_fontsize(22)
     return ax
