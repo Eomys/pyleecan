@@ -20,4 +20,6 @@ def get_rot_dir(self):
     if self.geo.rot_dir is not None and self.geo.rot_dir.size > 0:
         return self.geo.rot_dir
     else:  # Compute
-        return self.simu.machine.stator.comp_rot_dir()
+        rot_dir = self.simu.machine.stator.comp_rot_dir()
+        self.geo.rot_dir = rot_dir
+        return rot_dir

@@ -43,7 +43,6 @@ def solve_EEC(self, output):
 
     # dq to abc transform
     Is = dq2n(Idq, -rot_dir*2*pi*freq0*time, n=qs)
-    Ir = zeros(Is.shape)
     
     # Store currents into a Data object
     Time = Data1D(name="time", unit="s", values=time)
@@ -59,4 +58,4 @@ def solve_EEC(self, output):
         values=transpose(Is),
     )
     output.elec.Is = Is
-    output.elec.Ir = Ir
+    output.elec.Ir = None

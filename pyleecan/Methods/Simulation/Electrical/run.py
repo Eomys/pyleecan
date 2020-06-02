@@ -4,11 +4,11 @@ from ....Methods.Simulation.Input import InputError
 
 
 def run(self):
-    """Run the Magnetics module    
+    """Run the Electrical module    
     """
     if self.parent is None:
         raise InputError(
-            "ERROR: The Magnetic object must be in a Simulation object to run"
+            "ERROR: The Electrical object must be in a Simulation object to run"
         )
     if self.parent.parent is None:
         raise InputError(
