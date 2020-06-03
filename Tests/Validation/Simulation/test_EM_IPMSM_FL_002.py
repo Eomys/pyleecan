@@ -10,8 +10,6 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 
-from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
-from pyleecan.Classes.IndMagFEMM import IndMagFEMM
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Output import Output
@@ -50,10 +48,6 @@ def test_EM_IPMSM_FL_002():
         angle=angle,
         angle_rotor_initial=0.86,
     )
-
-    # Definition of the electrical simulation (FEMM)
-    simu.elec.fluxlink = FluxLinkFEMM(is_symmetry_a=True, sym_a=4, is_antiper_a=True)
-    simu.elec.indmag = IndMagFEMM(is_symmetry_a=True, sym_a=4, is_antiper_a=True)
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
