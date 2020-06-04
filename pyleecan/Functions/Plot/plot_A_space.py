@@ -103,9 +103,11 @@ def plot_A_space(
     if is_deg:
         a_str = "angle{°}"
         xlabel = "Angle [°]"
+        xticks = [0,60,120,180,240,300,360]
     else:
         a_str = "angle"
         xlabel = "Angle [rad]"
+        xticks=None
     if t != None:
         t_str = "time=" + str(t)
     else:
@@ -149,6 +151,7 @@ def plot_A_space(
         ylabel=ylabel,
         y_min=y_min,
         y_max=y_max,
+        xticks=xticks,
     )
 
     if is_fft:
@@ -182,6 +185,11 @@ def plot_A_space(
                 unit=unit,
                 is_norm=False,
             )
+        
+        for i in range(len(Ydata)):
+            indices = [ind for ind, y in enumerate(Ydata[i]) if abs(y)>0.01]
+        indices = [0] + list(set(indices))
+        xticks = wavenumber[indices]
 
         plot_A_2D(
             wavenumber,
@@ -196,6 +204,7 @@ def plot_A_space(
             is_fund=True,
             fund_harm=fund_harm,
             y_max=mag_max,
+            xticks=xticks,
         )
 
     if save_path is not None:

@@ -171,6 +171,11 @@ def plot_A_time(
                 unit=unit,
                 is_norm=False,
             )
+        
+        for i in range(len(Ydata)):
+            indices = [ind for ind, y in enumerate(Ydata[i]) if abs(y)>0.01]
+        indices = [0] + list(set(indices))
+        xticks = freqs[indices]
 
         plot_A_2D(
             freqs,
@@ -183,6 +188,7 @@ def plot_A_time(
             ylabel=ylabel,
             type="bargraph",
             y_max=mag_max,
+            xticks=xticks,
         )
     
     if save_path is not None:

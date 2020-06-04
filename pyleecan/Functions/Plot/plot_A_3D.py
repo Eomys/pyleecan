@@ -21,6 +21,8 @@ def plot_A_3D(
     xlabel="",
     ylabel="",
     zlabel="",
+    xticks=None,
+    yticks=None,
     fig=None,
     subplot_index=None,
     is_logscale_x=False,
@@ -61,6 +63,8 @@ def plot_A_3D(
         label for the y-axis
     zlabel : str
         label for the z-axis
+    xticks : list
+        list of ticks to use for the x-axis
     fig : Matplotlib.figure.Figure
         existing figure to use if is_newfig=False
     subplot_index : int
@@ -88,9 +92,9 @@ def plot_A_3D(
         for xi, yi, zi in zip(Xdata, Ydata, Zdata):
             line = art3d.Line3D(
                 *zip((xi, yi, 0), (xi, yi, zi)),
-                linewidth=1.0,
+                linewidth=3.0,
                 marker="o",
-                markersize=1.5,
+                markersize=5.0,
                 markevery=(1, 1)
             )
             ax.add_line(line)
@@ -104,6 +108,10 @@ def plot_A_3D(
         ax.xaxis.labelpad=30
         ax.yaxis.labelpad=30
         ax.zaxis.labelpad=30
+        if xticks is not None:
+            ax.xaxis.set_ticks(xticks)
+        if yticks is not None:
+            ax.yaxis.set_ticks(yticks)
         # white background
         ax.xaxis.pane.fill = False
         ax.yaxis.pane.fill = False
@@ -123,6 +131,10 @@ def plot_A_3D(
         ax.xaxis.labelpad=30
         ax.yaxis.labelpad=30
         ax.zaxis.labelpad=30
+        if xticks is not None:
+            ax.xaxis.set_ticks(xticks)
+        if yticks is not None:
+            ax.yaxis.set_ticks(yticks)
         # white background
         ax.xaxis.pane.fill = False
         ax.yaxis.pane.fill = False
@@ -137,6 +149,10 @@ def plot_A_3D(
         clb = fig.colorbar(c, ax=ax)
         clb.ax.set_title(zlabel, fontsize=18)
         clb.ax.tick_params(labelsize=18)
+        if xticks is not None:
+            ax.xaxis.set_ticks(xticks)
+        if yticks is not None:
+            ax.yaxis.set_ticks(yticks)
 
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
@@ -153,9 +169,9 @@ def plot_A_3D(
     if is_3d:
         for item in ([ax.xaxis.label, ax.yaxis.label, ax.zaxis.label] +
              ax.get_xticklabels() + ax.get_yticklabels() + ax.get_zticklabels()):
-            item.set_fontsize(18)
+            item.set_fontsize(22)
     else:
         for item in ([ax.xaxis.label, ax.yaxis.label] +
              ax.get_xticklabels() + ax.get_yticklabels()):
-            item.set_fontsize(18)
-    ax.title.set_fontsize(22)
+            item.set_fontsize(22)
+    ax.title.set_fontsize(24)

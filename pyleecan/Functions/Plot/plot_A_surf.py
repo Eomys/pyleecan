@@ -49,8 +49,10 @@ def plot_A_surf(
     xlabel = "Time [s]"
     if is_deg:
         ylabel = "Angle [°]"
+        yticks = [0,60,120,180,240,300,360]
     else:
         ylabel = "Angle [rad]"
+        yticks=None,
     if unit == "SI":
         unit = data.unit
     if is_norm:
@@ -96,6 +98,7 @@ def plot_A_surf(
         xlabel=xlabel,
         ylabel=ylabel,
         zlabel=zlabel,
+        yticks=yticks,
         type="surf",
     )
     

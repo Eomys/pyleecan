@@ -54,8 +54,10 @@ def plot_A_time_space(
     # pcolorplot
     if is_deg:
         xlabel = "Angle [°]"
+        xticks = [0,60,120,180,240,300,360]
     else:
         xlabel = "Angle [rad]"
+        xticks = None
     ylabel = "Time [s]"
     if unit == "SI":
         unit = data.unit
@@ -85,6 +87,7 @@ def plot_A_time_space(
         xlabel=xlabel,
         ylabel=ylabel,
         zlabel=zlabel,
+        xticks=xticks,
         fig=fig,
         subplot_index=0,
         type="pcolor",
@@ -116,7 +119,7 @@ def plot_A_time_space(
 
     # Plot the original graph
     plot_A_2D(
-        angle, Ydata, fig=fig, subplot_index=4, xlabel=xlabel, ylabel=ylabel,
+        angle, Ydata, fig=fig, subplot_index=4, xlabel=xlabel, ylabel=ylabel,xticks=xticks,
     )
 
     # fft time
@@ -135,6 +138,11 @@ def plot_A_time_space(
         (freqs, Ydata) = data.compare_magnitude_along(
             "freqs=[0," + str(freq_max) + "]", unit=unit, is_norm=False,
         )
+    
+    indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y)>0.01]
+    indices = [0] + list(set(indices))
+    xticks = freqs[indices]
+    
     plot_A_2D(
         freqs,
         Ydata,
@@ -143,6 +151,7 @@ def plot_A_time_space(
         xlabel=xlabel,
         ylabel=ylabel,
         type="bargraph",
+        xticks=xticks,
     )
 
     # fft space
@@ -159,6 +168,10 @@ def plot_A_time_space(
         (wavenumber, Ydata) = data.compare_magnitude_along(
             "wavenumber=[0," + str(r_max) + "]", unit=unit, is_norm=False
         )
+    indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y)>0.01]
+    indices = [0] + list(set(indices))
+    xticks = wavenumber[indices]
+    
     plot_A_2D(
         wavenumber,
         Ydata,
@@ -167,6 +180,7 @@ def plot_A_time_space(
         xlabel=xlabel,
         ylabel=ylabel,
         type="bargraph",
+        xticks=xticks,
     )
 
     axs[0, 1].axis("off")
