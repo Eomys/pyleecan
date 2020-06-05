@@ -9,6 +9,8 @@ from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM51.PHoleM51 import PHoleM51
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52.PHoleM52 import PHoleM52
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM53.PHoleM53 import PHoleM53
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.PHoleM54 import PHoleM54
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM57.PHoleM57 import PHoleM57
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM58.PHoleM58 import PHoleM58
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.Ui_WHoleMag import Ui_WHoleMag
 
 
@@ -49,9 +51,17 @@ class WHoleMag(Ui_WHoleMag, QWidget):
 
         # Adapt the GUI to the current machine
         if is_mag:  # IPMSM
-            self.wid_list = [PHoleM50, PHoleM51, PHoleM52, PHoleM53]
+            self.wid_list = [PHoleM50, PHoleM51, PHoleM52, PHoleM53, PHoleM57, PHoleM58]
         else:  # SyRM
-            self.wid_list = [PHoleM50, PHoleM51, PHoleM52, PHoleM53, PHoleM54]
+            self.wid_list = [
+                PHoleM50,
+                PHoleM51,
+                PHoleM52,
+                PHoleM53,
+                PHoleM54,
+                PHoleM57,
+                PHoleM58,
+            ]
         self.type_list = [wid.hole_type for wid in self.wid_list]
         self.name_list = [wid.hole_name for wid in self.wid_list]
 

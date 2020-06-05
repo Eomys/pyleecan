@@ -16,6 +16,8 @@ from ..Classes.CondType12 import CondType12
 from ..Classes.CondType21 import CondType21
 from ..Classes.CondType22 import CondType22
 from ..Classes.Conductor import Conductor
+from ..Classes.Drive import Drive
+from ..Classes.DriveWave import DriveWave
 from ..Classes.Element import Element
 from ..Classes.ElementMat import ElementMat
 from ..Classes.Force import Force
@@ -28,10 +30,12 @@ from ..Classes.HoleM51 import HoleM51
 from ..Classes.HoleM52 import HoleM52
 from ..Classes.HoleM53 import HoleM53
 from ..Classes.HoleM54 import HoleM54
+from ..Classes.HoleM57 import HoleM57
 from ..Classes.HoleM58 import HoleM58
 from ..Classes.HoleMag import HoleMag
 from ..Classes.Import import Import
 from ..Classes.ImportGenMatrixSin import ImportGenMatrixSin
+from ..Classes.ImportGenToothSaw import ImportGenToothSaw
 from ..Classes.ImportGenVectLin import ImportGenVectLin
 from ..Classes.ImportGenVectSin import ImportGenVectSin
 from ..Classes.ImportMatlab import ImportMatlab
@@ -91,6 +95,7 @@ from ..Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 from ..Classes.OptiObjFunc import OptiObjFunc
 from ..Classes.OptiProblem import OptiProblem
 from ..Classes.OutElec import OutElec
+from ..Classes.OutForce import OutForce
 from ..Classes.OutGeo import OutGeo
 from ..Classes.OutGeoLam import OutGeoLam
 from ..Classes.OutMag import OutMag

@@ -52,6 +52,16 @@ try:
 except ImportError as error:
     comp_radius_mid_yoke = error
 
+try:
+    from ..Methods.Machine.LamHole.has_magnet import has_magnet
+except ImportError as error:
+    has_magnet = error
+
+try:
+    from ..Methods.Machine.LamHole.comp_angle_d_axis import comp_angle_d_axis
+except ImportError as error:
+    comp_angle_d_axis = error
+
 
 from ._check import InitUnKnowClassError
 from .Hole import Hole
@@ -153,6 +163,27 @@ class LamHole(Lamination):
         )
     else:
         comp_radius_mid_yoke = comp_radius_mid_yoke
+    # cf Methods.Machine.LamHole.has_magnet
+    if isinstance(has_magnet, ImportError):
+        has_magnet = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamHole method has_magnet: " + str(has_magnet))
+            )
+        )
+    else:
+        has_magnet = has_magnet
+    # cf Methods.Machine.LamHole.comp_angle_d_axis
+    if isinstance(comp_angle_d_axis, ImportError):
+        comp_angle_d_axis = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamHole method comp_angle_d_axis: "
+                    + str(comp_angle_d_axis)
+                )
+            )
+        )
+    else:
+        comp_angle_d_axis = comp_angle_d_axis
     # save method is available in all object
     save = save
 
@@ -258,6 +289,7 @@ class LamHole(Lamination):
                         "HoleM52",
                         "HoleM53",
                         "HoleM54",
+                        "HoleM57",
                         "HoleM58",
                         "HoleMag",
                         "VentilationCirc",

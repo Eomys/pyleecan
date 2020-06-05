@@ -66,13 +66,14 @@ def test_FEMM_sym():
     # Definition of the magnetic simulation
     # 2 sym + antiperiodicity = 1/4 Lamination
     simu.mag = MagFEMM(
-        is_stator_linear_BH=2,
-        is_rotor_linear_BH=2,
+        type_BH_stator=2,
+        type_BH_rotor=2,
         is_symmetry_a=True,
         sym_a=2,
         is_antiper_a=True,
     )
     # Stop after magnetic computation
+    simu.force = None
     simu.struct = None
     # Run simulation
     out = Output(simu=simu)
@@ -428,6 +429,7 @@ def test_BoreFlower():
     assert len(fig.axes[0].patches) == 42
 
 
+@pytest.mark.long
 @pytest.mark.FEMM
 @pytest.mark.long
 def test_ecc_FEMM():
@@ -457,8 +459,8 @@ def test_ecc_FEMM():
 
     # Definition of the magnetic simulation (is_mmfr=False => no flux from the magnets)
     simu.mag = MagFEMM(
-        is_stator_linear_BH=0,
-        is_rotor_linear_BH=0,
+        type_BH_stator=0,
+        type_BH_rotor=0,
         is_sliding_band=False,  # Ecc => No sliding band
         is_symmetry_a=False,  # No sym
         is_mmfs=False,
@@ -466,6 +468,7 @@ def test_ecc_FEMM():
         is_save_FEA=True,
         sym_a=1,
     )
+    simu.force = None
     simu.struct = None
 
     # Set two transformations
@@ -587,10 +590,7 @@ def test_Optimization_problem():
 
     # Definition of the magnetic simulation
     simu.mag = MagFEMM(
-        is_stator_linear_BH=2,
-        is_rotor_linear_BH=2,
-        is_symmetry_a=True,
-        is_antiper_a=False,
+        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=True, is_antiper_a=False
     )
 
     simu.mag.sym_a = 4

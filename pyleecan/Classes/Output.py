@@ -101,6 +101,11 @@ try:
 except ImportError as error:
     plot_mesh_field = error
 
+try:
+    from ..Methods.Output.Output.plot.plot_A_space_compare import plot_A_space_compare
+except ImportError as error:
+    plot_A_space_compare = error
+
 
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
@@ -109,6 +114,7 @@ from .OutElec import OutElec
 from .OutMag import OutMag
 from .OutStruct import OutStruct
 from .OutPost import OutPost
+from .OutForce import OutForce
 
 
 class Output(FrozenClass):
@@ -297,6 +303,18 @@ class Output(FrozenClass):
         )
     else:
         plot_mesh_field = plot_mesh_field
+    # cf Methods.Output.Output.plot.plot_A_space_compare
+    if isinstance(plot_A_space_compare, ImportError):
+        plot_A_space_compare = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_space_compare: "
+                    + str(plot_A_space_compare)
+                )
+            )
+        )
+    else:
+        plot_A_space_compare = plot_A_space_compare
     # save method is available in all object
     save = save
 
@@ -313,6 +331,7 @@ class Output(FrozenClass):
         struct=-1,
         post=-1,
         logger_name="Pyleecan.Output",
+        force=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -339,6 +358,8 @@ class Output(FrozenClass):
             struct = OutStruct()
         if post == -1:
             post = OutPost()
+        if force == -1:
+            force = OutForce()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -354,6 +375,7 @@ class Output(FrozenClass):
             struct = obj.struct
             post = obj.post
             logger_name = obj.logger_name
+            force = obj.force
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -373,6 +395,8 @@ class Output(FrozenClass):
                 post = init_dict["post"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "force" in list(init_dict.keys()):
+                force = init_dict["force"]
         # Initialisation by argument
         self.parent = None
         # simu can be None, a Simulation object or a dict
@@ -428,6 +452,13 @@ class Output(FrozenClass):
         else:
             self.post = post
         self.logger_name = logger_name
+        # force can be None, a OutForce object or a dict
+        if isinstance(force, dict):
+            self.force = OutForce(init_dict=force)
+        elif isinstance(force, str):
+            self.force = OutForce(init_str=force)
+        else:
+            self.force = force
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -472,6 +503,11 @@ class Output(FrozenClass):
         else:
             Output_str += "post = None" + linesep + linesep
         Output_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        if self.force is not None:
+            tmp = self.force.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Output_str += "force = " + tmp
+        else:
+            Output_str += "force = None" + linesep + linesep
         return Output_str
 
     def __eq__(self, other):
@@ -494,6 +530,8 @@ class Output(FrozenClass):
         if other.post != self.post:
             return False
         if other.logger_name != self.logger_name:
+            return False
+        if other.force != self.force:
             return False
         return True
 
@@ -528,6 +566,10 @@ class Output(FrozenClass):
         else:
             Output_dict["post"] = self.post.as_dict()
         Output_dict["logger_name"] = self.logger_name
+        if self.force is None:
+            Output_dict["force"] = None
+        else:
+            Output_dict["force"] = self.force.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         Output_dict["__class__"] = "Output"
         return Output_dict
@@ -549,6 +591,8 @@ class Output(FrozenClass):
         if self.post is not None:
             self.post._set_None()
         self.logger_name = None
+        if self.force is not None:
+            self.force._set_None()
 
     def _get_simu(self):
         """getter of simu"""
@@ -685,3 +729,19 @@ class Output(FrozenClass):
         fset=_set_logger_name,
         doc=u"""Name of the logger to use""",
     )
+
+    def _get_force(self):
+        """getter of force"""
+        return self._force
+
+    def _set_force(self, value):
+        """setter of force"""
+        check_var("force", value, "OutForce")
+        self._force = value
+
+        if self._force is not None:
+            self._force.parent = self
+
+    # Force module output
+    # Type : OutForce
+    force = property(fget=_get_force, fset=_set_force, doc=u"""Force module output""")

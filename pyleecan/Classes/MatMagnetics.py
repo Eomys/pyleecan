@@ -123,6 +123,7 @@ class MatMagnetics(FrozenClass):
             if class_name not in [
                 "ImportMatrix",
                 "ImportGenMatrixSin",
+                "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatrixVal",

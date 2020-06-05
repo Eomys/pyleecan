@@ -77,7 +77,7 @@ def plot_A_2D(
                     barlist = ax.bar(
                         Xdata,
                         Ydatas[i],
-                        color=color_list[i][0],
+                        color=color_list[i],
                         width=width,
                         label=legend_list[i],
                     )
@@ -90,7 +90,7 @@ def plot_A_2D(
                     barlist = ax.bar(
                         Xdata,
                         Ydatas[i],
-                        edgecolor=color_list[i][0],
+                        edgecolor=color_list[i],
                         width=width,
                         fc="None",
                         lw=1,
@@ -119,7 +119,7 @@ def plot_A_2D(
                     ax.bar(
                         range(len(Xdata)),
                         Ydatas[i],
-                        color=color_list[i][0],
+                        color=color_list[i],
                         width=0.5,
                         label=legend_list[i],
                     )
@@ -132,7 +132,7 @@ def plot_A_2D(
                     ax.bar(
                         range(len(Xdata)),
                         Ydatas[i],
-                        edgecolor=color_list[i][0],
+                        edgecolor=color_list[i],
                         width=0.5,
                         fc="None",
                         lw=1,

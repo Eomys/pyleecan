@@ -11,6 +11,13 @@ from ..Functions.save import save
 from ._frozen import FrozenClass
 
 from numpy import array, array_equal
+from cloudpickle import dumps, loads
+from ._check import CheckTypeError
+
+try:
+    from SciDataTool.Classes.DataND import DataND
+except ImportError:
+    DataND = ImportError
 from ._check import InitUnKnowClassError
 
 
@@ -36,6 +43,7 @@ class OutElec(FrozenClass):
         rot_dir=-1,
         angle_rotor_initial=0,
         logger_name="Pyleecan.OutElec",
+        mmf_unit=None,
         init_dict=None,
         init_str=None,
     ):
@@ -66,6 +74,7 @@ class OutElec(FrozenClass):
             rot_dir = obj.rot_dir
             angle_rotor_initial = obj.angle_rotor_initial
             logger_name = obj.logger_name
+            mmf_unit = obj.mmf_unit
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -87,6 +96,8 @@ class OutElec(FrozenClass):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "mmf_unit" in list(init_dict.keys()):
+                mmf_unit = init_dict["mmf_unit"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -104,6 +115,10 @@ class OutElec(FrozenClass):
         self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
         self.logger_name = logger_name
+        # Check if the type DataND has been imported with success
+        if isinstance(DataND, ImportError):
+            raise ImportError("Unknown type DataND please install SciDataTool")
+        self.mmf_unit = mmf_unit
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -163,6 +178,7 @@ class OutElec(FrozenClass):
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         )
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        OutElec_str += "mmf_unit = " + str(self.mmf_unit) + linesep + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -187,6 +203,8 @@ class OutElec(FrozenClass):
         if other.angle_rotor_initial != self.angle_rotor_initial:
             return False
         if other.logger_name != self.logger_name:
+            return False
+        if other.mmf_unit != self.mmf_unit:
             return False
         return True
 
@@ -222,6 +240,14 @@ class OutElec(FrozenClass):
         OutElec_dict["rot_dir"] = self.rot_dir
         OutElec_dict["angle_rotor_initial"] = self.angle_rotor_initial
         OutElec_dict["logger_name"] = self.logger_name
+        if self.mmf_unit is None:
+            OutElec_dict["mmf_unit"] = None
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutElec_dict["mmf_unit"] = {
+                "__class__": str(type(self._mmf_unit)),
+                "__repr__": str(self._mmf_unit.__repr__()),
+                "serialized": dumps(self._mmf_unit).decode("ISO-8859-2"),
+            }
         # The class name is added to the dict fordeserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -238,6 +264,7 @@ class OutElec(FrozenClass):
         self.rot_dir = None
         self.angle_rotor_initial = None
         self.logger_name = None
+        self.mmf_unit = None
 
     def _get_time(self):
         """getter of time"""
@@ -416,4 +443,28 @@ class OutElec(FrozenClass):
         fget=_get_logger_name,
         fset=_set_logger_name,
         doc=u"""Name of the logger to use""",
+    )
+
+    def _get_mmf_unit(self):
+        """getter of mmf_unit"""
+        return self._mmf_unit
+
+    def _set_mmf_unit(self, value):
+        """setter of mmf_unit"""
+        try:  # Check the type
+            check_var("mmf_unit", value, "dict")
+        except CheckTypeError:
+            check_var("mmf_unit", value, "SciDataTool.Classes.DataND.DataND")
+            # property can be set from a list to handle loads
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._mmf_unit = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._mmf_unit = value
+
+    # Unit magnetomotive force
+    # Type : SciDataTool.Classes.DataND.DataND
+    mmf_unit = property(
+        fget=_get_mmf_unit, fset=_set_mmf_unit, doc=u"""Unit magnetomotive force"""
     )

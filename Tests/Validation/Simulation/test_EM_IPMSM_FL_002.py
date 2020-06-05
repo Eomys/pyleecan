@@ -51,12 +51,13 @@ def test_EM_IPMSM_FL_002():
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
-        is_stator_linear_BH=0,
-        is_rotor_linear_BH=0,
+        type_BH_stator=0,
+        type_BH_rotor=0,
         is_symmetry_a=False,
         is_antiper_a=True,
         Kgeo_fineness=0.75,
     )
+    simu.force = None
     simu.struct = None
     # simu.struct.force = ForceMT()
     # Copy the simu and activate the symmetry

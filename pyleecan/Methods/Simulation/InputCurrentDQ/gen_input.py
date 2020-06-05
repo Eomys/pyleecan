@@ -3,7 +3,7 @@
 from ....Classes.MachineSync import MachineSync
 from ....Classes.OutElec import OutElec
 from ....Methods.Simulation.Input import InputError
-from ....Functions.Electrical.coordinate_transformation import dq2ab, ab2uvw
+from ....Functions.Electrical.coordinate_transformation import dq2n
 from numpy import ndarray
 
 
@@ -154,4 +154,4 @@ def gen_input(self):
     zp = simu.machine.stator.get_pole_pair_number()
 
     # add stator current
-    output.Is = ab2uvw(dq2ab(IsDQ, angle * zp))
+    output.Is = dq2n(IsDQ, angle * zp, n=qs)

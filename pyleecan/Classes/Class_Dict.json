@@ -624,6 +624,80 @@
             }
         ]
     },
+    "Drive": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract Drive class",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "Drive",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Drive.csv",
+        "properties": [
+            {
+                "desc": "Maximum RMS voltage of the Drive",
+                "max": "",
+                "min": "0",
+                "name": "Umax",
+                "type": "float",
+                "unit": "V",
+                "value": 800
+            },
+            {
+                "desc": "Maximum RMS current of the Drive",
+                "max": "",
+                "min": "0",
+                "name": "Imax",
+                "type": "float",
+                "unit": "A",
+                "value": 800
+            },
+            {
+                "desc": "True to generate current waveform, False for voltage",
+                "max": "",
+                "min": "",
+                "name": "is_current",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            }
+        ]
+    },
+    "DriveWave": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Drive to generate a wave according to an Import object",
+        "is_internal": false,
+        "methods": [
+            "get_wave"
+        ],
+        "mother": "",
+        "name": "DriveWave",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/DriveWave.csv",
+        "properties": [
+            {
+                "desc": "Wave generator",
+                "max": "",
+                "min": "",
+                "name": "wave",
+                "type": "Import",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
     "Element": {
         "constants": [
             {
@@ -731,8 +805,9 @@
         "desc": "Forces module abstract object",
         "is_internal": false,
         "methods": [
+            "run",
             "comp_force",
-            "comp_force_nodal"
+            "comp_time_angle"
         ],
         "mother": "",
         "name": "Force",
@@ -873,6 +948,7 @@
             "HoleM52",
             "HoleM53",
             "HoleM54",
+            "HoleM57",
             "HoleM58",
             "HoleMag",
             "VentilationCirc",
@@ -938,7 +1014,8 @@
             "comp_volume_magnets",
             "comp_W5",
             "get_height_magnet",
-            "remove_magnet"
+            "remove_magnet",
+            "has_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM50",
@@ -1079,7 +1156,8 @@
             "comp_volume_magnets",
             "comp_width",
             "get_height_magnet",
-            "remove_magnet"
+            "remove_magnet",
+            "has_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM51",
@@ -1239,7 +1317,8 @@
             "comp_volume_magnets",
             "comp_W1",
             "get_height_magnet",
-            "remove_magnet"
+            "remove_magnet",
+            "has_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM52",
@@ -1326,7 +1405,8 @@
             "comp_volume_magnets",
             "comp_W5",
             "get_height_magnet",
-            "remove_magnet"
+            "remove_magnet",
+            "has_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM53",
@@ -1489,6 +1569,118 @@
             }
         ]
     },
+    "HoleM57": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "V shape slot for buried magnet",
+        "is_internal": false,
+        "methods": [
+            "_to_m_file",
+            "build_geometry",
+            "check",
+            "comp_mass_magnets",
+            "comp_radius",
+            "comp_surface_magnets",
+            "comp_volume_magnets",
+            "remove_magnet"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleM57",
+        "package": "Slot",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/HoleM57.csv",
+        "properties": [
+            {
+                "desc": "V angle",
+                "max": "3.15",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "rad",
+                "value": 0.2
+            },
+            {
+                "desc": "Distance from the lamination Bore",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": 0
+            },
+            {
+                "desc": "Tooth width (at V bottom)",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.013
+            },
+            {
+                "desc": "Magnet height",
+                "max": "",
+                "min": "0",
+                "name": "H2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.02
+            },
+            {
+                "desc": "Distance Magnet to top of the V",
+                "max": "",
+                "min": "0",
+                "name": "W2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "Tooth width (at V top)",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "Magnet Width",
+                "max": "",
+                "min": "0",
+                "name": "W4",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "First Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_0",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Second Magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet_1",
+                "type": "Magnet",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "HoleM58": {
         "constants": [
             {
@@ -1511,7 +1703,8 @@
             "comp_surface_magnets",
             "comp_volume_magnets",
             "get_height_magnet",
-            "remove_magnet"
+            "remove_magnet",
+            "has_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM58",
@@ -1613,6 +1806,7 @@
             "HoleM51",
             "HoleM52",
             "HoleM53",
+            "HoleM57",
             "HoleM58"
         ],
         "desc": "Hole with magnets for lamination (abstract)",
@@ -1636,6 +1830,7 @@
         "daughters": [
             "Import",
             "ImportGenMatrixSin",
+            "ImportGenToothSaw",
             "ImportGenVectLin",
             "ImportGenVectSin",
             "ImportMatlab",
@@ -1679,6 +1874,80 @@
                 "type": "[ImportGenVectSin]",
                 "unit": "-",
                 "value": ""
+            }
+        ]
+    },
+    "ImportGenToothSaw": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "To generate a toothsaw vector",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "ImportMatrix",
+        "name": "ImportGenToothSaw",
+        "package": "Import",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/ImportGenToothSaw.csv",
+        "properties": [
+            {
+                "desc": "0: Forward toothsaw, 1: Backwards toothsaw, 2: symmetrical toothsaw",
+                "max": "2",
+                "min": "0",
+                "name": "type_signal",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Frequency of the signal to generate",
+                "max": "",
+                "min": "0",
+                "name": "f",
+                "type": "float",
+                "unit": "Hz",
+                "value": 100
+            },
+            {
+                "desc": "Amplitude of the signal to generate",
+                "max": "",
+                "min": "",
+                "name": "A",
+                "type": "float",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Length of the signal to generate",
+                "max": "",
+                "min": "0",
+                "name": "N",
+                "type": "int",
+                "unit": "-",
+                "value": 1024
+            },
+            {
+                "desc": "End time of the signal generation",
+                "max": "",
+                "min": "0",
+                "name": "Tf",
+                "type": "float",
+                "unit": "s",
+                "value": 1
+            },
+            {
+                "desc": "Time offset",
+                "max": "",
+                "min": "",
+                "name": "Dt",
+                "type": "float",
+                "unit": "s",
+                "value": 0
             }
         ]
     },
@@ -1851,6 +2120,7 @@
         "daughters": [
             "ImportMatrix",
             "ImportGenMatrixSin",
+            "ImportGenToothSaw",
             "ImportGenVectLin",
             "ImportGenVectSin",
             "ImportMatrixVal",
@@ -1976,14 +2246,35 @@
             "InputFlux",
             "InputForce"
         ],
-        "desc": "Abstract class to set the starting data of the simulation",
+        "desc": "Starting data of the simulation",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "gen_input"
+        ],
         "mother": "",
         "name": "Input",
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Input.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Electrical time vector (no symmetry) to import",
+                "max": "",
+                "min": "",
+                "name": "time",
+                "type": "Import",
+                "unit": "s",
+                "value": "ImportMatrixVal()"
+            },
+            {
+                "desc": "Electrical position vector (no symmetry) to import",
+                "max": "",
+                "min": "",
+                "name": "angle",
+                "type": "Import",
+                "unit": "rad",
+                "value": "ImportMatrixVal()"
+            }
+        ]
     },
     "InputCurrent": {
         "constants": [
@@ -2004,24 +2295,6 @@
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputCurrent.csv",
         "properties": [
-            {
-                "desc": "Electrical time vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "time",
-                "type": "Import",
-                "unit": "s",
-                "value": "ImportMatrixVal()"
-            },
-            {
-                "desc": "Electrical position vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "angle",
-                "type": "Import",
-                "unit": "rad",
-                "value": "ImportMatrixVal()"
-            },
             {
                 "desc": "Stator currents as a function of time (each column correspond to one phase) to import",
                 "max": "",
@@ -2097,24 +2370,6 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputCurrentDQ.csv",
         "properties": [
             {
-                "desc": "Electrical time vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "time",
-                "type": "Import",
-                "unit": "s",
-                "value": null
-            },
-            {
-                "desc": "Electrical position vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "angle",
-                "type": "Import",
-                "unit": "rad",
-                "value": null
-            },
-            {
                 "desc": "Stator dq-currents as a function of time to import",
                 "max": "",
                 "min": "",
@@ -2189,24 +2444,6 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv",
         "properties": [
             {
-                "desc": "Electrical time vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "time",
-                "type": "Import",
-                "unit": "s",
-                "value": null
-            },
-            {
-                "desc": "Electrical position vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "angle",
-                "type": "Import",
-                "unit": "rad",
-                "value": null
-            },
-            {
                 "desc": "Radial airgap flux density",
                 "max": "",
                 "min": "",
@@ -2245,24 +2482,6 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputForce.csv",
         "properties": [
             {
-                "desc": "Electrical time vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "time",
-                "type": "Import",
-                "unit": "s",
-                "value": null
-            },
-            {
-                "desc": "Electrical position vector (no symmetry) to import",
-                "max": "",
-                "min": "",
-                "name": "angle",
-                "type": "Import",
-                "unit": "rad",
-                "value": null
-            },
-            {
                 "desc": "Radial magnetic air-gap surface force",
                 "max": "",
                 "min": "",
@@ -2300,7 +2519,9 @@
             "comp_volumes",
             "get_pole_pair_number",
             "plot",
-            "comp_radius_mid_yoke"
+            "comp_radius_mid_yoke",
+            "has_magnet",
+            "comp_angle_d_axis"
         ],
         "mother": "Lamination",
         "name": "LamHole",
@@ -2386,7 +2607,8 @@
             "comp_radius_mec",
             "comp_surfaces",
             "comp_volumes",
-            "plot"
+            "plot",
+            "comp_angle_d_axis"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",
@@ -2465,7 +2687,13 @@
             "plot_winding",
             "comp_fill_factor",
             "comp_output_geo",
-            "get_polar_eq"
+            "get_polar_eq",
+            "comp_wind_function",
+            "plot_mmf_unit",
+            "comp_resistance_wind",
+            "comp_angle_d_axis",
+            "comp_mmf_unit",
+            "comp_rot_dir"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
@@ -2578,7 +2806,8 @@
             "get_polar_eq",
             "is_outwards",
             "comp_height_yoke",
-            "get_notch_list"
+            "get_notch_list",
+            "comp_angle_q_axis"
         ],
         "mother": "",
         "name": "Lamination",
@@ -3702,7 +3931,7 @@
                 "desc": "0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)",
                 "max": "2",
                 "min": "0",
-                "name": "is_stator_linear_BH",
+                "name": "type_BH_stator",
                 "type": "int",
                 "unit": "-",
                 "value": 0
@@ -3711,7 +3940,7 @@
                 "desc": "0 to use the B(H) curve, 1 to use linear B(H) curve according to mur_lin, 2 to enforce infinite permeability (mur_lin =100000)",
                 "max": "2",
                 "min": "0",
-                "name": "is_rotor_linear_BH",
+                "name": "type_BH_rotor",
                 "type": "int",
                 "unit": "-",
                 "value": 0
@@ -4914,6 +5143,96 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutElec"
+            },
+            {
+                "desc": "Unit magnetomotive force",
+                "max": "",
+                "min": "",
+                "name": "mmf_unit",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "-",
+                "value": "None"
+            }
+        ]
+    },
+    "OutForce": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Gather the structural module outputs",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "OutForce",
+        "package": "Output",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutForce.csv",
+        "properties": [
+            {
+                "desc": "Structural time vector (no symmetry)",
+                "max": "",
+                "min": "",
+                "name": "time",
+                "type": "ndarray",
+                "unit": "s",
+                "value": null
+            },
+            {
+                "desc": "Structural position vector (no symmetry)",
+                "max": "",
+                "min": "",
+                "name": "angle",
+                "type": "ndarray",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "desc": "Length of the time vector",
+                "max": "",
+                "min": "",
+                "name": "Nt_tot",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Length of the angle vector",
+                "max": "",
+                "min": "",
+                "name": "Na_tot",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Radial magnetic air-gap surface force",
+                "max": "",
+                "min": "",
+                "name": "Prad",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "N.m^2",
+                "value": "None"
+            },
+            {
+                "desc": "Tangential magnetic air-gap surface force",
+                "max": "",
+                "min": "",
+                "name": "Ptan",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "N.m^2",
+                "value": "None"
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OutStruct"
             }
         ]
     },
@@ -5321,24 +5640,6 @@
                 "value": null
             },
             {
-                "desc": "Radial magnetic air-gap surface force",
-                "max": "",
-                "min": "",
-                "name": "Prad",
-                "type": "ndarray",
-                "unit": "N.m^2",
-                "value": null
-            },
-            {
-                "desc": "Tangential magnetic air-gap surface force",
-                "max": "",
-                "min": "",
-                "name": "Ptan",
-                "type": "ndarray",
-                "unit": "N.m^2",
-                "value": null
-            },
-            {
                 "desc": "Name of the logger to use",
                 "max": "",
                 "min": "",
@@ -5346,6 +5647,33 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutStruct"
+            },
+            {
+                "desc": "Displacement output",
+                "max": "",
+                "min": "",
+                "name": "Yr",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "m",
+                "value": "None"
+            },
+            {
+                "desc": "Velocity output",
+                "max": "",
+                "min": "",
+                "name": "Vr",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "m/s",
+                "value": "None"
+            },
+            {
+                "desc": "Acceleration output",
+                "max": "",
+                "min": "",
+                "name": "Ar",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "m/s^2",
+                "value": "None"
             }
         ]
     },
@@ -5376,7 +5704,8 @@
             "plot.plot_A_fft2",
             "plot.Magnetic.plot_B_space",
             "plot.Structural.plot_force_space",
-            "plot.Magnetic.plot_mesh_field"
+            "plot.Magnetic.plot_mesh_field",
+            "plot.plot_A_space_compare"
         ],
         "mother": "",
         "name": "Output",
@@ -5454,6 +5783,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Output"
+            },
+            {
+                "desc": "Force module output",
+                "max": "",
+                "min": "",
+                "name": "force",
+                "type": "OutForce",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
@@ -5753,6 +6091,15 @@
                 "min": "",
                 "name": "struct",
                 "type": "Structural",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Force moduale",
+                "max": "",
+                "min": "",
+                "name": "force",
+                "type": "Force",
                 "unit": "-",
                 "value": ""
             }

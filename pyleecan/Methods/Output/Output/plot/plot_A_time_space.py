@@ -18,7 +18,6 @@ def plot_A_time_space(
     is_norm=False,
     unit="SI",
     colormap="RdBu_r",
-    out_list=[],
 ):
     """Plots a field as a function of time and space (angle)
 
@@ -46,27 +45,16 @@ def plot_A_time_space(
         unit in which to plot the field
     colormap : colormap object
         colormap prescribed by user
-    out_list : list
-        list of Output objects to compare
     """
 
     # Get Data object names
-    Phys = getattr(self, Data_str.split(".")[0])
-    A = getattr(Phys, Data_str.split(".")[1])
-    B_list = []
-    for out in out_list:
-        Phys = getattr(out, Data_str.split(".")[0])
-        B_list.append(getattr(Phys, Data_str.split(".")[1]))
+    phys = getattr(self, Data_str.split(".")[0])
+    data = getattr(phys, Data_str.split(".")[1])
 
     # Set plot
     fig, axs = plt.subplots(3, 2, tight_layout=True, figsize=(20, 10))
-    legend_list = [self.post.legend_name]
-    for out in out_list:
-        legend_list.append(out.post.legend_name)
     color_list = [self.post.line_color]
-    for out in out_list:
-        color_list.append(out.post.line_color)
-    title = A.name + " over time and space"
+    title = data.name + " over time and space"
 
     # pcolorplot
     if is_deg:
@@ -75,23 +63,25 @@ def plot_A_time_space(
         xlabel = "Angle [rad]"
     ylabel = "Time [s]"
     if unit == "SI":
-        unit = A.unit
+        unit = data.unit
     if is_norm:
-        zlabel = r"$\frac{" + A.symbol + "}{" + A.symbol + "_0}\, [" + unit + "]$"
+        zlabel = r"$\frac{" + data.symbol + "}{" + data.symbol + "_0}\, [" + unit + "]$"
     else:
-        zlabel = r"$" + A.symbol + "\, [" + unit + "]$"
+        zlabel = r"$" + data.symbol + "\, [" + unit + "]$"
 
     if is_deg:
-        (time, angle, A_t_s) = A.get_along(
+        (time, angle, A_t_s) = data.get_along(
             "time", "angle{°}", unit=unit, is_norm=is_norm
         )
     else:
-        (time, angle, A_t_s) = A.get_along("time", "angle", unit=unit, is_norm=is_norm)
+        (time, angle, A_t_s) = data.get_along(
+            "time", "angle", unit=unit, is_norm=is_norm
+        )
     angle_map, time_map = meshgrid(angle, time)
     plot_A_3D(
         angle_map,
         time_map,
-        transpose(A_t_s),
+        A_t_s,
         z_max=z_max,
         z_min=-z_max,
         colormap=colormap,
@@ -108,17 +98,14 @@ def plot_A_time_space(
     # time
     xlabel = "Time [s]"
     if is_norm:
-        ylabel = r"$\frac{" + A.symbol + "}{" + A.symbol + "_0}\, [" + unit + "]$"
+        ylabel = r"$\frac{" + data.symbol + "}{" + data.symbol + "_0}\, [" + unit + "]$"
     else:
-        ylabel = r"$" + A.symbol + "\, [" + unit + "]$"
-    (time, Ydata) = A.compare_along(
-        "time", data_list=B_list, unit=unit, is_norm=is_norm
-    )
+        ylabel = r"$" + data.symbol + "\, [" + unit + "]$"
+    (time, Ydata) = data.compare_along("time", unit=unit, is_norm=is_norm)
     # Plot the original graph
     plot_A_2D(
         time,
         Ydata,
-        legend_list=legend_list,
         color_list=color_list,
         fig=fig,
         subplot_index=2,
@@ -131,14 +118,15 @@ def plot_A_time_space(
         xlabel = "Angle [°]"
     else:
         xlabel = "Angle [rad]"
-    (angle, Ydata) = A.compare_along(
-        "angle", data_list=B_list, unit=unit, is_norm=is_norm
-    )
+    if is_deg:
+        (angle, Ydata) = data.compare_along("angle{°}", unit=unit, is_norm=is_norm)
+    else:
+        (angle, Ydata) = data.compare_along("angle", unit=unit, is_norm=is_norm)
+
     # Plot the original graph
     plot_A_2D(
         angle,
         Ydata,
-        legend_list=legend_list,
         color_list=color_list,
         fig=fig,
         subplot_index=4,
@@ -147,28 +135,24 @@ def plot_A_time_space(
     )
 
     # fft time
-    ylabel = r"$|\widehat{" + A.symbol + "}|\, [" + unit + "]$"
+    if data.symbol == "Magnitude":
+        ylabel = "Magnitude [" + unit + "]"
+    else:
+        ylabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
     if is_elecorder:
-        elec_max = freq_max / A.normalizations.get("elec_order")
+        elec_max = freq_max / data.normalizations.get("elec_order")
         xlabel = "Electrical order []"
-        (freqs, Ydata) = A.compare_magnitude_along(
-            "freqs=[0," + str(elec_max) + "]{elec_order}",
-            data_list=B_list,
-            unit=unit,
-            is_norm=False,
+        (freqs, Ydata) = data.compare_magnitude_along(
+            "freqs=[0," + str(elec_max) + "]{elec_order}", unit=unit, is_norm=False
         )
     else:
         xlabel = "Frequency [Hz]"
-        (freqs, Ydata) = A.compare_magnitude_along(
-            "freqs=[0," + str(freq_max) + "]",
-            data_list=B_list,
-            unit=unit,
-            is_norm=False,
+        (freqs, Ydata) = data.compare_magnitude_along(
+            "freqs=[0," + str(freq_max) + "]", unit=unit, is_norm=False
         )
     plot_A_2D(
         freqs,
         Ydata,
-        legend_list=legend_list,
         color_list=color_list,
         fig=fig,
         subplot_index=3,
@@ -179,36 +163,21 @@ def plot_A_time_space(
 
     # fft space
     if is_spaceorder:
-        order_max = r_max / A.normalizations.get("space_order")
+        order_max = r_max / data.normalizations.get("space_order")
         xlabel = "Space order []"
-        (wavenumber, A_FT) = A.get_magnitude_along(
+        (wavenumber, Ydata) = data.compare_magnitude_along(
             "wavenumber=[0," + str(order_max) + "]{space_order}",
             unit=unit,
             is_norm=False,
         )
-        Ydata = [A_FT]
-        for B in B_list:
-            (wavenumber, A_FT) = B.get_magnitude_along(
-                "wavenumber=[0," + str(order_max) + "]{space_order}",
-                unit=unit,
-                is_norm=False,
-            )
-            Ydata.append(A_FT)
     else:
         xlabel = "Wavenumber []"
-        (wavenumber, A_FT) = A.get_magnitude_along(
+        (wavenumber, Ydata) = data.compare_magnitude_along(
             "wavenumber=[0," + str(r_max) + "]", unit=unit, is_norm=False
         )
-        Ydata = [A_FT]
-        for B in B_list:
-            (wavenumber, A_FT) = B.get_magnitude_along(
-                "wavenumber=[0," + str(r_max) + "]", unit=unit, is_norm=False
-            )
-            Ydata.append(A_FT)
     plot_A_2D(
         wavenumber,
         Ydata,
-        legend_list=legend_list,
         color_list=color_list,
         fig=fig,
         subplot_index=5,

@@ -72,6 +72,36 @@ try:
 except ImportError as error:
     get_polar_eq = error
 
+try:
+    from ..Methods.Machine.LamSlotWind.comp_wind_function import comp_wind_function
+except ImportError as error:
+    comp_wind_function = error
+
+try:
+    from ..Methods.Machine.LamSlotWind.plot_mmf_unit import plot_mmf_unit
+except ImportError as error:
+    plot_mmf_unit = error
+
+try:
+    from ..Methods.Machine.LamSlotWind.comp_resistance_wind import comp_resistance_wind
+except ImportError as error:
+    comp_resistance_wind = error
+
+try:
+    from ..Methods.Machine.LamSlotWind.comp_angle_d_axis import comp_angle_d_axis
+except ImportError as error:
+    comp_angle_d_axis = error
+
+try:
+    from ..Methods.Machine.LamSlotWind.comp_mmf_unit import comp_mmf_unit
+except ImportError as error:
+    comp_mmf_unit = error
+
+try:
+    from ..Methods.Machine.LamSlotWind.comp_rot_dir import comp_rot_dir
+except ImportError as error:
+    comp_rot_dir = error
+
 
 from ._check import InitUnKnowClassError
 from .Winding import Winding
@@ -220,6 +250,75 @@ class LamSlotWind(LamSlot):
         )
     else:
         get_polar_eq = get_polar_eq
+    # cf Methods.Machine.LamSlotWind.comp_wind_function
+    if isinstance(comp_wind_function, ImportError):
+        comp_wind_function = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_wind_function: "
+                    + str(comp_wind_function)
+                )
+            )
+        )
+    else:
+        comp_wind_function = comp_wind_function
+    # cf Methods.Machine.LamSlotWind.plot_mmf_unit
+    if isinstance(plot_mmf_unit, ImportError):
+        plot_mmf_unit = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method plot_mmf_unit: " + str(plot_mmf_unit)
+                )
+            )
+        )
+    else:
+        plot_mmf_unit = plot_mmf_unit
+    # cf Methods.Machine.LamSlotWind.comp_resistance_wind
+    if isinstance(comp_resistance_wind, ImportError):
+        comp_resistance_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_resistance_wind: "
+                    + str(comp_resistance_wind)
+                )
+            )
+        )
+    else:
+        comp_resistance_wind = comp_resistance_wind
+    # cf Methods.Machine.LamSlotWind.comp_angle_d_axis
+    if isinstance(comp_angle_d_axis, ImportError):
+        comp_angle_d_axis = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_angle_d_axis: "
+                    + str(comp_angle_d_axis)
+                )
+            )
+        )
+    else:
+        comp_angle_d_axis = comp_angle_d_axis
+    # cf Methods.Machine.LamSlotWind.comp_mmf_unit
+    if isinstance(comp_mmf_unit, ImportError):
+        comp_mmf_unit = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_mmf_unit: " + str(comp_mmf_unit)
+                )
+            )
+        )
+    else:
+        comp_mmf_unit = comp_mmf_unit
+    # cf Methods.Machine.LamSlotWind.comp_rot_dir
+    if isinstance(comp_rot_dir, ImportError):
+        comp_rot_dir = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_rot_dir: " + str(comp_rot_dir)
+                )
+            )
+        )
+    else:
+        comp_rot_dir = comp_rot_dir
     # save method is available in all object
     save = save
 

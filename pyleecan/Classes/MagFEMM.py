@@ -126,8 +126,8 @@ class MagFEMM(Magnetics):
         is_remove_vent=False,
         is_mmfs=True,
         is_mmfr=True,
-        is_stator_linear_BH=0,
-        is_rotor_linear_BH=0,
+        type_BH_stator=0,
+        type_BH_rotor=0,
         is_symmetry_t=False,
         sym_t=1,
         is_antiper_t=False,
@@ -170,8 +170,8 @@ class MagFEMM(Magnetics):
             is_remove_vent = obj.is_remove_vent
             is_mmfs = obj.is_mmfs
             is_mmfr = obj.is_mmfr
-            is_stator_linear_BH = obj.is_stator_linear_BH
-            is_rotor_linear_BH = obj.is_rotor_linear_BH
+            type_BH_stator = obj.type_BH_stator
+            type_BH_rotor = obj.type_BH_rotor
             is_symmetry_t = obj.is_symmetry_t
             sym_t = obj.sym_t
             is_antiper_t = obj.is_antiper_t
@@ -211,10 +211,10 @@ class MagFEMM(Magnetics):
                 is_mmfs = init_dict["is_mmfs"]
             if "is_mmfr" in list(init_dict.keys()):
                 is_mmfr = init_dict["is_mmfr"]
-            if "is_stator_linear_BH" in list(init_dict.keys()):
-                is_stator_linear_BH = init_dict["is_stator_linear_BH"]
-            if "is_rotor_linear_BH" in list(init_dict.keys()):
-                is_rotor_linear_BH = init_dict["is_rotor_linear_BH"]
+            if "type_BH_stator" in list(init_dict.keys()):
+                type_BH_stator = init_dict["type_BH_stator"]
+            if "type_BH_rotor" in list(init_dict.keys()):
+                type_BH_rotor = init_dict["type_BH_rotor"]
             if "is_symmetry_t" in list(init_dict.keys()):
                 is_symmetry_t = init_dict["is_symmetry_t"]
             if "sym_t" in list(init_dict.keys()):
@@ -245,8 +245,8 @@ class MagFEMM(Magnetics):
             is_remove_vent=is_remove_vent,
             is_mmfs=is_mmfs,
             is_mmfr=is_mmfr,
-            is_stator_linear_BH=is_stator_linear_BH,
-            is_rotor_linear_BH=is_rotor_linear_BH,
+            type_BH_stator=type_BH_stator,
+            type_BH_rotor=type_BH_rotor,
             is_symmetry_t=is_symmetry_t,
             sym_t=sym_t,
             is_antiper_t=is_antiper_t,

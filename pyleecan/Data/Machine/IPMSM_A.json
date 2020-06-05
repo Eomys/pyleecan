@@ -221,7 +221,7 @@
             "mag": {
                 "BH_curve": {
                     "__class__": "ImportMatrixXls",
-                    "file_path": "pyleecan\\Tests\\Validation\\Material\\M400-50A.xlsx",
+                    "file_path": "Tests\\Validation\\Material\\M400-50A.xlsx",
                     "is_transpose": false,
                     "sheet": "BH",
                     "skiprows": 0,
