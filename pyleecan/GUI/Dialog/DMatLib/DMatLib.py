@@ -55,16 +55,20 @@ class DMatLib(Gen_DMatLib, QDialog):
             self.nav_mat.setCurrentRow(selected)
             self.update_out(on_matlib=True)
         else:
-            self.nav_mat_mach.setCurrentRow(selected-self.matlib.index_first_mat_mach)
+            self.nav_mat_mach.setCurrentRow(selected - self.matlib.index_first_mat_mach)
             self.update_out(on_matlib=False)
 
         # Hide since unused
         # self.out_iso.hide()
         self.out_epsr.hide()
 
-        self.nav_mat.itemSelectionChanged.connect(lambda: self.update_out(on_matlib=True))
-        self.nav_mat_mach.itemSelectionChanged.connect(lambda: self.update_out(on_matlib=False))
-        
+        self.nav_mat.itemSelectionChanged.connect(
+            lambda: self.update_out(on_matlib=True)
+        )
+        self.nav_mat_mach.itemSelectionChanged.connect(
+            lambda: self.update_out(on_matlib=False)
+        )
+
         # self.nav_mat.clicked.connect(lambda: self.update_out(on_matlib=True))
         # self.nav_mat_mach.clicked.connect(lambda: self.update_out(on_matlib=False))
         self.le_search.textChanged.connect(self.filter_material)
@@ -136,10 +140,12 @@ class DMatLib(Gen_DMatLib, QDialog):
         if len(self.nav_mat.selectedItems()) > 0:
             mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1
         else:
-            mat_id = int(self.nav_mat_mach.currentItem().text()[:3]) - 1 
+            mat_id = int(self.nav_mat_mach.currentItem().text()[:3]) - 1
         # Open the setup GUI
         # (creates a copy of the material, i.e. self.matlib won't be edited directly)
-        self.mat_win = DMatSetup(self.matlib.list_mat[mat_id], self.mat_selected_in_matlib)
+        self.mat_win = DMatSetup(
+            self.matlib.list_mat[mat_id], self.mat_selected_in_matlib
+        )
         return_code = self.mat_win.exec_()
 
         if return_code > 0:
@@ -152,7 +158,7 @@ class DMatLib(Gen_DMatLib, QDialog):
                 # Set the pointer on the ref matlib if machine material list is empty
                 if len(self.matlib.list_mat) == self.matlib.index_first_mat_mach:
                     self.on_matlib = True
-                
+
             # Update material list
             self.update_list_mat()
 
@@ -187,7 +193,9 @@ class DMatLib(Gen_DMatLib, QDialog):
 
         # Open the setup GUI
         # (creates a copy of the material, i.e. self.matlib won't be edited directly)
-        self.mat_win = DMatSetup(self.matlib.list_mat[mat_id], self.mat_selected_in_matlib)
+        self.mat_win = DMatSetup(
+            self.matlib.list_mat[mat_id], self.mat_selected_in_matlib
+        )
         return_code = self.mat_win.exec_()
         if return_code > 0:
             # Update the material only if the user validate at the end
@@ -196,7 +204,7 @@ class DMatLib(Gen_DMatLib, QDialog):
 
                 # Add the material to the mat_ref
                 self.matlib.add_mat_ref(self.mat_win.mat)
-                
+
                 self.update_list_mat()
                 self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
                 self.update_out()
@@ -236,7 +244,9 @@ class DMatLib(Gen_DMatLib, QDialog):
         if len(self.matlib.list_mat) > 1:
 
             del_msg = (
-                "Are you sure you want to delete " + self.matlib.list_mat[mat_id].name + " ?"
+                "Are you sure you want to delete "
+                + self.matlib.list_mat[mat_id].name
+                + " ?"
             )
             reply = QMessageBox.question(
                 self, "Confirmation", del_msg, QMessageBox.Yes, QMessageBox.No
@@ -346,7 +356,7 @@ class DMatLib(Gen_DMatLib, QDialog):
         else:
             mat_id = (
                 int(self.nav_mat_mach.currentItem().text()[:3]) - 1
-            ) # for filtering
+            )  # for filtering
             self.mat_selected_in_matlib = False
             # Deselect item in nav_mat
             self.nav_mat.clearSelection()
@@ -414,6 +424,7 @@ class DMatLib(Gen_DMatLib, QDialog):
             else:
                 text = "-"
             self.out_BH.setText(text)
+
 
 def update_text(label, name, value, unit):
     """Update a Qlabel with the value if not None

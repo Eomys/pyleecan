@@ -53,7 +53,7 @@ class WGuiOption(Ui_GUIOption, QDialog):
         folder = QFileDialog.getExistingDirectory(self, "Select MatLib directory")
         if folder != self.matlib.ref_path and folder:
             self.le_matlib_path.setText(folder)
-        GUI_logger.info('message')
+        GUI_logger.info("message")
 
     def change_matlib_dir(self):
         """

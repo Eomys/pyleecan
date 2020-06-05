@@ -33,9 +33,8 @@ def get_material(obj):
         for mat in materials:
             if compare_material(mat, material):
                 n_mat += 1
-                if n_mat > 1: # material found twice in the list
+                if n_mat > 1:  # material found twice in the list
                     materials.remove(material)
                     break
-
 
     return materials

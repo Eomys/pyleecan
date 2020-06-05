@@ -15,8 +15,8 @@ class MatLib(object):
         """MatLib contains the material library and the specific machine materials.
         """
         # List containing the material library and the specific machine materials
-        self.list_mat = [] 
-        
+        self.list_mat = []
+
         # Pointer on the first machine material in the list
         self.index_first_mat_mach = 1
 
@@ -35,7 +35,7 @@ class MatLib(object):
         path: str
             new material library path
         """
-        # Load a complete new matlib 
+        # Load a complete new matlib
         if len(self.list_mat) in [0, self.index_first_mat_mach]:
             self.list_mat = load_matlib(path)
             self.index_first_mat_mach = len(self.list_mat)
@@ -45,11 +45,10 @@ class MatLib(object):
                 self.list_mat.pop(0)
             self.index_first_mat_mach = len(list_mat)
             for idx, material in enumerate(list_mat):
-                self.list_mat.insert(idx,material)
-        
+                self.list_mat.insert(idx, material)
+
         self.ref_path = path
 
-    
     def add_machine_mat(self, machine):
         """
         Add machine materials if it is not in the MatLib 
@@ -63,14 +62,11 @@ class MatLib(object):
         """
 
         list_mach_mat = machine.get_material_list()
-        if not isinstance(list_mach_mat,list):
+        if not isinstance(list_mach_mat, list):
             list_mach_mat = [list_mach_mat]
 
         # Copy the matlib and remove the name and the path to compare the materials
-        list_mat_noname = [
-            Material(init_dict=mat.as_dict())
-            for mat in self.list_mat
-        ]
+        list_mat_noname = [Material(init_dict=mat.as_dict()) for mat in self.list_mat]
         for mat in list_mat_noname:
             mat.name = ""
             mat.path = ""
@@ -80,7 +76,7 @@ class MatLib(object):
             # Avoid materials from the default machine
             if material.is_isotropic == None:
                 continue
-            
+
             # Store name and path to compare other attributes
             name = material.name
             path = material.path
@@ -95,14 +91,12 @@ class MatLib(object):
                 self.check_material_duplicated_name(-1)
 
             # Replace the material in the machine by the MatLib one
-            else: 
+            else:
                 for mat in self.list_mat:
                     # Find the material in the matlib
                     if compare_material(material, mat):
                         # Replace material by mat in machine
-                        replace_material_pyleecan_obj(
-                            machine, material, mat
-                        )
+                        replace_material_pyleecan_obj(machine, material, mat)
                         break
 
     def move_mach_mat_to_ref(self, index):
@@ -117,10 +111,13 @@ class MatLib(object):
             position of the machine material
         """
         assert index >= self.index_first_mat_mach, ValueError(
-            'The material {} is already in the Material Library'.format(self.list_mat[index].name)
+            "The material {} is already in the Material Library".format(
+                self.list_mat[index].name
             )
+        )
 
         from ....definitions import MATLIB_DIR
+
         # Move the material into the Material library
         mat = self.list_mat.pop(index)
         index = self.index_first_mat_mach
@@ -133,7 +130,6 @@ class MatLib(object):
         )
         self.list_mat[index].path = new_path
         self.list_mat[index].save(new_path)
-
 
     def delete_material(self, index):
         """
@@ -154,12 +150,10 @@ class MatLib(object):
 
         # Reference material
         if index < self.index_first_mat_mach:
-            remove(mat_to_del.path) # Delete the file 
+            remove(mat_to_del.path)  # Delete the file
 
             # Change index_first_mat_mach
             self.index_first_mat_mach -= 1
-
-            
 
     def check_material_duplicated_name(self, index):
         """
@@ -184,7 +178,7 @@ class MatLib(object):
             is_renamed = True
             name = "Untitled"
 
-        list_mat_name =[mat.name for i, mat in enumerate(self.list_mat) if i != index]
+        list_mat_name = [mat.name for i, mat in enumerate(self.list_mat) if i != index]
 
         # Browse the material list name and change the name while the name exist
         while mat_duplicated:
@@ -231,19 +225,15 @@ class MatLib(object):
         from ....definitions import MATLIB_DIR
 
         self.list_mat.insert(self.index_first_mat_mach, material)
-        self.index_first_mat_mach +=1
-        
-        # Check if the material is duplicated
-        self.check_material_duplicated_name(self.index_first_mat_mach-1)
-        
-        material.path= join(
-            MATLIB_DIR, material.name + ".json"
-        ).replace("\\", "/")
+        self.index_first_mat_mach += 1
 
-        GUI_logger.info(
-            "Creating the material: " + material.path
-        )
-        
+        # Check if the material is duplicated
+        self.check_material_duplicated_name(self.index_first_mat_mach - 1)
+
+        material.path = join(MATLIB_DIR, material.name + ".json").replace("\\", "/")
+
+        GUI_logger.info("Creating the material: " + material.path)
+
         # Saving the material
         material.save(material.path)
 
@@ -262,7 +252,15 @@ class MatLib(object):
 
     def replace_material(self, index, material):
         """
-        
+        Replace a material
+
+        Parameters
+        ----------
+        self: MatLib
+        index: int
+            index of the material to replace
+        material: Material
+            new material 
         """
         from ....definitions import MATLIB_DIR
 
@@ -274,22 +272,19 @@ class MatLib(object):
             # Replace the material
             self.list_mat[index] = material
 
-            # Check its name 
+            # Check its name
             self.check_material_duplicated_name(index)
 
             # Set its path
-            material.path= join(
-                MATLIB_DIR, material.name + ".json"
-            ).replace("\\", "/")
+            material.path = join(MATLIB_DIR, material.name + ".json").replace("\\", "/")
 
-            # Save it 
+            # Save it
             material.save()
 
         # Machine material
-        else: 
+        else:
             # Replace the material
             self.list_mat[index] = material
 
-            # Check its name 
+            # Check its name
             self.check_material_duplicated_name(index)
-            
