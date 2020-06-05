@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Fri Jul 20 11:30:24 2018
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 import sys
 from unittest import TestCase
@@ -20,6 +15,8 @@ from pyleecan.Classes.HoleM51 import HoleM51
 from pyleecan.Classes.HoleM52 import HoleM52
 from pyleecan.Classes.HoleM53 import HoleM53
 from pyleecan.Classes.HoleM54 import HoleM54
+from pyleecan.Classes.HoleM57 import HoleM57
+from pyleecan.Classes.HoleM58 import HoleM58
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
 from pyleecan.Classes.Material import Material
 
@@ -79,7 +76,7 @@ class test_SMHoleMag(TestCase):
         self.assertEqual(
             self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 50"
         )
-        self.assertEqual(self.widget.tab_hole.widget(0).c_hole_type.count(), 4)
+        self.assertEqual(self.widget.tab_hole.widget(0).c_hole_type.count(), 6)
 
     def test_init_SyRM(self):
         """Check that the Widget initialize to the correct hole"""
@@ -92,7 +89,7 @@ class test_SMHoleMag(TestCase):
         self.assertEqual(
             self.widget2.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 54"
         )
-        self.assertEqual(self.widget2.tab_hole.widget(0).c_hole_type.count(), 5)
+        self.assertEqual(self.widget2.tab_hole.widget(0).c_hole_type.count(), 7)
 
     def test_init_SyRM_51(self):
         """Check that the Widget initialize to the correct hole"""
@@ -127,7 +124,7 @@ class test_SMHoleMag(TestCase):
         self.assertEqual(
             self.widget2.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 51"
         )
-        self.assertEqual(self.widget2.tab_hole.widget(0).c_hole_type.count(), 5)
+        self.assertEqual(self.widget2.tab_hole.widget(0).c_hole_type.count(), 7)
 
         self.assertEqual(self.widget2.tab_hole.widget(0).w_hole.lf_W0.text(), "0.11")
         self.assertEqual(self.widget2.tab_hole.widget(0).w_hole.lf_W1.text(), "0.12")
@@ -186,6 +183,36 @@ class test_SMHoleMag(TestCase):
             self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 53"
         )
 
+    def test_init_57(self):
+        """Check that you can edit a hole 57"""
+        self.test_obj.rotor.hole[0] = HoleM57(Zh=18)
+        self.test_obj.rotor.hole[0].magnet_0.mat_type.name = "Magnet1"
+        self.widget = SMHoleMag(
+            machine=self.test_obj, matlib=self.matlib, is_stator=False
+        )
+        self.assertEqual(
+            self.widget.out_hole_pitch.text(), "Slot pitch = 360 / 2p = 20 °"
+        )
+        self.assertEqual(self.widget.tab_hole.widget(0).c_hole_type.currentIndex(), 4)
+        self.assertEqual(
+            self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 57"
+        )
+
+    def test_init_58(self):
+        """Check that you can edit a hole 58"""
+        self.test_obj.rotor.hole[0] = HoleM58(Zh=18)
+        self.test_obj.rotor.hole[0].magnet_0.mat_type.name = "Magnet1"
+        self.widget = SMHoleMag(
+            machine=self.test_obj, matlib=self.matlib, is_stator=False
+        )
+        self.assertEqual(
+            self.widget.out_hole_pitch.text(), "Slot pitch = 360 / 2p = 20 °"
+        )
+        self.assertEqual(self.widget.tab_hole.widget(0).c_hole_type.currentIndex(), 5)
+        self.assertEqual(
+            self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 58"
+        )
+
     def test_set_type_51(self):
         """ """
         self.widget.tab_hole.widget(0).c_hole_type.setCurrentIndex(1)
@@ -223,6 +250,32 @@ class test_SMHoleMag(TestCase):
         self.assertEqual(self.widget.tab_hole.widget(0).c_hole_type.currentIndex(), 3)
         self.assertEqual(
             self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 53"
+        )
+
+    def test_set_type_57(self):
+        """ """
+        self.widget.tab_hole.widget(0).c_hole_type.setCurrentIndex(4)
+
+        self.assertEqual(type(self.test_obj.rotor.hole[0]), HoleM57)
+        self.assertEqual(
+            self.widget.out_hole_pitch.text(), "Slot pitch = 360 / 2p = 45 °"
+        )
+        self.assertEqual(self.widget.tab_hole.widget(0).c_hole_type.currentIndex(), 4)
+        self.assertEqual(
+            self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 57"
+        )
+
+    def test_set_type_58(self):
+        """ """
+        self.widget.tab_hole.widget(0).c_hole_type.setCurrentIndex(5)
+
+        self.assertEqual(type(self.test_obj.rotor.hole[0]), HoleM58)
+        self.assertEqual(
+            self.widget.out_hole_pitch.text(), "Slot pitch = 360 / 2p = 45 °"
+        )
+        self.assertEqual(self.widget.tab_hole.widget(0).c_hole_type.currentIndex(), 5)
+        self.assertEqual(
+            self.widget.tab_hole.widget(0).c_hole_type.currentText(), "Slot Type 58"
         )
 
     def test_SyRM_set_type_54_51_54(self):

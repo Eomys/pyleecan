@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@author: pierre_b
-"""
 
 from unittest import TestCase
 

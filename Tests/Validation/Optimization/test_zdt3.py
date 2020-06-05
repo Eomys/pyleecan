@@ -4,7 +4,8 @@
 Test Pyleecan optimization module using Zitzler–Deb–Thiele's function N. 3
 """
 import pytest
-from pyleecan.Tests.Validation.Machine.SCIM_001 import SCIM_001
+from pyleecan.definitions import PACKAGE_NAME
+from Tests.Validation.Machine.SCIM_001 import SCIM_001
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
@@ -24,7 +25,8 @@ import random
 
 
 @pytest.mark.validation
-@pytest.mark.optimization
+@pytest.mark.long
+@pytest.mark.DEAP
 def test_zdt3():
     # ### Defining reference Output
 
@@ -62,10 +64,7 @@ def test_zdt3():
 
     # Definition of the magnetic simulation
     simu.mag = MagFEMM(
-        is_stator_linear_BH=2,
-        is_rotor_linear_BH=2,
-        is_symmetry_a=True,
-        is_antiper_a=False,
+        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=True, is_antiper_a=False
     )
     simu.mag.Kmesh_fineness = 0.01
     # simu.mag.Kgeo_fineness=0.02
@@ -185,4 +184,4 @@ def test_zdt3():
         return fig
 
     fig = plot_pareto(res)
-    plt.savefig("pyleecan\\Tests\\Results\\Validation\\test_zdt3.png")
+    fig.savefig(PACKAGE_NAME + "/Tests/Results/Validation/test_zdt3.png")

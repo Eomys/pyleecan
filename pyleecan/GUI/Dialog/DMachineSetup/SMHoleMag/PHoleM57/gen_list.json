@@ -1,0 +1,65 @@
+[
+    {
+        "cls": "HoleM57",
+        "name": "W0",
+        "widget": [
+            "in_W0",
+            "lf_W0"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "HoleM57",
+        "name": "W1",
+        "widget": [
+            "in_W1",
+            "lf_W1"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "HoleM57",
+        "name": "W2",
+        "widget": [
+            "in_W2",
+            "lf_W2"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "HoleM57",
+        "name": "W3",
+        "widget": [
+            "in_W3",
+            "lf_W3"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "HoleM57",
+        "name": "W4",
+        "widget": [
+            "in_W4",
+            "lf_W4"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "HoleM57",
+        "name": "H1",
+        "widget": [
+            "in_H1",
+            "lf_H1"
+        ],
+        "xls": "Slot"
+    },
+    {
+        "cls": "HoleM57",
+        "name": "H2",
+        "widget": [
+            "in_H2",
+            "lf_H2"
+        ],
+        "xls": "Slot"
+    }
+]

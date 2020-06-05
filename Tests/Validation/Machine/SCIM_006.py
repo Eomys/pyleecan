@@ -18,8 +18,8 @@ from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Classes.WindingSC import WindingSC
 from pyleecan.Classes.SlotW22 import SlotW22
 from pyleecan.Classes.SlotW21 import SlotW21
-from pyleecan.Tests.Validation.Material.Copper1 import Copper1
-from pyleecan.Tests.Validation.Material.M400_50A import M400_50A
+from Tests.Validation.Material.Copper1 import Copper1
+from Tests.Validation.Material.M400_50A import M400_50A
 
 # Stator setup
 stator = LamSlotWind(

@@ -1,8 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-time,s,Structural time vector (no symmetry),Nt_tot,ndarray,None,,,,Output,,,VERSION,1,Gather the structural module outputs
-angle,rad,Structural position vector (no symmetry),Na_tot,ndarray,None,,,,,,,,,
-Nt_tot,-,Length of the time vector,,int,None,,,,,,,,,
-Na_tot,-,Length of the angle vector,,int,None,,,,,,,,,
-Prad,N.m^2,Radial magnetic air-gap surface force,"(Nt_tot ,Na_tot)",ndarray,None,,,,,,,,,
-Ptan,N.m^2,Tangential magnetic air-gap surface force,"(Nt_tot ,Na_tot)",ndarray,None,,,,,,,,,
-logger_name,-,Name of the logger to use,0,str,Pyleecan.OutStruct,,,,,,,,,

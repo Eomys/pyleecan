@@ -1,0 +1,3 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+time,s,Electrical time vector (no symmetry) to import,Nt_tot,Import,ImportMatrixVal(),,,,Simulation,,gen_input,VERSION,1,Starting data of the simulation
+angle,rad,Electrical position vector (no symmetry) to import,Na_tot,Import,ImportMatrixVal(),,,,,,,,,

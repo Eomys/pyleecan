@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Thu May 18 14:35:34 2017
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-"""
 
 from os.path import join, isfile
 from os import remove
@@ -22,7 +17,7 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.MachineWRSM import MachineWRSM
 from pyleecan.Classes.MachineSRM import MachineSRM
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
-from pyleecan.Tests import save_gui_path as save_path
+from Tests import save_gui_path as save_path
 
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
 from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.SMagnet import SMagnet
@@ -32,7 +27,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
 import matplotlib.pyplot as plt
-from pyleecan.Tests import DATA_DIR
+from Tests import DATA_DIR
 
 load_test = list()
 load_test.append(  # 1

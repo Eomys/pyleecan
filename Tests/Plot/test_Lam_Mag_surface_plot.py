@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package
-
-@date Created on Wed Jan 13 15:33:48 2016
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-@todo unittest it
-"""
 
 from os.path import join
 from unittest import TestCase
@@ -26,7 +19,7 @@ from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.SlotMFlat import SlotMFlat
 from pyleecan.Classes.SlotMPolar import SlotMPolar
-from pyleecan.Tests import save_plot_path as save_path
+from Tests import save_plot_path as save_path
 
 
 class test_Lam_Mag_surface_plot(TestCase):

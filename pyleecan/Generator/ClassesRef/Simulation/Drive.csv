@@ -1,0 +1,4 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe
+Umax,V,Maximum RMS voltage of the Drive,,float,800,0,,,Simulation,,,VERSION,1,Abstract Drive class
+Imax,A,Maximum RMS current of the Drive,,float,800,0,,,,,,,,
+is_current,-,"True to generate current waveform, False for voltage",,bool,0,,,,,,,,,

@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Jan 14 13:51:53 2014
-
-@author: pierre_b
-"""
 from unittest import TestCase
 from ddt import ddt, data
 

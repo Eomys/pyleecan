@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@date Created on Thu Apr 27 14:05:46 2017
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author: pierre_b
-"""
 
 import sys
 from os import remove, mkdir
@@ -26,7 +21,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 
-from pyleecan.Tests import save_load_path as save_path, DATA_DIR, is_clean_result
+from Tests import save_load_path as save_path, DATA_DIR, is_clean_result
 
 
 class test_Workflow_DMatLib(TestCase):

@@ -9,7 +9,8 @@ In Proceedings of the third international Conference on Genetic Algorithms (Mend
 # Imports
 
 import pytest
-from pyleecan.Tests.Validation.Machine.SCIM_001 import SCIM_001
+from pyleecan.definitions import PACKAGE_NAME
+from Tests.Validation.Machine.SCIM_001 import SCIM_001
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
@@ -29,7 +30,8 @@ import random
 
 
 @pytest.mark.validation
-@pytest.mark.optimization
+@pytest.mark.long
+@pytest.mark.DEAP
 def test_Binh_and_Korn():
     # Defining reference Output
     # Definition of the enforced output of the electrical module
@@ -66,10 +68,7 @@ def test_Binh_and_Korn():
 
     # Definition of the magnetic simulation
     simu.mag = MagFEMM(
-        is_stator_linear_BH=2,
-        is_rotor_linear_BH=2,
-        is_symmetry_a=True,
-        is_antiper_a=False,
+        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=True, is_antiper_a=False
     )
     simu.mag.Kmesh_fineness = 0.01
     # simu.mag.Kgeo_fineness=0.02
@@ -205,10 +204,7 @@ def test_Binh_and_Korn():
         axs[0].set_xlabel(r"$f_1(x)$")
         axs[0].set_ylabel(r"$f_2(x)$")
         try:
-            img_to_find = img.imread(
-                "pyleecan\\Tests\\Validation\\Optimization\\Binh_and_Korn_function.jpg",
-                format="jpg",
-            )
+            img_to_find = img.imread("Binh_and_Korn_function.jpg", format="jpg")
             axs[1].imshow(img_to_find, aspect="auto")
             axs[1].axis("off")
             axs[1].set_title("Pareto front of the problem")
@@ -218,4 +214,4 @@ def test_Binh_and_Korn():
         return fig
 
     fig = plot_pareto(res)
-    plt.savefig("pyleecan\\Tests\\Results\\Validation\\test_Binh_and_Korn.png")
+    fig.savefig(PACKAGE_NAME + "/Tests/Results/Validation/test_Binh_and_Korn.png")

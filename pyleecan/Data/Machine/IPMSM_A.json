@@ -1,0 +1,518 @@
+{
+    "__class__": "MachineIPMSM",
+    "desc": "TOYOTA Prius 2004 interior magnet (V shape) with distributed winding",
+    "frame": null,
+    "logger_name": "Pyleecan.Machine",
+    "name": "IPMSM_A",
+    "rotor": {
+        "Kf1": 0.95,
+        "L1": 0.08382,
+        "Nrvd": 0,
+        "Rext": 0.0802,
+        "Rint": 0.05532,
+        "Wrvd": 0,
+        "__class__": "LamHole",
+        "axial_vent": [],
+        "bore": null,
+        "hole": [
+            {
+                "H0": 0.01096,
+                "H1": 0.0015,
+                "H2": 0.001,
+                "H3": 0.0065,
+                "H4": 0,
+                "W0": 0.042,
+                "W1": 0,
+                "W2": 0,
+                "W3": 0.014,
+                "W4": 0.0189,
+                "Zh": 8,
+                "__class__": "HoleM50",
+                "magnet_0": {
+                    "Lmag": 0.95,
+                    "__class__": "Magnet",
+                    "mat_type": {
+                        "HT": {
+                            "Cp": 1,
+                            "__class__": "MatHT",
+                            "alpha": 0.00393,
+                            "lambda_x": 1,
+                            "lambda_y": 1,
+                            "lambda_z": 1
+                        },
+                        "__class__": "Material",
+                        "desc": "Lamination M400-50A",
+                        "eco": {
+                            "__class__": "MatEconomical",
+                            "cost_unit": 0.127,
+                            "unit_name": "$"
+                        },
+                        "elec": {
+                            "__class__": "MatElectrical",
+                            "alpha": 1,
+                            "epsr": 1,
+                            "rho": 1.6e-06
+                        },
+                        "is_isotropic": false,
+                        "mag": {
+                            "BH_curve": {
+                                "__class__": "ImportMatrix",
+                                "is_transpose": false
+                            },
+                            "Brm20": 1.24,
+                            "Hc": 902181.163126629,
+                            "Wlam": 0,
+                            "__class__": "MatMagnetics",
+                            "alpha_Br": -0.001,
+                            "mur_lin": 1.05
+                        },
+                        "name": "Magnet_prius",
+                        "path": "",
+                        "struct": {
+                            "Ex": 215000000000.0,
+                            "Ey": 215000000000.0,
+                            "Ez": 80000000000,
+                            "Gxy": 0,
+                            "Gxz": 2000000000,
+                            "Gyz": 2000000000,
+                            "__class__": "MatStructural",
+                            "nu_xy": 0.3,
+                            "nu_xz": 0.03,
+                            "nu_yz": 0.03,
+                            "rho": 7500.0
+                        }
+                    },
+                    "type_magnetization": 1
+                },
+                "magnet_1": {
+                    "Lmag": 0.95,
+                    "__class__": "Magnet",
+                    "mat_type": {
+                        "HT": {
+                            "Cp": 1,
+                            "__class__": "MatHT",
+                            "alpha": 0.00393,
+                            "lambda_x": 1,
+                            "lambda_y": 1,
+                            "lambda_z": 1
+                        },
+                        "__class__": "Material",
+                        "desc": "Lamination M400-50A",
+                        "eco": {
+                            "__class__": "MatEconomical",
+                            "cost_unit": 0.127,
+                            "unit_name": "$"
+                        },
+                        "elec": {
+                            "__class__": "MatElectrical",
+                            "alpha": 1,
+                            "epsr": 1,
+                            "rho": 1.6e-06
+                        },
+                        "is_isotropic": false,
+                        "mag": {
+                            "BH_curve": {
+                                "__class__": "ImportMatrix",
+                                "is_transpose": false
+                            },
+                            "Brm20": 1.24,
+                            "Hc": 902181.163126629,
+                            "Wlam": 0,
+                            "__class__": "MatMagnetics",
+                            "alpha_Br": -0.001,
+                            "mur_lin": 1.05
+                        },
+                        "name": "Magnet_prius",
+                        "path": "",
+                        "struct": {
+                            "Ex": 215000000000.0,
+                            "Ey": 215000000000.0,
+                            "Ez": 80000000000,
+                            "Gxy": 0,
+                            "Gxz": 2000000000,
+                            "Gyz": 2000000000,
+                            "__class__": "MatStructural",
+                            "nu_xy": 0.3,
+                            "nu_xz": 0.03,
+                            "nu_yz": 0.03,
+                            "rho": 7500.0
+                        }
+                    },
+                    "type_magnetization": 1
+                },
+                "mat_void": {
+                    "HT": {
+                        "Cp": 1,
+                        "__class__": "MatHT",
+                        "alpha": 0.00393,
+                        "lambda_x": 1,
+                        "lambda_y": 1,
+                        "lambda_z": 1
+                    },
+                    "__class__": "Material",
+                    "desc": "Lamination M400-50A",
+                    "eco": {
+                        "__class__": "MatEconomical",
+                        "cost_unit": 0.127,
+                        "unit_name": "$"
+                    },
+                    "elec": {
+                        "__class__": "MatElectrical",
+                        "alpha": 1,
+                        "epsr": 1,
+                        "rho": 1
+                    },
+                    "is_isotropic": false,
+                    "mag": {
+                        "BH_curve": {
+                            "__class__": "ImportMatrix",
+                            "is_transpose": false
+                        },
+                        "Brm20": 0,
+                        "Hc": 0,
+                        "Wlam": 0,
+                        "__class__": "MatMagnetics",
+                        "alpha_Br": 0,
+                        "mur_lin": 1
+                    },
+                    "name": "M400-50A",
+                    "path": "",
+                    "struct": {
+                        "Ex": 215000000000.0,
+                        "Ey": 215000000000.0,
+                        "Ez": 80000000000,
+                        "Gxy": 0,
+                        "Gxz": 2000000000,
+                        "Gyz": 2000000000,
+                        "__class__": "MatStructural",
+                        "nu_xy": 0.3,
+                        "nu_xz": 0.03,
+                        "nu_yz": 0.03,
+                        "rho": 7650
+                    }
+                }
+            }
+        ],
+        "is_internal": true,
+        "is_stator": false,
+        "mat_type": {
+            "HT": {
+                "Cp": 1,
+                "__class__": "MatHT",
+                "alpha": 0.00393,
+                "lambda_x": 1,
+                "lambda_y": 1,
+                "lambda_z": 1
+            },
+            "__class__": "Material",
+            "desc": "Lamination M400-50A",
+            "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": 0.127,
+                "unit_name": "$"
+            },
+            "elec": {
+                "__class__": "MatElectrical",
+                "alpha": 1,
+                "epsr": 1,
+                "rho": 1
+            },
+            "is_isotropic": false,
+            "mag": {
+                "BH_curve": {
+                    "__class__": "ImportMatrixXls",
+                    "file_path": "Tests\\Validation\\Material\\M400-50A.xlsx",
+                    "is_transpose": false,
+                    "sheet": "BH",
+                    "skiprows": 0,
+                    "usecols": null
+                },
+                "Brm20": 0,
+                "Hc": 0,
+                "Wlam": 0.0005,
+                "__class__": "MatMagnetics",
+                "alpha_Br": 0,
+                "mur_lin": 2500.0
+            },
+            "name": "M400-50A",
+            "path": "",
+            "struct": {
+                "Ex": 215000000000.0,
+                "Ey": 215000000000.0,
+                "Ez": 80000000000.0,
+                "Gxy": 0.0,
+                "Gxz": 2000000000.0,
+                "Gyz": 2000000000.0,
+                "__class__": "MatStructural",
+                "nu_xy": 0.3,
+                "nu_xz": 0.03,
+                "nu_yz": 0.03,
+                "rho": 7650.0
+            }
+        },
+        "notch": []
+    },
+    "shaft": {
+        "Drsh": 0.11064,
+        "Lshaft": 0.1,
+        "__class__": "Shaft",
+        "mat_type": {
+            "HT": {
+                "Cp": 1,
+                "__class__": "MatHT",
+                "alpha": 0.00393,
+                "lambda_x": 1,
+                "lambda_y": 1,
+                "lambda_z": 1
+            },
+            "__class__": "Material",
+            "desc": "Lamination M400-50A",
+            "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": 0.127,
+                "unit_name": "$"
+            },
+            "elec": {
+                "__class__": "MatElectrical",
+                "alpha": 1,
+                "epsr": 1,
+                "rho": 1
+            },
+            "is_isotropic": false,
+            "mag": {
+                "BH_curve": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "Brm20": 0,
+                "Hc": 0,
+                "Wlam": 0,
+                "__class__": "MatMagnetics",
+                "alpha_Br": 0,
+                "mur_lin": 1
+            },
+            "name": "M400-50A",
+            "path": "",
+            "struct": {
+                "Ex": 215000000000.0,
+                "Ey": 215000000000.0,
+                "Ez": 80000000000,
+                "Gxy": 0,
+                "Gxz": 2000000000,
+                "Gyz": 2000000000,
+                "__class__": "MatStructural",
+                "nu_xy": 0.3,
+                "nu_xz": 0.03,
+                "nu_yz": 0.03,
+                "rho": 7650
+            }
+        }
+    },
+    "stator": {
+        "Kf1": 0.95,
+        "Ksfill": null,
+        "L1": 0.08382,
+        "Nrvd": 0,
+        "Rext": 0.13462,
+        "Rint": 0.08095,
+        "Wrvd": 0,
+        "__class__": "LamSlotWind",
+        "axial_vent": [],
+        "is_internal": false,
+        "is_stator": true,
+        "mat_type": {
+            "HT": {
+                "Cp": 1,
+                "__class__": "MatHT",
+                "alpha": 0.00393,
+                "lambda_x": 1,
+                "lambda_y": 1,
+                "lambda_z": 1
+            },
+            "__class__": "Material",
+            "desc": "Lamination M400-50A",
+            "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": 0.127,
+                "unit_name": "$"
+            },
+            "elec": {
+                "__class__": "MatElectrical",
+                "alpha": 1,
+                "epsr": 1,
+                "rho": 1
+            },
+            "is_isotropic": false,
+            "mag": {
+                "BH_curve": {
+                    "__class__": "ImportMatrixXls",
+                    "file_path": "Tests\\Validation\\Material\\M400-50A.xlsx",
+                    "is_transpose": false,
+                    "sheet": "BH",
+                    "skiprows": 0,
+                    "usecols": null
+                },
+                "Brm20": 0,
+                "Hc": 0,
+                "Wlam": 0.0005,
+                "__class__": "MatMagnetics",
+                "alpha_Br": 0,
+                "mur_lin": 2500.0
+            },
+            "name": "M400-50A",
+            "path": "",
+            "struct": {
+                "Ex": 215000000000.0,
+                "Ey": 215000000000.0,
+                "Ez": 80000000000.0,
+                "Gxy": 0.0,
+                "Gxz": 2000000000.0,
+                "Gyz": 2000000000.0,
+                "__class__": "MatStructural",
+                "nu_xy": 0.3,
+                "nu_xz": 0.03,
+                "nu_yz": 0.03,
+                "rho": 7650.0
+            }
+        },
+        "notch": [],
+        "slot": {
+            "H0": 0.001,
+            "H1": 0,
+            "H1_is_rad": false,
+            "H2": 0.0333,
+            "R1": 0.004,
+            "W0": 0.00193,
+            "W1": 0.005,
+            "W2": 0.008,
+            "Zs": 48,
+            "__class__": "SlotW11"
+        },
+        "winding": {
+            "Lewout": 0,
+            "Npcpp": 1,
+            "Nslot_shift_wind": 2,
+            "Ntcoil": 9,
+            "__class__": "WindingDW1L",
+            "coil_pitch": 5,
+            "conductor": {
+                "Hwire": 0.002,
+                "Nwppc_rad": 1,
+                "Nwppc_tan": 1,
+                "Wins_coil": 0,
+                "Wins_wire": 1e-06,
+                "Wwire": 0.000912,
+                "__class__": "CondType11",
+                "alpha_ew": 58,
+                "cond_mat": {
+                    "HT": {
+                        "Cp": 1,
+                        "__class__": "MatHT",
+                        "alpha": 0.00393,
+                        "lambda_x": 1,
+                        "lambda_y": 1,
+                        "lambda_z": 1
+                    },
+                    "__class__": "Material",
+                    "desc": "Lamination M400-50A",
+                    "eco": {
+                        "__class__": "MatEconomical",
+                        "cost_unit": 0.127,
+                        "unit_name": "$"
+                    },
+                    "elec": {
+                        "__class__": "MatElectrical",
+                        "alpha": 0.00393,
+                        "epsr": 1,
+                        "rho": 1.73e-08
+                    },
+                    "is_isotropic": false,
+                    "mag": {
+                        "BH_curve": {
+                            "__class__": "ImportMatrix",
+                            "is_transpose": false
+                        },
+                        "Brm20": 0,
+                        "Hc": 0,
+                        "Wlam": 0,
+                        "__class__": "MatMagnetics",
+                        "alpha_Br": 0,
+                        "mur_lin": 1
+                    },
+                    "name": "Copper1",
+                    "path": "",
+                    "struct": {
+                        "Ex": 115000000000.0,
+                        "Ey": 115000000000.0,
+                        "Ez": 115000000000.0,
+                        "Gxy": 0,
+                        "Gxz": 2000000000,
+                        "Gyz": 2000000000,
+                        "__class__": "MatStructural",
+                        "nu_xy": 0.3,
+                        "nu_xz": 0.03,
+                        "nu_yz": 0.03,
+                        "rho": 8900.0
+                    }
+                },
+                "ins_mat": {
+                    "HT": {
+                        "Cp": 1,
+                        "__class__": "MatHT",
+                        "alpha": 0.00393,
+                        "lambda_x": 1,
+                        "lambda_y": 1,
+                        "lambda_z": 1
+                    },
+                    "__class__": "Material",
+                    "desc": "Lamination M400-50A",
+                    "eco": {
+                        "__class__": "MatEconomical",
+                        "cost_unit": 0.127,
+                        "unit_name": "$"
+                    },
+                    "elec": {
+                        "__class__": "MatElectrical",
+                        "alpha": 1,
+                        "epsr": 1,
+                        "rho": 1
+                    },
+                    "is_isotropic": false,
+                    "mag": {
+                        "BH_curve": {
+                            "__class__": "ImportMatrix",
+                            "is_transpose": false
+                        },
+                        "Brm20": 0,
+                        "Hc": 0,
+                        "Wlam": 0,
+                        "__class__": "MatMagnetics",
+                        "alpha_Br": 0,
+                        "mur_lin": 1
+                    },
+                    "name": "M400-50A",
+                    "path": "",
+                    "struct": {
+                        "Ex": 215000000000.0,
+                        "Ey": 215000000000.0,
+                        "Ez": 80000000000,
+                        "Gxy": 0,
+                        "Gxz": 2000000000,
+                        "Gyz": 2000000000,
+                        "__class__": "MatStructural",
+                        "nu_xy": 0.3,
+                        "nu_xz": 0.03,
+                        "nu_yz": 0.03,
+                        "rho": 7650
+                    }
+                },
+                "type_winding_shape": 0
+            },
+            "is_reverse_wind": true,
+            "p": 4,
+            "qs": 3,
+            "type_connection": 0
+        }
+    },
+    "type_machine": 1
+}

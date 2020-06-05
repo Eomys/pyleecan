@@ -1,6 +1,6 @@
 __pycache__/
 *.pyc
-/Results
+/pyleecan/Results
 /Tests/Results
 .idea/
 /Tests/Validation/Simulation/.cache/v/cache
