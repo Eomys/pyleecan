@@ -13,6 +13,7 @@ from pyleecan.Classes.LamSquirrelCage import LamSquirrelCage
 from pyleecan.Classes.MachineSCIM import MachineSCIM
 from pyleecan.Classes.Material import Material
 from pyleecan.Classes.SlotW22 import SlotW22
+from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType21.PCondType21 import PCondType21
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType22.PCondType22 import PCondType22
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
@@ -35,13 +36,16 @@ class test_SBar(TestCase):
         self.test_obj.rotor.winding.conductor = CondType21(Hbar=0.014, Wbar=0.015)
         self.test_obj.rotor.winding.conductor.cond_mat.name = "test1"
 
-        self.matlib = list()
-        self.matlib.append(Material(name="test1"))
-        self.matlib[-1].elec.rho = 0.31
-        self.matlib.append(Material(name="test2"))
-        self.matlib[-1].elec.rho = 0.32
-        self.matlib.append(Material(name="test3"))
-        self.matlib[-1].elec.rho = 0.33
+        self.matlib = MatLib()
+        self.matlib.list_mat = [
+            Material(name="test1"),
+            Material(name="test2"),
+            Material(name="test3"),
+        ]
+        self.matlib.index_first_mat_mach = 3
+        self.matlib.list_mat[0].elec.rho = 0.31
+        self.matlib.list_mat[1].elec.rho = 0.32
+        self.matlib.list_mat[2].elec.rho = 0.33
 
         self.widget = SBar(machine=self.test_obj, matlib=self.matlib, is_stator=False)
 

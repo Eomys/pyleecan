@@ -11,7 +11,7 @@ from ....GUI import GUI_logger
 
 
 class MatLib(object):
-    def __init__(self, path):
+    def __init__(self, path=None):
         """MatLib contains the material library and the specific machine materials.
         """
         # List containing the material library and the specific machine materials
@@ -24,7 +24,8 @@ class MatLib(object):
         self.ref_path = path
 
         # Load the material reference from the path
-        self.load_mat_ref(path)
+        if path:
+            self.load_mat_ref(path)
 
     def load_mat_ref(self, path):
         """Remove the reference materials and load materials from the path

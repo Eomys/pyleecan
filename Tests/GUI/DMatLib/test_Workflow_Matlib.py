@@ -19,6 +19,7 @@ from pyleecan.Classes.Material import Material
 from pyleecan.Functions.load import load_matlib
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 
 from Tests import save_load_path as save_path, DATA_DIR, is_clean_result
@@ -56,7 +57,7 @@ class test_Workflow_DMatLib(TestCase):
             join(DATA_DIR, "Material", "M400-50A.json"),
             join(self.work_path, "M400-50A.json"),
         )
-        self.matlib = load_matlib(self.work_path)
+        self.matlib = MatLib(self.work_path)
 
     def teardown(self):
         """Delete the workspace at the end of the tests

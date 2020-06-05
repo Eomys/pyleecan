@@ -18,6 +18,7 @@ from pyleecan.Classes.MachineWRSM import MachineWRSM
 from pyleecan.Classes.MachineSRM import MachineSRM
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from Tests import save_gui_path as save_path
 
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
@@ -71,9 +72,9 @@ class test_DMachineSetup(TestCase):
     def setUp(self):
         """Run at the begining of every test to setup the gui"""
         # MatLib widget
-        mat_widget = DMatLib("Tests/Data/Material", selected=0)
+        matlib = MatLib("Tests/Data/Material")
         self.widget = DMachineSetup(
-            mat_widget=mat_widget, machine_path=join(DATA_DIR, "Machine")
+            matlib=matlib, machine_path=join(DATA_DIR, "Machine")
         )
 
     @classmethod

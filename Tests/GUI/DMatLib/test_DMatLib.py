@@ -8,6 +8,7 @@ from PyQt5 import QtWidgets
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from os import mkdir
 from os.path import isdir
 from shutil import rmtree
@@ -51,6 +52,10 @@ class test_DMatLib(TestCase):
         mat_lib.append(Material(name="test_material_6"))
         mat_lib.append(Material(name="test_material_7"))
 
+        matlib = MatLib()
+        matlib.list_mat = mat_lib
+        matlib.index_first_mat_mach = 7
+
         # Save material in a tmp folder
         tmp_folder = "Tests/GUI/DMatLib/tmp_matlib"
         if isdir(tmp_folder):
@@ -59,7 +64,7 @@ class test_DMatLib(TestCase):
         for mat in mat_lib:
             mat.save(tmp_folder + "/" + mat.name + ".json")
 
-        self.widget = DMatLib(tmp_folder)
+        self.widget = DMatLib(matlib)
 
     @classmethod
     def setUpClass(cls):

@@ -16,6 +16,7 @@ from pyleecan.Classes.HoleM52 import HoleM52
 from pyleecan.Classes.HoleM53 import HoleM53
 from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.Classes.HoleM58 import HoleM58
+from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
 from pyleecan.Classes.Material import Material
 
@@ -45,10 +46,13 @@ class test_SMHoleMag(TestCase):
         self.test_obj2.rotor.hole = list()
         self.test_obj2.rotor.hole.append(HoleM54(Zh=16))
 
-        self.matlib = list()
-        self.matlib.append(Material(name="Magnet1"))
-        self.matlib.append(Material(name="Magnet2"))
-        self.matlib.append(Material(name="Magnet3"))
+        self.matlib = MatLib()
+        self.matlib.list_mat = [
+            Material(name="Magnet1"),
+            Material(name="Magnet2"),
+            Material(name="Magnet3"),
+        ]
+        self.matlib.index_first_mat_mach = 3
 
         self.widget = SMHoleMag(
             machine=self.test_obj, matlib=self.matlib, is_stator=False

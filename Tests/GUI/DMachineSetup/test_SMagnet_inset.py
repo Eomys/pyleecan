@@ -17,6 +17,7 @@ from pyleecan.Classes.MagnetType13 import MagnetType13
 from pyleecan.Classes.MagnetType14 import MagnetType14
 from pyleecan.Classes.SlotMPolar import SlotMPolar
 from pyleecan.Classes.Material import Material
+from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.SMagnet import SMagnet
 from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet10.PMagnet10 import PMagnet10
 from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet11.PMagnet11 import PMagnet11
@@ -43,13 +44,16 @@ class test_SMagnet_inset(TestCase):
         self.test_obj.rotor.slot.magnet = [MagnetType11(Wmag=pi / 24, Hmag=3e-3)]
         self.test_obj.rotor.slot.magnet[0].mat_type.name = "test3"
 
-        self.matlib = list()
-        self.matlib.append(Material(name="test1"))
-        self.matlib[-1].elec.rho = 0.31
-        self.matlib.append(Material(name="test2"))
-        self.matlib[-1].elec.rho = 0.32
-        self.matlib.append(Material(name="test3"))
-        self.matlib[-1].elec.rho = 0.33
+        self.matlib = MatLib()
+        self.matlib.list_mat = [
+            Material(name="test1"),
+            Material(name="test2"),
+            Material(name="test3"),
+        ]
+        self.matlib.index_first_mat_mach = 3
+        self.matlib.list_mat[0].elec.rho = 0.31
+        self.matlib.list_mat[1].elec.rho = 0.32
+        self.matlib.list_mat[2].elec.rho = 0.33
 
         self.widget = SMagnet(
             machine=self.test_obj, matlib=self.matlib, is_stator=False
