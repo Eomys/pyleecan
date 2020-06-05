@@ -24,7 +24,7 @@ class SBar(Gen_SBar, QWidget):
     # Information for the DMachineSetup nav
     step_name = "Bar"
 
-    def __init__(self, machine, w_matlib, is_stator=False):
+    def __init__(self, machine, matlib, is_stator=False):
         """Initialize the widget according to machine
 
         Parameters
@@ -33,8 +33,8 @@ class SBar(Gen_SBar, QWidget):
             A SBar widget
         machine : Machine
             current machine to edit
-        w_matlib : DMatLib Dialog
-            Material Library Dialog to view and modify material data
+        matlib : MatLib
+            Material Library 
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -45,7 +45,7 @@ class SBar(Gen_SBar, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.w_matlib = w_matlib
+        self.matlib = matlib
         self.is_stator = is_stator
 
         # Set FloatEdit unit
@@ -60,7 +60,7 @@ class SBar(Gen_SBar, QWidget):
         # Set materials
         self.w_mat.def_mat = "Copper1"
         self.w_mat.setText("Ring material:")
-        self.w_mat.update(self.machine.rotor, "ring_mat", self.w_matlib)
+        self.w_mat.update(self.machine.rotor, "ring_mat", self.matlib)
 
         # Initialize the GUI with the current machine value
         self.lf_Hscr.setValue(machine.rotor.Hscr)
@@ -77,7 +77,7 @@ class SBar(Gen_SBar, QWidget):
             index = INIT_INDEX.index(type(conductor))
             self.g_bar.layout().removeWidget(self.w_bar)
             self.w_bar.setParent(None)
-            self.w_bar = WIDGET_LIST[index](self.machine, self.w_matlib)
+            self.w_bar = WIDGET_LIST[index](self.machine, self.matlib)
             self.g_bar.layout().addWidget(self.w_bar)
             self.c_bar_type.setCurrentIndex(index)
         else:  # Set default conductor
@@ -153,7 +153,7 @@ class SBar(Gen_SBar, QWidget):
         self.machine.rotor.winding.conductor = INIT_INDEX[index]()
         self.machine.rotor.winding.conductor._set_None()
 
-        self.w_bar = WIDGET_LIST[index](self.machine, self.w_matlib)
+        self.w_bar = WIDGET_LIST[index](self.machine, self.matlib)
         self.w_bar.saveNeeded.connect(self.emit_save)
         # Refresh the GUi
         self.g_bar.layout().addWidget(self.w_bar)

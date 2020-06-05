@@ -11,6 +11,7 @@ try:  # Import if pyleecan is installed with pip
     from .definitions import ROOT_DIR, DATA_DIR, MATLIB_DIR, PACKAGE_NAME
     from .GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
     from .GUI.Dialog.DMatLib.DMatLib import DMatLib
+    from .GUI.Dialog.DMatLib.MatLib import MatLib
     from .GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
     from .GUI.Tools.SidebarWindow import SidebarWindow
     from .GUI.Tools.MachinePlotWidget import MachinePlotWidget
@@ -27,6 +28,7 @@ except ImportError:  # Import for dev version
         + ".GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup"
     )
     exec("from " + PACKAGE_NAME + ".GUI.Dialog.DMatLib.DMatLib import DMatLib")
+    exec("from " + PACKAGE_NAME + ".GUI.Dialog.DMatLib.MatLib import MatLib")
     exec(
         "from "
         + PACKAGE_NAME
@@ -58,11 +60,14 @@ def run_GUI(argv):
     translator.load(translationFile, "GUI//i18n")
     a.installTranslator(translator)
 
+    # Setting the material library
+    matlib = MatLib(MATLIB_DIR)
+
     # MatLib widget
-    mat_widget = DMatLib(MATLIB_DIR, selected=0)
+    mat_widget = DMatLib(matlib, selected=0)
 
     # Machine Setup Widget
-    c = DMachineSetup(mat_widget=mat_widget, machine_path=join(DATA_DIR, "Machine"))
+    c = DMachineSetup(matlib=matlib, machine_path=join(DATA_DIR, "Machine"))
 
     if EXT_GUI:
         # Setup extended GUI with sub windows
@@ -78,13 +83,13 @@ def run_GUI(argv):
         window.addSubWindow("Plot", plt_widget, plt_widget.update)
 
         mat_widget.installEventFilter(window)
-        window.addSubWindow("MatLib", mat_widget, mat_widget.update_mat_list)
+        window.addSubWindow("MatLib", mat_widget, mat_widget.update_list_mat)
 
         tree = TreeView()
         tree_fcn = lambda: tree.generate(getattr(c, "machine"))
         window.addSubWindow("TreeView", tree, tree_fcn)
 
-        option = WGuiOption(machine_setup=c, dmatlib=mat_widget)
+        option = WGuiOption(machine_setup=c, matlib=matlib)
         window.addSubWindow("Option", option)
         window.show()
 

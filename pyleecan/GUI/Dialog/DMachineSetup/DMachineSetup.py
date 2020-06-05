@@ -30,7 +30,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
     machineChanged = pyqtSignal()
     rejected = pyqtSignal()
 
-    def __init__(self, machine=None, mat_widget=None, machine_path=""):
+    def __init__(self, machine=None, matlib=None, machine_path=""):
         """Initialize the GUI according to machine type
 
         Parameters
@@ -44,7 +44,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         self.setupUi(self)
 
         self.is_save_needed = False
-        self.mat_widget = mat_widget
+        self.matlib = matlib
 
         # Saving arguments
         self.machine = machine
@@ -169,61 +169,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                 machine = load(load_path)
                 if isinstance(machine, Machine):
                     self.machine = machine
-                    self.mat_widget.matlib = self.mat_widget.matlib[
-                        : self.mat_widget.index_first_matlib_mach
-                    ]
-                    materials = machine.get_material_list()
-
-                    # Copy the matlib and remove the name and the path to compare the materials
-                    matlib_without_name = [
-                        Material(init_dict=material.as_dict())
-                        for material in self.mat_widget.matlib
-                    ]
-                    for material in matlib_without_name:
-                        material.name = ""
-                        material.path = ""
-
-                    # Add the material to machine material if it is not already contained in the Matlib
-                    for material in materials:
-                        name = material.name
-                        path = material.path
-                        material.name = ""
-                        material.path = ""
-
-                        # Add the material if not in matlib
-                        if material not in matlib_without_name:
-                            matlib_names = [mat.name for mat in self.mat_widget.matlib]
-
-                            if name is None or name == "":
-                                name = "Untitled"
-                            while name in matlib_names:
-                                if "(" in name and name.endswith(")"):
-                                    idx = name.rfind("(") + 1
-                                    try:
-                                        name = (
-                                            name[:idx]
-                                            + str(int(name[idx:-1]) + 1)
-                                            + ")"
-                                        )
-                                    except ValueError:
-                                        name += "(1)"
-                                else:
-                                    name += "(1)"
-
-                            material.name = name
-                            material.path = path
-                            self.mat_widget.matlib.append(material)
-                            self.mat_widget.update_mat_list()
-                        # Else replace the machine material by the matlib one
-                        else:
-                            for matlib_material in self.mat_widget.matlib:
-                                # Find the material in the matlib
-                                if compare_material(material, matlib_material):
-                                    replace_material_pyleecan_obj(
-                                        machine, material, matlib_material
-                                    )
-                                    break
-
+                    self.matlib.add_machine_mat(machine)
                 else:
                     QMessageBox().critical(
                         self,
@@ -338,7 +284,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         # Regenerate the step with the current values
         self.w_step.setParent(None)
         self.w_step = step_list[index](
-            machine=self.machine, w_matlib=self.mat_widget, is_stator=is_stator
+            machine=self.machine, matlib=self.matlib, is_stator=is_stator
         )
         self.w_step.b_previous.clicked.connect(self.s_previous)
         if index != len(step_list) - 1:

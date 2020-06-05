@@ -21,7 +21,7 @@ class SLamParam(Gen_SLamParam, QWidget):
     # Information for the DMachineSetup nav
     step_name = "Lamination"
 
-    def __init__(self, machine, w_matlib, is_stator=False):
+    def __init__(self, machine, matlib, is_stator=False):
         """Initialize the widget according to machine
 
         Parameters
@@ -30,8 +30,8 @@ class SLamParam(Gen_SLamParam, QWidget):
             A SLamParam widget
         machine : Machine
             current machine to edit
-        w_matlib : DMatLib Dialog
-            Material Library Dialog to view and modify material data
+        matlib : MatLib
+            Material Library 
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -42,7 +42,7 @@ class SLamParam(Gen_SLamParam, QWidget):
 
         # Saving arguments
         self.machine = machine
-        self.w_matlib = w_matlib
+        self.matlib = matlib
         self.is_stator = is_stator
 
         # Set FloatEdit unit
@@ -66,7 +66,7 @@ class SLamParam(Gen_SLamParam, QWidget):
                 # Default value for rotor is the stator one
                 self.obj.Kf1 = self.machine.stator.Kf1
 
-        self.w_mat.update(self.obj, "mat_type", self.w_matlib)
+        self.w_mat.update(self.obj, "mat_type", self.matlib)
 
         self.lf_L1.setValue(self.obj.L1)
         self.lf_Kf1.setValue(self.obj.Kf1)

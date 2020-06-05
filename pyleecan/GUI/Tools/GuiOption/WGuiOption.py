@@ -20,7 +20,7 @@ from ....Classes.Material import Material
 
 
 class WGuiOption(Ui_GUIOption, QDialog):
-    def __init__(self, machine_setup, dmatlib):
+    def __init__(self, machine_setup, matlib):
         """
         WGuiOption enable to modify some option in the GUI such as:
             - units
@@ -29,14 +29,14 @@ class WGuiOption(Ui_GUIOption, QDialog):
         Parameters:
         machine_setup: DMachineSetup
             Machine widget
-        dmatlib: DMatlib 
-            Material library widget
+        matlib : MatLib
+            Material Library 
         """
         QDialog.__init__(self)
         self.setupUi(self)
         self.le_matlib_path.setText(MATLIB_DIR)
         self.machine_setup = machine_setup  # DMachineSetup to access to the machine
-        self.dmatlib = dmatlib  # dmatlib to access to the material library
+        self.matlib = matlib  # dmatlib to access to the material library
         self.c_unit_m.setCurrentIndex(gui_option.unit.unit_m)
         self.c_unit_m2.setCurrentIndex(gui_option.unit.unit_m2)
 
@@ -51,9 +51,9 @@ class WGuiOption(Ui_GUIOption, QDialog):
         b_define_matlib_dir open a dialog to select the matlib directory 
         """
         folder = QFileDialog.getExistingDirectory(self, "Select MatLib directory")
-        if folder != self.dmatlib.matlib_path and folder:
-            self.dmatlib.matlib_path = folder
+        if folder != self.matlib.ref_path and folder:
             self.le_matlib_path.setText(folder)
+        GUI_logger.info('message')
 
     def change_matlib_dir(self):
         """
@@ -61,53 +61,9 @@ class WGuiOption(Ui_GUIOption, QDialog):
         """
         matlib_path = self.le_matlib_path.text()
         edit_config_dict("MATLIB_DIR", matlib_path)
-        new_matlib = load_matlib(matlib_path)
 
-        # Get the current machine matlib
-        machine_matlib = self.dmatlib.matlib[self.dmatlib.index_first_matlib_mach :]
-
-        # Add the machine material in case one of them has been add to the previous MatLib
-        current_machine_mat = self.machine_setup.machine.get_material_list()
-
-        for mat in current_machine_mat:
-            if mat.is_isotropic != None and mat not in machine_matlib:
-                machine_matlib.append(mat)
-
-        self.dmatlib.index_first_matlib_mach = len(new_matlib)
-        self.dmatlib.matlib = new_matlib
-
-        # Copy the new matlib and remove material name and path to compare material
-        matlib_without_name = [
-            Material(init_dict=material.as_dict()) for material in new_matlib
-        ]
-        for mat in matlib_without_name:
-            mat.name = ""
-            mat.path = ""
-
-        # Check if the machine material are in the new MatLib
-        default_mat = Material()
-        for mat in machine_matlib:
-            name = mat.name
-            path = mat.path
-            mat.name = ""
-            mat.path = ""
-            if mat not in matlib_without_name:
-                mat.name = name
-                mat.path = path
-                if mat != default_mat:
-                    self.dmatlib.matlib.append(mat)
-                    self.dmatlib.check_duplicated_material(len(self.dmatlib.matlib) - 1)
-            # Else replace the machine material by the matlib one
-            else:
-                for matlib_material in self.dmatlib.matlib:
-                    # Find the material in the matlib
-                    if compare_material(mat, matlib_material):
-                        replace_material_pyleecan_obj(
-                            self.machine_setup.machine, mat, matlib_material
-                        )
-                        break
-
-        self.dmatlib.update_mat_list()
+        self.matlib.load_mat_ref(matlib_path)
+        self.matlib.add_machine_mat(self.machine_setup.machine)
 
     def change_unit(self, unit="m"):
         """

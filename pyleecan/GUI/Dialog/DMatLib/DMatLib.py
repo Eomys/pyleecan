@@ -17,14 +17,14 @@ from ....Functions.path_tools import abs_file_path
 class DMatLib(Gen_DMatLib, QDialog):
     """Material Library Dialog to view and modify material data."""
 
-    def __init__(self, matlib_path, matlib=[], index_first_matlib_mach=0, selected=0):
+    def __init__(self, matlib, selected=0):
         """Init the Matlib GUI
 
         Parameters
         ----------
         self :
             a DMatLib object
-        matlib :
+        matlib : MatLib
             The current state of the Material library (list of
             material)
         selected :
@@ -39,36 +39,34 @@ class DMatLib(Gen_DMatLib, QDialog):
         QDialog.__init__(self)
         self.setupUi(self)
 
-        # do not copy to set the modification here (i.e. within DMatLib)
-        if matlib_path == "":
-            self.matlib_path = abspath(MATLIB_DIR)
-        else:
-            self.matlib_path = matlib_path
-
         # Load the material library
-        self.matlib = load_matlib(matlib_path)
-        # self.matlib contains the material library and the non referenced machine material
-        # index_first_matlib_mach locate the first non referenced machine material in the list
-        self.index_first_matlib_mach = len(self.matlib)
+        self.matlib = matlib
 
         # bool to know if the material selected is in MatLib
         self.mat_selected_in_matlib = True
 
-        if len(self.matlib) == 0:
-            self.load()
         # Unknow material => Use the first one
         if selected == -1:
             selected = 0
-        self.update_mat_list()
-        self.nav_mat.setCurrentRow(selected)
-        self.update_out()
+        self.update_list_mat()
+
+        # Select the material
+        if selected < self.matlib.index_first_mat_mach:
+            self.nav_mat.setCurrentRow(selected)
+            self.update_out(on_matlib=True)
+        else:
+            self.nav_mat_mach.setCurrentRow(selected-self.matlib.index_first_mat_mach)
+            self.update_out(on_matlib=False)
 
         # Hide since unused
         # self.out_iso.hide()
         self.out_epsr.hide()
 
-        self.nav_mat.clicked.connect(lambda: self.update_out(on_matlib=True))
-        self.nav_mat_mach.clicked.connect(lambda: self.update_out(on_matlib=False))
+        self.nav_mat.itemSelectionChanged.connect(lambda: self.update_out(on_matlib=True))
+        self.nav_mat_mach.itemSelectionChanged.connect(lambda: self.update_out(on_matlib=False))
+        
+        # self.nav_mat.clicked.connect(lambda: self.update_out(on_matlib=True))
+        # self.nav_mat_mach.clicked.connect(lambda: self.update_out(on_matlib=False))
         self.le_search.textChanged.connect(self.filter_material)
 
         self.b_edit.clicked.connect(self.edit_material)
@@ -99,7 +97,7 @@ class DMatLib(Gen_DMatLib, QDialog):
         if load_path != "":
             try:
                 self.matlib = load_matlib(load_path)
-                self.update_mat_list()
+                self.update_list_mat()
                 self.nav_mat.setCurrentRow(0)
                 self.update_out()
                 self.matlib_path = dirname(load_path)
@@ -138,49 +136,26 @@ class DMatLib(Gen_DMatLib, QDialog):
         if len(self.nav_mat.selectedItems()) > 0:
             mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1
         else:
-            mat_id = int(self.nav_mat_mach.currentItem().text()[:3]) - 1
+            mat_id = int(self.nav_mat_mach.currentItem().text()[:3]) - 1 
         # Open the setup GUI
         # (creates a copy of the material, i.e. self.matlib won't be edited directly)
-        self.mat_win = DMatSetup(self.matlib[mat_id], self.mat_selected_in_matlib)
+        self.mat_win = DMatSetup(self.matlib.list_mat[mat_id], self.mat_selected_in_matlib)
         return_code = self.mat_win.exec_()
 
         if return_code > 0:
-            # Update the material only if the user save changes
-            old_name = self.matlib[mat_id].name
-            old_path = self.matlib[mat_id].path
-            # keep material object
-            self.matlib[mat_id].__init__(init_dict=self.mat_win.mat.as_dict())
-            # Check if the material name is duplicated
-            self.check_duplicated_material(mat_id)
-            new_path = abs_file_path(self.matlib[mat_id].path, is_check=False)
-            if old_name != self.matlib[mat_id].name:
-                # Update the material name list only if modified
-                index = self.nav_mat.currentRow()
-                self.update_mat_list()
-                if index < self.nav_mat.count() - 1:
-                    self.nav_mat.setCurrentRow(index)
-                else:
-                    self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
-                if self.mat_selected_in_matlib:
-                    # Rename the saving file
-                    rename(old_path, new_path)
+            self.matlib.replace_material(mat_id, self.mat_win.mat)
+
             if return_code == 2:
                 # Move the material into the Material library
-                mat = self.matlib.pop(mat_id)
-                mat_id = self.index_first_matlib_mach
-                self.index_first_matlib_mach += 1
-                self.matlib.insert(mat_id, mat)
-                self.update_mat_list()
-                # Set the path of the new matlib material
-                new_path = join(MATLIB_DIR, self.matlib[mat_id].name + ".json").replace(
-                    "\\", "/"
-                )
-                self.matlib[mat_id].path = new_path
+                self.matlib.move_mach_mat_to_ref(mat_id)
 
-            if self.mat_selected_in_matlib or return_code == 2:
-                self.matlib[mat_id].save(new_path)
+                # Set the pointer on the ref matlib if machine material list is empty
+                if len(self.matlib.list_mat) == self.matlib.index_first_mat_mach:
+                    self.on_matlib = True
+                
+            # Update material list
+            self.update_list_mat()
 
-            self.update_mat_list()
             if self.mat_selected_in_matlib:
                 self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
                 self.update_out(on_matlib=True)
@@ -212,43 +187,25 @@ class DMatLib(Gen_DMatLib, QDialog):
 
         # Open the setup GUI
         # (creates a copy of the material, i.e. self.matlib won't be edited directly)
-        self.mat_win = DMatSetup(self.matlib[mat_id], self.mat_selected_in_matlib)
+        self.mat_win = DMatSetup(self.matlib.list_mat[mat_id], self.mat_selected_in_matlib)
         return_code = self.mat_win.exec_()
         if return_code > 0:
             # Update the material only if the user validate at the end
             if self.mat_selected_in_matlib or return_code == 2:
-                self.matlib.insert(self.index_first_matlib_mach, self.mat_win.mat)
-                index_machine = self.index_first_matlib_mach
-                self.index_first_matlib_mach += 1
-                # Check if the name is duplicated
-                self.check_duplicated_material(index_machine)
-                GUI_logger.info(
-                    "Creating the material: " + self.matlib[index_machine].path
-                )
-                if self.mat_selected_in_matlib:
-                    new_path = abs_file_path(
-                        self.matlib[index_machine].path, is_check=False
-                    )
-                else:  # Edit material path
-                    new_path = join(
-                        MATLIB_DIR, self.matlib[index_machine].name + ".json"
-                    ).replace("\\", "/")
-                    self.matlib[index_machine].path = new_path
-                    self.mat_selected_in_matlib = True
+                self.mat_selected_in_matlib = True
 
-                self.matlib[index_machine].save(new_path)
-                self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
-            else:
-                self.matlib.append(self.mat_win.mat)
-                # Check if the name is duplicated
-                self.check_duplicated_material(len(self.matlib) - 1)
-                self.nav_mat_mach.setCurrentRow(self.nav_mat_mach.count() - 1)
-
-            self.update_mat_list()
-            if self.mat_selected_in_matlib:
+                # Add the material to the mat_ref
+                self.matlib.add_mat_ref(self.mat_win.mat)
+                
+                self.update_list_mat()
                 self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
                 self.update_out()
+
             else:
+                # Add the material to the machine materials
+                self.matlib.add_mat_mach(self.mat_win.mat)
+
+                self.update_list_mat()
                 self.nav_mat_mach.setCurrentRow(self.nav_mat_mach.count() - 1)
                 self.update_out(on_matlib=False)
 
@@ -276,10 +233,10 @@ class DMatLib(Gen_DMatLib, QDialog):
             QMessageBox.information(self, "", "Cannot delete machine material.")
             return
 
-        if len(self.matlib) > 1:
+        if len(self.matlib.list_mat) > 1:
 
             del_msg = (
-                "Are you sure you want to delete " + self.matlib[mat_id].name + " ?"
+                "Are you sure you want to delete " + self.matlib.list_mat[mat_id].name + " ?"
             )
             reply = QMessageBox.question(
                 self, "Confirmation", del_msg, QMessageBox.Yes, QMessageBox.No
@@ -287,20 +244,16 @@ class DMatLib(Gen_DMatLib, QDialog):
 
             if reply == QMessageBox.Yes:
                 # delete only if confirmed
-                GUI_logger.info("Deleting the material: " + self.matlib[mat_id].path)
-                remove(self.matlib[mat_id].path)
-                self.matlib.pop(mat_id)
+                self.matlib.delete_material(mat_id)
                 index = self.nav_mat.currentRow()
-                self.update_mat_list()
+                self.update_list_mat()
                 if index < self.nav_mat.count() - 1:
                     self.nav_mat.setCurrentRow(index)
                 else:
                     self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
-                # Change index_first_matlib_mach
-                self.index_first_matlib_mach -= 1
                 # Signal set by WMatSelect to update Combobox
                 self.accepted.emit()
-                self.update_mat_list()
+                self.update_list_mat()
         else:
             QMessageBox.information(
                 self, "", "MatLib must contain at least one material."
@@ -318,10 +271,10 @@ class DMatLib(Gen_DMatLib, QDialog):
         -------
 
         """
-        self.update_mat_list()
+        self.update_list_mat()
         self.nav_mat.setCurrentRow(0)
 
-    def update_mat_list(self, selected_id=-1):
+    def update_list_mat(self, selected_id=-1):
         """Update the list of Material with the current content of MatLib
 
         Parameters
@@ -333,12 +286,12 @@ class DMatLib(Gen_DMatLib, QDialog):
         -------
 
         """
-        mat_list = self.matlib
+        list_mat = self.matlib.list_mat
         self.nav_mat.blockSignals(True)
         self.nav_mat.clear()
 
         # Filter the material
-        for ii, mat in enumerate(mat_list[: self.index_first_matlib_mach]):
+        for ii, mat in enumerate(list_mat[: self.matlib.index_first_mat_mach]):
             # todo: add new filter
             if self.le_search.text() != "" and not match(
                 ".*" + self.le_search.text().lower() + ".*", mat.name.lower()
@@ -351,19 +304,19 @@ class DMatLib(Gen_DMatLib, QDialog):
         self.nav_mat_mach.clear()
 
         # Filter the material
-        index_first_matlib_mach = self.index_first_matlib_mach
-        for ii, mat in enumerate(mat_list[index_first_matlib_mach:]):
+        index_first_mat_mach = self.matlib.index_first_mat_mach
+        for ii, mat in enumerate(list_mat[index_first_mat_mach:]):
             # todo: add new filter
             if self.le_search.text() != "" and not match(
                 ".*" + self.le_search.text().lower() + ".*", mat.name.lower()
             ):
                 continue
             self.nav_mat_mach.addItem(
-                "%03d" % (index_first_matlib_mach + ii + 1) + " - " + mat.name
+                "%03d" % (index_first_mat_mach + ii + 1) + " - " + mat.name
             )
         self.nav_mat_mach.blockSignals(False)
         # Hide the widget if machine material list is empty
-        if len(mat_list[index_first_matlib_mach:]) == 0:
+        if len(list_mat[index_first_mat_mach:]) == 0:
             self.in_machine_mat.setVisible(False)
             self.nav_mat_mach.setVisible(False)
         elif not self.in_machine_mat.isVisible():
@@ -393,11 +346,11 @@ class DMatLib(Gen_DMatLib, QDialog):
         else:
             mat_id = (
                 int(self.nav_mat_mach.currentItem().text()[:3]) - 1
-            )  # for filtering
+            ) # for filtering
             self.mat_selected_in_matlib = False
             # Deselect item in nav_mat
             self.nav_mat.clearSelection()
-        mat = self.matlib[mat_id]
+        mat = self.matlib.list_mat[mat_id]
 
         # mat = [mat for mat in self.matlib if mat.name == curr_name][0]
 
@@ -461,54 +414,6 @@ class DMatLib(Gen_DMatLib, QDialog):
             else:
                 text = "-"
             self.out_BH.setText(text)
-
-    def add_material(self, material):
-        """
-        Add an existing material in the matlib
-        """
-        self.matlib.append(material)
-        self.check_duplicated_material(-1)
-
-    def check_duplicated_material(self, index):
-        """
-        Check if a material name is already used, modify it and its path if needed
-
-        Parameters
-        """
-        # Check if the material is duplicated and rename it
-        is_renamed = False
-        mat_duplicated = True
-
-        # Get the material name
-        name = self.matlib[index].name
-
-        # Browse the material list name and change the name while the name exist
-        while mat_duplicated:
-            mat_duplicated = False
-            for i, mat in enumerate(self.matlib):
-                if i != index:
-                    if mat.name == name:
-                        is_renamed = True
-                        if name.endswith(")") and "(" in name:
-                            idx = name.rfind("(")
-                            num = int(name[idx + 1 : -1]) + 1
-                            name = "{}({})".format(name[:idx], num)
-                        else:
-                            name += "(1)"
-                        mat_duplicated = True
-                        break
-        # Change path to save the material
-        if is_renamed:
-            self.matlib[index].name = name
-            path = self.matlib[index].path.replace("\\", "/")
-            idx = path.rfind("/")
-            if idx == -1:
-                self.matlib[index].path = self.matlib[index].name + ".json"
-            else:
-                self.matlib[index].path = (
-                    path[: idx + 1] + self.matlib[index].name + ".json"
-                )
-
 
 def update_text(label, name, value, unit):
     """Update a Qlabel with the value if not None
