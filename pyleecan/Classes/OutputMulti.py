@@ -95,7 +95,9 @@ class OutputMulti(FrozenClass):
         if isinstance(output_ref, dict):
             self.output_ref = Output(init_dict=output_ref)
         elif isinstance(output_ref, str):
-            self.output_ref = Output(init_str=output_ref)
+            from ..Functions.load import load
+
+            self.output_ref = load(output_ref)
         else:
             self.output_ref = output_ref
         # outputs can be None or a list of Output object

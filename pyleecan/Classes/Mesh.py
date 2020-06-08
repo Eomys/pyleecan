@@ -251,7 +251,16 @@ class Mesh(FrozenClass):
             class_obj = getattr(module, class_name)
             self.node = class_obj(init_dict=node)
         elif isinstance(node, str):
-            self.node = Node(init_str=node)
+            from ..Functions.load import load
+
+            node = load(node)
+            # Check that the type is correct (including daughter)
+            class_name = node.__class__.__name__
+            if class_name not in ["Node", "NodeMat"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for node"
+                )
+            self.node = node
         else:
             self.node = node
         # submesh can be None or a list of Mesh object

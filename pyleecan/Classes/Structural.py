@@ -102,7 +102,16 @@ class Structural(FrozenClass):
             class_obj = getattr(module, class_name)
             self.force = class_obj(init_dict=force)
         elif isinstance(force, str):
-            self.force = Force(init_str=force)
+            from ..Functions.load import load
+
+            force = load(force)
+            # Check that the type is correct (including daughter)
+            class_name = force.__class__.__name__
+            if class_name not in ["Force", "ForceMT"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for force"
+                )
+            self.force = force
         else:
             self.force = force
 

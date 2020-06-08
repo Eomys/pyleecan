@@ -89,14 +89,18 @@ class OutGeo(FrozenClass):
         if isinstance(stator, dict):
             self.stator = OutGeoLam(init_dict=stator)
         elif isinstance(stator, str):
-            self.stator = OutGeoLam(init_str=stator)
+            from ..Functions.load import load
+
+            self.stator = load(stator)
         else:
             self.stator = stator
         # rotor can be None, a OutGeoLam object or a dict
         if isinstance(rotor, dict):
             self.rotor = OutGeoLam(init_dict=rotor)
         elif isinstance(rotor, str):
-            self.rotor = OutGeoLam(init_str=rotor)
+            from ..Functions.load import load
+
+            self.rotor = load(rotor)
         else:
             self.rotor = rotor
         self.Wgap_mec = Wgap_mec

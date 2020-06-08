@@ -102,7 +102,9 @@ class OptiProblem(FrozenClass):
         if isinstance(output, dict):
             self.output = Output(init_dict=output)
         elif isinstance(output, str):
-            self.output = Output(init_str=output)
+            from ..Functions.load import load
+
+            self.output = load(output)
         else:
             self.output = output
         # design_var can be None or a dict of OptiDesignVar object

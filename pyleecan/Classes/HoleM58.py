@@ -278,7 +278,25 @@ class HoleM58(HoleMag):
             class_obj = getattr(module, class_name)
             self.magnet_0 = class_obj(init_dict=magnet_0)
         elif isinstance(magnet_0, str):
-            self.magnet_0 = Magnet(init_str=magnet_0)
+            from ..Functions.load import load
+
+            magnet_0 = load(magnet_0)
+            # Check that the type is correct (including daughter)
+            class_name = magnet_0.__class__.__name__
+            if class_name not in [
+                "Magnet",
+                "MagnetFlat",
+                "MagnetPolar",
+                "MagnetType10",
+                "MagnetType11",
+                "MagnetType12",
+                "MagnetType13",
+                "MagnetType14",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for magnet_0"
+                )
+            self.magnet_0 = magnet_0
         else:
             self.magnet_0 = magnet_0
         # Call HoleMag init

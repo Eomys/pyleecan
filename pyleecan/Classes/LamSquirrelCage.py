@@ -204,7 +204,9 @@ class LamSquirrelCage(LamSlotWind):
         if isinstance(ring_mat, dict):
             self.ring_mat = Material(init_dict=ring_mat)
         elif isinstance(ring_mat, str):
-            self.ring_mat = Material(init_str=ring_mat)
+            from ..Functions.load import load
+
+            self.ring_mat = load(ring_mat)
         else:
             self.ring_mat = ring_mat
         # Call LamSlotWind init

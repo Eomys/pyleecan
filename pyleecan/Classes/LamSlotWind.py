@@ -437,7 +437,25 @@ class LamSlotWind(LamSlot):
             class_obj = getattr(module, class_name)
             self.winding = class_obj(init_dict=winding)
         elif isinstance(winding, str):
-            self.winding = Winding(init_str=winding)
+            from ..Functions.load import load
+
+            winding = load(winding)
+            # Check that the type is correct (including daughter)
+            class_name = winding.__class__.__name__
+            if class_name not in [
+                "Winding",
+                "WindingCW1L",
+                "WindingCW2LR",
+                "WindingCW2LT",
+                "WindingDW1L",
+                "WindingDW2L",
+                "WindingSC",
+                "WindingUD",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for winding"
+                )
+            self.winding = winding
         else:
             self.winding = winding
         # Call LamSlot init

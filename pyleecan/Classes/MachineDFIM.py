@@ -142,7 +142,16 @@ class MachineDFIM(MachineAsync):
             class_obj = getattr(module, class_name)
             self.rotor = class_obj(init_dict=rotor)
         elif isinstance(rotor, str):
-            self.rotor = LamSlotWind(init_str=rotor)
+            from ..Functions.load import load
+
+            rotor = load(rotor)
+            # Check that the type is correct (including daughter)
+            class_name = rotor.__class__.__name__
+            if class_name not in ["LamSlotWind", "LamSquirrelCage"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for rotor"
+                )
+            self.rotor = rotor
         else:
             self.rotor = rotor
         # stator can be None, a LamSlotWind object or a dict
@@ -158,7 +167,16 @@ class MachineDFIM(MachineAsync):
             class_obj = getattr(module, class_name)
             self.stator = class_obj(init_dict=stator)
         elif isinstance(stator, str):
-            self.stator = LamSlotWind(init_str=stator)
+            from ..Functions.load import load
+
+            stator = load(stator)
+            # Check that the type is correct (including daughter)
+            class_name = stator.__class__.__name__
+            if class_name not in ["LamSlotWind", "LamSquirrelCage"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for stator"
+                )
+            self.stator = stator
         else:
             self.stator = stator
         # Call MachineAsync init

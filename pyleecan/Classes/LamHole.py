@@ -324,7 +324,16 @@ class LamHole(Lamination):
             class_obj = getattr(module, class_name)
             self.bore = class_obj(init_dict=bore)
         elif isinstance(bore, str):
-            self.bore = Bore(init_str=bore)
+            from ..Functions.load import load
+
+            bore = load(bore)
+            # Check that the type is correct (including daughter)
+            class_name = bore.__class__.__name__
+            if class_name not in ["Bore", "BoreFlower"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for bore"
+                )
+            self.bore = bore
         else:
             self.bore = bore
         # Call Lamination init

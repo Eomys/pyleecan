@@ -491,17 +491,24 @@ def generate_set_class_by_dict(prop_name, prop_type, daug_list):
         )
 
     class_dict_str += TAB2 + "elif isinstance(" + prop_name + ", str):\n"
+    class_dict_str += TAB3 + "from ..Functions.load import load\n"
 
-    class_dict_str += (
-        TAB3
-        + "self."
-        + prop_name
-        + " = "
-        + prop_type
-        + "(init_str="
-        + prop_name
-        + ")\n"
-    )
+    if len(daug_list) > 0:
+        class_dict_str += TAB3 + prop_name + " = load(" + prop_name + ")\n"
+        class_dict_str += (
+            TAB3 + "# Check that the type is correct (including daughter)\n"
+        )
+        class_dict_str += TAB3 + "class_name = " + prop_name + ".__class__.__name__\n"
+        class_dict_str += TAB3 + "if class_name not in " + str(daug_list) + ":\n"
+        class_dict_str += TAB4 + "raise InitUnKnowClassError(\n"
+        class_dict_str += TAB5 + '"Unknow class name "\n'
+        class_dict_str += TAB5 + "+ class_name\n"
+        class_dict_str += TAB5 + '+ " in init_dict for ' + prop_name + '"\n'
+        class_dict_str += TAB4 + ")\n"
+        class_dict_str += TAB3 + "self." + prop_name + "=" + prop_name + "\n"
+
+    else:
+        class_dict_str += TAB3 + "self." + prop_name + " = load(" + prop_name + ")\n"
     return class_dict_str
 
 

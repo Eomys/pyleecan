@@ -5,7 +5,7 @@ from os.path import isfile, join
 import pytest
 from unittest.mock import patch  # for unittest of input
 
-from numpy import pi
+from numpy import ones, pi, array
 
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.LamSlotWind import LamSlotWind
@@ -16,6 +16,15 @@ from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Functions.load import load
+from pyleecan.Classes.InputCurrent import InputCurrent
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.MagFEMM import MagFEMM
+from pyleecan.Classes.Output import Output
+
+from pyleecan.Classes.Simu1 import Simu1
+from Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
+
 from Tests import DATA_DIR, save_load_path as save_path, x as logger
 from pyleecan.Functions.load import (
     load,
@@ -96,22 +105,52 @@ def test_save_load_machine():
 def test_save_load_folder_path():
     """Save with a folder path
     """
-    test_obj = LamSlotWind(L1=0.45)
+    simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
+
+    # Definition of the enforced output of the electrical module
+    Nr = ImportMatrixVal(value=ones(1) * 3000)
+    Is = ImportMatrixVal(value=array([[2.25353053e02, 2.25353053e02, 2.25353053e02]]))
+    time = ImportGenVectLin(start=0, stop=1, num=1, endpoint=True)
+    angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
+
+    simu.input = InputCurrent(
+        Is=Is,
+        Ir=None,  # No winding on the rotor
+        Nr=Nr,
+        angle_rotor=None,  # Will be computed
+        time=time,
+        angle=angle,
+    )
+
+    # Definition of the magnetic simulation (no symmetry)
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=0, is_sliding_band=False)
+    simu.force = None
+    simu.struct = None
+
+    test_obj = Output(simu=simu)
+    test_obj.post.legend_name = "Slotless lamination"
+
     loc_save_path = join(save_path, "FolderSaved")
     file_path = join(loc_save_path, "FolderSaved.json")
     logger.debug(loc_save_path)
     logger.debug(file_path)
+
     if isfile(file_path):
         remove(file_path)
+
     assert isfile(file_path) == False
     test_obj.save(loc_save_path, is_folder=True)
     assert isfile(file_path)
+    assert isfile(join(loc_save_path, "Material.json"))
+    assert isfile(join(loc_save_path, "M400-50A.json"))
+    assert isfile(join(loc_save_path, "CEFC_Lam.json"))
+    assert isfile(join(loc_save_path, "SM_CEFC_001.json"))
     test_obj2 = load(loc_save_path)
     assert test_obj == test_obj2
 
 
 def test_save_load_just_name():
-    """Save with a folder path
+    """Save in a file and load 
     """
 
     test_obj = SlotW10(Zs=10)

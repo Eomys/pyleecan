@@ -298,14 +298,18 @@ class Machine(FrozenClass):
         if isinstance(frame, dict):
             self.frame = Frame(init_dict=frame)
         elif isinstance(frame, str):
-            self.frame = Frame(init_str=frame)
+            from ..Functions.load import load
+
+            self.frame = load(frame)
         else:
             self.frame = frame
         # shaft can be None, a Shaft object or a dict
         if isinstance(shaft, dict):
             self.shaft = Shaft(init_dict=shaft)
         elif isinstance(shaft, str):
-            self.shaft = Shaft(init_str=shaft)
+            from ..Functions.load import load
+
+            self.shaft = load(shaft)
         else:
             self.shaft = shaft
         self.name = name

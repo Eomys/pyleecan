@@ -100,7 +100,26 @@ class Input(FrozenClass):
             class_obj = getattr(module, class_name)
             self.time = class_obj(init_dict=time)
         elif isinstance(time, str):
-            self.time = Import(init_str=time)
+            from ..Functions.load import load
+
+            time = load(time)
+            # Check that the type is correct (including daughter)
+            class_name = time.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for time"
+                )
+            self.time = time
         else:
             self.time = time
         # angle can be None, a Import object or a dict
@@ -126,7 +145,26 @@ class Input(FrozenClass):
             class_obj = getattr(module, class_name)
             self.angle = class_obj(init_dict=angle)
         elif isinstance(angle, str):
-            self.angle = Import(init_str=angle)
+            from ..Functions.load import load
+
+            angle = load(angle)
+            # Check that the type is correct (including daughter)
+            class_name = angle.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for angle"
+                )
+            self.angle = angle
         else:
             self.angle = angle
 

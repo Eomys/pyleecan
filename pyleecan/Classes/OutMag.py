@@ -142,7 +142,9 @@ class OutMag(FrozenClass):
         if isinstance(meshsolution, dict):
             self.meshsolution = MeshSolution(init_dict=meshsolution)
         elif isinstance(meshsolution, str):
-            self.meshsolution = MeshSolution(init_str=meshsolution)
+            from ..Functions.load import load
+
+            self.meshsolution = load(meshsolution)
         else:
             self.meshsolution = meshsolution
         self.FEMM_dict = FEMM_dict

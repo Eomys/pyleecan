@@ -154,7 +154,26 @@ class InputCurrent(Input):
             class_obj = getattr(module, class_name)
             self.Is = class_obj(init_dict=Is)
         elif isinstance(Is, str):
-            self.Is = Import(init_str=Is)
+            from ..Functions.load import load
+
+            Is = load(Is)
+            # Check that the type is correct (including daughter)
+            class_name = Is.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Is"
+                )
+            self.Is = Is
         else:
             self.Is = Is
         # Ir can be None, a Import object or a dict
@@ -180,7 +199,26 @@ class InputCurrent(Input):
             class_obj = getattr(module, class_name)
             self.Ir = class_obj(init_dict=Ir)
         elif isinstance(Ir, str):
-            self.Ir = Import(init_str=Ir)
+            from ..Functions.load import load
+
+            Ir = load(Ir)
+            # Check that the type is correct (including daughter)
+            class_name = Ir.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Ir"
+                )
+            self.Ir = Ir
         else:
             self.Ir = Ir
         # angle_rotor can be None, a Import object or a dict
@@ -206,7 +244,26 @@ class InputCurrent(Input):
             class_obj = getattr(module, class_name)
             self.angle_rotor = class_obj(init_dict=angle_rotor)
         elif isinstance(angle_rotor, str):
-            self.angle_rotor = Import(init_str=angle_rotor)
+            from ..Functions.load import load
+
+            angle_rotor = load(angle_rotor)
+            # Check that the type is correct (including daughter)
+            class_name = angle_rotor.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for angle_rotor"
+                )
+            self.angle_rotor = angle_rotor
         else:
             self.angle_rotor = angle_rotor
         # Nr can be None, a Import object or a dict
@@ -232,7 +289,26 @@ class InputCurrent(Input):
             class_obj = getattr(module, class_name)
             self.Nr = class_obj(init_dict=Nr)
         elif isinstance(Nr, str):
-            self.Nr = Import(init_str=Nr)
+            from ..Functions.load import load
+
+            Nr = load(Nr)
+            # Check that the type is correct (including daughter)
+            class_name = Nr.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Nr"
+                )
+            self.Nr = Nr
         else:
             self.Nr = Nr
         self.rot_dir = rot_dir

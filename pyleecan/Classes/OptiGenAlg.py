@@ -105,7 +105,9 @@ class OptiGenAlg(FrozenClass):
         if isinstance(multi_output, dict):
             self.multi_output = OutputMultiOpti(init_dict=multi_output)
         elif isinstance(multi_output, str):
-            self.multi_output = OutputMultiOpti(init_str=multi_output)
+            from ..Functions.load import load
+
+            self.multi_output = load(multi_output)
         else:
             self.multi_output = multi_output
         self.selector = selector
@@ -119,7 +121,9 @@ class OptiGenAlg(FrozenClass):
         if isinstance(problem, dict):
             self.problem = OptiProblem(init_dict=problem)
         elif isinstance(problem, str):
-            self.problem = OptiProblem(init_str=problem)
+            from ..Functions.load import load
+
+            self.problem = load(problem)
         else:
             self.problem = problem
         self.logger_name = logger_name

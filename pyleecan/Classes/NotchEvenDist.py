@@ -116,7 +116,42 @@ class NotchEvenDist(Notch):
             class_obj = getattr(module, class_name)
             self.notch_shape = class_obj(init_dict=notch_shape)
         elif isinstance(notch_shape, str):
-            self.notch_shape = Slot(init_str=notch_shape)
+            from ..Functions.load import load
+
+            notch_shape = load(notch_shape)
+            # Check that the type is correct (including daughter)
+            class_name = notch_shape.__class__.__name__
+            if class_name not in [
+                "Slot",
+                "Slot19",
+                "SlotMFlat",
+                "SlotMPolar",
+                "SlotMag",
+                "SlotUD",
+                "SlotW10",
+                "SlotW11",
+                "SlotW12",
+                "SlotW13",
+                "SlotW14",
+                "SlotW15",
+                "SlotW16",
+                "SlotW21",
+                "SlotW22",
+                "SlotW23",
+                "SlotW24",
+                "SlotW25",
+                "SlotW26",
+                "SlotW27",
+                "SlotW28",
+                "SlotW29",
+                "SlotW60",
+                "SlotW61",
+                "SlotWind",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for notch_shape"
+                )
+            self.notch_shape = notch_shape
         else:
             self.notch_shape = notch_shape
         # Call Notch init

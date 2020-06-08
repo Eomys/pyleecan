@@ -137,7 +137,24 @@ class MatMagnetics(FrozenClass):
             class_obj = getattr(module, class_name)
             self.BH_curve = class_obj(init_dict=BH_curve)
         elif isinstance(BH_curve, str):
-            self.BH_curve = ImportMatrix(init_str=BH_curve)
+            from ..Functions.load import load
+
+            BH_curve = load(BH_curve)
+            # Check that the type is correct (including daughter)
+            class_name = BH_curve.__class__.__name__
+            if class_name not in [
+                "ImportMatrix",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for BH_curve"
+                )
+            self.BH_curve = BH_curve
         else:
             self.BH_curve = BH_curve
 

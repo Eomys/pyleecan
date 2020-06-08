@@ -152,7 +152,9 @@ class Hole(FrozenClass):
         if isinstance(mat_void, dict):
             self.mat_void = Material(init_dict=mat_void)
         elif isinstance(mat_void, str):
-            self.mat_void = Material(init_str=mat_void)
+            from ..Functions.load import load
+
+            self.mat_void = load(mat_void)
         else:
             self.mat_void = mat_void
 

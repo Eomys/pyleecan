@@ -113,70 +113,121 @@ def build_data(obj):
         return None
 
 
-def save_separated_obj(classes_list, obj_dict, folder_path, logger):
+def save_split_obj(classes_tuple, obj, folder_path, logger):
     """
-    Save classes_list objects contained in obj_dict in separated files and modify obj_dict
+    Scan the object attribute and save the object in a dedicated file 
+
+    Parameters
+    ----------
+
+    classes_tuple: tuple
+        tuple containing the classe names to save separately
+
+    obj: dict
+        object dictionnary to save
+
+    folder_path: str
+        directory to save all the files
+
+    logger: logging.Logger
+        logger to display information
+
+    Returns
+    -------
+    name : str
+        name of the file containing the object
+    """
+    # Call save_separated_obj to save the sub object into files
+    save_separated_obj(classes_tuple, obj, folder_path, logger)
+
+    if "name" in obj.keys() and obj["name"] != "" and obj["name"] != None:
+        name = obj["name"] + ".json"
+        if not isfile(join(folder_path, name)):
+            with open(join(folder_path, name), "w") as json_file:
+                logger.info("Saving " + obj["name"] + " in " + join(folder_path, name))
+                dump(
+                    obj, json_file, sort_keys=True, indent=4, separators=(",", ": "),
+                )
+    else:
+        zeros = "0000"
+        num = 1
+        prefix = zeros[: -len(str(num))] + str(num)
+        name = obj["__class__"] + prefix
+
+        # Define the file name
+        while isfile(join(folder_path, name + ".json")):
+            num += 1
+            prefix = zeros[: -len(str(num))] + str(num)
+            name = obj["__class__"] + prefix
+
+        # Save the file
+        name += ".json"
+        logger.info(
+            "Saving unamed object of class",
+            obj["__class__"],
+            "in",
+            join(folder_path, name),
+        )
+        with open(join(folder_path, name), "w") as json_file:
+            dump(
+                obj, json_file, sort_keys=True, indent=4, separators=(",", ": "),
+            )
+
+    return name  # Set the name to load the file
+
+
+def save_separated_obj(classes_tuple, obj_dict, folder_path, logger):
+    """
+    Save classes_tuple objects contained in obj_dict in separated files and modify obj_dict
+
+    Parameters
+    ----------
+
+    classes_tuple: tuple
+        tuple containing the classe names to save separately
+
+    obj_dict: dict
+        object dictionnary to save
+
+    folder_path: str
+        directory to save all the files
+
+    logger: logging.Logger
+        logger to display information
+
+    Returns
+    -------
+    obj_dict : dict
+        object dictionnary to save
     """
 
     for key, val in obj_dict.items():
         if isinstance(val, dict):
-            if "__class__" in val.keys() and val["__class__"] in classes_list:
-                # Call save_separated_obj to save the obj
-                save_separated_obj(classes_list, val, folder_path, logger)
-
-                if "name" in val.keys() and val["name"] != "" and val["name"] != None:
-                    name = val["name"] + ".json"
-                    if not isfile(join(folder_path, name)):
-                        with open(join(folder_path, name), "w") as json_file:
-                            logger.info(
-                                "Saving "
-                                + val["name"]
-                                + " in "
-                                + join(folder_path, name)
-                            )
-                            dump(
-                                val,
-                                json_file,
-                                sort_keys=True,
-                                indent=4,
-                                separators=(",", ": "),
-                            )
-                else:
-                    zeros = "0000"
-                    num = 1
-                    prefix = zeros[: -len(str(num))] + str(num)
-                    name = val["__class__"] + prefix
-
-                    # Define the file name
-                    while isfile(join(folder_path, name + ".json")):
-                        num += 1
-                        prefix = zeros[: -len(str(num))] + str(num)
-                        name = val["__class__"] + prefix
-
-                    # Save the file
-                    name += ".json"
-                    logger.info(
-                        "Saving unamed object of class",
-                        val["__class__"],
-                        "in",
-                        join(folder_path, name),
-                    )
-                    with open(join(folder_path, name), "w") as json_file:
-                        dump(
-                            val,
-                            json_file,
-                            sort_keys=True,
-                            indent=4,
-                            separators=(",", ": "),
-                        )
-
-                obj_dict[key] = name  # Set the name to load the file
-
+            if "__class__" in val.keys() and val["__class__"] in classes_tuple:
+                # Call save_split_obj to save the obj and its attributes
+                obj_dict[key] = save_split_obj(
+                    classes_tuple, val, folder_path, logger
+                )  # Set the name to load the file
             else:
+                # Call save_separed_obj to scan the attributes
                 obj_dict[key] = save_separated_obj(
-                    classes_list, val, folder_path, logger
+                    classes_tuple, val, folder_path, logger
                 )
-
+        elif isinstance(val, list):
+            for idx, list_val in enumerate(val):
+                # Pyleecan obj
+                if isinstance(list_val, dict) and "__class__" in list_val.keys():
+                    # Object to split
+                    if list_val["__class__"] in classes_tuple:
+                        # Call save_split_obj to save the obj and its attributes
+                        obj_dict[key][idx] = save_split_obj(
+                            classes_tuple, list_val, folder_path, logger
+                        )  # Set the name to load the file
+                    else:
+                        # Call save_separed_obj to scan the attributes
+                        obj_dict[key][idx] = save_separated_obj(
+                            classes_tuple, list_val, folder_path, logger
+                        )
     return obj_dict
 
 
@@ -204,8 +255,8 @@ def save_data(obj, save_path="", is_folder=False):
     # save
     obj = build_data(obj)
     if isinstance(obj, dict) and is_folder:
-        # List containing classes to save separately
-        class_to_split = ["Machine", "Material"]
+        # Tuple containing classes to save separately
+        class_to_split = ("Simulation", "Machine", "Material")
 
         # Add the classes daughters
         class_to_add = []
@@ -217,7 +268,7 @@ def save_data(obj, save_path="", is_folder=False):
         for class_name in class_to_split:
             class_to_add.extend(class_dict[class_name]["daughters"])
 
-        class_to_split.extend(class_to_add)
+        class_to_split += tuple(class_to_add)
 
         # Call ref_objects to save the objects separately
         obj = save_separated_obj(class_to_split, obj, save_path, logger)

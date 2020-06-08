@@ -128,14 +128,25 @@ class Simu1(Simulation):
             class_obj = getattr(module, class_name)
             self.mag = class_obj(init_dict=mag)
         elif isinstance(mag, str):
-            self.mag = Magnetics(init_str=mag)
+            from ..Functions.load import load
+
+            mag = load(mag)
+            # Check that the type is correct (including daughter)
+            class_name = mag.__class__.__name__
+            if class_name not in ["Magnetics", "MagFEMM"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for mag"
+                )
+            self.mag = mag
         else:
             self.mag = mag
         # struct can be None, a Structural object or a dict
         if isinstance(struct, dict):
             self.struct = Structural(init_dict=struct)
         elif isinstance(struct, str):
-            self.struct = Structural(init_str=struct)
+            from ..Functions.load import load
+
+            self.struct = load(struct)
         else:
             self.struct = struct
         # force can be None, a Force object or a dict
@@ -151,7 +162,16 @@ class Simu1(Simulation):
             class_obj = getattr(module, class_name)
             self.force = class_obj(init_dict=force)
         elif isinstance(force, str):
-            self.force = Force(init_str=force)
+            from ..Functions.load import load
+
+            force = load(force)
+            # Check that the type is correct (including daughter)
+            class_name = force.__class__.__name__
+            if class_name not in ["Force", "ForceMT"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for force"
+                )
+            self.force = force
         else:
             self.force = force
         # Call Simulation init

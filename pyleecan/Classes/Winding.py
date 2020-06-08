@@ -201,7 +201,22 @@ class Winding(FrozenClass):
             class_obj = getattr(module, class_name)
             self.conductor = class_obj(init_dict=conductor)
         elif isinstance(conductor, str):
-            self.conductor = Conductor(init_str=conductor)
+            from ..Functions.load import load
+
+            conductor = load(conductor)
+            # Check that the type is correct (including daughter)
+            class_name = conductor.__class__.__name__
+            if class_name not in [
+                "Conductor",
+                "CondType11",
+                "CondType12",
+                "CondType21",
+                "CondType22",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for conductor"
+                )
+            self.conductor = conductor
         else:
             self.conductor = conductor
 

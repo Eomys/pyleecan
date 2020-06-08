@@ -413,7 +413,9 @@ class Lamination(FrozenClass):
         if isinstance(mat_type, dict):
             self.mat_type = Material(init_dict=mat_type)
         elif isinstance(mat_type, str):
-            self.mat_type = Material(init_str=mat_type)
+            from ..Functions.load import load
+
+            self.mat_type = load(mat_type)
         else:
             self.mat_type = mat_type
         self.Nrvd = Nrvd

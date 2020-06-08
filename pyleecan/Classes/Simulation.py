@@ -105,7 +105,28 @@ class Simulation(FrozenClass):
             class_obj = getattr(module, class_name)
             self.machine = class_obj(init_dict=machine)
         elif isinstance(machine, str):
-            self.machine = Machine(init_str=machine)
+            from ..Functions.load import load
+
+            machine = load(machine)
+            # Check that the type is correct (including daughter)
+            class_name = machine.__class__.__name__
+            if class_name not in [
+                "Machine",
+                "MachineAsync",
+                "MachineDFIM",
+                "MachineIPMSM",
+                "MachineSCIM",
+                "MachineSIPMSM",
+                "MachineSRM",
+                "MachineSyRM",
+                "MachineSync",
+                "MachineUD",
+                "MachineWRSM",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for machine"
+                )
+            self.machine = machine
         else:
             self.machine = machine
         # input can be None, a Input object or a dict
@@ -127,7 +148,22 @@ class Simulation(FrozenClass):
             class_obj = getattr(module, class_name)
             self.input = class_obj(init_dict=input)
         elif isinstance(input, str):
-            self.input = Input(init_str=input)
+            from ..Functions.load import load
+
+            input = load(input)
+            # Check that the type is correct (including daughter)
+            class_name = input.__class__.__name__
+            if class_name not in [
+                "Input",
+                "InputCurrent",
+                "InputCurrentDQ",
+                "InputFlux",
+                "InputForce",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for input"
+                )
+            self.input = input
         else:
             self.input = input
         self.logger_name = logger_name

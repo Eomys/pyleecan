@@ -111,7 +111,26 @@ class InputForce(Input):
             class_obj = getattr(module, class_name)
             self.Prad = class_obj(init_dict=Prad)
         elif isinstance(Prad, str):
-            self.Prad = Import(init_str=Prad)
+            from ..Functions.load import load
+
+            Prad = load(Prad)
+            # Check that the type is correct (including daughter)
+            class_name = Prad.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Prad"
+                )
+            self.Prad = Prad
         else:
             self.Prad = Prad
         # Ptan can be None, a Import object or a dict
@@ -137,7 +156,26 @@ class InputForce(Input):
             class_obj = getattr(module, class_name)
             self.Ptan = class_obj(init_dict=Ptan)
         elif isinstance(Ptan, str):
-            self.Ptan = Import(init_str=Ptan)
+            from ..Functions.load import load
+
+            Ptan = load(Ptan)
+            # Check that the type is correct (including daughter)
+            class_name = Ptan.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Ptan"
+                )
+            self.Ptan = Ptan
         else:
             self.Ptan = Ptan
         # Call Input init

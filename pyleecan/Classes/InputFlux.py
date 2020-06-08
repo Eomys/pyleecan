@@ -111,7 +111,26 @@ class InputFlux(Input):
             class_obj = getattr(module, class_name)
             self.Br = class_obj(init_dict=Br)
         elif isinstance(Br, str):
-            self.Br = Import(init_str=Br)
+            from ..Functions.load import load
+
+            Br = load(Br)
+            # Check that the type is correct (including daughter)
+            class_name = Br.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Br"
+                )
+            self.Br = Br
         else:
             self.Br = Br
         # Bt can be None, a Import object or a dict
@@ -137,7 +156,26 @@ class InputFlux(Input):
             class_obj = getattr(module, class_name)
             self.Bt = class_obj(init_dict=Bt)
         elif isinstance(Bt, str):
-            self.Bt = Import(init_str=Bt)
+            from ..Functions.load import load
+
+            Bt = load(Bt)
+            # Check that the type is correct (including daughter)
+            class_name = Bt.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Bt"
+                )
+            self.Bt = Bt
         else:
             self.Bt = Bt
         # Call Input init

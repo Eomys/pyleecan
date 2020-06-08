@@ -57,7 +57,9 @@ class GUIOption(FrozenClass):
         if isinstance(unit, dict):
             self.unit = Unit(init_dict=unit)
         elif isinstance(unit, str):
-            self.unit = Unit(init_str=unit)
+            from ..Functions.load import load
+
+            self.unit = load(unit)
         else:
             self.unit = unit
 

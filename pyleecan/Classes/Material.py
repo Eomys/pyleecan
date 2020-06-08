@@ -30,14 +30,14 @@ class Material(FrozenClass):
 
     def __init__(
         self,
-        name="M400-50A",
+        name="Material",
         is_isotropic=False,
         elec=-1,
         mag=-1,
         struct=-1,
         HT=-1,
         eco=-1,
-        desc="Lamination M400-50A",
+        desc="Material description",
         path="",
         init_dict=None,
         init_str=None,
@@ -108,35 +108,45 @@ class Material(FrozenClass):
         if isinstance(elec, dict):
             self.elec = MatElectrical(init_dict=elec)
         elif isinstance(elec, str):
-            self.elec = MatElectrical(init_str=elec)
+            from ..Functions.load import load
+
+            self.elec = load(elec)
         else:
             self.elec = elec
         # mag can be None, a MatMagnetics object or a dict
         if isinstance(mag, dict):
             self.mag = MatMagnetics(init_dict=mag)
         elif isinstance(mag, str):
-            self.mag = MatMagnetics(init_str=mag)
+            from ..Functions.load import load
+
+            self.mag = load(mag)
         else:
             self.mag = mag
         # struct can be None, a MatStructural object or a dict
         if isinstance(struct, dict):
             self.struct = MatStructural(init_dict=struct)
         elif isinstance(struct, str):
-            self.struct = MatStructural(init_str=struct)
+            from ..Functions.load import load
+
+            self.struct = load(struct)
         else:
             self.struct = struct
         # HT can be None, a MatHT object or a dict
         if isinstance(HT, dict):
             self.HT = MatHT(init_dict=HT)
         elif isinstance(HT, str):
-            self.HT = MatHT(init_str=HT)
+            from ..Functions.load import load
+
+            self.HT = load(HT)
         else:
             self.HT = HT
         # eco can be None, a MatEconomical object or a dict
         if isinstance(eco, dict):
             self.eco = MatEconomical(init_dict=eco)
         elif isinstance(eco, str):
-            self.eco = MatEconomical(init_str=eco)
+            from ..Functions.load import load
+
+            self.eco = load(eco)
         else:
             self.eco = eco
         self.desc = desc

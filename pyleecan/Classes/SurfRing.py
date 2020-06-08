@@ -244,7 +244,23 @@ class SurfRing(Surface):
             class_obj = getattr(module, class_name)
             self.out_surf = class_obj(init_dict=out_surf)
         elif isinstance(out_surf, str):
-            self.out_surf = Surface(init_str=out_surf)
+            from ..Functions.load import load
+
+            out_surf = load(out_surf)
+            # Check that the type is correct (including daughter)
+            class_name = out_surf.__class__.__name__
+            if class_name not in [
+                "Surface",
+                "Circle",
+                "PolarArc",
+                "SurfLine",
+                "SurfRing",
+                "Trapeze",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for out_surf"
+                )
+            self.out_surf = out_surf
         else:
             self.out_surf = out_surf
         # in_surf can be None, a Surface object or a dict
@@ -267,7 +283,23 @@ class SurfRing(Surface):
             class_obj = getattr(module, class_name)
             self.in_surf = class_obj(init_dict=in_surf)
         elif isinstance(in_surf, str):
-            self.in_surf = Surface(init_str=in_surf)
+            from ..Functions.load import load
+
+            in_surf = load(in_surf)
+            # Check that the type is correct (including daughter)
+            class_name = in_surf.__class__.__name__
+            if class_name not in [
+                "Surface",
+                "Circle",
+                "PolarArc",
+                "SurfLine",
+                "SurfRing",
+                "Trapeze",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for in_surf"
+                )
+            self.in_surf = in_surf
         else:
             self.in_surf = in_surf
         # Call Surface init

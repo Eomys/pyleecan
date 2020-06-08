@@ -80,14 +80,18 @@ class Conductor(FrozenClass):
         if isinstance(cond_mat, dict):
             self.cond_mat = Material(init_dict=cond_mat)
         elif isinstance(cond_mat, str):
-            self.cond_mat = Material(init_str=cond_mat)
+            from ..Functions.load import load
+
+            self.cond_mat = load(cond_mat)
         else:
             self.cond_mat = cond_mat
         # ins_mat can be None, a Material object or a dict
         if isinstance(ins_mat, dict):
             self.ins_mat = Material(init_dict=ins_mat)
         elif isinstance(ins_mat, str):
-            self.ins_mat = Material(init_str=ins_mat)
+            from ..Functions.load import load
+
+            self.ins_mat = load(ins_mat)
         else:
             self.ins_mat = ins_mat
 

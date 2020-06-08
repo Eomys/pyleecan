@@ -290,7 +290,42 @@ class LamSlot(Lamination):
             class_obj = getattr(module, class_name)
             self.slot = class_obj(init_dict=slot)
         elif isinstance(slot, str):
-            self.slot = Slot(init_str=slot)
+            from ..Functions.load import load
+
+            slot = load(slot)
+            # Check that the type is correct (including daughter)
+            class_name = slot.__class__.__name__
+            if class_name not in [
+                "Slot",
+                "Slot19",
+                "SlotMFlat",
+                "SlotMPolar",
+                "SlotMag",
+                "SlotUD",
+                "SlotW10",
+                "SlotW11",
+                "SlotW12",
+                "SlotW13",
+                "SlotW14",
+                "SlotW15",
+                "SlotW16",
+                "SlotW21",
+                "SlotW22",
+                "SlotW23",
+                "SlotW24",
+                "SlotW25",
+                "SlotW26",
+                "SlotW27",
+                "SlotW28",
+                "SlotW29",
+                "SlotW60",
+                "SlotW61",
+                "SlotWind",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for slot"
+                )
+            self.slot = slot
         else:
             self.slot = slot
         # Call Lamination init

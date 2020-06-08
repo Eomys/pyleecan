@@ -412,7 +412,16 @@ class Output(FrozenClass):
             class_obj = getattr(module, class_name)
             self.simu = class_obj(init_dict=simu)
         elif isinstance(simu, str):
-            self.simu = Simulation(init_str=simu)
+            from ..Functions.load import load
+
+            simu = load(simu)
+            # Check that the type is correct (including daughter)
+            class_name = simu.__class__.__name__
+            if class_name not in ["Simulation", "Simu1"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for simu"
+                )
+            self.simu = simu
         else:
             self.simu = simu
         self.path_res = path_res
@@ -420,35 +429,45 @@ class Output(FrozenClass):
         if isinstance(geo, dict):
             self.geo = OutGeo(init_dict=geo)
         elif isinstance(geo, str):
-            self.geo = OutGeo(init_str=geo)
+            from ..Functions.load import load
+
+            self.geo = load(geo)
         else:
             self.geo = geo
         # elec can be None, a OutElec object or a dict
         if isinstance(elec, dict):
             self.elec = OutElec(init_dict=elec)
         elif isinstance(elec, str):
-            self.elec = OutElec(init_str=elec)
+            from ..Functions.load import load
+
+            self.elec = load(elec)
         else:
             self.elec = elec
         # mag can be None, a OutMag object or a dict
         if isinstance(mag, dict):
             self.mag = OutMag(init_dict=mag)
         elif isinstance(mag, str):
-            self.mag = OutMag(init_str=mag)
+            from ..Functions.load import load
+
+            self.mag = load(mag)
         else:
             self.mag = mag
         # struct can be None, a OutStruct object or a dict
         if isinstance(struct, dict):
             self.struct = OutStruct(init_dict=struct)
         elif isinstance(struct, str):
-            self.struct = OutStruct(init_str=struct)
+            from ..Functions.load import load
+
+            self.struct = load(struct)
         else:
             self.struct = struct
         # post can be None, a OutPost object or a dict
         if isinstance(post, dict):
             self.post = OutPost(init_dict=post)
         elif isinstance(post, str):
-            self.post = OutPost(init_str=post)
+            from ..Functions.load import load
+
+            self.post = load(post)
         else:
             self.post = post
         self.logger_name = logger_name
@@ -456,7 +475,9 @@ class Output(FrozenClass):
         if isinstance(force, dict):
             self.force = OutForce(init_dict=force)
         elif isinstance(force, str):
-            self.force = OutForce(init_str=force)
+            from ..Functions.load import load
+
+            self.force = load(force)
         else:
             self.force = force
 

@@ -322,7 +322,25 @@ class HoleM50(HoleMag):
             class_obj = getattr(module, class_name)
             self.magnet_0 = class_obj(init_dict=magnet_0)
         elif isinstance(magnet_0, str):
-            self.magnet_0 = Magnet(init_str=magnet_0)
+            from ..Functions.load import load
+
+            magnet_0 = load(magnet_0)
+            # Check that the type is correct (including daughter)
+            class_name = magnet_0.__class__.__name__
+            if class_name not in [
+                "Magnet",
+                "MagnetFlat",
+                "MagnetPolar",
+                "MagnetType10",
+                "MagnetType11",
+                "MagnetType12",
+                "MagnetType13",
+                "MagnetType14",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for magnet_0"
+                )
+            self.magnet_0 = magnet_0
         else:
             self.magnet_0 = magnet_0
         # magnet_1 can be None, a Magnet object or a dict
@@ -347,7 +365,25 @@ class HoleM50(HoleMag):
             class_obj = getattr(module, class_name)
             self.magnet_1 = class_obj(init_dict=magnet_1)
         elif isinstance(magnet_1, str):
-            self.magnet_1 = Magnet(init_str=magnet_1)
+            from ..Functions.load import load
+
+            magnet_1 = load(magnet_1)
+            # Check that the type is correct (including daughter)
+            class_name = magnet_1.__class__.__name__
+            if class_name not in [
+                "Magnet",
+                "MagnetFlat",
+                "MagnetPolar",
+                "MagnetType10",
+                "MagnetType11",
+                "MagnetType12",
+                "MagnetType13",
+                "MagnetType14",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for magnet_1"
+                )
+            self.magnet_1 = magnet_1
         else:
             self.magnet_1 = magnet_1
         # Call HoleMag init

@@ -94,7 +94,26 @@ class DriveWave(FrozenClass):
             class_obj = getattr(module, class_name)
             self.wave = class_obj(init_dict=wave)
         elif isinstance(wave, str):
-            self.wave = Import(init_str=wave)
+            from ..Functions.load import load
+
+            wave = load(wave)
+            # Check that the type is correct (including daughter)
+            class_name = wave.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for wave"
+                )
+            self.wave = wave
         else:
             self.wave = wave
 
