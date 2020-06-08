@@ -1,30 +1,30 @@
 # -*- coding: utf-8 -*-
 
-from os import getcwd, rename
+from os import getcwd, rename, remove
 from os.path import join, dirname, abspath, split
 from re import match
 
-from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QListWidget
 
 from ....Functions.load import load_matlib
 from ....GUI.Dialog.DMatLib.Gen_DMatLib import Gen_DMatLib
 from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
-from ....definitions import DATA_DIR
-
+from ....definitions import DATA_DIR, MATLIB_DIR
+from ....GUI import GUI_logger
 from ....Functions.path_tools import abs_file_path
 
 
 class DMatLib(Gen_DMatLib, QDialog):
     """Material Library Dialog to view and modify material data."""
 
-    def __init__(self, matlib=list(), selected=0):
+    def __init__(self, matlib, selected=0):
         """Init the Matlib GUI
 
         Parameters
         ----------
         self :
             a DMatLib object
-        matlib :
+        matlib : MatLib
             The current state of the Material library (list of
             material)
         selected :
@@ -39,30 +39,45 @@ class DMatLib(Gen_DMatLib, QDialog):
         QDialog.__init__(self)
         self.setupUi(self)
 
-        # do not copy to set the modification here (i.e. within DMatLib)
+        # Load the material library
         self.matlib = matlib
-        self.matlib_path = abspath(join(DATA_DIR, "Material"))
 
-        if len(self.matlib) == 0:
-            self.load()
+        # bool to know if the material selected is in MatLib
+        self.mat_selected_in_matlib = True
+
         # Unknow material => Use the first one
         if selected == -1:
             selected = 0
-        self.update_mat_list()
-        self.nav_mat.setCurrentRow(selected)
-        self.update_out()
+        self.update_list_mat()
+
+        # Select the material
+        if selected < self.matlib.index_first_mat_mach:
+            self.nav_mat.setCurrentRow(selected)
+            self.update_out(on_matlib=True)
+        else:
+            self.nav_mat_mach.setCurrentRow(selected - self.matlib.index_first_mat_mach)
+            self.update_out(on_matlib=False)
 
         # Hide since unused
         # self.out_iso.hide()
         self.out_epsr.hide()
 
-        self.nav_mat.currentRowChanged.connect(self.update_out)
+        self.nav_mat.itemSelectionChanged.connect(
+            lambda: self.update_out(on_matlib=True)
+        )
+        self.nav_mat_mach.itemSelectionChanged.connect(
+            lambda: self.update_out(on_matlib=False)
+        )
+
+        # self.nav_mat.clicked.connect(lambda: self.update_out(on_matlib=True))
+        # self.nav_mat_mach.clicked.connect(lambda: self.update_out(on_matlib=False))
         self.le_search.textChanged.connect(self.filter_material)
 
         self.b_edit.clicked.connect(self.edit_material)
         self.b_delete.clicked.connect(self.delete_material)
         self.b_duplicate.clicked.connect(self.new_material)
         self.nav_mat.doubleClicked.connect(self.edit_material)
+        self.nav_mat_mach.doubleClicked.connect(self.edit_material)
 
     def load(self):
         """Load the material library
@@ -86,7 +101,7 @@ class DMatLib(Gen_DMatLib, QDialog):
         if load_path != "":
             try:
                 self.matlib = load_matlib(load_path)
-                self.update_mat_list()
+                self.update_list_mat()
                 self.nav_mat.setCurrentRow(0)
                 self.update_out()
                 self.matlib_path = dirname(load_path)
@@ -106,7 +121,7 @@ class DMatLib(Gen_DMatLib, QDialog):
         else:
             self.reject()
 
-    def edit_material(self, item=None):
+    def edit_material(self):
         """
         Open the setup material GUI to edit the current material.
         Changes will be saved to the corresponding material file.
@@ -115,38 +130,44 @@ class DMatLib(Gen_DMatLib, QDialog):
         ----------
         self :
             A DMatLib object
-        item :
-             (Default value = None)
 
         Returns
         -------
 
         """
+
         # Get the current material (filtering index)
-        mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1
+        if len(self.nav_mat.selectedItems()) > 0:
+            mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1
+        else:
+            mat_id = int(self.nav_mat_mach.currentItem().text()[:3]) - 1
         # Open the setup GUI
         # (creates a copy of the material, i.e. self.matlib won't be edited directly)
-        self.mat_win = DMatSetup(self.matlib[mat_id])
+        self.mat_win = DMatSetup(
+            self.matlib.list_mat[mat_id], self.mat_selected_in_matlib
+        )
         return_code = self.mat_win.exec_()
-        if return_code == QDialog.Accepted:
-            # Update the material only if the user save changes
-            old_name = self.matlib[mat_id].name
-            old_path = self.matlib[mat_id].path
-            # keep material object
-            self.matlib[mat_id].__init__(init_dict=self.mat_win.mat.as_dict())
-            new_path = abs_file_path(self.matlib[mat_id].path, is_check=False)
-            if old_name != self.matlib[mat_id].name:
-                # Update the material name list only if modified
-                index = self.nav_mat.currentRow()
-                self.update_mat_list()
-                if index < self.nav_mat.count() - 1:
-                    self.nav_mat.setCurrentRow(index)
-                else:
-                    self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
-                # Rename the saving file
-                rename(old_path, new_path)
-            self.matlib[mat_id].save(new_path)
-            self.update_out()
+
+        if return_code > 0:
+            self.matlib.replace_material(mat_id, self.mat_win.mat)
+
+            if return_code == 2:
+                # Move the material into the Material library
+                self.matlib.move_mach_mat_to_ref(mat_id)
+
+                # Set the pointer on the ref matlib if machine material list is empty
+                if len(self.matlib.list_mat) == self.matlib.index_first_mat_mach:
+                    self.on_matlib = True
+
+            # Update material list
+            self.update_list_mat()
+
+            if self.mat_selected_in_matlib:
+                self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
+                self.update_out(on_matlib=True)
+            else:
+                self.nav_mat_mach.setCurrentRow(self.nav_mat_mach.count() - 1)
+                self.update_out(on_matlib=False)
 
             # Signal set by WMatSelect to update Combobox
             self.accepted.emit()
@@ -165,19 +186,36 @@ class DMatLib(Gen_DMatLib, QDialog):
 
         """
         # Get the current material (filtering index)
-        mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1
+        if self.mat_selected_in_matlib:
+            mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1
+        else:
+            mat_id = int(self.nav_mat_mach.currentItem().text()[:3]) - 1
+
         # Open the setup GUI
         # (creates a copy of the material, i.e. self.matlib won't be edited directly)
-        self.mat_win = DMatSetup(self.matlib[mat_id])
+        self.mat_win = DMatSetup(
+            self.matlib.list_mat[mat_id], self.mat_selected_in_matlib
+        )
         return_code = self.mat_win.exec_()
-        if return_code == QDialog.Accepted:
+        if return_code > 0:
             # Update the material only if the user validate at the end
-            self.matlib.append(self.mat_win.mat)
-            new_path = abs_file_path(self.matlib[-1].path, is_check=False)
-            self.matlib[-1].save(new_path)
-            self.update_mat_list()
-            self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
-            self.update_out()
+            if self.mat_selected_in_matlib or return_code == 2:
+                self.mat_selected_in_matlib = True
+
+                # Add the material to the mat_ref
+                self.matlib.add_mat_ref(self.mat_win.mat)
+
+                self.update_list_mat()
+                self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
+                self.update_out()
+
+            else:
+                # Add the material to the machine materials
+                self.matlib.add_mat_mach(self.mat_win.mat)
+
+                self.update_list_mat()
+                self.nav_mat_mach.setCurrentRow(self.nav_mat_mach.count() - 1)
+                self.update_out(on_matlib=False)
 
             # Signal set by WMatSelect to update Combobox
             self.accepted.emit()
@@ -194,24 +232,42 @@ class DMatLib(Gen_DMatLib, QDialog):
         -------
 
         """
-        mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1
-        del_msg = "Are you sure you want to delete " + self.matlib[mat_id].name + " ?"
-        reply = QMessageBox.question(
-            self, "Confirmation", del_msg, QMessageBox.Yes, QMessageBox.No
-        )
+        if self.nav_mat.currentItem() != None:
+            mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1
+        else:
+            self.mat_selected_in_matlib = False
+        # Do not delete machine material
+        if not self.mat_selected_in_matlib:
+            QMessageBox.information(self, "", "Cannot delete machine material.")
+            return
 
-        if reply == QMessageBox.Yes:
-            # delete only if confirmed
-            self.matlib.pop(mat_id)
-            index = self.nav_mat.currentRow()
-            self.update_mat_list()
-            if index < self.nav_mat.count() - 1:
-                self.nav_mat.setCurrentRow(index)
-            else:
-                self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
+        if len(self.matlib.list_mat) > 1:
 
-            # Signal set by WMatSelect to update Combobox
-            self.accepted.emit()
+            del_msg = (
+                "Are you sure you want to delete "
+                + self.matlib.list_mat[mat_id].name
+                + " ?"
+            )
+            reply = QMessageBox.question(
+                self, "Confirmation", del_msg, QMessageBox.Yes, QMessageBox.No
+            )
+
+            if reply == QMessageBox.Yes:
+                # delete only if confirmed
+                self.matlib.delete_material(mat_id)
+                index = self.nav_mat.currentRow()
+                self.update_list_mat()
+                if index < self.nav_mat.count() - 1:
+                    self.nav_mat.setCurrentRow(index)
+                else:
+                    self.nav_mat.setCurrentRow(self.nav_mat.count() - 1)
+                # Signal set by WMatSelect to update Combobox
+                self.accepted.emit()
+                self.update_list_mat()
+        else:
+            QMessageBox.information(
+                self, "", "MatLib must contain at least one material."
+            )
 
     def filter_material(self, index=None):
         """
@@ -225,10 +281,10 @@ class DMatLib(Gen_DMatLib, QDialog):
         -------
 
         """
-        self.update_mat_list()
+        self.update_list_mat()
         self.nav_mat.setCurrentRow(0)
 
-    def update_mat_list(self):
+    def update_list_mat(self, selected_id=-1):
         """Update the list of Material with the current content of MatLib
 
         Parameters
@@ -240,12 +296,12 @@ class DMatLib(Gen_DMatLib, QDialog):
         -------
 
         """
+        list_mat = self.matlib.list_mat
         self.nav_mat.blockSignals(True)
         self.nav_mat.clear()
-        mat_list = self.matlib
 
         # Filter the material
-        for ii, mat in enumerate(mat_list):
+        for ii, mat in enumerate(list_mat[: self.matlib.index_first_mat_mach]):
             # todo: add new filter
             if self.le_search.text() != "" and not match(
                 ".*" + self.le_search.text().lower() + ".*", mat.name.lower()
@@ -254,7 +310,30 @@ class DMatLib(Gen_DMatLib, QDialog):
             self.nav_mat.addItem("%03d" % (ii + 1) + " - " + mat.name)
         self.nav_mat.blockSignals(False)
 
-    def update_out(self, index=0):
+        self.nav_mat_mach.blockSignals(True)
+        self.nav_mat_mach.clear()
+
+        # Filter the material
+        index_first_mat_mach = self.matlib.index_first_mat_mach
+        for ii, mat in enumerate(list_mat[index_first_mat_mach:]):
+            # todo: add new filter
+            if self.le_search.text() != "" and not match(
+                ".*" + self.le_search.text().lower() + ".*", mat.name.lower()
+            ):
+                continue
+            self.nav_mat_mach.addItem(
+                "%03d" % (index_first_mat_mach + ii + 1) + " - " + mat.name
+            )
+        self.nav_mat_mach.blockSignals(False)
+        # Hide the widget if machine material list is empty
+        if len(list_mat[index_first_mat_mach:]) == 0:
+            self.in_machine_mat.setVisible(False)
+            self.nav_mat_mach.setVisible(False)
+        elif not self.in_machine_mat.isVisible():
+            self.in_machine_mat.setVisible(True)
+            self.nav_mat_mach.setVisible(True)
+
+    def update_out(self, on_matlib=True):
         """Update all the output widget for material preview
 
         Parameters
@@ -269,8 +348,19 @@ class DMatLib(Gen_DMatLib, QDialog):
 
         """
         # Get the selected material
-        mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1  # for filtering
-        mat = self.matlib[mat_id]
+        if on_matlib:
+            mat_id = int(self.nav_mat.currentItem().text()[:3]) - 1  # for filtering
+            self.mat_selected_in_matlib = True
+            # Deselect item in nav_mat_mach
+            self.nav_mat_mach.clearSelection()
+        else:
+            mat_id = (
+                int(self.nav_mat_mach.currentItem().text()[:3]) - 1
+            )  # for filtering
+            self.mat_selected_in_matlib = False
+            # Deselect item in nav_mat
+            self.nav_mat.clearSelection()
+        mat = self.matlib.list_mat[mat_id]
 
         # mat = [mat for mat in self.matlib if mat.name == curr_name][0]
 

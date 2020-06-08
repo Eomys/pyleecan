@@ -74,6 +74,11 @@ try:
 except ImportError as error:
     plot_anim_rotor = error
 
+try:
+    from ..Methods.Machine.Machine.get_material_list import get_material_list
+except ImportError as error:
+    get_material_list = error
+
 
 from ._check import InitUnKnowClassError
 from .Frame import Frame
@@ -215,6 +220,18 @@ class Machine(FrozenClass):
         )
     else:
         plot_anim_rotor = plot_anim_rotor
+    # cf Methods.Machine.Machine.get_material_list
+    if isinstance(get_material_list, ImportError):
+        get_material_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_material_list: "
+                    + str(get_material_list)
+                )
+            )
+        )
+    else:
+        get_material_list = get_material_list
     # save method is available in all object
     save = save
 
@@ -230,12 +247,15 @@ class Machine(FrozenClass):
         type_machine=1,
         logger_name="Pyleecan.Machine",
         init_dict=None,
+        init_str=None,
     ):
-        """Constructor of the class. Can be use in two ways :
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
@@ -244,6 +264,19 @@ class Machine(FrozenClass):
             frame = Frame()
         if shaft == -1:
             shaft = Shaft()
+        if init_str is not None:  # Initialisation by str
+            from ..Functions.load import load
+
+            assert type(init_str) is str
+            # load the object from a file
+            obj = load(init_str)
+            assert type(obj) is type(self)
+            frame = obj.frame
+            shaft = obj.shaft
+            name = obj.name
+            desc = obj.desc
+            type_machine = obj.type_machine
+            logger_name = obj.logger_name
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -264,11 +297,19 @@ class Machine(FrozenClass):
         # frame can be None, a Frame object or a dict
         if isinstance(frame, dict):
             self.frame = Frame(init_dict=frame)
+        elif isinstance(frame, str):
+            from ..Functions.load import load
+
+            self.frame = load(frame)
         else:
             self.frame = frame
         # shaft can be None, a Shaft object or a dict
         if isinstance(shaft, dict):
             self.shaft = Shaft(init_dict=shaft)
+        elif isinstance(shaft, str):
+            from ..Functions.load import load
+
+            self.shaft = load(shaft)
         else:
             self.shaft = shaft
         self.name = name

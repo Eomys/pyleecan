@@ -2983,7 +2983,8 @@
             "comp_output_geo",
             "comp_length_airgap_active",
             "get_polar_eq",
-            "plot_anim_rotor"
+            "plot_anim_rotor",
+            "get_material_list"
         ],
         "mother": "",
         "name": "Machine",
@@ -4350,7 +4351,7 @@
                 "name": "name",
                 "type": "str",
                 "unit": "",
-                "value": "M400-50A"
+                "value": "Material"
             },
             {
                 "desc": "If True, uniformity in all orientations",
@@ -4413,7 +4414,7 @@
                 "name": "desc",
                 "type": "str",
                 "unit": "",
-                "value": "Lamination M400-50A"
+                "value": "Material description"
             },
             {
                 "desc": "Path to the material file",

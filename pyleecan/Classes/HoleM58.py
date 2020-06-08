@@ -187,12 +187,15 @@ class HoleM58(HoleMag):
         Zh=36,
         mat_void=-1,
         init_dict=None,
+        init_str=None,
     ):
-        """Constructor of the class. Can be use in two ways :
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
@@ -201,6 +204,24 @@ class HoleM58(HoleMag):
             magnet_0 = Magnet()
         if mat_void == -1:
             mat_void = Material()
+        if init_str is not None:  # Initialisation by str
+            from ..Functions.load import load
+
+            assert type(init_str) is str
+            # load the object from a file
+            obj = load(init_str)
+            assert type(obj) is type(self)
+            H0 = obj.H0
+            W0 = obj.W0
+            H1 = obj.H1
+            W1 = obj.W1
+            H2 = obj.H2
+            W2 = obj.W2
+            W3 = obj.W3
+            R0 = obj.R0
+            magnet_0 = obj.magnet_0
+            Zh = obj.Zh
+            mat_void = obj.mat_void
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -256,6 +277,26 @@ class HoleM58(HoleMag):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.magnet_0 = class_obj(init_dict=magnet_0)
+        elif isinstance(magnet_0, str):
+            from ..Functions.load import load
+
+            magnet_0 = load(magnet_0)
+            # Check that the type is correct (including daughter)
+            class_name = magnet_0.__class__.__name__
+            if class_name not in [
+                "Magnet",
+                "MagnetFlat",
+                "MagnetPolar",
+                "MagnetType10",
+                "MagnetType11",
+                "MagnetType12",
+                "MagnetType13",
+                "MagnetType14",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for magnet_0"
+                )
+            self.magnet_0 = magnet_0
         else:
             self.magnet_0 = magnet_0
         # Call HoleMag init

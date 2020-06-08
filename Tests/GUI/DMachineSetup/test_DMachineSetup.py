@@ -17,6 +17,8 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.MachineWRSM import MachineWRSM
 from pyleecan.Classes.MachineSRM import MachineSRM
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from Tests import save_gui_path as save_path
 
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachineType
@@ -59,14 +61,21 @@ from PyQt5.QtCore import Qt
 ENABLE_ITEM = Qt.ItemIsSelectable | Qt.ItemIsEnabled
 
 
+import pytest
+
+
+@pytest.mark.GUI
 @ddt
 class test_DMachineSetup(TestCase):
     """Test that the widget DMachineSetup behave like it should"""
 
     def setUp(self):
         """Run at the begining of every test to setup the gui"""
-
-        self.widget = DMachineSetup(matlib_path="./MaterialData")
+        # MatLib widget
+        matlib = MatLib("Tests/Data/Material")
+        self.widget = DMachineSetup(
+            matlib=matlib, machine_path=join(DATA_DIR, "Machine")
+        )
 
     @classmethod
     def setUpClass(cls):

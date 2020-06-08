@@ -11,6 +11,10 @@ from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot10.PWSlot10 import PWSlot10
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_PWSlot10(TestCase):
     """Test that the widget PWSlot10 behave like it should"""
 

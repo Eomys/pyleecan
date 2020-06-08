@@ -71,12 +71,15 @@ class InputCurrent(Input):
         time=-1,
         angle=-1,
         init_dict=None,
+        init_str=None,
     ):
-        """Constructor of the class. Can be use in two ways :
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
@@ -93,6 +96,21 @@ class InputCurrent(Input):
             time = ImportMatrixVal()
         if angle == -1:
             angle = ImportMatrixVal()
+        if init_str is not None:  # Initialisation by str
+            from ..Functions.load import load
+
+            assert type(init_str) is str
+            # load the object from a file
+            obj = load(init_str)
+            assert type(obj) is type(self)
+            Is = obj.Is
+            Ir = obj.Ir
+            angle_rotor = obj.angle_rotor
+            Nr = obj.Nr
+            rot_dir = obj.rot_dir
+            angle_rotor_initial = obj.angle_rotor_initial
+            time = obj.time
+            angle = obj.angle
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -135,6 +153,27 @@ class InputCurrent(Input):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.Is = class_obj(init_dict=Is)
+        elif isinstance(Is, str):
+            from ..Functions.load import load
+
+            Is = load(Is)
+            # Check that the type is correct (including daughter)
+            class_name = Is.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Is"
+                )
+            self.Is = Is
         else:
             self.Is = Is
         # Ir can be None, a Import object or a dict
@@ -159,6 +198,27 @@ class InputCurrent(Input):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.Ir = class_obj(init_dict=Ir)
+        elif isinstance(Ir, str):
+            from ..Functions.load import load
+
+            Ir = load(Ir)
+            # Check that the type is correct (including daughter)
+            class_name = Ir.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Ir"
+                )
+            self.Ir = Ir
         else:
             self.Ir = Ir
         # angle_rotor can be None, a Import object or a dict
@@ -183,6 +243,27 @@ class InputCurrent(Input):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.angle_rotor = class_obj(init_dict=angle_rotor)
+        elif isinstance(angle_rotor, str):
+            from ..Functions.load import load
+
+            angle_rotor = load(angle_rotor)
+            # Check that the type is correct (including daughter)
+            class_name = angle_rotor.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for angle_rotor"
+                )
+            self.angle_rotor = angle_rotor
         else:
             self.angle_rotor = angle_rotor
         # Nr can be None, a Import object or a dict
@@ -207,6 +288,27 @@ class InputCurrent(Input):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.Nr = class_obj(init_dict=Nr)
+        elif isinstance(Nr, str):
+            from ..Functions.load import load
+
+            Nr = load(Nr)
+            # Check that the type is correct (including daughter)
+            class_name = Nr.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for Nr"
+                )
+            self.Nr = Nr
         else:
             self.Nr = Nr
         self.rot_dir = rot_dir

@@ -34,12 +34,15 @@ class Simulation(FrozenClass):
         input=-1,
         logger_name="Pyleecan.Simulation",
         init_dict=None,
+        init_str=None,
     ):
-        """Constructor of the class. Can be use in two ways :
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
@@ -48,6 +51,18 @@ class Simulation(FrozenClass):
             machine = Machine()
         if input == -1:
             input = Input()
+        if init_str is not None:  # Initialisation by str
+            from ..Functions.load import load
+
+            assert type(init_str) is str
+            # load the object from a file
+            obj = load(init_str)
+            assert type(obj) is type(self)
+            name = obj.name
+            desc = obj.desc
+            machine = obj.machine
+            input = obj.input
+            logger_name = obj.logger_name
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -89,6 +104,29 @@ class Simulation(FrozenClass):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.machine = class_obj(init_dict=machine)
+        elif isinstance(machine, str):
+            from ..Functions.load import load
+
+            machine = load(machine)
+            # Check that the type is correct (including daughter)
+            class_name = machine.__class__.__name__
+            if class_name not in [
+                "Machine",
+                "MachineAsync",
+                "MachineDFIM",
+                "MachineIPMSM",
+                "MachineSCIM",
+                "MachineSIPMSM",
+                "MachineSRM",
+                "MachineSyRM",
+                "MachineSync",
+                "MachineUD",
+                "MachineWRSM",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for machine"
+                )
+            self.machine = machine
         else:
             self.machine = machine
         # input can be None, a Input object or a dict
@@ -109,6 +147,23 @@ class Simulation(FrozenClass):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.input = class_obj(init_dict=input)
+        elif isinstance(input, str):
+            from ..Functions.load import load
+
+            input = load(input)
+            # Check that the type is correct (including daughter)
+            class_name = input.__class__.__name__
+            if class_name not in [
+                "Input",
+                "InputCurrent",
+                "InputCurrentDQ",
+                "InputFlux",
+                "InputForce",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for input"
+                )
+            self.input = input
         else:
             self.input = input
         self.logger_name = logger_name
