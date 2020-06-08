@@ -429,7 +429,6 @@ def test_BoreFlower():
     assert len(fig.axes[0].patches) == 42
 
 
-@pytest.mark.long
 @pytest.mark.FEMM
 @pytest.mark.long
 def test_ecc_FEMM():
