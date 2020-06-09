@@ -16,9 +16,14 @@ from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
 from pyleecan.Classes.VentilationCirc import VentilationCirc
 from pyleecan.Classes.VentilationTrap import VentilationTrap
 from pyleecan.Classes.Material import Material
+from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.SLamParam import SLamParam
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_SLamParam(TestCase):
     """Test that the widget SLamParam behave like it should"""
 
@@ -34,13 +39,16 @@ class test_SLamParam(TestCase):
         )
         self.test_obj.rotor.mat_type.name = "test2"
 
-        self.matlib = list()
-        self.matlib.append(Material(name="test1"))
-        self.matlib[-1].elec.rho = 0.31
-        self.matlib.append(Material(name="test2"))
-        self.matlib[-1].elec.rho = 0.32
-        self.matlib.append(Material(name="test3"))
-        self.matlib[-1].elec.rho = 0.33
+        self.matlib = MatLib()
+        self.matlib.list_mat = [
+            Material(name="test1"),
+            Material(name="test2"),
+            Material(name="test3"),
+        ]
+        self.matlib.index_first_mat_mach = 3
+        self.matlib.list_mat[0].elec.rho = 0.31
+        self.matlib.list_mat[1].elec.rho = 0.32
+        self.matlib.list_mat[2].elec.rho = 0.33
 
         self.widget_1 = SLamParam(
             machine=self.test_obj, matlib=self.matlib, is_stator=True

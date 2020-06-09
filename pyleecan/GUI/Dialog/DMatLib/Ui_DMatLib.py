@@ -3,13 +3,14 @@
 # File generated according to DMatLib.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_DMatLib(object):
     def setupUi(self, DMatLib):
         DMatLib.setObjectName("DMatLib")
-        DMatLib.resize(746, 534)
+        DMatLib.resize(746, 536)
         self.verticalLayout_11 = QtWidgets.QVBoxLayout(DMatLib)
         self.verticalLayout_11.setObjectName("verticalLayout_11")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
@@ -25,7 +26,7 @@ class Ui_DMatLib(object):
         self.img_search.setText("")
         self.img_search.setPixmap(
             QtGui.QPixmap(
-                "\n"
+                "D:/PYLEECAN/pyleecan/pyleecan/GUI\\Dialog\\DMatLib\\\n"
                 "                                                    :/images/images/icon/search.png\n"
                 "                                                "
             )
@@ -34,10 +35,22 @@ class Ui_DMatLib(object):
         self.img_search.setObjectName("img_search")
         self.horizontalLayout_9.addWidget(self.img_search)
         self.verticalLayout_3.addLayout(self.horizontalLayout_9)
+        self.verticalLayout_12 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_12.setObjectName("verticalLayout_12")
         self.nav_mat = QtWidgets.QListWidget(DMatLib)
         self.nav_mat.setObjectName("nav_mat")
-        self.verticalLayout_3.addWidget(self.nav_mat)
+        self.verticalLayout_12.addWidget(self.nav_mat)
+        self.in_machine_mat = QtWidgets.QLabel(DMatLib)
+        self.in_machine_mat.setObjectName("in_machine_mat")
+        self.verticalLayout_12.addWidget(self.in_machine_mat)
+        self.nav_mat_mach = QtWidgets.QListWidget(DMatLib)
+        self.nav_mat_mach.setObjectName("nav_mat_mach")
+        self.verticalLayout_12.addWidget(self.nav_mat_mach)
+        self.verticalLayout_3.addLayout(self.verticalLayout_12)
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_8.setSizeConstraint(
+            QtWidgets.QLayout.SetDefaultConstraint
+        )
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
         self.b_edit = QtWidgets.QPushButton(DMatLib)
         self.b_edit.setObjectName("b_edit")
@@ -340,8 +353,8 @@ class Ui_DMatLib(object):
         self.b_close.raise_()
 
         self.retranslateUi(DMatLib)
-        self.nav_iso_therm.setCurrentIndex(0)
-        self.nav_iso_meca.setCurrentIndex(1)
+        self.nav_iso_therm.setCurrentIndex(1)
+        self.nav_iso_meca.setCurrentIndex(0)
         self.b_close.accepted.connect(DMatLib.accept)
         self.b_close.rejected.connect(DMatLib.reject)
         QtCore.QMetaObject.connectSlotsByName(DMatLib)
@@ -349,6 +362,7 @@ class Ui_DMatLib(object):
     def retranslateUi(self, DMatLib):
         _translate = QtCore.QCoreApplication.translate
         DMatLib.setWindowTitle(_translate("DMatLib", "Material Library"))
+        self.in_machine_mat.setText(_translate("DMatLib", "Machine materials"))
         self.b_edit.setText(_translate("DMatLib", "Edit"))
         self.b_duplicate.setText(_translate("DMatLib", "New from"))
         self.b_delete.setText(_translate("DMatLib", "Delete"))

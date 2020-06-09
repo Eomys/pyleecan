@@ -1,7 +1,7 @@
 from ...Generator import TAB, TAB2, TAB3
 
 
-def generate_init_void():
+def generate_init_void(class_name):
     """Generate the code for the init method with no property
 
     Returns
@@ -12,7 +12,7 @@ def generate_init_void():
 
     init_str = ""
 
-    init_str += TAB + "def __init__(self, init_dict=None):\n"
+    init_str += TAB + "def __init__(self, init_dict = None, init_str = None):\n"
     init_str += TAB2 + '"""Constructor of the class. Can be use in two ways ' ":\n"
     init_str += (
         TAB2 + "- __init__ (arg1 = 1, arg3 = 5) every parameters "
@@ -30,7 +30,10 @@ def generate_init_void():
     init_str += TAB2 + 'object or dict can be given for pyleecan Object"""\n\n'
 
     init_str += TAB2 + "if init_dict is not None:  # Initialisation by dict\n"
-    init_str += TAB3 + "check_init_dict(init_dict, [])\n"
+    init_str += TAB3 + "assert init_dict == {'__class__' : '" + class_name + "'}\n"
+
+    init_str += TAB2 + "if init_str is not None:  # Initialisation by str\n"
+    init_str += TAB3 + "assert type(init_str) is str\n"
 
     init_str += (
         TAB2 + "# The class is frozen, for now it's impossible to "

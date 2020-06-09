@@ -200,10 +200,12 @@ def generate_init(gen_dict, class_dict):
 
     check_dict = ""  # list of all the property expectable in the init_dict
     init_by_dict = ""  # To overwrite the parameter from init_dict
+    init_by_str = ""  # To load the object from a file
     arg_list = ""  # For the argument with default value
     init_P_Type = ""  # To initialize the pyleecan Type default (-1)
     for prop in all_properties:
         # To overwrite the parameter from init_dict
+        init_by_str += TAB3 + prop["name"] + " = obj." + prop["name"] + "\n"
         init_by_dict += TAB3 + 'if "' + prop["name"] + '" in list(init_dict.keys()):\n'
         init_by_dict += TAB4 + prop["name"] + ' = init_dict["' + prop["name"] + '"]\n'
         # For the argument with default value
@@ -257,8 +259,10 @@ def generate_init(gen_dict, class_dict):
                 init_P_Type += TAB3 + prop["name"] + " = " + prop["type"] + "()\n"
 
     # Code generation in init_str
-    init_str += TAB + "def __init__(self" + arg_list + ", init_dict=None):\n"
-    init_str += TAB2 + '"""Constructor of the class. Can be use in two ways ' ":\n"
+    init_str += (
+        TAB + "def __init__(self" + arg_list + ", init_dict = None, init_str = None):\n"
+    )
+    init_str += TAB2 + '"""Constructor of the class. Can be use in three ways ' ":\n"
     init_str += (
         TAB2 + "- __init__ (arg1 = 1, arg3 = 5) every parameters "
         "have name and default values\n"
@@ -269,12 +273,21 @@ def generate_init(gen_dict, class_dict):
     init_str += TAB3 + "for pyleecan type, None will call the default " "constructor\n"
     init_str += (
         TAB2 + "- __init__ (init_dict = d) d must be a dictionnary "
-        "wiht every properties as keys\n\n"
+        "with every properties as keys\n"
     )
+    init_str += TAB2 + "- __init__ (init_str = s) s must be a string\n"
+    init_str += TAB2 + "s is the file path to load\n\n"
     init_str += TAB2 + "ndarray or list can be given for Vector and Matrix\n"
     init_str += TAB2 + 'object or dict can be given for pyleecan Object"""\n\n'
 
     init_str += init_P_Type
+    init_str += TAB2 + "if init_str is not None :  # Initialisation by str\n"
+    init_str += TAB3 + "from ..Functions.load import load\n"
+    init_str += TAB3 + "assert type(init_str) is str\n"
+    init_str += TAB3 + "# load the object from a file\n"
+    init_str += TAB3 + "obj = load(init_str)\n"
+    init_str += TAB3 + "assert type(obj) is type(self)\n"
+    init_str += init_by_str
     init_str += TAB2 + "if init_dict is not None:  # Initialisation by dict\n"
     init_str += TAB3 + "assert type(init_dict) is dict\n"
     init_str += TAB3 + "# Overwrite default value with init_dict content\n"
@@ -476,6 +489,26 @@ def generate_set_class_by_dict(prop_name, prop_type, daug_list):
             + prop_name
             + ")\n"
         )
+
+    class_dict_str += TAB2 + "elif isinstance(" + prop_name + ", str):\n"
+    class_dict_str += TAB3 + "from ..Functions.load import load\n"
+
+    if len(daug_list) > 0:
+        class_dict_str += TAB3 + prop_name + " = load(" + prop_name + ")\n"
+        class_dict_str += (
+            TAB3 + "# Check that the type is correct (including daughter)\n"
+        )
+        class_dict_str += TAB3 + "class_name = " + prop_name + ".__class__.__name__\n"
+        class_dict_str += TAB3 + "if class_name not in " + str(daug_list) + ":\n"
+        class_dict_str += TAB4 + "raise InitUnKnowClassError(\n"
+        class_dict_str += TAB5 + '"Unknow class name "\n'
+        class_dict_str += TAB5 + "+ class_name\n"
+        class_dict_str += TAB5 + '+ " in init_dict for ' + prop_name + '"\n'
+        class_dict_str += TAB4 + ")\n"
+        class_dict_str += TAB3 + "self." + prop_name + "=" + prop_name + "\n"
+
+    else:
+        class_dict_str += TAB3 + "self." + prop_name + " = load(" + prop_name + ")\n"
     return class_dict_str
 
 

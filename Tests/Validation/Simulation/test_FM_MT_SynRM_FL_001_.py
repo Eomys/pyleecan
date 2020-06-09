@@ -26,7 +26,7 @@ import json
 def test_Magnetic_AGSF():
     """Validation of a SynRM machine from Syr-e r29 open source software
     https://sourceforge.net/projects/syr-e/
-    Test compute air-gap surface force with Maxwell Tensor.
+    Test compute air-gap surface force with Maxwell Tensor and load the results
     """
     # The aim of this validation test is to compute the torque as a function of Phi0
     # As (for now) there is no electrical model, we will compute the current for each Phi0 here
@@ -77,6 +77,9 @@ def test_Magnetic_AGSF():
     out = Output(simu=simu)
     simu.run()
 
+    # Test save with MeshSolution object in out
+    out.save(save_path=save_path)
+
     # Plot the AGSF as a function of space with the spatial fft
     r_max = 78
     out.plot_A_space("force.Prad", is_fft=True, r_max=r_max)
@@ -95,17 +98,10 @@ def test_Magnetic_AGSF():
     # Plot the AGSF as a function of time with the time fft
     out.plot_A_time("force.Ptan", alpha=0, is_fft=True, freq_max=freq_max)
 
-    # Test save with MeshSolution object in out
-    out.save(save_path=save_path)
     # ------------------------------------------------------
 
+    load_path = join(save_path, "test_FM_SynRM_FL_001_plot_force_space")
 
-def test_Magnetic_load():
-
-    load_path = join(
-        "C:\\Users\\Raphael\\Desktop\\Git\\EOMYS-Public\\pyleecan\\pyleecan\\Results\\FM_SynRM_FL_001",
-        "Output.json",
-    )
     # Test to load the Meshsolution object (inside the output):
     with open(load_path) as json_file:
         json_tmp = json.load(json_file)

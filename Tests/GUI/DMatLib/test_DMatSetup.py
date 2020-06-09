@@ -54,7 +54,6 @@ class test_DMatSetup(TestCase):
         self.test_obj.HT.Cp = 0.19
         self.test_obj.HT.alpha = 0.20
         self.test_obj.eco.cost_unit = 0.21
-
         self.widget = DMatSetup(material=self.test_obj)
 
     def teardown(self):

@@ -4,6 +4,7 @@ import sys
 from logging import ERROR, INFO, basicConfig, getLogger
 from matplotlib import use
 from ..Classes.GUIOption import GUIOption
+from ..definitions import config_dict
 from os.path import abspath, dirname, join, normpath
 
 # Set Matplotlib backend
@@ -39,8 +40,8 @@ class StreamToLogger(object):
 
 
 gui_option = GUIOption()
-gui_option.unit.unit_m = 1  # Use mm
-gui_option.unit.unit_m2 = 1  # Use mm²
+gui_option.unit.unit_m = config_dict["UNIT_M"]  # Use mm
+gui_option.unit.unit_m2 = config_dict["UNIT_M2"]  # Use mm²
 
 # Default config for all logger
 basicConfig(

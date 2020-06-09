@@ -6,11 +6,17 @@ from os.path import basename, join, isfile, dirname
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QWidget
 
+from ....Functions.Material.compare_material import compare_material
+from ....Functions.Material.replace_material_pyleecan_obj import (
+    replace_material_pyleecan_obj,
+)
 from ....Functions.load import load, load_matlib
 from ....GUI.Dialog.DMachineSetup import mach_index, mach_list
 from ....GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
 from ....definitions import DATA_DIR
 from ....Classes.Machine import Machine
+from ....Classes.Material import Material
+from logging import getLogger
 
 # Flag for set the enable property of w_nav (List_Widget)
 DISABLE_ITEM = Qt.NoItemFlags
@@ -24,7 +30,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
     machineChanged = pyqtSignal()
     rejected = pyqtSignal()
 
-    def __init__(self, machine=None, machine_path="", matlib_path=""):
+    def __init__(self, machine=None, matlib=None, machine_path=""):
         """Initialize the GUI according to machine type
 
         Parameters
@@ -38,6 +44,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         self.setupUi(self)
 
         self.is_save_needed = False
+        self.matlib = matlib
 
         # Saving arguments
         self.machine = machine
@@ -46,20 +53,12 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         else:
             self.machine_path = machine_path
 
-        if matlib_path == "":
-            self.matlib_path = join(DATA_DIR, "Material")
-        else:
-            self.matlib_path = matlib_path
-        # Load all the materials
-        try:
-            self.matlib = load_matlib(self.matlib_path)
-        except Exception:
-            self.matlib = list()
         # Initialize the machine if needed
         if machine is None:
             self.machine = type(mach_list[0]["init_machine"])(
                 init_dict=mach_list[0]["init_machine"].as_dict()
             )
+
         self.update_nav()
         self.set_nav(0)
 
@@ -170,6 +169,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                 machine = load(load_path)
                 if isinstance(machine, Machine):
                     self.machine = machine
+                    self.matlib.add_machine_mat(machine)
                 else:
                     QMessageBox().critical(
                         self,

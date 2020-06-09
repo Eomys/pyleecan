@@ -14,6 +14,10 @@ from pyleecan.Classes.SlotW22 import SlotW22
 from pyleecan.GUI.Dialog.DMachineSetup.SWindParam.SWindParam import SWindParam
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_SWindParam(TestCase):
     """Test that the widget SWindParam behave like it should"""
 
