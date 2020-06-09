@@ -68,15 +68,11 @@ def create_folder():
         )
 
     with open(PYLEECAN_USER_DIR + "/config.json", "w") as config_file:
-        dump(
-            config_dict, config_file, sort_keys=True, indent=4, separators=(",", ": "),
-        )
+        dump(config_dict, config_file, sort_keys=True, indent=4, separators=(",", ": "))
 
 
 def edit_config_dict(key, value):
     config_dict[key] = value
 
     with open(PYLEECAN_USER_DIR + "/config.json", "w") as config_file:
-        dump(
-            config_dict, config_file, sort_keys=True, indent=4, separators=(",", ": "),
-        )
+        dump(config_dict, config_file, sort_keys=True, indent=4, separators=(",", ": "))

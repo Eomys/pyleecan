@@ -268,6 +268,7 @@ class LamSlotMulti(Lamination):
                     if class_name not in [
                         "Slot",
                         "Slot19",
+                        "SlotCirc",
                         "SlotMFlat",
                         "SlotMPolar",
                         "SlotMag",

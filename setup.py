@@ -23,10 +23,7 @@ install_requires = [
     "pyfemm >= 0.1.0;platform_system=='Windows'",
 ]
 
-tests_require = [
-    "ddt>=1.3.1",
-    "pytest>=5.4.1",
-]
+tests_require = ["ddt>=1.3.1", "pytest>=5.4.1"]
 
 setuptools.setup(
     name="pyleecan",
@@ -42,7 +39,7 @@ setuptools.setup(
     package_data={
         # Include any *.json files found in pyleecan:
         # '': ['*.json'],
-        "pyleecan": ["*.json"],
+        "pyleecan": ["*.json"]
     },
     include_package_data=True,
     classifiers=[
