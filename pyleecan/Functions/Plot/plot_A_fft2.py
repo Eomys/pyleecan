@@ -70,8 +70,12 @@ def plot_A_fft2(
         unit = data.unit
 
     # Extract the field
-    (freqs, wavenumber, A_mag) = data.get_magnitude_along(x_str, y_str, unit=unit)
+    results = data.get_magnitude_along(x_str, y_str, unit=unit)
 
+    wavenumber = results["wavenumber"]
+    freqs = results["freqs"]
+    A_mag = results[data.symbol]
+    
     wavenumber = append(wavenumber, wavenumber[-1] + 1) - 0.5
     freqs = append(freqs, freqs[-1] + 1)
     wavenumber_map, freqs_map = meshgrid(wavenumber, freqs)

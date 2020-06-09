@@ -119,7 +119,7 @@ def plot_A_space(
 
     # Extract the fields
     if list_str is not None:
-        (angle, Ydatas) = data.compare_along(
+        results = data.compare_along(
             a_str,
             t_str,
             list_str + str(index_list),
@@ -127,17 +127,19 @@ def plot_A_space(
             unit=unit,
             is_norm=is_norm,
         )
-        Ydata = []
-        for d in Ydatas:
-            if d.ndim != 1:
-                Ydata += split(d, len(index_list))
-            else:
-                Ydata += [d]
-        Ydata = [squeeze(d) for d in Ydata]
     else:
-        (angle, Ydata) = data.compare_along(
+        results = data.compare_along(
             a_str, t_str, data_list=data_list, unit=unit, is_norm=is_norm
         )
+    angle = results["angle"]
+    Ydatas = [results[data.symbol]] + [results[d.symbol+"_"+str(i)] for i in range(len(data_list))]
+    Ydata = []
+    for d in Ydatas:
+        if d.ndim != 1:
+            Ydata += split(d, len(index_list))
+        else:
+            Ydata += [d]
+    Ydata = [squeeze(d) for d in Ydata]
 
     # Plot the original graph
     ax = plot_A_2D(
@@ -168,7 +170,7 @@ def plot_A_space(
         if is_spaceorder:
             order_max = r_max / data.normalizations.get("space_order")
             xlabel = "Space order []"
-            (wavenumber, Ydata) = data.compare_magnitude_along(
+            results = data.compare_magnitude_along(
                 "wavenumber=[0," + str(order_max) + "]{space_order}",
                 t_str,
                 data_list=data_list,
@@ -178,13 +180,15 @@ def plot_A_space(
 
         else:
             xlabel = "Wavenumber []"
-            (wavenumber, Ydata) = data.compare_magnitude_along(
+            results = data.compare_magnitude_along(
                 "wavenumber=[0," + str(r_max) + "]",
                 t_str,
                 data_list=data_list,
                 unit=unit,
                 is_norm=False,
             )
+        wavenumber = results["wavenumber"]
+        Ydata = [results[data.symbol]] + [results[d.symbol+"_"+str(i)] for i in range(len(data_list))]
         
         for i in range(len(Ydata)):
             indices = [ind for ind, y in enumerate(Ydata[i]) if abs(y)>0.01]

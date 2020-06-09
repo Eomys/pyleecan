@@ -80,9 +80,12 @@ def plot_A_cfft2(
     zlabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
 
     # Extract the field
-    (F_flat, R_flat, B_FT_flat) = data.get_harmonics(
+    results = data.get_harmonics(
         N_stem, x_str, y_str, unit=unit, is_norm=False, is_flat=True
     )
+    F_flat = results["freqs"]
+    R_flat = results["wavenumber"]
+    B_FT_flat = results[data.symbol]
     if mag_max is None:
         mag_max = np_max(B_FT_flat)
 

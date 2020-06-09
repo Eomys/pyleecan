@@ -106,7 +106,7 @@ def plot_A_time(
 
     # Extract the fields
     if list_str is not None:
-        (time, Ydatas) = data.compare_along(
+        results = data.compare_along(
             "time",
             alpha_str,
             list_str + str(index_list),
@@ -114,17 +114,19 @@ def plot_A_time(
             unit=unit,
             is_norm=is_norm,
         )
-        Ydata = []
-        for d in Ydatas:
-            if d.ndim != 1:
-                Ydata += split(d, len(index_list))
-            else:
-                Ydata += [d]
-        Ydata = [squeeze(d) for d in Ydata]
     else:
-        (time, Ydata) = data.compare_along(
+        results = data.compare_along(
             "time", alpha_str, data_list=data_list, unit=unit, is_norm=is_norm
         )
+    time = results["time"]
+    Ydatas = [results[data.symbol]] + [results[d.symbol+"_"+str(i)] for i in range(len(data_list))]
+    Ydata = []
+    for d in Ydatas:
+        if d.ndim != 1:
+            Ydata += split(d, len(index_list))
+        else:
+            Ydata += [d]
+    Ydata = [squeeze(d) for d in Ydata]
 
     # Plot the original graph
     plot_A_2D(
@@ -154,7 +156,7 @@ def plot_A_time(
         if is_elecorder:
             elec_max = freq_max / data.normalizations.get("elec_order")
             xlabel = "Electrical order []"
-            (freqs, Ydata) = data.compare_magnitude_along(
+            results = data.compare_magnitude_along(
                 "freqs=[0," + str(elec_max) + "]{elec_order}",
                 alpha_str,
                 data_list=data_list,
@@ -164,13 +166,16 @@ def plot_A_time(
 
         else:
             xlabel = "Frequency [Hz]"
-            (freqs, Ydata) = data.compare_magnitude_along(
+            results = data.compare_magnitude_along(
                 "freqs=[0," + str(freq_max) + "]",
                 alpha_str,
                 data_list=data_list,
                 unit=unit,
                 is_norm=False,
             )
+        
+        freqs = results["freqs"]
+        Ydata = [results[data.symbol]] + [results[d.symbol+"_"+str(i)] for i in range(len(data_list))]
         
         for i in range(len(Ydata)):
             indices = [ind for ind, y in enumerate(Ydata[i]) if abs(y)>0.01]

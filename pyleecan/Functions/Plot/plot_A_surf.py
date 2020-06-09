@@ -62,13 +62,17 @@ def plot_A_surf(
 
     # Extract the field
     if is_deg:
-        (time, angle, Ydata) = data.get_along(
+        results = data.get_along(
             "time", "angle{°}", unit=unit, is_norm=is_norm
         )
     else:
-        (time, angle, Ydata) = data.get_along(
+        results = data.get_along(
             "time", "angle{°}", unit=unit, is_norm=is_norm
         )
+    
+    angle = results["angle"]
+    time = results["time"]
+    Ydata = results[data.symbol]
 
     angle_map, time_map = meshgrid(angle, time)
 

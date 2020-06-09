@@ -67,13 +67,16 @@ def plot_A_time_space(
         zlabel = r"$" + data.symbol + "\, [" + unit + "]$"
 
     if is_deg:
-        (time, angle, A_t_s) = data.get_along(
+        results = data.get_along(
             "time", "angle{°}", unit=unit, is_norm=is_norm
         )
     else:
-        (time, angle, A_t_s) = data.get_along(
+        results = data.get_along(
             "time", "angle", unit=unit, is_norm=is_norm
         )
+    angle = results["angle"]
+    time = results["time"]
+    A_t_s = results[data.symbol]
     angle_map, time_map = meshgrid(angle, time)
     if z_max is None:
         z_max = np_max(A_t_s)
@@ -101,7 +104,9 @@ def plot_A_time_space(
         ylabel = r"$\frac{" + data.symbol + "}{" + data.symbol + "_0}\, [" + unit + "]$"
     else:
         ylabel = r"$" + data.symbol + "\, [" + unit + "]$"
-    (time, Ydata) = data.compare_along("time", unit=unit, is_norm=is_norm)
+    results = data.compare_along("time", unit=unit, is_norm=is_norm)
+    time = results["time"]
+    Ydata = [results[data.symbol]]
     # Plot the original graph
     plot_A_2D(
         time, Ydata, fig=fig, subplot_index=2, xlabel=xlabel, ylabel=ylabel,
@@ -113,10 +118,11 @@ def plot_A_time_space(
     else:
         xlabel = "Angle [rad]"
     if is_deg:
-        (angle, Ydata) = data.compare_along("angle{°}", unit=unit, is_norm=is_norm)
+        results = data.compare_along("angle{°}", unit=unit, is_norm=is_norm)
     else:
-        (angle, Ydata) = data.compare_along("angle", unit=unit, is_norm=is_norm)
-
+        results = data.compare_along("angle", unit=unit, is_norm=is_norm)
+    angle = results["angle"]
+    Ydata = [results[data.symbol]]
     # Plot the original graph
     plot_A_2D(
         angle, Ydata, fig=fig, subplot_index=4, xlabel=xlabel, ylabel=ylabel,xticks=xticks,
@@ -135,9 +141,11 @@ def plot_A_time_space(
         )
     else:
         xlabel = "Frequency [Hz]"
-        (freqs, Ydata) = data.compare_magnitude_along(
+        results = data.compare_magnitude_along(
             "freqs=[0," + str(freq_max) + "]", unit=unit, is_norm=False,
         )
+    freqs = results["freqs"]
+    Ydata = [results[data.symbol]]
     
     indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y)>0.01]
     indices = [0] + list(set(indices))
@@ -158,16 +166,19 @@ def plot_A_time_space(
     if is_spaceorder:
         order_max = r_max / data.normalizations.get("space_order")
         xlabel = "Space order []"
-        (wavenumber, Ydata) = data.compare_magnitude_along(
+        results = data.compare_magnitude_along(
             "wavenumber=[0," + str(order_max) + "]{space_order}",
             unit=unit,
             is_norm=False,
         )
     else:
         xlabel = "Wavenumber []"
-        (wavenumber, Ydata) = data.compare_magnitude_along(
+        results = data.compare_magnitude_along(
             "wavenumber=[0," + str(r_max) + "]", unit=unit, is_norm=False
         )
+    wavenumber = results["wavenumber"]
+    Ydata = [results[data.symbol]]
+    
     indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y)>0.01]
     indices = [0] + list(set(indices))
     xticks = wavenumber[indices]
