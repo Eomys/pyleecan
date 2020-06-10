@@ -317,3 +317,13 @@ def test_class_prop_doc(class_dict):
             + "').__doc__.splitlines()"
         )
         assert result == prop["desc"].split("\\n")
+
+
+@pytest.mark.parametrize("class_dict", class_list)
+def test_class_copy(class_dict):
+    """Check if the copy method is correct
+    """
+
+    test_obj = eval(class_dict["name"] + "()")
+    result = test_obj.copy()
+    assert test_obj == result
