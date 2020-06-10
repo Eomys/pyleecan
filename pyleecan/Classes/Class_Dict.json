@@ -803,9 +803,8 @@
         "desc": "Forces module abstract object",
         "is_internal": false,
         "methods": [
-            "run",
-            "comp_force",
-            "comp_time_angle"
+            "comp_time_angle",
+            "run"
         ],
         "mother": "",
         "name": "Force",
