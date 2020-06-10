@@ -74,6 +74,8 @@ class OutGeo(FrozenClass):
             Rgap_mec = obj.Rgap_mec
             Lgap = obj.Lgap
             logger_name = obj.logger_name
+            d_angle_diff = obj.d_angle_diff
+            rot_dir = obj.rot_dir
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content

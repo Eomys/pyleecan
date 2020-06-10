@@ -82,6 +82,7 @@ class OutElec(FrozenClass):
             angle_rotor_initial = obj.angle_rotor_initial
             logger_name = obj.logger_name
             mmf_unit = obj.mmf_unit
+            Currents = obj.Currents
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content

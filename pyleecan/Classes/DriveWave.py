@@ -70,6 +70,9 @@ class DriveWave(Drive):
             obj = load(init_str)
             assert type(obj) is type(self)
             wave = obj.wave
+            Umax = obj.Umax
+            Imax = obj.Imax
+            is_current = obj.is_current
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -79,6 +82,8 @@ class DriveWave(Drive):
                 Umax = init_dict["Umax"]
             if "Imax" in list(init_dict.keys()):
                 Imax = init_dict["Imax"]
+            if "is_current" in list(init_dict.keys()):
+                is_current = init_dict["is_current"]
         # Initialisation by argument
         # wave can be None, a Import object or a dict
         if isinstance(wave, dict):
@@ -126,7 +131,7 @@ class DriveWave(Drive):
         else:
             self.wave = wave
         # Call Drive init
-        super(DriveWave, self).__init__(Umax=Umax, Imax=Imax)
+        super(DriveWave, self).__init__(Umax=Umax, Imax=Imax, is_current=is_current)
         # The class is frozen (in Drive init), for now it's impossible to
         # add new properties
 

@@ -97,6 +97,7 @@ class Simu1(Simulation):
             # load the object from a file
             obj = load(init_str)
             assert type(obj) is type(self)
+            elec = obj.elec
             mag = obj.mag
             struct = obj.struct
             force = obj.force
@@ -130,6 +131,10 @@ class Simu1(Simulation):
         # elec can be None, a Electrical object or a dict
         if isinstance(elec, dict):
             self.elec = Electrical(init_dict=elec)
+        elif isinstance(elec, str):
+            from ..Functions.load import load
+
+            self.elec = load(elec)
         else:
             self.elec = elec
         # mag can be None, a Magnetics object or a dict
