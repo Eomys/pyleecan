@@ -25,7 +25,7 @@ class SWindCond(Ui_SWindCond, QWidget):
     # Information for DMachineSetup nav
     step_name = "Winding Conductor"
 
-    def __init__(self, machine, matlib=[], is_stator=False):
+    def __init__(self, machine, matlib, is_stator=False):
         """Initialize the GUI according to machine
 
         Parameters
@@ -73,7 +73,7 @@ class SWindCond(Ui_SWindCond, QWidget):
             self.obj.winding.conductor._set_None()
 
         # Set the conductor material
-        self.w_mat.update(self.obj.winding.conductor, "cond_mat", matlib)
+        self.w_mat.update(self.obj.winding.conductor, "cond_mat", self.matlib)
 
         # Initialize the needed conductor widget
         index = type_list.index(type(self.obj.winding.conductor))

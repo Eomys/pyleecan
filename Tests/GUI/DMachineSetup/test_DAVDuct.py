@@ -19,8 +19,10 @@ from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.PVentPolar i
 from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.PVentTrap import (
     PVentTrap,
 )
+import pytest
 
 
+@pytest.mark.GUI
 class test_DAVDuct(TestCase):
     """Test that the widget DAVDuct behave like it should"""
 

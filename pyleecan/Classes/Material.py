@@ -25,27 +25,36 @@ class Material(FrozenClass):
     # save method is available in all object
     save = save
 
+    # generic copy method
+    def copy(self):
+        """Return a copy of the class
+        """
+        return type(self)(init_dict=self.as_dict())
+
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        name="M400-50A",
+        name="Material",
         is_isotropic=False,
         elec=-1,
         mag=-1,
         struct=-1,
         HT=-1,
         eco=-1,
-        desc="Lamination M400-50A",
+        desc="Material description",
         path="",
         init_dict=None,
+        init_str=None,
     ):
-        """Constructor of the class. Can be use in two ways :
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
@@ -60,6 +69,22 @@ class Material(FrozenClass):
             HT = MatHT()
         if eco == -1:
             eco = MatEconomical()
+        if init_str is not None:  # Initialisation by str
+            from ..Functions.load import load
+
+            assert type(init_str) is str
+            # load the object from a file
+            obj = load(init_str)
+            assert type(obj) is type(self)
+            name = obj.name
+            is_isotropic = obj.is_isotropic
+            elec = obj.elec
+            mag = obj.mag
+            struct = obj.struct
+            HT = obj.HT
+            eco = obj.eco
+            desc = obj.desc
+            path = obj.path
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -88,26 +113,46 @@ class Material(FrozenClass):
         # elec can be None, a MatElectrical object or a dict
         if isinstance(elec, dict):
             self.elec = MatElectrical(init_dict=elec)
+        elif isinstance(elec, str):
+            from ..Functions.load import load
+
+            self.elec = load(elec)
         else:
             self.elec = elec
         # mag can be None, a MatMagnetics object or a dict
         if isinstance(mag, dict):
             self.mag = MatMagnetics(init_dict=mag)
+        elif isinstance(mag, str):
+            from ..Functions.load import load
+
+            self.mag = load(mag)
         else:
             self.mag = mag
         # struct can be None, a MatStructural object or a dict
         if isinstance(struct, dict):
             self.struct = MatStructural(init_dict=struct)
+        elif isinstance(struct, str):
+            from ..Functions.load import load
+
+            self.struct = load(struct)
         else:
             self.struct = struct
         # HT can be None, a MatHT object or a dict
         if isinstance(HT, dict):
             self.HT = MatHT(init_dict=HT)
+        elif isinstance(HT, str):
+            from ..Functions.load import load
+
+            self.HT = load(HT)
         else:
             self.HT = HT
         # eco can be None, a MatEconomical object or a dict
         if isinstance(eco, dict):
             self.eco = MatEconomical(init_dict=eco)
+        elif isinstance(eco, str):
+            from ..Functions.load import load
+
+            self.eco = load(eco)
         else:
             self.eco = eco
         self.desc = desc

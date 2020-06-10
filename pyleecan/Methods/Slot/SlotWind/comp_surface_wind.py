@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def comp_surface_wind(self):
+def comp_surface_wind(self, Ndisc=200):
     """Compute the Slot winding surface (by numerical computation).
     Caution, the bottom of the Slot is an Arc
 
@@ -9,6 +9,8 @@ def comp_surface_wind(self):
     ----------
     self : SlotWind
         A SlotWind object
+    Ndisc : int
+        Number of point to discretize the lines
 
     Returns
     -------
@@ -19,4 +21,4 @@ def comp_surface_wind(self):
 
     surf = self.build_geometry_wind(Nrad=1, Ntan=1)
 
-    return surf[0].comp_surface()
+    return surf[0].comp_surface(Ndisc=Ndisc)

@@ -118,6 +118,7 @@ from ..Classes.Simu1 import Simu1
 from ..Classes.Simulation import Simulation
 from ..Classes.Slot import Slot
 from ..Classes.Slot19 import Slot19
+from ..Classes.SlotCirc import SlotCirc
 from ..Classes.SlotMFlat import SlotMFlat
 from ..Classes.SlotMPolar import SlotMPolar
 from ..Classes.SlotMag import SlotMag

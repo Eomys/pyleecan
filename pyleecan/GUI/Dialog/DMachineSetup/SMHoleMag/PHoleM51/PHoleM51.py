@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QWidget
 from ......Classes.HoleM51 import HoleM51
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM51.Gen_PHoleM51 import Gen_PHoleM51
+from ......GUI.Dialog.DMatLib.MatLib import MatLib
 from ......Methods.Slot.Slot.check import SlotCheckError
 
 
@@ -21,7 +22,7 @@ class PHoleM51(Gen_PHoleM51, QWidget):
     hole_name = "Slot Type 51"
     hole_type = HoleM51
 
-    def __init__(self, hole=None, matlib=[]):
+    def __init__(self, hole=None, matlib=MatLib()):
         """Initialize the widget according to hole
 
         Parameters
@@ -30,8 +31,8 @@ class PHoleM51(Gen_PHoleM51, QWidget):
             A PHoleM51 widget
         hole : HoleM51
             current hole to edit
-        matlib : list
-            List of available Material
+        matlib : MatLib
+            Material Library 
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)

@@ -2,13 +2,15 @@
 from ....Functions.Geometry.comp_surface_num import comp_surface_num
 
 
-def comp_surface(self):
+def comp_surface(self, Ndisc=200):
     """Compute the SurfLine surface
 
     Parameters
     ----------
     self : SurfLine
         A SurfLine object
+    Ndisc : int
+        Number of point to discretize the lines
 
     Returns
     -------
@@ -18,6 +20,6 @@ def comp_surface(self):
     """
 
     # Discretize the surface with lots of points to compute the surface numerically
-    point_list = self.discretize(200)
+    point_list = self.discretize(Ndisc)
 
     return comp_surface_num(point_list)

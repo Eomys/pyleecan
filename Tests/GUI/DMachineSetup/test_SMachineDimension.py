@@ -16,6 +16,10 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension impor
 )
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_SMachineDimension(TestCase):
     """Test that the widget SMachineDimension behave like it should"""
 

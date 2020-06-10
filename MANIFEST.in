@@ -1,2 +1,4 @@
 prune Tests
 prune Tutorials
+graft pyleecan
+global-exclude *.py[cod]

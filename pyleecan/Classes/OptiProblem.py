@@ -45,6 +45,12 @@ class OptiProblem(FrozenClass):
     # save method is available in all object
     save = save
 
+    # generic copy method
+    def copy(self):
+        """Return a copy of the class
+        """
+        return type(self)(init_dict=self.as_dict())
+
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -56,18 +62,33 @@ class OptiProblem(FrozenClass):
         eval_func=None,
         constraint=dict(),
         init_dict=None,
+        init_str=None,
     ):
-        """Constructor of the class. Can be use in two ways :
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
         if output == -1:
             output = Output()
+        if init_str is not None:  # Initialisation by str
+            from ..Functions.load import load
+
+            assert type(init_str) is str
+            # load the object from a file
+            obj = load(init_str)
+            assert type(obj) is type(self)
+            output = obj.output
+            design_var = obj.design_var
+            obj_func = obj.obj_func
+            eval_func = obj.eval_func
+            constraint = obj.constraint
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -86,6 +107,10 @@ class OptiProblem(FrozenClass):
         # output can be None, a Output object or a dict
         if isinstance(output, dict):
             self.output = Output(init_dict=output)
+        elif isinstance(output, str):
+            from ..Functions.load import load
+
+            self.output = load(output)
         else:
             self.output = output
         # design_var can be None or a dict of OptiDesignVar object

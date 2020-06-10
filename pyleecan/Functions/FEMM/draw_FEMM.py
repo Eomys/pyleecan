@@ -148,7 +148,13 @@ def draw_FEMM(
     FEMM_dict.update(user_FEMM_dict)  # Overwrite some values if needed
 
     # The package must be initialized with the openfemm command.
-    femm.openfemm()
+    try:
+        femm.openfemm()
+    except Exception as e:
+        raise FEMMError(
+            "ERROR: Unable to open FEMM, please check that FEMM is correctly installed\n"
+            + str(e)
+        )
 
     # We need to create a new Magnetostatics document to work on.
     femm.newdocument(0)
@@ -209,3 +215,8 @@ def draw_FEMM(
     FEMM_dict["circuits"] = circuits
 
     return FEMM_dict
+
+
+class FEMMError(Exception):
+    """Raised when FEMM is not possible to run
+    """

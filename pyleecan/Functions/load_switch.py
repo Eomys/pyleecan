@@ -120,6 +120,7 @@ load_switch = {
     "Simulation": Simulation,
     "Slot": Slot,
     "Slot19": Slot19,
+    "SlotCirc": SlotCirc,
     "SlotMFlat": SlotMFlat,
     "SlotMPolar": SlotMPolar,
     "SlotMag": SlotMag,

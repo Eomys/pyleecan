@@ -106,6 +106,12 @@ class MagFEMM(Magnetics):
     # save method is available in all object
     save = save
 
+    # generic copy method
+    def copy(self):
+        """Return a copy of the class
+        """
+        return type(self)(init_dict=self.as_dict())
+
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -135,16 +141,49 @@ class MagFEMM(Magnetics):
         sym_a=1,
         is_antiper_a=False,
         init_dict=None,
+        init_str=None,
     ):
-        """Constructor of the class. Can be use in two ways :
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if init_str is not None:  # Initialisation by str
+            from ..Functions.load import load
+
+            assert type(init_str) is str
+            # load the object from a file
+            obj = load(init_str)
+            assert type(obj) is type(self)
+            Kmesh_fineness = obj.Kmesh_fineness
+            Kgeo_fineness = obj.Kgeo_fineness
+            type_calc_leakage = obj.type_calc_leakage
+            file_name = obj.file_name
+            FEMM_dict = obj.FEMM_dict
+            angle_stator = obj.angle_stator
+            is_get_mesh = obj.is_get_mesh
+            is_save_FEA = obj.is_save_FEA
+            is_sliding_band = obj.is_sliding_band
+            transform_list = obj.transform_list
+            is_remove_slotS = obj.is_remove_slotS
+            is_remove_slotR = obj.is_remove_slotR
+            is_remove_vent = obj.is_remove_vent
+            is_mmfs = obj.is_mmfs
+            is_mmfr = obj.is_mmfr
+            type_BH_stator = obj.type_BH_stator
+            type_BH_rotor = obj.type_BH_rotor
+            is_symmetry_t = obj.is_symmetry_t
+            sym_t = obj.sym_t
+            is_antiper_t = obj.is_antiper_t
+            is_symmetry_a = obj.is_symmetry_a
+            sym_a = obj.sym_a
+            is_antiper_a = obj.is_antiper_a
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content

@@ -11,10 +11,12 @@ try:  # Import if pyleecan is installed with pip
     from .definitions import ROOT_DIR, DATA_DIR, MATLIB_DIR, PACKAGE_NAME
     from .GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
     from .GUI.Dialog.DMatLib.DMatLib import DMatLib
+    from .GUI.Dialog.DMatLib.MatLib import MatLib
     from .GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
     from .GUI.Tools.SidebarWindow import SidebarWindow
     from .GUI.Tools.MachinePlotWidget import MachinePlotWidget
     from .GUI.Tools.TreeView import TreeView
+    from .GUI.Tools.GuiOption.WGuiOption import WGuiOption
 
 except ImportError:  # Import for dev version
     from definitions import PACKAGE_NAME, DATA_DIR, MATLIB_DIR, ROOT_DIR
@@ -26,6 +28,7 @@ except ImportError:  # Import for dev version
         + ".GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup"
     )
     exec("from " + PACKAGE_NAME + ".GUI.Dialog.DMatLib.DMatLib import DMatLib")
+    exec("from " + PACKAGE_NAME + ".GUI.Dialog.DMatLib.MatLib import MatLib")
     exec(
         "from "
         + PACKAGE_NAME
@@ -36,6 +39,7 @@ except ImportError:  # Import for dev version
         "from " + PACKAGE_NAME + ".GUI.Tools.MachinePlotWidget import MachinePlotWidget"
     )
     exec("from " + PACKAGE_NAME + ".GUI.Tools.TreeView import TreeView")
+    exec("from " + PACKAGE_NAME + ".GUI.Tools.GuiOption.WGuiOption import WGuiOption")
 
 
 EXT_GUI = True
@@ -56,8 +60,14 @@ def run_GUI(argv):
     translator.load(translationFile, "GUI//i18n")
     a.installTranslator(translator)
 
+    # Setting the material library
+    matlib = MatLib(MATLIB_DIR)
+
+    # MatLib widget
+    mat_widget = DMatLib(matlib, selected=0)
+
     # Machine Setup Widget
-    c = DMachineSetup(machine_path=join(DATA_DIR, "Machine"), matlib_path=MATLIB_DIR)
+    c = DMachineSetup(matlib=matlib, machine_path=join(DATA_DIR, "Machine"))
 
     if EXT_GUI:
         # Setup extended GUI with sub windows
@@ -72,14 +82,15 @@ def run_GUI(argv):
         plt_widget = MachinePlotWidget(window)
         window.addSubWindow("Plot", plt_widget, plt_widget.update)
 
-        mat_widget = DMatLib(window.DesignWidget.matlib, selected=0)
         mat_widget.installEventFilter(window)
-        window.addSubWindow("MatLib", mat_widget, mat_widget.update_mat_list)
+        window.addSubWindow("MatLib", mat_widget, mat_widget.update_list_mat)
 
         tree = TreeView()
         tree_fcn = lambda: tree.generate(getattr(c, "machine"))
         window.addSubWindow("TreeView", tree, tree_fcn)
 
+        option = WGuiOption(machine_setup=c, matlib=matlib)
+        window.addSubWindow("Option", option)
         window.show()
 
     else:

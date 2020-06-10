@@ -21,7 +21,7 @@ class WHoleMag(Ui_WHoleMag, QWidget):
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
 
-    def __init__(self, parent, is_mag, index, matlib=[]):
+    def __init__(self, parent, is_mag, index, matlib):
         """Initialize the GUI according to lamination
 
         Parameters
@@ -34,8 +34,8 @@ class WHoleMag(Ui_WHoleMag, QWidget):
             False: no magnet in the Hole (for the SyRM)
         index : int
             Index of the hole to edit
-        matlib : list
-            List of available Material
+        matlib : MatLib
+            Material Library 
         """
 
         # Build the interface according to the .ui file

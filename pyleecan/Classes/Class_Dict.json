@@ -3372,7 +3372,8 @@
             "comp_output_geo",
             "comp_length_airgap_active",
             "get_polar_eq",
-            "plot_anim_rotor"
+            "plot_anim_rotor",
+            "get_material_list"
         ],
         "mother": "",
         "name": "Machine",
@@ -4739,7 +4740,7 @@
                 "name": "name",
                 "type": "str",
                 "unit": "",
-                "value": "M400-50A"
+                "value": "Material"
             },
             {
                 "desc": "If True, uniformity in all orientations",
@@ -4802,7 +4803,7 @@
                 "name": "desc",
                 "type": "str",
                 "unit": "",
-                "value": "Lamination M400-50A"
+                "value": "Material description"
             },
             {
                 "desc": "Path to the material file",
@@ -6606,6 +6607,7 @@
         "daughters": [
             "Slot",
             "Slot19",
+            "SlotCirc",
             "SlotMFlat",
             "SlotMPolar",
             "SlotMag",
@@ -6724,6 +6726,55 @@
                 "type": "bool",
                 "unit": "-",
                 "value": 0
+            }
+        ]
+    },
+    "SlotCirc": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Circular slot (for notches)",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "build_geometry_wind",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_wind",
+            "comp_surface",
+            "comp_surface_wind"
+        ],
+        "mother": "SlotWind",
+        "name": "SlotCirc",
+        "package": "Slot",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotCirc.csv",
+        "properties": [
+            {
+                "desc": "Slot isthmus width.",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "Slot height",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.03
             }
         ]
     },
@@ -8505,6 +8556,7 @@
             }
         ],
         "daughters": [
+            "SlotCirc",
             "SlotW10",
             "SlotW11",
             "SlotW12",

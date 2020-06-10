@@ -149,6 +149,10 @@ def read_file(path):
     class_dict["package"] = class_csv[1][PACK_COL]
     class_dict["desc"] = class_csv[1][CLASS_DEF_COL]
     class_dict["mother"] = class_csv[1][HER_COL]
+    if class_dict["mother"] == class_dict["name"]:
+        raise InheritError(
+            "ERROR: the class " + class_dict["name"] + " inherit from itself"
+        )
 
     return class_dict
 
@@ -295,6 +299,13 @@ def is_dict_pyleecan_type(type_name):
 
 class NotAFile(Exception):
     """Raised when the code generator is call on a wrong path
+    """
+
+    pass
+
+
+class InheritError(Exception):
+    """Raised when a class has a wrong mother defined
     """
 
     pass

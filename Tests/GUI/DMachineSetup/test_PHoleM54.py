@@ -12,6 +12,10 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.PHoleM54 import PHoleM
 from pyleecan.Classes.Material import Material
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_PHoleM54(TestCase):
     """Test that the widget PHoleM54 behave like it should"""
 
