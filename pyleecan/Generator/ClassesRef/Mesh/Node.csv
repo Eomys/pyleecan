@@ -1,3 +1,2 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-,,,,,,,,,Mesh,,get_group,VERSION,1,"Abstract class to define nodes. It must have at least a method get_coord to get nodes coordinates for given node tags/number, and a method get_group to create a new objet Node based on a set of given elements."
-,,,,,,,,,,,get_coord,,,
+,,,,,,,,,Mesh,,,VERSION,1,"Abstract class to define nodes. It must have at least a method get_coord to get nodes coordinates for given node tags/number, and a method get_group to create a new objet Node based on a set of given elements."

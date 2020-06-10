@@ -4559,10 +4559,7 @@
         ],
         "desc": "Abstract class to define nodes. It must have at least a method get_coord to get nodes coordinates for given node tags/number, and a method get_group to create a new objet Node based on a set of given elements.",
         "is_internal": false,
-        "methods": [
-            "get_group",
-            "get_coord"
-        ],
+        "methods": [],
         "mother": "",
         "name": "Node",
         "package": "Mesh",
