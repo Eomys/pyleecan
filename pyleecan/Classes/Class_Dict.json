@@ -4986,9 +4986,7 @@
         "daughters": [],
         "desc": "Multi-objectives optimization problem with some constraints",
         "is_internal": false,
-        "methods": [
-            "eval_pb"
-        ],
+        "methods": [],
         "mother": "",
         "name": "OptiProblem",
         "package": "Optimization",
