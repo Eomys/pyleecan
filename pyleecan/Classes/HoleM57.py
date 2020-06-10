@@ -13,11 +13,6 @@ from .HoleMag import HoleMag
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Slot.HoleM57._to_m_file import _to_m_file
-except ImportError as error:
-    _to_m_file = error
-
-try:
     from ..Methods.Slot.HoleM57.build_geometry import build_geometry
 except ImportError as error:
     build_geometry = error
@@ -52,6 +47,16 @@ try:
 except ImportError as error:
     remove_magnet = error
 
+try:
+    from ..Methods.Slot.HoleM57.get_height_magnet import get_height_magnet
+except ImportError as error:
+    get_height_magnet = error
+
+try:
+    from ..Methods.Slot.HoleM57.has_magnet import has_magnet
+except ImportError as error:
+    has_magnet = error
+
 
 from ._check import InitUnKnowClassError
 from .Magnet import Magnet
@@ -65,15 +70,6 @@ class HoleM57(HoleMag):
     IS_SYMMETRICAL = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Slot.HoleM57._to_m_file
-    if isinstance(_to_m_file, ImportError):
-        _to_m_file = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use HoleM57 method _to_m_file: " + str(_to_m_file))
-            )
-        )
-    else:
-        _to_m_file = _to_m_file
     # cf Methods.Slot.HoleM57.build_geometry
     if isinstance(build_geometry, ImportError):
         build_geometry = property(
@@ -150,6 +146,27 @@ class HoleM57(HoleMag):
         )
     else:
         remove_magnet = remove_magnet
+    # cf Methods.Slot.HoleM57.get_height_magnet
+    if isinstance(get_height_magnet, ImportError):
+        get_height_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM57 method get_height_magnet: "
+                    + str(get_height_magnet)
+                )
+            )
+        )
+    else:
+        get_height_magnet = get_height_magnet
+    # cf Methods.Slot.HoleM57.has_magnet
+    if isinstance(has_magnet, ImportError):
+        has_magnet = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleM57 method has_magnet: " + str(has_magnet))
+            )
+        )
+    else:
+        has_magnet = has_magnet
     # save method is available in all object
     save = save
 

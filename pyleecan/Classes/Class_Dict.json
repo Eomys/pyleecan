@@ -1581,14 +1581,15 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
-            "_to_m_file",
             "build_geometry",
             "check",
             "comp_mass_magnets",
             "comp_radius",
             "comp_surface_magnets",
             "comp_volume_magnets",
-            "remove_magnet"
+            "remove_magnet",
+            "get_height_magnet",
+            "has_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM57",

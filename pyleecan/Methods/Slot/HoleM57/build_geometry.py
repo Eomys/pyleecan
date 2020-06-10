@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""@package Methods.Machine.HoleM57.build_geometry
-HoleM57 build_geometry method
-@date Created on Thu Dec 17 11:03:07 2015
-@copyright (C) 2015-2016 EOMYS ENGINEERING.
-@author pierre_b
-"""
 
 from numpy import arcsin, cos, exp, angle, pi, sin, tan, array
 
