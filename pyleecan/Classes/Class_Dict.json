@@ -4577,10 +4577,9 @@
         "desc": "Class to define nodes coordinates and getter.",
         "is_internal": false,
         "methods": [
-            "get_coord",
-            "get_tag",
-            "get_group",
             "add_node",
+            "get_coord",
+            "get_group",
             "is_exist"
         ],
         "mother": "Node",
