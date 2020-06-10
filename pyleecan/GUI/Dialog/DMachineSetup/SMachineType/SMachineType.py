@@ -18,7 +18,7 @@ class SMachineType(Gen_SMachineType, QWidget):
     # Information for the DMachineSetup nav
     step_name = "Machine Type"
 
-    def __init__(self, machine, matlib=[], is_stator=False):
+    def __init__(self, machine, matlib, is_stator=False):
         """Initialize the widget according to machine
 
         Parameters
@@ -27,8 +27,8 @@ class SMachineType(Gen_SMachineType, QWidget):
             A SMachineType widget
         machine : Machine
             current machine to edit
-        matlib : list
-            List of available Material
+        matlib : MatLib
+            Material Library 
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """

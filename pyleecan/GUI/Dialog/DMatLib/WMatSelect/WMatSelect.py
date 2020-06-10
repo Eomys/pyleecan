@@ -50,7 +50,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         self.c_mat_type.currentIndexChanged.connect(self.set_mat_type)
         self.b_matlib.clicked.connect(self.s_open_matlib)
 
-    def update(self, obj, mat_attr_name, matlib=list(), matlib_path=""):
+    def update(self, obj, mat_attr_name, matlib, matlib_path=""):
         """
         Set a reference to a material libray and material data path, 
         updates the Combobox by the material names of the libary 
@@ -83,7 +83,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
 
         # Update the list of materials
         self.c_mat_type.clear()
-        self.c_mat_type.addItems([mat.name for mat in matlib])
+        self.c_mat_type.addItems([mat.name for mat in matlib.list_mat])
 
         mat = getattr(self.obj, mat_attr_name, None)
         if mat is None or mat.name is None:
@@ -91,7 +91,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
             index = self.c_mat_type.findText(self.def_mat)
             if index != -1:
                 # self.mat.__init__(init_dict=self.matlib[index].as_dict())
-                setattr(self.obj, self.mat_attr_name, self.matlib[index])
+                setattr(self.obj, self.mat_attr_name, self.matlib.list_mat[index])
         else:
             index = self.c_mat_type.findText(mat.name)
         self.c_mat_type.setCurrentIndex(index)
@@ -130,7 +130,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         -------
 
         """
-        setattr(self.obj, self.mat_attr_name, self.matlib[index])
+        setattr(self.obj, self.mat_attr_name, self.matlib.list_mat[index])
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
@@ -167,7 +167,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         # del self.matlib[:]
         # self.matlib.extend(self.mat_win.matlib)
         # Update the material
-        index = int(self.mat_win.nav_mat.currentItem().text()[:3]) - 1
+        # index = int(self.mat_win.nav_mat.currentItem().text()[:3]) - 1
 
         # not needed if machine materials are "connected" properly
         # mat_dict = (self.mat_win.matlib[index]).as_dict()
@@ -183,7 +183,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         self.c_mat_type.blockSignals(True)
 
         self.c_mat_type.clear()
-        self.c_mat_type.addItems([mat.name for mat in self.matlib])
+        self.c_mat_type.addItems([mat.name for mat in self.matlib.list_mat])
         index = self.c_mat_type.findText(getattr(self.obj, self.mat_attr_name).name)
         self.c_mat_type.setCurrentIndex(index)
 

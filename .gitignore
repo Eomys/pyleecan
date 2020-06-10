@@ -8,3 +8,4 @@ Internal/
 _Internal/
 *.log
 run_GUI_internal.py
+/Tests/logtest.txt

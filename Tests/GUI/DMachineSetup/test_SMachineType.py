@@ -21,6 +21,10 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.SMachineType import SMachine
 from pyleecan.Classes.HoleM50 import HoleM50
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_SMachineType(TestCase):
     """Test that the widget SMachineType behave like it should"""
 

@@ -24,7 +24,7 @@ class SBar(Gen_SBar, QWidget):
     # Information for the DMachineSetup nav
     step_name = "Bar"
 
-    def __init__(self, machine, matlib=[], is_stator=False):
+    def __init__(self, machine, matlib, is_stator=False):
         """Initialize the widget according to machine
 
         Parameters
@@ -33,8 +33,8 @@ class SBar(Gen_SBar, QWidget):
             A SBar widget
         machine : Machine
             current machine to edit
-        matlib : list
-            List of available Material
+        matlib : MatLib
+            Material Library 
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -60,7 +60,7 @@ class SBar(Gen_SBar, QWidget):
         # Set materials
         self.w_mat.def_mat = "Copper1"
         self.w_mat.setText("Ring material:")
-        self.w_mat.update(self.machine.rotor, "ring_mat", matlib)
+        self.w_mat.update(self.machine.rotor, "ring_mat", self.matlib)
 
         # Initialize the GUI with the current machine value
         self.lf_Hscr.setValue(machine.rotor.Hscr)

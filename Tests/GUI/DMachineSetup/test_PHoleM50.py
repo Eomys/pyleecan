@@ -9,11 +9,16 @@ from PyQt5.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM50 import HoleM50
+from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.PHoleM50 import PHoleM50
 from Tests.GUI import gui_option  # Set unit to m
 from pyleecan.Classes.Material import Material
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_PHoleM50(TestCase):
     """Test that the widget PHoleM50 behave like it should"""
 
@@ -38,10 +43,13 @@ class test_PHoleM50(TestCase):
         self.test_obj.hole[0].magnet_0.mat_type.name = "Magnet3"
         self.test_obj.hole[0].magnet_1.mat_type.name = "Magnet2"
 
-        self.matlib = list()
-        self.matlib.append(Material(name="Magnet1"))
-        self.matlib.append(Material(name="Magnet2"))
-        self.matlib.append(Material(name="Magnet3"))
+        self.matlib = MatLib()
+        self.matlib.list_mat = [
+            Material(name="Magnet1"),
+            Material(name="Magnet2"),
+            Material(name="Magnet3"),
+        ]
+        self.matlib.index_first_mat_mach = 3
 
         self.widget = PHoleM50(self.test_obj.hole[0], self.matlib)
 
@@ -89,7 +97,7 @@ class test_PHoleM50(TestCase):
             H4=0.28,
             W4=0.29,
         )
-        self.widget = PHoleM50(self.test_obj.hole[0])
+        self.widget = PHoleM50(self.test_obj.hole[0], self.matlib)
         self.assertEqual(self.widget.lf_H0.value(), 0.20)
         self.assertEqual(self.widget.lf_H1.value(), 0.21)
         self.assertEqual(self.widget.lf_H2.value(), 0.22)

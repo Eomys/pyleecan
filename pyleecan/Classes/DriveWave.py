@@ -39,21 +39,48 @@ class DriveWave(Drive):
     # save method is available in all object
     save = save
 
+    # generic copy method
+    def copy(self):
+        """Return a copy of the class
+        """
+        return type(self)(init_dict=self.as_dict())
+
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, wave=-1, Umax=800, Imax=800, init_dict=None):
-        """Constructor of the class. Can be use in two ways :
+    def __init__(
+        self,
+        wave=-1,
+        Umax=800,
+        Imax=800,
+        is_current=False,
+        init_dict=None,
+        init_str=None,
+    ):
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
         if wave == -1:
             wave = Import()
+        if init_str is not None:  # Initialisation by str
+            from ..Functions.load import load
+
+            assert type(init_str) is str
+            # load the object from a file
+            obj = load(init_str)
+            assert type(obj) is type(self)
+            wave = obj.wave
+            Umax = obj.Umax
+            Imax = obj.Imax
+            is_current = obj.is_current
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -63,6 +90,8 @@ class DriveWave(Drive):
                 Umax = init_dict["Umax"]
             if "Imax" in list(init_dict.keys()):
                 Imax = init_dict["Imax"]
+            if "is_current" in list(init_dict.keys()):
+                is_current = init_dict["is_current"]
         # Initialisation by argument
         # wave can be None, a Import object or a dict
         if isinstance(wave, dict):
@@ -86,10 +115,31 @@ class DriveWave(Drive):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.wave = class_obj(init_dict=wave)
+        elif isinstance(wave, str):
+            from ..Functions.load import load
+
+            wave = load(wave)
+            # Check that the type is correct (including daughter)
+            class_name = wave.__class__.__name__
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for wave"
+                )
+            self.wave = wave
         else:
             self.wave = wave
         # Call Drive init
-        super(DriveWave, self).__init__(Umax=Umax, Imax=Imax)
+        super(DriveWave, self).__init__(Umax=Umax, Imax=Imax, is_current=is_current)
         # The class is frozen (in Drive init), for now it's impossible to
         # add new properties
 

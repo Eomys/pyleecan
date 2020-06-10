@@ -74,6 +74,10 @@ def generate_class(gen_dict, class_name, path_to_gen):
     # Get logger function
     class_file.write("from ..Functions.get_logger import get_logger\n")
 
+    #
+    # if len(class_dict["properties"]) == 0 and class_dict["mother"] == "":
+    #     class_file.write("from ..Functions.get_logger import check_init_dict\n")
+
     # Save function
     class_file.write("from ..Functions.save import save\n")
 
@@ -131,7 +135,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
             # Extract import name
             from_name = import_type[: import_type.rfind(".")]
             type_name = import_type[import_type.rfind(".") + 1 :]
-            print(type_name, import_type, from_name)
+
             # Import the type if not already imported
             if type_name not in types_imported:
                 class_file.write("try :\n")
@@ -217,13 +221,17 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write(TAB2 + meth_name + " = " + meth_name + "\n")
     class_file.write(TAB + "# save method is available in all object\n")
     class_file.write(TAB + "save = save\n\n")
+    class_file.write(TAB + "# generic copy method\n")
+    class_file.write(TAB + "def copy(self):\n")
+    class_file.write(TAB2 + '"""Return a copy of the class\n' + TAB2 + '"""\n')
+    class_file.write(TAB2 + "return type(self)(init_dict=self.as_dict())\n\n")
 
     class_file.write(TAB + "# get_logger method is available in all object\n")
     class_file.write(TAB + "get_logger = get_logger\n\n")
 
     # Add the __init__ method
     if len(class_dict["properties"]) == 0 and class_dict["mother"] == "":
-        class_file.write(generate_init_void() + "\n")
+        class_file.write(generate_init_void(class_name) + "\n")
     else:
         class_file.write(generate_init(gen_dict, class_dict) + "\n")
 

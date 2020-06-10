@@ -40,19 +40,37 @@ class BoreFlower(Bore):
     # save method is available in all object
     save = save
 
+    # generic copy method
+    def copy(self):
+        """Return a copy of the class
+        """
+        return type(self)(init_dict=self.as_dict())
+
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, N=8, Rarc=0.01, alpha=0, init_dict=None):
-        """Constructor of the class. Can be use in two ways :
+    def __init__(self, N=8, Rarc=0.01, alpha=0, init_dict=None, init_str=None):
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if init_str is not None:  # Initialisation by str
+            from ..Functions.load import load
+
+            assert type(init_str) is str
+            # load the object from a file
+            obj = load(init_str)
+            assert type(obj) is type(self)
+            N = obj.N
+            Rarc = obj.Rarc
+            alpha = obj.alpha
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content

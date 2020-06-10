@@ -13,10 +13,16 @@ from PyQt5.QtWidgets import QDialogButtonBox
 
 from pyleecan.Functions.load import load
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
+from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
+from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from Tests import DATA_DIR
 from Tests import save_load_path as save_path
 
 
+import pytest
+
+
+@pytest.mark.GUI
 class test_save_load_matlib(TestCase):
     """Test that the widget DMachineSetup and DMatLib can save/load the MatLib (old and new)
     """
@@ -75,35 +81,37 @@ class test_save_load_matlib(TestCase):
         self.assertEqual(nb_file, 2)
 
         # Start the GUI
+        self.matlib = MatLib(self.work_path)
+        self.mat_widget = DMatLib(matlib=self.matlib)
         self.widget = DMachineSetup(
-            machine=None, machine_path=self.work_path, matlib_path=self.work_path
+            matlib=self.matlib, machine=None, machine_path=self.work_path
         )
         # Check load of the matlib
-        self.assertEqual(len(self.widget.matlib), 4)
+        self.assertEqual(len(self.matlib.list_mat), 4)
         self.assertEqual(
             ["Copper1", "Insulator1", "M400-50A", "Magnet1"],
-            [mat.name for mat in self.widget.matlib],
+            [mat.name for mat in self.matlib.list_mat],
         )
-        self.assertEqual(self.widget.matlib[0].elec.rho, 1.73e-8)
-        self.assertEqual(self.widget.matlib[0].HT.alpha, 0.00393)
+        self.assertEqual(self.matlib.list_mat[0].elec.rho, 1.73e-8)
+        self.assertEqual(self.matlib.list_mat[0].HT.alpha, 0.00393)
         self.assertEqual(
-            self.widget.matlib[0].path, join(self.work_path, "Copper1.json")
+            self.matlib.list_mat[0].path, join(self.work_path, "Copper1.json")
         )
 
-        self.assertEqual(self.widget.matlib[2].mag.mur_lin, 2500)
-        self.assertEqual(self.widget.matlib[2].struct.rho, 7650)
-        self.assertEqual(self.widget.matlib[2].struct.Ex, 215000000000)
+        self.assertEqual(self.matlib.list_mat[2].mag.mur_lin, 2500)
+        self.assertEqual(self.matlib.list_mat[2].struct.rho, 7650)
+        self.assertEqual(self.matlib.list_mat[2].struct.Ex, 215000000000)
         self.assertEqual(
-            self.widget.matlib[2].path,
+            self.matlib.list_mat[2].path,
             join(self.work_path, "Lamination", "M400-50A.json"),
         )
         # Change value of materials
-        self.widget.matlib[0].elec.rho = 1.74e-8
-        self.widget.matlib[0].HT.alpha = 0.00555
-        self.widget.matlib[2].mag.mur_lin = 2501.2
-        self.widget.matlib[2].struct.rho = 76
+        self.matlib.list_mat[0].elec.rho = 1.74e-8
+        self.matlib.list_mat[0].HT.alpha = 0.00555
+        self.matlib.list_mat[2].mag.mur_lin = 2501.2
+        self.matlib.list_mat[2].struct.rho = 76
         # Save matlib
-        for mat in self.widget.matlib:
+        for mat in self.matlib.list_mat:
             mat.save(mat.path)
             mat2 = load(mat.path)
             self.assertEqual(mat.as_dict(), mat2.as_dict())

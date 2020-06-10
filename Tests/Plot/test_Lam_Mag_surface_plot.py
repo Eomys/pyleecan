@@ -203,8 +203,8 @@ class test_Lam_Mag_surface_plot(TestCase):
         rotor.slot = SlotMPolar(Zs=8, W0=0.628, magnet=magnet)
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        stator = Lamination(
-            Rint=130e-3,
+        stator = LamSlotMag(
+            Rint=150e-3,
             Rext=0.2,
             is_internal=False,
             is_stator=True,
@@ -212,6 +212,8 @@ class test_Lam_Mag_surface_plot(TestCase):
             Nrvd=4,
             Wrvd=0.02,
         )
+        magnet = [MagnetType14(Lmag=0.5, Hmag=0.02, Wmag=0.628, Rtop=0.05)]
+        stator.slot = SlotMPolar(Zs=8, W0=0.628, magnet=magnet)
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
         rotor.plot()
@@ -221,5 +223,5 @@ class test_Lam_Mag_surface_plot(TestCase):
 
         stator.plot()
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 2)
+        self.assertEqual(len(fig.axes[0].patches), 10)
         fig.savefig(join(save_path, "test_Lam_Mag_14s_3-Stator.png"))

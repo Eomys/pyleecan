@@ -4,13 +4,11 @@ from numpy import pi
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget
-
-from pyleecan.Classes.HoleM57 import HoleM57
-from pyleecan.GUI import gui_option
-from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM57.Gen_PHoleM57 import (
-    Gen_PHoleM57,
-)
-from pyleecan.Methods.Slot.Slot.check import SlotCheckError
+from ......Classes.HoleM57 import HoleM57
+from ......GUI import gui_option
+from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM57.Gen_PHoleM57 import Gen_PHoleM57
+from ......Methods.Slot.Slot.check import SlotCheckError
+from ......GUI.Dialog.DMatLib.MatLib import MatLib
 
 
 class PHoleM57(Gen_PHoleM57, QWidget):
@@ -23,7 +21,7 @@ class PHoleM57(Gen_PHoleM57, QWidget):
     hole_name = "Slot Type 57"
     hole_type = HoleM57
 
-    def __init__(self, hole=None, matlib=[]):
+    def __init__(self, hole=None, matlib=MatLib()):
         """Initialize the widget according to hole
 
         Parameters

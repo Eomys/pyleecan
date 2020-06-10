@@ -17,9 +17,17 @@ from numpy import array
 
 
 class DMatSetup(Gen_DMatSetup, QDialog):
-    """Dialog for editing material data."""
+    def __init__(self, material, is_matlib=True):
+        """
+        Dialog for editing material data.
 
-    def __init__(self, material):
+        Parameters
+        ----------
+            material : Material
+                material to edit
+            is_matlib : bool 
+                material already in matlib 
+        """
         # Build the interface according to the .ui file
         QDialog.__init__(self)
         self.setupUi(self)
@@ -36,6 +44,12 @@ class DMatSetup(Gen_DMatSetup, QDialog):
             self.is_isotropic.setCheckState(Qt.Unchecked)
             self.nav_meca.setCurrentIndex(0)
             self.nav_ther.setCurrentIndex(0)
+
+        # Three button to close
+        self.b_add_matlib.setVisible(not is_matlib)
+        self.b_cancel.clicked.connect(self.close)
+        self.b_save.clicked.connect(lambda: self.done(1))
+        self.b_add_matlib.clicked.connect(lambda: self.done(2))
 
         # === check material attribute and set values ===
         # Elec
@@ -561,3 +575,11 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         None
         """
         self.mat.struct.nu_yz = self.lf_nu_yz.value()
+
+    def save(self):
+        """Signal to save the material"""
+        return 1
+
+    def add_matlib(self):
+        """Signal to save the material in the Material Library"""
+        return 2

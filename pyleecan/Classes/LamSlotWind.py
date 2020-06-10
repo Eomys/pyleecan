@@ -322,6 +322,12 @@ class LamSlotWind(LamSlot):
     # save method is available in all object
     save = save
 
+    # generic copy method
+    def copy(self):
+        """Return a copy of the class
+        """
+        return type(self)(init_dict=self.as_dict())
+
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -342,12 +348,15 @@ class LamSlotWind(LamSlot):
         axial_vent=list(),
         notch=list(),
         init_dict=None,
+        init_str=None,
     ):
-        """Constructor of the class. Can be use in two ways :
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
@@ -358,6 +367,27 @@ class LamSlotWind(LamSlot):
             slot = Slot()
         if mat_type == -1:
             mat_type = Material()
+        if init_str is not None:  # Initialisation by str
+            from ..Functions.load import load
+
+            assert type(init_str) is str
+            # load the object from a file
+            obj = load(init_str)
+            assert type(obj) is type(self)
+            Ksfill = obj.Ksfill
+            winding = obj.winding
+            slot = obj.slot
+            L1 = obj.L1
+            mat_type = obj.mat_type
+            Nrvd = obj.Nrvd
+            Wrvd = obj.Wrvd
+            Kf1 = obj.Kf1
+            is_internal = obj.is_internal
+            Rint = obj.Rint
+            Rext = obj.Rext
+            is_stator = obj.is_stator
+            axial_vent = obj.axial_vent
+            notch = obj.notch
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -412,6 +442,26 @@ class LamSlotWind(LamSlot):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.winding = class_obj(init_dict=winding)
+        elif isinstance(winding, str):
+            from ..Functions.load import load
+
+            winding = load(winding)
+            # Check that the type is correct (including daughter)
+            class_name = winding.__class__.__name__
+            if class_name not in [
+                "Winding",
+                "WindingCW1L",
+                "WindingCW2LR",
+                "WindingCW2LT",
+                "WindingDW1L",
+                "WindingDW2L",
+                "WindingSC",
+                "WindingUD",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for winding"
+                )
+            self.winding = winding
         else:
             self.winding = winding
         # Call LamSlot init

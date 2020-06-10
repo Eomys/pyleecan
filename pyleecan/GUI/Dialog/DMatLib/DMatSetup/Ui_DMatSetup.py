@@ -3,13 +3,14 @@
 # File generated according to DMatSetup.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_DMatSetup(object):
     def setupUi(self, DMatSetup):
         DMatSetup.setObjectName("DMatSetup")
-        DMatSetup.resize(388, 451)
+        DMatSetup.resize(392, 451)
         self.verticalLayout = QtWidgets.QVBoxLayout(DMatSetup)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -522,20 +523,29 @@ class Ui_DMatSetup(object):
         self.verticalLayout_6.addItem(spacerItem6)
         self.nav_phy.addTab(self.tab_eco, "")
         self.verticalLayout.addWidget(self.nav_phy)
-        self.b_close = QtWidgets.QDialogButtonBox(DMatSetup)
-        self.b_close.setOrientation(QtCore.Qt.Horizontal)
-        self.b_close.setStandardButtons(
-            QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Save
+        self.horizontalGroupBox = QtWidgets.QGroupBox(DMatSetup)
+        self.horizontalGroupBox.setObjectName("horizontalGroupBox")
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.horizontalGroupBox)
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        spacerItem7 = QtWidgets.QSpacerItem(
+            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )
-        self.b_close.setObjectName("b_close")
-        self.verticalLayout.addWidget(self.b_close)
+        self.horizontalLayout_9.addItem(spacerItem7)
+        self.b_add_matlib = QtWidgets.QPushButton(self.horizontalGroupBox)
+        self.b_add_matlib.setObjectName("b_add_matlib")
+        self.horizontalLayout_9.addWidget(self.b_add_matlib)
+        self.b_save = QtWidgets.QPushButton(self.horizontalGroupBox)
+        self.b_save.setObjectName("b_save")
+        self.horizontalLayout_9.addWidget(self.b_save)
+        self.b_cancel = QtWidgets.QPushButton(self.horizontalGroupBox)
+        self.b_cancel.setObjectName("b_cancel")
+        self.horizontalLayout_9.addWidget(self.b_cancel)
+        self.verticalLayout.addWidget(self.horizontalGroupBox)
 
         self.retranslateUi(DMatSetup)
-        self.nav_phy.setCurrentIndex(1)
+        self.nav_phy.setCurrentIndex(4)
         self.nav_meca.setCurrentIndex(1)
         self.nav_ther.setCurrentIndex(1)
-        self.b_close.accepted.connect(DMatSetup.accept)
-        self.b_close.rejected.connect(DMatSetup.reject)
         QtCore.QMetaObject.connectSlotsByName(DMatSetup)
 
     def retranslateUi(self, DMatSetup):
@@ -605,6 +615,9 @@ class Ui_DMatSetup(object):
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_eco), _translate("DMatSetup", "Economical")
         )
+        self.b_add_matlib.setText(_translate("DMatSetup", "Add to MatLib"))
+        self.b_save.setText(_translate("DMatSetup", "Save"))
+        self.b_cancel.setText(_translate("DMatSetup", "Cancel"))
 
 
 from .....GUI.Tools.FloatEdit import FloatEdit

@@ -331,6 +331,12 @@ class Output(FrozenClass):
     # save method is available in all object
     save = save
 
+    # generic copy method
+    def copy(self):
+        """Return a copy of the class
+        """
+        return type(self)(init_dict=self.as_dict())
+
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -346,12 +352,15 @@ class Output(FrozenClass):
         logger_name="Pyleecan.Output",
         force=-1,
         init_dict=None,
+        init_str=None,
     ):
-        """Constructor of the class. Can be use in two ways :
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
@@ -370,6 +379,22 @@ class Output(FrozenClass):
             post = OutPost()
         if force == -1:
             force = OutForce()
+        if init_str is not None:  # Initialisation by str
+            from ..Functions.load import load
+
+            assert type(init_str) is str
+            # load the object from a file
+            obj = load(init_str)
+            assert type(obj) is type(self)
+            simu = obj.simu
+            path_res = obj.path_res
+            geo = obj.geo
+            elec = obj.elec
+            mag = obj.mag
+            struct = obj.struct
+            post = obj.post
+            logger_name = obj.logger_name
+            force = obj.force
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -405,38 +430,73 @@ class Output(FrozenClass):
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
             self.simu = class_obj(init_dict=simu)
+        elif isinstance(simu, str):
+            from ..Functions.load import load
+
+            simu = load(simu)
+            # Check that the type is correct (including daughter)
+            class_name = simu.__class__.__name__
+            if class_name not in ["Simulation", "Simu1"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for simu"
+                )
+            self.simu = simu
         else:
             self.simu = simu
         self.path_res = path_res
         # geo can be None, a OutGeo object or a dict
         if isinstance(geo, dict):
             self.geo = OutGeo(init_dict=geo)
+        elif isinstance(geo, str):
+            from ..Functions.load import load
+
+            self.geo = load(geo)
         else:
             self.geo = geo
         # elec can be None, a OutElec object or a dict
         if isinstance(elec, dict):
             self.elec = OutElec(init_dict=elec)
+        elif isinstance(elec, str):
+            from ..Functions.load import load
+
+            self.elec = load(elec)
         else:
             self.elec = elec
         # mag can be None, a OutMag object or a dict
         if isinstance(mag, dict):
             self.mag = OutMag(init_dict=mag)
+        elif isinstance(mag, str):
+            from ..Functions.load import load
+
+            self.mag = load(mag)
         else:
             self.mag = mag
         # struct can be None, a OutStruct object or a dict
         if isinstance(struct, dict):
             self.struct = OutStruct(init_dict=struct)
+        elif isinstance(struct, str):
+            from ..Functions.load import load
+
+            self.struct = load(struct)
         else:
             self.struct = struct
         # post can be None, a OutPost object or a dict
         if isinstance(post, dict):
             self.post = OutPost(init_dict=post)
+        elif isinstance(post, str):
+            from ..Functions.load import load
+
+            self.post = load(post)
         else:
             self.post = post
         self.logger_name = logger_name
         # force can be None, a OutForce object or a dict
         if isinstance(force, dict):
             self.force = OutForce(init_dict=force)
+        elif isinstance(force, str):
+            from ..Functions.load import load
+
+            self.force = load(force)
         else:
             self.force = force
 
