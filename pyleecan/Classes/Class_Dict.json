@@ -729,15 +729,13 @@
         "desc": "Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). ",
         "is_internal": false,
         "methods": [
-            "get_node2element",
-            "convert_element",
             "add_element",
-            "get_connectivity",
             "get_all_connectivity",
-            "is_exist",
-            "get_new_tag",
             "get_all_node_tags",
-            "get_group"
+            "get_connectivity",
+            "get_group",
+            "get_node2element",
+            "is_exist"
         ],
         "mother": "Element",
         "name": "ElementMat",
