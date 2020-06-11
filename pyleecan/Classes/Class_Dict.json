@@ -5970,7 +5970,9 @@
             "rotate",
             "split_half",
             "split_line",
-            "translate"
+            "translate",
+            "is_on_line",
+            "comp_distance"
         ],
         "mother": "Line",
         "name": "Segment",
