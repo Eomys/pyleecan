@@ -29,13 +29,14 @@ def plot_deformation(self, field, indices=[], factor=1):
         field = field[indices]
 
     # Add field to mesh
-    mesh.vectors = field
+    mesh.vectors = field * factor
 
     # Warp by vectors
     mesh_warp = mesh.warp_by_vector()
 
     # Configure plot
-    p = pv.Plotter()
+    p = pv.BackgroundPlotter()
+    p.set_background("white")
     p.add_mesh(
         mesh_warp,
         color="grey",

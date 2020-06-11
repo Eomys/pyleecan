@@ -4823,10 +4823,7 @@
                 "value": "1"
             }
         ],
-        "daughters": [
-            "Mesh",
-            "MeshVTK"
-        ],
+        "daughters": [],
         "desc": "Gather the mesh storage format",
         "is_internal": false,
         "methods": [
@@ -4956,14 +4953,14 @@
             "get_cells",
             "get_normals",
             "get_surf",
-            "get_cell_surf",
+            "get_cell_area",
             "plot_mesh",
             "plot_contour",
             "plot_glyph",
             "plot_deformation",
             "plot_deformation_animated"
         ],
-        "mother": "Mesh",
+        "mother": "",
         "name": "MeshVTK",
         "package": "Mesh",
         "path": "pyleecan/Generator/ClassesRef/Mesh/MeshVTK.csv",
@@ -4993,7 +4990,7 @@
                 "name": "format",
                 "type": "str",
                 "unit": "",
-                "value": "\"vtk\""
+                "value": "vtk"
             },
             {
                 "desc": "Path where the mesh is stored",
@@ -5011,7 +5008,7 @@
                 "name": "name",
                 "type": "str",
                 "unit": "",
-                "value": "\"mesh\""
+                "value": "mesh"
             },
             {
                 "desc": "Contain all possible group numbers",
@@ -5056,7 +5053,57 @@
                 "name": "surf_name",
                 "type": "str",
                 "unit": "",
-                "value": "\"surf\""
+                "value": "surf"
+            }
+        ]
+    },
+    "ModalBasis": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Structural module: Modal Basis object",
+        "is_internal": false,
+        "methods": [
+            "get_mesh",
+            "get_natfreqs",
+            "get_amplitudes",
+            "plot_modal_basis_3D"
+        ],
+        "mother": "",
+        "name": "ModalBasis",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/ModalBasis.csv",
+        "properties": [
+            {
+                "desc": "Cylindrical mesh",
+                "max": "",
+                "min": "",
+                "name": "mesh",
+                "type": "MeshVTK",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Dict of the natural frequencies: key = (m,n) of the mode, values = natural frequencies (lists)",
+                "max": "",
+                "min": "",
+                "name": "nat_freqs",
+                "type": "dict",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Dict of the amplitudes: key = (m,n) of the mode, values = amplitudes (Data objects)",
+                "max": "",
+                "min": "",
+                "name": "amplitudes",
+                "type": "dict",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -8796,6 +8843,15 @@
                 "min": "",
                 "name": "force",
                 "type": "Force",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Modal Basis object (cylindrical mesh + solution)",
+                "max": "",
+                "min": "",
+                "name": "modalbasis",
+                "type": "ModalBasis",
                 "unit": "-",
                 "value": ""
             }

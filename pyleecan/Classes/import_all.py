@@ -92,6 +92,7 @@ from ..Classes.Material import Material
 from ..Classes.Mesh import Mesh
 from ..Classes.MeshSolution import MeshSolution
 from ..Classes.MeshVTK import MeshVTK
+from ..Classes.ModalBasis import ModalBasis
 from ..Classes.Node import Node
 from ..Classes.NodeMat import NodeMat
 from ..Classes.Notch import Notch

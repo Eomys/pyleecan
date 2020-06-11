@@ -276,20 +276,7 @@ class Mesh(FrozenClass):
                 if obj is None:  # Default value
                     self.submesh.append(Mesh())
                 elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in ["Mesh", "MeshVTK"]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for submesh"
-                        )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.submesh.append(class_obj(init_dict=obj))
+                    self.submesh.append(Mesh(init_dict=obj))
                 else:
                     self.submesh.append(obj)
         elif submesh is None:

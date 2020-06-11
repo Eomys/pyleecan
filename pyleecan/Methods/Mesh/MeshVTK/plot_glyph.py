@@ -36,9 +36,10 @@ def plot_glyph(self, field, indices=[], factor=1):
     centers2.vectors = surf["field"] * factor
 
     # Configure plot
-    p = pv.Plotter()
+    p = pv.BackgroundPlotter()
+    p.set_background("white")
     p.add_mesh(
-        mesh, show_edges=True, edge_color="white", line_width=1,
+        mesh, color="grey", opacity=0.7, show_edges=True, edge_color="white",
     )
-    p.add_mesh(centers2.arrows, color="black")
+    p.add_mesh(centers2.arrows, color="white")
     p.show()

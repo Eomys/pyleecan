@@ -42,7 +42,7 @@ def plot_deformation_animated(
         field = field[indices]
 
     # Add field to mesh
-    mesh.vectors = field
+    mesh.vectors = take(field, 0, axis=-1) * factor
 
     # Warp by vectors
     mesh_warp = mesh.warp_by_vector()
@@ -63,8 +63,7 @@ def plot_deformation_animated(
     # GIF
     p.open_gif(gif_path + "/" + gif_name)
     for i in range(Nt_tot):
-        field = take(field, i, axis=-1)
-        mesh.vectors = field
+        mesh.vectors = take(field, i, axis=-1) * factor
         mesh_warp = mesh.warp_by_vector()
         p.add_mesh(
             mesh_warp,

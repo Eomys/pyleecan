@@ -20,7 +20,8 @@ def plot_mesh(self, indices=[]):
     mesh = self.get_mesh(indices)
 
     # Configure plot
-    p = pv.Plotter()
+    p = pv.BackgroundPlotter()
+    p.set_background("white")
     p.add_mesh(
         mesh,
         color="grey",

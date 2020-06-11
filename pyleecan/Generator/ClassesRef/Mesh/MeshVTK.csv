@@ -1,12 +1,12 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-mesh,,Pyvista object of the mesh (optional),,pyvista.core.pointset.UnstructuredGrid,None,,,,Mesh,Mesh,get_mesh,VERSION,1,Gather the mesh storage format
+mesh,,Pyvista object of the mesh (optional),,pyvista.core.pointset.UnstructuredGrid,None,,,,Mesh,,get_mesh,VERSION,1,Gather the mesh storage format
 is_pyvista_mesh,,Store the pyvista object,,bool,False,,,,,,get_points,,,
-format,,Format in which the mesh is stored,,str,"""vtk""",,,,,,get_cells,,,
+format,,Format in which the mesh is stored,,str,vtk,,,,,,get_cells,,,
 path,,Path where the mesh is stored,,str,,,,,,,get_normals,,,
-name,,Name of the mesh file,,str,"""mesh""",,,,,,get_surf,,,
-group,,Contain all possible group numbers,,ndarray,,,,,,,get_cell_surf,,,
+name,,Name of the mesh file,,str,mesh,,,,,,get_surf,,,
+group,,Contain all possible group numbers,,ndarray,,,,,,,get_cell_area,,,
 surf,,Pyvista object of the outer surface,,pyvista.core.pointset.PolyData,None,,,,,,plot_mesh,,,
 is_vtk_surf,,Save the surface mesh in a vtk file,,bool,False,,,,,,plot_contour,,,
 surf_path,,Path where the outer surface is stored,,str,,,,,,,plot_glyph,,,
-surf_name,,Name of the outer surface file,,str,"""surf""",,,,,,plot_deformation,,,
+surf_name,,Name of the outer surface file,,str,surf,,,,,,plot_deformation,,,
 ,,,,,,,,,,,plot_deformation_animated,,,

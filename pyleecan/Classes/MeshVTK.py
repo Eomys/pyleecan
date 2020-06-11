@@ -8,7 +8,7 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from .Mesh import Mesh
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -38,9 +38,9 @@ except ImportError as error:
     get_surf = error
 
 try:
-    from ..Methods.Mesh.MeshVTK.get_cell_surf import get_cell_surf
+    from ..Methods.Mesh.MeshVTK.get_cell_area import get_cell_area
 except ImportError as error:
-    get_cell_surf = error
+    get_cell_area = error
 
 try:
     from ..Methods.Mesh.MeshVTK.plot_mesh import plot_mesh
@@ -63,7 +63,9 @@ except ImportError as error:
     plot_deformation = error
 
 try:
-    from ..Methods.Mesh.MeshVTK.plot_deformation_animated import plot_deformation_animated
+    from ..Methods.Mesh.MeshVTK.plot_deformation_animated import (
+        plot_deformation_animated,
+    )
 except ImportError as error:
     plot_deformation_animated = error
 
@@ -71,21 +73,19 @@ except ImportError as error:
 from numpy import array, array_equal
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
-try :
+
+try:
     from pyvista.core.pointset import UnstructuredGrid
-except ImportError :
+except ImportError:
     UnstructuredGrid = ImportError
-try :
+try:
     from pyvista.core.pointset import PolyData
-except ImportError :
+except ImportError:
     PolyData = ImportError
 from ._check import InitUnKnowClassError
-from .Element import Element
-from .Node import Node
-from .Mesh import Mesh
 
 
-class MeshVTK(Mesh):
+class MeshVTK(FrozenClass):
     """Gather the mesh storage format"""
 
     VERSION = 1
@@ -136,17 +136,17 @@ class MeshVTK(Mesh):
         )
     else:
         get_surf = get_surf
-    # cf Methods.Mesh.MeshVTK.get_cell_surf
-    if isinstance(get_cell_surf, ImportError):
-        get_cell_surf = property(
+    # cf Methods.Mesh.MeshVTK.get_cell_area
+    if isinstance(get_cell_area, ImportError):
+        get_cell_area = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MeshVTK method get_cell_surf: " + str(get_cell_surf)
+                    "Can't use MeshVTK method get_cell_area: " + str(get_cell_area)
                 )
             )
         )
     else:
-        get_cell_surf = get_cell_surf
+        get_cell_area = get_cell_area
     # cf Methods.Mesh.MeshVTK.plot_mesh
     if isinstance(plot_mesh, ImportError):
         plot_mesh = property(
@@ -181,7 +181,8 @@ class MeshVTK(Mesh):
         plot_deformation = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MeshVTK method plot_deformation: " + str(plot_deformation)
+                    "Can't use MeshVTK method plot_deformation: "
+                    + str(plot_deformation)
                 )
             )
         )
@@ -211,7 +212,21 @@ class MeshVTK(Mesh):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, mesh=None, is_pyvista_mesh=False, format=""vtk"", path="", name=""mesh"", group=None, surf=None, is_vtk_surf=False, surf_path="", surf_name=""surf"", element=dict(), node=-1, submesh=list(), group=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        mesh=None,
+        is_pyvista_mesh=False,
+        format="vtk",
+        path="",
+        name="mesh",
+        group=None,
+        surf=None,
+        is_vtk_surf=False,
+        surf_path="",
+        surf_name="surf",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -223,10 +238,9 @@ class MeshVTK(Mesh):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if node == -1:
-            node = Node()
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -241,10 +255,6 @@ class MeshVTK(Mesh):
             is_vtk_surf = obj.is_vtk_surf
             surf_path = obj.surf_path
             surf_name = obj.surf_name
-            element = obj.element
-            node = obj.node
-            submesh = obj.submesh
-            group = obj.group
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -268,18 +278,11 @@ class MeshVTK(Mesh):
                 surf_path = init_dict["surf_path"]
             if "surf_name" in list(init_dict.keys()):
                 surf_name = init_dict["surf_name"]
-            if "element" in list(init_dict.keys()):
-                element = init_dict["element"]
-            if "node" in list(init_dict.keys()):
-                node = init_dict["node"]
-            if "submesh" in list(init_dict.keys()):
-                submesh = init_dict["submesh"]
-            if "group" in list(init_dict.keys()):
-                group = init_dict["group"]
         # Initialisation by argument
+        self.parent = None
         # Check if the type UnstructuredGrid has been imported with success
         if isinstance(UnstructuredGrid, ImportError):
-            raise ImportError('Unknown type UnstructuredGrid please install pyvista')
+            raise ImportError("Unknown type UnstructuredGrid please install pyvista")
         self.mesh = mesh
         self.is_pyvista_mesh = is_pyvista_mesh
         self.format = format
@@ -289,29 +292,36 @@ class MeshVTK(Mesh):
         set_array(self, "group", group)
         # Check if the type PolyData has been imported with success
         if isinstance(PolyData, ImportError):
-            raise ImportError('Unknown type PolyData please install pyvista')
+            raise ImportError("Unknown type PolyData please install pyvista")
         self.surf = surf
         self.is_vtk_surf = is_vtk_surf
         self.surf_path = surf_path
         self.surf_name = surf_name
-        # Call Mesh init
-        super(MeshVTK, self).__init__(element=element, node=node, submesh=submesh, group=group)
-        # The class is frozen (in Mesh init), for now it's impossible to
-        # add new properties
+
+        # The class is frozen, for now it's impossible to add new properties
+        self._freeze()
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
         MeshVTK_str = ""
-        # Get the properties inherited from Mesh
-        MeshVTK_str += super(MeshVTK, self).__str__()
-        MeshVTK_str += "mesh = "+ str(self.mesh) + linesep + linesep
+        if self.parent is None:
+            MeshVTK_str += "parent = None " + linesep
+        else:
+            MeshVTK_str += "parent = " + str(type(self.parent)) + " object" + linesep
+        MeshVTK_str += "mesh = " + str(self.mesh) + linesep + linesep
         MeshVTK_str += "is_pyvista_mesh = " + str(self.is_pyvista_mesh) + linesep
         MeshVTK_str += 'format = "' + str(self.format) + '"' + linesep
         MeshVTK_str += 'path = "' + str(self.path) + '"' + linesep
         MeshVTK_str += 'name = "' + str(self.name) + '"' + linesep
-        MeshVTK_str += "group = " + linesep + str(self.group).replace(linesep, linesep + "\t") + linesep + linesep
-        MeshVTK_str += "surf = "+ str(self.surf) + linesep + linesep
+        MeshVTK_str += (
+            "group = "
+            + linesep
+            + str(self.group).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        MeshVTK_str += "surf = " + str(self.surf) + linesep + linesep
         MeshVTK_str += "is_vtk_surf = " + str(self.is_vtk_surf) + linesep
         MeshVTK_str += 'surf_path = "' + str(self.surf_path) + '"' + linesep
         MeshVTK_str += 'surf_name = "' + str(self.surf_name) + '"' + linesep
@@ -321,10 +331,6 @@ class MeshVTK(Mesh):
         """Compare two objects (skip parent)"""
 
         if type(other) != type(self):
-            return False
-
-        # Check the properties inherited from Mesh
-        if not super(MeshVTK, self).__eq__(other):
             return False
         if other.mesh != self.mesh:
             return False
@@ -352,12 +358,15 @@ class MeshVTK(Mesh):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        # Get the properties inherited from Mesh
-        MeshVTK_dict = super(MeshVTK, self).as_dict()
+        MeshVTK_dict = dict()
         if self.mesh is None:
             MeshVTK_dict["mesh"] = None
-        else: # Store serialized data (using cloudpickle) and str to read it in json save files
-            MeshVTK_dict['mesh'] ={"__class__" : str(type(self._mesh)),"__repr__":str(self._mesh.__repr__()),"serialized":dumps(self._mesh).decode('ISO-8859-2')}
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            MeshVTK_dict["mesh"] = {
+                "__class__": str(type(self._mesh)),
+                "__repr__": str(self._mesh.__repr__()),
+                "serialized": dumps(self._mesh).decode("ISO-8859-2"),
+            }
         MeshVTK_dict["is_pyvista_mesh"] = self.is_pyvista_mesh
         MeshVTK_dict["format"] = self.format
         MeshVTK_dict["path"] = self.path
@@ -368,13 +377,16 @@ class MeshVTK(Mesh):
             MeshVTK_dict["group"] = self.group.tolist()
         if self.surf is None:
             MeshVTK_dict["surf"] = None
-        else: # Store serialized data (using cloudpickle) and str to read it in json save files
-            MeshVTK_dict['surf'] ={"__class__" : str(type(self._surf)),"__repr__":str(self._surf.__repr__()),"serialized":dumps(self._surf).decode('ISO-8859-2')}
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            MeshVTK_dict["surf"] = {
+                "__class__": str(type(self._surf)),
+                "__repr__": str(self._surf.__repr__()),
+                "serialized": dumps(self._surf).decode("ISO-8859-2"),
+            }
         MeshVTK_dict["is_vtk_surf"] = self.is_vtk_surf
         MeshVTK_dict["surf_path"] = self.surf_path
         MeshVTK_dict["surf_name"] = self.surf_name
         # The class name is added to the dict fordeserialisation purpose
-        # Overwrite the mother class name
         MeshVTK_dict["__class__"] = "MeshVTK"
         return MeshVTK_dict
 
@@ -391,8 +403,6 @@ class MeshVTK(Mesh):
         self.is_vtk_surf = None
         self.surf_path = None
         self.surf_name = None
-        # Set to None the properties inherited from Mesh
-        super(MeshVTK, self)._set_None()
 
     def _get_mesh(self):
         """getter of mesh"""
@@ -400,15 +410,18 @@ class MeshVTK(Mesh):
 
     def _set_mesh(self, value):
         """setter of mesh"""
-        try: # Check the type 
+        try:  # Check the type
             check_var("mesh", value, "dict")
         except CheckTypeError:
             check_var("mesh", value, "pyvista.core.pointset.UnstructuredGrid")
             # property can be set from a list to handle loads
-        if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._mesh = loads(value["serialized"].encode('ISO-8859-2'))
-        else: 
-            self._mesh= value 
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._mesh = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._mesh = value
+
     # Pyvista object of the mesh (optional)
     # Type : pyvista.core.pointset.UnstructuredGrid
     mesh = property(
@@ -427,7 +440,9 @@ class MeshVTK(Mesh):
     # Store the pyvista object
     # Type : bool
     is_pyvista_mesh = property(
-        fget=_get_is_pyvista_mesh, fset=_set_is_pyvista_mesh, doc=u"""Store the pyvista object"""
+        fget=_get_is_pyvista_mesh,
+        fset=_set_is_pyvista_mesh,
+        doc=u"""Store the pyvista object""",
     )
 
     def _get_format(self):
@@ -442,7 +457,9 @@ class MeshVTK(Mesh):
     # Format in which the mesh is stored
     # Type : str
     format = property(
-        fget=_get_format, fset=_set_format, doc=u"""Format in which the mesh is stored"""
+        fget=_get_format,
+        fset=_set_format,
+        doc=u"""Format in which the mesh is stored""",
     )
 
     def _get_path(self):
@@ -471,9 +488,7 @@ class MeshVTK(Mesh):
 
     # Name of the mesh file
     # Type : str
-    name = property(
-        fget=_get_name, fset=_set_name, doc=u"""Name of the mesh file"""
-    )
+    name = property(fget=_get_name, fset=_set_name, doc=u"""Name of the mesh file""")
 
     def _get_group(self):
         """getter of group"""
@@ -501,15 +516,18 @@ class MeshVTK(Mesh):
 
     def _set_surf(self, value):
         """setter of surf"""
-        try: # Check the type 
+        try:  # Check the type
             check_var("surf", value, "dict")
         except CheckTypeError:
             check_var("surf", value, "pyvista.core.pointset.PolyData")
             # property can be set from a list to handle loads
-        if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._surf = loads(value["serialized"].encode('ISO-8859-2'))
-        else: 
-            self._surf= value 
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._surf = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._surf = value
+
     # Pyvista object of the outer surface
     # Type : pyvista.core.pointset.PolyData
     surf = property(
@@ -528,7 +546,9 @@ class MeshVTK(Mesh):
     # Save the surface mesh in a vtk file
     # Type : bool
     is_vtk_surf = property(
-        fget=_get_is_vtk_surf, fset=_set_is_vtk_surf, doc=u"""Save the surface mesh in a vtk file"""
+        fget=_get_is_vtk_surf,
+        fset=_set_is_vtk_surf,
+        doc=u"""Save the surface mesh in a vtk file""",
     )
 
     def _get_surf_path(self):
@@ -543,7 +563,9 @@ class MeshVTK(Mesh):
     # Path where the outer surface is stored
     # Type : str
     surf_path = property(
-        fget=_get_surf_path, fset=_set_surf_path, doc=u"""Path where the outer surface is stored"""
+        fget=_get_surf_path,
+        fset=_set_surf_path,
+        doc=u"""Path where the outer surface is stored""",
     )
 
     def _get_surf_name(self):
@@ -558,5 +580,7 @@ class MeshVTK(Mesh):
     # Name of the outer surface file
     # Type : str
     surf_name = property(
-        fget=_get_surf_name, fset=_set_surf_name, doc=u"""Name of the outer surface file"""
+        fget=_get_surf_name,
+        fset=_set_surf_name,
+        doc=u"""Name of the outer surface file""",
     )

@@ -30,8 +30,15 @@ def plot_contour(self, field, field_name="Magnitude", indices=[], cmap="RdBu_r")
     mesh[field_name] = field
 
     # Configure plot
-    p = pv.Plotter()
-    sargs = dict(interactive=True)
+    p = pv.BackgroundPlotter()
+    p.set_background("white")
+    sargs = dict(
+        interactive=True,
+        title_font_size=20,
+        label_font_size=16,
+        font_family="arial",
+        color="black",
+    )
     p.add_mesh(
         mesh,
         scalars=field_name,

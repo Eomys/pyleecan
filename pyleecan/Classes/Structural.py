@@ -25,6 +25,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .Force import Force
+from .ModalBasis import ModalBasis
 
 
 class Structural(FrozenClass):
@@ -66,7 +67,7 @@ class Structural(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, force=-1, init_dict=None, init_str=None):
+    def __init__(self, force=-1, modalbasis=-1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -80,6 +81,8 @@ class Structural(FrozenClass):
 
         if force == -1:
             force = Force()
+        if modalbasis == -1:
+            modalbasis = ModalBasis()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -88,11 +91,14 @@ class Structural(FrozenClass):
             obj = load(init_str)
             assert type(obj) is type(self)
             force = obj.force
+            modalbasis = obj.modalbasis
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "force" in list(init_dict.keys()):
                 force = init_dict["force"]
+            if "modalbasis" in list(init_dict.keys()):
+                modalbasis = init_dict["modalbasis"]
         # Initialisation by argument
         self.parent = None
         # force can be None, a Force object or a dict
@@ -120,6 +126,15 @@ class Structural(FrozenClass):
             self.force = force
         else:
             self.force = force
+        # modalbasis can be None, a ModalBasis object or a dict
+        if isinstance(modalbasis, dict):
+            self.modalbasis = ModalBasis(init_dict=modalbasis)
+        elif isinstance(modalbasis, str):
+            from ..Functions.load import load
+
+            self.modalbasis = load(modalbasis)
+        else:
+            self.modalbasis = modalbasis
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -137,6 +152,13 @@ class Structural(FrozenClass):
             Structural_str += "force = " + tmp
         else:
             Structural_str += "force = None" + linesep + linesep
+        if self.modalbasis is not None:
+            tmp = (
+                self.modalbasis.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
+            Structural_str += "modalbasis = " + tmp
+        else:
+            Structural_str += "modalbasis = None" + linesep + linesep
         return Structural_str
 
     def __eq__(self, other):
@@ -145,6 +167,8 @@ class Structural(FrozenClass):
         if type(other) != type(self):
             return False
         if other.force != self.force:
+            return False
+        if other.modalbasis != self.modalbasis:
             return False
         return True
 
@@ -157,6 +181,10 @@ class Structural(FrozenClass):
             Structural_dict["force"] = None
         else:
             Structural_dict["force"] = self.force.as_dict()
+        if self.modalbasis is None:
+            Structural_dict["modalbasis"] = None
+        else:
+            Structural_dict["modalbasis"] = self.modalbasis.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         Structural_dict["__class__"] = "Structural"
         return Structural_dict
@@ -166,6 +194,8 @@ class Structural(FrozenClass):
 
         if self.force is not None:
             self.force._set_None()
+        if self.modalbasis is not None:
+            self.modalbasis._set_None()
 
     def _get_force(self):
         """getter of force"""
@@ -182,3 +212,23 @@ class Structural(FrozenClass):
     # Force module
     # Type : Force
     force = property(fget=_get_force, fset=_set_force, doc=u"""Force module""")
+
+    def _get_modalbasis(self):
+        """getter of modalbasis"""
+        return self._modalbasis
+
+    def _set_modalbasis(self, value):
+        """setter of modalbasis"""
+        check_var("modalbasis", value, "ModalBasis")
+        self._modalbasis = value
+
+        if self._modalbasis is not None:
+            self._modalbasis.parent = self
+
+    # Modal Basis object (cylindrical mesh + solution)
+    # Type : ModalBasis
+    modalbasis = property(
+        fget=_get_modalbasis,
+        fset=_set_modalbasis,
+        doc=u"""Modal Basis object (cylindrical mesh + solution)""",
+    )
