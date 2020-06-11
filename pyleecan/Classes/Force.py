@@ -13,19 +13,14 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.Force.run import run
-except ImportError as error:
-    run = error
-
-try:
-    from ..Methods.Simulation.Force.comp_force import comp_force
-except ImportError as error:
-    comp_force = error
-
-try:
     from ..Methods.Simulation.Force.comp_time_angle import comp_time_angle
 except ImportError as error:
     comp_time_angle = error
+
+try:
+    from ..Methods.Simulation.Force.run import run
+except ImportError as error:
+    run = error
 
 
 from ._check import InitUnKnowClassError
@@ -37,24 +32,6 @@ class Force(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.Force.run
-    if isinstance(run, ImportError):
-        run = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Force method run: " + str(run))
-            )
-        )
-    else:
-        run = run
-    # cf Methods.Simulation.Force.comp_force
-    if isinstance(comp_force, ImportError):
-        comp_force = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Force method comp_force: " + str(comp_force))
-            )
-        )
-    else:
-        comp_force = comp_force
     # cf Methods.Simulation.Force.comp_time_angle
     if isinstance(comp_time_angle, ImportError):
         comp_time_angle = property(
@@ -66,8 +43,23 @@ class Force(FrozenClass):
         )
     else:
         comp_time_angle = comp_time_angle
+    # cf Methods.Simulation.Force.run
+    if isinstance(run, ImportError):
+        run = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Force method run: " + str(run))
+            )
+        )
+    else:
+        run = run
     # save method is available in all object
     save = save
+
+    # generic copy method
+    def copy(self):
+        """Return a copy of the class
+        """
+        return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger

@@ -729,15 +729,13 @@
         "desc": "Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). ",
         "is_internal": false,
         "methods": [
-            "get_node2element",
-            "convert_element",
             "add_element",
-            "get_connectivity",
             "get_all_connectivity",
-            "is_exist",
-            "get_new_tag",
             "get_all_node_tags",
-            "get_group"
+            "get_connectivity",
+            "get_group",
+            "get_node2element",
+            "is_exist"
         ],
         "mother": "Element",
         "name": "ElementMat",
@@ -805,9 +803,8 @@
         "desc": "Forces module abstract object",
         "is_internal": false,
         "methods": [
-            "run",
-            "comp_force",
-            "comp_time_angle"
+            "comp_time_angle",
+            "run"
         ],
         "mother": "",
         "name": "Force",
@@ -1584,14 +1581,15 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
-            "_to_m_file",
             "build_geometry",
             "check",
             "comp_mass_magnets",
             "comp_radius",
             "comp_surface_magnets",
             "comp_volume_magnets",
-            "remove_magnet"
+            "remove_magnet",
+            "get_height_magnet",
+            "has_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM57",
@@ -4561,10 +4559,7 @@
         ],
         "desc": "Abstract class to define nodes. It must have at least a method get_coord to get nodes coordinates for given node tags/number, and a method get_group to create a new objet Node based on a set of given elements.",
         "is_internal": false,
-        "methods": [
-            "get_group",
-            "get_coord"
-        ],
+        "methods": [],
         "mother": "",
         "name": "Node",
         "package": "Mesh",
@@ -4582,10 +4577,9 @@
         "desc": "Class to define nodes coordinates and getter.",
         "is_internal": false,
         "methods": [
-            "get_coord",
-            "get_tag",
-            "get_group",
             "add_node",
+            "get_coord",
+            "get_group",
             "is_exist"
         ],
         "mother": "Node",
@@ -4965,9 +4959,7 @@
         "daughters": [],
         "desc": "Multi-objectives optimization problem with some constraints",
         "is_internal": false,
-        "methods": [
-            "eval_pb"
-        ],
+        "methods": [],
         "mother": "",
         "name": "OptiProblem",
         "package": "Optimization",
@@ -5709,24 +5701,20 @@
         "desc": "Main Output object: gather all the outputs of all the modules",
         "is_internal": false,
         "methods": [
-            "getter.get_BH_stator",
-            "getter.get_BH_rotor",
-            "getter.get_path_result",
             "getter.get_angle_rotor",
-            "plot.Structural.plot_force_space",
-            "plot.Magnetic.plot_mesh_field",
-            "plot.Magnetic.plot_mesh",
-            "plot.plot_A_time",
-            "plot.plot_A_space",
-            "plot.plot_A_time_space",
-            "plot.plot_A_surf",
-            "plot.plot_A_cfft2",
-            "plot.plot_A_nthoctave",
-            "plot.plot_A_fft2",
+            "getter.get_BH_rotor",
+            "getter.get_BH_stator",
+            "getter.get_path_result",
             "plot.Magnetic.plot_B_space",
-            "plot.Structural.plot_force_space",
+            "plot.Magnetic.plot_mesh",
             "plot.Magnetic.plot_mesh_field",
-            "plot.plot_A_space_compare"
+            "plot.plot_A_cfft2",
+            "plot.plot_A_fft2",
+            "plot.plot_A_space",
+            "plot.plot_A_surf",
+            "plot.plot_A_time",
+            "plot.plot_A_time_space",
+            "plot.Structural.plot_force_space"
         ],
         "mother": "",
         "name": "Output",
@@ -6202,6 +6190,7 @@
         "daughters": [
             "Slot",
             "Slot19",
+            "SlotCirc",
             "SlotMFlat",
             "SlotMPolar",
             "SlotMag",
@@ -6320,6 +6309,55 @@
                 "type": "bool",
                 "unit": "-",
                 "value": 0
+            }
+        ]
+    },
+    "SlotCirc": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Circular slot (for notches)",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "build_geometry_wind",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_wind",
+            "comp_surface",
+            "comp_surface_wind"
+        ],
+        "mother": "SlotWind",
+        "name": "SlotCirc",
+        "package": "Slot",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotCirc.csv",
+        "properties": [
+            {
+                "desc": "Slot isthmus width.",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "Slot height",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.03
             }
         ]
     },
@@ -8101,6 +8139,7 @@
             }
         ],
         "daughters": [
+            "SlotCirc",
             "SlotW10",
             "SlotW11",
             "SlotW12",

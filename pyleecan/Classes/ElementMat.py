@@ -13,24 +13,9 @@ from .Element import Element
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Mesh.ElementMat.get_node2element import get_node2element
-except ImportError as error:
-    get_node2element = error
-
-try:
-    from ..Methods.Mesh.ElementMat.convert_element import convert_element
-except ImportError as error:
-    convert_element = error
-
-try:
     from ..Methods.Mesh.ElementMat.add_element import add_element
 except ImportError as error:
     add_element = error
-
-try:
-    from ..Methods.Mesh.ElementMat.get_connectivity import get_connectivity
-except ImportError as error:
-    get_connectivity = error
 
 try:
     from ..Methods.Mesh.ElementMat.get_all_connectivity import get_all_connectivity
@@ -38,24 +23,29 @@ except ImportError as error:
     get_all_connectivity = error
 
 try:
-    from ..Methods.Mesh.ElementMat.is_exist import is_exist
-except ImportError as error:
-    is_exist = error
-
-try:
-    from ..Methods.Mesh.ElementMat.get_new_tag import get_new_tag
-except ImportError as error:
-    get_new_tag = error
-
-try:
     from ..Methods.Mesh.ElementMat.get_all_node_tags import get_all_node_tags
 except ImportError as error:
     get_all_node_tags = error
 
 try:
+    from ..Methods.Mesh.ElementMat.get_connectivity import get_connectivity
+except ImportError as error:
+    get_connectivity = error
+
+try:
     from ..Methods.Mesh.ElementMat.get_group import get_group
 except ImportError as error:
     get_group = error
+
+try:
+    from ..Methods.Mesh.ElementMat.get_node2element import get_node2element
+except ImportError as error:
+    get_node2element = error
+
+try:
+    from ..Methods.Mesh.ElementMat.is_exist import is_exist
+except ImportError as error:
+    is_exist = error
 
 
 from numpy import array, array_equal
@@ -68,30 +58,6 @@ class ElementMat(Element):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.ElementMat.get_node2element
-    if isinstance(get_node2element, ImportError):
-        get_node2element = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ElementMat method get_node2element: "
-                    + str(get_node2element)
-                )
-            )
-        )
-    else:
-        get_node2element = get_node2element
-    # cf Methods.Mesh.ElementMat.convert_element
-    if isinstance(convert_element, ImportError):
-        convert_element = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ElementMat method convert_element: "
-                    + str(convert_element)
-                )
-            )
-        )
-    else:
-        convert_element = convert_element
     # cf Methods.Mesh.ElementMat.add_element
     if isinstance(add_element, ImportError):
         add_element = property(
@@ -103,18 +69,6 @@ class ElementMat(Element):
         )
     else:
         add_element = add_element
-    # cf Methods.Mesh.ElementMat.get_connectivity
-    if isinstance(get_connectivity, ImportError):
-        get_connectivity = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ElementMat method get_connectivity: "
-                    + str(get_connectivity)
-                )
-            )
-        )
-    else:
-        get_connectivity = get_connectivity
     # cf Methods.Mesh.ElementMat.get_all_connectivity
     if isinstance(get_all_connectivity, ImportError):
         get_all_connectivity = property(
@@ -127,26 +81,6 @@ class ElementMat(Element):
         )
     else:
         get_all_connectivity = get_all_connectivity
-    # cf Methods.Mesh.ElementMat.is_exist
-    if isinstance(is_exist, ImportError):
-        is_exist = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use ElementMat method is_exist: " + str(is_exist))
-            )
-        )
-    else:
-        is_exist = is_exist
-    # cf Methods.Mesh.ElementMat.get_new_tag
-    if isinstance(get_new_tag, ImportError):
-        get_new_tag = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ElementMat method get_new_tag: " + str(get_new_tag)
-                )
-            )
-        )
-    else:
-        get_new_tag = get_new_tag
     # cf Methods.Mesh.ElementMat.get_all_node_tags
     if isinstance(get_all_node_tags, ImportError):
         get_all_node_tags = property(
@@ -159,6 +93,18 @@ class ElementMat(Element):
         )
     else:
         get_all_node_tags = get_all_node_tags
+    # cf Methods.Mesh.ElementMat.get_connectivity
+    if isinstance(get_connectivity, ImportError):
+        get_connectivity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ElementMat method get_connectivity: "
+                    + str(get_connectivity)
+                )
+            )
+        )
+    else:
+        get_connectivity = get_connectivity
     # cf Methods.Mesh.ElementMat.get_group
     if isinstance(get_group, ImportError):
         get_group = property(
@@ -168,8 +114,35 @@ class ElementMat(Element):
         )
     else:
         get_group = get_group
+    # cf Methods.Mesh.ElementMat.get_node2element
+    if isinstance(get_node2element, ImportError):
+        get_node2element = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ElementMat method get_node2element: "
+                    + str(get_node2element)
+                )
+            )
+        )
+    else:
+        get_node2element = get_node2element
+    # cf Methods.Mesh.ElementMat.is_exist
+    if isinstance(is_exist, ImportError):
+        is_exist = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ElementMat method is_exist: " + str(is_exist))
+            )
+        )
+    else:
+        is_exist = is_exist
     # save method is available in all object
     save = save
+
+    # generic copy method
+    def copy(self):
+        """Return a copy of the class
+        """
+        return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger

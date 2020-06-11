@@ -145,9 +145,7 @@ def save_split_obj(classes_tuple, obj, folder_path, logger):
         if not isfile(join(folder_path, name)):
             with open(join(folder_path, name), "w") as json_file:
                 logger.info("Saving " + obj["name"] + " in " + join(folder_path, name))
-                dump(
-                    obj, json_file, sort_keys=True, indent=4, separators=(",", ": "),
-                )
+                dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
     else:
         zeros = "0000"
         num = 1
@@ -169,9 +167,7 @@ def save_split_obj(classes_tuple, obj, folder_path, logger):
             join(folder_path, name),
         )
         with open(join(folder_path, name), "w") as json_file:
-            dump(
-                obj, json_file, sort_keys=True, indent=4, separators=(",", ": "),
-            )
+            dump(obj, json_file, sort_keys=True, indent=4, separators=(",", ": "))
 
     return name  # Set the name to load the file
 

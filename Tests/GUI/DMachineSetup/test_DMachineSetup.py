@@ -64,6 +64,9 @@ ENABLE_ITEM = Qt.ItemIsSelectable | Qt.ItemIsEnabled
 import pytest
 
 
+matlib_path = join(DATA_DIR, "Material")
+
+
 @pytest.mark.GUI
 @ddt
 class test_DMachineSetup(TestCase):
@@ -72,7 +75,7 @@ class test_DMachineSetup(TestCase):
     def setUp(self):
         """Run at the begining of every test to setup the gui"""
         # MatLib widget
-        matlib = MatLib("Tests/Data/Material")
+        matlib = MatLib(matlib_path)
         self.widget = DMachineSetup(
             matlib=matlib, machine_path=join(DATA_DIR, "Machine")
         )

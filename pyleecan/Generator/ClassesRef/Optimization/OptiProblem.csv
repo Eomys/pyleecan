@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-output,,Default output to define the default simulation. ,1,Output,,,,,Optimization,,eval_pb,VERSION,1,Multi-objectives optimization problem with some constraints,
+output,,Default output to define the default simulation. ,1,Output,,,,,Optimization,,,VERSION,1,Multi-objectives optimization problem with some constraints,
 design_var,,Dict of design variables,1,{OptiDesignVar},{},,,,,,,,,,
 obj_func,,Dict of objective functions,1,{OptiObjFunc},{},,,,,,,,,,
 eval_func,,Function to evaluate before computing obj function and constraints,1,function,None,,,,,,,,,,

@@ -10,14 +10,6 @@ from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ._frozen import FrozenClass
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Optimization.OptiProblem.eval_pb import eval_pb
-except ImportError as error:
-    eval_pb = error
-
-
 from inspect import getsource
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
@@ -33,17 +25,14 @@ class OptiProblem(FrozenClass):
 
     VERSION = 1
 
-    # cf Methods.Optimization.OptiProblem.eval_pb
-    if isinstance(eval_pb, ImportError):
-        eval_pb = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use OptiProblem method eval_pb: " + str(eval_pb))
-            )
-        )
-    else:
-        eval_pb = eval_pb
     # save method is available in all object
     save = save
+
+    # generic copy method
+    def copy(self):
+        """Return a copy of the class
+        """
+        return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger

@@ -9,11 +9,16 @@ from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
-from os import mkdir
-from os.path import isdir
+from Tests import save_gui_path
+
+from os import makedirs
+from os.path import isdir, join
 from shutil import rmtree
 
 import pytest
+
+# To save the tmp Matlib
+tmp_folder = join(save_gui_path, "DMatLib", "tmp_matlib")
 
 
 @pytest.mark.GUI
@@ -57,10 +62,9 @@ class test_DMatLib(TestCase):
         matlib.index_first_mat_mach = 7
 
         # Save material in a tmp folder
-        tmp_folder = "Tests/GUI/DMatLib/tmp_matlib"
         if isdir(tmp_folder):
             rmtree(tmp_folder)
-        mkdir(tmp_folder)
+        makedirs(tmp_folder)
         for mat in mat_lib:
             mat.save(tmp_folder + "/" + mat.name + ".json")
 
@@ -76,7 +80,7 @@ class test_DMatLib(TestCase):
     def tearDownClass(cls):
         """Exit the app after the test"""
         cls.app.quit()
-        rmtree("Tests/GUI/DMatLib/tmp_matlib")
+        rmtree(tmp_folder)
 
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""

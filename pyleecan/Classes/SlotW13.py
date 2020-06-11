@@ -171,6 +171,12 @@ class SlotW13(SlotWind):
     # save method is available in all object
     save = save
 
+    # generic copy method
+    def copy(self):
+        """Return a copy of the class
+        """
+        return type(self)(init_dict=self.as_dict())
+
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -364,9 +370,7 @@ class SlotW13(SlotWind):
     # Slot wedge radial height or wedge angle .
     # Type : float, min = 0
     H1 = property(
-        fget=_get_H1,
-        fset=_set_H1,
-        doc=u"""Slot wedge radial height or wedge angle .""",
+        fget=_get_H1, fset=_set_H1, doc=u"""Slot wedge radial height or wedge angle ."""
     )
 
     def _get_W1(self):
