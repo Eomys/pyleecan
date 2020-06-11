@@ -26,12 +26,12 @@ def plot_pareto_design_space(self, dvar1=0, dvar2=1):
         idx_dvar1 = dvar1
         dvar1 = self.design_var_names[idx_dvar1]
     else:
-        dvar1 = self.design_var_names.index(dvar1)
+        idx_dvar1 = self.design_var_names.index(dvar1)
     if isinstance(dvar2, int):
         idx_dvar2 = dvar2
         dvar2 = self.design_var_names[idx_dvar2]
     else:
-        dvar2 = self.design_var_names.index(dvar2)
+        idx_dvar2 = self.design_var_names.index(dvar2)
 
     # Get fitness and ngen
     is_valid = np.array(self.is_valid)

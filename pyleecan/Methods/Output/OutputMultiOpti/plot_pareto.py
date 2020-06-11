@@ -29,12 +29,12 @@ def plot_pareto(self, obj1=0, obj2=1):
         idx_obj1 = obj1
         obj1 = self.fitness_names[idx_obj1]
     else:
-        obj1 = self.fitness_names.index(obj1)
+        idx_obj1 = self.fitness_names.index(obj1)
     if isinstance(obj2, int):
         idx_obj2 = obj2
         obj2 = self.fitness_names[idx_obj2]
     else:
-        obj2 = self.fitness_names.index(obj2)
+        idx_obj2 = self.fitness_names.index(obj2)
 
     # Get fitness and ngen
     is_valid = np.array(self.is_valid)

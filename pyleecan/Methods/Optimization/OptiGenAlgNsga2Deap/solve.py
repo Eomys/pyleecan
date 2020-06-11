@@ -28,6 +28,24 @@ def solve(self):
     # Check input parameters
     self.check_optimization_input()
 
+    # Display information
+    try:
+        filename = self.get_logger().handlers[0].stream.name
+        print(
+            "{} Starting optimization... \n\tLog file: {}\n\tNumber of generations: {}\n\tPopulation size: {}\n".format(
+                datetime.now().strftime("%H:%M:%S"),
+                filename,
+                self.nb_gen,
+                self.size_pop,
+            )
+        )
+    except (AttributeError, IndexError):
+        print(
+            "{} Starting optimization...\n\tNumber of generations: {}\n\tPopulation size: {}\n".format(
+                datetime.now().strftime("%H:%M:%S"), self.nb_gen, self.size_pop,
+            )
+        )
+
     try:
         # Create the toolbox
         self.create_toolbox()
@@ -67,7 +85,7 @@ def solve(self):
                 nb_infeasible += check_cstr(self, indiv) == False
         print(
             "\r{}  gen {:>5}: 100%, {:>4} errors,{:>4} infeasible.".format(
-                time_start_gen, 0, nb_error, nb_infeasible - nb_error
+                time_start_gen, 0, nb_error, nb_infeasible
             )
         )
 
@@ -143,7 +161,7 @@ def solve(self):
                     nb_infeasible += check_cstr(self, indiv) == False
             print(
                 "\r{}  gen {:>5}: 100%, {:>4} errors,{:>4} infeasible.".format(
-                    time_start_gen, ngen, nb_error, nb_infeasible - nb_error
+                    time_start_gen, ngen, nb_error, nb_infeasible
                 )
             )
             # Add children to OutputMultiOpti
