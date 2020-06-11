@@ -49,10 +49,10 @@ def plot_A_surf(
     xlabel = "Time [s]"
     if is_deg:
         ylabel = "Angle [°]"
-        yticks = [0,60,120,180,240,300,360]
+        yticks = [0, 60, 120, 180, 240, 300, 360]
     else:
         ylabel = "Angle [rad]"
-        yticks=None,
+        yticks = (None,)
     if unit == "SI":
         unit = data.unit
     if is_norm:
@@ -62,14 +62,10 @@ def plot_A_surf(
 
     # Extract the field
     if is_deg:
-        results = data.get_along(
-            "time", "angle{°}", unit=unit, is_norm=is_norm
-        )
+        results = data.get_along("time", "angle{°}", unit=unit, is_norm=is_norm)
     else:
-        results = data.get_along(
-            "time", "angle{°}", unit=unit, is_norm=is_norm
-        )
-    
+        results = data.get_along("time", "angle{°}", unit=unit, is_norm=is_norm)
+
     angle = results["angle"]
     time = results["time"]
     Ydata = results[data.symbol]
@@ -81,7 +77,7 @@ def plot_A_surf(
 
     if z_max is None:
         z_max = np_max(Ydata)
-    
+
     if z_min is None:
         z_min = -z_max
 
@@ -105,6 +101,6 @@ def plot_A_surf(
         yticks=yticks,
         type="surf",
     )
-    
+
     if save_path is not None:
         fig.savefig(save_path)

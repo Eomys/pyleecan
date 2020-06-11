@@ -25,9 +25,10 @@ def gen_drive(self, output):
 
     # d,q transform
     voltage = Voltage.values
-    voltage_dq = split(n2dq(transpose(voltage), -rot_dir*2*pi*freq0*time, n=qs), 2, axis=1)
+    voltage_dq = split(
+        n2dq(transpose(voltage), -rot_dir * 2 * pi * freq0 * time, n=qs), 2, axis=1
+    )
 
     # Store into EEC parameters
     self.parameters["Ud"] = mean(voltage_dq[0])
     self.parameters["Uq"] = mean(voltage_dq[1])
-

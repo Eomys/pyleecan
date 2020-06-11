@@ -77,7 +77,13 @@ def plot_A_2D(
     # Plot
     if type == "curve":
         for i in range(len(Ydatas)):
-            ax.plot(Xdata, Ydatas[i], color=color_list[i], label=legend_list[i], linewidth=3.0)
+            ax.plot(
+                Xdata,
+                Ydatas[i],
+                color=color_list[i],
+                label=legend_list[i],
+                linewidth=3.0,
+            )
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
     elif type == "bargraph":
@@ -107,7 +113,7 @@ def plot_A_2D(
                     imax = int(where(Ydatas[i] == mag_max)[0])
                 else:
                     imax = argmin(abs(Xdata - fund_harm))
-                barlist[imax].set_color("r")                    
+                barlist[imax].set_color("r")
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
     elif type == "barchart":
@@ -159,8 +165,9 @@ def plot_A_2D(
         ax.legend()
 
     plt.tight_layout()
-    for item in ([ax.xaxis.label, ax.yaxis.label] +
-             ax.get_xticklabels() + ax.get_yticklabels()):
+    for item in (
+        [ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()
+    ):
         item.set_fontsize(22)
     ax.title.set_fontsize(24)
     return ax

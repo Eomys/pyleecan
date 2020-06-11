@@ -69,9 +69,7 @@ def plot_A_cfft2(
     if is_spaceorder:
         ylabel = "Spatial order []"
         r_max = r_max / data.normalizations.get("space_order")
-        y_str = (
-            "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]{space_order}"
-        )
+        y_str = "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]{space_order}"
     else:
         ylabel = "Wavenumber []"
         y_str = "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]"
@@ -107,6 +105,6 @@ def plot_A_cfft2(
         zlabel=zlabel,
         type="stem",
     )
-    
+
     if save_path is not None:
         fig.savefig(save_path)

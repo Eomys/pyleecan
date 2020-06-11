@@ -103,11 +103,11 @@ def plot_A_space(
     if is_deg:
         a_str = "angle{°}"
         xlabel = "Angle [°]"
-        xticks = [0,60,120,180,240,300,360]
+        xticks = [0, 60, 120, 180, 240, 300, 360]
     else:
         a_str = "angle"
         xlabel = "Angle [rad]"
-        xticks=None
+        xticks = None
     if t != None:
         t_str = "time=" + str(t)
     else:
@@ -132,7 +132,9 @@ def plot_A_space(
             a_str, t_str, data_list=data_list, unit=unit, is_norm=is_norm
         )
     angle = results["angle"]
-    Ydatas = [results[data.symbol]] + [results[d.symbol+"_"+str(i)] for i in range(len(data_list))]
+    Ydatas = [results[data.symbol]] + [
+        results[d.symbol + "_" + str(i)] for i in range(len(data_list))
+    ]
     Ydata = []
     for d in Ydatas:
         if d.ndim != 1:
@@ -188,10 +190,12 @@ def plot_A_space(
                 is_norm=False,
             )
         wavenumber = results["wavenumber"]
-        Ydata = [results[data.symbol]] + [results[d.symbol+"_"+str(i)] for i in range(len(data_list))]
-        
+        Ydata = [results[data.symbol]] + [
+            results[d.symbol + "_" + str(i)] for i in range(len(data_list))
+        ]
+
         for i in range(len(Ydata)):
-            indices = [ind for ind, y in enumerate(Ydata[i]) if abs(y)>0.01]
+            indices = [ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01]
         indices = [0] + list(set(indices))
         xticks = wavenumber[indices]
 

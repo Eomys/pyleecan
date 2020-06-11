@@ -105,9 +105,9 @@ def plot_A_3D(
         ax.view_init(elev=20.0, azim=45)
         ax.zaxis.set_rotate_label(False)
         ax.set_zlabel(zlabel, rotation=0)
-        ax.xaxis.labelpad=30
-        ax.yaxis.labelpad=30
-        ax.zaxis.labelpad=30
+        ax.xaxis.labelpad = 30
+        ax.yaxis.labelpad = 30
+        ax.zaxis.labelpad = 30
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
         if yticks is not None:
@@ -128,9 +128,9 @@ def plot_A_3D(
         ax.set_zlim3d(z_min, z_max)
         ax.zaxis.set_rotate_label(False)
         ax.set_zlabel(zlabel, rotation=0)
-        ax.xaxis.labelpad=30
-        ax.yaxis.labelpad=30
-        ax.zaxis.labelpad=30
+        ax.xaxis.labelpad = 30
+        ax.yaxis.labelpad = 30
+        ax.zaxis.labelpad = 30
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
         if yticks is not None:
@@ -165,13 +165,20 @@ def plot_A_3D(
 
     if is_disp_title:
         ax.set_title(title)
-    
+
     if is_3d:
-        for item in ([ax.xaxis.label, ax.yaxis.label, ax.zaxis.label] +
-             ax.get_xticklabels() + ax.get_yticklabels() + ax.get_zticklabels()):
+        for item in (
+            [ax.xaxis.label, ax.yaxis.label, ax.zaxis.label]
+            + ax.get_xticklabels()
+            + ax.get_yticklabels()
+            + ax.get_zticklabels()
+        ):
             item.set_fontsize(22)
     else:
-        for item in ([ax.xaxis.label, ax.yaxis.label] +
-             ax.get_xticklabels() + ax.get_yticklabels()):
+        for item in (
+            [ax.xaxis.label, ax.yaxis.label]
+            + ax.get_xticklabels()
+            + ax.get_yticklabels()
+        ):
             item.set_fontsize(22)
     ax.title.set_fontsize(24)

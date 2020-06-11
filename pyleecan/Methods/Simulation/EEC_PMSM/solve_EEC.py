@@ -42,8 +42,8 @@ def solve_EEC(self, output):
     Idq = solve(XR, XU - XE)
 
     # dq to abc transform
-    Is = dq2n(Idq, -rot_dir*2*pi*freq0*time, n=qs)
-    
+    Is = dq2n(Idq, -rot_dir * 2 * pi * freq0 * time, n=qs)
+
     # Store currents into a Data object
     Time = Data1D(name="time", unit="s", values=time)
     phases_names = gen_name(qs, is_add_phase=True)

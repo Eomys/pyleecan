@@ -119,7 +119,9 @@ def plot_A_time(
             "time", alpha_str, data_list=data_list, unit=unit, is_norm=is_norm
         )
     time = results["time"]
-    Ydatas = [results[data.symbol]] + [results[d.symbol+"_"+str(i)] for i in range(len(data_list))]
+    Ydatas = [results[data.symbol]] + [
+        results[d.symbol + "_" + str(i)] for i in range(len(data_list))
+    ]
     Ydata = []
     for d in Ydatas:
         if d.ndim != 1:
@@ -173,12 +175,14 @@ def plot_A_time(
                 unit=unit,
                 is_norm=False,
             )
-        
+
         freqs = results["freqs"]
-        Ydata = [results[data.symbol]] + [results[d.symbol+"_"+str(i)] for i in range(len(data_list))]
-        
+        Ydata = [results[data.symbol]] + [
+            results[d.symbol + "_" + str(i)] for i in range(len(data_list))
+        ]
+
         for i in range(len(Ydata)):
-            indices = [ind for ind, y in enumerate(Ydata[i]) if abs(y)>0.01]
+            indices = [ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01]
         indices = [0] + list(set(indices))
         xticks = freqs[indices]
 
@@ -195,6 +199,6 @@ def plot_A_time(
             y_max=mag_max,
             xticks=xticks,
         )
-    
+
     if save_path is not None:
         fig.savefig(save_path)

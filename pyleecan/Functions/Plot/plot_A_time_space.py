@@ -54,7 +54,7 @@ def plot_A_time_space(
     # pcolorplot
     if is_deg:
         xlabel = "Angle [°]"
-        xticks = [0,60,120,180,240,300,360]
+        xticks = [0, 60, 120, 180, 240, 300, 360]
     else:
         xlabel = "Angle [rad]"
         xticks = None
@@ -67,13 +67,9 @@ def plot_A_time_space(
         zlabel = r"$" + data.symbol + "\, [" + unit + "]$"
 
     if is_deg:
-        results = data.get_along(
-            "time", "angle{°}", unit=unit, is_norm=is_norm
-        )
+        results = data.get_along("time", "angle{°}", unit=unit, is_norm=is_norm)
     else:
-        results = data.get_along(
-            "time", "angle", unit=unit, is_norm=is_norm
-        )
+        results = data.get_along("time", "angle", unit=unit, is_norm=is_norm)
     angle = results["angle"]
     time = results["time"]
     A_t_s = results[data.symbol]
@@ -125,7 +121,13 @@ def plot_A_time_space(
     Ydata = [results[data.symbol]]
     # Plot the original graph
     plot_A_2D(
-        angle, Ydata, fig=fig, subplot_index=4, xlabel=xlabel, ylabel=ylabel,xticks=xticks,
+        angle,
+        Ydata,
+        fig=fig,
+        subplot_index=4,
+        xlabel=xlabel,
+        ylabel=ylabel,
+        xticks=xticks,
     )
 
     # fft time
@@ -146,11 +148,11 @@ def plot_A_time_space(
         )
     freqs = results["freqs"]
     Ydata = [results[data.symbol]]
-    
-    indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y)>0.01]
+
+    indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y) > 0.01]
     indices = [0] + list(set(indices))
     xticks = freqs[indices]
-    
+
     plot_A_2D(
         freqs,
         Ydata,
@@ -178,11 +180,11 @@ def plot_A_time_space(
         )
     wavenumber = results["wavenumber"]
     Ydata = [results[data.symbol]]
-    
-    indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y)>0.01]
+
+    indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y) > 0.01]
     indices = [0] + list(set(indices))
     xticks = wavenumber[indices]
-    
+
     plot_A_2D(
         wavenumber,
         Ydata,
@@ -199,6 +201,6 @@ def plot_A_time_space(
     fig.canvas.set_window_title(title)
     fig.suptitle(title, x=0.65, fontsize=16)
     fig.tight_layout()
-    
+
     if save_path is not None:
         fig.savefig(save_path)
