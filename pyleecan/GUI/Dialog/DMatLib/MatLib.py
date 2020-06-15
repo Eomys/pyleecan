@@ -280,7 +280,7 @@ class MatLib(object):
             material.path = join(MATLIB_DIR, material.name + ".json").replace("\\", "/")
 
             # Save it
-            material.save()
+            material.save(material.path)
 
         # Machine material
         else:
