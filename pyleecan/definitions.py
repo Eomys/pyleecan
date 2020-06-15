@@ -58,10 +58,10 @@ TEST_DIR = join(MAIN_DIR, "../Tests")
 
 # Pyleecan user folder
 if platform.system() == "Windows":
-    PYLEECAN_USER_DIR = os.environ["APPDATA"] + "/Pyleecan"
+    PYLEECAN_USER_DIR = join(os.environ["APPDATA"], PACKAGE_NAME)
     PYLEECAN_USER_DIR = PYLEECAN_USER_DIR.replace("\\", "/")
 else:
-    PYLEECAN_USER_DIR = os.environ["HOME"] + "/.local/share/Pyleecan"
+    PYLEECAN_USER_DIR = os.environ["HOME"] + "/.local/share/" + PACKAGE_NAME
 
 if isfile(join(PYLEECAN_USER_DIR, "config.json")):  # Load the config file if it exist
     with open(join(PYLEECAN_USER_DIR, "config.json"), "r") as config_file:
