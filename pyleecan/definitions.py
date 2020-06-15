@@ -17,14 +17,14 @@ def create_folder(conf_dict):
     """
     logger = getLogger("Pyleecan")
 
-    if not isdir(PYLEECAN_USER_DIR):
+    if not isdir(USER_DIR):
         # Create Pyleecan folder and copy Data folder
-        logger.debug("Copying Data folder in " + PYLEECAN_USER_DIR + "/Data")
+        logger.debug("Copying Data folder in " + USER_DIR + "/Data")
         shutil.copytree(
             __file__[: max(__file__.rfind("/"), __file__.rfind("\\"))] + "/Data",
-            PYLEECAN_USER_DIR + "/Data",
+            USER_DIR + "/Data",
         )
-        with open(PYLEECAN_USER_DIR + "/config.json", "w") as conf_file:
+        with open(USER_DIR + "/config.json", "w") as conf_file:
             dump(conf_dict, conf_file, sort_keys=True, indent=4, separators=(",", ": "))
 
 
@@ -33,7 +33,7 @@ def edit_config_dict(key, value, conf_dict):
     """
     conf_dict[key] = value
 
-    with open(PYLEECAN_USER_DIR + "/config.json", "w") as conf_file:
+    with open(USER_DIR + "/config.json", "w") as conf_file:
         dump(conf_dict, conf_file, sort_keys=True, indent=4, separators=(",", ": "))
 
 
@@ -58,20 +58,18 @@ TEST_DIR = join(MAIN_DIR, "../Tests")
 
 # Pyleecan user folder
 if platform.system() == "Windows":
-    PYLEECAN_USER_DIR = join(os.environ["APPDATA"], PACKAGE_NAME)
-    PYLEECAN_USER_DIR = PYLEECAN_USER_DIR.replace("\\", "/")
+    USER_DIR = join(os.environ["APPDATA"], PACKAGE_NAME)
+    USER_DIR = USER_DIR.replace("\\", "/")
 else:
-    PYLEECAN_USER_DIR = os.environ["HOME"] + "/.local/share/" + PACKAGE_NAME
+    USER_DIR = os.environ["HOME"] + "/.local/share/" + PACKAGE_NAME
 
-if isfile(join(PYLEECAN_USER_DIR, "config.json")):  # Load the config file if it exist
-    with open(join(PYLEECAN_USER_DIR, "config.json"), "r") as config_file:
+if isfile(join(USER_DIR, "config.json")):  # Load the config file if it exist
+    with open(join(USER_DIR, "config.json"), "r") as config_file:
         config_dict = load(config_file)
 else:  # Default values
     config_dict = dict(
-        DATA_DIR=join(PYLEECAN_USER_DIR, "Data"),
-        MATLIB_DIR=join(
-            PYLEECAN_USER_DIR, "Data", "Material"
-        ),  # Material library directory
+        DATA_DIR=join(USER_DIR, "Data"),
+        MATLIB_DIR=join(USER_DIR, "Data", "Material"),  # Material library directory
         UNIT_M=1,  # length unit: 0 for m, 1 for mm
         UNIT_M2=1,  # Surface unit: 0 for m^2, 1 for mm^2
         COLOR_DICT_NAME="pyleecan_color.json",  # Name of the color set to use
