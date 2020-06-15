@@ -108,13 +108,13 @@ def plot(
                 axes.set_title("Rotor with Winding")
             # Add the winding legend only if needed
             if not is_lam_only:
+                phase_name = gen_name(qs, is_add_phase=True)
                 for ii in range(qs):
-                    phase_name = gen_name(ii, is_add_phase=True)
-                    if not phase_name in label_leg:
+                    if not phase_name[ii] in label_leg:
                         # Avoid adding twice the same label
                         index = ii % len(PHASE_COLORS)
                         patch_leg.append(Patch(color=PHASE_COLORS[index]))
-                        label_leg.append(phase_name)
+                        label_leg.append(phase_name[ii])
             legend(patch_leg, label_leg)
         fig.show()
     else:
