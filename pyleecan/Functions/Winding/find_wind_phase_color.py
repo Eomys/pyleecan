@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from ...Methods.Machine import PHASE_COLOR
+from ...definitions import config_dict
+
+PHASE_COLORS = config_dict["color_dict"]["PHASE_COLORS"]
 
 
 def find_wind_phase_color(label, wind_mat):
@@ -28,9 +30,9 @@ def find_wind_phase_color(label, wind_mat):
         if q is None:  # No phase => White
             color = "w"
         else:
-            color = PHASE_COLOR[q]
+            color = PHASE_COLORS[q]
     else:
-        color = PHASE_COLOR[0]
+        color = PHASE_COLORS[0]
 
     return color
 

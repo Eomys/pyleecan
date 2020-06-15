@@ -4,9 +4,14 @@ from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
 
 from ....Functions.Winding.find_wind_phase_color import find_wind_phase_color
+from ....Functions.Winding.gen_phase_list import gen_name
 from ....Functions.init_fig import init_fig
-from ....Methods.Machine import PHASE_COLOR, PHASE_NAME, ROTOR_COLOR, STATOR_COLOR
+from ....definitions import config_dict
 from ....Classes.WindingSC import WindingSC
+
+PHASE_COLORS = config_dict["color_dict"]["PHASE_COLORS"]
+ROTOR_COLOR = config_dict["color_dict"]["ROTOR_COLOR"]
+STATOR_COLOR = config_dict["color_dict"]["STATOR_COLOR"]
 
 
 def plot(
@@ -104,11 +109,12 @@ def plot(
             # Add the winding legend only if needed
             if not is_lam_only:
                 for ii in range(qs):
-                    if not ("Phase " + PHASE_NAME[ii] in label_leg):
+                    phase_name = gen_name(ii, is_add_phase=True)
+                    if not phase_name in label_leg:
                         # Avoid adding twice the same label
-                        index = ii % len(PHASE_COLOR)
-                        patch_leg.append(Patch(color=PHASE_COLOR[index]))
-                        label_leg.append("Phase " + PHASE_NAME[ii])
+                        index = ii % len(PHASE_COLORS)
+                        patch_leg.append(Patch(color=PHASE_COLORS[index]))
+                        label_leg.append(phase_name)
             legend(patch_leg, label_leg)
         fig.show()
     else:
