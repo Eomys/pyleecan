@@ -8,7 +8,7 @@ from logging import getLogger
 from json import dump, load
 
 
-def create_folder(config_dict):
+def create_folder(conf_dict):
     """
     Create Pyleecan folder to copy Data into it.
     
@@ -24,16 +24,17 @@ def create_folder(config_dict):
             __file__[: max(__file__.rfind("/"), __file__.rfind("\\"))] + "/Data",
             PYLEECAN_USER_DIR + "/Data",
         )
+        with open(PYLEECAN_USER_DIR + "/config.json", "w") as conf_file:
+            dump(conf_dict, conf_file, sort_keys=True, indent=4, separators=(",", ": "))
 
-    with open(PYLEECAN_USER_DIR + "/config.json", "w") as config_file:
-        dump(config_dict, config_file, sort_keys=True, indent=4, separators=(",", ": "))
 
+def edit_config_dict(key, value, conf_dict):
+    """Edit and save the config dict
+    """
+    conf_dict[key] = value
 
-def edit_config_dict(key, value):
-    config_dict[key] = value
-
-    with open(PYLEECAN_USER_DIR + "/config.json", "w") as config_file:
-        dump(config_dict, config_file, sort_keys=True, indent=4, separators=(",", ": "))
+    with open(PYLEECAN_USER_DIR + "/config.json", "w") as conf_file:
+        dump(conf_dict, conf_file, sort_keys=True, indent=4, separators=(",", ": "))
 
 
 ROOT_DIR = normpath(abspath(join(dirname(__file__), ".."))).replace("\\", "/")
