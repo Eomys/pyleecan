@@ -850,15 +850,13 @@
         "desc": "Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). ",
         "is_internal": false,
         "methods": [
-            "get_node2element",
-            "convert_element",
             "add_element",
-            "get_connectivity",
             "get_all_connectivity",
-            "is_exist",
-            "get_new_tag",
             "get_all_node_tags",
-            "get_group"
+            "get_connectivity",
+            "get_group",
+            "get_node2element",
+            "is_exist"
         ],
         "mother": "Element",
         "name": "ElementMat",
@@ -1060,9 +1058,8 @@
         "desc": "Forces module abstract object",
         "is_internal": false,
         "methods": [
-            "run",
-            "comp_force",
-            "comp_time_angle"
+            "comp_time_angle",
+            "run"
         ],
         "mother": "",
         "name": "Force",
@@ -1839,14 +1836,15 @@
         "desc": "V shape slot for buried magnet",
         "is_internal": false,
         "methods": [
-            "_to_m_file",
             "build_geometry",
             "check",
             "comp_mass_magnets",
             "comp_radius",
             "comp_surface_magnets",
             "comp_volume_magnets",
-            "remove_magnet"
+            "remove_magnet",
+            "get_height_magnet",
+            "has_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleM57",
@@ -5059,56 +5057,6 @@
             }
         ]
     },
-    "ModalBasis": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Structural module: Modal Basis object",
-        "is_internal": false,
-        "methods": [
-            "get_mesh",
-            "get_natfreqs",
-            "get_amplitudes",
-            "plot_modal_basis_3D"
-        ],
-        "mother": "",
-        "name": "ModalBasis",
-        "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/ModalBasis.csv",
-        "properties": [
-            {
-                "desc": "Cylindrical mesh",
-                "max": "",
-                "min": "",
-                "name": "mesh",
-                "type": "MeshVTK",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Dict of the natural frequencies: key = (m,n) of the mode, values = natural frequencies (lists)",
-                "max": "",
-                "min": "",
-                "name": "nat_freqs",
-                "type": "dict",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Dict of the amplitudes: key = (m,n) of the mode, values = amplitudes (Data objects)",
-                "max": "",
-                "min": "",
-                "name": "amplitudes",
-                "type": "dict",
-                "unit": "-",
-                "value": null
-            }
-        ]
-    },
     "Node": {
         "constants": [
             {
@@ -5122,10 +5070,7 @@
         ],
         "desc": "Abstract class to define nodes. It must have at least a method get_coord to get nodes coordinates for given node tags/number, and a method get_group to create a new objet Node based on a set of given elements.",
         "is_internal": false,
-        "methods": [
-            "get_group",
-            "get_coord"
-        ],
+        "methods": [],
         "mother": "",
         "name": "Node",
         "package": "Mesh",
@@ -5143,10 +5088,9 @@
         "desc": "Class to define nodes coordinates and getter.",
         "is_internal": false,
         "methods": [
-            "get_coord",
-            "get_tag",
-            "get_group",
             "add_node",
+            "get_coord",
+            "get_group",
             "is_exist"
         ],
         "mother": "Node",
@@ -5553,9 +5497,7 @@
         "daughters": [],
         "desc": "Multi-objectives optimization problem with some constraints",
         "is_internal": false,
-        "methods": [
-            "eval_pb"
-        ],
+        "methods": [],
         "mother": "",
         "name": "OptiProblem",
         "package": "Optimization",
@@ -6276,23 +6218,19 @@
         "desc": "Main Output object: gather all the outputs of all the modules",
         "is_internal": false,
         "methods": [
-            "getter.get_BH_stator",
-            "getter.get_BH_rotor",
-            "getter.get_path_result",
             "getter.get_angle_rotor",
-            "getter.get_d_angle_diff",
-            "getter.get_rot_dir",
-            "plot.Structural.plot_force_space",
-            "plot.Magnetic.plot_mesh_field",
-            "plot.Magnetic.plot_mesh",
-            "plot.plot_A_time",
-            "plot.plot_A_space",
-            "plot.plot_A_time_space",
-            "plot.plot_A_surf",
-            "plot.plot_A_cfft2",
-            "plot.plot_A_nthoctave",
-            "plot.plot_A_fft2",
+            "getter.get_BH_rotor",
+            "getter.get_BH_stator",
+            "getter.get_path_result",
             "plot.Magnetic.plot_B_space",
+            "plot.Magnetic.plot_mesh",
+            "plot.Magnetic.plot_mesh_field",
+            "plot.plot_A_cfft2",
+            "plot.plot_A_fft2",
+            "plot.plot_A_space",
+            "plot.plot_A_surf",
+            "plot.plot_A_time",
+            "plot.plot_A_time_space",
             "plot.Structural.plot_force_space",
             "plot.Magnetic.plot_mesh_field",
             "plot.plot_A_quiver_2D"
@@ -6572,7 +6510,9 @@
             "rotate",
             "split_half",
             "split_line",
-            "translate"
+            "translate",
+            "is_on_line",
+            "comp_distance"
         ],
         "mother": "Line",
         "name": "Segment",
@@ -8846,15 +8786,6 @@
                 "min": "",
                 "name": "force",
                 "type": "Force",
-                "unit": "-",
-                "value": ""
-            },
-            {
-                "desc": "Modal Basis object (cylindrical mesh + solution)",
-                "max": "",
-                "min": "",
-                "name": "modalbasis",
-                "type": "ModalBasis",
                 "unit": "-",
                 "value": ""
             }

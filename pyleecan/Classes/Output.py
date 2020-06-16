@@ -13,9 +13,9 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Output.Output.getter.get_BH_stator import get_BH_stator
+    from ..Methods.Output.Output.getter.get_angle_rotor import get_angle_rotor
 except ImportError as error:
-    get_BH_stator = error
+    get_angle_rotor = error
 
 try:
     from ..Methods.Output.Output.getter.get_BH_rotor import get_BH_rotor
@@ -23,36 +23,19 @@ except ImportError as error:
     get_BH_rotor = error
 
 try:
+    from ..Methods.Output.Output.getter.get_BH_stator import get_BH_stator
+except ImportError as error:
+    get_BH_stator = error
+
+try:
     from ..Methods.Output.Output.getter.get_path_result import get_path_result
 except ImportError as error:
     get_path_result = error
 
 try:
-    from ..Methods.Output.Output.getter.get_angle_rotor import get_angle_rotor
+    from ..Methods.Output.Output.plot.Magnetic.plot_B_space import plot_B_space
 except ImportError as error:
-    get_angle_rotor = error
-
-try:
-    from ..Methods.Output.Output.getter.get_d_angle_diff import get_d_angle_diff
-except ImportError as error:
-    get_d_angle_diff = error
-
-try:
-    from ..Methods.Output.Output.getter.get_rot_dir import get_rot_dir
-except ImportError as error:
-    get_rot_dir = error
-
-try:
-    from ..Methods.Output.Output.plot.Structural.plot_force_space import (
-        plot_force_space,
-    )
-except ImportError as error:
-    plot_force_space = error
-
-try:
-    from ..Methods.Output.Output.plot.Magnetic.plot_mesh_field import plot_mesh_field
-except ImportError as error:
-    plot_mesh_field = error
+    plot_B_space = error
 
 try:
     from ..Methods.Output.Output.plot.Magnetic.plot_mesh import plot_mesh
@@ -60,24 +43,9 @@ except ImportError as error:
     plot_mesh = error
 
 try:
-    from ..Methods.Output.Output.plot.plot_A_time import plot_A_time
+    from ..Methods.Output.Output.plot.Magnetic.plot_mesh_field import plot_mesh_field
 except ImportError as error:
-    plot_A_time = error
-
-try:
-    from ..Methods.Output.Output.plot.plot_A_space import plot_A_space
-except ImportError as error:
-    plot_A_space = error
-
-try:
-    from ..Methods.Output.Output.plot.plot_A_time_space import plot_A_time_space
-except ImportError as error:
-    plot_A_time_space = error
-
-try:
-    from ..Methods.Output.Output.plot.plot_A_surf import plot_A_surf
-except ImportError as error:
-    plot_A_surf = error
+    plot_mesh_field = error
 
 try:
     from ..Methods.Output.Output.plot.plot_A_cfft2 import plot_A_cfft2
@@ -85,19 +53,29 @@ except ImportError as error:
     plot_A_cfft2 = error
 
 try:
-    from ..Methods.Output.Output.plot.plot_A_nthoctave import plot_A_nthoctave
-except ImportError as error:
-    plot_A_nthoctave = error
-
-try:
     from ..Methods.Output.Output.plot.plot_A_fft2 import plot_A_fft2
 except ImportError as error:
     plot_A_fft2 = error
 
 try:
-    from ..Methods.Output.Output.plot.Magnetic.plot_B_space import plot_B_space
+    from ..Methods.Output.Output.plot.plot_A_space import plot_A_space
 except ImportError as error:
-    plot_B_space = error
+    plot_A_space = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_surf import plot_A_surf
+except ImportError as error:
+    plot_A_surf = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_time import plot_A_time
+except ImportError as error:
+    plot_A_time = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_time_space import plot_A_time_space
+except ImportError as error:
+    plot_A_time_space = error
 
 try:
     from ..Methods.Output.Output.plot.Structural.plot_force_space import (
@@ -133,39 +111,6 @@ class Output(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Output.Output.getter.get_BH_stator
-    if isinstance(get_BH_stator, ImportError):
-        get_BH_stator = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method get_BH_stator: " + str(get_BH_stator)
-                )
-            )
-        )
-    else:
-        get_BH_stator = get_BH_stator
-    # cf Methods.Output.Output.getter.get_BH_rotor
-    if isinstance(get_BH_rotor, ImportError):
-        get_BH_rotor = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method get_BH_rotor: " + str(get_BH_rotor)
-                )
-            )
-        )
-    else:
-        get_BH_rotor = get_BH_rotor
-    # cf Methods.Output.Output.getter.get_path_result
-    if isinstance(get_path_result, ImportError):
-        get_path_result = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method get_path_result: " + str(get_path_result)
-                )
-            )
-        )
-    else:
-        get_path_result = get_path_result
     # cf Methods.Output.Output.getter.get_angle_rotor
     if isinstance(get_angle_rotor, ImportError):
         get_angle_rotor = property(
@@ -177,37 +122,59 @@ class Output(FrozenClass):
         )
     else:
         get_angle_rotor = get_angle_rotor
-    # cf Methods.Output.Output.getter.get_d_angle_diff
-    if isinstance(get_d_angle_diff, ImportError):
-        get_d_angle_diff = property(
+    # cf Methods.Output.Output.getter.get_BH_rotor
+    if isinstance(get_BH_rotor, ImportError):
+        get_BH_rotor = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Output method get_d_angle_diff: " + str(get_d_angle_diff)
+                    "Can't use Output method get_BH_rotor: " + str(get_BH_rotor)
                 )
             )
         )
     else:
-        get_d_angle_diff = get_d_angle_diff
-    # cf Methods.Output.Output.getter.get_rot_dir
-    if isinstance(get_rot_dir, ImportError):
-        get_rot_dir = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method get_rot_dir: " + str(get_rot_dir))
-            )
-        )
-    else:
-        get_rot_dir = get_rot_dir
-    # cf Methods.Output.Output.plot.Structural.plot_force_space
-    if isinstance(plot_force_space, ImportError):
-        plot_force_space = property(
+        get_BH_rotor = get_BH_rotor
+    # cf Methods.Output.Output.getter.get_BH_stator
+    if isinstance(get_BH_stator, ImportError):
+        get_BH_stator = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Output method plot_force_space: " + str(plot_force_space)
+                    "Can't use Output method get_BH_stator: " + str(get_BH_stator)
                 )
             )
         )
     else:
-        plot_force_space = plot_force_space
+        get_BH_stator = get_BH_stator
+    # cf Methods.Output.Output.getter.get_path_result
+    if isinstance(get_path_result, ImportError):
+        get_path_result = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method get_path_result: " + str(get_path_result)
+                )
+            )
+        )
+    else:
+        get_path_result = get_path_result
+    # cf Methods.Output.Output.plot.Magnetic.plot_B_space
+    if isinstance(plot_B_space, ImportError):
+        plot_B_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_B_space: " + str(plot_B_space)
+                )
+            )
+        )
+    else:
+        plot_B_space = plot_B_space
+    # cf Methods.Output.Output.plot.Magnetic.plot_mesh
+    if isinstance(plot_mesh, ImportError):
+        plot_mesh = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method plot_mesh: " + str(plot_mesh))
+            )
+        )
+    else:
+        plot_mesh = plot_mesh
     # cf Methods.Output.Output.plot.Magnetic.plot_mesh_field
     if isinstance(plot_mesh_field, ImportError):
         plot_mesh_field = property(
@@ -219,24 +186,26 @@ class Output(FrozenClass):
         )
     else:
         plot_mesh_field = plot_mesh_field
-    # cf Methods.Output.Output.plot.Magnetic.plot_mesh
-    if isinstance(plot_mesh, ImportError):
-        plot_mesh = property(
+    # cf Methods.Output.Output.plot.plot_A_cfft2
+    if isinstance(plot_A_cfft2, ImportError):
+        plot_A_cfft2 = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Output method plot_mesh: " + str(plot_mesh))
+                ImportError(
+                    "Can't use Output method plot_A_cfft2: " + str(plot_A_cfft2)
+                )
             )
         )
     else:
-        plot_mesh = plot_mesh
-    # cf Methods.Output.Output.plot.plot_A_time
-    if isinstance(plot_A_time, ImportError):
-        plot_A_time = property(
+        plot_A_cfft2 = plot_A_cfft2
+    # cf Methods.Output.Output.plot.plot_A_fft2
+    if isinstance(plot_A_fft2, ImportError):
+        plot_A_fft2 = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Output method plot_A_time: " + str(plot_A_time))
+                ImportError("Can't use Output method plot_A_fft2: " + str(plot_A_fft2))
             )
         )
     else:
-        plot_A_time = plot_A_time
+        plot_A_fft2 = plot_A_fft2
     # cf Methods.Output.Output.plot.plot_A_space
     if isinstance(plot_A_space, ImportError):
         plot_A_space = property(
@@ -248,6 +217,24 @@ class Output(FrozenClass):
         )
     else:
         plot_A_space = plot_A_space
+    # cf Methods.Output.Output.plot.plot_A_surf
+    if isinstance(plot_A_surf, ImportError):
+        plot_A_surf = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method plot_A_surf: " + str(plot_A_surf))
+            )
+        )
+    else:
+        plot_A_surf = plot_A_surf
+    # cf Methods.Output.Output.plot.plot_A_time
+    if isinstance(plot_A_time, ImportError):
+        plot_A_time = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method plot_A_time: " + str(plot_A_time))
+            )
+        )
+    else:
+        plot_A_time = plot_A_time
     # cf Methods.Output.Output.plot.plot_A_time_space
     if isinstance(plot_A_time_space, ImportError):
         plot_A_time_space = property(
@@ -260,57 +247,6 @@ class Output(FrozenClass):
         )
     else:
         plot_A_time_space = plot_A_time_space
-    # cf Methods.Output.Output.plot.plot_A_surf
-    if isinstance(plot_A_surf, ImportError):
-        plot_A_surf = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method plot_A_surf: " + str(plot_A_surf))
-            )
-        )
-    else:
-        plot_A_surf = plot_A_surf
-    # cf Methods.Output.Output.plot.plot_A_cfft2
-    if isinstance(plot_A_cfft2, ImportError):
-        plot_A_cfft2 = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_A_cfft2: " + str(plot_A_cfft2)
-                )
-            )
-        )
-    else:
-        plot_A_cfft2 = plot_A_cfft2
-    # cf Methods.Output.Output.plot.plot_A_nthoctave
-    if isinstance(plot_A_nthoctave, ImportError):
-        plot_A_nthoctave = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_A_nthoctave: " + str(plot_A_nthoctave)
-                )
-            )
-        )
-    else:
-        plot_A_nthoctave = plot_A_nthoctave
-    # cf Methods.Output.Output.plot.plot_A_fft2
-    if isinstance(plot_A_fft2, ImportError):
-        plot_A_fft2 = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method plot_A_fft2: " + str(plot_A_fft2))
-            )
-        )
-    else:
-        plot_A_fft2 = plot_A_fft2
-    # cf Methods.Output.Output.plot.Magnetic.plot_B_space
-    if isinstance(plot_B_space, ImportError):
-        plot_B_space = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_B_space: " + str(plot_B_space)
-                )
-            )
-        )
-    else:
-        plot_B_space = plot_B_space
     # cf Methods.Output.Output.plot.Structural.plot_force_space
     if isinstance(plot_force_space, ImportError):
         plot_force_space = property(

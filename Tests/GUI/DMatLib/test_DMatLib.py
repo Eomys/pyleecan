@@ -80,7 +80,7 @@ class test_DMatLib(TestCase):
     def tearDownClass(cls):
         """Exit the app after the test"""
         cls.app.quit()
-        rmtree("Tests/GUI/DMatLib/tmp_matlib")
+        rmtree(tmp_folder)
 
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""

@@ -13,24 +13,19 @@ from .Node import Node
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Mesh.NodeMat.add_node import add_node
+except ImportError as error:
+    add_node = error
+
+try:
     from ..Methods.Mesh.NodeMat.get_coord import get_coord
 except ImportError as error:
     get_coord = error
 
 try:
-    from ..Methods.Mesh.NodeMat.get_tag import get_tag
-except ImportError as error:
-    get_tag = error
-
-try:
     from ..Methods.Mesh.NodeMat.get_group import get_group
 except ImportError as error:
     get_group = error
-
-try:
-    from ..Methods.Mesh.NodeMat.add_node import add_node
-except ImportError as error:
-    add_node = error
 
 try:
     from ..Methods.Mesh.NodeMat.is_exist import is_exist
@@ -48,33 +43,6 @@ class NodeMat(Node):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.NodeMat.get_coord
-    if isinstance(get_coord, ImportError):
-        get_coord = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use NodeMat method get_coord: " + str(get_coord))
-            )
-        )
-    else:
-        get_coord = get_coord
-    # cf Methods.Mesh.NodeMat.get_tag
-    if isinstance(get_tag, ImportError):
-        get_tag = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use NodeMat method get_tag: " + str(get_tag))
-            )
-        )
-    else:
-        get_tag = get_tag
-    # cf Methods.Mesh.NodeMat.get_group
-    if isinstance(get_group, ImportError):
-        get_group = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use NodeMat method get_group: " + str(get_group))
-            )
-        )
-    else:
-        get_group = get_group
     # cf Methods.Mesh.NodeMat.add_node
     if isinstance(add_node, ImportError):
         add_node = property(
@@ -84,6 +52,24 @@ class NodeMat(Node):
         )
     else:
         add_node = add_node
+    # cf Methods.Mesh.NodeMat.get_coord
+    if isinstance(get_coord, ImportError):
+        get_coord = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use NodeMat method get_coord: " + str(get_coord))
+            )
+        )
+    else:
+        get_coord = get_coord
+    # cf Methods.Mesh.NodeMat.get_group
+    if isinstance(get_group, ImportError):
+        get_group = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use NodeMat method get_group: " + str(get_group))
+            )
+        )
+    else:
+        get_group = get_group
     # cf Methods.Mesh.NodeMat.is_exist
     if isinstance(is_exist, ImportError):
         is_exist = property(

@@ -1,3 +1,3 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
 force,-,Force module,,Force,,,,,Simulation,,run,VERSION,1,Structural module abstract object,
-modalbasis,-,Modal Basis object (cylindrical mesh + solution),,ModalBasis,,,,,,,comp_time_angle,,,,
+,,,,,,,,,,,comp_time_angle,,,,

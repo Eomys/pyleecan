@@ -14,7 +14,7 @@ from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 from ....definitions import DATA_DIR
 from ....GUI import GUI_logger, gui_option
 from ....Functions.path_tools import abs_file_path
-from ....definitions import edit_config_dict, MATLIB_DIR
+from ....definitions import edit_config_dict, MATLIB_DIR, config_dict
 from ....Functions.load import load_matlib
 from ....Classes.Material import Material
 
@@ -60,7 +60,7 @@ class WGuiOption(Ui_GUIOption, QDialog):
         Change the matlib directory and load the new matlib
         """
         matlib_path = self.le_matlib_path.text()
-        edit_config_dict("MATLIB_DIR", matlib_path)
+        edit_config_dict("MATLIB_DIR", matlib_path, config_dict)
 
         self.matlib.load_mat_ref(matlib_path)
         self.matlib.add_machine_mat(self.machine_setup.machine)
@@ -85,4 +85,4 @@ class WGuiOption(Ui_GUIOption, QDialog):
         else:
             raise ValueError("Unexpected argument in change_unit, unit=" + str(unit))
 
-        edit_config_dict(key, value)
+        edit_config_dict(key, value, config_dict)

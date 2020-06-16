@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase, skip
+import pytest
 
-from ddt import ddt, data
+
 from mock import MagicMock
 from numpy import array, pi, zeros
 
@@ -95,137 +95,125 @@ M_test[-1]["Mmach"] = (
 )
 
 
-@ddt
-class test_comp_mass_meth(TestCase):
-    """unittest for comp_mass (and volume and surface) methods"""
+@pytest.mark.parametrize("test_dict", M_test)
+def test_comp_surface_rotor(test_dict):
+    """Check that the computation of the surface is correct
+    """
+    result = test_obj.rotor.comp_surfaces()
 
-    @data(*M_test)
-    def test_comp_surface_rotor(self, test_dict):
-        """Check that the computation of the surface is correct
-        """
-        result = test_obj.rotor.comp_surfaces()
+    a = result["Slam"]
+    b = test_dict["rotor"]["Slam"]
+    msg = "For Slam, Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg
 
-        a = result["Slam"]
-        b = test_dict["rotor"]["Slam"]
-        msg = "For Slam, Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
+    a = result["Svent"]
+    b = test_dict["rotor"]["Svent"]
+    msg = "For Svent, Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg
 
-        a = result["Svent"]
-        b = test_dict["rotor"]["Svent"]
-        msg = "For Svent, Return " + str(a) + " expected " + str(b)
-        if b == 0:
-            self.assertEqual(a, b, msg=msg)
-        else:
-            self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
+    if "Smag" in result.keys():
+        a = result["Smag"]
+        b = test_dict["rotor"]["Smag"]
+        msg = "For Smag, Return " + str(a) + " expected " + str(b)
+        assert a == pytest.approx(b, rel=DELTA), msg
 
-        if "Smag" in result.keys():
-            a = result["Smag"]
-            b = test_dict["rotor"]["Smag"]
-            msg = "For Smag, Return " + str(a) + " expected " + str(b)
-            self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
 
-    @data(*M_test)
-    def test_comp_surface_stator(self, test_dict):
-        """Check that the computation of the surface is correct
-        """
-        result = test_obj.stator.comp_surfaces()
+@pytest.mark.parametrize("test_dict", M_test)
+def test_comp_surface_stator(test_dict):
+    """Check that the computation of the surface is correct
+    """
+    result = test_obj.stator.comp_surfaces()
 
-        a = result["Slam"]
-        b = test_dict["stator"]["Slam"]
+    a = result["Slam"]
+    b = test_dict["stator"]["Slam"]
+    msg = "Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg
+
+    a = result["Svent"]
+    b = test_dict["stator"]["Svent"]
+    msg = "Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg
+
+    if "Smag" in result.keys():
+        a = result["Smag"]
+        b = test_dict["stator"]["Smag"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
+        assert a == pytest.approx(b, rel=DELTA), msg
 
-        a = result["Svent"]
-        b = test_dict["stator"]["Svent"]
+
+@pytest.mark.parametrize("test_dict", M_test)
+def test_comp_volume_rotor(test_dict):
+    """Check that the computation of the volume is correct
+    """
+    result = test_obj.rotor.comp_volumes()
+
+    a = result["Vlam"]
+    b = test_dict["rotor"]["Vlam"]
+    msg = "Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg
+
+    a = result["Vvent"]
+    b = test_dict["rotor"]["Vvent"]
+    msg = "Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg
+
+    if "Vmag" in result.keys():
+        a = result["Vmag"]
+        b = test_dict["rotor"]["Vmag"]
         msg = "Return " + str(a) + " expected " + str(b)
-        if b == 0:
-            self.assertEqual(a, b, msg=msg)
-        else:
-            self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
+        assert a == pytest.approx(b, rel=DELTA), msg
 
-        if "Smag" in result.keys():
-            a = result["Smag"]
-            b = test_dict["stator"]["Smag"]
-            msg = "Return " + str(a) + " expected " + str(b)
-            self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
 
-    @data(*M_test)
-    def test_comp_volume_rotor(self, test_dict):
-        """Check that the computation of the volume is correct
-        """
-        result = test_obj.rotor.comp_volumes()
+@pytest.mark.parametrize("test_dict", M_test)
+def test_comp_volume_stator(test_dict):
+    """Check that the computation of the volume is correct
+    """
+    result = test_obj.stator.comp_volumes()
 
-        a = result["Vlam"]
-        b = test_dict["rotor"]["Vlam"]
+    a = result["Vlam"]
+    b = test_dict["stator"]["Vlam"]
+    msg = "Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg
+
+    a = result["Vvent"]
+    b = test_dict["stator"]["Vvent"]
+    msg = "Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg
+
+    if "Vmag" in result.keys():
+        a = result["Vmag"]
+        b = test_dict["stator"]["Vmag"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
+        assert a == pytest.approx(b, rel=DELTA), msg
 
-        a = result["Vvent"]
-        b = test_dict["rotor"]["Vvent"]
-        msg = "Return " + str(a) + " expected " + str(b)
-        if b == 0:
-            self.assertEqual(a, b, msg=msg)
-        else:
-            self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
 
-        if "Vmag" in result.keys():
-            a = result["Vmag"]
-            b = test_dict["rotor"]["Vmag"]
-            msg = "Return " + str(a) + " expected " + str(b)
-            self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
+@pytest.mark.parametrize("test_dict", M_test)
+def test_comp_mass(test_dict):
+    """Check that the computation of the mass is correct
+    """
+    result = test_obj.comp_masses()
 
-    @data(*M_test)
-    def test_comp_volume_stator(self, test_dict):
-        """Check that the computation of the volume is correct
-        """
-        result = test_obj.stator.comp_volumes()
+    a = result["Mfra"]
+    b = test_dict["Mfra"]
+    msg = "Mfra, Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg
 
-        a = result["Vlam"]
-        b = test_dict["stator"]["Vlam"]
-        msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
+    a = result["Msha"]
+    b = test_dict["Msha"]
+    msg = "Msha, Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg
 
-        a = result["Vvent"]
-        b = test_dict["stator"]["Vvent"]
-        msg = "Return " + str(a) + " expected " + str(b)
-        if b == 0:
-            self.assertEqual(a, b, msg=msg)
-        else:
-            self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
+    a = result["Mrot"]["Mtot"]
+    b = test_dict["Mrot"]
+    msg = "Mrot, Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg
 
-        if "Vmag" in result.keys():
-            a = result["Vmag"]
-            b = test_dict["stator"]["Vmag"]
-            msg = "Return " + str(a) + " expected " + str(b)
-            self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
+    a = result["Msta"]["Mtot"]
+    b = test_dict["Msta"]
+    msg = "Msta, Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg
 
-    @data(*M_test)
-    def test_comp_mass(self, test_dict):
-        """Check that the computation of the mass is correct
-        """
-        result = test_obj.comp_masses()
-
-        a = result["Mfra"]
-        b = test_dict["Mfra"]
-        msg = "Mfra, Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
-
-        a = result["Msha"]
-        b = test_dict["Msha"]
-        msg = "Msha, Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
-
-        a = result["Mrot"]["Mtot"]
-        b = test_dict["Mrot"]
-        msg = "Mrot, Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
-
-        a = result["Msta"]["Mtot"]
-        b = test_dict["Msta"]
-        msg = "Msta, Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
-
-        a = result["Mmach"]
-        b = test_dict["Mmach"]
-        msg = "Mmach, Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, msg=msg, delta=DELTA)
+    a = result["Mmach"]
+    b = test_dict["Mmach"]
+    msg = "Mmach, Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg

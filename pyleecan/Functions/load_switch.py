@@ -94,7 +94,6 @@ load_switch = {
     "Mesh": Mesh,
     "MeshSolution": MeshSolution,
     "MeshVTK": MeshVTK,
-    "ModalBasis": ModalBasis,
     "Node": Node,
     "NodeMat": NodeMat,
     "Notch": Notch,

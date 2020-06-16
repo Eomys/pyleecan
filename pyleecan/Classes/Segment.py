@@ -77,6 +77,16 @@ try:
 except ImportError as error:
     translate = error
 
+try:
+    from ..Methods.Geometry.Segment.is_on_line import is_on_line
+except ImportError as error:
+    is_on_line = error
+
+try:
+    from ..Methods.Geometry.Segment.comp_distance import comp_distance
+except ImportError as error:
+    comp_distance = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -206,6 +216,26 @@ class Segment(Line):
         )
     else:
         translate = translate
+    # cf Methods.Geometry.Segment.is_on_line
+    if isinstance(is_on_line, ImportError):
+        is_on_line = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Segment method is_on_line: " + str(is_on_line))
+            )
+        )
+    else:
+        is_on_line = is_on_line
+    # cf Methods.Geometry.Segment.comp_distance
+    if isinstance(comp_distance, ImportError):
+        comp_distance = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Segment method comp_distance: " + str(comp_distance)
+                )
+            )
+        )
+    else:
+        comp_distance = comp_distance
     # save method is available in all object
     save = save
 
