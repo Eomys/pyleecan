@@ -2961,7 +2961,8 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "get_bore_desc"
+            "get_bore_desc",
+            "comp_radius_mid_yoke"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -3196,7 +3197,8 @@
             "is_outwards",
             "comp_height_yoke",
             "get_notch_list",
-            "comp_angle_q_axis"
+            "comp_angle_q_axis",
+            "comp_radius_mid_yoke"
         ],
         "mother": "",
         "name": "Lamination",
@@ -6292,7 +6294,8 @@
             "plot.plot_A_fft2",
             "plot.Magnetic.plot_B_space",
             "plot.Structural.plot_force_space",
-            "plot.Magnetic.plot_mesh_field"
+            "plot.Magnetic.plot_mesh_field",
+            "plot.plot_A_quiver_2D"
         ],
         "mother": "",
         "name": "Output",
