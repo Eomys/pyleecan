@@ -10,6 +10,8 @@ from PyQt5.QtTest import QTest
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.LamSlotWind import LamSlotWind
+from pyleecan.Classes.Material import Material
+from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.Classes.MachineSCIM import MachineSCIM
 from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension import (
     SMachineDimension,
@@ -35,8 +37,16 @@ class test_SMachineDimension(TestCase):
         self.test_obj.frame = Frame(Rint=0.22, Rext=0.24, Lfra=0.25)
         self.test_obj.shaft = Shaft(Lshaft=0.333, Drsh=self.test_obj.rotor.Rint * 2)
 
+        self.matlib = MatLib()
+        self.matlib.list_mat = [
+            Material(name="Magnet1"),
+            Material(name="Magnet2"),
+            Material(name="Magnet3"),
+        ]
+        self.matlib.index_first_mat_mach = 3
+
         self.widget = SMachineDimension(
-            machine=self.test_obj, matlib=[], is_stator=False
+            machine=self.test_obj, matlib=self.matlib, is_stator=False
         )
 
     @classmethod
@@ -68,19 +78,19 @@ class test_SMachineDimension(TestCase):
 
         self.test_obj.shaft = None
         self.widget = SMachineDimension(
-            machine=self.test_obj, matlib=[], is_stator=False
+            machine=self.test_obj, matlib=self.matlib, is_stator=False
         )
         self.assertEqual(self.widget.g_shaft.isChecked(), False)
 
         self.test_obj.shaft = Shaft(Drsh=None)
         self.widget = SMachineDimension(
-            machine=self.test_obj, matlib=[], is_stator=False
+            machine=self.test_obj, matlib=self.matlib, is_stator=False
         )
         self.assertEqual(self.widget.g_shaft.isChecked(), False)
 
         self.test_obj.shaft = Shaft(Drsh=0)
         self.widget = SMachineDimension(
-            machine=self.test_obj, matlib=[], is_stator=False
+            machine=self.test_obj, matlib=self.matlib, is_stator=False
         )
         self.assertEqual(self.widget.g_shaft.isChecked(), False)
 
