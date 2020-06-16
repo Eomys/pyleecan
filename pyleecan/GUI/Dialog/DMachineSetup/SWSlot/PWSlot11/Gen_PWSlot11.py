@@ -2,7 +2,6 @@
 """File generated according to PWSlot11/gen_list.json
 WARNING! All changes made in this file will be lost!
 """
-
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot11.Ui_PWSlot11 import Ui_PWSlot11
 
 

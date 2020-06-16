@@ -2,7 +2,6 @@
 """File generated according to PHoleM52/gen_list.json
 WARNING! All changes made in this file will be lost!
 """
-
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM52.Ui_PHoleM52 import Ui_PHoleM52
 
 

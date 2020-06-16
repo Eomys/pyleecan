@@ -2,7 +2,6 @@
 """File generated according to SLamParam/gen_list.json
 WARNING! All changes made in this file will be lost!
 """
-
 from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.Ui_SLamParam import Ui_SLamParam
 
 
