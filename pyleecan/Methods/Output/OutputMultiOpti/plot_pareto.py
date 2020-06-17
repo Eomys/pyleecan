@@ -49,7 +49,6 @@ def plot_pareto(self, obj1=0, obj2=1):
     design_var = design_var[indx]
 
     # Get pareto front
-    fitness.tolist()
     pareto = fitness
 
     # Get dominated values
@@ -61,7 +60,6 @@ def plot_pareto(self, obj1=0, obj2=1):
                 idx_non_dom.remove(i)
                 break
 
-    pareto = np.array(pareto)
     pareto = pareto[idx_non_dom]
     design_var_values = design_var[idx_non_dom]
 

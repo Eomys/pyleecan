@@ -92,9 +92,7 @@ def solve(self):
         # Add pop to OutputMultiOpt
         for indiv in pop:
             # Check that at every fitness values is different from inf
-            is_valid = (
-                indiv.fitness.valid and indiv.is_simu_valid and indiv.cstr_viol == 0
-            )
+            is_valid = indiv.is_simu_valid and indiv.cstr_viol == 0
 
             # Add the indiv to the multi_output
             self.multi_output.add_evaluation(
@@ -164,12 +162,10 @@ def solve(self):
                     time_start_gen, ngen, nb_error, nb_infeasible
                 )
             )
-            # Add children to OutputMultiOpti
-            for indiv in children:
+            # Add new children to OutputMultiOpti
+            for indiv in to_eval:
                 # Check that at every fitness values is different from inf
-                is_valid = (
-                    indiv.fitness.valid and indiv.is_simu_valid and indiv.cstr_viol == 0
-                )
+                is_valid = indiv.is_simu_valid and indiv.cstr_viol == 0
 
                 # Add the indiv to the multi_output
                 self.multi_output.add_evaluation(

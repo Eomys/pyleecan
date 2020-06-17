@@ -46,7 +46,6 @@ def plot_pareto_design_space(self, dvar1=0, dvar2=1):
     design_var = design_var[indx]
 
     # Get pareto front
-    fitness.tolist()
     pareto = fitness
 
     # Get dominated values

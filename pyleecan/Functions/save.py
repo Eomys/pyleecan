@@ -297,7 +297,7 @@ def save(self, save_path="", is_folder=False):
         to split the object in different files: separate simulation machine and materials 
     """
     # Save in the object.path if it exist and save_path is empty
-    if save_path=="" and hasattr(self,"path") and getattr(self,"path") != None:
+    if save_path == "" and hasattr(self, "path") and getattr(self, "path") != None:
         save_path = self.path
-        
+
     save_data(self, save_path=save_path, is_folder=is_folder)
