@@ -173,7 +173,7 @@ def test_zdt3():
         axs[0].set_ylabel(r"$f_2(x)$")
         try:
             img_to_find = img.imread(
-                "pyleecan\\Tests\\Validation\\Optimization\\zdt3.jpg", format="jpg"
+                "Tests\\Validation\\Optimization\\zdt3.jpg", format="jpg"
             )
             axs[1].imshow(img_to_find, aspect="auto")
             axs[1].axis("off")
@@ -184,4 +184,4 @@ def test_zdt3():
         return fig
 
     fig = plot_pareto(res)
-    fig.savefig(PACKAGE_NAME + "/Tests/Results/Validation/test_zdt3.png")
+    fig.savefig("Tests/Results/Validation/test_zdt3.png")

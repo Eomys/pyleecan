@@ -3,6 +3,7 @@
 # File generated according to SWindCond.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -24,10 +25,17 @@ class Ui_SWindCond(object):
         self.c_cond_type.addItem("")
         self.c_cond_type.addItem("")
         self.horizontalLayout.addWidget(self.c_cond_type)
-        self.w_mat = WMatSelect(SWindCond)
-        self.w_mat.setMinimumSize(QtCore.QSize(100, 0))
-        self.w_mat.setObjectName("w_mat")
-        self.horizontalLayout.addWidget(self.w_mat)
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.w_mat_0 = WMatSelect(SWindCond)
+        self.w_mat_0.setMinimumSize(QtCore.QSize(100, 0))
+        self.w_mat_0.setObjectName("w_mat_0")
+        self.verticalLayout.addWidget(self.w_mat_0)
+        self.w_mat_1 = WMatSelect(SWindCond)
+        self.w_mat_1.setMinimumSize(QtCore.QSize(100, 0))
+        self.w_mat_1.setObjectName("w_mat_1")
+        self.verticalLayout.addWidget(self.w_mat_1)
+        self.horizontalLayout.addLayout(self.verticalLayout)
         spacerItem = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )

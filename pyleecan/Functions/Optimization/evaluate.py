@@ -49,7 +49,7 @@ def evaluate(solver, indiv):
         # Add the fitness values
         fitness = []
         for of in obj_func_list:
-            fitness.append(solver.problem.obj_func[of].func(indiv.output))
+            fitness.append(float(solver.problem.obj_func[of].func(indiv.output)))
 
         indiv.fitness.values = fitness
         indiv.is_simu_valid = True

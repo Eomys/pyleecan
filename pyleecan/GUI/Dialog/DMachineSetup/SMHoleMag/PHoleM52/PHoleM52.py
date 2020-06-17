@@ -49,8 +49,10 @@ class PHoleM52(Gen_PHoleM52, QWidget):
         self.lf_H2.unit = "m"
 
         # Set default materials
-        self.w_mat_0.setText("magnet_0:")
-        self.w_mat_0.def_mat = "Magnet1"
+        self.w_mat_0.setText("mat_void:")
+        self.w_mat_0.def_mat = "Air"
+        self.w_mat_1.setText("magnet_0:")
+        self.w_mat_1.def_mat = "Magnet1"
 
         # Set unit name (m ou mm)
         self.u = gui_option.unit
@@ -69,9 +71,11 @@ class PHoleM52(Gen_PHoleM52, QWidget):
             self.img_slot.setPixmap(
                 QPixmap(":/images/images/MachineSetup/WSlot/Slot_52_no_mag.PNG")
             )
-            self.w_mat_0.hide()
+            self.w_mat_0.update(self.hole, "mat_void", self.matlib)
+            self.w_mat_1.hide()
         else:
-            self.w_mat_0.update(self.hole.magnet_0, "mat_type", self.matlib)
+            self.w_mat_0.update(self.hole, "mat_void", self.matlib)
+            self.w_mat_1.update(self.hole.magnet_0, "mat_type", self.matlib)
 
         # Fill the fields with the machine values (if they're filled)
         self.lf_W0.setValue(self.hole.W0)
@@ -89,6 +93,9 @@ class PHoleM52(Gen_PHoleM52, QWidget):
         self.lf_H0.editingFinished.connect(self.set_H0)
         self.lf_H1.editingFinished.connect(self.set_H1)
         self.lf_H2.editingFinished.connect(self.set_H2)
+
+        self.w_mat_0.saveNeeded.connect(self.emit_save)
+        self.w_mat_1.saveNeeded.connect(self.emit_save)
 
     def emit_save(self):
         """Send a saveNeeded signal to the DMachineSetup

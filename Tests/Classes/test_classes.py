@@ -25,6 +25,7 @@ from pyleecan.Classes._frozen import FrozenClass, FrozenError
 gen_dict = read_all(DOC_DIR)  # dict of class dict
 # Remove one list level (packages Machine, Simulation, Material...)
 class_list = list(gen_dict.values())
+
 from pyleecan.Classes.import_all import *
 
 
@@ -224,15 +225,27 @@ def test_class_inherit(class_dict):
         assert eval("issubclass(" + class_dict["name"] + ", FrozenClass)") == True
 
 
-@pytest.mark.parametrize("class_dict", class_list)
+@pytest.mark.parametrize("class_dict", class_list)  # [86:87]
 def test_class_methods(class_dict):
     """Check if the class has all its methods"""
+    test_obj = eval(class_dict["name"] + "()")
+
     meth_list = get_mother_attr(gen_dict, class_dict, "methods")[0]
     for meth in meth_list:
         meth = meth.split(".")[-1]  # Get the methods name if in a folder
+
+        # Check if the method exists, shouldn't be raised because of the class generator
         assert eval("hasattr(" + class_dict["name"] + ", '" + meth + "')") == True, (
             class_dict["name"] + " has no method: " + meth
         )
+
+        # Check if the methods doesn't raise ImportError
+        try:
+            eval("test_obj." + meth + "()")
+        except ImportError as err:
+            raise err  # Raise the ImportError because the method doesn't exist
+        except:
+            pass
 
 
 @pytest.mark.parametrize("class_dict", class_list)
