@@ -126,7 +126,7 @@ def plot_A_fft2(
             ylabel=ylabel,
             zlabel=zlabel,
             fig=fig,
-            type="scatter",
+            type="pcolor",
         )
 
     if save_path is not None:

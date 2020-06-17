@@ -78,7 +78,7 @@ def plot_A_3D(
     is_disp_title : bool
         boolean indicating if the title must be displayed
     type : str
-        type of 3D graph : "stem", "surf" or "pcolor"
+        type of 3D graph : "stem", "surf", "pcolor" or "scatter"
     """
 
     # Set figure/subplot
@@ -154,7 +154,7 @@ def plot_A_3D(
         if yticks is not None:
             ax.yaxis.set_ticks(yticks)
     elif type == "scatter":
-        c = ax.scatter(Xdata, Ydata, Zdata, cmap=colormap, vmin=z_min, vmax=z_max)
+        c = ax.scatter(Xdata, Ydata, Zdata, c=Zdata, cmap=colormap, vmin=z_min, vmax=z_max)
         clb = fig.colorbar(c, ax=ax)
         clb.ax.set_title(zlabel, fontsize=18)
         clb.ax.tick_params(labelsize=18)
@@ -162,6 +162,7 @@ def plot_A_3D(
             ax.xaxis.set_ticks(xticks)
         if yticks is not None:
             ax.yaxis.set_ticks(yticks)
+        ax.view_init(azim=-90, elev=90)
 
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)

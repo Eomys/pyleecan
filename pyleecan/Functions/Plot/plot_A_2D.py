@@ -11,7 +11,7 @@ def plot_A_2D(
     Ydatas,
     legend_list=[""],
     color_list=[(0, 0, 1, 0.5)],
-    linewidth_list=[1],
+    linewidth_list=[3],
     title="",
     xlabel="",
     ylabel="",
@@ -99,7 +99,7 @@ def plot_A_2D(
             ax.plot(
                 Xdata,
                 Ydatas[i],
-                color_list[i],
+                color=color_list[i],
                 label=legend_list[i],
                 linewidth=linewidth_list[i],
             )
