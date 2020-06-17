@@ -57,6 +57,11 @@ try:
 except ImportError as error:
     get_bore_desc = error
 
+try:
+    from ..Methods.Machine.LamSlot.comp_radius_mid_yoke import comp_radius_mid_yoke
+except ImportError as error:
+    comp_radius_mid_yoke = error
+
 
 from ._check import InitUnKnowClassError
 from .Slot import Slot
@@ -166,6 +171,18 @@ class LamSlot(Lamination):
         )
     else:
         get_bore_desc = get_bore_desc
+    # cf Methods.Machine.LamSlot.comp_radius_mid_yoke
+    if isinstance(comp_radius_mid_yoke, ImportError):
+        comp_radius_mid_yoke = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlot method comp_radius_mid_yoke: "
+                    + str(comp_radius_mid_yoke)
+                )
+            )
+        )
+    else:
+        comp_radius_mid_yoke = comp_radius_mid_yoke
     # save method is available in all object
     save = save
 

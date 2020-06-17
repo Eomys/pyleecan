@@ -40,6 +40,8 @@ class OutGeo(FrozenClass):
         Rgap_mec=None,
         Lgap=None,
         logger_name="Pyleecan.OutGeo",
+        d_angle_diff=None,
+        rot_dir=None,
         init_dict=None,
         init_str=None,
     ):
@@ -72,6 +74,8 @@ class OutGeo(FrozenClass):
             Rgap_mec = obj.Rgap_mec
             Lgap = obj.Lgap
             logger_name = obj.logger_name
+            d_angle_diff = obj.d_angle_diff
+            rot_dir = obj.rot_dir
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -89,6 +93,10 @@ class OutGeo(FrozenClass):
                 Lgap = init_dict["Lgap"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "d_angle_diff" in list(init_dict.keys()):
+                d_angle_diff = init_dict["d_angle_diff"]
+            if "rot_dir" in list(init_dict.keys()):
+                rot_dir = init_dict["rot_dir"]
         # Initialisation by argument
         self.parent = None
         # stator can be None, a OutGeoLam object or a dict
@@ -114,6 +122,8 @@ class OutGeo(FrozenClass):
         self.Rgap_mec = Rgap_mec
         self.Lgap = Lgap
         self.logger_name = logger_name
+        self.d_angle_diff = d_angle_diff
+        self.rot_dir = rot_dir
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -141,6 +151,8 @@ class OutGeo(FrozenClass):
         OutGeo_str += "Rgap_mec = " + str(self.Rgap_mec) + linesep
         OutGeo_str += "Lgap = " + str(self.Lgap) + linesep
         OutGeo_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        OutGeo_str += "d_angle_diff = " + str(self.d_angle_diff) + linesep
+        OutGeo_str += "rot_dir = " + str(self.rot_dir) + linesep
         return OutGeo_str
 
     def __eq__(self, other):
@@ -162,6 +174,10 @@ class OutGeo(FrozenClass):
             return False
         if other.logger_name != self.logger_name:
             return False
+        if other.d_angle_diff != self.d_angle_diff:
+            return False
+        if other.rot_dir != self.rot_dir:
+            return False
         return True
 
     def as_dict(self):
@@ -182,6 +198,8 @@ class OutGeo(FrozenClass):
         OutGeo_dict["Rgap_mec"] = self.Rgap_mec
         OutGeo_dict["Lgap"] = self.Lgap
         OutGeo_dict["logger_name"] = self.logger_name
+        OutGeo_dict["d_angle_diff"] = self.d_angle_diff
+        OutGeo_dict["rot_dir"] = self.rot_dir
         # The class name is added to the dict fordeserialisation purpose
         OutGeo_dict["__class__"] = "OutGeo"
         return OutGeo_dict
@@ -198,6 +216,8 @@ class OutGeo(FrozenClass):
         self.Rgap_mec = None
         self.Lgap = None
         self.logger_name = None
+        self.d_angle_diff = None
+        self.rot_dir = None
 
     def _get_stator(self):
         """getter of stator"""
@@ -314,4 +334,36 @@ class OutGeo(FrozenClass):
         fget=_get_logger_name,
         fset=_set_logger_name,
         doc=u"""Name of the logger to use""",
+    )
+
+    def _get_d_angle_diff(self):
+        """getter of d_angle_diff"""
+        return self._d_angle_diff
+
+    def _set_d_angle_diff(self, value):
+        """setter of d_angle_diff"""
+        check_var("d_angle_diff", value, "float")
+        self._d_angle_diff = value
+
+    # Difference between the d axis angle of the stator and the rotor
+    # Type : float
+    d_angle_diff = property(
+        fget=_get_d_angle_diff,
+        fset=_set_d_angle_diff,
+        doc=u"""Difference between the d axis angle of the stator and the rotor""",
+    )
+
+    def _get_rot_dir(self):
+        """getter of rot_dir"""
+        return self._rot_dir
+
+    def _set_rot_dir(self, value):
+        """setter of rot_dir"""
+        check_var("rot_dir", value, "int", Vmin=-1, Vmax=1)
+        self._rot_dir = value
+
+    # Rotation direction
+    # Type : int, min = -1, max = 1
+    rot_dir = property(
+        fget=_get_rot_dir, fset=_set_rot_dir, doc=u"""Rotation direction"""
     )

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .....Functions.init_fig import init_fig
-from .....Functions.Plot.plot_A_2D import plot_A_2D
-from numpy import squeeze, split
+from .....Functions.Plot.plot_A_time import plot_A_time as plot_A_time_fct
 
 
 def plot_A_time(
@@ -18,7 +16,11 @@ def plot_A_time(
     unit="SI",
     data_list=[],
     legend_list=[],
-    color_list=["tab:blue", "tab:red", "tab:olive", "k", "tab:orange", "tab:pink"],
+    color_list=[],
+    save_path=None,
+    y_min=None,
+    y_max=None,
+    mag_max=None,
 ):
     """Plots a field as a function of time
 
@@ -50,126 +52,36 @@ def plot_A_time(
         list of legends to use for each Data object (including reference one) instead of data.name
     color_list : list
         list of colors to use for each Data object
+    save_path : str
+        path and name of the png file to save
+    y_min : float
+        minimum value for the y-axis
+    y_max : float
+        maximum value for the y-axis
+    mag_max : float
+        maximum alue for the y-axis of the fft
     """
 
     # Get Data object names
     phys = getattr(self, Data_str.split(".")[0])
     data = getattr(phys, Data_str.split(".")[1])
 
-    # Set plot
-    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
-    data_list2 = [data] + data_list
-    if legend_list == []:
-        legend_list = [d.name for d in data_list2]
-    legends = []
-    list_str = None
-    for i, d in enumerate(data_list2):
-        is_components = False
-        for axis in d.axes:
-            try:
-                if axis.is_components:
-                    is_components = True
-                    legends += [
-                        legend_list[i] + ": " + axis.values.tolist()[j]
-                        for j in index_list
-                    ]
-                    list_str = axis.name
-            except:
-                is_components = False
-        if not is_components:
-            legends += [legend_list[i]]
-    xlabel = "Time [s]"
-    if unit == "SI":
-        unit = data.unit
-    if is_norm:
-        ylabel = r"$\frac{" + data.symbol + "}{" + data.symbol + "_0}\, [" + unit + "]$"
-    else:
-        ylabel = r"$" + data.symbol + "\, [" + unit + "]$"
-
-    # Prepare the extractions
-    if alpha != None:
-        alpha_str = "angle=" + str(alpha)
-    else:
-        alpha_str = "angle[" + str(alpha_index) + "]"
-    if data_list == []:
-        title = data.name + " over time at " + alpha_str
-    else:
-        title = "Comparison over time at " + alpha_str
-
-    # Extract the fields
-    if list_str is not None:
-        (time, Ydatas) = data.compare_along(
-            "time",
-            alpha_str,
-            list_str + str(index_list),
-            data_list=data_list,
-            unit=unit,
-            is_norm=is_norm,
-        )
-        Ydata = []
-        for d in Ydatas:
-            if d.ndim != 1:
-                Ydata += split(d, len(index_list))
-            else:
-                Ydata += [d]
-        Ydata = [squeeze(d) for d in Ydata]
-    else:
-        (time, Ydata) = data.compare_along(
-            "time", alpha_str, data_list=data_list, unit=unit, is_norm=is_norm
-        )
-
-    # Plot the original graph
-    plot_A_2D(
-        time,
-        Ydata,
-        legend_list=legends,
+    # Call the plot function
+    plot_A_time_fct(
+        data,
+        index_list=index_list,
+        alpha=alpha,
+        alpha_index=alpha_index,
+        is_fft=is_fft,
+        is_elecorder=is_elecorder,
+        freq_max=freq_max,
+        is_norm=is_norm,
+        unit=unit,
+        data_list=data_list,
+        legend_list=legend_list,
         color_list=color_list,
-        fig=fig,
-        title=title,
-        xlabel=xlabel,
-        ylabel=ylabel,
+        save_path=save_path,
+        y_min=y_min,
+        y_max=y_max,
+        mag_max=mag_max,
     )
-
-    if is_fft:
-        if data_list == []:
-            title = "FFT of " + data.name
-        else:
-            title = "Comparison of FFT"
-        if data.symbol == "Magnitude":
-            ylabel = "Magnitude [" + unit + "]"
-        else:
-            ylabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
-        legend_list = [legend_list[0]] + [legend_list[-1]]
-
-        if is_elecorder:
-            elec_max = freq_max / data.normalizations.get("elec_order")
-            xlabel = "Electrical order []"
-            (freqs, Ydata) = data.compare_magnitude_along(
-                "freqs=[0," + str(elec_max) + "]{elec_order}",
-                alpha_str,
-                data_list=data_list,
-                unit=unit,
-                is_norm=False,
-            )
-
-        else:
-            xlabel = "Frequency [Hz]"
-            (freqs, Ydata) = data.compare_magnitude_along(
-                "freqs=[0," + str(freq_max) + "]",
-                alpha_str,
-                data_list=data_list,
-                unit=unit,
-                is_norm=False,
-            )
-
-        plot_A_2D(
-            freqs,
-            Ydata,
-            legend_list=legend_list,
-            color_list=color_list,
-            fig=fig,
-            title=title,
-            xlabel=xlabel,
-            ylabel=ylabel,
-            type="bargraph",
-        )
