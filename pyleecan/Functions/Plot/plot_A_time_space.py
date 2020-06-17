@@ -104,9 +104,7 @@ def plot_A_time_space(
     time = results["time"]
     Ydata = [results[data.symbol]]
     # Plot the original graph
-    plot_A_2D(
-        time, Ydata, fig=fig, subplot_index=2, xlabel=xlabel, ylabel=ylabel,
-    )
+    plot_A_2D(time, Ydata, fig=fig, subplot_index=2, xlabel=xlabel, ylabel=ylabel)
 
     # angle
     if is_deg:
@@ -139,12 +137,12 @@ def plot_A_time_space(
         elec_max = freq_max / data.normalizations.get("elec_order")
         xlabel = "Electrical order []"
         (freqs, Ydata) = data.compare_magnitude_along(
-            "freqs=[0," + str(elec_max) + "]{elec_order}", unit=unit, is_norm=False,
+            "freqs=[0," + str(elec_max) + "]{elec_order}", unit=unit, is_norm=False
         )
     else:
         xlabel = "Frequency [Hz]"
         results = data.compare_magnitude_along(
-            "freqs=[0," + str(freq_max) + "]", unit=unit, is_norm=False,
+            "freqs=[0," + str(freq_max) + "]", unit=unit, is_norm=False
         )
     freqs = results["freqs"]
     Ydata = [results[data.symbol]]

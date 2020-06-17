@@ -3,14 +3,7 @@
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Functions.Electrical.coordinate_transformation import n2dq, dq2n
 
-from numpy import (
-    array,
-    zeros,
-    linspace,
-    pi,
-    split,
-    mean,
-)
+from numpy import array, zeros, linspace, pi, split, mean
 
 # import matplotlib.pyplot as plt
 
