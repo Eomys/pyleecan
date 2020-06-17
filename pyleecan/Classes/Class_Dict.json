@@ -2691,7 +2691,9 @@
             "comp_resistance_wind",
             "comp_angle_d_axis",
             "comp_mmf_unit",
-            "comp_rot_dir"
+            "comp_rot_dir",
+            "comp_lengths_winding",
+            "comp_number_phase_eq"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
@@ -2732,7 +2734,8 @@
             "build_geometry",
             "check",
             "comp_length_ring",
-            "plot"
+            "plot",
+            "comp_number_phase_eq"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
@@ -8687,7 +8690,8 @@
             "comp_Ntspc",
             "comp_phasor_angle",
             "comp_resistance_norm",
-            "comp_winding_factor"
+            "comp_winding_factor",
+            "comp_length_endwinding"
         ],
         "mother": "",
         "name": "Winding",
