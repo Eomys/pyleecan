@@ -83,7 +83,7 @@ def plot_A_3D(
 
     # Set figure/subplot
     is_3d = False
-    if type != "pcolor":
+    if type != "pcolor" and type != "scatter":
         is_3d = True
     fig, ax = init_subplot(fig=fig, subplot_index=subplot_index, is_3d=is_3d)
 
@@ -154,7 +154,7 @@ def plot_A_3D(
         if yticks is not None:
             ax.yaxis.set_ticks(yticks)
     elif type == "scatter":
-        c = ax.scatter(Xdata, Ydata, Zdata, c=Zdata, cmap=colormap, vmin=z_min, vmax=z_max)
+        c = ax.scatter(Xdata, Ydata, c=Zdata, marker="s", cmap=colormap, vmin=z_min, vmax=z_max)
         clb = fig.colorbar(c, ax=ax)
         clb.ax.set_title(zlabel, fontsize=18)
         clb.ax.tick_params(labelsize=18)
@@ -162,7 +162,6 @@ def plot_A_3D(
             ax.xaxis.set_ticks(xticks)
         if yticks is not None:
             ax.yaxis.set_ticks(yticks)
-        ax.view_init(azim=-90, elev=90)
 
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)

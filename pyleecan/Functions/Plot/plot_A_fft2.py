@@ -2,7 +2,7 @@
 
 from ..init_fig import init_fig
 from .plot_A_3D import plot_A_3D
-from numpy import meshgrid, append, pi, max as np_max
+from numpy import meshgrid, pi, max as np_max
 
 
 def plot_A_fft2(
@@ -16,7 +16,7 @@ def plot_A_fft2(
     mag_max=None,
     is_norm=False,
     unit="SI",
-    colormap="RdBu_r",
+    colormap="YlOrRd",
     save_path=None,
 ):
     """2D color plot of the 2D Fourier Transform of a field
@@ -76,9 +76,10 @@ def plot_A_fft2(
     freqs = results["freqs"]
     A_mag = results[data.symbol]
 
-    wavenumber = append(wavenumber, wavenumber[-1] + 1) - 0.5
-    freqs = append(freqs, freqs[-1] + 1)
-    wavenumber_map, freqs_map = meshgrid(wavenumber, freqs)
+    freqs_map, wavenumber_map = meshgrid(freqs, wavenumber)
+    freqs_flat = freqs_map.flatten()
+    wavenumber_flat = wavenumber_map.flatten()
+    A_mag_flat = A_mag.flatten()
 
     zlabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
 
@@ -87,9 +88,9 @@ def plot_A_fft2(
 
     # Plot the original graph
     plot_A_3D(
-        freqs_map,
-        wavenumber_map,
-        A_mag,
+        freqs_flat,
+        wavenumber_flat,
+        A_mag_flat,
         colormap=colormap,
         z_max=mag_max,
         z_min=0,
@@ -98,7 +99,7 @@ def plot_A_fft2(
         ylabel=ylabel,
         zlabel=zlabel,
         fig=fig,
-        type="pcolor",
+        type="scatter",
     )
 
     if is_phase:
@@ -112,12 +113,17 @@ def plot_A_fft2(
             )
             zlabel = r"$Angle(" + data.symbol + ")\, [rad]$"
             mag_max = pi
+            
+        freqs_map, wavenumber_map = meshgrid(freqs, wavenumber)
+        freqs_flat = freqs_map.flatten()
+        wavenumber_flat = wavenumber_map.flatten()
+        A_phase_flat = A_phase.flatten()
 
         # Plot the original graph
         plot_A_3D(
-            freqs_map,
-            wavenumber_map,
-            A_phase,
+            freqs_flat,
+            wavenumber_flat,
+            A_phase_flat,
             z_max=mag_max,
             z_min=-mag_max,
             colormap=colormap,
@@ -126,7 +132,7 @@ def plot_A_fft2(
             ylabel=ylabel,
             zlabel=zlabel,
             fig=fig,
-            type="pcolor",
+            type="scatter",
         )
 
     if save_path is not None:
