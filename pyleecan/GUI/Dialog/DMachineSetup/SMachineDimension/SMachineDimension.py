@@ -72,6 +72,12 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
 
         self.set_airgap()  # Update out_airgap if possible
 
+        # Set default materials
+        self.w_mat_0.setText("mat_type:")
+        self.w_mat_0.def_mat = "M400-50A"
+        self.w_mat_1.setText("mat_type:")
+        self.w_mat_1.def_mat = "M400-50A"
+
         if (
             machine.frame is None
             or machine.frame.Rint is None
@@ -87,6 +93,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             self.lf_Wfra.setText(format(gui_option.unit.get_m(Wfra), ".6g"))
             if machine.frame.Lfra is not None:
                 self.lf_Lfra.setValue(machine.frame.Lfra)
+            self.w_mat_1.update(self.machine.frame, "mat_type", self.matlib)
 
         # Adapt the GUI to the topology of the machine
         if not machine.rotor.is_internal:  # External Rotor
@@ -119,6 +126,9 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
                     + str(2000 * self.machine.rotor.Rint)
                     + " mm"
                 )
+
+            self.w_mat_0.update(self.machine.shaft, "mat_type", self.matlib)
+
         # Connect the widget
         self.lf_SRint.editingFinished.connect(self.set_stator_Rint)
         self.lf_SRext.editingFinished.connect(self.set_stator_Rext)
@@ -129,6 +139,9 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
 
         self.g_shaft.toggled.connect(self.set_Drsh)
         self.g_frame.toggled.connect(self.clear_frame)
+
+        self.w_mat_0.saveNeeded.connect(self.emit_save)
+        self.w_mat_1.saveNeeded.connect(self.emit_save)
 
     def set_stator_Rint(self):
         """Signal to update the value of stator.Rint according to the line edit
@@ -268,7 +281,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             else:
                 self.machine.frame.Rint = None
                 self.machine.frame.Rext = None
-
+            self.w_mat_1.update(self.machine.frame, "mat_type", self.matlib)
             self.lf_Wfra.clear()
             self.lf_Lfra.clear()
             self.in_Lfra.show()
@@ -292,6 +305,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
         if is_checked:  # If there is a shaft
             # Set the corresponding image
             self.img_machine.setPixmap(QPixmap(pixmap_dict["Dim_In_Rotor_Shaft"]))
+            self.w_mat_0.update(self.machine.shaft, "mat_type", self.matlib)
             # Set Drsh if machine.rotor.Rint is set
             if self.machine.rotor.Rint is not None:
                 self.out_Drsh.setText(
@@ -376,3 +390,8 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             return self.tr("You must set Wfra or unchecked Frame !")
         if not self.g_frame.isChecked():
             self.machine.frame = None
+
+    def emit_save(self):
+        """Send a saveNeeded signal to the DMachineSetup
+        """
+        self.saveNeeded.emit()

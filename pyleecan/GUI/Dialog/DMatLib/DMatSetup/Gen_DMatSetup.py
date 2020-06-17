@@ -2,7 +2,6 @@
 """File generated according to DMatSetup/gen_list.json
 WARNING! All changes made in this file will be lost!
 """
-
 from pyleecan.GUI.Dialog.DMatLib.DMatSetup.Ui_DMatSetup import Ui_DMatSetup
 
 

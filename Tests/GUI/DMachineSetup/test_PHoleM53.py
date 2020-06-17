@@ -64,12 +64,12 @@ class test_PHoleM53(TestCase):
         self.assertEqual(self.widget.lf_W3.value(), 0.16)
         self.assertEqual(self.widget.lf_W4.value(), 0.17)
         # Check material
-        self.assertFalse(self.widget.w_mat_0.isHidden())
-        self.assertEqual(self.widget.w_mat_0.c_mat_type.currentText(), "Magnet3")
-        self.assertEqual(self.widget.w_mat_0.c_mat_type.currentIndex(), 2)
         self.assertFalse(self.widget.w_mat_1.isHidden())
-        self.assertEqual(self.widget.w_mat_1.c_mat_type.currentText(), "Magnet2")
-        self.assertEqual(self.widget.w_mat_1.c_mat_type.currentIndex(), 1)
+        self.assertEqual(self.widget.w_mat_1.c_mat_type.currentText(), "Magnet3")
+        self.assertEqual(self.widget.w_mat_1.c_mat_type.currentIndex(), 2)
+        self.assertFalse(self.widget.w_mat_2.isHidden())
+        self.assertEqual(self.widget.w_mat_2.c_mat_type.currentText(), "Magnet2")
+        self.assertEqual(self.widget.w_mat_2.c_mat_type.currentIndex(), 1)
 
     def test_set_H0(self):
         """Check that the Widget allow to update H0"""
@@ -146,15 +146,22 @@ class test_PHoleM53(TestCase):
         self.assertEqual(self.test_obj.hole[0].W4, 0.368)
 
     def test_set_material_0(self):
-        """Check that you can change the material of magnet_0"""
+        """Check that you can change the material of mat_void"""
         self.widget.w_mat_0.c_mat_type.setCurrentIndex(0)
 
         self.assertEqual(self.widget.w_mat_0.c_mat_type.currentText(), "Magnet1")
-        self.assertEqual(self.test_obj.hole[0].magnet_0.mat_type.name, "Magnet1")
+        self.assertEqual(self.test_obj.hole[0].mat_void.name, "Magnet1")
 
     def test_set_material_1(self):
-        """Check that you can change the material of magnet_1"""
+        """Check that you can change the material of magnet_0"""
         self.widget.w_mat_1.c_mat_type.setCurrentIndex(0)
 
         self.assertEqual(self.widget.w_mat_1.c_mat_type.currentText(), "Magnet1")
+        self.assertEqual(self.test_obj.hole[0].magnet_0.mat_type.name, "Magnet1")
+
+    def test_set_material_2(self):
+        """Check that you can change the material of magnet_1"""
+        self.widget.w_mat_2.c_mat_type.setCurrentIndex(0)
+
+        self.assertEqual(self.widget.w_mat_2.c_mat_type.currentText(), "Magnet1")
         self.assertEqual(self.test_obj.hole[0].magnet_1.mat_type.name, "Magnet1")

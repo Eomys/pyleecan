@@ -121,7 +121,7 @@ class test_SlotW10_meth(TestCase):
 
     @data(*slotW10_test)
     def test_comp_angle_opening(self, test_dict):
-        """Check that the computation of the average opening angle iscorrect
+        """Check that the computation of the average opening angle is correct
         """
         test_obj = test_dict["test_obj"]
         a = test_obj.slot.comp_angle_opening()
@@ -130,6 +130,14 @@ class test_SlotW10_meth(TestCase):
         b = comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
         self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+
+    @data(*slotW10_test)
+    def test_comp_width_opening(self, test_dict):
+        """Check that the computation of the average opening width is correct
+        """
+        test_obj = test_dict["test_obj"]
+        a = test_obj.slot.comp_width_opening()
+        self.assertEqual(a, test_obj.slot.W0)
 
     @data(*slotW10_test)
     def test_comp_angle_wind_eq(self, test_dict):

@@ -22,19 +22,19 @@ def plot_generation(self, obj1=0, obj2=1):
         idx_obj1 = obj1
         obj1 = self.fitness_names[idx_obj1]
     else:
-        obj1 = self.fitness_names.index(obj1)
+        idx_obj1 = self.fitness_names.index(obj1)
     if isinstance(obj2, int):
         idx_obj2 = obj2
         obj2 = self.fitness_names[idx_obj2]
     else:
-        obj2 = self.fitness_names.index(obj2)
+        idx_obj2 = self.fitness_names.index(obj2)
 
     # TODO define the colormap according to Pyleecan graphical chart
     # Colormap definition
     cm = LinearSegmentedColormap.from_list(
         "colormap",
         [(35 / 255, 89 / 255, 133 / 255), (250 / 255, 202 / 255, 56 / 255)],
-        N=max(self.ngen),
+        N=max(self.ngen) + 1,
     )
 
     # Get fitness and ngen

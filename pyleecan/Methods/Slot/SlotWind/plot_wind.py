@@ -5,7 +5,10 @@ from matplotlib.pyplot import axis, legend
 from numpy import array, exp, pi
 
 from ....Functions.init_fig import init_fig
-from ....Methods.Machine import PHASE_COLOR, PHASE_NAME
+from ....Functions.Winding.gen_phase_list import gen_name
+from ....definitions import config_dict
+
+PHASE_COLORS = config_dict["color_dict"]["PHASE_COLORS"]
 
 
 def plot_wind(self, wind_mat=None, fig=None, is_bar=False):
@@ -28,6 +31,8 @@ def plot_wind(self, wind_mat=None, fig=None, is_bar=False):
     None
     """
 
+    qs_name = gen_name(self.winding.qs)
+
     if wind_mat is None:  # Default : Only one zone monocolor
         Nrad, Ntan, qs = 1, 1, 1
         Zs = self.Zs
@@ -47,7 +52,7 @@ def plot_wind(self, wind_mat=None, fig=None, is_bar=False):
         for jj in range(Zs):
             if wind_mat is None or len(surf_list) != Ntan * Nrad:
                 x, y = point_list.real, point_list.imag
-                patches.append(Polygon(list(zip(x, y)), color=PHASE_COLOR[0]))
+                patches.append(Polygon(list(zip(x, y)), color=PHASE_COLORS[0]))
             else:
                 # print "Nrad, Ntan, Zs : "+str((ii%Nrad,ii/Nrad,jj))
                 color = get_color(wind_mat, ii % Nrad, ii // Nrad, jj)
@@ -78,19 +83,19 @@ def plot_wind(self, wind_mat=None, fig=None, is_bar=False):
         # No winding matrix => Only one zone
         if not is_bar and not ("Winding" in label_leg):
             # Avoid adding twice the same label
-            patch_leg.append(Patch(color=PHASE_COLOR[0]))
+            patch_leg.append(Patch(color=PHASE_COLORS[0]))
             label_leg.append("Winding")
         elif is_bar and not ("Rotor bar" in label_leg):
             # Avoid adding twice the same label
-            patch_leg.append(Patch(color=PHASE_COLOR[0]))
+            patch_leg.append(Patch(color=PHASE_COLORS[0]))
             label_leg.append("Rotor bar")
     else:  # Add every phase to the legend
         for ii in range(qs):
-            if not ("Phase " + PHASE_NAME[ii] in label_leg):
+            if not ("Phase " + qs_name[ii] in label_leg):
                 # Avoid adding twice the same label
-                index = ii % len(PHASE_COLOR)
-                patch_leg.append(Patch(color=PHASE_COLOR[index]))
-                label_leg.append("Phase " + PHASE_NAME[ii])
+                index = ii % len(PHASE_COLORS)
+                patch_leg.append(Patch(color=PHASE_COLORS[index]))
+                label_leg.append("Phase " + qs_name[ii])
 
     legend(patch_leg, label_leg)
     fig.show()
@@ -119,5 +124,5 @@ def get_color(wind_mat, Nrad, Ntan, Zs):
     A = wind_mat[Nrad, Ntan, Zs, :]
     for zz in range(len(A)):
         if A[zz] != 0:
-            return PHASE_COLOR[zz]
+            return PHASE_COLORS[zz]
     return "w"  # If all the phase are at 0 : the zone is empty => white

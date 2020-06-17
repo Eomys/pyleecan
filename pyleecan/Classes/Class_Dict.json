@@ -5321,20 +5321,11 @@
         "desc": "Genetic algorithm class",
         "is_internal": false,
         "methods": [],
-        "mother": "",
+        "mother": "OptiSolver",
         "name": "OptiGenAlg",
         "package": "Optimization",
         "path": "pyleecan/Generator/ClassesRef/Optimization/OptiGenAlg.csv",
         "properties": [
-            {
-                "desc": "Optimization results containing every output",
-                "max": "",
-                "min": "",
-                "name": "multi_output",
-                "type": "OutputMultiOpti",
-                "unit": "-",
-                "value": ""
-            },
             {
                 "desc": "Selector of the genetic algorithm",
                 "max": "",
@@ -5397,24 +5388,6 @@
                 "type": "int",
                 "unit": "-",
                 "value": 100
-            },
-            {
-                "desc": "Problem to solve",
-                "max": "",
-                "min": "",
-                "name": "problem",
-                "type": "OptiProblem",
-                "unit": "-",
-                "value": ""
-            },
-            {
-                "desc": "Name of the logger to use",
-                "max": "",
-                "min": "",
-                "name": "logger_name",
-                "type": "str",
-                "unit": "-",
-                "value": "Pyleecan.OptiGenAlg"
             }
         ]
     },
@@ -5547,6 +5520,54 @@
                 "type": "{OptiConstraint}",
                 "unit": "",
                 "value": {}
+            }
+        ]
+    },
+    "OptiSolver": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "OptiGenAlg",
+            "OptiGenAlgNsga2Deap"
+        ],
+        "desc": "Optimization solver class",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "OptiSolver",
+        "package": "Optimization",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Optimization/OptiSolver.csv",
+        "properties": [
+            {
+                "desc": "Problem to solve",
+                "max": "",
+                "min": "",
+                "name": "problem",
+                "type": "OptiProblem",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Optimization results containing every output",
+                "max": "",
+                "min": "",
+                "name": "multi_output",
+                "type": "OutputMultiOpti",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OptiSolver"
             }
         ]
     },
@@ -6758,7 +6779,8 @@
             "get_surface",
             "get_surface_tooth",
             "is_outwards",
-            "plot"
+            "plot",
+            "comp_width_opening"
         ],
         "mother": "",
         "name": "Slot",

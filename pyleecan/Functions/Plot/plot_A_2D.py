@@ -11,6 +11,7 @@ def plot_A_2D(
     Ydatas,
     legend_list=[""],
     color_list=[(0, 0, 1, 0.5)],
+    linewidth_list=[1],
     title="",
     xlabel="",
     ylabel="",
@@ -39,6 +40,8 @@ def plot_A_2D(
         list of legends
     color_list : list
         list of colors to use for each curve
+    linewidth_list : list
+        list of line width to use for each curve
     title : str
         title of the graph
     xlabel : str
@@ -80,6 +83,9 @@ def plot_A_2D(
     if len(color_list) < len(Ydatas) and len(color_list) == 1:
         # Set the same color for all curves
         color_list = [color_list[0] for Y in Ydatas]
+    if len(linewidth_list) < len(Ydatas) and len(linewidth_list) == 1:
+        # Set the same color for all curves
+        linewidth_list = [linewidth_list[0] for Y in Ydatas]
     if len(legend_list) < len(Ydatas) and len(legend_list) == 1:
         # Set no legend for all curves
         legend_list = ["" for Y in Ydatas]
@@ -93,12 +99,10 @@ def plot_A_2D(
             ax.plot(
                 Xdata,
                 Ydatas[i],
-                color=color_list[i],
+                color_list[i],
                 label=legend_list[i],
-                linewidth=3.0,
+                linewidth=linewidth_list[i],
             )
-        if xticks is not None:
-            ax.xaxis.set_ticks(xticks)
     elif type == "bargraph":
         for i in range(len(Ydatas)):
             width = Xdata[1] - Xdata[0]

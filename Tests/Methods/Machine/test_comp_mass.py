@@ -208,6 +208,13 @@ def test_comp_mass(test_dict):
     msg = "Mrot, Return " + str(a) + " expected " + str(b)
     assert a == pytest.approx(b, rel=DELTA), msg
 
+    assert result["Mrot"]["Myoke"] + result["Mrot"]["Mteeth"] == pytest.approx(
+        result["Mrot"]["Mlam"], rel=DELTA
+    )
+    assert result["Msta"]["Myoke"] + result["Msta"]["Mteeth"] == pytest.approx(
+        result["Msta"]["Mlam"], rel=DELTA
+    )
+
     a = result["Msta"]["Mtot"]
     b = test_dict["Msta"]
     msg = "Msta, Return " + str(a) + " expected " + str(b)

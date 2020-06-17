@@ -98,6 +98,10 @@ class Ui_PHoleM54(object):
         self.in_W0.setObjectName("in_W0")
         self.gridLayout.addWidget(self.in_W0, 2, 0, 1, 1)
         self.verticalLayout_2.addLayout(self.gridLayout)
+        self.w_mat_0 = WMatSelect(PHoleM54)
+        self.w_mat_0.setMinimumSize(QtCore.QSize(100, 0))
+        self.w_mat_0.setObjectName("w_mat_0")
+        self.verticalLayout_2.addWidget(self.w_mat_0)
         self.g_output = QtWidgets.QGroupBox(PHoleM54)
         self.g_output.setMinimumSize(QtCore.QSize(200, 0))
         self.g_output.setObjectName("g_output")
@@ -146,5 +150,6 @@ class Ui_PHoleM54(object):
         self.out_slot_surface.setText(_translate("PHoleM54", "Slot suface : ?"))
 
 
-from ......GUI.Tools.FloatEdit import FloatEdit
+from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc

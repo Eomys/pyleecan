@@ -2,7 +2,6 @@
 """File generated according to PVentTrap/gen_list.json
 WARNING! All changes made in this file will be lost!
 """
-
 from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.Ui_PVentTrap import (
     Ui_PVentTrap,
 )
