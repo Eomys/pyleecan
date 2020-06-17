@@ -19,8 +19,8 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
 
     Returns
     -------
-    list
-        surf_list: list of surfaces
+    surf_list: list
+        list of surfaces
     
     """
     surf_list = super(type(self), self).build_geometry(

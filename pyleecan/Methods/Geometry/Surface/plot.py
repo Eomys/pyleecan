@@ -3,7 +3,10 @@
 from matplotlib.pyplot import axis, legend
 
 from ....Functions.init_fig import init_fig
-from ....Methods.Machine import PATCH_COLOR, PATCH_EDGE
+from ....definitions import config_dict
+
+PATCH_EDGE = config_dict["color_dict"]["PATCH_EDGE"]
+PATCH_COLOR = config_dict["color_dict"]["PATCH_COLOR"]
 
 
 def plot(

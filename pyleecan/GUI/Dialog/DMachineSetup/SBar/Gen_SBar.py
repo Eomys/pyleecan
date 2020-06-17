@@ -2,7 +2,6 @@
 """File generated according to SBar/gen_list.json
 WARNING! All changes made in this file will be lost!
 """
-
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.Ui_SBar import Ui_SBar
 
 

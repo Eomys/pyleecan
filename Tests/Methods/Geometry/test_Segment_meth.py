@@ -8,7 +8,7 @@ from pyleecan.Classes.Segment import Segment
 
 from pyleecan.Methods.Geometry.Segment.check import PointSegmentError
 from pyleecan.Methods.Geometry.Segment.discretize import NbPointSegmentDError
-from numpy import pi, array, exp
+from numpy import pi, array, exp, sqrt
 
 
 # For AlmostEqual
@@ -60,6 +60,23 @@ split_half_test.append(
 split_half_test.append(
     {"begin": -2j, "end": -6j, "is_begin": False, "N_begin": -4j, "N_end": -6j}
 )
+
+is_on_test = list()
+is_on_test.append({"begin": -2, "end": 2, "Z": 0, "result": True})
+is_on_test.append({"begin": -2, "end": 2, "Z": 1j, "result": False})
+is_on_test.append({"begin": -2, "end": 2, "Z": -1j, "result": False})
+is_on_test.append({"begin": -2, "end": 2, "Z": -2, "result": True})
+is_on_test.append({"begin": -2, "end": 2, "Z": 2, "result": True})
+is_on_test.append({"begin": 2j, "end": 2, "Z": 1 + 1j, "result": True})
+
+distance_test = list()
+distance_test.append({"begin": -2, "end": 2, "Z": 0, "result": 0})
+distance_test.append({"begin": -2, "end": 2, "Z": 1j, "result": 1})
+distance_test.append({"begin": -2, "end": 2, "Z": -1j, "result": 1})
+distance_test.append({"begin": -2, "end": 2, "Z": -2, "result": 0})
+distance_test.append({"begin": -2, "end": 2, "Z": 2, "result": 0})
+distance_test.append({"begin": 2j, "end": 2, "Z": 1 + 1j, "result": 0})
+distance_test.append({"begin": 2j, "end": 2, "Z": 3 - 1j, "result": sqrt(2)})
 
 
 @ddt
@@ -170,3 +187,21 @@ class test_Segment_meth(TestCase):
 
         self.assertAlmostEqual(seg.begin, test_dict["N_begin"])
         self.assertAlmostEqual(seg.end, test_dict["N_end"])
+
+    @data(*is_on_test)
+    def test_is_on(self, test_dict):
+        """Check that the segment is_on_line method is correct
+        """
+        seg = Segment(begin=test_dict["begin"], end=test_dict["end"])
+        result = seg.is_on_line(Z=test_dict["Z"])
+
+        self.assertEqual(result, test_dict["result"])
+
+    @data(*distance_test)
+    def test_distance(self, test_dict):
+        """Check that the segment comp_distance method is correct
+        """
+        seg = Segment(begin=test_dict["begin"], end=test_dict["end"])
+        result = seg.comp_distance(Z=test_dict["Z"])
+
+        self.assertAlmostEqual(result, test_dict["result"])

@@ -51,7 +51,14 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
         Zs = self.slot.Zs
 
         # Check for symmetry
-        assert (Zs % sym) == 0
+        assert (Zs % sym) == 0, (
+            "ERROR, Wrong symmetry for "
+            + label
+            + " "
+            + str(Zs)
+            + " slots and sym="
+            + str(sym)
+        )
 
         bore_desc = self.get_bore_desc(sym=sym)
         bore_list = list()

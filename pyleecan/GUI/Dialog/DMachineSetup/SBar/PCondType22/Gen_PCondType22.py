@@ -2,7 +2,6 @@
 """File generated according to PCondType22/gen_list.json
 WARNING! All changes made in this file will be lost!
 """
-
 from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType22.Ui_PCondType22 import (
     Ui_PCondType22,
 )

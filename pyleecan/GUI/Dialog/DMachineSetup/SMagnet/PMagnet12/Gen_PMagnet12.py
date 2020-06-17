@@ -2,7 +2,6 @@
 """File generated according to PMagnet12/gen_list.json
 WARNING! All changes made in this file will be lost!
 """
-
 from pyleecan.GUI.Dialog.DMachineSetup.SMagnet.PMagnet12.Ui_PMagnet12 import (
     Ui_PMagnet12,
 )

@@ -5,7 +5,10 @@ from matplotlib.pyplot import axis, legend
 from numpy import array, exp, pi
 
 from ....Functions.init_fig import init_fig
-from ....Methods.Machine import BAR_COLOR, SCR_COLOR
+from ....definitions import config_dict
+
+BAR_COLOR = config_dict["color_dict"]["BAR_COLOR"]
+SCR_COLOR = config_dict["color_dict"]["SCR_COLOR"]
 
 
 def plot(

@@ -28,8 +28,17 @@ def comp_surfaces(self):
         Shole += hole.Zh * hole.comp_surface()
         if hole.has_magnet():
             Smag += hole.Zh * hole.comp_surface_magnets()
+
+    Ryoke = self.get_Ryoke()
+    Hyoke = self.comp_height_yoke()
+    if self.is_internal:
+        S_dict["Syoke"] = pi * ((Ryoke + Hyoke ** 2) - Ryoke ** 2) - S_dict["Svent"]
+    else:
+        S_dict["Syoke"] = pi * (Ryoke ** 2 - (Ryoke - Hyoke ** 2)) - S_dict["Svent"]
+
     S_dict["Smag"] = Smag
     S_dict["Shole"] = Shole
     S_dict["Slam"] -= Shole  # the magnet surface in included in the hole one
+    S_dict["Steeth"] = S_dict["Slam"] - S_dict["Syoke"]
 
     return S_dict

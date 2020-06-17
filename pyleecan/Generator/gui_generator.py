@@ -74,7 +74,7 @@ def gen_gui_edit_file(path, class_name, gen_dict, gen_list):
     # gen_str contains the code that will be written in the generated file
     gen_str = "# -*- coding: utf-8 -*-\n"
     gen_str += '"""File generated according to ' + class_name + "/gen_list.json\n"
-    gen_str += 'WARNING! All changes made in this file will be lost!\n"""\n\n'
+    gen_str += 'WARNING! All changes made in this file will be lost!\n"""\n'
 
     # Generate the import path
     # from "C:\\Users...\\GUI\\Dialog..." to ["C:", "Users",..., "GUI",
@@ -525,7 +525,8 @@ def ui_to_py(path, file_name):
     with open(path_out, "w") as py_file:
         py_file.write(data[0])
         py_file.write("\n# File generated according to " + file_name + "\n")
-        py_file.writelines(data[6:])
+        py_file.write("# WARNING! All changes made in this file will be lost!\n")
+        py_file.writelines(data[7:])
 
 
 #    #Run the windows command "pyuic5" for converting files

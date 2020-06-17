@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 from numpy import where, argmin, abs
 
-from ...Functions.init_fig import init_subplot
+from ...Functions.init_fig import init_subplot, init_fig
 
 
 def plot_A_2D(
@@ -11,6 +11,7 @@ def plot_A_2D(
     Ydatas,
     legend_list=[""],
     color_list=["b"],
+    linewidth_list=[1],
     title="",
     xlabel="",
     ylabel="",
@@ -36,6 +37,8 @@ def plot_A_2D(
         list of legends
     color_list : list
         list of colors to use for each curve
+    linewidth_list : list
+        list of line width to use for each curve
     title : str
         title of the graph
     xlabel : str
@@ -63,12 +66,34 @@ def plot_A_2D(
     """
 
     # Set figure/subplot
+    if fig is None:
+        (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
     fig, ax = init_subplot(fig=fig, subplot_index=subplot_index)
+
+    # Expend default argument
+    if len(color_list) < len(Ydatas) and len(color_list) == 1:
+        # Set the same color for all curves
+        color_list = [color_list[0] for Y in Ydatas]
+    if len(linewidth_list) < len(Ydatas) and len(linewidth_list) == 1:
+        # Set the same color for all curves
+        linewidth_list = [linewidth_list[0] for Y in Ydatas]
+    if len(legend_list) < len(Ydatas) and len(legend_list) == 1:
+        # Set no legend for all curves
+        legend_list = ["" for Y in Ydatas]
+        no_legend = True
+    else:
+        no_legend = False
 
     # Plot
     if type == "curve":
         for i in range(len(Ydatas)):
-            ax.plot(Xdata, Ydatas[i], color_list[i], label=legend_list[i])
+            ax.plot(
+                Xdata,
+                Ydatas[i],
+                color_list[i],
+                label=legend_list[i],
+                linewidth=linewidth_list[i],
+            )
     elif type == "bargraph":
         for i in range(len(Ydatas)):
             width = Xdata[1] - Xdata[0]
@@ -164,7 +189,7 @@ def plot_A_2D(
     if is_grid:
         ax.grid()
 
-    if len(Ydatas) > 1:
+    if len(Ydatas) > 1 and not no_legend:
         ax.legend()
 
     plt.tight_layout()

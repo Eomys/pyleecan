@@ -22,8 +22,14 @@ def comp_masses(self):
 
     """
 
-    Mfra = self.frame.comp_mass()
-    Msha = self.shaft.comp_mass()
+    if self.frame is None:
+        Mfra = 0
+    else:
+        Mfra = self.frame.comp_mass()
+    if self.shaft is None:
+        Msha = 0
+    else:
+        Msha = self.shaft.comp_mass()
     Mrot = self.rotor.comp_masses()
     Msta = self.stator.comp_masses()
 

@@ -14,7 +14,7 @@ def comp_volumes(self):
     Returns
     -------
     V_dict: dict
-        Volume of the Lamination (Vlam, Vvent) [m**3]
+        Volume of the Lamination (Vlam, Vvent, Vyoke, Vteeth) [m**3]
 
     """
 
@@ -22,5 +22,8 @@ def comp_volumes(self):
 
     S_dict = self.comp_surfaces()
     Vvent = Lf * S_dict["Svent"]
+    # L1 is without ventilation ducts (volume to compute masses)
     Vlam = self.L1 * S_dict["Slam"]
-    return {"Vlam": Vlam, "Vvent": Vvent}
+    Vyoke = self.L1 * S_dict["Syoke"]
+    Vteeth = self.L1 * S_dict["Steeth"]
+    return {"Vlam": Vlam, "Vvent": Vvent, "Vyoke": Vyoke, "Vteeth": Vteeth}
