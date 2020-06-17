@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from .....Functions.init_fig import init_fig
-from .....Functions.Plot.plot_A_2D import plot_A_2D
+from ..init_fig import init_fig
+from .plot_A_2D import plot_A_2D
 
 
 def plot_A_quiver_2D(

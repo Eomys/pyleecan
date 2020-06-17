@@ -153,6 +153,15 @@ def plot_A_3D(
             ax.xaxis.set_ticks(xticks)
         if yticks is not None:
             ax.yaxis.set_ticks(yticks)
+    elif type == "scatter":
+        c = ax.scatter(Xdata, Ydata, Zdata, cmap=colormap, vmin=z_min, vmax=z_max)
+        clb = fig.colorbar(c, ax=ax)
+        clb.ax.set_title(zlabel, fontsize=18)
+        clb.ax.tick_params(labelsize=18)
+        if xticks is not None:
+            ax.xaxis.set_ticks(xticks)
+        if yticks is not None:
+            ax.yaxis.set_ticks(yticks)
 
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
