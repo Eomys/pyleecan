@@ -14,7 +14,7 @@ def comp_surfaces(self):
     Returns
     -------
     S_dict: dict
-        Lamination surface dictionnary (Slam, Svent) [m**2]
+        Lamination surface dictionnary (Slam, Svent, Syoke, Steeth, Sslot) [m**2]
 
     """
 
@@ -28,4 +28,10 @@ def comp_surfaces(self):
     # Surface of the ventilation ducts on the yoke
     Svent = self.comp_surface_axial_vent()
 
-    return {"Slam": Slam - Svent, "Svent": Svent}
+    return {
+        "Slam": Slam - Svent,
+        "Svent": Svent,
+        "Syoke": Slam,
+        "Steeth": 0,
+        "Sslot": 0,
+    }
