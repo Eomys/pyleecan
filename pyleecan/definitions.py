@@ -63,17 +63,27 @@ if platform.system() == "Windows":
 else:
     USER_DIR = os.environ["HOME"] + "/.local/share/" + PACKAGE_NAME
 
+# Default config_dict
+default_config_dict = dict(
+    DATA_DIR=join(USER_DIR, "Data"),
+    MATLIB_DIR=join(USER_DIR, "Data", "Material"),  # Material library directory
+    UNIT_M=1,  # length unit: 0 for m, 1 for mm
+    UNIT_M2=1,  # Surface unit: 0 for m^2, 1 for mm^2
+    COLOR_DICT_NAME="pyleecan_color.json",  # Name of the color set to use
+)
+
 if isfile(join(USER_DIR, "config.json")):  # Load the config file if it exist
     with open(join(USER_DIR, "config.json"), "r") as config_file:
         config_dict = load(config_file)
+
+    # Check that config_dict contains all the default_config_dict keys
+    for key, val in default_config_dict.items():
+        if key not in config_dict:
+            edit_config_dict(key, val, config_dict)
+
 else:  # Default values
-    config_dict = dict(
-        DATA_DIR=join(USER_DIR, "Data"),
-        MATLIB_DIR=join(USER_DIR, "Data", "Material"),  # Material library directory
-        UNIT_M=1,  # length unit: 0 for m, 1 for mm
-        UNIT_M2=1,  # Surface unit: 0 for m^2, 1 for mm^2
-        COLOR_DICT_NAME="pyleecan_color.json",  # Name of the color set to use
-    )
+    config_dict = default_config_dict
+
 create_folder(config_dict)
 
 DATA_DIR = config_dict["DATA_DIR"]

@@ -61,6 +61,9 @@ class MatLib(object):
         machine: Machine
             Machine containing material to add 
         """
+        # Remove previous machine material
+        for i in range(self.index_first_mat_mach, len(self.list_mat)):
+            self.list_mat.pop(i)
 
         list_mach_mat = machine.get_material_list()
         if not isinstance(list_mach_mat, list):
@@ -280,7 +283,7 @@ class MatLib(object):
             material.path = join(MATLIB_DIR, material.name + ".json").replace("\\", "/")
 
             # Save it
-            material.save()
+            material.save(material.path)
 
         # Machine material
         else:

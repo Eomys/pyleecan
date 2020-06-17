@@ -56,6 +56,13 @@ def check_optimization_input(self):
         raise OptimizationAttributeError(
             "Optimization problem must contain at least one design variable"
         )
+    else:
+        for name, design_var in self.problem.design_var.items():
+            if design_var.type_var not in ["set", "interval"]:
+                mess = 'The design variable \'{}\' has a wrong type_var got {} expected "set" or "interval".'.format(
+                    name, design_var.type_var
+                )
+                raise OptimizationAttributeError(mess)
 
     # Check constraints type
     if self.problem.constraint != None:

@@ -5,7 +5,9 @@ from matplotlib.pyplot import axis, legend
 from numpy import array, exp, pi
 
 from ....Functions.init_fig import init_fig
-from ....Methods.Machine import MAGNET_COLOR
+from ....definitions import config_dict
+
+MAGNET_COLOR = config_dict["color_dict"]["MAGNET_COLOR"]
 
 
 def plot(self, fig=None, display_field=False):

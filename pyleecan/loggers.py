@@ -63,7 +63,7 @@ LOGGING_CONFIG_CONSOLE = {
             "handlers": [],
         },
         "Pyleecan.OutGeo": {"level": DEFAULT_LEVEL, "propagate": True, "handlers": []},
-        "Pyleecan.OptiGenAlg": {
+        "Pyleecan.OptiSolver": {
             "level": DEFAULT_LEVEL,
             "propagate": False,
             "handlers": ["opti_file_handler"],  # <-- redirection in a file
@@ -182,7 +182,7 @@ LOGGING_CONFIG_FILE = {
             "propagate": False,
             "handlers": ["OutGeo_fh"],
         },
-        "Pyleecan.OptiGenAlg": {
+        "Pyleecan.OptiSolver": {
             "level": DEFAULT_LEVEL,
             "propagate": False,
             "handlers": ["opti_file_handler"],  # <-- redirection in a file

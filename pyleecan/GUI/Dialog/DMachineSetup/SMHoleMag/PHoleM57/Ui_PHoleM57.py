@@ -3,6 +3,7 @@
 # File generated according to PHoleM57.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -115,6 +116,10 @@ class Ui_PHoleM57(object):
         self.w_mat_1.setMinimumSize(QtCore.QSize(100, 0))
         self.w_mat_1.setObjectName("w_mat_1")
         self.verticalLayout_2.addWidget(self.w_mat_1)
+        self.w_mat_2 = WMatSelect(PHoleM57)
+        self.w_mat_2.setMinimumSize(QtCore.QSize(100, 0))
+        self.w_mat_2.setObjectName("w_mat_2")
+        self.verticalLayout_2.addWidget(self.w_mat_2)
         self.g_output = QtWidgets.QGroupBox(PHoleM57)
         self.g_output.setMinimumSize(QtCore.QSize(200, 0))
         self.g_output.setObjectName("g_output")
@@ -168,6 +173,6 @@ class Ui_PHoleM57(object):
         )
 
 
-from ......GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
 from pyleecan.GUI.Tools.FloatEdit import FloatEdit
 from pyleecan.GUI.Resources import pyleecan_rc
