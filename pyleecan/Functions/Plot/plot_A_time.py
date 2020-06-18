@@ -120,7 +120,7 @@ def plot_A_time(
         )
     time = results["time"]
     Ydatas = [results[data.symbol]] + [
-        results[d.symbol + "_" + str(i)] for i in range(len(data_list))
+        results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
     ]
     Ydata = []
     for d in Ydatas:
@@ -178,7 +178,7 @@ def plot_A_time(
 
         freqs = results["freqs"]
         Ydata = [results[data.symbol]] + [
-            results[d.symbol + "_" + str(i)] for i in range(len(data_list))
+            results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
         ]
 
         for i in range(len(Ydata)):

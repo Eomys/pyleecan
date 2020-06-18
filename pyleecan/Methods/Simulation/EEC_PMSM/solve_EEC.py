@@ -15,7 +15,19 @@ from scipy.linalg import solve
 
 def solve_EEC(self, output):
     """Compute the parameters dict for the equivalent electrical circuit
-
+    cf "Advanced Electrical Drives, analysis, modeling, control"
+    Rik de doncker, Duco W.J. Pulle, Andre Veltman, Springer edition
+    
+                 <---                               --->
+     -----R-----wsLqIq----              -----R-----wsLdId----
+    |                     |            |                     |
+    |                     |            |                    BEMF
+    |                     |            |                     |
+     ---------Id----------              ---------Iq----------
+             
+             --->                               ---> 
+              Ud                                 Uq
+              
     Parameters
     ----------
     self : EEC_PMSM

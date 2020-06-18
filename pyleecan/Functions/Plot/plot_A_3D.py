@@ -154,7 +154,9 @@ def plot_A_3D(
         if yticks is not None:
             ax.yaxis.set_ticks(yticks)
     elif type == "scatter":
-        c = ax.scatter(Xdata, Ydata, c=Zdata, marker="s", cmap=colormap, vmin=z_min, vmax=z_max)
+        c = ax.scatter(
+            Xdata, Ydata, c=Zdata, marker="s", cmap=colormap, vmin=z_min, vmax=z_max
+        )
         clb = fig.colorbar(c, ax=ax)
         clb.ax.set_title(zlabel, fontsize=18)
         clb.ax.tick_params(labelsize=18)

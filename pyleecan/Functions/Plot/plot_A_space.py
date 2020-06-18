@@ -133,7 +133,7 @@ def plot_A_space(
         )
     angle = results["angle"]
     Ydatas = [results[data.symbol]] + [
-        results[d.symbol + "_" + str(i)] for i in range(len(data_list))
+        results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
     ]
     Ydata = []
     for d in Ydatas:
@@ -191,7 +191,7 @@ def plot_A_space(
             )
         wavenumber = results["wavenumber"]
         Ydata = [results[data.symbol]] + [
-            results[d.symbol + "_" + str(i)] for i in range(len(data_list))
+            results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
         ]
 
         for i in range(len(Ydata)):

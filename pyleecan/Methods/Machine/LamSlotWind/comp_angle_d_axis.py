@@ -22,7 +22,7 @@ def comp_angle_d_axis(self):
     # Get the unit mmf FFT and angle values
     results = MMF.get_along("angle")
     angle_rotor = results["angle"]
-    results = MMF.get_FT_along("wavenumber")
+    results = MMF.get_along("wavenumber")
     wavenumber = results["wavenumber"]
     mmf_ft = results[MMF.symbol]
 

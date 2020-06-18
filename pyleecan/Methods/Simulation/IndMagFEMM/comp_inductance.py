@@ -64,8 +64,8 @@ def comp_inductance(self, output):
     # Geometry building and assigning property in FEMM
     FEMM_dict = draw_FEMM(
         output,
-        is_mmfr=self.is_mmfr,  # to remove the magnets
-        is_mmfs=self.is_mmfs,
+        is_mmfr=1,
+        is_mmfs=1,
         sym=sym,
         is_antiper=self.is_antiper_a,
         type_calc_leakage=self.type_calc_leakage,

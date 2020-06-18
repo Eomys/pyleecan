@@ -762,7 +762,7 @@
                 "value": null
             },
             {
-                "desc": "Parameters of the EEC",
+                "desc": "Parameters of the EEC: computed if empty, or enforced",
                 "max": "",
                 "min": "",
                 "name": "parameters",
@@ -930,17 +930,7 @@
         "name": "FluxLink",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/FluxLink.csv",
-        "properties": [
-            {
-                "desc": "a",
-                "max": "",
-                "min": "",
-                "name": "a",
-                "type": "int",
-                "unit": "-",
-                "value": 0
-            }
-        ]
+        "properties": []
     },
     "FluxLinkFEMM": {
         "constants": [
@@ -1016,31 +1006,13 @@
                 "value": 0
             },
             {
-                "desc": "1 to compute the stator magnetomotive force / stator armature magnetic field",
-                "max": "",
-                "min": "",
-                "name": "is_mmfs",
-                "type": "bool",
-                "unit": "-",
-                "value": 1
-            },
-            {
-                "desc": "1 to compute the rotor magnetomotive force / rotor magnetic field",
-                "max": "",
-                "min": "",
-                "name": "is_mmfr",
-                "type": "bool",
-                "unit": "-",
-                "value": 1
-            },
-            {
                 "desc": "Number of time steps for the FEMM simulation",
                 "max": "",
                 "min": "",
                 "name": "Nt_tot",
                 "type": "int",
                 "unit": "-",
-                "value": 20
+                "value": 5
             }
         ]
     },
@@ -2505,17 +2477,7 @@
         "name": "IndMag",
         "package": "Simulation",
         "path": "pyleecan/Generator/ClassesRef/Simulation/IndMag.csv",
-        "properties": [
-            {
-                "desc": "a",
-                "max": "",
-                "min": "",
-                "name": "a",
-                "type": "int",
-                "unit": "-",
-                "value": 0
-            }
-        ]
+        "properties": []
     },
     "IndMagFEMM": {
         "constants": [
@@ -2591,31 +2553,13 @@
                 "value": 0
             },
             {
-                "desc": "1 to compute the stator magnetomotive force / stator armature magnetic field",
-                "max": "",
-                "min": "",
-                "name": "is_mmfs",
-                "type": "bool",
-                "unit": "-",
-                "value": 1
-            },
-            {
-                "desc": "1 to compute the rotor magnetomotive force / rotor magnetic field",
-                "max": "",
-                "min": "",
-                "name": "is_mmfr",
-                "type": "bool",
-                "unit": "-",
-                "value": 1
-            },
-            {
                 "desc": "Number of time steps for the FEMM simulation",
                 "max": "",
                 "min": "",
                 "name": "Nt_tot",
                 "type": "int",
                 "unit": "-",
-                "value": 20
+                "value": 5
             }
         ]
     },
@@ -5540,7 +5484,7 @@
         "mother": "",
         "name": "OptiSolver",
         "package": "Optimization",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Optimization/OptiSolver.csv",
+        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiSolver.csv",
         "properties": [
             {
                 "desc": "Problem to solve",
@@ -6254,7 +6198,9 @@
             "plot.plot_A_time_space",
             "plot.Structural.plot_force_space",
             "plot.Magnetic.plot_mesh_field",
-            "plot.plot_A_quiver_2D"
+            "plot.plot_A_quiver_2D",
+            "getter.get_rot_dir",
+            "getter.get_d_angle_diff"
         ],
         "mother": "",
         "name": "Output",

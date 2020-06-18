@@ -30,8 +30,8 @@ def solve_FEMM(self, output, sym, FEMM_dict):
             output=output,
             materials=FEMM_dict["materials"],
             circuits=FEMM_dict["circuits"],
-            is_mmfs=self.is_mmfs,
-            is_mmfr=self.is_mmfr,
+            is_mmfs=1,
+            is_mmfr=1,
             j_t0=ii,
             is_sliding_band=self.is_sliding_band,
         )

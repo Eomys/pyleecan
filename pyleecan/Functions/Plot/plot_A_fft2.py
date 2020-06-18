@@ -113,7 +113,7 @@ def plot_A_fft2(
             )
             zlabel = r"$Angle(" + data.symbol + ")\, [rad]$"
             mag_max = pi
-            
+
         freqs_map, wavenumber_map = meshgrid(freqs, wavenumber)
         freqs_flat = freqs_map.flatten()
         wavenumber_flat = wavenumber_map.flatten()
