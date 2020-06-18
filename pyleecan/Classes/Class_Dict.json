@@ -22,7 +22,7 @@
         "mother": "Line",
         "name": "Arc",
         "package": "Geometry",
-        "path": "pyleecan/Generator/ClassesRef/Geometry/Arc.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Geometry/Arc.csv",
         "properties": []
     },
     "Arc1": {
@@ -53,7 +53,7 @@
         "mother": "Arc",
         "name": "Arc1",
         "package": "Geometry",
-        "path": "pyleecan/Generator/ClassesRef/Geometry/Arc1.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Geometry/Arc1.csv",
         "properties": [
             {
                 "desc": "begin point of the arc",
@@ -121,7 +121,7 @@
         "mother": "Arc",
         "name": "Arc2",
         "package": "Geometry",
-        "path": "pyleecan/Generator/ClassesRef/Geometry/Arc2.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Geometry/Arc2.csv",
         "properties": [
             {
                 "desc": "begin point of the arc",
@@ -180,7 +180,7 @@
         "mother": "Arc",
         "name": "Arc3",
         "package": "Geometry",
-        "path": "pyleecan/Generator/ClassesRef/Geometry/Arc3.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Geometry/Arc3.csv",
         "properties": [
             {
                 "desc": "begin point of the arc",
@@ -228,7 +228,7 @@
         "mother": "",
         "name": "Bore",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/Bore.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/Bore.csv",
         "properties": []
     },
     "BoreFlower": {
@@ -247,7 +247,7 @@
         "mother": "Bore",
         "name": "BoreFlower",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/BoreFlower.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/BoreFlower.csv",
         "properties": [
             {
                 "desc": "Number of flower arc",
@@ -302,7 +302,7 @@
         "mother": "Surface",
         "name": "Circle",
         "package": "Geometry",
-        "path": "pyleecan/Generator/ClassesRef/Geometry/Circle.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Geometry/Circle.csv",
         "properties": [
             {
                 "desc": "Radius of the circle",
@@ -353,7 +353,7 @@
         "mother": "Conductor",
         "name": "CondType11",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/CondType11.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/CondType11.csv",
         "properties": [
             {
                 "desc": "cf schematics, single wire height without insulation [m]",
@@ -450,7 +450,7 @@
         "mother": "Conductor",
         "name": "CondType12",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/CondType12.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/CondType12.csv",
         "properties": [
             {
                 "desc": "cf schematics, single wire diameter without insulation [m]",
@@ -519,7 +519,7 @@
         "mother": "Conductor",
         "name": "CondType21",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/CondType21.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/CondType21.csv",
         "properties": [
             {
                 "desc": "Bar height",
@@ -567,7 +567,7 @@
         "mother": "Conductor",
         "name": "CondType22",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/CondType22.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/CondType22.csv",
         "properties": [
             {
                 "desc": "Surface of the Slot",
@@ -602,7 +602,7 @@
         "mother": "",
         "name": "Conductor",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/Conductor.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/Conductor.csv",
         "properties": [
             {
                 "desc": "Material of the conductor",
@@ -641,7 +641,7 @@
         "mother": "",
         "name": "Drive",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/Drive.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Drive.csv",
         "properties": [
             {
                 "desc": "Maximum RMS voltage of the Drive",
@@ -688,7 +688,7 @@
         "mother": "Drive",
         "name": "DriveWave",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/DriveWave.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/DriveWave.csv",
         "properties": [
             {
                 "desc": "Wave generator",
@@ -718,7 +718,7 @@
         "mother": "",
         "name": "EEC",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/EEC.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/EEC.csv",
         "properties": []
     },
     "EEC_PMSM": {
@@ -741,7 +741,7 @@
         "mother": "EEC",
         "name": "EEC_PMSM",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_PMSM.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/EEC_PMSM.csv",
         "properties": [
             {
                 "desc": "Magnetic inductance",
@@ -806,7 +806,7 @@
         "mother": "",
         "name": "Electrical",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/Electrical.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Electrical.csv",
         "properties": [
             {
                 "desc": "Electrical Equivalent Circuit",
@@ -818,26 +818,6 @@
                 "value": null
             }
         ]
-    },
-    "Element": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "Element",
-            "ElementMat"
-        ],
-        "desc": "Abstract class to define connectivity and getter.",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "Element",
-        "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/Element.csv",
-        "properties": []
     },
     "ElementMat": {
         "constants": [
@@ -858,10 +838,10 @@
             "get_node2element",
             "is_exist"
         ],
-        "mother": "Element",
+        "mother": "",
         "name": "ElementMat",
         "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/ElementMat.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/ElementMat.csv",
         "properties": [
             {
                 "desc": "Matrix of connectivity for one element type",
@@ -929,7 +909,7 @@
         "mother": "",
         "name": "FluxLink",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/FluxLink.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/FluxLink.csv",
         "properties": []
     },
     "FluxLinkFEMM": {
@@ -949,7 +929,7 @@
         "mother": "FluxLink",
         "name": "FluxLinkFEMM",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/FluxLinkFEMM.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/FluxLinkFEMM.csv",
         "properties": [
             {
                 "desc": "To enforce user-defined values for FEMM main parameters ",
@@ -1036,7 +1016,7 @@
         "mother": "",
         "name": "Force",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/Force.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Force.csv",
         "properties": [
             {
                 "desc": "1 to compute lumped tooth forces",
@@ -1066,7 +1046,7 @@
         "mother": "Force",
         "name": "ForceMT",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/ForceMT.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/ForceMT.csv",
         "properties": []
     },
     "Frame": {
@@ -1091,7 +1071,7 @@
         "mother": "",
         "name": "Frame",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/Frame.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/Frame.csv",
         "properties": [
             {
                 "desc": "frame length [m]",
@@ -1145,7 +1125,7 @@
         "mother": "",
         "name": "GUIOption",
         "package": "GUIOption",
-        "path": "pyleecan/Generator/ClassesRef/GUI_Option/GUIOption.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/GUI_Option/GUIOption.csv",
         "properties": [
             {
                 "desc": "Unit options",
@@ -1192,7 +1172,7 @@
         "mother": "",
         "name": "Hole",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/Hole.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/Hole.csv",
         "properties": [
             {
                 "desc": "Number of Hole around the circumference",
@@ -1244,7 +1224,7 @@
         "mother": "HoleMag",
         "name": "HoleM50",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM50.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/HoleM50.csv",
         "properties": [
             {
                 "desc": "Slot depth",
@@ -1386,7 +1366,7 @@
         "mother": "HoleMag",
         "name": "HoleM51",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM51.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/HoleM51.csv",
         "properties": [
             {
                 "desc": "Hole depth",
@@ -1547,7 +1527,7 @@
         "mother": "HoleMag",
         "name": "HoleM52",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM52.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/HoleM52.csv",
         "properties": [
             {
                 "desc": "Slot depth",
@@ -1635,7 +1615,7 @@
         "mother": "HoleMag",
         "name": "HoleM53",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM53.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/HoleM53.csv",
         "properties": [
             {
                 "desc": "Slot depth",
@@ -1753,7 +1733,7 @@
         "mother": "Hole",
         "name": "HoleM54",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM54.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/HoleM54.csv",
         "properties": [
             {
                 "desc": "Hole depth",
@@ -1821,7 +1801,7 @@
         "mother": "HoleMag",
         "name": "HoleM57",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM57.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/HoleM57.csv",
         "properties": [
             {
                 "desc": "V angle",
@@ -1934,7 +1914,7 @@
         "mother": "HoleMag",
         "name": "HoleM58",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/HoleM58.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/HoleM58.csv",
         "properties": [
             {
                 "desc": "Slot depth",
@@ -2042,7 +2022,7 @@
         "mother": "Hole",
         "name": "HoleMag",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/HoleMag.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/HoleMag.csv",
         "properties": []
     },
     "Import": {
@@ -2069,7 +2049,7 @@
         "mother": "",
         "name": "Import",
         "package": "Import",
-        "path": "pyleecan/Generator/ClassesRef/Import/Import.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/Import.csv",
         "properties": []
     },
     "ImportGenMatrixSin": {
@@ -2089,7 +2069,7 @@
         "mother": "ImportMatrix",
         "name": "ImportGenMatrixSin",
         "package": "Import",
-        "path": "pyleecan/Generator/ClassesRef/Import/ImportGenMatrixSin.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/ImportGenMatrixSin.csv",
         "properties": [
             {
                 "desc": "List of sinus vector to generate the matrix lines",
@@ -2118,7 +2098,7 @@
         "mother": "ImportMatrix",
         "name": "ImportGenToothSaw",
         "package": "Import",
-        "path": "pyleecan/Generator/ClassesRef/Import/ImportGenToothSaw.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/ImportGenToothSaw.csv",
         "properties": [
             {
                 "desc": "0: Forward toothsaw, 1: Backwards toothsaw, 2: symmetrical toothsaw",
@@ -2192,7 +2172,7 @@
         "mother": "ImportMatrix",
         "name": "ImportGenVectLin",
         "package": "Import",
-        "path": "pyleecan/Generator/ClassesRef/Import/ImportGenVectLin.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/ImportGenVectLin.csv",
         "properties": [
             {
                 "desc": "Begin point of the linspace",
@@ -2248,7 +2228,7 @@
         "mother": "ImportMatrix",
         "name": "ImportGenVectSin",
         "package": "Import",
-        "path": "pyleecan/Generator/ClassesRef/Import/ImportGenVectSin.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/ImportGenVectSin.csv",
         "properties": [
             {
                 "desc": "Frequency of the sinus to generate",
@@ -2313,7 +2293,7 @@
         "mother": "Import",
         "name": "ImportMatlab",
         "package": "Import",
-        "path": "pyleecan/Generator/ClassesRef/Import/ImportMatlab.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/ImportMatlab.csv",
         "properties": [
             {
                 "desc": "Path of the file to load",
@@ -2359,7 +2339,7 @@
         "mother": "Import",
         "name": "ImportMatrix",
         "package": "Import",
-        "path": "pyleecan/Generator/ClassesRef/Import/ImportMatrix.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/ImportMatrix.csv",
         "properties": [
             {
                 "desc": "1 to transpose the Imported/Generated matrix",
@@ -2388,7 +2368,7 @@
         "mother": "ImportMatrix",
         "name": "ImportMatrixVal",
         "package": "Import",
-        "path": "pyleecan/Generator/ClassesRef/Import/ImportMatrixVal.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/ImportMatrixVal.csv",
         "properties": [
             {
                 "desc": "The matrix to return",
@@ -2417,7 +2397,7 @@
         "mother": "ImportMatrix",
         "name": "ImportMatrixXls",
         "package": "Import",
-        "path": "pyleecan/Generator/ClassesRef/Import/ImportMatrixXls.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/ImportMatrixXls.csv",
         "properties": [
             {
                 "desc": "Path of the file to load",
@@ -2476,7 +2456,7 @@
         "mother": "",
         "name": "IndMag",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/IndMag.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/IndMag.csv",
         "properties": []
     },
     "IndMagFEMM": {
@@ -2496,7 +2476,7 @@
         "mother": "IndMag",
         "name": "IndMagFEMM",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/IndMagFEMM.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/IndMagFEMM.csv",
         "properties": [
             {
                 "desc": "To enforce user-defined values for FEMM main parameters ",
@@ -2585,7 +2565,7 @@
         "mother": "",
         "name": "Input",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/Input.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Input.csv",
         "properties": [
             {
                 "desc": "Electrical time vector (no symmetry) to import",
@@ -2624,7 +2604,7 @@
         "mother": "Input",
         "name": "InputCurrent",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InputCurrent.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputCurrent.csv",
         "properties": [
             {
                 "desc": "Stator currents as a function of time (each column correspond to one phase) to import",
@@ -2698,7 +2678,7 @@
         "mother": "Input",
         "name": "InputCurrentDQ",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InputCurrentDQ.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputCurrentDQ.csv",
         "properties": [
             {
                 "desc": "Stator dq-currents as a function of time to import",
@@ -2772,7 +2752,7 @@
         "mother": "Input",
         "name": "InputFlux",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv",
         "properties": [
             {
                 "desc": "Radial airgap flux density",
@@ -2810,7 +2790,7 @@
         "mother": "Input",
         "name": "InputForce",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/InputForce.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputForce.csv",
         "properties": [
             {
                 "desc": "Radial magnetic air-gap surface force",
@@ -2857,7 +2837,7 @@
         "mother": "Lamination",
         "name": "LamHole",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/LamHole.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/LamHole.csv",
         "properties": [
             {
                 "desc": "lamination Hole",
@@ -2909,7 +2889,7 @@
         "mother": "Lamination",
         "name": "LamSlot",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlot.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/LamSlot.csv",
         "properties": [
             {
                 "desc": "lamination Slot",
@@ -2945,7 +2925,7 @@
         "mother": "LamSlot",
         "name": "LamSlotMag",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMag.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/LamSlotMag.csv",
         "properties": []
     },
     "LamSlotMulti": {
@@ -2972,7 +2952,7 @@
         "mother": "Lamination",
         "name": "LamSlotMulti",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotMulti.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/LamSlotMulti.csv",
         "properties": [
             {
                 "desc": "List of lamination Slot",
@@ -3025,12 +3005,14 @@
             "comp_resistance_wind",
             "comp_angle_d_axis",
             "comp_mmf_unit",
-            "comp_rot_dir"
+            "comp_rot_dir",
+            "comp_lengths_winding",
+            "comp_number_phase_eq"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/LamSlotWind.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/LamSlotWind.csv",
         "properties": [
             {
                 "desc": "Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)",
@@ -3066,12 +3048,13 @@
             "build_geometry",
             "check",
             "comp_length_ring",
-            "plot"
+            "plot",
+            "comp_number_phase_eq"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/LamSquirrelCage.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/LamSquirrelCage.csv",
         "properties": [
             {
                 "desc": "short circuit ring section radial height [m]",
@@ -3145,7 +3128,7 @@
         "mother": "",
         "name": "Lamination",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/Lamination.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/Lamination.csv",
         "properties": [
             {
                 "desc": "Lamination stack active length [m] without radial ventilation airducts but including insulation layers between lamination sheets",
@@ -3269,7 +3252,7 @@
         "mother": "",
         "name": "Line",
         "package": "Geometry",
-        "path": "pyleecan/Generator/ClassesRef/Geometry/Line.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Geometry/Line.csv",
         "properties": [
             {
                 "desc": "the label of the Line (EX: Yoke_side)",
@@ -3322,7 +3305,7 @@
         "mother": "",
         "name": "Machine",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/Machine.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/Machine.csv",
         "properties": [
             {
                 "desc": "Machine's Frame",
@@ -3399,7 +3382,7 @@
         "mother": "Machine",
         "name": "MachineAsync",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MachineAsync.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MachineAsync.csv",
         "properties": []
     },
     "MachineDFIM": {
@@ -3421,7 +3404,7 @@
         "mother": "MachineAsync",
         "name": "MachineDFIM",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MachineDFIM.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MachineDFIM.csv",
         "properties": [
             {
                 "desc": "Machine's Rotor",
@@ -3460,7 +3443,7 @@
         "mother": "MachineSync",
         "name": "MachineIPMSM",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MachineIPMSM.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MachineIPMSM.csv",
         "properties": [
             {
                 "desc": "Machine's Rotor",
@@ -3499,7 +3482,7 @@
         "mother": "MachineDFIM",
         "name": "MachineSCIM",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MachineSCIM.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MachineSCIM.csv",
         "properties": []
     },
     "MachineSIPMSM": {
@@ -3519,7 +3502,7 @@
         "mother": "MachineSync",
         "name": "MachineSIPMSM",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MachineSIPMSM.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MachineSIPMSM.csv",
         "properties": [
             {
                 "desc": "Machine's Rotor",
@@ -3558,7 +3541,7 @@
         "mother": "MachineSync",
         "name": "MachineSRM",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MachineSRM.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MachineSRM.csv",
         "properties": [
             {
                 "desc": "Machine's Rotor",
@@ -3597,7 +3580,7 @@
         "mother": "MachineSync",
         "name": "MachineSyRM",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MachineSyRM.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MachineSyRM.csv",
         "properties": [
             {
                 "desc": "Machine's Rotor",
@@ -3642,7 +3625,7 @@
         "mother": "Machine",
         "name": "MachineSync",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MachineSync.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MachineSync.csv",
         "properties": []
     },
     "MachineUD": {
@@ -3662,7 +3645,7 @@
         "mother": "Machine",
         "name": "MachineUD",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MachineUD.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MachineUD.csv",
         "properties": [
             {
                 "desc": "List of Lamination",
@@ -3692,7 +3675,7 @@
         "mother": "MachineSync",
         "name": "MachineWRSM",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MachineWRSM.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MachineWRSM.csv",
         "properties": [
             {
                 "desc": "Machine's Rotor",
@@ -3734,7 +3717,7 @@
         "mother": "Magnetics",
         "name": "MagFEMM",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/MagFEMM.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/MagFEMM.csv",
         "properties": [
             {
                 "desc": "global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)",
@@ -3860,7 +3843,7 @@
         "mother": "",
         "name": "Magnet",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/Magnet.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/Magnet.csv",
         "properties": [
             {
                 "desc": "The Magnet material",
@@ -3910,7 +3893,7 @@
         "mother": "Magnet",
         "name": "MagnetFlat",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetFlat.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MagnetFlat.csv",
         "properties": []
     },
     "MagnetPolar": {
@@ -3931,7 +3914,7 @@
         "mother": "Magnet",
         "name": "MagnetPolar",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetPolar.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MagnetPolar.csv",
         "properties": []
     },
     "MagnetType10": {
@@ -3960,7 +3943,7 @@
         "mother": "MagnetFlat",
         "name": "MagnetType10",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType10.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MagnetType10.csv",
         "properties": [
             {
                 "desc": "magnet bottom width [m]",
@@ -4009,7 +3992,7 @@
         "mother": "MagnetPolar",
         "name": "MagnetType11",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType11.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MagnetType11.csv",
         "properties": [
             {
                 "desc": "magnet bottom width [rad]",
@@ -4057,7 +4040,7 @@
         "mother": "MagnetFlat",
         "name": "MagnetType12",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType12.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MagnetType12.csv",
         "properties": [
             {
                 "desc": "magnet bottom width [m]",
@@ -4105,7 +4088,7 @@
         "mother": "MagnetFlat",
         "name": "MagnetType13",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType13.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MagnetType13.csv",
         "properties": [
             {
                 "desc": "magnet bottom width [m]",
@@ -4161,7 +4144,7 @@
         "mother": "MagnetPolar",
         "name": "MagnetType14",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/MagnetType14.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/MagnetType14.csv",
         "properties": [
             {
                 "desc": "magnet bottom width [rad]",
@@ -4213,7 +4196,7 @@
         "mother": "",
         "name": "Magnetics",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/Magnetics.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Magnetics.csv",
         "properties": [
             {
                 "desc": "1 to artificially remove stator slotting effects in permeance mmf calculations",
@@ -4348,7 +4331,7 @@
         "mother": "",
         "name": "MatEconomical",
         "package": "Material",
-        "path": "pyleecan/Generator/ClassesRef/Material/MatEconomical.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Material/MatEconomical.csv",
         "properties": [
             {
                 "desc": "Cost of one kilo of material",
@@ -4384,7 +4367,7 @@
         "mother": "",
         "name": "MatElectrical",
         "package": "Material",
-        "path": "pyleecan/Generator/ClassesRef/Material/MatElectrical.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Material/MatElectrical.csv",
         "properties": [
             {
                 "desc": "Resistivity at 20 deg C",
@@ -4429,7 +4412,7 @@
         "mother": "",
         "name": "MatHT",
         "package": "Material",
-        "path": "pyleecan/Generator/ClassesRef/Material/MatHT.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Material/MatHT.csv",
         "properties": [
             {
                 "desc": "thermal conductivity (XY is lamination plane, Z is rotation axis)",
@@ -4495,7 +4478,7 @@
         "mother": "",
         "name": "MatMagnetics",
         "package": "Material",
-        "path": "pyleecan/Generator/ClassesRef/Material/MatMagnetics.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Material/MatMagnetics.csv",
         "properties": [
             {
                 "desc": "Relative magnetic permeability",
@@ -4567,7 +4550,7 @@
         "mother": "",
         "name": "MatStructural",
         "package": "Material",
-        "path": "pyleecan/Generator/ClassesRef/Material/MatStructural.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Material/MatStructural.csv",
         "properties": [
             {
                 "desc": "mass per unit volume [kg/m3]",
@@ -4675,7 +4658,7 @@
         "mother": "",
         "name": "Material",
         "package": "Material",
-        "path": "pyleecan/Generator/ClassesRef/Material/Material.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Material/Material.csv",
         "properties": [
             {
                 "desc": "name of the material",
@@ -4767,10 +4750,45 @@
                 "value": "1"
             }
         ],
+        "daughters": [
+            "Mesh",
+            "MeshVTK"
+        ],
+        "desc": "Abstract Class for mesh related classes",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "Mesh",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Mesh.csv",
+        "properties": [
+            {
+                "desc": "Description of the mesh",
+                "max": "",
+                "min": "",
+                "name": "label",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
+            }
+        ]
+    },
+    "MeshMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
         "daughters": [],
         "desc": "Gather the mesh storage format",
         "is_internal": false,
         "methods": [
+            "get_points",
+            "get_cells",
+            "get_normals",
+            "get_surf",
+            "get_cell_area",
             "set_submesh",
             "get_all_node_coord",
             "add_element",
@@ -4779,19 +4797,24 @@
             "get_new_tag",
             "interface",
             "get_node_tags",
-            "get_vertice"
+            "get_vertice",
+            "plot_mesh",
+            "plot_contour",
+            "plot_glyph",
+            "plot_deformation",
+            "plot_deformation_animated"
         ],
         "mother": "",
-        "name": "Mesh",
+        "name": "MeshMat",
         "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/Mesh.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/MeshMat.csv",
         "properties": [
             {
                 "desc": "Storing connectivity",
                 "max": "",
                 "min": "",
                 "name": "element",
-                "type": "{Element}",
+                "type": "{ElementMat}",
                 "unit": "",
                 "value": ""
             },
@@ -4800,7 +4823,7 @@
                 "max": "",
                 "min": "",
                 "name": "node",
-                "type": "Node",
+                "type": "NodeMat",
                 "unit": "",
                 "value": ""
             },
@@ -4841,7 +4864,7 @@
         "mother": "",
         "name": "MeshSolution",
         "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/MeshSolution.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/MeshSolution.csv",
         "properties": [
             {
                 "desc": "(Optional) Descriptive name of the mesh",
@@ -4853,7 +4876,7 @@
                 "value": ""
             },
             {
-                "desc": "A Mesh object. ",
+                "desc": "A list of Mesh objects. ",
                 "max": "",
                 "min": "",
                 "name": "mesh",
@@ -4862,11 +4885,11 @@
                 "value": ""
             },
             {
-                "desc": "A Solution object which are defined with respect to the mesh attribute.",
+                "desc": "A list of dict containing Solution objects which are defined with respect to the mesh attribute.",
                 "max": "",
                 "min": "",
-                "name": "solution",
-                "type": "[Solution]",
+                "name": "soldict",
+                "type": "dict",
                 "unit": "",
                 "value": ""
             },
@@ -4904,10 +4927,10 @@
             "plot_deformation",
             "plot_deformation_animated"
         ],
-        "mother": "",
+        "mother": "Mesh",
         "name": "MeshVTK",
         "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/MeshVTK.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/MeshVTK.csv",
         "properties": [
             {
                 "desc": "Pyvista object of the mesh (optional)",
@@ -5001,26 +5024,6 @@
             }
         ]
     },
-    "Node": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "Node",
-            "NodeMat"
-        ],
-        "desc": "Abstract class to define nodes. It must have at least a method get_coord to get nodes coordinates for given node tags/number, and a method get_group to create a new objet Node based on a set of given elements.",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "Node",
-        "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/Node.csv",
-        "properties": []
-    },
     "NodeMat": {
         "constants": [
             {
@@ -5037,10 +5040,10 @@
             "get_group",
             "is_exist"
         ],
-        "mother": "Node",
+        "mother": "",
         "name": "NodeMat",
         "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/NodeMat.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/NodeMat.csv",
         "properties": [
             {
                 "desc": "Nodes coordinates",
@@ -5100,7 +5103,7 @@
         "mother": "",
         "name": "Notch",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/Notch.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/Notch.csv",
         "properties": []
     },
     "NotchEvenDist": {
@@ -5119,7 +5122,7 @@
         "mother": "Notch",
         "name": "NotchEvenDist",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/NotchEvenDist.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/NotchEvenDist.csv",
         "properties": [
             {
                 "desc": "angular positon of the first notch",
@@ -5155,7 +5158,7 @@
         "mother": "",
         "name": "OptiConstraint",
         "package": "Optimization",
-        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiConstraint.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Optimization/OptiConstraint.csv",
         "properties": [
             {
                 "desc": "name of the design variable",
@@ -5209,7 +5212,7 @@
         "mother": "",
         "name": "OptiDesignVar",
         "package": "Optimization",
-        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiDesignVar.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Optimization/OptiDesignVar.csv",
         "properties": [
             {
                 "desc": "name of the design variable",
@@ -5268,7 +5271,7 @@
         "mother": "OptiSolver",
         "name": "OptiGenAlg",
         "package": "Optimization",
-        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiGenAlg.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Optimization/OptiGenAlg.csv",
         "properties": [
             {
                 "desc": "Selector of the genetic algorithm",
@@ -5355,7 +5358,7 @@
         "mother": "OptiGenAlg",
         "name": "OptiGenAlgNsga2Deap",
         "package": "Optimization",
-        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv",
         "properties": [
             {
                 "desc": "DEAP toolbox",
@@ -5382,7 +5385,7 @@
         "mother": "",
         "name": "OptiObjFunc",
         "package": "Optimization",
-        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiObjFunc.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Optimization/OptiObjFunc.csv",
         "properties": [
             {
                 "desc": "Description of the objective",
@@ -5418,7 +5421,7 @@
         "mother": "",
         "name": "OptiProblem",
         "package": "Optimization",
-        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiProblem.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Optimization/OptiProblem.csv",
         "properties": [
             {
                 "desc": "Default output to define the default simulation. ",
@@ -5484,7 +5487,7 @@
         "mother": "",
         "name": "OptiSolver",
         "package": "Optimization",
-        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiSolver.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Optimization/OptiSolver.csv",
         "properties": [
             {
                 "desc": "Problem to solve",
@@ -5529,7 +5532,7 @@
         "mother": "",
         "name": "OutElec",
         "package": "Output",
-        "path": "pyleecan/Generator/ClassesRef/Output/OutElec.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutElec.csv",
         "properties": [
             {
                 "desc": "Electrical time vector (no symmetry)",
@@ -5646,7 +5649,7 @@
         "mother": "",
         "name": "OutForce",
         "package": "Output",
-        "path": "pyleecan/Generator/ClassesRef/Output/OutForce.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutForce.csv",
         "properties": [
             {
                 "desc": "Structural time vector (no symmetry)",
@@ -5727,7 +5730,7 @@
         "mother": "",
         "name": "OutGeo",
         "package": "Output",
-        "path": "pyleecan/Generator/ClassesRef/Output/OutGeo.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutGeo.csv",
         "properties": [
             {
                 "desc": "Geometry output of the stator",
@@ -5826,7 +5829,7 @@
         "mother": "",
         "name": "OutGeoLam",
         "package": "Output",
-        "path": "pyleecan/Generator/ClassesRef/Output/OutGeoLam.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutGeoLam.csv",
         "properties": [
             {
                 "desc": "Name of the phases of the winding (if any)",
@@ -5916,7 +5919,7 @@
         "mother": "",
         "name": "OutMag",
         "package": "Output",
-        "path": "pyleecan/Generator/ClassesRef/Output/OutMag.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutMag.csv",
         "properties": [
             {
                 "desc": "Magnetic time vector (no symmetry)",
@@ -6060,7 +6063,7 @@
         "mother": "",
         "name": "OutPost",
         "package": "Output",
-        "path": "pyleecan/Generator/ClassesRef/Output/OutPost.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutPost.csv",
         "properties": [
             {
                 "desc": "Name to use in the legend in case of comparison",
@@ -6096,7 +6099,7 @@
         "mother": "",
         "name": "OutStruct",
         "package": "Output",
-        "path": "pyleecan/Generator/ClassesRef/Output/OutStruct.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutStruct.csv",
         "properties": [
             {
                 "desc": "Structural time vector (no symmetry)",
@@ -6205,7 +6208,7 @@
         "mother": "",
         "name": "Output",
         "package": "Output",
-        "path": "pyleecan/Generator/ClassesRef/Output/Output.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/Output.csv",
         "properties": [
             {
                 "desc": "Simulation object that generated the Output",
@@ -6303,7 +6306,7 @@
         "mother": "",
         "name": "OutputMulti",
         "package": "Output",
-        "path": "pyleecan/Generator/ClassesRef/Output/OutputMulti.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutputMulti.csv",
         "properties": [
             {
                 "desc": "Reference output of the multi simulation",
@@ -6368,7 +6371,7 @@
         "mother": "OutputMulti",
         "name": "OutputMultiOpti",
         "package": "Output",
-        "path": "pyleecan/Generator/ClassesRef/Output/OutputMultiOpti.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutputMultiOpti.csv",
         "properties": [
             {
                 "desc": "List of the corresponding output objective values",
@@ -6432,7 +6435,7 @@
         "mother": "Surface",
         "name": "PolarArc",
         "package": "Geometry",
-        "path": "pyleecan/Generator/ClassesRef/Geometry/PolarArc.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Geometry/PolarArc.csv",
         "properties": [
             {
                 "desc": "Polar angle",
@@ -6484,7 +6487,7 @@
         "mother": "Line",
         "name": "Segment",
         "package": "Geometry",
-        "path": "pyleecan/Generator/ClassesRef/Geometry/Segment.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Geometry/Segment.csv",
         "properties": [
             {
                 "desc": "begin point of the line",
@@ -6524,7 +6527,7 @@
         "mother": "",
         "name": "Shaft",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/Shaft.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/Shaft.csv",
         "properties": [
             {
                 "desc": "length of the rotor shaft [m] (used for weight & cost estimation only)",
@@ -6571,7 +6574,7 @@
         "mother": "Simulation",
         "name": "Simu1",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/Simu1.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Simu1.csv",
         "properties": [
             {
                 "desc": "Electrical module",
@@ -6628,7 +6631,7 @@
         "mother": "",
         "name": "Simulation",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/Simulation.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Simulation.csv",
         "properties": [
             {
                 "desc": "Name of the simulation",
@@ -6731,7 +6734,7 @@
         "mother": "",
         "name": "Slot",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/Slot.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/Slot.csv",
         "properties": [
             {
                 "desc": "slot number",
@@ -6770,7 +6773,7 @@
         "mother": "Slot",
         "name": "Slot19",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/Slot19.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/Slot19.csv",
         "properties": [
             {
                 "desc": "Slot top width",
@@ -6837,7 +6840,7 @@
         "mother": "SlotWind",
         "name": "SlotCirc",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotCirc.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotCirc.csv",
         "properties": [
             {
                 "desc": "Slot isthmus width.",
@@ -6889,7 +6892,7 @@
         "mother": "SlotMag",
         "name": "SlotMFlat",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotMFlat.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotMFlat.csv",
         "properties": [
             {
                 "desc": "Slot isthmus height",
@@ -6958,7 +6961,7 @@
         "mother": "SlotMag",
         "name": "SlotMPolar",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotMPolar.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotMPolar.csv",
         "properties": [
             {
                 "desc": "Slot isthmus width.",
@@ -7006,7 +7009,7 @@
         "mother": "Slot",
         "name": "SlotMag",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotMag.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotMag.csv",
         "properties": [
             {
                 "desc": "Angle between magnet in the slot",
@@ -7035,7 +7038,7 @@
         "mother": "Slot",
         "name": "SlotUD",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotUD.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotUD.csv",
         "properties": [
             {
                 "desc": "Coordinates of the slot points (will be connected in order with Segments)",
@@ -7085,7 +7088,7 @@
         "mother": "SlotWind",
         "name": "SlotW10",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW10.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW10.csv",
         "properties": [
             {
                 "desc": "Slot isthmus width.",
@@ -7180,7 +7183,7 @@
         "mother": "SlotWind",
         "name": "SlotW11",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW11.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW11.csv",
         "properties": [
             {
                 "desc": "Slot isthmus width.",
@@ -7283,7 +7286,7 @@
         "mother": "SlotWind",
         "name": "SlotW12",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW12.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW12.csv",
         "properties": [
             {
                 "desc": "Slot isthmus height.",
@@ -7351,7 +7354,7 @@
         "mother": "SlotWind",
         "name": "SlotW13",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW13.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW13.csv",
         "properties": [
             {
                 "desc": "Slot isthmus width.",
@@ -7455,7 +7458,7 @@
         "mother": "SlotWind",
         "name": "SlotW14",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW14.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW14.csv",
         "properties": [
             {
                 "desc": "Slot isthmus width.",
@@ -7531,7 +7534,7 @@
         "mother": "SlotWind",
         "name": "SlotW15",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW15.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW15.csv",
         "properties": [
             {
                 "desc": "Slot isthmus width.",
@@ -7625,7 +7628,7 @@
         "mother": "SlotWind",
         "name": "SlotW16",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW16.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW16.csv",
         "properties": [
             {
                 "desc": "Slot isthmus angular width.",
@@ -7702,7 +7705,7 @@
         "mother": "SlotWind",
         "name": "SlotW21",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW21.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW21.csv",
         "properties": [
             {
                 "desc": "Slot isthmus width.",
@@ -7796,7 +7799,7 @@
         "mother": "SlotWind",
         "name": "SlotW22",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW22.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW22.csv",
         "properties": [
             {
                 "desc": "Slot isthmus orthoradial angular width.",
@@ -7865,7 +7868,7 @@
         "mother": "SlotWind",
         "name": "SlotW23",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW23.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW23.csv",
         "properties": [
             {
                 "desc": "Slot isthmus width.",
@@ -7979,7 +7982,7 @@
         "mother": "SlotWind",
         "name": "SlotW24",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW24.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW24.csv",
         "properties": [
             {
                 "desc": "Teeth width",
@@ -8029,7 +8032,7 @@
         "mother": "SlotWind",
         "name": "SlotW25",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW25.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW25.csv",
         "properties": [
             {
                 "desc": "Teeth bottom width",
@@ -8097,7 +8100,7 @@
         "mother": "SlotWind",
         "name": "SlotW26",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW26.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW26.csv",
         "properties": [
             {
                 "desc": "Slot isthmus width.",
@@ -8174,7 +8177,7 @@
         "mother": "SlotWind",
         "name": "SlotW27",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW27.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW27.csv",
         "properties": [
             {
                 "desc": "Slot isthmus height.",
@@ -8277,7 +8280,7 @@
         "mother": "SlotWind",
         "name": "SlotW28",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW28.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW28.csv",
         "properties": [
             {
                 "desc": "Slot isthmus width.",
@@ -8354,7 +8357,7 @@
         "mother": "SlotWind",
         "name": "SlotW29",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW29.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW29.csv",
         "properties": [
             {
                 "desc": "Slot isthmus width.",
@@ -8440,7 +8443,7 @@
         "mother": "SlotWind",
         "name": "SlotW60",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW60.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW60.csv",
         "properties": [
             {
                 "desc": "Pole top width",
@@ -8544,7 +8547,7 @@
         "mother": "SlotWind",
         "name": "SlotW61",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotW61.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotW61.csv",
         "properties": [
             {
                 "desc": "Pole top width",
@@ -8669,7 +8672,7 @@
         "mother": "Slot",
         "name": "SlotWind",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/SlotWind.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotWind.csv",
         "properties": []
     },
     "Solution": {
@@ -8679,53 +8682,114 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
-        "desc": "Define a solution related to a Mesh object.",
-        "is_internal": false,
-        "methods": [
-            "get_field",
-            "set_field"
+        "daughters": [
+            "SolutionCell",
+            "SolutionPoint"
         ],
+        "desc": "Abstract class for solution related classes.",
+        "is_internal": false,
+        "methods": [],
         "mother": "",
         "name": "Solution",
         "package": "Mesh",
-        "path": "pyleecan/Generator/ClassesRef/Mesh/Solution.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Solution.csv",
+        "properties": []
+    },
+    "SolutionCell": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Define a solution related to the cells of a Mesh object.",
+        "is_internal": false,
+        "methods": [
+            "get_field",
+            "set_field",
+            "get_tag"
+        ],
+        "mother": "Solution",
+        "name": "SolutionCell",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/SolutionCell.csv",
         "properties": [
             {
-                "desc": "A solution related to nodes",
+                "desc": "List of vector of the numerical values of the solutions",
                 "max": "",
                 "min": "",
-                "name": "nodal",
-                "type": "{ndarray}",
-                "unit": "",
-                "value": ""
+                "name": "field",
+                "type": "list",
+                "unit": "-",
+                "value": null
             },
             {
-                "desc": "A solution related to edges",
+                "desc": "Vector of cell tags on which the solution apply",
                 "max": "",
                 "min": "",
-                "name": "edge",
-                "type": "{ndarray}",
-                "unit": "",
-                "value": ""
+                "name": "tag",
+                "type": "ndarray",
+                "unit": "-",
+                "value": null
             },
             {
-                "desc": "A solution related to faces",
+                "desc": "Label of the Mesh object which is linked to the solution",
                 "max": "",
                 "min": "",
-                "name": "face",
-                "type": "{ndarray}",
-                "unit": "",
-                "value": ""
+                "name": "label",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
+            }
+        ]
+    },
+    "SolutionPoint": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Define a solution related to the points (or nodes) a Mesh object.",
+        "is_internal": false,
+        "methods": [
+            "get_field",
+            "set_field",
+            "get_indice"
+        ],
+        "mother": "Solution",
+        "name": "SolutionPoint",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/SolutionPoint.csv",
+        "properties": [
+            {
+                "desc": "Matrix/Vector of the numerical values of the solutions",
+                "max": "",
+                "min": "",
+                "name": "field",
+                "type": "ndarray",
+                "unit": "-",
+                "value": null
             },
             {
-                "desc": "A solution related to volumes",
+                "desc": "Vector of points/nodes indices on which the solution apply",
                 "max": "",
                 "min": "",
-                "name": "volume",
-                "type": "{ndarray}",
-                "unit": "",
-                "value": ""
+                "name": "indices",
+                "type": "ndarray",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Label of the Mesh object which is linked to the solution",
+                "max": "",
+                "min": "",
+                "name": "label",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
             }
         ]
     },
@@ -8746,7 +8810,7 @@
         "mother": "",
         "name": "Structural",
         "package": "Simulation",
-        "path": "pyleecan/Generator/ClassesRef/Simulation/Structural.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Structural.csv",
         "properties": [
             {
                 "desc": "Force module",
@@ -8784,7 +8848,7 @@
         "mother": "Surface",
         "name": "SurfLine",
         "package": "Geometry",
-        "path": "pyleecan/Generator/ClassesRef/Geometry/SurfLine.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Geometry/SurfLine.csv",
         "properties": [
             {
                 "desc": "List of Lines ",
@@ -8822,7 +8886,7 @@
         "mother": "Surface",
         "name": "SurfRing",
         "package": "Geometry",
-        "path": "pyleecan/Generator/ClassesRef/Geometry/SurfRing.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Geometry/SurfRing.csv",
         "properties": [
             {
                 "desc": "Outter surface",
@@ -8870,7 +8934,7 @@
         "mother": "",
         "name": "Surface",
         "package": "Geometry",
-        "path": "pyleecan/Generator/ClassesRef/Geometry/Surface.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Geometry/Surface.csv",
         "properties": [
             {
                 "desc": "Center of symmetry",
@@ -8916,7 +8980,7 @@
         "mother": "Surface",
         "name": "Trapeze",
         "package": "Geometry",
-        "path": "pyleecan/Generator/ClassesRef/Geometry/Trapeze.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Geometry/Trapeze.csv",
         "properties": [
             {
                 "desc": "the height of the Trapeze",
@@ -8968,7 +9032,7 @@
         "mother": "",
         "name": "Unit",
         "package": "GUI_Option",
-        "path": "pyleecan/Generator/ClassesRef/GUI_Option/Unit.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/GUI_Option/Unit.csv",
         "properties": [
             {
                 "desc": "0: use m, 1: use mm",
@@ -9019,7 +9083,7 @@
         "mother": "Hole",
         "name": "VentilationCirc",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/VentilationCirc.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/VentilationCirc.csv",
         "properties": [
             {
                 "desc": "Shift angle of the holes around circumference",
@@ -9070,7 +9134,7 @@
         "mother": "Hole",
         "name": "VentilationPolar",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/VentilationPolar.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/VentilationPolar.csv",
         "properties": [
             {
                 "desc": "Shift angle of the hole around circumference",
@@ -9130,7 +9194,7 @@
         "mother": "Hole",
         "name": "VentilationTrap",
         "package": "Slot",
-        "path": "pyleecan/Generator/ClassesRef/Slot/VentilationTrap.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/VentilationTrap.csv",
         "properties": [
             {
                 "desc": "Shift angle of the hole around circumference",
@@ -9203,12 +9267,13 @@
             "comp_Ntspc",
             "comp_phasor_angle",
             "comp_resistance_norm",
-            "comp_winding_factor"
+            "comp_winding_factor",
+            "comp_length_endwinding"
         ],
         "mother": "",
         "name": "Winding",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/Winding.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/Winding.csv",
         "properties": [
             {
                 "desc": "1 to reverse the default winding algorithm along the airgap (c, b, a instead of a, b, c along the trigonometric direction)",
@@ -9310,7 +9375,7 @@
         "mother": "Winding",
         "name": "WindingCW1L",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW1L.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/WindingCW1L.csv",
         "properties": []
     },
     "WindingCW2LR": {
@@ -9330,7 +9395,7 @@
         "mother": "Winding",
         "name": "WindingCW2LR",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW2LR.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/WindingCW2LR.csv",
         "properties": []
     },
     "WindingCW2LT": {
@@ -9350,7 +9415,7 @@
         "mother": "Winding",
         "name": "WindingCW2LT",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingCW2LT.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/WindingCW2LT.csv",
         "properties": []
     },
     "WindingDW1L": {
@@ -9372,7 +9437,7 @@
         "mother": "Winding",
         "name": "WindingDW1L",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingDW1L.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/WindingDW1L.csv",
         "properties": [
             {
                 "desc": "winding coil pitch or coil span expressed in slots (coil_pitch1=Zs/(2p)->full-pitch distributed winding, coil_pitch1<Zs/(2p)->chorded/shorted-pitch distributed winding, coil_pitch1=1->tooth-winding). Coil pitch is sometimes written 1/9 means Input.Magnetics.coil_pitch1=9-1=8",
@@ -9401,7 +9466,7 @@
         "mother": "WindingDW1L",
         "name": "WindingDW2L",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingDW2L.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/WindingDW2L.csv",
         "properties": []
     },
     "WindingSC": {
@@ -9421,7 +9486,7 @@
         "mother": "Winding",
         "name": "WindingSC",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingSC.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/WindingSC.csv",
         "properties": []
     },
     "WindingUD": {
@@ -9441,7 +9506,7 @@
         "mother": "Winding",
         "name": "WindingUD",
         "package": "Machine",
-        "path": "pyleecan/Generator/ClassesRef/Machine/WindingUD.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/WindingUD.csv",
         "properties": [
             {
                 "desc": "user defined Winding matrix",

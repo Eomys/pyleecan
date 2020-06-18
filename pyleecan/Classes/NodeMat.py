@@ -8,7 +8,7 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from .Node import Node
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -37,7 +37,7 @@ from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 
 
-class NodeMat(Node):
+class NodeMat(FrozenClass):
     """Class to define nodes coordinates and getter."""
 
     VERSION = 1
@@ -134,23 +134,25 @@ class NodeMat(Node):
             if "delta" in list(init_dict.keys()):
                 delta = init_dict["delta"]
         # Initialisation by argument
+        self.parent = None
         # coordinate can be None, a ndarray or a list
         set_array(self, "coordinate", coordinate)
         self.nb_node = nb_node
         # tag can be None, a ndarray or a list
         set_array(self, "tag", tag)
         self.delta = delta
-        # Call Node init
-        super(NodeMat, self).__init__()
-        # The class is frozen (in Node init), for now it's impossible to
-        # add new properties
+
+        # The class is frozen, for now it's impossible to add new properties
+        self._freeze()
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
         NodeMat_str = ""
-        # Get the properties inherited from Node
-        NodeMat_str += super(NodeMat, self).__str__()
+        if self.parent is None:
+            NodeMat_str += "parent = None " + linesep
+        else:
+            NodeMat_str += "parent = " + str(type(self.parent)) + " object" + linesep
         NodeMat_str += (
             "coordinate = "
             + linesep
@@ -174,10 +176,6 @@ class NodeMat(Node):
 
         if type(other) != type(self):
             return False
-
-        # Check the properties inherited from Node
-        if not super(NodeMat, self).__eq__(other):
-            return False
         if not array_equal(other.coordinate, self.coordinate):
             return False
         if other.nb_node != self.nb_node:
@@ -192,8 +190,7 @@ class NodeMat(Node):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        # Get the properties inherited from Node
-        NodeMat_dict = super(NodeMat, self).as_dict()
+        NodeMat_dict = dict()
         if self.coordinate is None:
             NodeMat_dict["coordinate"] = None
         else:
@@ -205,7 +202,6 @@ class NodeMat(Node):
             NodeMat_dict["tag"] = self.tag.tolist()
         NodeMat_dict["delta"] = self.delta
         # The class name is added to the dict fordeserialisation purpose
-        # Overwrite the mother class name
         NodeMat_dict["__class__"] = "NodeMat"
         return NodeMat_dict
 
@@ -216,8 +212,6 @@ class NodeMat(Node):
         self.nb_node = None
         self.tag = None
         self.delta = None
-        # Set to None the properties inherited from Node
-        super(NodeMat, self)._set_None()
 
     def _get_coordinate(self):
         """getter of coordinate"""

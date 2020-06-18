@@ -8,7 +8,7 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from .Element import Element
+from ._frozen import FrozenClass
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -52,7 +52,7 @@ from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 
 
-class ElementMat(Element):
+class ElementMat(FrozenClass):
     """Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). """
 
     VERSION = 1
@@ -194,6 +194,7 @@ class ElementMat(Element):
             if "tag" in list(init_dict.keys()):
                 tag = init_dict["tag"]
         # Initialisation by argument
+        self.parent = None
         # connectivity can be None, a ndarray or a list
         set_array(self, "connectivity", connectivity)
         self.nb_elem = nb_elem
@@ -202,17 +203,18 @@ class ElementMat(Element):
         set_array(self, "group", group)
         # tag can be None, a ndarray or a list
         set_array(self, "tag", tag)
-        # Call Element init
-        super(ElementMat, self).__init__()
-        # The class is frozen (in Element init), for now it's impossible to
-        # add new properties
+
+        # The class is frozen, for now it's impossible to add new properties
+        self._freeze()
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
         ElementMat_str = ""
-        # Get the properties inherited from Element
-        ElementMat_str += super(ElementMat, self).__str__()
+        if self.parent is None:
+            ElementMat_str += "parent = None " + linesep
+        else:
+            ElementMat_str += "parent = " + str(type(self.parent)) + " object" + linesep
         ElementMat_str += (
             "connectivity = "
             + linesep
@@ -245,10 +247,6 @@ class ElementMat(Element):
 
         if type(other) != type(self):
             return False
-
-        # Check the properties inherited from Element
-        if not super(ElementMat, self).__eq__(other):
-            return False
         if not array_equal(other.connectivity, self.connectivity):
             return False
         if other.nb_elem != self.nb_elem:
@@ -265,8 +263,7 @@ class ElementMat(Element):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        # Get the properties inherited from Element
-        ElementMat_dict = super(ElementMat, self).as_dict()
+        ElementMat_dict = dict()
         if self.connectivity is None:
             ElementMat_dict["connectivity"] = None
         else:
@@ -282,7 +279,6 @@ class ElementMat(Element):
         else:
             ElementMat_dict["tag"] = self.tag.tolist()
         # The class name is added to the dict fordeserialisation purpose
-        # Overwrite the mother class name
         ElementMat_dict["__class__"] = "ElementMat"
         return ElementMat_dict
 
@@ -294,8 +290,6 @@ class ElementMat(Element):
         self.nb_node_per_element = None
         self.group = None
         self.tag = None
-        # Set to None the properties inherited from Element
-        super(ElementMat, self)._set_None()
 
     def _get_connectivity(self):
         """getter of connectivity"""

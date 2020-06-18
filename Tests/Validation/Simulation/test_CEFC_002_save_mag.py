@@ -75,9 +75,9 @@ def test_CEFC_002():
     fig.savefig(join(save_path, "test_CEFC_002_save_mag"))
 
     # Test save with MeshSolution object in out
-    out.save(save_path=save_path)
-
     load_path = join(save_path, "Output.json")
+    out.save(save_path=load_path)
+
     # Test to load the Meshsolution object (inside the output):
     with open(load_path) as json_file:
         json_tmp = json.load(json_file)

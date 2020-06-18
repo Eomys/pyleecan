@@ -8,7 +8,7 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ._frozen import FrozenClass
+from .Mesh import Mesh
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -85,7 +85,7 @@ except ImportError:
 from ._check import InitUnKnowClassError
 
 
-class MeshVTK(FrozenClass):
+class MeshVTK(Mesh):
     """Gather the mesh storage format"""
 
     VERSION = 1
@@ -224,6 +224,7 @@ class MeshVTK(FrozenClass):
         is_vtk_surf=False,
         surf_path="",
         surf_name="surf",
+        label=None,
         init_dict=None,
         init_str=None,
     ):
@@ -255,6 +256,7 @@ class MeshVTK(FrozenClass):
             is_vtk_surf = obj.is_vtk_surf
             surf_path = obj.surf_path
             surf_name = obj.surf_name
+            label = obj.label
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -278,8 +280,9 @@ class MeshVTK(FrozenClass):
                 surf_path = init_dict["surf_path"]
             if "surf_name" in list(init_dict.keys()):
                 surf_name = init_dict["surf_name"]
+            if "label" in list(init_dict.keys()):
+                label = init_dict["label"]
         # Initialisation by argument
-        self.parent = None
         # Check if the type UnstructuredGrid has been imported with success
         if isinstance(UnstructuredGrid, ImportError):
             raise ImportError("Unknown type UnstructuredGrid please install pyvista")
@@ -297,18 +300,17 @@ class MeshVTK(FrozenClass):
         self.is_vtk_surf = is_vtk_surf
         self.surf_path = surf_path
         self.surf_name = surf_name
-
-        # The class is frozen, for now it's impossible to add new properties
-        self._freeze()
+        # Call Mesh init
+        super(MeshVTK, self).__init__(label=label)
+        # The class is frozen (in Mesh init), for now it's impossible to
+        # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
         MeshVTK_str = ""
-        if self.parent is None:
-            MeshVTK_str += "parent = None " + linesep
-        else:
-            MeshVTK_str += "parent = " + str(type(self.parent)) + " object" + linesep
+        # Get the properties inherited from Mesh
+        MeshVTK_str += super(MeshVTK, self).__str__()
         MeshVTK_str += "mesh = " + str(self.mesh) + linesep + linesep
         MeshVTK_str += "is_pyvista_mesh = " + str(self.is_pyvista_mesh) + linesep
         MeshVTK_str += 'format = "' + str(self.format) + '"' + linesep
@@ -331,6 +333,10 @@ class MeshVTK(FrozenClass):
         """Compare two objects (skip parent)"""
 
         if type(other) != type(self):
+            return False
+
+        # Check the properties inherited from Mesh
+        if not super(MeshVTK, self).__eq__(other):
             return False
         if other.mesh != self.mesh:
             return False
@@ -358,7 +364,8 @@ class MeshVTK(FrozenClass):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        MeshVTK_dict = dict()
+        # Get the properties inherited from Mesh
+        MeshVTK_dict = super(MeshVTK, self).as_dict()
         if self.mesh is None:
             MeshVTK_dict["mesh"] = None
         else:  # Store serialized data (using cloudpickle) and str to read it in json save files
@@ -387,6 +394,7 @@ class MeshVTK(FrozenClass):
         MeshVTK_dict["surf_path"] = self.surf_path
         MeshVTK_dict["surf_name"] = self.surf_name
         # The class name is added to the dict fordeserialisation purpose
+        # Overwrite the mother class name
         MeshVTK_dict["__class__"] = "MeshVTK"
         return MeshVTK_dict
 
@@ -403,6 +411,8 @@ class MeshVTK(FrozenClass):
         self.is_vtk_surf = None
         self.surf_path = None
         self.surf_name = None
+        # Set to None the properties inherited from Mesh
+        super(MeshVTK, self)._set_None()
 
     def _get_mesh(self):
         """getter of mesh"""

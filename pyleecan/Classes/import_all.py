@@ -21,7 +21,6 @@ from ..Classes.DriveWave import DriveWave
 from ..Classes.EEC import EEC
 from ..Classes.EEC_PMSM import EEC_PMSM
 from ..Classes.Electrical import Electrical
-from ..Classes.Element import Element
 from ..Classes.ElementMat import ElementMat
 from ..Classes.FluxLink import FluxLink
 from ..Classes.FluxLinkFEMM import FluxLinkFEMM
@@ -90,9 +89,9 @@ from ..Classes.MatMagnetics import MatMagnetics
 from ..Classes.MatStructural import MatStructural
 from ..Classes.Material import Material
 from ..Classes.Mesh import Mesh
+from ..Classes.MeshMat import MeshMat
 from ..Classes.MeshSolution import MeshSolution
 from ..Classes.MeshVTK import MeshVTK
-from ..Classes.Node import Node
 from ..Classes.NodeMat import NodeMat
 from ..Classes.Notch import Notch
 from ..Classes.NotchEvenDist import NotchEvenDist
@@ -145,6 +144,8 @@ from ..Classes.SlotW60 import SlotW60
 from ..Classes.SlotW61 import SlotW61
 from ..Classes.SlotWind import SlotWind
 from ..Classes.Solution import Solution
+from ..Classes.SolutionCell import SolutionCell
+from ..Classes.SolutionPoint import SolutionPoint
 from ..Classes.Structural import Structural
 from ..Classes.SurfLine import SurfLine
 from ..Classes.SurfRing import SurfRing
