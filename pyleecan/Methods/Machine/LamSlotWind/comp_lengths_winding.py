@@ -5,6 +5,7 @@ def comp_lengths_winding(self):
     - Lwact : active length of lamination winding excl. end-windings and
     radial ventilation ducts [m].
     - Lewt : total end-winding length [m].
+    - Lew : end-winding length on one side for a half-turn
     - Lwvent : length of lamination winding in the radial ventilation ducts [m]
 
     Parameters
@@ -42,4 +43,4 @@ def comp_lengths_winding(self):
     # length of lamination winding in the radial ventilation duct [m]
     Lwvent = qb * Ntspc * self.winding.Npcpp * 2 * self.Nrvd * self.Wrvd
 
-    return {"Lwtot": Lwtot, "Lwact": Lwact, "Lewt": Lewt, "Lwvent": Lwvent}
+    return {"Lwtot": Lwtot, "Lwact": Lwact, "Lewt": Lewt, "Lwvent": Lwvent, "Lew": Lew}

@@ -104,7 +104,7 @@ M_test.append(
     {
         "test_obj": IPMSM_A,
         "Mfra": 0,
-        "Msha": 7850 * 0.1 * pi * (0.11064 / 2) ** 2,
+        "Msha": 7650 * 0.1 * pi * (0.11064 / 2) ** 2,
     }  # No frame
 )
 M_test[-1]["rotor"] = {"Slam": 0.0082186, "Svent": 0, "Smag": 0.0189 * 0.0065 * 2 * 8}
@@ -122,7 +122,7 @@ M_test[-1]["stator"]["Mwind"] = 4.0015
 M_test[-1]["stator"]["Mtot"] = (
     M_test[-1]["stator"]["Vlam"] * 7650 * 0.95 + M_test[-1]["stator"]["Mwind"]
 )
-M_test[-1]["Mmach"] = 33.57
+M_test[-1]["Mmach"] = 33.38
 
 
 @pytest.mark.parametrize("test_dict", M_test)

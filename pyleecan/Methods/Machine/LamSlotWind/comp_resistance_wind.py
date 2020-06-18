@@ -22,7 +22,7 @@ def comp_resistance_wind(self):
 
     # end-winding length on one side for a half-turn
     # TODO implement endwinding length (return Enforced endwinding length)
-    Lew = self.comp_length_endwinding()
+    Lew = self.winding.comp_length_endwinding()
 
     # average length of a lamination winding half-turn (one "go" conductor
     # without "return" conductor)
