@@ -14,6 +14,7 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
+from Tests.Validation.Machine.IPMSM_A import IPMSM_A
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -88,18 +89,47 @@ M_test[-1]["Mrot"] = (
 M_test[-1]["stator"] = {"Slam": 9.1483e-3, "Svent": 5.7177e-3}
 M_test[-1]["stator"]["Vlam"] = M_test[-1]["stator"]["Slam"] * 0.8
 M_test[-1]["stator"]["Vvent"] = M_test[-1]["stator"]["Svent"] * 0.8
-M_test[-1]["Msta"] = M_test[-1]["stator"]["Vlam"] * 8000 * 0.95
-
-M_test[-1]["Mmach"] = (
-    M_test[-1]["Mrot"] + M_test[-1]["Msta"] + M_test[-1]["Mfra"] + M_test[-1]["Msha"]
+M_test[-1]["stator"]["Mwind"] = 0
+M_test[-1]["stator"]["Mtot"] = (
+    M_test[-1]["stator"]["Vlam"] * 8000 * 0.95 + M_test[-1]["stator"]["Mwind"]
 )
+M_test[-1]["Mmach"] = (
+    M_test[-1]["Mrot"]
+    + M_test[-1]["stator"]["Mtot"]
+    + M_test[-1]["Mfra"]
+    + M_test[-1]["Msha"]
+)
+# IPMSM_A (Prius machine)
+M_test.append(
+    {
+        "test_obj": IPMSM_A,
+        "Mfra": 0,
+        "Msha": 7650 * 0.1 * pi * (0.11064 / 2) ** 2,
+    }  # No frame
+)
+M_test[-1]["rotor"] = {"Slam": 0.0082186, "Svent": 0, "Smag": 0.0189 * 0.0065 * 2 * 8}
+M_test[-1]["rotor"]["Vlam"] = M_test[-1]["rotor"]["Slam"] * 0.08382
+M_test[-1]["rotor"]["Vvent"] = M_test[-1]["rotor"]["Svent"] * 0.08382
+M_test[-1]["rotor"]["Vmag"] = M_test[-1]["rotor"]["Smag"] * 0.08382
+M_test[-1]["Mrot"] = (
+    M_test[-1]["rotor"]["Vmag"] * 7500 + M_test[-1]["rotor"]["Vlam"] * 7650 * 0.95
+)
+
+M_test[-1]["stator"] = {"Slam": 0.0259068, "Svent": 0}
+M_test[-1]["stator"]["Vlam"] = M_test[-1]["stator"]["Slam"] * 0.08382
+M_test[-1]["stator"]["Vvent"] = M_test[-1]["stator"]["Svent"] * 0.08382
+M_test[-1]["stator"]["Mwind"] = 4.0015
+M_test[-1]["stator"]["Mtot"] = (
+    M_test[-1]["stator"]["Vlam"] * 7650 * 0.95 + M_test[-1]["stator"]["Mwind"]
+)
+M_test[-1]["Mmach"] = 33.38
 
 
 @pytest.mark.parametrize("test_dict", M_test)
 def test_comp_surface_rotor(test_dict):
     """Check that the computation of the surface is correct
     """
-    result = test_obj.rotor.comp_surfaces()
+    result = test_dict["test_obj"].rotor.comp_surfaces()
 
     a = result["Slam"]
     b = test_dict["rotor"]["Slam"]
@@ -122,7 +152,7 @@ def test_comp_surface_rotor(test_dict):
 def test_comp_surface_stator(test_dict):
     """Check that the computation of the surface is correct
     """
-    result = test_obj.stator.comp_surfaces()
+    result = test_dict["test_obj"].stator.comp_surfaces()
 
     a = result["Slam"]
     b = test_dict["stator"]["Slam"]
@@ -145,7 +175,7 @@ def test_comp_surface_stator(test_dict):
 def test_comp_volume_rotor(test_dict):
     """Check that the computation of the volume is correct
     """
-    result = test_obj.rotor.comp_volumes()
+    result = test_dict["test_obj"].rotor.comp_volumes()
 
     a = result["Vlam"]
     b = test_dict["rotor"]["Vlam"]
@@ -168,7 +198,7 @@ def test_comp_volume_rotor(test_dict):
 def test_comp_volume_stator(test_dict):
     """Check that the computation of the volume is correct
     """
-    result = test_obj.stator.comp_volumes()
+    result = test_dict["test_obj"].stator.comp_volumes()
 
     a = result["Vlam"]
     b = test_dict["stator"]["Vlam"]
@@ -191,7 +221,7 @@ def test_comp_volume_stator(test_dict):
 def test_comp_mass(test_dict):
     """Check that the computation of the mass is correct
     """
-    result = test_obj.comp_masses()
+    result = test_dict["test_obj"].comp_masses()
 
     a = result["Mfra"]
     b = test_dict["Mfra"]
@@ -215,9 +245,14 @@ def test_comp_mass(test_dict):
         result["Msta"]["Mlam"], rel=DELTA
     )
 
+    a = result["Msta"]["Mwind"]
+    b = test_dict["stator"]["Mwind"]
+    msg = "Msta[Mwind], Return " + str(a) + " expected " + str(b)
+    assert a == pytest.approx(b, rel=DELTA), msg
+
     a = result["Msta"]["Mtot"]
-    b = test_dict["Msta"]
-    msg = "Msta, Return " + str(a) + " expected " + str(b)
+    b = test_dict["stator"]["Mtot"]
+    msg = "Msta[Mtot], Return " + str(a) + " expected " + str(b)
     assert a == pytest.approx(b, rel=DELTA), msg
 
     a = result["Mmach"]

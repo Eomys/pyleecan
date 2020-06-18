@@ -23,11 +23,6 @@ def plot_mesh(self, indices=[]):
     p = pv.BackgroundPlotter()
     p.set_background("white")
     p.add_mesh(
-        mesh,
-        color="grey",
-        opacity=1,
-        show_edges=True,
-        edge_color="white",
-        line_width=1,
+        mesh, color="grey", opacity=1, show_edges=True, edge_color="white", line_width=1
     )
     p.show()

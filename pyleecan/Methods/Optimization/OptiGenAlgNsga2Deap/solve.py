@@ -42,7 +42,7 @@ def solve(self):
     except (AttributeError, IndexError):
         print(
             "{} Starting optimization...\n\tNumber of generations: {}\n\tPopulation size: {}\n".format(
-                datetime.now().strftime("%H:%M:%S"), self.nb_gen, self.size_pop,
+                datetime.now().strftime("%H:%M:%S"), self.nb_gen, self.size_pop
             )
         )
 

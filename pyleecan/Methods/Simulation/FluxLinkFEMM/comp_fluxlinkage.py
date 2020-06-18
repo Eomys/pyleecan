@@ -3,13 +3,7 @@
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Functions.Electrical.coordinate_transformation import n2dq
 
-from numpy import (
-    zeros,
-    linspace,
-    pi,
-    split,
-    mean,
-)
+from numpy import zeros, linspace, pi, split, mean
 
 
 def comp_fluxlinkage(self, output):

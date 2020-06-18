@@ -38,8 +38,6 @@ def plot_glyph(self, field, indices=[], factor=1):
     # Configure plot
     p = pv.BackgroundPlotter()
     p.set_background("white")
-    p.add_mesh(
-        mesh, color="grey", opacity=0.7, show_edges=True, edge_color="white",
-    )
+    p.add_mesh(mesh, color="grey", opacity=0.7, show_edges=True, edge_color="white")
     p.add_mesh(centers2.arrows, color="white")
     p.show()

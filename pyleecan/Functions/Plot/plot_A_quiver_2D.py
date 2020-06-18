@@ -4,9 +4,7 @@ from ..init_fig import init_fig
 from .plot_A_2D import plot_A_2D
 
 
-def plot_A_quiver_2D(
-    data, t=None, t_index=0, is_norm=False, unit="SI",
-):
+def plot_A_quiver_2D(data, t=None, t_index=0, is_norm=False, unit="SI"):
     """Plots a 2D vector field
 
     Parameters
@@ -41,5 +39,5 @@ def plot_A_quiver_2D(
 
     # Plot the original graph
     plot_A_2D(
-        xy, [Ydata], fig=fig, title=title, xlabel=xlabel, ylabel=ylabel, type="quiver",
+        xy, [Ydata], fig=fig, title=title, xlabel=xlabel, ylabel=ylabel, type="quiver"
     )

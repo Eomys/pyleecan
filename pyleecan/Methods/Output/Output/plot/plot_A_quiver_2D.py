@@ -5,9 +5,7 @@ from .....Functions.Plot.plot_A_quiver_2D import (
 )
 
 
-def plot_A_quiver_2D(
-    self, Data_str, t=None, t_index=0, is_norm=False, unit="SI",
-):
+def plot_A_quiver_2D(self, Data_str, t=None, t_index=0, is_norm=False, unit="SI"):
     """Plots a field as a function of space (angle)
 
     Parameters
@@ -31,6 +29,4 @@ def plot_A_quiver_2D(
     data = getattr(phys, Data_str.split(".")[1])
 
     # Call the plot function
-    plot_A_quiver_2D_fct(
-        data, t=t, t_index=t_index, is_norm=is_norm, unit=unit,
-    )
+    plot_A_quiver_2D_fct(data, t=t, t_index=t_index, is_norm=is_norm, unit=unit)
