@@ -91,7 +91,7 @@ def plot_generation_design_space(self, dvar1=0, dvar2=1, valid_only=False):
                     markerfacecolor="None",
                     markeredgecolor="r",
                     markersize=7,
-                ),
+                )
             ]
         )
         labels.append("invalid")
