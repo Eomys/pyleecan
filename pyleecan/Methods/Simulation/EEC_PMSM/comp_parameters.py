@@ -14,11 +14,13 @@ def comp_parameters(self, output):
         an Output object
     """
 
-    freq0 = self.freq0
-
-    self.parameters["R20"] = output.simu.machine.stator.comp_resistance_wind()
-    phi = self.fluxlink.comp_fluxlinkage(output)
-    (Lmd, Lmq) = self.indmag.comp_inductance(output)
-    self.parameters["Ld"] = Lmd
-    self.parameters["Lq"] = Lmq
-    self.parameters["BEMF"] = 2 * pi * freq0 * phi
+    if "R20" not in self.parameters:
+        self.parameters["R20"] = output.simu.machine.stator.comp_resistance_wind()
+    if "Ld" not in self.parameters:
+        (Lmd, Lmq) = self.indmag.comp_inductance(output)
+        self.parameters["Ld"] = Lmd
+        self.parameters["Lq"] = Lmq
+    if "BEMF" not in self.parameters:
+        phi = self.fluxlink.comp_fluxlinkage(output)
+        freq0 = self.freq0
+        self.parameters["BEMF"] = 2 * pi * freq0 * phi

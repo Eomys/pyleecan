@@ -47,10 +47,6 @@ def get_angle_rotor(self):
             deltaT = self.elec.time[1] - self.elec.time[0]
             # Convert Nr from [rpm] to [rad/s] (time in [s] and angle_rotor in [rad])
             Ar = cumsum(rot_dir * deltaT * self.elec.Nr * 2 * pi / 60)
-            print(deltaT)
-            print(rot_dir)
-            print(self.elec.Nr)
-            print(Ar)
             # Enforce first position to 0
             Ar = roll(Ar, 1)
             Ar[0] = 0

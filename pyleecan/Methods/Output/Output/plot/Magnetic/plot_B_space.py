@@ -23,12 +23,12 @@ def plot_B_space(self, j_t0=0, is_deg=True, out_list=[]):
         unit = "°"
     else:
         unit = "rad"
-    [angle, Br] = self.mag.Br.get_along(
-        "angle{" + unit + "}", "time[" + str(j_t0) + "]"
-    )
-    [angle, Bt] = self.mag.Bt.get_along(
-        "angle{" + unit + "}", "time[" + str(j_t0) + "]"
-    )
+    results = self.mag.Br.get_along("angle{" + unit + "}", "time[" + str(j_t0) + "]")
+    angle = results["angle"]
+    Br = results[self.mag.Br.symbol]
+    results = self.mag.Bt.get_along("angle{" + unit + "}", "time[" + str(j_t0) + "]")
+    angle = results["angle"]
+    Bt = results[self.mag.Bt.symbol]
 
     # Plot the original graph
     fig, axs = plt.subplots(1, 2, constrained_layout=True)
@@ -55,16 +55,20 @@ def plot_B_space(self, j_t0=0, is_deg=True, out_list=[]):
     # Add all the other output to compare (if needed)
     for out in out_list:
         if out.mag.Br is not None:
-            [angle_out, Br_out] = out.mag.Br.get_along(
+            results = out.mag.Br.get_along(
                 "angle{" + unit + "}", "time[" + str(j_t0) + "]"
             )
+            angle_out = results["angle"]
+            Br_out = results[out.mag.Br.symbol]
             axs[0].plot(
                 angle_out, Br_out, out.post.line_color, label=out.post.legend_name
             )
         if out.mag.Bt is not None:
-            [angle_out, Bt_out] = out.mag.Bt.get_along(
+            results = out.mag.Bt.get_along(
                 "angle{" + unit + "}", "time[" + str(j_t0) + "]"
             )
+            angle_out = results["angle"]
+            Bt_out = results[out.mag.Bt.symbol]
             axs[1].plot(
                 angle_out, Bt_out, out.post.line_color, label=out.post.legend_name
             )

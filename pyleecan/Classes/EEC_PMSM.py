@@ -376,10 +376,12 @@ class EEC_PMSM(EEC):
         check_var("parameters", value, "dict")
         self._parameters = value
 
-    # Parameters of the EEC
+    # Parameters of the EEC: computed if empty, or enforced
     # Type : dict
     parameters = property(
-        fget=_get_parameters, fset=_set_parameters, doc=u"""Parameters of the EEC"""
+        fget=_get_parameters,
+        fset=_set_parameters,
+        doc=u"""Parameters of the EEC: computed if empty, or enforced""",
     )
 
     def _get_freq0(self):

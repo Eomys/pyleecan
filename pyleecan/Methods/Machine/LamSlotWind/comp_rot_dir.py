@@ -19,6 +19,7 @@ def comp_rot_dir(self):
     p = self.get_pole_pair_number()
 
     # Compute rotation direction from unit mmf
-    H1 = MMF.get_harmonics(1, "freqs", "wavenumber")
+    results = MMF.get_harmonics(1, "freqs", "wavenumber")
+    H1 = results[MMF.symbol]
 
-    return sign(H1[2][0])
+    return sign(H1[0])

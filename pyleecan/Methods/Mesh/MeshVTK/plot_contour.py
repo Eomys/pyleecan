@@ -8,8 +8,8 @@ def plot_contour(self, field, field_name="Magnitude", indices=[], cmap="RdBu_r")
 
     Parameters
     ----------
-    self : MeshFile
-        a MeshFile object
+    self : MeshVTK
+        a MeshVTK object
     field : ndarray
         array of the field
     indices : list
