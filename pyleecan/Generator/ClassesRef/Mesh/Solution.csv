@@ -1,4 +1,2 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-,,,,,,,,,Mesh,,get_field,VERSION,1,Define a solution related to a Mesh object.
-,,,,,,,,,,,set_field,,,
-,,,,,,,,,,,get_mesh,,,
+,,,,,,,,,Mesh,,,VERSION,1,Abstract class for solution related classes.

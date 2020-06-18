@@ -1,9 +1,8 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-element,,Storing connectivity,,{Element},,,,,Mesh,,get_mesh,VERSION,1,Gather the mesh storage format
-node,,Storing nodes,,Node,,,,,,,get_points,,,
-submesh,,Storing submeshes. Node and element numbers/tags or group must be the same.,,[Mesh],,,,,,,get_cells,,,
-group,,Contain all possible group numbers,,ndarray,,,,,,,get_normals,,,
-,,,,,,,,,,,get_surf,,,
+element,,Storing connectivity,,{ElementMat},,,,,Mesh,,get_points,VERSION,1,Gather the mesh storage format
+node,,Storing nodes,,NodeMat,,,,,,,get_cells,,,
+submesh,,Storing submeshes. Node and element numbers/tags or group must be the same.,,[Mesh],,,,,,,get_normals,,,
+group,,Contain all possible group numbers,,ndarray,,,,,,,get_surf,,,
 ,,,,,,,,,,,get_cell_area,,,
 ,,,,,,,,,,,set_submesh,,,
 ,,,,,,,,,,,get_all_node_coord,,,

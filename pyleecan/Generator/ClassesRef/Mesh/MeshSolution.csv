@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 name,,(Optional) Descriptive name of the mesh,,str,,,,,Mesh,,get_mesh,VERSION,1,To associate a Mesh with one or several solutions
-mesh,,A Mesh object. ,,[Mesh],,,,,,,get_solution,,,
-solution_dict,,A Solution object which are defined with respect to the mesh attribute.,,[SolutionDict],,,,,,,,,,
+mesh,,A list of Mesh objects. ,,[Mesh],,,,,,,get_solution,,,
+soldict,,A list of dict containing Solution objects which are defined with respect to the mesh attribute.,,[dict],,,,,,,,,,
 is_same_mesh,,1 if the mesh is the same at each time step,,bool,1,,,,,,,,,
