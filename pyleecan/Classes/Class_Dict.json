@@ -631,7 +631,10 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "Drive",
+            "DriveWave"
+        ],
         "desc": "Abstract Drive class",
         "is_internal": false,
         "methods": [],
@@ -682,7 +685,7 @@
         "methods": [
             "get_wave"
         ],
-        "mother": "",
+        "mother": "Drive",
         "name": "DriveWave",
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/DriveWave.csv",
@@ -695,6 +698,124 @@
                 "type": "Import",
                 "unit": "",
                 "value": ""
+            }
+        ]
+    },
+    "EEC": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "EEC",
+            "EEC_PMSM"
+        ],
+        "desc": "Electric module: Equivalent Electrical Circuit abstract class",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "EEC",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/EEC.csv",
+        "properties": []
+    },
+    "EEC_PMSM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module: Electrical Equivalent Circuit",
+        "is_internal": false,
+        "methods": [
+            "comp_parameters",
+            "solve_EEC",
+            "comp_losses",
+            "comp_torque",
+            "gen_drive"
+        ],
+        "mother": "EEC",
+        "name": "EEC_PMSM",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/EEC_PMSM.csv",
+        "properties": [
+            {
+                "desc": "Magnetic inductance",
+                "max": "",
+                "min": "",
+                "name": "indmag",
+                "type": "IndMag",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Flux Linkage",
+                "max": "",
+                "min": "",
+                "name": "fluxlink",
+                "type": "FluxLink",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Parameters of the EEC",
+                "max": "",
+                "min": "",
+                "name": "parameters",
+                "type": "dict",
+                "unit": "-",
+                "value": {}
+            },
+            {
+                "desc": "",
+                "max": "",
+                "min": "",
+                "name": "freq0",
+                "type": "float",
+                "unit": "Hz",
+                "value": null
+            },
+            {
+                "desc": "Drive",
+                "max": "",
+                "min": "",
+                "name": "drive",
+                "type": "Drive",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "Electrical": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module abstract object",
+        "is_internal": false,
+        "methods": [
+            "run"
+        ],
+        "mother": "",
+        "name": "Electrical",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Electrical.csv",
+        "properties": [
+            {
+                "desc": "Electrical Equivalent Circuit",
+                "max": "",
+                "min": "",
+                "name": "eec",
+                "type": "EEC",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -786,6 +907,140 @@
                 "type": "ndarray",
                 "unit": "",
                 "value": ""
+            }
+        ]
+    },
+    "FluxLink": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "FluxLink",
+            "FluxLinkFEMM"
+        ],
+        "desc": "Electric module: Flux Linkage",
+        "is_internal": false,
+        "methods": [
+            "comp_fluxlinkage"
+        ],
+        "mother": "",
+        "name": "FluxLink",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/FluxLink.csv",
+        "properties": [
+            {
+                "desc": "a",
+                "max": "",
+                "min": "",
+                "name": "a",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            }
+        ]
+    },
+    "FluxLinkFEMM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module: Flux Linkage with FEMM",
+        "is_internal": false,
+        "methods": [
+            "comp_fluxlinkage",
+            "solve_FEMM"
+        ],
+        "mother": "FluxLink",
+        "name": "FluxLinkFEMM",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/FluxLinkFEMM.csv",
+        "properties": [
+            {
+                "desc": "To enforce user-defined values for FEMM main parameters ",
+                "max": "",
+                "min": "",
+                "name": "FEMM_dict",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "0 no leakage calculation /  1 calculation using single slot ",
+                "max": "1",
+                "min": "0",
+                "name": "type_calc_leakage",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "0 to desactivate the sliding band",
+                "max": "",
+                "min": "",
+                "name": "is_sliding_band",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a",
+                "max": "",
+                "min": "",
+                "name": "is_symmetry_a",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Number of symmetry for the angle vector",
+                "max": "",
+                "min": "1",
+                "name": "sym_a",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "To add an antiperiodicity to the angle vector",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_a",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "1 to compute the stator magnetomotive force / stator armature magnetic field",
+                "max": "",
+                "min": "",
+                "name": "is_mmfs",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "1 to compute the rotor magnetomotive force / rotor magnetic field",
+                "max": "",
+                "min": "",
+                "name": "is_mmfr",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Number of time steps for the FEMM simulation",
+                "max": "",
+                "min": "",
+                "name": "Nt_tot",
+                "type": "int",
+                "unit": "-",
+                "value": 20
             }
         ]
     },
@@ -2230,6 +2485,140 @@
             }
         ]
     },
+    "IndMag": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "IndMag",
+            "IndMagFEMM"
+        ],
+        "desc": "Electric module: Magnetic Inductance",
+        "is_internal": false,
+        "methods": [
+            "comp_inductance"
+        ],
+        "mother": "",
+        "name": "IndMag",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/IndMag.csv",
+        "properties": [
+            {
+                "desc": "a",
+                "max": "",
+                "min": "",
+                "name": "a",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            }
+        ]
+    },
+    "IndMagFEMM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module: Magnetic Inductance with FEMM",
+        "is_internal": false,
+        "methods": [
+            "comp_inductance",
+            "solve_FEMM"
+        ],
+        "mother": "IndMag",
+        "name": "IndMagFEMM",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/IndMagFEMM.csv",
+        "properties": [
+            {
+                "desc": "To enforce user-defined values for FEMM main parameters ",
+                "max": "",
+                "min": "",
+                "name": "FEMM_dict",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "0 no leakage calculation /  1 calculation using single slot ",
+                "max": "1",
+                "min": "0",
+                "name": "type_calc_leakage",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "0 to desactivate the sliding band",
+                "max": "",
+                "min": "",
+                "name": "is_sliding_band",
+                "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a",
+                "max": "",
+                "min": "",
+                "name": "is_symmetry_a",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Number of symmetry for the angle vector",
+                "max": "",
+                "min": "1",
+                "name": "sym_a",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "To add an antiperiodicity to the angle vector",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_a",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "1 to compute the stator magnetomotive force / stator armature magnetic field",
+                "max": "",
+                "min": "",
+                "name": "is_mmfs",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "1 to compute the rotor magnetomotive force / rotor magnetic field",
+                "max": "",
+                "min": "",
+                "name": "is_mmfr",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Number of time steps for the FEMM simulation",
+                "max": "",
+                "min": "",
+                "name": "Nt_tot",
+                "type": "int",
+                "unit": "-",
+                "value": 20
+            }
+        ]
+    },
     "Input": {
         "constants": [
             {
@@ -2570,7 +2959,8 @@
             "plot",
             "comp_height_yoke",
             "get_Zs",
-            "get_bore_desc"
+            "get_bore_desc",
+            "comp_radius_mid_yoke"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -2808,7 +3198,8 @@
             "is_outwards",
             "comp_height_yoke",
             "get_notch_list",
-            "comp_angle_q_axis"
+            "comp_angle_q_axis",
+            "comp_radius_mid_yoke"
         ],
         "mother": "",
         "name": "Lamination",
@@ -4549,6 +4940,126 @@
             }
         ]
     },
+    "MeshVTK": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Gather the mesh storage format",
+        "is_internal": false,
+        "methods": [
+            "get_mesh",
+            "get_points",
+            "get_cells",
+            "get_normals",
+            "get_surf",
+            "get_cell_area",
+            "plot_mesh",
+            "plot_contour",
+            "plot_glyph",
+            "plot_deformation",
+            "plot_deformation_animated"
+        ],
+        "mother": "",
+        "name": "MeshVTK",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/MeshVTK.csv",
+        "properties": [
+            {
+                "desc": "Pyvista object of the mesh (optional)",
+                "max": "",
+                "min": "",
+                "name": "mesh",
+                "type": "pyvista.core.pointset.UnstructuredGrid",
+                "unit": "",
+                "value": "None"
+            },
+            {
+                "desc": "Store the pyvista object",
+                "max": "",
+                "min": "",
+                "name": "is_pyvista_mesh",
+                "type": "bool",
+                "unit": "",
+                "value": false
+            },
+            {
+                "desc": "Format in which the mesh is stored",
+                "max": "",
+                "min": "",
+                "name": "format",
+                "type": "str",
+                "unit": "",
+                "value": "vtk"
+            },
+            {
+                "desc": "Path where the mesh is stored",
+                "max": "",
+                "min": "",
+                "name": "path",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Name of the mesh file",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "",
+                "value": "mesh"
+            },
+            {
+                "desc": "Contain all possible group numbers",
+                "max": "",
+                "min": "",
+                "name": "group",
+                "type": "ndarray",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Pyvista object of the outer surface",
+                "max": "",
+                "min": "",
+                "name": "surf",
+                "type": "pyvista.core.pointset.PolyData",
+                "unit": "",
+                "value": "None"
+            },
+            {
+                "desc": "Save the surface mesh in a vtk file",
+                "max": "",
+                "min": "",
+                "name": "is_vtk_surf",
+                "type": "bool",
+                "unit": "",
+                "value": false
+            },
+            {
+                "desc": "Path where the outer surface is stored",
+                "max": "",
+                "min": "",
+                "name": "surf_path",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Name of the outer surface file",
+                "max": "",
+                "min": "",
+                "name": "surf_name",
+                "type": "str",
+                "unit": "",
+                "value": "surf"
+            }
+        ]
+    },
     "Node": {
         "constants": [
             {
@@ -5168,6 +5679,15 @@
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "-",
                 "value": "None"
+            },
+            {
+                "desc": "Currents",
+                "max": "",
+                "min": "",
+                "name": "Currents",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "-",
+                "value": ""
             }
         ]
     },
@@ -5330,6 +5850,24 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutGeo"
+            },
+            {
+                "desc": "Difference between the d axis angle of the stator and the rotor",
+                "max": "",
+                "min": "",
+                "name": "d_angle_diff",
+                "type": "float",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "desc": "Rotation direction",
+                "max": "1",
+                "min": "-1",
+                "name": "rot_dir",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -5717,7 +6255,9 @@
             "plot.plot_A_surf",
             "plot.plot_A_time",
             "plot.plot_A_time_space",
-            "plot.Structural.plot_force_space"
+            "plot.Structural.plot_force_space",
+            "plot.Magnetic.plot_mesh_field",
+            "plot.plot_A_quiver_2D"
         ],
         "mother": "",
         "name": "Output",
@@ -6090,6 +6630,15 @@
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Simu1.csv",
         "properties": [
+            {
+                "desc": "Electrical module",
+                "max": "",
+                "min": "",
+                "name": "elec",
+                "type": "Electrical",
+                "unit": "-",
+                "value": ""
+            },
             {
                 "desc": "Magnetic module",
                 "max": "",

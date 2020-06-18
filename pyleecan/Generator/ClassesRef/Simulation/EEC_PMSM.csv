@@ -1,0 +1,6 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+indmag,-,Magnetic inductance,,IndMag,None,,,,Simulation,EEC,comp_parameters,VERSION,1,Electric module: Electrical Equivalent Circuit,
+fluxlink,-,Flux Linkage,,FluxLink,None,,,,,,solve_EEC,,,,
+parameters,-,Parameters of the EEC,,dict,{},,,,,,comp_losses,,,,
+freq0,Hz,,,float,None,,,,,,comp_torque,,,,
+drive,-,Drive,,Drive,None,,,,,,gen_drive,,,,

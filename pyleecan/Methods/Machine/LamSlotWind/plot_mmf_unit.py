@@ -8,7 +8,6 @@ from ....Functions.Winding.gen_phase_list import gen_name
 
 def plot_mmf_unit(self, Na=2048):
     """Plot the winding unit mmf as a function of space
-
     Parameters
     ----------
     self : LamSlotWind

@@ -18,8 +18,13 @@ from ..Classes.CondType22 import CondType22
 from ..Classes.Conductor import Conductor
 from ..Classes.Drive import Drive
 from ..Classes.DriveWave import DriveWave
+from ..Classes.EEC import EEC
+from ..Classes.EEC_PMSM import EEC_PMSM
+from ..Classes.Electrical import Electrical
 from ..Classes.Element import Element
 from ..Classes.ElementMat import ElementMat
+from ..Classes.FluxLink import FluxLink
+from ..Classes.FluxLinkFEMM import FluxLinkFEMM
 from ..Classes.Force import Force
 from ..Classes.ForceMT import ForceMT
 from ..Classes.Frame import Frame
@@ -42,6 +47,8 @@ from ..Classes.ImportMatlab import ImportMatlab
 from ..Classes.ImportMatrix import ImportMatrix
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from ..Classes.ImportMatrixXls import ImportMatrixXls
+from ..Classes.IndMag import IndMag
+from ..Classes.IndMagFEMM import IndMagFEMM
 from ..Classes.Input import Input
 from ..Classes.InputCurrent import InputCurrent
 from ..Classes.InputCurrentDQ import InputCurrentDQ
@@ -84,6 +91,7 @@ from ..Classes.MatStructural import MatStructural
 from ..Classes.Material import Material
 from ..Classes.Mesh import Mesh
 from ..Classes.MeshSolution import MeshSolution
+from ..Classes.MeshVTK import MeshVTK
 from ..Classes.Node import Node
 from ..Classes.NodeMat import NodeMat
 from ..Classes.Notch import Notch

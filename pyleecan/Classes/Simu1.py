@@ -19,6 +19,7 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
+from .Electrical import Electrical
 from .Magnetics import Magnetics
 from .Structural import Structural
 from .Force import Force
@@ -54,6 +55,7 @@ class Simu1(Simulation):
 
     def __init__(
         self,
+        elec=-1,
         mag=-1,
         struct=-1,
         force=-1,
@@ -76,6 +78,8 @@ class Simu1(Simulation):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if elec == -1:
+            elec = Electrical()
         if mag == -1:
             mag = Magnetics()
         if struct == -1:
@@ -93,6 +97,7 @@ class Simu1(Simulation):
             # load the object from a file
             obj = load(init_str)
             assert type(obj) is type(self)
+            elec = obj.elec
             mag = obj.mag
             struct = obj.struct
             force = obj.force
@@ -104,6 +109,8 @@ class Simu1(Simulation):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
+            if "elec" in list(init_dict.keys()):
+                elec = init_dict["elec"]
             if "mag" in list(init_dict.keys()):
                 mag = init_dict["mag"]
             if "struct" in list(init_dict.keys()):
@@ -121,6 +128,15 @@ class Simu1(Simulation):
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
         # Initialisation by argument
+        # elec can be None, a Electrical object or a dict
+        if isinstance(elec, dict):
+            self.elec = Electrical(init_dict=elec)
+        elif isinstance(elec, str):
+            from ..Functions.load import load
+
+            self.elec = load(elec)
+        else:
+            self.elec = elec
         # mag can be None, a Magnetics object or a dict
         if isinstance(mag, dict):
             # Check that the type is correct (including daughter)
@@ -193,6 +209,11 @@ class Simu1(Simulation):
         Simu1_str = ""
         # Get the properties inherited from Simulation
         Simu1_str += super(Simu1, self).__str__()
+        if self.elec is not None:
+            tmp = self.elec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Simu1_str += "elec = " + tmp
+        else:
+            Simu1_str += "elec = None" + linesep + linesep
         if self.mag is not None:
             tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
             Simu1_str += "mag = " + tmp
@@ -219,6 +240,8 @@ class Simu1(Simulation):
         # Check the properties inherited from Simulation
         if not super(Simu1, self).__eq__(other):
             return False
+        if other.elec != self.elec:
+            return False
         if other.mag != self.mag:
             return False
         if other.struct != self.struct:
@@ -233,6 +256,10 @@ class Simu1(Simulation):
 
         # Get the properties inherited from Simulation
         Simu1_dict = super(Simu1, self).as_dict()
+        if self.elec is None:
+            Simu1_dict["elec"] = None
+        else:
+            Simu1_dict["elec"] = self.elec.as_dict()
         if self.mag is None:
             Simu1_dict["mag"] = None
         else:
@@ -253,6 +280,8 @@ class Simu1(Simulation):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
+        if self.elec is not None:
+            self.elec._set_None()
         if self.mag is not None:
             self.mag._set_None()
         if self.struct is not None:
@@ -261,6 +290,22 @@ class Simu1(Simulation):
             self.force._set_None()
         # Set to None the properties inherited from Simulation
         super(Simu1, self)._set_None()
+
+    def _get_elec(self):
+        """getter of elec"""
+        return self._elec
+
+    def _set_elec(self, value):
+        """setter of elec"""
+        check_var("elec", value, "Electrical")
+        self._elec = value
+
+        if self._elec is not None:
+            self._elec.parent = self
+
+    # Electrical module
+    # Type : Electrical
+    elec = property(fget=_get_elec, fset=_set_elec, doc=u"""Electrical module""")
 
     def _get_mag(self):
         """getter of mag"""
