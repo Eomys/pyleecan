@@ -734,8 +734,6 @@
         "methods": [
             "comp_parameters",
             "solve_EEC",
-            "comp_losses",
-            "comp_torque",
             "gen_drive"
         ],
         "mother": "EEC",
@@ -771,7 +769,7 @@
                 "value": {}
             },
             {
-                "desc": "",
+                "desc": "Frequency",
                 "max": "",
                 "min": "",
                 "name": "freq0",
@@ -923,9 +921,7 @@
         ],
         "desc": "Electric module: Flux Linkage",
         "is_internal": false,
-        "methods": [
-            "comp_fluxlinkage"
-        ],
+        "methods": [],
         "mother": "",
         "name": "FluxLink",
         "package": "Simulation",
@@ -2470,9 +2466,7 @@
         ],
         "desc": "Electric module: Magnetic Inductance",
         "is_internal": false,
-        "methods": [
-            "comp_inductance"
-        ],
+        "methods": [],
         "mother": "",
         "name": "IndMag",
         "package": "Simulation",
@@ -5628,7 +5622,7 @@
                 "name": "Currents",
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "-",
-                "value": ""
+                "value": "None"
             }
         ]
     },

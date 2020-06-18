@@ -10,14 +10,6 @@ from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ._frozen import FrozenClass
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Simulation.IndMag.comp_inductance import comp_inductance
-except ImportError as error:
-    comp_inductance = error
-
-
 from ._check import InitUnKnowClassError
 
 
@@ -26,17 +18,6 @@ class IndMag(FrozenClass):
 
     VERSION = 1
 
-    # cf Methods.Simulation.IndMag.comp_inductance
-    if isinstance(comp_inductance, ImportError):
-        comp_inductance = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use IndMag method comp_inductance: " + str(comp_inductance)
-                )
-            )
-        )
-    else:
-        comp_inductance = comp_inductance
     # save method is available in all object
     save = save
 
