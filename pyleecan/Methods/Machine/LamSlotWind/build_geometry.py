@@ -48,7 +48,18 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
             Nrad=Nrad, Ntan=Ntan, is_simplified=is_simplified, alpha=alpha, delta=delta
         )
 
-        assert (Zs % sym) == 0
+        if self.is_stator:
+            st = "Stator"
+        else:
+            st = "Rotor"
+        assert (self.slot.Zs % sym) == 0, (
+            "ERROR, Wrong symmetry for "
+            + st
+            + " "
+            + str(self.slot.Zs)
+            + " slots and sym="
+            + str(sym)
+        )
         for ii in range(Zs // sym):  # for each slot
             # for each part of the winding surface in the slot
             for surf in surf_Wind:

@@ -20,8 +20,11 @@ def comp_angle_d_axis(self):
     p = self.get_pole_pair_number()
 
     # Get the unit mmf FFT and angle values
-    (angle_rotor, mmmf_a) = MMF.get_along("angle")
-    (wavenumber, mmf_ft) = MMF.get_FT_along("wavenumber")
+    results = MMF.get_along("angle")
+    angle_rotor = results["angle"]
+    results = MMF.get_FT_along("wavenumber")
+    wavenumber = results["wavenumber"]
+    mmf_ft = results[MMF.symbol]
 
     # Find the angle where the FFT is max
     indr_fund = np_abs(wavenumber - p).argmin()

@@ -15,7 +15,7 @@ def comp_surfaces(self):
     Returns
     -------
     S_dict: dict
-        Lamination surface dictionnary (Slam, Svent, Sslot) [m**2]
+        Lamination surface dictionnary (Slam, Svent, Sslot, Syoke, Steeth) [m**2]
 
     """
 
@@ -25,6 +25,14 @@ def comp_surfaces(self):
     else:
         Sslot = self.get_Zs() * self.slot.comp_surface()
 
+    Ryoke = self.get_Ryoke()
+    Hyoke = self.comp_height_yoke()
+    if self.is_internal:
+        S_dict["Syoke"] = pi * ((Ryoke + Hyoke) ** 2 - Ryoke ** 2) - S_dict["Svent"]
+    else:
+        S_dict["Syoke"] = pi * (Ryoke ** 2 - (Ryoke - Hyoke) ** 2) - S_dict["Svent"]
+
     S_dict["Sslot"] = Sslot
     S_dict["Slam"] -= Sslot
+    S_dict["Steeth"] = S_dict["Slam"] - S_dict["Syoke"]
     return S_dict

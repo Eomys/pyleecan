@@ -32,6 +32,13 @@ try:
 except ImportError as error:
     plot = error
 
+try:
+    from ..Methods.Machine.LamSquirrelCage.comp_number_phase_eq import (
+        comp_number_phase_eq,
+    )
+except ImportError as error:
+    comp_number_phase_eq = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -89,6 +96,18 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         plot = plot
+    # cf Methods.Machine.LamSquirrelCage.comp_number_phase_eq
+    if isinstance(comp_number_phase_eq, ImportError):
+        comp_number_phase_eq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_number_phase_eq: "
+                    + str(comp_number_phase_eq)
+                )
+            )
+        )
+    else:
+        comp_number_phase_eq = comp_number_phase_eq
     # save method is available in all object
     save = save
 

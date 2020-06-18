@@ -19,7 +19,6 @@ def comp_FEMM_Jcus(lam, cname, I, j_t0, is_mmf):
         s = -1
     else:
         s = 1
-
     if LA.norm(I) == 0:
         Jcus = 0
     else:

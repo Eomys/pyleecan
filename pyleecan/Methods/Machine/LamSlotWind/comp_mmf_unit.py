@@ -36,10 +36,18 @@ def comp_mmf_unit(self, Na=2048, Nt=50):
         # Use Electrical module discretization
         angle = self.parent.parent.parent.elec.angle
         Na = angle.size
+    else:
+        angle = linspace(0, 2 * pi, Na, endpoint=False)
+
+    # Define the time dicretization
+    if (
+        is_out
+        and self.parent.parent.parent.elec.time is not None
+        and self.parent.parent.parent.elec.time.size != 1
+    ):
         time = self.parent.parent.parent.elec.time
         Nt = time.size
     else:
-        angle = linspace(0, 2 * pi, Na, endpoint=False)
         time = linspace(0, 1 / 50, Nt, endpoint=False)  # freq = 50Hz
 
     # Compute the winding function and mmf

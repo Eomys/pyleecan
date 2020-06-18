@@ -224,6 +224,16 @@
       </widget>
      </item>
      <item>
+      <widget class="WMatSelect" name="w_mat_2" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QGroupBox" name="g_output">
        <property name="minimumSize">
         <size>
@@ -273,12 +283,12 @@
   <customwidget>
    <class>FloatEdit</class>
    <extends>QLineEdit</extends>
-   <header>pyleecan.GUI/Tools/FloatEdit.h</header>
+   <header>pyleecan/GUI/Tools/FloatEdit.h</header>
   </customwidget>
   <customwidget>
    <class>WMatSelect</class>
    <extends>QWidget</extends>
-   <header>......GUI.Dialog.DMatLib.WMatSelect.WMatSelect.h</header>
+   <header>pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

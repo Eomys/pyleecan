@@ -122,7 +122,14 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
     # Holes surface(s)
     for hole in self.hole:
         Zh = hole.Zh
-        assert (Zh % sym) == 0  # For now only
+        assert (Zh % sym) == 0, (
+            "ERROR, Wrong symmetry for "
+            + label
+            + " "
+            + str(Zh)
+            + " holes and sym="
+            + str(sym)
+        )  # For now only
         angle = 2 * pi / Zh
         # Create the first hole surface(s)
         surf_hole = hole.build_geometry(alpha=pi / Zh)

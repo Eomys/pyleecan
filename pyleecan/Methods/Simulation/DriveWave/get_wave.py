@@ -14,7 +14,7 @@ def get_wave(self):
     Returns
     -------
     wave : DataTime
-        Voltage / current waveform (qs, Nt)
+        Voltage / current waveform (Nt, qs)
     """
 
     wave = self.wave.get_data()
@@ -26,7 +26,11 @@ def get_wave(self):
         is_components=True,
     )
     # Ouput.Simulation.Electrical.EEC.Drive
-    if check_parent(self, 4) and self.parent.parent.parent.parent.elec.time is not None:
+    if (
+        check_parent(self, 4)
+        and self.parent.parent.parent.parent.elec.time is not None
+        and len(self.parent.parent.parent.parent.elec.time) > 1
+    ):
         Time = Data1D(
             name="time", unit="s", values=self.parent.parent.parent.parent.elec.time
         )

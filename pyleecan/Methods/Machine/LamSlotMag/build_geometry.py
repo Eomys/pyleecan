@@ -29,13 +29,19 @@ def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=
 
     """
 
-    assert (self.slot.Zs % sym) == 0
-
     if self.is_stator:
         st = "Stator"
     else:
         st = "Rotor"
 
+    assert (self.slot.Zs % sym) == 0, (
+        "ERROR, Wrong symmetry for "
+        + st
+        + " "
+        + str(self.slot.Zs)
+        + " slots and sym="
+        + str(sym)
+    )
     # getting the LamSlot surface
     surf_list = build_geo(self, sym=sym)
 

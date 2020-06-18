@@ -67,6 +67,11 @@ try:
 except ImportError as error:
     plot = error
 
+try:
+    from ..Methods.Slot.Slot.comp_width_opening import comp_width_opening
+except ImportError as error:
+    comp_width_opening = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -186,6 +191,18 @@ class Slot(FrozenClass):
         )
     else:
         plot = plot
+    # cf Methods.Slot.Slot.comp_width_opening
+    if isinstance(comp_width_opening, ImportError):
+        comp_width_opening = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Slot method comp_width_opening: "
+                    + str(comp_width_opening)
+                )
+            )
+        )
+    else:
+        comp_width_opening = comp_width_opening
     # save method is available in all object
     save = save
 

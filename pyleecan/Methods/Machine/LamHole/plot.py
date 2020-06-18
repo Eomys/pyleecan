@@ -4,7 +4,13 @@ from matplotlib.patches import Circle, Patch
 from matplotlib.pyplot import axis, legend
 
 from ....Functions.init_fig import init_fig
-from ....Methods.Machine import PATCH_COLOR, MAGNET_COLOR, ROTOR_COLOR, STATOR_COLOR
+from ....definitions import config_dict
+
+
+PATCH_COLOR = config_dict["color_dict"]["PATCH_COLOR"]
+MAGNET_COLOR = config_dict["color_dict"]["MAGNET_COLOR"]
+ROTOR_COLOR = config_dict["color_dict"]["ROTOR_COLOR"]
+STATOR_COLOR = config_dict["color_dict"]["STATOR_COLOR"]
 
 
 def plot(

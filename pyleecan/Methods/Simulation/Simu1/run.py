@@ -22,8 +22,8 @@ def run(self):
     self.input.gen_input()
 
     # Run the modules
-    # if self.elec is not None:
-    #     self.elec.run()
+    if self.elec is not None:
+        self.elec.run()
     if self.mag is not None:
         self.mag.run()
 

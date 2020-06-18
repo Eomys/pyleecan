@@ -79,6 +79,8 @@ rotor.hole = [
 ]
 rotor.hole[0].magnet_0.type_magnetization = 1
 rotor.hole[0].magnet_1.type_magnetization = 1
+rotor.hole[0].magnet_0.Lmag = 0.08382
+rotor.hole[0].magnet_1.Lmag = 0.08382
 shaft = Shaft(Lshaft=0.1, Drsh=0.11064)
 frame = None
 
@@ -88,6 +90,7 @@ rotor.mat_type = M400_50A
 stator.winding.conductor.cond_mat = Copper1
 rotor.hole[0].magnet_0.mat_type = Magnet_prius
 rotor.hole[0].magnet_1.mat_type = Magnet_prius
+shaft.mat_type.struct.rho = 7650
 
 IPMSM_A = MachineIPMSM(
     name="IPMSM_A",

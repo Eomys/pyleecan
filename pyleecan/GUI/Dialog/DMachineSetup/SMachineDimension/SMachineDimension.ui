@@ -46,7 +46,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
       <widget class="QGroupBox" name="g_stator">
        <property name="minimumSize">
@@ -269,7 +269,17 @@
        <property name="checkable">
         <bool>true</bool>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="WMatSelect" name="w_mat_0" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QLabel" name="out_Drsh">
           <property name="toolTip">
@@ -291,90 +301,104 @@
        <property name="checkable">
         <bool>true</bool>
        </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="in_Wfra">
-          <property name="toolTip">
-           <string>Frame width</string>
-          </property>
-          <property name="whatsThis">
-           <string>Frame width</string>
-          </property>
-          <property name="text">
-           <string>Wfra:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="FloatEdit" name="lf_Wfra">
-          <property name="maximumSize">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="WMatSelect" name="w_mat_1" native="true">
+          <property name="minimumSize">
            <size>
             <width>100</width>
-            <height>16777215</height>
+            <height>0</height>
            </size>
           </property>
-          <property name="toolTip">
-           <string>Frame width</string>
-          </property>
-          <property name="whatsThis">
-           <string>Frame width</string>
-          </property>
          </widget>
         </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="unit_Wfra">
-          <property name="toolTip">
-           <string>Frame width</string>
-          </property>
-          <property name="whatsThis">
-           <string>Frame width</string>
-          </property>
-          <property name="text">
-           <string>m</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="in_Lfra">
-          <property name="toolTip">
-           <string>Frame length</string>
-          </property>
-          <property name="whatsThis">
-           <string>Frame length</string>
-          </property>
-          <property name="text">
-           <string>Lfra:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="FloatEdit" name="lf_Lfra">
-          <property name="maximumSize">
-           <size>
-            <width>100</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Frame length</string>
-          </property>
-          <property name="whatsThis">
-           <string>Frame length</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QLabel" name="unit_Lfra">
-          <property name="toolTip">
-           <string>Frame length</string>
-          </property>
-          <property name="whatsThis">
-           <string>Frame length</string>
-          </property>
-          <property name="text">
-           <string>m</string>
-          </property>
-         </widget>
+        <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="1" column="1">
+           <widget class="FloatEdit" name="lf_Lfra">
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Frame length</string>
+            </property>
+            <property name="whatsThis">
+             <string>Frame length</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="in_Lfra">
+            <property name="toolTip">
+             <string>Frame length</string>
+            </property>
+            <property name="whatsThis">
+             <string>Frame length</string>
+            </property>
+            <property name="text">
+             <string>Lfra:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="FloatEdit" name="lf_Wfra">
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Frame width</string>
+            </property>
+            <property name="whatsThis">
+             <string>Frame width</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="in_Wfra">
+            <property name="toolTip">
+             <string>Frame width</string>
+            </property>
+            <property name="whatsThis">
+             <string>Frame width</string>
+            </property>
+            <property name="text">
+             <string>Wfra:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="unit_Lfra">
+            <property name="toolTip">
+             <string>Frame length</string>
+            </property>
+            <property name="whatsThis">
+             <string>Frame length</string>
+            </property>
+            <property name="text">
+             <string>m</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="unit_Wfra">
+            <property name="toolTip">
+             <string>Frame width</string>
+            </property>
+            <property name="whatsThis">
+             <string>Frame width</string>
+            </property>
+            <property name="text">
+             <string>m</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -431,7 +455,13 @@
   <customwidget>
    <class>FloatEdit</class>
    <extends>QLineEdit</extends>
-   <header>.....GUI/Tools/FloatEdit.h</header>
+   <header>pyleecan/GUI/Tools/FloatEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>WMatSelect</class>
+   <extends>QWidget</extends>
+   <header>pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

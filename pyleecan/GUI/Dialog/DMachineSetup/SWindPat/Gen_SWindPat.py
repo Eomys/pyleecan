@@ -2,7 +2,6 @@
 """File generated according to SWindPat/gen_list.json
 WARNING! All changes made in this file will be lost!
 """
-
 from pyleecan.GUI.Dialog.DMachineSetup.SWindPat.Ui_SWindPat import Ui_SWindPat
 
 

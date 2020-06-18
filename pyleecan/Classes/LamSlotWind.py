@@ -102,6 +102,16 @@ try:
 except ImportError as error:
     comp_rot_dir = error
 
+try:
+    from ..Methods.Machine.LamSlotWind.comp_lengths_winding import comp_lengths_winding
+except ImportError as error:
+    comp_lengths_winding = error
+
+try:
+    from ..Methods.Machine.LamSlotWind.comp_number_phase_eq import comp_number_phase_eq
+except ImportError as error:
+    comp_number_phase_eq = error
+
 
 from ._check import InitUnKnowClassError
 from .Winding import Winding
@@ -319,6 +329,30 @@ class LamSlotWind(LamSlot):
         )
     else:
         comp_rot_dir = comp_rot_dir
+    # cf Methods.Machine.LamSlotWind.comp_lengths_winding
+    if isinstance(comp_lengths_winding, ImportError):
+        comp_lengths_winding = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_lengths_winding: "
+                    + str(comp_lengths_winding)
+                )
+            )
+        )
+    else:
+        comp_lengths_winding = comp_lengths_winding
+    # cf Methods.Machine.LamSlotWind.comp_number_phase_eq
+    if isinstance(comp_number_phase_eq, ImportError):
+        comp_number_phase_eq = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSlotWind method comp_number_phase_eq: "
+                    + str(comp_number_phase_eq)
+                )
+            )
+        )
+    else:
+        comp_number_phase_eq = comp_number_phase_eq
     # save method is available in all object
     save = save
 

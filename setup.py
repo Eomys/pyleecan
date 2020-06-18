@@ -8,6 +8,7 @@ python_requires = ">= 3.5"
 
 # Pyleecan dependancies
 install_requires = [
+    "setuptools",
     "cloudpickle>=1.3.0",
     "gmsh-sdk>=4.5.5.post1",
     "matplotlib>=3.2.1",

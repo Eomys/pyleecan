@@ -4,7 +4,7 @@ Nslot_shift_wind,-,"0 not to change the stator winding connection matrix built b
 qs,-,number of phases ,0,int,3,1,100,,,,comp_phasor_angle,,,
 Ntcoil,-,number of turns per coil,0,int,7,1,1000,,,,comp_resistance_norm,,,
 Npcpp,-,number of parallel circuits per phase (maximum 2p),0,int,2,1,1000,,,,comp_winding_factor,,,
-type_connection,-,"Winding connection : 0 star (Y), 1 triangle (delta)",0,int,0,0,1,,,,,,,
+type_connection,-,"Winding connection : 0 star (Y), 1 triangle (delta)",0,int,0,0,1,,,,comp_length_endwinding,,,
 p,-,pole pairs number,0,int,3,1,100,,,,,,,
 Lewout,m,straight length of the conductors outside the lamination before the curved part of winding overhang [m] - can be negative to tune the average turn length ,0,float,0.015,0,100,,,,,,,
 conductor,-,Winding's conductor,,Conductor,,,,,,,,,,

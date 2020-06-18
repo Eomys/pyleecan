@@ -7,6 +7,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
+from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.Classes.HoleM54 import HoleM54
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM54.PHoleM54 import PHoleM54
 from pyleecan.Classes.Material import Material
@@ -24,7 +25,14 @@ class test_PHoleM54(TestCase):
         self.test_obj = LamHole(Rint=0.1, Rext=0.2)
         self.test_obj.hole = list()
         self.test_obj.hole.append(HoleM54(H0=0.10, H1=0.11, W0=0.12, R1=0.13))
-        self.widget = PHoleM54(self.test_obj.hole[0], matlib=[])
+        self.matlib = MatLib()
+        self.matlib.list_mat = [
+            Material(name="Magnet1"),
+            Material(name="Magnet2"),
+            Material(name="Magnet3"),
+        ]
+        self.matlib.index_first_mat_mach = 3
+        self.widget = PHoleM54(self.test_obj.hole[0], matlib=self.matlib)
 
     @classmethod
     def setUpClass(cls):

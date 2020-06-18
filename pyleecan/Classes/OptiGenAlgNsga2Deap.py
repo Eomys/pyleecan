@@ -49,8 +49,8 @@ try:
 except ImportError:
     Toolbox = ImportError
 from ._check import InitUnKnowClassError
-from .OutputMultiOpti import OutputMultiOpti
 from .OptiProblem import OptiProblem
+from .OutputMultiOpti import OutputMultiOpti
 
 
 class OptiGenAlgNsga2Deap(OptiGenAlg):
@@ -127,7 +127,6 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
     def __init__(
         self,
         toolbox=None,
-        multi_output=-1,
         selector=None,
         crossover=None,
         mutator=None,
@@ -136,7 +135,8 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         size_pop=40,
         nb_gen=100,
         problem=-1,
-        logger_name="Pyleecan.OptiGenAlg",
+        multi_output=-1,
+        logger_name="Pyleecan.OptiSolver",
         init_dict=None,
         init_str=None,
     ):
@@ -151,10 +151,10 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if multi_output == -1:
-            multi_output = OutputMultiOpti()
         if problem == -1:
             problem = OptiProblem()
+        if multi_output == -1:
+            multi_output = OutputMultiOpti()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -163,7 +163,6 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             obj = load(init_str)
             assert type(obj) is type(self)
             toolbox = obj.toolbox
-            multi_output = obj.multi_output
             selector = obj.selector
             crossover = obj.crossover
             mutator = obj.mutator
@@ -172,14 +171,13 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             size_pop = obj.size_pop
             nb_gen = obj.nb_gen
             problem = obj.problem
+            multi_output = obj.multi_output
             logger_name = obj.logger_name
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "toolbox" in list(init_dict.keys()):
                 toolbox = init_dict["toolbox"]
-            if "multi_output" in list(init_dict.keys()):
-                multi_output = init_dict["multi_output"]
             if "selector" in list(init_dict.keys()):
                 selector = init_dict["selector"]
             if "crossover" in list(init_dict.keys()):
@@ -196,6 +194,8 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
                 nb_gen = init_dict["nb_gen"]
             if "problem" in list(init_dict.keys()):
                 problem = init_dict["problem"]
+            if "multi_output" in list(init_dict.keys()):
+                multi_output = init_dict["multi_output"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
         # Initialisation by argument
@@ -205,7 +205,6 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         self.toolbox = toolbox
         # Call OptiGenAlg init
         super(OptiGenAlgNsga2Deap, self).__init__(
-            multi_output=multi_output,
             selector=selector,
             crossover=crossover,
             mutator=mutator,
@@ -214,6 +213,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             size_pop=size_pop,
             nb_gen=nb_gen,
             problem=problem,
+            multi_output=multi_output,
             logger_name=logger_name,
         )
         # The class is frozen (in OptiGenAlg init), for now it's impossible to

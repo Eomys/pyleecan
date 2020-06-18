@@ -3,3 +3,4 @@ Hscr,m,short circuit ring section radial height [m],0,float,3.00E-02,0,,,Machine
 Lscr,m,short circuit ring section axial length,0,float,1.50E-02,0,,,,,check,,,
 ring_mat,,Material of the Rotor short circuit ring,,Material,,,,,,,comp_length_ring,,,
 ,,,,,,,,,,,plot,,,
+,,,,,,,,,,,comp_number_phase_eq,,,

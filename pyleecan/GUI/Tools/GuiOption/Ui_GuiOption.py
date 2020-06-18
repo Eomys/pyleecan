@@ -3,7 +3,6 @@
 # File generated according to GuiOption.ui
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
