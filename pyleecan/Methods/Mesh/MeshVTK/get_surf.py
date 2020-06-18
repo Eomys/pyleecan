@@ -6,8 +6,8 @@ def get_surf(self, indices=[]):
 
     Parameters
     ----------
-    self : MeshFile
-        a MeshFile object
+    self : MeshVTK
+        a MeshVTK object
     indices : list
         list of the points to extract (optional)
 

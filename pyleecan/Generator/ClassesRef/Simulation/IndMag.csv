@@ -1,2 +1,2 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-a,-,a,0,int,0,,,,Simulation,,comp_inductance,VERSION,1,Electric module: Magnetic Inductance,IndMagFEMM
+,,,,,,,,,Simulation,,,VERSION,1,Electric module: Magnetic Inductance,IndMagFEMM

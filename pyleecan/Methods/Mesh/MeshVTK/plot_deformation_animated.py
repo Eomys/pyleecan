@@ -11,8 +11,8 @@ def plot_deformation_animated(
 
     Parameters
     ----------
-    self : MeshFile
-        a MeshFile object
+    self : MeshVTK
+        a MeshVTK object
     field : ndarray
         array of the field
     Nt_tot : int

@@ -8,8 +8,8 @@ def plot_deformation(self, field, indices=[], factor=1):
 
     Parameters
     ----------
-    self : MeshFile
-        a MeshFile object
+    self : MeshVTK
+        a MeshVTK object
     field : ndarray
         array of the field
     indices : list

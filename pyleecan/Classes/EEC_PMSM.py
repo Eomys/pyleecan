@@ -23,16 +23,6 @@ except ImportError as error:
     solve_EEC = error
 
 try:
-    from ..Methods.Simulation.EEC_PMSM.comp_losses import comp_losses
-except ImportError as error:
-    comp_losses = error
-
-try:
-    from ..Methods.Simulation.EEC_PMSM.comp_torque import comp_torque
-except ImportError as error:
-    comp_torque = error
-
-try:
     from ..Methods.Simulation.EEC_PMSM.gen_drive import gen_drive
 except ImportError as error:
     gen_drive = error
@@ -70,28 +60,6 @@ class EEC_PMSM(EEC):
         )
     else:
         solve_EEC = solve_EEC
-    # cf Methods.Simulation.EEC_PMSM.comp_losses
-    if isinstance(comp_losses, ImportError):
-        comp_losses = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use EEC_PMSM method comp_losses: " + str(comp_losses)
-                )
-            )
-        )
-    else:
-        comp_losses = comp_losses
-    # cf Methods.Simulation.EEC_PMSM.comp_torque
-    if isinstance(comp_torque, ImportError):
-        comp_torque = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use EEC_PMSM method comp_torque: " + str(comp_torque)
-                )
-            )
-        )
-    else:
-        comp_torque = comp_torque
     # cf Methods.Simulation.EEC_PMSM.gen_drive
     if isinstance(gen_drive, ImportError):
         gen_drive = property(
@@ -376,10 +344,12 @@ class EEC_PMSM(EEC):
         check_var("parameters", value, "dict")
         self._parameters = value
 
-    # Parameters of the EEC
+    # Parameters of the EEC: computed if empty, or enforced
     # Type : dict
     parameters = property(
-        fget=_get_parameters, fset=_set_parameters, doc=u"""Parameters of the EEC"""
+        fget=_get_parameters,
+        fset=_set_parameters,
+        doc=u"""Parameters of the EEC: computed if empty, or enforced""",
     )
 
     def _get_freq0(self):
@@ -391,9 +361,9 @@ class EEC_PMSM(EEC):
         check_var("freq0", value, "float")
         self._freq0 = value
 
-    #
+    # Frequency
     # Type : float
-    freq0 = property(fget=_get_freq0, fset=_set_freq0, doc=u"""""")
+    freq0 = property(fget=_get_freq0, fset=_set_freq0, doc=u"""Frequency""")
 
     def _get_drive(self):
         """getter of drive"""

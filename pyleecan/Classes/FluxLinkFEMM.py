@@ -75,10 +75,7 @@ class FluxLinkFEMM(FluxLink):
         is_symmetry_a=False,
         sym_a=1,
         is_antiper_a=False,
-        is_mmfs=True,
-        is_mmfr=True,
-        Nt_tot=20,
-        a=0,
+        Nt_tot=5,
         init_dict=None,
         init_str=None,
     ):
@@ -106,10 +103,7 @@ class FluxLinkFEMM(FluxLink):
             is_symmetry_a = obj.is_symmetry_a
             sym_a = obj.sym_a
             is_antiper_a = obj.is_antiper_a
-            is_mmfs = obj.is_mmfs
-            is_mmfr = obj.is_mmfr
             Nt_tot = obj.Nt_tot
-            a = obj.a
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -125,14 +119,8 @@ class FluxLinkFEMM(FluxLink):
                 sym_a = init_dict["sym_a"]
             if "is_antiper_a" in list(init_dict.keys()):
                 is_antiper_a = init_dict["is_antiper_a"]
-            if "is_mmfs" in list(init_dict.keys()):
-                is_mmfs = init_dict["is_mmfs"]
-            if "is_mmfr" in list(init_dict.keys()):
-                is_mmfr = init_dict["is_mmfr"]
             if "Nt_tot" in list(init_dict.keys()):
                 Nt_tot = init_dict["Nt_tot"]
-            if "a" in list(init_dict.keys()):
-                a = init_dict["a"]
         # Initialisation by argument
         self.FEMM_dict = FEMM_dict
         self.type_calc_leakage = type_calc_leakage
@@ -140,11 +128,9 @@ class FluxLinkFEMM(FluxLink):
         self.is_symmetry_a = is_symmetry_a
         self.sym_a = sym_a
         self.is_antiper_a = is_antiper_a
-        self.is_mmfs = is_mmfs
-        self.is_mmfr = is_mmfr
         self.Nt_tot = Nt_tot
         # Call FluxLink init
-        super(FluxLinkFEMM, self).__init__(a=a)
+        super(FluxLinkFEMM, self).__init__()
         # The class is frozen (in FluxLink init), for now it's impossible to
         # add new properties
 
@@ -162,8 +148,6 @@ class FluxLinkFEMM(FluxLink):
         FluxLinkFEMM_str += "is_symmetry_a = " + str(self.is_symmetry_a) + linesep
         FluxLinkFEMM_str += "sym_a = " + str(self.sym_a) + linesep
         FluxLinkFEMM_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
-        FluxLinkFEMM_str += "is_mmfs = " + str(self.is_mmfs) + linesep
-        FluxLinkFEMM_str += "is_mmfr = " + str(self.is_mmfr) + linesep
         FluxLinkFEMM_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         return FluxLinkFEMM_str
 
@@ -188,10 +172,6 @@ class FluxLinkFEMM(FluxLink):
             return False
         if other.is_antiper_a != self.is_antiper_a:
             return False
-        if other.is_mmfs != self.is_mmfs:
-            return False
-        if other.is_mmfr != self.is_mmfr:
-            return False
         if other.Nt_tot != self.Nt_tot:
             return False
         return True
@@ -208,8 +188,6 @@ class FluxLinkFEMM(FluxLink):
         FluxLinkFEMM_dict["is_symmetry_a"] = self.is_symmetry_a
         FluxLinkFEMM_dict["sym_a"] = self.sym_a
         FluxLinkFEMM_dict["is_antiper_a"] = self.is_antiper_a
-        FluxLinkFEMM_dict["is_mmfs"] = self.is_mmfs
-        FluxLinkFEMM_dict["is_mmfr"] = self.is_mmfr
         FluxLinkFEMM_dict["Nt_tot"] = self.Nt_tot
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
@@ -225,8 +203,6 @@ class FluxLinkFEMM(FluxLink):
         self.is_symmetry_a = None
         self.sym_a = None
         self.is_antiper_a = None
-        self.is_mmfs = None
-        self.is_mmfr = None
         self.Nt_tot = None
         # Set to None the properties inherited from FluxLink
         super(FluxLinkFEMM, self)._set_None()
@@ -331,40 +307,6 @@ class FluxLinkFEMM(FluxLink):
         fget=_get_is_antiper_a,
         fset=_set_is_antiper_a,
         doc=u"""To add an antiperiodicity to the angle vector""",
-    )
-
-    def _get_is_mmfs(self):
-        """getter of is_mmfs"""
-        return self._is_mmfs
-
-    def _set_is_mmfs(self, value):
-        """setter of is_mmfs"""
-        check_var("is_mmfs", value, "bool")
-        self._is_mmfs = value
-
-    # 1 to compute the stator magnetomotive force / stator armature magnetic field
-    # Type : bool
-    is_mmfs = property(
-        fget=_get_is_mmfs,
-        fset=_set_is_mmfs,
-        doc=u"""1 to compute the stator magnetomotive force / stator armature magnetic field""",
-    )
-
-    def _get_is_mmfr(self):
-        """getter of is_mmfr"""
-        return self._is_mmfr
-
-    def _set_is_mmfr(self, value):
-        """setter of is_mmfr"""
-        check_var("is_mmfr", value, "bool")
-        self._is_mmfr = value
-
-    # 1 to compute the rotor magnetomotive force / rotor magnetic field
-    # Type : bool
-    is_mmfr = property(
-        fget=_get_is_mmfr,
-        fset=_set_is_mmfr,
-        doc=u"""1 to compute the rotor magnetomotive force / rotor magnetic field""",
     )
 
     def _get_Nt_tot(self):
