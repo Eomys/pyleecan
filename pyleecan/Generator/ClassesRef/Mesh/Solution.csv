@@ -1,5 +1,4 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-nodal,,A solution related to nodes,,{ndarray},,,,,Mesh,,get_field,VERSION,1,Define a solution related to a Mesh object.
-edge,,A solution related to edges,,{ndarray},,,,,,,set_field,,,
-face,,A solution related to faces,,{ndarray},,,,,,,,,,
-volume,,A solution related to volumes,,{ndarray},,,,,,,,,,
+,,,,,,,,,Mesh,,get_field,VERSION,1,Define a solution related to a Mesh object.
+,,,,,,,,,,,set_field,,,
+,,,,,,,,,,,get_mesh,,,
