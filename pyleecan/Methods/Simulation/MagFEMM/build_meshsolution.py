@@ -1,7 +1,7 @@
-
 from ....Classes.SolutionData import SolutionData
 from ....Classes.MeshSolution import MeshSolution
 from SciDataTool import DataTime, Data1D
+
 
 def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu):
     """ Build the MeshSolution objets from FEMM outputs.
@@ -54,15 +54,12 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu):
             values=mu,
         )
 
-        sollist.append(SolutionData(field=solB, type_cell="Triangle")) # Face solution
+        sollist.append(SolutionData(field=solB, type_cell="Triangle"))  # Face solution
         sollist.append(SolutionData(field=solH, type_cell="Triangle"))
         sollist.append(SolutionData(field=solmu, type_cell="Triangle"))
 
     meshsol = MeshSolution(
-        label="FEMM_magnetotatic",
-        mesh=meshFEMM,
-        solution=sollist,
-        is_same_mesh=cond,
+        label="FEMM_magnetotatic", mesh=meshFEMM, solution=sollist, is_same_mesh=cond,
     )
 
     return meshsol

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/ElementMat.csv
+"""File generated according to Generator/ClassesRef/Mesh/CellMat.csv
 WARNING! All changes made in this file will be lost!
 """
 
@@ -13,37 +13,37 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Mesh.ElementMat.add_element import add_element
+    from ..Methods.Mesh.CellMat.add_element import add_element
 except ImportError as error:
     add_element = error
 
 try:
-    from ..Methods.Mesh.ElementMat.get_all_connectivity import get_all_connectivity
+    from ..Methods.Mesh.CellMat.get_all_connectivity import get_all_connectivity
 except ImportError as error:
     get_all_connectivity = error
 
 try:
-    from ..Methods.Mesh.ElementMat.get_all_node_tags import get_all_node_tags
+    from ..Methods.Mesh.CellMat.get_all_node_tags import get_all_node_tags
 except ImportError as error:
     get_all_node_tags = error
 
 try:
-    from ..Methods.Mesh.ElementMat.get_connectivity import get_connectivity
+    from ..Methods.Mesh.CellMat.get_connectivity import get_connectivity
 except ImportError as error:
     get_connectivity = error
 
 try:
-    from ..Methods.Mesh.ElementMat.get_group import get_group
+    from ..Methods.Mesh.CellMat.get_group import get_group
 except ImportError as error:
     get_group = error
 
 try:
-    from ..Methods.Mesh.ElementMat.get_node2element import get_node2element
+    from ..Methods.Mesh.CellMat.get_node2element import get_node2element
 except ImportError as error:
     get_node2element = error
 
 try:
-    from ..Methods.Mesh.ElementMat.is_exist import is_exist
+    from ..Methods.Mesh.CellMat.is_exist import is_exist
 except ImportError as error:
     is_exist = error
 
@@ -52,85 +52,83 @@ from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 
 
-class ElementMat(FrozenClass):
+class CellMat(FrozenClass):
     """Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). """
 
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.ElementMat.add_element
+    # cf Methods.Mesh.CellMat.add_element
     if isinstance(add_element, ImportError):
         add_element = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use ElementMat method add_element: " + str(add_element)
-                )
+                ImportError("Can't use CellMat method add_element: " + str(add_element))
             )
         )
     else:
         add_element = add_element
-    # cf Methods.Mesh.ElementMat.get_all_connectivity
+    # cf Methods.Mesh.CellMat.get_all_connectivity
     if isinstance(get_all_connectivity, ImportError):
         get_all_connectivity = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ElementMat method get_all_connectivity: "
+                    "Can't use CellMat method get_all_connectivity: "
                     + str(get_all_connectivity)
                 )
             )
         )
     else:
         get_all_connectivity = get_all_connectivity
-    # cf Methods.Mesh.ElementMat.get_all_node_tags
+    # cf Methods.Mesh.CellMat.get_all_node_tags
     if isinstance(get_all_node_tags, ImportError):
         get_all_node_tags = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ElementMat method get_all_node_tags: "
+                    "Can't use CellMat method get_all_node_tags: "
                     + str(get_all_node_tags)
                 )
             )
         )
     else:
         get_all_node_tags = get_all_node_tags
-    # cf Methods.Mesh.ElementMat.get_connectivity
+    # cf Methods.Mesh.CellMat.get_connectivity
     if isinstance(get_connectivity, ImportError):
         get_connectivity = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ElementMat method get_connectivity: "
+                    "Can't use CellMat method get_connectivity: "
                     + str(get_connectivity)
                 )
             )
         )
     else:
         get_connectivity = get_connectivity
-    # cf Methods.Mesh.ElementMat.get_group
+    # cf Methods.Mesh.CellMat.get_group
     if isinstance(get_group, ImportError):
         get_group = property(
             fget=lambda x: raise_(
-                ImportError("Can't use ElementMat method get_group: " + str(get_group))
+                ImportError("Can't use CellMat method get_group: " + str(get_group))
             )
         )
     else:
         get_group = get_group
-    # cf Methods.Mesh.ElementMat.get_node2element
+    # cf Methods.Mesh.CellMat.get_node2element
     if isinstance(get_node2element, ImportError):
         get_node2element = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ElementMat method get_node2element: "
+                    "Can't use CellMat method get_node2element: "
                     + str(get_node2element)
                 )
             )
         )
     else:
         get_node2element = get_node2element
-    # cf Methods.Mesh.ElementMat.is_exist
+    # cf Methods.Mesh.CellMat.is_exist
     if isinstance(is_exist, ImportError):
         is_exist = property(
             fget=lambda x: raise_(
-                ImportError("Can't use ElementMat method is_exist: " + str(is_exist))
+                ImportError("Can't use CellMat method is_exist: " + str(is_exist))
             )
         )
     else:
@@ -150,10 +148,10 @@ class ElementMat(FrozenClass):
     def __init__(
         self,
         connectivity=None,
-        nb_elem=0,
-        nb_node_per_element=0,
+        nb_cell=0,
+        nb_point_per_cell=0,
         group=None,
-        tag=None,
+        indice=None,
         init_dict=None,
         init_str=None,
     ):
@@ -176,33 +174,33 @@ class ElementMat(FrozenClass):
             obj = load(init_str)
             assert type(obj) is type(self)
             connectivity = obj.connectivity
-            nb_elem = obj.nb_elem
-            nb_node_per_element = obj.nb_node_per_element
+            nb_cell = obj.nb_cell
+            nb_point_per_cell = obj.nb_point_per_cell
             group = obj.group
-            tag = obj.tag
+            indice = obj.indice
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "connectivity" in list(init_dict.keys()):
                 connectivity = init_dict["connectivity"]
-            if "nb_elem" in list(init_dict.keys()):
-                nb_elem = init_dict["nb_elem"]
-            if "nb_node_per_element" in list(init_dict.keys()):
-                nb_node_per_element = init_dict["nb_node_per_element"]
+            if "nb_cell" in list(init_dict.keys()):
+                nb_cell = init_dict["nb_cell"]
+            if "nb_point_per_cell" in list(init_dict.keys()):
+                nb_point_per_cell = init_dict["nb_point_per_cell"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
-            if "tag" in list(init_dict.keys()):
-                tag = init_dict["tag"]
+            if "indice" in list(init_dict.keys()):
+                indice = init_dict["indice"]
         # Initialisation by argument
         self.parent = None
         # connectivity can be None, a ndarray or a list
         set_array(self, "connectivity", connectivity)
-        self.nb_elem = nb_elem
-        self.nb_node_per_element = nb_node_per_element
+        self.nb_cell = nb_cell
+        self.nb_point_per_cell = nb_point_per_cell
         # group can be None, a ndarray or a list
         set_array(self, "group", group)
-        # tag can be None, a ndarray or a list
-        set_array(self, "tag", tag)
+        # indice can be None, a ndarray or a list
+        set_array(self, "indice", indice)
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -210,37 +208,35 @@ class ElementMat(FrozenClass):
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
-        ElementMat_str = ""
+        CellMat_str = ""
         if self.parent is None:
-            ElementMat_str += "parent = None " + linesep
+            CellMat_str += "parent = None " + linesep
         else:
-            ElementMat_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        ElementMat_str += (
+            CellMat_str += "parent = " + str(type(self.parent)) + " object" + linesep
+        CellMat_str += (
             "connectivity = "
             + linesep
             + str(self.connectivity).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
-        ElementMat_str += "nb_elem = " + str(self.nb_elem) + linesep
-        ElementMat_str += (
-            "nb_node_per_element = " + str(self.nb_node_per_element) + linesep
-        )
-        ElementMat_str += (
+        CellMat_str += "nb_cell = " + str(self.nb_cell) + linesep
+        CellMat_str += "nb_point_per_cell = " + str(self.nb_point_per_cell) + linesep
+        CellMat_str += (
             "group = "
             + linesep
             + str(self.group).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
-        ElementMat_str += (
-            "tag = "
+        CellMat_str += (
+            "indice = "
             + linesep
-            + str(self.tag).replace(linesep, linesep + "\t")
+            + str(self.indice).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
-        return ElementMat_str
+        return CellMat_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -249,13 +245,13 @@ class ElementMat(FrozenClass):
             return False
         if not array_equal(other.connectivity, self.connectivity):
             return False
-        if other.nb_elem != self.nb_elem:
+        if other.nb_cell != self.nb_cell:
             return False
-        if other.nb_node_per_element != self.nb_node_per_element:
+        if other.nb_point_per_cell != self.nb_point_per_cell:
             return False
         if not array_equal(other.group, self.group):
             return False
-        if not array_equal(other.tag, self.tag):
+        if not array_equal(other.indice, self.indice):
             return False
         return True
 
@@ -263,33 +259,33 @@ class ElementMat(FrozenClass):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        ElementMat_dict = dict()
+        CellMat_dict = dict()
         if self.connectivity is None:
-            ElementMat_dict["connectivity"] = None
+            CellMat_dict["connectivity"] = None
         else:
-            ElementMat_dict["connectivity"] = self.connectivity.tolist()
-        ElementMat_dict["nb_elem"] = self.nb_elem
-        ElementMat_dict["nb_node_per_element"] = self.nb_node_per_element
+            CellMat_dict["connectivity"] = self.connectivity.tolist()
+        CellMat_dict["nb_cell"] = self.nb_cell
+        CellMat_dict["nb_point_per_cell"] = self.nb_point_per_cell
         if self.group is None:
-            ElementMat_dict["group"] = None
+            CellMat_dict["group"] = None
         else:
-            ElementMat_dict["group"] = self.group.tolist()
-        if self.tag is None:
-            ElementMat_dict["tag"] = None
+            CellMat_dict["group"] = self.group.tolist()
+        if self.indice is None:
+            CellMat_dict["indice"] = None
         else:
-            ElementMat_dict["tag"] = self.tag.tolist()
+            CellMat_dict["indice"] = self.indice.tolist()
         # The class name is added to the dict fordeserialisation purpose
-        ElementMat_dict["__class__"] = "ElementMat"
-        return ElementMat_dict
+        CellMat_dict["__class__"] = "CellMat"
+        return CellMat_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
         self.connectivity = None
-        self.nb_elem = None
-        self.nb_node_per_element = None
+        self.nb_cell = None
+        self.nb_point_per_cell = None
         self.group = None
-        self.tag = None
+        self.indice = None
 
     def _get_connectivity(self):
         """getter of connectivity"""
@@ -313,35 +309,35 @@ class ElementMat(FrozenClass):
         doc=u"""Matrix of connectivity for one element type""",
     )
 
-    def _get_nb_elem(self):
-        """getter of nb_elem"""
-        return self._nb_elem
+    def _get_nb_cell(self):
+        """getter of nb_cell"""
+        return self._nb_cell
 
-    def _set_nb_elem(self, value):
-        """setter of nb_elem"""
-        check_var("nb_elem", value, "int")
-        self._nb_elem = value
+    def _set_nb_cell(self, value):
+        """setter of nb_cell"""
+        check_var("nb_cell", value, "int")
+        self._nb_cell = value
 
     # Total number of elements
     # Type : int
-    nb_elem = property(
-        fget=_get_nb_elem, fset=_set_nb_elem, doc=u"""Total number of elements"""
+    nb_cell = property(
+        fget=_get_nb_cell, fset=_set_nb_cell, doc=u"""Total number of elements"""
     )
 
-    def _get_nb_node_per_element(self):
-        """getter of nb_node_per_element"""
-        return self._nb_node_per_element
+    def _get_nb_point_per_cell(self):
+        """getter of nb_point_per_cell"""
+        return self._nb_point_per_cell
 
-    def _set_nb_node_per_element(self, value):
-        """setter of nb_node_per_element"""
-        check_var("nb_node_per_element", value, "int")
-        self._nb_node_per_element = value
+    def _set_nb_point_per_cell(self, value):
+        """setter of nb_point_per_cell"""
+        check_var("nb_point_per_cell", value, "int")
+        self._nb_point_per_cell = value
 
     # Define the number of node per element
     # Type : int
-    nb_node_per_element = property(
-        fget=_get_nb_node_per_element,
-        fset=_set_nb_node_per_element,
+    nb_point_per_cell = property(
+        fget=_get_nb_point_per_cell,
+        fset=_set_nb_point_per_cell,
         doc=u"""Define the number of node per element""",
     )
 
@@ -367,20 +363,20 @@ class ElementMat(FrozenClass):
         doc=u"""Attribute a group number (int) to each element . This group number should correspond to a subpart of the machine.""",
     )
 
-    def _get_tag(self):
-        """getter of tag"""
-        return self._tag
+    def _get_indice(self):
+        """getter of indice"""
+        return self._indice
 
-    def _set_tag(self, value):
-        """setter of tag"""
+    def _set_indice(self, value):
+        """setter of indice"""
         if type(value) is list:
             try:
                 value = array(value)
             except:
                 pass
-        check_var("tag", value, "ndarray")
-        self._tag = value
+        check_var("indice", value, "ndarray")
+        self._indice = value
 
-    # Element tags
+    # Element indices
     # Type : ndarray
-    tag = property(fget=_get_tag, fset=_set_tag, doc=u"""Element tags""")
+    indice = property(fget=_get_indice, fset=_set_indice, doc=u"""Element indices""")

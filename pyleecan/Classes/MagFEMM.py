@@ -37,6 +37,11 @@ try:
 except ImportError as error:
     get_path_save_fem = error
 
+try:
+    from ..Methods.Simulation.MagFEMM.build_meshsolution import build_meshsolution
+except ImportError as error:
+    build_meshsolution = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -103,6 +108,18 @@ class MagFEMM(Magnetics):
         )
     else:
         get_path_save_fem = get_path_save_fem
+    # cf Methods.Simulation.MagFEMM.build_meshsolution
+    if isinstance(build_meshsolution, ImportError):
+        build_meshsolution = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method build_meshsolution: "
+                    + str(build_meshsolution)
+                )
+            )
+        )
+    else:
+        build_meshsolution = build_meshsolution
     # save method is available in all object
     save = save
 

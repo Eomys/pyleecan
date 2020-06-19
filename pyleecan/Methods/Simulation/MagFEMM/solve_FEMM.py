@@ -99,10 +99,11 @@ def solve_FEMM(self, output, sym, FEMM_dict):
 
         # Load mesh data & solution
         if self.is_get_mesh or self.is_save_FEA:
-            meshFEMM[ii], tmpB, tmpH, tmpmu = self.get_meshsolution(save_path, ii
-            )
+            meshFEMM[ii], tmpB, tmpH, tmpmu = self.get_meshsolution(save_path, ii)
 
-            if self.is_sliding_band or Nt_tot == 1: # To make sure solution have the same size at every time step
+            if (
+                self.is_sliding_band or Nt_tot == 1
+            ):  # To make sure solution have the same size at every time step
                 if ii == 0:
                     B = np.zeros([Nt_tot, meshFEMM[ii].cell["Triangle3"].nb_cell, 2])
                     H = np.zeros([Nt_tot, meshFEMM[ii].cell["Triangle3"].nb_cell, 2])
@@ -111,7 +112,6 @@ def solve_FEMM(self, output, sym, FEMM_dict):
                 B[ii, :] = tmpB
                 H[ii, :] = tmpH
                 mu[ii, :] = tmpmu
-
 
     # Shift to take into account stator position
     roll_id = int(self.angle_stator * Na_tot / (2 * pi))
@@ -157,7 +157,9 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     output.mag.FEMM_dict = FEMM_dict
 
     if self.is_get_mesh:
-        output.mag.meshsolution = self.build_meshsolution(Nt_tot, meshFEMM, Time, B, H, mu)
+        output.mag.meshsolution = self.build_meshsolution(
+            Nt_tot, meshFEMM, Time, B, H, mu
+        )
 
     if self.is_save_FEA:
         save_path_fea = join(save_path, "MeshSolutionFEMM.json")

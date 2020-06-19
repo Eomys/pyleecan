@@ -8,7 +8,7 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ._frozen import FrozenClass
+from .Mesh import Mesh
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
@@ -112,12 +112,12 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .ElementMat import ElementMat
-from .NodeMat import NodeMat
+from .CellMat import CellMat
+from .PointMat import PointMat
 from .Mesh import Mesh
 
 
-class MeshMat(FrozenClass):
+class MeshMat(Mesh):
     """Gather the mesh storage format"""
 
     VERSION = 1
@@ -329,10 +329,11 @@ class MeshMat(FrozenClass):
 
     def __init__(
         self,
-        element=dict(),
-        node=-1,
+        cell=dict(),
+        point=-1,
         submesh=list(),
         group=None,
+        label=None,
         init_dict=None,
         init_str=None,
     ):
@@ -347,8 +348,8 @@ class MeshMat(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if node == -1:
-            node = NodeMat()
+        if point == -1:
+            point = PointMat()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -356,44 +357,46 @@ class MeshMat(FrozenClass):
             # load the object from a file
             obj = load(init_str)
             assert type(obj) is type(self)
-            element = obj.element
-            node = obj.node
+            cell = obj.cell
+            point = obj.point
             submesh = obj.submesh
             group = obj.group
+            label = obj.label
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "element" in list(init_dict.keys()):
-                element = init_dict["element"]
-            if "node" in list(init_dict.keys()):
-                node = init_dict["node"]
+            if "cell" in list(init_dict.keys()):
+                cell = init_dict["cell"]
+            if "point" in list(init_dict.keys()):
+                point = init_dict["point"]
             if "submesh" in list(init_dict.keys()):
                 submesh = init_dict["submesh"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
+            if "label" in list(init_dict.keys()):
+                label = init_dict["label"]
         # Initialisation by argument
-        self.parent = None
-        # element can be None or a dict of ElementMat object
-        self.element = dict()
-        if type(element) is dict:
-            for key, obj in element.items():
+        # cell can be None or a dict of CellMat object
+        self.cell = dict()
+        if type(cell) is dict:
+            for key, obj in cell.items():
                 if isinstance(obj, dict):
-                    self.element[key] = ElementMat(init_dict=obj)
+                    self.cell[key] = CellMat(init_dict=obj)
                 else:
-                    self.element[key] = obj
-        elif element is None:
-            self.element = dict()
+                    self.cell[key] = obj
+        elif cell is None:
+            self.cell = dict()
         else:
-            self.element = element  # Should raise an error
-        # node can be None, a NodeMat object or a dict
-        if isinstance(node, dict):
-            self.node = NodeMat(init_dict=node)
-        elif isinstance(node, str):
+            self.cell = cell  # Should raise an error
+        # point can be None, a PointMat object or a dict
+        if isinstance(point, dict):
+            self.point = PointMat(init_dict=point)
+        elif isinstance(point, str):
             from ..Functions.load import load
 
-            self.node = load(node)
+            self.point = load(point)
         else:
-            self.node = node
+            self.point = point
         # submesh can be None or a list of Mesh object
         self.submesh = list()
         if type(submesh) is list:
@@ -403,7 +406,7 @@ class MeshMat(FrozenClass):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in ["Mesh", "MeshVTK"]:
+                    if class_name not in ["Mesh", "MeshMat", "MeshVTK"]:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -423,28 +426,27 @@ class MeshMat(FrozenClass):
             self.submesh = submesh
         # group can be None, a ndarray or a list
         set_array(self, "group", group)
-
-        # The class is frozen, for now it's impossible to add new properties
-        self._freeze()
+        # Call Mesh init
+        super(MeshMat, self).__init__(label=label)
+        # The class is frozen (in Mesh init), for now it's impossible to
+        # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
         MeshMat_str = ""
-        if self.parent is None:
-            MeshMat_str += "parent = None " + linesep
+        # Get the properties inherited from Mesh
+        MeshMat_str += super(MeshMat, self).__str__()
+        if len(self.cell) == 0:
+            MeshMat_str += "cell = dict()" + linesep
+        for key, obj in self.cell.items():
+            tmp = self.cell[key].__str__().replace(linesep, linesep + "\t") + linesep
+            MeshMat_str += "cell[" + key + "] =" + tmp + linesep + linesep
+        if self.point is not None:
+            tmp = self.point.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MeshMat_str += "point = " + tmp
         else:
-            MeshMat_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        if len(self.element) == 0:
-            MeshMat_str += "element = dict()" + linesep
-        for key, obj in self.element.items():
-            tmp = self.element[key].__str__().replace(linesep, linesep + "\t") + linesep
-            MeshMat_str += "element[" + key + "] =" + tmp + linesep + linesep
-        if self.node is not None:
-            tmp = self.node.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MeshMat_str += "node = " + tmp
-        else:
-            MeshMat_str += "node = None" + linesep + linesep
+            MeshMat_str += "point = None" + linesep + linesep
         if len(self.submesh) == 0:
             MeshMat_str += "submesh = []" + linesep
         for ii in range(len(self.submesh)):
@@ -464,9 +466,13 @@ class MeshMat(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.element != self.element:
+
+        # Check the properties inherited from Mesh
+        if not super(MeshMat, self).__eq__(other):
             return False
-        if other.node != self.node:
+        if other.cell != self.cell:
+            return False
+        if other.point != self.point:
             return False
         if other.submesh != self.submesh:
             return False
@@ -478,14 +484,15 @@ class MeshMat(FrozenClass):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        MeshMat_dict = dict()
-        MeshMat_dict["element"] = dict()
-        for key, obj in self.element.items():
-            MeshMat_dict["element"][key] = obj.as_dict()
-        if self.node is None:
-            MeshMat_dict["node"] = None
+        # Get the properties inherited from Mesh
+        MeshMat_dict = super(MeshMat, self).as_dict()
+        MeshMat_dict["cell"] = dict()
+        for key, obj in self.cell.items():
+            MeshMat_dict["cell"][key] = obj.as_dict()
+        if self.point is None:
+            MeshMat_dict["point"] = None
         else:
-            MeshMat_dict["node"] = self.node.as_dict()
+            MeshMat_dict["point"] = self.point.as_dict()
         MeshMat_dict["submesh"] = list()
         for obj in self.submesh:
             MeshMat_dict["submesh"].append(obj.as_dict())
@@ -494,53 +501,54 @@ class MeshMat(FrozenClass):
         else:
             MeshMat_dict["group"] = self.group.tolist()
         # The class name is added to the dict fordeserialisation purpose
+        # Overwrite the mother class name
         MeshMat_dict["__class__"] = "MeshMat"
         return MeshMat_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for key, obj in self.element.items():
+        for key, obj in self.cell.items():
             obj._set_None()
-        if self.node is not None:
-            self.node._set_None()
+        if self.point is not None:
+            self.point._set_None()
         for obj in self.submesh:
             obj._set_None()
         self.group = None
+        # Set to None the properties inherited from Mesh
+        super(MeshMat, self)._set_None()
 
-    def _get_element(self):
-        """getter of element"""
-        for key, obj in self._element.items():
+    def _get_cell(self):
+        """getter of cell"""
+        for key, obj in self._cell.items():
             if obj is not None:
                 obj.parent = self
-        return self._element
+        return self._cell
 
-    def _set_element(self, value):
-        """setter of element"""
-        check_var("element", value, "{ElementMat}")
-        self._element = value
+    def _set_cell(self, value):
+        """setter of cell"""
+        check_var("cell", value, "{CellMat}")
+        self._cell = value
 
     # Storing connectivity
-    # Type : {ElementMat}
-    element = property(
-        fget=_get_element, fset=_set_element, doc=u"""Storing connectivity"""
-    )
+    # Type : {CellMat}
+    cell = property(fget=_get_cell, fset=_set_cell, doc=u"""Storing connectivity""")
 
-    def _get_node(self):
-        """getter of node"""
-        return self._node
+    def _get_point(self):
+        """getter of point"""
+        return self._point
 
-    def _set_node(self, value):
-        """setter of node"""
-        check_var("node", value, "NodeMat")
-        self._node = value
+    def _set_point(self, value):
+        """setter of point"""
+        check_var("point", value, "PointMat")
+        self._point = value
 
-        if self._node is not None:
-            self._node.parent = self
+        if self._point is not None:
+            self._point.parent = self
 
     # Storing nodes
-    # Type : NodeMat
-    node = property(fget=_get_node, fset=_set_node, doc=u"""Storing nodes""")
+    # Type : PointMat
+    point = property(fget=_get_point, fset=_set_point, doc=u"""Storing nodes""")
 
     def _get_submesh(self):
         """getter of submesh"""

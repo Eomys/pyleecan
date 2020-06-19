@@ -10,6 +10,14 @@ from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Mesh.Solution.get_solution import get_solution
+except ImportError as error:
+    get_solution = error
+
+
 from ._check import InitUnKnowClassError
 
 
@@ -18,6 +26,17 @@ class Solution(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Mesh.Solution.get_solution
+    if isinstance(get_solution, ImportError):
+        get_solution = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Solution method get_solution: " + str(get_solution)
+                )
+            )
+        )
+    else:
+        get_solution = get_solution
     # save method is available in all object
     save = save
 

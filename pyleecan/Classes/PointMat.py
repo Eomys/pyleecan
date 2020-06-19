@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/NodeMat.csv
+"""File generated according to Generator/ClassesRef/Mesh/PointMat.csv
 WARNING! All changes made in this file will be lost!
 """
 
@@ -13,22 +13,22 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Mesh.NodeMat.add_node import add_node
+    from ..Methods.Mesh.PointMat.add_node import add_node
 except ImportError as error:
     add_node = error
 
 try:
-    from ..Methods.Mesh.NodeMat.get_coord import get_coord
+    from ..Methods.Mesh.PointMat.get_coord import get_coord
 except ImportError as error:
     get_coord = error
 
 try:
-    from ..Methods.Mesh.NodeMat.get_group import get_group
+    from ..Methods.Mesh.PointMat.get_group import get_group
 except ImportError as error:
     get_group = error
 
 try:
-    from ..Methods.Mesh.NodeMat.is_exist import is_exist
+    from ..Methods.Mesh.PointMat.is_exist import is_exist
 except ImportError as error:
     is_exist = error
 
@@ -37,44 +37,44 @@ from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 
 
-class NodeMat(FrozenClass):
+class PointMat(FrozenClass):
     """Class to define nodes coordinates and getter."""
 
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.NodeMat.add_node
+    # cf Methods.Mesh.PointMat.add_node
     if isinstance(add_node, ImportError):
         add_node = property(
             fget=lambda x: raise_(
-                ImportError("Can't use NodeMat method add_node: " + str(add_node))
+                ImportError("Can't use PointMat method add_node: " + str(add_node))
             )
         )
     else:
         add_node = add_node
-    # cf Methods.Mesh.NodeMat.get_coord
+    # cf Methods.Mesh.PointMat.get_coord
     if isinstance(get_coord, ImportError):
         get_coord = property(
             fget=lambda x: raise_(
-                ImportError("Can't use NodeMat method get_coord: " + str(get_coord))
+                ImportError("Can't use PointMat method get_coord: " + str(get_coord))
             )
         )
     else:
         get_coord = get_coord
-    # cf Methods.Mesh.NodeMat.get_group
+    # cf Methods.Mesh.PointMat.get_group
     if isinstance(get_group, ImportError):
         get_group = property(
             fget=lambda x: raise_(
-                ImportError("Can't use NodeMat method get_group: " + str(get_group))
+                ImportError("Can't use PointMat method get_group: " + str(get_group))
             )
         )
     else:
         get_group = get_group
-    # cf Methods.Mesh.NodeMat.is_exist
+    # cf Methods.Mesh.PointMat.is_exist
     if isinstance(is_exist, ImportError):
         is_exist = property(
             fget=lambda x: raise_(
-                ImportError("Can't use NodeMat method is_exist: " + str(is_exist))
+                ImportError("Can't use PointMat method is_exist: " + str(is_exist))
             )
         )
     else:
@@ -94,8 +94,8 @@ class NodeMat(FrozenClass):
     def __init__(
         self,
         coordinate=None,
-        nb_node=0,
-        tag=None,
+        nb_pt=0,
+        indice=None,
         delta=1e-10,
         init_dict=None,
         init_str=None,
@@ -119,27 +119,27 @@ class NodeMat(FrozenClass):
             obj = load(init_str)
             assert type(obj) is type(self)
             coordinate = obj.coordinate
-            nb_node = obj.nb_node
-            tag = obj.tag
+            nb_pt = obj.nb_pt
+            indice = obj.indice
             delta = obj.delta
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "coordinate" in list(init_dict.keys()):
                 coordinate = init_dict["coordinate"]
-            if "nb_node" in list(init_dict.keys()):
-                nb_node = init_dict["nb_node"]
-            if "tag" in list(init_dict.keys()):
-                tag = init_dict["tag"]
+            if "nb_pt" in list(init_dict.keys()):
+                nb_pt = init_dict["nb_pt"]
+            if "indice" in list(init_dict.keys()):
+                indice = init_dict["indice"]
             if "delta" in list(init_dict.keys()):
                 delta = init_dict["delta"]
         # Initialisation by argument
         self.parent = None
         # coordinate can be None, a ndarray or a list
         set_array(self, "coordinate", coordinate)
-        self.nb_node = nb_node
-        # tag can be None, a ndarray or a list
-        set_array(self, "tag", tag)
+        self.nb_pt = nb_pt
+        # indice can be None, a ndarray or a list
+        set_array(self, "indice", indice)
         self.delta = delta
 
         # The class is frozen, for now it's impossible to add new properties
@@ -148,28 +148,28 @@ class NodeMat(FrozenClass):
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
-        NodeMat_str = ""
+        PointMat_str = ""
         if self.parent is None:
-            NodeMat_str += "parent = None " + linesep
+            PointMat_str += "parent = None " + linesep
         else:
-            NodeMat_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        NodeMat_str += (
+            PointMat_str += "parent = " + str(type(self.parent)) + " object" + linesep
+        PointMat_str += (
             "coordinate = "
             + linesep
             + str(self.coordinate).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
-        NodeMat_str += "nb_node = " + str(self.nb_node) + linesep
-        NodeMat_str += (
-            "tag = "
+        PointMat_str += "nb_pt = " + str(self.nb_pt) + linesep
+        PointMat_str += (
+            "indice = "
             + linesep
-            + str(self.tag).replace(linesep, linesep + "\t")
+            + str(self.indice).replace(linesep, linesep + "\t")
             + linesep
             + linesep
         )
-        NodeMat_str += "delta = " + str(self.delta) + linesep
-        return NodeMat_str
+        PointMat_str += "delta = " + str(self.delta) + linesep
+        return PointMat_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -178,9 +178,9 @@ class NodeMat(FrozenClass):
             return False
         if not array_equal(other.coordinate, self.coordinate):
             return False
-        if other.nb_node != self.nb_node:
+        if other.nb_pt != self.nb_pt:
             return False
-        if not array_equal(other.tag, self.tag):
+        if not array_equal(other.indice, self.indice):
             return False
         if other.delta != self.delta:
             return False
@@ -190,27 +190,27 @@ class NodeMat(FrozenClass):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        NodeMat_dict = dict()
+        PointMat_dict = dict()
         if self.coordinate is None:
-            NodeMat_dict["coordinate"] = None
+            PointMat_dict["coordinate"] = None
         else:
-            NodeMat_dict["coordinate"] = self.coordinate.tolist()
-        NodeMat_dict["nb_node"] = self.nb_node
-        if self.tag is None:
-            NodeMat_dict["tag"] = None
+            PointMat_dict["coordinate"] = self.coordinate.tolist()
+        PointMat_dict["nb_pt"] = self.nb_pt
+        if self.indice is None:
+            PointMat_dict["indice"] = None
         else:
-            NodeMat_dict["tag"] = self.tag.tolist()
-        NodeMat_dict["delta"] = self.delta
+            PointMat_dict["indice"] = self.indice.tolist()
+        PointMat_dict["delta"] = self.delta
         # The class name is added to the dict fordeserialisation purpose
-        NodeMat_dict["__class__"] = "NodeMat"
-        return NodeMat_dict
+        PointMat_dict["__class__"] = "PointMat"
+        return PointMat_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
         self.coordinate = None
-        self.nb_node = None
-        self.tag = None
+        self.nb_pt = None
+        self.indice = None
         self.delta = None
 
     def _get_coordinate(self):
@@ -233,38 +233,36 @@ class NodeMat(FrozenClass):
         fget=_get_coordinate, fset=_set_coordinate, doc=u"""Nodes coordinates"""
     )
 
-    def _get_nb_node(self):
-        """getter of nb_node"""
-        return self._nb_node
+    def _get_nb_pt(self):
+        """getter of nb_pt"""
+        return self._nb_pt
 
-    def _set_nb_node(self, value):
-        """setter of nb_node"""
-        check_var("nb_node", value, "int")
-        self._nb_node = value
+    def _set_nb_pt(self, value):
+        """setter of nb_pt"""
+        check_var("nb_pt", value, "int")
+        self._nb_pt = value
 
     # Total number of nodes
     # Type : int
-    nb_node = property(
-        fget=_get_nb_node, fset=_set_nb_node, doc=u"""Total number of nodes"""
-    )
+    nb_pt = property(fget=_get_nb_pt, fset=_set_nb_pt, doc=u"""Total number of nodes""")
 
-    def _get_tag(self):
-        """getter of tag"""
-        return self._tag
+    def _get_indice(self):
+        """getter of indice"""
+        return self._indice
 
-    def _set_tag(self, value):
-        """setter of tag"""
+    def _set_indice(self, value):
+        """setter of indice"""
         if type(value) is list:
             try:
                 value = array(value)
             except:
                 pass
-        check_var("tag", value, "ndarray")
-        self._tag = value
+        check_var("indice", value, "ndarray")
+        self._indice = value
 
-    # Node tags
+    # Node indices
     # Type : ndarray
-    tag = property(fget=_get_tag, fset=_set_tag, doc=u"""Node tags""")
+    indice = property(fget=_get_indice, fset=_set_indice, doc=u"""Node indices""")
 
     def _get_delta(self):
         """getter of delta"""

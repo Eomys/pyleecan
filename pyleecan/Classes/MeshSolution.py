@@ -25,10 +25,11 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .Mesh import Mesh
+from .Solution import Solution
 
 
 class MeshSolution(FrozenClass):
-    """To associate a Mesh with one or several solutions"""
+    """Abstract class to associate a mesh with one or several solutions"""
 
     VERSION = 1
 
@@ -67,10 +68,10 @@ class MeshSolution(FrozenClass):
 
     def __init__(
         self,
-        name="",
+        label=None,
         mesh=list(),
-        soldict={},
         is_same_mesh=True,
+        solution=list(),
         init_dict=None,
         init_str=None,
     ):
@@ -92,24 +93,24 @@ class MeshSolution(FrozenClass):
             # load the object from a file
             obj = load(init_str)
             assert type(obj) is type(self)
-            name = obj.name
+            label = obj.label
             mesh = obj.mesh
-            soldict = obj.soldict
             is_same_mesh = obj.is_same_mesh
+            solution = obj.solution
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "name" in list(init_dict.keys()):
-                name = init_dict["name"]
+            if "label" in list(init_dict.keys()):
+                label = init_dict["label"]
             if "mesh" in list(init_dict.keys()):
                 mesh = init_dict["mesh"]
-            if "soldict" in list(init_dict.keys()):
-                soldict = init_dict["soldict"]
             if "is_same_mesh" in list(init_dict.keys()):
                 is_same_mesh = init_dict["is_same_mesh"]
+            if "solution" in list(init_dict.keys()):
+                solution = init_dict["solution"]
         # Initialisation by argument
         self.parent = None
-        self.name = name
+        self.label = label
         # mesh can be None or a list of Mesh object
         self.mesh = list()
         if type(mesh) is list:
@@ -119,7 +120,7 @@ class MeshSolution(FrozenClass):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in ["Mesh", "MeshVTK"]:
+                    if class_name not in ["Mesh", "MeshMat", "MeshVTK"]:
                         raise InitUnKnowClassError(
                             "Unknow class name " + class_name + " in init_dict for mesh"
                         )
@@ -135,8 +136,34 @@ class MeshSolution(FrozenClass):
             self.mesh = list()
         else:
             self.mesh = mesh
-        self.soldict = soldict
         self.is_same_mesh = is_same_mesh
+        # solution can be None or a list of Solution object
+        self.solution = list()
+        if type(solution) is list:
+            for obj in solution:
+                if obj is None:  # Default value
+                    self.solution.append(Solution())
+                elif isinstance(obj, dict):
+                    # Check that the type is correct (including daughter)
+                    class_name = obj.get("__class__")
+                    if class_name not in ["Solution", "SolutionData", "SolutionMat"]:
+                        raise InitUnKnowClassError(
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for solution"
+                        )
+                    # Dynamic import to call the correct constructor
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
+                    self.solution.append(class_obj(init_dict=obj))
+                else:
+                    self.solution.append(obj)
+        elif solution is None:
+            self.solution = list()
+        else:
+            self.solution = solution
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -151,14 +178,18 @@ class MeshSolution(FrozenClass):
             MeshSolution_str += (
                 "parent = " + str(type(self.parent)) + " object" + linesep
             )
-        MeshSolution_str += 'name = "' + str(self.name) + '"' + linesep
+        MeshSolution_str += 'label = "' + str(self.label) + '"' + linesep
         if len(self.mesh) == 0:
             MeshSolution_str += "mesh = []" + linesep
         for ii in range(len(self.mesh)):
             tmp = self.mesh[ii].__str__().replace(linesep, linesep + "\t") + linesep
             MeshSolution_str += "mesh[" + str(ii) + "] =" + tmp + linesep + linesep
-        MeshSolution_str += "soldict = " + str(self.soldict) + linesep
         MeshSolution_str += "is_same_mesh = " + str(self.is_same_mesh) + linesep
+        if len(self.solution) == 0:
+            MeshSolution_str += "solution = []" + linesep
+        for ii in range(len(self.solution)):
+            tmp = self.solution[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            MeshSolution_str += "solution[" + str(ii) + "] =" + tmp + linesep + linesep
         return MeshSolution_str
 
     def __eq__(self, other):
@@ -166,13 +197,13 @@ class MeshSolution(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.name != self.name:
+        if other.label != self.label:
             return False
         if other.mesh != self.mesh:
             return False
-        if other.soldict != self.soldict:
-            return False
         if other.is_same_mesh != self.is_same_mesh:
+            return False
+        if other.solution != self.solution:
             return False
         return True
 
@@ -181,12 +212,14 @@ class MeshSolution(FrozenClass):
         """
 
         MeshSolution_dict = dict()
-        MeshSolution_dict["name"] = self.name
+        MeshSolution_dict["label"] = self.label
         MeshSolution_dict["mesh"] = list()
         for obj in self.mesh:
             MeshSolution_dict["mesh"].append(obj.as_dict())
-        MeshSolution_dict["soldict"] = self.soldict
         MeshSolution_dict["is_same_mesh"] = self.is_same_mesh
+        MeshSolution_dict["solution"] = list()
+        for obj in self.solution:
+            MeshSolution_dict["solution"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         MeshSolution_dict["__class__"] = "MeshSolution"
         return MeshSolution_dict
@@ -194,26 +227,27 @@ class MeshSolution(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.name = None
+        self.label = None
         for obj in self.mesh:
             obj._set_None()
-        self.soldict = None
         self.is_same_mesh = None
+        for obj in self.solution:
+            obj._set_None()
 
-    def _get_name(self):
-        """getter of name"""
-        return self._name
+    def _get_label(self):
+        """getter of label"""
+        return self._label
 
-    def _set_name(self, value):
-        """setter of name"""
-        check_var("name", value, "str")
-        self._name = value
+    def _set_label(self, value):
+        """setter of label"""
+        check_var("label", value, "str")
+        self._label = value
 
     # (Optional) Descriptive name of the mesh
     # Type : str
-    name = property(
-        fget=_get_name,
-        fset=_set_name,
+    label = property(
+        fget=_get_label,
+        fset=_set_label,
         doc=u"""(Optional) Descriptive name of the mesh""",
     )
 
@@ -237,23 +271,6 @@ class MeshSolution(FrozenClass):
     # Type : [Mesh]
     mesh = property(fget=_get_mesh, fset=_set_mesh, doc=u"""A list of Mesh objects. """)
 
-    def _get_soldict(self):
-        """getter of soldict"""
-        return self._soldict
-
-    def _set_soldict(self, value):
-        """setter of soldict"""
-        check_var("soldict", value, "dict")
-        self._soldict = value
-
-    # A list of dict containing Solution objects which are defined with respect to the mesh attribute.
-    # Type : dict
-    soldict = property(
-        fget=_get_soldict,
-        fset=_set_soldict,
-        doc=u"""A list of dict containing Solution objects which are defined with respect to the mesh attribute.""",
-    )
-
     def _get_is_same_mesh(self):
         """getter of is_same_mesh"""
         return self._is_same_mesh
@@ -263,10 +280,32 @@ class MeshSolution(FrozenClass):
         check_var("is_same_mesh", value, "bool")
         self._is_same_mesh = value
 
-    # 1 if the mesh is the same at each time step
+    # 1 if the mesh is the same at each step (time, mode etc.)
     # Type : bool
     is_same_mesh = property(
         fget=_get_is_same_mesh,
         fset=_set_is_same_mesh,
-        doc=u"""1 if the mesh is the same at each time step""",
+        doc=u"""1 if the mesh is the same at each step (time, mode etc.)""",
+    )
+
+    def _get_solution(self):
+        """getter of solution"""
+        for obj in self._solution:
+            if obj is not None:
+                obj.parent = self
+        return self._solution
+
+    def _set_solution(self, value):
+        """setter of solution"""
+        check_var("solution", value, "[Solution]")
+        self._solution = value
+
+        for obj in self._solution:
+            if obj is not None:
+                obj.parent = self
+
+    # A list of Solution objects
+    # Type : [Solution]
+    solution = property(
+        fget=_get_solution, fset=_set_solution, doc=u"""A list of Solution objects"""
     )

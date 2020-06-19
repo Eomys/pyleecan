@@ -10,6 +10,7 @@ from ..Classes.Arc2 import Arc2
 from ..Classes.Arc3 import Arc3
 from ..Classes.Bore import Bore
 from ..Classes.BoreFlower import BoreFlower
+from ..Classes.CellMat import CellMat
 from ..Classes.Circle import Circle
 from ..Classes.CondType11 import CondType11
 from ..Classes.CondType12 import CondType12
@@ -21,7 +22,6 @@ from ..Classes.DriveWave import DriveWave
 from ..Classes.EEC import EEC
 from ..Classes.EEC_PMSM import EEC_PMSM
 from ..Classes.Electrical import Electrical
-from ..Classes.ElementMat import ElementMat
 from ..Classes.FluxLink import FluxLink
 from ..Classes.FluxLinkFEMM import FluxLinkFEMM
 from ..Classes.Force import Force
@@ -92,7 +92,6 @@ from ..Classes.Mesh import Mesh
 from ..Classes.MeshMat import MeshMat
 from ..Classes.MeshSolution import MeshSolution
 from ..Classes.MeshVTK import MeshVTK
-from ..Classes.NodeMat import NodeMat
 from ..Classes.Notch import Notch
 from ..Classes.NotchEvenDist import NotchEvenDist
 from ..Classes.OptiConstraint import OptiConstraint
@@ -112,6 +111,7 @@ from ..Classes.OutStruct import OutStruct
 from ..Classes.Output import Output
 from ..Classes.OutputMulti import OutputMulti
 from ..Classes.OutputMultiOpti import OutputMultiOpti
+from ..Classes.PointMat import PointMat
 from ..Classes.PolarArc import PolarArc
 from ..Classes.Segment import Segment
 from ..Classes.Shaft import Shaft
@@ -144,8 +144,8 @@ from ..Classes.SlotW60 import SlotW60
 from ..Classes.SlotW61 import SlotW61
 from ..Classes.SlotWind import SlotWind
 from ..Classes.Solution import Solution
-from ..Classes.SolutionCell import SolutionCell
-from ..Classes.SolutionPoint import SolutionPoint
+from ..Classes.SolutionData import SolutionData
+from ..Classes.SolutionMat import SolutionMat
 from ..Classes.Structural import Structural
 from ..Classes.SurfLine import SurfLine
 from ..Classes.SurfRing import SurfRing
