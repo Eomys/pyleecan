@@ -27,6 +27,8 @@ class MatLib(object):
         if path:
             self.load_mat_ref(path)
 
+        self.machine = None
+
     def load_mat_ref(self, path):
         """Remove the reference materials and load materials from the path
         
@@ -61,6 +63,9 @@ class MatLib(object):
         machine: Machine
             Machine containing material to add 
         """
+        # Set the machine
+        self.machine = machine
+
         # Remove previous machine material
         for i in range(self.index_first_mat_mach, len(self.list_mat)):
             self.list_mat.pop(i)
@@ -268,6 +273,12 @@ class MatLib(object):
         """
         from ....definitions import MATLIB_DIR
 
+        # Replace the material in the current machine
+        if self.machine != None:
+            replace_material_pyleecan_obj(
+                self.machine, self.list_mat[index], material, comp_name_path=False
+            )
+
         # Material Library
         if index < self.index_first_mat_mach:
             # Delete the previous material
@@ -292,3 +303,7 @@ class MatLib(object):
 
             # Check its name
             self.check_material_duplicated_name(index)
+
+        # Check that existing machine materials are not duplicated
+        # if self.machine != None:
+        #     self.add_machine_mat(self.machine)
