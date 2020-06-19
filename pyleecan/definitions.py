@@ -26,6 +26,13 @@ def create_folder(conf_dict):
         )
         with open(USER_DIR + "/config.json", "w") as conf_file:
             dump(conf_dict, conf_file, sort_keys=True, indent=4, separators=(",", ": "))
+    
+    # Copy pyleecan_color.json if needed
+    elif not isfile(USER_DIR + "/Data/pyleecan_color.json"):
+        shutil.copyfile(
+            __file__[: max(__file__.rfind("/"), __file__.rfind("\\"))] + "/Data/pyleecan_color.json",
+            USER_DIR + "/Data/pyleecan_color.json"
+        )
 
 
 def edit_config_dict(key, value, conf_dict):
