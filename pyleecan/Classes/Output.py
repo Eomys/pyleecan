@@ -84,6 +84,26 @@ try:
 except ImportError as error:
     plot_force_space = error
 
+try:
+    from ..Methods.Output.Output.plot.Magnetic.plot_mesh_field import plot_mesh_field
+except ImportError as error:
+    plot_mesh_field = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_quiver_2D import plot_A_quiver_2D
+except ImportError as error:
+    plot_A_quiver_2D = error
+
+try:
+    from ..Methods.Output.Output.getter.get_rot_dir import get_rot_dir
+except ImportError as error:
+    get_rot_dir = error
+
+try:
+    from ..Methods.Output.Output.getter.get_d_angle_diff import get_d_angle_diff
+except ImportError as error:
+    get_d_angle_diff = error
+
 
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
@@ -248,6 +268,48 @@ class Output(FrozenClass):
         )
     else:
         plot_force_space = plot_force_space
+    # cf Methods.Output.Output.plot.Magnetic.plot_mesh_field
+    if isinstance(plot_mesh_field, ImportError):
+        plot_mesh_field = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_mesh_field: " + str(plot_mesh_field)
+                )
+            )
+        )
+    else:
+        plot_mesh_field = plot_mesh_field
+    # cf Methods.Output.Output.plot.plot_A_quiver_2D
+    if isinstance(plot_A_quiver_2D, ImportError):
+        plot_A_quiver_2D = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_quiver_2D: " + str(plot_A_quiver_2D)
+                )
+            )
+        )
+    else:
+        plot_A_quiver_2D = plot_A_quiver_2D
+    # cf Methods.Output.Output.getter.get_rot_dir
+    if isinstance(get_rot_dir, ImportError):
+        get_rot_dir = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method get_rot_dir: " + str(get_rot_dir))
+            )
+        )
+    else:
+        get_rot_dir = get_rot_dir
+    # cf Methods.Output.Output.getter.get_d_angle_diff
+    if isinstance(get_d_angle_diff, ImportError):
+        get_d_angle_diff = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method get_d_angle_diff: " + str(get_d_angle_diff)
+                )
+            )
+        )
+    else:
+        get_d_angle_diff = get_d_angle_diff
     # save method is available in all object
     save = save
 

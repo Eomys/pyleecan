@@ -23,4 +23,4 @@ def comp_angle_opening(self):
     if Nmag > 0:
         return alpha0 * Nmag + alpha3 * (Nmag - 1)
     else:
-        0
+        return 0

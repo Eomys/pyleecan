@@ -15,13 +15,17 @@ def comp_masses(self):
     -------
     M_dict: dict
         Lamination mass dictionnary (Mtot, Mlam, Mwind) [kg]
-
     """
 
     M_dict = LamSlot.comp_masses(self)
-    V_dict = self.comp_volumes()
+
     if self.winding is not None:
-        Mwind = V_dict["Vwind"] * self.winding.mat_type.struct.rho
+        L_dict = self.comp_lengths_winding()
+        Mwind = (
+            self.winding.conductor.comp_surface_active()
+            * self.winding.conductor.cond_mat.struct.rho
+            * L_dict["Lwtot"]
+        )
     else:
         Mwind = 0
 

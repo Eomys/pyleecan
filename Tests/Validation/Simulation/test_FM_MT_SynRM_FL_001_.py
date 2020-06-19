@@ -78,7 +78,7 @@ def test_Magnetic_AGSF():
     simu.run()
 
     # Test save with MeshSolution object in out
-    out.save(save_path=save_path)
+    out.save(save_path=save_path + "\Output.json")
 
     # Plot the AGSF as a function of space with the spatial fft
     r_max = 78

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import matplotlib.pyplot as plt
-from numpy import where, argmin, abs
+from numpy import where, argmin, abs, squeeze, split
 
 from ...Functions.init_fig import init_subplot, init_fig
 
@@ -10,8 +10,8 @@ def plot_A_2D(
     Xdata,
     Ydatas,
     legend_list=[""],
-    color_list=["b"],
-    linewidth_list=[1],
+    color_list=[(0, 0, 1, 0.5)],
+    linewidth_list=[3],
     title="",
     xlabel="",
     ylabel="",
@@ -24,6 +24,9 @@ def plot_A_2D(
     type="curve",
     is_fund=False,
     fund_harm=None,
+    y_min=None,
+    y_max=None,
+    xticks=None,
 ):
     """Plots a 2D graph (curve, bargraph or barchart) comparing fields in Ydatas
 
@@ -58,11 +61,17 @@ def plot_A_2D(
     is_grid : bool
         boolean indicating if the grid must be displayed
     type : str
-        type of 2D graph : "curve", "bargraph" or "barchart"
+        type of 2D graph : "curve", "bargraph", "barchart" or "quiver"
     is_fund : bool
         boolean indicating if the bar corresponding to the fundamental must be displayed in red
     fund_harm : float
-        frequency of the fundamental harmonic    
+        frequency of the fundamental harmonic
+    y_min : float
+        minimum value for the y-axis
+    y_max : float
+        maximum value for the y-axis
+    xticks : list
+        list of ticks to use for the x-axis
     """
 
     # Set figure/subplot
@@ -90,7 +99,7 @@ def plot_A_2D(
             ax.plot(
                 Xdata,
                 Ydatas[i],
-                color_list[i],
+                color=color_list[i],
                 label=legend_list[i],
                 linewidth=linewidth_list[i],
             )
@@ -98,38 +107,23 @@ def plot_A_2D(
         for i in range(len(Ydatas)):
             width = Xdata[1] - Xdata[0]
             if i == 0:
-                if color_list[i] != "":
-                    barlist = ax.bar(
-                        Xdata,
-                        Ydatas[i],
-                        color=color_list[i],
-                        width=width,
-                        label=legend_list[i],
-                    )
-                else:
-                    barlist = ax.bar(
-                        Xdata, Ydatas[i], width=width, label=legend_list[i]
-                    )
+                barlist = ax.bar(
+                    Xdata,
+                    Ydatas[i],
+                    color=color_list[i],
+                    width=width,
+                    label=legend_list[i],
+                )
             else:
-                if color_list[i] != "":
-                    barlist = ax.bar(
-                        Xdata,
-                        Ydatas[i],
-                        edgecolor=color_list[i],
-                        width=width,
-                        fc="None",
-                        lw=1,
-                        label=legend_list[i],
-                    )
-                else:
-                    barlist = ax.bar(
-                        Xdata,
-                        Ydatas[i],
-                        width=width,
-                        fc="None",
-                        lw=1,
-                        label=legend_list[i],
-                    )
+                barlist = ax.bar(
+                    Xdata,
+                    Ydatas[i],
+                    edgecolor=color_list[i],
+                    width=width,
+                    fc="None",
+                    lw=1,
+                    label=legend_list[i],
+                )
             if is_fund:  # Find fundamental
                 if fund_harm is None:
                     mag_max = max(Ydatas[i])
@@ -137,45 +131,40 @@ def plot_A_2D(
                 else:
                     imax = argmin(abs(Xdata - fund_harm))
                 barlist[imax].set_color("r")
+        if xticks is not None:
+            ax.xaxis.set_ticks(xticks)
     elif type == "barchart":
         for i in range(len(Ydatas)):
             if i == 0:
-                if color_list[i] != "":
-                    ax.bar(
-                        range(len(Xdata)),
-                        Ydatas[i],
-                        color=color_list[i],
-                        width=0.5,
-                        label=legend_list[i],
-                    )
-                else:
-                    ax.bar(
-                        range(len(Xdata)), Ydatas[i], width=0.5, label=legend_list[i]
-                    )
+                ax.bar(
+                    range(len(Xdata)),
+                    Ydatas[i],
+                    color=color_list[i],
+                    width=0.5,
+                    label=legend_list[i],
+                )
             else:
-                if color_list[i] != "":
-                    ax.bar(
-                        range(len(Xdata)),
-                        Ydatas[i],
-                        edgecolor=color_list[i],
-                        width=0.5,
-                        fc="None",
-                        lw=1,
-                        label=legend_list[i],
-                    )
-                else:
-                    ax.bar(
-                        range(len(Xdata)),
-                        Ydatas[i],
-                        width=0.5,
-                        fc="None",
-                        lw=1,
-                        label=legend_list[i],
-                    )
+                ax.bar(
+                    range(len(Xdata)),
+                    Ydatas[i],
+                    edgecolor=color_list[i],
+                    width=0.5,
+                    fc="None",
+                    lw=1,
+                    label=legend_list[i],
+                )
         plt.xticks(range(len(Xdata)), [str(f) for f in Xdata], rotation=90)
+    elif type == "quiver":
+        for i in range(len(Ydatas)):
+            x = [e[0] for e in Xdata]
+            y = [e[1] for e in Xdata]
+            vect_list = split(Ydatas[i], 2)
+            ax.quiver(x, y, squeeze(vect_list[0]), squeeze(vect_list[1]))
+            ax.axis("equal")
 
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
+    ax.set_ylim([y_min, y_max])
 
     if is_logscale_x:
         ax.xscale("log")
@@ -193,3 +182,9 @@ def plot_A_2D(
         ax.legend()
 
     plt.tight_layout()
+    for item in (
+        [ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()
+    ):
+        item.set_fontsize(22)
+    ax.title.set_fontsize(24)
+    return ax

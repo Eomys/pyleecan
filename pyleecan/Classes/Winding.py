@@ -37,6 +37,11 @@ try:
 except ImportError as error:
     comp_winding_factor = error
 
+try:
+    from ..Methods.Machine.Winding.comp_length_endwinding import comp_length_endwinding
+except ImportError as error:
+    comp_length_endwinding = error
+
 
 from ._check import InitUnKnowClassError
 from .Conductor import Conductor
@@ -102,6 +107,18 @@ class Winding(FrozenClass):
         )
     else:
         comp_winding_factor = comp_winding_factor
+    # cf Methods.Machine.Winding.comp_length_endwinding
+    if isinstance(comp_length_endwinding, ImportError):
+        comp_length_endwinding = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Winding method comp_length_endwinding: "
+                    + str(comp_length_endwinding)
+                )
+            )
+        )
+    else:
+        comp_length_endwinding = comp_length_endwinding
     # save method is available in all object
     save = save
 

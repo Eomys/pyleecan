@@ -1,0 +1,8 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+FEMM_dict,,To enforce user-defined values for FEMM main parameters ,0,dict,,,,,Simulation,FluxLink,comp_fluxlinkage,VERSION,1,Electric module: Flux Linkage with FEMM,
+type_calc_leakage,,0 no leakage calculation /  1 calculation using single slot ,0,int,0,0,1,,,,solve_FEMM,,,,
+is_sliding_band,,0 to desactivate the sliding band,0,bool,1,,,,,,,,,,
+is_symmetry_a,,"0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a",0,bool,0,,,,,,,,,,
+sym_a,-,Number of symmetry for the angle vector,0,int,1,1,,,,,,,,,
+is_antiper_a,-,To add an antiperiodicity to the angle vector,0,bool,0,,,,,,,,,,
+Nt_tot,-,Number of time steps for the FEMM simulation,0,int,5,,,,,,,,,,

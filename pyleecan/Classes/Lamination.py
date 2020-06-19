@@ -109,6 +109,11 @@ try:
 except ImportError as error:
     comp_angle_q_axis = error
 
+try:
+    from ..Methods.Machine.Lamination.comp_radius_mid_yoke import comp_radius_mid_yoke
+except ImportError as error:
+    comp_radius_mid_yoke = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -328,6 +333,18 @@ class Lamination(FrozenClass):
         )
     else:
         comp_angle_q_axis = comp_angle_q_axis
+    # cf Methods.Machine.Lamination.comp_radius_mid_yoke
+    if isinstance(comp_radius_mid_yoke, ImportError):
+        comp_radius_mid_yoke = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Lamination method comp_radius_mid_yoke: "
+                    + str(comp_radius_mid_yoke)
+                )
+            )
+        )
+    else:
+        comp_radius_mid_yoke = comp_radius_mid_yoke
     # save method is available in all object
     save = save
 

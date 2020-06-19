@@ -1,0 +1,2 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
+,,,,,,,,,Simulation,,,VERSION,1,Electric module: Equivalent Electrical Circuit abstract class,EEC_PMSM
