@@ -8745,7 +8745,7 @@
                 "name": "type_cell",
                 "type": "str",
                 "unit": "-",
-                "value": "None"
+                "value": "triangle"
             }
         ]
     },
@@ -8781,7 +8781,7 @@
                 "name": "type_cell",
                 "type": "str",
                 "unit": "-",
-                "value": "\"Point\""
+                "value": "triangle"
             },
             {
                 "desc": "Label to identify the solution",

@@ -1,3 +1,3 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 field,-,"Data object containing the numerical values of a solution. One of the axis must be ""Indices"", a list of indices. If the solution is a vector, one of the axis must be ""Direction"", values ['x','y'] for example.",,SciDataTool.Classes.DataND.DataND,None,,,,Mesh,Solution,get_field,VERSION,1,Define a Solution with SciDataTool objects.
-type_cell,-,"Type of cell (Point, Segment2, Triangle3, etc.)",,str,None,,,,,,,,,
+type_cell,-,"Type of cell (Point, Segment2, Triangle3, etc.)",,str,triangle,,,,,,,,,
