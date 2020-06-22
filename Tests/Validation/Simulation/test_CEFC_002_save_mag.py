@@ -9,6 +9,7 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from Tests import save_validation_path as save_path
+from Tests import save_load_path as load_results_path
 from os.path import join
 
 import matplotlib.pyplot as plt
@@ -63,7 +64,13 @@ def test_CEFC_002():
     out.post.legend_name = "Slotless lamination"
     simu.run()
 
-    out.plot_mesh(mesh=out.mag.meshsolution.mesh[0], title="FEA Mesh")
+    # Test save with MeshSolution object in out
+    load_path = join(save_path, "Output.json")
+    out.save(save_path=load_path)
+
+    out.plot_mesh(
+        meshsolution=out.mag.meshsolution, field_symbol="\mu", title="FEA Mesh"
+    )
 
     # out.plot_mesh_field(meshsolution=out.mag.meshsolution, title="Permeability")
     out.plot_mesh_field(
@@ -78,14 +85,15 @@ def test_CEFC_002():
     load_path = join(save_path, "Output.json")
     out.save(save_path=load_path)
 
+
+def test_CEFC_002_bis():
+    load_path = join(load_results_path, "Output.json")
     # Test to load the Meshsolution object (inside the output):
     with open(load_path) as json_file:
         json_tmp = json.load(json_file)
         FEMM = Output(init_dict=json_tmp)
 
     # To test that the "mu" is still a ndarray after saving and loading
-    out.plot_mesh_field(
-        mesh=FEMM.mag.meshsolution.mesh[0],
-        title="Permeability",
-        field=FEMM.mag.meshsolution.solution[0].face["mu"],
+    FEMM.plot_mesh_fieldout.plot_mesh(
+        meshsolution=out.mag.meshsolution, field_name="mu", title="FEA Mesh"
     )

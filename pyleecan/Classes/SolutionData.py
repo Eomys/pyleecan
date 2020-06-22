@@ -10,6 +10,14 @@ from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from .Solution import Solution
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Mesh.SolutionData.get_field import get_field
+except ImportError as error:
+    get_field = error
+
+
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
@@ -25,6 +33,17 @@ class SolutionData(Solution):
 
     VERSION = 1
 
+    # cf Methods.Mesh.SolutionData.get_field
+    if isinstance(get_field, ImportError):
+        get_field = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SolutionData method get_field: " + str(get_field)
+                )
+            )
+        )
+    else:
+        get_field = get_field
     # save method is available in all object
     save = save
 

@@ -105,12 +105,12 @@ def solve_FEMM(self, output, sym, FEMM_dict):
                 self.is_sliding_band or Nt_tot == 1
             ):  # To make sure solution have the same size at every time step
                 if ii == 0:
-                    B = np.zeros([Nt_tot, meshFEMM[ii].cell["Triangle3"].nb_cell, 2])
-                    H = np.zeros([Nt_tot, meshFEMM[ii].cell["Triangle3"].nb_cell, 2])
+                    B = np.zeros([Nt_tot, meshFEMM[ii].cell["Triangle3"].nb_cell, 3])
+                    H = np.zeros([Nt_tot, meshFEMM[ii].cell["Triangle3"].nb_cell, 3])
                     mu = np.zeros([Nt_tot, meshFEMM[ii].cell["Triangle3"].nb_cell])
 
-                B[ii, :] = tmpB
-                H[ii, :] = tmpH
+                B[ii, :, 0:2] = tmpB
+                H[ii, :, 0:2] = tmpH
                 mu[ii, :] = tmpmu
 
     # Shift to take into account stator position

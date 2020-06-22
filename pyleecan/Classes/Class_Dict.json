@@ -4905,6 +4905,15 @@
                 "type": "[Solution]",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "Dimension of the physical problem",
+                "max": "3",
+                "min": "1",
+                "name": "dimension",
+                "type": "int",
+                "unit": "",
+                "value": 3
             }
         ]
     },
@@ -8712,7 +8721,9 @@
         "daughters": [],
         "desc": "Define a Solution with SciDataTool objects.",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_field"
+        ],
         "mother": "Solution",
         "name": "SolutionData",
         "package": "Mesh",

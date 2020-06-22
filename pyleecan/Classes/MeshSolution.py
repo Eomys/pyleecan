@@ -72,6 +72,7 @@ class MeshSolution(FrozenClass):
         mesh=list(),
         is_same_mesh=True,
         solution=list(),
+        dimension=3,
         init_dict=None,
         init_str=None,
     ):
@@ -97,6 +98,7 @@ class MeshSolution(FrozenClass):
             mesh = obj.mesh
             is_same_mesh = obj.is_same_mesh
             solution = obj.solution
+            dimension = obj.dimension
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -108,6 +110,8 @@ class MeshSolution(FrozenClass):
                 is_same_mesh = init_dict["is_same_mesh"]
             if "solution" in list(init_dict.keys()):
                 solution = init_dict["solution"]
+            if "dimension" in list(init_dict.keys()):
+                dimension = init_dict["dimension"]
         # Initialisation by argument
         self.parent = None
         self.label = label
@@ -164,6 +168,7 @@ class MeshSolution(FrozenClass):
             self.solution = list()
         else:
             self.solution = solution
+        self.dimension = dimension
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -190,6 +195,7 @@ class MeshSolution(FrozenClass):
         for ii in range(len(self.solution)):
             tmp = self.solution[ii].__str__().replace(linesep, linesep + "\t") + linesep
             MeshSolution_str += "solution[" + str(ii) + "] =" + tmp + linesep + linesep
+        MeshSolution_str += "dimension = " + str(self.dimension) + linesep
         return MeshSolution_str
 
     def __eq__(self, other):
@@ -204,6 +210,8 @@ class MeshSolution(FrozenClass):
         if other.is_same_mesh != self.is_same_mesh:
             return False
         if other.solution != self.solution:
+            return False
+        if other.dimension != self.dimension:
             return False
         return True
 
@@ -220,6 +228,7 @@ class MeshSolution(FrozenClass):
         MeshSolution_dict["solution"] = list()
         for obj in self.solution:
             MeshSolution_dict["solution"].append(obj.as_dict())
+        MeshSolution_dict["dimension"] = self.dimension
         # The class name is added to the dict fordeserialisation purpose
         MeshSolution_dict["__class__"] = "MeshSolution"
         return MeshSolution_dict
@@ -233,6 +242,7 @@ class MeshSolution(FrozenClass):
         self.is_same_mesh = None
         for obj in self.solution:
             obj._set_None()
+        self.dimension = None
 
     def _get_label(self):
         """getter of label"""
@@ -308,4 +318,21 @@ class MeshSolution(FrozenClass):
     # Type : [Solution]
     solution = property(
         fget=_get_solution, fset=_set_solution, doc=u"""A list of Solution objects"""
+    )
+
+    def _get_dimension(self):
+        """getter of dimension"""
+        return self._dimension
+
+    def _set_dimension(self, value):
+        """setter of dimension"""
+        check_var("dimension", value, "int", Vmin=1, Vmax=3)
+        self._dimension = value
+
+    # Dimension of the physical problem
+    # Type : int, min = 1, max = 3
+    dimension = property(
+        fget=_get_dimension,
+        fset=_set_dimension,
+        doc=u"""Dimension of the physical problem""",
     )

@@ -3,3 +3,4 @@ label,,(Optional) Descriptive name of the mesh,,str,None,,,,Mesh,,get_mesh,VERSI
 mesh,,A list of Mesh objects. ,,[Mesh],None,,,,,,get_solution,,,
 is_same_mesh,,"1 if the mesh is the same at each step (time, mode etc.)",,bool,1,,,,,,,,,
 solution,,A list of Solution objects,,[Solution],None,,,,,,,,,
+dimension,,Dimension of the physical problem,,int,3,1,3,,,,,,,

@@ -27,7 +27,6 @@ from ......Functions.FEMM import (
 STATOR_COLOR = config_dict["color_dict"]["STATOR_COLOR"]
 ROTOR_COLOR = config_dict["color_dict"]["ROTOR_COLOR"]
 SHAFT_COLOR = config_dict["color_dict"]["SHAFT_COLOR"]
-ROTOR_COLOR = config_dict["color_dict"]["ROTOR_COLOR"]
 FRAME_COLOR = config_dict["color_dict"]["FRAME_COLOR"]
 MAGNET_COLOR = config_dict["color_dict"]["MAGNET_COLOR"]
 BAR_COLOR = config_dict["color_dict"]["BAR_COLOR"]
@@ -35,9 +34,13 @@ SCR_COLOR = config_dict["color_dict"]["SCR_COLOR"]
 VENT_COLOR = config_dict["color_dict"]["VENT_COLOR"]
 VENT_EDGE = config_dict["color_dict"]["VENT_EDGE"]
 
+import pyvista as pv
+from numpy import real, pi, linspace, exp
+import meshio
+
 
 def plot_mesh(
-    self, j_t0=0, mesh=None, title="No title", group=None, elem_type=["Triangle3"]
+    self, meshsolution, field_name="", field_symbol="", j_t0=0, title="No title"
 ):
     """ Display mesh.
 
@@ -50,67 +53,47 @@ def plot_mesh(
     title : str
         Title of the figure
     """
+    name_file_vtk = "plot_mesh.vtk"
 
-    if group is None:
-        group = mesh.group
+    mesh_jt0 = meshsolution.get_mesh(j_t0=j_t0)
+    solution_jt0 = meshsolution.get_solution(
+        j_t0=j_t0, field_name=field_name, field_symbol=field_symbol
+    )
 
-    def showMeshPlot(mesh, elem_type, group, title, colors):
-        def triplot(mesh, elem_type, grp, color, ax=None, **kwargs):
+    points = mesh_jt0.get_point(["All"])
+    connect = mesh_jt0.get_cell(["All"])
 
-            if not ax:
-                ax = plt.gca()
+    cells = [("triangle", connect)]
 
-            verts, nb_elem = mesh.get_vertice(elem_type, grp)
-            pc = matplotlib.collections.PolyCollection(verts, **kwargs)
-            col = np.ones(nb_elem)
-            pc.set_facecolor(color)
-            ax.add_collection(pc)
-            ax.autoscale()
-            return pc
+    # Write .vtk file using meshio
+    meshio.write_points_cells(
+        filename="mesh.vtk", points=points, cells=cells, cell_data=solution_jt0,
+    )
 
-        fig, ax = plt.subplots()
-        # fig.show()
-        ax.set_aspect("equal")
+    meshio.write(name_file_vtk)
 
-        for type in elem_type:
-            ik = 0
-            for grp in group:
-                pc = triplot(
-                    mesh,
-                    type,
-                    grp,
-                    colors[ik],
-                    ax=ax,
-                    lw=0.1,
-                    edgecolor="black",
-                    cmap="rainbow",
-                )
-                ik = ik + 1
+    # Read .vtk file with pyvista
+    mesh = pv.read(name_file_vtk)
+    mesh2 = mesh.warp_by_vector()
 
-        # nodes, tags = mesh.get_all_node_coord()
-        # x = nodes[:, 0]
-        # y = nodes[:, 1]
-        # ax.plot(x, y, marker=".", markersize=0.1, ls="", color="white")
+    # Plot
+    pv.set_plot_theme("document")
+    p = pv.Plotter(notebook=False)
+    sargs = dict(interactive=True, n_colors=50)
 
-        ax.set(title=title, xlabel="Y Axis", ylabel="Z Axis")
-        return fig, ax
+    p.add_mesh(
+        mesh2,
+        color="grey",
+        # opacity=0.5,
+        show_edges=True,
+        edge_color="white",
+        line_width=0.0001,
+        # clim=[-3.6e-12, 3.6e-12],
+        # cmap="RdBu_r",
+        # scalar_bar_args=sargs
+    )
+    p.remove_scalar_bar()
+    p.show(use_panel=False, auto_close=False)
 
-    colors = list()
-    for grp in group:
-        if grp == GROUP_SC:
-            color = STATOR_COLOR
-        elif grp == GROUP_RC:
-            color = ROTOR_COLOR
-        elif grp == GROUP_IN:
-            color = SHAFT_COLOR
-        elif grp == GROUP_RW:
-            color = "r"
-        elif grp == GROUP_SV or grp == GROUP_RV:
-            color = VENT_COLOR
-        else:
-            color = "w"
-
-        colors.extend(color)
-
-    fig, ax = showMeshPlot(mesh, elem_type, group, title, colors)
-    fig.show()
+    # Close movie and delete object
+    p.close()
