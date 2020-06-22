@@ -58,7 +58,7 @@ except ImportError as error:
     get_all_connectivity = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_connectivity import get_connectivity
+    from ..Methods.Mesh.MeshMat.get_cell import get_connectivity
 except ImportError as error:
     get_connectivity = error
 

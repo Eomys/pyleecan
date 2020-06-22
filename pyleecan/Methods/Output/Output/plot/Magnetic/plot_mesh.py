@@ -40,7 +40,7 @@ import meshio
 
 
 def plot_mesh(
-    self, meshsolution, field_name="", field_symbol="", j_t0=0, title="No title"
+    self, meshsolution, field_name="", field_symbol="\mu", j_t0=0, title="No title"
 ):
     """ Display mesh.
 
@@ -60,8 +60,8 @@ def plot_mesh(
         j_t0=j_t0, field_name=field_name, field_symbol=field_symbol
     )
 
-    points = mesh_jt0.get_point(["All"])
-    connect = mesh_jt0.get_cell(["All"])
+    points = mesh_jt0.get_point()
+    connect = mesh_jt0.get_cell()
 
     cells = [("triangle", connect)]
 
