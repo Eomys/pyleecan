@@ -805,8 +805,6 @@
         "methods": [
             "comp_parameters",
             "solve_EEC",
-            "comp_losses",
-            "comp_torque",
             "gen_drive"
         ],
         "mother": "EEC",
@@ -842,7 +840,7 @@
                 "value": {}
             },
             {
-                "desc": "",
+                "desc": "Frequency",
                 "max": "",
                 "min": "",
                 "name": "freq0",
@@ -903,9 +901,7 @@
         ],
         "desc": "Electric module: Flux Linkage",
         "is_internal": false,
-        "methods": [
-            "comp_fluxlinkage"
-        ],
+        "methods": [],
         "mother": "",
         "name": "FluxLink",
         "package": "Simulation",
@@ -2450,9 +2446,7 @@
         ],
         "desc": "Electric module: Magnetic Inductance",
         "is_internal": false,
-        "methods": [
-            "comp_inductance"
-        ],
+        "methods": [],
         "mother": "",
         "name": "IndMag",
         "package": "Simulation",
@@ -2832,7 +2826,8 @@
             "plot",
             "comp_radius_mid_yoke",
             "has_magnet",
-            "comp_angle_d_axis"
+            "comp_angle_d_axis",
+            "comp_sym"
         ],
         "mother": "Lamination",
         "name": "LamHole",
@@ -2884,7 +2879,8 @@
             "comp_height_yoke",
             "get_Zs",
             "get_bore_desc",
-            "comp_radius_mid_yoke"
+            "comp_radius_mid_yoke",
+            "comp_sym"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -2920,7 +2916,8 @@
             "comp_surfaces",
             "comp_volumes",
             "plot",
-            "comp_angle_d_axis"
+            "comp_angle_d_axis",
+            "comp_sym"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",
@@ -3007,7 +3004,8 @@
             "comp_mmf_unit",
             "comp_rot_dir",
             "comp_lengths_winding",
-            "comp_number_phase_eq"
+            "comp_number_phase_eq",
+            "comp_sym"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
@@ -3049,7 +3047,8 @@
             "check",
             "comp_length_ring",
             "plot",
-            "comp_number_phase_eq"
+            "comp_number_phase_eq",
+            "comp_sym"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
@@ -3300,7 +3299,8 @@
             "comp_length_airgap_active",
             "get_polar_eq",
             "plot_anim_rotor",
-            "get_material_list"
+            "get_material_list",
+            "comp_sym"
         ],
         "mother": "",
         "name": "Machine",
@@ -5582,7 +5582,7 @@
                 "name": "Currents",
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "-",
-                "value": ""
+                "value": "None"
             }
         ]
     },
@@ -5931,9 +5931,9 @@
                 "max": "",
                 "min": "",
                 "name": "Tem",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "N.m",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Average Electromagnetic torque",

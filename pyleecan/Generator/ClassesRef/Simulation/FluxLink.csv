@@ -1,2 +1,2 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
-,,,,,,,,,Simulation,,comp_fluxlinkage,VERSION,1,Electric module: Flux Linkage,FluxLinkFEMM
+,,,,,,,,,Simulation,,,VERSION,1,Electric module: Flux Linkage,FluxLinkFEMM

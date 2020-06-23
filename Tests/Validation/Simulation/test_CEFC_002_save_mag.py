@@ -82,20 +82,27 @@ def test_CEFC_002():
         meshsolution=out.mag.meshsolution, field_symbol="H",
     )
 
+    # Test save with MeshSolution object in out
+    out.save(save_path=save_path)
+    # Test save with MeshSolution object in out
+    out.save(save_path=save_path + "\Output.json")
 
-#     # Test save with MeshSolution object in out
-#     load_path = join(save_path, "Output.json")
-#     out.save(save_path=load_path)
-#
-#
-# def test_CEFC_002_load():
-#     load_path = join(load_results_path, "Output.json")
-#     # Test to load the Meshsolution object (inside the output):
-#     with open(load_path) as json_file:
-#         json_tmp = json.load(json_file)
-#         FEMM = Output(init_dict=json_tmp)
-#
-#     # To test that the "mu" is still a ndarray after saving and loading
-#     FEMM.plot_mesh(
-#         meshsolution=FEMM.mag.meshsolution, field_symbol="\mu",
-#     )
+
+    load_path = join(save_path, "Output.json")
+    # Test to load the Meshsolution object (inside the output):
+    with open(load_path) as json_file:
+        json_tmp = json.load(json_file)
+        FEMM = Output(init_dict=json_tmp)
+
+    # [Important] To test that fields are still working after saving and loading
+    FEMM.plot_mesh(
+        meshsolution=FEMM.mag.meshsolution, field_symbol="\mu",
+    )
+
+    out.plot_mesh(
+        meshsolution=out.mag.meshsolution, field_symbol="B",
+    )
+
+    out.plot_mesh(
+        meshsolution=out.mag.meshsolution, field_symbol="H",
+    )

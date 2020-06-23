@@ -10,14 +10,6 @@ from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ._frozen import FrozenClass
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Simulation.FluxLink.comp_fluxlinkage import comp_fluxlinkage
-except ImportError as error:
-    comp_fluxlinkage = error
-
-
 from ._check import InitUnKnowClassError
 
 
@@ -26,18 +18,6 @@ class FluxLink(FrozenClass):
 
     VERSION = 1
 
-    # cf Methods.Simulation.FluxLink.comp_fluxlinkage
-    if isinstance(comp_fluxlinkage, ImportError):
-        comp_fluxlinkage = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use FluxLink method comp_fluxlinkage: "
-                    + str(comp_fluxlinkage)
-                )
-            )
-        )
-    else:
-        comp_fluxlinkage = comp_fluxlinkage
     # save method is available in all object
     save = save
 
