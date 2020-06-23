@@ -22,7 +22,7 @@ class unittest_interface(TestCase):
         self.other_mesh.node = self.mesh.node
 
     def test_ElementMat_NodeMat_flat(self):
-        """unittest with ElementDict and NodeMat objects"""
+        """unittest with ElementDict and PointMat objects"""
 
         self.mesh.add_element([0, 1, 2], "Triangle3")
         self.mesh.add_element([2, 3, 4], "Triangle3")
@@ -52,7 +52,7 @@ class unittest_interface(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_ElementMat_NodeMat_corner_ext(self):
-        """unittest with ElementMat and NodeMat objects, extract interface from the external mesh point of view"""
+        """unittest with CellMat and PointMat objects, extract interface from the external mesh point of view"""
         self.mesh.add_element([0, 1, 2], "Triangle3")
         self.mesh.add_element([1, 2, 3], "Triangle3")
         self.mesh.add_element([1, 5, 4], "Triangle3")
@@ -78,7 +78,7 @@ class unittest_interface(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_ElementMat_NodeMat_corner_int(self):
-        """unittest with ElementMat and NodeMat objects, extract interface from the internal mesh point of view"""
+        """unittest with CellMat and PointMat objects, extract interface from the internal mesh point of view"""
         self.mesh.add_element([0, 1, 2], "Triangle3")
         self.mesh.add_element([1, 2, 3], "Triangle3")
         self.mesh.add_element([1, 5, 4], "Triangle3")
@@ -104,7 +104,7 @@ class unittest_interface(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_ElementMat_NodeMat_self(self):
-        """unittest with ElementMat and NodeMat objects, extract interface on itself"""
+        """unittest with CellMat and PointMat objects, extract interface on itself"""
         self.mesh.add_element([0, 1, 2], "Triangle3")
         self.mesh.add_element([0, 2, 3], "Triangle3")
         self.mesh.add_element([0, 3, 4], "Triangle3")

@@ -13,9 +13,9 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Mesh.CellMat.add_element import add_element
+    from ..Methods.Mesh.CellMat.add_cell import add_cell
 except ImportError as error:
-    add_element = error
+    add_cell = error
 
 try:
     from ..Methods.Mesh.CellMat.get_all_connectivity import get_all_connectivity
@@ -38,9 +38,9 @@ except ImportError as error:
     get_group = error
 
 try:
-    from ..Methods.Mesh.CellMat.get_node2element import get_node2element
+    from ..Methods.Mesh.CellMat.get_point2cell import get_point2cell
 except ImportError as error:
-    get_node2element = error
+    get_point2cell = error
 
 try:
     from ..Methods.Mesh.CellMat.is_exist import is_exist
@@ -58,15 +58,15 @@ class CellMat(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.CellMat.add_element
-    if isinstance(add_element, ImportError):
-        add_element = property(
+    # cf Methods.Mesh.CellMat.add_cell
+    if isinstance(add_cell, ImportError):
+        add_cell = property(
             fget=lambda x: raise_(
-                ImportError("Can't use CellMat method add_element: " + str(add_element))
+                ImportError("Can't use CellMat method add_cell: " + str(add_cell))
             )
         )
     else:
-        add_element = add_element
+        add_cell = add_cell
     # cf Methods.Mesh.CellMat.get_all_connectivity
     if isinstance(get_all_connectivity, ImportError):
         get_all_connectivity = property(
@@ -112,18 +112,17 @@ class CellMat(FrozenClass):
         )
     else:
         get_group = get_group
-    # cf Methods.Mesh.CellMat.get_node2element
-    if isinstance(get_node2element, ImportError):
-        get_node2element = property(
+    # cf Methods.Mesh.CellMat.get_point2cell
+    if isinstance(get_point2cell, ImportError):
+        get_point2cell = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use CellMat method get_node2element: "
-                    + str(get_node2element)
+                    "Can't use CellMat method get_point2cell: " + str(get_point2cell)
                 )
             )
         )
     else:
-        get_node2element = get_node2element
+        get_point2cell = get_point2cell
     # cf Methods.Mesh.CellMat.is_exist
     if isinstance(is_exist, ImportError):
         is_exist = property(
@@ -149,7 +148,7 @@ class CellMat(FrozenClass):
         self,
         connectivity=None,
         nb_cell=0,
-        nb_point_per_cell=0,
+        nb_pt_per_cell=0,
         group=None,
         indice=None,
         init_dict=None,
@@ -175,7 +174,7 @@ class CellMat(FrozenClass):
             assert type(obj) is type(self)
             connectivity = obj.connectivity
             nb_cell = obj.nb_cell
-            nb_point_per_cell = obj.nb_point_per_cell
+            nb_pt_per_cell = obj.nb_pt_per_cell
             group = obj.group
             indice = obj.indice
         if init_dict is not None:  # Initialisation by dict
@@ -185,8 +184,8 @@ class CellMat(FrozenClass):
                 connectivity = init_dict["connectivity"]
             if "nb_cell" in list(init_dict.keys()):
                 nb_cell = init_dict["nb_cell"]
-            if "nb_point_per_cell" in list(init_dict.keys()):
-                nb_point_per_cell = init_dict["nb_point_per_cell"]
+            if "nb_pt_per_cell" in list(init_dict.keys()):
+                nb_pt_per_cell = init_dict["nb_pt_per_cell"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
             if "indice" in list(init_dict.keys()):
@@ -196,7 +195,7 @@ class CellMat(FrozenClass):
         # connectivity can be None, a ndarray or a list
         set_array(self, "connectivity", connectivity)
         self.nb_cell = nb_cell
-        self.nb_point_per_cell = nb_point_per_cell
+        self.nb_pt_per_cell = nb_pt_per_cell
         # group can be None, a ndarray or a list
         set_array(self, "group", group)
         # indice can be None, a ndarray or a list
@@ -221,7 +220,7 @@ class CellMat(FrozenClass):
             + linesep
         )
         CellMat_str += "nb_cell = " + str(self.nb_cell) + linesep
-        CellMat_str += "nb_point_per_cell = " + str(self.nb_point_per_cell) + linesep
+        CellMat_str += "nb_pt_per_cell = " + str(self.nb_pt_per_cell) + linesep
         CellMat_str += (
             "group = "
             + linesep
@@ -247,7 +246,7 @@ class CellMat(FrozenClass):
             return False
         if other.nb_cell != self.nb_cell:
             return False
-        if other.nb_point_per_cell != self.nb_point_per_cell:
+        if other.nb_pt_per_cell != self.nb_pt_per_cell:
             return False
         if not array_equal(other.group, self.group):
             return False
@@ -265,7 +264,7 @@ class CellMat(FrozenClass):
         else:
             CellMat_dict["connectivity"] = self.connectivity.tolist()
         CellMat_dict["nb_cell"] = self.nb_cell
-        CellMat_dict["nb_point_per_cell"] = self.nb_point_per_cell
+        CellMat_dict["nb_pt_per_cell"] = self.nb_pt_per_cell
         if self.group is None:
             CellMat_dict["group"] = None
         else:
@@ -283,7 +282,7 @@ class CellMat(FrozenClass):
 
         self.connectivity = None
         self.nb_cell = None
-        self.nb_point_per_cell = None
+        self.nb_pt_per_cell = None
         self.group = None
         self.indice = None
 
@@ -324,20 +323,20 @@ class CellMat(FrozenClass):
         fget=_get_nb_cell, fset=_set_nb_cell, doc=u"""Total number of elements"""
     )
 
-    def _get_nb_point_per_cell(self):
-        """getter of nb_point_per_cell"""
-        return self._nb_point_per_cell
+    def _get_nb_pt_per_cell(self):
+        """getter of nb_pt_per_cell"""
+        return self._nb_pt_per_cell
 
-    def _set_nb_point_per_cell(self, value):
-        """setter of nb_point_per_cell"""
-        check_var("nb_point_per_cell", value, "int")
-        self._nb_point_per_cell = value
+    def _set_nb_pt_per_cell(self, value):
+        """setter of nb_pt_per_cell"""
+        check_var("nb_pt_per_cell", value, "int")
+        self._nb_pt_per_cell = value
 
     # Define the number of node per element
     # Type : int
-    nb_point_per_cell = property(
-        fget=_get_nb_point_per_cell,
-        fset=_set_nb_point_per_cell,
+    nb_pt_per_cell = property(
+        fget=_get_nb_pt_per_cell,
+        fset=_set_nb_pt_per_cell,
         doc=u"""Define the number of node per element""",
     )
 

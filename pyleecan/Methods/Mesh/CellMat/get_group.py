@@ -9,21 +9,19 @@ def get_group(self, group_number):
 
      Parameters
      ----------
-     self : ElementMat
-         an ElementMat object
+     self : CellMat
+         an CellMat object
      group_number : int
          a group number which define the elements which constitute the submesh
 
      Returns
      -------
-     subelem: ElementMat
-         an ElementMat which is a submesh of parent mesh self related to group_number
+     subelem: CellMat
+         an CellMat which is a submesh of parent mesh self related to group_number
 
      """
-    module = __import__(
-        PACKAGE_NAME + ".Classes." + "ElementMat", fromlist=["ElementMat"]
-    )
-    grp_elem = getattr(module, "ElementMat")()
+    module = __import__(PACKAGE_NAME + ".Classes." + "CellMat", fromlist=["CellMat"])
+    grp_elem = getattr(module, "CellMat")()
 
     connect_parent = self.connectivity
     groups = self.group

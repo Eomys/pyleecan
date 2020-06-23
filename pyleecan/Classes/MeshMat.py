@@ -13,19 +13,24 @@ from .Mesh import Mesh
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Mesh.MeshMat.get_points import get_points
+    from ..Methods.Mesh.MeshMat.get_point import get_point
 except ImportError as error:
-    get_points = error
+    get_point = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_cells import get_cells
+    from ..Methods.Mesh.MeshMat.get_cell import get_cell
 except ImportError as error:
-    get_cells = error
+    get_cell = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_normals import get_normals
+    from ..Methods.Mesh.MeshMat.get_mesh import get_mesh
 except ImportError as error:
-    get_normals = error
+    get_mesh = error
+
+try:
+    from ..Methods.Mesh.MeshMat.get_normal import get_normal
+except ImportError as error:
+    get_normal = error
 
 try:
     from ..Methods.Mesh.MeshMat.get_surf import get_surf
@@ -43,29 +48,9 @@ except ImportError as error:
     set_submesh = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_all_node_coord import get_all_node_coord
+    from ..Methods.Mesh.MeshMat.add_cell import add_cell
 except ImportError as error:
-    get_all_node_coord = error
-
-try:
-    from ..Methods.Mesh.MeshMat.add_element import add_element
-except ImportError as error:
-    add_element = error
-
-try:
-    from ..Methods.Mesh.MeshMat.get_all_connectivity import get_all_connectivity
-except ImportError as error:
-    get_all_connectivity = error
-
-try:
-    from ..Methods.Mesh.MeshMat.get_cell import get_connectivity
-except ImportError as error:
-    get_connectivity = error
-
-try:
-    from ..Methods.Mesh.MeshMat.get_new_tag import get_new_tag
-except ImportError as error:
-    get_new_tag = error
+    add_cell = error
 
 try:
     from ..Methods.Mesh.MeshMat.interface import interface
@@ -123,33 +108,42 @@ class MeshMat(Mesh):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.MeshMat.get_points
-    if isinstance(get_points, ImportError):
-        get_points = property(
+    # cf Methods.Mesh.MeshMat.get_point
+    if isinstance(get_point, ImportError):
+        get_point = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_points: " + str(get_points))
+                ImportError("Can't use MeshMat method get_point: " + str(get_point))
             )
         )
     else:
-        get_points = get_points
-    # cf Methods.Mesh.MeshMat.get_cells
-    if isinstance(get_cells, ImportError):
-        get_cells = property(
+        get_point = get_point
+    # cf Methods.Mesh.MeshMat.get_cell
+    if isinstance(get_cell, ImportError):
+        get_cell = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_cells: " + str(get_cells))
+                ImportError("Can't use MeshMat method get_cell: " + str(get_cell))
             )
         )
     else:
-        get_cells = get_cells
-    # cf Methods.Mesh.MeshMat.get_normals
-    if isinstance(get_normals, ImportError):
-        get_normals = property(
+        get_cell = get_cell
+    # cf Methods.Mesh.MeshMat.get_mesh
+    if isinstance(get_mesh, ImportError):
+        get_mesh = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_normals: " + str(get_normals))
+                ImportError("Can't use MeshMat method get_mesh: " + str(get_mesh))
             )
         )
     else:
-        get_normals = get_normals
+        get_mesh = get_mesh
+    # cf Methods.Mesh.MeshMat.get_normal
+    if isinstance(get_normal, ImportError):
+        get_normal = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method get_normal: " + str(get_normal))
+            )
+        )
+    else:
+        get_normal = get_normal
     # cf Methods.Mesh.MeshMat.get_surf
     if isinstance(get_surf, ImportError):
         get_surf = property(
@@ -179,60 +173,15 @@ class MeshMat(Mesh):
         )
     else:
         set_submesh = set_submesh
-    # cf Methods.Mesh.MeshMat.get_all_node_coord
-    if isinstance(get_all_node_coord, ImportError):
-        get_all_node_coord = property(
+    # cf Methods.Mesh.MeshMat.add_cell
+    if isinstance(add_cell, ImportError):
+        add_cell = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshMat method get_all_node_coord: "
-                    + str(get_all_node_coord)
-                )
+                ImportError("Can't use MeshMat method add_cell: " + str(add_cell))
             )
         )
     else:
-        get_all_node_coord = get_all_node_coord
-    # cf Methods.Mesh.MeshMat.add_element
-    if isinstance(add_element, ImportError):
-        add_element = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method add_element: " + str(add_element))
-            )
-        )
-    else:
-        add_element = add_element
-    # cf Methods.Mesh.MeshMat.get_all_connectivity
-    if isinstance(get_all_connectivity, ImportError):
-        get_all_connectivity = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshMat method get_all_connectivity: "
-                    + str(get_all_connectivity)
-                )
-            )
-        )
-    else:
-        get_all_connectivity = get_all_connectivity
-    # cf Methods.Mesh.MeshMat.get_connectivity
-    if isinstance(get_connectivity, ImportError):
-        get_connectivity = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshMat method get_connectivity: "
-                    + str(get_connectivity)
-                )
-            )
-        )
-    else:
-        get_connectivity = get_connectivity
-    # cf Methods.Mesh.MeshMat.get_new_tag
-    if isinstance(get_new_tag, ImportError):
-        get_new_tag = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_new_tag: " + str(get_new_tag))
-            )
-        )
-    else:
-        get_new_tag = get_new_tag
+        add_cell = add_cell
     # cf Methods.Mesh.MeshMat.interface
     if isinstance(interface, ImportError):
         interface = property(

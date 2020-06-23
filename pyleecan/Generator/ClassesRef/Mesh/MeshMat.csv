@@ -1,15 +1,12 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-cell,,Storing connectivity,,{CellMat},,,,,Mesh,Mesh,get_points,VERSION,1,Gather the mesh storage format
-point,,Storing nodes,,PointMat,,,,,,,get_cells,,,
-submesh,,Storing submeshes. Node and element numbers/tags or group must be the same.,,[Mesh],,,,,,,get_normals,,,
-group,,Contain all possible group numbers,,ndarray,,,,,,,get_surf,,,
+cell,,Storing connectivity,,{CellMat},,,,,Mesh,Mesh,get_point,VERSION,1,Gather the mesh storage format
+point,,Storing nodes,,PointMat,,,,,,,get_cell,,,
+submesh,,Storing submeshes. Node and element numbers/tags or group must be the same.,,[Mesh],,,,,,,get_mesh,,,
+group,,Contain all possible group numbers,,ndarray,,,,,,,get_normal,,,
+,,,,,,,,,,,get_surf,,,
 ,,,,,,,,,,,get_cell_area,,,
 ,,,,,,,,,,,set_submesh,,,
-,,,,,,,,,,,get_all_node_coord,,,
-,,,,,,,,,,,add_element,,,
-,,,,,,,,,,,get_all_connectivity,,,
-,,,,,,,,,,,get_connectivity,,,
-,,,,,,,,,,,get_new_tag,,,
+,,,,,,,,,,,add_cell,,,
 ,,,,,,,,,,,interface,,,
 ,,,,,,,,,,,get_node_tags,,,
 ,,,,,,,,,,,get_vertice,,,

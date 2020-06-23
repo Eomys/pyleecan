@@ -5,12 +5,12 @@ import numpy as np
 
 
 def get_group(self, element):
-    """Define a new NodeMat object based on a set of elements.
+    """Define a new PointMat object based on a set of elements.
 
      Parameters
      ----------
-     self : NodeMat
-         an NodeMat object
+     self : PointMat
+         an PointMat object
      element : Element
          an Element object
 
@@ -20,8 +20,8 @@ def get_group(self, element):
          a Node object corresponding to Element
 
      """
-    module = __import__(PACKAGE_NAME + ".Classes." + "NodeMat", fromlist=["NodeMat"])
-    node = getattr(module, "NodeMat")()
+    module = __import__(PACKAGE_NAME + ".Classes." + "PointMat", fromlist=["PointMat"])
+    node = getattr(module, "PointMat")()
 
     node_tags = element.get_all_node_tags()
 

@@ -28,7 +28,7 @@ class unittest_get_vertice(TestCase):
         self.mesh.add_element(np.array([4, 3]), "Segment2", group=int(2))
 
     def test_ElementMat_empty(self):
-        """unittest with ElementMat object. Test for empty Mesh"""
+        """unittest with CellMat object. Test for empty Mesh"""
 
         solution = 0
         result = self.mesh.get_vertice("Quad4")[0]
@@ -43,7 +43,7 @@ class unittest_get_vertice(TestCase):
         self.assertAlmostEqual(testA, solution, msg=msg, delta=DELTA)
 
     def test_ElementMat_seg(self):
-        """unittest with ElementMat object. Test for empty Mesh"""
+        """unittest with CellMat object. Test for empty Mesh"""
 
         solution = 4
         result = self.mesh.get_vertice("Segment2")[0]
@@ -58,7 +58,7 @@ class unittest_get_vertice(TestCase):
         self.assertAlmostEqual(testA, solution, msg=msg, delta=DELTA)
 
     def test_ElementMat_tgl(self):
-        """unittest with ElementMat object. Test for empty Mesh"""
+        """unittest with CellMat object. Test for empty Mesh"""
 
         solution = 18
         result = self.mesh.get_vertice("Triangle3")[0]

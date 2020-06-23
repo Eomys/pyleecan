@@ -25,7 +25,7 @@ class unittest_get_all_node_coord(TestCase):
         self.mesh.node.add_node([2, -1])
 
     def test_NodeMat_ElementMat_coord(self):
-        """unittest with NodeMat and ElementMat objects"""
+        """unittest with PointMat and CellMat objects"""
 
         result, res_tags = self.mesh.get_all_node_coord()
         solution = np.array([[0, 0], [1, 0], [0, 1], [1, -1], [2, -1]])
@@ -35,7 +35,7 @@ class unittest_get_all_node_coord(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_NodeMat_ElementMat_tags(self):
-        """unittest with NodeMat and ElementMat objects"""
+        """unittest with PointMat and CellMat objects"""
 
         result, res_tags = self.mesh.get_all_node_coord()
         solution = np.array([0, 1, 2, 3, 4])
@@ -45,7 +45,7 @@ class unittest_get_all_node_coord(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_NodeMat_ElementMat_group(self):
-        """unittest with NodeMat and ElementMat objects"""
+        """unittest with PointMat and CellMat objects"""
 
         result, res_tags = self.mesh.get_all_node_coord(2)
         solution = np.array([1, 2, 3, 4])

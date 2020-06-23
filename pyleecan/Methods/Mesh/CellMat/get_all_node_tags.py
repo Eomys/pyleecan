@@ -8,8 +8,8 @@ def get_all_node_tags(self):
 
     Parameters
     ----------
-    self : ElementMat
-        an ElementMat object
+    self : CellMat
+        an CellMat object
 
     Returns
     -------

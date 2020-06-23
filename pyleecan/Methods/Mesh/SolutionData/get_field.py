@@ -29,8 +29,6 @@ def get_field(
             else:  # scalar
                 field = self.field.get_along("time", "indice")[self.field.symbol]
 
-
-
         elif indice is None and direction is None:
             if "direction" in [axis.name for axis in self.field.axes]:  # Vector
                 field = self.field.get_along(
@@ -42,7 +40,6 @@ def get_field(
                 ]
 
             return field
-
 
     else:
         return None

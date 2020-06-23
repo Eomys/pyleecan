@@ -15,7 +15,7 @@ class unittest_get_all_connectivity(TestCase):
         self.mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)
 
     def test_ElementMat_empty(self):
-        """unittest with ElementMat object. Test for empty Mesh"""
+        """unittest with CellMat object. Test for empty Mesh"""
 
         solution = np.array([])
         result, tags = self.mesh.get_all_connectivity("Segment2")
@@ -25,7 +25,7 @@ class unittest_get_all_connectivity(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_ElementMat_1seg(self):
-        """unittest with ElementMat object. Test for 1 segment."""
+        """unittest with CellMat object. Test for 1 segment."""
 
         node_tags = np.array([0, 1])
         self.mesh.add_element(node_tags, "Segment2")
@@ -37,7 +37,7 @@ class unittest_get_all_connectivity(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_ElementMat_2seg(self):
-        """unittest with ElementMat object. Test with 2 segment."""
+        """unittest with CellMat object. Test with 2 segment."""
 
         self.mesh.add_element([0, 1], "Segment2")
         self.mesh.add_element([1, 2], "Segment2")
@@ -49,7 +49,7 @@ class unittest_get_all_connectivity(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_ElementMat_2seg_1tgl(self):
-        """unittest with ElementMat object. Test with 2 segment and 1 tgl."""
+        """unittest with CellMat object. Test with 2 segment and 1 tgl."""
 
         self.mesh.add_element([0, 1], "Segment2")
         self.mesh.add_element([1, 2], "Segment2")
@@ -62,7 +62,7 @@ class unittest_get_all_connectivity(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_ElementMat_2seg_2tgl(self):
-        """unittest with ElementMat object. Test with 2 segment and 2 tgl."""
+        """unittest with CellMat object. Test with 2 segment and 2 tgl."""
 
         self.mesh.add_element([0, 1], "Segment2")
         self.mesh.add_element([1, 2], "Segment2")
@@ -76,7 +76,7 @@ class unittest_get_all_connectivity(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_ElementMat_3seg_2tgl_1group(self):
-        """unittest with ElementMat object. Test for 1 triangle in a group."""
+        """unittest with CellMat object. Test for 1 triangle in a group."""
 
         self.mesh.add_element([0, 1], "Segment2")
         self.mesh.add_element([1, 2], "Segment2")
@@ -101,7 +101,7 @@ class unittest_get_all_connectivity(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_ElementMat_3seg_2tgl_2group(self):
-        """unittest with ElementMat object. Test for 2 triangle in a group."""
+        """unittest with CellMat object. Test for 2 triangle in a group."""
 
         self.mesh.add_element([0, 1], "Segment2")
         self.mesh.add_element([1, 2], "Segment2")

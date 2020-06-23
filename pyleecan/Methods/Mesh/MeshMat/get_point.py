@@ -27,5 +27,4 @@ def get_point(self, indice=None, is_indice=False):
         else:
             return self.point.coordinate
     else:
-            return self.point.coordinate[indice,:]
-
+        return self.point.coordinate[indice, :]

@@ -3,14 +3,14 @@
 import numpy as np
 
 
-def get_vertice(self, elem_type=None, group=None):
-    """Return a connectivity matrix where the node tags are replaced by their coordinates.
+def get_vertice(self, elem_type=None):
+    """Return a connectivity matrix where the points indices are replaced by their coordinates.
 
     Parameters
     ----------
     self : Mesh
         an Mesh object
-    elem_type : str
+    cell_type : str
         a key corresponding to an element type
     group : numpy.array
         One or several group numbers to be returned
@@ -22,9 +22,7 @@ def get_vertice(self, elem_type=None, group=None):
 
     """
 
-    connect_select, tags_select = self.get_all_connectivity(elem_type, group)
-    nb_elem = len(tags_select)
-    nb_node_per_elem = self.element[elem_type].nb_node_per_element
+    cells = self.get_cell()
 
     if nb_elem == 1:
         vertices = np.zeros((nb_node_per_elem, 2))

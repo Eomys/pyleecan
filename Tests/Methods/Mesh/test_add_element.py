@@ -15,7 +15,7 @@ class unittest_add_element(TestCase):
         self.mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)
 
     def test_Mesh_ElementMat_1seg(self):
-        """unittest with ElementMat and only 1 segment element"""
+        """unittest with CellMat and only 1 segment element"""
 
         node_tags = np.array([0, 1])
         self.mesh.add_element(node_tags, "Segment2")
@@ -42,7 +42,7 @@ class unittest_add_element(TestCase):
         )
 
     def test_Mesh_ElementMat_2elem(self):
-        """unittest with ElementMat and 2 segment element"""
+        """unittest with CellMat and 2 segment element"""
 
         node_tags = np.array([0, 1])
         self.mesh.add_element(node_tags, "Segment2")
@@ -62,7 +62,7 @@ class unittest_add_element(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_Mesh_ElementMat_2elem_1tgl(self):
-        """unittest with ElementMat and 2 segment element and 1 triangle"""
+        """unittest with CellMat and 2 segment element and 1 triangle"""
 
         self.mesh.add_element(np.array([0, 1]), "Segment2")
         self.mesh.add_element(np.array([1, 2]), "Segment2")
@@ -80,7 +80,7 @@ class unittest_add_element(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_Mesh_ElementMat_2elem_1tgl_add_seg_exist(self):
-        """unittest with ElementMat and 2 segment element and 1 triangle, try to add an already existing segment."""
+        """unittest with CellMat and 2 segment element and 1 triangle, try to add an already existing segment."""
 
         self.mesh.add_element(np.array([0, 1]), "Segment2")
         self.mesh.add_element(np.array([1, 2]), "Segment2")
@@ -99,7 +99,7 @@ class unittest_add_element(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_Mesh_ElementMat_2elem_1tgl_add_tgl_exist(self):
-        """unittest with ElementMat and 2 segment element and 1 triangle, try to add an already existing triangle."""
+        """unittest with CellMat and 2 segment element and 1 triangle, try to add an already existing triangle."""
 
         self.mesh.add_element(np.array([0, 1]), "Segment2")
         self.mesh.add_element(np.array([1, 2]), "Segment2")
@@ -118,7 +118,7 @@ class unittest_add_element(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_Mesh_ElementMat_2elem_2tgl(self):
-        """unittest with ElementMat and 2 segment element and 1 triangle, add 1 triangle."""
+        """unittest with CellMat and 2 segment element and 1 triangle, add 1 triangle."""
 
         self.mesh.add_element(np.array([0, 1]), "Segment2")
         self.mesh.add_element(np.array([1, 2]), "Segment2")
@@ -137,7 +137,7 @@ class unittest_add_element(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_Mesh_ElementMat_2elem_2tgl_add_tgl_group(self):
-        """unittest with ElementMat and 2 segment element and 1 triangle, add 1 triangle with a group number."""
+        """unittest with CellMat and 2 segment element and 1 triangle, add 1 triangle with a group number."""
 
         self.mesh.add_element(np.array([0, 1]), "Segment2")
         self.mesh.add_element(np.array([1, 2]), "Segment2")
@@ -152,7 +152,7 @@ class unittest_add_element(TestCase):
         self.assertTrue(testA, msg=msg)
 
     def test_Mesh_ElementMat_add_stupid(self):
-        """unittest with ElementMat and 2 segment element and 1 triangle, add 1 triangle with a group number."""
+        """unittest with CellMat and 2 segment element and 1 triangle, add 1 triangle with a group number."""
 
         self.mesh.add_element(np.array([0, 1]), "Segment2")
         self.mesh.add_element(None, "Segment2")

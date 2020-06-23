@@ -8,8 +8,8 @@ def get_coord(self, node_tags):
 
      Parameters
      ----------
-     self : NodeMat
-         an NodeMat object
+     self : PointMat
+         an PointMat object
      node_tags : np.array
          an array of node tags
 

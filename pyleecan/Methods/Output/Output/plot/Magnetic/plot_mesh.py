@@ -61,9 +61,9 @@ def plot_mesh(
     )
 
     points = mesh_jt0.get_point()
-    connect = mesh_jt0.get_cell()
+    cells = mesh_jt0.get_cell()
 
-    cells = [("triangle", connect)]
+    cells = [("triangle", cells["triangle"])]
 
     # Write .vtk file using meshio
     meshio.write_points_cells(

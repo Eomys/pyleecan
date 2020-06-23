@@ -9,8 +9,8 @@ def get_all_connectivity(self, group=None):
 
     Parameters
     ----------
-    self : ElementMat
-        an ElementMat object
+    self : CellMat
+        an CellMat object
     group : numpy.array
         one or several group number
 
