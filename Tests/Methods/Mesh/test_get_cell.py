@@ -14,10 +14,10 @@ class unittest_get_cell_MeshMat(TestCase):
         self.mesh = MeshMat()
         self.mesh.cell["triangle3"] = CellMat(nb_pt_per_cell=3)
         self.mesh.cell["segment2"] = CellMat(nb_pt_per_cell=2)
-        self.mesh.add_cell([2, 1, 0], "triangle3", group=int(3))
-        self.mesh.add_cell([1, 2, 3], "triangle3", group=int(2))
-        self.mesh.add_cell([3, 1, 4], "triangle3", group=int(2))
-        self.mesh.add_cell([0, 1], "segment2", group=int(3))
+        self.mesh.add_cell([2, 1, 0], "triangle3")
+        self.mesh.add_cell([1, 2, 3], "triangle3")
+        self.mesh.add_cell([3, 1, 4], "triangle3")
+        self.mesh.add_cell([0, 1], "segment2")
 
         self.mesh.point = PointMat()
         self.mesh.point.add_node([0, 0])
@@ -78,7 +78,7 @@ class unittest_get_cell_MeshMat(TestCase):
 
     def test_MeshMat_add(self):
         """unittest with MeshMat, add and get_cell for 1 cell"""
-        tag_test = self.mesh.add_cell([2, 1], "segment2", group=int(3))
+        tag_test = self.mesh.add_cell([2, 1], "segment2")
         result = self.mesh.get_cell(tag_test)
         solution = np.array([2, 1])
         testA = np.sum(abs(result["segment2"] - solution))

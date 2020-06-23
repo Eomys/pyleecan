@@ -22,7 +22,7 @@ def get_node2element(self, pt_indice):
 
     pt_to_cell = np.array([], dtype=int)
 
-    for key in self.element:
+    for key in self.cell:
         connect = self.cell[key].connectivity
         indice_elem = self.cell[key].indice
         if len(connect[key].shape) > 1:  # If there is more than 1 element

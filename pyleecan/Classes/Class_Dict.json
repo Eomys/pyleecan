@@ -330,15 +330,6 @@
                 "value": 0
             },
             {
-                "desc": "Attribute a label (str) to each cell . This label should correspond to a subpart of the machine.",
-                "max": "",
-                "min": "",
-                "name": "group",
-                "type": "list",
-                "unit": "",
-                "value": null
-            },
-            {
                 "desc": "Element indices",
                 "max": "",
                 "min": "",
@@ -4797,13 +4788,9 @@
             "set_submesh",
             "add_cell",
             "interface",
-            "get_node_tags",
             "get_vertice",
             "plot_mesh",
-            "plot_contour",
-            "plot_glyph",
-            "plot_deformation",
-            "plot_deformation_animated"
+            "get_group"
         ],
         "mother": "Mesh",
         "name": "MeshMat",
@@ -4838,11 +4825,11 @@
                 "value": ""
             },
             {
-                "desc": "Contain all possible group numbers",
+                "desc": "Dict sorted by groups name with cells indices. ",
                 "max": "",
                 "min": "",
                 "name": "group",
-                "type": "ndarray",
+                "type": "dict",
                 "unit": "",
                 "value": ""
             }
@@ -4860,7 +4847,8 @@
         "is_internal": false,
         "methods": [
             "get_mesh",
-            "get_solution"
+            "get_solution",
+            "save_to_file"
         ],
         "mother": "",
         "name": "MeshSolution",

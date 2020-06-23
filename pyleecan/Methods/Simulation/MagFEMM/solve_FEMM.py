@@ -105,9 +105,9 @@ def solve_FEMM(self, output, sym, FEMM_dict):
                 self.is_sliding_band or Nt_tot == 1
             ):  # To make sure solution have the same size at every time step
                 if ii == 0:
-                    B = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle3"].nb_cell, 3])
-                    H = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle3"].nb_cell, 3])
-                    mu = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle3"].nb_cell])
+                    B = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                    H = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                    mu = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell])
 
                 B[ii, :, 0:2] = tmpB
                 H[ii, :, 0:2] = tmpH

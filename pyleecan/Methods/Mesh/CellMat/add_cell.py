@@ -3,19 +3,17 @@
 import numpy as np
 
 
-def add_cell(self, pt_indice, new_ind, group=-1):
-    """Add a new element defined by a vector of node tags
+def add_cell(self, pt_indice, new_ind):
+    """Add a new element
 
     Parameters
     ----------
     self : CellMat
         an CellMat object
-    new_tag : int
-        an new element tag
-    node_tags : numpy.array
-        an array of node tags
-    group : int
-        the group number
+    new_ind : int
+        an new cell indices
+    pt_indice : ndarray
+        connectivity
 
     Returns
     -------
@@ -30,14 +28,12 @@ def add_cell(self, pt_indice, new_ind, group=-1):
         return False
 
     # Create the new element
-    if self.connectivity.size == 0:
+    if self.nb_cell == 0:
         self.connectivity = pt_indice
         self.indice = np.array([new_ind])
-        self.group = np.array([group], dtype=int)
     else:
         self.connectivity = np.vstack([self.connectivity, pt_indice])
         self.indice = np.concatenate([self.indice, np.array([new_ind])])
-        self.group = np.concatenate([self.group, np.array([group], dtype=int)])
 
     self.nb_cell = self.nb_cell + 1
 

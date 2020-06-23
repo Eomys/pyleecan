@@ -8,6 +8,25 @@ from ....Classes.PointMat import PointMat
 from femm import callfemm
 from os.path import join
 
+from ....Functions.FEMM import (
+    GROUP_SC,
+    GROUP_AG,
+    GROUP_RC,
+    GROUP_SW,
+    GROUP_RW,
+    GROUP_AGM,
+    GROUP_IN,
+    GROUP_FM,
+    GROUP_SV,
+    GROUP_RV,
+    GROUP_SSI,
+    GROUP_RSI,
+    GROUP_SN,
+    GROUP_RN,
+    GROUP_SH,
+    GROUP_RH,
+)
+
 
 def get_meshsolution(self, save_path, j_t0):
     """Load the mesh data and solution data. FEMM must be working and a simulation must have been solved.
@@ -90,19 +109,28 @@ def get_meshsolution(self, save_path, j_t0):
     # Save MeshMat for only 1 time step with sliding band
     if (not self.is_sliding_band) or (j_t0 == 0):
         mesh = MeshMat()
-        # mesh.group =  TODO with dict
         mesh.label = "FEMM"
-        mesh.cell["triangle3"] = CellMat(
+        mesh.cell["triangle"] = CellMat(
             connectivity=listElem,
             nb_cell=NbElem,
             nb_pt_per_cell=3,
-            indice=np.linspace(0, NbElem - 1, NbElem),
+            indice=np.linspace(0, NbElem - 1, NbElem, dtype=int),
         )
         mesh.point = PointMat(
             coordinate=listNd[:, 0:2], nb_pt=NbNd, indice=np.linspace(0, NbNd - 1, NbNd)
         )
+        mesh.group = dict()
+        mesh.group["stator"] = mesh.cell["triangle"].indice[
+            np.where(listElem0[:, 6] == GROUP_SC)[0]
+        ]
+        mesh.group["airgap"] = mesh.cell["triangle"].indice[
+            np.where(listElem0[:, 6] == GROUP_AG)[0]
+        ]
+        mesh.group["stator_windings"] = mesh.cell["triangle"].indice[
+            np.where(listElem0[:, 6] == GROUP_SW)[0]
+        ]
+        # If necessary, other groups can be defined here
 
-        mesh.group = np.unique(listElem0[:, 6])
     else:
         mesh = None
 

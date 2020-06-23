@@ -5,7 +5,7 @@ WARNING! All changes made in this file will be lost!
 
 from os import linesep
 from logging import getLogger
-from ._check import set_array, check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from .Mesh import Mesh
@@ -58,11 +58,6 @@ except ImportError as error:
     interface = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_node_tags import get_node_tags
-except ImportError as error:
-    get_node_tags = error
-
-try:
     from ..Methods.Mesh.MeshMat.get_vertice import get_vertice
 except ImportError as error:
     get_vertice = error
@@ -73,29 +68,11 @@ except ImportError as error:
     plot_mesh = error
 
 try:
-    from ..Methods.Mesh.MeshMat.plot_contour import plot_contour
+    from ..Methods.Mesh.MeshMat.get_group import get_group
 except ImportError as error:
-    plot_contour = error
-
-try:
-    from ..Methods.Mesh.MeshMat.plot_glyph import plot_glyph
-except ImportError as error:
-    plot_glyph = error
-
-try:
-    from ..Methods.Mesh.MeshMat.plot_deformation import plot_deformation
-except ImportError as error:
-    plot_deformation = error
-
-try:
-    from ..Methods.Mesh.MeshMat.plot_deformation_animated import (
-        plot_deformation_animated,
-    )
-except ImportError as error:
-    plot_deformation_animated = error
+    get_group = error
 
 
-from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .CellMat import CellMat
 from .PointMat import PointMat
@@ -191,17 +168,6 @@ class MeshMat(Mesh):
         )
     else:
         interface = interface
-    # cf Methods.Mesh.MeshMat.get_node_tags
-    if isinstance(get_node_tags, ImportError):
-        get_node_tags = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshMat method get_node_tags: " + str(get_node_tags)
-                )
-            )
-        )
-    else:
-        get_node_tags = get_node_tags
     # cf Methods.Mesh.MeshMat.get_vertice
     if isinstance(get_vertice, ImportError):
         get_vertice = property(
@@ -220,50 +186,15 @@ class MeshMat(Mesh):
         )
     else:
         plot_mesh = plot_mesh
-    # cf Methods.Mesh.MeshMat.plot_contour
-    if isinstance(plot_contour, ImportError):
-        plot_contour = property(
+    # cf Methods.Mesh.MeshMat.get_group
+    if isinstance(get_group, ImportError):
+        get_group = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshMat method plot_contour: " + str(plot_contour)
-                )
+                ImportError("Can't use MeshMat method get_group: " + str(get_group))
             )
         )
     else:
-        plot_contour = plot_contour
-    # cf Methods.Mesh.MeshMat.plot_glyph
-    if isinstance(plot_glyph, ImportError):
-        plot_glyph = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method plot_glyph: " + str(plot_glyph))
-            )
-        )
-    else:
-        plot_glyph = plot_glyph
-    # cf Methods.Mesh.MeshMat.plot_deformation
-    if isinstance(plot_deformation, ImportError):
-        plot_deformation = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshMat method plot_deformation: "
-                    + str(plot_deformation)
-                )
-            )
-        )
-    else:
-        plot_deformation = plot_deformation
-    # cf Methods.Mesh.MeshMat.plot_deformation_animated
-    if isinstance(plot_deformation_animated, ImportError):
-        plot_deformation_animated = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshMat method plot_deformation_animated: "
-                    + str(plot_deformation_animated)
-                )
-            )
-        )
-    else:
-        plot_deformation_animated = plot_deformation_animated
+        get_group = get_group
     # save method is available in all object
     save = save
 
@@ -281,7 +212,7 @@ class MeshMat(Mesh):
         cell=dict(),
         point=-1,
         submesh=list(),
-        group=None,
+        group={},
         label=None,
         init_dict=None,
         init_str=None,
@@ -373,8 +304,7 @@ class MeshMat(Mesh):
             self.submesh = list()
         else:
             self.submesh = submesh
-        # group can be None, a ndarray or a list
-        set_array(self, "group", group)
+        self.group = group
         # Call Mesh init
         super(MeshMat, self).__init__(label=label)
         # The class is frozen (in Mesh init), for now it's impossible to
@@ -401,13 +331,7 @@ class MeshMat(Mesh):
         for ii in range(len(self.submesh)):
             tmp = self.submesh[ii].__str__().replace(linesep, linesep + "\t") + linesep
             MeshMat_str += "submesh[" + str(ii) + "] =" + tmp + linesep + linesep
-        MeshMat_str += (
-            "group = "
-            + linesep
-            + str(self.group).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        MeshMat_str += "group = " + str(self.group) + linesep
         return MeshMat_str
 
     def __eq__(self, other):
@@ -425,7 +349,7 @@ class MeshMat(Mesh):
             return False
         if other.submesh != self.submesh:
             return False
-        if not array_equal(other.group, self.group):
+        if other.group != self.group:
             return False
         return True
 
@@ -445,10 +369,7 @@ class MeshMat(Mesh):
         MeshMat_dict["submesh"] = list()
         for obj in self.submesh:
             MeshMat_dict["submesh"].append(obj.as_dict())
-        if self.group is None:
-            MeshMat_dict["group"] = None
-        else:
-            MeshMat_dict["group"] = self.group.tolist()
+        MeshMat_dict["group"] = self.group
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         MeshMat_dict["__class__"] = "MeshMat"
@@ -529,16 +450,13 @@ class MeshMat(Mesh):
 
     def _set_group(self, value):
         """setter of group"""
-        if type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("group", value, "ndarray")
+        check_var("group", value, "dict")
         self._group = value
 
-    # Contain all possible group numbers
-    # Type : ndarray
+    # Dict sorted by groups name with cells indices.
+    # Type : dict
     group = property(
-        fget=_get_group, fset=_set_group, doc=u"""Contain all possible group numbers"""
+        fget=_get_group,
+        fset=_set_group,
+        doc=u"""Dict sorted by groups name with cells indices. """,
     )

@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     get_solution = error
 
+try:
+    from ..Methods.Mesh.MeshSolution.save_to_file import save_to_file
+except ImportError as error:
+    save_to_file = error
+
 
 from ._check import InitUnKnowClassError
 from .Mesh import Mesh
@@ -54,6 +59,17 @@ class MeshSolution(FrozenClass):
         )
     else:
         get_solution = get_solution
+    # cf Methods.Mesh.MeshSolution.save_to_file
+    if isinstance(save_to_file, ImportError):
+        save_to_file = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method save_to_file: " + str(save_to_file)
+                )
+            )
+        )
+    else:
+        save_to_file = save_to_file
     # save method is available in all object
     save = save
 

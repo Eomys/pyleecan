@@ -26,7 +26,7 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu):
     sollist = list()
     cond = self.is_sliding_band or Nt_tot == 1
     if cond:
-        indices_cell = meshFEMM[0].cell["triangle3"].indice
+        indices_cell = meshFEMM[0].cell["triangle"].indice
         Direction = Data1D(name="direction", values=["x", "y", "z"], is_components=True)
         Indices_Cell = Data1D(name="indice", values=indices_cell, is_components=True)
         Nodirection = Data1D(name="direction", values=["scalar"], is_components=False)
@@ -55,9 +55,9 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu):
             values=mu,
         )
 
-        sollist.append(SolutionData(field=solB, type_cell="triangle3"))  # Face solution
-        sollist.append(SolutionData(field=solH, type_cell="triangle3"))
-        sollist.append(SolutionData(field=solmu, type_cell="triangle3"))
+        sollist.append(SolutionData(field=solB, type_cell="triangle"))  # Face solution
+        sollist.append(SolutionData(field=solH, type_cell="triangle"))
+        sollist.append(SolutionData(field=solmu, type_cell="triangle"))
 
     meshsol = MeshSolution(
         label="FEMM_magnetotatic",

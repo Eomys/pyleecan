@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-from pyleecan.Classes.Mesh import Mesh
-from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.NodeMat import NodeMat
+from pyleecan.Classes.MeshMat import MeshMat
+from pyleecan.Classes.CellMat import CellMat
+from pyleecan.Classes.PointMat import PointMat
 import numpy as np
 
 
@@ -11,26 +11,34 @@ class unittest_get_group(TestCase):
     """unittest to extract a group as a Mesh object"""
 
     def setUp(self):
-        self.mesh = Mesh()
-        self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
-        self.mesh.node = NodeMat()
-        self.mesh.node.add_node(np.array([0, 0]))
-        self.mesh.node.add_node(np.array([1, 0]))
-        self.mesh.node.add_node(np.array([1, 2]))
-        self.mesh.node.add_node(np.array([2, 3]))
-        self.mesh.node.add_node(np.array([3, 3]))
+        self.mesh = MeshMat()
+        self.mesh.cell["triangle"] = CellMat(nb_pt_per_cell=3)
+        self.mesh.point = PointMat()
+        self.mesh.point.add_node(np.array([0, 0]))
+        self.mesh.point.add_node(np.array([1, 0]))
+        self.mesh.point.add_node(np.array([1, 2]))
+        self.mesh.point.add_node(np.array([2, 3]))
+        self.mesh.point.add_node(np.array([3, 3]))
 
-        self.mesh.add_element(np.array([0, 1, 2]), "Triangle3", group=int(3))
-        self.mesh.add_element(np.array([1, 2, 3]), "Triangle3", group=int(3))
-        self.mesh.add_element(np.array([4, 2, 3]), "Triangle3", group=int(2))
+        self.mesh.add_cell(np.array([0, 1, 2]), "triangle", group_name="stator")
+        self.mesh.add_cell(np.array([1, 2, 3]), "triangle", group_name="stator")
+        self.mesh.add_cell(np.array([4, 2, 3]), "triangle", group_name="rotor")
 
-    def test_ElementMat_1group(self):
+        self.DELTA = 1e-10
+
+    def test_MeshMat_1group(self):
         """unittest for 1 group"""
 
-        elem_grp4 = self.mesh.element["Triangle3"].get_group([3])
+        cells_grp = self.mesh.get_group("stator")
         solution = np.array([[0, 1, 2], [1, 2, 3]])
-        results = elem_grp4.connectivity
+        results = cells_grp["triangle"]
         testA = np.sum(abs(solution - results))
         msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
-        DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        self.assertAlmostEqual(testA, 0, msg=msg, delta=self.DELTA)
+
+        cells_grp = self.mesh.get_group("rotor")
+        solution = np.array([4, 2, 3])
+        results = cells_grp["triangle"]
+        testA = np.sum(abs(solution - results))
+        msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
+        self.assertAlmostEqual(testA, 0, msg=msg, delta=self.DELTA)

@@ -23,7 +23,9 @@ def get_mesh_pv(self, path="", indices=None):
 
     points = self.get_point()
     cells = self.get_cell()
-    cells = [("triangle", cells["triangle3"])]  # TODO : Generalize to any cell type
+
+    # for key in cells:
+    cells = [("triangle", cells["triangle"])]  # TODO : Generalize to any cell type
 
     # Write .vtk file using meshio
     meshio.write_points_cells(

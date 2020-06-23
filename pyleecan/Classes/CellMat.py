@@ -149,7 +149,6 @@ class CellMat(FrozenClass):
         connectivity=None,
         nb_cell=0,
         nb_pt_per_cell=0,
-        group=None,
         indice=None,
         init_dict=None,
         init_str=None,
@@ -175,7 +174,6 @@ class CellMat(FrozenClass):
             connectivity = obj.connectivity
             nb_cell = obj.nb_cell
             nb_pt_per_cell = obj.nb_pt_per_cell
-            group = obj.group
             indice = obj.indice
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
@@ -186,8 +184,6 @@ class CellMat(FrozenClass):
                 nb_cell = init_dict["nb_cell"]
             if "nb_pt_per_cell" in list(init_dict.keys()):
                 nb_pt_per_cell = init_dict["nb_pt_per_cell"]
-            if "group" in list(init_dict.keys()):
-                group = init_dict["group"]
             if "indice" in list(init_dict.keys()):
                 indice = init_dict["indice"]
         # Initialisation by argument
@@ -196,7 +192,6 @@ class CellMat(FrozenClass):
         set_array(self, "connectivity", connectivity)
         self.nb_cell = nb_cell
         self.nb_pt_per_cell = nb_pt_per_cell
-        self.group = group
         # indice can be None, a ndarray or a list
         set_array(self, "indice", indice)
 
@@ -221,12 +216,6 @@ class CellMat(FrozenClass):
         CellMat_str += "nb_cell = " + str(self.nb_cell) + linesep
         CellMat_str += "nb_pt_per_cell = " + str(self.nb_pt_per_cell) + linesep
         CellMat_str += (
-            "group = "
-            + linesep
-            + str(self.group).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        CellMat_str += (
             "indice = "
             + linesep
             + str(self.indice).replace(linesep, linesep + "\t")
@@ -246,8 +235,6 @@ class CellMat(FrozenClass):
             return False
         if other.nb_pt_per_cell != self.nb_pt_per_cell:
             return False
-        if other.group != self.group:
-            return False
         if not array_equal(other.indice, self.indice):
             return False
         return True
@@ -263,7 +250,6 @@ class CellMat(FrozenClass):
             CellMat_dict["connectivity"] = self.connectivity.tolist()
         CellMat_dict["nb_cell"] = self.nb_cell
         CellMat_dict["nb_pt_per_cell"] = self.nb_pt_per_cell
-        CellMat_dict["group"] = self.group
         if self.indice is None:
             CellMat_dict["indice"] = None
         else:
@@ -278,7 +264,6 @@ class CellMat(FrozenClass):
         self.connectivity = None
         self.nb_cell = None
         self.nb_pt_per_cell = None
-        self.group = None
         self.indice = None
 
     def _get_connectivity(self):
@@ -333,23 +318,6 @@ class CellMat(FrozenClass):
         fget=_get_nb_pt_per_cell,
         fset=_set_nb_pt_per_cell,
         doc=u"""Define the number of node per element""",
-    )
-
-    def _get_group(self):
-        """getter of group"""
-        return self._group
-
-    def _set_group(self, value):
-        """setter of group"""
-        check_var("group", value, "list")
-        self._group = value
-
-    # Attribute a label (str) to each cell . This label should correspond to a subpart of the machine.
-    # Type : list
-    group = property(
-        fget=_get_group,
-        fset=_set_group,
-        doc=u"""Attribute a label (str) to each cell . This label should correspond to a subpart of the machine.""",
     )
 
     def _get_indice(self):

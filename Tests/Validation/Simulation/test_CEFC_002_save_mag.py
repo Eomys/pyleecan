@@ -87,7 +87,6 @@ def test_CEFC_002():
     # Test save with MeshSolution object in out
     out.save(save_path=save_path + "\Output.json")
 
-
     load_path = join(save_path, "Output.json")
     # Test to load the Meshsolution object (inside the output):
     with open(load_path) as json_file:
