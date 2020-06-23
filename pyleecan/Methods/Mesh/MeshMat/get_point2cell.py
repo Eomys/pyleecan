@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def get_node2element(self, pt_indice):
+def get_point2cell(self, pt_indice):
     """Return all cell indices of cells containing a point.
 
     Parameters
