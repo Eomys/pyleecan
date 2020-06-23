@@ -40,7 +40,7 @@ class OutGeo(FrozenClass):
         Rgap_mec=None,
         Lgap=None,
         logger_name="Pyleecan.OutGeo",
-        d_angle_diff=None,
+        angle_offset_initial=None,
         rot_dir=None,
         init_dict=None,
         init_str=None,
@@ -74,7 +74,7 @@ class OutGeo(FrozenClass):
             Rgap_mec = obj.Rgap_mec
             Lgap = obj.Lgap
             logger_name = obj.logger_name
-            d_angle_diff = obj.d_angle_diff
+            angle_offset_initial = obj.angle_offset_initial
             rot_dir = obj.rot_dir
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
@@ -93,8 +93,8 @@ class OutGeo(FrozenClass):
                 Lgap = init_dict["Lgap"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
-            if "d_angle_diff" in list(init_dict.keys()):
-                d_angle_diff = init_dict["d_angle_diff"]
+            if "angle_offset_initial" in list(init_dict.keys()):
+                angle_offset_initial = init_dict["angle_offset_initial"]
             if "rot_dir" in list(init_dict.keys()):
                 rot_dir = init_dict["rot_dir"]
         # Initialisation by argument
@@ -122,7 +122,7 @@ class OutGeo(FrozenClass):
         self.Rgap_mec = Rgap_mec
         self.Lgap = Lgap
         self.logger_name = logger_name
-        self.d_angle_diff = d_angle_diff
+        self.angle_offset_initial = angle_offset_initial
         self.rot_dir = rot_dir
 
         # The class is frozen, for now it's impossible to add new properties
@@ -151,7 +151,9 @@ class OutGeo(FrozenClass):
         OutGeo_str += "Rgap_mec = " + str(self.Rgap_mec) + linesep
         OutGeo_str += "Lgap = " + str(self.Lgap) + linesep
         OutGeo_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OutGeo_str += "d_angle_diff = " + str(self.d_angle_diff) + linesep
+        OutGeo_str += (
+            "angle_offset_initial = " + str(self.angle_offset_initial) + linesep
+        )
         OutGeo_str += "rot_dir = " + str(self.rot_dir) + linesep
         return OutGeo_str
 
@@ -174,7 +176,7 @@ class OutGeo(FrozenClass):
             return False
         if other.logger_name != self.logger_name:
             return False
-        if other.d_angle_diff != self.d_angle_diff:
+        if other.angle_offset_initial != self.angle_offset_initial:
             return False
         if other.rot_dir != self.rot_dir:
             return False
@@ -198,7 +200,7 @@ class OutGeo(FrozenClass):
         OutGeo_dict["Rgap_mec"] = self.Rgap_mec
         OutGeo_dict["Lgap"] = self.Lgap
         OutGeo_dict["logger_name"] = self.logger_name
-        OutGeo_dict["d_angle_diff"] = self.d_angle_diff
+        OutGeo_dict["angle_offset_initial"] = self.angle_offset_initial
         OutGeo_dict["rot_dir"] = self.rot_dir
         # The class name is added to the dict fordeserialisation purpose
         OutGeo_dict["__class__"] = "OutGeo"
@@ -216,7 +218,7 @@ class OutGeo(FrozenClass):
         self.Rgap_mec = None
         self.Lgap = None
         self.logger_name = None
-        self.d_angle_diff = None
+        self.angle_offset_initial = None
         self.rot_dir = None
 
     def _get_stator(self):
@@ -336,20 +338,20 @@ class OutGeo(FrozenClass):
         doc=u"""Name of the logger to use""",
     )
 
-    def _get_d_angle_diff(self):
-        """getter of d_angle_diff"""
-        return self._d_angle_diff
+    def _get_angle_offset_initial(self):
+        """getter of angle_offset_initial"""
+        return self._angle_offset_initial
 
-    def _set_d_angle_diff(self, value):
-        """setter of d_angle_diff"""
-        check_var("d_angle_diff", value, "float")
-        self._d_angle_diff = value
+    def _set_angle_offset_initial(self, value):
+        """setter of angle_offset_initial"""
+        check_var("angle_offset_initial", value, "float")
+        self._angle_offset_initial = value
 
     # Difference between the d axis angle of the stator and the rotor
     # Type : float
-    d_angle_diff = property(
-        fget=_get_d_angle_diff,
-        fset=_set_d_angle_diff,
+    angle_offset_initial = property(
+        fget=_get_angle_offset_initial,
+        fset=_set_angle_offset_initial,
         doc=u"""Difference between the d axis angle of the stator and the rotor""",
     )
 

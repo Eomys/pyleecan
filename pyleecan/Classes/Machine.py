@@ -84,6 +84,13 @@ try:
 except ImportError as error:
     comp_sym = error
 
+try:
+    from ..Methods.Machine.Machine.comp_angle_offset_initial import (
+        comp_angle_offset_initial,
+    )
+except ImportError as error:
+    comp_angle_offset_initial = error
+
 
 from ._check import InitUnKnowClassError
 from .Frame import Frame
@@ -246,6 +253,18 @@ class Machine(FrozenClass):
         )
     else:
         comp_sym = comp_sym
+    # cf Methods.Machine.Machine.comp_angle_offset_initial
+    if isinstance(comp_angle_offset_initial, ImportError):
+        comp_angle_offset_initial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method comp_angle_offset_initial: "
+                    + str(comp_angle_offset_initial)
+                )
+            )
+        )
+    else:
+        comp_angle_offset_initial = comp_angle_offset_initial
     # save method is available in all object
     save = save
 

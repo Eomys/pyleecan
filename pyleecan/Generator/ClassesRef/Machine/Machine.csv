@@ -13,3 +13,4 @@ logger_name,-,Name of the logger to use,0,str,Pyleecan.Machine,,,,,,get_laminati
 ,,,,,,,,,,,plot_anim_rotor,,,
 ,,,,,,,,,,,get_material_list,,,
 ,,,,,,,,,,,comp_sym,,,
+,,,,,,,,,,,comp_angle_offset_initial,,,

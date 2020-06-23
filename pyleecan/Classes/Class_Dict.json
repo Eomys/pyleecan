@@ -3320,7 +3320,8 @@
             "get_polar_eq",
             "plot_anim_rotor",
             "get_material_list",
-            "comp_sym"
+            "comp_sym",
+            "comp_angle_offset_initial"
         ],
         "mother": "",
         "name": "Machine",
@@ -3639,8 +3640,7 @@
         "desc": "Abstract class for synchronous machine",
         "is_internal": false,
         "methods": [
-            "is_synchronous",
-            "comp_initial_angle"
+            "is_synchronous"
         ],
         "mother": "Machine",
         "name": "MachineSync",
@@ -5799,7 +5799,7 @@
                 "desc": "Difference between the d axis angle of the stator and the rotor",
                 "max": "",
                 "min": "",
-                "name": "d_angle_diff",
+                "name": "angle_offset_initial",
                 "type": "float",
                 "unit": "rad",
                 "value": null
@@ -6203,7 +6203,7 @@
             "plot.Magnetic.plot_mesh_field",
             "plot.plot_A_quiver_2D",
             "getter.get_rot_dir",
-            "getter.get_d_angle_diff"
+            "getter.get_angle_offset_initial"
         ],
         "mother": "",
         "name": "Output",
