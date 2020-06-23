@@ -39,6 +39,11 @@ try:
 except ImportError as error:
     comp_number_phase_eq = error
 
+try:
+    from ..Methods.Machine.LamSquirrelCage.comp_sym import comp_sym
+except ImportError as error:
+    comp_sym = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -108,6 +113,17 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_number_phase_eq = comp_number_phase_eq
+    # cf Methods.Machine.LamSquirrelCage.comp_sym
+    if isinstance(comp_sym, ImportError):
+        comp_sym = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_sym: " + str(comp_sym)
+                )
+            )
+        )
+    else:
+        comp_sym = comp_sym
     # save method is available in all object
     save = save
 
