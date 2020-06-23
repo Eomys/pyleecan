@@ -28,11 +28,7 @@ def get_solution(
 
     for sol in self.solution:
         field = sol.get_field(
-            field_name=field_name,
-            field_symbol=field_symbol,
-            j_t0=j_t0,
-            indice=indice,
-            direction=direction,
+            field_symbol=field_symbol, j_t0=j_t0, indice=indice, direction=direction,
         )
 
         if field is not None:

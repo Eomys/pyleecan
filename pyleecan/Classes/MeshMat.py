@@ -23,9 +23,9 @@ except ImportError as error:
     get_cell = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_mesh import get_mesh
+    from ..Methods.Mesh.MeshMat.get_mesh_pv import get_mesh_pv
 except ImportError as error:
-    get_mesh = error
+    get_mesh_pv = error
 
 try:
     from ..Methods.Mesh.MeshMat.get_normal import get_normal
@@ -126,15 +126,15 @@ class MeshMat(Mesh):
         )
     else:
         get_cell = get_cell
-    # cf Methods.Mesh.MeshMat.get_mesh
-    if isinstance(get_mesh, ImportError):
-        get_mesh = property(
+    # cf Methods.Mesh.MeshMat.get_mesh_pv
+    if isinstance(get_mesh_pv, ImportError):
+        get_mesh_pv = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_mesh: " + str(get_mesh))
+                ImportError("Can't use MeshMat method get_mesh_pv: " + str(get_mesh_pv))
             )
         )
     else:
-        get_mesh = get_mesh
+        get_mesh_pv = get_mesh_pv
     # cf Methods.Mesh.MeshMat.get_normal
     if isinstance(get_normal, ImportError):
         get_normal = property(

@@ -54,7 +54,7 @@ def test_CEFC_002():
         type_BH_stator=2,
         type_BH_rotor=2,
         is_get_mesh=True,
-        is_save_FEA=True,
+        is_save_FEA=False,
         is_sliding_band=False,
     )
     simu.force = None
@@ -68,32 +68,34 @@ def test_CEFC_002():
     load_path = join(save_path, "Output.json")
     out.save(save_path=load_path)
 
+    out.plot_mesh(meshsolution=out.mag.meshsolution,)
+
     out.plot_mesh(
-        meshsolution=out.mag.meshsolution, field_symbol="\mu", title="FEA Mesh"
+        meshsolution=out.mag.meshsolution, field_symbol="\mu",
     )
 
-    # out.plot_mesh_field(meshsolution=out.mag.meshsolution, title="Permeability")
-    out.plot_mesh_field(
-        mesh=out.mag.meshsolution.mesh[0],
-        title="Permeability",
-        field=out.mag.meshsolution.solution[0].face["mu"],
+    out.plot_mesh(
+        meshsolution=out.mag.meshsolution, field_symbol="B",
     )
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_CEFC_002_save_mag"))
 
-    # Test save with MeshSolution object in out
-    load_path = join(save_path, "Output.json")
-    out.save(save_path=load_path)
-
-
-def test_CEFC_002_bis():
-    load_path = join(load_results_path, "Output.json")
-    # Test to load the Meshsolution object (inside the output):
-    with open(load_path) as json_file:
-        json_tmp = json.load(json_file)
-        FEMM = Output(init_dict=json_tmp)
-
-    # To test that the "mu" is still a ndarray after saving and loading
-    FEMM.plot_mesh_fieldout.plot_mesh(
-        meshsolution=out.mag.meshsolution, field_name="mu", title="FEA Mesh"
+    out.plot_mesh(
+        meshsolution=out.mag.meshsolution, field_symbol="H",
     )
+
+
+#     # Test save with MeshSolution object in out
+#     load_path = join(save_path, "Output.json")
+#     out.save(save_path=load_path)
+#
+#
+# def test_CEFC_002_load():
+#     load_path = join(load_results_path, "Output.json")
+#     # Test to load the Meshsolution object (inside the output):
+#     with open(load_path) as json_file:
+#         json_tmp = json.load(json_file)
+#         FEMM = Output(init_dict=json_tmp)
+#
+#     # To test that the "mu" is still a ndarray after saving and loading
+#     FEMM.plot_mesh(
+#         meshsolution=FEMM.mag.meshsolution, field_symbol="\mu",
+#     )

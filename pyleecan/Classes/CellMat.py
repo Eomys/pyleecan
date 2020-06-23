@@ -196,8 +196,7 @@ class CellMat(FrozenClass):
         set_array(self, "connectivity", connectivity)
         self.nb_cell = nb_cell
         self.nb_pt_per_cell = nb_pt_per_cell
-        # group can be None, a ndarray or a list
-        set_array(self, "group", group)
+        self.group = group
         # indice can be None, a ndarray or a list
         set_array(self, "indice", indice)
 
@@ -226,7 +225,6 @@ class CellMat(FrozenClass):
             + linesep
             + str(self.group).replace(linesep, linesep + "\t")
             + linesep
-            + linesep
         )
         CellMat_str += (
             "indice = "
@@ -248,7 +246,7 @@ class CellMat(FrozenClass):
             return False
         if other.nb_pt_per_cell != self.nb_pt_per_cell:
             return False
-        if not array_equal(other.group, self.group):
+        if other.group != self.group:
             return False
         if not array_equal(other.indice, self.indice):
             return False
@@ -265,10 +263,7 @@ class CellMat(FrozenClass):
             CellMat_dict["connectivity"] = self.connectivity.tolist()
         CellMat_dict["nb_cell"] = self.nb_cell
         CellMat_dict["nb_pt_per_cell"] = self.nb_pt_per_cell
-        if self.group is None:
-            CellMat_dict["group"] = None
-        else:
-            CellMat_dict["group"] = self.group.tolist()
+        CellMat_dict["group"] = self.group
         if self.indice is None:
             CellMat_dict["indice"] = None
         else:
@@ -346,20 +341,15 @@ class CellMat(FrozenClass):
 
     def _set_group(self, value):
         """setter of group"""
-        if type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("group", value, "ndarray")
+        check_var("group", value, "list")
         self._group = value
 
-    # Attribute a group number (int) to each element . This group number should correspond to a subpart of the machine.
-    # Type : ndarray
+    # Attribute a label (str) to each cell . This label should correspond to a subpart of the machine.
+    # Type : list
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc=u"""Attribute a group number (int) to each element . This group number should correspond to a subpart of the machine.""",
+        doc=u"""Attribute a label (str) to each cell . This label should correspond to a subpart of the machine.""",
     )
 
     def _get_indice(self):

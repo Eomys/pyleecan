@@ -330,13 +330,13 @@
                 "value": 0
             },
             {
-                "desc": "Attribute a group number (int) to each element . This group number should correspond to a subpart of the machine.",
+                "desc": "Attribute a label (str) to each cell . This label should correspond to a subpart of the machine.",
                 "max": "",
                 "min": "",
                 "name": "group",
-                "type": "ndarray",
+                "type": "list",
                 "unit": "",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Element indices",
@@ -4790,7 +4790,7 @@
         "methods": [
             "get_point",
             "get_cell",
-            "get_mesh",
+            "get_mesh_pv",
             "get_normal",
             "get_surf",
             "get_cell_area",

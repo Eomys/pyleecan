@@ -90,12 +90,12 @@ def get_meshsolution(self, save_path, j_t0):
     # Save MeshMat for only 1 time step with sliding band
     if (not self.is_sliding_band) or (j_t0 == 0):
         mesh = MeshMat()
+        # mesh.group =  TODO with dict
         mesh.label = "FEMM"
-        mesh.cell["Triangle3"] = CellMat(
+        mesh.cell["triangle3"] = CellMat(
             connectivity=listElem,
             nb_cell=NbElem,
-            group=listElem0[:, 6],
-            nb_point_per_cell=3,
+            nb_pt_per_cell=3,
             indice=np.linspace(0, NbElem - 1, NbElem),
         )
         mesh.point = PointMat(

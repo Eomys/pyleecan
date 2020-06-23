@@ -40,7 +40,7 @@ import meshio
 
 
 def plot_mesh(
-    self, meshsolution, field_name="", field_symbol="\mu", j_t0=0, title="No title"
+    self, meshsolution, field_symbol=None, j_t0=0,
 ):
     """ Display mesh.
 
@@ -50,50 +50,37 @@ def plot_mesh(
         an Output object
     mesh : Mesh
         a Mesh object
-    title : str
-        Title of the figure
     """
     name_file_vtk = "plot_mesh.vtk"
 
     mesh_jt0 = meshsolution.get_mesh(j_t0=j_t0)
-    solution_jt0 = meshsolution.get_solution(
-        j_t0=j_t0, field_name=field_name, field_symbol=field_symbol
+    meshpv = mesh_jt0.get_mesh_pv(path=name_file_vtk)
+
+    if field_symbol is not None:
+        solution_jt0 = meshsolution.get_solution(j_t0=j_t0, field_symbol=field_symbol)
+        meshpv[field_symbol] = solution_jt0
+
+    # Add field to mesh
+    # Add field to mesh
+
+    # Configure plot
+    p = pv.BackgroundPlotter()
+    p.set_background("white")
+    sargs = dict(
+        interactive=True,
+        title_font_size=20,
+        label_font_size=16,
+        font_family="arial",
+        color="black",
     )
-
-    points = mesh_jt0.get_point()
-    cells = mesh_jt0.get_cell()
-
-    cells = [("triangle", cells["triangle"])]
-
-    # Write .vtk file using meshio
-    meshio.write_points_cells(
-        filename="mesh.vtk", points=points, cells=cells, cell_data=solution_jt0,
-    )
-
-    meshio.write(name_file_vtk)
-
-    # Read .vtk file with pyvista
-    mesh = pv.read(name_file_vtk)
-    mesh2 = mesh.warp_by_vector()
-
-    # Plot
-    pv.set_plot_theme("document")
-    p = pv.Plotter(notebook=False)
-    sargs = dict(interactive=True, n_colors=50)
-
     p.add_mesh(
-        mesh2,
-        color="grey",
-        # opacity=0.5,
+        meshpv,
+        scalars=field_symbol,
         show_edges=True,
         edge_color="white",
-        line_width=0.0001,
-        # clim=[-3.6e-12, 3.6e-12],
-        # cmap="RdBu_r",
-        # scalar_bar_args=sargs
+        line_width=1,
+        # cmap=cmap,
+        # clim=clim,
+        scalar_bar_args=sargs,
     )
-    p.remove_scalar_bar()
-    p.show(use_panel=False, auto_close=False)
-
-    # Close movie and delete object
-    p.close()
+    p.show()

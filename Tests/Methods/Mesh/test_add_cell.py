@@ -113,7 +113,6 @@ class unittest_add_element(TestCase):
             self.mesh.cell["segment2"].nb_cell, 2, msg=msg, delta=self.DELTA
         )
 
-
     def test_Mesh_ElementMat_add_stupid(self):
         """unittest with CellMat and 2 segment element and 1 triangle, add 1 triangle with a group number."""
 
@@ -124,7 +123,7 @@ class unittest_add_element(TestCase):
         self.assertFalse(test2)
         test3 = self.mesh.add_cell(np.array([1, 1]), "segment2")
         self.assertFalse(test2)
-        
+
         solution = np.array([0, 1], dtype=int)
         result = self.mesh.cell["segment2"].connectivity
         testA = np.sum(abs(result - solution))
