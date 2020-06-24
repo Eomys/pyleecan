@@ -59,6 +59,8 @@ def plot_mesh(
     if field_symbol is not None:
         solution_jt0 = meshsolution.get_solution(j_t0=j_t0, field_symbol=field_symbol)
         meshpv[field_symbol] = solution_jt0
+    else:
+        show_edges = True
 
     # Add field to mesh
     # Add field to mesh
