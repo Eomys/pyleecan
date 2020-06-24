@@ -40,7 +40,7 @@ import meshio
 
 
 def plot_mesh(
-    self, meshsolution, field_symbol=None, j_t0=0,
+    self, meshsolution, field_symbol=None, j_t0=0, show_edges=False,
 ):
     """ Display mesh.
 
@@ -73,10 +73,11 @@ def plot_mesh(
         font_family="arial",
         color="black",
     )
+
     p.add_mesh(
         meshpv,
         scalars=field_symbol,
-        show_edges=True,
+        show_edges=show_edges,
         edge_color="white",
         line_width=1,
         # cmap=cmap,
