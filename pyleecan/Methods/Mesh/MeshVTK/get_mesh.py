@@ -23,7 +23,7 @@ def get_mesh(self, indices=None):
     # Already available => Return
     if self.mesh is not None:
         # Extract submesh
-        if indices != None:
+        if indices is not None:
             mesh = self.mesh.extract_points(indices)
         return mesh
 
@@ -38,7 +38,7 @@ def get_mesh(self, indices=None):
         mesh = pv.read(self.path + "/" + self.name + ".vtk")
 
         # Extract submesh
-        if indices != None:
+        if indices is not None:
             mesh = mesh.extract_points(indices)
 
         if self.is_pyvista_mesh:
