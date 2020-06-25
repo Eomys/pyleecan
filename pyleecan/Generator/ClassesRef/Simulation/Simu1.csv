@@ -3,3 +3,4 @@ elec,-,Electrical module,0,Electrical,,,,,Simulation,Simulation,run,VERSION,1,Fi
 mag,-,Magnetic module,0,Magnetics,,,,,,,,,,
 struct,-,Structural module,0,Structural,,,,,,,,,,
 force,-,Force moduale,0,Force,,,,,,,,,,
+loss,-,Loss moduale,0,Loss,,,,,,,,,,

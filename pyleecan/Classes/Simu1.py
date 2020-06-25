@@ -23,6 +23,7 @@ from .Electrical import Electrical
 from .Magnetics import Magnetics
 from .Structural import Structural
 from .Force import Force
+from .Loss import Loss
 from .Machine import Machine
 from .Input import Input
 
@@ -59,6 +60,7 @@ class Simu1(Simulation):
         mag=-1,
         struct=-1,
         force=-1,
+        loss=-1,
         name="",
         desc="",
         machine=-1,
@@ -86,6 +88,8 @@ class Simu1(Simulation):
             struct = Structural()
         if force == -1:
             force = Force()
+        if loss == -1:
+            loss = Loss()
         if machine == -1:
             machine = Machine()
         if input == -1:
@@ -101,6 +105,7 @@ class Simu1(Simulation):
             mag = obj.mag
             struct = obj.struct
             force = obj.force
+            loss = obj.loss
             name = obj.name
             desc = obj.desc
             machine = obj.machine
@@ -117,6 +122,8 @@ class Simu1(Simulation):
                 struct = init_dict["struct"]
             if "force" in list(init_dict.keys()):
                 force = init_dict["force"]
+            if "loss" in list(init_dict.keys()):
+                loss = init_dict["loss"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "desc" in list(init_dict.keys()):
@@ -196,6 +203,15 @@ class Simu1(Simulation):
             self.force = force
         else:
             self.force = force
+        # loss can be None, a Loss object or a dict
+        if isinstance(loss, dict):
+            self.loss = Loss(init_dict=loss)
+        elif isinstance(loss, str):
+            from ..Functions.load import load
+
+            self.loss = load(loss)
+        else:
+            self.loss = loss
         # Call Simulation init
         super(Simu1, self).__init__(
             name=name, desc=desc, machine=machine, input=input, logger_name=logger_name
@@ -229,6 +245,11 @@ class Simu1(Simulation):
             Simu1_str += "force = " + tmp
         else:
             Simu1_str += "force = None" + linesep + linesep
+        if self.loss is not None:
+            tmp = self.loss.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Simu1_str += "loss = " + tmp
+        else:
+            Simu1_str += "loss = None" + linesep + linesep
         return Simu1_str
 
     def __eq__(self, other):
@@ -247,6 +268,8 @@ class Simu1(Simulation):
         if other.struct != self.struct:
             return False
         if other.force != self.force:
+            return False
+        if other.loss != self.loss:
             return False
         return True
 
@@ -272,6 +295,10 @@ class Simu1(Simulation):
             Simu1_dict["force"] = None
         else:
             Simu1_dict["force"] = self.force.as_dict()
+        if self.loss is None:
+            Simu1_dict["loss"] = None
+        else:
+            Simu1_dict["loss"] = self.loss.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         Simu1_dict["__class__"] = "Simu1"
@@ -288,6 +315,8 @@ class Simu1(Simulation):
             self.struct._set_None()
         if self.force is not None:
             self.force._set_None()
+        if self.loss is not None:
+            self.loss._set_None()
         # Set to None the properties inherited from Simulation
         super(Simu1, self)._set_None()
 
@@ -354,3 +383,19 @@ class Simu1(Simulation):
     # Force moduale
     # Type : Force
     force = property(fget=_get_force, fset=_set_force, doc=u"""Force moduale""")
+
+    def _get_loss(self):
+        """getter of loss"""
+        return self._loss
+
+    def _set_loss(self, value):
+        """setter of loss"""
+        check_var("loss", value, "Loss")
+        self._loss = value
+
+        if self._loss is not None:
+            self._loss.parent = self
+
+    # Loss moduale
+    # Type : Loss
+    loss = property(fget=_get_loss, fset=_set_loss, doc=u"""Loss moduale""")
