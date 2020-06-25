@@ -3656,7 +3656,7 @@
             }
         ],
         "daughters": [],
-        "desc": "Doubly Fed Induction Machine",
+        "desc": "User defined Machine with multiple Laminations",
         "is_internal": false,
         "methods": [
             "build_geometry",
