@@ -17,6 +17,6 @@ def get_normals(self, indices=[]):
         Normals coordinates
     """
 
-    surf = self.get_surf(indices)
+    surf = self.get_surf(indices=indices)
 
     return surf.cell_normals

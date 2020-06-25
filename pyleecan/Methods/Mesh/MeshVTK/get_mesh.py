@@ -4,7 +4,7 @@ import pyvista as pv
 from meshio import read
 
 
-def get_mesh(self, indices=[]):
+def get_mesh(self, indices=None):
     """Return the pyvista mesh object (or submesh).
 
     Parameters
@@ -22,7 +22,10 @@ def get_mesh(self, indices=[]):
 
     # Already available => Return
     if self.mesh is not None:
-        return self.mesh
+        # Extract submesh
+        if indices != None:
+            mesh = self.mesh.extract_points(indices)
+        return mesh
 
     # Read mesh file
     else:
@@ -35,7 +38,7 @@ def get_mesh(self, indices=[]):
         mesh = pv.read(self.path + "/" + self.name + ".vtk")
 
         # Extract submesh
-        if indices != []:
+        if indices != None:
             mesh = mesh.extract_points(indices)
 
         if self.is_pyvista_mesh:

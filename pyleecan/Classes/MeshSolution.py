@@ -27,6 +27,36 @@ try:
 except ImportError as error:
     save_to_file = error
 
+try:
+    from ..Methods.Mesh.MeshSolution.get_field import get_field
+except ImportError as error:
+    get_field = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.plot_mesh import plot_mesh
+except ImportError as error:
+    plot_mesh = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.plot_contour import plot_contour
+except ImportError as error:
+    plot_contour = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.plot_ODS import plot_ODS
+except ImportError as error:
+    plot_ODS = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.plot_ODS_animated import plot_ODS_animated
+except ImportError as error:
+    plot_ODS_animated = error
+
+try:
+    from ..Methods.Mesh.MeshSolution.plot_glyph import plot_glyph
+except ImportError as error:
+    plot_glyph = error
+
 
 from ._check import InitUnKnowClassError
 from .Mesh import Mesh
@@ -70,6 +100,71 @@ class MeshSolution(FrozenClass):
         )
     else:
         save_to_file = save_to_file
+    # cf Methods.Mesh.MeshSolution.get_field
+    if isinstance(get_field, ImportError):
+        get_field = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method get_field: " + str(get_field)
+                )
+            )
+        )
+    else:
+        get_field = get_field
+    # cf Methods.Mesh.MeshSolution.plot_mesh
+    if isinstance(plot_mesh, ImportError):
+        plot_mesh = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method plot_mesh: " + str(plot_mesh)
+                )
+            )
+        )
+    else:
+        plot_mesh = plot_mesh
+    # cf Methods.Mesh.MeshSolution.plot_contour
+    if isinstance(plot_contour, ImportError):
+        plot_contour = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method plot_contour: " + str(plot_contour)
+                )
+            )
+        )
+    else:
+        plot_contour = plot_contour
+    # cf Methods.Mesh.MeshSolution.plot_ODS
+    if isinstance(plot_ODS, ImportError):
+        plot_ODS = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshSolution method plot_ODS: " + str(plot_ODS))
+            )
+        )
+    else:
+        plot_ODS = plot_ODS
+    # cf Methods.Mesh.MeshSolution.plot_ODS_animated
+    if isinstance(plot_ODS_animated, ImportError):
+        plot_ODS_animated = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method plot_ODS_animated: "
+                    + str(plot_ODS_animated)
+                )
+            )
+        )
+    else:
+        plot_ODS_animated = plot_ODS_animated
+    # cf Methods.Mesh.MeshSolution.plot_glyph
+    if isinstance(plot_glyph, ImportError):
+        plot_glyph = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method plot_glyph: " + str(plot_glyph)
+                )
+            )
+        )
+    else:
+        plot_glyph = plot_glyph
     # save method is available in all object
     save = save
 

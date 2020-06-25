@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-field,-,Matrix/Vector of the numerical values of the solutions.,,ndarray,None,,,,Mesh,Solution,,VERSION,1,Define a Solution with ndarray object.
+field,-,Matrix/Vector of the numerical values of the solutions.,,ndarray,None,,,,Mesh,Solution,get_field,VERSION,1,Define a Solution with ndarray object.
 type_cell,-,"Type of cell (Point, Segment2, Triangle3, etc.)",,str,triangle,,,,,,,,,
 label,-,Label to identify the solution,,str,None,,,,,,,,,
 indice,-,Indices of loaded cells. Set to None if all cells are loaded,,ndarray,None,,,,,,,,,

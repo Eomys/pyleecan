@@ -4848,7 +4848,13 @@
         "methods": [
             "get_mesh",
             "get_solution",
-            "save_to_file"
+            "save_to_file",
+            "get_field",
+            "plot_mesh",
+            "plot_contour",
+            "plot_ODS",
+            "plot_ODS_animated",
+            "plot_glyph"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -4918,12 +4924,7 @@
             "get_cells",
             "get_normals",
             "get_surf",
-            "get_cell_area",
-            "plot_mesh",
-            "plot_contour",
-            "plot_glyph",
-            "plot_deformation",
-            "plot_deformation_animated"
+            "get_cell_area"
         ],
         "mother": "Mesh",
         "name": "MeshVTK",
@@ -8688,7 +8689,7 @@
         "desc": "Abstract class for solution related classes.",
         "is_internal": false,
         "methods": [
-            "get_solution"
+            "get_field"
         ],
         "mother": "",
         "name": "Solution",
@@ -8731,6 +8732,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "triangle"
+            },
+            {
+                "desc": "Label to identify the solution",
+                "max": "",
+                "min": "",
+                "name": "label",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
             }
         ]
     },
@@ -8744,7 +8754,9 @@
         "daughters": [],
         "desc": "Define a Solution with ndarray object.",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_field"
+        ],
         "mother": "Solution",
         "name": "SolutionMat",
         "package": "Mesh",
