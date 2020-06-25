@@ -4,7 +4,7 @@ import pyvistaqt as pv
 from numpy import min as np_min, max as np_max
 
 from ....Classes.MeshMat import MeshMat
-from ...definitions import config_dict
+from ....definitions import config_dict
 
 COLOR_MAP = config_dict["color_dict"]["COLOR_MAP"]
 
