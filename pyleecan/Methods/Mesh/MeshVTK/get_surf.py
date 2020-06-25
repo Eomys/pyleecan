@@ -27,7 +27,7 @@ def get_surf(self, indices=None):
     # Extract the outer surface of the mesh
     else:
         mesh = self.get_mesh(indices=indices)
-        surf = mesh.extract_surface()
+        surf = mesh.extract_geometry()
 
         if self.is_vtk_surf:
             surf.save(self.path_surf + "/" + self.name + ".vtk")

@@ -3,7 +3,7 @@
 from ....Classes.MeshMat import MeshMat
 from ....Classes.MeshVTK import MeshVTK
 from ....Functions.Structural.conversions import DimError, cart2pol
-from numpy import einsum, sqrt, zeros, squeeze, sum as np_sum, abs as np_abs
+from numpy import einsum, sqrt, zeros, squeeze, real, imag, sum as np_sum, abs as np_abs
 
 
 def get_field(
@@ -80,8 +80,9 @@ def get_field(
     if is_center or is_normal or is_rthetaz or is_surf:
         # Get the mesh
         mesh = self.get_mesh(label=label, index=index)
+        mesh_pv = mesh.get_mesh(indices=indices)
         if isinstance(mesh, MeshMat):
-            mesh_pv = mesh.get_mesh_pv()
+            mesh_pv = mesh.get_mesh_pv(indices=indices)
             mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
     # Get points coordinates if necessary
     if is_rthetaz:
@@ -89,12 +90,12 @@ def get_field(
     # Get normals if necessary
     if is_normal and is_center:
         # Get normals
-        normals = mesh.get_normals()
+        normals = mesh.get_normals(indices=indices)
     elif is_normal:
-        normals = mesh.get_normals(loc="point")
+        normals = mesh.get_normals(indices=indices, loc="point")
     # Get cell area if necessary
     if is_rms:
-        cell_area = mesh.get_cell_area()
+        cell_area = mesh.get_cell_area(indices=indices)
 
     # 1D case: only cell-center and surf available
     if is_1d_input:
@@ -105,42 +106,44 @@ def get_field(
                 for i in range(shape[1]):
                     field_i = field[:, i]
                     # Extract subset of the field if necessary
-                    if indices != None:
+                    if indices is not None:
                         if len(field_i) != len(indices):
                             field_i = field_i[indices]
                     # Add field to mesh
-                    mesh["field"] = field_i
+                    mesh_pv["real"] = real(field_i)
+                    mesh_pv["imag"] = imag(field_i)
                     if is_center:
                         # Points to centers
-                        mesh_cell = mesh.point_data_to_cell_data()
+                        mesh_cell = mesh_pv.point_data_to_cell_data()
                     else:
-                        mesh_cell = mesh
+                        mesh_cell = mesh_pv
                     if is_surf:
                         # Extract surface
-                        surf = mesh_cell.extract_surface()
-                        field_i = surf["field"]
+                        surf = mesh_cell.extract_geometry()
+                        field_i = surf["real"] + 1j * surf["imag"]
                     else:
-                        field_i = mesh_cell["field"]
+                        field_i = mesh_cell["real"] + 1j * mesh_cell["imag"]
                     # Store in result
                     result[:, i] = field_i
             else:
                 # Extract subset of the field if necessary
-                if indices != None:
+                if indices is not None:
                     if len(field) != len(indices):
                         field = field[indices]
                 # Add field to mesh
-                mesh["field"] = field
+                mesh_pv["real"] = real(field)
+                mesh_pv["imag"] = imag(field)
                 if is_center:
                     # Points to centers
-                    mesh_cell = mesh.point_data_to_cell_data()
+                    mesh_cell = mesh_pv.point_data_to_cell_data()
                 else:
-                    mesh_cell = mesh
+                    mesh_cell = mesh_pv
                 if is_surf:
                     # Extract surface
-                    surf = mesh_cell.extract_surface()
-                    field = surf["field"]
+                    surf = mesh_cell.extract_geometry()
+                    field = surf["real"] + 1j * surf["imag"]
                 else:
-                    field = mesh_cell["field"]
+                    field = mesh_cell["real"] + 1j * mesh_cell["imag"]
                 # Store in result
                 result = field
         else:
@@ -159,23 +162,24 @@ def get_field(
             for i in range(shape[2]):
                 field_i = field[:, :, i]
                 # Extract subset of the field if necessary
-                if indices != None and field_i.shape != indices.shape:
+                if indices is not None and field_i.shape != indices.shape:
                     field_i = field_i[indices]
                 # Field to mesh if necessary
                 if is_center or is_normal or is_surf:
                     # Add field to mesh
-                    mesh["field"] = field_i
-                if is_center:
-                    # Points to centers
-                    mesh_cell = mesh.point_data_to_cell_data()
-                else:
-                    mesh_cell = mesh
+                    mesh_pv["real"] = real(field_i)
+                    mesh_pv["imag"] = imag(field_i)
+                    if is_center:
+                        # Points to centers
+                        mesh_cell = mesh_pv.point_data_to_cell_data()
+                    else:
+                        mesh_cell = mesh_pv
                 if is_surf:
                     # Extract surface
-                    surf = mesh_cell.extract_surface()
-                    field_i = surf["field"]
+                    surf = mesh_cell.extract_geometry()
+                    field_i = surf["real"] + 1j * surf["imag"]
                 elif is_center:
-                    field_i = mesh_cell["field"]
+                    field_i = mesh_cell["real"] + 1j * mesh_cell["imag"]
                 # Project on normals if necessary
                 if is_normal:
                     field_i = einsum("ij,ij->i", normals, field_i)
@@ -188,7 +192,7 @@ def get_field(
                 if is_rthetaz:
                     field_i = cart2pol(field_i, points)
                 if is_radial:
-                    field_i = field_i[:, 1]
+                    field_i = field_i[:, 0]
                 # Store in result
                 if is_1d_output:
                     result[:, i] = field_i
@@ -198,23 +202,24 @@ def get_field(
                     result[:, :, i] = field_i
         else:
             # Extract subset of the field if necessary
-            if indices != None and field_i.shape != indices.shape:
+            if indices is not None and field_i.shape != indices.shape:
                 field = field[indices]
             # Field to mesh if necessary
             if is_center or is_normal or is_surf:
                 # Add field to mesh
-                mesh["field"] = field
-            if is_center:
-                # Points to centers
-                mesh_cell = mesh.point_data_to_cell_data()
-            else:
-                mesh_cell = mesh
+                mesh_pv["real"] = real(field)
+                mesh_pv["imag"] = imag(field)
+                if is_center:
+                    # Points to centers
+                    mesh_cell = mesh_pv.point_data_to_cell_data()
+                else:
+                    mesh_cell = mesh_pv
             if is_surf:
                 # Extract surface
-                surf = mesh_cell.extract_surface()
-                field = surf["field"]
+                surf = mesh_cell.extract_geometry()
+                field = surf["real"] + 1j * surf["imag"]
             elif is_center:
-                field = mesh_cell["field"]
+                field = mesh_cell["real"] + 1j * mesh_cell["imag"]
             # Project on normals if necessary
             if is_normal:
                 field = einsum("ij,ij->i", normals, field)
@@ -222,7 +227,7 @@ def get_field(
             if is_rthetaz:
                 field = cart2pol(field, points)
             if is_radial:
-                field = field[:, 1]
+                field = field[:, 0]
             # Store in result
             result = field
 

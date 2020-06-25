@@ -63,7 +63,7 @@ def plot_glyph(
     # Add field to mesh
     mesh_pv["field"] = vect_field
     mesh_cell = mesh_pv.point_data_to_cell_data()
-    surf = mesh_cell.extract_surface()
+    surf = mesh_cell.extract_geometry()
     centers2 = surf.cell_centers()
     centers2.vectors = surf["field"] * factor
 

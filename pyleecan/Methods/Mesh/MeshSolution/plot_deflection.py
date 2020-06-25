@@ -10,7 +10,7 @@ from ....definitions import config_dict
 COLOR_MAP = config_dict["color_dict"]["COLOR_MAP"]
 
 
-def plot_ODS(
+def plot_deflection(
     self,
     label=None,
     index=None,
@@ -72,7 +72,7 @@ def plot_ODS(
 
     # Compute colorbar boundaries
     if clim is None:
-        clim = [np_min(field), np_max(field)]
+        clim = [np_min(real(field)), np_max(real(field))]
 
     # Compute deformation factor
     if factor is None:
@@ -80,7 +80,6 @@ def plot_ODS(
 
     # Extract surface
     surf = mesh.get_surf(indices=indices)
-    surf[field_name] = field
 
     # Add field to surf
     surf.vectors = real(vect_field) * factor

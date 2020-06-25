@@ -10,7 +10,7 @@ from ....definitions import config_dict
 COLOR_MAP = config_dict["color_dict"]["COLOR_MAP"]
 
 
-def plot_ODS_animated(
+def plot_deflection_animated(
     self,
     label=None,
     index=None,
@@ -57,9 +57,7 @@ def plot_ODS_animated(
         mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)
 
     # Get the field
-    field = self.get_field(
-        label=label, index=index, indices=indices, is_surf=True, is_radial=True
-    )
+    field = self.get_field(label=label, index=index, indices=indices, is_radial=True)
     vect_field = self.get_field(label=label, index=index, indices=indices)
     if is_time:
         field_data = real(field[:, 0])
@@ -80,7 +78,7 @@ def plot_ODS_animated(
 
     # Compute colorbar boundaries
     if clim is None:
-        clim = [np_min(field), np_max(field)]
+        clim = [np_min(real(field)), np_max(real(field))]
 
     # Compute deformation factor
     if factor is None:
@@ -88,7 +86,6 @@ def plot_ODS_animated(
 
     # Extract surface
     surf = mesh.get_surf(indices=indices)
-    surf[field_name] = field
 
     # Add field to surf
     surf.vectors = real(vect_field) * factor
