@@ -30,7 +30,7 @@ from .Shaft import Shaft
 
 
 class MachineUD(Machine):
-    """Doubly Fed Induction Machine"""
+    """User defined Machine with multiple Laminations"""
 
     VERSION = 1
 
