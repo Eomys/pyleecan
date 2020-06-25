@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def get_normals(self, indices=[]):
+def get_normals(self, indices=None):
     """Return the array of the normals coordinates.
 
     Parameters
