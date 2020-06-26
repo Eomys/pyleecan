@@ -411,7 +411,7 @@ class Output(FrozenClass):
         if isinstance(simu, dict):
             # Check that the type is correct (including daughter)
             class_name = simu.get("__class__")
-            if class_name not in ["Simulation", "Loss1", "Simu1"]:
+            if class_name not in ["Simulation", "Simu1"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for simu"
                 )
@@ -425,7 +425,7 @@ class Output(FrozenClass):
             simu = load(simu)
             # Check that the type is correct (including daughter)
             class_name = simu.__class__.__name__
-            if class_name not in ["Simulation", "Loss1", "Simu1"]:
+            if class_name not in ["Simulation", "Simu1"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for simu"
                 )

@@ -8,36 +8,34 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from .Simulation import Simulation
+from .Loss import Loss
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.Loss1.comp_losses import comp_losses
+    from ..Methods.Simulation.Loss1.run import run
 except ImportError as error:
-    comp_losses = error
+    run = error
 
 
 from ._check import InitUnKnowClassError
 from .LossModel import LossModel
-from .Machine import Machine
-from .Input import Input
 
 
-class Loss1(Simulation):
+class Loss1(Loss):
     """Gather loss modules loss calculation models"""
 
     VERSION = 1
 
-    # cf Methods.Simulation.Loss1.comp_losses
-    if isinstance(comp_losses, ImportError):
-        comp_losses = property(
+    # cf Methods.Simulation.Loss1.run
+    if isinstance(run, ImportError):
+        run = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Loss1 method comp_losses: " + str(comp_losses))
+                ImportError("Can't use Loss1 method run: " + str(run))
             )
         )
     else:
-        comp_losses = comp_losses
+        run = run
     # save method is available in all object
     save = save
 
@@ -52,22 +50,17 @@ class Loss1(Simulation):
 
     def __init__(
         self,
-        lam_stator=-1,
-        lam_rotor=-1,
-        wind_stator=-1,
-        wind_rotor=-1,
-        mag_stator=-1,
-        mag_rotor=-1,
-        windage=-1,
-        bearing=-1,
-        shaft=-1,
-        frame=-1,
-        additional=-1,
-        name="",
-        desc="",
-        machine=-1,
-        input=-1,
-        logger_name="Pyleecan.Simulation",
+        lam_stator=None,
+        lam_rotor=None,
+        wind_stator=None,
+        wind_rotor=None,
+        mag_stator=None,
+        mag_rotor=None,
+        windage=None,
+        bearing=None,
+        shaft=None,
+        frame=None,
+        additional=None,
         init_dict=None,
         init_str=None,
     ):
@@ -104,10 +97,6 @@ class Loss1(Simulation):
             frame = LossModel()
         if additional == -1:
             additional = LossModel()
-        if machine == -1:
-            machine = Machine()
-        if input == -1:
-            input = Input()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -126,11 +115,6 @@ class Loss1(Simulation):
             shaft = obj.shaft
             frame = obj.frame
             additional = obj.additional
-            name = obj.name
-            desc = obj.desc
-            machine = obj.machine
-            input = obj.input
-            logger_name = obj.logger_name
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -156,16 +140,6 @@ class Loss1(Simulation):
                 frame = init_dict["frame"]
             if "additional" in list(init_dict.keys()):
                 additional = init_dict["additional"]
-            if "name" in list(init_dict.keys()):
-                name = init_dict["name"]
-            if "desc" in list(init_dict.keys()):
-                desc = init_dict["desc"]
-            if "machine" in list(init_dict.keys()):
-                machine = init_dict["machine"]
-            if "input" in list(init_dict.keys()):
-                input = init_dict["input"]
-            if "logger_name" in list(init_dict.keys()):
-                logger_name = init_dict["logger_name"]
         # Initialisation by argument
         # lam_stator can be None, a LossModel object or a dict
         if isinstance(lam_stator, dict):
@@ -266,18 +240,16 @@ class Loss1(Simulation):
             self.additional = load(additional)
         else:
             self.additional = additional
-        # Call Simulation init
-        super(Loss1, self).__init__(
-            name=name, desc=desc, machine=machine, input=input, logger_name=logger_name
-        )
-        # The class is frozen (in Simulation init), for now it's impossible to
+        # Call Loss init
+        super(Loss1, self).__init__()
+        # The class is frozen (in Loss init), for now it's impossible to
         # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
         Loss1_str = ""
-        # Get the properties inherited from Simulation
+        # Get the properties inherited from Loss
         Loss1_str += super(Loss1, self).__str__()
         if self.lam_stator is not None:
             tmp = (
@@ -352,7 +324,7 @@ class Loss1(Simulation):
         if type(other) != type(self):
             return False
 
-        # Check the properties inherited from Simulation
+        # Check the properties inherited from Loss
         if not super(Loss1, self).__eq__(other):
             return False
         if other.lam_stator != self.lam_stator:
@@ -383,7 +355,7 @@ class Loss1(Simulation):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        # Get the properties inherited from Simulation
+        # Get the properties inherited from Loss
         Loss1_dict = super(Loss1, self).as_dict()
         if self.lam_stator is None:
             Loss1_dict["lam_stator"] = None
@@ -459,7 +431,7 @@ class Loss1(Simulation):
             self.frame._set_None()
         if self.additional is not None:
             self.additional._set_None()
-        # Set to None the properties inherited from Simulation
+        # Set to None the properties inherited from Loss
         super(Loss1, self)._set_None()
 
     def _get_lam_stator(self):

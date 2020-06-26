@@ -205,11 +205,27 @@ class Simu1(Simulation):
             self.force = force
         # loss can be None, a Loss object or a dict
         if isinstance(loss, dict):
-            self.loss = Loss(init_dict=loss)
+            # Check that the type is correct (including daughter)
+            class_name = loss.get("__class__")
+            if class_name not in ["Loss", "Loss1"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for loss"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.loss = class_obj(init_dict=loss)
         elif isinstance(loss, str):
             from ..Functions.load import load
 
-            self.loss = load(loss)
+            loss = load(loss)
+            # Check that the type is correct (including daughter)
+            class_name = loss.__class__.__name__
+            if class_name not in ["Loss", "Loss1"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for loss"
+                )
+            self.loss = loss
         else:
             self.loss = loss
         # Call Simulation init

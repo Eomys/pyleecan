@@ -3286,7 +3286,10 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "Loss",
+            "Loss1"
+        ],
         "desc": "Losses module abstract object",
         "is_internal": false,
         "methods": [],
@@ -3307,9 +3310,9 @@
         "desc": "Gather loss modules loss calculation models",
         "is_internal": false,
         "methods": [
-            "comp_losses"
+            "run"
         ],
-        "mother": "Simulation",
+        "mother": "Loss",
         "name": "Loss1",
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Loss1.csv",
@@ -3321,7 +3324,7 @@
                 "name": "lam_stator",
                 "type": "LossModel",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Rotor Lamination Loss Model",
@@ -3330,7 +3333,7 @@
                 "name": "lam_rotor",
                 "type": "LossModel",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Stator Winding Loss Model",
@@ -3339,7 +3342,7 @@
                 "name": "wind_stator",
                 "type": "LossModel",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Rotor Winding Loss Model",
@@ -3348,7 +3351,7 @@
                 "name": "wind_rotor",
                 "type": "LossModel",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Stator Magnet Loss Model",
@@ -3357,7 +3360,7 @@
                 "name": "mag_stator",
                 "type": "LossModel",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Rotor Magnet Loss Model",
@@ -3366,7 +3369,7 @@
                 "name": "mag_rotor",
                 "type": "LossModel",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Windage Loss Model",
@@ -3375,7 +3378,7 @@
                 "name": "windage",
                 "type": "LossModel",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Bearing Loss Model",
@@ -3384,7 +3387,7 @@
                 "name": "bearing",
                 "type": "LossModel",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Shaft Loss Model",
@@ -3393,7 +3396,7 @@
                 "name": "shaft",
                 "type": "LossModel",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Frame Loss Model",
@@ -3402,7 +3405,7 @@
                 "name": "frame",
                 "type": "LossModel",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Loss moduale",
@@ -3411,7 +3414,7 @@
                 "name": "additional",
                 "type": "LossModel",
                 "unit": "-",
-                "value": ""
+                "value": null
             }
         ]
     },
@@ -6934,7 +6937,6 @@
         ],
         "daughters": [
             "Simulation",
-            "Loss1",
             "Simu1"
         ],
         "desc": "Abstract class for the simulation",
