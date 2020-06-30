@@ -43,6 +43,13 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_12">
          <item>
+          <widget class="QLabel" name="in_reference_mat_lib">
+           <property name="text">
+            <string>Material library</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QListWidget" name="nav_mat"/>
          </item>
          <item>
