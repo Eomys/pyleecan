@@ -619,7 +619,7 @@ def test_Optimization_problem():
     def harm1(output):
         """Return the average torque opposite (opposite to be maximized)"""
         N = output.simu.input.time.num
-        x = output.mag.Tem[:, 0]
+        x = output.mag.Tem.values[:, 0]
         sp = np.fft.rfft(x)
         sp = 2 / N * np.abs(sp)
         return -sp[0] / 2
@@ -627,7 +627,7 @@ def test_Optimization_problem():
     def harm2(output):
         """Return the first torque harmonic """
         N = output.simu.input.time.num
-        x = output.mag.Tem[:, 0]
+        x = output.mag.Tem.values[:, 0]
         sp = np.fft.rfft(x)
         sp = 2 / N * np.abs(sp)
         return sp[1]

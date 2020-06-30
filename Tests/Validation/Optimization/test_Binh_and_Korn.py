@@ -7,7 +7,7 @@ Binh, T. and U. Korn, "MOBES: A multiobjective evolution strategy for constraine
 In Proceedings of the third international Conference on Genetic Algorithms (Mendel97), ", Brno, Czech Republic, pp. 176-182, 1997 
 """
 # Imports
-
+from os.path import join
 import pytest
 from pyleecan.definitions import PACKAGE_NAME
 from Tests.Validation.Machine.SCIM_001 import SCIM_001
@@ -27,6 +27,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as img
 import numpy as np
 import random
+from Tests import save_validation_path as save_path
 
 
 @pytest.mark.validation
@@ -217,4 +218,4 @@ def test_Binh_and_Korn():
         return fig
 
     fig = plot_pareto(res)
-    fig.savefig("Tests/Results/Validation/test_Binh_and_Korn.png")
+    fig.savefig(join(save_path, "test_Binh_and_Korn.png"))

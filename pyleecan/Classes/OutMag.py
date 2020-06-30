@@ -136,8 +136,7 @@ class OutMag(FrozenClass):
             raise ImportError("Unknown type DataND please install SciDataTool")
         self.Br = Br
         self.Bt = Bt
-        # Tem can be None, a ndarray or a list
-        set_array(self, "Tem", Tem)
+        self.Tem = Tem
         self.Tem_av = Tem_av
         self.Tem_rip = Tem_rip
         # Phi_wind_stator can be None, a ndarray or a list
@@ -185,13 +184,7 @@ class OutMag(FrozenClass):
         OutMag_str += "Na_tot = " + str(self.Na_tot) + linesep
         OutMag_str += "Br = " + str(self.Br) + linesep + linesep
         OutMag_str += "Bt = " + str(self.Bt) + linesep + linesep
-        OutMag_str += (
-            "Tem = "
-            + linesep
-            + str(self.Tem).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutMag_str += "Tem = " + str(self.Tem) + linesep + linesep
         OutMag_str += "Tem_av = " + str(self.Tem_av) + linesep
         OutMag_str += "Tem_rip = " + str(self.Tem_rip) + linesep
         OutMag_str += (
@@ -238,7 +231,7 @@ class OutMag(FrozenClass):
             return False
         if other.Bt != self.Bt:
             return False
-        if not array_equal(other.Tem, self.Tem):
+        if other.Tem != self.Tem:
             return False
         if other.Tem_av != self.Tem_av:
             return False
@@ -289,8 +282,12 @@ class OutMag(FrozenClass):
             }
         if self.Tem is None:
             OutMag_dict["Tem"] = None
-        else:
-            OutMag_dict["Tem"] = self.Tem.tolist()
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutMag_dict["Tem"] = {
+                "__class__": str(type(self._Tem)),
+                "__repr__": str(self._Tem.__repr__()),
+                "serialized": dumps(self._Tem).decode("ISO-8859-2"),
+            }
         OutMag_dict["Tem_av"] = self.Tem_av
         OutMag_dict["Tem_rip"] = self.Tem_rip
         if self.Phi_wind_stator is None:
@@ -452,16 +449,20 @@ class OutMag(FrozenClass):
 
     def _set_Tem(self, value):
         """setter of Tem"""
-        if type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Tem", value, "ndarray")
-        self._Tem = value
+        try:  # Check the type
+            check_var("Tem", value, "dict")
+        except CheckTypeError:
+            check_var("Tem", value, "SciDataTool.Classes.DataND.DataND")
+            # property can be set from a list to handle loads
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Tem = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._Tem = value
 
     # Electromagnetic torque
-    # Type : ndarray
+    # Type : SciDataTool.Classes.DataND.DataND
     Tem = property(fget=_get_Tem, fset=_set_Tem, doc=u"""Electromagnetic torque""")
 
     def _get_Tem_av(self):
