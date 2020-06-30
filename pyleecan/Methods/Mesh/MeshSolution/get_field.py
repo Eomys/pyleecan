@@ -102,7 +102,7 @@ def get_field(
         if is_center or is_surf:
             if is_other_dim:
                 # Field has other dimension -> loop over other dimension
-                result = result = zeros(shape[0], shape[1])
+                result = zeros((shape[0], shape[1]), dtype=complex)
                 for i in range(shape[1]):
                     field_i = field[:, i]
                     # Extract subset of the field if necessary
@@ -154,11 +154,11 @@ def get_field(
         if is_other_dim:
             # Field has third dimension -> loop over third dimension
             if is_1d_output:
-                result = zeros(shape[0], shape[2])
+                result = zeros((shape[0], shape[2]), dtype=complex)
             elif is_rms:
-                result = zeros(shape[2])
+                result = zeros(shape[2], dtype=complex)
             else:
-                result = zeros(shape)
+                result = zeros(shape, dtype=complex)
             for i in range(shape[2]):
                 field_i = field[:, :, i]
                 # Extract subset of the field if necessary

@@ -1,7 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import pyvista as pv
-from numpy import real, linspace, exp, pi, min as np_min, max as np_max
+from numpy import (
+    real,
+    linspace,
+    exp,
+    pi,
+    argmax,
+    abs,
+    sum as np_sum,
+    min as np_min,
+    max as np_max,
+)
 
 from ....Classes.MeshMat import MeshMat
 from ....Classes.MeshVTK import MeshVTK
@@ -19,7 +29,7 @@ def plot_deflection_animated(
     factor=None,
     field_name=None,
     is_time=False,
-    ifreq=0,
+    ifreq=None,
     gif_name="animation.gif",
     gif_path="./",
 ):
@@ -63,8 +73,14 @@ def plot_deflection_animated(
         field_data = real(field[:, 0])
         vect_field_data = real(vect_field[:, :, 0])
     elif len(field.shape) == 2:
-        field_data = real(field[:, ifreq])
-        vect_field_data = real(vect_field[:, :, ifreq])
+        if ifreq is None:
+            # Find frequency with highest response
+            ifreq = argmax(np_sum(real(field), axis=0))
+        field = field[:, ifreq]
+        vect_field = vect_field[:, :, ifreq]
+        field_data = real(field)
+        vect_field_data = real(vect_field)
+
     else:
         field_data = real(field)
         vect_field_data = real(vect_field)
@@ -88,13 +104,13 @@ def plot_deflection_animated(
     surf = mesh.get_surf(indices=indices)
 
     # Add field to surf
-    surf.vectors = real(vect_field) * factor
+    surf.vectors = real(vect_field_data) * factor
 
     # Warp by vectors
     surf_warp = surf.warp_by_vector()
 
     # Add radial field
-    surf_warp[field_name] = real(field)
+    surf_warp[field_name] = real(field_data)
 
     # Configure plot
     pv.set_plot_theme("document")
