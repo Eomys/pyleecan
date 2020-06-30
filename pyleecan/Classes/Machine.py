@@ -84,6 +84,11 @@ try:
 except ImportError as error:
     comp_sym = error
 
+try:
+    from ..Methods.Machine.Machine.comp_desc_dict import comp_desc_dict
+except ImportError as error:
+    comp_desc_dict = error
+
 
 from ._check import InitUnKnowClassError
 from .Frame import Frame
@@ -246,6 +251,17 @@ class Machine(FrozenClass):
         )
     else:
         comp_sym = comp_sym
+    # cf Methods.Machine.Machine.comp_desc_dict
+    if isinstance(comp_desc_dict, ImportError):
+        comp_desc_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method comp_desc_dict: " + str(comp_desc_dict)
+                )
+            )
+        )
+    else:
+        comp_desc_dict = comp_desc_dict
     # save method is available in all object
     save = save
 

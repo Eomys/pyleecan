@@ -276,9 +276,7 @@ class MatLib(QObject):
                 except FileNotFoundError:
                     logger = self.dict_mat[key][index].get_logger()
                     logger.warning(
-                        'Couldn\'t delete old material "{}" file: {}'.format(
-                            name, path,
-                        )
+                        'Couldn\'t delete old material "{}" file: {}'.format(name, path)
                     )
 
             idx = path.rfind("/")
