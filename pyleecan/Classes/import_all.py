@@ -65,6 +65,7 @@ from ..Classes.Line import Line
 from ..Classes.Loss import Loss
 from ..Classes.Loss1 import Loss1
 from ..Classes.LossModel import LossModel
+from ..Classes.LossModelBertotti import LossModelBertotti
 from ..Classes.Machine import Machine
 from ..Classes.MachineAsync import MachineAsync
 from ..Classes.MachineDFIM import MachineDFIM

@@ -143,101 +143,277 @@ class Loss1(Loss):
         # Initialisation by argument
         # lam_stator can be None, a LossModel object or a dict
         if isinstance(lam_stator, dict):
-            self.lam_stator = LossModel(init_dict=lam_stator)
+            # Check that the type is correct (including daughter)
+            class_name = lam_stator.get("__class__")
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for lam_stator"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.lam_stator = class_obj(init_dict=lam_stator)
         elif isinstance(lam_stator, str):
             from ..Functions.load import load
 
-            self.lam_stator = load(lam_stator)
+            lam_stator = load(lam_stator)
+            # Check that the type is correct (including daughter)
+            class_name = lam_stator.__class__.__name__
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for lam_stator"
+                )
+            self.lam_stator = lam_stator
         else:
             self.lam_stator = lam_stator
         # lam_rotor can be None, a LossModel object or a dict
         if isinstance(lam_rotor, dict):
-            self.lam_rotor = LossModel(init_dict=lam_rotor)
+            # Check that the type is correct (including daughter)
+            class_name = lam_rotor.get("__class__")
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for lam_rotor"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.lam_rotor = class_obj(init_dict=lam_rotor)
         elif isinstance(lam_rotor, str):
             from ..Functions.load import load
 
-            self.lam_rotor = load(lam_rotor)
+            lam_rotor = load(lam_rotor)
+            # Check that the type is correct (including daughter)
+            class_name = lam_rotor.__class__.__name__
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for lam_rotor"
+                )
+            self.lam_rotor = lam_rotor
         else:
             self.lam_rotor = lam_rotor
         # wind_stator can be None, a LossModel object or a dict
         if isinstance(wind_stator, dict):
-            self.wind_stator = LossModel(init_dict=wind_stator)
+            # Check that the type is correct (including daughter)
+            class_name = wind_stator.get("__class__")
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for wind_stator"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.wind_stator = class_obj(init_dict=wind_stator)
         elif isinstance(wind_stator, str):
             from ..Functions.load import load
 
-            self.wind_stator = load(wind_stator)
+            wind_stator = load(wind_stator)
+            # Check that the type is correct (including daughter)
+            class_name = wind_stator.__class__.__name__
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for wind_stator"
+                )
+            self.wind_stator = wind_stator
         else:
             self.wind_stator = wind_stator
         # wind_rotor can be None, a LossModel object or a dict
         if isinstance(wind_rotor, dict):
-            self.wind_rotor = LossModel(init_dict=wind_rotor)
+            # Check that the type is correct (including daughter)
+            class_name = wind_rotor.get("__class__")
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for wind_rotor"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.wind_rotor = class_obj(init_dict=wind_rotor)
         elif isinstance(wind_rotor, str):
             from ..Functions.load import load
 
-            self.wind_rotor = load(wind_rotor)
+            wind_rotor = load(wind_rotor)
+            # Check that the type is correct (including daughter)
+            class_name = wind_rotor.__class__.__name__
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for wind_rotor"
+                )
+            self.wind_rotor = wind_rotor
         else:
             self.wind_rotor = wind_rotor
         # mag_stator can be None, a LossModel object or a dict
         if isinstance(mag_stator, dict):
-            self.mag_stator = LossModel(init_dict=mag_stator)
+            # Check that the type is correct (including daughter)
+            class_name = mag_stator.get("__class__")
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for mag_stator"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.mag_stator = class_obj(init_dict=mag_stator)
         elif isinstance(mag_stator, str):
             from ..Functions.load import load
 
-            self.mag_stator = load(mag_stator)
+            mag_stator = load(mag_stator)
+            # Check that the type is correct (including daughter)
+            class_name = mag_stator.__class__.__name__
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for mag_stator"
+                )
+            self.mag_stator = mag_stator
         else:
             self.mag_stator = mag_stator
         # mag_rotor can be None, a LossModel object or a dict
         if isinstance(mag_rotor, dict):
-            self.mag_rotor = LossModel(init_dict=mag_rotor)
+            # Check that the type is correct (including daughter)
+            class_name = mag_rotor.get("__class__")
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for mag_rotor"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.mag_rotor = class_obj(init_dict=mag_rotor)
         elif isinstance(mag_rotor, str):
             from ..Functions.load import load
 
-            self.mag_rotor = load(mag_rotor)
+            mag_rotor = load(mag_rotor)
+            # Check that the type is correct (including daughter)
+            class_name = mag_rotor.__class__.__name__
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for mag_rotor"
+                )
+            self.mag_rotor = mag_rotor
         else:
             self.mag_rotor = mag_rotor
         # windage can be None, a LossModel object or a dict
         if isinstance(windage, dict):
-            self.windage = LossModel(init_dict=windage)
+            # Check that the type is correct (including daughter)
+            class_name = windage.get("__class__")
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for windage"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.windage = class_obj(init_dict=windage)
         elif isinstance(windage, str):
             from ..Functions.load import load
 
-            self.windage = load(windage)
+            windage = load(windage)
+            # Check that the type is correct (including daughter)
+            class_name = windage.__class__.__name__
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for windage"
+                )
+            self.windage = windage
         else:
             self.windage = windage
         # bearing can be None, a LossModel object or a dict
         if isinstance(bearing, dict):
-            self.bearing = LossModel(init_dict=bearing)
+            # Check that the type is correct (including daughter)
+            class_name = bearing.get("__class__")
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for bearing"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.bearing = class_obj(init_dict=bearing)
         elif isinstance(bearing, str):
             from ..Functions.load import load
 
-            self.bearing = load(bearing)
+            bearing = load(bearing)
+            # Check that the type is correct (including daughter)
+            class_name = bearing.__class__.__name__
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for bearing"
+                )
+            self.bearing = bearing
         else:
             self.bearing = bearing
         # shaft can be None, a LossModel object or a dict
         if isinstance(shaft, dict):
-            self.shaft = LossModel(init_dict=shaft)
+            # Check that the type is correct (including daughter)
+            class_name = shaft.get("__class__")
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for shaft"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.shaft = class_obj(init_dict=shaft)
         elif isinstance(shaft, str):
             from ..Functions.load import load
 
-            self.shaft = load(shaft)
+            shaft = load(shaft)
+            # Check that the type is correct (including daughter)
+            class_name = shaft.__class__.__name__
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for shaft"
+                )
+            self.shaft = shaft
         else:
             self.shaft = shaft
         # frame can be None, a LossModel object or a dict
         if isinstance(frame, dict):
-            self.frame = LossModel(init_dict=frame)
+            # Check that the type is correct (including daughter)
+            class_name = frame.get("__class__")
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for frame"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.frame = class_obj(init_dict=frame)
         elif isinstance(frame, str):
             from ..Functions.load import load
 
-            self.frame = load(frame)
+            frame = load(frame)
+            # Check that the type is correct (including daughter)
+            class_name = frame.__class__.__name__
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for frame"
+                )
+            self.frame = frame
         else:
             self.frame = frame
         # additional can be None, a LossModel object or a dict
         if isinstance(additional, dict):
-            self.additional = LossModel(init_dict=additional)
+            # Check that the type is correct (including daughter)
+            class_name = additional.get("__class__")
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for additional"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.additional = class_obj(init_dict=additional)
         elif isinstance(additional, str):
             from ..Functions.load import load
 
-            self.additional = load(additional)
+            additional = load(additional)
+            # Check that the type is correct (including daughter)
+            class_name = additional.__class__.__name__
+            if class_name not in ["LossModel", "LossModelBertotti"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for additional"
+                )
+            self.additional = additional
         else:
             self.additional = additional
         # Call Loss init

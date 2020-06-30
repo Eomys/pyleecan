@@ -3425,7 +3425,10 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "LossModel",
+            "LossModelBertotti"
+        ],
         "desc": "Abstract Loss Model Class",
         "is_internal": false,
         "methods": [
@@ -3436,6 +3439,89 @@
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/LossModel.csv",
         "properties": []
+    },
+    "LossModelBertotti": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "F_REF",
+                "value": "50"
+            },
+            {
+                "name": "B_REF",
+                "value": "1.5"
+            }
+        ],
+        "daughters": [],
+        "desc": "Bertotti Loss Model Class",
+        "is_internal": false,
+        "methods": [
+            "comp_loss",
+            "comp_coeff_Bertotti"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelBertotti",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/LossModelBertotti.csv",
+        "properties": [
+            {
+                "desc": "Hysteresis loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_hy",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Eddy current loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_ed",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Excess loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_ex",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Hysteresis loss power coefficient",
+                "max": "",
+                "min": "",
+                "name": "alpha_hy",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Eddy current loss power coefficient",
+                "max": "",
+                "min": "",
+                "name": "alpha_ed",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Excess loss power coefficient",
+                "max": "",
+                "min": "",
+                "name": "alpha_ex",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            }
+        ]
     },
     "Machine": {
         "constants": [
@@ -4704,6 +4790,15 @@
                 "name": "BH_curve",
                 "type": "ImportMatrix",
                 "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "specific loss data value triplets, i.e. B, f, P",
+                "max": "",
+                "min": "",
+                "name": "LossData",
+                "type": "ImportMatrix",
+                "unit": "W/kg",
                 "value": ""
             }
         ]
