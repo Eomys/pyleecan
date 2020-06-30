@@ -4852,8 +4852,8 @@
             "get_field",
             "plot_mesh",
             "plot_contour",
-            "plot_ODS",
-            "plot_ODS_animated",
+            "plot_deflection",
+            "plot_deflection_animated",
             "plot_glyph"
         ],
         "mother": "",
@@ -5020,6 +5020,56 @@
                 "type": "str",
                 "unit": "",
                 "value": "surf"
+            }
+        ]
+    },
+    "Mode": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Structural module: Mode object",
+        "is_internal": false,
+        "methods": [
+            "plot",
+            "plot_animated",
+            "get_shape_xyz",
+            "get_shape_pol"
+        ],
+        "mother": "SolutionMat",
+        "name": "Mode",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Mode.csv",
+        "properties": [
+            {
+                "desc": "Natural frequency of the mode",
+                "max": "",
+                "min": "",
+                "name": "nat_freq",
+                "type": "float",
+                "unit": "Hz",
+                "value": null
+            },
+            {
+                "desc": "Circumferential order",
+                "max": "",
+                "min": "0",
+                "name": "order_circ",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Longitudinal order",
+                "max": "",
+                "min": "0",
+                "name": "order_long",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -8683,6 +8733,7 @@
         ],
         "daughters": [
             "Solution",
+            "Mode",
             "SolutionData",
             "SolutionMat"
         ],
@@ -8751,7 +8802,9 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "Mode"
+        ],
         "desc": "Define a Solution with ndarray object.",
         "is_internal": false,
         "methods": [

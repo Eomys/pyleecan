@@ -43,14 +43,16 @@ except ImportError as error:
     plot_contour = error
 
 try:
-    from ..Methods.Mesh.MeshSolution.plot_ODS import plot_ODS
+    from ..Methods.Mesh.MeshSolution.plot_deflection import plot_deflection
 except ImportError as error:
-    plot_ODS = error
+    plot_deflection = error
 
 try:
-    from ..Methods.Mesh.MeshSolution.plot_ODS_animated import plot_ODS_animated
+    from ..Methods.Mesh.MeshSolution.plot_deflection_animated import (
+        plot_deflection_animated,
+    )
 except ImportError as error:
-    plot_ODS_animated = error
+    plot_deflection_animated = error
 
 try:
     from ..Methods.Mesh.MeshSolution.plot_glyph import plot_glyph
@@ -133,27 +135,30 @@ class MeshSolution(FrozenClass):
         )
     else:
         plot_contour = plot_contour
-    # cf Methods.Mesh.MeshSolution.plot_ODS
-    if isinstance(plot_ODS, ImportError):
-        plot_ODS = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MeshSolution method plot_ODS: " + str(plot_ODS))
-            )
-        )
-    else:
-        plot_ODS = plot_ODS
-    # cf Methods.Mesh.MeshSolution.plot_ODS_animated
-    if isinstance(plot_ODS_animated, ImportError):
-        plot_ODS_animated = property(
+    # cf Methods.Mesh.MeshSolution.plot_deflection
+    if isinstance(plot_deflection, ImportError):
+        plot_deflection = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MeshSolution method plot_ODS_animated: "
-                    + str(plot_ODS_animated)
+                    "Can't use MeshSolution method plot_deflection: "
+                    + str(plot_deflection)
                 )
             )
         )
     else:
-        plot_ODS_animated = plot_ODS_animated
+        plot_deflection = plot_deflection
+    # cf Methods.Mesh.MeshSolution.plot_deflection_animated
+    if isinstance(plot_deflection_animated, ImportError):
+        plot_deflection_animated = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method plot_deflection_animated: "
+                    + str(plot_deflection_animated)
+                )
+            )
+        )
+    else:
+        plot_deflection_animated = plot_deflection_animated
     # cf Methods.Mesh.MeshSolution.plot_glyph
     if isinstance(plot_glyph, ImportError):
         plot_glyph = property(
@@ -261,7 +266,12 @@ class MeshSolution(FrozenClass):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in ["Solution", "SolutionData", "SolutionMat"]:
+                    if class_name not in [
+                        "Solution",
+                        "Mode",
+                        "SolutionData",
+                        "SolutionMat",
+                    ]:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
