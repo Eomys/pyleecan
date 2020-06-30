@@ -5481,7 +5481,7 @@
         "mother": "",
         "name": "OptiSolver",
         "package": "Optimization",
-        "path": "pyleecan/Generator/ClassesRef/Optimization/OptiSolver.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Optimization/OptiSolver.csv",
         "properties": [
             {
                 "desc": "Problem to solve",
