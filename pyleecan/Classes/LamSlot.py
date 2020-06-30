@@ -62,6 +62,11 @@ try:
 except ImportError as error:
     comp_radius_mid_yoke = error
 
+try:
+    from ..Methods.Machine.LamSlot.comp_sym import comp_sym
+except ImportError as error:
+    comp_sym = error
+
 
 from ._check import InitUnKnowClassError
 from .Slot import Slot
@@ -183,6 +188,15 @@ class LamSlot(Lamination):
         )
     else:
         comp_radius_mid_yoke = comp_radius_mid_yoke
+    # cf Methods.Machine.LamSlot.comp_sym
+    if isinstance(comp_sym, ImportError):
+        comp_sym = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlot method comp_sym: " + str(comp_sym))
+            )
+        )
+    else:
+        comp_sym = comp_sym
     # save method is available in all object
     save = save
 

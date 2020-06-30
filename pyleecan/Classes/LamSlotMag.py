@@ -52,6 +52,11 @@ try:
 except ImportError as error:
     comp_angle_d_axis = error
 
+try:
+    from ..Methods.Machine.LamSlotMag.comp_sym import comp_sym
+except ImportError as error:
+    comp_sym = error
+
 
 from ._check import InitUnKnowClassError
 from .Slot import Slot
@@ -152,6 +157,15 @@ class LamSlotMag(LamSlot):
         )
     else:
         comp_angle_d_axis = comp_angle_d_axis
+    # cf Methods.Machine.LamSlotMag.comp_sym
+    if isinstance(comp_sym, ImportError):
+        comp_sym = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use LamSlotMag method comp_sym: " + str(comp_sym))
+            )
+        )
+    else:
+        comp_sym = comp_sym
     # save method is available in all object
     save = save
 

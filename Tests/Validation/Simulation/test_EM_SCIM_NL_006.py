@@ -53,11 +53,12 @@ def test_Magnetic_FEMM_sym():
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
-        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=False, is_antiper_a=True
+        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=False, is_antiper_a=False
     )
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
+    assert SCIM_006.comp_sym() == (2, False)
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_symmetry_a = True
     simu_sym.mag.sym_a = 2

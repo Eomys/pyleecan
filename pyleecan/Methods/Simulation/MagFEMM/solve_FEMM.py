@@ -39,7 +39,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     # Initialize results matrix
     Br = zeros((Nt_tot, Na_tot))
     Bt = zeros((Nt_tot, Na_tot))
-    Tem = zeros((Nt_tot, 1))
+    Tem = zeros((Nt_tot))
 
     lam_int = output.simu.machine.get_lamination(True)
     lam_ext = output.simu.machine.get_lamination(False)
@@ -143,7 +143,13 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         axes=[Time, Angle],
         values=Bt,
     )
-    output.mag.Tem = Tem
+    output.mag.Tem = DataTime(
+        name="Electromagnetic torque",
+        unit="Nm",
+        symbol="T_{em}",
+        axes=[Time],
+        values=Tem,
+    )
     output.mag.Tem_av = mean(Tem)
     if output.mag.Tem_av != 0:
         output.mag.Tem_rip = abs((np_max(Tem) - np_min(Tem)) / output.mag.Tem_av)
