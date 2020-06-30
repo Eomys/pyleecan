@@ -7,18 +7,23 @@ from ....Functions.Material.compare_material import compare_material
 from ....Functions.Material.replace_material_pyleecan_obj import (
     replace_material_pyleecan_obj,
 )
+from ....definitions import config_dict, MATLIB_DIR
 from ....GUI import GUI_logger
 
+from PyQt5.QtCore import QObject, pyqtSignal
 
-class MatLib(object):
+
+class MatLib(QObject):
+    saveNeeded = pyqtSignal()
+
     def __init__(self, path=None):
         """MatLib contains the material library and the specific machine materials.
         """
-        # List containing the material library and the specific machine materials
-        self.list_mat = []
-
-        # Pointer on the first machine material in the list
-        self.index_first_mat_mach = 1
+        # Dict containing the material library and the specific machine materials
+        self.dict_mat = {
+            "RefMatLib": [],  # Reference Material Library
+            "MachineMatLib": [],  # Machine-specific materials
+        }
 
         # Reference material library path
         self.ref_path = path
@@ -39,22 +44,23 @@ class MatLib(object):
             new material library path
         """
         # Load a complete new matlib
-        if len(self.list_mat) in [0, self.index_first_mat_mach]:
-            self.list_mat = load_matlib(path)
-            self.index_first_mat_mach = len(self.list_mat)
-        else:
-            list_mat = load_matlib(path)
-            for _ in range(self.index_first_mat_mach):
-                self.list_mat.pop(0)
-            self.index_first_mat_mach = len(list_mat)
-            for idx, material in enumerate(list_mat):
-                self.list_mat.insert(idx, material)
+        self.dict_mat["RefMatLib"] = load_matlib(path)
+
+        # Remove MATLIB_DIR at the beginning of the material path
+        for mat in self.dict_mat["RefMatLib"]:
+            if config_dict["MATLIB_DIR"].replace("\\", " / ") in mat.path.replace(
+                "\\", "/"
+            ):
+                mat.path = mat.path.replace("\\", "/")[
+                    len(config_dict["MATLIB_DIR"].replace("\\", " / ")) + 1 :
+                ]
+            mat.path = mat.path.replace("\\", "/").strip("/")
 
         self.ref_path = path
 
     def add_machine_mat(self, machine):
         """
-        Add machine materials if it is not in the MatLib 
+        Add machine materials if they are not in the MatLib 
         
         Parameters
         ----------
@@ -62,20 +68,29 @@ class MatLib(object):
         
         machine: Machine
             Machine containing material to add 
+
+        Returns
+        -------
+        is_change: bool
+            Machine has changed
         """
         # Set the machine
         self.machine = machine
 
-        # Remove previous machine material
-        for i in range(self.index_first_mat_mach, len(self.list_mat)):
-            self.list_mat.pop(i)
+        # No change by default
+        is_change = False
+
+        # Remove previous machine materials
+        self.dict_mat["MachineMatLib"] = []
 
         list_mach_mat = machine.get_material_list()
         if not isinstance(list_mach_mat, list):
             list_mach_mat = [list_mach_mat]
 
         # Copy the matlib and remove the name and the path to compare the materials
-        list_mat_noname = [Material(init_dict=mat.as_dict()) for mat in self.list_mat]
+        list_mat_noname = [
+            Material(init_dict=mat.as_dict()) for mat in self.dict_mat["RefMatLib"]
+        ]
         for mat in list_mat_noname:
             mat.name = ""
             mat.path = ""
@@ -96,51 +111,88 @@ class MatLib(object):
             if material not in list_mat_noname:
                 material.name = name
                 material.path = path
-                self.list_mat.append(material)
-                self.check_material_duplicated_name(-1)
+                self.dict_mat["MachineMatLib"].append(material)
+                self.check_material_duplicated_name("MachineMatLib", -1)
 
             # Replace the material in the machine by the MatLib one
             else:
-                for mat in self.list_mat:
+                material.name = name
+                material.path = path
+                for mat in self.dict_mat["RefMatLib"]:
                     # Find the material in the matlib
-                    if compare_material(material, mat):
+                    if material == mat:  # Same name and path
+                        # No need to change the material
+                        break
+                    elif compare_material(material, mat):
                         # Replace material by mat in machine
-                        replace_material_pyleecan_obj(machine, material, mat)
+                        is_change_mat = replace_material_pyleecan_obj(
+                            machine, material, mat, False
+                        )
+
+                        if not is_change:
+                            is_change = is_change_mat
                         break
 
-    def move_mach_mat_to_ref(self, index):
+        return is_change
+
+    def move_mach_mat_to_ref(self, key, index):
         """
         Move a machine material into the matlib reference
 
         Parameters
         ----------
         self: MatLib 
-
+        key: str
+            machine name to move the right material  
         index: int
-            position of the machine material
+            position of the machine material in its machine materials list
         """
-        assert index >= self.index_first_mat_mach, ValueError(
-            "The material {} is already in the Material Library".format(
-                self.list_mat[index].name
-            )
-        )
-
-        from ....definitions import MATLIB_DIR
 
         # Move the material into the Material library
-        mat = self.list_mat.pop(index)
-        index = self.index_first_mat_mach
-        self.index_first_mat_mach += 1
-        self.list_mat.insert(index, mat)
+        mat = self.dict_mat["MachineMatLib"].pop(index)
+        self.dict_mat["RefMatLib"].append(mat)
 
         # Set the path of the new matlib material
-        new_path = join(MATLIB_DIR, self.list_mat[index].name + ".json").replace(
-            "\\", "/"
-        )
-        self.list_mat[index].path = new_path
-        self.list_mat[index].save(new_path)
+        new_path = self.dict_mat["RefMatLib"][-1].name + ".json"
+        self.dict_mat["RefMatLib"][-1].path = new_path
 
-    def delete_material(self, index):
+        self.dict_mat["RefMatLib"][-1].save(join(config_dict["MATLIB_DIR"], new_path))
+
+    def move_ref_mat_to_mach(self, key, index):
+        """
+        Move a material from the reference material library to 
+        the machine materials
+
+        self: MatLib
+        key: str
+            key to select the right machine list
+        index: int
+            material to move position in the reference material list
+        """
+
+        mat_to_move = self.dict_mat["RefMatLib"].pop(index)
+
+        # Get material logger
+        logger = mat_to_move.get_logger()
+
+        # Try to remove the material from the material library
+        try:
+            remove(join(config_dict["MATLIB_DIR"], mat_to_move.path))
+            logger.info(
+                'Delete material "{}" file: {}'.format(
+                    mat_to_move.name, join(config_dict["MATLIB_DIR"], mat_to_move.path)
+                )
+            )
+        except FileNotFoundError:
+            logger.warning(
+                'Couldn\'t delete material "{}" file: {}'.format(
+                    mat_to_move.name, join(config_dict["MATLIB_DIR"], mat_to_move.path)
+                )
+            )
+
+        self.dict_mat[key].append(mat_to_move)
+
+    def delete_material(self, key, index):
         """
         Remove the material and delete the material file
 
@@ -148,23 +200,21 @@ class MatLib(object):
         ----------
         self: MatLib
 
+        key: str
+            List selector in the dict : RefMatLib or MachineMatLib TODO MachineName in the future
+
         index: int
             position of the material to remove
         """
-
         # Get the material
-        mat_to_del = self.list_mat.pop(index)
+        mat_to_del = self.dict_mat[key].pop(index)
 
-        GUI_logger.info("Deleting the material: " + mat_to_del.path)
+        # Delete the material file if the material is in the Reference Material Library
+        if key == "RefMatLib":
+            GUI_logger.info("Deleting the material: " + mat_to_del.path)
+            remove(join(config_dict["MATLIB_DIR"], mat_to_del.path))  # Delete the file
 
-        # Reference material
-        if index < self.index_first_mat_mach:
-            remove(mat_to_del.path)  # Delete the file
-
-            # Change index_first_mat_mach
-            self.index_first_mat_mach -= 1
-
-    def check_material_duplicated_name(self, index):
+    def check_material_duplicated_name(self, key, index):
         """
         Check if a material name is already used, modify it and its path if needed
 
@@ -172,22 +222,28 @@ class MatLib(object):
         ----------
         self: MatLib
 
+        key: str
+            List selector in the dict : RefMatLib or MachineMatLib TODO MachineName in the future
         index: int
             position of the material to check
         """
         if index == -1:
-            index += len(self.list_mat)
+            index += len(self.dict_mat[key])
 
         is_renamed = False
         mat_duplicated = True
 
         # Get the material name
-        name = self.list_mat[index].name
+        name = self.dict_mat[key][index].name
         if name == None:
             is_renamed = True
             name = "Untitled"
 
-        list_mat_name = [mat.name for i, mat in enumerate(self.list_mat) if i != index]
+        list_mat_name = []
+        for key_iter in self.dict_mat.keys():
+            for i, mat in enumerate(self.dict_mat[key_iter]):
+                if i != index or key_iter != key:
+                    list_mat_name.append(mat.name)
 
         # Browse the material list name and change the name while the name exist
         while mat_duplicated:
@@ -206,24 +262,38 @@ class MatLib(object):
 
         # Change path to save the material
         if is_renamed:
-            self.list_mat[index].name = name
-            path = self.list_mat[index].path
+            self.dict_mat[key][index].name = name
+            path = self.dict_mat[key][index].path
             if path == None:
                 path = ""
             else:
-                path = path.replace("\\", "/")
+                path = path.replace("\\", " / ")
+
+            # Remove the previous file if needed
+            if key == "RefMatLib":
+                try:
+                    remove(path)
+                except FileNotFoundError:
+                    logger = self.dict_mat[key][index].get_logger()
+                    logger.warning(
+                        'Couldn\'t delete old material "{}" file: {}'.format(
+                            name, path,
+                        )
+                    )
 
             idx = path.rfind("/")
             if idx == -1:
-                self.list_mat[index].path = self.list_mat[index].name + ".json"
+                self.dict_mat[key][index].path = (
+                    self.dict_mat[key][index].name + ".json"
+                )
             else:
-                self.list_mat[index].path = (
-                    path[: idx + 1] + self.list_mat[index].name + ".json"
+                self.dict_mat[key][index].path = (
+                    path[: idx + 1] + self.dict_mat[key][index].name + ".json"
                 )
 
-    def add_mat_ref(self, material):
+    def add_new_mat_ref(self, material):
         """
-        Add a material in the reference matlib
+        Add a new material in the reference matlib
 
         Parameters
         ----------
@@ -231,24 +301,21 @@ class MatLib(object):
         material: Material
             material to add
         """
-        from ....definitions import MATLIB_DIR
-
-        self.list_mat.insert(self.index_first_mat_mach, material)
-        self.index_first_mat_mach += 1
+        self.dict_mat["RefMatLib"].append(material)
 
         # Check if the material is duplicated
-        self.check_material_duplicated_name(self.index_first_mat_mach - 1)
+        self.check_material_duplicated_name("RefMatLib", -1)
 
-        material.path = join(MATLIB_DIR, material.name + ".json").replace("\\", "/")
+        material.path = material.name + ".json"
 
         GUI_logger.info("Creating the material: " + material.path)
 
         # Saving the material
-        material.save(material.path)
+        material.save(join(config_dict["MATLIB_DIR"], material.path))
 
-    def add_mat_mach(self, material):
+    def add_new_mat_mach(self, material):
         """
-        Add a material in the machine materials
+        Add a new material in the machine materials
 
         Parameters
         ----------
@@ -256,54 +323,80 @@ class MatLib(object):
         material: Material
             material to add
         """
-        self.list_mat.append(material)
-        self.check_material_duplicated_name(-1)
+        self.dict_mat["MachineMatLib"].append(material)
+        self.check_material_duplicated_name("MachineMatLib", -1)
 
-    def replace_material(self, index, material):
+    def replace_material(self, key, index, material, save=True):
         """
         Replace a material
 
         Parameters
         ----------
         self: MatLib
+        key: str
+            dict_mat key to select the right material list
         index: int
             index of the material to replace
         material: Material
             new material 
-        """
-        from ....definitions import MATLIB_DIR
+        save: bool 
+            save modification in the MatLib file
+        
+        Returns
+        -------
 
+        is_change: bool
+            Machine has been change 
+        """
+        is_change = False
         # Replace the material in the current machine
         if self.machine != None:
-            replace_material_pyleecan_obj(
-                self.machine, self.list_mat[index], material, comp_name_path=False
+            is_change = replace_material_pyleecan_obj(
+                self.machine, self.dict_mat[key][index], material, comp_name_path=False
             )
 
         # Material Library
-        if index < self.index_first_mat_mach:
-            # Delete the previous material
-            remove(self.list_mat[index].path)
+        if key == "RefMatLib":
+            if save:
+                try:
+                    # Delete the previous material
+                    remove(
+                        join(
+                            config_dict["MATLIB_DIR"],
+                            self.dict_mat["RefMatLib"][index].path,
+                        )
+                    )
+                except FileNotFoundError:
+                    logger = material.get_logger()
+                    logger.warning(
+                        'Couldn\'t remove machine "{}" file: {}'.format(
+                            material.name,
+                            join(
+                                config_dict["MATLIB_DIR"],
+                                self.dict_mat["RefMatLib"][index].path,
+                            ),
+                        )
+                    )
 
             # Replace the material
-            self.list_mat[index] = material
+            self.dict_mat[key][index] = material
 
             # Check its name
-            self.check_material_duplicated_name(index)
+            self.check_material_duplicated_name(key, index)
 
             # Set its path
-            material.path = join(MATLIB_DIR, material.name + ".json").replace("\\", "/")
+            material.path = material.name + ".json"
 
-            # Save it
-            material.save(material.path)
+            if save:
+                # Save it
+                material.save(join(config_dict["MATLIB_DIR"], material.path))
 
         # Machine material
         else:
             # Replace the material
-            self.list_mat[index] = material
+            self.dict_mat[key][index] = material
 
             # Check its name
-            self.check_material_duplicated_name(index)
+            self.check_material_duplicated_name(key, index)
 
-        # Check that existing machine materials are not duplicated
-        # if self.machine != None:
-        #     self.add_machine_mat(self.machine)
+        return is_change

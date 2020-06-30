@@ -84,34 +84,35 @@ class test_save_load_matlib(TestCase):
         self.matlib = MatLib(self.work_path)
         self.mat_widget = DMatLib(matlib=self.matlib)
         self.widget = DMachineSetup(
-            matlib=self.matlib, machine=None, machine_path=self.work_path
+            dmatlib=self.mat_widget, machine=None, machine_path=self.work_path
         )
         # Check load of the matlib
-        self.assertEqual(len(self.matlib.list_mat), 4)
+        self.assertEqual(len(self.matlib.dict_mat["RefMatLib"]), 4)
         self.assertEqual(
             ["Copper1", "Insulator1", "M400-50A", "Magnet1"],
-            [mat.name for mat in self.matlib.list_mat],
+            [mat.name for mat in self.matlib.dict_mat["RefMatLib"]],
         )
-        self.assertEqual(self.matlib.list_mat[0].elec.rho, 1.73e-8)
-        self.assertEqual(self.matlib.list_mat[0].HT.alpha, 0.00393)
+        self.assertEqual(self.matlib.dict_mat["RefMatLib"][0].elec.rho, 1.73e-8)
+        self.assertEqual(self.matlib.dict_mat["RefMatLib"][0].HT.alpha, 0.00393)
         self.assertEqual(
-            self.matlib.list_mat[0].path, join(self.work_path, "Copper1.json")
+            self.matlib.dict_mat["RefMatLib"][0].path,
+            join(self.work_path, "Copper1.json").replace("\\", "/"),
         )
 
-        self.assertEqual(self.matlib.list_mat[2].mag.mur_lin, 2500)
-        self.assertEqual(self.matlib.list_mat[2].struct.rho, 7650)
-        self.assertEqual(self.matlib.list_mat[2].struct.Ex, 215000000000)
+        self.assertEqual(self.matlib.dict_mat["RefMatLib"][2].mag.mur_lin, 2500)
+        self.assertEqual(self.matlib.dict_mat["RefMatLib"][2].struct.rho, 7650)
+        self.assertEqual(self.matlib.dict_mat["RefMatLib"][2].struct.Ex, 215000000000)
         self.assertEqual(
-            self.matlib.list_mat[2].path,
-            join(self.work_path, "Lamination", "M400-50A.json"),
+            self.matlib.dict_mat["RefMatLib"][2].path,
+            join(self.work_path, "Lamination", "M400-50A.json").replace("\\", "/"),
         )
         # Change value of materials
-        self.matlib.list_mat[0].elec.rho = 1.74e-8
-        self.matlib.list_mat[0].HT.alpha = 0.00555
-        self.matlib.list_mat[2].mag.mur_lin = 2501.2
-        self.matlib.list_mat[2].struct.rho = 76
+        self.matlib.dict_mat["RefMatLib"][0].elec.rho = 1.74e-8
+        self.matlib.dict_mat["RefMatLib"][0].HT.alpha = 0.00555
+        self.matlib.dict_mat["RefMatLib"][2].mag.mur_lin = 2501.2
+        self.matlib.dict_mat["RefMatLib"][2].struct.rho = 76
         # Save matlib
-        for mat in self.matlib.list_mat:
+        for mat in self.matlib.dict_mat["RefMatLib"]:
             mat.save(mat.path)
             mat2 = load(mat.path)
             self.assertEqual(mat.as_dict(), mat2.as_dict())

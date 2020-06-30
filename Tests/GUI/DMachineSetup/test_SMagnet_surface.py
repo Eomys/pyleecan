@@ -46,15 +46,14 @@ class test_SMagnet_surface(TestCase):
         self.test_obj.rotor.slot.magnet[0].mat_type.name = "test2"
 
         self.matlib = MatLib()
-        self.matlib.list_mat = [
+        self.matlib.dict_mat["RefMatLib"] = [
             Material(name="test1"),
             Material(name="test2"),
             Material(name="test3"),
         ]
-        self.matlib.index_first_mat_mach = 3
-        self.matlib.list_mat[0].elec.rho = 0.31
-        self.matlib.list_mat[1].elec.rho = 0.32
-        self.matlib.list_mat[2].elec.rho = 0.33
+        self.matlib.dict_mat["RefMatLib"][0].elec.rho = 0.31
+        self.matlib.dict_mat["RefMatLib"][1].elec.rho = 0.32
+        self.matlib.dict_mat["RefMatLib"][2].elec.rho = 0.33
 
         self.widget = SMagnet(
             machine=self.test_obj, matlib=self.matlib, is_stator=False
