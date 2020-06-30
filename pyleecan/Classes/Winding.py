@@ -51,6 +51,7 @@ class Winding(FrozenClass):
     """Winding abstract class"""
 
     VERSION = 1
+    NAME = "Abstract Winding"
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.Winding.comp_Ncspc

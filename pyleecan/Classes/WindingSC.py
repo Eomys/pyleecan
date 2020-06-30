@@ -31,6 +31,7 @@ class WindingSC(Winding):
     """short-circuit winding (e.g. squirrel cage type)"""
 
     VERSION = 1
+    NAME = "short-circuit"
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.WindingSC.comp_connection_mat
