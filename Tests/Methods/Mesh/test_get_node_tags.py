@@ -27,7 +27,7 @@ class unittest_get_node_tags(TestCase):
         self.mesh.add_element(np.array([4, 3]), "Segment2", group=int(2))
 
     def test_ElementMat_NodeMat_Triangle3(self):
-        """unittest with ElementMat and NodeMat objects, only Triangle3 elements are defined"""
+        """unittest with CellMat and PointMat objects, only Triangle3 elements are defined"""
 
         node_tags = self.mesh.get_node_tags(elem_tag=np.array([1, 2], dtype=int))
         solution = np.array([1, 2, 3, 4])
@@ -43,7 +43,7 @@ class unittest_get_node_tags(TestCase):
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
     def test_ElementMat_NodeMat_MixedElement(self):
-        """unittest with ElementMat and NodeMat objects, both Triangle3 and Segment2 elements are defined"""
+        """unittest with CellMat and PointMat objects, both Triangle3 and Segment2 elements are defined"""
         # Method test 2
         node_tags = self.mesh.get_node_tags(np.array([2, 3]))
         # Check result

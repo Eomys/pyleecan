@@ -47,6 +47,8 @@ def test_EM_IPMSM_FL_001():
     )
     simu.force = None
     simu.struct = None
+
+    assert IPMSM_xxx.comp_sym() == (4, True)
     # Copy the simu and activate the symmetry
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_symmetry_a = True
@@ -58,7 +60,7 @@ def test_EM_IPMSM_FL_001():
     simu.run()
 
     out2 = Output(simu=simu_sym)
-    out2.post.legend_name = "1/2 symmetry"
+    out2.post.legend_name = "1/4 symmetry"
     out2.post.line_color = "r--"
     simu_sym.run()
 

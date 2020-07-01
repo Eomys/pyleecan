@@ -27,7 +27,6 @@ from ......Functions.FEMM import (
 STATOR_COLOR = config_dict["color_dict"]["STATOR_COLOR"]
 ROTOR_COLOR = config_dict["color_dict"]["ROTOR_COLOR"]
 SHAFT_COLOR = config_dict["color_dict"]["SHAFT_COLOR"]
-ROTOR_COLOR = config_dict["color_dict"]["ROTOR_COLOR"]
 FRAME_COLOR = config_dict["color_dict"]["FRAME_COLOR"]
 MAGNET_COLOR = config_dict["color_dict"]["MAGNET_COLOR"]
 BAR_COLOR = config_dict["color_dict"]["BAR_COLOR"]
@@ -35,9 +34,13 @@ SCR_COLOR = config_dict["color_dict"]["SCR_COLOR"]
 VENT_COLOR = config_dict["color_dict"]["VENT_COLOR"]
 VENT_EDGE = config_dict["color_dict"]["VENT_EDGE"]
 
+import pyvista as pv
+from numpy import real, pi, linspace, exp
+import meshio
+
 
 def plot_mesh(
-    self, j_t0=0, mesh=None, title="No title", group=None, elem_type=["Triangle3"]
+    self, meshsolution, field_symbol=None, j_t0=0, show_edges=False,
 ):
     """ Display mesh.
 
@@ -47,70 +50,40 @@ def plot_mesh(
         an Output object
     mesh : Mesh
         a Mesh object
-    title : str
-        Title of the figure
     """
+    name_file_vtk = "plot_mesh.vtk"
 
-    if group is None:
-        group = mesh.group
+    mesh_jt0 = meshsolution.get_mesh(j_t0=j_t0)
+    meshpv = mesh_jt0.get_mesh_pv(path=name_file_vtk)
 
-    def showMeshPlot(mesh, elem_type, group, title, colors):
-        def triplot(mesh, elem_type, grp, color, ax=None, **kwargs):
+    if field_symbol is not None:
+        solution_jt0 = meshsolution.get_solution(j_t0=j_t0, field_symbol=field_symbol)
+        meshpv[field_symbol] = solution_jt0
+    else:
+        show_edges = True
 
-            if not ax:
-                ax = plt.gca()
+    # Add field to mesh
+    # Add field to mesh
 
-            verts, nb_elem = mesh.get_vertice(elem_type, grp)
-            pc = matplotlib.collections.PolyCollection(verts, **kwargs)
-            col = np.ones(nb_elem)
-            pc.set_facecolor(color)
-            ax.add_collection(pc)
-            ax.autoscale()
-            return pc
+    # Configure plot
+    p = pv.BackgroundPlotter()
+    p.set_background("white")
+    sargs = dict(
+        interactive=True,
+        title_font_size=20,
+        label_font_size=16,
+        font_family="arial",
+        color="black",
+    )
 
-        fig, ax = plt.subplots()
-        # fig.show()
-        ax.set_aspect("equal")
-
-        for type in elem_type:
-            ik = 0
-            for grp in group:
-                pc = triplot(
-                    mesh,
-                    type,
-                    grp,
-                    colors[ik],
-                    ax=ax,
-                    lw=0.1,
-                    edgecolor="black",
-                    cmap="rainbow",
-                )
-                ik = ik + 1
-
-        # nodes, tags = mesh.get_all_node_coord()
-        # x = nodes[:, 0]
-        # y = nodes[:, 1]
-        # ax.plot(x, y, marker=".", markersize=0.1, ls="", color="white")
-
-        ax.set(title=title, xlabel="Y Axis", ylabel="Z Axis")
-        return fig, ax
-
-    colors = list()
-    for grp in group:
-        if grp == GROUP_SC:
-            color = STATOR_COLOR
-        elif grp == GROUP_RC:
-            color = ROTOR_COLOR
-        elif grp == GROUP_IN:
-            color = SHAFT_COLOR
-        elif grp == GROUP_RW:
-            color = "r"
-        elif grp == GROUP_SV or grp == GROUP_RV:
-            color = VENT_COLOR
-        else:
-            color = "w"
-
-        colors.extend(color)
-
-    fig, ax = showMeshPlot(mesh, elem_type, group, title, colors)
-    fig.show()
+    p.add_mesh(
+        meshpv,
+        scalars=field_symbol,
+        show_edges=show_edges,
+        edge_color="white",
+        line_width=1,
+        # cmap=cmap,
+        # clim=clim,
+        scalar_bar_args=sargs,
+    )
+    p.show()

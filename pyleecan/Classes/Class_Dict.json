@@ -278,6 +278,68 @@
             }
         ]
     },
+    "CellMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). ",
+        "is_internal": false,
+        "methods": [
+            "add_cell",
+            "get_all_connectivity",
+            "get_all_node_tags",
+            "get_connectivity",
+            "get_group",
+            "get_point2cell",
+            "is_exist"
+        ],
+        "mother": "",
+        "name": "CellMat",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/CellMat.csv",
+        "properties": [
+            {
+                "desc": "Matrix of connectivity for one element type",
+                "max": "",
+                "min": "",
+                "name": "connectivity",
+                "type": "ndarray",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "Total number of elements",
+                "max": "",
+                "min": "",
+                "name": "nb_cell",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Define the number of node per element",
+                "max": "",
+                "min": "",
+                "name": "nb_pt_per_cell",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Element indices",
+                "max": "",
+                "min": "",
+                "name": "indice",
+                "type": "ndarray",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
     "Circle": {
         "constants": [
             {
@@ -814,97 +876,6 @@
                 "type": "EEC",
                 "unit": "-",
                 "value": null
-            }
-        ]
-    },
-    "Element": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "Element",
-            "ElementMat"
-        ],
-        "desc": "Abstract class to define connectivity and getter.",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "Element",
-        "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Element.csv",
-        "properties": []
-    },
-    "ElementMat": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). ",
-        "is_internal": false,
-        "methods": [
-            "add_element",
-            "get_all_connectivity",
-            "get_all_node_tags",
-            "get_connectivity",
-            "get_group",
-            "get_node2element",
-            "is_exist"
-        ],
-        "mother": "Element",
-        "name": "ElementMat",
-        "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/ElementMat.csv",
-        "properties": [
-            {
-                "desc": "Matrix of connectivity for one element type",
-                "max": "",
-                "min": "",
-                "name": "connectivity",
-                "type": "ndarray",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Total number of elements",
-                "max": "",
-                "min": "",
-                "name": "nb_elem",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Define the number of node per element",
-                "max": "",
-                "min": "",
-                "name": "nb_node_per_element",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Attribute a group number (int) to each element . This group number should correspond to a subpart of the machine.",
-                "max": "",
-                "min": "",
-                "name": "group",
-                "type": "ndarray",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Element tags",
-                "max": "",
-                "min": "",
-                "name": "tag",
-                "type": "ndarray",
-                "unit": "",
-                "value": ""
             }
         ]
     },
@@ -2846,7 +2817,8 @@
             "plot",
             "comp_radius_mid_yoke",
             "has_magnet",
-            "comp_angle_d_axis"
+            "comp_angle_d_axis",
+            "comp_sym"
         ],
         "mother": "Lamination",
         "name": "LamHole",
@@ -2898,7 +2870,8 @@
             "comp_height_yoke",
             "get_Zs",
             "get_bore_desc",
-            "comp_radius_mid_yoke"
+            "comp_radius_mid_yoke",
+            "comp_sym"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -2934,7 +2907,8 @@
             "comp_surfaces",
             "comp_volumes",
             "plot",
-            "comp_angle_d_axis"
+            "comp_angle_d_axis",
+            "comp_sym"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",
@@ -3021,7 +2995,8 @@
             "comp_mmf_unit",
             "comp_rot_dir",
             "comp_lengths_winding",
-            "comp_number_phase_eq"
+            "comp_number_phase_eq",
+            "comp_sym"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
@@ -3063,7 +3038,8 @@
             "check",
             "comp_length_ring",
             "plot",
-            "comp_number_phase_eq"
+            "comp_number_phase_eq",
+            "comp_sym"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
@@ -3558,7 +3534,8 @@
             "comp_length_airgap_active",
             "get_polar_eq",
             "plot_anim_rotor",
-            "get_material_list"
+            "get_material_list",
+            "comp_sym"
         ],
         "mother": "",
         "name": "Machine",
@@ -3970,7 +3947,8 @@
             "get_path_save",
             "solve_FEMM",
             "get_meshsolution",
-            "get_path_save_fem"
+            "get_path_save_fem",
+            "build_meshsolution"
         ],
         "mother": "Magnetics",
         "name": "MagFEMM",
@@ -5017,19 +4995,15 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
-        "desc": "Gather the mesh storage format",
+        "daughters": [
+            "Mesh",
+            "MeshMat",
+            "MeshVTK"
+        ],
+        "desc": "Abstract Class for mesh related classes",
         "is_internal": false,
         "methods": [
-            "set_submesh",
-            "get_all_node_coord",
-            "add_element",
-            "get_all_connectivity",
-            "get_connectivity",
-            "get_new_tag",
-            "interface",
-            "get_node_tags",
-            "get_vertice"
+            "get_mesh"
         ],
         "mother": "",
         "name": "Mesh",
@@ -5037,11 +5011,51 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Mesh.csv",
         "properties": [
             {
+                "desc": "Description of the mesh",
+                "max": "",
+                "min": "",
+                "name": "label",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
+            }
+        ]
+    },
+    "MeshMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Gather the mesh storage format",
+        "is_internal": false,
+        "methods": [
+            "get_point",
+            "get_cell",
+            "get_mesh_pv",
+            "get_normal",
+            "get_surf",
+            "get_cell_area",
+            "set_submesh",
+            "add_cell",
+            "interface",
+            "get_vertice",
+            "plot_mesh",
+            "get_group"
+        ],
+        "mother": "Mesh",
+        "name": "MeshMat",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/MeshMat.csv",
+        "properties": [
+            {
                 "desc": "Storing connectivity",
                 "max": "",
                 "min": "",
-                "name": "element",
-                "type": "{Element}",
+                "name": "cell",
+                "type": "{CellMat}",
                 "unit": "",
                 "value": ""
             },
@@ -5049,8 +5063,8 @@
                 "desc": "Storing nodes",
                 "max": "",
                 "min": "",
-                "name": "node",
-                "type": "Node",
+                "name": "point",
+                "type": "PointMat",
                 "unit": "",
                 "value": ""
             },
@@ -5064,11 +5078,11 @@
                 "value": ""
             },
             {
-                "desc": "Contain all possible group numbers",
+                "desc": "Dict sorted by groups name with cells indices. ",
                 "max": "",
                 "min": "",
                 "name": "group",
-                "type": "ndarray",
+                "type": "dict",
                 "unit": "",
                 "value": ""
             }
@@ -5082,11 +5096,18 @@
             }
         ],
         "daughters": [],
-        "desc": "To associate a Mesh with one or several solutions",
+        "desc": "Abstract class to associate a mesh with one or several solutions",
         "is_internal": false,
         "methods": [
             "get_mesh",
-            "get_solution"
+            "get_solution",
+            "save_to_file",
+            "get_field",
+            "plot_mesh",
+            "plot_contour",
+            "plot_deflection",
+            "plot_deflection_animated",
+            "plot_glyph"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -5097,37 +5118,46 @@
                 "desc": "(Optional) Descriptive name of the mesh",
                 "max": "",
                 "min": "",
-                "name": "name",
+                "name": "label",
                 "type": "str",
                 "unit": "",
-                "value": ""
+                "value": "None"
             },
             {
-                "desc": "A Mesh object. ",
+                "desc": "A list of Mesh objects. ",
                 "max": "",
                 "min": "",
                 "name": "mesh",
                 "type": "[Mesh]",
                 "unit": "",
-                "value": ""
+                "value": null
             },
             {
-                "desc": "A Solution object which are defined with respect to the mesh attribute.",
-                "max": "",
-                "min": "",
-                "name": "solution",
-                "type": "[Solution]",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "1 if the mesh is the same at each time step",
+                "desc": "1 if the mesh is the same at each step (time, mode etc.)",
                 "max": "",
                 "min": "",
                 "name": "is_same_mesh",
                 "type": "bool",
                 "unit": "",
                 "value": 1
+            },
+            {
+                "desc": "A list of Solution objects",
+                "max": "",
+                "min": "",
+                "name": "solution",
+                "type": "[Solution]",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Dimension of the physical problem",
+                "max": "3",
+                "min": "1",
+                "name": "dimension",
+                "type": "int",
+                "unit": "",
+                "value": 3
             }
         ]
     },
@@ -5147,14 +5177,9 @@
             "get_cells",
             "get_normals",
             "get_surf",
-            "get_cell_area",
-            "plot_mesh",
-            "plot_contour",
-            "plot_glyph",
-            "plot_deformation",
-            "plot_deformation_animated"
+            "get_cell_area"
         ],
-        "mother": "",
+        "mother": "Mesh",
         "name": "MeshVTK",
         "package": "Mesh",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/MeshVTK.csv",
@@ -5251,27 +5276,7 @@
             }
         ]
     },
-    "Node": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "Node",
-            "NodeMat"
-        ],
-        "desc": "Abstract class to define nodes. It must have at least a method get_coord to get nodes coordinates for given node tags/number, and a method get_group to create a new objet Node based on a set of given elements.",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "Node",
-        "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Node.csv",
-        "properties": []
-    },
-    "NodeMat": {
+    "Mode": {
         "constants": [
             {
                 "name": "VERSION",
@@ -5279,54 +5284,45 @@
             }
         ],
         "daughters": [],
-        "desc": "Class to define nodes coordinates and getter.",
+        "desc": "Structural module: Mode object",
         "is_internal": false,
         "methods": [
-            "add_node",
-            "get_coord",
-            "get_group",
-            "is_exist"
+            "plot",
+            "plot_animated",
+            "get_shape_xyz",
+            "get_shape_pol"
         ],
-        "mother": "Node",
-        "name": "NodeMat",
-        "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/NodeMat.csv",
+        "mother": "SolutionMat",
+        "name": "Mode",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Mode.csv",
         "properties": [
             {
-                "desc": "Nodes coordinates",
+                "desc": "Natural frequency of the mode",
                 "max": "",
                 "min": "",
-                "name": "coordinate",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Total number of nodes",
-                "max": "",
-                "min": "",
-                "name": "nb_node",
-                "type": "int",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Node tags",
-                "max": "",
-                "min": "",
-                "name": "tag",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Sensibility for node searching",
-                "max": "",
-                "min": "",
-                "name": "delta",
+                "name": "nat_freq",
                 "type": "float",
-                "unit": "",
-                "value": 1e-10
+                "unit": "Hz",
+                "value": null
+            },
+            {
+                "desc": "Circumferential order",
+                "max": "",
+                "min": "0",
+                "name": "order_circ",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Longitudinal order",
+                "max": "",
+                "min": "0",
+                "name": "order_long",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -6808,6 +6804,65 @@
                 "type": "list",
                 "unit": "-",
                 "value": []
+            }
+        ]
+    },
+    "PointMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class to define nodes coordinates and getter.",
+        "is_internal": false,
+        "methods": [
+            "add_node",
+            "get_coord",
+            "get_group",
+            "is_exist"
+        ],
+        "mother": "",
+        "name": "PointMat",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/PointMat.csv",
+        "properties": [
+            {
+                "desc": "Nodes coordinates",
+                "max": "",
+                "min": "",
+                "name": "coordinate",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Total number of nodes",
+                "max": "",
+                "min": "",
+                "name": "nb_pt",
+                "type": "int",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Node indices",
+                "max": "",
+                "min": "",
+                "name": "indice",
+                "type": "ndarray",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "Sensibility for node searching",
+                "max": "",
+                "min": "",
+                "name": "delta",
+                "type": "float",
+                "unit": "",
+                "value": 1e-10
             }
         ]
     },
@@ -9091,53 +9146,125 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
-        "desc": "Define a solution related to a Mesh object.",
+        "daughters": [
+            "Solution",
+            "Mode",
+            "SolutionData",
+            "SolutionMat"
+        ],
+        "desc": "Abstract class for solution related classes.",
         "is_internal": false,
         "methods": [
-            "get_field",
-            "set_field"
+            "get_field"
         ],
         "mother": "",
         "name": "Solution",
         "package": "Mesh",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Solution.csv",
+        "properties": []
+    },
+    "SolutionData": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Define a Solution with SciDataTool objects.",
+        "is_internal": false,
+        "methods": [
+            "get_field"
+        ],
+        "mother": "Solution",
+        "name": "SolutionData",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/SolutionData.csv",
         "properties": [
             {
-                "desc": "A solution related to nodes",
+                "desc": "Data object containing the numerical values of a solution. One of the axis must be \"Indices\", a list of indices. If the solution is a vector, one of the axis must be \"Direction\", values ['x','y'] for example.",
                 "max": "",
                 "min": "",
-                "name": "nodal",
-                "type": "{ndarray}",
-                "unit": "",
-                "value": ""
+                "name": "field",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "-",
+                "value": "None"
             },
             {
-                "desc": "A solution related to edges",
+                "desc": "Type of cell (Point, Segment2, Triangle3, etc.)",
                 "max": "",
                 "min": "",
-                "name": "edge",
-                "type": "{ndarray}",
-                "unit": "",
-                "value": ""
+                "name": "type_cell",
+                "type": "str",
+                "unit": "-",
+                "value": "triangle"
             },
             {
-                "desc": "A solution related to faces",
+                "desc": "Label to identify the solution",
                 "max": "",
                 "min": "",
-                "name": "face",
-                "type": "{ndarray}",
-                "unit": "",
-                "value": ""
+                "name": "label",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
+            }
+        ]
+    },
+    "SolutionMat": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "Mode"
+        ],
+        "desc": "Define a Solution with ndarray object.",
+        "is_internal": false,
+        "methods": [
+            "get_field"
+        ],
+        "mother": "Solution",
+        "name": "SolutionMat",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/SolutionMat.csv",
+        "properties": [
+            {
+                "desc": "Matrix/Vector of the numerical values of the solutions.",
+                "max": "",
+                "min": "",
+                "name": "field",
+                "type": "ndarray",
+                "unit": "-",
+                "value": null
             },
             {
-                "desc": "A solution related to volumes",
+                "desc": "Type of cell (Point, Segment2, Triangle3, etc.)",
                 "max": "",
                 "min": "",
-                "name": "volume",
-                "type": "{ndarray}",
-                "unit": "",
-                "value": ""
+                "name": "type_cell",
+                "type": "str",
+                "unit": "-",
+                "value": "triangle"
+            },
+            {
+                "desc": "Label to identify the solution",
+                "max": "",
+                "min": "",
+                "name": "label",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
+            },
+            {
+                "desc": "Indices of loaded cells. Set to None if all cells are loaded",
+                "max": "",
+                "min": "",
+                "name": "indice",
+                "type": "ndarray",
+                "unit": "-",
+                "value": null
             }
         ]
     },

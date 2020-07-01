@@ -3,6 +3,7 @@
 """
 Test Pyleecan optimization module using Zitzler–Deb–Thiele's function N. 3
 """
+from os.path import join
 import pytest
 from pyleecan.definitions import PACKAGE_NAME
 from Tests.Validation.Machine.SCIM_001 import SCIM_001
@@ -17,7 +18,7 @@ from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
-
+from Tests import save_validation_path as save_path
 import matplotlib.pyplot as plt
 import matplotlib.image as img
 import numpy as np
@@ -184,4 +185,4 @@ def test_zdt3():
         return fig
 
     fig = plot_pareto(res)
-    fig.savefig("Tests/Results/Validation/test_zdt3.png")
+    fig.savefig(join(save_path, "test_zdt3.png"))

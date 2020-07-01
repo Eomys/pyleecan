@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def get_normals(self, indices=[]):
+def get_normals(self, indices=None):
     """Return the array of the normals coordinates.
 
     Parameters
@@ -17,6 +17,6 @@ def get_normals(self, indices=[]):
         Normals coordinates
     """
 
-    surf = self.get_surf(indices)
+    surf = self.get_surf(indices=indices)
 
     return surf.cell_normals

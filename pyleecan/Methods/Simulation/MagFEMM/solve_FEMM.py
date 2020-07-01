@@ -1,23 +1,21 @@
 import femm
 import numpy as np
-from os.path import basename, splitext
 
 from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
+from os.path import basename, splitext
+from SciDataTool import DataLinspace, DataTime
+from os.path import join
+
 from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from ....Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
-from ....Classes.MeshSolution import MeshSolution
-from ....Classes.Mesh import Mesh
-from ....Classes.Solution import Solution
-from SciDataTool import DataLinspace, DataTime
-from os.path import join
+from ....Classes.MeshMat import MeshMat
 
 
 def solve_FEMM(self, output, sym, FEMM_dict):
 
-    # Loading parameters for readibilitys
+    # Loading parameters for readibility
     angle = output.mag.angle
-
     L1 = output.simu.machine.stator.comp_length()
     Nt_tot = output.mag.Nt_tot  # Number of time step
     Na_tot = output.mag.Na_tot  # Number of angular step
@@ -47,11 +45,9 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     Rgap_mec_ext = lam_ext.comp_radius_mec()
 
     if self.is_get_mesh or self.is_save_FEA:
-        meshFEMM = [Mesh() for ii in range(Nt_tot)]
-        solutionFEMM = [Solution() for ii in range(Nt_tot)]
+        meshFEMM = [MeshMat() for ii in range(Nt_tot)]
     else:
-        meshFEMM = [Mesh()]
-        solutionFEMM = [Solution()]
+        meshFEMM = [MeshMat()]
 
     # Compute the data for each time step
     for ii in range(Nt_tot):
@@ -103,9 +99,19 @@ def solve_FEMM(self, output, sym, FEMM_dict):
 
         # Load mesh data & solution
         if self.is_get_mesh or self.is_save_FEA:
-            meshFEMM[ii], solutionFEMM[ii] = self.get_meshsolution(
-                self.is_get_mesh, self.is_save_FEA, save_path, ii
-            )
+            meshFEMM[ii], tmpB, tmpH, tmpmu = self.get_meshsolution(save_path, ii)
+
+            if (
+                self.is_sliding_band or Nt_tot == 1
+            ):  # To make sure solution have the same size at every time step
+                if ii == 0:
+                    B = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                    H = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                    mu = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell])
+
+                B[ii, :, 0:2] = tmpB
+                H[ii, :, 0:2] = tmpH
+                mu[ii, :] = tmpmu
 
     # Shift to take into account stator position
     roll_id = int(self.angle_stator * Na_tot / (2 * pi))
@@ -157,17 +163,13 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     output.mag.FEMM_dict = FEMM_dict
 
     if self.is_get_mesh:
-        cond = (not self.is_sliding_band) or (Nt_tot == 1)
-        output.mag.meshsolution = MeshSolution(
-            name="FEMM_magnetic_mesh",
-            mesh=meshFEMM,
-            solution=solutionFEMM,
-            is_same_mesh=cond,
+        output.mag.meshsolution = self.build_meshsolution(
+            Nt_tot, meshFEMM, Time, B, H, mu
         )
 
     if self.is_save_FEA:
         save_path_fea = join(save_path, "MeshSolutionFEMM.json")
-        output.mag.meshsolution.save(save_path_fea)
+        output.mag.meshsolution.save_to_file(save_path_fea)
 
     if (
         hasattr(output.simu.machine.stator, "winding")

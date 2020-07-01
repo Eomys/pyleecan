@@ -9,6 +9,7 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from Tests import save_validation_path as save_path
+from Tests import save_load_path as load_results_path
 from os.path import join
 
 import matplotlib.pyplot as plt
@@ -53,7 +54,7 @@ def test_CEFC_002():
         type_BH_stator=2,
         type_BH_rotor=2,
         is_get_mesh=True,
-        is_save_FEA=True,
+        is_save_FEA=False,
         is_sliding_band=False,
     )
     simu.force = None
@@ -63,17 +64,26 @@ def test_CEFC_002():
     out.post.legend_name = "Slotless lamination"
     simu.run()
 
-    out.plot_mesh(mesh=out.mag.meshsolution.mesh[0], title="FEA Mesh")
+    # Test save with MeshSolution object in out
+    load_path = join(save_path, "Output.json")
+    out.save(save_path=load_path)
 
-    # out.plot_mesh_field(meshsolution=out.mag.meshsolution, title="Permeability")
-    out.plot_mesh_field(
-        mesh=out.mag.meshsolution.mesh[0],
-        title="Permeability",
-        field=out.mag.meshsolution.solution[0].face["mu"],
+    out.plot_mesh(meshsolution=out.mag.meshsolution,)
+
+    out.plot_mesh(
+        meshsolution=out.mag.meshsolution, field_symbol="\mu",
     )
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_CEFC_002_save_mag"))
 
+    out.plot_mesh(
+        meshsolution=out.mag.meshsolution, field_symbol="B",
+    )
+
+    out.plot_mesh(
+        meshsolution=out.mag.meshsolution, field_symbol="H",
+    )
+
+    # Test save with MeshSolution object in out
+    out.save(save_path=save_path)
     # Test save with MeshSolution object in out
     out.save(save_path=save_path + "\Output.json")
 
@@ -83,9 +93,15 @@ def test_CEFC_002():
         json_tmp = json.load(json_file)
         FEMM = Output(init_dict=json_tmp)
 
-    # To test that the "mu" is still a ndarray after saving and loading
-    out.plot_mesh_field(
-        mesh=FEMM.mag.meshsolution.mesh[0],
-        title="Permeability",
-        field=FEMM.mag.meshsolution.solution[0].face["mu"],
+    # [Important] To test that fields are still working after saving and loading
+    FEMM.plot_mesh(
+        meshsolution=FEMM.mag.meshsolution, field_symbol="\mu",
+    )
+
+    out.plot_mesh(
+        meshsolution=out.mag.meshsolution, field_symbol="B",
+    )
+
+    out.plot_mesh(
+        meshsolution=out.mag.meshsolution, field_symbol="H",
     )

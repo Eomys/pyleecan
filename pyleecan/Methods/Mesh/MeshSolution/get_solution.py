@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
 
-
-def get_solution(self, j_t0=0):
-    """Return the solution corresponding to a time step.
+def get_solution(self, label=None, index=None):
+    """Return the solution corresponding to label or an index.
 
     Parameters
     ----------
     self : MeshSolution
         an MeshSolution object
-    j_t0 : int
-        a time step
+    label : str
+        a label
+    index : int
+        an index
 
     Returns
     -------
@@ -20,4 +20,10 @@ def get_solution(self, j_t0=0):
 
     """
 
-    return self.solution[j_t0]
+    if index is None:
+        index = 0
+        if label is not None:
+            for i, solution in enumerate(self.solution):
+                if solution.label == label:
+                    index = i
+    return self.solution[index]

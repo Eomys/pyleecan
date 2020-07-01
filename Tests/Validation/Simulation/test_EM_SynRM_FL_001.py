@@ -86,6 +86,7 @@ def test_Magnetic_Phi0():
     )
 
     # Definition of the magnetic simulation (1/2 symmetry)
+    assert SynRM_001.comp_sym() == (2, True)
     simu.mag = MagFEMM(
         type_BH_stator=0,
         type_BH_rotor=0,

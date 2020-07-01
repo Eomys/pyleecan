@@ -71,4 +71,3 @@ def test_E_IPMSM_FL_002():
 
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_E_IPMSM_FL_002_currents.png"))
-    
