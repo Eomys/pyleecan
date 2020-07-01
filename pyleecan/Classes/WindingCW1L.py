@@ -31,6 +31,7 @@ class WindingCW1L(Winding):
     """single layer non-overlapping 'concentrated' tooth winding 'alternate teeth wound'"""
 
     VERSION = 1
+    NAME = "single layer concentrated"
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.WindingCW1L.comp_connection_mat

@@ -45,8 +45,11 @@ class DMatSetup(Gen_DMatSetup, QDialog):
             self.nav_meca.setCurrentIndex(0)
             self.nav_ther.setCurrentIndex(0)
 
+        # Edit button text if the Material selected is in the ref matlib
+        if is_matlib:
+            self.b_add_matlib.setText("Add to machine")
+
         # Three button to close
-        self.b_add_matlib.setVisible(not is_matlib)
         self.b_cancel.clicked.connect(self.close)
         self.b_save.clicked.connect(lambda: self.done(1))
         self.b_add_matlib.clicked.connect(lambda: self.done(2))

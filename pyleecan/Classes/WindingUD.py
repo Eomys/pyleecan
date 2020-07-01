@@ -32,6 +32,7 @@ class WindingUD(Winding):
     """User defined winding"""
 
     VERSION = 1
+    NAME = "User defined"
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.WindingUD.comp_connection_mat

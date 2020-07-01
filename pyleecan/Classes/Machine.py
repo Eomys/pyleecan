@@ -79,6 +79,16 @@ try:
 except ImportError as error:
     get_material_list = error
 
+try:
+    from ..Methods.Machine.Machine.comp_sym import comp_sym
+except ImportError as error:
+    comp_sym = error
+
+try:
+    from ..Methods.Machine.Machine.comp_desc_dict import comp_desc_dict
+except ImportError as error:
+    comp_desc_dict = error
+
 
 from ._check import InitUnKnowClassError
 from .Frame import Frame
@@ -232,6 +242,26 @@ class Machine(FrozenClass):
         )
     else:
         get_material_list = get_material_list
+    # cf Methods.Machine.Machine.comp_sym
+    if isinstance(comp_sym, ImportError):
+        comp_sym = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Machine method comp_sym: " + str(comp_sym))
+            )
+        )
+    else:
+        comp_sym = comp_sym
+    # cf Methods.Machine.Machine.comp_desc_dict
+    if isinstance(comp_desc_dict, ImportError):
+        comp_desc_dict = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method comp_desc_dict: " + str(comp_desc_dict)
+                )
+            )
+        )
+    else:
+        comp_desc_dict = comp_desc_dict
     # save method is available in all object
     save = save
 

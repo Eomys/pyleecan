@@ -76,8 +76,9 @@ class test_DMachineSetup(TestCase):
         """Run at the begining of every test to setup the gui"""
         # MatLib widget
         matlib = MatLib(matlib_path)
+        dmatlib = DMatLib(matlib=matlib)
         self.widget = DMachineSetup(
-            matlib=matlib, machine_path=join(DATA_DIR, "Machine")
+            dmatlib=dmatlib, machine_path=join(DATA_DIR, "Machine")
         )
 
     @classmethod
