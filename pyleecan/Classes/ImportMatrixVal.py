@@ -142,7 +142,9 @@ class ImportMatrixVal(ImportMatrix):
 
     def _set_value(self, value):
         """setter of value"""
-        if type(value) is list:
+        if type(value) is type(None):
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
