@@ -35,5 +35,4 @@ def save(self, save_path="", is_folder=False):
         save_json(self, save_path=save_path, is_folder=is_folder)
 
     elif save_path.endswith(".h5"):
-        print("YEAH")
         save_hdf5(self, save_path=save_path)
