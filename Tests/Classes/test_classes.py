@@ -201,7 +201,10 @@ def test_class_set_None(class_dict):
     test_obj._set_None()
     prop_list = get_mother_attr(gen_dict, class_dict, "properties")[0]
     for prop in prop_list:
-        if prop["type"] == "ndarray" or prop["type"] in PYTHON_TYPE:
+        # ndarray set as None are set as array([])
+        if prop["type"] == "ndarray":
+            assert array_equal(test_obj.__getattribute__(prop["name"]), array([]))
+        elif prop["type"] in PYTHON_TYPE:
             assert test_obj.__getattribute__(prop["name"]) == None
 
 
