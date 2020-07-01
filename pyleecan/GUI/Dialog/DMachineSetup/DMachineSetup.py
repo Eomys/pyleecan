@@ -44,6 +44,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         self.is_save_needed = False
         self.dmatlib = dmatlib
         self.matlib = dmatlib.matlib
+        self.last_index = 0  # Index of the last step available
 
         # Saving arguments
         self.machine = machine
@@ -229,7 +230,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
             self.nav_step.addItem(str(index) + ": " + SPreview.step_name)
         self.update_enable_nav()
         self.nav_step.blockSignals(False)
-        self.nav_step.setCurrentRow(0)
+        self.nav_step.setCurrentRow(self.last_index)
 
     def update_enable_nav(self):
         # Load for readibility
@@ -245,21 +246,25 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         # Check the start steps
         for step in mach_dict["start_step"]:
             if step.check(machine) is not None:
+                self.last_index = index - 1
                 return None  # Exit at the first fail
             nav.item(index).setFlags(ENABLE_ITEM)
             index += 1
         # Check the stator steps
         for step in mach_dict["stator_step"]:
             if step.check(machine.stator) is not None:
+                self.last_index = index - 1
                 return None  # Exit at the first fail
             nav.item(index).setFlags(ENABLE_ITEM)
             index += 1
         # Check the rotor steps
         for step in mach_dict["rotor_step"]:
             if step.check(machine.rotor) is not None:
+                self.last_index = index - 1
                 return None  # Exit at the first fail
             nav.item(index).setFlags(ENABLE_ITEM)
             index += 1
+        self.last_index = index - 1
 
     def get_machine_index(self):
         """Get the index corresponding to the current machine in the mach_list
@@ -337,6 +342,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
             QMessageBox().critical(self, self.tr("Error"), error)
         else:  # No error => Go to the next page
             self.nav_step.item(next_index).setFlags(ENABLE_ITEM)
+            self.last_index = next_index
             self.nav_step.setCurrentRow(next_index)
             # As the current row have changed, set_nav is called
 
