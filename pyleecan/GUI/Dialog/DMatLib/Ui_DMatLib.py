@@ -3,6 +3,7 @@
 # File generated according to DMatLib.ui
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -25,7 +26,7 @@ class Ui_DMatLib(object):
         self.img_search.setText("")
         self.img_search.setPixmap(
             QtGui.QPixmap(
-                "\n"
+                "D:/PYLEECAN/pyleecan/pyleecan/GUI\\Dialog\\DMatLib\\\n"
                 "                                                    :/images/images/icon/search.png\n"
                 "                                                "
             )
@@ -36,6 +37,9 @@ class Ui_DMatLib(object):
         self.verticalLayout_3.addLayout(self.horizontalLayout_9)
         self.verticalLayout_12 = QtWidgets.QVBoxLayout()
         self.verticalLayout_12.setObjectName("verticalLayout_12")
+        self.in_reference_mat_lib = QtWidgets.QLabel(DMatLib)
+        self.in_reference_mat_lib.setObjectName("in_reference_mat_lib")
+        self.verticalLayout_12.addWidget(self.in_reference_mat_lib)
         self.nav_mat = QtWidgets.QListWidget(DMatLib)
         self.nav_mat.setObjectName("nav_mat")
         self.verticalLayout_12.addWidget(self.nav_mat)
@@ -361,6 +365,7 @@ class Ui_DMatLib(object):
     def retranslateUi(self, DMatLib):
         _translate = QtCore.QCoreApplication.translate
         DMatLib.setWindowTitle(_translate("DMatLib", "Material Library"))
+        self.in_reference_mat_lib.setText(_translate("DMatLib", "Material library"))
         self.in_machine_mat.setText(_translate("DMatLib", "Machine materials"))
         self.b_edit.setText(_translate("DMatLib", "Edit"))
         self.b_duplicate.setText(_translate("DMatLib", "New from"))

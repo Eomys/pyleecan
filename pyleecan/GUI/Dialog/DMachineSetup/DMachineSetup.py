@@ -7,9 +7,6 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QWidget
 
 from ....Functions.Material.compare_material import compare_material
-from ....Functions.Material.replace_material_pyleecan_obj import (
-    replace_material_pyleecan_obj,
-)
 from ....Functions.load import load, load_matlib
 from ....GUI.Dialog.DMachineSetup import mach_index, mach_list
 from ....GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
@@ -30,7 +27,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
     machineChanged = pyqtSignal()
     rejected = pyqtSignal()
 
-    def __init__(self, machine=None, matlib=None, machine_path=""):
+    def __init__(self, machine=None, dmatlib=None, machine_path=""):
         """Initialize the GUI according to machine type
 
         Parameters
@@ -44,7 +41,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         self.setupUi(self)
 
         self.is_save_needed = False
-        self.matlib = matlib
+        self.dmatlib = dmatlib
+        self.matlib = dmatlib.matlib
 
         # Saving arguments
         self.machine = machine
@@ -66,6 +64,12 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         self.nav_step.currentRowChanged.connect(self.set_nav)
         self.b_save.clicked.connect(self.s_save)
         self.b_load.clicked.connect(self.s_load)
+
+        self.dmatlib.saveNeeded.connect(self.save_needed)
+
+    def save_needed(self):
+        """Set is_save_needed to True"""
+        self.is_save_needed = True
 
     def closeEvent(self, event):
         """Display a message before leaving
@@ -169,7 +173,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                 machine = load(load_path)
                 if isinstance(machine, Machine):
                     self.machine = machine
-                    self.matlib.add_machine_mat(machine)
+                    is_machine_change = self.matlib.add_machine_mat(machine)
                 else:
                     QMessageBox().critical(
                         self,
@@ -178,7 +182,11 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
                     )
                     return
                 self.machineChanged.emit()
-                self.is_save_needed = False
+
+                # Save needed if machine materials have changed
+                if is_machine_change:
+                    self.save_needed()
+
             except Exception as e:
                 QMessageBox().critical(
                     self,
@@ -292,6 +300,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         else:
             self.w_step.b_next.setText(self.tr(u"Save and Close"))
             self.w_step.b_next.clicked.connect(self.s_save_close)
+
+        self.w_step.saveNeeded.connect(self.save_needed)
         # Refresh the GUI
         self.main_layout.insertWidget(1, self.w_step)
 
