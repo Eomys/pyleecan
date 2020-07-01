@@ -49,7 +49,8 @@ class OutMag(FrozenClass):
         Bt=None,
         Tem=None,
         Tem_av=None,
-        Tem_rip=None,
+        Tem_rip_norm=None,
+        Tem_rip_pp=None,
         Phi_wind_stator=None,
         emf=None,
         meshsolution=-1,
@@ -86,7 +87,8 @@ class OutMag(FrozenClass):
             Bt = obj.Bt
             Tem = obj.Tem
             Tem_av = obj.Tem_av
-            Tem_rip = obj.Tem_rip
+            Tem_rip_norm = obj.Tem_rip_norm
+            Tem_rip_pp = obj.Tem_rip_pp
             Phi_wind_stator = obj.Phi_wind_stator
             emf = obj.emf
             meshsolution = obj.meshsolution
@@ -111,8 +113,10 @@ class OutMag(FrozenClass):
                 Tem = init_dict["Tem"]
             if "Tem_av" in list(init_dict.keys()):
                 Tem_av = init_dict["Tem_av"]
-            if "Tem_rip" in list(init_dict.keys()):
-                Tem_rip = init_dict["Tem_rip"]
+            if "Tem_rip_norm" in list(init_dict.keys()):
+                Tem_rip_norm = init_dict["Tem_rip_norm"]
+            if "Tem_rip_pp" in list(init_dict.keys()):
+                Tem_rip_pp = init_dict["Tem_rip_pp"]
             if "Phi_wind_stator" in list(init_dict.keys()):
                 Phi_wind_stator = init_dict["Phi_wind_stator"]
             if "emf" in list(init_dict.keys()):
@@ -138,7 +142,8 @@ class OutMag(FrozenClass):
         self.Bt = Bt
         self.Tem = Tem
         self.Tem_av = Tem_av
-        self.Tem_rip = Tem_rip
+        self.Tem_rip_norm = Tem_rip_norm
+        self.Tem_rip_pp = Tem_rip_pp
         # Phi_wind_stator can be None, a ndarray or a list
         set_array(self, "Phi_wind_stator", Phi_wind_stator)
         # emf can be None, a ndarray or a list
@@ -186,7 +191,8 @@ class OutMag(FrozenClass):
         OutMag_str += "Bt = " + str(self.Bt) + linesep + linesep
         OutMag_str += "Tem = " + str(self.Tem) + linesep + linesep
         OutMag_str += "Tem_av = " + str(self.Tem_av) + linesep
-        OutMag_str += "Tem_rip = " + str(self.Tem_rip) + linesep
+        OutMag_str += "Tem_rip_norm = " + str(self.Tem_rip_norm) + linesep
+        OutMag_str += "Tem_rip_pp = " + str(self.Tem_rip_pp) + linesep
         OutMag_str += (
             "Phi_wind_stator = "
             + linesep
@@ -235,7 +241,9 @@ class OutMag(FrozenClass):
             return False
         if other.Tem_av != self.Tem_av:
             return False
-        if other.Tem_rip != self.Tem_rip:
+        if other.Tem_rip_norm != self.Tem_rip_norm:
+            return False
+        if other.Tem_rip_pp != self.Tem_rip_pp:
             return False
         if not array_equal(other.Phi_wind_stator, self.Phi_wind_stator):
             return False
@@ -289,7 +297,8 @@ class OutMag(FrozenClass):
                 "serialized": dumps(self._Tem).decode("ISO-8859-2"),
             }
         OutMag_dict["Tem_av"] = self.Tem_av
-        OutMag_dict["Tem_rip"] = self.Tem_rip
+        OutMag_dict["Tem_rip_norm"] = self.Tem_rip_norm
+        OutMag_dict["Tem_rip_pp"] = self.Tem_rip_pp
         if self.Phi_wind_stator is None:
             OutMag_dict["Phi_wind_stator"] = None
         else:
@@ -319,7 +328,8 @@ class OutMag(FrozenClass):
         self.Bt = None
         self.Tem = None
         self.Tem_av = None
-        self.Tem_rip = None
+        self.Tem_rip_norm = None
+        self.Tem_rip_pp = None
         self.Phi_wind_stator = None
         self.emf = None
         if self.meshsolution is not None:
@@ -480,18 +490,39 @@ class OutMag(FrozenClass):
         fget=_get_Tem_av, fset=_set_Tem_av, doc=u"""Average Electromagnetic torque"""
     )
 
-    def _get_Tem_rip(self):
-        """getter of Tem_rip"""
-        return self._Tem_rip
+    def _get_Tem_rip_norm(self):
+        """getter of Tem_rip_norm"""
+        return self._Tem_rip_norm
 
-    def _set_Tem_rip(self, value):
-        """setter of Tem_rip"""
-        check_var("Tem_rip", value, "float")
-        self._Tem_rip = value
+    def _set_Tem_rip_norm(self, value):
+        """setter of Tem_rip_norm"""
+        check_var("Tem_rip_norm", value, "float")
+        self._Tem_rip_norm = value
 
-    # Torque ripple
+    # Peak to Peak Torque ripple normalized according to average torque (None if average torque=0)
     # Type : float
-    Tem_rip = property(fget=_get_Tem_rip, fset=_set_Tem_rip, doc=u"""Torque ripple""")
+    Tem_rip_norm = property(
+        fget=_get_Tem_rip_norm,
+        fset=_set_Tem_rip_norm,
+        doc=u"""Peak to Peak Torque ripple normalized according to average torque (None if average torque=0)""",
+    )
+
+    def _get_Tem_rip_pp(self):
+        """getter of Tem_rip_pp"""
+        return self._Tem_rip_pp
+
+    def _set_Tem_rip_pp(self, value):
+        """setter of Tem_rip_pp"""
+        check_var("Tem_rip_pp", value, "float")
+        self._Tem_rip_pp = value
+
+    # Peak to Peak Torque ripple
+    # Type : float
+    Tem_rip_pp = property(
+        fget=_get_Tem_rip_pp,
+        fset=_set_Tem_rip_pp,
+        doc=u"""Peak to Peak Torque ripple""",
+    )
 
     def _get_Phi_wind_stator(self):
         """getter of Phi_wind_stator"""

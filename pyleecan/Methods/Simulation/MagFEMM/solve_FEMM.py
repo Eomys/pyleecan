@@ -151,8 +151,11 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         values=Tem,
     )
     output.mag.Tem_av = mean(Tem)
+    output.mag.Tem_rip_pp = abs(np_max(Tem) - np_min(Tem))  # [N.m]
     if output.mag.Tem_av != 0:
-        output.mag.Tem_rip = abs((np_max(Tem) - np_min(Tem)) / output.mag.Tem_av)
+        output.mag.Tem_rip_norm = output.mag.Tem_rip_pp / output.mag.Tem_av  # []
+    else:
+        output.mag.Tem_rip_norm = None
     output.mag.Phi_wind_stator = Phi_wind_stator
     output.mag.FEMM_dict = FEMM_dict
 

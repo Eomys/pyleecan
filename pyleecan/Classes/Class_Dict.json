@@ -5996,12 +5996,21 @@
                 "value": null
             },
             {
-                "desc": "Torque ripple",
+                "desc": "Peak to Peak Torque ripple normalized according to average torque (None if average torque=0)",
                 "max": "",
                 "min": "",
-                "name": "Tem_rip",
+                "name": "Tem_rip_norm",
                 "type": "float",
                 "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Peak to Peak Torque ripple",
+                "max": "",
+                "min": "",
+                "name": "Tem_rip_pp",
+                "type": "float",
+                "unit": "N.m",
                 "value": null
             },
             {
