@@ -434,7 +434,9 @@ class Mesh(FrozenClass):
 
     def _set_group(self, value):
         """setter of group"""
-        if type(value) is list:
+        if type(value) is type(None):
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
