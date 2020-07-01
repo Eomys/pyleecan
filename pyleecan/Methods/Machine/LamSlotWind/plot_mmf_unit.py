@@ -6,7 +6,7 @@ from ....Functions.Electrical.coordinate_transformation import dq2n
 from ....Functions.Winding.gen_phase_list import gen_name
 
 
-def plot_mmf_unit(self, Na=2048):
+def plot_mmf_unit(self, Na=2048, fig=None):
     """Plot the winding unit mmf as a function of space
     Parameters
     ----------
@@ -14,6 +14,8 @@ def plot_mmf_unit(self, Na=2048):
         an LamSlotWind object
     Na : int
         Space discretization
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
     """
 
     # Create an empty Output object to use the generic plot methods
@@ -46,4 +48,6 @@ def plot_mmf_unit(self, Na=2048):
         name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf
     )
 
-    out.plot_A_space("mag.Br", is_fft=True, index_list=[0, 1, 2], data_list=[mmf_u])
+    out.plot_A_space(
+        "mag.Br", is_fft=True, index_list=[0, 1, 2], data_list=[mmf_u], fig=fig
+    )

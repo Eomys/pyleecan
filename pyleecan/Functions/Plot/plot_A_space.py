@@ -25,6 +25,7 @@ def plot_A_space(
     y_min=None,
     y_max=None,
     mag_max=None,
+    fig=None,
 ):
     """Plots a field as a function of space (angle)
 
@@ -66,10 +67,12 @@ def plot_A_space(
         maximum value for the y-axis
     mag_max : float
         maximum alue for the y-axis of the fft
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
     """
 
     # Set plot
-    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     data_list2 = [data] + data_list
     if legend_list == []:
         legend_list = [d.name for d in data_list2]

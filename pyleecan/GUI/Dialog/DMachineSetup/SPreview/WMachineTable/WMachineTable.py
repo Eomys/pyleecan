@@ -64,7 +64,7 @@ class WMachineTable(Ui_WMachineTable, QWidget):
     def plot_mmf(self):
         """Plot the unit mmf of the stator
         """
-        print("plop")
         if self.machine is not None:
-            self.machine.stator.plot_mmf_unit()
-            plt.show()
+            fig, axes = plt.subplots()
+            self.machine.stator.plot_mmf_unit(fig=fig)
+            fig.show()
