@@ -22,8 +22,18 @@ def comp_loss(self, output, lam, typ):
             "ERROR: The LossModelBertotti object must be in an Output object to run"
         )
 
+    # compute needed model parameter from material data
+    self.comp_coeff_Bertotti(lam.mat_type)
+
+    # comp. fft of elemental FEA results
+    
+
+    # apply model
+
+
+    # store results
     if typ == "Lamination":
         if lam.is_stator:
             output.loss.Plam_stator = np.array(np.nan)
 
-            self.comp_coeff_Bertotti(lam.mat_type)
+            

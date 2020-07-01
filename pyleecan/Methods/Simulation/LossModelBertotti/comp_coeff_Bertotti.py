@@ -40,9 +40,7 @@ def comp_coeff_Bertotti(self, mat):
     mat : Material
         A Material object
     """
-    print("LossModelBertotti: comp_coeff_Bertotti")
-
-    # loss model
+    # store loss model parameter
     C = []
     C.append(self.k_hy)
     C.append(self.alpha_hy)
@@ -53,9 +51,7 @@ def comp_coeff_Bertotti(self, mat):
 
     # check if parameters have to been estimated
     n_est = sum(x is None for x in C)
-    print(n_est)
     if n_est == 0:
-        print("estimation skipped")
         return
 
     data = mat.mag.LossData.get_data()
@@ -63,9 +59,9 @@ def comp_coeff_Bertotti(self, mat):
     B = data[:, 0]
     Loss = data[:, 2]
 
-    # # Fit the data
-    _comp_err = lambda Cx: (_comp_loss(self, C, Cx, f, B) - Loss) / (f)
-    C0 = np.ones([n_est])  # Initial guess for the parameters
+    # fit the data
+    _comp_err = lambda Cx: (_comp_loss(self, C, Cx, f, B) - Loss) / (f) # TODO:
+    C0 = np.ones([n_est])  # initial values for the parameters
     result = optimize.least_squares(_comp_err, C0[:], method="lm")
 
     C1 = result.x
