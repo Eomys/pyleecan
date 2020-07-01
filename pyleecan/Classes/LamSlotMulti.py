@@ -427,7 +427,7 @@ class LamSlotMulti(Lamination):
 
     def _set_alpha(self, value):
         """setter of alpha"""
-        if type(value) is type(None):
+        if value is None:
             value = array([])
         elif type(value) is list:
             try:

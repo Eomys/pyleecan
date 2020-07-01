@@ -225,7 +225,7 @@ class NodeMat(Node):
 
     def _set_coordinate(self, value):
         """setter of coordinate"""
-        if type(value) is type(None):
+        if value is None:
             value = array([])
         elif type(value) is list:
             try:
@@ -262,7 +262,7 @@ class NodeMat(Node):
 
     def _set_tag(self, value):
         """setter of tag"""
-        if type(value) is type(None):
+        if value is None:
             value = array([])
         elif type(value) is list:
             try:

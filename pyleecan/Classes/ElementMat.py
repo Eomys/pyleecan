@@ -303,7 +303,7 @@ class ElementMat(Element):
 
     def _set_connectivity(self, value):
         """setter of connectivity"""
-        if type(value) is type(None):
+        if value is None:
             value = array([])
         elif type(value) is list:
             try:
@@ -359,7 +359,7 @@ class ElementMat(Element):
 
     def _set_group(self, value):
         """setter of group"""
-        if type(value) is type(None):
+        if value is None:
             value = array([])
         elif type(value) is list:
             try:
@@ -383,7 +383,7 @@ class ElementMat(Element):
 
     def _set_tag(self, value):
         """setter of tag"""
-        if type(value) is type(None):
+        if value is None:
             value = array([])
         elif type(value) is list:
             try:
