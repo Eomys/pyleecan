@@ -7,7 +7,6 @@ from numpy import (
     exp,
     pi,
     argmax,
-    abs,
     sum as np_sum,
     min as np_min,
     max as np_max,

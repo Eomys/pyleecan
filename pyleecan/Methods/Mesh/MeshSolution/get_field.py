@@ -65,6 +65,8 @@ def get_field(
         is_1d_input = True
     if is_radial:
         is_rthetaz = True
+    if is_radial or is_1d_input or is_normal:
+        is_1d_output = True
     if is_rms:
         is_center = True
         is_normal = True
@@ -73,8 +75,6 @@ def get_field(
     if is_rthetaz or is_normal:
         if is_1d_input:
             raise DimError("The field should be 3D")
-    if is_radial or is_1d_input:
-        is_1d_output = True
 
     # Get mesh if necessary
     if is_center or is_normal or is_rthetaz or is_surf:
@@ -102,7 +102,11 @@ def get_field(
         if is_center or is_surf:
             if is_other_dim:
                 # Field has other dimension -> loop over other dimension
-                result = zeros((shape[0], shape[1]), dtype=complex)
+                if is_center:
+                    Nnodes = mesh.get_points(indices=indices).shape[0]
+                else:
+                    Nnodes = shape[0]
+                result = zeros((Nnodes, shape[1]), dtype=complex)
                 for i in range(shape[1]):
                     field_i = field[:, i]
                     # Extract subset of the field if necessary
@@ -153,12 +157,16 @@ def get_field(
     else:
         if is_other_dim:
             # Field has third dimension -> loop over third dimension
+            if is_center:
+                Nnodes = mesh.get_normals(indices=indices).shape[0]
+            else:
+                Nnodes = shape[0]
             if is_1d_output:
-                result = zeros((shape[0], shape[2]), dtype=complex)
+                result = zeros((Nnodes, shape[2]), dtype=complex)
             elif is_rms:
                 result = zeros(shape[2], dtype=complex)
             else:
-                result = zeros(shape, dtype=complex)
+                result = zeros((Nnodes, shape[1], shape[2]), dtype=complex)
             for i in range(shape[2]):
                 field_i = field[:, :, i]
                 # Extract subset of the field if necessary
