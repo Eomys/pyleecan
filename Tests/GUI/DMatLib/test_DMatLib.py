@@ -58,7 +58,7 @@ class test_DMatLib(TestCase):
         mat_lib.append(Material(name="test_material_7"))
 
         matlib = MatLib()
-        matlib.list_mat = mat_lib
+        matlib.dict_mat["RefMatLib"] = mat_lib
         matlib.index_first_mat_mach = 7
 
         # Save material in a tmp folder

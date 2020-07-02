@@ -31,6 +31,7 @@ class WindingCW2LR(Winding):
     """double layer non-overlapping "concentrated" tooth winding "all teeth wound", radial coil superposition"""
 
     VERSION = 1
+    NAME = "double layer concentrated (radial)"
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.WindingCW2LR.comp_connection_mat

@@ -31,6 +31,7 @@ class WindingDW1L(Winding):
     """single layer overlapping integral distributed winding"""
 
     VERSION = 1
+    NAME = "single layer distributed"
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.WindingDW1L.comp_connection_mat

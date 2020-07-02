@@ -295,7 +295,9 @@ class OutElec(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -315,7 +317,9 @@ class OutElec(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -337,7 +341,9 @@ class OutElec(FrozenClass):
 
     def _set_Is(self, value):
         """setter of Is"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -359,7 +365,9 @@ class OutElec(FrozenClass):
 
     def _set_Ir(self, value):
         """setter of Ir"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -381,7 +389,9 @@ class OutElec(FrozenClass):
 
     def _set_angle_rotor(self, value):
         """setter of angle_rotor"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -403,7 +413,9 @@ class OutElec(FrozenClass):
 
     def _set_Nr(self, value):
         """setter of Nr"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:

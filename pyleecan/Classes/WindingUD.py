@@ -32,6 +32,7 @@ class WindingUD(Winding):
     """User defined winding"""
 
     VERSION = 1
+    NAME = "User defined"
 
     # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.WindingUD.comp_connection_mat
@@ -211,7 +212,9 @@ class WindingUD(Winding):
 
     def _set_user_wind_mat(self, value):
         """setter of user_wind_mat"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:

@@ -3291,7 +3291,8 @@
             "get_polar_eq",
             "plot_anim_rotor",
             "get_material_list",
-            "comp_sym"
+            "comp_sym",
+            "comp_desc_dict"
         ],
         "mother": "",
         "name": "Machine",
@@ -3368,7 +3369,8 @@
         "desc": "Abstract class for asynchronous machines",
         "is_internal": false,
         "methods": [
-            "is_synchronous"
+            "is_synchronous",
+            "comp_desc_dict"
         ],
         "mother": "Machine",
         "name": "MachineAsync",
@@ -3627,7 +3629,7 @@
             }
         ],
         "daughters": [],
-        "desc": "Doubly Fed Induction Machine",
+        "desc": "User defined Machine with multiple Laminations",
         "is_internal": false,
         "methods": [
             "build_geometry",
@@ -4829,7 +4831,7 @@
                 "max": "",
                 "min": "",
                 "name": "group",
-                "type": "dict",
+                "type": "{ndarray}",
                 "unit": "",
                 "value": ""
             }
@@ -5984,12 +5986,21 @@
                 "value": null
             },
             {
-                "desc": "Torque ripple",
+                "desc": "Peak to Peak Torque ripple normalized according to average torque (None if average torque=0)",
                 "max": "",
                 "min": "",
-                "name": "Tem_rip",
+                "name": "Tem_rip_norm",
                 "type": "float",
                 "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Peak to Peak Torque ripple",
+                "max": "",
+                "min": "",
+                "name": "Tem_rip_pp",
+                "type": "float",
+                "unit": "N.m",
                 "value": null
             },
             {
@@ -9308,6 +9319,10 @@
             {
                 "name": "VERSION",
                 "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"Abstract Winding\""
             }
         ],
         "daughters": [
@@ -9423,6 +9438,10 @@
             {
                 "name": "VERSION",
                 "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"single layer concentrated\""
             }
         ],
         "daughters": [],
@@ -9443,6 +9462,10 @@
             {
                 "name": "VERSION",
                 "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"double layer concentrated (radial)\""
             }
         ],
         "daughters": [],
@@ -9463,6 +9486,10 @@
             {
                 "name": "VERSION",
                 "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"double layer concentrated (orthoradial)\""
             }
         ],
         "daughters": [],
@@ -9483,6 +9510,10 @@
             {
                 "name": "VERSION",
                 "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"single layer distributed\""
             }
         ],
         "daughters": [
@@ -9515,6 +9546,10 @@
             {
                 "name": "VERSION",
                 "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"double layer distributed\""
             }
         ],
         "daughters": [],
@@ -9534,6 +9569,10 @@
             {
                 "name": "VERSION",
                 "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"short-circuit\""
             }
         ],
         "daughters": [],
@@ -9554,6 +9593,10 @@
             {
                 "name": "VERSION",
                 "value": "1"
+            },
+            {
+                "name": "NAME",
+                "value": "\"User defined\""
             }
         ],
         "daughters": [],

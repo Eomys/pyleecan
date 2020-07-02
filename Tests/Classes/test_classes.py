@@ -5,6 +5,7 @@ from os import remove
 
 import pytest
 from importlib import import_module
+import matplotlib.pyplot as plt
 from numpy import array_equal, empty, array
 from pyleecan.Generator.read_fct import read_all
 from pyleecan.Generator.ClassGenerator.init_method_generator import get_mother_attr
@@ -201,7 +202,10 @@ def test_class_set_None(class_dict):
     test_obj._set_None()
     prop_list = get_mother_attr(gen_dict, class_dict, "properties")[0]
     for prop in prop_list:
-        if prop["type"] == "ndarray" or prop["type"] in PYTHON_TYPE:
+        # ndarray set as None are set as array([])
+        if prop["type"] == "ndarray":
+            assert array_equal(test_obj.__getattribute__(prop["name"]), array([]))
+        elif prop["type"] in PYTHON_TYPE:
             assert test_obj.__getattribute__(prop["name"]) == None
 
 
@@ -246,6 +250,9 @@ def test_class_methods(class_dict):
             raise err  # Raise the ImportError because the method doesn't exist
         except:
             pass
+
+    # Some methods may generate plots
+    plt.close("all")
 
 
 @pytest.mark.parametrize("class_dict", class_list)
