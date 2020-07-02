@@ -73,6 +73,7 @@ except ImportError as error:
     get_group = error
 
 
+from numpy import array, empty
 from ._check import InitUnKnowClassError
 from .CellMat import CellMat
 from .PointMat import PointMat
@@ -212,7 +213,7 @@ class MeshMat(Mesh):
         cell=dict(),
         point=-1,
         submesh=list(),
-        group={},
+        group=dict(),
         label=None,
         init_dict=None,
         init_str=None,
@@ -304,7 +305,19 @@ class MeshMat(Mesh):
             self.submesh = list()
         else:
             self.submesh = submesh
-        self.group = group
+        # group can be None or a dict of ndarray
+        self.group = dict()
+        if type(group) is dict:
+            for key, obj in group.items():
+                if obj is None:  # Default value
+                    value = empty(0)
+                elif isinstance(obj, list):
+                    value = array(obj)
+                self.group[key] = value
+        elif group is None:
+            self.group = dict()
+        else:
+            self.group = group  # Should raise an error
         # Call Mesh init
         super(MeshMat, self).__init__(label=label)
         # The class is frozen (in Mesh init), for now it's impossible to
@@ -331,7 +344,12 @@ class MeshMat(Mesh):
         for ii in range(len(self.submesh)):
             tmp = self.submesh[ii].__str__().replace(linesep, linesep + "\t") + linesep
             MeshMat_str += "submesh[" + str(ii) + "] =" + tmp + linesep + linesep
-        MeshMat_str += "group = " + str(self.group) + linesep
+        if len(self.group) == 0:
+            MeshMat_str += "group = dict()"
+        for key, obj in self.group.items():
+            MeshMat_str += (
+                "group[" + key + "] = " + str(self.group[key]) + linesep + linesep
+            )
         return MeshMat_str
 
     def __eq__(self, other):
@@ -369,7 +387,9 @@ class MeshMat(Mesh):
         MeshMat_dict["submesh"] = list()
         for obj in self.submesh:
             MeshMat_dict["submesh"].append(obj.as_dict())
-        MeshMat_dict["group"] = self.group
+        MeshMat_dict["group"] = dict()
+        for key, obj in self.group.items():
+            MeshMat_dict["group"][key] = obj.tolist()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         MeshMat_dict["__class__"] = "MeshMat"
@@ -384,7 +404,7 @@ class MeshMat(Mesh):
             self.point._set_None()
         for obj in self.submesh:
             obj._set_None()
-        self.group = None
+        self.group = dict()
         # Set to None the properties inherited from Mesh
         super(MeshMat, self)._set_None()
 
@@ -450,11 +470,18 @@ class MeshMat(Mesh):
 
     def _set_group(self, value):
         """setter of group"""
-        check_var("group", value, "dict")
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is list:
+                    try:
+                        obj = array(obj)
+                    except:
+                        pass
+        check_var("group", value, "{ndarray}")
         self._group = value
 
     # Dict sorted by groups name with cells indices.
-    # Type : dict
+    # Type : {ndarray}
     group = property(
         fget=_get_group,
         fset=_set_group,

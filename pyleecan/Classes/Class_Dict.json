@@ -4831,7 +4831,7 @@
                 "max": "",
                 "min": "",
                 "name": "group",
-                "type": "dict",
+                "type": "{ndarray}",
                 "unit": "",
                 "value": ""
             }
