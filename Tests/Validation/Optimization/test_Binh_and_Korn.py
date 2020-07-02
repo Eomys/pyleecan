@@ -118,7 +118,7 @@ def test_Binh_and_Korn():
         ),
         "obj2": OptiObjFunc(
             description="Minimization of the torque ripple",
-            func=lambda output: output.mag.Tem_rip,
+            func=lambda output: output.mag.Tem_rip_norm,
         ),
     }
 
@@ -127,7 +127,7 @@ def test_Binh_and_Korn():
         x = output.simu.machine.rotor.slot.H0
         y = output.simu.machine.stator.slot.H0
         output.mag.Tem_av = 4 * x ** 2 + 4 * y ** 2
-        output.mag.Tem_rip = (x - 5) ** 2 + (y - 5) ** 2
+        output.mag.Tem_rip_norm = (x - 5) ** 2 + (y - 5) ** 2
 
     # ### Defining the problem
 
