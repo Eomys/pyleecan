@@ -18,7 +18,7 @@ def comp_surface(self):
     """
 
     Sint = pi * self.R1 ** 2
-    Sext = pi * (self.R1 + self.R1) ** 2
+    Sext = pi * (self.R1 + self.H1) ** 2
     Sarc = (Sext - Sint) * (self.W0 / (2 * pi))
 
-    return Sarc + pi * self.H1 ** 2
+    return Sarc + pi * (self.H1 / 2) ** 2
