@@ -42,33 +42,6 @@ try:
 except ImportError as error:
     get_cell_area = error
 
-try:
-    from ..Methods.Mesh.MeshVTK.plot_mesh import plot_mesh
-except ImportError as error:
-    plot_mesh = error
-
-try:
-    from ..Methods.Mesh.MeshVTK.plot_contour import plot_contour
-except ImportError as error:
-    plot_contour = error
-
-try:
-    from ..Methods.Mesh.MeshVTK.plot_glyph import plot_glyph
-except ImportError as error:
-    plot_glyph = error
-
-try:
-    from ..Methods.Mesh.MeshVTK.plot_deformation import plot_deformation
-except ImportError as error:
-    plot_deformation = error
-
-try:
-    from ..Methods.Mesh.MeshVTK.plot_deformation_animated import (
-        plot_deformation_animated,
-    )
-except ImportError as error:
-    plot_deformation_animated = error
-
 
 from numpy import array, array_equal
 from cloudpickle import dumps, loads
@@ -147,59 +120,6 @@ class MeshVTK(Mesh):
         )
     else:
         get_cell_area = get_cell_area
-    # cf Methods.Mesh.MeshVTK.plot_mesh
-    if isinstance(plot_mesh, ImportError):
-        plot_mesh = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MeshVTK method plot_mesh: " + str(plot_mesh))
-            )
-        )
-    else:
-        plot_mesh = plot_mesh
-    # cf Methods.Mesh.MeshVTK.plot_contour
-    if isinstance(plot_contour, ImportError):
-        plot_contour = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshVTK method plot_contour: " + str(plot_contour)
-                )
-            )
-        )
-    else:
-        plot_contour = plot_contour
-    # cf Methods.Mesh.MeshVTK.plot_glyph
-    if isinstance(plot_glyph, ImportError):
-        plot_glyph = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MeshVTK method plot_glyph: " + str(plot_glyph))
-            )
-        )
-    else:
-        plot_glyph = plot_glyph
-    # cf Methods.Mesh.MeshVTK.plot_deformation
-    if isinstance(plot_deformation, ImportError):
-        plot_deformation = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshVTK method plot_deformation: "
-                    + str(plot_deformation)
-                )
-            )
-        )
-    else:
-        plot_deformation = plot_deformation
-    # cf Methods.Mesh.MeshVTK.plot_deformation_animated
-    if isinstance(plot_deformation_animated, ImportError):
-        plot_deformation_animated = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshVTK method plot_deformation_animated: "
-                    + str(plot_deformation_animated)
-                )
-            )
-        )
-    else:
-        plot_deformation_animated = plot_deformation_animated
     # save method is available in all object
     save = save
 

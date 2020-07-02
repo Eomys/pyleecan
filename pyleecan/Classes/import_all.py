@@ -92,6 +92,7 @@ from ..Classes.Mesh import Mesh
 from ..Classes.MeshMat import MeshMat
 from ..Classes.MeshSolution import MeshSolution
 from ..Classes.MeshVTK import MeshVTK
+from ..Classes.Mode import Mode
 from ..Classes.Notch import Notch
 from ..Classes.NotchEvenDist import NotchEvenDist
 from ..Classes.OptiConstraint import OptiConstraint

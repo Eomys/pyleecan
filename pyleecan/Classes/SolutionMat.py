@@ -10,6 +10,14 @@ from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from .Solution import Solution
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Mesh.SolutionMat.get_field import get_field
+except ImportError as error:
+    get_field = error
+
+
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 
@@ -19,6 +27,15 @@ class SolutionMat(Solution):
 
     VERSION = 1
 
+    # cf Methods.Mesh.SolutionMat.get_field
+    if isinstance(get_field, ImportError):
+        get_field = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SolutionMat method get_field: " + str(get_field))
+            )
+        )
+    else:
+        get_field = get_field
     # save method is available in all object
     save = save
 

@@ -94,6 +94,7 @@ load_switch = {
     "MeshMat": MeshMat,
     "MeshSolution": MeshSolution,
     "MeshVTK": MeshVTK,
+    "Mode": Mode,
     "Notch": Notch,
     "NotchEvenDist": NotchEvenDist,
     "OptiConstraint": OptiConstraint,

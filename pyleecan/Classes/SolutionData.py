@@ -56,7 +56,14 @@ class SolutionData(Solution):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, field=None, type_cell="triangle", init_dict=None, init_str=None):
+    def __init__(
+        self,
+        field=None,
+        type_cell="triangle",
+        label=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -77,6 +84,7 @@ class SolutionData(Solution):
             assert type(obj) is type(self)
             field = obj.field
             type_cell = obj.type_cell
+            label = obj.label
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -84,12 +92,15 @@ class SolutionData(Solution):
                 field = init_dict["field"]
             if "type_cell" in list(init_dict.keys()):
                 type_cell = init_dict["type_cell"]
+            if "label" in list(init_dict.keys()):
+                label = init_dict["label"]
         # Initialisation by argument
         # Check if the type DataND has been imported with success
         if isinstance(DataND, ImportError):
             raise ImportError("Unknown type DataND please install SciDataTool")
         self.field = field
         self.type_cell = type_cell
+        self.label = label
         # Call Solution init
         super(SolutionData, self).__init__()
         # The class is frozen (in Solution init), for now it's impossible to
@@ -103,6 +114,7 @@ class SolutionData(Solution):
         SolutionData_str += super(SolutionData, self).__str__()
         SolutionData_str += "field = " + str(self.field) + linesep + linesep
         SolutionData_str += 'type_cell = "' + str(self.type_cell) + '"' + linesep
+        SolutionData_str += 'label = "' + str(self.label) + '"' + linesep
         return SolutionData_str
 
     def __eq__(self, other):
@@ -117,6 +129,8 @@ class SolutionData(Solution):
         if other.field != self.field:
             return False
         if other.type_cell != self.type_cell:
+            return False
+        if other.label != self.label:
             return False
         return True
 
@@ -135,6 +149,7 @@ class SolutionData(Solution):
                 "serialized": dumps(self._field).decode("ISO-8859-2"),
             }
         SolutionData_dict["type_cell"] = self.type_cell
+        SolutionData_dict["label"] = self.label
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         SolutionData_dict["__class__"] = "SolutionData"
@@ -145,6 +160,7 @@ class SolutionData(Solution):
 
         self.field = None
         self.type_cell = None
+        self.label = None
         # Set to None the properties inherited from Solution
         super(SolutionData, self)._set_None()
 
@@ -189,4 +205,19 @@ class SolutionData(Solution):
         fget=_get_type_cell,
         fset=_set_type_cell,
         doc=u"""Type of cell (Point, Segment2, Triangle3, etc.)""",
+    )
+
+    def _get_label(self):
+        """getter of label"""
+        return self._label
+
+    def _set_label(self, value):
+        """setter of label"""
+        check_var("label", value, "str")
+        self._label = value
+
+    # Label to identify the solution
+    # Type : str
+    label = property(
+        fget=_get_label, fset=_set_label, doc=u"""Label to identify the solution"""
     )

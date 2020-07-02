@@ -2,5 +2,9 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 label,,(Optional) Descriptive name of the mesh,,str,None,,,,Mesh,,get_mesh,VERSION,1,Abstract class to associate a mesh with one or several solutions
 mesh,,A list of Mesh objects. ,,[Mesh],None,,,,,,get_solution,,,
 is_same_mesh,,"1 if the mesh is the same at each step (time, mode etc.)",,bool,1,,,,,,save_to_file,,,
-solution,,A list of Solution objects,,[Solution],None,,,,,,,,,
-dimension,,Dimension of the physical problem,,int,3,1,3,,,,,,,
+solution,,A list of Solution objects,,[Solution],None,,,,,,get_field,,,
+dimension,,Dimension of the physical problem,,int,3,1,3,,,,plot_mesh,,,
+,,,,,,,,,,,plot_contour,,,
+,,,,,,,,,,,plot_deflection,,,
+,,,,,,,,,,,plot_deflection_animated,,,
+,,,,,,,,,,,plot_glyph,,,

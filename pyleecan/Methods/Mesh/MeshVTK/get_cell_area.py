@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def get_cell_area(self, indices=[]):
+def get_cell_area(self, indices=None):
     """Return the area of the cells on the outer surface.
 
     Parameters
@@ -17,6 +17,6 @@ def get_cell_area(self, indices=[]):
         Area of the cells
     """
 
-    surf = self.get_surf(indices)
+    surf = self.get_surf(indices=indices)
 
     return surf.compute_cell_sizes(area=True)["Area"]

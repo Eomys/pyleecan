@@ -4850,7 +4850,13 @@
         "methods": [
             "get_mesh",
             "get_solution",
-            "save_to_file"
+            "save_to_file",
+            "get_field",
+            "plot_mesh",
+            "plot_contour",
+            "plot_deflection",
+            "plot_deflection_animated",
+            "plot_glyph"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -4920,12 +4926,7 @@
             "get_cells",
             "get_normals",
             "get_surf",
-            "get_cell_area",
-            "plot_mesh",
-            "plot_contour",
-            "plot_glyph",
-            "plot_deformation",
-            "plot_deformation_animated"
+            "get_cell_area"
         ],
         "mother": "Mesh",
         "name": "MeshVTK",
@@ -5021,6 +5022,56 @@
                 "type": "str",
                 "unit": "",
                 "value": "surf"
+            }
+        ]
+    },
+    "Mode": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Structural module: Mode object",
+        "is_internal": false,
+        "methods": [
+            "plot",
+            "plot_animated",
+            "get_shape_xyz",
+            "get_shape_pol"
+        ],
+        "mother": "SolutionMat",
+        "name": "Mode",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Mode.csv",
+        "properties": [
+            {
+                "desc": "Natural frequency of the mode",
+                "max": "",
+                "min": "",
+                "name": "nat_freq",
+                "type": "float",
+                "unit": "Hz",
+                "value": null
+            },
+            {
+                "desc": "Circumferential order",
+                "max": "",
+                "min": "0",
+                "name": "order_circ",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Longitudinal order",
+                "max": "",
+                "min": "0",
+                "name": "order_long",
+                "type": "int",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -8684,13 +8735,14 @@
         ],
         "daughters": [
             "Solution",
+            "Mode",
             "SolutionData",
             "SolutionMat"
         ],
         "desc": "Abstract class for solution related classes.",
         "is_internal": false,
         "methods": [
-            "get_solution"
+            "get_field"
         ],
         "mother": "",
         "name": "Solution",
@@ -8733,6 +8785,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "triangle"
+            },
+            {
+                "desc": "Label to identify the solution",
+                "max": "",
+                "min": "",
+                "name": "label",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
             }
         ]
     },
@@ -8743,10 +8804,14 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "Mode"
+        ],
         "desc": "Define a Solution with ndarray object.",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_field"
+        ],
         "mother": "Solution",
         "name": "SolutionMat",
         "package": "Mesh",
