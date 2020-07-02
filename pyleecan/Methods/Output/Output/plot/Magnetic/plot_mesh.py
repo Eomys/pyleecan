@@ -40,7 +40,7 @@ import meshio
 
 
 def plot_mesh(
-    self, meshsolution, field_symbol=None, j_t0=0, show_edges=False,
+    self, meshsolution, label=None, index=0, show_edges=False,
 ):
     """ Display mesh.
 
@@ -51,14 +51,14 @@ def plot_mesh(
     mesh : Mesh
         a Mesh object
     """
-    name_file_vtk = "plot_mesh.vtk"
+    #name_file_vtk = "plot_mesh.vtk"
 
-    mesh_jt0 = meshsolution.get_mesh(j_t0=j_t0)
-    meshpv = mesh_jt0.get_mesh_pv(path=name_file_vtk)
+    mesh_jt0 = meshsolution.get_mesh(index=index)
+    meshpv = mesh_jt0.get_mesh_pv()
 
-    if field_symbol is not None:
-        solution_jt0 = meshsolution.get_solution(j_t0=j_t0, field_symbol=field_symbol)
-        meshpv[field_symbol] = solution_jt0
+    if label is not None:
+        solution_jt0 = meshsolution.get_field(index=index, label=label)
+        meshpv[label] = solution_jt0
     else:
         show_edges = True
 
@@ -78,7 +78,7 @@ def plot_mesh(
 
     p.add_mesh(
         meshpv,
-        scalars=field_symbol,
+        scalars=label,
         show_edges=show_edges,
         edge_color="white",
         line_width=1,

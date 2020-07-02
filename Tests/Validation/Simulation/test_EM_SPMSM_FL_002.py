@@ -80,13 +80,13 @@ def test_Magnetic_FEMM_sym():
     simu_sym.run()
 
     out.plot_mesh(
-        meshsolution=out.mag.meshsolution, field_symbol="\mu",
+        meshsolution=out.mag.meshsolution, label="\mu",
     )
 
     out.plot_mesh(
-        meshsolution=out.mag.meshsolution, field_symbol="B",
+        meshsolution=out.mag.meshsolution, label="B",
     )
 
     out.plot_mesh(
-        meshsolution=out.mag.meshsolution, field_symbol="H",
+        meshsolution=out.mag.meshsolution, label="H",
     )

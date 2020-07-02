@@ -52,7 +52,7 @@ def get_field(
 
     # Get field
     solution = self.get_solution(label=label, index=index)
-    field = squeeze(solution.get_field())
+    field = squeeze(solution.get_field(field_symbol=label, index=index))
 
     # Check dimensions
     shape = field.shape

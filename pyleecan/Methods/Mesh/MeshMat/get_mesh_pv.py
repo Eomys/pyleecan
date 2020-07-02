@@ -5,7 +5,7 @@ import meshio
 import os
 
 
-def get_mesh_pv(self, path="", indices=None):
+def get_mesh_pv(self, path="temp.vtk", indices=None):
     """Return the pyvista mesh object (or submesh).
 
     Parameters
