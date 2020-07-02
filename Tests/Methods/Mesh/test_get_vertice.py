@@ -31,38 +31,28 @@ class unittest_get_vertice(TestCase):
     def test_MeshMat(self):
         """unittest with Meshmat object"""
 
-        solution = np.array([[3,3],[1,2],[2,3]])
-        vert = self.mesh.get_vertice([2,3])
+        solution = np.array([[3, 3], [1, 2], [2, 3]])
+        vert = self.mesh.get_vertice([2, 3])
         results = vert["triangle"]
         testA = np.sum(abs(solution - results))
-        msg = (
-            "Wrong output: returned "
-            + str(results)
-            + ", expected: "
-            + str(solution)
-        )
+        msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
         self.assertAlmostEqual(testA, 0, msg=msg, delta=self.DELTA)
 
-        solution = np.array([[3,3],[1,2]])
+        solution = np.array([[3, 3], [1, 2]])
         results = vert["segment"]
         testA = np.sum(abs(solution - results))
-        msg = (
-            "Wrong output: returned "
-            + str(results)
-            + ", expected: "
-            + str(solution)
-        )
+        msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
         self.assertAlmostEqual(testA, 0, msg=msg, delta=self.DELTA)
 
-        solution = np.array([[[0,0],[1,0],[1,2]], [[1,0],[1,2],[2,3]], [[3,3],[1,2],[2,3]] ])
-        vert = self.mesh.get_vertice([0,1,2])
+        solution = np.array(
+            [
+                [[0, 0], [1, 0], [1, 2]],
+                [[1, 0], [1, 2], [2, 3]],
+                [[3, 3], [1, 2], [2, 3]],
+            ]
+        )
+        vert = self.mesh.get_vertice([0, 1, 2])
         results = vert["triangle"]
         testA = np.sum(abs(solution - results))
-        msg = (
-            "Wrong output: returned "
-            + str(results)
-            + ", expected: "
-            + str(solution)
-        )
+        msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
         self.assertAlmostEqual(testA, 0, msg=msg, delta=self.DELTA)
-

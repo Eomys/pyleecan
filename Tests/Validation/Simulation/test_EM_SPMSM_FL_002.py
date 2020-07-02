@@ -61,7 +61,11 @@ def test_Magnetic_FEMM_sym():
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
-        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=False, is_antiper_a=True, is_get_mesh=True,
+        type_BH_stator=2,
+        type_BH_rotor=2,
+        is_symmetry_a=False,
+        is_antiper_a=True,
+        is_get_mesh=True,
     )
     simu.force = None
     simu.struct = None
@@ -86,4 +90,3 @@ def test_Magnetic_FEMM_sym():
     out.plot_mesh(
         meshsolution=out.mag.meshsolution, field_symbol="H",
     )
-
