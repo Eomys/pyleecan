@@ -106,6 +106,7 @@ class test_DMachineSetup(TestCase):
         ):
             # To trigger the slot
             self.widget.b_load.clicked.emit(True)
+        self.widget.nav_step.setCurrentRow(0)
         # To remember to update when adding a new machine type
         self.assertEqual(self.widget.w_step.c_type.count(), 8)
         # Check load MachineType

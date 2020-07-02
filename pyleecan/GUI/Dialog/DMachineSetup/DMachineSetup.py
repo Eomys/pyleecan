@@ -60,7 +60,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
             )
 
         self.update_nav()
-        self.set_nav(0)
+        self.set_nav(self.last_index)
 
         # Connect save/load button
         self.nav_step.currentRowChanged.connect(self.set_nav)
