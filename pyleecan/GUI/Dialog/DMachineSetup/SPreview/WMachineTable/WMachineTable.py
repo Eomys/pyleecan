@@ -66,5 +66,6 @@ class WMachineTable(Ui_WMachineTable, QWidget):
         """
         if self.machine is not None:
             fig, axes = plt.subplots()
+            axes.set_visible(False)
             self.machine.stator.plot_mmf_unit(fig=fig)
             fig.show()
