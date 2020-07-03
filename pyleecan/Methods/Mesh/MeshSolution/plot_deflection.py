@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import pyvistaqt as pv
+try:
+    import pyvistaqt as pv
+    is_pyvistaqt = True
+except:
+    import pyvista as pv
+    is_pyvistaqt = False
 from numpy import real, min as np_min, max as np_max
 
 from ....Classes.MeshMat import MeshMat
@@ -73,6 +78,8 @@ def plot_deflection(
     # Compute colorbar boundaries
     if clim is None:
         clim = [np_min(real(field)), np_max(real(field))]
+        if (clim[1] - clim[0]) / clim[1] < 0.01:
+            clim[0] = -clim[1]
 
     # Compute deformation factor
     if factor is None:
@@ -91,8 +98,12 @@ def plot_deflection(
     surf_warp[field_name] = real(field)
 
     # Configure plot
-    p = pv.BackgroundPlotter()
-    p.set_background("white")
+    if is_pyvistaqt:
+        p = pv.BackgroundPlotter()
+        p.set_background("white")
+    else:
+        pv.set_plot_theme("document")
+        p = pv.Plotter(notebook=False)
     sargs = dict(
         interactive=True,
         title_font_size=20,
