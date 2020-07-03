@@ -17,6 +17,7 @@ def get_field(
     is_rms=False,
     is_center=False,
     is_surf=False,
+    args=None,
 ):
     """Return the solution corresponding to label or an index.
 
@@ -49,10 +50,13 @@ def get_field(
         field
 
     """
+    if args is None:
+        args = dict()
+        args["time"] = 0
 
     # Get field
     solution = self.get_solution(label=label, index=index)
-    field = squeeze(solution.get_field(field_symbol=label, index=index))
+    field = squeeze(solution.get_field(args=args))
 
     # Check dimensions
     shape = field.shape
@@ -80,7 +84,7 @@ def get_field(
     if is_center or is_normal or is_rthetaz or is_surf:
         # Get the mesh
         mesh = self.get_mesh(label=label, index=index)
-        mesh_pv = mesh.get_mesh(indices=indices)
+        mesh_pv = mesh.get_mesh_pv(indices=indices)
         if isinstance(mesh, MeshMat):
             mesh_pv = mesh.get_mesh_pv(indices=indices)
             mesh = MeshVTK(mesh=mesh_pv, is_pyvista_mesh=True)

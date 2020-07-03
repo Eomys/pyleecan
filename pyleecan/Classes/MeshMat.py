@@ -472,7 +472,9 @@ class MeshMat(Mesh):
         """setter of group"""
         if type(value) is dict:
             for key, obj in value.items():
-                if type(obj) is list:
+                if obj is None:
+                    obj = array([])
+                elif type(obj) is list:
                     try:
                         obj = array(obj)
                     except:

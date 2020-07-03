@@ -14,7 +14,7 @@ def plot_contour(
     label=None,
     index=None,
     indices=None,
-    is_surf=True,
+    is_surf=False,
     is_radial=False,
     is_center=False,
     clim=None,
@@ -77,7 +77,7 @@ def plot_contour(
 
     # Add field to mesh
     if is_surf:
-        surf = mesh.get_surf(indices=indices)
+        surf = mesh_pv.get_surf(indices=indices)
         surf[field_name] = field
         mesh_field = surf
     else:

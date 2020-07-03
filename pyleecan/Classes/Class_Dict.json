@@ -4921,7 +4921,7 @@
         "desc": "Gather the mesh storage format",
         "is_internal": false,
         "methods": [
-            "get_mesh",
+            "get_mesh_pv",
             "get_points",
             "get_cells",
             "get_normals",
@@ -6192,8 +6192,6 @@
             "getter.get_BH_stator",
             "getter.get_path_result",
             "plot.Magnetic.plot_B_space",
-            "plot.Magnetic.plot_mesh",
-            "plot.Magnetic.plot_mesh_field",
             "plot.plot_A_cfft2",
             "plot.plot_A_fft2",
             "plot.plot_A_space",

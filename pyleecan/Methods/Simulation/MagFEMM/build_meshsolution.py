@@ -55,7 +55,9 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu):
             values=mu,
         )
 
-        sollist.append(SolutionData(field=solB, type_cell="triangle", label="B"))  # Face solution
+        sollist.append(
+            SolutionData(field=solB, type_cell="triangle", label="B")
+        )  # Face solution
         sollist.append(SolutionData(field=solH, type_cell="triangle", label="H"))
         sollist.append(SolutionData(field=solmu, type_cell="triangle", label="\mu"))
 

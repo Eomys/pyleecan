@@ -2,15 +2,15 @@
 import numpy as np
 
 
-def get_field(self, field_name, j_t0=None):
+def get_field(self, args=None):
     """Get the value of variables stored in Solution.
 
-     Parameters
+     Parameterss
      ----------
      self : Solution
          an Solution object
-     field_name : str
-         name of the field to return
+     args : dict
+         dict of selected entries (not used)
 
      Returns
      -------
@@ -19,10 +19,4 @@ def get_field(self, field_name, j_t0=None):
 
      """
 
-    if field_name == self.label:
-        if j_t0 is None:
-            return self.field
-        else:
-            return self.field[j_t0, :]
-    else:
-        return None
+    return self.field

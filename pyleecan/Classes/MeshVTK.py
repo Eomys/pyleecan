@@ -13,9 +13,9 @@ from .Mesh import Mesh
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Mesh.MeshVTK.get_mesh import get_mesh
+    from ..Methods.Mesh.MeshVTK.get_mesh_pv import get_mesh_pv
 except ImportError as error:
-    get_mesh = error
+    get_mesh_pv = error
 
 try:
     from ..Methods.Mesh.MeshVTK.get_points import get_points
@@ -64,15 +64,15 @@ class MeshVTK(Mesh):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.MeshVTK.get_mesh
-    if isinstance(get_mesh, ImportError):
-        get_mesh = property(
+    # cf Methods.Mesh.MeshVTK.get_mesh_pv
+    if isinstance(get_mesh_pv, ImportError):
+        get_mesh_pv = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshVTK method get_mesh: " + str(get_mesh))
+                ImportError("Can't use MeshVTK method get_mesh_pv: " + str(get_mesh_pv))
             )
         )
     else:
-        get_mesh = get_mesh
+        get_mesh_pv = get_mesh_pv
     # cf Methods.Mesh.MeshVTK.get_points
     if isinstance(get_points, ImportError):
         get_points = property(
