@@ -6,7 +6,7 @@ import os
 import tempfile
 
 
-def get_mesh_pv(self, path="", indices=None):
+def get_mesh_pv(self, path="temp.vtk", indices=None):
     """Return the pyvista mesh object (or submesh).
 
     Parameters
@@ -30,9 +30,9 @@ def get_mesh_pv(self, path="", indices=None):
 
     # get filename
     if not path:
-        with tempfile.NamedTemporaryFile(suffix='.vtk') as file:
+        with tempfile.NamedTemporaryFile(suffix=".vtk") as file:
             path = file.name
-    
+
     # Write .vtk file using meshio
     meshio.write_points_cells(
         filename=path, points=points, cells=cells, file_format="vtk"

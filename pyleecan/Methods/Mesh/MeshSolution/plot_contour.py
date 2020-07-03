@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import pyvistaqt as pv
+try:
+    import pyvistaqt as pv
+
+    is_pyvistaqt = True
+except:
+    import pyvista as pv
+
+    is_pyvistaqt = False
 from numpy import min as np_min, max as np_max
 
 from ....Classes.MeshMat import MeshMat
@@ -14,7 +21,7 @@ def plot_contour(
     label=None,
     index=None,
     indices=None,
-    is_surf=True,
+    is_surf=False,
     is_radial=False,
     is_center=False,
     clim=None,
@@ -77,7 +84,7 @@ def plot_contour(
 
     # Add field to mesh
     if is_surf:
-        surf = mesh.get_surf(indices=indices)
+        surf = mesh_pv.get_surf(indices=indices)
         surf[field_name] = field
         mesh_field = surf
     else:
@@ -85,8 +92,12 @@ def plot_contour(
         mesh_field = mesh_pv
 
     # Configure plot
-    p = pv.BackgroundPlotter()
-    p.set_background("white")
+    if is_pyvistaqt:
+        p = pv.BackgroundPlotter()
+        p.set_background("white")
+    else:
+        pv.set_plot_theme("document")
+        p = pv.Plotter(notebook=False)
     sargs = dict(
         interactive=True,
         title_font_size=20,

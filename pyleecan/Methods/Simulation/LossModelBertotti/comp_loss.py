@@ -7,11 +7,11 @@ from ....Methods.Simulation.Input import InputError
 
 
 def _ft_data(data):
-    #---------------------------------------------------------------
+    # ---------------------------------------------------------------
     # workaround
     # fourier transform with data with multiple components
     # axes/components order won't be restored
-    #---------------------------------------------------------------
+    # ---------------------------------------------------------------
 
     # get axes and components
     axes = []
@@ -21,26 +21,25 @@ def _ft_data(data):
         if axis.is_components:
             components.append(axis)
             n_comp = len(axis.values)
-        else: 
+        else:
             axes.append(axis)
-    
-    axes_str = [x.name for x in axes]
 
+    axes_str = [x.name for x in axes]
 
     # transform each field component at a time
     if n_comp > 1:
         values = []
         for id in range(n_comp):
             component_str = components[0].name + f"[{id}]"
-            component_data = data.get_along(component_str,*axes_str)
+            component_data = data.get_along(component_str, *axes_str)
             _data = DataTime(
-                        name = data.name,
-                        unit = data.unit,
-                        symbol = data.symbol,
-                        axes = axes,
-                        values = component_data[data.symbol]
-                        )
-            
+                name=data.name,
+                unit=data.unit,
+                symbol=data.symbol,
+                axes=axes,
+                values=component_data[data.symbol],
+            )
+
             _dataFt = _data.time_to_freq()
             values.append(_dataFt.values)
 
@@ -48,17 +47,16 @@ def _ft_data(data):
 
         # recombine transformed field components
         dataFt = DataFreq(
-                    name=_dataFt.name,
-                    unit=_dataFt.unit,
-                    symbol=_dataFt.symbol,
-                    axes=[components[0], *_dataFt.axes],
-                    values=values
-                    )
+            name=_dataFt.name,
+            unit=_dataFt.unit,
+            symbol=_dataFt.symbol,
+            axes=[components[0], *_dataFt.axes],
+            values=values,
+        )
     else:
         dataFt = data.time_to_freq()
-    
-    return dataFt
 
+    return dataFt
 
 
 def comp_loss(self, output, lam, typ):
@@ -83,9 +81,7 @@ def comp_loss(self, output, lam, typ):
 
     # comp. fft of elemental FEA results
     B_fft = _ft_data(output.mag.meshsolution.solution[0].field)
-    print('FFT of B calculated')
-    
-
+    print("FFT of B calculated")
 
     # apply model
 
@@ -93,6 +89,5 @@ def comp_loss(self, output, lam, typ):
     if typ == "Lamination":
         if lam.is_stator:
             output.loss.Plam_stator = np.array([np.nan])
-
 
     return B_fft

@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def get_field(self, field_symbol="", j_t0=None, indice=None, direction=None):
+def get_field(self, args=None):
     """Get the value of variables stored in Solution.
 
      Parameters
@@ -18,26 +18,16 @@ def get_field(self, field_symbol="", j_t0=None, indice=None, direction=None):
          an array of field values
 
      """
-    if field_symbol == self.field.symbol:
-        if j_t0 is None and indice is None and direction is None:
-            if "direction" in [axis.name for axis in self.field.axes]:  # Vector
-                field = self.field.get_along("time", "indice", "direction")[
-                    self.field.symbol
-                ]
-            else:  # scalar
-                field = self.field.get_along("time", "indice")[self.field.symbol]
+    if args is None:
+        args = dict()
 
-        elif indice is None and direction is None:
-            if "direction" in [axis.name for axis in self.field.axes]:  # Vector
-                field = self.field.get_along(
-                    "time[" + str(j_t0) + "]", "indice", "direction"
-                )[self.field.symbol]
-            else:  # scalar
-                field = self.field.get_along("time[" + str(j_t0) + "]", "indice")[
-                    self.field.symbol
-                ]
+    along_arg = list()
+    for axis in self.field.axes:
+        if axis.name in args:
+            along_arg.append(axis.name + "[" + str(args[axis.name]) + "]")
+        else:
+            along_arg.append(axis.name)
 
-        return field
+    field = self.field.get_along(tuple(along_arg))[self.field.symbol]
 
-    else:
-        return None
+    return field

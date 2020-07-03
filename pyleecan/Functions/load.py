@@ -1,47 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from json import load as jload
-from os.path import isfile, isdir, join
+from os.path import isdir, join
 from os import walk, getcwd, chdir
-from re import match
 from ..Functions.load_switch import load_switch
 from ..Classes.Material import Material
-
-
-def load_json(file_path):
-    """Load a json file
-
-    Parameters
-    ----------
-    file_path: str
-        path to the file to load
-
-    Returns
-    -------
-    file_path: str
-        edited path to the file to load 
-    json_data: json decoded data type
-        data of the json file
-    """
-    if isdir(file_path):
-        i = max(file_path.rfind("\\"), file_path.rfind("/"))
-        if i != -1:
-            file_path += file_path[i:] + ".json"
-        else:
-            file_path += "/" + file_path + ".json"
-    # The file_name must end with .json
-    elif not match(".*\.json", file_path):
-        file_path += ".json"  # If it doesn't, we add .json at the end
-
-    # The file (and the folder) should exist
-    if not isfile(file_path):
-        raise LoadMissingFileError(str(file_path) + " doesn't exist")
-
-    # Get the data dictionary
-    with open(file_path, "r") as load_file:
-        json_data = jload(load_file)
-
-    return file_path, json_data
+from .Load.load_json import load_json
+from .Load.load_hdf5 import load_hdf5
 
 
 def init_data(obj, file_path):
@@ -117,7 +81,10 @@ def load(file_path):
         path to the file to load
     """
 
-    file_path, init_dict = load_json(file_path)
+    if file_path.endswith("hdf5") or file_path.endswith("h5"):
+        file_path, init_dict = load_hdf5(file_path)
+    else:
+        file_path, init_dict = load_json(file_path)
 
     # Check that loaded data are of type dict
     if not isinstance(init_dict, dict):
@@ -199,7 +166,7 @@ def load_matlib(mat_path):
     for (dirpath, _, filenames) in walk(mat_path):
         for file_name in filenames:
             # For all json file in the folder and subfolder
-            if file_name[-5:] == ".json":
+            if file_name.endswith(".json") or file_name.endswith(".h5"):
                 file_path = join(dirpath, file_name)
                 try:
                     mat = load(file_path)
@@ -212,12 +179,6 @@ def load_matlib(mat_path):
                 except Exception:
                     print("When loading matlib, unable to load file: " + file_path)
     return matlib
-
-
-class LoadMissingFileError(Exception):
-    """ """
-
-    pass
 
 
 class LoadMissingFolderError(Exception):

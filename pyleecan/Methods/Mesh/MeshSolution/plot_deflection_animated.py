@@ -7,7 +7,6 @@ from numpy import (
     exp,
     pi,
     argmax,
-    abs,
     sum as np_sum,
     min as np_min,
     max as np_max,
@@ -32,6 +31,7 @@ def plot_deflection_animated(
     ifreq=None,
     gif_name="animation.gif",
     gif_path="./",
+    title="",
 ):
     """Create the gif of the animated operational deflection shape.
 
@@ -95,6 +95,8 @@ def plot_deflection_animated(
     # Compute colorbar boundaries
     if clim is None:
         clim = [np_min(real(field)), np_max(real(field))]
+        if (clim[1] - clim[0]) / clim[1] < 0.01:
+            clim[0] = -clim[1]
 
     # Compute deformation factor
     if factor is None:
@@ -114,7 +116,7 @@ def plot_deflection_animated(
 
     # Configure plot
     pv.set_plot_theme("document")
-    p = pv.Plotter(notebook=False)
+    p = pv.Plotter(notebook=False, title=title)
     sargs = dict(
         interactive=True,
         title_font_size=20,
@@ -131,6 +133,7 @@ def plot_deflection_animated(
         clim=clim,
         scalar_bar_args=sargs,
     )
+    p.add_text(title, position="upper_edge")
     p.show(use_panel=False, auto_close=False)
 
     # GIF
@@ -150,6 +153,7 @@ def plot_deflection_animated(
                 clim=clim,
                 scalar_bar_args=sargs,
             )
+            p.add_text(title, position="upper_edge")
             p.write_frame()
             p.clear()
 
@@ -170,6 +174,7 @@ def plot_deflection_animated(
                 clim=clim,
                 scalar_bar_args=sargs,
             )
+            p.add_text(title, position="upper_edge")
             p.write_frame()
             p.clear()
 

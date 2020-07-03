@@ -359,7 +359,9 @@ class OutLoss(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -394,7 +396,9 @@ class OutLoss(FrozenClass):
 
     def _set_Plam_stator(self, value):
         """setter of Plam_stator"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -416,7 +420,9 @@ class OutLoss(FrozenClass):
 
     def _set_Plam_rotor(self, value):
         """setter of Plam_rotor"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -436,7 +442,9 @@ class OutLoss(FrozenClass):
 
     def _set_Pwind_stator(self, value):
         """setter of Pwind_stator"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -456,7 +464,9 @@ class OutLoss(FrozenClass):
 
     def _set_Pwind_rotor(self, value):
         """setter of Pwind_rotor"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -476,7 +486,9 @@ class OutLoss(FrozenClass):
 
     def _set_Pmag_stator(self, value):
         """setter of Pmag_stator"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -496,7 +508,9 @@ class OutLoss(FrozenClass):
 
     def _set_Pmag_rotor(self, value):
         """setter of Pmag_rotor"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -516,7 +530,9 @@ class OutLoss(FrozenClass):
 
     def _set_Pwindage(self, value):
         """setter of Pwindage"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -536,7 +552,9 @@ class OutLoss(FrozenClass):
 
     def _set_Pbearing(self, value):
         """setter of Pbearing"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -556,7 +574,9 @@ class OutLoss(FrozenClass):
 
     def _set_Pshaft(self, value):
         """setter of Pshaft"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -574,7 +594,9 @@ class OutLoss(FrozenClass):
 
     def _set_Pframe(self, value):
         """setter of Pframe"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -592,7 +614,9 @@ class OutLoss(FrozenClass):
 
     def _set_Padd(self, value):
         """setter of Padd"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:

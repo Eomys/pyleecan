@@ -182,7 +182,9 @@ class SolutionMat(Solution):
 
     def _set_field(self, value):
         """setter of field"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -236,7 +238,9 @@ class SolutionMat(Solution):
 
     def _set_indice(self, value):
         """setter of indice"""
-        if type(value) is list:
+        if value is None:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:

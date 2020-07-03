@@ -68,19 +68,10 @@ def test_CEFC_002():
     load_path = join(save_path, "Output.json")
     out.save(save_path=load_path)
 
-    out.plot_mesh(meshsolution=out.mag.meshsolution,)
-
-    out.plot_mesh(
-        meshsolution=out.mag.meshsolution, field_symbol="\mu",
-    )
-
-    out.plot_mesh(
-        meshsolution=out.mag.meshsolution, field_symbol="B",
-    )
-
-    out.plot_mesh(
-        meshsolution=out.mag.meshsolution, field_symbol="H",
-    )
+    out.mag.meshsolution.plot_mesh()
+    out.mag.meshsolution.plot_contour(label="\mu")
+    out.mag.meshsolution.plot_contour(label="B")
+    out.mag.meshsolution.plot_contour(label="H")
 
     # Test save with MeshSolution object in out
     out.save(save_path=save_path)
@@ -94,14 +85,7 @@ def test_CEFC_002():
         FEMM = Output(init_dict=json_tmp)
 
     # [Important] To test that fields are still working after saving and loading
-    FEMM.plot_mesh(
-        meshsolution=FEMM.mag.meshsolution, field_symbol="\mu",
-    )
-
-    out.plot_mesh(
-        meshsolution=out.mag.meshsolution, field_symbol="B",
-    )
-
-    out.plot_mesh(
-        meshsolution=out.mag.meshsolution, field_symbol="H",
-    )
+    FEMM.mag.meshsolution.plot_mesh()
+    FEMM.mag.meshsolution.plot_contour(label="\mu")
+    FEMM.mag.meshsolution.plot_contour(label="B")
+    FEMM.mag.meshsolution.plot_contour(label="H")

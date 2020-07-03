@@ -60,7 +60,7 @@ def comp_coeff_Bertotti(self, mat):
     Loss = data[:, 2]
 
     # fit the data
-    _comp_err = lambda Cx: (_comp_loss(self, C, Cx, f, B) - Loss) / (f) # TODO:
+    _comp_err = lambda Cx: (_comp_loss(self, C, Cx, f, B) - Loss) / (f)  # TODO:
     C0 = np.ones([n_est])  # initial values for the parameters
     result = optimize.least_squares(_comp_err, C0[:], method="lm")
 

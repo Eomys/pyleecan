@@ -26,6 +26,7 @@ class WindingDW2L(WindingDW1L):
     """double layer overlapping integral distributed winding, radial coil superposition"""
 
     VERSION = 1
+    NAME = "double layer distributed"
 
     # cf Methods.Machine.WindingDW2L.get_dim_wind
     if isinstance(get_dim_wind, ImportError):

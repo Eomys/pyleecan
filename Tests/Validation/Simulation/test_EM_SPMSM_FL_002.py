@@ -79,14 +79,7 @@ def test_Magnetic_FEMM_sym():
     out.post.line_color = "r--"
     simu_sym.run()
 
-    out.plot_mesh(
-        meshsolution=out.mag.meshsolution, field_symbol="\mu",
-    )
-
-    out.plot_mesh(
-        meshsolution=out.mag.meshsolution, field_symbol="B",
-    )
-
-    out.plot_mesh(
-        meshsolution=out.mag.meshsolution, field_symbol="H",
-    )
+    out.mag.meshsolution.plot_mesh()
+    out.mag.meshsolution.plot_contour(label="\mu")
+    out.mag.meshsolution.plot_contour(label="B")
+    out.mag.meshsolution.plot_contour(label="H")
