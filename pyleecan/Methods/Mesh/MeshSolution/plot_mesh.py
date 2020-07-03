@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import pyvistaqt as pv
+try:
+    import pyvistaqt as pv
+    is_pyvistaqt = True
+except:
+    import pyvista as pv
+    is_pyvistaqt = False
 
 from ....Classes.MeshMat import MeshMat
 
@@ -31,8 +36,12 @@ def plot_mesh(self, label=None, index=None, indices=None):
         mesh = mesh_obj.get_mesh(indices=indices)
 
     # Configure plot
-    p = pv.BackgroundPlotter()
-    p.set_background("white")
+    if is_pyvistaqt:
+        p = pv.BackgroundPlotter()
+        p.set_background("white")
+    else:
+        pv.set_plot_theme("document")
+        p = pv.Plotter(notebook=False)
     p.add_mesh(
         mesh, color="grey", opacity=1, show_edges=True, edge_color="white", line_width=1
     )

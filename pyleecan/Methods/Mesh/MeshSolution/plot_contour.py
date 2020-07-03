@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import pyvistaqt as pv
+try:
+    import pyvistaqt as pv
+    is_pyvistaqt = True
+except:
+    import pyvista as pv
+    is_pyvistaqt = False
 from numpy import min as np_min, max as np_max
 
 from ....Classes.MeshMat import MeshMat
@@ -85,8 +90,12 @@ def plot_contour(
         mesh_field = mesh_pv
 
     # Configure plot
-    p = pv.BackgroundPlotter()
-    p.set_background("white")
+    if is_pyvistaqt:
+        p = pv.BackgroundPlotter()
+        p.set_background("white")
+    else:
+        pv.set_plot_theme("document")
+        p = pv.Plotter(notebook=False)
     sargs = dict(
         interactive=True,
         title_font_size=20,

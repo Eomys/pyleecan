@@ -2,7 +2,12 @@
 
 # -*- coding: utf-8 -*-
 
-import pyvistaqt as pv
+try:
+    import pyvistaqt as pv
+    is_pyvistaqt = True
+except:
+    import pyvista as pv
+    is_pyvistaqt = False
 from numpy import real, max as np_max
 
 from ....Classes.MeshMat import MeshMat
@@ -68,8 +73,12 @@ def plot_glyph(
     centers2.vectors = surf["field"] * factor
 
     # Configure plot
-    p = pv.BackgroundPlotter()
-    p.set_background("white")
+    if is_pyvistaqt:
+        p = pv.BackgroundPlotter()
+        p.set_background("white")
+    else:
+        pv.set_plot_theme("document")
+        p = pv.Plotter(notebook=False)
     p.add_mesh(
         mesh_pv, color="grey", opacity=0.7, show_edges=True, edge_color="white",
     )
