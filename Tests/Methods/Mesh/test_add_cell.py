@@ -91,7 +91,7 @@ class unittest_add_element(TestCase):
             self.mesh.cell["triangle3"].nb_cell, 1, msg=msg, delta=self.DELTA
         )
 
-    def test_Mesh_ElementMat_add_exist(self):
+    def test_MeshMat_add_exist(self):
         """unittest with MeshMat, try to add an already existing cell."""
         points_test = np.array([0, 1])
         self.mesh.add_cell(points_test, "segment2")
@@ -113,7 +113,7 @@ class unittest_add_element(TestCase):
             self.mesh.cell["segment2"].nb_cell, 2, msg=msg, delta=self.DELTA
         )
 
-    def test_Mesh_ElementMat_add_stupid(self):
+    def test_MeshMat_add_stupid(self):
         """unittest with CellMat and 2 segment element and 1 triangle, add 1 triangle with a group number."""
 
         self.mesh.add_cell(np.array([0, 1]), "segment2")
