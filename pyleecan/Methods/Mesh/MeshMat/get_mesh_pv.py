@@ -3,6 +3,7 @@
 import pyvista as pv
 import meshio
 import os
+import tempfile
 
 
 def get_mesh_pv(self, path="", indices=None):
@@ -27,9 +28,14 @@ def get_mesh_pv(self, path="", indices=None):
     # for key in cells:
     cells = [("triangle", cells["triangle"])]  # TODO : Generalize to any cell type
 
+    # get filename
+    if not path:
+        with tempfile.NamedTemporaryFile(suffix='.vtk') as file:
+            path = file.name
+    
     # Write .vtk file using meshio
     meshio.write_points_cells(
-        filename=path, points=points, cells=cells,
+        filename=path, points=points, cells=cells, file_format="vtk"
     )
 
     # Read .vtk file with pyvista

@@ -37,7 +37,7 @@ def get_field(self, field_symbol="", j_t0=None, indice=None, direction=None):
                     self.field.symbol
                 ]
 
-            return field
+        return field
 
     else:
         return None

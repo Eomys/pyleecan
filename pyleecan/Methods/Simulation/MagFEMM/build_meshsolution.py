@@ -28,7 +28,7 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu):
     if cond:
         indices_cell = meshFEMM[0].cell["triangle"].indice
         Direction = Data1D(name="direction", values=["x", "y", "z"], is_components=True)
-        Indices_Cell = Data1D(name="indice", values=indices_cell, is_components=True)
+        Indices_Cell = Data1D(name="indice", values=indices_cell, is_components=False)
         Nodirection = Data1D(name="direction", values=["scalar"], is_components=False)
 
         solB = DataTime(
