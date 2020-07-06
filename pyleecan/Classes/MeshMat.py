@@ -28,11 +28,6 @@ except ImportError as error:
     get_mesh_pv = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_normal import get_normal
-except ImportError as error:
-    get_normal = error
-
-try:
     from ..Methods.Mesh.MeshMat.get_surf import get_surf
 except ImportError as error:
     get_surf = error
@@ -113,15 +108,6 @@ class MeshMat(Mesh):
         )
     else:
         get_mesh_pv = get_mesh_pv
-    # cf Methods.Mesh.MeshMat.get_normal
-    if isinstance(get_normal, ImportError):
-        get_normal = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_normal: " + str(get_normal))
-            )
-        )
-    else:
-        get_normal = get_normal
     # cf Methods.Mesh.MeshMat.get_surf
     if isinstance(get_surf, ImportError):
         get_surf = property(

@@ -75,11 +75,6 @@ except ImportError as error:
     plot_force_space = error
 
 try:
-    from ..Methods.Output.Output.plot.Magnetic.plot_mesh_field import plot_mesh_field
-except ImportError as error:
-    plot_mesh_field = error
-
-try:
     from ..Methods.Output.Output.plot.plot_A_quiver_2D import plot_A_quiver_2D
 except ImportError as error:
     plot_A_quiver_2D = error
@@ -238,17 +233,6 @@ class Output(FrozenClass):
         )
     else:
         plot_force_space = plot_force_space
-    # cf Methods.Output.Output.plot.Magnetic.plot_mesh_field
-    if isinstance(plot_mesh_field, ImportError):
-        plot_mesh_field = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_mesh_field: " + str(plot_mesh_field)
-                )
-            )
-        )
-    else:
-        plot_mesh_field = plot_mesh_field
     # cf Methods.Output.Output.plot.plot_A_quiver_2D
     if isinstance(plot_A_quiver_2D, ImportError):
         plot_A_quiver_2D = property(

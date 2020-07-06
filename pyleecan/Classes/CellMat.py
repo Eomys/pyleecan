@@ -18,16 +18,6 @@ except ImportError as error:
     add_cell = error
 
 try:
-    from ..Methods.Mesh.CellMat.get_all_connectivity import get_all_connectivity
-except ImportError as error:
-    get_all_connectivity = error
-
-try:
-    from ..Methods.Mesh.CellMat.get_all_node_tags import get_all_node_tags
-except ImportError as error:
-    get_all_node_tags = error
-
-try:
     from ..Methods.Mesh.CellMat.get_connectivity import get_connectivity
 except ImportError as error:
     get_connectivity = error
@@ -67,30 +57,6 @@ class CellMat(FrozenClass):
         )
     else:
         add_cell = add_cell
-    # cf Methods.Mesh.CellMat.get_all_connectivity
-    if isinstance(get_all_connectivity, ImportError):
-        get_all_connectivity = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CellMat method get_all_connectivity: "
-                    + str(get_all_connectivity)
-                )
-            )
-        )
-    else:
-        get_all_connectivity = get_all_connectivity
-    # cf Methods.Mesh.CellMat.get_all_node_tags
-    if isinstance(get_all_node_tags, ImportError):
-        get_all_node_tags = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use CellMat method get_all_node_tags: "
-                    + str(get_all_node_tags)
-                )
-            )
-        )
-    else:
-        get_all_node_tags = get_all_node_tags
     # cf Methods.Mesh.CellMat.get_connectivity
     if isinstance(get_connectivity, ImportError):
         get_connectivity = property(

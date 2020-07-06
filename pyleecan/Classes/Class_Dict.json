@@ -290,8 +290,6 @@
         "is_internal": false,
         "methods": [
             "add_cell",
-            "get_all_connectivity",
-            "get_all_node_tags",
             "get_connectivity",
             "get_group",
             "get_point2cell",
@@ -4751,9 +4749,7 @@
         ],
         "desc": "Abstract Class for mesh related classes",
         "is_internal": false,
-        "methods": [
-            "get_mesh"
-        ],
+        "methods": [],
         "mother": "",
         "name": "Mesh",
         "package": "Mesh",
@@ -4784,7 +4780,6 @@
             "get_point",
             "get_cell",
             "get_mesh_pv",
-            "get_normal",
             "get_surf",
             "get_cell_area",
             "set_submesh",
@@ -4878,7 +4873,7 @@
                 "name": "mesh",
                 "type": "[Mesh]",
                 "unit": "",
-                "value": null
+                "value": []
             },
             {
                 "desc": "1 if the mesh is the same at each step (time, mode etc.)",
@@ -4896,7 +4891,7 @@
                 "name": "solution",
                 "type": "[Solution]",
                 "unit": "",
-                "value": null
+                "value": []
             },
             {
                 "desc": "Dimension of the physical problem",
@@ -6198,7 +6193,6 @@
             "plot.plot_A_time",
             "plot.plot_A_time_space",
             "plot.Structural.plot_force_space",
-            "plot.Magnetic.plot_mesh_field",
             "plot.plot_A_quiver_2D",
             "getter.get_rot_dir",
             "getter.get_d_angle_diff"
@@ -8747,9 +8741,7 @@
         ],
         "desc": "Abstract class for solution related classes.",
         "is_internal": false,
-        "methods": [
-            "get_field"
-        ],
+        "methods": [],
         "mother": "",
         "name": "Solution",
         "package": "Mesh",
