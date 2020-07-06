@@ -47,16 +47,19 @@ def plot_contour(
     Returns
     -------
     """
-    
+
     if save_path is None:
         try:
             import pyvistaqt as pv
+
             is_pyvistaqt = True
         except:
             import pyvista as pv
+
             is_pyvistaqt = False
     else:
         import pyvista as pv
+
         is_pyvistaqt = False
 
     # Get the mesh

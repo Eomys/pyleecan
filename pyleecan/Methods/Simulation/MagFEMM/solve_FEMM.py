@@ -171,8 +171,8 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         )
 
     if self.is_save_FEA:
-        save_path_fea = join(save_path, "MeshSolutionFEMM.json")
-        output.mag.meshsolution.save_to_file(save_path_fea)
+        save_path_fea = join(save_path, "MeshSolutionFEMM.h5")
+        output.mag.meshsolution.save(save_path_fea)
 
     if (
         hasattr(output.simu.machine.stator, "winding")

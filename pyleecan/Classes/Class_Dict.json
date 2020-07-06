@@ -4850,7 +4850,6 @@
         "methods": [
             "get_mesh",
             "get_solution",
-            "save_to_file",
             "get_field",
             "plot_mesh",
             "plot_contour",
