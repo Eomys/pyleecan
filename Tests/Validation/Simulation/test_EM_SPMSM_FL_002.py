@@ -79,7 +79,7 @@ def test_Magnetic_FEMM_sym():
     out.post.line_color = "r--"
     simu_sym.run()
 
-    out.mag.meshsolution.plot_mesh()
-    out.mag.meshsolution.plot_contour(label="\mu")
-    out.mag.meshsolution.plot_contour(label="B")
-    out.mag.meshsolution.plot_contour(label="H")
+    out.mag.meshsolution.plot_mesh(save_path=join(save_path, "EM_SPMSM_FL_002_mesh.png"), is_2d=True)
+    out.mag.meshsolution.plot_contour(label="\mu", save_path=join(save_path, "EM_SPMSM_FL_002_mu.png"), is_2d=True)
+    out.mag.meshsolution.plot_contour(label="B", save_path=join(save_path, "EM_SPMSM_FL_002_B.png"), is_2d=True)
+    out.mag.meshsolution.plot_contour(label="H", save_path=join(save_path, "EM_SPMSM_FL_002_H.png"), is_2d=True)

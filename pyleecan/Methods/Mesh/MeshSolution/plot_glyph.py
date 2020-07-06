@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# -*- coding: utf-8 -*-
-
-try:
-    import pyvistaqt as pv
-    is_pyvistaqt = True
-except:
-    import pyvista as pv
-    is_pyvistaqt = False
 from numpy import real, max as np_max
 
 from ....Classes.MeshMat import MeshMat
@@ -22,6 +14,8 @@ def plot_glyph(
     factor=None,
     field_name=None,
     ifreq=0,
+    is_2d=False,
+    save_path=None,
 ):
     """Plot the vector field as a glyph (or quiver) over the mesh.
 
@@ -47,6 +41,17 @@ def plot_glyph(
     Returns
     -------
     """
+    
+    if save_path is None:
+        try:
+            import pyvistaqt as pv
+            is_pyvistaqt = True
+        except:
+            import pyvista as pv
+            is_pyvistaqt = False
+    else:
+        import pyvista as pv
+        is_pyvistaqt = False
 
     # Get the mesh
     mesh = self.get_mesh(label=label, index=index)
@@ -83,4 +88,9 @@ def plot_glyph(
         mesh_pv, color="grey", opacity=0.7, show_edges=True, edge_color="white",
     )
     p.add_mesh(centers2.arrows, color="white")
-    p.show()
+    if is_2d:
+        p.view_xy()
+    if save_path is None:
+        p.show()
+    else:
+        p.show(interactive=False, screenshot=save_path)

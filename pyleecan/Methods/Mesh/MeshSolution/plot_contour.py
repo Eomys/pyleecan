@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 
-try:
-    import pyvistaqt as pv
-    is_pyvistaqt = True
-except:
-    import pyvista as pv
-    is_pyvistaqt = False
-from numpy import min as np_min, max as np_max
+from numpy import real, min as np_min, max as np_max
 
 from ....Classes.MeshMat import MeshMat
 from ....definitions import config_dict
@@ -24,6 +18,8 @@ def plot_contour(
     is_center=False,
     clim=None,
     field_name=None,
+    is_2d=False,
+    save_path=None,
 ):
     """Plot the contour of a field on a mesh using pyvista plotter.
 
@@ -51,6 +47,17 @@ def plot_contour(
     Returns
     -------
     """
+    
+    if save_path is None:
+        try:
+            import pyvistaqt as pv
+            is_pyvistaqt = True
+        except:
+            import pyvista as pv
+            is_pyvistaqt = False
+    else:
+        import pyvista as pv
+        is_pyvistaqt = False
 
     # Get the mesh
     mesh = self.get_mesh(label=label, index=index)
@@ -83,10 +90,10 @@ def plot_contour(
     # Add field to mesh
     if is_surf:
         surf = mesh_pv.get_surf(indices=indices)
-        surf[field_name] = field
+        surf[field_name] = real(field)
         mesh_field = surf
     else:
-        mesh_pv[field_name] = field
+        mesh_pv[field_name] = real(field)
         mesh_field = mesh_pv
 
     # Configure plot
@@ -111,4 +118,9 @@ def plot_contour(
         clim=clim,
         scalar_bar_args=sargs,
     )
-    p.show()
+    if is_2d:
+        p.view_xy()
+    if save_path is None:
+        p.show()
+    else:
+        p.show(interactive=False, screenshot=save_path)
