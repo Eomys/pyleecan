@@ -291,7 +291,6 @@
         "methods": [
             "add_cell",
             "get_connectivity",
-            "get_group",
             "get_point2cell",
             "is_exist"
         ],
@@ -4780,7 +4779,6 @@
             "get_point",
             "get_cell",
             "get_mesh_pv",
-            "get_surf",
             "get_cell_area",
             "set_submesh",
             "add_cell",

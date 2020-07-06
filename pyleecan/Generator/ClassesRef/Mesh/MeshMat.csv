@@ -2,8 +2,7 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 cell,,Storing connectivity,,{CellMat},,,,,Mesh,Mesh,get_point,VERSION,1,Gather the mesh storage format
 point,,Storing nodes,,PointMat,,,,,,,get_cell,,,
 submesh,,Storing submeshes. Node and element numbers/tags or group must be the same.,,[Mesh],,,,,,,get_mesh_pv,,,
-group,,Dict sorted by groups name with cells indices. ,,{ndarray},,,,,,,get_surf,,,
-,,,,,,,,,,,get_cell_area,,,
+group,,Dict sorted by groups name with cells indices. ,,{ndarray},,,,,,,get_cell_area,,,
 ,,,,,,,,,,,set_submesh,,,
 ,,,,,,,,,,,add_cell,,,
 ,,,,,,,,,,,interface,,,

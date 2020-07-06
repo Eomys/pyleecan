@@ -23,11 +23,6 @@ except ImportError as error:
     get_connectivity = error
 
 try:
-    from ..Methods.Mesh.CellMat.get_group import get_group
-except ImportError as error:
-    get_group = error
-
-try:
     from ..Methods.Mesh.CellMat.get_point2cell import get_point2cell
 except ImportError as error:
     get_point2cell = error
@@ -69,15 +64,6 @@ class CellMat(FrozenClass):
         )
     else:
         get_connectivity = get_connectivity
-    # cf Methods.Mesh.CellMat.get_group
-    if isinstance(get_group, ImportError):
-        get_group = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use CellMat method get_group: " + str(get_group))
-            )
-        )
-    else:
-        get_group = get_group
     # cf Methods.Mesh.CellMat.get_point2cell
     if isinstance(get_point2cell, ImportError):
         get_point2cell = property(
