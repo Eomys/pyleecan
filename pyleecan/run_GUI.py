@@ -7,40 +7,15 @@ from PyQt5.QtCore import QTranslator
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QIcon
 
-try:  # Import if pyleecan is installed with pip
-    from .definitions import ROOT_DIR, DATA_DIR, MATLIB_DIR, PACKAGE_NAME
-    from .GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
-    from .GUI.Dialog.DMatLib.DMatLib import DMatLib
-    from .GUI.Dialog.DMatLib.MatLib import MatLib
-    from .GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
-    from .GUI.Tools.SidebarWindow import SidebarWindow
-    from .GUI.Tools.MachinePlotWidget import MachinePlotWidget
-    from .GUI.Tools.TreeView import TreeView
-    from .GUI.Tools.GuiOption.WGuiOption import WGuiOption
-
-except ImportError:  # Import for dev version
-    from definitions import PACKAGE_NAME, DATA_DIR, MATLIB_DIR, ROOT_DIR
-
-    sys.path.insert(0, ROOT_DIR)
-    exec(
-        "from "
-        + PACKAGE_NAME
-        + ".GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup"
-    )
-    exec("from " + PACKAGE_NAME + ".GUI.Dialog.DMatLib.DMatLib import DMatLib")
-    exec("from " + PACKAGE_NAME + ".GUI.Dialog.DMatLib.MatLib import MatLib")
-    exec(
-        "from "
-        + PACKAGE_NAME
-        + ".GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect"
-    )
-    exec("from " + PACKAGE_NAME + ".GUI.Tools.SidebarWindow import SidebarWindow")
-    exec(
-        "from " + PACKAGE_NAME + ".GUI.Tools.MachinePlotWidget import MachinePlotWidget"
-    )
-    exec("from " + PACKAGE_NAME + ".GUI.Tools.TreeView import TreeView")
-    exec("from " + PACKAGE_NAME + ".GUI.Tools.GuiOption.WGuiOption import WGuiOption")
-
+from .definitions import ROOT_DIR, DATA_DIR, MATLIB_DIR
+from .GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
+from .GUI.Dialog.DMatLib.DMatLib import DMatLib
+from .GUI.Dialog.DMatLib.MatLib import MatLib
+from .GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+from .GUI.Tools.SidebarWindow import SidebarWindow
+from .GUI.Tools.MachinePlotWidget import MachinePlotWidget
+from .GUI.Tools.TreeView import TreeView
+from .GUI.Tools.GuiOption.WGuiOption import WGuiOption
 
 EXT_GUI = True
 
