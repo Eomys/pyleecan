@@ -33,9 +33,19 @@ RES_NAME = "pyleecan.qrc"  # Default Resouces file name
 
 TEST_DIR = join(MAIN_DIR, "../Tests")
 
-
-from .default_variable import default_config_dict
-from .Functions.init_environment import edit_config_dict, read_config_dict, copy_folder
+try:
+    from .default_variable import default_config_dict
+    from .Functions.init_environment import (
+        edit_config_dict,
+        read_config_dict,
+        copy_folder,
+    )
+except ImportError:
+    sys.path.insert(0, ROOT_DIR)
+    exec("from pyleecan.default_variable import default_config_dict")
+    exec(
+        "from pyleecan.Functions.init_environment import edit_config_dict, read_config_dict, copy_folder"
+    )
 
 if isfile(join(USER_DIR, "config.json")):  # Load the config file if it exist
     with open(join(USER_DIR, "config.json"), "r") as config_file:
