@@ -10,7 +10,7 @@ module = __import__(
     fromlist=["USER_DIR"],
     level=0,
 )
-USER_DIR = module.USER_DIR  # dynamic import to avoid loop
+USER_DIR = module.USER_DIR
 
 # Default config_dict
 default_config_dict = dict(
