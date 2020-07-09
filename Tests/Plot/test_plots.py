@@ -1,5 +1,4 @@
 from numpy import squeeze, linspace, sin
-from numpy.fft import fft2, fftshift
 from unittest import TestCase
 from os.path import join
 import matplotlib.pyplot as plt
