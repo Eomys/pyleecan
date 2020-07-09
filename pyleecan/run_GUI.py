@@ -21,7 +21,6 @@ try:  # Import if pyleecan is installed with pip
 except ImportError:  # Import for dev version
     from definitions import PACKAGE_NAME, DATA_DIR, MATLIB_DIR, ROOT_DIR
 
-    sys.path.insert(0, ROOT_DIR)
     exec(
         "from "
         + PACKAGE_NAME
@@ -67,7 +66,7 @@ def run_GUI(argv):
     mat_widget = DMatLib(matlib, selected=0)
 
     # Machine Setup Widget
-    c = DMachineSetup(matlib=matlib, machine_path=join(DATA_DIR, "Machine"))
+    c = DMachineSetup(dmatlib=mat_widget, machine_path=join(DATA_DIR, "Machine"))
 
     if EXT_GUI:
         # Setup extended GUI with sub windows

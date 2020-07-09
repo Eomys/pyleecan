@@ -93,3 +93,7 @@ class SidebarWindow(QtWidgets.QMainWindow):
             if event.key() in (QtCore.Qt.Key_Escape,):
                 return True
         return super(SidebarWindow, self).eventFilter(obj, event)
+
+    def closeEvent(self, event):
+        """Overload the methode to call DesignWidget.closeEvent """
+        self.DesignWidget.closeEvent(event)

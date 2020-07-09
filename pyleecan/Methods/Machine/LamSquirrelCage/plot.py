@@ -12,7 +12,14 @@ SCR_COLOR = config_dict["color_dict"]["SCR_COLOR"]
 
 
 def plot(
-    self, fig=None, is_lam_only=False, sym=1, alpha=0, delta=0, is_edge_only=False
+    self,
+    fig=None,
+    is_lam_only=False,
+    sym=1,
+    alpha=0,
+    delta=0,
+    is_edge_only=False,
+    is_show=True,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -33,6 +40,8 @@ def plot(
         Complex value for translation
     is_edge_only: bool
         To plot transparent Patches
+    is_show : bool
+        To call show at the end of the method
 
     Returns
     -------
@@ -115,4 +124,5 @@ def plot(
             label_leg.append("Short Circuit Ring")
 
         legend(patch_leg, label_leg)
-    fig.show()
+    if is_show:
+        fig.show()

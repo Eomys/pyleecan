@@ -93,7 +93,7 @@ def test_zdt3():
         ),
         "obj2": OptiObjFunc(
             description="Minimization of the torque ripple",
-            func=lambda output: output.mag.Tem_rip,
+            func=lambda output: output.mag.Tem_rip_norm,
         ),
     }
 
@@ -104,7 +104,7 @@ def test_zdt3():
         g = lambda x: 1 + (9 / 29) * np.sum(x[1:])
         h = lambda f1, g: 1 - np.sqrt(f1 / g) - (f1 / g) * np.sin(10 * np.pi * f1)
         output.mag.Tem_av = f1(x)
-        output.mag.Tem_rip = g(x) * h(f1(x), g(x))
+        output.mag.Tem_rip_norm = g(x) * h(f1(x), g(x))
 
     # ### Defining the problem
     my_prob = OptiProblem(
