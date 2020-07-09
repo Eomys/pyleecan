@@ -21,7 +21,6 @@ try:  # Import if pyleecan is installed with pip
 except ImportError:  # Import for dev version
     from definitions import PACKAGE_NAME, DATA_DIR, MATLIB_DIR, ROOT_DIR
 
-    sys.path.insert(0, ROOT_DIR)
     exec(
         "from "
         + PACKAGE_NAME
