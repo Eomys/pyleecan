@@ -26,7 +26,7 @@ wind_mat[2, 1, 0, 5] = -1
 test_obj.winding = WindingUD(user_wind_mat=wind_mat)
 
 
-CURVE_COLORS = config_dict["color_dict"]["CURVE_COLORS"]
+CURVE_COLORS = config_dict["PLOT"]["color_dict"]["CURVE_COLORS"]
 
 
 def test_slot():

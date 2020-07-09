@@ -6,7 +6,7 @@ from matplotlib.pyplot import axis, legend
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
-MAGNET_COLOR = config_dict["color_dict"]["MAGNET_COLOR"]
+MAGNET_COLOR = config_dict["PLOT"]["color_dict"]["MAGNET_COLOR"]
 
 
 def plot(self, fig=None, display_magnet=True):

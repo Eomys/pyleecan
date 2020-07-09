@@ -21,7 +21,7 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 
-CURVE_COLORS = config_dict["color_dict"]["CURVE_COLORS"]
+CURVE_COLORS = config_dict["PLOT"]["color_dict"]["CURVE_COLORS"]
 
 
 def test_axis_LamSlotMag():
@@ -163,6 +163,8 @@ def test_axis_LamHole():
     assert Q_axis == pi / 4
 
 
+@pytest.mark.FEMM
+@pytest.mark.long
 def test_axis_LamWind():
     """Axis convention for LamWind
     """

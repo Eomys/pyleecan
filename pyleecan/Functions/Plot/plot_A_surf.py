@@ -48,7 +48,7 @@ def plot_A_surf(
     (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
     title = data.name + " as a function of time and space"
     if colormap is None:
-        colormap = config_dict["color_dict"]["COLOR_MAP"]
+        colormap = config_dict["PLOT"]["color_dict"]["COLOR_MAP"]
     xlabel = "Time [s]"
     if is_deg:
         ylabel = "Angle [°]"

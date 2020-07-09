@@ -4,7 +4,7 @@ from random import choice
 import string
 from ...definitions import config_dict
 
-PHASE_COLORS = config_dict["color_dict"]["PHASE_COLORS"]
+PHASE_COLORS = config_dict["PLOT"]["color_dict"]["PHASE_COLORS"]
 
 
 def gen_color(N):

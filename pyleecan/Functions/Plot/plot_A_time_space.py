@@ -55,8 +55,8 @@ def plot_A_time_space(
     fig, axs = plt.subplots(3, 2, tight_layout=True, figsize=(20, 10))
     title = data.name + " over time and space"
     if colormap is None:
-        colormap = config_dict["color_dict"]["COLOR_MAP"]
-    color_list = config_dict["color_dict"]["CURVE_COLORS"]
+        colormap = config_dict["PLOT"]["color_dict"]["COLOR_MAP"]
+    color_list = config_dict["PLOT"]["color_dict"]["CURVE_COLORS"]
 
     # pcolorplot
     if is_deg:
@@ -111,7 +111,15 @@ def plot_A_time_space(
     time = results["time"]
     Ydata = [results[data.symbol]]
     # Plot the original graph
-    plot_A_2D(time, Ydata, fig=fig, subplot_index=2, xlabel=xlabel, ylabel=ylabel, color_list=color_list)
+    plot_A_2D(
+        time,
+        Ydata,
+        fig=fig,
+        subplot_index=2,
+        xlabel=xlabel,
+        ylabel=ylabel,
+        color_list=color_list,
+    )
 
     # angle
     if is_deg:
@@ -154,7 +162,7 @@ def plot_A_time_space(
         )
     freqs = results["freqs"]
     Ydata = [results[data.symbol]]
-    
+
     if is_auto_ticks:
         indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y) > 0.01]
         indices = [0] + list(set(indices))
