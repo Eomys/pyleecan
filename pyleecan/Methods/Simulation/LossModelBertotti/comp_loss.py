@@ -6,59 +6,6 @@ from SciDataTool import DataTime, DataFreq
 from ....Methods.Simulation.Input import InputError
 
 
-def _ft_data(data):
-    # ---------------------------------------------------------------
-    # workaround
-    # fourier transform with data with multiple components
-    # axes/components order won't be restored
-    # ---------------------------------------------------------------
-
-    # get axes and components
-    axes = []
-    components = []
-    n_comp = 1
-    for axis in data.axes:
-        if axis.is_components:
-            components.append(axis)
-            n_comp = len(axis.values)
-        else:
-            axes.append(axis)
-
-    axes_str = [x.name for x in axes]
-
-    # transform each field component at a time
-    if n_comp > 1:
-        values = []
-        for id in range(n_comp):
-            component_str = components[0].name + f"[{id}]"
-            component_data = data.get_along(component_str, *axes_str)
-            _data = DataTime(
-                name=data.name,
-                unit=data.unit,
-                symbol=data.symbol,
-                axes=axes,
-                values=component_data[data.symbol],
-            )
-
-            _dataFt = _data.time_to_freq()
-            values.append(_dataFt.values)
-
-        values = np.array([*values])
-
-        # recombine transformed field components
-        dataFt = DataFreq(
-            name=_dataFt.name,
-            unit=_dataFt.unit,
-            symbol=_dataFt.symbol,
-            axes=[components[0], *_dataFt.axes],
-            values=values,
-        )
-    else:
-        dataFt = data.time_to_freq()
-
-    return dataFt
-
-
 def comp_loss(self, output, lam, typ):
     """Compute the Losses
     """
@@ -80,14 +27,25 @@ def comp_loss(self, output, lam, typ):
     self.comp_coeff_Bertotti(lam.mat_type)
 
     # comp. fft of elemental FEA results
-    B_fft = _ft_data(output.mag.meshsolution.solution[0].field)
+    B_fft = output.mag.meshsolution.solution[0].field.time_to_freq()
     print("FFT of B calculated")
 
+    # calculate principle axes and transform for exponentials other than 2
+    # TODO
+
+    # TODO time data hot fix
+    #output.mag.meshsolution.solution[0].field.axes[0].final=output.mag.time[-1]
+    #output.mag.meshsolution.solution[0].field.axes[0].include_endpoint=True
+
     # apply model
+    # #TODO model equation should be a func that takes SciDataTool Data as input
+    Loss = self.comp_loss_norm(output.mag.meshsolution.solution[0].field)
+
+    # store losses field
 
     # store results
     if typ == "Lamination":
         if lam.is_stator:
             output.loss.Plam_stator = np.array([np.nan])
 
-    return B_fft
+    return Loss

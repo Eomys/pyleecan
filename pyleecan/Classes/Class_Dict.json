@@ -3436,7 +3436,8 @@
         "is_internal": false,
         "methods": [
             "comp_loss",
-            "comp_coeff_Bertotti"
+            "comp_coeff_Bertotti",
+            "comp_loss_norm"
         ],
         "mother": "LossModel",
         "name": "LossModelBertotti",

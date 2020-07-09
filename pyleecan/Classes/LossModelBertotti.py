@@ -24,6 +24,11 @@ try:
 except ImportError as error:
     comp_coeff_Bertotti = error
 
+try:
+    from ..Methods.Simulation.LossModelBertotti.comp_loss_norm import comp_loss_norm
+except ImportError as error:
+    comp_loss_norm = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -59,6 +64,18 @@ class LossModelBertotti(LossModel):
         )
     else:
         comp_coeff_Bertotti = comp_coeff_Bertotti
+    # cf Methods.Simulation.LossModelBertotti.comp_loss_norm
+    if isinstance(comp_loss_norm, ImportError):
+        comp_loss_norm = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LossModelBertotti method comp_loss_norm: "
+                    + str(comp_loss_norm)
+                )
+            )
+        )
+    else:
+        comp_loss_norm = comp_loss_norm
     # save method is available in all object
     save = save
 
