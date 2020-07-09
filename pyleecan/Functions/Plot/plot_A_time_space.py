@@ -111,7 +111,15 @@ def plot_A_time_space(
     time = results["time"]
     Ydata = [results[data.symbol]]
     # Plot the original graph
-    plot_A_2D(time, Ydata, fig=fig, subplot_index=2, xlabel=xlabel, ylabel=ylabel, color_list=color_list)
+    plot_A_2D(
+        time,
+        Ydata,
+        fig=fig,
+        subplot_index=2,
+        xlabel=xlabel,
+        ylabel=ylabel,
+        color_list=color_list,
+    )
 
     # angle
     if is_deg:
@@ -154,7 +162,7 @@ def plot_A_time_space(
         )
     freqs = results["freqs"]
     Ydata = [results[data.symbol]]
-    
+
     if is_auto_ticks:
         indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y) > 0.01]
         indices = [0] + list(set(indices))

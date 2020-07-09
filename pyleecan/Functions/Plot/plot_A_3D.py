@@ -8,6 +8,7 @@ from ...definitions import config_dict
 
 COLORS = config_dict["color_dict"]["CURVE_COLORS"]
 
+
 def plot_A_3D(
     Xdata,
     Ydata,

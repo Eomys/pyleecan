@@ -317,7 +317,10 @@ class tests_plots(TestCase):
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
         out.plot_A_time(
-            "mag.Br", data_list=[out2.mag.Br], legend_list=["Br", "0.2sin(375t-1.5)"], is_auto_ticks=False,
+            "mag.Br",
+            data_list=[out2.mag.Br],
+            legend_list=["Br", "0.2sin(375t-1.5)"],
+            is_auto_ticks=False,
         )
 
         fig = plt.gcf()
@@ -369,7 +372,9 @@ class tests_plots(TestCase):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_A_time_space("mag.Br", freq_max=freq_max, r_max=r_max, is_auto_ticks=False)
+        out.plot_A_time_space(
+            "mag.Br", freq_max=freq_max, r_max=r_max, is_auto_ticks=False
+        )
 
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_default_proj_Br_time_space_dataobj.png"))

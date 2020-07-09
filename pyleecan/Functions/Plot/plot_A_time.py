@@ -86,7 +86,7 @@ def plot_A_time(
                         legend_list[i] + ": " + axis.values.tolist()[j]
                         for j in index_list
                     ]
-                    colors += [phase_colors[i*n_phase+j] for j in range(n_phase)]
+                    colors += [phase_colors[i * n_phase + j] for j in range(n_phase)]
                     list_str = axis.name
             except:
                 is_components = False
@@ -95,7 +95,7 @@ def plot_A_time(
             colors += [curve_colors[i]]
     if color_list == []:
         color_list = colors
-        
+
     xlabel = "Time [s]"
     if unit == "SI":
         unit = data.unit
@@ -194,7 +194,9 @@ def plot_A_time(
         if is_auto_ticks:
             indices = [0]
             for i in range(len(Ydata)):
-                indices += list(set([ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01]))
+                indices += list(
+                    set([ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01])
+                )
             xticks = freqs[indices]
         else:
             xticks = None
