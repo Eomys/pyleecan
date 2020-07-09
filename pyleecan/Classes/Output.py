@@ -100,9 +100,11 @@ except ImportError as error:
     get_rot_dir = error
 
 try:
-    from ..Methods.Output.Output.getter.get_d_angle_diff import get_d_angle_diff
+    from ..Methods.Output.Output.getter.get_angle_offset_initial import (
+        get_angle_offset_initial,
+    )
 except ImportError as error:
-    get_d_angle_diff = error
+    get_angle_offset_initial = error
 
 
 from ._check import InitUnKnowClassError
@@ -299,17 +301,18 @@ class Output(FrozenClass):
         )
     else:
         get_rot_dir = get_rot_dir
-    # cf Methods.Output.Output.getter.get_d_angle_diff
-    if isinstance(get_d_angle_diff, ImportError):
-        get_d_angle_diff = property(
+    # cf Methods.Output.Output.getter.get_angle_offset_initial
+    if isinstance(get_angle_offset_initial, ImportError):
+        get_angle_offset_initial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Output method get_d_angle_diff: " + str(get_d_angle_diff)
+                    "Can't use Output method get_angle_offset_initial: "
+                    + str(get_angle_offset_initial)
                 )
             )
         )
     else:
-        get_d_angle_diff = get_d_angle_diff
+        get_angle_offset_initial = get_angle_offset_initial
     # save method is available in all object
     save = save
 

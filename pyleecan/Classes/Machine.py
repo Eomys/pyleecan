@@ -85,6 +85,13 @@ except ImportError as error:
     comp_sym = error
 
 try:
+    from ..Methods.Machine.Machine.comp_angle_offset_initial import (
+        comp_angle_offset_initial,
+    )
+except ImportError as error:
+    comp_angle_offset_initial = error
+
+try:
     from ..Methods.Machine.Machine.comp_desc_dict import comp_desc_dict
 except ImportError as error:
     comp_desc_dict = error
@@ -251,6 +258,18 @@ class Machine(FrozenClass):
         )
     else:
         comp_sym = comp_sym
+    # cf Methods.Machine.Machine.comp_angle_offset_initial
+    if isinstance(comp_angle_offset_initial, ImportError):
+        comp_angle_offset_initial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method comp_angle_offset_initial: "
+                    + str(comp_angle_offset_initial)
+                )
+            )
+        )
+    else:
+        comp_angle_offset_initial = comp_angle_offset_initial
     # cf Methods.Machine.Machine.comp_desc_dict
     if isinstance(comp_desc_dict, ImportError):
         comp_desc_dict = property(
