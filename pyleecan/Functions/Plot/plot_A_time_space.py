@@ -3,6 +3,7 @@
 import matplotlib.pyplot as plt
 from .plot_A_2D import plot_A_2D
 from .plot_A_3D import plot_A_3D
+from ...definitions import config_dict
 from numpy import meshgrid, max as np_max
 
 
@@ -16,8 +17,9 @@ def plot_A_time_space(
     z_max=None,
     is_norm=False,
     unit="SI",
-    colormap="RdBu_r",
+    colormap=None,
     save_path=None,
+    is_auto_ticks=True,
 ):
     """Plots a field as a function of time and space (angle)
 
@@ -45,11 +47,16 @@ def plot_A_time_space(
         colormap prescribed by user
     save_path : str
         path and name of the png file to save
+    is_auto_ticks : bool
+        in fft, adjust ticks to freqs and wavenumbers (deactivate if too close)
     """
 
     # Set plot
     fig, axs = plt.subplots(3, 2, tight_layout=True, figsize=(20, 10))
     title = data.name + " over time and space"
+    if colormap is None:
+        colormap = config_dict["color_dict"]["COLOR_MAP"]
+    color_list = config_dict["color_dict"]["CURVE_COLORS"]
 
     # pcolorplot
     if is_deg:
@@ -104,7 +111,7 @@ def plot_A_time_space(
     time = results["time"]
     Ydata = [results[data.symbol]]
     # Plot the original graph
-    plot_A_2D(time, Ydata, fig=fig, subplot_index=2, xlabel=xlabel, ylabel=ylabel)
+    plot_A_2D(time, Ydata, fig=fig, subplot_index=2, xlabel=xlabel, ylabel=ylabel, color_list=color_list)
 
     # angle
     if is_deg:
@@ -126,6 +133,7 @@ def plot_A_time_space(
         xlabel=xlabel,
         ylabel=ylabel,
         xticks=xticks,
+        color_list=color_list,
     )
 
     # fft time
@@ -146,10 +154,13 @@ def plot_A_time_space(
         )
     freqs = results["freqs"]
     Ydata = [results[data.symbol]]
-
-    indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y) > 0.01]
-    indices = [0] + list(set(indices))
-    xticks = freqs[indices]
+    
+    if is_auto_ticks:
+        indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y) > 0.01]
+        indices = [0] + list(set(indices))
+        xticks = freqs[indices]
+    else:
+        xticks = None
 
     plot_A_2D(
         freqs,
@@ -160,6 +171,7 @@ def plot_A_time_space(
         ylabel=ylabel,
         type="bargraph",
         xticks=xticks,
+        color_list=color_list,
     )
 
     # fft space
@@ -179,9 +191,12 @@ def plot_A_time_space(
     wavenumber = results["wavenumber"]
     Ydata = [results[data.symbol]]
 
-    indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y) > 0.01]
-    indices = [0] + list(set(indices))
-    xticks = wavenumber[indices]
+    if is_auto_ticks:
+        indices = [ind for ind, y in enumerate(Ydata[0]) if abs(y) > 0.01]
+        indices = [0] + list(set(indices))
+        xticks = wavenumber[indices]
+    else:
+        xticks = None
 
     plot_A_2D(
         wavenumber,
@@ -192,6 +207,7 @@ def plot_A_time_space(
         ylabel=ylabel,
         type="bargraph",
         xticks=xticks,
+        color_list=color_list,
     )
 
     axs[0, 1].axis("off")

@@ -18,6 +18,7 @@ def plot_A_time_space(
     unit="SI",
     colormap="RdBu_r",
     save_path=None,
+    is_auto_ticks=True,
 ):
     """Plots a field as a function of time and space (angle)
 
@@ -47,6 +48,8 @@ def plot_A_time_space(
         colormap prescribed by user
     save_path : str
         path and name of the png file to save
+    is_auto_ticks : bool
+        in fft, adjust ticks to freqs and wavenumbers (deactivate if too close)
     """
 
     # Get Data object names
@@ -66,4 +69,5 @@ def plot_A_time_space(
         unit=unit,
         colormap=colormap,
         save_path=save_path,
+        is_auto_ticks=is_auto_ticks,
     )

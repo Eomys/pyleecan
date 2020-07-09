@@ -21,6 +21,7 @@ def plot_A_time(
     y_min=None,
     y_max=None,
     mag_max=None,
+    is_auto_ticks=True,
 ):
     """Plots a field as a function of time
 
@@ -60,6 +61,8 @@ def plot_A_time(
         maximum value for the y-axis
     mag_max : float
         maximum alue for the y-axis of the fft
+    is_auto_ticks : bool
+        in fft, adjust ticks to freqs (deactivate if too close)
     """
 
     # Get Data object names
@@ -84,4 +87,5 @@ def plot_A_time(
         y_min=y_min,
         y_max=y_max,
         mag_max=mag_max,
+        is_auto_ticks=is_auto_ticks,
     )

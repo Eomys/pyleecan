@@ -23,6 +23,7 @@ def plot_A_space(
     y_min=None,
     y_max=None,
     mag_max=None,
+    is_auto_ticks=True,
     fig=None,
 ):
     """Plots a field as a function of space (angle)
@@ -67,6 +68,8 @@ def plot_A_space(
         maximum value for the y-axis
     mag_max : float
         maximum alue for the y-axis of the fft
+    is_auto_ticks : bool
+        in fft, adjust ticks to wavenumbers (deactivate if too close)
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
     """
@@ -95,5 +98,6 @@ def plot_A_space(
         y_min=y_min,
         y_max=y_max,
         mag_max=mag_max,
+        is_auto_ticks=is_auto_ticks,
         fig=fig,
     )

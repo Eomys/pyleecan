@@ -130,7 +130,7 @@ def plot_A_2D(
                     imax = int(where(Ydatas[i] == mag_max)[0])
                 else:
                     imax = argmin(abs(Xdata - fund_harm))
-                barlist[imax].set_color("r")
+                barlist[imax].set_color("k")
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
     elif type == "barchart":
