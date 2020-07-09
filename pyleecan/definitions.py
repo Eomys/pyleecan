@@ -73,3 +73,16 @@ if not isfile(color_path):  # Default colors
     color_path = join(config_dict["DATA_DIR"], "pyleecan_color.json")
 with open(color_path, "r") as color_file:
     config_dict["color_dict"] = load(color_file)
+
+# Register the colormap
+cmap_name = config_dict["color_dict"]["COLOR_MAP"]
+cmap_path = join(config_dict["DATA_DIR"], cmap_name) + ".npy"
+try:
+    get_cmap(name=cmap_name)
+except:
+    if not isfile(cmap_path):  # Default colormap
+        config_dict["color_dict"]["COLOR_MAP"] = "RdBu_r"
+    else:
+        cmap = np_load(cmap_path)
+        cmp = ListedColormap(cmap)
+        register_cmap(name=config_dict["color_dict"]["COLOR_MAP"], cmap=cmp)

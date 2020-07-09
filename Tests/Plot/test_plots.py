@@ -1,4 +1,5 @@
 from numpy import squeeze, linspace, sin
+from numpy.fft import fft2, fftshift
 from unittest import TestCase
 from os.path import join
 import matplotlib.pyplot as plt
@@ -47,7 +48,7 @@ wavenumber = squeeze(
 )
 
 # Plot parameters
-freq_max = 13000
+freq_max = 2000
 r_max = 78
 
 
@@ -171,6 +172,7 @@ class tests_plots(TestCase):
             freq_max=freq_max,
             data_list=[out2.mag.Br],
             legend_list=["Reference", "Periodic"],
+            is_auto_ticks=False,
         )
 
         fig = plt.gcf()
@@ -185,6 +187,7 @@ class tests_plots(TestCase):
             r_max=r_max,
             data_list=[out3.mag.Br],
             legend_list=["Reference", "Linspace"],
+            is_auto_ticks=False,
         )
 
         fig = plt.gcf()
@@ -192,12 +195,12 @@ class tests_plots(TestCase):
 
         # Plot the result by comparing the two simulation (Data1D / DataLinspace)
         plt.close("all")
-        out.plot_A_space(
+        out4.plot_A_space(
             "mag.Br",
             is_fft=True,
             r_max=r_max,
-            data_list=[out4.mag.Br],
             legend_list=["Reference", "Inverse FFT"],
+            is_auto_ticks=False,
         )
 
         fig = plt.gcf()
@@ -207,7 +210,7 @@ class tests_plots(TestCase):
 
         r_max = 78
         freq_max = 2500
-        mag_max = 0.6
+        mag_max = 1
         N_stem = 100
 
         out = Output(simu=simu)
@@ -315,7 +318,7 @@ class tests_plots(TestCase):
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
         out.plot_A_time(
-            "mag.Br", data_list=[out2.mag.Br], legend_list=["Br", "0.2sin(375t-1.5)"]
+            "mag.Br", data_list=[out2.mag.Br], legend_list=["Br", "0.2sin(375t-1.5)"], is_auto_ticks=False,
         )
 
         fig = plt.gcf()
@@ -367,7 +370,7 @@ class tests_plots(TestCase):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_A_time_space("mag.Br", freq_max=freq_max, r_max=r_max)
+        out.plot_A_time_space("mag.Br", freq_max=freq_max, r_max=r_max, is_auto_ticks=False)
 
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_default_proj_Br_time_space_dataobj.png"))

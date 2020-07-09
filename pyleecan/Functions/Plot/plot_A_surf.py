@@ -2,6 +2,7 @@
 
 from ..init_fig import init_fig
 from .plot_A_3D import plot_A_3D
+from ...definitions import config_dict
 from numpy import meshgrid, max as np_max
 
 
@@ -14,7 +15,7 @@ def plot_A_surf(
     z_max=None,
     is_norm=False,
     unit="SI",
-    colormap="RdBu_r",
+    colormap=None,
     save_path=None,
 ):
     """Plots the isosurface of a field in 3D
@@ -46,6 +47,8 @@ def plot_A_surf(
     # Set plot
     (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
     title = data.name + " as a function of time and space"
+    if colormap is None:
+        colormap = config_dict["color_dict"]["COLOR_MAP"]
     xlabel = "Time [s]"
     if is_deg:
         ylabel = "Angle [°]"

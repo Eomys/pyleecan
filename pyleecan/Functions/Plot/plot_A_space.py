@@ -2,7 +2,7 @@
 
 from ..init_fig import init_fig
 from .plot_A_2D import plot_A_2D
-from ..Winding.gen_phase_list import gen_color
+from ...definitions import config_dict
 from numpy import squeeze, split
 
 
@@ -25,6 +25,7 @@ def plot_A_space(
     y_min=None,
     y_max=None,
     mag_max=None,
+    is_auto_ticks=True,
     fig=None,
 ):
     """Plots a field as a function of space (angle)
@@ -67,6 +68,8 @@ def plot_A_space(
         maximum value for the y-axis
     mag_max : float
         maximum alue for the y-axis of the fft
+    is_auto_ticks : bool
+        in fft, adjust ticks to wavenumbers (deactivate if too close)
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
     """
@@ -76,7 +79,11 @@ def plot_A_space(
     data_list2 = [data] + data_list
     if legend_list == []:
         legend_list = [d.name for d in data_list2]
+    curve_colors = config_dict["color_dict"]["CURVE_COLORS"]
+    phase_colors = config_dict["color_dict"]["PHASE_COLORS"]
     legends = []
+    colors = []
+    n_phase = len(index_list)
     list_str = None
     for i, d in enumerate(data_list2):
         is_components = False
@@ -88,13 +95,16 @@ def plot_A_space(
                         legend_list[i] + ": " + axis.values.tolist()[j]
                         for j in index_list
                     ]
+                    colors += [phase_colors[i*n_phase+j] for j in range(n_phase)]
                     list_str = axis.name
             except:
                 is_components = False
         if not is_components:
             legends += [legend_list[i]]
+            colors += [curve_colors[i]]
     if color_list == []:
-        color_list = gen_color(len(legends))
+        color_list = colors
+    
     if unit == "SI":
         unit = data.unit
     if is_norm:
@@ -196,11 +206,14 @@ def plot_A_space(
         Ydata = [results[data.symbol]] + [
             results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
         ]
-
-        for i in range(len(Ydata)):
-            indices = [ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01]
-        indices = [0] + list(set(indices))
-        xticks = wavenumber[indices]
+        
+        if is_auto_ticks:
+            indices = [0]
+            for i in range(len(Ydata)):
+                indices += list(set([ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01]))
+            xticks = wavenumber[indices]
+        else:
+            xticks = None
 
         plot_A_2D(
             wavenumber,
