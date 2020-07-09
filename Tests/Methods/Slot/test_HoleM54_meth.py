@@ -9,6 +9,7 @@ from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Arc3 import Arc3
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM54 import HoleM54
+from pyleecan.Methods.Slot.Hole.comp_surface import comp_surface
 from numpy import exp, arcsin, ndarray, pi
 
 # For AlmostEqual
@@ -20,7 +21,7 @@ test_obj = LamHole(is_internal=True, is_stator=False, hole=list(), Rext=0.1)
 test_obj.hole = list()
 test_obj.hole.append(HoleM54(Zh=8, W0=pi / 8, H0=30e-3, H1=10e-3, R1=60e-3))
 HoleM54_test.append(
-    {"test_obj": test_obj, "S_exp": 2.434734e-3, "Rmin": 0.06, "Rmax": 0.0724515}
+    {"test_obj": test_obj, "S_exp": 3.337942194e-4, "Rmin": 0.06, "Rmax": 0.0724515}
 )
 
 
@@ -39,6 +40,11 @@ class test_HoleM54_meth(TestCase):
         b = test_dict["S_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
         self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+
+        # Check that the analytical method returns the same result as the numerical one
+        b = comp_surface(test_obj.hole[0])
+        msg = "Return " + str(a) + " expected " + str(b)
+        self.assertAlmostEqual((a - b) / a, 0, delta=1e-4, msg=msg)
 
     @data(*HoleM54_test)
     def test_comp_radius(self, test_dict):

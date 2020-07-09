@@ -22,8 +22,8 @@ class Ui_PCondType12(object):
         self.img_cond.setScaledContents(True)
         self.img_cond.setObjectName("img_cond")
         self.horizontalLayout.addWidget(self.img_cond)
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
         self.in_Nwpc1 = QtWidgets.QLabel(PCondType12)
@@ -72,15 +72,28 @@ class Ui_PCondType12(object):
         self.unit_Wins_cond = QtWidgets.QLabel(PCondType12)
         self.unit_Wins_cond.setObjectName("unit_Wins_cond")
         self.gridLayout.addWidget(self.unit_Wins_cond, 3, 2, 1, 1)
-        self.verticalLayout_2.addLayout(self.gridLayout)
+        self.in_Lewout = QtWidgets.QLabel(PCondType12)
+        self.in_Lewout.setMinimumSize(QtCore.QSize(40, 0))
+        self.in_Lewout.setObjectName("in_Lewout")
+        self.gridLayout.addWidget(self.in_Lewout, 4, 0, 1, 1)
+        self.lf_Lewout = FloatEdit(PCondType12)
+        self.lf_Lewout.setMinimumSize(QtCore.QSize(50, 0))
+        self.lf_Lewout.setMaximumSize(QtCore.QSize(100, 100))
+        self.lf_Lewout.setObjectName("lf_Lewout")
+        self.gridLayout.addWidget(self.lf_Lewout, 4, 1, 1, 1)
+        self.unit_Lewout = QtWidgets.QLabel(PCondType12)
+        self.unit_Lewout.setMinimumSize(QtCore.QSize(0, 0))
+        self.unit_Lewout.setObjectName("unit_Lewout")
+        self.gridLayout.addWidget(self.unit_Lewout, 4, 2, 1, 1)
+        self.verticalLayout.addLayout(self.gridLayout)
         self.w_out = WCondOut(PCondType12)
         self.w_out.setObjectName("w_out")
-        self.verticalLayout_2.addWidget(self.w_out)
+        self.verticalLayout.addWidget(self.w_out)
         spacerItem = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.verticalLayout_2.addItem(spacerItem)
-        self.horizontalLayout.addLayout(self.verticalLayout_2)
+        self.verticalLayout.addItem(spacerItem)
+        self.horizontalLayout.addLayout(self.verticalLayout)
 
         self.retranslateUi(PCondType12)
         QtCore.QMetaObject.connectSlotsByName(PCondType12)
@@ -97,6 +110,26 @@ class Ui_PCondType12(object):
         self.unit_Wins_wire.setText(_translate("PCondType12", "m"))
         self.in_Wins_cond.setText(_translate("PCondType12", "Wins_cond :"))
         self.unit_Wins_cond.setText(_translate("PCondType12", "m"))
+        self.in_Lewout.setToolTip(
+            _translate("PCondType12", "End-winding length on one side for a half-turn")
+        )
+        self.in_Lewout.setWhatsThis(
+            _translate("PCondType12", "End-winding length on one side for a half-turn")
+        )
+        self.in_Lewout.setText(_translate("PCondType12", "Lewout:"))
+        self.lf_Lewout.setToolTip(
+            _translate("PCondType12", "End-winding length on one side for a half-turn")
+        )
+        self.lf_Lewout.setWhatsThis(
+            _translate("PCondType12", "End-winding length on one side for a half-turn")
+        )
+        self.unit_Lewout.setToolTip(
+            _translate("PCondType12", "End-winding length on one side for a half-turn")
+        )
+        self.unit_Lewout.setWhatsThis(
+            _translate("PCondType12", "End-winding length on one side for a half-turn")
+        )
+        self.unit_Lewout.setText(_translate("PCondType12", "m"))
 
 
 from ......GUI.Dialog.DMachineSetup.SWindCond.WCondOut.WCondOut import WCondOut

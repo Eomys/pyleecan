@@ -66,7 +66,7 @@ def run_GUI(argv):
     mat_widget = DMatLib(matlib, selected=0)
 
     # Machine Setup Widget
-    c = DMachineSetup(matlib=matlib, machine_path=join(DATA_DIR, "Machine"))
+    c = DMachineSetup(dmatlib=mat_widget, machine_path=join(DATA_DIR, "Machine"))
 
     if EXT_GUI:
         # Setup extended GUI with sub windows

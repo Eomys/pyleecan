@@ -7,6 +7,7 @@ import shutil
 from logging import getLogger
 from json import load
 
+
 ROOT_DIR = normpath(abspath(join(dirname(__file__), ".."))).replace("\\", "/")
 MAIN_DIR = dirname(realpath(__file__)).replace("\\", "/")
 

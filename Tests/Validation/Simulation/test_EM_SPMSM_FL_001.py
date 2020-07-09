@@ -66,6 +66,7 @@ def test_Magnetic_FEMM_sym():
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
+    assert SPMSM_003.comp_sym() == (1, True)
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_symmetry_a = True
 

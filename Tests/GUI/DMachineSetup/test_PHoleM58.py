@@ -34,12 +34,11 @@ class test_PHoleM58(TestCase):
         self.test_obj.hole[0].magnet_0.mat_type.name = "Magnet3"
 
         self.matlib = MatLib()
-        self.matlib.list_mat = [
+        self.matlib.dict_mat["RefMatLib"] = [
             Material(name="Magnet1"),
             Material(name="Magnet2"),
             Material(name="Magnet3"),
         ]
-        self.matlib.index_first_mat_mach = 3
 
         self.widget = PHoleM58(self.test_obj.hole[0], self.matlib)
 

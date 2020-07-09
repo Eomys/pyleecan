@@ -3,6 +3,7 @@
 """
 Test Pyleecan optimization module using Zitzler–Deb–Thiele's function N. 3
 """
+from os.path import join
 import pytest
 from pyleecan.definitions import PACKAGE_NAME
 from Tests.Validation.Machine.SCIM_001 import SCIM_001
@@ -17,7 +18,7 @@ from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
-
+from Tests import save_validation_path as save_path
 import matplotlib.pyplot as plt
 import matplotlib.image as img
 import numpy as np
@@ -92,7 +93,7 @@ def test_zdt3():
         ),
         "obj2": OptiObjFunc(
             description="Minimization of the torque ripple",
-            func=lambda output: output.mag.Tem_rip,
+            func=lambda output: output.mag.Tem_rip_norm,
         ),
     }
 
@@ -103,7 +104,7 @@ def test_zdt3():
         g = lambda x: 1 + (9 / 29) * np.sum(x[1:])
         h = lambda f1, g: 1 - np.sqrt(f1 / g) - (f1 / g) * np.sin(10 * np.pi * f1)
         output.mag.Tem_av = f1(x)
-        output.mag.Tem_rip = g(x) * h(f1(x), g(x))
+        output.mag.Tem_rip_norm = g(x) * h(f1(x), g(x))
 
     # ### Defining the problem
     my_prob = OptiProblem(
@@ -184,4 +185,4 @@ def test_zdt3():
         return fig
 
     fig = plot_pareto(res)
-    fig.savefig("Tests/Results/Validation/test_zdt3.png")
+    fig.savefig(join(save_path, "test_zdt3.png"))

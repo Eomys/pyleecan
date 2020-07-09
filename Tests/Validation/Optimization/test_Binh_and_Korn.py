@@ -7,7 +7,7 @@ Binh, T. and U. Korn, "MOBES: A multiobjective evolution strategy for constraine
 In Proceedings of the third international Conference on Genetic Algorithms (Mendel97), ", Brno, Czech Republic, pp. 176-182, 1997 
 """
 # Imports
-
+from os.path import join
 import pytest
 from pyleecan.definitions import PACKAGE_NAME
 from Tests.Validation.Machine.SCIM_001 import SCIM_001
@@ -27,6 +27,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as img
 import numpy as np
 import random
+from Tests import save_validation_path as save_path
 
 
 @pytest.mark.validation
@@ -117,7 +118,7 @@ def test_Binh_and_Korn():
         ),
         "obj2": OptiObjFunc(
             description="Minimization of the torque ripple",
-            func=lambda output: output.mag.Tem_rip,
+            func=lambda output: output.mag.Tem_rip_norm,
         ),
     }
 
@@ -126,7 +127,7 @@ def test_Binh_and_Korn():
         x = output.simu.machine.rotor.slot.H0
         y = output.simu.machine.stator.slot.H0
         output.mag.Tem_av = 4 * x ** 2 + 4 * y ** 2
-        output.mag.Tem_rip = (x - 5) ** 2 + (y - 5) ** 2
+        output.mag.Tem_rip_norm = (x - 5) ** 2 + (y - 5) ** 2
 
     # ### Defining the problem
 
@@ -217,4 +218,4 @@ def test_Binh_and_Korn():
         return fig
 
     fig = plot_pareto(res)
-    fig.savefig("Tests/Results/Validation/test_Binh_and_Korn.png")
+    fig.savefig(join(save_path, "test_Binh_and_Korn.png"))
