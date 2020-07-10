@@ -126,6 +126,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         initial=output.mag.time[0],
         final=output.mag.time[-1],
         number=Nt_tot,
+        include_endpoint=True,
     )
     Angle = DataLinspace(
         name="angle",
@@ -134,6 +135,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         initial=angle[0],
         final=angle[-1],
         number=Na_tot,
+        include_endpoint=True,
     )
     output.mag.Br = DataTime(
         name="Airgap radial flux density",
