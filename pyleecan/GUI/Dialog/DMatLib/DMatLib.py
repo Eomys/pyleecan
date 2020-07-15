@@ -38,7 +38,6 @@ class DMatLib(Gen_DMatLib, QDialog):
         -------
 
         """
-        print(selected)
 
         # Build the interface according to the .ui file
         QDialog.__init__(self)
