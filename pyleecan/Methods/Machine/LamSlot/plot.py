@@ -6,8 +6,8 @@ from matplotlib.pyplot import axis, legend
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
-ROTOR_COLOR = config_dict["color_dict"]["ROTOR_COLOR"]
-STATOR_COLOR = config_dict["color_dict"]["STATOR_COLOR"]
+ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
+STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 
 
 def plot(
@@ -19,6 +19,7 @@ def plot(
     delta=0,
     is_edge_only=False,
     is_display=True,
+    is_show=True,
 ):
     """Plot the Lamination with empty Slots in a matplotlib fig
 
@@ -41,6 +42,8 @@ def plot(
         To plot transparent Patches
     is_display : bool
         False to return the patches
+    is_show : bool
+        To call show at the end of the method
     Returns
     -------
     patches : list
@@ -89,6 +92,7 @@ def plot(
                 axes.set_title("Rotor with empty slot")
 
             legend(patch_leg, label_leg)
-        fig.show()
+        if is_show:
+            fig.show()
     else:
         return patches

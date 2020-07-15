@@ -20,7 +20,9 @@ stator = LamSlotWind(
     Rint=0.1325, Rext=0.2, Nrvd=0, L1=0.35, Kf1=0.95, is_internal=False, is_stator=True
 )
 stator.slot = SlotW10(Zs=36, H0=1e-3, H1=1.5e-3, H2=30e-3, W0=12e-3, W1=14e-3, W2=12e-3)
-stator.winding = WindingDW2L(qs=3, Lewout=15e-3, p=3, coil_pitch=5, Ntcoil=7, Npcpp=2)
+stator.winding = WindingDW2L(
+    qs=3, Lewout=1.541392e-01, p=3, coil_pitch=5, Ntcoil=7, Npcpp=2
+)
 
 stator.winding.conductor = CondType11(
     Nwppc_tan=1, Nwppc_rad=1, Wwire=10e-3, Hwire=2e-3, Wins_wire=0, type_winding_shape=0

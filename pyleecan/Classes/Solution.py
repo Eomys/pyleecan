@@ -249,7 +249,7 @@ class Solution(FrozenClass):
         """setter of nodal"""
         if type(value) is dict:
             for key, obj in value.items():
-                if type(obj) is type(None):
+                if obj is None:
                     obj = array([])
                 elif type(obj) is list:
                     try:
@@ -273,7 +273,7 @@ class Solution(FrozenClass):
         """setter of edge"""
         if type(value) is dict:
             for key, obj in value.items():
-                if type(obj) is type(None):
+                if obj is None:
                     obj = array([])
                 elif type(obj) is list:
                     try:
@@ -297,7 +297,7 @@ class Solution(FrozenClass):
         """setter of face"""
         if type(value) is dict:
             for key, obj in value.items():
-                if type(obj) is type(None):
+                if obj is None:
                     obj = array([])
                 elif type(obj) is list:
                     try:
@@ -321,7 +321,7 @@ class Solution(FrozenClass):
         """setter of volume"""
         if type(value) is dict:
             for key, obj in value.items():
-                if type(obj) is type(None):
+                if obj is None:
                     obj = array([])
                 elif type(obj) is list:
                     try:

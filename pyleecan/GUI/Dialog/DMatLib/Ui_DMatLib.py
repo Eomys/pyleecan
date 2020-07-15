@@ -3,7 +3,6 @@
 # File generated according to DMatLib.ui
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -26,7 +25,7 @@ class Ui_DMatLib(object):
         self.img_search.setText("")
         self.img_search.setPixmap(
             QtGui.QPixmap(
-                "D:/PYLEECAN/pyleecan/pyleecan/GUI\\Dialog\\DMatLib\\\n"
+                "\n"
                 "                                                    :/images/images/icon/search.png\n"
                 "                                                "
             )

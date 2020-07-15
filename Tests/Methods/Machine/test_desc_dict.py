@@ -31,10 +31,10 @@ def test_desc_SCIM():
     assert desc_dict[6]["value"] == "double layer distributed"
 
     assert desc_dict[7]["name"] == "Rwinds"
-    assert desc_dict[7]["value"] == pytest.approx(0.0138, rel=0.1)
+    assert desc_dict[7]["value"] == pytest.approx(0.02392, rel=0.1)
 
     assert desc_dict[8]["name"] == "Mmachine"
-    assert desc_dict[8]["value"] == pytest.approx(303.11, rel=0.1)
+    assert desc_dict[8]["value"] == pytest.approx(328.1, rel=0.1)
 
 
 def test_desc_IPMSM():

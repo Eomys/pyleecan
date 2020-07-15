@@ -7,12 +7,19 @@ from numpy import array, exp, pi
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
-BAR_COLOR = config_dict["color_dict"]["BAR_COLOR"]
-SCR_COLOR = config_dict["color_dict"]["SCR_COLOR"]
+BAR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["BAR_COLOR"]
+SCR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["SCR_COLOR"]
 
 
 def plot(
-    self, fig=None, is_lam_only=False, sym=1, alpha=0, delta=0, is_edge_only=False
+    self,
+    fig=None,
+    is_lam_only=False,
+    sym=1,
+    alpha=0,
+    delta=0,
+    is_edge_only=False,
+    is_show=True,
 ):
     """Plot the Lamination in a matplotlib fig
 
@@ -33,6 +40,8 @@ def plot(
         Complex value for translation
     is_edge_only: bool
         To plot transparent Patches
+    is_show : bool
+        To call show at the end of the method
 
     Returns
     -------
@@ -115,4 +124,5 @@ def plot(
             label_leg.append("Short Circuit Ring")
 
         legend(patch_leg, label_leg)
-    fig.show()
+    if is_show:
+        fig.show()

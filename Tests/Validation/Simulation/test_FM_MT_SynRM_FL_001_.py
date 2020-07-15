@@ -100,7 +100,7 @@ def test_Magnetic_AGSF():
 
     # ------------------------------------------------------
 
-    load_path = join(save_path, "test_FM_SynRM_FL_001_plot_force_space")
+    load_path = join(save_path, "Output.json")
 
     # Test to load the Meshsolution object (inside the output):
     with open(load_path) as json_file:

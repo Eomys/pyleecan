@@ -3,6 +3,7 @@
 from ..init_fig import init_fig
 from .plot_A_3D import plot_A_3D
 from numpy import meshgrid, pi, max as np_max
+from ...definitions import config_dict
 
 
 def plot_A_fft2(
@@ -16,7 +17,7 @@ def plot_A_fft2(
     mag_max=None,
     is_norm=False,
     unit="SI",
-    colormap="YlOrRd",
+    colormap=None,
     save_path=None,
 ):
     """2D color plot of the 2D Fourier Transform of a field
@@ -50,6 +51,8 @@ def plot_A_fft2(
     # Set plot
     (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
     title = "FFT2 of " + data.name
+    if colormap is None:
+        colormap = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
     if is_elecorder:
         xlabel = "Electrical order []"
         elec_max = freq_max / data.normalizations.get("elec_order")

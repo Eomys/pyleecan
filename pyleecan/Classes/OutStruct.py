@@ -230,7 +230,7 @@ class OutStruct(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if type(value) is type(None):
+        if value is None:
             value = array([])
         elif type(value) is list:
             try:
@@ -252,7 +252,7 @@ class OutStruct(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if type(value) is type(None):
+        if value is None:
             value = array([])
         elif type(value) is list:
             try:

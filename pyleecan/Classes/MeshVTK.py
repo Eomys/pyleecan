@@ -496,7 +496,7 @@ class MeshVTK(FrozenClass):
 
     def _set_group(self, value):
         """setter of group"""
-        if type(value) is type(None):
+        if value is None:
             value = array([])
         elif type(value) is list:
             try:

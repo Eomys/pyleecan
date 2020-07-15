@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QIcon
 
 try:  # Import if pyleecan is installed with pip
-    from .definitions import ROOT_DIR, DATA_DIR, MATLIB_DIR, PACKAGE_NAME
+    from .definitions import ROOT_DIR, PACKAGE_NAME, config_dict
     from .GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
     from .GUI.Dialog.DMatLib.DMatLib import DMatLib
     from .GUI.Dialog.DMatLib.MatLib import MatLib
@@ -19,9 +19,8 @@ try:  # Import if pyleecan is installed with pip
     from .GUI.Tools.GuiOption.WGuiOption import WGuiOption
 
 except ImportError:  # Import for dev version
-    from definitions import PACKAGE_NAME, DATA_DIR, MATLIB_DIR, ROOT_DIR
+    from definitions import PACKAGE_NAME, ROOT_DIR, config_dict
 
-    sys.path.insert(0, ROOT_DIR)
     exec(
         "from "
         + PACKAGE_NAME
@@ -61,13 +60,15 @@ def run_GUI(argv):
     a.installTranslator(translator)
 
     # Setting the material library
-    matlib = MatLib(MATLIB_DIR)
+    matlib = MatLib(config_dict["MAIN"]["MATLIB_DIR"])
 
     # MatLib widget
     mat_widget = DMatLib(matlib, selected=0)
 
     # Machine Setup Widget
-    c = DMachineSetup(dmatlib=mat_widget, machine_path=join(DATA_DIR, "Machine"))
+    c = DMachineSetup(
+        dmatlib=mat_widget, machine_path=config_dict["MAIN"]["MACHINE_DIR"]
+    )
 
     if EXT_GUI:
         # Setup extended GUI with sub windows

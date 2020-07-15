@@ -33,28 +33,28 @@ from Tests import DATA_DIR
 
 load_test = list()
 load_test.append(  # 1
-    {"type": "SCIM", "index": 0, "name": "SCIM_001", "p": 1, "count": 10}
+    {"type": "SCIM", "index": 0, "name": "SCIM_001", "p": 1, "count": 11}
 )
 load_test.append(  # 2
-    {"type": "DFIM", "index": 1, "name": "DFIM_001", "p": 2, "count": 12}
+    {"type": "DFIM", "index": 1, "name": "DFIM_001", "p": 2, "count": 13}
 )
 load_test.append(  # 3
-    {"type": "SyRM", "index": 2, "name": "SynRM_001", "p": 2, "count": 9}
+    {"type": "SyRM", "index": 2, "name": "SynRM_001", "p": 2, "count": 10}
 )
 load_test.append(  # 4
-    {"type": "SPMSM", "index": 3, "name": "SPMSM_001", "p": 4, "count": 9}
+    {"type": "SPMSM", "index": 3, "name": "SPMSM_001", "p": 4, "count": 10}
 )
 load_test.append(  # 5
-    {"type": "SIPMSM", "index": 4, "name": "SIPMSM_008", "p": 4, "count": 9}
+    {"type": "SIPMSM", "index": 4, "name": "SIPMSM_008", "p": 4, "count": 10}
 )
 load_test.append(  # 6
-    {"type": "IPMSM", "index": 5, "name": "machine_IPMSM_A", "p": 5, "count": 9}
+    {"type": "IPMSM", "index": 5, "name": "machine_IPMSM_A", "p": 5, "count": 10}
 )
 load_test.append(  # 7
-    {"type": "WRSM", "index": 6, "name": "WRSM_001", "p": 6, "count": 12}
+    {"type": "WRSM", "index": 6, "name": "WRSM_001", "p": 6, "count": 13}
 )
 load_test.append(  # 8
-    {"type": "SRM", "index": 7, "name": "SRM_test_load", "p": 10, "count": 9}
+    {"type": "SRM", "index": 7, "name": "SRM_test_load", "p": 10, "count": 10}
 )
 from PyQt5.QtCore import Qt
 
@@ -106,6 +106,7 @@ class test_DMachineSetup(TestCase):
         ):
             # To trigger the slot
             self.widget.b_load.clicked.emit(True)
+        self.widget.nav_step.setCurrentRow(0)
         # To remember to update when adding a new machine type
         self.assertEqual(self.widget.w_step.c_type.count(), 8)
         # Check load MachineType

@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.art3d as art3d
 
 from ...Functions.init_fig import init_fig, init_subplot
+from ...definitions import config_dict
+
+COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
 
 def plot_A_3D(
@@ -95,7 +98,8 @@ def plot_A_3D(
                 linewidth=3.0,
                 marker="o",
                 markersize=5.0,
-                markevery=(1, 1)
+                markevery=(1, 1),
+                color=COLORS[0]
             )
             ax.add_line(line)
         ax.set_xlim3d(x_max, x_min)
