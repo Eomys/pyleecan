@@ -11,10 +11,10 @@ from ....Functions.Material.replace_material_pyleecan_obj import (
 )
 from ....GUI.Tools.GuiOption.Ui_GuiOption import Ui_GUIOption
 from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
-from ....definitions import DATA_DIR
 from ....GUI import GUI_logger, gui_option
 from ....Functions.path_tools import abs_file_path
-from ....definitions import save_config_dict, config_dict
+from ....Functions.init_environment import save_config_dict
+from ....definitions import config_dict
 from ....Functions.load import load_matlib
 from ....Classes.Material import Material
 
