@@ -6,7 +6,7 @@ from matplotlib.pyplot import axis
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
-FRAME_COLOR = config_dict["PLOT"]["color_dict"]["FRAME_COLOR"]
+FRAME_COLOR = config_dict["PLOT"]["COLOR_DICT"]["FRAME_COLOR"]
 
 
 def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, is_show=True):

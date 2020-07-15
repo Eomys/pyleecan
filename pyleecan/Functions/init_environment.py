@@ -102,23 +102,23 @@ def get_config_dict():
 
     # Load default to make sure that the keys are all there
     with open(def_color_path, "r") as color_file:
-        config_dict["PLOT"]["color_dict"] = load(color_file)
+        config_dict["PLOT"]["COLOR_DICT"] = load(color_file)
     if color_path != def_color_path:
         with open(color_path, "r") as color_file:
-            config_dict["PLOT"]["color_dict"].update(load(color_file))
+            config_dict["PLOT"]["COLOR_DICT"].update(load(color_file))
 
     # Register the colormap
-    cmap_name = config_dict["PLOT"]["color_dict"]["COLOR_MAP"]
+    cmap_name = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
     if "." not in cmap_name:
         cmap_path = join(USER_DIR, "Plot", cmap_name) + ".npy"
     try:
         get_cmap(name=cmap_name)
     except:
         if not isfile(cmap_path):  # Default colormap
-            config_dict["PLOT"]["color_dict"]["COLOR_MAP"] = "RdBu_r"
+            config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"] = "RdBu_r"
         else:
             cmap = np_load(cmap_path)
             cmp = ListedColormap(cmap)
-            register_cmap(name=config_dict["PLOT"]["color_dict"]["COLOR_MAP"], cmap=cmp)
+            register_cmap(name=config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"], cmap=cmp)
 
     return config_dict

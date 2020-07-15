@@ -21,7 +21,7 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 
-CURVE_COLORS = config_dict["PLOT"]["color_dict"]["CURVE_COLORS"]
+CURVE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
 
 def test_axis_LamSlotMag():

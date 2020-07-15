@@ -6,7 +6,7 @@ from matplotlib.pyplot import axis, legend
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
-SHAFT_COLOR = config_dict["PLOT"]["color_dict"]["SHAFT_COLOR"]
+SHAFT_COLOR = config_dict["PLOT"]["COLOR_DICT"]["SHAFT_COLOR"]
 
 
 def plot(self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, is_show=True):

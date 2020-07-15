@@ -55,8 +55,8 @@ def plot_A_time_space(
     fig, axs = plt.subplots(3, 2, tight_layout=True, figsize=(20, 10))
     title = data.name + " over time and space"
     if colormap is None:
-        colormap = config_dict["PLOT"]["color_dict"]["COLOR_MAP"]
-    color_list = config_dict["PLOT"]["color_dict"]["CURVE_COLORS"]
+        colormap = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
+    color_list = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
     # pcolorplot
     if is_deg:

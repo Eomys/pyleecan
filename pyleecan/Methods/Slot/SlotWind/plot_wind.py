@@ -8,7 +8,7 @@ from ....Functions.init_fig import init_fig
 from ....Functions.Winding.gen_phase_list import gen_name
 from ....definitions import config_dict
 
-PHASE_COLORS = config_dict["PLOT"]["color_dict"]["PHASE_COLORS"]
+PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
 
 
 def plot_wind(self, wind_mat=None, fig=None, is_bar=False):

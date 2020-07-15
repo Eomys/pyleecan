@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from ...definitions import config_dict
 
-PHASE_COLORS = config_dict["PLOT"]["color_dict"]["PHASE_COLORS"]
+PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
 
 
 def find_wind_phase_color(label, wind_mat):

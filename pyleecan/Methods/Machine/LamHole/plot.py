@@ -7,10 +7,10 @@ from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
 
-PATCH_COLOR = config_dict["PLOT"]["color_dict"]["PATCH_COLOR"]
-MAGNET_COLOR = config_dict["PLOT"]["color_dict"]["MAGNET_COLOR"]
-ROTOR_COLOR = config_dict["PLOT"]["color_dict"]["ROTOR_COLOR"]
-STATOR_COLOR = config_dict["PLOT"]["color_dict"]["STATOR_COLOR"]
+PATCH_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PATCH_COLOR"]
+MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
+ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
+STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 
 
 def plot(

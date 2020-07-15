@@ -70,8 +70,8 @@ def plot_A_time(
     data_list2 = [data] + data_list
     if legend_list == []:
         legend_list = [d.name for d in data_list2]
-    curve_colors = config_dict["PLOT"]["color_dict"]["CURVE_COLORS"]
-    phase_colors = config_dict["PLOT"]["color_dict"]["PHASE_COLORS"]
+    curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
+    phase_colors = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
     legends = []
     colors = []
     n_phase = len(index_list)

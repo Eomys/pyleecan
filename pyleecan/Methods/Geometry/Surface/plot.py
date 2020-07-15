@@ -5,8 +5,8 @@ from matplotlib.pyplot import axis, legend
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
-PATCH_EDGE = config_dict["PLOT"]["color_dict"]["PATCH_EDGE"]
-PATCH_COLOR = config_dict["PLOT"]["color_dict"]["PATCH_COLOR"]
+PATCH_EDGE = config_dict["PLOT"]["COLOR_DICT"]["PATCH_EDGE"]
+PATCH_COLOR = config_dict["PLOT"]["COLOR_DICT"]["PATCH_COLOR"]
 
 
 def plot(
