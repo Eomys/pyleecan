@@ -2,7 +2,7 @@
 
 from ....Classes.OutMag import OutMag
 from ....Methods.Simulation.Input import InputError
-from SciDataTool import DataND, DataLinspace, DataTime
+from SciDataTool import DataLinspace, DataTime, VectorField
 from numpy import ndarray
 
 
@@ -46,6 +46,14 @@ def gen_input(self):
     if self.Br is None:
         raise InputError("ERROR: InFlux.Br missing")
     Br = self.Br.get_data()
+    if not isinstance(Br, ndarray) or Br.shape != (Nt_tot, Na_tot):
+        raise InputError(
+            "ERROR: InFlux.Br must be a matrix with the shape "
+            + str((Nt_tot, Na_tot))
+            + " (len(time), stator phase number), "
+            + str(Br.shape)
+            + " returned"
+        )
     Time = DataLinspace(
         name="time",
         unit="s",
@@ -62,32 +70,21 @@ def gen_input(self):
         final=output.angle[-1],
         number=Na_tot,
     )
-    output.Br = DataTime(
+    Br_data = DataTime(
         name="Airgap radial flux density",
         unit="T",
         symbol="B_r",
         axes=[Time, Angle],
         values=Br,
     )
-    if not isinstance(output.Br, DataND) or Br.shape != (Nt_tot, Na_tot):
-        raise InputError(
-            "ERROR: InFlux.Br must be a matrix with the shape "
-            + str((Nt_tot, Na_tot))
-            + " (len(time), stator phase number), "
-            + str(Br.shape)
-            + " returned"
-        )
+    output.B = VectorField(
+        name="Airgap flux density",
+        components={"radial": Br_data}
+    )
 
     if self.Bt is not None:
         Bt = self.Bt.get_data()
-        output.Bt = DataTime(
-            name="Airgap tangential flux density",
-            unit="T",
-            symbol="B_t",
-            axes=[Time, Angle],
-            values=Bt,
-        )
-        if not isinstance(output.Bt, DataND) or Bt.shape != (Nt_tot, Na_tot):
+        if not isinstance(Bt, ndarray) or Bt.shape != (Nt_tot, Na_tot):
             raise InputError(
                 "ERROR: InFlux.Bt must be a matrix with the shape "
                 + str((Nt_tot, Na_tot))
@@ -95,8 +92,14 @@ def gen_input(self):
                 + str(Bt.shape)
                 + " returned"
             )
-    else:
-        output.Bt = None
+        Bt_data = DataTime(
+            name="Airgap tangential flux density",
+            unit="T",
+            symbol="B_t",
+            axes=[Time, Angle],
+            values=Bt,
+        )
+        output.B.components["tangential"] = Bt_data
 
     if self.parent.parent is None:
         raise InputError(

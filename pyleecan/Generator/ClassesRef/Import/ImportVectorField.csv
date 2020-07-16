@@ -1,0 +1,4 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+components,-,"Dict of components (e.g. {""radial"": ImportData})",,{ImportData},None,,,,Import,,get_data,VERSION,1,Abstract class for Data Import/Generation
+name,-,Name of the vector field,,str,,,,,,,,,,
+symbol,-,Symbol of the vector field,,str,,,,,,,,,,

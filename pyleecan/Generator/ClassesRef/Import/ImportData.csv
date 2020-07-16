@@ -1,0 +1,7 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+axes,-,List of axes of the data,,[ImportData],None,,,,Import,,get_data,VERSION,1,Abstract class for Data Import/Generation
+field,-,Field (Import object),,Import,None,,,,,,,,,
+unit,-,Unit of the field,,str,SI,,,,,,,,,
+name,-,Name of the field,,str,,,,,,,,,,
+symbol,-,Symbol of the field,,str,,,,,,,,,,
+is_freq,-,Field is imported in frequential domain,,bool,False,,,,,,,,,
