@@ -20,7 +20,7 @@ def comp_fluxlinkage(self, output):
     qs = output.simu.machine.stator.winding.qs
     p = output.simu.machine.stator.winding.p
     Nt_tot = self.Nt_tot
-    d_angle_diff = output.get_d_angle_diff()
+    angle_offset_initial = output.get_angle_offset_initial()
     rot_dir = output.get_rot_dir()
 
     # Store data to be replaced
@@ -49,7 +49,7 @@ def comp_fluxlinkage(self, output):
     output.elec.angle_rotor = angle
 
     # Define d axis angle for the d,q transform
-    d_angle = rot_dir * (angle - d_angle_diff)
+    d_angle = rot_dir * (angle - angle_offset_initial)
 
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
