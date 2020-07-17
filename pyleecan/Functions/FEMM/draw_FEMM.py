@@ -104,8 +104,9 @@ def draw_FEMM(
 
     # Building geometry of the (modified) stator and the rotor
     surf_list = list()
-    lam_ext = machine.get_lamination(is_internal=False)
-    lam_int = machine.get_lamination(is_internal=True)
+    lam_list = machine.get_lam_list()
+    lam_int = lam_list[0]
+    lam_ext = lam_list[1]
 
     # Adding no_mesh for shaft if needed
     if lam_int.Rint > 0 and sym == 1:
@@ -115,20 +116,9 @@ def draw_FEMM(
 
     # adding the Airgap surface
     if is_sliding_band:
-        surf_list.extend(
-            get_sliding_band(
-                sym=sym,
-                lam_int=output.simu.machine.get_lamination(True),
-                lam_ext=output.simu.machine.get_lamination(False),
-            )
-        )
+        surf_list.extend(get_sliding_band(sym=sym, lam_int=lam_int, lam_ext=lam_ext))
     else:
-        surf_list.extend(
-            get_airgap_surface(
-                lam_int=output.simu.machine.get_lamination(True),
-                lam_ext=output.simu.machine.get_lamination(False),
-            )
-        )
+        surf_list.extend(get_airgap_surface(lam_int=lam_int, lam_ext=lam_ext))
 
     # adding External Lamination surface
     surf_list.extend(lam_ext.build_geometry(sym=sym))
