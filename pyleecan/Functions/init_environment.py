@@ -48,15 +48,29 @@ def init_user_dir():
     USER_DIR = module.USER_DIR
     MAIN_DIR = module.MAIN_DIR
 
-    # Create the main folder
-    makedirs(USER_DIR)
-    # Copy initial DATA
     logger = getLogger("Pyleecan")
-    logger.debug("Initialization of USER_DIR in " + USER_DIR)
 
-    shutil.copytree(join(MAIN_DIR, "Data", "Machine"), join(USER_DIR, "Machine"))
-    shutil.copytree(join(MAIN_DIR, "Data", "Material"), join(USER_DIR, "Material"))
-    shutil.copytree(join(MAIN_DIR, "Data", "Plot"), join(USER_DIR, "Plot"))
+    # Create the main folder
+    if not isdir(USER_DIR):
+        makedirs(USER_DIR)
+        # Copy initial DATA
+        logger.debug("Initialization of USER_DIR in " + USER_DIR)
+
+    # Data initialization
+    mach_path = join(USER_DIR, "Machine")
+    if not isdir(mach_path):
+        shutil.copytree(join(MAIN_DIR, "Data", "Machine"), mach_path)
+        logger.debug("Initialization USER_DIR Machines in " + mach_path)
+
+    mat_path = join(USER_DIR, "Material")
+    if not isdir(mat_path):
+        shutil.copytree(join(MAIN_DIR, "Data", "Material"), mat_path)
+        logger.debug("Initialization USER_DIR Materials in " + mat_path)
+
+    plot_path = join(USER_DIR, "Plot")
+    if not isdir(plot_path):
+        shutil.copytree(join(MAIN_DIR, "Data", "Plot"), plot_path)
+        logger.debug("Initialization USER_DIR Plot in " + plot_path)
 
 
 def get_config_dict():
@@ -81,14 +95,13 @@ def get_config_dict():
     logger = getLogger("Pyleecan")
 
     # Initialization to make sure all the parameters exist
+    init_user_dir()
     config_dict = default_config_dict.copy()
     if isfile(CONF_PATH):
         with open(CONF_PATH, "r") as config_file:
             config_dict.update(load(config_file))
     else:
         logger.debug("Config dict missing in " + CONF_PATH)
-        if not isdir(USER_DIR):
-            init_user_dir()
         save_config_dict(config_dict)
 
     # Load the color_dict
