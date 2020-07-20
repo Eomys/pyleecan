@@ -269,12 +269,14 @@ class SWSlot(Gen_SWSlot, QWidget):
         error: str
             Error message (return None if no error)
         """
+        try:
+            # Check that everything is set
+            if lam.slot.Zs is None:
+                return "You must set Zs !"
 
-        # Check that everything is set
-        if lam.slot.Zs is None:
-            return "You must set Zs !"
-
-        # Call the check method of the slot (every slot type have a
-        # different check method)
-        index = INIT_INDEX.index(type(lam.slot))
-        return WIDGET_LIST[index].check(lam)
+            # Call the check method of the slot (every slot type have a
+            # different check method)
+            index = INIT_INDEX.index(type(lam.slot))
+            return WIDGET_LIST[index].check(lam)
+        except Exception as e:
+            return str(e)

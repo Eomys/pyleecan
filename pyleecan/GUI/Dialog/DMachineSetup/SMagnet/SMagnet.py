@@ -239,18 +239,21 @@ class SMagnet(Ui_SMagnet, QDialog):
         error: str
             Error message (return None if no error)
         """
-        # Check that everything is set
-        if lamination.slot.magnet[0].Wmag is None:
-            return "You must set Wmag !"
-        if lamination.slot.magnet[0].Hmag is None:
-            return "You must set Hmag !"
-        if (
-            hasattr(lamination.slot.magnet[0], "Rtop")
-            and lamination.slot.magnet[0].Rtop is None
-        ):
-            return "You must set Rtopm !"
-        if lamination.slot.H0 is None:
-            return "You must set H0 !"
+        try:
+            # Check that everything is set
+            if lamination.slot.magnet[0].Wmag is None:
+                return "You must set Wmag !"
+            if lamination.slot.magnet[0].Hmag is None:
+                return "You must set Hmag !"
+            if (
+                hasattr(lamination.slot.magnet[0], "Rtop")
+                and lamination.slot.magnet[0].Rtop is None
+            ):
+                return "You must set Rtopm !"
+            if lamination.slot.H0 is None:
+                return "You must set H0 !"
+        except Exception as e:
+            return str(e)
 
         # Check that everything is set right
         try:

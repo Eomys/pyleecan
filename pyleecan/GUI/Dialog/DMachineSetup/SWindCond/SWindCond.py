@@ -153,14 +153,17 @@ class SWindCond(Ui_SWindCond, QWidget):
             Error message (return None if no error)
         """
 
-        obj = lamination.winding  # For readibility
+        try:
+            obj = lamination.winding  # For readibility
 
-        # Check that the conductor properties are set
-        if type(obj.conductor) is CondType11:
-            for name in ["Hwire", "Wwire", "Wins_wire", "Nwppc_rad", "Nwppc_tan"]:
-                if obj.conductor.__getattribute__(name) is None:
-                    return "You must set " + name + " !"
-        elif type(obj.conductor) is CondType12:
-            for name in ["Wwire", "Wins_wire", "Wins_cond", "Nwppc"]:
-                if obj.conductor.__getattribute__(name) is None:
-                    return "You must set " + name + " !"
+            # Check that the conductor properties are set
+            if type(obj.conductor) is CondType11:
+                for name in ["Hwire", "Wwire", "Wins_wire", "Nwppc_rad", "Nwppc_tan"]:
+                    if obj.conductor.__getattribute__(name) is None:
+                        return "You must set " + name + " !"
+            elif type(obj.conductor) is CondType12:
+                for name in ["Wwire", "Wins_wire", "Wins_cond", "Nwppc"]:
+                    if obj.conductor.__getattribute__(name) is None:
+                        return "You must set " + name + " !"
+        except Exception as e:
+            return str(e)
