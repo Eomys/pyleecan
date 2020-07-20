@@ -1,5 +1,5 @@
 import numpy as np
-from SciDataTool import DataLinspace, DataTime
+from SciDataTool import Data1D, DataFreq, VectorField
 
 
 def comp_force(self, output):
@@ -15,48 +15,58 @@ def comp_force(self, output):
     """
 
     mu_0 = 4 * np.pi * 1e-7
-    angle = output.force.angle
-    Na_tot = output.force.Na_tot
-    time = output.force.time
-    Nt_tot = output.force.Nt_tot
 
     # Load magnetic flux
-    Br = output.mag.Br.values
-    Bt = output.mag.Bt.values
+    Brphiz = output.mag.B.get_rphiz_along("freqs", "wavenumber")
+    Br = Brphiz["radial"]
+    Bt = Brphiz["tangential"]
+    Bz = Brphiz["axial"]
+    freqs = Brphiz["freqs"]
+    wavenumber = Brphiz["wavenumber"]
 
     # Compute AGSF with MT formula
-    Prad = (Br * Br - Bt * Bt) / (2 * mu_0)
-    Ptan = Br * Bt / mu_0
+    Prad = - (Br * Br - Bt * Bt - Bz * Bz) / (2 * mu_0)
+    Ptan = - Br * Bt / mu_0
+    Pz =  - Br * Bz / mu_0
 
     # Store the results
-    Time = DataLinspace(
-        name="time",
-        unit="s",
-        symmetries={},
-        initial=time[0],
-        final=time[-1],
-        number=Nt_tot,
+    Freqs = Data1D(
+        name="freqs",
+        unit="Hz",
+        values=freqs,
     )
-
-    Angle = DataLinspace(
-        name="angle",
-        unit="rad",
-        symmetries={},
-        initial=angle[0],
-        final=angle[-1],
-        number=Na_tot,
+    Wavenumber = Data1D(
+        name="wavenumber",
+        unit="dimless",
+        values=wavenumber,
     )
-    output.force.Prad = DataTime(
+    Prad_data = DataFreq(
         name="Airgap radial surface force",
-        unit="T",
+        unit="N/m2",
         symbol="P_r",
-        axes=[Time, Angle],
+        axes=[Freqs, Wavenumber],
         values=Prad,
     )
-    output.force.Ptan = DataTime(
-        name="Airgap radial surface force",
-        unit="T",
+    Ptan_data = DataFreq(
+        name="Airgap tangential surface force",
+        unit="N/m2",
         symbol="P_t",
-        axes=[Time, Angle],
+        axes=[Freqs, Wavenumber],
         values=Ptan,
+    )
+    Pz_data = DataFreq(
+        name="Airgap axial surface force",
+        unit="N/m2",
+        symbol="P_z",
+        axes=[Freqs, Wavenumber],
+        values=Pz,
+    )
+    output.force.P = VectorField(
+        name="Magnetic airgap surface force",
+        symbol="P",
+        components={
+            "radial":Prad_data,
+            "tangential":Ptan_data,
+            "axial":Pz_data
+        }
     )
