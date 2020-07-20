@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-from os.path import dirname, join
+from os.path import dirname, join, isfile
 from sys import argv, exit
 
 from PyQt5.QtCore import QTranslator
@@ -58,6 +58,9 @@ def run_GUI(argv):
     translator = QTranslator()
     translator.load(translationFile, "GUI//i18n")
     a.installTranslator(translator)
+    if isfile(config_dict["GUI"]["CSS_PATH"]):
+        with open(config_dict["GUI"]["CSS_PATH"], "r") as css_file:
+            a.setStyleSheet(css_file.read())
 
     # Setting the material library
     matlib = MatLib(config_dict["MAIN"]["MATLIB_DIR"])

@@ -72,6 +72,11 @@ def init_user_dir():
         shutil.copytree(join(MAIN_DIR, "Data", "Plot"), plot_path)
         logger.debug("Initialization USER_DIR Plot in " + plot_path)
 
+    gui_path = join(USER_DIR, "GUI")
+    if not isdir(gui_path):
+        shutil.copytree(join(MAIN_DIR, "Data", "GUI"), gui_path)
+        logger.debug("Initialization USER_DIR GUI in " + gui_path)
+
 
 def get_config_dict():
     """Return the config dict (create the default one if needed)
@@ -99,10 +104,10 @@ def get_config_dict():
     config_dict = default_config_dict.copy()
     if isfile(CONF_PATH):
         with open(CONF_PATH, "r") as config_file:
-            config_dict.update(load(config_file))
+            update_dict(source=config_dict, update=load(config_file))
     else:
-        logger.debug("Config dict missing in " + CONF_PATH)
-        save_config_dict(config_dict)
+        logger.debug("Creating missing config_dict in " + CONF_PATH)
+    save_config_dict(config_dict)
 
     # Load the color_dict
     color_path = join(USER_DIR, "Plot", config_dict["PLOT"]["COLOR_DICT_NAME"])
@@ -118,7 +123,9 @@ def get_config_dict():
         config_dict["PLOT"]["COLOR_DICT"] = load(color_file)
     if color_path != def_color_path:
         with open(color_path, "r") as color_file:
-            config_dict["PLOT"]["COLOR_DICT"].update(load(color_file))
+            update_dict(
+                source=config_dict["PLOT"]["COLOR_DICT"], update=load(color_file)
+            )
 
     # Register the colormap
     cmap_name = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
@@ -135,3 +142,12 @@ def get_config_dict():
             register_cmap(name=config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"], cmap=cmp)
 
     return config_dict
+
+
+def update_dict(source, update):
+    for key, value in update.items():
+        if isinstance(value, dict):
+            source[key] = update_dict(source.get(key, {}), value)
+        else:
+            source[key] = value
+    return source
