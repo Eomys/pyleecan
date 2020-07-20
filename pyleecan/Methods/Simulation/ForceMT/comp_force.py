@@ -25,21 +25,13 @@ def comp_force(self, output):
     wavenumber = Brphiz["wavenumber"]
 
     # Compute AGSF with MT formula
-    Prad = - (Br * Br - Bt * Bt - Bz * Bz) / (2 * mu_0)
-    Ptan = - Br * Bt / mu_0
-    Pz =  - Br * Bz / mu_0
+    Prad = -(Br * Br - Bt * Bt - Bz * Bz) / (2 * mu_0)
+    Ptan = -Br * Bt / mu_0
+    Pz = -Br * Bz / mu_0
 
     # Store the results
-    Freqs = Data1D(
-        name="freqs",
-        unit="Hz",
-        values=freqs,
-    )
-    Wavenumber = Data1D(
-        name="wavenumber",
-        unit="dimless",
-        values=wavenumber,
-    )
+    Freqs = Data1D(name="freqs", unit="Hz", values=freqs,)
+    Wavenumber = Data1D(name="wavenumber", unit="dimless", values=wavenumber,)
     Prad_data = DataFreq(
         name="Airgap radial surface force",
         unit="N/m2",
@@ -64,9 +56,5 @@ def comp_force(self, output):
     output.force.P = VectorField(
         name="Magnetic airgap surface force",
         symbol="P",
-        components={
-            "radial":Prad_data,
-            "tangential":Ptan_data,
-            "axial":Pz_data
-        }
+        components={"radial": Prad_data, "tangential": Ptan_data, "axial": Pz_data},
     )

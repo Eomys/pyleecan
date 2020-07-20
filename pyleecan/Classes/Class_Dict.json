@@ -2068,6 +2068,80 @@
         "path": "pyleecan/Generator/ClassesRef/Import/Import.csv",
         "properties": []
     },
+    "ImportData": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for Data Import/Generation",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "",
+        "name": "ImportData",
+        "package": "Import",
+        "path": "pyleecan/Generator/ClassesRef/Import/ImportData.csv",
+        "properties": [
+            {
+                "desc": "List of axes of the data",
+                "max": "",
+                "min": "",
+                "name": "axes",
+                "type": "[ImportData]",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Field (Import object)",
+                "max": "",
+                "min": "",
+                "name": "field",
+                "type": "Import",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Unit of the field",
+                "max": "",
+                "min": "",
+                "name": "unit",
+                "type": "str",
+                "unit": "-",
+                "value": "SI"
+            },
+            {
+                "desc": "Name of the field",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Symbol of the field",
+                "max": "",
+                "min": "",
+                "name": "symbol",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Field is imported in frequential domain",
+                "max": "",
+                "min": "",
+                "name": "is_freq",
+                "type": "bool",
+                "unit": "-",
+                "value": false
+            }
+        ]
+    },
     "ImportGenMatrixSin": {
         "constants": [
             {
@@ -2453,6 +2527,53 @@
             }
         ]
     },
+    "ImportVectorField": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for Data Import/Generation",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "",
+        "name": "ImportVectorField",
+        "package": "Import",
+        "path": "pyleecan/Generator/ClassesRef/Import/ImportVectorField.csv",
+        "properties": [
+            {
+                "desc": "Dict of components (e.g. {\"radial\": ImportData})",
+                "max": "",
+                "min": "",
+                "name": "components",
+                "type": "{ImportData}",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Name of the vector field",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Symbol of the vector field",
+                "max": "",
+                "min": "",
+                "name": "symbol",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "IndMag": {
         "constants": [
             {
@@ -2769,20 +2890,11 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv",
         "properties": [
             {
-                "desc": "Radial airgap flux density",
+                "desc": "Airgap flux density",
                 "max": "",
                 "min": "",
-                "name": "Br",
-                "type": "Import",
-                "unit": "T",
-                "value": null
-            },
-            {
-                "desc": "Tangential airgap flux density",
-                "max": "",
-                "min": "",
-                "name": "Bt",
-                "type": "Import",
+                "name": "B",
+                "type": "ImportVectorField",
                 "unit": "T",
                 "value": null
             }
@@ -2807,20 +2919,11 @@
         "path": "pyleecan/Generator/ClassesRef/Simulation/InputForce.csv",
         "properties": [
             {
-                "desc": "Radial magnetic air-gap surface force",
+                "desc": "Magnetic air-gap surface force",
                 "max": "",
                 "min": "",
-                "name": "Prad",
-                "type": "Import",
-                "unit": "N.m^2",
-                "value": null
-            },
-            {
-                "desc": "Tangential magnetic air-gap surface force",
-                "max": "",
-                "min": "",
-                "name": "Ptan",
-                "type": "Import",
+                "name": "P",
+                "type": "ImportVectorField",
                 "unit": "N.m^2",
                 "value": null
             }

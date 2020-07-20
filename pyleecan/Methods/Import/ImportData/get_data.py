@@ -17,14 +17,11 @@ def get_data(self):
         The generated Data object
 
     """
-    
+
     axes_list = []
     for axis in self.axes:
-        axes_list.append(Data1D(
-            values=axis.field.get_data(),
-            name=axis.name,
-        ))
-        
+        axes_list.append(Data1D(values=axis.field.get_data(), name=axis.name,))
+
     if self.is_freq:
         Data = DataFreq(
             axes=axes_list,
@@ -39,5 +36,5 @@ def get_data(self):
             name=self.name,
             symbol=self.symbol,
         )
-    
+
     return Data

@@ -146,7 +146,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     output.mag.B = VectorField(
         name="Airgap flux density",
         symbol="B",
-        components={"radial":Br_data, "tangential":Bt_data}
+        components={"radial": Br_data, "tangential": Bt_data},
     )
     output.mag.Tem = DataTime(
         name="Electromagnetic torque",

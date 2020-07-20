@@ -19,6 +19,7 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
+from .ImportVectorField import ImportVectorField
 from .Import import Import
 from .ImportMatrixVal import ImportMatrixVal
 
@@ -49,9 +50,7 @@ class InputForce(Input):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, Prad=None, Ptan=None, time=-1, angle=-1, init_dict=None, init_str=None
-    ):
+    def __init__(self, P=None, time=-1, angle=-1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -63,10 +62,8 @@ class InputForce(Input):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if Prad == -1:
-            Prad = Import()
-        if Ptan == -1:
-            Ptan = Import()
+        if P == -1:
+            P = ImportVectorField()
         if time == -1:
             time = ImportMatrixVal()
         if angle == -1:
@@ -78,112 +75,28 @@ class InputForce(Input):
             # load the object from a file
             obj = load(init_str)
             assert type(obj) is type(self)
-            Prad = obj.Prad
-            Ptan = obj.Ptan
+            P = obj.P
             time = obj.time
             angle = obj.angle
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "Prad" in list(init_dict.keys()):
-                Prad = init_dict["Prad"]
-            if "Ptan" in list(init_dict.keys()):
-                Ptan = init_dict["Ptan"]
+            if "P" in list(init_dict.keys()):
+                P = init_dict["P"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
                 angle = init_dict["angle"]
         # Initialisation by argument
-        # Prad can be None, a Import object or a dict
-        if isinstance(Prad, dict):
-            # Check that the type is correct (including daughter)
-            class_name = Prad.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Prad"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.Prad = class_obj(init_dict=Prad)
-        elif isinstance(Prad, str):
+        # P can be None, a ImportVectorField object or a dict
+        if isinstance(P, dict):
+            self.P = ImportVectorField(init_dict=P)
+        elif isinstance(P, str):
             from ..Functions.load import load
 
-            Prad = load(Prad)
-            # Check that the type is correct (including daughter)
-            class_name = Prad.__class__.__name__
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Prad"
-                )
-            self.Prad = Prad
+            self.P = load(P)
         else:
-            self.Prad = Prad
-        # Ptan can be None, a Import object or a dict
-        if isinstance(Ptan, dict):
-            # Check that the type is correct (including daughter)
-            class_name = Ptan.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Ptan"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.Ptan = class_obj(init_dict=Ptan)
-        elif isinstance(Ptan, str):
-            from ..Functions.load import load
-
-            Ptan = load(Ptan)
-            # Check that the type is correct (including daughter)
-            class_name = Ptan.__class__.__name__
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Ptan"
-                )
-            self.Ptan = Ptan
-        else:
-            self.Ptan = Ptan
+            self.P = P
         # Call Input init
         super(InputForce, self).__init__(time=time, angle=angle)
         # The class is frozen (in Input init), for now it's impossible to
@@ -195,16 +108,11 @@ class InputForce(Input):
         InputForce_str = ""
         # Get the properties inherited from Input
         InputForce_str += super(InputForce, self).__str__()
-        if self.Prad is not None:
-            tmp = self.Prad.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputForce_str += "Prad = " + tmp
+        if self.P is not None:
+            tmp = self.P.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            InputForce_str += "P = " + tmp
         else:
-            InputForce_str += "Prad = None" + linesep + linesep
-        if self.Ptan is not None:
-            tmp = self.Ptan.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputForce_str += "Ptan = " + tmp
-        else:
-            InputForce_str += "Ptan = None" + linesep + linesep
+            InputForce_str += "P = None" + linesep + linesep
         return InputForce_str
 
     def __eq__(self, other):
@@ -216,9 +124,7 @@ class InputForce(Input):
         # Check the properties inherited from Input
         if not super(InputForce, self).__eq__(other):
             return False
-        if other.Prad != self.Prad:
-            return False
-        if other.Ptan != self.Ptan:
+        if other.P != self.P:
             return False
         return True
 
@@ -228,14 +134,10 @@ class InputForce(Input):
 
         # Get the properties inherited from Input
         InputForce_dict = super(InputForce, self).as_dict()
-        if self.Prad is None:
-            InputForce_dict["Prad"] = None
+        if self.P is None:
+            InputForce_dict["P"] = None
         else:
-            InputForce_dict["Prad"] = self.Prad.as_dict()
-        if self.Ptan is None:
-            InputForce_dict["Ptan"] = None
-        else:
-            InputForce_dict["Ptan"] = self.Ptan.as_dict()
+            InputForce_dict["P"] = self.P.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         InputForce_dict["__class__"] = "InputForce"
@@ -244,47 +146,23 @@ class InputForce(Input):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.Prad is not None:
-            self.Prad._set_None()
-        if self.Ptan is not None:
-            self.Ptan._set_None()
+        if self.P is not None:
+            self.P._set_None()
         # Set to None the properties inherited from Input
         super(InputForce, self)._set_None()
 
-    def _get_Prad(self):
-        """getter of Prad"""
-        return self._Prad
+    def _get_P(self):
+        """getter of P"""
+        return self._P
 
-    def _set_Prad(self, value):
-        """setter of Prad"""
-        check_var("Prad", value, "Import")
-        self._Prad = value
+    def _set_P(self, value):
+        """setter of P"""
+        check_var("P", value, "ImportVectorField")
+        self._P = value
 
-        if self._Prad is not None:
-            self._Prad.parent = self
+        if self._P is not None:
+            self._P.parent = self
 
-    # Radial magnetic air-gap surface force
-    # Type : Import
-    Prad = property(
-        fget=_get_Prad, fset=_set_Prad, doc=u"""Radial magnetic air-gap surface force"""
-    )
-
-    def _get_Ptan(self):
-        """getter of Ptan"""
-        return self._Ptan
-
-    def _set_Ptan(self, value):
-        """setter of Ptan"""
-        check_var("Ptan", value, "Import")
-        self._Ptan = value
-
-        if self._Ptan is not None:
-            self._Ptan.parent = self
-
-    # Tangential magnetic air-gap surface force
-    # Type : Import
-    Ptan = property(
-        fget=_get_Ptan,
-        fset=_set_Ptan,
-        doc=u"""Tangential magnetic air-gap surface force""",
-    )
+    # Magnetic air-gap surface force
+    # Type : ImportVectorField
+    P = property(fget=_get_P, fset=_set_P, doc=u"""Magnetic air-gap surface force""")
