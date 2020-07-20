@@ -1,198 +1,77 @@
 {
-    "__class__": "MachineIPMSM",
-    "desc": "TOYOTA Prius 2004 interior magnet (V shape) with distributed winding",
-    "frame": null,
-    "logger_name": "Pyleecan.Machine",
-    "name": "IPMSM_A",
-    "rotor": {
-        "Kf1": 0.95,
-        "L1": 0.08382,
-        "Nrvd": 0,
-        "Rext": 0.0802,
-        "Rint": 0.05532,
-        "Wrvd": 0,
-        "__class__": "LamHole",
-        "axial_vent": [],
-        "bore": null,
-        "hole": [
-            {
-                "H0": 0.01096,
-                "H1": 0.0015,
-                "H2": 0.001,
-                "H3": 0.0065,
-                "H4": 0,
-                "W0": 0.042,
-                "W1": 0,
-                "W2": 0,
-                "W3": 0.014,
-                "W4": 0.0189,
-                "Zh": 8,
-                "__class__": "HoleM50",
-                "magnet_0": {
-                    "Lmag": 0.95,
-                    "__class__": "Magnet",
-                    "mat_type": {
-                        "HT": {
-                            "Cp": 450.0,
-                            "__class__": "MatHT",
-                            "alpha": null,
-                            "lambda_x": 8.5,
-                            "lambda_y": 8.5,
-                            "lambda_z": 8.5
-                        },
-                        "__class__": "Material",
-                        "desc": "MAGNET1 for SIPMSM",
-                        "eco": {
-                            "__class__": "MatEconomical",
-                            "cost_unit": 252.0,
-                            "unit_name": "$"
-                        },
-                        "elec": {
-                            "__class__": "MatElectrical",
-                            "alpha": 1,
-                            "epsr": null,
-                            "rho": 1.6e-06
-                        },
-                        "is_isotropic": true,
-                        "mag": {
-                            "BH_curve": {
-                                "__class__": "ImportMatrix",
-                                "is_transpose": false
-                            },
-                            "Brm20": 1.24,
-                            "Hc": null,
-                            "Wlam": 0,
-                            "__class__": "MatMagnetics",
-                            "alpha_Br": -0.001,
-                            "mur_lin": 1.05
-                        },
-                        "name": "MagnetPrius",
-                        "path": "MagnetPrius.json",
-                        "struct": {
-                            "Ex": null,
-                            "Ey": null,
-                            "Ez": null,
-                            "Gxy": null,
-                            "Gxz": null,
-                            "Gyz": null,
-                            "__class__": "MatStructural",
-                            "nu_xy": null,
-                            "nu_xz": null,
-                            "nu_yz": null,
-                            "rho": 7500.0
-                        }
-                    },
-                    "type_magnetization": 1
+    "__class__": "MachineSCIM",
+    "desc": null,
+    "frame": {
+        "Lfra": null,
+        "Rext": 0.127,
+        "Rint": 0.127,
+        "__class__": "Frame",
+        "mat_type": {
+            "HT": {
+                "Cp": null,
+                "__class__": "MatHT",
+                "alpha": null,
+                "lambda_x": null,
+                "lambda_y": null,
+                "lambda_z": null
+            },
+            "__class__": "Material",
+            "desc": null,
+            "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": null,
+                "unit_name": null
+            },
+            "elec": {
+                "__class__": "MatElectrical",
+                "alpha": null,
+                "epsr": null,
+                "rho": null
+            },
+            "is_isotropic": null,
+            "mag": {
+                "BH_curve": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": null
                 },
-                "magnet_1": {
-                    "Lmag": 0.95,
-                    "__class__": "Magnet",
-                    "mat_type": {
-                        "HT": {
-                            "Cp": 450.0,
-                            "__class__": "MatHT",
-                            "alpha": null,
-                            "lambda_x": 8.5,
-                            "lambda_y": 8.5,
-                            "lambda_z": 8.5
-                        },
-                        "__class__": "Material",
-                        "desc": "MAGNET1 for SIPMSM",
-                        "eco": {
-                            "__class__": "MatEconomical",
-                            "cost_unit": 252.0,
-                            "unit_name": "$"
-                        },
-                        "elec": {
-                            "__class__": "MatElectrical",
-                            "alpha": 1,
-                            "epsr": null,
-                            "rho": 1.6e-06
-                        },
-                        "is_isotropic": true,
-                        "mag": {
-                            "BH_curve": {
-                                "__class__": "ImportMatrix",
-                                "is_transpose": false
-                            },
-                            "Brm20": 1.24,
-                            "Hc": null,
-                            "Wlam": 0,
-                            "__class__": "MatMagnetics",
-                            "alpha_Br": -0.001,
-                            "mur_lin": 1.05
-                        },
-                        "name": "MagnetPrius",
-                        "path": "MagnetPrius.json",
-                        "struct": {
-                            "Ex": null,
-                            "Ey": null,
-                            "Ez": null,
-                            "Gxy": null,
-                            "Gxz": null,
-                            "Gyz": null,
-                            "__class__": "MatStructural",
-                            "nu_xy": null,
-                            "nu_xz": null,
-                            "nu_yz": null,
-                            "rho": 7500.0
-                        }
-                    },
-                    "type_magnetization": 1
-                },
-                "mat_void": {
-                    "HT": {
-                        "Cp": 1,
-                        "__class__": "MatHT",
-                        "alpha": 0.00393,
-                        "lambda_x": 1,
-                        "lambda_y": 1,
-                        "lambda_z": 1
-                    },
-                    "__class__": "Material",
-                    "desc": "Lamination M400-50A",
-                    "eco": {
-                        "__class__": "MatEconomical",
-                        "cost_unit": 0.127,
-                        "unit_name": "$"
-                    },
-                    "elec": {
-                        "__class__": "MatElectrical",
-                        "alpha": 1,
-                        "epsr": 1,
-                        "rho": 1
-                    },
-                    "is_isotropic": false,
-                    "mag": {
-                        "BH_curve": {
-                            "__class__": "ImportMatrix",
-                            "is_transpose": false
-                        },
-                        "Brm20": 0,
-                        "Hc": 0,
-                        "Wlam": 0,
-                        "__class__": "MatMagnetics",
-                        "alpha_Br": 0,
-                        "mur_lin": 1
-                    },
-                    "name": "M400-50A",
-                    "path": "",
-                    "struct": {
-                        "Ex": 215000000000.0,
-                        "Ey": 215000000000.0,
-                        "Ez": 80000000000,
-                        "Gxy": 0,
-                        "Gxz": 2000000000,
-                        "Gyz": 2000000000,
-                        "__class__": "MatStructural",
-                        "nu_xy": 0.3,
-                        "nu_xz": 0.03,
-                        "nu_yz": 0.03,
-                        "rho": 7650
-                    }
-                }
+                "Brm20": null,
+                "Hc": null,
+                "Wlam": null,
+                "__class__": "MatMagnetics",
+                "alpha_Br": null,
+                "mur_lin": null
+            },
+            "name": null,
+            "path": null,
+            "struct": {
+                "Ex": null,
+                "Ey": null,
+                "Ez": null,
+                "Gxy": null,
+                "Gxz": null,
+                "Gyz": null,
+                "__class__": "MatStructural",
+                "nu_xy": null,
+                "nu_xz": null,
+                "nu_yz": null,
+                "rho": null
             }
-        ],
+        }
+    },
+    "logger_name": null,
+    "name": "AUDI_eTron",
+    "rotor": {
+        "Hscr": 0.02,
+        "Kf1": 0.95,
+        "Ksfill": null,
+        "L1": 0.1538,
+        "Lscr": 0.015,
+        "Nrvd": null,
+        "Rext": 0.07790000000000001,
+        "Rint": 0.030449999999999998,
+        "Wrvd": null,
+        "__class__": "LamSquirrelCage",
+        "axial_vent": [],
         "is_internal": true,
         "is_stator": false,
         "mat_type": {
@@ -448,11 +327,188 @@
                 "rho": 7650.0
             }
         },
-        "notch": []
+        "notch": [],
+        "ring_mat": {
+            "HT": {
+                "Cp": 381.0,
+                "__class__": "MatHT",
+                "alpha": 0.003,
+                "lambda_x": 385.0,
+                "lambda_y": 385.0,
+                "lambda_z": 385.0
+            },
+            "__class__": "Material",
+            "desc": "COPPER WINDING",
+            "eco": {
+                "__class__": "MatEconomical",
+                "cost_unit": 60.0,
+                "unit_name": "$"
+            },
+            "elec": {
+                "__class__": "MatElectrical",
+                "alpha": 1,
+                "epsr": null,
+                "rho": 2.2e-08
+            },
+            "is_isotropic": true,
+            "mag": {
+                "BH_curve": {
+                    "__class__": "ImportMatrix",
+                    "is_transpose": false
+                },
+                "Brm20": 0,
+                "Hc": 0,
+                "Wlam": 0,
+                "__class__": "MatMagnetics",
+                "alpha_Br": 0.0,
+                "mur_lin": 1
+            },
+            "name": "Copper2",
+            "path": "Copper2.json",
+            "struct": {
+                "Ex": 115000000000.0,
+                "Ey": 115000000000.0,
+                "Ez": 115000000000.0,
+                "Gxy": null,
+                "Gxz": null,
+                "Gyz": null,
+                "__class__": "MatStructural",
+                "nu_xy": null,
+                "nu_xz": null,
+                "nu_yz": null,
+                "rho": 8900.0
+            }
+        },
+        "slot": {
+            "H0": 8e-05,
+            "H2": 0.0226,
+            "R1": 0.0001,
+            "W0": 5e-05,
+            "W3": 0.00348,
+            "Zs": 58,
+            "__class__": "SlotW16"
+        },
+        "winding": {
+            "Lewout": 0.017,
+            "Npcpp": null,
+            "Nslot_shift_wind": null,
+            "Ntcoil": null,
+            "__class__": "WindingSC",
+            "conductor": {
+                "Sbar": 8.419783949714067e-05,
+                "__class__": "CondType22",
+                "cond_mat": {
+                    "HT": {
+                        "Cp": 381.0,
+                        "__class__": "MatHT",
+                        "alpha": 0.003,
+                        "lambda_x": 385.0,
+                        "lambda_y": 385.0,
+                        "lambda_z": 385.0
+                    },
+                    "__class__": "Material",
+                    "desc": "COPPER WINDING",
+                    "eco": {
+                        "__class__": "MatEconomical",
+                        "cost_unit": 60.0,
+                        "unit_name": "$"
+                    },
+                    "elec": {
+                        "__class__": "MatElectrical",
+                        "alpha": 1,
+                        "epsr": null,
+                        "rho": 2.2e-08
+                    },
+                    "is_isotropic": true,
+                    "mag": {
+                        "BH_curve": {
+                            "__class__": "ImportMatrix",
+                            "is_transpose": false
+                        },
+                        "Brm20": 0,
+                        "Hc": 0,
+                        "Wlam": 0,
+                        "__class__": "MatMagnetics",
+                        "alpha_Br": 0.0,
+                        "mur_lin": 1
+                    },
+                    "name": "Copper2",
+                    "path": "Copper2.json",
+                    "struct": {
+                        "Ex": 115000000000.0,
+                        "Ey": 115000000000.0,
+                        "Ez": 115000000000.0,
+                        "Gxy": null,
+                        "Gxz": null,
+                        "Gyz": null,
+                        "__class__": "MatStructural",
+                        "nu_xy": null,
+                        "nu_xz": null,
+                        "nu_yz": null,
+                        "rho": 8900.0
+                    }
+                },
+                "ins_mat": {
+                    "HT": {
+                        "Cp": null,
+                        "__class__": "MatHT",
+                        "alpha": null,
+                        "lambda_x": null,
+                        "lambda_y": null,
+                        "lambda_z": null
+                    },
+                    "__class__": "Material",
+                    "desc": null,
+                    "eco": {
+                        "__class__": "MatEconomical",
+                        "cost_unit": null,
+                        "unit_name": null
+                    },
+                    "elec": {
+                        "__class__": "MatElectrical",
+                        "alpha": null,
+                        "epsr": null,
+                        "rho": null
+                    },
+                    "is_isotropic": null,
+                    "mag": {
+                        "BH_curve": {
+                            "__class__": "ImportMatrix",
+                            "is_transpose": null
+                        },
+                        "Brm20": null,
+                        "Hc": null,
+                        "Wlam": null,
+                        "__class__": "MatMagnetics",
+                        "alpha_Br": null,
+                        "mur_lin": null
+                    },
+                    "name": null,
+                    "path": null,
+                    "struct": {
+                        "Ex": null,
+                        "Ey": null,
+                        "Ez": null,
+                        "Gxy": null,
+                        "Gxz": null,
+                        "Gyz": null,
+                        "__class__": "MatStructural",
+                        "nu_xy": null,
+                        "nu_xz": null,
+                        "nu_yz": null,
+                        "rho": null
+                    }
+                }
+            },
+            "is_reverse_wind": null,
+            "p": 2,
+            "qs": null,
+            "type_connection": null
+        }
     },
     "shaft": {
-        "Drsh": 0.11064,
-        "Lshaft": 0.1,
+        "Drsh": 0.060899999999999996,
+        "Lshaft": null,
         "__class__": "Shaft",
         "mat_type": {
             "HT": {
@@ -711,11 +767,11 @@
     "stator": {
         "Kf1": 0.95,
         "Ksfill": null,
-        "L1": 0.08382,
-        "Nrvd": 0,
-        "Rext": 0.13462,
-        "Rint": 0.08095,
-        "Wrvd": 0,
+        "L1": 0.15619999999999998,
+        "Nrvd": null,
+        "Rext": 0.127,
+        "Rint": 0.0785,
+        "Wrvd": null,
         "__class__": "LamSlotWind",
         "axial_vent": [],
         "is_internal": false,
@@ -975,33 +1031,30 @@
         },
         "notch": [],
         "slot": {
-            "H0": 0.001,
-            "H1": 0,
-            "H1_is_rad": false,
-            "H2": 0.0333,
-            "R1": 0.004,
-            "W0": 0.00193,
-            "W1": 0.005,
-            "W2": 0.008,
+            "H0": 0.0005,
+            "H1": 0.0005,
+            "H2": 0.019,
+            "R1": 0.0005,
+            "R2": 0.0005,
+            "W0": 0.0035,
+            "W3": 0.0052,
             "Zs": 48,
-            "__class__": "SlotW11"
+            "__class__": "SlotW15"
         },
         "winding": {
-            "Lewout": 0,
+            "Lewout": null,
             "Npcpp": 1,
-            "Nslot_shift_wind": 2,
-            "Ntcoil": 9,
+            "Nslot_shift_wind": 0,
+            "Ntcoil": 12,
             "__class__": "WindingDW1L",
             "coil_pitch": 5,
             "conductor": {
-                "Hwire": 0.002,
-                "Nwppc_rad": 1,
-                "Nwppc_tan": 1,
-                "Wins_coil": 0,
+                "Kwoh": null,
+                "Nwppc": 1,
+                "Wins_cond": 0.0,
                 "Wins_wire": 1e-06,
-                "Wwire": 0.000912,
-                "__class__": "CondType11",
-                "alpha_ew": 58,
+                "Wwire": 0.0007,
+                "__class__": "CondType12",
                 "cond_mat": {
                     "HT": {
                         "Cp": 381.0,
@@ -1081,13 +1134,12 @@
                         "nu_yz": null,
                         "rho": 1200.0
                     }
-                },
-                "type_winding_shape": 0
+                }
             },
-            "is_reverse_wind": true,
-            "p": 4,
+            "is_reverse_wind": false,
+            "p": 2,
             "qs": 3,
-            "type_connection": 0
+            "type_connection": null
         }
     },
     "type_machine": 1
