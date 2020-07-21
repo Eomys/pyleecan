@@ -99,11 +99,27 @@ class OutputMulti(FrozenClass):
         self.parent = None
         # output_ref can be None, a Output object or a dict
         if isinstance(output_ref, dict):
-            self.output_ref = Output(init_dict=output_ref)
+            # Check that the type is correct (including daughter)
+            class_name = output_ref.get("__class__")
+            if class_name not in ["Output", "XOutput"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for output_ref"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.output_ref = class_obj(init_dict=output_ref)
         elif isinstance(output_ref, str):
             from ..Functions.load import load
 
-            self.output_ref = load(output_ref)
+            output_ref = load(output_ref)
+            # Check that the type is correct (including daughter)
+            class_name = output_ref.__class__.__name__
+            if class_name not in ["Output", "XOutput"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for output_ref"
+                )
+            self.output_ref = output_ref
         else:
             self.output_ref = output_ref
         # outputs can be None or a list of Output object
@@ -113,7 +129,20 @@ class OutputMulti(FrozenClass):
                 if obj is None:  # Default value
                     self.outputs.append(Output())
                 elif isinstance(obj, dict):
-                    self.outputs.append(Output(init_dict=obj))
+                    # Check that the type is correct (including daughter)
+                    class_name = obj.get("__class__")
+                    if class_name not in ["Output", "XOutput"]:
+                        raise InitUnKnowClassError(
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for outputs"
+                        )
+                    # Dynamic import to call the correct constructor
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
+                    self.outputs.append(class_obj(init_dict=obj))
                 else:
                     self.outputs.append(obj)
         elif outputs is None:

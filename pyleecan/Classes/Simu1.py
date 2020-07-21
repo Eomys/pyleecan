@@ -13,9 +13,9 @@ from .Simulation import Simulation
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.Simu1.run import run
+    from ..Methods.Simulation.Simu1.run_single import run_single
 except ImportError as error:
-    run = error
+    run_single = error
 
 
 from ._check import InitUnKnowClassError
@@ -25,6 +25,7 @@ from .Structural import Structural
 from .Force import Force
 from .Machine import Machine
 from .Input import Input
+from .VarSimu import VarSimu
 
 
 class Simu1(Simulation):
@@ -32,15 +33,15 @@ class Simu1(Simulation):
 
     VERSION = 1
 
-    # cf Methods.Simulation.Simu1.run
-    if isinstance(run, ImportError):
-        run = property(
+    # cf Methods.Simulation.Simu1.run_single
+    if isinstance(run_single, ImportError):
+        run_single = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Simu1 method run: " + str(run))
+                ImportError("Can't use Simu1 method run_single: " + str(run_single))
             )
         )
     else:
-        run = run
+        run_single = run_single
     # save method is available in all object
     save = save
 
@@ -64,6 +65,7 @@ class Simu1(Simulation):
         machine=-1,
         input=-1,
         logger_name="Pyleecan.Simulation",
+        var_simu=None,
         init_dict=None,
         init_str=None,
     ):
@@ -90,6 +92,8 @@ class Simu1(Simulation):
             machine = Machine()
         if input == -1:
             input = Input()
+        if var_simu == -1:
+            var_simu = VarSimu()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -106,6 +110,7 @@ class Simu1(Simulation):
             machine = obj.machine
             input = obj.input
             logger_name = obj.logger_name
+            var_simu = obj.var_simu
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -127,6 +132,8 @@ class Simu1(Simulation):
                 input = init_dict["input"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "var_simu" in list(init_dict.keys()):
+                var_simu = init_dict["var_simu"]
         # Initialisation by argument
         # elec can be None, a Electrical object or a dict
         if isinstance(elec, dict):
@@ -198,7 +205,12 @@ class Simu1(Simulation):
             self.force = force
         # Call Simulation init
         super(Simu1, self).__init__(
-            name=name, desc=desc, machine=machine, input=input, logger_name=logger_name
+            name=name,
+            desc=desc,
+            machine=machine,
+            input=input,
+            logger_name=logger_name,
+            var_simu=var_simu,
         )
         # The class is frozen (in Simulation init), for now it's impossible to
         # add new properties

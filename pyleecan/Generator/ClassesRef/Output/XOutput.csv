@@ -1,0 +1,13 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+input_param,-,"Parameters values for each simulation, parameter names",0,dict,{},,,,Output,Output,__delitem__,VERSION,1,XOutput object: gather all the outputs of all the modules for multiple simulations
+output_list,-,List containing Output for each simulation,0,list,[],,,,,,__getitem__,,,
+xoutput_dict,-,Dictionnary containing VarParam DataKeeper results in ndarray,0,dict,{},,,,,,__iter__,,,
+,,,,,,,,,,,__len__,,,
+,,,,,,,,,,,__missing__,,,
+,,,,,,,,,,,__next__,,,
+,,,,,,,,,,,__reversed__,,,
+,,,,,,,,,,,__setitem__,,,
+,,,,,,,,,,,count,,,
+,,,,,,,,,,,insert,,,
+,,,,,,,,,,,pop,,,
+,,,,,,,,,,,remove,,,
