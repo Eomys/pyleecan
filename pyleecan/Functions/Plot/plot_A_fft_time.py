@@ -1,0 +1,133 @@
+# -*- coding: utf-8 -*-
+
+from ..init_fig import init_fig
+from .plot_A_2D import plot_A_2D
+from ...definitions import config_dict
+
+
+def plot_A_fft_time(
+    data,
+    alpha=None,
+    alpha_index=0,
+    is_elecorder=False,
+    freq_max=20000,
+    unit="SI",
+    data_list=[],
+    legend_list=[],
+    color_list=[],
+    save_path=None,
+    mag_max=None,
+    is_auto_ticks=True,
+):
+    """Plots a field as a function of time
+
+    Parameters
+    ----------
+    data : Data
+        a Data object
+    index_list : list
+        list of indices to take from a components axis
+    alpha : float
+        angle value at which to slice
+    alpha_index : int
+        angle index at which to slice
+    is_elecorder : bool
+        boolean indicating if we want to use the electrical order for the fft axis
+    freq_max : int
+        maximum value of the frequency for the fft axis
+    unit : str
+        unit in which to plot the field
+    data_list : list
+        list of Data objects to compare
+    legend_list : list
+        list of legends to use for each Data object (including reference one) instead of data.name
+    color_list : list
+        list of colors to use for each Data object
+    save_path : str
+        path and name of the png file to save
+    mag_max : float
+        maximum alue for the y-axis of the fft
+    is_auto_ticks : bool
+        in fft, adjust ticks to freqs (deactivate if too close)
+    """
+
+    # Set plot
+    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+    data_list2 = [data] + data_list
+    if legend_list == []:
+        legend_list = [d.name for d in data_list2]
+    if color_list == []:
+        curve_colors = config_dict["color_dict"]["CURVE_COLORS"]
+        color_list = curve_colors
+
+    if unit == "SI":
+        unit = data.unit
+
+    # Prepare the extractions
+    if alpha != None:
+        alpha_str = "angle=" + str(alpha)
+    else:
+        alpha_str = "angle[" + str(alpha_index) + "]"
+
+    if data_list == []:
+        title = "FFT of " + data.name
+    else:
+        title = "Comparison of FFT"
+    if data.symbol == "Magnitude":
+        ylabel = "Magnitude [" + unit + "]"
+    else:
+        ylabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
+    legend_list = [legend_list[0]] + [legend_list[-1]]
+
+    if is_elecorder:
+        elec_max = freq_max / data.normalizations.get("elec_order")
+        xlabel = "Electrical order []"
+        results = data.compare_magnitude_along(
+            "freqs=[0," + str(elec_max) + "]{elec_order}",
+            alpha_str,
+            data_list=data_list,
+            unit=unit,
+            is_norm=False,
+        )
+
+    else:
+        xlabel = "Frequency [Hz]"
+        results = data.compare_magnitude_along(
+            "freqs=[0," + str(freq_max) + "]",
+            alpha_str,
+            data_list=data_list,
+            unit=unit,
+            is_norm=False,
+        )
+
+    freqs = results["freqs"]
+    Ydata = [results[data.symbol]] + [
+        results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
+    ]
+
+    if is_auto_ticks:
+        indices = [0]
+        for i in range(len(Ydata)):
+            indices += list(
+                set([ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01])
+            )
+        xticks = freqs[indices]
+    else:
+        xticks = None
+
+    plot_A_2D(
+        freqs,
+        Ydata,
+        legend_list=legend_list,
+        color_list=color_list,
+        fig=fig,
+        title=title,
+        xlabel=xlabel,
+        ylabel=ylabel,
+        type="bargraph",
+        y_max=mag_max,
+        xticks=xticks,
+    )
+
+    if save_path is not None:
+        fig.savefig(save_path)
