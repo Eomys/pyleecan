@@ -98,7 +98,7 @@ class MatLib(QObject):
         # Add the material to machine material if it is not already contained in the Matlib
         for material in list_mach_mat:
             # Avoid materials from the default machine
-            if material.is_isotropic == None:
+            if material.is_isotropic == None or material == Material():
                 continue
 
             # Store name and path to compare other attributes
@@ -113,6 +113,11 @@ class MatLib(QObject):
                 material.path = path
                 self.dict_mat["MachineMatLib"].append(material)
                 self.check_material_duplicated_name("MachineMatLib", -1)
+
+                is_change_mat = replace_material_pyleecan_obj(
+                    machine, material, material, False
+                )
+                is_change = is_change or is_change_mat
 
             # Replace the material in the machine by the MatLib one
             else:
@@ -129,8 +134,7 @@ class MatLib(QObject):
                             machine, material, mat, False
                         )
 
-                        if not is_change:
-                            is_change = is_change_mat
+                        is_change = is_change or is_change_mat
                         break
 
         return is_change
