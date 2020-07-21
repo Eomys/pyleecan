@@ -11,7 +11,7 @@ from matplotlib import use
 sys.path.append("..")
 
 use("Qt5Agg")  # Use PyQt5 backend
-DATA_DIR = join(TEST_DIR, "Data")
+TEST_DATA_DIR = join(TEST_DIR, "Data")
 LOG_DIR = join(TEST_DIR, "logtest.txt")
 
 # Set logger for test

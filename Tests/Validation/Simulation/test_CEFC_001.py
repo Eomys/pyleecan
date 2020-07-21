@@ -1,7 +1,7 @@
 from numpy import ones, pi, array
 
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
+from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin

@@ -13,9 +13,13 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-from Tests import DATA_DIR
-from Tests.Validation.Machine.SIPMSM_001 import SIPMSM_001
+from Tests import TEST_DATA_DIR
 import pytest
+
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+SIPMSM_001 = load(join(DATA_DIR, "Machine", "SIPMSM_001.json"))
 
 
 @pytest.mark.long
@@ -67,7 +71,7 @@ def test_Magnetic_FEMM_sym():
     # Just load the Output and ends (we could also have directly filled the Output object)
     simu_load = Simu1(init_dict=simu.as_dict())
     simu_load.mag = None
-    mat_file = join(DATA_DIR, "EM_SIPMSM_AL_001_MANATEE_SDM.mat")
+    mat_file = join(TEST_DATA_DIR, "EM_SIPMSM_AL_001_MANATEE_SDM.mat")
     Br = ImportMatlab(file_path=mat_file, var_name="XBr")
     Bt = ImportMatlab(file_path=mat_file, var_name="XBt")
     simu_load.input = InputFlux(time=time, angle=angle, Br=Br, Bt=Bt)

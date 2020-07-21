@@ -1,24 +1,24 @@
 {
     "HT": {
-        "Cp": 450.0,
+        "Cp": 460.0,
         "__class__": "MatHT",
         "alpha": null,
-        "lambda_x": 8.5,
-        "lambda_y": 8.5,
-        "lambda_z": 8.5
+        "lambda_x": 43.0,
+        "lambda_y": 43.0,
+        "lambda_z": 43.0
     },
     "__class__": "Material",
-    "desc": "MAGNET1 for SIPMSM",
+    "desc": "Steel",
     "eco": {
         "__class__": "MatEconomical",
-        "cost_unit": 252.0,
+        "cost_unit": 2.0,
         "unit_name": "$"
     },
     "elec": {
         "__class__": "MatElectrical",
-        "alpha": 1,
+        "alpha": null,
         "epsr": null,
-        "rho": 1.6e-06
+        "rho": 1.43e-07
     },
     "is_isotropic": true,
     "mag": {
@@ -26,26 +26,26 @@
             "__class__": "ImportMatrix",
             "is_transpose": false
         },
-        "Brm20": 1.24,
-        "Hc": 902181.163126629,
+        "Brm20": null,
+        "Hc": null,
         "Wlam": 0,
         "__class__": "MatMagnetics",
-        "alpha_Br": -0.001,
-        "mur_lin": 1.05
+        "alpha_Br": null,
+        "mur_lin": 100.0
     },
-    "name": "MagnetPrius",
-    "path": "MagnetPrius.json",
+    "name": "Steel1",
+    "path": "Steel1.json",
     "struct": {
-        "Ex": null,
-        "Ey": null,
-        "Ez": null,
+        "Ex": 71000000000.0,
+        "Ey": 71000000000.0,
+        "Ez": 71000000000.0,
         "Gxy": null,
         "Gxz": null,
         "Gyz": null,
         "__class__": "MatStructural",
-        "nu_xy": null,
-        "nu_xz": null,
-        "nu_yz": null,
-        "rho": 7500.0
+        "nu_xy": 0.3,
+        "nu_xz": 0.3,
+        "nu_yz": 0.3,
+        "rho": 7850.0
     }
 }

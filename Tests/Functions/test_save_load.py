@@ -23,9 +23,9 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
+from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
 
-from Tests import DATA_DIR, save_load_path as save_path, x as logger
+from Tests import TEST_DATA_DIR, save_load_path as save_path, x as logger
 from pyleecan.Functions.load import (
     load,
     load_list,
@@ -37,9 +37,9 @@ from pyleecan.Functions.load import (
 from pyleecan.Functions.Save.save_json import save_json
 from pyleecan.Functions.Load.load_json import LoadMissingFileError
 
-load_file_1 = join(DATA_DIR, "test_wrong_slot_load_1.json")
-load_file_2 = join(DATA_DIR, "test_wrong_slot_load_2.json")
-load_file_3 = join(DATA_DIR, "test_wrong_slot_load_3.json")
+load_file_1 = join(TEST_DATA_DIR, "test_wrong_slot_load_1.json")
+load_file_2 = join(TEST_DATA_DIR, "test_wrong_slot_load_2.json")
+load_file_3 = join(TEST_DATA_DIR, "test_wrong_slot_load_3.json")
 logger.info(save_path)
 
 """test for save and load fonctions"""

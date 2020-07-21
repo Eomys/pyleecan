@@ -1,7 +1,11 @@
 import pytest
+from os.path import join
 
-from Tests.Validation.Machine.IPMSM_A import IPMSM_A
-from Tests.Validation.Machine.SCIM_001 import SCIM_001
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
 
 def test_desc_SCIM():
