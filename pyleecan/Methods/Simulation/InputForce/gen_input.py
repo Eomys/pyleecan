@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ....Classes.OutStruct import OutStruct
+from ....Classes.OutForce import OutForce
 from ....Methods.Simulation.Input import InputError
 
 
@@ -13,7 +13,7 @@ def gen_input(self):
         An InputForce object
     """
 
-    output = OutStruct()
+    output = OutForce()
 
     if self.P is None:
         raise InputError("ERROR: InForce.P missing")
