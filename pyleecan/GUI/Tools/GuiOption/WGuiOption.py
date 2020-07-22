@@ -34,32 +34,28 @@ class WGuiOption(Ui_GUIOption, QDialog):
         """
         QDialog.__init__(self)
         self.setupUi(self)
-        self.le_matlib_path.setText(config_dict["MAIN"]["MATLIB_DIR"])
+        # Matlib path selector setup
+        self.w_matlib_path.verbose_name = "Matlib directory"
+        self.w_matlib_path.is_file = False
+        self.w_matlib_path.set_path_txt(config_dict["MAIN"]["MATLIB_DIR"])
+        self.w_matlib_path.update()
+
         self.machine_setup = machine_setup  # DMachineSetup to access to the machine
         self.matlib = matlib  # dmatlib to access to the material library
+
         self.c_unit_m.setCurrentIndex(gui_option.unit.unit_m)
         self.c_unit_m2.setCurrentIndex(gui_option.unit.unit_m2)
 
         # Connections
-        self.b_matlib_path.clicked.connect(self.b_define_matlib_dir)
-        self.le_matlib_path.textChanged.connect(self.change_matlib_dir)
+        self.w_matlib_path.pathChanged.connect(self.change_matlib_dir)
         self.c_unit_m.currentTextChanged.connect(self.set_unit_m)
         self.c_unit_m2.currentTextChanged.connect(self.set_unit_m2)
-
-    def b_define_matlib_dir(self):
-        """
-        b_define_matlib_dir open a dialog to select the matlib directory 
-        """
-        folder = QFileDialog.getExistingDirectory(self, "Select MatLib directory")
-        if folder != self.matlib.ref_path and folder:
-            self.le_matlib_path.setText(folder)
-        GUI_logger.info("message")
 
     def change_matlib_dir(self):
         """
         Change the matlib directory and load the new matlib
         """
-        matlib_path = self.le_matlib_path.text()
+        matlib_path = self.w_matlib_path.get_path()
         config_dict["MAIN"]["MATLIB_DIR"] = matlib_path
         save_config_dict(config_dict)
 
