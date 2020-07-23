@@ -6,6 +6,10 @@ import platform
 import shutil
 from logging import getLogger
 from json import load
+from matplotlib.colors import ListedColormap
+from matplotlib.cm import get_cmap, register_cmap
+from numpy import load as np_load
+from matplotlib import font_manager
 
 
 ROOT_DIR = normpath(abspath(join(dirname(__file__), ".."))).replace("\\", "/")
@@ -86,3 +90,9 @@ except:
         cmap = np_load(cmap_path)
         cmp = ListedColormap(cmap)
         register_cmap(name=config_dict["color_dict"]["COLOR_MAP"], cmap=cmp)
+
+# # Register fonts
+# font_dirs = config_dict["DATA_DIR"]
+# font_files = font_manager.findSystemFonts(fontpaths=font_dirs)
+# font_list = font_manager.createFontList(font_files)
+# font_manager.fontManager.ttflist.extend(font_list)

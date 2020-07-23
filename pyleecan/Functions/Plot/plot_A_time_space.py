@@ -6,6 +6,7 @@ from .plot_A_3D import plot_A_3D
 from ...definitions import config_dict
 from numpy import meshgrid, max as np_max
 
+FONT_NAME = "Brandon Text"
 
 def plot_A_time_space(
     data,
@@ -221,7 +222,7 @@ def plot_A_time_space(
     axs[0, 1].axis("off")
 
     fig.canvas.set_window_title(title)
-    fig.suptitle(title, x=0.65, fontsize=16)
+    fig.suptitle(title, x=0.65, fontsize=24, fontname=FONT_NAME)
     fig.tight_layout()
 
     if save_path is not None:

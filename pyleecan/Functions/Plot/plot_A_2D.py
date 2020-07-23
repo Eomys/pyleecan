@@ -5,6 +5,7 @@ from numpy import where, argmin, abs, squeeze, split
 
 from ...Functions.init_fig import init_subplot, init_fig
 
+FONT_NAME = "Brandon Text"
 
 def plot_A_2D(
     Xdata,
@@ -104,6 +105,8 @@ def plot_A_2D(
                 label=legend_list[i],
                 linewidth=linewidth_list[i],
             )
+        if xticks is not None:
+            ax.xaxis.set_ticks(xticks)
     elif type == "bargraph":
         for i in range(len(Ydatas)):
             width = Xdata[1] - Xdata[0]
@@ -180,13 +183,15 @@ def plot_A_2D(
         ax.grid()
 
     if len(Ydatas) > 1 and not no_legend:
-        ax.legend(fontsize=22)
+        ax.legend(prop={'family': FONT_NAME, 'size': 22})
 
     plt.tight_layout()
     for item in (
         [ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()
     ):
+        item.set_fontname(FONT_NAME)
         item.set_fontsize(22)
+    ax.title.set_fontname(FONT_NAME)
     ax.title.set_fontsize(24)
 
     if save_path is not None:

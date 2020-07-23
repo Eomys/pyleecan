@@ -5,6 +5,7 @@ import mpl_toolkits.mplot3d.art3d as art3d
 
 from ...Functions.init_fig import init_fig, init_subplot
 
+FONT_NAME = "Brandon Text"
 
 def plot_A_4D(
     Xdata,
@@ -142,7 +143,9 @@ def plot_A_4D(
             + ax.get_yticklabels()
         ):
             item.set_fontsize(22)
+            item.set_fontname(FONT_NAME)
     ax.title.set_fontsize(24)
+    ax.title.set_fontname(FONT_NAME)
 
     if save_path is not None:
         fig.savefig(save_path)

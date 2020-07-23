@@ -321,7 +321,7 @@ class tests_plots(TestCase):
         simu.input = InputFlux(B=B)
         out = Output(simu=simu)
         simu.run()
-
+        
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
         out.plot_A_time_space(

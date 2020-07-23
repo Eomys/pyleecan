@@ -7,7 +7,7 @@ from ...Functions.init_fig import init_subplot
 from ...definitions import config_dict
 
 COLORS = config_dict["color_dict"]["CURVE_COLORS"]
-
+FONT_NAME = "Brandon Text"
 
 def plot_A_3D(
     Xdata,
@@ -197,7 +197,9 @@ def plot_A_3D(
             + ax.get_yticklabels()
         ):
             item.set_fontsize(22)
+            item.set_fontname(FONT_NAME)
     ax.title.set_fontsize(24)
+    ax.title.set_fontname(FONT_NAME)
 
     if save_path is not None:
         fig.savefig(save_path)
