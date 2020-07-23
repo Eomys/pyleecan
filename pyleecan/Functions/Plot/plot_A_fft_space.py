@@ -58,7 +58,7 @@ def plot_A_space(
     """
 
     # Set plot
-    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     data_list2 = [data] + data_list
     if legend_list == []:
         legend_list = [d.name for d in data_list2]
@@ -83,7 +83,7 @@ def plot_A_space(
     else:
         ylabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
     legend_list = [legend_list[0]] + [legend_list[-1]]
-    
+
     if is_spaceorder:
         order_max = r_max / data.normalizations.get("space_order")
         xlabel = "Space order []"
@@ -133,8 +133,5 @@ def plot_A_space(
         fund_harm=fund_harm,
         y_max=mag_max,
         xticks=xticks,
+        save_path=save_path,
     )
-
-    if save_path is not None:
-        fig.savefig(save_path)
-

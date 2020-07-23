@@ -20,7 +20,14 @@ def get_data(self):
 
     axes_list = []
     for axis in self.axes:
-        axes_list.append(Data1D(values=axis.field.get_data(), name=axis.name,))
+        axes_list.append(
+            Data1D(
+                values=axis.field.get_data(),
+                name=axis.name,
+                unit=axis.unit,
+                symmetries=axis.symmetries,
+            )
+        )
 
     if self.is_freq:
         Data = DataFreq(
@@ -28,6 +35,9 @@ def get_data(self):
             values=self.field.get_data(),
             name=self.name,
             symbol=self.symbol,
+            unit=self.unit,
+            normalizations=self.normalizations,
+            symmetries=self.symmetries,
         )
     else:
         Data = DataTime(
@@ -35,6 +45,9 @@ def get_data(self):
             values=self.field.get_data(),
             name=self.name,
             symbol=self.symbol,
+            unit=self.unit,
+            normalizations=self.normalizations,
+            symmetries=self.symmetries,
         )
 
     return Data

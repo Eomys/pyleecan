@@ -27,6 +27,7 @@ def plot_A_2D(
     y_min=None,
     y_max=None,
     xticks=None,
+    save_path=None,
 ):
     """Plots a 2D graph (curve, bargraph or barchart) comparing fields in Ydatas
 
@@ -179,7 +180,7 @@ def plot_A_2D(
         ax.grid()
 
     if len(Ydatas) > 1 and not no_legend:
-        ax.legend()
+        ax.legend(fontsize=22)
 
     plt.tight_layout()
     for item in (
@@ -187,4 +188,9 @@ def plot_A_2D(
     ):
         item.set_fontsize(22)
     ax.title.set_fontsize(24)
+
+    if save_path is not None:
+        fig.savefig(save_path)
+        plt.close()
+
     return ax

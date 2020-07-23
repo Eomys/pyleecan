@@ -17,6 +17,7 @@ def plot_A_surf(
     unit="SI",
     colormap=None,
     save_path=None,
+    fig=None,
 ):
     """Plots the isosurface of a field in 3D
 
@@ -42,10 +43,12 @@ def plot_A_surf(
         colormap prescribed by user
     save_path : str
         path and name of the png file to save
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
     """
 
     # Set plot
-    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     title = data.name + " as a function of time and space"
     if colormap is None:
         colormap = config_dict["color_dict"]["COLOR_MAP"]
@@ -103,7 +106,5 @@ def plot_A_surf(
         zlabel=zlabel,
         yticks=yticks,
         type="surf",
+        save_path=save_path,
     )
-
-    if save_path is not None:
-        fig.savefig(save_path)

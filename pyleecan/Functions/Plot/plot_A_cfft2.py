@@ -17,6 +17,7 @@ def plot_A_cfft2(
     is_norm=False,
     unit="SI",
     save_path=None,
+    fig=None,
 ):
     """3D stem plot of the 2D Fourier Transform of a field
 
@@ -44,10 +45,12 @@ def plot_A_cfft2(
         unit in which to plot the field
     save_path : str
         path and name of the png file to save
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
     """
 
     # Set plot
-    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     title = "Complex FFT2 of " + data.name
     if is_elecorder:
         xlabel = "Electrical order []"
@@ -95,8 +98,8 @@ def plot_A_cfft2(
         fig=fig,
         x_min=x_min,
         x_max=freq_max,
-        y_min=-r_max,
-        y_max=r_max,
+        y_min=r_max,
+        y_max=-r_max,
         z_min=0,
         z_max=mag_max,
         title=title,
@@ -104,7 +107,5 @@ def plot_A_cfft2(
         ylabel=ylabel,
         zlabel=zlabel,
         type="stem",
+        save_path=save_path,
     )
-
-    if save_path is not None:
-        fig.savefig(save_path)

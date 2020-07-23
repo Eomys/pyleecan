@@ -32,32 +32,37 @@ def comp_force(self, output):
     # Store the results
     Time = Data1D(name="time", unit="s", values=time)
     Angle = Data1D(name="angle", unit="rad", values=angle)
-    Prad_data = DataTime(
-        name="Airgap radial surface force",
-        unit="N/m2",
-        symbol="P_r",
-        axes=[Time, Angle],
-        values=Prad,
-    )
-    Prad_freq = Prad_data.time_to_freq()
-    Ptan_data = DataTime(
-        name="Airgap tangential surface force",
-        unit="N/m2",
-        symbol="P_t",
-        axes=[Time, Angle],
-        values=Ptan,
-    )
-    Ptan_freq = Ptan_data.time_to_freq()
-    Pz_data = DataTime(
-        name="Airgap axial surface force",
-        unit="N/m2",
-        symbol="P_z",
-        axes=[Time, Angle],
-        values=Pz,
-    )
-    Pz_freq = Pz_data.time_to_freq()
+    components = {}
+    if not np.all((Prad == 0)):
+        Prad_data = DataTime(
+            name="Airgap radial surface force",
+            unit="N/m2",
+            symbol="P_r",
+            axes=[Time, Angle],
+            values=Prad,
+        )
+        Prad_freq = Prad_data.time_to_freq()
+        components["radial"] = Prad_freq
+    if not np.all((Ptan == 0)):
+        Ptan_data = DataTime(
+            name="Airgap tangential surface force",
+            unit="N/m2",
+            symbol="P_t",
+            axes=[Time, Angle],
+            values=Ptan,
+        )
+        Ptan_freq = Ptan_data.time_to_freq()
+        components["tangential"] = Ptan_freq
+    if not np.all((Pz == 0)):
+        Pz_data = DataTime(
+            name="Airgap axial surface force",
+            unit="N/m2",
+            symbol="P_z",
+            axes=[Time, Angle],
+            values=Pz,
+        )
+        Pz_freq = Pz_data.time_to_freq()
+        components["axial"] = Pz_freq
     output.force.P = VectorField(
-        name="Magnetic airgap surface force",
-        symbol="P",
-        components={"radial": Prad_freq, "tangential": Ptan_freq, "axial": Pz_freq},
+        name="Magnetic airgap surface force", symbol="P", components=components,
     )

@@ -56,6 +56,8 @@ class ImportData(FrozenClass):
         name="",
         symbol="",
         is_freq=False,
+        normalizations={},
+        symmetries={},
         init_dict=None,
         init_str=None,
     ):
@@ -85,6 +87,8 @@ class ImportData(FrozenClass):
             name = obj.name
             symbol = obj.symbol
             is_freq = obj.is_freq
+            normalizations = obj.normalizations
+            symmetries = obj.symmetries
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -100,6 +104,10 @@ class ImportData(FrozenClass):
                 symbol = init_dict["symbol"]
             if "is_freq" in list(init_dict.keys()):
                 is_freq = init_dict["is_freq"]
+            if "normalizations" in list(init_dict.keys()):
+                normalizations = init_dict["normalizations"]
+            if "symmetries" in list(init_dict.keys()):
+                symmetries = init_dict["symmetries"]
         # Initialisation by argument
         self.parent = None
         # axes can be None or a list of ImportData object
@@ -165,6 +173,8 @@ class ImportData(FrozenClass):
         self.name = name
         self.symbol = symbol
         self.is_freq = is_freq
+        self.normalizations = normalizations
+        self.symmetries = symmetries
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -191,6 +201,8 @@ class ImportData(FrozenClass):
         ImportData_str += 'name = "' + str(self.name) + '"' + linesep
         ImportData_str += 'symbol = "' + str(self.symbol) + '"' + linesep
         ImportData_str += "is_freq = " + str(self.is_freq) + linesep
+        ImportData_str += "normalizations = " + str(self.normalizations) + linesep
+        ImportData_str += "symmetries = " + str(self.symmetries) + linesep
         return ImportData_str
 
     def __eq__(self, other):
@@ -210,6 +222,10 @@ class ImportData(FrozenClass):
             return False
         if other.is_freq != self.is_freq:
             return False
+        if other.normalizations != self.normalizations:
+            return False
+        if other.symmetries != self.symmetries:
+            return False
         return True
 
     def as_dict(self):
@@ -228,6 +244,8 @@ class ImportData(FrozenClass):
         ImportData_dict["name"] = self.name
         ImportData_dict["symbol"] = self.symbol
         ImportData_dict["is_freq"] = self.is_freq
+        ImportData_dict["normalizations"] = self.normalizations
+        ImportData_dict["symmetries"] = self.symmetries
         # The class name is added to the dict fordeserialisation purpose
         ImportData_dict["__class__"] = "ImportData"
         return ImportData_dict
@@ -243,6 +261,8 @@ class ImportData(FrozenClass):
         self.name = None
         self.symbol = None
         self.is_freq = None
+        self.normalizations = None
+        self.symmetries = None
 
     def _get_axes(self):
         """getter of axes"""
@@ -336,4 +356,36 @@ class ImportData(FrozenClass):
         fget=_get_is_freq,
         fset=_set_is_freq,
         doc=u"""Field is imported in frequential domain""",
+    )
+
+    def _get_normalizations(self):
+        """getter of normalizations"""
+        return self._normalizations
+
+    def _set_normalizations(self, value):
+        """setter of normalizations"""
+        check_var("normalizations", value, "dict")
+        self._normalizations = value
+
+    # Dict of normalizations
+    # Type : dict
+    normalizations = property(
+        fget=_get_normalizations,
+        fset=_set_normalizations,
+        doc=u"""Dict of normalizations""",
+    )
+
+    def _get_symmetries(self):
+        """getter of symmetries"""
+        return self._symmetries
+
+    def _set_symmetries(self, value):
+        """setter of symmetries"""
+        check_var("symmetries", value, "dict")
+        self._symmetries = value
+
+    # Dict of symmetries
+    # Type : dict
+    symmetries = property(
+        fget=_get_symmetries, fset=_set_symmetries, doc=u"""Dict of symmetries"""
     )

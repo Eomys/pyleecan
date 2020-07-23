@@ -169,6 +169,7 @@ def plot_A_space(
         y_min=y_min,
         y_max=y_max,
         xticks=xticks,
+        save_path=save_path,
     )
 
     if is_fft:
@@ -231,9 +232,7 @@ def plot_A_space(
             fund_harm=fund_harm,
             y_max=mag_max,
             xticks=xticks,
+            save_path=save_path,
         )
-
-    if save_path is not None:
-        fig.savefig(save_path)
 
     return ax

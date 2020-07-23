@@ -24,6 +24,7 @@ def plot_A_time(
     y_max=None,
     mag_max=None,
     is_auto_ticks=True,
+    fig=None,
 ):
     """Plots a field as a function of time
 
@@ -63,10 +64,12 @@ def plot_A_time(
         maximum alue for the y-axis of the fft
     is_auto_ticks : bool
         in fft, adjust ticks to freqs (deactivate if too close)
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
     """
 
     # Set plot
-    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     data_list2 = [data] + data_list
     if legend_list == []:
         legend_list = [d.name for d in data_list2]
@@ -152,6 +155,7 @@ def plot_A_time(
         ylabel=ylabel,
         y_min=y_min,
         y_max=y_max,
+        save_path=save_path,
     )
 
     if is_fft:
@@ -213,7 +217,5 @@ def plot_A_time(
             type="bargraph",
             y_max=mag_max,
             xticks=xticks,
+            save_path=save_path,
         )
-
-    if save_path is not None:
-        fig.savefig(save_path)

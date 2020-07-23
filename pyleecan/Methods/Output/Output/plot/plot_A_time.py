@@ -4,6 +4,7 @@ from .....Functions.Plot.plot_A_time import plot_A_time as plot_A_time_fct
 from .....Functions.init_fig import init_fig
 from SciDataTool import VectorField
 
+
 def plot_A_time(
     self,
     Data_str,
@@ -73,11 +74,11 @@ def plot_A_time(
     phys = getattr(self, Data_str.split(".")[0])
     data = getattr(phys, Data_str.split(".")[1])
 
-    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
-    
+    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+
     # Call the plot function
     if isinstance(data, VectorField):
-        if component_list is None: # default: extract all components
+        if component_list is None:  # default: extract all components
             component_list = data.components.keys()
         for comp in component_list:
             plot_A_time_fct(
@@ -90,7 +91,7 @@ def plot_A_time(
                 freq_max=freq_max,
                 is_norm=is_norm,
                 unit=unit,
-                data_list=data_list,
+                data_list=[dat.components[comp] for dat in data_list],
                 legend_list=legend_list,
                 color_list=color_list,
                 save_path=save_path,
@@ -100,9 +101,8 @@ def plot_A_time(
                 is_auto_ticks=is_auto_ticks,
                 fig=fig,
             )
-    
+
     else:
-        # Call the plot function
         plot_A_time_fct(
             data,
             index_list=index_list,
@@ -121,4 +121,5 @@ def plot_A_time(
             y_max=y_max,
             mag_max=mag_max,
             is_auto_ticks=is_auto_ticks,
+            fig=fig,
         )

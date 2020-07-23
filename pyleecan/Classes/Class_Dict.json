@@ -2139,6 +2139,24 @@
                 "type": "bool",
                 "unit": "-",
                 "value": false
+            },
+            {
+                "desc": "Dict of normalizations",
+                "max": "",
+                "min": "",
+                "name": "normalizations",
+                "type": "dict",
+                "unit": "-",
+                "value": {}
+            },
+            {
+                "desc": "Dict of symmetries",
+                "max": "",
+                "min": "",
+                "name": "symmetries",
+                "type": "dict",
+                "unit": "-",
+                "value": {}
             }
         ]
     },
@@ -6299,7 +6317,9 @@
             "plot.Magnetic.plot_mesh_field",
             "plot.plot_A_quiver_2D",
             "getter.get_rot_dir",
-            "getter.get_angle_offset_initial"
+            "getter.get_angle_offset_initial",
+            "plot.plot_A_fft_space",
+            "plot.plot_A_fft_time"
         ],
         "mother": "",
         "name": "Output",

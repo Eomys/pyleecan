@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from .....Functions.Plot.plot_A_fft_space import plot_A_fft_space as plot_A_fft_space_fct
+from .....Functions.Plot.plot_A_fft_space import (
+    plot_A_fft_space as plot_A_fft_space_fct,
+)
+from .....Functions.init_fig import init_fig
+from SciDataTool import VectorField
 
 
 def plot_A_fft_space(
@@ -14,6 +18,7 @@ def plot_A_fft_space(
     is_norm=False,
     unit="SI",
     data_list=[],
+    component_list=None,
     legend_list=[],
     color_list=[],
     save_path=None,
@@ -45,6 +50,8 @@ def plot_A_fft_space(
         unit in which to plot the field
     data_list : list
         list of Data objects to compare
+    component_list : list
+        list of component names to plot in separate figures
     legend_list : list
         list of legends to use for each Data object (including reference one) instead of data.name
     color_list : list
@@ -63,21 +70,47 @@ def plot_A_fft_space(
     phys = getattr(self, Data_str.split(".")[0])
     data = getattr(phys, Data_str.split(".")[1])
 
+    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+
     # Call the plot function
-    plot_A_fft_space_fct(
-        data,
-        t=t,
-        t_index=t_index,
-        is_spaceorder=is_spaceorder,
-        r_max=r_max,
-        fund_harm=fund_harm,
-        is_norm=is_norm,
-        unit=unit,
-        data_list=data_list,
-        legend_list=legend_list,
-        color_list=color_list,
-        save_path=save_path,
-        mag_max=mag_max,
-        is_auto_ticks=is_auto_ticks,
-        fig=fig,
-    )
+    # Call the plot function
+    if isinstance(data, VectorField):
+        if component_list is None:  # default: extract all components
+            component_list = data.components.keys()
+        for comp in component_list:
+            plot_A_fft_space_fct(
+                data.components[comp],
+                t=t,
+                t_index=t_index,
+                is_spaceorder=is_spaceorder,
+                r_max=r_max,
+                fund_harm=fund_harm,
+                is_norm=is_norm,
+                unit=unit,
+                data_list=[dat.components[comp] for dat in data_list],
+                legend_list=legend_list,
+                color_list=color_list,
+                save_path=save_path,
+                mag_max=mag_max,
+                is_auto_ticks=is_auto_ticks,
+                fig=fig,
+            )
+
+    else:
+        plot_A_fft_space_fct(
+            data,
+            t=t,
+            t_index=t_index,
+            is_spaceorder=is_spaceorder,
+            r_max=r_max,
+            fund_harm=fund_harm,
+            is_norm=is_norm,
+            unit=unit,
+            data_list=data_list,
+            legend_list=legend_list,
+            color_list=color_list,
+            save_path=save_path,
+            mag_max=mag_max,
+            is_auto_ticks=is_auto_ticks,
+            fig=fig,
+        )

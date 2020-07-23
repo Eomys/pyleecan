@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from .....Functions.Plot.plot_A_surf import plot_A_surf as plot_A_surf_fct
+from .....Functions.init_fig import init_fig
+from SciDataTool import VectorField
 
 
 def plot_A_surf(
@@ -15,6 +17,7 @@ def plot_A_surf(
     unit="SI",
     colormap="RdBu_r",
     save_path=None,
+    component_list=None,
 ):
     """Plots the isosurface of a field in 3D
 
@@ -42,22 +45,46 @@ def plot_A_surf(
         colormap prescribed by user
     save_path : str
         path and name of the png file to save
+    component_list : list
+        list of component names to plot in separate figures
     """
 
     # Get Data object name
     phys = getattr(self, Data_str.split(".")[0])
     data = getattr(phys, Data_str.split(".")[1])
 
+    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+
     # Call the plot function
-    plot_A_surf_fct(
-        data,
-        is_deg=is_deg,
-        t_max=t_max,
-        a_max=a_max,
-        z_min=z_min,
-        z_max=z_max,
-        is_norm=is_norm,
-        unit=unit,
-        colormap=colormap,
-        save_path=save_path,
-    )
+    if isinstance(data, VectorField):
+        if component_list is None:  # default: extract all components
+            component_list = data.components.keys()
+        for comp in component_list:
+            plot_A_surf_fct(
+                data.components[comp],
+                is_deg=is_deg,
+                t_max=t_max,
+                a_max=a_max,
+                z_min=z_min,
+                z_max=z_max,
+                is_norm=is_norm,
+                unit=unit,
+                colormap=colormap,
+                save_path=save_path,
+                fig=fig,
+            )
+
+    else:
+        plot_A_surf_fct(
+            data,
+            is_deg=is_deg,
+            t_max=t_max,
+            a_max=a_max,
+            z_min=z_min,
+            z_max=z_max,
+            is_norm=is_norm,
+            unit=unit,
+            colormap=colormap,
+            save_path=save_path,
+            fig=fig,
+        )

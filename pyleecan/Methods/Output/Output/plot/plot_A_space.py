@@ -82,12 +82,12 @@ def plot_A_space(
     # Get Data object names
     phys = getattr(self, Data_str.split(".")[0])
     data = getattr(phys, Data_str.split(".")[1])
-    
-    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
-    
+
+    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+
     # Call the plot function
     if isinstance(data, VectorField):
-        if component_list is None: # default: extract all components
+        if component_list is None:  # default: extract all components
             component_list = data.components.keys()
         for comp in component_list:
             plot_A_space_fct(
@@ -102,7 +102,7 @@ def plot_A_space(
                 fund_harm=fund_harm,
                 is_norm=is_norm,
                 unit=unit,
-                data_list=data_list,
+                data_list=[dat.components[comp] for dat in data_list],
                 legend_list=legend_list,
                 color_list=color_list,
                 save_path=save_path,
@@ -112,7 +112,7 @@ def plot_A_space(
                 is_auto_ticks=is_auto_ticks,
                 fig=fig,
             )
-    
+
     else:
         plot_A_space_fct(
             data,

@@ -226,3 +226,4 @@ def plot_A_time_space(
 
     if save_path is not None:
         fig.savefig(save_path)
+        plt.close()
