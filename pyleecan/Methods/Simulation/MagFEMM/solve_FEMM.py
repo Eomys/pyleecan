@@ -41,11 +41,6 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     Bt = zeros((Nt_tot, Na_tot))
     Tem = zeros((Nt_tot))
 
-    lam_int = output.simu.machine.get_lamination(True)
-    lam_ext = output.simu.machine.get_lamination(False)
-    Rgap_mec_int = lam_int.comp_radius_mec()
-    Rgap_mec_ext = lam_ext.comp_radius_mec()
-
     if self.is_get_mesh or self.is_save_FEA:
         meshFEMM = [Mesh() for ii in range(Nt_tot)]
         solutionFEMM = [Solution() for ii in range(Nt_tot)]
@@ -83,9 +78,9 @@ def solve_FEMM(self, output, sym, FEMM_dict):
             for jj in range(Na_tot):
                 Br[ii, jj], Bt[ii, jj] = femm.mo_getgapb("bc_ag2", angle[jj] * 180 / pi)
         else:
-            Rag = (Rgap_mec_ext + Rgap_mec_int) / 2
+            Rgap = output.simu.machine.comp_Rgap_mec()
             for jj in range(Na_tot):
-                B = femm.mo_getb(Rag * np.cos(angle[jj]), Rag * np.sin(angle[jj]))
+                B = femm.mo_getb(Rgap * np.cos(angle[jj]), Rgap * np.sin(angle[jj]))
                 Br[ii, jj] = B[0] * np.cos(angle[jj]) + B[1] * np.sin(angle[jj])
                 Bt[ii, jj] = -B[0] * np.sin(angle[jj]) + B[1] * np.cos(angle[jj])
 

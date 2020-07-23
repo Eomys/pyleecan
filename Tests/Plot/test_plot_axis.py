@@ -7,10 +7,6 @@ from numpy import argmax, cos, abs as np_abs, angle as np_angle
 
 from pyleecan.definitions import config_dict
 from Tests import save_plot_path as save_path
-from Tests.Validation.Machine.IPMSM_A import IPMSM_A
-from Tests.Validation.Machine.SCIM_001 import SCIM_001
-from Tests.Validation.Machine.SynRM_001 import SynRM_001
-from Tests.Validation.Machine.SIPMSM_001 import SIPMSM_001
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.InputFlux import InputFlux
@@ -20,8 +16,14 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
 
-CURVE_COLORS = config_dict["color_dict"]["CURVE_COLORS"]
+IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
+SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+SynRM_001 = load(join(DATA_DIR, "Machine", "SynRM_001.json"))
+SIPMSM_001 = load(join(DATA_DIR, "Machine", "SIPMSM_001.json"))
+CURVE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
 
 def test_axis_LamSlotMag():
@@ -163,6 +165,8 @@ def test_axis_LamHole():
     assert Q_axis == pi / 4
 
 
+@pytest.mark.FEMM
+@pytest.mark.long
 def test_axis_LamWind():
     """Axis convention for LamWind
     """

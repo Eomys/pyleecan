@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
 
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Machine.SPMSM_015 import SPMSM_015
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.InputFlux import InputFlux
@@ -14,8 +13,13 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-from Tests import DATA_DIR
+from Tests import TEST_DATA_DIR
 import pytest
+
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
 
 
 @pytest.mark.long
@@ -60,7 +64,7 @@ def test_Magnetic_FEMM_sym():
     # Just load the Output and ends (we could also have directly filled the Output object)
     simu_load = Simu1(init_dict=simu.as_dict())
     simu_load.mag = None
-    mat_file = join(DATA_DIR, "EM_SPMSM_NL_001_MANATEE_SDM.mat")
+    mat_file = join(TEST_DATA_DIR, "EM_SPMSM_NL_001_MANATEE_SDM.mat")
     Br = ImportMatlab(file_path=mat_file, var_name="Br")
     Bt = ImportMatlab(file_path=mat_file, var_name="Bt")
     angle2 = ImportGenVectLin(start=0, stop=2 * pi / 9, num=2048 / 9, endpoint=False)

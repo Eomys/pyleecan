@@ -18,9 +18,19 @@ except ImportError as error:
     build_geometry = error
 
 try:
+    from ..Methods.Machine.MachineUD.get_lam_list import get_lam_list
+except ImportError as error:
+    get_lam_list = error
+
+try:
     from ..Methods.Machine.MachineUD.plot import plot
 except ImportError as error:
     plot = error
+
+try:
+    from ..Methods.Machine.MachineUD.is_synchronous import is_synchronous
+except ImportError as error:
+    is_synchronous = error
 
 
 from ._check import InitUnKnowClassError
@@ -46,6 +56,17 @@ class MachineUD(Machine):
         )
     else:
         build_geometry = build_geometry
+    # cf Methods.Machine.MachineUD.get_lam_list
+    if isinstance(get_lam_list, ImportError):
+        get_lam_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MachineUD method get_lam_list: " + str(get_lam_list)
+                )
+            )
+        )
+    else:
+        get_lam_list = get_lam_list
     # cf Methods.Machine.MachineUD.plot
     if isinstance(plot, ImportError):
         plot = property(
@@ -55,6 +76,17 @@ class MachineUD(Machine):
         )
     else:
         plot = plot
+    # cf Methods.Machine.MachineUD.is_synchronous
+    if isinstance(is_synchronous, ImportError):
+        is_synchronous = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MachineUD method is_synchronous: " + str(is_synchronous)
+                )
+            )
+        )
+    else:
+        is_synchronous = is_synchronous
     # save method is available in all object
     save = save
 
@@ -70,6 +102,7 @@ class MachineUD(Machine):
     def __init__(
         self,
         lam_list=list(),
+        is_sync=True,
         frame=-1,
         shaft=-1,
         name="default_machine",
@@ -102,6 +135,7 @@ class MachineUD(Machine):
             obj = load(init_str)
             assert type(obj) is type(self)
             lam_list = obj.lam_list
+            is_sync = obj.is_sync
             frame = obj.frame
             shaft = obj.shaft
             name = obj.name
@@ -113,6 +147,8 @@ class MachineUD(Machine):
             # Overwrite default value with init_dict content
             if "lam_list" in list(init_dict.keys()):
                 lam_list = init_dict["lam_list"]
+            if "is_sync" in list(init_dict.keys()):
+                is_sync = init_dict["is_sync"]
             if "frame" in list(init_dict.keys()):
                 frame = init_dict["frame"]
             if "shaft" in list(init_dict.keys()):
@@ -161,6 +197,7 @@ class MachineUD(Machine):
             self.lam_list = list()
         else:
             self.lam_list = lam_list
+        self.is_sync = is_sync
         # Call Machine init
         super(MachineUD, self).__init__(
             frame=frame,
@@ -184,6 +221,7 @@ class MachineUD(Machine):
         for ii in range(len(self.lam_list)):
             tmp = self.lam_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
             MachineUD_str += "lam_list[" + str(ii) + "] =" + tmp + linesep + linesep
+        MachineUD_str += "is_sync = " + str(self.is_sync) + linesep
         return MachineUD_str
 
     def __eq__(self, other):
@@ -197,6 +235,8 @@ class MachineUD(Machine):
             return False
         if other.lam_list != self.lam_list:
             return False
+        if other.is_sync != self.is_sync:
+            return False
         return True
 
     def as_dict(self):
@@ -208,6 +248,7 @@ class MachineUD(Machine):
         MachineUD_dict["lam_list"] = list()
         for obj in self.lam_list:
             MachineUD_dict["lam_list"].append(obj.as_dict())
+        MachineUD_dict["is_sync"] = self.is_sync
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         MachineUD_dict["__class__"] = "MachineUD"
@@ -218,6 +259,7 @@ class MachineUD(Machine):
 
         for obj in self.lam_list:
             obj._set_None()
+        self.is_sync = None
         # Set to None the properties inherited from Machine
         super(MachineUD, self)._set_None()
 
@@ -241,4 +283,21 @@ class MachineUD(Machine):
     # Type : [Lamination]
     lam_list = property(
         fget=_get_lam_list, fset=_set_lam_list, doc=u"""List of Lamination"""
+    )
+
+    def _get_is_sync(self):
+        """getter of is_sync"""
+        return self._is_sync
+
+    def _set_is_sync(self, value):
+        """setter of is_sync"""
+        check_var("is_sync", value, "bool")
+        self._is_sync = value
+
+    # True if the machine should be handled as a Synchronous machine
+    # Type : bool
+    is_sync = property(
+        fget=_get_is_sync,
+        fset=_set_is_sync,
+        doc=u"""True if the machine should be handled as a Synchronous machine""",
     )

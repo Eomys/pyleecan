@@ -7,7 +7,7 @@ from ....Functions.Material.compare_material import compare_material
 from ....Functions.Material.replace_material_pyleecan_obj import (
     replace_material_pyleecan_obj,
 )
-from ....definitions import config_dict, MATLIB_DIR
+from ....definitions import config_dict
 from ....GUI import GUI_logger
 
 from PyQt5.QtCore import QObject, pyqtSignal
@@ -48,11 +48,11 @@ class MatLib(QObject):
 
         # Remove MATLIB_DIR at the beginning of the material path
         for mat in self.dict_mat["RefMatLib"]:
-            if config_dict["MATLIB_DIR"].replace("\\", " / ") in mat.path.replace(
-                "\\", "/"
-            ):
+            if config_dict["MAIN"]["MATLIB_DIR"].replace(
+                "\\", " / "
+            ) in mat.path.replace("\\", "/"):
                 mat.path = mat.path.replace("\\", "/")[
-                    len(config_dict["MATLIB_DIR"].replace("\\", " / ")) + 1 :
+                    len(config_dict["MAIN"]["MATLIB_DIR"].replace("\\", " / ")) + 1 :
                 ]
             mat.path = mat.path.replace("\\", "/").strip("/")
 
@@ -98,7 +98,7 @@ class MatLib(QObject):
         # Add the material to machine material if it is not already contained in the Matlib
         for material in list_mach_mat:
             # Avoid materials from the default machine
-            if material.is_isotropic == None:
+            if material.is_isotropic == None or material == Material():
                 continue
 
             # Store name and path to compare other attributes
@@ -113,6 +113,11 @@ class MatLib(QObject):
                 material.path = path
                 self.dict_mat["MachineMatLib"].append(material)
                 self.check_material_duplicated_name("MachineMatLib", -1)
+
+                is_change_mat = replace_material_pyleecan_obj(
+                    machine, material, material, False
+                )
+                is_change = is_change or is_change_mat
 
             # Replace the material in the machine by the MatLib one
             else:
@@ -129,8 +134,7 @@ class MatLib(QObject):
                             machine, material, mat, False
                         )
 
-                        if not is_change:
-                            is_change = is_change_mat
+                        is_change = is_change or is_change_mat
                         break
 
         return is_change
@@ -156,7 +160,9 @@ class MatLib(QObject):
         new_path = self.dict_mat["RefMatLib"][-1].name + ".json"
         self.dict_mat["RefMatLib"][-1].path = new_path
 
-        self.dict_mat["RefMatLib"][-1].save(join(config_dict["MATLIB_DIR"], new_path))
+        self.dict_mat["RefMatLib"][-1].save(
+            join(config_dict["MAIN"]["MATLIB_DIR"], new_path)
+        )
 
     def move_ref_mat_to_mach(self, key, index):
         """
@@ -177,16 +183,18 @@ class MatLib(QObject):
 
         # Try to remove the material from the material library
         try:
-            remove(join(config_dict["MATLIB_DIR"], mat_to_move.path))
+            remove(join(config_dict["MAIN"]["MATLIB_DIR"], mat_to_move.path))
             logger.info(
                 'Delete material "{}" file: {}'.format(
-                    mat_to_move.name, join(config_dict["MATLIB_DIR"], mat_to_move.path)
+                    mat_to_move.name,
+                    join(config_dict["MAIN"]["MATLIB_DIR"], mat_to_move.path),
                 )
             )
         except FileNotFoundError:
             logger.warning(
                 'Couldn\'t delete material "{}" file: {}'.format(
-                    mat_to_move.name, join(config_dict["MATLIB_DIR"], mat_to_move.path)
+                    mat_to_move.name,
+                    join(config_dict["MAIN"]["MATLIB_DIR"], mat_to_move.path),
                 )
             )
 
@@ -212,7 +220,9 @@ class MatLib(QObject):
         # Delete the material file if the material is in the Reference Material Library
         if key == "RefMatLib":
             GUI_logger.info("Deleting the material: " + mat_to_del.path)
-            remove(join(config_dict["MATLIB_DIR"], mat_to_del.path))  # Delete the file
+            remove(
+                join(config_dict["MAIN"]["MATLIB_DIR"], mat_to_del.path)
+            )  # Delete the file
 
     def check_material_duplicated_name(self, key, index):
         """
@@ -309,7 +319,7 @@ class MatLib(QObject):
         GUI_logger.info("Creating the material: " + material.path)
 
         # Saving the material
-        material.save(join(config_dict["MATLIB_DIR"], material.path))
+        material.save(join(config_dict["MAIN"]["MATLIB_DIR"], material.path))
 
     def add_new_mat_mach(self, material):
         """
@@ -360,7 +370,7 @@ class MatLib(QObject):
                     # Delete the previous material
                     remove(
                         join(
-                            config_dict["MATLIB_DIR"],
+                            config_dict["MAIN"]["MATLIB_DIR"],
                             self.dict_mat["RefMatLib"][index].path,
                         )
                     )
@@ -370,7 +380,7 @@ class MatLib(QObject):
                         'Couldn\'t remove machine "{}" file: {}'.format(
                             material.name,
                             join(
-                                config_dict["MATLIB_DIR"],
+                                config_dict["MAIN"]["MATLIB_DIR"],
                                 self.dict_mat["RefMatLib"][index].path,
                             ),
                         )
@@ -387,7 +397,7 @@ class MatLib(QObject):
 
             if save:
                 # Save it
-                material.save(join(config_dict["MATLIB_DIR"], material.path))
+                material.save(join(config_dict["MAIN"]["MATLIB_DIR"], material.path))
 
         # Machine material
         else:

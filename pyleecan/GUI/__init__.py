@@ -40,8 +40,8 @@ class StreamToLogger(object):
 
 
 gui_option = GUIOption()
-gui_option.unit.unit_m = config_dict["UNIT_M"]  # Use mm
-gui_option.unit.unit_m2 = config_dict["UNIT_M2"]  # Use mm²
+gui_option.unit.unit_m = config_dict["GUI"]["UNIT_M"]  # Use mm
+gui_option.unit.unit_m2 = config_dict["GUI"]["UNIT_M2"]  # Use mm²
 
 # Default config for all logger
 basicConfig(

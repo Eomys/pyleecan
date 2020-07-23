@@ -60,8 +60,7 @@ def plot_A_fft_time(
     if legend_list == []:
         legend_list = [d.name for d in data_list2]
     if color_list == []:
-        curve_colors = config_dict["color_dict"]["CURVE_COLORS"]
-        color_list = curve_colors
+        color_list = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
     if unit == "SI":
         unit = data.unit

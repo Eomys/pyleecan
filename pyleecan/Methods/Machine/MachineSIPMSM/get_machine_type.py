@@ -12,14 +12,11 @@ def get_machine_type(self):
     Returns
     -------
     str
-        type_str: SPMSM/IPMSM Zs/p (int/ext rotor)
+        type_str: SIPMSM Zs/p (int/ext rotor)
 
     """
 
-    if self.type_machine == 6:
-        type_str = "SPMSM "
-    elif self.type_machine == 7:
-        type_str = "IPMSM "
+    type_str = "SIPMSM "
 
     if self.stator.slot.Zs is not None:
         type_str += str(self.stator.slot.Zs) + "s / "

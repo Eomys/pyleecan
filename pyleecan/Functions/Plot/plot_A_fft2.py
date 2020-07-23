@@ -53,7 +53,7 @@ def plot_A_fft2(
     (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     title = "FFT2 of " + data.name
     if colormap is None:
-        colormap = config_dict["color_dict"]["COLOR_MAP"]
+        colormap = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
     if is_elecorder:
         xlabel = "Electrical order []"
         elec_max = freq_max / data.normalizations.get("elec_order")

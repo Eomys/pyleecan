@@ -211,5 +211,8 @@ class SWPole(Ui_SWPole, QWidget):
 
         # Call the check method of the slot (every slot type have a
         # different check method)
-        index = INIT_INDEX.index(type(lam.slot))
-        return WIDGET_LIST[index].check(lam)
+        try:
+            index = INIT_INDEX.index(type(lam.slot))
+            return WIDGET_LIST[index].check(lam)
+        except Exception as e:
+            return str(e)

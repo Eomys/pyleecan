@@ -9,9 +9,9 @@ from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 from ....Classes.WindingSC import WindingSC
 
-PHASE_COLORS = config_dict["color_dict"]["PHASE_COLORS"]
-ROTOR_COLOR = config_dict["color_dict"]["ROTOR_COLOR"]
-STATOR_COLOR = config_dict["color_dict"]["STATOR_COLOR"]
+PHASE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
+ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
+STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 
 
 def plot(

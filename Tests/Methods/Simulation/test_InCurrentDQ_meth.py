@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-
+from os.path import join
 from ddt import data, ddt
 from numpy import linspace, ones, pi, zeros, array, sqrt, transpose
 from numpy.testing import assert_array_almost_equal
@@ -18,8 +18,10 @@ from pyleecan.Classes.Simulation import Simulation
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Methods.Simulation.Input import InputError
-from Tests.Validation.Machine.IPMSM_A import IPMSM_A
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
 
+IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 InputCurrentDQ_Error_test = list()
 time_wrong = ImportMatrixVal(value=zeros((10, 2)))
 time = ImportGenVectLin(0, 10, 100)

@@ -4,8 +4,9 @@ import matplotlib.pyplot as plt
 from numpy import where, argmin, abs, squeeze, split
 
 from ...Functions.init_fig import init_subplot, init_fig
+from ...definitions import config_dict
 
-FONT_NAME = "Brandon Text"
+FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 
 def plot_A_2D(
     Xdata,

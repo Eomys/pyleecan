@@ -16,4 +16,7 @@ def get_pole_pair_number(self):
 
     """
 
-    return self.winding.p
+    if self.winding is not None:
+        return self.winding.p
+    else:
+        return None

@@ -11,7 +11,7 @@ from ....Functions.load import load, load_matlib
 from ....GUI.Dialog.DMachineSetup import mach_index, mach_list
 from ....GUI.Dialog.DMachineSetup.Ui_DMachineSetup import Ui_DMachineSetup
 from ....GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
-from ....definitions import DATA_DIR
+from ....definitions import config_dict
 from ....Classes.Machine import Machine
 from ....Classes.Material import Material
 from logging import getLogger
@@ -49,7 +49,7 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
         # Saving arguments
         self.machine = machine
         if machine_path == "":
-            self.machine_path = join(DATA_DIR, "Machine")
+            self.machine_path = config_dict["MAIN"]["MACHINE_DIR"]
         else:
             self.machine_path = machine_path
 

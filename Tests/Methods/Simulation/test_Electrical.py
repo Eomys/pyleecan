@@ -2,12 +2,15 @@
 
 import pytest
 from numpy import pi
-
+from os.path import join
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.SlotW11 import SlotW11
 from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Classes.CondType12 import CondType12
-from Tests.Validation.Machine.IPMSM_A import IPMSM_A
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
 
 def test_resistance():

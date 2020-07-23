@@ -22,7 +22,7 @@ from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
 
-from Tests import save_load_path as save_path, DATA_DIR, is_clean_result
+from Tests import save_load_path as save_path, TEST_DATA_DIR, is_clean_result
 
 
 import pytest
@@ -42,19 +42,19 @@ class test_Workflow_DMatLib(TestCase):
             rmtree(self.work_path)
         mkdir(self.work_path)
         copyfile(
-            join(DATA_DIR, "Material", "Magnet1.json"),
+            join(TEST_DATA_DIR, "Material", "Magnet1.json"),
             join(self.work_path, "Magnet1.json"),
         )
         copyfile(
-            join(DATA_DIR, "Material", "Copper1.json"),
+            join(TEST_DATA_DIR, "Material", "Copper1.json"),
             join(self.work_path, "Copper1.json"),
         )
         copyfile(
-            join(DATA_DIR, "Material", "Insulator1.json"),
+            join(TEST_DATA_DIR, "Material", "Insulator1.json"),
             join(self.work_path, "Insulator1.json"),
         )
         copyfile(
-            join(DATA_DIR, "Material", "M400-50A.json"),
+            join(TEST_DATA_DIR, "Material", "M400-50A.json"),
             join(self.work_path, "M400-50A.json"),
         )
         self.matlib = MatLib(self.work_path)

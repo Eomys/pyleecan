@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
 
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Machine.IPMSM_xxx import IPMSM_xxx
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
@@ -13,6 +12,11 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 import pytest
+
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
 
 
 @pytest.mark.long

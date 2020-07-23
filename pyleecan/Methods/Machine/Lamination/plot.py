@@ -6,10 +6,10 @@ from matplotlib.pyplot import axis, legend
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
-VENT_COLOR = config_dict["color_dict"]["VENT_COLOR"]
-VENT_EDGE = config_dict["color_dict"]["VENT_EDGE"]
-ROTOR_COLOR = config_dict["color_dict"]["ROTOR_COLOR"]
-STATOR_COLOR = config_dict["color_dict"]["STATOR_COLOR"]
+VENT_COLOR = config_dict["PLOT"]["COLOR_DICT"]["VENT_COLOR"]
+VENT_EDGE = config_dict["PLOT"]["COLOR_DICT"]["VENT_EDGE"]
+ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
+STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 
 
 def plot(

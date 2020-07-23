@@ -9,7 +9,6 @@ from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QListWidget
 from ....Functions.load import load_matlib
 from ....GUI.Dialog.DMatLib.Gen_DMatLib import Gen_DMatLib
 from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
-from ....definitions import DATA_DIR, MATLIB_DIR
 from ....GUI import GUI_logger
 from ....Functions.path_tools import abs_file_path
 from PyQt5.QtCore import pyqtSignal
@@ -38,7 +37,6 @@ class DMatLib(Gen_DMatLib, QDialog):
         -------
 
         """
-        print(selected)
 
         # Build the interface according to the .ui file
         QDialog.__init__(self)

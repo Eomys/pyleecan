@@ -6,7 +6,7 @@ from .plot_A_3D import plot_A_3D
 from ...definitions import config_dict
 from numpy import meshgrid, max as np_max
 
-FONT_NAME = "Brandon Text"
+FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 
 def plot_A_time_space(
     data,
@@ -56,8 +56,8 @@ def plot_A_time_space(
     fig, axs = plt.subplots(3, 2, tight_layout=True, figsize=(20, 10))
     title = data.name + " over time and space"
     if colormap is None:
-        colormap = config_dict["color_dict"]["COLOR_MAP"]
-    color_list = config_dict["color_dict"]["CURVE_COLORS"]
+        colormap = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
+    color_list = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
     # pcolorplot
     if is_deg:

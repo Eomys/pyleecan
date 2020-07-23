@@ -10,26 +10,31 @@ from Tests import save_validation_path as save_path
 import pytest
 
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Machine.SCIM_006 import SCIM_006
 
 from pyleecan.Classes.Output import Output
 from SciDataTool import DataTime, Data1D, DataLinspace, VectorField
-from Tests import DATA_DIR
+from Tests import TEST_DATA_DIR
 from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.ImportData import ImportData
 from pyleecan.Classes.ImportVectorField import ImportVectorField
 from pyleecan.Classes.InputFlux import InputFlux
 
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
 
-mat_file_Br = join(DATA_DIR, "Plots/default_proj_Br.mat")
-mat_file_time = join(DATA_DIR, "Plots/default_proj_time.mat")
-mat_file_angle = join(DATA_DIR, "Plots/default_proj_angle.mat")
-mat_file_MTr_freqs = join(DATA_DIR, "Plots/default_proj_MTr_freqs.mat")
-mat_file_MTr_wavenumber = join(DATA_DIR, "Plots/default_proj_MTr_wavenumber.mat")
-mat_file_MTr = join(DATA_DIR, "Plots/default_proj_MTr.mat")
-mat_file_Br_cfft2 = join(DATA_DIR, "Plots/default_proj_Br_cfft2.mat")
-mat_file_Brfreqs = join(DATA_DIR, "Plots/default_proj_Brfreqs.mat")
-mat_file_Brwavenumber = join(DATA_DIR, "Plots/default_proj_Brwavenumber.mat")
+SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
+
+simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
+
+mat_file_Br = join(TEST_DATA_DIR, "Plots/default_proj_Br.mat")
+mat_file_time = join(TEST_DATA_DIR, "Plots/default_proj_time.mat")
+mat_file_angle = join(TEST_DATA_DIR, "Plots/default_proj_angle.mat")
+mat_file_MTr_freqs = join(TEST_DATA_DIR, "Plots/default_proj_MTr_freqs.mat")
+mat_file_MTr_wavenumber = join(TEST_DATA_DIR, "Plots/default_proj_MTr_wavenumber.mat")
+mat_file_MTr = join(TEST_DATA_DIR, "Plots/default_proj_MTr.mat")
+mat_file_Br_cfft2 = join(TEST_DATA_DIR, "Plots/default_proj_Br_cfft2.mat")
+mat_file_Brfreqs = join(TEST_DATA_DIR, "Plots/default_proj_Brfreqs.mat")
+mat_file_Brwavenumber = join(TEST_DATA_DIR, "Plots/default_proj_Brwavenumber.mat")
 
 # Read input files from Manatee
 flux = ImportMatlab(mat_file_Br, var_name="XBr")

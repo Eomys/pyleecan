@@ -140,10 +140,13 @@ class SWindParam(Gen_SWindParam, QWidget):
             Error message (return None if no error)
         """
 
-        obj = lamination.winding  # For readibility
+        try:
+            obj = lamination.winding  # For readibility
 
-        # Check that everything is set
-        if obj.Ntcoil is None:
-            return "You must set Ntcoil !"
-        if obj.Npcpp is None:
-            return "You must set Npcpp !"
+            # Check that everything is set
+            if obj.Ntcoil is None:
+                return "You must set Ntcoil !"
+            if obj.Npcpp is None:
+                return "You must set Npcpp !"
+        except Exception as e:
+            return str(e)

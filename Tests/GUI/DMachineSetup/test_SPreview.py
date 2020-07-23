@@ -12,7 +12,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 from pyleecan.GUI.Dialog.DMachineSetup.SPreview.SPreview import SPreview
-from Tests import DATA_DIR as data_test
+from Tests import TEST_DATA_DIR as data_test
 from pyleecan.definitions import MAIN_DIR
 
 matlib_path = join(data_test, "Material")
@@ -42,8 +42,8 @@ IPMSM_dict = {
         ("Topology", "Inner Rotor"),
         ("Stator phase number", "3"),
         ("Stator winding type", "single layer distributed"),
-        ("Stator winding resistance", "0.1145 Ohm"),
-        ("Machine total mass", "42.74 kg"),
+        ("Stator winding resistance", "0.03595 Ohm"),
+        ("Machine total mass", "33.38 kg"),
     ],
     "Nrow": 8,
 }

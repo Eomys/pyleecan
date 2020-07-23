@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-from os.path import dirname, join
+from os.path import dirname, join, isfile
 from sys import argv, exit
 
 from PyQt5.QtCore import QTranslator
@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QIcon
 
 try:  # Import if pyleecan is installed with pip
-    from .definitions import ROOT_DIR, DATA_DIR, MATLIB_DIR, PACKAGE_NAME
+    from .definitions import ROOT_DIR, PACKAGE_NAME, config_dict
     from .GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
     from .GUI.Dialog.DMatLib.DMatLib import DMatLib
     from .GUI.Dialog.DMatLib.MatLib import MatLib
@@ -19,7 +19,7 @@ try:  # Import if pyleecan is installed with pip
     from .GUI.Tools.GuiOption.WGuiOption import WGuiOption
 
 except ImportError:  # Import for dev version
-    from definitions import PACKAGE_NAME, DATA_DIR, MATLIB_DIR, ROOT_DIR
+    from definitions import PACKAGE_NAME, ROOT_DIR, config_dict
 
     exec(
         "from "
@@ -58,15 +58,20 @@ def run_GUI(argv):
     translator = QTranslator()
     translator.load(translationFile, "GUI//i18n")
     a.installTranslator(translator)
+    if isfile(config_dict["GUI"]["CSS_PATH"]):
+        with open(config_dict["GUI"]["CSS_PATH"], "r") as css_file:
+            a.setStyleSheet(css_file.read())
 
     # Setting the material library
-    matlib = MatLib(MATLIB_DIR)
+    matlib = MatLib(config_dict["MAIN"]["MATLIB_DIR"])
 
     # MatLib widget
     mat_widget = DMatLib(matlib, selected=0)
 
     # Machine Setup Widget
-    c = DMachineSetup(dmatlib=mat_widget, machine_path=join(DATA_DIR, "Machine"))
+    c = DMachineSetup(
+        dmatlib=mat_widget, machine_path=config_dict["MAIN"]["MACHINE_DIR"]
+    )
 
     if EXT_GUI:
         # Setup extended GUI with sub windows

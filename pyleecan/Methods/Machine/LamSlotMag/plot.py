@@ -6,9 +6,9 @@ from matplotlib.pyplot import axis, legend
 from ....Functions.init_fig import init_fig
 from ....definitions import config_dict
 
-MAGNET_COLOR = config_dict["color_dict"]["MAGNET_COLOR"]
-ROTOR_COLOR = config_dict["color_dict"]["ROTOR_COLOR"]
-STATOR_COLOR = config_dict["color_dict"]["STATOR_COLOR"]
+MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
+ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
+STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 
 
 def plot(

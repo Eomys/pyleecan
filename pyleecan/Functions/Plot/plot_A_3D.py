@@ -6,8 +6,9 @@ import mpl_toolkits.mplot3d.art3d as art3d
 from ...Functions.init_fig import init_subplot
 from ...definitions import config_dict
 
-COLORS = config_dict["color_dict"]["CURVE_COLORS"]
-FONT_NAME = "Brandon Text"
+COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
+FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
+
 
 def plot_A_3D(
     Xdata,

@@ -24,16 +24,16 @@ from ......Functions.FEMM import (
     GROUP_RH,
 )
 
-STATOR_COLOR = config_dict["color_dict"]["STATOR_COLOR"]
-ROTOR_COLOR = config_dict["color_dict"]["ROTOR_COLOR"]
-SHAFT_COLOR = config_dict["color_dict"]["SHAFT_COLOR"]
-ROTOR_COLOR = config_dict["color_dict"]["ROTOR_COLOR"]
-FRAME_COLOR = config_dict["color_dict"]["FRAME_COLOR"]
-MAGNET_COLOR = config_dict["color_dict"]["MAGNET_COLOR"]
-BAR_COLOR = config_dict["color_dict"]["BAR_COLOR"]
-SCR_COLOR = config_dict["color_dict"]["SCR_COLOR"]
-VENT_COLOR = config_dict["color_dict"]["VENT_COLOR"]
-VENT_EDGE = config_dict["color_dict"]["VENT_EDGE"]
+STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
+ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
+SHAFT_COLOR = config_dict["PLOT"]["COLOR_DICT"]["SHAFT_COLOR"]
+ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
+FRAME_COLOR = config_dict["PLOT"]["COLOR_DICT"]["FRAME_COLOR"]
+MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
+BAR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["BAR_COLOR"]
+SCR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["SCR_COLOR"]
+VENT_COLOR = config_dict["PLOT"]["COLOR_DICT"]["VENT_COLOR"]
+VENT_EDGE = config_dict["PLOT"]["COLOR_DICT"]["VENT_EDGE"]
 
 
 def plot_mesh(
