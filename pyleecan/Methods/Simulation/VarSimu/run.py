@@ -1,8 +1,10 @@
 import numpy as np
+import itertools
+from ....Functions.Simulation.VarSimu.run_single_simu import run_single_simu
 
 
 def run(self):
-    """Run each simulation contained in """
+    """Run each simulation contained"""
 
     # Check var_simu parameters
     self.check_param()
@@ -10,83 +12,52 @@ def run(self):
     # Get xoutput to store results
     xoutput = self.parent.parent
 
-    # Extact simulations
+    # Extact simulation list and ParamExplorerValue list
     simu_dict = self.get_simulations()
 
     # Fill input_parameters
-    xoutput.input_param["shape"] = simu_dict["shape"]
-    xoutput.input_param["symbol"] = [
-        param_setter.symbol for param_setter in self.paramsetter_list
-    ]
-    xoutput.input_param["value"] = simu_dict["value"]
-    simu_array = simu_dict["simulation"]
+    xoutput.shape = simu_dict["shape"]
+    xoutput.paramexplorer_list = simu_dict["paramexplorer_list"]
+    simulation_list = simu_dict["simulation_list"]
 
     # Construct results
     for datakeeper in self.datakeeper_list:
-        xoutput.xoutput_dict[datakeeper.name] = np.ndarray(
-            simu_array.shape, dtype=datakeeper.dtype
-        )
+        xoutput.xoutput_dict[datakeeper.symbol] = np.ndarray(xoutput.shape, dtype="O")
+
+    # Build multi_index list to know position of the simulation
+    index_simu = [idx for idx in itertools.product(*[range(i) for i in xoutput.shape])]
 
     # TODO Parallelization
     if self.nb_proc > 1:
         pass
     else:
-        with np.nditer(simu_array, flags=["multi_index", "refs_ok"]) as simu_iterator:
-            nb_simu = self.nb_simu
-            for idx, simulation in enumerate(simu_iterator):
-                # Skip multisimulation
-                print(
-                    "\r["
-                    + "=" * ((50 * idx) // (nb_simu))
-                    + " " * (50 - ((50 * idx) // (nb_simu)))
-                    + "] {:3d}%".format(((100 * idx) // (nb_simu))),
-                    end="",
-                )
-                simulation = simulation.flat[0]
-                if self.stop_if_error:
-                    is_error = False
-                    result = simulation.run()
-                else:
-                    # Run simulation
-                    try:
-                        result = simulation.run()
-                        is_error = False
-                    except:
-                        is_error = True
-
-                # Extract results
-                if self.is_keep_all_output:
-                    xoutput.output_list.append(result)
-
-                # Datakeepers
-                if is_error:
-                    # Execute error_keeper if error
-                    for datakeeper in self.datakeeper_list:
-                        if datakeeper.error_keeper is None:
-                            xoutput.xoutput_dict[datakeeper.name][
-                                simu_iterator.multi_index
-                            ] = None
-                        else:
-                            xoutput.xoutput_dict[datakeeper.name][
-                                simu_iterator.multi_index
-                            ] = datakeeper.error_keeper(simulation)
-                else:
-                    if idx == self.ref_simu_index:
-                        for attr in dir(result):
-                            if (
-                                # Not method
-                                not callable(getattr(result, attr))
-                                # Not private properties
-                                and not attr.startswith("_")
-                                # Not following properties
-                                and attr not in ["VERSION", "logger_name", "parent",]
-                            ):
-                                setattr(xoutput, attr, getattr(result, attr))
-
-                    # Execute keepers
-                    for datakeeper in self.datakeeper_list:
-                        xoutput.xoutput_dict[datakeeper.name][
-                            simu_iterator.multi_index
-                        ] = datakeeper.keeper(result)
+        nb_simu = self.nb_simu
+        for idx, multi_index, simulation in zip(
+            range(nb_simu), index_simu, simulation_list
+        ):
+            # Skip multisimulation
+            print(
+                "\r["
+                + "=" * ((50 * idx) // (nb_simu))
+                + " " * (50 - ((50 * idx) // (nb_simu)))
+                + "] {:3d}%".format(((100 * idx) // (nb_simu))),
+                end="",
+            )
+            # Run the simulation handling errors
+            run_single_simu(
+                xoutput,
+                self.datakeeper_list,
+                simulation,
+                multi_index,
+                self.stop_if_error,
+                self.ref_simu_index,
+                self.is_keep_all_output,
+            )
 
         print("\r[" + "=" * 50 + "] 100%")
+
+    # Change datakeeper array dtype
+    for datakeeper in self.datakeeper_list:
+        xoutput.xoutput_dict[datakeeper.symbol] = np.array(
+            xoutput.xoutput_dict[datakeeper.symbol].tolist()
+        )

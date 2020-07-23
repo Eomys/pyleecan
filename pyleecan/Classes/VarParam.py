@@ -18,18 +18,13 @@ except ImportError as error:
     check_param = error
 
 try:
-    from ..Methods.Simulation.VarParam.get_simu import get_simu
-except ImportError as error:
-    get_simu = error
-
-try:
     from ..Methods.Simulation.VarParam.get_simulations import get_simulations
 except ImportError as error:
     get_simulations = error
 
 
 from ._check import InitUnKnowClassError
-from .ParamSetter import ParamSetter
+from .ParamExplorer import ParamExplorer
 from .DataKeeper import DataKeeper
 
 
@@ -50,15 +45,6 @@ class VarParam(VarSimu):
         )
     else:
         check_param = check_param
-    # cf Methods.Simulation.VarParam.get_simu
-    if isinstance(get_simu, ImportError):
-        get_simu = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use VarParam method get_simu: " + str(get_simu))
-            )
-        )
-    else:
-        get_simu = get_simu
     # cf Methods.Simulation.VarParam.get_simulations
     if isinstance(get_simulations, ImportError):
         get_simulations = property(
@@ -84,7 +70,7 @@ class VarParam(VarSimu):
 
     def __init__(
         self,
-        paramsetter_list=list(),
+        paramexplorer_list=list(),
         name="",
         desc="",
         datakeeper_list=list(),
@@ -114,7 +100,7 @@ class VarParam(VarSimu):
             # load the object from a file
             obj = load(init_str)
             assert type(obj) is type(self)
-            paramsetter_list = obj.paramsetter_list
+            paramexplorer_list = obj.paramexplorer_list
             name = obj.name
             desc = obj.desc
             datakeeper_list = obj.datakeeper_list
@@ -126,8 +112,8 @@ class VarParam(VarSimu):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "paramsetter_list" in list(init_dict.keys()):
-                paramsetter_list = init_dict["paramsetter_list"]
+            if "paramexplorer_list" in list(init_dict.keys()):
+                paramexplorer_list = init_dict["paramexplorer_list"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "desc" in list(init_dict.keys()):
@@ -145,20 +131,37 @@ class VarParam(VarSimu):
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
         # Initialisation by argument
-        # paramsetter_list can be None or a list of ParamSetter object
-        self.paramsetter_list = list()
-        if type(paramsetter_list) is list:
-            for obj in paramsetter_list:
+        # paramexplorer_list can be None or a list of ParamExplorer object
+        self.paramexplorer_list = list()
+        if type(paramexplorer_list) is list:
+            for obj in paramexplorer_list:
                 if obj is None:  # Default value
-                    self.paramsetter_list.append(ParamSetter())
+                    self.paramexplorer_list.append(ParamExplorer())
                 elif isinstance(obj, dict):
-                    self.paramsetter_list.append(ParamSetter(init_dict=obj))
+                    # Check that the type is correct (including daughter)
+                    class_name = obj.get("__class__")
+                    if class_name not in [
+                        "ParamExplorer",
+                        "ParamExplorerSet",
+                        "ParamExplorerValue",
+                    ]:
+                        raise InitUnKnowClassError(
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for paramexplorer_list"
+                        )
+                    # Dynamic import to call the correct constructor
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
+                    self.paramexplorer_list.append(class_obj(init_dict=obj))
                 else:
-                    self.paramsetter_list.append(obj)
-        elif paramsetter_list is None:
-            self.paramsetter_list = list()
+                    self.paramexplorer_list.append(obj)
+        elif paramexplorer_list is None:
+            self.paramexplorer_list = list()
         else:
-            self.paramsetter_list = paramsetter_list
+            self.paramexplorer_list = paramexplorer_list
         # Call VarSimu init
         super(VarParam, self).__init__(
             name=name,
@@ -179,15 +182,15 @@ class VarParam(VarSimu):
         VarParam_str = ""
         # Get the properties inherited from VarSimu
         VarParam_str += super(VarParam, self).__str__()
-        if len(self.paramsetter_list) == 0:
-            VarParam_str += "paramsetter_list = []" + linesep
-        for ii in range(len(self.paramsetter_list)):
+        if len(self.paramexplorer_list) == 0:
+            VarParam_str += "paramexplorer_list = []" + linesep
+        for ii in range(len(self.paramexplorer_list)):
             tmp = (
-                self.paramsetter_list[ii].__str__().replace(linesep, linesep + "\t")
+                self.paramexplorer_list[ii].__str__().replace(linesep, linesep + "\t")
                 + linesep
             )
             VarParam_str += (
-                "paramsetter_list[" + str(ii) + "] =" + tmp + linesep + linesep
+                "paramexplorer_list[" + str(ii) + "] =" + tmp + linesep + linesep
             )
         return VarParam_str
 
@@ -200,7 +203,7 @@ class VarParam(VarSimu):
         # Check the properties inherited from VarSimu
         if not super(VarParam, self).__eq__(other):
             return False
-        if other.paramsetter_list != self.paramsetter_list:
+        if other.paramexplorer_list != self.paramexplorer_list:
             return False
         return True
 
@@ -210,9 +213,9 @@ class VarParam(VarSimu):
 
         # Get the properties inherited from VarSimu
         VarParam_dict = super(VarParam, self).as_dict()
-        VarParam_dict["paramsetter_list"] = list()
-        for obj in self.paramsetter_list:
-            VarParam_dict["paramsetter_list"].append(obj.as_dict())
+        VarParam_dict["paramexplorer_list"] = list()
+        for obj in self.paramexplorer_list:
+            VarParam_dict["paramexplorer_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         VarParam_dict["__class__"] = "VarParam"
@@ -221,31 +224,31 @@ class VarParam(VarSimu):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        for obj in self.paramsetter_list:
+        for obj in self.paramexplorer_list:
             obj._set_None()
         # Set to None the properties inherited from VarSimu
         super(VarParam, self)._set_None()
 
-    def _get_paramsetter_list(self):
-        """getter of paramsetter_list"""
-        for obj in self._paramsetter_list:
+    def _get_paramexplorer_list(self):
+        """getter of paramexplorer_list"""
+        for obj in self._paramexplorer_list:
             if obj is not None:
                 obj.parent = self
-        return self._paramsetter_list
+        return self._paramexplorer_list
 
-    def _set_paramsetter_list(self, value):
-        """setter of paramsetter_list"""
-        check_var("paramsetter_list", value, "[ParamSetter]")
-        self._paramsetter_list = value
+    def _set_paramexplorer_list(self, value):
+        """setter of paramexplorer_list"""
+        check_var("paramexplorer_list", value, "[ParamExplorer]")
+        self._paramexplorer_list = value
 
-        for obj in self._paramsetter_list:
+        for obj in self._paramexplorer_list:
             if obj is not None:
                 obj.parent = self
 
     # List containing ParamSetter to define every simulation
-    # Type : [ParamSetter]
-    paramsetter_list = property(
-        fget=_get_paramsetter_list,
-        fset=_set_paramsetter_list,
+    # Type : [ParamExplorer]
+    paramexplorer_list = property(
+        fget=_get_paramexplorer_list,
+        fset=_set_paramexplorer_list,
         doc=u"""List containing ParamSetter to define every simulation""",
     )

@@ -72,6 +72,41 @@ try:
 except ImportError as error:
     remove = error
 
+try:
+    from ..Methods.Output.XOutput.append import append
+except ImportError as error:
+    append = error
+
+try:
+    from ..Methods.Output.XOutput.get_simu import get_simu
+except ImportError as error:
+    get_simu = error
+
+try:
+    from ..Methods.Output.XOutput.keys import keys
+except ImportError as error:
+    keys = error
+
+try:
+    from ..Methods.Output.XOutput.items import items
+except ImportError as error:
+    items = error
+
+try:
+    from ..Methods.Output.XOutput.get_param_simu import get_param_simu
+except ImportError as error:
+    get_param_simu = error
+
+try:
+    from ..Methods.Output.XOutput.get_param_array import get_param_array
+except ImportError as error:
+    get_param_array = error
+
+try:
+    from ..Methods.Output.XOutput.plot_multi import plot_multi
+except ImportError as error:
+    plot_multi = error
+
 
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
@@ -199,6 +234,73 @@ class XOutput(Output):
         )
     else:
         remove = remove
+    # cf Methods.Output.XOutput.append
+    if isinstance(append, ImportError):
+        append = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use XOutput method append: " + str(append))
+            )
+        )
+    else:
+        append = append
+    # cf Methods.Output.XOutput.get_simu
+    if isinstance(get_simu, ImportError):
+        get_simu = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use XOutput method get_simu: " + str(get_simu))
+            )
+        )
+    else:
+        get_simu = get_simu
+    # cf Methods.Output.XOutput.keys
+    if isinstance(keys, ImportError):
+        keys = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use XOutput method keys: " + str(keys))
+            )
+        )
+    else:
+        keys = keys
+    # cf Methods.Output.XOutput.items
+    if isinstance(items, ImportError):
+        items = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use XOutput method items: " + str(items))
+            )
+        )
+    else:
+        items = items
+    # cf Methods.Output.XOutput.get_param_simu
+    if isinstance(get_param_simu, ImportError):
+        get_param_simu = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method get_param_simu: " + str(get_param_simu)
+                )
+            )
+        )
+    else:
+        get_param_simu = get_param_simu
+    # cf Methods.Output.XOutput.get_param_array
+    if isinstance(get_param_array, ImportError):
+        get_param_array = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method get_param_array: " + str(get_param_array)
+                )
+            )
+        )
+    else:
+        get_param_array = get_param_array
+    # cf Methods.Output.XOutput.plot_multi
+    if isinstance(plot_multi, ImportError):
+        plot_multi = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use XOutput method plot_multi: " + str(plot_multi))
+            )
+        )
+    else:
+        plot_multi = plot_multi
     # save method is available in all object
     save = save
 
@@ -213,9 +315,11 @@ class XOutput(Output):
 
     def __init__(
         self,
-        input_param={},
+        paramexplorer_list=[],
         output_list=[],
         xoutput_dict={},
+        nb_simu=0,
+        shape=None,
         simu=-1,
         path_res="",
         geo=-1,
@@ -260,9 +364,11 @@ class XOutput(Output):
             # load the object from a file
             obj = load(init_str)
             assert type(obj) is type(self)
-            input_param = obj.input_param
+            paramexplorer_list = obj.paramexplorer_list
             output_list = obj.output_list
             xoutput_dict = obj.xoutput_dict
+            nb_simu = obj.nb_simu
+            shape = obj.shape
             simu = obj.simu
             path_res = obj.path_res
             geo = obj.geo
@@ -275,12 +381,16 @@ class XOutput(Output):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "input_param" in list(init_dict.keys()):
-                input_param = init_dict["input_param"]
+            if "paramexplorer_list" in list(init_dict.keys()):
+                paramexplorer_list = init_dict["paramexplorer_list"]
             if "output_list" in list(init_dict.keys()):
                 output_list = init_dict["output_list"]
             if "xoutput_dict" in list(init_dict.keys()):
                 xoutput_dict = init_dict["xoutput_dict"]
+            if "nb_simu" in list(init_dict.keys()):
+                nb_simu = init_dict["nb_simu"]
+            if "shape" in list(init_dict.keys()):
+                shape = init_dict["shape"]
             if "simu" in list(init_dict.keys()):
                 simu = init_dict["simu"]
             if "path_res" in list(init_dict.keys()):
@@ -300,9 +410,11 @@ class XOutput(Output):
             if "force" in list(init_dict.keys()):
                 force = init_dict["force"]
         # Initialisation by argument
-        self.input_param = input_param
+        self.paramexplorer_list = paramexplorer_list
         self.output_list = output_list
         self.xoutput_dict = xoutput_dict
+        self.nb_simu = nb_simu
+        self.shape = shape
         # Call Output init
         super(XOutput, self).__init__(
             simu=simu,
@@ -324,7 +436,12 @@ class XOutput(Output):
         XOutput_str = ""
         # Get the properties inherited from Output
         XOutput_str += super(XOutput, self).__str__()
-        XOutput_str += "input_param = " + str(self.input_param) + linesep
+        XOutput_str += (
+            "paramexplorer_list = "
+            + linesep
+            + str(self.paramexplorer_list).replace(linesep, linesep + "\t")
+            + linesep
+        )
         XOutput_str += (
             "output_list = "
             + linesep
@@ -332,6 +449,12 @@ class XOutput(Output):
             + linesep
         )
         XOutput_str += "xoutput_dict = " + str(self.xoutput_dict) + linesep
+        XOutput_str += "nb_simu = " + str(self.nb_simu) + linesep
+        if self.shape is not None:
+            tmp = self.shape.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            XOutput_str += "shape = " + tmp + linesep
+        else:
+            XOutput_str += "shape = None" + linesep
         return XOutput_str
 
     def __eq__(self, other):
@@ -343,11 +466,15 @@ class XOutput(Output):
         # Check the properties inherited from Output
         if not super(XOutput, self).__eq__(other):
             return False
-        if other.input_param != self.input_param:
+        if other.paramexplorer_list != self.paramexplorer_list:
             return False
         if other.output_list != self.output_list:
             return False
         if other.xoutput_dict != self.xoutput_dict:
+            return False
+        if other.nb_simu != self.nb_simu:
+            return False
+        if other.shape != self.shape:
             return False
         return True
 
@@ -357,9 +484,11 @@ class XOutput(Output):
 
         # Get the properties inherited from Output
         XOutput_dict = super(XOutput, self).as_dict()
-        XOutput_dict["input_param"] = self.input_param
+        XOutput_dict["paramexplorer_list"] = self.paramexplorer_list
         XOutput_dict["output_list"] = self.output_list
         XOutput_dict["xoutput_dict"] = self.xoutput_dict
+        XOutput_dict["nb_simu"] = self.nb_simu
+        XOutput_dict["shape"] = self.shape
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         XOutput_dict["__class__"] = "XOutput"
@@ -368,27 +497,29 @@ class XOutput(Output):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.input_param = None
+        self.paramexplorer_list = None
         self.output_list = None
         self.xoutput_dict = None
+        self.nb_simu = None
+        self.shape = None
         # Set to None the properties inherited from Output
         super(XOutput, self)._set_None()
 
-    def _get_input_param(self):
-        """getter of input_param"""
-        return self._input_param
+    def _get_paramexplorer_list(self):
+        """getter of paramexplorer_list"""
+        return self._paramexplorer_list
 
-    def _set_input_param(self, value):
-        """setter of input_param"""
-        check_var("input_param", value, "dict")
-        self._input_param = value
+    def _set_paramexplorer_list(self, value):
+        """setter of paramexplorer_list"""
+        check_var("paramexplorer_list", value, "list")
+        self._paramexplorer_list = value
 
-    # Parameters values for each simulation, parameter names
-    # Type : dict
-    input_param = property(
-        fget=_get_input_param,
-        fset=_set_input_param,
-        doc=u"""Parameters values for each simulation, parameter names""",
+    # List containing ParamExplorer
+    # Type : list
+    paramexplorer_list = property(
+        fget=_get_paramexplorer_list,
+        fset=_set_paramexplorer_list,
+        doc=u"""List containing ParamExplorer""",
     )
 
     def _get_output_list(self):
@@ -424,3 +555,33 @@ class XOutput(Output):
         fset=_set_xoutput_dict,
         doc=u"""Dictionnary containing VarParam DataKeeper results in ndarray""",
     )
+
+    def _get_nb_simu(self):
+        """getter of nb_simu"""
+        return self._nb_simu
+
+    def _set_nb_simu(self, value):
+        """setter of nb_simu"""
+        check_var("nb_simu", value, "int", Vmin=0)
+        self._nb_simu = value
+
+    # Number of simulations excluding reference simulation
+    # Type : int, min = 0
+    nb_simu = property(
+        fget=_get_nb_simu,
+        fset=_set_nb_simu,
+        doc=u"""Number of simulations excluding reference simulation""",
+    )
+
+    def _get_shape(self):
+        """getter of shape"""
+        return self._shape
+
+    def _set_shape(self, value):
+        """setter of shape"""
+        check_var("shape", value, "tuple")
+        self._shape = value
+
+    # Simulation shape
+    # Type : tuple
+    shape = property(fget=_get_shape, fset=_set_shape, doc=u"""Simulation shape""")

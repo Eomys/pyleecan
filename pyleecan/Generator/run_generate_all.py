@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 from os.path import dirname, abspath, normpath, join, realpath
-from os import listdir, remove
+from os import listdir, remove, system
 
 begin = len(normpath(abspath(join(dirname(__file__), "../.."))))
 end = len(normpath(abspath(join(dirname(__file__), ".."))))
@@ -21,3 +21,5 @@ if __name__ == "__main__":
     gen_dict = read_all(DOC_DIR, is_internal=False, in_path=INT_DIR)
     generate_code(MAIN_DIR, gen_dict)
     generate_gui(gen_dict, is_gen_resource=True)
+    # Run black
+    system("{} -m black .".format(sys.executable))

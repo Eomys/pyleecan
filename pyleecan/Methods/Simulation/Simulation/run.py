@@ -10,8 +10,9 @@ def run(self):
     from ....Classes.XOutput import XOutput
     from ....Classes.Output import Output
 
+    # Multi-simulation
     if self.var_simu is not None:
-        # Multi-simulation
+        # XOutput initialization
         if self.parent is None:
             results = XOutput(simu=self)
         else:
@@ -26,14 +27,17 @@ def run(self):
         if self.var_simu.ref_simu_index is None:
             self.run_single()
 
+        # Compute the multisimulation
         self.var_simu.run()
 
     else:
+        # Output initialization
         if self.parent is None:
             results = Output(simu=self)
         else:
             results = self.parent
 
+        # Compute the simulation
         self.run_single()
 
     return results

@@ -3,4 +3,3 @@ name,-,Parameter name,0,str,,,,,Simulation,,_set_setter,VERSION,1,Abstract class
 symbol,-,Parameter symbol,,str,,,,,,,,,,
 unit,-,Parameter unit,,str,,,,,,,,,,
 setter,-,Function that takes a Simulation and a value in argument and modifiers the simulation,,function,None,,,,,,,,,
-value_list,-,List containing the different parameter values to explore,,list,[],,,,,,,,,

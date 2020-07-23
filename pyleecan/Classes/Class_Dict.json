@@ -684,15 +684,6 @@
                 "type": "function",
                 "unit": "-",
                 "value": null
-            },
-            {
-                "desc": "dtype of keeper and error_keeper outputs",
-                "max": "",
-                "min": "",
-                "name": "dtype",
-                "type": "str",
-                "unit": "-",
-                "value": "O"
             }
         ]
     },
@@ -5576,8 +5567,8 @@
                 "desc": "Optimization results containing every output",
                 "max": "",
                 "min": "",
-                "name": "multi_output",
-                "type": "OutputMultiOpti",
+                "name": "xoutput",
+                "type": "XOutput",
                 "unit": "-",
                 "value": ""
             },
@@ -5589,6 +5580,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OptiSolver"
+            },
+            {
+                "desc": "Boolean to keep every output",
+                "max": "",
+                "min": "",
+                "name": "is_keep_all_output",
+                "type": "bool",
+                "unit": "-",
+                "value": false
             }
         ]
     },
@@ -6497,23 +6497,27 @@
             }
         ]
     },
-    "ParamSetter": {
+    "ParamExplorer": {
         "constants": [
             {
                 "name": "VERSION",
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "ParamExplorer",
+            "ParamExplorerSet",
+            "ParamExplorerValue"
+        ],
         "desc": "Abstract class for the multi-simulation",
         "is_internal": false,
         "methods": [
             "_set_setter"
         ],
         "mother": "",
-        "name": "ParamSetter",
+        "name": "ParamExplorer",
         "package": "Simulation",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/ParamSetter.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/ParamExplorer.csv",
         "properties": [
             {
                 "desc": "Parameter name",
@@ -6550,13 +6554,60 @@
                 "type": "function",
                 "unit": "-",
                 "value": null
-            },
+            }
+        ]
+    },
+    "ParamExplorerSet": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for the multi-simulation",
+        "is_internal": false,
+        "methods": [
+            "get_value"
+        ],
+        "mother": "ParamExplorer",
+        "name": "ParamExplorerSet",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/ParamExplorerSet.csv",
+        "properties": [
             {
                 "desc": "List containing the different parameter values to explore",
                 "max": "",
                 "min": "",
                 "name": "value_list",
                 "type": "list",
+                "unit": "-",
+                "value": []
+            }
+        ]
+    },
+    "ParamExplorerValue": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for the multi-simulation",
+        "is_internal": false,
+        "methods": [],
+        "mother": "ParamExplorer",
+        "name": "ParamExplorerValue",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/ParamExplorerValue.csv",
+        "properties": [
+            {
+                "desc": "List containing the different parameter values to explore",
+                "max": "",
+                "min": "",
+                "name": "value",
+                "type": "ndarray",
                 "unit": "-",
                 "value": []
             }
@@ -9176,7 +9227,6 @@
         "is_internal": false,
         "methods": [
             "check_param",
-            "get_simu",
             "get_simulations"
         ],
         "mother": "VarSimu",
@@ -9188,8 +9238,8 @@
                 "desc": "List containing ParamSetter to define every simulation",
                 "max": "",
                 "min": "",
-                "name": "paramsetter_list",
-                "type": "[ParamSetter]",
+                "name": "paramexplorer_list",
+                "type": "[ParamExplorer]",
                 "unit": "-",
                 "value": []
             }
@@ -9800,7 +9850,14 @@
             "count",
             "insert",
             "pop",
-            "remove"
+            "remove",
+            "append",
+            "get_simu",
+            "keys",
+            "items",
+            "get_param_simu",
+            "get_param_array",
+            "plot_multi"
         ],
         "mother": "Output",
         "name": "XOutput",
@@ -9808,13 +9865,13 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/XOutput.csv",
         "properties": [
             {
-                "desc": "Parameters values for each simulation, parameter names",
+                "desc": "List containing ParamExplorer",
                 "max": "",
                 "min": "",
-                "name": "input_param",
-                "type": "dict",
+                "name": "paramexplorer_list",
+                "type": "list",
                 "unit": "-",
-                "value": {}
+                "value": []
             },
             {
                 "desc": "List containing Output for each simulation",
@@ -9833,6 +9890,24 @@
                 "type": "dict",
                 "unit": "-",
                 "value": {}
+            },
+            {
+                "desc": "Number of simulations excluding reference simulation",
+                "max": "",
+                "min": "0",
+                "name": "nb_simu",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Simulation shape",
+                "max": "",
+                "min": "",
+                "name": "shape",
+                "type": "tuple",
+                "unit": "-",
+                "value": null
             }
         ]
     }

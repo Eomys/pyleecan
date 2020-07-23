@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/ParamSetter.csv
+"""File generated according to Generator/ClassesRef/Simulation/ParamExplorer.csv
 WARNING! All changes made in this file will be lost!
 """
 
@@ -13,7 +13,7 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.ParamSetter._set_setter import _set_setter
+    from ..Methods.Simulation.ParamExplorer._set_setter import _set_setter
 except ImportError as error:
     _set_setter = error
 
@@ -24,17 +24,17 @@ from ._check import CheckTypeError
 from ._check import InitUnKnowClassError
 
 
-class ParamSetter(FrozenClass):
+class ParamExplorer(FrozenClass):
     """Abstract class for the multi-simulation"""
 
     VERSION = 1
 
-    # cf Methods.Simulation.ParamSetter._set_setter
+    # cf Methods.Simulation.ParamExplorer._set_setter
     if isinstance(_set_setter, ImportError):
         _set_setter = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ParamSetter method _set_setter: " + str(_set_setter)
+                    "Can't use ParamExplorer method _set_setter: " + str(_set_setter)
                 )
             )
         )
@@ -53,14 +53,7 @@ class ParamSetter(FrozenClass):
     get_logger = get_logger
 
     def __init__(
-        self,
-        name="",
-        symbol="",
-        unit="",
-        setter=None,
-        value_list=[],
-        init_dict=None,
-        init_str=None,
+        self, name="", symbol="", unit="", setter=None, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -84,7 +77,6 @@ class ParamSetter(FrozenClass):
             symbol = obj.symbol
             unit = obj.unit
             setter = obj.setter
-            value_list = obj.value_list
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -96,15 +88,12 @@ class ParamSetter(FrozenClass):
                 unit = init_dict["unit"]
             if "setter" in list(init_dict.keys()):
                 setter = init_dict["setter"]
-            if "value_list" in list(init_dict.keys()):
-                value_list = init_dict["value_list"]
         # Initialisation by argument
         self.parent = None
         self.name = name
         self.symbol = symbol
         self.unit = unit
         self.setter = setter
-        self.value_list = value_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -112,29 +101,23 @@ class ParamSetter(FrozenClass):
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
-        ParamSetter_str = ""
+        ParamExplorer_str = ""
         if self.parent is None:
-            ParamSetter_str += "parent = None " + linesep
+            ParamExplorer_str += "parent = None " + linesep
         else:
-            ParamSetter_str += (
+            ParamExplorer_str += (
                 "parent = " + str(type(self.parent)) + " object" + linesep
             )
-        ParamSetter_str += 'name = "' + str(self.name) + '"' + linesep
-        ParamSetter_str += 'symbol = "' + str(self.symbol) + '"' + linesep
-        ParamSetter_str += 'unit = "' + str(self.unit) + '"' + linesep
+        ParamExplorer_str += 'name = "' + str(self.name) + '"' + linesep
+        ParamExplorer_str += 'symbol = "' + str(self.symbol) + '"' + linesep
+        ParamExplorer_str += 'unit = "' + str(self.unit) + '"' + linesep
         if self._setter[1] is None:
-            ParamSetter_str += "setter = " + str(self._setter[1])
+            ParamExplorer_str += "setter = " + str(self._setter[1])
         else:
-            ParamSetter_str += (
+            ParamExplorer_str += (
                 "setter = " + linesep + str(self._setter[1]) + linesep + linesep
             )
-        ParamSetter_str += (
-            "value_list = "
-            + linesep
-            + str(self.value_list).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        return ParamSetter_str
+        return ParamExplorer_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
@@ -149,29 +132,26 @@ class ParamSetter(FrozenClass):
             return False
         if other.setter != self.setter:
             return False
-        if other.value_list != self.value_list:
-            return False
         return True
 
     def as_dict(self):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        ParamSetter_dict = dict()
-        ParamSetter_dict["name"] = self.name
-        ParamSetter_dict["symbol"] = self.symbol
-        ParamSetter_dict["unit"] = self.unit
+        ParamExplorer_dict = dict()
+        ParamExplorer_dict["name"] = self.name
+        ParamExplorer_dict["symbol"] = self.symbol
+        ParamExplorer_dict["unit"] = self.unit
         if self.setter is None:
-            ParamSetter_dict["setter"] = None
+            ParamExplorer_dict["setter"] = None
         else:
-            ParamSetter_dict["setter"] = [
+            ParamExplorer_dict["setter"] = [
                 dumps(self._setter[0]).decode("ISO-8859-2"),
                 self._setter[1],
             ]
-        ParamSetter_dict["value_list"] = self.value_list
         # The class name is added to the dict fordeserialisation purpose
-        ParamSetter_dict["__class__"] = "ParamSetter"
-        return ParamSetter_dict
+        ParamExplorer_dict["__class__"] = "ParamExplorer"
+        return ParamExplorer_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
@@ -180,7 +160,6 @@ class ParamSetter(FrozenClass):
         self.symbol = None
         self.unit = None
         self.setter = None
-        self.value_list = None
 
     def _get_name(self):
         """getter of name"""
@@ -231,21 +210,4 @@ class ParamSetter(FrozenClass):
         fget=_get_setter,
         fset=_set_setter,
         doc=u"""Function that takes a Simulation and a value in argument and modifiers the simulation""",
-    )
-
-    def _get_value_list(self):
-        """getter of value_list"""
-        return self._value_list
-
-    def _set_value_list(self, value):
-        """setter of value_list"""
-        check_var("value_list", value, "list")
-        self._value_list = value
-
-    # List containing the different parameter values to explore
-    # Type : list
-    value_list = property(
-        fget=_get_value_list,
-        fset=_set_value_list,
-        doc=u"""List containing the different parameter values to explore""",
     )
