@@ -8,6 +8,7 @@ from ...definitions import config_dict
 
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 
+
 def plot_A_4D(
     Xdata,
     Ydata,

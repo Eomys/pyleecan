@@ -8,6 +8,7 @@ from ...definitions import config_dict
 
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 
+
 def plot_A_2D(
     Xdata,
     Ydatas,
@@ -184,7 +185,7 @@ def plot_A_2D(
         ax.grid()
 
     if len(Ydatas) > 1 and not no_legend:
-        ax.legend(prop={'family': FONT_NAME, 'size': 22})
+        ax.legend(prop={"family": FONT_NAME, "size": 22})
 
     plt.tight_layout()
     for item in (

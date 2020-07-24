@@ -8,6 +8,7 @@ from numpy import meshgrid, max as np_max
 
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 
+
 def plot_A_time_space(
     data,
     is_deg=True,

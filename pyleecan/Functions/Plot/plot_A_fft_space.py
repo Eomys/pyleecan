@@ -5,7 +5,7 @@ from .plot_A_2D import plot_A_2D
 from ...definitions import config_dict
 
 
-def plot_A_space(
+def plot_A_fft_space(
     data,
     t=None,
     t_index=0,

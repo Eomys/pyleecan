@@ -2093,7 +2093,7 @@
                 "name": "axes",
                 "type": "[ImportData]",
                 "unit": "-",
-                "value": null
+                "value": []
             },
             {
                 "desc": "Field (Import object)",
@@ -2570,7 +2570,7 @@
                 "name": "components",
                 "type": "{ImportData}",
                 "unit": "-",
-                "value": null
+                "value": {}
             },
             {
                 "desc": "Name of the vector field",
