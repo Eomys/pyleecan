@@ -3,7 +3,6 @@
 from .....Functions.Plot.plot_A_time_space import (
     plot_A_time_space as plot_A_time_space_fct,
 )
-from .....Functions.init_fig import init_fig
 from SciDataTool import VectorField
 
 
@@ -18,7 +17,7 @@ def plot_A_time_space(
     z_max=None,
     is_norm=False,
     unit="SI",
-    colormap="RdBu_r",
+    colormap=None,
     save_path=None,
     is_auto_ticks=True,
     component_list=None,

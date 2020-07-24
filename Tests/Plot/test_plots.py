@@ -1,6 +1,3 @@
-from os import chdir
-
-chdir("../..")
 
 from numpy import linspace, sin, squeeze
 from unittest import TestCase
