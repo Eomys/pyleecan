@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-PYTHON_TYPE = ["float", "int", "str", "bool", "complex", "list", "dict"]
+PYTHON_TYPE = ["float", "int", "str", "bool", "complex", "list", "dict", "tuple"]
 # Indentation according to PEP 8
 TAB = "    "
 TAB2 = TAB + TAB
