@@ -349,28 +349,33 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
             Error message (return None if no error)
 
         """
+        try:
+            # Check that everything is set
+            if machine.stator.Rint is None:
+                return "You must set Stator.Rint !"
+            if machine.stator.Rext is None:
+                return "You must set Stator.Rext !"
+            if machine.rotor.Rint is None:
+                return "You must set Rotor.Rint !"
+            if machine.rotor.Rext is None:
+                return "You must set Rotor.Rext !"
 
-        # Check that everything is set
-        if machine.stator.Rint is None:
-            return "You must set Stator.Rint !"
-        if machine.stator.Rext is None:
-            return "You must set Stator.Rext !"
-        if machine.rotor.Rint is None:
-            return "You must set Rotor.Rint !"
-        if machine.rotor.Rext is None:
-            return "You must set Rotor.Rext !"
-
-        # Check that everything is set right
-        if machine.stator.Rext <= machine.stator.Rint:
-            return "The Stator can't have an internal radius greater than the external one !"
-        if machine.rotor.Rext <= machine.rotor.Rint:
-            return "The Rotor can't have an internal radius greater than the external one !"
-        if machine.rotor.is_internal and machine.stator.Rint <= machine.rotor.Rext:
-            return "For inner rotor machine, you must have: Rotor.Rext < Stator.Rint !"
-        if not machine.rotor.is_internal and machine.stator.Rext >= machine.rotor.Rint:
-            return (
-                "For external rotor machine, you must have: Stator.Rext < Rotor.Rint !"
-            )
+            # Check that everything is set right
+            if machine.stator.Rext <= machine.stator.Rint:
+                return "The Stator can't have an internal radius greater than the external one !"
+            if machine.rotor.Rext <= machine.rotor.Rint:
+                return "The Rotor can't have an internal radius greater than the external one !"
+            if machine.rotor.is_internal and machine.stator.Rint <= machine.rotor.Rext:
+                return (
+                    "For inner rotor machine, you must have: Rotor.Rext < Stator.Rint !"
+                )
+            if (
+                not machine.rotor.is_internal
+                and machine.stator.Rext >= machine.rotor.Rint
+            ):
+                return "For external rotor machine, you must have: Stator.Rext < Rotor.Rint !"
+        except Exception as e:
+            return str(e)
 
     def check_gui(self):
         """Check that the widget are set right according to the current machine

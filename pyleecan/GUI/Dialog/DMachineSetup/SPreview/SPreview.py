@@ -42,6 +42,8 @@ class SPreview(Ui_SPreview, QWidget):
 
         self.machine.plot(fig=self.w_plot.fig, sym=1, alpha=0, delta=0, is_show=False)
         self.w_plot.axes.set_axis_off()
+        if self.w_plot.axes.get_legend() is not None:
+            self.w_plot.axes.get_legend().remove()
         self.w_plot.draw()
 
     # def resizeEvent(self, event):

@@ -23,6 +23,7 @@ MAIN_DIR = dirname(realpath(__file__)).replace("\\", "/")
 PACKAGE_NAME = MAIN_DIR[len(ROOT_DIR) + 1 :]  # To allow to change pyleecan directory
 GEN_DIR = join(MAIN_DIR, "Generator").replace("\\", "/")
 DOC_DIR = join(GEN_DIR, "ClassesRef").replace("\\", "/")
+DATA_DIR = join(MAIN_DIR, "Data").replace("\\", "/")
 # Absolute path to  internal classes ref. dir
 INT_DIR = join(GEN_DIR, "Internal").replace("\\", "/")
 
@@ -47,3 +48,5 @@ config_dict = get_config_dict()
 # Update config_dict content
 config_dict["MAIN"]["MACHINE_DIR"] = join(USER_DIR, "Machine")
 config_dict["MAIN"]["MATLIB_DIR"] = join(USER_DIR, "Material")
+
+config_dict["GUI"]["CSS_PATH"] = join(USER_DIR, "GUI", config_dict["GUI"]["CSS_NAME"])

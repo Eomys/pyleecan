@@ -27,7 +27,7 @@
             "is_transpose": false
         },
         "Brm20": 1.24,
-        "Hc": null,
+        "Hc": 902181.163126629,
         "Wlam": 0,
         "__class__": "MatMagnetics",
         "alpha_Br": -0.001,

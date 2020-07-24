@@ -1,0 +1,51 @@
+{
+    "HT": {
+        "Cp": 460.0,
+        "__class__": "MatHT",
+        "alpha": null,
+        "lambda_x": 43.0,
+        "lambda_y": 43.0,
+        "lambda_z": 43.0
+    },
+    "__class__": "Material",
+    "desc": "Steel",
+    "eco": {
+        "__class__": "MatEconomical",
+        "cost_unit": 2.0,
+        "unit_name": "$"
+    },
+    "elec": {
+        "__class__": "MatElectrical",
+        "alpha": null,
+        "epsr": null,
+        "rho": 1.43e-07
+    },
+    "is_isotropic": true,
+    "mag": {
+        "BH_curve": {
+            "__class__": "ImportMatrix",
+            "is_transpose": false
+        },
+        "Brm20": null,
+        "Hc": null,
+        "Wlam": 0,
+        "__class__": "MatMagnetics",
+        "alpha_Br": null,
+        "mur_lin": 100.0
+    },
+    "name": "Steel1",
+    "path": "Steel1.json",
+    "struct": {
+        "Ex": 71000000000.0,
+        "Ey": 71000000000.0,
+        "Ez": 71000000000.0,
+        "Gxy": null,
+        "Gxz": null,
+        "Gyz": null,
+        "__class__": "MatStructural",
+        "nu_xy": 0.3,
+        "nu_xz": 0.3,
+        "nu_yz": 0.3,
+        "rho": 7850.0
+    }
+}

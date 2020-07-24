@@ -185,16 +185,19 @@ class SBar(Gen_SBar, QWidget):
             Error message (return None if no error)
         """
 
-        # Check that everything is set
-        if lamination.Hscr is None:
-            return "You must set Hscr !"
-        elif lamination.Lscr is None:
-            return "You must set Lscr !"
-        elif lamination.winding.Lewout is None:
-            return "You must set Lewout !"
+        try:
+            # Check that everything is set
+            if lamination.Hscr is None:
+                return "You must set Hscr !"
+            elif lamination.Lscr is None:
+                return "You must set Lscr !"
+            elif lamination.winding.Lewout is None:
+                return "You must set Lewout !"
 
-        if type(lamination.winding.conductor) is INIT_INDEX[0]:
-            if lamination.winding.conductor.Hbar is None:
-                return "You must set Hbar !"
-            elif lamination.winding.conductor.Wbar is None:
-                return "You must set Wbar !"
+            if type(lamination.winding.conductor) is INIT_INDEX[0]:
+                if lamination.winding.conductor.Hbar is None:
+                    return "You must set Hbar !"
+                elif lamination.winding.conductor.Wbar is None:
+                    return "You must set Wbar !"
+        except Exception as e:
+            return str(e)

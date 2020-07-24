@@ -73,7 +73,7 @@ class SidebarWindow(QtWidgets.QMainWindow):
         """ add a new sub window to the stack including the coresponding button"""
         # Button
         btn = QtWidgets.QPushButton(name)
-        btn.setFixedSize(60, 40)
+        btn.setFixedSize(100, 40)
         btn.setCheckable(True)
 
         self.nav_btn_grp.addButton(btn, self.io_stack.count())

@@ -29,7 +29,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
 from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.SWSlot import SWSlot
 from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.SMHoleMag import SMHoleMag
 import matplotlib.pyplot as plt
-from Tests import DATA_DIR
+from Tests import TEST_DATA_DIR
 
 load_test = list()
 load_test.append(  # 1
@@ -64,7 +64,7 @@ ENABLE_ITEM = Qt.ItemIsSelectable | Qt.ItemIsEnabled
 import pytest
 
 
-matlib_path = join(DATA_DIR, "Material")
+matlib_path = join(TEST_DATA_DIR, "Material")
 
 
 @pytest.mark.GUI
@@ -78,7 +78,7 @@ class test_DMachineSetup(TestCase):
         matlib = MatLib(matlib_path)
         dmatlib = DMatLib(matlib=matlib)
         self.widget = DMachineSetup(
-            dmatlib=dmatlib, machine_path=join(DATA_DIR, "Machine")
+            dmatlib=dmatlib, machine_path=join(TEST_DATA_DIR, "Machine")
         )
 
     @classmethod
@@ -98,7 +98,7 @@ class test_DMachineSetup(TestCase):
         """
 
         return_value = (
-            join(join(DATA_DIR, "Load_GUI"), test_dict["name"] + ".json"),
+            join(join(TEST_DATA_DIR, "Load_GUI"), test_dict["name"] + ".json"),
             "Json (*.json)",
         )
         with mock.patch(

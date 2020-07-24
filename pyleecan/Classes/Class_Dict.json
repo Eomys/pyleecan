@@ -3372,20 +3372,19 @@
         "methods": [
             "build_geometry",
             "check",
+            "comp_angle_offset_initial",
+            "comp_desc_dict",
+            "comp_length_airgap_active",
             "comp_masses",
+            "comp_output_geo",
+            "comp_Rgap_mec",
+            "comp_sym",
             "comp_width_airgap_mag",
             "comp_width_airgap_mec",
-            "get_lamination",
-            "comp_Rgap_mec",
-            "plot",
-            "comp_output_geo",
-            "comp_length_airgap_active",
-            "get_polar_eq",
-            "plot_anim_rotor",
             "get_material_list",
-            "comp_sym",
-            "comp_angle_offset_initial",
-            "comp_desc_dict"
+            "get_polar_eq",
+            "plot",
+            "plot_anim_rotor"
         ],
         "mother": "",
         "name": "Machine",
@@ -3485,7 +3484,8 @@
         "is_internal": false,
         "methods": [
             "check",
-            "get_machine_type"
+            "get_machine_type",
+            "get_lam_list"
         ],
         "mother": "MachineAsync",
         "name": "MachineDFIM",
@@ -3524,7 +3524,8 @@
         "is_internal": false,
         "methods": [
             "check",
-            "get_machine_type"
+            "get_machine_type",
+            "get_lam_list"
         ],
         "mother": "MachineSync",
         "name": "MachineIPMSM",
@@ -3583,6 +3584,7 @@
         "is_internal": false,
         "methods": [
             "check",
+            "get_lam_list",
             "get_machine_type"
         ],
         "mother": "MachineSync",
@@ -3622,6 +3624,7 @@
         "is_internal": false,
         "methods": [
             "check",
+            "get_lam_list",
             "get_machine_type"
         ],
         "mother": "MachineSync",
@@ -3661,6 +3664,7 @@
         "is_internal": false,
         "methods": [
             "check",
+            "get_lam_list",
             "get_machine_type"
         ],
         "mother": "MachineSync",
@@ -3725,7 +3729,9 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "plot"
+            "get_lam_list",
+            "plot",
+            "is_synchronous"
         ],
         "mother": "Machine",
         "name": "MachineUD",
@@ -3740,6 +3746,15 @@
                 "type": "[Lamination]",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "desc": "True if the machine should be handled as a Synchronous machine",
+                "max": "",
+                "min": "",
+                "name": "is_sync",
+                "type": "bool",
+                "unit": "",
+                "value": true
             }
         ]
     },
@@ -3755,6 +3770,7 @@
         "is_internal": false,
         "methods": [
             "check",
+            "get_lam_list",
             "get_machine_type"
         ],
         "mother": "MachineSync",

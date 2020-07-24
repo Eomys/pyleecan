@@ -14,18 +14,9 @@ class Ui_GUIOption(object):
         GUIOption.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.verticalLayout = QtWidgets.QVBoxLayout(GUIOption)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.in_matlib_path = QtWidgets.QLabel(GUIOption)
-        self.in_matlib_path.setObjectName("in_matlib_path")
-        self.horizontalLayout_3.addWidget(self.in_matlib_path)
-        self.le_matlib_path = QtWidgets.QLineEdit(GUIOption)
-        self.le_matlib_path.setObjectName("le_matlib_path")
-        self.horizontalLayout_3.addWidget(self.le_matlib_path)
-        self.b_matlib_path = QtWidgets.QPushButton(GUIOption)
-        self.b_matlib_path.setObjectName("b_matlib_path")
-        self.horizontalLayout_3.addWidget(self.b_matlib_path)
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
+        self.w_matlib_path = WPathSelector(GUIOption)
+        self.w_matlib_path.setObjectName("w_matlib_path")
+        self.verticalLayout.addWidget(self.w_matlib_path)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.in_unit_m = QtWidgets.QLabel(GUIOption)
@@ -48,6 +39,10 @@ class Ui_GUIOption(object):
         self.c_unit_m2.addItem("")
         self.horizontalLayout_2.addWidget(self.c_unit_m2)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
+        self.verticalLayout.addItem(spacerItem)
 
         self.retranslateUi(GUIOption)
         QtCore.QMetaObject.connectSlotsByName(GUIOption)
@@ -55,8 +50,6 @@ class Ui_GUIOption(object):
     def retranslateUi(self, GUIOption):
         _translate = QtCore.QCoreApplication.translate
         GUIOption.setWindowTitle(_translate("GUIOption", "Form"))
-        self.in_matlib_path.setText(_translate("GUIOption", "Material Library path"))
-        self.b_matlib_path.setText(_translate("GUIOption", "Select folder"))
         self.in_unit_m.setText(_translate("GUIOption", "Meter unit"))
         self.c_unit_m.setItemText(0, _translate("GUIOption", "m"))
         self.c_unit_m.setItemText(1, _translate("GUIOption", "mm"))
@@ -65,4 +58,5 @@ class Ui_GUIOption(object):
         self.c_unit_m2.setItemText(1, _translate("GUIOption", "mm²"))
 
 
+from ....GUI.Tools.WPathSelector.WPathSelector import WPathSelector
 from pyleecan.GUI.Resources import pyleecan_rc

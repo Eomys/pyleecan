@@ -1,3 +1,4 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constante Name,Constante Value,Description classe,Classe fille
 rotor,,Machine's Rotor,,LamSlot,,,,,Machine,MachineSync,check,VERSION,1,Switched Reluctance Machine,
-stator,,Machine's Stator,,LamSlotWind,,,,,,,get_machine_type,,,,
+stator,,Machine's Stator,,LamSlotWind,,,,,,,get_lam_list,,,,
+,,,,,,,,,,,get_machine_type,,,,

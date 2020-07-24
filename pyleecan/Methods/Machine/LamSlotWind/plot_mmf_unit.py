@@ -4,6 +4,7 @@ from numpy import pi, linspace, zeros, sqrt, dot, array, squeeze
 from SciDataTool import Data1D, DataLinspace, DataTime
 from ....Functions.Electrical.coordinate_transformation import dq2n
 from ....Functions.Winding.gen_phase_list import gen_name
+from ....definitions import config_dict
 
 
 def plot_mmf_unit(self, Na=2048, fig=None):
@@ -48,6 +49,12 @@ def plot_mmf_unit(self, Na=2048, fig=None):
         name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf
     )
 
+    color_list = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][: qs + 1]
     out.plot_A_space(
-        "mag.Br", is_fft=True, index_list=[0, 1, 2], data_list=[mmf_u], fig=fig
+        "mag.Br",
+        is_fft=True,
+        index_list=[0, 1, 2],
+        data_list=[mmf_u],
+        fig=fig,
+        color_list=color_list,
     )
