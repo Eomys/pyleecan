@@ -320,7 +320,6 @@ class XOutput(Output):
         output_list=[],
         xoutput_dict={},
         nb_simu=0,
-        shape=None,
         simu=-1,
         path_res="",
         geo=-1,
@@ -369,7 +368,6 @@ class XOutput(Output):
             output_list = obj.output_list
             xoutput_dict = obj.xoutput_dict
             nb_simu = obj.nb_simu
-            shape = obj.shape
             simu = obj.simu
             path_res = obj.path_res
             geo = obj.geo
@@ -390,8 +388,6 @@ class XOutput(Output):
                 xoutput_dict = init_dict["xoutput_dict"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
-            if "shape" in list(init_dict.keys()):
-                shape = init_dict["shape"]
             if "simu" in list(init_dict.keys()):
                 simu = init_dict["simu"]
             if "path_res" in list(init_dict.keys()):
@@ -415,7 +411,6 @@ class XOutput(Output):
         self.output_list = output_list
         self.xoutput_dict = xoutput_dict
         self.nb_simu = nb_simu
-        self.shape = shape
         # Call Output init
         super(XOutput, self).__init__(
             simu=simu,
@@ -451,11 +446,6 @@ class XOutput(Output):
         )
         XOutput_str += "xoutput_dict = " + str(self.xoutput_dict) + linesep
         XOutput_str += "nb_simu = " + str(self.nb_simu) + linesep
-        if self.shape is not None:
-            tmp = self.shape.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            XOutput_str += "shape = " + tmp + linesep
-        else:
-            XOutput_str += "shape = None" + linesep
         return XOutput_str
 
     def __eq__(self, other):
@@ -475,8 +465,6 @@ class XOutput(Output):
             return False
         if other.nb_simu != self.nb_simu:
             return False
-        if other.shape != self.shape:
-            return False
         return True
 
     def as_dict(self):
@@ -489,7 +477,6 @@ class XOutput(Output):
         XOutput_dict["output_list"] = self.output_list
         XOutput_dict["xoutput_dict"] = self.xoutput_dict
         XOutput_dict["nb_simu"] = self.nb_simu
-        XOutput_dict["shape"] = self.shape
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         XOutput_dict["__class__"] = "XOutput"
@@ -502,7 +489,6 @@ class XOutput(Output):
         self.output_list = None
         self.xoutput_dict = None
         self.nb_simu = None
-        self.shape = None
         # Set to None the properties inherited from Output
         super(XOutput, self)._set_None()
 
@@ -573,16 +559,3 @@ class XOutput(Output):
         fset=_set_nb_simu,
         doc=u"""Number of simulations excluding reference simulation""",
     )
-
-    def _get_shape(self):
-        """getter of shape"""
-        return self._shape
-
-    def _set_shape(self, value):
-        """setter of shape"""
-        check_var("shape", value, "tuple")
-        self._shape = value
-
-    # Simulation shape
-    # Type : tuple
-    shape = property(fget=_get_shape, fset=_set_shape, doc=u"""Simulation shape""")

@@ -22,4 +22,9 @@ if __name__ == "__main__":
     generate_code(MAIN_DIR, gen_dict)
     generate_gui(gen_dict, is_gen_resource=True)
     # Run black
-    system("{} -m black .".format(sys.executable))
+    try:
+        import black
+
+        system("{} -m black .".format(sys.executable))
+    except ImportError:
+        print("/!\\ Please install and run black /!\\")

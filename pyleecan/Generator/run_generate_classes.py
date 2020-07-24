@@ -98,4 +98,9 @@ if __name__ == "__main__":
     gen_dict = read_all(DOC_DIR, is_internal=False, in_path=INT_DIR)
     generate_code(MAIN_DIR, gen_dict)
     # Run black
-    system("{} -m black .".format(sys.executable))
+    try:
+        import black
+
+        system("{} -m black .".format(sys.executable))
+    except ImportError:
+        print("/!\\ Please install and run black /!\\")

@@ -1,4 +1,8 @@
-# <img alt="Pyleecan" src="https://www.pyleecan.org/_static/favicon.png" height="60">
+# <img alt="Pyleecan" src="https://www.pyleecan.org/_static/favicon.png" height="120">
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+
 ## Presentation
 PYLEECAN™ objective is to provide a **user-friendly, unified, flexible simulation framework for the multiphysic design and optimization of electrical machines and drives** based on fully open-source software.
 

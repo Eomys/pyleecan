@@ -3,7 +3,7 @@ paramexplorer_list,-,List containing ParamExplorer,0,list,[],,,,Output,Output,__
 output_list,-,List containing Output for each simulation,0,list,[],,,,,,__getitem__,,,
 xoutput_dict,-,Dictionnary containing VarParam DataKeeper results in ndarray,0,dict,{},,,,,,__iter__,,,
 nb_simu,-,Number of simulations excluding reference simulation,0,int,0,0,,,,,__len__,,,
-shape,-,Simulation shape,0,tuple,None,,,,,,__missing__,,,
+,,,,,,,,,,,__missing__,,,
 ,,,,,,,,,,,__next__,,,
 ,,,,,,,,,,,__reversed__,,,
 ,,,,,,,,,,,__setitem__,,,

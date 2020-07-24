@@ -24,4 +24,9 @@ if __name__ == "__main__":
     generate_gui(gen_dict, is_gen_resource=False)
 
     # Run black
-    system("{} -m black .".format(sys.executable))
+    try:
+        import black
+
+        system("{} -m black .".format(sys.executable))
+    except ImportError:
+        print("/!\\ Please install and run black /!\\")

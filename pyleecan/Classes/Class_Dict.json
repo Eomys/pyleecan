@@ -9887,15 +9887,6 @@
                 "type": "int",
                 "unit": "-",
                 "value": 0
-            },
-            {
-                "desc": "Simulation shape",
-                "max": "",
-                "min": "",
-                "name": "shape",
-                "type": "tuple",
-                "unit": "-",
-                "value": null
             }
         ]
     }
