@@ -15,7 +15,7 @@ def plot_A_surf(
     z_max=None,
     is_norm=False,
     unit="SI",
-    colormap="RdBu_r",
+    colormap=None,
     save_path=None,
     component_list=None,
 ):
