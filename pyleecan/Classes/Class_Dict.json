@@ -6506,8 +6506,7 @@
         ],
         "daughters": [
             "ParamExplorer",
-            "ParamExplorerSet",
-            "ParamExplorerValue"
+            "ParamExplorerSet"
         ],
         "desc": "Abstract class for the multi-simulation",
         "is_internal": false,
@@ -6579,35 +6578,8 @@
                 "desc": "List containing the different parameter values to explore",
                 "max": "",
                 "min": "",
-                "name": "value_list",
-                "type": "list",
-                "unit": "-",
-                "value": []
-            }
-        ]
-    },
-    "ParamExplorerValue": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Abstract class for the multi-simulation",
-        "is_internal": false,
-        "methods": [],
-        "mother": "ParamExplorer",
-        "name": "ParamExplorerValue",
-        "package": "Simulation",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/ParamExplorerValue.csv",
-        "properties": [
-            {
-                "desc": "List containing the different parameter values to explore",
-                "max": "",
-                "min": "",
                 "name": "value",
-                "type": "ndarray",
+                "type": "list",
                 "unit": "-",
                 "value": []
             }
@@ -9323,9 +9295,9 @@
             {
                 "desc": "Index of the reference simulation, if None the reference simulation is not in the multi-simulation",
                 "max": "",
-                "min": "",
+                "min": "0",
                 "name": "ref_simu_index",
-                "type": "tuple",
+                "type": "int",
                 "unit": "-",
                 "value": null
             },
@@ -9856,7 +9828,7 @@
             "keys",
             "items",
             "get_param_simu",
-            "get_param_array",
+            "get_paramexplorer",
             "plot_multi"
         ],
         "mother": "Output",

@@ -2,7 +2,7 @@ def run_single_simu(
     xoutput,
     datakeeper_list,
     simulation,
-    multi_index,
+    index,
     stop_if_error,
     ref_simu_index,
     is_keep_all_output,
@@ -18,7 +18,7 @@ def run_single_simu(
         List of datakeeper to extract results
     simulation: Simulation
         Simulation to run
-    multi_index: tuple
+    index: int
         Index of the simulation
     stop_if_error: bool
         Raises an error if the simulation fails
@@ -27,7 +27,7 @@ def run_single_simu(
     is_keep_all_output: bool
         store simulation output
     """
-    
+
     if stop_if_error:
         is_error = False
         result = simulation.run()
@@ -49,13 +49,13 @@ def run_single_simu(
         # Execute error_keeper if error
         for datakeeper in datakeeper_list:
             if datakeeper.error_keeper is None:
-                xoutput.xoutput_dict[datakeeper.symbol][multi_index] = None
+                xoutput.xoutput_dict[datakeeper.symbol][index] = None
             else:
                 xoutput.xoutput_dict[datakeeper.symbol][
-                    multi_index
+                    index
                 ] = datakeeper.error_keeper(simulation)
     else:
-        if multi_index == ref_simu_index:
+        if index == ref_simu_index:
             for attr in dir(result):
                 if (
                     # Not method
@@ -69,6 +69,4 @@ def run_single_simu(
 
         # Execute keepers
         for datakeeper in datakeeper_list:
-            xoutput.xoutput_dict[datakeeper.symbol][multi_index] = datakeeper.keeper(
-                result
-            )
+            xoutput.xoutput_dict[datakeeper.symbol][index] = datakeeper.keeper(result)

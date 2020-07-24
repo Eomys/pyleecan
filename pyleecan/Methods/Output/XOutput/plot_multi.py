@@ -40,9 +40,17 @@ def plot_multi(self, param, data, plot_type="scatter", idx=None, ax=None, title=
     if plot_type not in ["scatter", "plot"]:
         raise PlotError("Unknown plot_type {}.".format(plot_type))
 
-    x_values = self.get_param_array(param)[idx]
-    y_values = self[data][idx]
+    paramexplorer = self.get_paramexplorer(param)
 
+    x_values = np.array(paramexplorer.value[idx])
+    y_values = np.array(self[data][idx])
+
+    # x_label definition
+    x_label = param
+    if paramexplorer.unit not in ["", None]:
+        x_label += " [{}]".format(paramexplorer.unit)
+
+    # Plot in new figure
     if ax is None:
         fig, ax = plt.subplots()
         if plot_type is "scatter":
@@ -51,11 +59,11 @@ def plot_multi(self, param, data, plot_type="scatter", idx=None, ax=None, title=
             sort_index = np.argsort(x_values)
             ax.plot(x_values[sort_index], y_values[sort_index])
 
-        # ax.set_title("Pareto Front")
         fig.suptitle(title)
-        ax.set_xlabel(param)
+        ax.set_xlabel(x_label)
         ax.set_ylabel(data)
         return fig
+    # Plot in ax
     else:
         if plot_type is "scatter":
             ax.scatter(x_values, y_values)
@@ -64,6 +72,6 @@ def plot_multi(self, param, data, plot_type="scatter", idx=None, ax=None, title=
             ax.plot(x_values[sort_index], y_values[sort_index])
 
         ax.set_title(title)
-        ax.set_xlabel(param)
+        ax.set_xlabel(x_label)
         ax.set_ylabel(data)
         return ax

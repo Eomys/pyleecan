@@ -1,6 +1,6 @@
 import itertools
 import numpy as np
-from ....Classes.ParamExplorerValue import ParamExplorerValue
+from ....Classes.ParamExplorerSet import ParamExplorerSet
 
 
 def get_simulations(self):
@@ -15,17 +15,24 @@ def get_simulations(self):
     ref_simu = self.parent
 
     # Build the list
-    params_setter_list = []
-    params_value_list = []
+    setter_list = []  # Store ParamExplorer setters
+    params_value_dict = {}  # Store parameter value list per ParamExplorer
+    params_symbol_list = []  # Store ParamExplorer symbols
+    params_value_list = []  # Store ParamExplorer values to perform cartesian product
     multisim_shape = []
 
     n_param = 0
     # Add values and shape in the list
     for param_explorer in self.paramexplorer_list:
         n_param += 1
-        params_setter_list.append(param_explorer.setter)
-        params_value_list.append(param_explorer.get_value())
-        multisim_shape.append(len(param_explorer.value_list))
+        params_value_dict[param_explorer.symbol] = []
+        params_symbol_list.append(param_explorer.symbol)
+        setter_list.append(param_explorer.setter)
+
+        # Generate values
+        values = param_explorer.get_value()
+        params_value_list.append(values)
+        multisim_shape.append(len(values))
 
     if len(params_value_list) > 0:
         self.nb_simu = 1
@@ -33,19 +40,13 @@ def get_simulations(self):
             self.nb_simu *= len(values)
 
     multisim_dict = {
-        "shape": tuple(multisim_shape),  # Shape simulation
+        "nb_simu": self.nb_simu,  # Shape simulation
         "paramexplorer_list": [],  # Setter's values
         "simulation_list": [],
     }
 
-    multisim_values = np.ndarray(multisim_shape + [n_param], dtype="O")
-
-    idx_simu_list = [range(len(value_list)) for value_list in params_value_list]
-
     # Cartesian product to generate every simulation
-    for idx_simu, simu_param_values in zip(
-        itertools.product(*idx_simu_list), itertools.product(*params_value_list)
-    ):
+    for simu_param_values in itertools.product(*params_value_list):
         # Generate the simulation
         new_simu = ref_simu.copy()
 
@@ -56,12 +57,13 @@ def get_simulations(self):
         input_values = []
 
         # Edit it using setter
-        for setter, value in zip(params_setter_list, simu_param_values):
+        for setter, value, symbol in zip(
+            setter_list, simu_param_values, params_symbol_list
+        ):
             setter(new_simu, value)
-            input_values.append(value)
+            params_value_dict[symbol].append(value)
 
         # Add the simulation
-        multisim_values[idx_simu] = input_values
         multisim_dict["simulation_list"].append(new_simu)
 
     # Create slices to extract ndarrays from multisim_values
@@ -70,14 +72,14 @@ def get_simulations(self):
         slices += (slice(None),)
 
     # Create ParamExplorerValue to be stored in XOutput
-    for i, param_explorer in enumerate(self.paramexplorer_list):
+    for param_explorer in self.paramexplorer_list:
         multisim_dict["paramexplorer_list"].append(
-            ParamExplorerValue(
+            ParamExplorerSet(
                 name=param_explorer.name,
                 symbol=param_explorer.symbol,
                 unit=param_explorer.unit,
                 setter=param_explorer.setter,
-                value=np.array(multisim_values[slices + (i,)]),
+                value=params_value_dict[param_explorer.symbol],
             )
         )
 

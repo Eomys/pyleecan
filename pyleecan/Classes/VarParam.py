@@ -140,11 +140,7 @@ class VarParam(VarSimu):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in [
-                        "ParamExplorer",
-                        "ParamExplorerSet",
-                        "ParamExplorerValue",
-                    ]:
+                    if class_name not in ["ParamExplorer", "ParamExplorerSet"]:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name

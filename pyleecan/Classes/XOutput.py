@@ -98,9 +98,9 @@ except ImportError as error:
     get_param_simu = error
 
 try:
-    from ..Methods.Output.XOutput.get_param_array import get_param_array
+    from ..Methods.Output.XOutput.get_paramexplorer import get_paramexplorer
 except ImportError as error:
-    get_param_array = error
+    get_paramexplorer = error
 
 try:
     from ..Methods.Output.XOutput.plot_multi import plot_multi
@@ -281,17 +281,18 @@ class XOutput(Output):
         )
     else:
         get_param_simu = get_param_simu
-    # cf Methods.Output.XOutput.get_param_array
-    if isinstance(get_param_array, ImportError):
-        get_param_array = property(
+    # cf Methods.Output.XOutput.get_paramexplorer
+    if isinstance(get_paramexplorer, ImportError):
+        get_paramexplorer = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use XOutput method get_param_array: " + str(get_param_array)
+                    "Can't use XOutput method get_paramexplorer: "
+                    + str(get_paramexplorer)
                 )
             )
         )
     else:
-        get_param_array = get_param_array
+        get_paramexplorer = get_paramexplorer
     # cf Methods.Output.XOutput.plot_multi
     if isinstance(plot_multi, ImportError):
         plot_multi = property(

@@ -54,7 +54,7 @@ class ParamExplorerSet(ParamExplorer):
 
     def __init__(
         self,
-        value_list=[],
+        value=[],
         name="",
         symbol="",
         unit="",
@@ -80,7 +80,7 @@ class ParamExplorerSet(ParamExplorer):
             # load the object from a file
             obj = load(init_str)
             assert type(obj) is type(self)
-            value_list = obj.value_list
+            value = obj.value
             name = obj.name
             symbol = obj.symbol
             unit = obj.unit
@@ -88,8 +88,8 @@ class ParamExplorerSet(ParamExplorer):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "value_list" in list(init_dict.keys()):
-                value_list = init_dict["value_list"]
+            if "value" in list(init_dict.keys()):
+                value = init_dict["value"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
             if "symbol" in list(init_dict.keys()):
@@ -99,7 +99,7 @@ class ParamExplorerSet(ParamExplorer):
             if "setter" in list(init_dict.keys()):
                 setter = init_dict["setter"]
         # Initialisation by argument
-        self.value_list = value_list
+        self.value = value
         # Call ParamExplorer init
         super(ParamExplorerSet, self).__init__(
             name=name, symbol=symbol, unit=unit, setter=setter
@@ -114,9 +114,9 @@ class ParamExplorerSet(ParamExplorer):
         # Get the properties inherited from ParamExplorer
         ParamExplorerSet_str += super(ParamExplorerSet, self).__str__()
         ParamExplorerSet_str += (
-            "value_list = "
+            "value = "
             + linesep
-            + str(self.value_list).replace(linesep, linesep + "\t")
+            + str(self.value).replace(linesep, linesep + "\t")
             + linesep
         )
         return ParamExplorerSet_str
@@ -130,7 +130,7 @@ class ParamExplorerSet(ParamExplorer):
         # Check the properties inherited from ParamExplorer
         if not super(ParamExplorerSet, self).__eq__(other):
             return False
-        if other.value_list != self.value_list:
+        if other.value != self.value:
             return False
         return True
 
@@ -140,7 +140,7 @@ class ParamExplorerSet(ParamExplorer):
 
         # Get the properties inherited from ParamExplorer
         ParamExplorerSet_dict = super(ParamExplorerSet, self).as_dict()
-        ParamExplorerSet_dict["value_list"] = self.value_list
+        ParamExplorerSet_dict["value"] = self.value
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         ParamExplorerSet_dict["__class__"] = "ParamExplorerSet"
@@ -149,23 +149,23 @@ class ParamExplorerSet(ParamExplorer):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.value_list = None
+        self.value = None
         # Set to None the properties inherited from ParamExplorer
         super(ParamExplorerSet, self)._set_None()
 
-    def _get_value_list(self):
-        """getter of value_list"""
-        return self._value_list
+    def _get_value(self):
+        """getter of value"""
+        return self._value
 
-    def _set_value_list(self, value):
-        """setter of value_list"""
-        check_var("value_list", value, "list")
-        self._value_list = value
+    def _set_value(self, value):
+        """setter of value"""
+        check_var("value", value, "list")
+        self._value = value
 
     # List containing the different parameter values to explore
     # Type : list
-    value_list = property(
-        fget=_get_value_list,
-        fset=_set_value_list,
+    value = property(
+        fget=_get_value,
+        fset=_set_value,
         doc=u"""List containing the different parameter values to explore""",
     )

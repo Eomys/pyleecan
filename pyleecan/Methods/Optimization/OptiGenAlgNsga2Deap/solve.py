@@ -7,7 +7,7 @@ import numpy as np
 
 from ....Classes.Output import Output
 from ....Classes.XOutput import XOutput
-from ....Classes.ParamExplorerValue import ParamExplorerValue
+from ....Classes.ParamExplorerSet import ParamExplorerSet
 from ....Functions.Optimization.evaluate import evaluate
 from ....Functions.Optimization.update import update
 from ....Functions.Optimization.check_cstr import check_cstr
@@ -243,20 +243,11 @@ def solve(self):
             range(shape), paramexplorer_setter, paramexplorer_symbol
         ):
             self.xoutput.paramexplorer_list.append(
-                ParamExplorerValue(
-                    value=paramexplorer_value[:, i], setter=setter, symbol=symbol,
+                ParamExplorerSet(
+                    value=paramexplorer_value[:, i].tolist(),
+                    setter=setter,
+                    symbol=symbol,
                 )
-            )
-
-        self.xoutput.xoutput_dict["is_valid"] = np.array(
-            self.xoutput.xoutput_dict["is_valid"]
-        )
-        self.xoutput.xoutput_dict["ngen"] = np.array(self.xoutput.xoutput_dict["ngen"])
-
-        # Fitness values
-        for fit_name in fitness_names:
-            self.xoutput.xoutput_dict[fit_name] = np.array(
-                self.xoutput.xoutput_dict[fit_name]
             )
 
         return self.xoutput
@@ -271,20 +262,11 @@ def solve(self):
             range(shape), paramexplorer_setter, paramexplorer_symbol
         ):
             self.xoutput.paramexplorer_list.append(
-                ParamExplorerValue(
-                    value=paramexplorer_value[:, i], setter=setter, symbol=symbol,
+                ParamExplorerSet(
+                    value=paramexplorer_value[:, i].tolist(),
+                    setter=setter,
+                    symbol=symbol,
                 )
-            )
-
-        self.xoutput.xoutput_dict["is_valid"] = np.array(
-            self.xoutput.xoutput_dict["is_valid"]
-        )
-        self.xoutput.xoutput_dict["ngen"] = np.array(self.xoutput.xoutput_dict["ngen"])
-
-        # Fitness values
-        for fit_name in fitness_names:
-            self.xoutput.xoutput_dict[fit_name] = np.array(
-                self.xoutput.xoutput_dict[fit_name]
             )
 
         # Except keybord interruption to return the results already computed

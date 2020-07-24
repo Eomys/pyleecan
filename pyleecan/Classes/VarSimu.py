@@ -156,15 +156,7 @@ class VarSimu(FrozenClass):
         VarSimu_str += "nb_proc = " + str(self.nb_proc) + linesep
         VarSimu_str += "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
         VarSimu_str += "stop_if_error = " + str(self.stop_if_error) + linesep
-        if self.ref_simu_index is not None:
-            tmp = (
-                self.ref_simu_index.__str__()
-                .replace(linesep, linesep + "\t")
-                .rstrip("\t")
-            )
-            VarSimu_str += "ref_simu_index = " + tmp + linesep
-        else:
-            VarSimu_str += "ref_simu_index = None" + linesep
+        VarSimu_str += "ref_simu_index = " + str(self.ref_simu_index) + linesep
         VarSimu_str += "nb_simu = " + str(self.nb_simu) + linesep
         return VarSimu_str
 
@@ -334,11 +326,11 @@ class VarSimu(FrozenClass):
 
     def _set_ref_simu_index(self, value):
         """setter of ref_simu_index"""
-        check_var("ref_simu_index", value, "tuple")
+        check_var("ref_simu_index", value, "int", Vmin=0)
         self._ref_simu_index = value
 
     # Index of the reference simulation, if None the reference simulation is not in the multi-simulation
-    # Type : tuple
+    # Type : int, min = 0
     ref_simu_index = property(
         fget=_get_ref_simu_index,
         fset=_set_ref_simu_index,

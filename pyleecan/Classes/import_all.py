@@ -116,7 +116,6 @@ from ..Classes.OutputMulti import OutputMulti
 from ..Classes.OutputMultiOpti import OutputMultiOpti
 from ..Classes.ParamExplorer import ParamExplorer
 from ..Classes.ParamExplorerSet import ParamExplorerSet
-from ..Classes.ParamExplorerValue import ParamExplorerValue
 from ..Classes.PolarArc import PolarArc
 from ..Classes.Segment import Segment
 from ..Classes.Shaft import Shaft

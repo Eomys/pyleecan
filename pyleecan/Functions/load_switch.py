@@ -118,7 +118,6 @@ load_switch = {
     "OutputMultiOpti": OutputMultiOpti,
     "ParamExplorer": ParamExplorer,
     "ParamExplorerSet": ParamExplorerSet,
-    "ParamExplorerValue": ParamExplorerValue,
     "PolarArc": PolarArc,
     "Segment": Segment,
     "Shaft": Shaft,
