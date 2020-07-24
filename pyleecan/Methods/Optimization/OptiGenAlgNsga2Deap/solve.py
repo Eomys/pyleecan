@@ -237,7 +237,6 @@ def solve(self):
         # Change xoutput variables in ndarray
         paramexplorer_value = np.array(paramexplorer_value)
 
-        self.xoutput.shape = (shape,)
         self.xoutput.nb_simu = shape
         for i, setter, symbol in zip(
             range(shape), paramexplorer_setter, paramexplorer_symbol
@@ -256,7 +255,6 @@ def solve(self):
         # Change xoutput variables in ndarray
         paramexplorer_value = np.array(paramexplorer_value)
 
-        self.xoutput.shape = (shape,)
         self.xoutput.nb_simu = shape
         for i, setter, symbol in zip(
             range(shape), paramexplorer_setter, paramexplorer_symbol
