@@ -23,10 +23,10 @@ class DMatSetup(Gen_DMatSetup, QDialog):
 
         Parameters
         ----------
-            material : Material
-                material to edit
-            is_matlib : bool 
-                material already in matlib 
+        material : Material
+            material to edit
+        is_matlib : bool 
+            material already in matlib 
         """
         # Build the interface according to the .ui file
         QDialog.__init__(self)
@@ -98,10 +98,11 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.lf_Brm20.setValue(self.mat.mag.Brm20)
         self.lf_alpha_Br.setValue(self.mat.mag.alpha_Br)
         self.lf_Wlam.setValue(self.mat.mag.Wlam)
-        if isinstance(self.mat.mag.BH_curve, ImportMatrixXls):
-            file_path = abs_file_path(self.mat.mag.BH_curve.file_path, is_check=False)
-            self.in_BH_file.setText(split(file_path)[1])
-            self.b_plot.setEnabled(True)
+        # Setup import B(H) widget
+        self.w_BH_import.verbose_name = "B(H) curve"
+        self.w_BH_import.obj = self.mat.mag
+        self.w_BH_import.param_name = "BH_curve"
+        self.w_BH_import.update()
 
         # Hide useless widget
         self.in_epsr.hide()
@@ -112,8 +113,6 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.le_name.editingFinished.connect(self.set_name)
         self.is_isotropic.toggled.connect(self.set_is_isotropic)
         self.lf_rho_elec.editingFinished.connect(self.set_rho_elec)
-        self.b_xls.clicked.connect(self.set_xls_BH)
-        self.b_plot.clicked.connect(self.plot_BH)
         # Magnetics
         self.lf_mur_lin.editingFinished.connect(self.set_mur_lin)
         self.lf_Brm20.editingFinished.connect(self.set_Brm20)
@@ -142,33 +141,6 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.lf_nu_xy.editingFinished.connect(self.set_nu_xy)
         self.lf_nu_xz.editingFinished.connect(self.set_nu_xz)
         self.lf_nu_yz.editingFinished.connect(self.set_nu_yz)
-
-    def plot_BH(self):
-        self.plot_win = MPLCanvas(self)
-        self.mat.mag.plot_BH(fig=self.plot_win.fig)
-        self.plot_win.setWindowTitle("BH curve")
-        self.plot_win.exec_()
-
-    def set_xls_BH(self):
-        # Ask the user to select a .xlsx file to load
-        load_path = str(
-            QFileDialog.getOpenFileName(
-                self,
-                self.tr("Load file"),
-                split(abs_file_path(self.mat.path, is_check=False))[0],
-                "Excel (*.xlsx *.xls)",
-            )[0]
-        )
-        if load_path is not None:
-            self.mat.mag.BH_curve = ImportMatrixXls(
-                file_path=rel_file_path(load_path, "MATLIB_DIR"),
-                sheet="BH",
-                is_transpose=False,
-                skiprows=0,
-                usecols=None,
-            )
-            self.in_BH_file.setText(split(load_path)[1])
-            self.b_plot.setEnabled(True)
 
     def set_default(self, attr, attr_name):
         msg = QMessageBox()
@@ -233,6 +205,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         -------
         None
         """
+        print(self.mat.mag.BH_curve)
         self.mat.elec.rho = self.lf_rho_elec.value()
 
     def set_mur_lin(self):

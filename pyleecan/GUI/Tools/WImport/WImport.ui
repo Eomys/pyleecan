@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WImport</class>
+ <widget class="QWidget" name="WImport">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>678</width>
+    <height>491</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="main_layout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="in_param">
+       <property name="text">
+        <string>Param_name: </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="c_type_import"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QWidget" name="w_import" native="true"/>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../../Resources/pyleecan.qrc"/>
+  <include location="../../../Resources/pyleecan.qrc"/>
+  <include location="../../../Resources/pyleecan.qrc"/>
+ </resources>
+ <connections/>
+</ui>
