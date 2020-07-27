@@ -59,7 +59,6 @@ Br_FT = ImportData(
     unit="T",
     name="Airgap radial flux density",
     symbol="B_{rad}",
-    is_freq=True,
 )
 B_FT = ImportVectorField(components={"radial": Br_FT})
 
