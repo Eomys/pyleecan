@@ -94,7 +94,7 @@ def plot_A_fft2(
     if data.symbol == "Magnitude":
         zlabel = "Magnitude " + unit_str
     else:
-        zlabel = r"$|\widehat{" + data.symbol + "}|\, " + unit_str + "$"
+        zlabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
 
     if mag_max is None:
         mag_max = np_max(A_mag)

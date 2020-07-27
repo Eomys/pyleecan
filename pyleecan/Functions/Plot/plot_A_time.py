@@ -172,7 +172,7 @@ def plot_A_time(
         if data.symbol == "Magnitude":
             ylabel = "Magnitude " + unit_str
         else:
-            ylabel = r"$|\widehat{" + data.symbol + "}|\, " + unit_str + "$"
+            ylabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
         legend_list = [legend_list[0]] + [legend_list[-1]]
 
         if is_elecorder:

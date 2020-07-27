@@ -87,7 +87,7 @@ def plot_A_cfft2(
     if data.symbol == "Magnitude":
         zlabel = "Magnitude " + unit_str
     else:
-        zlabel = r"$|\widehat{" + data.symbol + "}|\, " + unit_str + "$"
+        zlabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
 
     # Extract the field
     results = data.get_harmonics(
