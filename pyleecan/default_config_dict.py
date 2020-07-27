@@ -11,3 +11,4 @@ default_config_dict["GUI"]["CSS_PATH"] = ""
 # Name of the color set to use
 default_config_dict["PLOT"]["COLOR_DICT_NAME"] = "pyleecan_color.json"
 default_config_dict["PLOT"]["COLOR_DICT"] = {}
+default_config_dict["PLOT"]["FONT_NAME"] = "Arial"
