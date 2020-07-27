@@ -1,4 +1,4 @@
-from ....Methods.Simulation.Import import ImportError
+from ....Methods.Import import ImportError
 
 
 def check(self):
