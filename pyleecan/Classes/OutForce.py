@@ -15,9 +15,9 @@ from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
 try:
-    from SciDataTool.Classes.DataND import DataND
+    from SciDataTool.Classes.VectorField import VectorField
 except ImportError:
-    DataND = ImportError
+    VectorField = ImportError
 from ._check import InitUnKnowClassError
 
 
@@ -44,8 +44,7 @@ class OutForce(FrozenClass):
         angle=None,
         Nt_tot=None,
         Na_tot=None,
-        Prad=None,
-        Ptan=None,
+        P=None,
         logger_name="Pyleecan.OutStruct",
         init_dict=None,
         init_str=None,
@@ -72,8 +71,7 @@ class OutForce(FrozenClass):
             angle = obj.angle
             Nt_tot = obj.Nt_tot
             Na_tot = obj.Na_tot
-            Prad = obj.Prad
-            Ptan = obj.Ptan
+            P = obj.P
             logger_name = obj.logger_name
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
@@ -86,10 +84,8 @@ class OutForce(FrozenClass):
                 Nt_tot = init_dict["Nt_tot"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
-            if "Prad" in list(init_dict.keys()):
-                Prad = init_dict["Prad"]
-            if "Ptan" in list(init_dict.keys()):
-                Ptan = init_dict["Ptan"]
+            if "P" in list(init_dict.keys()):
+                P = init_dict["P"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
         # Initialisation by argument
@@ -100,11 +96,10 @@ class OutForce(FrozenClass):
         set_array(self, "angle", angle)
         self.Nt_tot = Nt_tot
         self.Na_tot = Na_tot
-        # Check if the type DataND has been imported with success
-        if isinstance(DataND, ImportError):
-            raise ImportError("Unknown type DataND please install SciDataTool")
-        self.Prad = Prad
-        self.Ptan = Ptan
+        # Check if the type VectorField has been imported with success
+        if isinstance(VectorField, ImportError):
+            raise ImportError("Unknown type VectorField please install SciDataTool")
+        self.P = P
         self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
@@ -134,8 +129,7 @@ class OutForce(FrozenClass):
         )
         OutForce_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutForce_str += "Na_tot = " + str(self.Na_tot) + linesep
-        OutForce_str += "Prad = " + str(self.Prad) + linesep + linesep
-        OutForce_str += "Ptan = " + str(self.Ptan) + linesep + linesep
+        OutForce_str += "P = " + str(self.P) + linesep + linesep
         OutForce_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return OutForce_str
 
@@ -152,9 +146,7 @@ class OutForce(FrozenClass):
             return False
         if other.Na_tot != self.Na_tot:
             return False
-        if other.Prad != self.Prad:
-            return False
-        if other.Ptan != self.Ptan:
+        if other.P != self.P:
             return False
         if other.logger_name != self.logger_name:
             return False
@@ -175,21 +167,13 @@ class OutForce(FrozenClass):
             OutForce_dict["angle"] = self.angle.tolist()
         OutForce_dict["Nt_tot"] = self.Nt_tot
         OutForce_dict["Na_tot"] = self.Na_tot
-        if self.Prad is None:
-            OutForce_dict["Prad"] = None
+        if self.P is None:
+            OutForce_dict["P"] = None
         else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutForce_dict["Prad"] = {
-                "__class__": str(type(self._Prad)),
-                "__repr__": str(self._Prad.__repr__()),
-                "serialized": dumps(self._Prad).decode("ISO-8859-2"),
-            }
-        if self.Ptan is None:
-            OutForce_dict["Ptan"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutForce_dict["Ptan"] = {
-                "__class__": str(type(self._Ptan)),
-                "__repr__": str(self._Ptan.__repr__()),
-                "serialized": dumps(self._Ptan).decode("ISO-8859-2"),
+            OutForce_dict["P"] = {
+                "__class__": str(type(self._P)),
+                "__repr__": str(self._P.__repr__()),
+                "serialized": dumps(self._P).decode("ISO-8859-2"),
             }
         OutForce_dict["logger_name"] = self.logger_name
         # The class name is added to the dict fordeserialisation purpose
@@ -203,8 +187,7 @@ class OutForce(FrozenClass):
         self.angle = None
         self.Nt_tot = None
         self.Na_tot = None
-        self.Prad = None
-        self.Ptan = None
+        self.P = None
         self.logger_name = None
 
     def _get_time(self):
@@ -283,55 +266,27 @@ class OutForce(FrozenClass):
         fget=_get_Na_tot, fset=_set_Na_tot, doc=u"""Length of the angle vector"""
     )
 
-    def _get_Prad(self):
-        """getter of Prad"""
-        return self._Prad
+    def _get_P(self):
+        """getter of P"""
+        return self._P
 
-    def _set_Prad(self, value):
-        """setter of Prad"""
+    def _set_P(self, value):
+        """setter of P"""
         try:  # Check the type
-            check_var("Prad", value, "dict")
+            check_var("P", value, "dict")
         except CheckTypeError:
-            check_var("Prad", value, "SciDataTool.Classes.DataND.DataND")
+            check_var("P", value, "SciDataTool.Classes.VectorField.VectorField")
             # property can be set from a list to handle loads
         if (
             type(value) == dict
         ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Prad = loads(value["serialized"].encode("ISO-8859-2"))
+            self._P = loads(value["serialized"].encode("ISO-8859-2"))
         else:
-            self._Prad = value
+            self._P = value
 
-    # Radial magnetic air-gap surface force
-    # Type : SciDataTool.Classes.DataND.DataND
-    Prad = property(
-        fget=_get_Prad, fset=_set_Prad, doc=u"""Radial magnetic air-gap surface force"""
-    )
-
-    def _get_Ptan(self):
-        """getter of Ptan"""
-        return self._Ptan
-
-    def _set_Ptan(self, value):
-        """setter of Ptan"""
-        try:  # Check the type
-            check_var("Ptan", value, "dict")
-        except CheckTypeError:
-            check_var("Ptan", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Ptan = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Ptan = value
-
-    # Tangential magnetic air-gap surface force
-    # Type : SciDataTool.Classes.DataND.DataND
-    Ptan = property(
-        fget=_get_Ptan,
-        fset=_set_Ptan,
-        doc=u"""Tangential magnetic air-gap surface force""",
-    )
+    # Air-gap surface force
+    # Type : SciDataTool.Classes.VectorField.VectorField
+    P = property(fget=_get_P, fset=_set_P, doc=u"""Air-gap surface force""")
 
     def _get_logger_name(self):
         """getter of logger_name"""

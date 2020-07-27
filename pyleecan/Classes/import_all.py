@@ -40,6 +40,7 @@ from ..Classes.HoleM57 import HoleM57
 from ..Classes.HoleM58 import HoleM58
 from ..Classes.HoleMag import HoleMag
 from ..Classes.Import import Import
+from ..Classes.ImportData import ImportData
 from ..Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from ..Classes.ImportGenToothSaw import ImportGenToothSaw
 from ..Classes.ImportGenVectLin import ImportGenVectLin
@@ -48,6 +49,7 @@ from ..Classes.ImportMatlab import ImportMatlab
 from ..Classes.ImportMatrix import ImportMatrix
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from ..Classes.ImportMatrixXls import ImportMatrixXls
+from ..Classes.ImportVectorField import ImportVectorField
 from ..Classes.IndMag import IndMag
 from ..Classes.IndMagFEMM import IndMagFEMM
 from ..Classes.Input import Input

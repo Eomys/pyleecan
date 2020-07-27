@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-import matplotlib.pyplot as plt
-from numpy import pi, linspace, zeros, sqrt, dot, array, squeeze
+from numpy import pi
 from SciDataTool import Data1D, DataLinspace, DataTime
-from ....Functions.Electrical.coordinate_transformation import dq2n
 from ....Functions.Winding.gen_phase_list import gen_name
+from ....Functions.Plot.plot_A_space import plot_A_space
 from ....definitions import config_dict
 
 
@@ -18,11 +17,6 @@ def plot_mmf_unit(self, Na=2048, fig=None):
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
     """
-
-    # Create an empty Output object to use the generic plot methods
-    module = __import__("pyleecan.Classes.Output", fromlist=["Output"])
-    Output = getattr(module, "Output")
-    out = Output()
 
     # Compute the winding function and mmf
     wf = self.comp_wind_function(Na=Na)
@@ -45,13 +39,13 @@ def plot_mmf_unit(self, Na=2048, fig=None):
         number=Na,
         include_endpoint=False,
     )
-    out.mag.Br = DataTime(
+    Br = DataTime(
         name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf
     )
 
     color_list = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][: qs + 1]
-    out.plot_A_space(
-        "mag.Br",
+    plot_A_space(
+        Br,
         is_fft=True,
         index_list=[0, 1, 2],
         data_list=[mmf_u],

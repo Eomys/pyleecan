@@ -1,4 +1,4 @@
-from numpy import squeeze, linspace, sin
+from numpy import linspace, sin, squeeze
 from unittest import TestCase
 from os.path import join
 import matplotlib.pyplot as plt
@@ -8,9 +8,12 @@ import pytest
 from pyleecan.Classes.Simu1 import Simu1
 
 from pyleecan.Classes.Output import Output
-from SciDataTool import DataTime, Data1D, DataLinspace, DataFreq
+from SciDataTool import DataTime, Data1D, DataLinspace, VectorField
 from Tests import TEST_DATA_DIR
 from pyleecan.Classes.ImportMatlab import ImportMatlab
+from pyleecan.Classes.ImportData import ImportData
+from pyleecan.Classes.ImportVectorField import ImportVectorField
+from pyleecan.Classes.InputFlux import InputFlux
 
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
@@ -30,25 +33,34 @@ mat_file_Brfreqs = join(TEST_DATA_DIR, "Plots/default_proj_Brfreqs.mat")
 mat_file_Brwavenumber = join(TEST_DATA_DIR, "Plots/default_proj_Brwavenumber.mat")
 
 # Read input files from Manatee
-Br = squeeze(ImportMatlab(file_path=mat_file_Br, var_name="XBr").get_data())
-time = squeeze(ImportMatlab(file_path=mat_file_time, var_name="timec").get_data())
-angle = squeeze(
-    ImportMatlab(file_path=mat_file_angle, var_name="alpha_radc").get_data()
+flux = ImportMatlab(mat_file_Br, var_name="XBr")
+time = ImportMatlab(mat_file_time, var_name="timec")
+Time = ImportData(field=time, unit="s", name="time")
+angle = ImportMatlab(mat_file_angle, var_name="alpha_radc")
+Angle = ImportData(field=angle, unit="rad", name="angle")
+Br = ImportData(
+    axes=[Time, Angle],
+    field=flux,
+    unit="T",
+    name="Airgap radial flux density",
+    normalizations={"space_order": 3},
+    symbol="B_{rad}",
 )
-MTr_freqs = squeeze(
-    ImportMatlab(file_path=mat_file_MTr_freqs, var_name="freqs").get_data()
+B = ImportVectorField(components={"radial": Br})
+
+flux_FT = ImportMatlab(mat_file_Br_cfft2, var_name="Fwr")
+freqs = ImportMatlab(mat_file_Brfreqs, var_name="freqs")
+Freqs = ImportData(field=freqs, unit="Hz", name="freqs")
+wavenumber = ImportMatlab(mat_file_Brwavenumber, var_name="orders")
+Wavenumber = ImportData(field=wavenumber, unit="dimless", name="wavenumber")
+Br_FT = ImportData(
+    axes=[Freqs, Wavenumber],
+    field=flux,
+    unit="T",
+    name="Airgap radial flux density",
+    symbol="B_{rad}",
 )
-MTr_wavenumber = squeeze(
-    ImportMatlab(file_path=mat_file_MTr_wavenumber, var_name="orders_circ").get_data()
-)
-MTr = squeeze(ImportMatlab(file_path=mat_file_MTr, var_name="XPwr").get_data())
-Br_cfft2 = squeeze(ImportMatlab(file_path=mat_file_Br_cfft2, var_name="Fwr").get_data())
-freqs_Br = squeeze(
-    ImportMatlab(file_path=mat_file_Brfreqs, var_name="freqs").get_data()
-)
-wavenumber = squeeze(
-    ImportMatlab(file_path=mat_file_Brwavenumber, var_name="orders").get_data()
-)
+B_FT = ImportVectorField(components={"radial": Br_FT})
 
 # Plot parameters
 freq_max = 2000
@@ -59,68 +71,75 @@ r_max = 78
 class tests_plots(TestCase):
     def test_default_proj_Br_time_space(self):
 
-        out = Output(simu=simu)
-        out.post.legend_name = "Reference"
+        time_arr = squeeze(time.get_data())
+        angle_arr = squeeze(angle.get_data())
+        flux_arr = flux.get_data()
 
-        # Build the data objects
-        Time = Data1D(name="time", unit="s", symmetries={}, values=time)
-        Angle = Data1D(name="angle", unit="rad", symmetries={}, values=angle)
-        out.mag.Br = DataTime(
-            symbol="B_r",
-            name="Airgap radial flux density",
-            unit="T",
-            symmetries={},
-            axes=[Time, Angle],
-            normalizations={"space_order": 3},
-            values=Br,
-        )
+        simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
+        simu.mag = None
+        simu.force = None
+        simu.struct = None
+        simu.input = InputFlux(B=B)
+        out = Output(simu=simu)
+        simu.run()
 
         out2 = Output(simu=simu)
-        out2.post.legend_name = "Periodicity 3"
-        out2.post.line_color = "r--"
 
         # Reduce to 1/3 period
-        Br_reduced = Br[0:672, 0:672]
-        time_reduced = time[0:672]
-        angle_reduced = angle[0:672]
+        Br_reduced = flux_arr[0:672, 0:672]
+        time_reduced = time_arr[0:672]
+        angle_reduced = angle_arr[0:672]
 
         # Build the data objects
-        Time = Data1D(
+        Time2 = Data1D(
             name="time",
             unit="s",
             symmetries={"time": {"period": 3}},
             values=time_reduced,
         )
-        Angle = Data1D(
+        Angle2 = Data1D(
             name="angle",
             unit="rad",
             symmetries={"angle": {"period": 3}},
             values=angle_reduced,
         )
-        out2.mag.Br = DataTime(
+        Br2 = DataTime(
             symbol="B_r",
             name="Airgap radial flux density",
             unit="T",
             symmetries={"time": {"period": 3}, "angle": {"period": 3}},
-            axes=[Time, Angle],
+            axes=[Time2, Angle2],
             normalizations={},
             values=Br_reduced,
         )
+        out2.mag.B = VectorField(
+            name="Airgap flux density", symbol="B", components={"radial": Br2}
+        )
+
+        # Plot the result by comparing the two simulation (sym / no sym)
+        plt.close("all")
+        out.plot_A_time(
+            "mag.B",
+            is_fft=True,
+            freq_max=freq_max,
+            data_list=[out2.mag.B],
+            legend_list=["Reference", "Periodic"],
+            is_auto_ticks=False,
+            save_path=join(save_path, "test_default_proj_Br_dataobj_period.png"),
+        )
 
         out3 = Output(simu=simu)
-        out3.post.legend_name = "Linspace"
-        out3.post.line_color = "r--"
 
         # Get linspace data
-        t0 = time[0]
-        tf = time[-1]
-        deltat = time[1] - time[0]
-        a0 = angle[0]
-        deltaa = angle[1] - angle[0]
-        Na = len(angle)
+        t0 = time_arr[0]
+        tf = time_arr[-1]
+        deltat = time_arr[1] - time_arr[0]
+        a0 = angle_arr[0]
+        deltaa = angle_arr[1] - angle_arr[0]
+        Na = len(angle_arr)
 
         # Build the data objects
-        Time = DataLinspace(
+        Time3 = DataLinspace(
             name="time",
             unit="s",
             symmetries={},
@@ -129,7 +148,7 @@ class tests_plots(TestCase):
             step=deltat,
             include_endpoint=False,
         )
-        Angle = DataLinspace(
+        Angle3 = DataLinspace(
             name="angle",
             unit="rad",
             symmetries={},
@@ -138,168 +157,67 @@ class tests_plots(TestCase):
             number=Na,
             include_endpoint=False,
         )
-        out3.mag.Br = DataTime(
+        Br3 = DataTime(
             symbol="B_r",
             name="Airgap radial flux density",
             unit="T",
             symmetries={},
-            axes=[Time, Angle],
+            axes=[Time3, Angle3],
             normalizations={"space_order": 3},
-            values=Br,
+            values=flux_arr,
         )
-
-        out4 = Output(simu=simu)
-        out4.post.legend_name = "Inverse FT"
-        out4.post.line_color = "r--"
-
-        # Build the data objects
-        Freqs = Data1D(name="freqs", unit="Hz", symmetries={}, values=freqs_Br)
-        Wavenumber = Data1D(
-            name="wavenumber", unit="", symmetries={}, values=wavenumber
+        out3.mag.B = VectorField(
+            name="Airgap flux density", symbol="B", components={"radial": Br3}
         )
-        out4.mag.Br = DataFreq(
-            symbol="B_r",
-            name="Airgap radial flux density",
-            unit="T",
-            symmetries={},
-            axes=[Freqs, Wavenumber],
-            normalizations={},
-            values=Br_cfft2,
-        )
-
-        # Plot the result by comparing the two simulation (sym / no sym)
-        plt.close("all")
-        out.plot_A_time(
-            "mag.Br",
-            is_fft=True,
-            freq_max=freq_max,
-            data_list=[out2.mag.Br],
-            legend_list=["Reference", "Periodic"],
-            is_auto_ticks=False,
-        )
-
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_default_proj_Br_dataobj_period.png"))
 
         # Plot the result by comparing the two simulation (Data1D / DataLinspace)
         plt.close("all")
         out.plot_A_space(
-            "mag.Br",
+            "mag.B",
             is_fft=True,
             is_spaceorder=True,
             r_max=r_max,
-            data_list=[out3.mag.Br],
+            data_list=[out3.mag.B],
             legend_list=["Reference", "Linspace"],
             is_auto_ticks=False,
+            save_path=join(save_path, "test_default_proj_Br_dataobj_linspace.png"),
         )
 
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_default_proj_Br_dataobj_linspace.png"))
+        simu4 = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
+        simu4.input = InputFlux(B=B_FT)
+        simu4.mag = None
+        simu4.force = None
+        simu4.struct = None
+        simu4.input = InputFlux(B=B)
+        out4 = Output(simu=simu4)
+        simu4.run()
+        out4.post.legend_name = "Inverse FT"
 
-        # Plot the result by comparing the two simulation (Data1D / DataLinspace)
+        # Plot the result by comparing the two simulation (direct / ifft)
         plt.close("all")
-        out4.plot_A_space(
-            "mag.Br",
+        out.plot_A_space(
+            "mag.B",
             is_fft=True,
             r_max=r_max,
+            data_list=[out4.mag.B],
             legend_list=["Reference", "Inverse FFT"],
             is_auto_ticks=False,
+            save_path=join(save_path, "test_default_proj_Br_dataobj_ift.png"),
         )
 
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_default_proj_Br_dataobj_ift.png"))
-
-    def test_default_proj_Br_cfft2(self):
-
-        r_max = 78
-        freq_max = 2500
-        mag_max = 1
-        N_stem = 100
-
-        out = Output(simu=simu)
-
-        # Build the data objects
-        Time = Data1D(name="time", unit="s", symmetries={}, values=time)
-        #        Angle = Data1D(name="angle", unit="rad", symmetries={"angle": {"period": 2}}, values=out.mag.angle[0:2048])
-        Angle = Data1D(name="angle", unit="rad", symmetries={}, values=angle)
-        out.mag.Br = DataTime(
-            symbol="B_r",
-            name="Airgap radial flux density",
-            unit="T",
-            symmetries={},
-            axes=[Time, Angle],
-            normalizations={},
-            values=Br,
-        )
-
-        # Plot the result by comparing the two simulation (sym / no sym)
-        plt.close("all")
-        out.plot_A_cfft2(
-            "mag.Br", freq_max=freq_max, r_max=r_max, mag_max=mag_max, N_stem=N_stem
-        )
-
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_default_proj_Br_dataobj_cfft2.png"))
-
-    def test_default_proj_surf(self):
-
-        out = Output(simu=simu)
-
-        # Build the data objects
-        Freqs = Data1D(name="freqs", unit="Hz", symmetries={}, values=freqs_Br)
-        Wavenumber = Data1D(
-            name="wavenumber", unit="", symmetries={}, values=wavenumber
-        )
-        out.mag.Br = DataFreq(
-            symbol="B_r",
-            name="Airgap radial flux density",
-            unit="T",
-            symmetries={},
-            axes=[Freqs, Wavenumber],
-            normalizations={},
-            values=Br_cfft2,
-        )
-
-        # Plot the result by comparing the two simulation (sym / no sym)
-        plt.close("all")
-        out.plot_A_surf("mag.Br", t_max=0.06)
-
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_default_proj_Br_surf_dataobj.png"))
-
-    def test_default_proj_compare(self):
-
-        out = Output(simu=simu)
-        out.post.legend_name = "Br"
-
-        # Build the data objects
-        Time = Data1D(name="time", unit="s", symmetries={}, values=time)
-        Angle = Data1D(name="angle", unit="rad", symmetries={}, values=angle)
-        out.mag.Br = DataTime(
-            symbol="B_r",
-            name="Airgap radial flux density",
-            unit="T",
-            symmetries={},
-            axes=[Time, Angle],
-            normalizations={},
-            values=Br,
-        )
-
-        out2 = Output(simu=simu)
-        out2.post.legend_name = "0.2sin(375t-1.5)"
-        out2.post.line_color = "r--"
+        out5 = Output(simu=simu)
 
         # Get linspace data
         t0 = 0.01
         tf = 0.04
         Nt = 3000
-        time2 = linspace(0.01, 0.04, 3000, endpoint=True)
+        time5 = linspace(0.01, 0.04, 3000, endpoint=True)
 
         # Compute sine function
-        Br2 = 0.2 * sin(375 * time2 - 1.5)
+        Br5 = 0.2 * sin(375 * time5 - 1.5)
 
         # Build the data objects
-        Time = DataLinspace(
+        Time5 = DataLinspace(
             name="time",
             unit="s",
             symmetries={},
@@ -308,77 +226,108 @@ class tests_plots(TestCase):
             number=Nt,
             include_endpoint=True,
         )
-        out2.mag.Br = DataTime(
+        flux5 = DataTime(
             symbol="B_r",
             name="Airgap radial flux density",
             unit="T",
             symmetries={},
-            axes=[Time],
+            axes=[Time5],
             normalizations={},
-            values=Br2,
+            values=Br5,
+        )
+        out5.mag.B = VectorField(
+            name="Airgap flux density", symbol="B", components={"radial": flux5}
         )
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
         out.plot_A_time(
-            "mag.Br",
-            data_list=[out2.mag.Br],
+            "mag.B",
+            data_list=[out5.mag.B],
             legend_list=["Br", "0.2sin(375t-1.5)"],
             is_auto_ticks=False,
+            save_path=join(save_path, "test_default_proj_Br_compare.png"),
         )
 
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_default_proj_Br_compare.png"))
+    def test_default_proj_Br_cfft2(self):
 
-    def test_default_proj_fft2(self):
+        N_stem = 100
 
+        simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
+        simu.input = InputFlux(B=B)
+        simu.mag = None
+        simu.force = None
+        simu.struct = None
+        simu.input = InputFlux(B=B)
         out = Output(simu=simu)
-
-        # Build the data objects
-        Freqs = Data1D(name="freqs", unit="Hz", symmetries={}, values=MTr_freqs)
-        Wavenumber = Data1D(
-            name="wavenumber", unit="dimless", symmetries={}, values=MTr_wavenumber
-        )
-        out.mag.Br = DataFreq(
-            symbol="MT_r",
-            name="Radial stress applying on stator",
-            unit="N/m2",
-            symmetries={},
-            axes=[Freqs, Wavenumber],
-            normalizations={},
-            values=MTr,
-        )
+        simu.run()
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_A_fft2("mag.Br", freq_max=13000, r_max=8, mag_max=50)
+        out.plot_A_cfft2(
+            "mag.B",
+            freq_max=freq_max,
+            r_max=r_max,
+            N_stem=N_stem,
+            save_path=join(save_path, "test_default_proj_Br_dataobj_cfft2.png"),
+        )
 
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_default_proj_MTr_fft2_dataobj.png"))
+    def test_default_proj_surf(self):
+
+        simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
+        simu.input = InputFlux(B=B_FT)
+        simu.mag = None
+        simu.force = None
+        simu.struct = None
+        simu.input = InputFlux(B=B)
+        out = Output(simu=simu)
+        simu.run()
+
+        # Plot the result by comparing the two simulation (sym / no sym)
+        plt.close("all")
+        out.plot_A_surf(
+            "mag.B",
+            t_max=0.06,
+            save_path=join(save_path, "test_default_proj_Br_surf_dataobj.png"),
+        )
+
+    def test_default_proj_fft2(self):
+
+        simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
+        simu.input = InputFlux(B=B_FT)
+        simu.mag = None
+        simu.force = None
+        simu.struct = None
+        simu.input = InputFlux(B=B)
+        out = Output(simu=simu)
+        simu.run()
+
+        # Plot the result by comparing the two simulation (sym / no sym)
+        plt.close("all")
+        out.plot_A_fft2(
+            "mag.B",
+            freq_max=500,
+            r_max=20,
+            save_path=join(save_path, "test_default_proj_Br_fft2_dataobj.png"),
+        )
 
     def test_default_proj_time_space(self):
 
+        simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
+        simu.input = InputFlux(B=B)
+        simu.mag = None
+        simu.force = None
+        simu.struct = None
+        simu.input = InputFlux(B=B)
         out = Output(simu=simu)
-        out.post.line_color = "tab:blue"
-
-        # Build the data objects
-        Time = Data1D(name="time", unit="s", symmetries={}, values=time)
-        Angle = Data1D(name="angle", unit="rad", symmetries={}, values=angle)
-        out.mag.Br = DataTime(
-            symbol="B_r",
-            name="Airgap radial flux density",
-            unit="T",
-            symmetries={},
-            axes=[Time, Angle],
-            normalizations={"space_order": 3},
-            values=Br,
-        )
+        simu.run()
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
         out.plot_A_time_space(
-            "mag.Br", freq_max=freq_max, r_max=r_max, is_auto_ticks=False
+            "mag.B",
+            freq_max=freq_max,
+            r_max=r_max,
+            is_auto_ticks=False,
+            save_path=join(save_path, "test_default_proj_Br_time_space_dataobj.png"),
         )
-
-        fig = plt.gcf()
-        fig.savefig(join(save_path, "test_default_proj_Br_time_space_dataobj.png"))

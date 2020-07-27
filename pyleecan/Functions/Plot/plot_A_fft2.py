@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from ..init_fig import init_fig
-from .plot_A_3D import plot_A_3D
+from .plot_A_4D import plot_A_4D
 from numpy import meshgrid, pi, max as np_max
 from ...definitions import config_dict
 
@@ -19,6 +19,8 @@ def plot_A_fft2(
     unit="SI",
     colormap=None,
     save_path=None,
+    fig=None,
+    subplot_index=None,
 ):
     """2D color plot of the 2D Fourier Transform of a field
 
@@ -49,7 +51,7 @@ def plot_A_fft2(
     """
 
     # Set plot
-    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     title = "FFT2 of " + data.name
     if colormap is None:
         colormap = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
@@ -71,6 +73,11 @@ def plot_A_fft2(
         y_str = "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]"
     if unit == "SI":
         unit = data.unit
+        unit_str = "[" + unit + "]"
+    elif "dB" in unit:
+        unit_str = "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
+    else:
+        unit_str = "[" + unit + "]"
 
     # Extract the field
     results = data.get_magnitude_along(x_str, y_str, unit=unit)
@@ -79,21 +86,26 @@ def plot_A_fft2(
     freqs = results["freqs"]
     A_mag = results[data.symbol]
 
-    freqs_map, wavenumber_map = meshgrid(freqs, wavenumber)
+    wavenumber_map, freqs_map = meshgrid(wavenumber, freqs)
     freqs_flat = freqs_map.flatten()
     wavenumber_flat = wavenumber_map.flatten()
     A_mag_flat = A_mag.flatten()
-
-    zlabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
+    size_flat = 1000 * A_mag_flat / np_max(A_mag_flat)
+    
+    if data.symbol == "Magnitude":
+        zlabel = "Magnitude " + unit_str
+    else:
+        zlabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
 
     if mag_max is None:
         mag_max = np_max(A_mag)
 
     # Plot the original graph
-    plot_A_3D(
+    plot_A_4D(
         freqs_flat,
         wavenumber_flat,
         A_mag_flat,
+        size_flat,
         colormap=colormap,
         z_max=mag_max,
         z_min=0,
@@ -103,6 +115,8 @@ def plot_A_fft2(
         zlabel=zlabel,
         fig=fig,
         type="scatter",
+        save_path=save_path,
+        subplot_index=subplot_index,
     )
 
     if is_phase:
@@ -121,12 +135,14 @@ def plot_A_fft2(
         freqs_flat = freqs_map.flatten()
         wavenumber_flat = wavenumber_map.flatten()
         A_phase_flat = A_phase.flatten()
+        size_flat = 1000 * A_mag_flat / np_max(A_mag_flat)
 
         # Plot the original graph
-        plot_A_3D(
+        plot_A_4D(
             freqs_flat,
             wavenumber_flat,
             A_phase_flat,
+            size_flat,
             z_max=mag_max,
             z_min=-mag_max,
             colormap=colormap,
@@ -136,7 +152,5 @@ def plot_A_fft2(
             zlabel=zlabel,
             fig=fig,
             type="scatter",
+            save_path=save_path,
         )
-
-    if save_path is not None:
-        fig.savefig(save_path)
