@@ -57,5 +57,5 @@ def comp_force(self, output):
         )
         components["axial"] = Pz_data
     output.force.P = VectorField(
-        name="Magnetic airgap surface force", symbol="P", components=components,
+        name="Magnetic airgap surface force", symbol="P", components=components
     )

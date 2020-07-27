@@ -111,11 +111,11 @@ def plot_A_2D(
             ax.xaxis.set_ticks(xticks)
     elif type == "bargraph":
         ndatas = len(Ydatas)
-        positions = range(-ndatas+1, ndatas, 2)
+        positions = range(-ndatas + 1, ndatas, 2)
         for i in range(ndatas):
             width = (Xdata[1] - Xdata[0]) / ndatas
             barlist = ax.bar(
-                Xdata + positions[i]*width/(2*ndatas),
+                Xdata + positions[i] * width / (2 * ndatas),
                 Ydatas[i],
                 color=color_list[i],
                 width=width,

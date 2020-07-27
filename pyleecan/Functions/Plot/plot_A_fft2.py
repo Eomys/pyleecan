@@ -75,7 +75,9 @@ def plot_A_fft2(
         unit = data.unit
         unit_str = "[" + unit + "]"
     elif "dB" in unit:
-        unit_str = "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
+        unit_str = (
+            "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
+        )
     else:
         unit_str = "[" + unit + "]"
 
@@ -91,7 +93,7 @@ def plot_A_fft2(
     wavenumber_flat = wavenumber_map.flatten()
     A_mag_flat = A_mag.flatten()
     size_flat = 1000 * A_mag_flat / np_max(A_mag_flat)
-    
+
     if data.symbol == "Magnitude":
         zlabel = "Magnitude " + unit_str
     else:

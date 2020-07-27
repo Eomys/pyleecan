@@ -9,6 +9,8 @@ from pyleecan.definitions import DATA_DIR
 from Tests import save_plot_path
 from pyleecan.Functions.GMSH.draw_GMSH import draw_GMSH
 
+
+@pytest.mark.long
 @pytest.mark.GMSH2D
 def test_gmsh_2d():
     """Check generation of the 2D mesh with gmsh
@@ -19,7 +21,7 @@ def test_gmsh_2d():
     save_path = join(save_plot_path, "GMSH")
     makedirs(save_path)
     # Plot the machine
-    #im = IPMSM_A.plot()
+    # im = IPMSM_A.plot()
 
     # Create the Simulation
     mySimu = Simu1(name="EM_SIPMSM_AL_001", machine=IPMSM_A)
@@ -43,5 +45,5 @@ def test_gmsh_2d():
         is_lam_only_S=False,
         is_lam_only_R=False,
         user_mesh_dict=mesh_dict,
-        path_save=join(save_path, "GSMH_model.msh")
+        path_save=join(save_path, "GSMH_model.msh"),
     )

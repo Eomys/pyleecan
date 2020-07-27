@@ -70,7 +70,9 @@ def plot_A_fft_space(
         unit = data.unit
         unit_str = "[" + unit + "]"
     elif "dB" in unit:
-        unit_str = "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
+        unit_str = (
+            "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
+        )
     else:
         unit_str = "[" + unit + "]"
 
