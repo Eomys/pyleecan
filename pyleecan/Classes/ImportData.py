@@ -55,7 +55,6 @@ class ImportData(FrozenClass):
         unit="SI",
         name="",
         symbol="",
-        is_freq=False,
         normalizations={},
         symmetries={},
         init_dict=None,
@@ -86,7 +85,6 @@ class ImportData(FrozenClass):
             unit = obj.unit
             name = obj.name
             symbol = obj.symbol
-            is_freq = obj.is_freq
             normalizations = obj.normalizations
             symmetries = obj.symmetries
         if init_dict is not None:  # Initialisation by dict
@@ -102,8 +100,6 @@ class ImportData(FrozenClass):
                 name = init_dict["name"]
             if "symbol" in list(init_dict.keys()):
                 symbol = init_dict["symbol"]
-            if "is_freq" in list(init_dict.keys()):
-                is_freq = init_dict["is_freq"]
             if "normalizations" in list(init_dict.keys()):
                 normalizations = init_dict["normalizations"]
             if "symmetries" in list(init_dict.keys()):
@@ -172,7 +168,6 @@ class ImportData(FrozenClass):
         self.unit = unit
         self.name = name
         self.symbol = symbol
-        self.is_freq = is_freq
         self.normalizations = normalizations
         self.symmetries = symmetries
 
@@ -200,7 +195,6 @@ class ImportData(FrozenClass):
         ImportData_str += 'unit = "' + str(self.unit) + '"' + linesep
         ImportData_str += 'name = "' + str(self.name) + '"' + linesep
         ImportData_str += 'symbol = "' + str(self.symbol) + '"' + linesep
-        ImportData_str += "is_freq = " + str(self.is_freq) + linesep
         ImportData_str += "normalizations = " + str(self.normalizations) + linesep
         ImportData_str += "symmetries = " + str(self.symmetries) + linesep
         return ImportData_str
@@ -219,8 +213,6 @@ class ImportData(FrozenClass):
         if other.name != self.name:
             return False
         if other.symbol != self.symbol:
-            return False
-        if other.is_freq != self.is_freq:
             return False
         if other.normalizations != self.normalizations:
             return False
@@ -243,7 +235,6 @@ class ImportData(FrozenClass):
         ImportData_dict["unit"] = self.unit
         ImportData_dict["name"] = self.name
         ImportData_dict["symbol"] = self.symbol
-        ImportData_dict["is_freq"] = self.is_freq
         ImportData_dict["normalizations"] = self.normalizations
         ImportData_dict["symmetries"] = self.symmetries
         # The class name is added to the dict fordeserialisation purpose
@@ -260,7 +251,6 @@ class ImportData(FrozenClass):
         self.unit = None
         self.name = None
         self.symbol = None
-        self.is_freq = None
         self.normalizations = None
         self.symmetries = None
 
@@ -339,23 +329,6 @@ class ImportData(FrozenClass):
     # Type : str
     symbol = property(
         fget=_get_symbol, fset=_set_symbol, doc=u"""Symbol of the field"""
-    )
-
-    def _get_is_freq(self):
-        """getter of is_freq"""
-        return self._is_freq
-
-    def _set_is_freq(self, value):
-        """setter of is_freq"""
-        check_var("is_freq", value, "bool")
-        self._is_freq = value
-
-    # Field is imported in frequential domain
-    # Type : bool
-    is_freq = property(
-        fget=_get_is_freq,
-        fset=_set_is_freq,
-        doc=u"""Field is imported in frequential domain""",
     )
 
     def _get_normalizations(self):

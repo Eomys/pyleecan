@@ -19,7 +19,10 @@ def get_data(self):
     """
 
     axes_list = []
+    is_freq = False
     for axis in self.axes:
+        if axis.name == "freqs" or axis.name == "wavenumber":
+            is_freq = True
         axes_list.append(
             Data1D(
                 values=axis.field.get_data(),
@@ -29,7 +32,7 @@ def get_data(self):
             )
         )
 
-    if self.is_freq:
+    if is_freq:
         Data = DataFreq(
             axes=axes_list,
             values=self.field.get_data(),

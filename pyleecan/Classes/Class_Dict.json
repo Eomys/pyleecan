@@ -2132,15 +2132,6 @@
                 "value": ""
             },
             {
-                "desc": "Field is imported in frequential domain",
-                "max": "",
-                "min": "",
-                "name": "is_freq",
-                "type": "bool",
-                "unit": "-",
-                "value": false
-            },
-            {
                 "desc": "Dict of normalizations",
                 "max": "",
                 "min": "",
