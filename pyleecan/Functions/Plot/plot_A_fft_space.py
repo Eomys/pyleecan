@@ -20,6 +20,7 @@ def plot_A_fft_space(
     mag_max=None,
     is_auto_ticks=True,
     fig=None,
+    subplot_index=None,
 ):
     """Plots a field as a function of space (angle)
 
@@ -133,4 +134,5 @@ def plot_A_fft_space(
         y_max=mag_max,
         xticks=xticks,
         save_path=save_path,
+        subplot_index=subplot_index,
     )

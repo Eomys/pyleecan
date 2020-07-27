@@ -19,6 +19,7 @@ def plot_A_fft_time(
     mag_max=None,
     is_auto_ticks=True,
     fig=None,
+    subplot_index=None,
 ):
     """Plots a field as a function of time
 
@@ -74,7 +75,7 @@ def plot_A_fft_time(
     if data_list == []:
         title = "FFT of " + data.name
     else:
-        title = "Comparison of FFT"
+        title = "Comparison of " + data.name + " FFT"
     if data.symbol == "Magnitude":
         ylabel = "Magnitude [" + unit + "]"
     else:
@@ -130,4 +131,5 @@ def plot_A_fft_time(
         y_max=mag_max,
         xticks=xticks,
         save_path=save_path,
+        subplot_index=subplot_index,
     )

@@ -20,6 +20,7 @@ def plot_A_fft2(
     colormap=None,
     save_path=None,
     fig=None,
+    subplot_index=None,
 ):
     """2D color plot of the 2D Fourier Transform of a field
 
@@ -107,6 +108,7 @@ def plot_A_fft2(
         fig=fig,
         type="scatter",
         save_path=save_path,
+        subplot_index=subplot_index,
     )
 
     if is_phase:

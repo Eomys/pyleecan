@@ -18,6 +18,7 @@ def plot_A_cfft2(
     unit="SI",
     save_path=None,
     fig=None,
+    subplot_index=None,
 ):
     """3D stem plot of the 2D Fourier Transform of a field
 
@@ -108,4 +109,5 @@ def plot_A_cfft2(
         zlabel=zlabel,
         type="stem",
         save_path=save_path,
+        subplot_index=subplot_index,
     )

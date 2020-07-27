@@ -27,6 +27,7 @@ def plot_A_space(
     mag_max=None,
     is_auto_ticks=True,
     fig=None,
+    subplot_index=None,
 ):
     """Plots a field as a function of space (angle)
 
@@ -126,7 +127,7 @@ def plot_A_space(
     if data_list == []:
         title = data.name + " over space at " + t_str
     else:
-        title = "Comparison over space at " + t_str
+        title = "Comparison of " + data.name + " over space at " + t_str
 
     # Extract the fields
     if list_str is not None:
@@ -172,13 +173,14 @@ def plot_A_space(
         y_max=y_max,
         xticks=xticks,
         save_path=save_path,
+        subplot_index=subplot_index,
     )
 
     if is_fft:
         if data_list == []:
             title = "FFT of " + data.name
         else:
-            title = "Comparison of FFT"
+            title = "Comparison of " + data.name + " FFT"
         if data.symbol == "Magnitude":
             ylabel = "Magnitude [" + unit + "]"
         else:

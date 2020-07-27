@@ -4,6 +4,8 @@ from .....Functions.Plot.plot_A_surf import plot_A_surf as plot_A_surf_fct
 from .....Functions.init_fig import init_fig
 from SciDataTool import VectorField
 
+from matplotlib.pyplot import subplots
+
 
 def plot_A_surf(
     self,
@@ -53,13 +55,19 @@ def plot_A_surf(
     phys = getattr(self, Data_str.split(".")[0])
     data = getattr(phys, Data_str.split(".")[1])
 
-    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
-
     # Call the plot function
     if isinstance(data, VectorField):
         if component_list is None:  # default: extract all components
             component_list = data.components.keys()
-        for comp in component_list:
+        ncomp = len(component_list)
+        fig, axs = subplots(
+            1,
+            ncomp,
+            tight_layout=True,
+            figsize=(20, 10),
+            subplot_kw=dict(projection="3d"),
+        )
+        for i, comp in enumerate(component_list):
             plot_A_surf_fct(
                 data.components[comp],
                 is_deg=is_deg,
@@ -72,9 +80,13 @@ def plot_A_surf(
                 colormap=colormap,
                 save_path=save_path,
                 fig=fig,
+                subplot_index=i,
             )
 
     else:
+        (fig, axes, patch_leg, label_leg) = init_fig(
+            None, shape="rectangle", is_3d=True
+        )
         plot_A_surf_fct(
             data,
             is_deg=is_deg,

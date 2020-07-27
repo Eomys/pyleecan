@@ -18,6 +18,7 @@ def plot_A_surf(
     colormap=None,
     save_path=None,
     fig=None,
+    subplot_index=None,
 ):
     """Plots the isosurface of a field in 3D
 
@@ -107,4 +108,5 @@ def plot_A_surf(
         yticks=yticks,
         type="surf",
         save_path=save_path,
+        subplot_index=subplot_index,
     )
