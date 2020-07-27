@@ -1,4 +1,4 @@
-import numpy as np
+from numpy import pi, array, all as np_all
 from SciDataTool import Data1D, DataTime, VectorField
 
 
@@ -14,55 +14,48 @@ def comp_force(self, output):
         an Output object (to update)
     """
 
-    mu_0 = 4 * np.pi * 1e-7
+    mu_0 = 4 * pi * 1e-7
 
     # Load magnetic flux
     Brphiz = output.mag.B.get_rphiz_along("time", "angle")
     Br = Brphiz["radial"]
     Bt = Brphiz["tangential"]
     Bz = Brphiz["axial"]
-    time = Brphiz["time"]
-    angle = Brphiz["angle"]
 
     # Compute AGSF with MT formula
-    Prad = -(Br * Br - Bt * Bt - Bz * Bz) / (2 * mu_0)
-    Ptan = -Br * Bt / mu_0
-    Pz = -Br * Bz / mu_0
+    Prad = (Br * Br - Bt * Bt - Bz * Bz) / (2 * mu_0)
+    Ptan = Br * Bt / mu_0
+    Pz = Br * Bz / mu_0
 
     # Store the results
-    Time = Data1D(name="time", unit="s", values=time)
-    Angle = Data1D(name="angle", unit="rad", values=angle)
     components = {}
-    if not np.all((Prad == 0)):
+    if not np_all((Prad == 0)):
         Prad_data = DataTime(
             name="Airgap radial surface force",
             unit="N/m2",
             symbol="P_r",
-            axes=[Time, Angle],
+            axes=list(output.mag.B.components.values())[0].axes,
             values=Prad,
         )
-        Prad_freq = Prad_data.time_to_freq()
-        components["radial"] = Prad_freq
-    if not np.all((Ptan == 0)):
+        components["radial"] = Prad_data
+    if not np_all((Ptan == 0)):
         Ptan_data = DataTime(
             name="Airgap tangential surface force",
             unit="N/m2",
             symbol="P_t",
-            axes=[Time, Angle],
+            axes=list(output.mag.B.components.values())[0].axes,
             values=Ptan,
         )
-        Ptan_freq = Ptan_data.time_to_freq()
-        components["tangential"] = Ptan_freq
-    if not np.all((Pz == 0)):
+        components["tangential"] = Ptan_data
+    if not np_all((Pz == 0)):
         Pz_data = DataTime(
             name="Airgap axial surface force",
             unit="N/m2",
             symbol="P_z",
-            axes=[Time, Angle],
+            axes=list(output.mag.B.components.values())[0].axes,
             values=Pz,
         )
-        Pz_freq = Pz_data.time_to_freq()
-        components["axial"] = Pz_freq
+        components["axial"] = Pz_data
     output.force.P = VectorField(
         name="Magnetic airgap surface force", symbol="P", components=components,
     )

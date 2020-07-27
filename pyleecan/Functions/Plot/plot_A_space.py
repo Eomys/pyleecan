@@ -116,11 +116,9 @@ def plot_A_space(
     if is_deg:
         a_str = "angle{°}"
         xlabel = "Angle [°]"
-        xticks = [0, 60, 120, 180, 240, 300, 360]
     else:
         a_str = "angle"
         xlabel = "Angle [rad]"
-        xticks = None
     if t != None:
         t_str = "time=" + str(t)
     else:
@@ -145,6 +143,10 @@ def plot_A_space(
             a_str, t_str, data_list=data_list, unit=unit, is_norm=is_norm
         )
     angle = results["angle"]
+    if is_deg and int(max(angle)) % 6 == 0:
+        xticks = [i * int(max(angle)) / 6 for i in range(int(max(angle)))]
+    else:
+        xticks = None
     Ydatas = [results[data.symbol]] + [
         results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
     ]
