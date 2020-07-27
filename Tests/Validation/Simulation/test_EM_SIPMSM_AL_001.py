@@ -10,6 +10,8 @@ from pyleecan.Classes.InputFlux import InputFlux
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportMatlab import ImportMatlab
+from pyleecan.Classes.ImportData import ImportData
+from pyleecan.Classes.ImportVectorField import ImportVectorField
 
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
@@ -74,20 +76,36 @@ def test_Magnetic_FEMM_sym():
     mat_file = join(TEST_DATA_DIR, "EM_SIPMSM_AL_001_MANATEE_SDM.mat")
     Br = ImportMatlab(file_path=mat_file, var_name="XBr")
     Bt = ImportMatlab(file_path=mat_file, var_name="XBt")
-    simu_load.input = InputFlux(time=time, angle=angle, Br=Br, Bt=Bt)
+    Time = ImportData(field=time, unit="s", name="time")
+    Angle = ImportData(field=angle, unit="rad", name="angle")
+    Br_data = ImportData(
+        axes=[Time, Angle],
+        field=Br,
+        unit="T",
+        name="Radial airgap flux density",
+        symbol="B_r",
+    )
+    Bt_data = ImportData(
+        axes=[Time, Angle],
+        field=Bt,
+        unit="T",
+        name="Tangential airgap flux density",
+        symbol="B_t",
+    )
+    B = ImportVectorField(components={"radial": Br_data, "tangential": Bt_data})
+    simu_load.input = InputFlux(time=time, angle=angle, B=B)
 
     out = Output(simu=simu)
-    out.post.legend_name = "No symmetry"
     simu.run()
 
     out3 = Output(simu=simu_load)
-    out3.post.legend_name = "MANATEE SDM"
-    out3.post.line_color = "g--"
     simu_load.run()
 
     # Plot the result by comparing the two simulation (no sym / MANATEE SDM)
     plt.close("all")
-    out.plot_B_space(out_list=[out3])
+    out.plot_A_space(
+        "mag.B", data_list=[out3.mag.B], legend_list=["No symmetry", "MANATEE SDM"]
+    )
 
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_EM_SIPMSM_AL_001_SDM.png"))

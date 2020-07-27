@@ -8,6 +8,7 @@ from os.path import abspath, dirname, isdir, isfile, join, normpath, realpath
 
 from matplotlib.cm import get_cmap, register_cmap
 from matplotlib.colors import ListedColormap
+from matplotlib import font_manager
 from numpy import load as np_load
 
 from ..default_config_dict import default_config_dict
@@ -140,6 +141,16 @@ def get_config_dict():
             cmap = np_load(cmap_path)
             cmp = ListedColormap(cmap)
             register_cmap(name=config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"], cmap=cmp)
+
+    # Check if font is available
+    font_name = config_dict["PLOT"]["FONT_NAME"]
+    if font_name not in [f.name for f in font_manager.fontManager.ttflist]:
+        logger.warning(
+            "WARNING: "
+            + font_name
+            + "font not available. Try: matplotlib.font_manager._rebuild()"
+        )
+        config_dict["PLOT"]["FONT_NAME"] = "Arial"  # Default font
 
     return config_dict
 

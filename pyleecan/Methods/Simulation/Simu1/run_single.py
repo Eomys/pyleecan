@@ -3,7 +3,7 @@
 from ....Methods.Simulation.Input import InputError
 
 
-def run(self):
+def run_single(self):
     """Run the simulation
 
     Parameters

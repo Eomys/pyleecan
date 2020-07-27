@@ -18,6 +18,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
+from pyleecan.Functions.init_fig import init_subplot
 
 IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
@@ -281,8 +282,9 @@ def test_axis_LamWind():
     simu.run()
 
     plt.close("all")
-    out.plot_B_space(is_deg=False)
+    out.plot_A_space("mag.B", is_deg=False)
     fig = plt.gcf()
-    fig.axes[0].plot(d_angle, max(max(out.mag.Br.values)), "rx")
-    fig.axes[0].text(d_angle, max(max(out.mag.Br.values)), "Max of mmf")
+    Br = out.mag.B.get_rad_along("time", "angle")
+    fig.axes[0].plot(d_angle, max(max(Br)), "rx")
+    fig.axes[0].text(d_angle, max(max(Br)), "Max of mmf")
     fig.savefig(join(save_path, "test_axis_LamWind_flux.png"))

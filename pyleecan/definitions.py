@@ -6,6 +6,10 @@ import sys
 from json import load
 from logging import getLogger
 from os.path import abspath, dirname, isdir, isfile, join, normpath, realpath
+from matplotlib.colors import ListedColormap
+from matplotlib.cm import get_cmap, register_cmap
+from numpy import load as np_load
+from matplotlib import font_manager
 
 ROOT_DIR = normpath(abspath(join(dirname(__file__), ".."))).replace("\\", "/")
 # Further import

@@ -9,7 +9,7 @@ from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
 from ....Classes.MeshSolution import MeshSolution
 from ....Classes.Mesh import Mesh
 from ....Classes.Solution import Solution
-from SciDataTool import DataLinspace, DataTime
+from SciDataTool import DataLinspace, DataTime, VectorField
 from os.path import join
 
 
@@ -124,19 +124,24 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         final=angle[-1],
         number=Na_tot,
     )
-    output.mag.Br = DataTime(
+    Br_data = DataTime(
         name="Airgap radial flux density",
         unit="T",
         symbol="B_r",
         axes=[Time, Angle],
         values=Br,
     )
-    output.mag.Bt = DataTime(
+    Bt_data = DataTime(
         name="Airgap tangential flux density",
         unit="T",
         symbol="B_t",
         axes=[Time, Angle],
         values=Bt,
+    )
+    output.mag.B = VectorField(
+        name="Airgap flux density",
+        symbol="B",
+        components={"radial": Br_data, "tangential": Bt_data},
     )
     output.mag.Tem = DataTime(
         name="Electromagnetic torque",

@@ -60,17 +60,16 @@ def test_EM_IPMSM_FL_001():
     simu_sym.mag.is_antiper_a = False
 
     out = Output(simu=simu)
-    out.post.legend_name = "No symmetry"
     simu.run()
 
     out2 = Output(simu=simu_sym)
-    out2.post.legend_name = "1/4 symmetry"
-    out2.post.line_color = "r--"
     simu_sym.run()
 
     # Plot the result by comparing the two simulation
     plt.close("all")
-    out.plot_B_space(out_list=[out2])
+    out.plot_A_space(
+        "mag.B", data_list=[out2.mag.B], legend_list=["No symmetry", "1/4 symmetry"]
+    )
 
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_EM_IPMSM_FL_001_sym.png"))

@@ -24,6 +24,8 @@ def plot_A_time(
     y_max=None,
     mag_max=None,
     is_auto_ticks=True,
+    fig=None,
+    subplot_index=None,
 ):
     """Plots a field as a function of time
 
@@ -63,10 +65,12 @@ def plot_A_time(
         maximum alue for the y-axis of the fft
     is_auto_ticks : bool
         in fft, adjust ticks to freqs (deactivate if too close)
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
     """
 
     # Set plot
-    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     data_list2 = [data] + data_list
     if legend_list == []:
         legend_list = [d.name for d in data_list2]
@@ -112,7 +116,7 @@ def plot_A_time(
     if data_list == []:
         title = data.name + " over time at " + alpha_str
     else:
-        title = "Comparison over time at " + alpha_str
+        title = "Comparison of " + data.name + " over space at " + alpha_str
 
     # Extract the fields
     if list_str is not None:
@@ -152,17 +156,23 @@ def plot_A_time(
         ylabel=ylabel,
         y_min=y_min,
         y_max=y_max,
+        save_path=save_path,
+        subplot_index=subplot_index,
     )
 
     if is_fft:
+        if "dB" in unit:
+            unit_str = "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
+        else:
+            unit_str = "[" + unit + "]"
         if data_list == []:
             title = "FFT of " + data.name
         else:
-            title = "Comparison of FFT"
+            title = "Comparison of " + data.name + " FFT"
         if data.symbol == "Magnitude":
-            ylabel = "Magnitude [" + unit + "]"
+            ylabel = "Magnitude " + unit_str
         else:
-            ylabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
+            ylabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
         legend_list = [legend_list[0]] + [legend_list[-1]]
 
         if is_elecorder:
@@ -213,7 +223,5 @@ def plot_A_time(
             type="bargraph",
             y_max=mag_max,
             xticks=xticks,
+            save_path=save_path,
         )
-
-    if save_path is not None:
-        fig.savefig(save_path)
