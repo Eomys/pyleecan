@@ -12,8 +12,17 @@ class WImportLinspace(Ui_WImportLinspace, QWidget):
     saveNeeded = pyqtSignal()
     dataTypeChanged = pyqtSignal()
 
-    def __init__(self, parent=None, data=None):
-        """Widget to define an ImportLinspace
+    def __init__(self, parent=None, data=None, verbose_name="", expected_shape=None):
+        """Initialization of the widget
+
+        Parameters
+        ----------
+        data : ImportGenVectLin 
+            Data import to define
+        verbose_name : str
+            Name of the imported data
+        expected_shape : list
+            List to enforce a shape, [None, 2] enforce 2D matrix with 2 columns
         """
         QWidget.__init__(self, parent=parent)
         self.setupUi(self)
@@ -22,6 +31,8 @@ class WImportLinspace(Ui_WImportLinspace, QWidget):
             self.data = ImportGenVectLin()
         else:
             self.data = data
+        self.verbose_name = verbose_name
+        self.expected_shape = expected_shape
         self.update()
 
         # Connect the slot/signal

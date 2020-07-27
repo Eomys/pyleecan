@@ -18,22 +18,27 @@ class WImportExcel(Ui_WImportExcel, QWidget):
     saveNeeded = pyqtSignal()
     dataTypeChanged = pyqtSignal()
 
-    def __init__(self, data=None):
+    def __init__(self, parent=None, data=None, verbose_name="", expected_shape=None):
         """Initialization of the widget
 
         Parameters
         ----------
         data : ImportMatrixXls 
             Data import to define
+        verbose_name : str
+            Name of the imported data
+        expected_shape : list
+            List to enforce a shape, [None, 2] enforce 2D matrix with 2 columns
         """
-        QWidget.__init__(self)
+        QWidget.__init__(self, parent=parent)
         self.setupUi(self)
 
         if data is None or not isinstance(data, ImportMatrixXls):
             self.data = ImportMatrixXls()
         else:
             self.data = data
-        self.data_type = ""  # Option to adapt the preview / check
+        self.verbose_name = verbose_name
+        self.expected_shape = expected_shape
 
         # Not used yet
         self.g_axe1.hide()

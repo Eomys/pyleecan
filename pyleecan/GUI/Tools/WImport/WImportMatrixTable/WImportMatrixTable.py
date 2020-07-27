@@ -11,7 +11,7 @@ from .....definitions import USER_DIR
 from .....GUI.Tools.WImport.WImportMatrixTable.Ui_WImportMatrixTable import (
     Ui_WImportMatrixTable,
 )
-from .....GUI.Tools.WTableData.WTableData import DTableData
+from .....GUI.Tools.WTableData.DTableData import DTableData
 
 
 class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
@@ -23,16 +23,20 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
     saveNeeded = pyqtSignal()
     dataTypeChanged = pyqtSignal()
 
-    def __init__(self, data=None):
+    def __init__(self, parent=None, data=None, verbose_name="", expected_shape=None):
         """Initialization of the widget
 
         Parameters
         ----------
         data : ImportMatrixVal 
             Data import to define
+        verbose_name : str
+            Name of the imported data
+        expected_shape : list
+            List to enforce a shape, [None, 2] enforce 2D matrix with 2 columns
         """
         # Initialzation of the widget
-        QWidget.__init__(self)
+        QWidget.__init__(self, parent=parent)
         self.setupUi(self)
 
         # Check data type
@@ -40,7 +44,8 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
             self.data = ImportMatrixVal()
         else:
             self.data = data
-        self.data_type = ""  # Option to adapt the preview / check
+        self.verbose_name = verbose_name
+        self.expected_shape = expected_shape
 
         self.update()
 
@@ -62,8 +67,22 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
         except Exception as e:
             QMessageBox.critical(self, self.tr("Error"), str(e))
             return
-        tab = DTableData(data=data)
+        # Enfoce shape
+        shape_min = [1, 1]
+        shape_max = [None, None]
+        if self.expected_shape is not None and self.expected_shape[0] is not None:
+            shape_min[0] = self.expected_shape[0]
+            shape_max[0] = self.expected_shape[0]
+        if self.expected_shape is not None and self.expected_shape[1] is not None:
+            shape_min[1] = self.expected_shape[1]
+            shape_max[1] = self.expected_shape[1]
+        tab = DTableData(
+            data=data, title=self.verbose_name, shape_min=shape_min, shape_max=shape_max
+        )
         return_code = tab.exec_()
+        if return_code == 1:
+            self.data.value = tab.data
+            self.update()
 
     def s_plot(self):
         """Plot the matrix (if 2D)

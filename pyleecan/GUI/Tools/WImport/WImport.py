@@ -21,6 +21,8 @@ class WImport(Ui_WImport, QWidget):
 
         self.obj = None  # Object to edit
         self.verbose_name = ""  # Name to display / adapt the GUI
+        # List to enforce a shape, [None, 2] enforce 2D matrix with 2 columns
+        self.expected_shape = None
         self.param_name = ""  # Name of the quantity to set
         self.widget_list = []  # Available widget to import
 
@@ -73,7 +75,11 @@ class WImport(Ui_WImport, QWidget):
         data = getattr(self.obj, self.param_name)
         # Regenerate the pages with the new values
         self.w_import.setParent(None)
-        self.w_import = self.widget_list[self.c_type_import.currentIndex()](data=data)
+        self.w_import = self.widget_list[self.c_type_import.currentIndex()](
+            data=data,
+            verbose_name=self.verbose_name,
+            expected_shape=self.expected_shape,
+        )
         self.w_import.data_type = self.verbose_name
         self.w_import.saveNeeded.connect(self.emit_save)
         self.w_import.dataTypeChanged.connect(self.update_type)

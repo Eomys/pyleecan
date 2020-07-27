@@ -102,6 +102,7 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         self.w_BH_import.verbose_name = "B(H) curve"
         self.w_BH_import.obj = self.mat.mag
         self.w_BH_import.param_name = "BH_curve"
+        self.w_BH_import.expected_shape = (None, 2)
         self.w_BH_import.update()
 
         # Hide useless widget
