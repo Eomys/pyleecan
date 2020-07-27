@@ -177,14 +177,18 @@ def plot_A_space(
     )
 
     if is_fft:
+        if "dB" in unit:
+            unit_str = "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
+        else:
+            unit_str = "[" + unit + "]"
         if data_list == []:
             title = "FFT of " + data.name
         else:
             title = "Comparison of " + data.name + " FFT"
         if data.symbol == "Magnitude":
-            ylabel = "Magnitude [" + unit + "]"
+            ylabel = "Magnitude " + unit_str
         else:
-            ylabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
+            ylabel = r"$|\widehat{" + data.symbol + "}|\, " + unit_str + "$"
         legend_list = [legend_list[0]] + [legend_list[-1]]
 
         if is_spaceorder:

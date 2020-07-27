@@ -73,6 +73,10 @@ def plot_A_fft2(
         y_str = "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]"
     if unit == "SI":
         unit = data.unit
+    elif "dB" in unit:
+        unit_str = "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
+    else:
+        unit_str = "[" + unit + "]"
 
     # Extract the field
     results = data.get_magnitude_along(x_str, y_str, unit=unit)
@@ -86,8 +90,11 @@ def plot_A_fft2(
     wavenumber_flat = wavenumber_map.flatten()
     A_mag_flat = A_mag.flatten()
     size_flat = 1000 * A_mag_flat / np_max(A_mag_flat)
-
-    zlabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
+    
+    if data.symbol == "Magnitude":
+        zlabel = "Magnitude " + unit_str
+    else:
+        zlabel = r"$|\widehat{" + data.symbol + "}|\, " + unit_str + "$"
 
     if mag_max is None:
         mag_max = np_max(A_mag)
