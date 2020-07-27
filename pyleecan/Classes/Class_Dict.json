@@ -2183,6 +2183,8 @@
         "desc": "To generate a Linspace vector",
         "is_internal": false,
         "methods": [
+            "check",
+            "comp_step",
             "get_data"
         ],
         "mother": "ImportMatrix",

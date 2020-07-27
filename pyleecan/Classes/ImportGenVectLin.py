@@ -13,6 +13,16 @@ from .ImportMatrix import ImportMatrix
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Import.ImportGenVectLin.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from ..Methods.Import.ImportGenVectLin.comp_step import comp_step
+except ImportError as error:
+    comp_step = error
+
+try:
     from ..Methods.Import.ImportGenVectLin.get_data import get_data
 except ImportError as error:
     get_data = error
@@ -26,6 +36,27 @@ class ImportGenVectLin(ImportMatrix):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Import.ImportGenVectLin.check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ImportGenVectLin method check: " + str(check))
+            )
+        )
+    else:
+        check = check
+    # cf Methods.Import.ImportGenVectLin.comp_step
+    if isinstance(comp_step, ImportError):
+        comp_step = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ImportGenVectLin method comp_step: " + str(comp_step)
+                )
+            )
+        )
+    else:
+        comp_step = comp_step
     # cf Methods.Import.ImportGenVectLin.get_data
     if isinstance(get_data, ImportError):
         get_data = property(
