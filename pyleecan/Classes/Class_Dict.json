@@ -624,6 +624,69 @@
             }
         ]
     },
+    "DataKeeper": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for the multi-simulation",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "DataKeeper",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/DataKeeper.csv",
+        "properties": [
+            {
+                "desc": "Data name",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Data symbol",
+                "max": "",
+                "min": "",
+                "name": "symbol",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Data unit",
+                "max": "",
+                "min": "",
+                "name": "unit",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Function that takes an Output in argument and return a value",
+                "max": "",
+                "min": "",
+                "name": "keeper",
+                "type": "function",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices",
+                "max": "",
+                "min": "",
+                "name": "error_keeper",
+                "type": "function",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
     "Drive": {
         "constants": [
             {
@@ -5632,8 +5695,8 @@
                 "desc": "Optimization results containing every output",
                 "max": "",
                 "min": "",
-                "name": "multi_output",
-                "type": "OutputMultiOpti",
+                "name": "xoutput",
+                "type": "XOutput",
                 "unit": "-",
                 "value": ""
             },
@@ -5645,6 +5708,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OptiSolver"
+            },
+            {
+                "desc": "Boolean to keep every output",
+                "max": "",
+                "min": "",
+                "name": "is_keep_all_output",
+                "type": "bool",
+                "unit": "-",
+                "value": false
             }
         ]
     },
@@ -6303,7 +6375,10 @@
                 "value": "1"
             }
         ],
-        "daughters": [],
+        "daughters": [
+            "Output",
+            "XOutput"
+        ],
         "desc": "Main Output object: gather all the outputs of all the modules",
         "is_internal": false,
         "methods": [
@@ -6534,6 +6609,94 @@
             }
         ]
     },
+    "ParamExplorer": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "ParamExplorer",
+            "ParamExplorerSet"
+        ],
+        "desc": "Abstract class for the multi-simulation",
+        "is_internal": false,
+        "methods": [
+            "_set_setter"
+        ],
+        "mother": "",
+        "name": "ParamExplorer",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/ParamExplorer.csv",
+        "properties": [
+            {
+                "desc": "Parameter name",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Parameter symbol",
+                "max": "",
+                "min": "",
+                "name": "symbol",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Parameter unit",
+                "max": "",
+                "min": "",
+                "name": "unit",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Function that takes a Simulation and a value in argument and modifiers the simulation",
+                "max": "",
+                "min": "",
+                "name": "setter",
+                "type": "function",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "ParamExplorerSet": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for the multi-simulation",
+        "is_internal": false,
+        "methods": [
+            "get_value"
+        ],
+        "mother": "ParamExplorer",
+        "name": "ParamExplorerSet",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/ParamExplorerSet.csv",
+        "properties": [
+            {
+                "desc": "List containing the different parameter values to explore",
+                "max": "",
+                "min": "",
+                "name": "value",
+                "type": "list",
+                "unit": "-",
+                "value": []
+            }
+        ]
+    },
     "PolarArc": {
         "constants": [
             {
@@ -6692,7 +6855,7 @@
         "desc": "Five sequential weak coupling multi physics simulation",
         "is_internal": false,
         "methods": [
-            "run"
+            "run_single"
         ],
         "mother": "Simulation",
         "name": "Simu1",
@@ -6750,7 +6913,9 @@
         ],
         "desc": "Abstract class for the simulation",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "run"
+        ],
         "mother": "",
         "name": "Simulation",
         "package": "Simulation",
@@ -6800,6 +6965,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.Simulation"
+            },
+            {
+                "desc": "Multi-simulation definition",
+                "max": "",
+                "min": "",
+                "name": "var_simu",
+                "type": "VarSimu",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -9125,6 +9299,131 @@
             }
         ]
     },
+    "VarParam": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Handle multisimulation by varying parameters",
+        "is_internal": false,
+        "methods": [
+            "check_param",
+            "get_simulations"
+        ],
+        "mother": "VarSimu",
+        "name": "VarParam",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/VarParam.csv",
+        "properties": [
+            {
+                "desc": "List containing ParamSetter to define every simulation",
+                "max": "",
+                "min": "",
+                "name": "paramexplorer_list",
+                "type": "[ParamExplorer]",
+                "unit": "-",
+                "value": []
+            }
+        ]
+    },
+    "VarSimu": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "VarSimu",
+            "VarParam"
+        ],
+        "desc": "Abstract class for the multi-simulation",
+        "is_internal": false,
+        "methods": [
+            "run"
+        ],
+        "mother": "",
+        "name": "VarSimu",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/VarSimu.csv",
+        "properties": [
+            {
+                "desc": "Name of the multi-simulation",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Multi-simulation description",
+                "max": "",
+                "min": "",
+                "name": "desc",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "List containing DataKeepers to extract VarSimu results ",
+                "max": "",
+                "min": "",
+                "name": "datakeeper_list",
+                "type": "[DataKeeper]",
+                "unit": "-",
+                "value": []
+            },
+            {
+                "desc": "Number of processors used to run the simulations",
+                "max": "",
+                "min": "1",
+                "name": "nb_proc",
+                "type": "int",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "True to store every output in a list",
+                "max": "",
+                "min": "",
+                "name": "is_keep_all_output",
+                "type": "bool",
+                "unit": "-",
+                "value": false
+            },
+            {
+                "desc": "Stop the multi-simulation if a simulation fails ",
+                "max": "",
+                "min": "",
+                "name": "stop_if_error",
+                "type": "bool",
+                "unit": "-",
+                "value": false
+            },
+            {
+                "desc": "Index of the reference simulation, if None the reference simulation is not in the multi-simulation",
+                "max": "",
+                "min": "0",
+                "name": "ref_simu_index",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Number of simulations",
+                "max": "",
+                "min": "",
+                "name": "nb_simu",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            }
+        ]
+    },
     "VentilationCirc": {
         "constants": [
             {
@@ -9610,6 +9909,80 @@
                 "type": "ndarray",
                 "unit": "-",
                 "value": ""
+            }
+        ]
+    },
+    "XOutput": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "XOutput object: gather all the outputs of all the modules for multiple simulations",
+        "is_internal": false,
+        "methods": [
+            "__delitem__",
+            "__getitem__",
+            "__iter__",
+            "__len__",
+            "__missing__",
+            "__next__",
+            "__reversed__",
+            "__setitem__",
+            "count",
+            "insert",
+            "pop",
+            "remove",
+            "append",
+            "get_simu",
+            "keys",
+            "items",
+            "get_param_simu",
+            "get_paramexplorer",
+            "plot_multi"
+        ],
+        "mother": "Output",
+        "name": "XOutput",
+        "package": "Output",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/XOutput.csv",
+        "properties": [
+            {
+                "desc": "List containing ParamExplorer",
+                "max": "",
+                "min": "",
+                "name": "paramexplorer_list",
+                "type": "list",
+                "unit": "-",
+                "value": []
+            },
+            {
+                "desc": "List containing Output for each simulation",
+                "max": "",
+                "min": "",
+                "name": "output_list",
+                "type": "list",
+                "unit": "-",
+                "value": []
+            },
+            {
+                "desc": "Dictionnary containing VarParam DataKeeper results in ndarray",
+                "max": "",
+                "min": "",
+                "name": "xoutput_dict",
+                "type": "dict",
+                "unit": "-",
+                "value": {}
+            },
+            {
+                "desc": "Number of simulations excluding reference simulation",
+                "max": "",
+                "min": "0",
+                "name": "nb_simu",
+                "type": "int",
+                "unit": "-",
+                "value": 0
             }
         ]
     }

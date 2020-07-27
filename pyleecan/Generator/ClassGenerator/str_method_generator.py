@@ -149,6 +149,19 @@ def generate_str(gen_dict, class_dict):
             var_str += (
                 TAB3 + class_name + '_str += "' + prop["name"] + '["+key+"] ="+ tmp'
             )
+        elif prop["type"] == "tuple":  # For tuple
+            var_str += TAB2 + "if self." + prop["name"] + " is not None:\n"
+            var_str += (
+                TAB3
+                + "tmp = self."
+                + prop["name"]
+                + '.__str__().replace(linesep, linesep + "\\t").rstrip("\\t")\n'
+            )
+            var_str += (
+                TAB3 + class_name + '_str += "' + prop["name"] + ' = "+ tmp + linesep\n'
+            )
+            var_str += TAB2 + "else:\n"
+            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = None"'
         else:  # For pyleecan type print the __str__
             # Add => < "MyClass = "+str(self.my_var.as_dict()) >to var_str
             var_str += TAB2 + "if self." + prop["name"] + " is not None:\n"

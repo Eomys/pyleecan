@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 from os.path import dirname, abspath, normpath, join, realpath, isdir
-from os import listdir, remove, mkdir
+from os import listdir, remove, mkdir, system
 
 begin = len(normpath(abspath(join(dirname(__file__), "../.."))))
 end = len(normpath(abspath(join(dirname(__file__), ".."))))
@@ -22,3 +22,11 @@ if __name__ == "__main__":
     gen_dict = read_all(DOC_DIR)
     print("#############################\nGenerating gui....")
     generate_gui(gen_dict, is_gen_resource=False)
+
+    # Run black
+    try:
+        import black
+
+        system("{} -m black .".format(sys.executable))
+    except ImportError:
+        print("/!\\ Please install and run black /!\\")

@@ -89,11 +89,27 @@ class OptiProblem(FrozenClass):
         self.parent = None
         # output can be None, a Output object or a dict
         if isinstance(output, dict):
-            self.output = Output(init_dict=output)
+            # Check that the type is correct (including daughter)
+            class_name = output.get("__class__")
+            if class_name not in ["Output", "XOutput"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for output"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.output = class_obj(init_dict=output)
         elif isinstance(output, str):
             from ..Functions.load import load
 
-            self.output = load(output)
+            output = load(output)
+            # Check that the type is correct (including daughter)
+            class_name = output.__class__.__name__
+            if class_name not in ["Output", "XOutput"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for output"
+                )
+            self.output = output
         else:
             self.output = output
         # design_var can be None or a dict of OptiDesignVar object

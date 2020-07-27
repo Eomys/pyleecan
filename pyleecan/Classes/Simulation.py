@@ -10,9 +10,18 @@ from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Simulation.Simulation.run import run
+except ImportError as error:
+    run = error
+
+
 from ._check import InitUnKnowClassError
 from .Machine import Machine
 from .Input import Input
+from .VarSimu import VarSimu
 
 
 class Simulation(FrozenClass):
@@ -20,6 +29,15 @@ class Simulation(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Simulation.Simulation.run
+    if isinstance(run, ImportError):
+        run = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Simulation method run: " + str(run))
+            )
+        )
+    else:
+        run = run
     # save method is available in all object
     save = save
 
@@ -39,6 +57,7 @@ class Simulation(FrozenClass):
         machine=-1,
         input=-1,
         logger_name="Pyleecan.Simulation",
+        var_simu=None,
         init_dict=None,
         init_str=None,
     ):
@@ -57,6 +76,8 @@ class Simulation(FrozenClass):
             machine = Machine()
         if input == -1:
             input = Input()
+        if var_simu == -1:
+            var_simu = VarSimu()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -69,6 +90,7 @@ class Simulation(FrozenClass):
             machine = obj.machine
             input = obj.input
             logger_name = obj.logger_name
+            var_simu = obj.var_simu
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -82,6 +104,8 @@ class Simulation(FrozenClass):
                 input = init_dict["input"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "var_simu" in list(init_dict.keys()):
+                var_simu = init_dict["var_simu"]
         # Initialisation by argument
         self.parent = None
         self.name = name
@@ -173,6 +197,31 @@ class Simulation(FrozenClass):
         else:
             self.input = input
         self.logger_name = logger_name
+        # var_simu can be None, a VarSimu object or a dict
+        if isinstance(var_simu, dict):
+            # Check that the type is correct (including daughter)
+            class_name = var_simu.get("__class__")
+            if class_name not in ["VarSimu", "VarParam"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for var_simu"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.var_simu = class_obj(init_dict=var_simu)
+        elif isinstance(var_simu, str):
+            from ..Functions.load import load
+
+            var_simu = load(var_simu)
+            # Check that the type is correct (including daughter)
+            class_name = var_simu.__class__.__name__
+            if class_name not in ["VarSimu", "VarParam"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for var_simu"
+                )
+            self.var_simu = var_simu
+        else:
+            self.var_simu = var_simu
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -198,6 +247,11 @@ class Simulation(FrozenClass):
         else:
             Simulation_str += "input = None" + linesep + linesep
         Simulation_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        if self.var_simu is not None:
+            tmp = self.var_simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Simulation_str += "var_simu = " + tmp
+        else:
+            Simulation_str += "var_simu = None" + linesep + linesep
         return Simulation_str
 
     def __eq__(self, other):
@@ -214,6 +268,8 @@ class Simulation(FrozenClass):
         if other.input != self.input:
             return False
         if other.logger_name != self.logger_name:
+            return False
+        if other.var_simu != self.var_simu:
             return False
         return True
 
@@ -233,6 +289,10 @@ class Simulation(FrozenClass):
         else:
             Simulation_dict["input"] = self.input.as_dict()
         Simulation_dict["logger_name"] = self.logger_name
+        if self.var_simu is None:
+            Simulation_dict["var_simu"] = None
+        else:
+            Simulation_dict["var_simu"] = self.var_simu.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         Simulation_dict["__class__"] = "Simulation"
         return Simulation_dict
@@ -247,6 +307,8 @@ class Simulation(FrozenClass):
         if self.input is not None:
             self.input._set_None()
         self.logger_name = None
+        if self.var_simu is not None:
+            self.var_simu._set_None()
 
     def _get_name(self):
         """getter of name"""
@@ -325,4 +387,22 @@ class Simulation(FrozenClass):
         fget=_get_logger_name,
         fset=_set_logger_name,
         doc=u"""Name of the logger to use""",
+    )
+
+    def _get_var_simu(self):
+        """getter of var_simu"""
+        return self._var_simu
+
+    def _set_var_simu(self, value):
+        """setter of var_simu"""
+        check_var("var_simu", value, "VarSimu")
+        self._var_simu = value
+
+        if self._var_simu is not None:
+            self._var_simu.parent = self
+
+    # Multi-simulation definition
+    # Type : VarSimu
+    var_simu = property(
+        fget=_get_var_simu, fset=_set_var_simu, doc=u"""Multi-simulation definition"""
     )
