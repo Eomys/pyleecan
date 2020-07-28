@@ -51,6 +51,7 @@ class OutElec(FrozenClass):
         logger_name="Pyleecan.OutElec",
         mmf_unit=None,
         Currents=None,
+        Tem_av_ref=None,
         init_dict=None,
         init_str=None,
     ):
@@ -83,6 +84,7 @@ class OutElec(FrozenClass):
             logger_name = obj.logger_name
             mmf_unit = obj.mmf_unit
             Currents = obj.Currents
+            Tem_av_ref = obj.Tem_av_ref
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -108,6 +110,8 @@ class OutElec(FrozenClass):
                 mmf_unit = init_dict["mmf_unit"]
             if "Currents" in list(init_dict.keys()):
                 Currents = init_dict["Currents"]
+            if "Tem_av_ref" in list(init_dict.keys()):
+                Tem_av_ref = init_dict["Tem_av_ref"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -130,6 +134,7 @@ class OutElec(FrozenClass):
             raise ImportError("Unknown type DataND please install SciDataTool")
         self.mmf_unit = mmf_unit
         self.Currents = Currents
+        self.Tem_av_ref = Tem_av_ref
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -191,6 +196,7 @@ class OutElec(FrozenClass):
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         OutElec_str += "mmf_unit = " + str(self.mmf_unit) + linesep + linesep
         OutElec_str += "Currents = " + str(self.Currents) + linesep + linesep
+        OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -219,6 +225,8 @@ class OutElec(FrozenClass):
         if other.mmf_unit != self.mmf_unit:
             return False
         if other.Currents != self.Currents:
+            return False
+        if other.Tem_av_ref != self.Tem_av_ref:
             return False
         return True
 
@@ -270,6 +278,7 @@ class OutElec(FrozenClass):
                 "__repr__": str(self._Currents.__repr__()),
                 "serialized": dumps(self._Currents).decode("ISO-8859-2"),
             }
+        OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
         # The class name is added to the dict fordeserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -288,6 +297,7 @@ class OutElec(FrozenClass):
         self.logger_name = None
         self.mmf_unit = None
         self.Currents = None
+        self.Tem_av_ref = None
 
     def _get_time(self):
         """getter of time"""
@@ -525,3 +535,20 @@ class OutElec(FrozenClass):
     # Currents
     # Type : SciDataTool.Classes.DataND.DataND
     Currents = property(fget=_get_Currents, fset=_set_Currents, doc=u"""Currents""")
+
+    def _get_Tem_av_ref(self):
+        """getter of Tem_av_ref"""
+        return self._Tem_av_ref
+
+    def _set_Tem_av_ref(self, value):
+        """setter of Tem_av_ref"""
+        check_var("Tem_av_ref", value, "float")
+        self._Tem_av_ref = value
+
+    # Theorical Average Electromagnetic torque
+    # Type : float
+    Tem_av_ref = property(
+        fget=_get_Tem_av_ref,
+        fset=_set_Tem_av_ref,
+        doc=u"""Theorical Average Electromagnetic torque""",
+    )

@@ -20,6 +20,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .ImportVectorField import ImportVectorField
+from .Input import Input
 from .Import import Import
 from .ImportMatrixVal import ImportMatrixVal
 
@@ -50,7 +51,9 @@ class InputFlux(Input):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, B=None, time=-1, angle=-1, init_dict=None, init_str=None):
+    def __init__(
+        self, B=None, OP=None, time=-1, angle=-1, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -64,6 +67,8 @@ class InputFlux(Input):
 
         if B == -1:
             B = ImportVectorField()
+        if OP == -1:
+            OP = Input()
         if time == -1:
             time = ImportMatrixVal()
         if angle == -1:
@@ -76,6 +81,7 @@ class InputFlux(Input):
             obj = load(init_str)
             assert type(obj) is type(self)
             B = obj.B
+            OP = obj.OP
             time = obj.time
             angle = obj.angle
         if init_dict is not None:  # Initialisation by dict
@@ -83,6 +89,8 @@ class InputFlux(Input):
             # Overwrite default value with init_dict content
             if "B" in list(init_dict.keys()):
                 B = init_dict["B"]
+            if "OP" in list(init_dict.keys()):
+                OP = init_dict["OP"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -97,6 +105,43 @@ class InputFlux(Input):
             self.B = load(B)
         else:
             self.B = B
+        # OP can be None, a Input object or a dict
+        if isinstance(OP, dict):
+            # Check that the type is correct (including daughter)
+            class_name = OP.get("__class__")
+            if class_name not in [
+                "Input",
+                "InputCurrent",
+                "InputCurrentDQ",
+                "InputFlux",
+                "InputForce",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for OP"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.OP = class_obj(init_dict=OP)
+        elif isinstance(OP, str):
+            from ..Functions.load import load
+
+            OP = load(OP)
+            # Check that the type is correct (including daughter)
+            class_name = OP.__class__.__name__
+            if class_name not in [
+                "Input",
+                "InputCurrent",
+                "InputCurrentDQ",
+                "InputFlux",
+                "InputForce",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for OP"
+                )
+            self.OP = OP
+        else:
+            self.OP = OP
         # Call Input init
         super(InputFlux, self).__init__(time=time, angle=angle)
         # The class is frozen (in Input init), for now it's impossible to
@@ -113,6 +158,11 @@ class InputFlux(Input):
             InputFlux_str += "B = " + tmp
         else:
             InputFlux_str += "B = None" + linesep + linesep
+        if self.OP is not None:
+            tmp = self.OP.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            InputFlux_str += "OP = " + tmp
+        else:
+            InputFlux_str += "OP = None" + linesep + linesep
         return InputFlux_str
 
     def __eq__(self, other):
@@ -126,6 +176,8 @@ class InputFlux(Input):
             return False
         if other.B != self.B:
             return False
+        if other.OP != self.OP:
+            return False
         return True
 
     def as_dict(self):
@@ -138,6 +190,10 @@ class InputFlux(Input):
             InputFlux_dict["B"] = None
         else:
             InputFlux_dict["B"] = self.B.as_dict()
+        if self.OP is None:
+            InputFlux_dict["OP"] = None
+        else:
+            InputFlux_dict["OP"] = self.OP.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         InputFlux_dict["__class__"] = "InputFlux"
@@ -148,6 +204,8 @@ class InputFlux(Input):
 
         if self.B is not None:
             self.B._set_None()
+        if self.OP is not None:
+            self.OP._set_None()
         # Set to None the properties inherited from Input
         super(InputFlux, self)._set_None()
 
@@ -166,3 +224,23 @@ class InputFlux(Input):
     # Airgap flux density
     # Type : ImportVectorField
     B = property(fget=_get_B, fset=_set_B, doc=u"""Airgap flux density""")
+
+    def _get_OP(self):
+        """getter of OP"""
+        return self._OP
+
+    def _set_OP(self, value):
+        """setter of OP"""
+        check_var("OP", value, "Input")
+        self._OP = value
+
+        if self._OP is not None:
+            self._OP.parent = self
+
+    # InputCurrent to define Operating Point (not mandatory)
+    # Type : Input
+    OP = property(
+        fget=_get_OP,
+        fset=_set_OP,
+        doc=u"""InputCurrent to define Operating Point (not mandatory)""",
+    )

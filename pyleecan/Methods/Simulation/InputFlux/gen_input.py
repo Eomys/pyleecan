@@ -55,3 +55,7 @@ def gen_input(self):
         )
     # Save the Output in the correct place
     self.parent.parent.mag = output
+
+    # Define the electrical Output to set the Operating Point
+    if self.OP is not None:
+        self.OP.gen_input()

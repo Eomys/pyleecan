@@ -127,6 +127,9 @@ def gen_input(self):
     else:
         output.angle_rotor_initial = self.angle_rotor_initial
 
+    if self.Tem_av_ref is not None:
+        output.Tem_av_ref = self.Tem_av_ref
+
     if self.parent.parent is None:
         raise InputError(
             "ERROR: The Simulation object must be in an Output object to run"

@@ -2868,6 +2868,15 @@
                 "type": "float",
                 "unit": "",
                 "value": 0
+            },
+            {
+                "desc": "Theorical Average Electromagnetic torque",
+                "max": "",
+                "min": "",
+                "name": "Tem_av_ref",
+                "type": "float",
+                "unit": "N.m",
+                "value": null
             }
         ]
     },
@@ -2942,6 +2951,15 @@
                 "type": "float",
                 "unit": "",
                 "value": 0
+            },
+            {
+                "desc": "Theorical Average Electromagnetic torque",
+                "max": "",
+                "min": "",
+                "name": "Tem_av_ref",
+                "type": "float",
+                "unit": "N.m",
+                "value": null
             }
         ]
     },
@@ -2970,6 +2988,15 @@
                 "name": "B",
                 "type": "ImportVectorField",
                 "unit": "T",
+                "value": null
+            },
+            {
+                "desc": "InputCurrent to define Operating Point (not mandatory)",
+                "max": "",
+                "min": "",
+                "name": "OP",
+                "type": "Input",
+                "unit": "-",
                 "value": null
             }
         ]
@@ -5836,6 +5863,15 @@
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "-",
                 "value": "None"
+            },
+            {
+                "desc": "Theorical Average Electromagnetic torque",
+                "max": "",
+                "min": "",
+                "name": "Tem_av_ref",
+                "type": "float",
+                "unit": "N.m",
+                "value": null
             }
         ]
     },
