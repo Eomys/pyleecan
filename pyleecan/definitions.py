@@ -35,7 +35,7 @@ GUI_DIR = join(MAIN_DIR, "GUI").replace("\\", "/")
 RES_PATH = join(GUI_DIR, "Resources").replace("\\", "/")  # Default Resouces folder name
 RES_NAME = "pyleecan.qrc"  # Default Resouces file name
 
-TEST_DIR = join(ROOT_DIR, "Tests")
+TEST_DIR = join(ROOT_DIR, "Tests").replace("\\", "/")
 
 # User folder (to store machine/materials/config)
 if platform.system() == "Windows":
