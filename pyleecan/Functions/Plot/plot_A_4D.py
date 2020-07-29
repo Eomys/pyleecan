@@ -109,8 +109,10 @@ def plot_A_4D(
             vmax=z_max,
         )
         clb = fig.colorbar(c, ax=ax)
-        clb.ax.set_title(zlabel, fontsize=18)
+        clb.ax.set_title(zlabel, fontsize=18, fontname=FONT_NAME)
         clb.ax.tick_params(labelsize=18)
+        for l in clb.ax.yaxis.get_ticklabels():
+            l.set_family(FONT_NAME)
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
             ax.set_xticklabels(xticklabels)
