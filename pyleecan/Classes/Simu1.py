@@ -56,10 +56,10 @@ class Simu1(Simulation):
 
     def __init__(
         self,
-        elec=-1,
-        mag=-1,
-        struct=-1,
-        force=-1,
+        elec=None,
+        mag=None,
+        struct=None,
+        force=None,
         name="",
         desc="",
         machine=-1,
