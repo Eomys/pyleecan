@@ -296,7 +296,8 @@ def test_save_load_dict():
 
 @pytest.mark.long
 @pytest.mark.FEMM
-def test_save_hdf5():
+@pytest.mark.parametrize("type_file", ["json", "h5", "pkl"])
+def test_save_load_simu(type_file):
     """Save in hdf5 file
     """
     simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
@@ -325,51 +326,7 @@ def test_save_hdf5():
     test_obj.simu.run()
     test_obj.post.legend_name = "Slotless lamination"
 
-    file_path = join(save_path, "test_save_h5.h5")
-    logger.debug(file_path)
-
-    if isfile(file_path):
-        remove(file_path)
-
-    assert isfile(file_path) == False
-    test_obj.save(file_path)
-    assert isfile(file_path)
-    test_obj2 = load(file_path)
-    assert test_obj == test_obj2
-
-
-@pytest.mark.long
-@pytest.mark.FEMM
-def test_save_json():
-    """Save in json file
-    """
-    simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
-
-    # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(1) * 3000)
-    Is = ImportMatrixVal(value=array([[2.25353053e02, 2.25353053e02, 2.25353053e02]]))
-    time = ImportGenVectLin(start=0, stop=1, num=1, endpoint=True)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
-
-    simu.input = InputCurrent(
-        Is=Is,
-        Ir=None,  # No winding on the rotor
-        Nr=Nr,
-        angle_rotor=None,  # Will be computed
-        time=time,
-        angle=angle,
-    )
-
-    # Definition of the magnetic simulation (no symmetry)
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=0, is_sliding_band=False)
-    simu.force = None
-    simu.struct = None
-
-    test_obj = Output(simu=simu)
-    test_obj.simu.run()
-    test_obj.post.legend_name = "Slotless lamination"
-
-    file_path = join(save_path, "test_save_json.json")
+    file_path = join(save_path, "test_save_{}.{}".format(type_file, type_file))
     logger.debug(file_path)
 
     if isfile(file_path):
