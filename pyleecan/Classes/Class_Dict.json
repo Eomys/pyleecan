@@ -2131,6 +2131,89 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/Import.csv",
         "properties": []
     },
+    "ImportData": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for Data Import/Generation",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "",
+        "name": "ImportData",
+        "package": "Import",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/ImportData.csv",
+        "properties": [
+            {
+                "desc": "List of axes of the data",
+                "max": "",
+                "min": "",
+                "name": "axes",
+                "type": "[ImportData]",
+                "unit": "-",
+                "value": []
+            },
+            {
+                "desc": "Field (Import object)",
+                "max": "",
+                "min": "",
+                "name": "field",
+                "type": "Import",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Unit of the field",
+                "max": "",
+                "min": "",
+                "name": "unit",
+                "type": "str",
+                "unit": "-",
+                "value": "SI"
+            },
+            {
+                "desc": "Name of the field",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Symbol of the field",
+                "max": "",
+                "min": "",
+                "name": "symbol",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Dict of normalizations",
+                "max": "",
+                "min": "",
+                "name": "normalizations",
+                "type": "dict",
+                "unit": "-",
+                "value": {}
+            },
+            {
+                "desc": "Dict of symmetries",
+                "max": "",
+                "min": "",
+                "name": "symmetries",
+                "type": "dict",
+                "unit": "-",
+                "value": {}
+            }
+        ]
+    },
     "ImportGenMatrixSin": {
         "constants": [
             {
@@ -2246,6 +2329,8 @@
         "desc": "To generate a Linspace vector",
         "is_internal": false,
         "methods": [
+            "check",
+            "comp_step",
             "get_data"
         ],
         "mother": "ImportMatrix",
@@ -2516,6 +2601,53 @@
             }
         ]
     },
+    "ImportVectorField": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for Data Import/Generation",
+        "is_internal": false,
+        "methods": [
+            "get_data"
+        ],
+        "mother": "",
+        "name": "ImportVectorField",
+        "package": "Import",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Import/ImportVectorField.csv",
+        "properties": [
+            {
+                "desc": "Dict of components (e.g. {\"radial\": ImportData})",
+                "max": "",
+                "min": "",
+                "name": "components",
+                "type": "{ImportData}",
+                "unit": "-",
+                "value": {}
+            },
+            {
+                "desc": "Name of the vector field",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Symbol of the vector field",
+                "max": "",
+                "min": "",
+                "name": "symbol",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            }
+        ]
+    },
     "IndMag": {
         "constants": [
             {
@@ -2736,6 +2868,15 @@
                 "type": "float",
                 "unit": "",
                 "value": 0
+            },
+            {
+                "desc": "Theorical Average Electromagnetic torque",
+                "max": "",
+                "min": "",
+                "name": "Tem_av_ref",
+                "type": "float",
+                "unit": "N.m",
+                "value": null
             }
         ]
     },
@@ -2810,6 +2951,15 @@
                 "type": "float",
                 "unit": "",
                 "value": 0
+            },
+            {
+                "desc": "Theorical Average Electromagnetic torque",
+                "max": "",
+                "min": "",
+                "name": "Tem_av_ref",
+                "type": "float",
+                "unit": "N.m",
+                "value": null
             }
         ]
     },
@@ -2832,21 +2982,21 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputFlux.csv",
         "properties": [
             {
-                "desc": "Radial airgap flux density",
+                "desc": "Airgap flux density",
                 "max": "",
                 "min": "",
-                "name": "Br",
-                "type": "Import",
+                "name": "B",
+                "type": "ImportVectorField",
                 "unit": "T",
                 "value": null
             },
             {
-                "desc": "Tangential airgap flux density",
+                "desc": "InputCurrent to define Operating Point (not mandatory)",
                 "max": "",
                 "min": "",
-                "name": "Bt",
-                "type": "Import",
-                "unit": "T",
+                "name": "OP",
+                "type": "Input",
+                "unit": "-",
                 "value": null
             }
         ]
@@ -2870,20 +3020,11 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputForce.csv",
         "properties": [
             {
-                "desc": "Radial magnetic air-gap surface force",
+                "desc": "Magnetic air-gap surface force",
                 "max": "",
                 "min": "",
-                "name": "Prad",
-                "type": "Import",
-                "unit": "N.m^2",
-                "value": null
-            },
-            {
-                "desc": "Tangential magnetic air-gap surface force",
-                "max": "",
-                "min": "",
-                "name": "Ptan",
-                "type": "Import",
+                "name": "P",
+                "type": "ImportVectorField",
                 "unit": "N.m^2",
                 "value": null
             }
@@ -5722,6 +5863,15 @@
                 "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "-",
                 "value": "None"
+            },
+            {
+                "desc": "Theorical Average Electromagnetic torque",
+                "max": "",
+                "min": "",
+                "name": "Tem_av_ref",
+                "type": "float",
+                "unit": "N.m",
+                "value": null
             }
         ]
     },
@@ -5778,20 +5928,11 @@
                 "value": null
             },
             {
-                "desc": "Radial magnetic air-gap surface force",
+                "desc": "Air-gap surface force",
                 "max": "",
                 "min": "",
-                "name": "Prad",
-                "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "N.m^2",
-                "value": "None"
-            },
-            {
-                "desc": "Tangential magnetic air-gap surface force",
-                "max": "",
-                "min": "",
-                "name": "Ptan",
-                "type": "SciDataTool.Classes.DataND.DataND",
+                "name": "P",
+                "type": "SciDataTool.Classes.VectorField.VectorField",
                 "unit": "N.m^2",
                 "value": "None"
             },
@@ -6048,20 +6189,11 @@
                 "value": null
             },
             {
-                "desc": "Radial airgap flux density",
+                "desc": "Airgap flux density components",
                 "max": "",
                 "min": "",
-                "name": "Br",
-                "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "H",
-                "value": "None"
-            },
-            {
-                "desc": "Tangential airgap flux density",
-                "max": "",
-                "min": "",
-                "name": "Bt",
-                "type": "SciDataTool.Classes.DataND.DataND",
+                "name": "B",
+                "type": "SciDataTool.Classes.VectorField.VectorField",
                 "unit": "H",
                 "value": "None"
             },
@@ -6305,7 +6437,9 @@
             "plot.Magnetic.plot_mesh_field",
             "plot.plot_A_quiver_2D",
             "getter.get_rot_dir",
-            "getter.get_angle_offset_initial"
+            "getter.get_angle_offset_initial",
+            "plot.plot_A_fft_space",
+            "plot.plot_A_fft_time"
         ],
         "mother": "",
         "name": "Output",

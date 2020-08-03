@@ -15,6 +15,10 @@ from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
 try:
+    from SciDataTool.Classes.VectorField import VectorField
+except ImportError:
+    VectorField = ImportError
+try:
     from SciDataTool.Classes.DataND import DataND
 except ImportError:
     DataND = ImportError
@@ -45,8 +49,7 @@ class OutMag(FrozenClass):
         angle=None,
         Nt_tot=None,
         Na_tot=None,
-        Br=None,
-        Bt=None,
+        B=None,
         Tem=None,
         Tem_av=None,
         Tem_rip_norm=None,
@@ -83,8 +86,7 @@ class OutMag(FrozenClass):
             angle = obj.angle
             Nt_tot = obj.Nt_tot
             Na_tot = obj.Na_tot
-            Br = obj.Br
-            Bt = obj.Bt
+            B = obj.B
             Tem = obj.Tem
             Tem_av = obj.Tem_av
             Tem_rip_norm = obj.Tem_rip_norm
@@ -105,10 +107,8 @@ class OutMag(FrozenClass):
                 Nt_tot = init_dict["Nt_tot"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
-            if "Br" in list(init_dict.keys()):
-                Br = init_dict["Br"]
-            if "Bt" in list(init_dict.keys()):
-                Bt = init_dict["Bt"]
+            if "B" in list(init_dict.keys()):
+                B = init_dict["B"]
             if "Tem" in list(init_dict.keys()):
                 Tem = init_dict["Tem"]
             if "Tem_av" in list(init_dict.keys()):
@@ -135,11 +135,13 @@ class OutMag(FrozenClass):
         set_array(self, "angle", angle)
         self.Nt_tot = Nt_tot
         self.Na_tot = Na_tot
+        # Check if the type VectorField has been imported with success
+        if isinstance(VectorField, ImportError):
+            raise ImportError("Unknown type VectorField please install SciDataTool")
+        self.B = B
         # Check if the type DataND has been imported with success
         if isinstance(DataND, ImportError):
             raise ImportError("Unknown type DataND please install SciDataTool")
-        self.Br = Br
-        self.Bt = Bt
         self.Tem = Tem
         self.Tem_av = Tem_av
         self.Tem_rip_norm = Tem_rip_norm
@@ -187,8 +189,7 @@ class OutMag(FrozenClass):
         )
         OutMag_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutMag_str += "Na_tot = " + str(self.Na_tot) + linesep
-        OutMag_str += "Br = " + str(self.Br) + linesep + linesep
-        OutMag_str += "Bt = " + str(self.Bt) + linesep + linesep
+        OutMag_str += "B = " + str(self.B) + linesep + linesep
         OutMag_str += "Tem = " + str(self.Tem) + linesep + linesep
         OutMag_str += "Tem_av = " + str(self.Tem_av) + linesep
         OutMag_str += "Tem_rip_norm = " + str(self.Tem_rip_norm) + linesep
@@ -233,9 +234,7 @@ class OutMag(FrozenClass):
             return False
         if other.Na_tot != self.Na_tot:
             return False
-        if other.Br != self.Br:
-            return False
-        if other.Bt != self.Bt:
+        if other.B != self.B:
             return False
         if other.Tem != self.Tem:
             return False
@@ -272,21 +271,13 @@ class OutMag(FrozenClass):
             OutMag_dict["angle"] = self.angle.tolist()
         OutMag_dict["Nt_tot"] = self.Nt_tot
         OutMag_dict["Na_tot"] = self.Na_tot
-        if self.Br is None:
-            OutMag_dict["Br"] = None
+        if self.B is None:
+            OutMag_dict["B"] = None
         else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutMag_dict["Br"] = {
-                "__class__": str(type(self._Br)),
-                "__repr__": str(self._Br.__repr__()),
-                "serialized": dumps(self._Br).decode("ISO-8859-2"),
-            }
-        if self.Bt is None:
-            OutMag_dict["Bt"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutMag_dict["Bt"] = {
-                "__class__": str(type(self._Bt)),
-                "__repr__": str(self._Bt.__repr__()),
-                "serialized": dumps(self._Bt).decode("ISO-8859-2"),
+            OutMag_dict["B"] = {
+                "__class__": str(type(self._B)),
+                "__repr__": str(self._B.__repr__()),
+                "serialized": dumps(self._B).decode("ISO-8859-2"),
             }
         if self.Tem is None:
             OutMag_dict["Tem"] = None
@@ -324,8 +315,7 @@ class OutMag(FrozenClass):
         self.angle = None
         self.Nt_tot = None
         self.Na_tot = None
-        self.Br = None
-        self.Bt = None
+        self.B = None
         self.Tem = None
         self.Tem_av = None
         self.Tem_rip_norm = None
@@ -413,49 +403,27 @@ class OutMag(FrozenClass):
         fget=_get_Na_tot, fset=_set_Na_tot, doc=u"""Length of the angle vector"""
     )
 
-    def _get_Br(self):
-        """getter of Br"""
-        return self._Br
+    def _get_B(self):
+        """getter of B"""
+        return self._B
 
-    def _set_Br(self, value):
-        """setter of Br"""
+    def _set_B(self, value):
+        """setter of B"""
         try:  # Check the type
-            check_var("Br", value, "dict")
+            check_var("B", value, "dict")
         except CheckTypeError:
-            check_var("Br", value, "SciDataTool.Classes.DataND.DataND")
+            check_var("B", value, "SciDataTool.Classes.VectorField.VectorField")
             # property can be set from a list to handle loads
         if (
             type(value) == dict
         ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Br = loads(value["serialized"].encode("ISO-8859-2"))
+            self._B = loads(value["serialized"].encode("ISO-8859-2"))
         else:
-            self._Br = value
+            self._B = value
 
-    # Radial airgap flux density
-    # Type : SciDataTool.Classes.DataND.DataND
-    Br = property(fget=_get_Br, fset=_set_Br, doc=u"""Radial airgap flux density""")
-
-    def _get_Bt(self):
-        """getter of Bt"""
-        return self._Bt
-
-    def _set_Bt(self, value):
-        """setter of Bt"""
-        try:  # Check the type
-            check_var("Bt", value, "dict")
-        except CheckTypeError:
-            check_var("Bt", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Bt = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Bt = value
-
-    # Tangential airgap flux density
-    # Type : SciDataTool.Classes.DataND.DataND
-    Bt = property(fget=_get_Bt, fset=_set_Bt, doc=u"""Tangential airgap flux density""")
+    # Airgap flux density components
+    # Type : SciDataTool.Classes.VectorField.VectorField
+    B = property(fget=_get_B, fset=_set_B, doc=u"""Airgap flux density components""")
 
     def _get_Tem(self):
         """getter of Tem"""

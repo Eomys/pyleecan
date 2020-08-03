@@ -63,7 +63,7 @@ def run_single_simu(
                     # Not private properties
                     and not attr.startswith("_")
                     # Not following properties
-                    and attr not in ["VERSION", "logger_name", "parent",]
+                    and attr not in ["VERSION", "logger_name", "parent"]
                 ):
                     setattr(xoutput, attr, getattr(result, attr))
 

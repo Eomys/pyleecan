@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from os.path import join
-from os import remove
+from os import remove, chdir
 
 import pytest
 from importlib import import_module
@@ -17,7 +17,7 @@ from Tests.find import (
     MissingTypeError,
     PYTHON_TYPE,
 )
-
+from Tests import save_path
 from pyleecan.Classes._check import CheckMinError, CheckTypeError, CheckMaxError
 from pyleecan.Classes._check import NotADictError
 from pyleecan.Classes._frozen import FrozenClass, FrozenError
@@ -129,11 +129,13 @@ def test_class_init_str(class_dict):
     test_obj = eval(class_dict["name"] + "()")
 
     # Save the object in a file
-    test_obj.save("tmp.json")
+    chdir(save_path)
+    tmp_file = join(save_path, "tmp.json").replace("\\", "/")
+    test_obj.save(tmp_file)
 
     # Initate a second object from the saved file
     test_obj2 = eval(class_dict["name"] + "(init_str='tmp.json')")
-    remove("tmp.json")
+    remove(tmp_file)
 
     # Compare the two objects
     assert test_obj == test_obj2

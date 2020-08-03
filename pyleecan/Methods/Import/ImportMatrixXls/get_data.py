@@ -23,6 +23,8 @@ def get_data(self):
     file_path = abs_file_path(self.file_path, is_check=False)
     if not isfile(file_path):
         raise XlsFileError("ERROR: The xls file doesn't exist " + self.file_path)
+    if self.usecols == "":
+        self.usecols = None
     df = read_excel(
         file_path, self.sheet, header=None, usecols=self.usecols, skiprows=self.skiprows
     )

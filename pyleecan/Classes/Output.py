@@ -106,6 +106,16 @@ try:
 except ImportError as error:
     get_angle_offset_initial = error
 
+try:
+    from ..Methods.Output.Output.plot.plot_A_fft_space import plot_A_fft_space
+except ImportError as error:
+    plot_A_fft_space = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_fft_time import plot_A_fft_time
+except ImportError as error:
+    plot_A_fft_time = error
+
 
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
@@ -313,6 +323,28 @@ class Output(FrozenClass):
         )
     else:
         get_angle_offset_initial = get_angle_offset_initial
+    # cf Methods.Output.Output.plot.plot_A_fft_space
+    if isinstance(plot_A_fft_space, ImportError):
+        plot_A_fft_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_fft_space: " + str(plot_A_fft_space)
+                )
+            )
+        )
+    else:
+        plot_A_fft_space = plot_A_fft_space
+    # cf Methods.Output.Output.plot.plot_A_fft_time
+    if isinstance(plot_A_fft_time, ImportError):
+        plot_A_fft_time = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_fft_time: " + str(plot_A_fft_time)
+                )
+            )
+        )
+    else:
+        plot_A_fft_time = plot_A_fft_time
     # save method is available in all object
     save = save
 

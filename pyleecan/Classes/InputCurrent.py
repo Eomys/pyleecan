@@ -74,6 +74,7 @@ class InputCurrent(Input):
         Nr=-1,
         rot_dir=-1,
         angle_rotor_initial=0,
+        Tem_av_ref=None,
         time=-1,
         angle=-1,
         init_dict=None,
@@ -115,6 +116,7 @@ class InputCurrent(Input):
             Nr = obj.Nr
             rot_dir = obj.rot_dir
             angle_rotor_initial = obj.angle_rotor_initial
+            Tem_av_ref = obj.Tem_av_ref
             time = obj.time
             angle = obj.angle
         if init_dict is not None:  # Initialisation by dict
@@ -132,6 +134,8 @@ class InputCurrent(Input):
                 rot_dir = init_dict["rot_dir"]
             if "angle_rotor_initial" in list(init_dict.keys()):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
+            if "Tem_av_ref" in list(init_dict.keys()):
+                Tem_av_ref = init_dict["Tem_av_ref"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -319,6 +323,7 @@ class InputCurrent(Input):
             self.Nr = Nr
         self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
+        self.Tem_av_ref = Tem_av_ref
         # Call Input init
         super(InputCurrent, self).__init__(time=time, angle=angle)
         # The class is frozen (in Input init), for now it's impossible to
@@ -356,6 +361,7 @@ class InputCurrent(Input):
         InputCurrent_str += (
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         )
+        InputCurrent_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         return InputCurrent_str
 
     def __eq__(self, other):
@@ -378,6 +384,8 @@ class InputCurrent(Input):
         if other.rot_dir != self.rot_dir:
             return False
         if other.angle_rotor_initial != self.angle_rotor_initial:
+            return False
+        if other.Tem_av_ref != self.Tem_av_ref:
             return False
         return True
 
@@ -405,6 +413,7 @@ class InputCurrent(Input):
             InputCurrent_dict["Nr"] = self.Nr.as_dict()
         InputCurrent_dict["rot_dir"] = self.rot_dir
         InputCurrent_dict["angle_rotor_initial"] = self.angle_rotor_initial
+        InputCurrent_dict["Tem_av_ref"] = self.Tem_av_ref
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         InputCurrent_dict["__class__"] = "InputCurrent"
@@ -423,6 +432,7 @@ class InputCurrent(Input):
             self.Nr._set_None()
         self.rot_dir = None
         self.angle_rotor_initial = None
+        self.Tem_av_ref = None
         # Set to None the properties inherited from Input
         super(InputCurrent, self)._set_None()
 
@@ -538,4 +548,21 @@ class InputCurrent(Input):
         fget=_get_angle_rotor_initial,
         fset=_set_angle_rotor_initial,
         doc=u"""Initial angular position of the rotor at t=0""",
+    )
+
+    def _get_Tem_av_ref(self):
+        """getter of Tem_av_ref"""
+        return self._Tem_av_ref
+
+    def _set_Tem_av_ref(self, value):
+        """setter of Tem_av_ref"""
+        check_var("Tem_av_ref", value, "float")
+        self._Tem_av_ref = value
+
+    # Theorical Average Electromagnetic torque
+    # Type : float
+    Tem_av_ref = property(
+        fget=_get_Tem_av_ref,
+        fset=_set_Tem_av_ref,
+        doc=u"""Theorical Average Electromagnetic torque""",
     )

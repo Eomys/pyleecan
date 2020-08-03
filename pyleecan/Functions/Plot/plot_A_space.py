@@ -27,6 +27,7 @@ def plot_A_space(
     mag_max=None,
     is_auto_ticks=True,
     fig=None,
+    subplot_index=None,
 ):
     """Plots a field as a function of space (angle)
 
@@ -116,11 +117,9 @@ def plot_A_space(
     if is_deg:
         a_str = "angle{°}"
         xlabel = "Angle [°]"
-        xticks = [0, 60, 120, 180, 240, 300, 360]
     else:
         a_str = "angle"
         xlabel = "Angle [rad]"
-        xticks = None
     if t != None:
         t_str = "time=" + str(t)
     else:
@@ -128,7 +127,7 @@ def plot_A_space(
     if data_list == []:
         title = data.name + " over space at " + t_str
     else:
-        title = "Comparison over space at " + t_str
+        title = "Comparison of " + data.name + " over space at " + t_str
 
     # Extract the fields
     if list_str is not None:
@@ -145,6 +144,10 @@ def plot_A_space(
             a_str, t_str, data_list=data_list, unit=unit, is_norm=is_norm
         )
     angle = results["angle"]
+    if is_deg and int(max(angle)) % 6 == 0:
+        xticks = [i * int(max(angle)) / 6 for i in range(int(max(angle)))]
+    else:
+        xticks = None
     Ydatas = [results[data.symbol]] + [
         results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
     ]
@@ -169,17 +172,25 @@ def plot_A_space(
         y_min=y_min,
         y_max=y_max,
         xticks=xticks,
+        save_path=save_path,
+        subplot_index=subplot_index,
     )
 
     if is_fft:
+        if "dB" in unit:
+            unit_str = (
+                "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
+            )
+        else:
+            unit_str = "[" + unit + "]"
         if data_list == []:
             title = "FFT of " + data.name
         else:
-            title = "Comparison of FFT"
+            title = "Comparison of " + data.name + " FFT"
         if data.symbol == "Magnitude":
-            ylabel = "Magnitude [" + unit + "]"
+            ylabel = "Magnitude " + unit_str
         else:
-            ylabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
+            ylabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
         legend_list = [legend_list[0]] + [legend_list[-1]]
 
         if is_spaceorder:
@@ -231,9 +242,7 @@ def plot_A_space(
             fund_harm=fund_harm,
             y_max=mag_max,
             xticks=xticks,
+            save_path=save_path,
         )
-
-    if save_path is not None:
-        fig.savefig(save_path)
 
     return ax
