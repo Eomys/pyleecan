@@ -6907,7 +6907,7 @@
                 "name": "elec",
                 "type": "Electrical",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Magnetic module",
@@ -6916,7 +6916,7 @@
                 "name": "mag",
                 "type": "Magnetics",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Structural module",
@@ -6925,7 +6925,7 @@
                 "name": "struct",
                 "type": "Structural",
                 "unit": "-",
-                "value": ""
+                "value": null
             },
             {
                 "desc": "Force moduale",
@@ -6934,7 +6934,7 @@
                 "name": "force",
                 "type": "Force",
                 "unit": "-",
-                "value": ""
+                "value": null
             }
         ]
     },
