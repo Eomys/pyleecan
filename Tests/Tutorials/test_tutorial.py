@@ -9,16 +9,25 @@ TUTO_DIR = join(join(TEST_DIR, ".."), "Tutorials")
 
 @pytest.mark.tutorial
 @pytest.mark.parametrize(
-    "tuto_name",
-    [
-        "tuto_Machine",
-        "tuto_Simulation_FEMM",
-        "tuto_Force",
-        "tuto_Plots",
-        "tuto_Optimization",
-    ],
+    "tuto_name", ["tuto_Machine", "tuto_Simulation_FEMM", "tuto_Force", "tuto_Plots",],
 )
-def test_tutorial(tuto_name):
+def test_short_tutorial(tuto_name):
+    """Execute the tutorial"""
+    # Read the notebook
+    with open(abspath(join(TUTO_DIR, tuto_name + ".ipynb"))) as f:
+        nb = nbformat.read(f, as_version=4)
+
+    # Execute it
+    ep = ExecutePreprocessor(timeout=-1, kernel_name="python3")
+    ep.preprocess(nb, {"metadata": {"path": TUTO_DIR}})
+
+
+@pytest.mark.tutorial
+@pytest.mark.long
+@pytest.mark.parametrize(
+    "tuto_name", ["tuto_Optimization",],
+)
+def test_long_tutorial(tuto_name):
     """Execute the tutorial"""
     # Read the notebook
     with open(abspath(join(TUTO_DIR, tuto_name + ".ipynb"))) as f:
