@@ -33,7 +33,7 @@ def test_E_IPMSM_FL_002():
     simu = Simu1(name="E_IPMSM_FL_002", machine=IPMSM_A)
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(2048) * 2504)
+    N0 = 2504
     time = ImportGenVectLin(start=0, stop=1, num=2048, endpoint=False)
     angle = ImportGenVectLin(start=0, stop=2 * pi, num=2048, endpoint=False)
     Is_mat = zeros((2048, 3))
@@ -47,7 +47,7 @@ def test_E_IPMSM_FL_002():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,

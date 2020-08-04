@@ -35,7 +35,7 @@ def test_EM_IPMSM_FL_002():
     simu = Simu1(name="EM_IPMSM_FL_002", machine=IPMSM_A)
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(1) * 2504)
+    N0 = 2504
     Is_mat = zeros((1, 3))
     Is_mat[0, :] = array([0, 12.2474, -12.2474])
     Is = ImportMatrixVal(value=Is_mat)
@@ -45,7 +45,7 @@ def test_EM_IPMSM_FL_002():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,

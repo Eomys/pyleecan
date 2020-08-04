@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from os.path import join
 from unittest import TestCase
 
 from ddt import data, ddt
-from numpy import linspace, ones, pi, zeros, array, sqrt, transpose
+from numpy import array, linspace, ones, pi, sqrt, transpose, zeros
 from numpy.testing import assert_array_almost_equal
 
 from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
@@ -13,10 +14,13 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineDFIM import MachineDFIM
-from pyleecan.Classes.Simulation import Simulation
 from pyleecan.Classes.Output import Output
+from pyleecan.Classes.Simulation import Simulation
+from pyleecan.definitions import DATA_DIR
+from pyleecan.Functions.load import load
 from pyleecan.Methods.Simulation.Input import InputError
 
+IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 InputCurrent_Error_test = list()
 time_wrong = ImportMatrixVal(value=zeros((10, 2)))
 time = ImportGenVectLin(0, 10, 100)
@@ -33,9 +37,10 @@ angle_rotor_wrong = ImportMatrixVal(value=zeros((10, 2)))
 angle_rotor_wrong2 = ImportMatrixVal(value=zeros((102)))
 angle_rotor = ImportMatrixVal(value=zeros((100)))
 
-Nr_wrong = ImportMatrixVal(value=zeros((10, 2)))
-Nr_wrong2 = ImportMatrixVal(value=zeros((102)))
-Nr = ImportMatrixVal(value=zeros((100)))
+# Quick fix added by Cedric 30/07/20 Nr -> N0
+N0_wrong = 1
+N0_wrong2 = 1
+N0 = 1
 
 # Winding stator only
 M1 = MachineDFIM()
@@ -56,12 +61,13 @@ M3.rotor.winding.qs = 2
 
 
 # Wrong time
-test_obj = Simulation()
+test_obj = Simulation(machine=IPMSM_A)
 test_obj.input = InputCurrent(time=None)
 InputCurrent_Error_test.append(
     {"test_obj": test_obj, "exp": "ERROR: InputCurrent.time missing"}
 )
-test_obj = Simulation()
+# Wong time shape
+test_obj = Simulation(machine=IPMSM_A)
 test_obj.input = InputCurrent(time=time_wrong)
 InputCurrent_Error_test.append(
     {
@@ -69,13 +75,8 @@ InputCurrent_Error_test.append(
         "exp": "ERROR: InputCurrent.time should be a vector, (10, 2) shape found",
     }
 )
-# Wrong angle
-test_obj = Simulation()
-test_obj.input = InputCurrent(time=time, angle=None)
-InputCurrent_Error_test.append(
-    {"test_obj": test_obj, "exp": "ERROR: InputCurrent.angle missing"}
-)
-test_obj = Simulation()
+# Wrong angle shape
+test_obj = Simulation(machine=IPMSM_A)
 test_obj.input = InputCurrent(time=time, angle=angle_wrong)
 InputCurrent_Error_test.append(
     {
@@ -83,12 +84,16 @@ InputCurrent_Error_test.append(
         "exp": "ERROR: InputCurrent.angle should be a vector, (10, 4) shape found",
     }
 )
-# Wrong Is
+# Missing Is
 test_obj = Simulation(machine=M1)
 test_obj.input = InputCurrent(time=time, angle=angle, Is=None)
 InputCurrent_Error_test.append(
-    {"test_obj": test_obj, "exp": "ERROR: InputCurrent.Is missing"}
+    {
+        "test_obj": test_obj,
+        "exp": "ERROR: InputCurrent.Is, InputCurrent.Id_ref, and InputCurrent.Iq_ref missing",
+    }
 )
+# Is wrong shape
 test_obj = Simulation(machine=M1)
 test_obj.input = InputCurrent(time=time, angle=angle, Is=I_3)
 InputCurrent_Error_test.append(
@@ -127,20 +132,20 @@ InputCurrent_Error_test.append(
         "exp": "ERROR: InputCurrent.Ir must be a matrix with the shape (100, 2) (len(time), rotor phase number), (100,) returned",
     }
 )
-# Wrong Nr, alpha_rotor
+# Wrong N0, alpha_rotor
 test_obj = Simulation(machine=M3)
 test_obj.input = InputCurrent(
-    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=None, Nr=None
+    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=None, N0=None
 )
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
-        "exp": "ERROR: InputCurrent.angle_rotor and InputCurrent.Nr can't be None at the same time",
+        "exp": "ERROR: InputCurrent.angle_rotor and InputCurrent.N0 can't be None at the same time",
     }
 )
 test_obj = Simulation(machine=M3)
 test_obj.input = InputCurrent(
-    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=angle_rotor_wrong, Nr=None
+    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=angle_rotor_wrong, N0=None
 )
 InputCurrent_Error_test.append(
     {
@@ -150,32 +155,12 @@ InputCurrent_Error_test.append(
 )
 test_obj = Simulation(machine=M3)
 test_obj.input = InputCurrent(
-    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=angle_rotor_wrong2, Nr=None
+    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=angle_rotor_wrong2, N0=None
 )
 InputCurrent_Error_test.append(
     {
         "test_obj": test_obj,
         "exp": "ERROR: InputCurrent.angle_rotor should be a vector of the same length as time, (102,) shape found, (100,) expected",
-    }
-)
-test_obj = Simulation(machine=M3)
-test_obj.input = InputCurrent(
-    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=angle_rotor, Nr=Nr_wrong
-)
-InputCurrent_Error_test.append(
-    {
-        "test_obj": test_obj,
-        "exp": "ERROR: InputCurrent.Nr should be a vector of the same length as time, (10, 2) shape found, (100,) expected",
-    }
-)
-test_obj = Simulation(machine=M3)
-test_obj.input = InputCurrent(
-    time=time, angle=angle, Is=I_1, Ir=I_2, angle_rotor=angle_rotor, Nr=Nr_wrong2
-)
-InputCurrent_Error_test.append(
-    {
-        "test_obj": test_obj,
-        "exp": "ERROR: InputCurrent.Nr should be a vector of the same length as time, (102,) shape found, (100,) expected",
     }
 )
 
@@ -227,9 +212,9 @@ class unittest_InputCurrent_meth(TestCase):
         )
 
         angle_rotor = ImportGenVectLin(0, 2 * pi, 16)
-        Nr = ImportMatrixVal(value=ones(16) * 10)
+        N0 = 10
         test_obj.input = InputCurrent(
-            time=time, angle=angle, Is=Is, Ir=Ir, angle_rotor=angle_rotor, Nr=Nr
+            time=time, angle=angle, Is=Is, Ir=Ir, angle_rotor=angle_rotor, N0=N0
         )
 
         test_obj.input.gen_input()
@@ -238,4 +223,49 @@ class unittest_InputCurrent_meth(TestCase):
         assert_array_almost_equal(output.elec.Is, Is_exp)
         assert_array_almost_equal(output.elec.Ir, Ir_exp)
         assert_array_almost_equal(output.elec.angle_rotor, linspace(0, 2 * pi, 16))
-        assert_array_almost_equal(output.elec.Nr, ones(16) * 10)
+        assert_array_almost_equal(output.elec.N0, ones(16) * 10)
+
+    def test_InputCurrent_DQ(self):
+        """Check that the input current can return a correct output
+        """
+        test_obj = Simulation(machine=IPMSM_A)
+        output = Output(simu=test_obj)
+        time = ImportGenVectLin(0, 1, 7)
+        angle = ImportGenVectLin(0, 2 * pi, 20)
+        Id_ref = 2
+        Iq_ref = 0
+
+        Is_exp = transpose(
+            array(
+                [
+                    [2, 1, -1, -2, -1, 1, 2],
+                    [-1, -2, -1, 1, 2, 1, -1],
+                    [-1, 1, 2, 1, -1, -2, -1],
+                ]
+            )
+        )
+
+        zp = IPMSM_A.stator.get_pole_pair_number()
+        angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
+        angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
+
+        N0 = 60 / zp
+        test_obj.input = InputCurrent(
+            time=time,
+            angle=angle,
+            Is=None,
+            Iq_ref=Iq_ref,
+            Id_ref=Id_ref,
+            Ir=None,
+            angle_rotor=None,
+            N0=N0,
+            angle_rotor_initial=angle_rotor_initial,
+            rot_dir=1,
+        )
+
+        test_obj.input.gen_input()
+        assert_array_almost_equal(output.elec.time, linspace(0, 1, 7))
+        assert_array_almost_equal(output.elec.angle, linspace(0, 2 * pi, 20))
+        assert_array_almost_equal(output.elec.get_Is(), Is_exp)
+        assert_array_almost_equal(output.elec.angle_rotor, angle_rotor_exp)
+        assert_array_almost_equal(output.elec.N0, ones(7) * 60 / zp)

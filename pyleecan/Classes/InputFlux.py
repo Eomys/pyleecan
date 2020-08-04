@@ -22,7 +22,6 @@ from ._check import InitUnKnowClassError
 from .ImportVectorField import ImportVectorField
 from .Input import Input
 from .Import import Import
-from .ImportMatrixVal import ImportMatrixVal
 
 
 class InputFlux(Input):
@@ -52,7 +51,16 @@ class InputFlux(Input):
     get_logger = get_logger
 
     def __init__(
-        self, B=None, OP=None, time=-1, angle=-1, init_dict=None, init_str=None
+        self,
+        B=None,
+        OP=None,
+        time=None,
+        angle=None,
+        Nt_tot=2048,
+        Nrev=1,
+        Na_tot=2048,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -70,9 +78,9 @@ class InputFlux(Input):
         if OP == -1:
             OP = Input()
         if time == -1:
-            time = ImportMatrixVal()
+            time = Import()
         if angle == -1:
-            angle = ImportMatrixVal()
+            angle = Import()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -84,6 +92,9 @@ class InputFlux(Input):
             OP = obj.OP
             time = obj.time
             angle = obj.angle
+            Nt_tot = obj.Nt_tot
+            Nrev = obj.Nrev
+            Na_tot = obj.Na_tot
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -95,6 +106,12 @@ class InputFlux(Input):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
                 angle = init_dict["angle"]
+            if "Nt_tot" in list(init_dict.keys()):
+                Nt_tot = init_dict["Nt_tot"]
+            if "Nrev" in list(init_dict.keys()):
+                Nrev = init_dict["Nrev"]
+            if "Na_tot" in list(init_dict.keys()):
+                Na_tot = init_dict["Na_tot"]
         # Initialisation by argument
         # B can be None, a ImportVectorField object or a dict
         if isinstance(B, dict):
@@ -109,13 +126,7 @@ class InputFlux(Input):
         if isinstance(OP, dict):
             # Check that the type is correct (including daughter)
             class_name = OP.get("__class__")
-            if class_name not in [
-                "Input",
-                "InputCurrent",
-                "InputCurrentDQ",
-                "InputFlux",
-                "InputForce",
-            ]:
+            if class_name not in ["Input", "InputCurrent", "InputFlux", "InputForce"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for OP"
                 )
@@ -129,13 +140,7 @@ class InputFlux(Input):
             OP = load(OP)
             # Check that the type is correct (including daughter)
             class_name = OP.__class__.__name__
-            if class_name not in [
-                "Input",
-                "InputCurrent",
-                "InputCurrentDQ",
-                "InputFlux",
-                "InputForce",
-            ]:
+            if class_name not in ["Input", "InputCurrent", "InputFlux", "InputForce"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for OP"
                 )
@@ -143,7 +148,9 @@ class InputFlux(Input):
         else:
             self.OP = OP
         # Call Input init
-        super(InputFlux, self).__init__(time=time, angle=angle)
+        super(InputFlux, self).__init__(
+            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
+        )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 

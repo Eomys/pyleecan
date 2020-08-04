@@ -251,7 +251,7 @@ def test_axis_LamWind():
     simu = Simu1(name="test_flux", machine=SCIM_001)
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(1) * 1500)
+    N0 = 1500
     Is = ImportMatrixVal(value=array([[1, -1 / 2, -1 / 2]]))  # Id=1, Iq=0
     Ir = ImportMatrixVal(value=zeros((1, 28)))
     time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=False)
@@ -260,7 +260,7 @@ def test_axis_LamWind():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
