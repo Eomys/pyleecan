@@ -39,9 +39,7 @@ def plot_multi(
     PlotError  
     """
 
-    if idx is not None:
-        assert len(idx) <= len(self.input_param["shape"])
-    else:
+    if idx is None:
         idx = slice(None)
 
     if plot_type not in ["scatter", "plot"]:
@@ -50,10 +48,10 @@ def plot_multi(
     # Get x_data
     if x_symbol in self.keys():  # DataKeeper
         x_data = self[x_symbol]
-        x_values = np.array(x_data.result[idx])
+        x_values = np.array(x_data.result)[idx]
     else:  # ParamSetter
         x_data = self.get_paramexplorer(x_symbol)
-        x_values = np.array(x_data.value[idx])
+        x_values = np.array(x_data.value)[idx]
 
     # x_label definition
     x_label = x_symbol
@@ -63,10 +61,10 @@ def plot_multi(
     # Get y_data
     if y_symbol in self.keys():  # DataKeeper
         y_data = self[y_symbol]
-        y_values = np.array(y_data.result[idx])
+        y_values = np.array(y_data.result)[idx]
     else:  # ParamSetter
         y_data = self.get_paramexplorer(y_symbol)
-        y_values = np.array(y_data.value[idx])
+        y_values = np.array(y_data.value)[idx]
 
     # y_label definition
     y_label = y_symbol
