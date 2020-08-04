@@ -40,6 +40,7 @@ class DataKeeper(FrozenClass):
         unit="",
         keeper=None,
         error_keeper=None,
+        result=[],
         init_dict=None,
         init_str=None,
     ):
@@ -66,6 +67,7 @@ class DataKeeper(FrozenClass):
             unit = obj.unit
             keeper = obj.keeper
             error_keeper = obj.error_keeper
+            result = obj.result
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -79,6 +81,8 @@ class DataKeeper(FrozenClass):
                 keeper = init_dict["keeper"]
             if "error_keeper" in list(init_dict.keys()):
                 error_keeper = init_dict["error_keeper"]
+            if "result" in list(init_dict.keys()):
+                result = init_dict["result"]
         # Initialisation by argument
         self.parent = None
         self.name = name
@@ -86,6 +90,7 @@ class DataKeeper(FrozenClass):
         self.unit = unit
         self.keeper = keeper
         self.error_keeper = error_keeper
+        self.result = result
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -117,6 +122,12 @@ class DataKeeper(FrozenClass):
                 + linesep
                 + linesep
             )
+        DataKeeper_str += (
+            "result = "
+            + linesep
+            + str(self.result).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return DataKeeper_str
 
     def __eq__(self, other):
@@ -133,6 +144,8 @@ class DataKeeper(FrozenClass):
         if other.keeper != self.keeper:
             return False
         if other.error_keeper != self.error_keeper:
+            return False
+        if other.result != self.result:
             return False
         return True
 
@@ -158,6 +171,7 @@ class DataKeeper(FrozenClass):
                 dumps(self._error_keeper[0]).decode("ISO-8859-2"),
                 self._error_keeper[1],
             ]
+        DataKeeper_dict["result"] = self.result
         # The class name is added to the dict fordeserialisation purpose
         DataKeeper_dict["__class__"] = "DataKeeper"
         return DataKeeper_dict
@@ -170,6 +184,7 @@ class DataKeeper(FrozenClass):
         self.unit = None
         self.keeper = None
         self.error_keeper = None
+        self.result = None
 
     def _get_name(self):
         """getter of name"""
@@ -266,4 +281,21 @@ class DataKeeper(FrozenClass):
         fget=_get_error_keeper,
         fset=_set_error_keeper,
         doc=u"""Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices""",
+    )
+
+    def _get_result(self):
+        """getter of result"""
+        return self._result
+
+    def _set_result(self, value):
+        """setter of result"""
+        check_var("result", value, "list")
+        self._result = value
+
+    # List containing datakeeper results for each simulation
+    # Type : list
+    result = property(
+        fget=_get_result,
+        fset=_set_result,
+        doc=u"""List containing datakeeper results for each simulation""",
     )

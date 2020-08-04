@@ -684,6 +684,15 @@
                 "type": "function",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "List containing datakeeper results for each simulation",
+                "max": "",
+                "min": "",
+                "name": "result",
+                "type": "list",
+                "unit": "-",
+                "value": []
             }
         ]
     },
