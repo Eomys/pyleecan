@@ -54,7 +54,7 @@ class ParamExplorerSet(ParamExplorer):
 
     def __init__(
         self,
-        value=[],
+        value=-1,
         name="",
         symbol="",
         unit="",

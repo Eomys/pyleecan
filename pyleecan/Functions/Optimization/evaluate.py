@@ -42,14 +42,10 @@ def evaluate(solver, indiv):
         else:
             solver.problem.eval_func(indiv.output)
 
-        # Sort the obj_func
-        obj_func_list = list(solver.problem.obj_func.keys())
-        obj_func_list.sort()
-
         # Add the fitness values
         fitness = []
-        for of in obj_func_list:
-            fitness.append(float(solver.problem.obj_func[of].func(indiv.output)))
+        for obj_func in solver.problem.obj_func:
+            fitness.append(float(obj_func.func(indiv.output)))
 
         indiv.fitness.values = fitness
         indiv.is_simu_valid = True
@@ -72,12 +68,8 @@ def evaluate(solver, indiv):
         traceback.print_exc(file=tb)
         logger.warning(tb.getvalue())
 
-        # Sort the obj_func
-        obj_func_list = list(solver.problem.obj_func.keys())
-        obj_func_list.sort()
-
         # Set fitness as inf
-        indiv.fitness.values = [float("inf") for _ in obj_func_list]
+        indiv.fitness.values = [float("inf") for _ in solver.problem.obj_func]
         indiv.is_simu_valid = False
 
         # Reset standard output and error

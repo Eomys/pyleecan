@@ -33,7 +33,9 @@ class OptiObjFunc(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, description="'", func=None, init_dict=None, init_str=None):
+    def __init__(
+        self, name="", symbol="", unit="", func=None, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -52,18 +54,26 @@ class OptiObjFunc(FrozenClass):
             # load the object from a file
             obj = load(init_str)
             assert type(obj) is type(self)
-            description = obj.description
+            name = obj.name
+            symbol = obj.symbol
+            unit = obj.unit
             func = obj.func
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "description" in list(init_dict.keys()):
-                description = init_dict["description"]
+            if "name" in list(init_dict.keys()):
+                name = init_dict["name"]
+            if "symbol" in list(init_dict.keys()):
+                symbol = init_dict["symbol"]
+            if "unit" in list(init_dict.keys()):
+                unit = init_dict["unit"]
             if "func" in list(init_dict.keys()):
                 func = init_dict["func"]
         # Initialisation by argument
         self.parent = None
-        self.description = description
+        self.name = name
+        self.symbol = symbol
+        self.unit = unit
         self.func = func
 
         # The class is frozen, for now it's impossible to add new properties
@@ -79,7 +89,9 @@ class OptiObjFunc(FrozenClass):
             OptiObjFunc_str += (
                 "parent = " + str(type(self.parent)) + " object" + linesep
             )
-        OptiObjFunc_str += 'description = "' + str(self.description) + '"' + linesep
+        OptiObjFunc_str += 'name = "' + str(self.name) + '"' + linesep
+        OptiObjFunc_str += 'symbol = "' + str(self.symbol) + '"' + linesep
+        OptiObjFunc_str += 'unit = "' + str(self.unit) + '"' + linesep
         if self._func[1] is None:
             OptiObjFunc_str += "func = " + str(self._func[1])
         else:
@@ -93,7 +105,11 @@ class OptiObjFunc(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.description != self.description:
+        if other.name != self.name:
+            return False
+        if other.symbol != self.symbol:
+            return False
+        if other.unit != self.unit:
             return False
         if other.func != self.func:
             return False
@@ -104,7 +120,9 @@ class OptiObjFunc(FrozenClass):
         """
 
         OptiObjFunc_dict = dict()
-        OptiObjFunc_dict["description"] = self.description
+        OptiObjFunc_dict["name"] = self.name
+        OptiObjFunc_dict["symbol"] = self.symbol
+        OptiObjFunc_dict["unit"] = self.unit
         if self.func is None:
             OptiObjFunc_dict["func"] = None
         else:
@@ -119,25 +137,49 @@ class OptiObjFunc(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.description = None
+        self.name = None
+        self.symbol = None
+        self.unit = None
         self.func = None
 
-    def _get_description(self):
-        """getter of description"""
-        return self._description
+    def _get_name(self):
+        """getter of name"""
+        return self._name
 
-    def _set_description(self, value):
-        """setter of description"""
-        check_var("description", value, "str")
-        self._description = value
+    def _set_name(self, value):
+        """setter of name"""
+        check_var("name", value, "str")
+        self._name = value
 
-    # Description of the objective
+    # Data name
     # Type : str
-    description = property(
-        fget=_get_description,
-        fset=_set_description,
-        doc=u"""Description of the objective""",
-    )
+    name = property(fget=_get_name, fset=_set_name, doc=u"""Data name""")
+
+    def _get_symbol(self):
+        """getter of symbol"""
+        return self._symbol
+
+    def _set_symbol(self, value):
+        """setter of symbol"""
+        check_var("symbol", value, "str")
+        self._symbol = value
+
+    # Data symbol
+    # Type : str
+    symbol = property(fget=_get_symbol, fset=_set_symbol, doc=u"""Data symbol""")
+
+    def _get_unit(self):
+        """getter of unit"""
+        return self._unit
+
+    def _set_unit(self, value):
+        """setter of unit"""
+        check_var("unit", value, "str")
+        self._unit = value
+
+    # Data unit
+    # Type : str
+    unit = property(fget=_get_unit, fset=_set_unit, doc=u"""Data unit""")
 
     def _get_func(self):
         """getter of func"""

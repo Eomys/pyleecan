@@ -692,7 +692,7 @@
                 "name": "result",
                 "type": "list",
                 "unit": "-",
-                "value": []
+                "value": -1
             }
         ]
     },
@@ -5440,20 +5440,11 @@
         "desc": "Optimization",
         "is_internal": false,
         "methods": [],
-        "mother": "",
+        "mother": "ParamExplorer",
         "name": "OptiDesignVar",
         "package": "Optimization",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Optimization/OptiDesignVar.csv",
         "properties": [
-            {
-                "desc": "name of the design variable",
-                "max": "",
-                "min": "",
-                "name": "name",
-                "type": "str",
-                "unit": "",
-                "value": ""
-            },
             {
                 "desc": "Type of the variable interval or set.",
                 "max": "",
@@ -5479,7 +5470,7 @@
                 "desc": "Function of the space to initiate the variable",
                 "max": "",
                 "min": "",
-                "name": "function",
+                "name": "get_value",
                 "type": "function",
                 "unit": "",
                 "value": null
@@ -5619,13 +5610,31 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Optimization/OptiObjFunc.csv",
         "properties": [
             {
-                "desc": "Description of the objective",
+                "desc": "Data name",
                 "max": "",
                 "min": "",
-                "name": "description",
+                "name": "name",
                 "type": "str",
-                "unit": "",
-                "value": "'"
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Data symbol",
+                "max": "",
+                "min": "",
+                "name": "symbol",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Data unit",
+                "max": "",
+                "min": "",
+                "name": "unit",
+                "type": "str",
+                "unit": "-",
+                "value": ""
             },
             {
                 "desc": "Function to minimize",
@@ -5664,22 +5673,22 @@
                 "value": ""
             },
             {
-                "desc": "Dict of design variables",
+                "desc": "List of design variables",
                 "max": "",
                 "min": "",
                 "name": "design_var",
-                "type": "{OptiDesignVar}",
+                "type": "[OptiDesignVar]",
                 "unit": "",
-                "value": {}
+                "value": ""
             },
             {
-                "desc": "Dict of objective functions",
+                "desc": "List of objective functions",
                 "max": "",
                 "min": "",
                 "name": "obj_func",
-                "type": "{OptiObjFunc}",
+                "type": "[OptiObjFunc]",
                 "unit": "",
-                "value": {}
+                "value": -1
             },
             {
                 "desc": "Function to evaluate before computing obj function and constraints",
@@ -5691,13 +5700,13 @@
                 "value": null
             },
             {
-                "desc": "Dict containing the constraints ",
+                "desc": "List containing the constraints ",
                 "max": "",
                 "min": "",
                 "name": "constraint",
-                "type": "{OptiConstraint}",
+                "type": "[OptiConstraint]",
                 "unit": "",
-                "value": {}
+                "value": -1
             }
         ]
     },
@@ -6665,6 +6674,7 @@
         ],
         "daughters": [
             "ParamExplorer",
+            "OptiDesignVar",
             "ParamExplorerSet"
         ],
         "desc": "Abstract class for the multi-simulation",
@@ -6740,7 +6750,7 @@
                 "name": "value",
                 "type": "list",
                 "unit": "-",
-                "value": []
+                "value": -1
             }
         ]
     },
@@ -9988,7 +9998,9 @@
             "items",
             "get_param_simu",
             "get_paramexplorer",
-            "plot_multi"
+            "plot_multi",
+            "plot_pareto",
+            "plot_generation"
         ],
         "mother": "Output",
         "name": "XOutput",

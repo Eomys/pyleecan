@@ -107,6 +107,16 @@ try:
 except ImportError as error:
     plot_multi = error
 
+try:
+    from ..Methods.Output.XOutput.plot_pareto import plot_pareto
+except ImportError as error:
+    plot_pareto = error
+
+try:
+    from ..Methods.Output.XOutput.plot_generation import plot_generation
+except ImportError as error:
+    plot_generation = error
+
 
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
@@ -302,6 +312,26 @@ class XOutput(Output):
         )
     else:
         plot_multi = plot_multi
+    # cf Methods.Output.XOutput.plot_pareto
+    if isinstance(plot_pareto, ImportError):
+        plot_pareto = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use XOutput method plot_pareto: " + str(plot_pareto))
+            )
+        )
+    else:
+        plot_pareto = plot_pareto
+    # cf Methods.Output.XOutput.plot_generation
+    if isinstance(plot_generation, ImportError):
+        plot_generation = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method plot_generation: " + str(plot_generation)
+                )
+            )
+        )
+    else:
+        plot_generation = plot_generation
     # save method is available in all object
     save = save
 
