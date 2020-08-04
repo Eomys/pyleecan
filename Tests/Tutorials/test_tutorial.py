@@ -36,4 +36,3 @@ def test_long_tutorial(tuto_name):
     # Execute it
     ep = ExecutePreprocessor(timeout=-1, kernel_name="python3")
     ep.preprocess(nb, {"metadata": {"path": TUTO_DIR}})
-
