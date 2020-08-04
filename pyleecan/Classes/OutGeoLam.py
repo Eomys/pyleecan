@@ -91,6 +91,8 @@ class OutGeoLam(FrozenClass):
                 is_asym_wind = init_dict["is_asym_wind"]
         # Initialisation by argument
         self.parent = None
+        if name_phase == -1:
+            name_phase = []
         self.name_phase = name_phase
         # BH_curve can be None, a ndarray or a list
         set_array(self, "BH_curve", BH_curve)

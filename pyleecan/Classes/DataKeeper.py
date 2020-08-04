@@ -40,7 +40,7 @@ class DataKeeper(FrozenClass):
         unit="",
         keeper=None,
         error_keeper=None,
-        result=[],
+        result=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -90,6 +90,8 @@ class DataKeeper(FrozenClass):
         self.unit = unit
         self.keeper = keeper
         self.error_keeper = error_keeper
+        if result == -1:
+            result = []
         self.result = result
 
         # The class is frozen, for now it's impossible to add new properties

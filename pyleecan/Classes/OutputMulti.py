@@ -149,8 +149,14 @@ class OutputMulti(FrozenClass):
             self.outputs = list()
         else:
             self.outputs = outputs
+        if is_valid == -1:
+            is_valid = []
         self.is_valid = is_valid
+        if design_var == -1:
+            design_var = []
         self.design_var = design_var
+        if design_var_names == -1:
+            design_var_names = []
         self.design_var_names = design_var_names
 
         # The class is frozen, for now it's impossible to add new properties

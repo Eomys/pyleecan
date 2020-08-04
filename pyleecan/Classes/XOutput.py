@@ -407,7 +407,11 @@ class XOutput(Output):
             if "force" in list(init_dict.keys()):
                 force = init_dict["force"]
         # Initialisation by argument
+        if paramexplorer_list == -1:
+            paramexplorer_list = []
         self.paramexplorer_list = paramexplorer_list
+        if output_list == -1:
+            output_list = []
         self.output_list = output_list
         self.xoutput_dict = xoutput_dict
         self.nb_simu = nb_simu

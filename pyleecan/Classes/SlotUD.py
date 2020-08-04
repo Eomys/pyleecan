@@ -83,6 +83,8 @@ class SlotUD(Slot):
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
         # Initialisation by argument
+        if point_list == -1:
+            point_list = []
         self.point_list = point_list
         self.is_sym = is_sym
         # Call Slot init

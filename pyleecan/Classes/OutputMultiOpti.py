@@ -202,9 +202,17 @@ class OutputMultiOpti(OutputMulti):
             if "design_var_names" in list(init_dict.keys()):
                 design_var_names = init_dict["design_var_names"]
         # Initialisation by argument
+        if fitness == -1:
+            fitness = []
         self.fitness = fitness
+        if constraint == -1:
+            constraint = []
         self.constraint = constraint
+        if ngen == -1:
+            ngen = []
         self.ngen = ngen
+        if fitness_names == -1:
+            fitness_names = []
         self.fitness_names = fitness_names
         # Call OutputMulti init
         super(OutputMultiOpti, self).__init__(
