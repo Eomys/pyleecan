@@ -18,3 +18,5 @@ nb_simu,-,Number of simulations excluding reference simulation,0,int,0,0,,,,,__l
 ,,,,,,,,,,,get_param_simu,,,
 ,,,,,,,,,,,get_paramexplorer,,,
 ,,,,,,,,,,,plot_multi,,,
+,,,,,,,,,,,plot_pareto,,,
+,,,,,,,,,,,plot_generation,,,
