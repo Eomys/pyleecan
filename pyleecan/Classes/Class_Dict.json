@@ -9320,6 +9320,88 @@
             }
         ]
     },
+    "VarLoad": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "VarLoadCurrent"
+        ],
+        "desc": "Abstract class to generate multi-simulation by changing the operating point",
+        "is_internal": false,
+        "methods": [
+            "get_elec_datakeeper",
+            "get_mag_datakeeper",
+            "get_force_datakeeper"
+        ],
+        "mother": "VarSimu",
+        "name": "VarLoad",
+        "package": "Simulation",
+        "path": "pyleecan-public/pyleecan/Generator/ClassesRef/Simulation/VarLoad.csv",
+        "properties": []
+    },
+    "VarLoadCurrent": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Generate a multisimulation with InputCurrent at variable operating point",
+        "is_internal": false,
+        "methods": [
+            "get_input_list",
+            "get_simulations",
+            "gen_datakeeper_list",
+            "check_param"
+        ],
+        "mother": "VarLoad",
+        "name": "VarLoadCurrent",
+        "package": "Simulation",
+        "path": "pyleecan-public/pyleecan/Generator/ClassesRef/Simulation/VarLoadCurrent.csv",
+        "properties": [
+            {
+                "desc": "Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) ",
+                "max": "",
+                "min": "",
+                "name": "OP_matrix",
+                "type": "ndarray",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Select with kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) ",
+                "max": "1",
+                "min": "0",
+                "name": "type_OP_matrix",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "True if the Torque is defined in OP_matrix",
+                "max": "",
+                "min": "",
+                "name": "is_torque",
+                "type": "bool",
+                "unit": "-",
+                "value": false
+            },
+            {
+                "desc": "True if the Power is defined in OP_matrix",
+                "max": "",
+                "min": "",
+                "name": "is_power",
+                "type": "bool",
+                "unit": "",
+                "value": false
+            }
+        ]
+    },
     "VarParam": {
         "constants": [
             {
@@ -9359,6 +9441,8 @@
         ],
         "daughters": [
             "VarSimu",
+            "VarLoad",
+            "VarLoadCurrent",
             "VarParam"
         ],
         "desc": "Abstract class for the multi-simulation",

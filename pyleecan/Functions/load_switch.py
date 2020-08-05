@@ -157,6 +157,8 @@ load_switch = {
     "Surface": Surface,
     "Trapeze": Trapeze,
     "Unit": Unit,
+    "VarLoad": VarLoad,
+    "VarLoadCurrent": VarLoadCurrent,
     "VarParam": VarParam,
     "VarSimu": VarSimu,
     "VentilationCirc": VentilationCirc,

@@ -189,7 +189,7 @@ class Simulation(FrozenClass):
         if isinstance(var_simu, dict):
             # Check that the type is correct (including daughter)
             class_name = var_simu.get("__class__")
-            if class_name not in ["VarSimu", "VarParam"]:
+            if class_name not in ["VarSimu", "VarLoad", "VarLoadCurrent", "VarParam"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for var_simu"
                 )
@@ -203,7 +203,7 @@ class Simulation(FrozenClass):
             var_simu = load(var_simu)
             # Check that the type is correct (including daughter)
             class_name = var_simu.__class__.__name__
-            if class_name not in ["VarSimu", "VarParam"]:
+            if class_name not in ["VarSimu", "VarLoad", "VarLoadCurrent", "VarParam"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for var_simu"
                 )
