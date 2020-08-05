@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Output/OutputMulti.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Output/OutputMulti.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/OutputMulti
 """
 
 from os import linesep
@@ -257,12 +258,13 @@ class OutputMulti(FrozenClass):
         if self._output_ref is not None:
             self._output_ref.parent = self
 
-    # Reference output of the multi simulation
-    # Type : Output
     output_ref = property(
         fget=_get_output_ref,
         fset=_set_output_ref,
-        doc=u"""Reference output of the multi simulation""",
+        doc=u"""Reference output of the multi simulation
+
+        :Type: Output
+        """,
     )
 
     def _get_outputs(self):
@@ -281,12 +283,13 @@ class OutputMulti(FrozenClass):
             if obj is not None:
                 obj.parent = self
 
-    # list of output from the multi-simulation
-    # Type : [Output]
     outputs = property(
         fget=_get_outputs,
         fset=_set_outputs,
-        doc=u"""list of output from the multi-simulation""",
+        doc=u"""list of output from the multi-simulation
+
+        :Type: [Output]
+        """,
     )
 
     def _get_is_valid(self):
@@ -298,12 +301,13 @@ class OutputMulti(FrozenClass):
         check_var("is_valid", value, "list")
         self._is_valid = value
 
-    # list to indicate if the corresponding output is valid
-    # Type : list
     is_valid = property(
         fget=_get_is_valid,
         fset=_set_is_valid,
-        doc=u"""list to indicate if the corresponding output is valid""",
+        doc=u"""list to indicate if the corresponding output is valid
+
+        :Type: list
+        """,
     )
 
     def _get_design_var(self):
@@ -315,12 +319,13 @@ class OutputMulti(FrozenClass):
         check_var("design_var", value, "list")
         self._design_var = value
 
-    # list of design variables corresponding to the output
-    # Type : list
     design_var = property(
         fget=_get_design_var,
         fset=_set_design_var,
-        doc=u"""list of design variables corresponding to the output""",
+        doc=u"""list of design variables corresponding to the output
+
+        :Type: list
+        """,
     )
 
     def _get_design_var_names(self):
@@ -332,10 +337,11 @@ class OutputMulti(FrozenClass):
         check_var("design_var_names", value, "list")
         self._design_var_names = value
 
-    # list of str containing the design variables names sorted alphabetically
-    # Type : list
     design_var_names = property(
         fget=_get_design_var_names,
         fset=_set_design_var_names,
-        doc=u"""list of str containing the design variables names sorted alphabetically""",
+        doc=u"""list of str containing the design variables names sorted alphabetically
+
+        :Type: list
+        """,
     )

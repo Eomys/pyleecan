@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/MagFEMM.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/MagFEMM.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/MagFEMM
 """
 
 from os import linesep
@@ -363,12 +364,13 @@ class MagFEMM(Magnetics):
         check_var("Kmesh_fineness", value, "float")
         self._Kmesh_fineness = value
 
-    # global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
-    # Type : float
     Kmesh_fineness = property(
         fget=_get_Kmesh_fineness,
         fset=_set_Kmesh_fineness,
-        doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)""",
+        doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
+
+        :Type: float
+        """,
     )
 
     def _get_Kgeo_fineness(self):
@@ -380,12 +382,13 @@ class MagFEMM(Magnetics):
         check_var("Kgeo_fineness", value, "float")
         self._Kgeo_fineness = value
 
-    # global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
-    # Type : float
     Kgeo_fineness = property(
         fget=_get_Kgeo_fineness,
         fset=_set_Kgeo_fineness,
-        doc=u"""global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)""",
+        doc=u"""global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
+
+        :Type: float
+        """,
     )
 
     def _get_type_calc_leakage(self):
@@ -397,12 +400,15 @@ class MagFEMM(Magnetics):
         check_var("type_calc_leakage", value, "int", Vmin=0, Vmax=1)
         self._type_calc_leakage = value
 
-    # 0 no leakage calculation /  1 calculation using single slot
-    # Type : int, min = 0, max = 1
     type_calc_leakage = property(
         fget=_get_type_calc_leakage,
         fset=_set_type_calc_leakage,
-        doc=u"""0 no leakage calculation /  1 calculation using single slot """,
+        doc=u"""0 no leakage calculation /  1 calculation using single slot 
+
+        :Type: int
+        :min: 0
+        :max: 1
+        """,
     )
 
     def _get_file_name(self):
@@ -414,12 +420,13 @@ class MagFEMM(Magnetics):
         check_var("file_name", value, "str")
         self._file_name = value
 
-    # Name of the file to save the FEMM model
-    # Type : str
     file_name = property(
         fget=_get_file_name,
         fset=_set_file_name,
-        doc=u"""Name of the file to save the FEMM model""",
+        doc=u"""Name of the file to save the FEMM model
+
+        :Type: str
+        """,
     )
 
     def _get_FEMM_dict(self):
@@ -431,12 +438,13 @@ class MagFEMM(Magnetics):
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 
-    # To enforce user-defined values for FEMM main parameters
-    # Type : dict
     FEMM_dict = property(
         fget=_get_FEMM_dict,
         fset=_set_FEMM_dict,
-        doc=u"""To enforce user-defined values for FEMM main parameters """,
+        doc=u"""To enforce user-defined values for FEMM main parameters 
+
+        :Type: dict
+        """,
     )
 
     def _get_angle_stator(self):
@@ -448,12 +456,13 @@ class MagFEMM(Magnetics):
         check_var("angle_stator", value, "float")
         self._angle_stator = value
 
-    # Angular position shift of the stator
-    # Type : float
     angle_stator = property(
         fget=_get_angle_stator,
         fset=_set_angle_stator,
-        doc=u"""Angular position shift of the stator""",
+        doc=u"""Angular position shift of the stator
+
+        :Type: float
+        """,
     )
 
     def _get_is_get_mesh(self):
@@ -465,12 +474,13 @@ class MagFEMM(Magnetics):
         check_var("is_get_mesh", value, "bool")
         self._is_get_mesh = value
 
-    # To save FEA mesh for latter post-procesing
-    # Type : bool
     is_get_mesh = property(
         fget=_get_is_get_mesh,
         fset=_set_is_get_mesh,
-        doc=u"""To save FEA mesh for latter post-procesing """,
+        doc=u"""To save FEA mesh for latter post-procesing 
+
+        :Type: bool
+        """,
     )
 
     def _get_is_save_FEA(self):
@@ -482,12 +492,13 @@ class MagFEMM(Magnetics):
         check_var("is_save_FEA", value, "bool")
         self._is_save_FEA = value
 
-    # To save FEA mesh and solution in .dat file
-    # Type : bool
     is_save_FEA = property(
         fget=_get_is_save_FEA,
         fset=_set_is_save_FEA,
-        doc=u"""To save FEA mesh and solution in .dat file""",
+        doc=u"""To save FEA mesh and solution in .dat file
+
+        :Type: bool
+        """,
     )
 
     def _get_is_sliding_band(self):
@@ -499,12 +510,13 @@ class MagFEMM(Magnetics):
         check_var("is_sliding_band", value, "bool")
         self._is_sliding_band = value
 
-    # 0 to desactivate the sliding band
-    # Type : bool
     is_sliding_band = property(
         fget=_get_is_sliding_band,
         fset=_set_is_sliding_band,
-        doc=u"""0 to desactivate the sliding band""",
+        doc=u"""0 to desactivate the sliding band
+
+        :Type: bool
+        """,
     )
 
     def _get_transform_list(self):
@@ -516,10 +528,11 @@ class MagFEMM(Magnetics):
         check_var("transform_list", value, "list")
         self._transform_list = value
 
-    # List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
-    # Type : list
     transform_list = property(
         fget=_get_transform_list,
         fset=_set_transform_list,
-        doc=u"""List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)""",
+        doc=u"""List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
+
+        :Type: list
+        """,
     )

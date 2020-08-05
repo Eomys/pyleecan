@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/Mesh.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/Mesh.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/Mesh
 """
 
 from os import linesep
@@ -382,10 +383,13 @@ class Mesh(FrozenClass):
         check_var("element", value, "{Element}")
         self._element = value
 
-    # Storing connectivity
-    # Type : {Element}
     element = property(
-        fget=_get_element, fset=_set_element, doc=u"""Storing connectivity"""
+        fget=_get_element,
+        fset=_set_element,
+        doc=u"""Storing connectivity
+
+        :Type: {Element}
+        """,
     )
 
     def _get_node(self):
@@ -400,9 +404,14 @@ class Mesh(FrozenClass):
         if self._node is not None:
             self._node.parent = self
 
-    # Storing nodes
-    # Type : Node
-    node = property(fget=_get_node, fset=_set_node, doc=u"""Storing nodes""")
+    node = property(
+        fget=_get_node,
+        fset=_set_node,
+        doc=u"""Storing nodes
+
+        :Type: Node
+        """,
+    )
 
     def _get_submesh(self):
         """getter of submesh"""
@@ -420,12 +429,13 @@ class Mesh(FrozenClass):
             if obj is not None:
                 obj.parent = self
 
-    # Storing submeshes. Node and element numbers/tags or group must be the same.
-    # Type : [Mesh]
     submesh = property(
         fget=_get_submesh,
         fset=_set_submesh,
-        doc=u"""Storing submeshes. Node and element numbers/tags or group must be the same.""",
+        doc=u"""Storing submeshes. Node and element numbers/tags or group must be the same.
+
+        :Type: [Mesh]
+        """,
     )
 
     def _get_group(self):
@@ -444,8 +454,11 @@ class Mesh(FrozenClass):
         check_var("group", value, "ndarray")
         self._group = value
 
-    # Contain all possible group numbers
-    # Type : ndarray
     group = property(
-        fget=_get_group, fset=_set_group, doc=u"""Contain all possible group numbers"""
+        fget=_get_group,
+        fset=_set_group,
+        doc=u"""Contain all possible group numbers
+
+        :Type: ndarray
+        """,
     )

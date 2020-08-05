@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Optimization/OptiDesignVar.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Optimization/OptiDesignVar.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Optimization/OptiDesignVar
 """
 
 from os import linesep
@@ -162,10 +163,13 @@ class OptiDesignVar(FrozenClass):
         check_var("name", value, "str")
         self._name = value
 
-    # name of the design variable
-    # Type : str
     name = property(
-        fget=_get_name, fset=_set_name, doc=u"""name of the design variable"""
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""name of the design variable
+
+        :Type: str
+        """,
     )
 
     def _get_type_var(self):
@@ -177,12 +181,13 @@ class OptiDesignVar(FrozenClass):
         check_var("type_var", value, "str")
         self._type_var = value
 
-    # Type of the variable interval or set.
-    # Type : str
     type_var = property(
         fget=_get_type_var,
         fset=_set_type_var,
-        doc=u"""Type of the variable interval or set.""",
+        doc=u"""Type of the variable interval or set.
+
+        :Type: str
+        """,
     )
 
     def _get_space(self):
@@ -194,9 +199,14 @@ class OptiDesignVar(FrozenClass):
         check_var("space", value, "list")
         self._space = value
 
-    # Space of the variable
-    # Type : list
-    space = property(fget=_get_space, fset=_set_space, doc=u"""Space of the variable""")
+    space = property(
+        fget=_get_space,
+        fset=_set_space,
+        doc=u"""Space of the variable
+
+        :Type: list
+        """,
+    )
 
     def _get_function(self):
         """getter of function"""
@@ -219,10 +229,11 @@ class OptiDesignVar(FrozenClass):
                 "Expected function or list from a saved file, got: " + str(type(value))
             )
 
-    # Function of the space to initiate the variable
-    # Type : function
     function = property(
         fget=_get_function,
         fset=_set_function,
-        doc=u"""Function of the space to initiate the variable""",
+        doc=u"""Function of the space to initiate the variable
+
+        :Type: function
+        """,
     )

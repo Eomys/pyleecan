@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Output/OutForce.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Output/OutForce.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/OutForce
 """
 
 from os import linesep
@@ -206,10 +207,13 @@ class OutForce(FrozenClass):
         check_var("time", value, "ndarray")
         self._time = value
 
-    # Structural time vector (no symmetry)
-    # Type : ndarray
     time = property(
-        fget=_get_time, fset=_set_time, doc=u"""Structural time vector (no symmetry)"""
+        fget=_get_time,
+        fset=_set_time,
+        doc=u"""Structural time vector (no symmetry)
+
+        :Type: ndarray
+        """,
     )
 
     def _get_angle(self):
@@ -228,12 +232,13 @@ class OutForce(FrozenClass):
         check_var("angle", value, "ndarray")
         self._angle = value
 
-    # Structural position vector (no symmetry)
-    # Type : ndarray
     angle = property(
         fget=_get_angle,
         fset=_set_angle,
-        doc=u"""Structural position vector (no symmetry)""",
+        doc=u"""Structural position vector (no symmetry)
+
+        :Type: ndarray
+        """,
     )
 
     def _get_Nt_tot(self):
@@ -245,10 +250,13 @@ class OutForce(FrozenClass):
         check_var("Nt_tot", value, "int")
         self._Nt_tot = value
 
-    # Length of the time vector
-    # Type : int
     Nt_tot = property(
-        fget=_get_Nt_tot, fset=_set_Nt_tot, doc=u"""Length of the time vector"""
+        fget=_get_Nt_tot,
+        fset=_set_Nt_tot,
+        doc=u"""Length of the time vector
+
+        :Type: int
+        """,
     )
 
     def _get_Na_tot(self):
@@ -260,10 +268,13 @@ class OutForce(FrozenClass):
         check_var("Na_tot", value, "int")
         self._Na_tot = value
 
-    # Length of the angle vector
-    # Type : int
     Na_tot = property(
-        fget=_get_Na_tot, fset=_set_Na_tot, doc=u"""Length of the angle vector"""
+        fget=_get_Na_tot,
+        fset=_set_Na_tot,
+        doc=u"""Length of the angle vector
+
+        :Type: int
+        """,
     )
 
     def _get_P(self):
@@ -284,9 +295,14 @@ class OutForce(FrozenClass):
         else:
             self._P = value
 
-    # Air-gap surface force
-    # Type : SciDataTool.Classes.VectorField.VectorField
-    P = property(fget=_get_P, fset=_set_P, doc=u"""Air-gap surface force""")
+    P = property(
+        fget=_get_P,
+        fset=_set_P,
+        doc=u"""Air-gap surface force
+
+        :Type: SciDataTool.Classes.VectorField.VectorField
+        """,
+    )
 
     def _get_logger_name(self):
         """getter of logger_name"""
@@ -297,10 +313,11 @@ class OutForce(FrozenClass):
         check_var("logger_name", value, "str")
         self._logger_name = value
 
-    # Name of the logger to use
-    # Type : str
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        doc=u"""Name of the logger to use
+
+        :Type: str
+        """,
     )

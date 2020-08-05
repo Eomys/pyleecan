@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/NodeMat.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/NodeMat.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/NodeMat
 """
 
 from os import linesep
@@ -235,10 +236,13 @@ class NodeMat(Node):
         check_var("coordinate", value, "ndarray")
         self._coordinate = value
 
-    # Nodes coordinates
-    # Type : ndarray
     coordinate = property(
-        fget=_get_coordinate, fset=_set_coordinate, doc=u"""Nodes coordinates"""
+        fget=_get_coordinate,
+        fset=_set_coordinate,
+        doc=u"""Nodes coordinates
+
+        :Type: ndarray
+        """,
     )
 
     def _get_nb_node(self):
@@ -250,10 +254,13 @@ class NodeMat(Node):
         check_var("nb_node", value, "int")
         self._nb_node = value
 
-    # Total number of nodes
-    # Type : int
     nb_node = property(
-        fget=_get_nb_node, fset=_set_nb_node, doc=u"""Total number of nodes"""
+        fget=_get_nb_node,
+        fset=_set_nb_node,
+        doc=u"""Total number of nodes
+
+        :Type: int
+        """,
     )
 
     def _get_tag(self):
@@ -272,9 +279,14 @@ class NodeMat(Node):
         check_var("tag", value, "ndarray")
         self._tag = value
 
-    # Node tags
-    # Type : ndarray
-    tag = property(fget=_get_tag, fset=_set_tag, doc=u"""Node tags""")
+    tag = property(
+        fget=_get_tag,
+        fset=_set_tag,
+        doc=u"""Node tags
+
+        :Type: ndarray
+        """,
+    )
 
     def _get_delta(self):
         """getter of delta"""
@@ -285,8 +297,11 @@ class NodeMat(Node):
         check_var("delta", value, "float")
         self._delta = value
 
-    # Sensibility for node searching
-    # Type : float
     delta = property(
-        fget=_get_delta, fset=_set_delta, doc=u"""Sensibility for node searching"""
+        fget=_get_delta,
+        fset=_set_delta,
+        doc=u"""Sensibility for node searching
+
+        :Type: float
+        """,
     )

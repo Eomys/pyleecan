@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/InputCurrentDQ.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/InputCurrentDQ.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/InputCurrentDQ
 """
 
 from os import linesep
@@ -433,12 +434,13 @@ class InputCurrentDQ(Input):
         if self._Is is not None:
             self._Is.parent = self
 
-    # Stator dq-currents as a function of time to import
-    # Type : Import
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
-        doc=u"""Stator dq-currents as a function of time to import""",
+        doc=u"""Stator dq-currents as a function of time to import
+
+        :Type: Import
+        """,
     )
 
     def _get_Ir(self):
@@ -453,12 +455,13 @@ class InputCurrentDQ(Input):
         if self._Ir is not None:
             self._Ir.parent = self
 
-    # Rotor currents as a function of time to import
-    # Type : Import
     Ir = property(
         fget=_get_Ir,
         fset=_set_Ir,
-        doc=u"""Rotor currents as a function of time to import""",
+        doc=u"""Rotor currents as a function of time to import
+
+        :Type: Import
+        """,
     )
 
     def _get_angle_rotor(self):
@@ -473,12 +476,13 @@ class InputCurrentDQ(Input):
         if self._angle_rotor is not None:
             self._angle_rotor.parent = self
 
-    # Rotor angular position as a function of time (if None computed according to Nr) to import
-    # Type : Import
     angle_rotor = property(
         fget=_get_angle_rotor,
         fset=_set_angle_rotor,
-        doc=u"""Rotor angular position as a function of time (if None computed according to Nr) to import""",
+        doc=u"""Rotor angular position as a function of time (if None computed according to Nr) to import
+
+        :Type: Import
+        """,
     )
 
     def _get_Nr(self):
@@ -493,12 +497,13 @@ class InputCurrentDQ(Input):
         if self._Nr is not None:
             self._Nr.parent = self
 
-    # Rotor speed as a function of time to import
-    # Type : Import
     Nr = property(
         fget=_get_Nr,
         fset=_set_Nr,
-        doc=u"""Rotor speed as a function of time to import""",
+        doc=u"""Rotor speed as a function of time to import
+
+        :Type: Import
+        """,
     )
 
     def _get_rot_dir(self):
@@ -510,12 +515,15 @@ class InputCurrentDQ(Input):
         check_var("rot_dir", value, "float", Vmin=-1, Vmax=1)
         self._rot_dir = value
 
-    # Rotation direction of the rotor 1 trigo, -1 clockwise
-    # Type : float, min = -1, max = 1
     rot_dir = property(
         fget=_get_rot_dir,
         fset=_set_rot_dir,
-        doc=u"""Rotation direction of the rotor 1 trigo, -1 clockwise""",
+        doc=u"""Rotation direction of the rotor 1 trigo, -1 clockwise
+
+        :Type: float
+        :min: -1
+        :max: 1
+        """,
     )
 
     def _get_angle_rotor_initial(self):
@@ -527,12 +535,13 @@ class InputCurrentDQ(Input):
         check_var("angle_rotor_initial", value, "float")
         self._angle_rotor_initial = value
 
-    # Initial angular position of the rotor at t=0
-    # Type : float
     angle_rotor_initial = property(
         fget=_get_angle_rotor_initial,
         fset=_set_angle_rotor_initial,
-        doc=u"""Initial angular position of the rotor at t=0""",
+        doc=u"""Initial angular position of the rotor at t=0
+
+        :Type: float
+        """,
     )
 
     def _get_Tem_av_ref(self):
@@ -544,10 +553,11 @@ class InputCurrentDQ(Input):
         check_var("Tem_av_ref", value, "float")
         self._Tem_av_ref = value
 
-    # Theorical Average Electromagnetic torque
-    # Type : float
     Tem_av_ref = property(
         fget=_get_Tem_av_ref,
         fset=_set_Tem_av_ref,
-        doc=u"""Theorical Average Electromagnetic torque""",
+        doc=u"""Theorical Average Electromagnetic torque
+
+        :Type: float
+        """,
     )

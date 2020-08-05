@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/Solution.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/Solution.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/Solution
 """
 
 from os import linesep
@@ -259,10 +260,13 @@ class Solution(FrozenClass):
         check_var("nodal", value, "{ndarray}")
         self._nodal = value
 
-    # A solution related to nodes
-    # Type : {ndarray}
     nodal = property(
-        fget=_get_nodal, fset=_set_nodal, doc=u"""A solution related to nodes"""
+        fget=_get_nodal,
+        fset=_set_nodal,
+        doc=u"""A solution related to nodes
+
+        :Type: {ndarray}
+        """,
     )
 
     def _get_edge(self):
@@ -283,10 +287,13 @@ class Solution(FrozenClass):
         check_var("edge", value, "{ndarray}")
         self._edge = value
 
-    # A solution related to edges
-    # Type : {ndarray}
     edge = property(
-        fget=_get_edge, fset=_set_edge, doc=u"""A solution related to edges"""
+        fget=_get_edge,
+        fset=_set_edge,
+        doc=u"""A solution related to edges
+
+        :Type: {ndarray}
+        """,
     )
 
     def _get_face(self):
@@ -307,10 +314,13 @@ class Solution(FrozenClass):
         check_var("face", value, "{ndarray}")
         self._face = value
 
-    # A solution related to faces
-    # Type : {ndarray}
     face = property(
-        fget=_get_face, fset=_set_face, doc=u"""A solution related to faces"""
+        fget=_get_face,
+        fset=_set_face,
+        doc=u"""A solution related to faces
+
+        :Type: {ndarray}
+        """,
     )
 
     def _get_volume(self):
@@ -331,8 +341,11 @@ class Solution(FrozenClass):
         check_var("volume", value, "{ndarray}")
         self._volume = value
 
-    # A solution related to volumes
-    # Type : {ndarray}
     volume = property(
-        fget=_get_volume, fset=_set_volume, doc=u"""A solution related to volumes"""
+        fget=_get_volume,
+        fset=_set_volume,
+        doc=u"""A solution related to volumes
+
+        :Type: {ndarray}
+        """,
     )

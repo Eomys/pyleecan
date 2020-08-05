@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Output/OutputMultiOpti.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Output/OutputMultiOpti.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/OutputMultiOpti
 """
 
 from os import linesep
@@ -302,12 +303,13 @@ class OutputMultiOpti(OutputMulti):
         check_var("fitness", value, "list")
         self._fitness = value
 
-    # List of the corresponding output objective values
-    # Type : list
     fitness = property(
         fget=_get_fitness,
         fset=_set_fitness,
-        doc=u"""List of the corresponding output objective values""",
+        doc=u"""List of the corresponding output objective values
+
+        :Type: list
+        """,
     )
 
     def _get_constraint(self):
@@ -319,12 +321,13 @@ class OutputMultiOpti(OutputMulti):
         check_var("constraint", value, "list")
         self._constraint = value
 
-    # List of the corresponding output constraint values
-    # Type : list
     constraint = property(
         fget=_get_constraint,
         fset=_set_constraint,
-        doc=u"""List of the corresponding output constraint values""",
+        doc=u"""List of the corresponding output constraint values
+
+        :Type: list
+        """,
     )
 
     def _get_ngen(self):
@@ -336,10 +339,13 @@ class OutputMultiOpti(OutputMulti):
         check_var("ngen", value, "list")
         self._ngen = value
 
-    # Number of generation of the indiv
-    # Type : list
     ngen = property(
-        fget=_get_ngen, fset=_set_ngen, doc=u"""Number of generation of the indiv"""
+        fget=_get_ngen,
+        fset=_set_ngen,
+        doc=u"""Number of generation of the indiv
+
+        :Type: list
+        """,
     )
 
     def _get_fitness_names(self):
@@ -351,10 +357,11 @@ class OutputMultiOpti(OutputMulti):
         check_var("fitness_names", value, "list")
         self._fitness_names = value
 
-    # Names of the objectives functions
-    # Type : list
     fitness_names = property(
         fget=_get_fitness_names,
         fset=_set_fitness_names,
-        doc=u"""Names of the objectives functions""",
+        doc=u"""Names of the objectives functions
+
+        :Type: list
+        """,
     )

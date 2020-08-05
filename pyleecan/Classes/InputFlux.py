@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/InputFlux.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/InputFlux.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/InputFlux
 """
 
 from os import linesep
@@ -221,9 +222,14 @@ class InputFlux(Input):
         if self._B is not None:
             self._B.parent = self
 
-    # Airgap flux density
-    # Type : ImportVectorField
-    B = property(fget=_get_B, fset=_set_B, doc=u"""Airgap flux density""")
+    B = property(
+        fget=_get_B,
+        fset=_set_B,
+        doc=u"""Airgap flux density
+
+        :Type: ImportVectorField
+        """,
+    )
 
     def _get_OP(self):
         """getter of OP"""
@@ -237,10 +243,11 @@ class InputFlux(Input):
         if self._OP is not None:
             self._OP.parent = self
 
-    # InputCurrent to define Operating Point (not mandatory)
-    # Type : Input
     OP = property(
         fget=_get_OP,
         fset=_set_OP,
-        doc=u"""InputCurrent to define Operating Point (not mandatory)""",
+        doc=u"""InputCurrent to define Operating Point (not mandatory)
+
+        :Type: Input
+        """,
     )

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/HoleM54.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/HoleM54.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/HoleM54
 """
 
 from os import linesep
@@ -240,9 +241,15 @@ class HoleM54(Hole):
         check_var("H0", value, "float", Vmin=0)
         self._H0 = value
 
-    # Hole depth
-    # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Hole depth""")
+    H0 = property(
+        fget=_get_H0,
+        fset=_set_H0,
+        doc=u"""Hole depth
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H1(self):
         """getter of H1"""
@@ -253,9 +260,15 @@ class HoleM54(Hole):
         check_var("H1", value, "float", Vmin=0)
         self._H1 = value
 
-    # Hole width
-    # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Hole width""")
+    H1 = property(
+        fget=_get_H1,
+        fset=_set_H1,
+        doc=u"""Hole width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W0(self):
         """getter of W0"""
@@ -266,9 +279,15 @@ class HoleM54(Hole):
         check_var("W0", value, "float", Vmin=0)
         self._W0 = value
 
-    # Hole angular width
-    # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Hole angular width""")
+    W0 = property(
+        fget=_get_W0,
+        fset=_set_W0,
+        doc=u"""Hole angular width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_R1(self):
         """getter of R1"""
@@ -279,6 +298,12 @@ class HoleM54(Hole):
         check_var("R1", value, "float", Vmin=0)
         self._R1 = value
 
-    # Hole radius
-    # Type : float, min = 0
-    R1 = property(fget=_get_R1, fset=_set_R1, doc=u"""Hole radius""")
+    R1 = property(
+        fget=_get_R1,
+        fset=_set_R1,
+        doc=u"""Hole radius
+
+        :Type: float
+        :min: 0
+        """,
+    )

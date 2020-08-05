@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/ElementMat.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/ElementMat.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/ElementMat
 """
 
 from os import linesep
@@ -313,12 +314,13 @@ class ElementMat(Element):
         check_var("connectivity", value, "ndarray")
         self._connectivity = value
 
-    # Matrix of connectivity for one element type
-    # Type : ndarray
     connectivity = property(
         fget=_get_connectivity,
         fset=_set_connectivity,
-        doc=u"""Matrix of connectivity for one element type""",
+        doc=u"""Matrix of connectivity for one element type
+
+        :Type: ndarray
+        """,
     )
 
     def _get_nb_elem(self):
@@ -330,10 +332,13 @@ class ElementMat(Element):
         check_var("nb_elem", value, "int")
         self._nb_elem = value
 
-    # Total number of elements
-    # Type : int
     nb_elem = property(
-        fget=_get_nb_elem, fset=_set_nb_elem, doc=u"""Total number of elements"""
+        fget=_get_nb_elem,
+        fset=_set_nb_elem,
+        doc=u"""Total number of elements
+
+        :Type: int
+        """,
     )
 
     def _get_nb_node_per_element(self):
@@ -345,12 +350,13 @@ class ElementMat(Element):
         check_var("nb_node_per_element", value, "int")
         self._nb_node_per_element = value
 
-    # Define the number of node per element
-    # Type : int
     nb_node_per_element = property(
         fget=_get_nb_node_per_element,
         fset=_set_nb_node_per_element,
-        doc=u"""Define the number of node per element""",
+        doc=u"""Define the number of node per element
+
+        :Type: int
+        """,
     )
 
     def _get_group(self):
@@ -369,12 +375,13 @@ class ElementMat(Element):
         check_var("group", value, "ndarray")
         self._group = value
 
-    # Attribute a group number (int) to each element . This group number should correspond to a subpart of the machine.
-    # Type : ndarray
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc=u"""Attribute a group number (int) to each element . This group number should correspond to a subpart of the machine.""",
+        doc=u"""Attribute a group number (int) to each element . This group number should correspond to a subpart of the machine.
+
+        :Type: ndarray
+        """,
     )
 
     def _get_tag(self):
@@ -393,6 +400,11 @@ class ElementMat(Element):
         check_var("tag", value, "ndarray")
         self._tag = value
 
-    # Element tags
-    # Type : ndarray
-    tag = property(fget=_get_tag, fset=_set_tag, doc=u"""Element tags""")
+    tag = property(
+        fget=_get_tag,
+        fset=_set_tag,
+        doc=u"""Element tags
+
+        :Type: ndarray
+        """,
+    )

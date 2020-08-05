@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/DriveWave.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/DriveWave.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/DriveWave
 """
 
 from os import linesep
@@ -204,6 +205,11 @@ class DriveWave(Drive):
         if self._wave is not None:
             self._wave.parent = self
 
-    # Wave generator
-    # Type : Import
-    wave = property(fget=_get_wave, fset=_set_wave, doc=u"""Wave generator""")
+    wave = property(
+        fget=_get_wave,
+        fset=_set_wave,
+        doc=u"""Wave generator
+
+        :Type: Import
+        """,
+    )

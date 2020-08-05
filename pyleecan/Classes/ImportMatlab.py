@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Import/ImportMatlab.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Import/ImportMatlab.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Import/ImportMatlab
 """
 
 from os import linesep
@@ -138,10 +139,13 @@ class ImportMatlab(Import):
         check_var("file_path", value, "str")
         self._file_path = value
 
-    # Path of the file to load
-    # Type : str
     file_path = property(
-        fget=_get_file_path, fset=_set_file_path, doc=u"""Path of the file to load"""
+        fget=_get_file_path,
+        fset=_set_file_path,
+        doc=u"""Path of the file to load
+
+        :Type: str
+        """,
     )
 
     def _get_var_name(self):
@@ -153,8 +157,11 @@ class ImportMatlab(Import):
         check_var("var_name", value, "str")
         self._var_name = value
 
-    # Name of the variable to load
-    # Type : str
     var_name = property(
-        fget=_get_var_name, fset=_set_var_name, doc=u"""Name of the variable to load"""
+        fget=_get_var_name,
+        fset=_set_var_name,
+        doc=u"""Name of the variable to load
+
+        :Type: str
+        """,
     )

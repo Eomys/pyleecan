@@ -338,7 +338,15 @@ def test_class_prop_doc(class_dict):
             + prop["name"]
             + "').__doc__.splitlines()"
         )
-        assert result == prop["desc"].split("\\n")
+
+        # Check only the part from the csv
+        type_index = 2
+        for line in result[2:]:
+            if ":Type:" in line:
+                break
+            else:
+                type_index += 1
+        assert result[: type_index - 1] == prop["desc"].split("\\n")
 
 
 @pytest.mark.parametrize("class_dict", class_list)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Output/XOutput.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Output/XOutput.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/XOutput
 """
 
 from os import linesep
@@ -501,12 +502,13 @@ class XOutput(Output):
         check_var("paramexplorer_list", value, "list")
         self._paramexplorer_list = value
 
-    # List containing ParamExplorer
-    # Type : list
     paramexplorer_list = property(
         fget=_get_paramexplorer_list,
         fset=_set_paramexplorer_list,
-        doc=u"""List containing ParamExplorer""",
+        doc=u"""List containing ParamExplorer
+
+        :Type: list
+        """,
     )
 
     def _get_output_list(self):
@@ -518,12 +520,13 @@ class XOutput(Output):
         check_var("output_list", value, "list")
         self._output_list = value
 
-    # List containing Output for each simulation
-    # Type : list
     output_list = property(
         fget=_get_output_list,
         fset=_set_output_list,
-        doc=u"""List containing Output for each simulation""",
+        doc=u"""List containing Output for each simulation
+
+        :Type: list
+        """,
     )
 
     def _get_xoutput_dict(self):
@@ -535,12 +538,13 @@ class XOutput(Output):
         check_var("xoutput_dict", value, "dict")
         self._xoutput_dict = value
 
-    # Dictionnary containing VarParam DataKeeper results in ndarray
-    # Type : dict
     xoutput_dict = property(
         fget=_get_xoutput_dict,
         fset=_set_xoutput_dict,
-        doc=u"""Dictionnary containing VarParam DataKeeper results in ndarray""",
+        doc=u"""Dictionnary containing VarParam DataKeeper results in ndarray
+
+        :Type: dict
+        """,
     )
 
     def _get_nb_simu(self):
@@ -552,10 +556,12 @@ class XOutput(Output):
         check_var("nb_simu", value, "int", Vmin=0)
         self._nb_simu = value
 
-    # Number of simulations excluding reference simulation
-    # Type : int, min = 0
     nb_simu = property(
         fget=_get_nb_simu,
         fset=_set_nb_simu,
-        doc=u"""Number of simulations excluding reference simulation""",
+        doc=u"""Number of simulations excluding reference simulation
+
+        :Type: int
+        :min: 0
+        """,
     )

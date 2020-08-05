@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/MeshSolution.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/MeshSolution.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/MeshSolution
 """
 
 from os import linesep
@@ -219,12 +220,13 @@ class MeshSolution(FrozenClass):
         check_var("name", value, "str")
         self._name = value
 
-    # (Optional) Descriptive name of the mesh
-    # Type : str
     name = property(
         fget=_get_name,
         fset=_set_name,
-        doc=u"""(Optional) Descriptive name of the mesh""",
+        doc=u"""(Optional) Descriptive name of the mesh
+
+        :Type: str
+        """,
     )
 
     def _get_mesh(self):
@@ -243,9 +245,14 @@ class MeshSolution(FrozenClass):
             if obj is not None:
                 obj.parent = self
 
-    # A Mesh object.
-    # Type : [Mesh]
-    mesh = property(fget=_get_mesh, fset=_set_mesh, doc=u"""A Mesh object. """)
+    mesh = property(
+        fget=_get_mesh,
+        fset=_set_mesh,
+        doc=u"""A Mesh object. 
+
+        :Type: [Mesh]
+        """,
+    )
 
     def _get_solution(self):
         """getter of solution"""
@@ -263,12 +270,13 @@ class MeshSolution(FrozenClass):
             if obj is not None:
                 obj.parent = self
 
-    # A Solution object which are defined with respect to the mesh attribute.
-    # Type : [Solution]
     solution = property(
         fget=_get_solution,
         fset=_set_solution,
-        doc=u"""A Solution object which are defined with respect to the mesh attribute.""",
+        doc=u"""A Solution object which are defined with respect to the mesh attribute.
+
+        :Type: [Solution]
+        """,
     )
 
     def _get_is_same_mesh(self):
@@ -280,10 +288,11 @@ class MeshSolution(FrozenClass):
         check_var("is_same_mesh", value, "bool")
         self._is_same_mesh = value
 
-    # 1 if the mesh is the same at each time step
-    # Type : bool
     is_same_mesh = property(
         fget=_get_is_same_mesh,
         fset=_set_is_same_mesh,
-        doc=u"""1 if the mesh is the same at each time step""",
+        doc=u"""1 if the mesh is the same at each time step
+
+        :Type: bool
+        """,
     )
