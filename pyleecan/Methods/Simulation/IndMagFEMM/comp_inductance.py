@@ -20,7 +20,7 @@ def comp_inductance(self, output):
     """
 
     qs = output.simu.machine.stator.winding.qs
-    p = output.simu.machine.stator.winding.p
+    zp = output.simu.machine.stator.get_pole_pair_number()
     Nt_tot = self.Nt_tot
     angle_offset_initial = output.get_angle_offset_initial()
     rot_dir = output.get_rot_dir()
@@ -50,7 +50,7 @@ def comp_inductance(self, output):
     d_angle = rot_dir * (angle - angle_offset_initial)
 
     # Set currents at 1A + Park transformation for the Id FEMM simulation
-    output.elec.Is = dq2n(array([1, 0]), p * d_angle, n=qs)
+    output.elec.Is = dq2n(array([1, 0]), zp * d_angle, n=qs)
     output.elec.Ir = zeros((Nt_tot, qs))
 
     # Setup the FEMM simulation
@@ -66,16 +66,16 @@ def comp_inductance(self, output):
 
     # Solve for all time step and store all the results in output
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
-    fluxdq = split(n2dq(Phi_wind, p * d_angle, n=qs), 2, axis=1)
+    fluxdq = split(n2dq(Phi_wind, zp * d_angle, n=qs), 2, axis=1)
     Lmd = mean(fluxdq[0])
 
     # Set currents at 1A + Park transformation for the Iq FEMM simulation
-    output.elec.Is = dq2n(array([0, 1]), p * d_angle, n=qs)
+    output.elec.Is = dq2n(array([0, 1]), zp * d_angle, n=qs)
     output.elec.Ir = zeros((Nt_tot, qs))
 
     # Solve for Lq
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
-    fluxdq = split(n2dq(Phi_wind, p * d_angle, n=qs), 2, axis=1)
+    fluxdq = split(n2dq(Phi_wind, zp * d_angle, n=qs), 2, axis=1)
     Lmq = mean(fluxdq[1])
 
     # Reinitialize replaced data

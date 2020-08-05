@@ -16,8 +16,7 @@ def gen_drive(self, output):
     """
 
     qs = output.simu.machine.stator.winding.qs
-    rot_dir = output.get_rot_dir()
-    freq0 = self.freq0
+    felec = output.elec.felec
     time = output.elec.time
 
     # Compute voltage
@@ -25,9 +24,7 @@ def gen_drive(self, output):
 
     # d,q transform
     voltage = Voltage.values
-    voltage_dq = split(
-        n2dq(transpose(voltage), -rot_dir * 2 * pi * freq0 * time, n=qs), 2, axis=1
-    )
+    voltage_dq = split(n2dq(transpose(voltage), 2 * pi * felec * time, n=qs), 2, axis=1)
 
     # Store into EEC parameters
     self.parameters["Ud"] = mean(voltage_dq[0])

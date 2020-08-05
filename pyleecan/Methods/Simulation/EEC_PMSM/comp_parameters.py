@@ -22,5 +22,5 @@ def comp_parameters(self, output):
         self.parameters["Lq"] = Lmq
     if "BEMF" not in self.parameters:
         phi = self.fluxlink.comp_fluxlinkage(output)
-        freq0 = self.freq0
-        self.parameters["BEMF"] = 2 * pi * freq0 * phi
+        felec = output.elec.felec
+        self.parameters["BEMF"] = 2 * pi * felec * phi

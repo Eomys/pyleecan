@@ -32,9 +32,8 @@ def solve_EEC(self, output):
     """
 
     qs = output.simu.machine.stator.winding.qs
-    freq0 = self.freq0
-    ws = 2 * pi * freq0
-    rot_dir = output.get_rot_dir()
+    felec = output.elec.felec
+    ws = 2 * pi * felec
     time = output.elec.time
 
     # Prepare linear system
@@ -49,7 +48,7 @@ def solve_EEC(self, output):
     Idq = solve(XR, XU - XE)
 
     # dq to abc transform
-    Is = dq2n(Idq, -rot_dir * 2 * pi * freq0 * time, n=qs)
+    Is = dq2n(Idq, 2 * pi * felec * time, n=qs)
 
     # Store currents into a Data object
     Time = Data1D(name="time", unit="s", values=time)
@@ -66,3 +65,5 @@ def solve_EEC(self, output):
     )
     output.elec.Is = Is
     output.elec.Ir = None
+    output.elec.Id_ref = Idq[0]
+    output.elec.Iq_ref = Idq[1]

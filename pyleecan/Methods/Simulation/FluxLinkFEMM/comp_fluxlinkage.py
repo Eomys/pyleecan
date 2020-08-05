@@ -18,7 +18,7 @@ def comp_fluxlinkage(self, output):
     """
 
     qs = output.simu.machine.stator.winding.qs
-    p = output.simu.machine.stator.winding.p
+    zp = output.simu.machine.stator.get_pole_pair_number()
     Nt_tot = self.Nt_tot
     angle_offset_initial = output.get_angle_offset_initial()
     rot_dir = output.get_rot_dir()
@@ -64,7 +64,7 @@ def comp_fluxlinkage(self, output):
 
     # Solve for all time step and store all the results in output
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
-    fluxdq = split(n2dq(Phi_wind, p * d_angle, n=qs), 2, axis=1)
+    fluxdq = split(n2dq(Phi_wind, zp * d_angle, n=qs), 2, axis=1)
     Flux_link = mean(fluxdq[0])
 
     # Reinitialize replaced data
