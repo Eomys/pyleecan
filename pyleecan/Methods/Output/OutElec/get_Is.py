@@ -1,5 +1,5 @@
 from ....Functions.Electrical.coordinate_transformation import dq2n
-from numpy import ones
+from numpy import pi, array
 
 
 def get_Is(self):
@@ -7,16 +7,12 @@ def get_Is(self):
     """
     if self.Is is None or len(self.Is) == 0:
         # Generate current according to Id/Iq
-        Isdq = ones((self.time.shape[0], 2))
-        Isdq[:, 0] *= self.Id_ref
-        Isdq[:, 1] *= self.Iq_ref
-        # calculate/get rotor angle and calculate phase currents
-        angle_rotor = self.parent.get_angle_rotor()
-        angle = angle_rotor - self.parent.simu.machine.comp_angle_offset_initial()
-        zp = self.parent.simu.machine.stator.get_pole_pair_number()
+        Isdq = array([self.Id_ref, self.Iq_ref])
+        time = self.time
         qs = self.parent.simu.machine.stator.winding.qs
+        felec = self.felec
 
         # add stator current
-        Is = dq2n(Isdq, angle * zp, n=qs)
+        Is = dq2n(Isdq, 2 * pi * felec * time, n=qs)
         self.Is = Is
     return self.Is

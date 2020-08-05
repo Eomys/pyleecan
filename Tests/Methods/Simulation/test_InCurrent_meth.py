@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from os import chdir
+
+chdir("../../..")
 
 from os.path import join
 from unittest import TestCase
@@ -267,5 +270,51 @@ class unittest_InputCurrent_meth(TestCase):
         assert_array_almost_equal(output.elec.time, linspace(0, 1, 7))
         assert_array_almost_equal(output.elec.angle, linspace(0, 2 * pi, 20))
         assert_array_almost_equal(output.elec.get_Is(), Is_exp)
-        assert_array_almost_equal(output.elec.angle_rotor, angle_rotor_exp)
+        assert_array_almost_equal(output.get_angle_rotor(), angle_rotor_exp)
+        assert_array_almost_equal(output.elec.N0, ones(7) * 60 / zp)
+
+    def test_InputCurrent_I0Phi0(self):
+        """Check that the input current can return a correct output
+        """
+        test_obj = Simulation(machine=IPMSM_A)
+        output = Output(simu=test_obj)
+        time = ImportGenVectLin(0, 1, 7)
+        angle = ImportGenVectLin(0, 2 * pi, 20)
+        Id_ref = 2
+        Iq_ref = 0
+
+        Is_exp = transpose(
+            array(
+                [
+                    [2, 1, -1, -2, -1, 1, 2],
+                    [-1, -2, -1, 1, 2, 1, -1],
+                    [-1, 1, 2, 1, -1, -2, -1],
+                ]
+            )
+        )
+        Is = ImportMatrixVal(value=Is_exp)
+
+        zp = IPMSM_A.stator.get_pole_pair_number()
+        angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
+        angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
+
+        N0 = 60 / zp
+
+        test_obj.input = InputCurrent(
+            time=time,
+            angle=angle,
+            Is=Is,
+            Ir=None,
+            angle_rotor=None,
+            angle_rotor_initial=angle_rotor_initial,
+            N0=N0,
+            rot_dir=1,
+        )
+
+        test_obj.input.gen_input()
+        assert_array_almost_equal(output.elec.time, linspace(0, 1, 7))
+        assert_array_almost_equal(output.elec.angle, linspace(0, 2 * pi, 20))
+        assert_array_almost_equal(output.get_angle_rotor(), angle_rotor_exp)
+        assert_array_almost_equal(output.elec.Id_ref, Id_ref)
+        assert_array_almost_equal(output.elec.Iq_ref, Iq_ref)
         assert_array_almost_equal(output.elec.N0, ones(7) * 60 / zp)

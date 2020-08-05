@@ -86,6 +86,7 @@ class OutElec(FrozenClass):
         Tem_av_ref=None,
         Id_ref=None,
         Iq_ref=None,
+        felec=None,
         init_dict=None,
         init_str=None,
     ):
@@ -121,6 +122,7 @@ class OutElec(FrozenClass):
             Tem_av_ref = obj.Tem_av_ref
             Id_ref = obj.Id_ref
             Iq_ref = obj.Iq_ref
+            felec = obj.felec
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -152,6 +154,8 @@ class OutElec(FrozenClass):
                 Id_ref = init_dict["Id_ref"]
             if "Iq_ref" in list(init_dict.keys()):
                 Iq_ref = init_dict["Iq_ref"]
+            if "felec" in list(init_dict.keys()):
+                felec = init_dict["felec"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -176,6 +180,7 @@ class OutElec(FrozenClass):
         self.Tem_av_ref = Tem_av_ref
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
+        self.felec = felec
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -234,6 +239,7 @@ class OutElec(FrozenClass):
         OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         OutElec_str += "Id_ref = " + str(self.Id_ref) + linesep
         OutElec_str += "Iq_ref = " + str(self.Iq_ref) + linesep
+        OutElec_str += "felec = " + str(self.felec) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -268,6 +274,8 @@ class OutElec(FrozenClass):
         if other.Id_ref != self.Id_ref:
             return False
         if other.Iq_ref != self.Iq_ref:
+            return False
+        if other.felec != self.felec:
             return False
         return True
 
@@ -319,6 +327,7 @@ class OutElec(FrozenClass):
         OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
         OutElec_dict["Id_ref"] = self.Id_ref
         OutElec_dict["Iq_ref"] = self.Iq_ref
+        OutElec_dict["felec"] = self.felec
         # The class name is added to the dict fordeserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -340,6 +349,7 @@ class OutElec(FrozenClass):
         self.Tem_av_ref = None
         self.Id_ref = None
         self.Iq_ref = None
+        self.felec = None
 
     def _get_time(self):
         """getter of time"""
@@ -615,3 +625,16 @@ class OutElec(FrozenClass):
     Iq_ref = property(
         fget=_get_Iq_ref, fset=_set_Iq_ref, doc=u"""q-axis current magnitude"""
     )
+
+    def _get_felec(self):
+        """getter of felec"""
+        return self._felec
+
+    def _set_felec(self, value):
+        """setter of felec"""
+        check_var("felec", value, "float")
+        self._felec = value
+
+    # Electrical Frequency
+    # Type : float
+    felec = property(fget=_get_felec, fset=_set_felec, doc=u"""Electrical Frequency""")

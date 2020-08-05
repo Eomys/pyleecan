@@ -4,7 +4,7 @@ from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
 from ....Methods.Simulation.Input import InputError
 from numpy import ndarray, linspace, pi, mean
-from ....Functions.Electrical.coordinate_transformation import ab2dq
+from ....Functions.Electrical.coordinate_transformation import n2dq
 
 
 def gen_input(self):
@@ -68,6 +68,13 @@ def gen_input(self):
     qs = len(simu.machine.stator.get_name_phase())
     qr = len(simu.machine.rotor.get_name_phase())
 
+    if self.N0 is not None:
+        output.N0 = self.N0
+        zp = simu.machine.stator.get_pole_pair_number()
+        output.felec = zp * self.N0 / 60
+    else:
+        output.felec = 1
+
     # Load and check Is
     if qs > 0:
         if self.Is is None:
@@ -93,7 +100,7 @@ def gen_input(self):
                     + " returned"
                 )
             # Compute corresponding Id/Iq reference
-            Idq = ab2dq(output.Is, output.time)
+            Idq = n2dq(output.Is, 2 * pi * output.felec * output.time)
             output.Id_ref = mean(Idq[:, 0])
             output.Iq_ref = mean(Idq[:, 1])
 
@@ -131,8 +138,6 @@ def gen_input(self):
                 + str(output.time.shape)
                 + " expected"
             )
-    if self.N0 is not None:
-        output.N0 = self.N0
 
     if self.rot_dir is None or self.rot_dir not in [-1, 1]:
         # Enforce default rotation direction
