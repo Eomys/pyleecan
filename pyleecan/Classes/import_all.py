@@ -155,6 +155,8 @@ from ..Classes.SurfRing import SurfRing
 from ..Classes.Surface import Surface
 from ..Classes.Trapeze import Trapeze
 from ..Classes.Unit import Unit
+from ..Classes.VarLoad import VarLoad
+from ..Classes.VarLoadCurrent import VarLoadCurrent
 from ..Classes.VarParam import VarParam
 from ..Classes.VarSimu import VarSimu
 from ..Classes.VentilationCirc import VentilationCirc
