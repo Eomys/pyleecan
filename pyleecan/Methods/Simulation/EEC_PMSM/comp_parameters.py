@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import pi
+from numpy import pi, sqrt
 
 
 def comp_parameters(self, output):
@@ -14,13 +14,14 @@ def comp_parameters(self, output):
         an Output object
     """
 
+    phi = self.fluxlink.comp_fluxlinkage(output)
+    
     if "R20" not in self.parameters:
         self.parameters["R20"] = output.simu.machine.stator.comp_resistance_wind()
     if "Ld" not in self.parameters:
         (Lmd, Lmq) = self.indmag.comp_inductance(output)
-        self.parameters["Ld"] = Lmd
+        self.parameters["Ld"] = Lmd - phi*sqrt(2)
         self.parameters["Lq"] = Lmq
     if "BEMF" not in self.parameters:
-        phi = self.fluxlink.comp_fluxlinkage(output)
         felec = output.elec.felec
         self.parameters["BEMF"] = 2 * pi * felec * phi

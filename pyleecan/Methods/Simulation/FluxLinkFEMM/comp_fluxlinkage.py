@@ -3,7 +3,8 @@
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Functions.Electrical.coordinate_transformation import n2dq
 
-from numpy import zeros, linspace, pi, split, mean
+from numpy import zeros, linspace, pi, split, mean, tile
+import matplotlib.pyplot as plt
 
 
 def comp_fluxlinkage(self, output):
@@ -45,11 +46,13 @@ def comp_fluxlinkage(self, output):
         sym = 1
 
     # Set rotor angle for the FEMM simulation
-    angle = linspace(0, 2 * pi / sym, Nt_tot)
-    output.elec.angle_rotor = angle
+    angle = linspace(0, 2 * pi / sym, Nt_tot, endpoint=False)
+    output.elec.angle_rotor = - rot_dir * angle / zp
 
     # Define d axis angle for the d,q transform
-    d_angle = rot_dir * (angle - angle_offset_initial)
+    print(angle_offset_initial)
+    angle_offset_initial = 1.31
+    d_angle = zp * (angle - angle_offset_initial)
 
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
@@ -64,8 +67,20 @@ def comp_fluxlinkage(self, output):
 
     # Solve for all time step and store all the results in output
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
-    fluxdq = split(n2dq(Phi_wind, zp * d_angle, n=qs), 2, axis=1)
+    Phi_wind = tile(Phi_wind, sym)
+    fluxdq = split(n2dq(Phi_wind, d_angle, n=qs), 2, axis=1)
     Flux_link = mean(fluxdq[0])
+    
+    flux = split(Phi_wind, 3, axis=1)
+    time = linspace(0, Nt_tot, Nt_tot)
+    fig = plt.figure()
+    plt.plot(time, flux[0], color="tab:blue", label="A")
+    plt.plot(time, flux[1], color="tab:red", label="B")
+    plt.plot(time, flux[2], color="tab:olive", label="C")
+    plt.plot(time, fluxdq[0], color="k", label="D")
+    plt.plot(time, fluxdq[1], color="g", label="Q")
+    plt.legend()
+    fig.savefig("test_fluxlink.png")
 
     # Reinitialize replaced data
     output.elec.angle_rotor = angle_rotor

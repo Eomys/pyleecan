@@ -5,7 +5,7 @@ from ....Functions.Electrical.coordinate_transformation import n2dq, dq2n
 
 from numpy import array, zeros, linspace, pi, split, mean
 
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 
 def comp_inductance(self, output):
@@ -21,6 +21,7 @@ def comp_inductance(self, output):
 
     qs = output.simu.machine.stator.winding.qs
     zp = output.simu.machine.stator.get_pole_pair_number()
+    
     Nt_tot = self.Nt_tot
     angle_offset_initial = output.get_angle_offset_initial()
     rot_dir = output.get_rot_dir()
@@ -43,14 +44,14 @@ def comp_inductance(self, output):
         sym = 1
 
     # Set rotor angle for the FEMM simulation
-    angle = linspace(0, 2 * pi / sym, Nt_tot)
-    output.elec.angle_rotor = angle
+    angle = linspace(0, 2 * pi / sym, Nt_tot, endpoint=False)
+    output.elec.angle_rotor = angle / zp
 
     # Define d axis angle for the d,q transform
-    d_angle = rot_dir * (angle - angle_offset_initial)
+    d_angle = rot_dir * (angle + 1.31)
 
     # Set currents at 1A + Park transformation for the Id FEMM simulation
-    output.elec.Is = dq2n(array([1, 0]), zp * d_angle, n=qs)
+    output.elec.Is = dq2n(array([1, 0]), d_angle, n=qs)
     output.elec.Ir = zeros((Nt_tot, qs))
 
     # Setup the FEMM simulation
@@ -66,16 +67,37 @@ def comp_inductance(self, output):
 
     # Solve for all time step and store all the results in output
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
-    fluxdq = split(n2dq(Phi_wind, zp * d_angle, n=qs), 2, axis=1)
+    
+    time = linspace(0, Nt_tot, Nt_tot)
+    flux = split(Phi_wind, 3, axis=1)
+    fluxdq = split(n2dq(Phi_wind, d_angle, n=qs), 2, axis=1)
+    fig = plt.figure()
+    plt.plot(time, flux[0], color="tab:blue", label="A")
+    plt.plot(time, flux[1], color="tab:red", label="B")
+    plt.plot(time, flux[2], color="tab:olive", label="C")
+    plt.plot(time, fluxdq[0], color="k", label="D")
+    plt.plot(time, fluxdq[1], color="g", label="Q")
+    plt.legend()
+    fig.savefig("test_inductanceD.png")
     Lmd = mean(fluxdq[0])
 
     # Set currents at 1A + Park transformation for the Iq FEMM simulation
-    output.elec.Is = dq2n(array([0, 1]), zp * d_angle, n=qs)
+    output.elec.Is = dq2n(array([0, 1]), d_angle, n=qs)
     output.elec.Ir = zeros((Nt_tot, qs))
 
     # Solve for Lq
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
-    fluxdq = split(n2dq(Phi_wind, zp * d_angle, n=qs), 2, axis=1)
+    
+    flux = split(Phi_wind, 3, axis=1)
+    fluxdq = split(n2dq(Phi_wind, d_angle, n=qs), 2, axis=1)
+    fig = plt.figure()
+    plt.plot(time, flux[0], color="tab:blue", label="A")
+    plt.plot(time, flux[1], color="tab:red", label="B")
+    plt.plot(time, flux[2], color="tab:olive", label="C")
+    plt.plot(time, fluxdq[0], color="k", label="D")
+    plt.plot(time, fluxdq[1], color="g", label="Q")
+    plt.legend()
+    fig.savefig("test_inductanceQ.png")
     Lmq = mean(fluxdq[1])
 
     # Reinitialize replaced data
