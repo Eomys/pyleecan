@@ -4,7 +4,7 @@ from ....Functions.Electrical.coordinate_transformation import dq2n
 from SciDataTool import Data1D, DataTime
 from ....Functions.Winding.gen_phase_list import gen_name
 
-from numpy import array, pi, zeros, transpose
+from numpy import array, pi, transpose
 from scipy.linalg import solve
 
 

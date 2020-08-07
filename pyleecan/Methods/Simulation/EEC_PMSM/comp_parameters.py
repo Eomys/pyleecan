@@ -20,7 +20,7 @@ def comp_parameters(self, output):
         self.parameters["R20"] = output.simu.machine.stator.comp_resistance_wind()
     if "Ld" not in self.parameters:
         (Lmd, Lmq) = self.indmag.comp_inductance(output)
-        self.parameters["Ld"] = Lmd - phi*sqrt(2)
+        self.parameters["Ld"] = Lmd - phi
         self.parameters["Lq"] = Lmq
     if "BEMF" not in self.parameters:
         felec = output.elec.felec

@@ -3,7 +3,7 @@
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Functions.Electrical.coordinate_transformation import n2dq
 
-from numpy import zeros, linspace, pi, split, mean, tile
+from numpy import zeros, linspace, pi, split, mean, sqrt
 import matplotlib.pyplot as plt
 
 
@@ -46,13 +46,8 @@ def comp_fluxlinkage(self, output):
         sym = 1
 
     # Set rotor angle for the FEMM simulation
-    angle = linspace(0, 2 * pi / sym, Nt_tot, endpoint=False)
-    output.elec.angle_rotor = - rot_dir * angle / zp
-
-    # Define d axis angle for the d,q transform
-    print(angle_offset_initial)
-    angle_offset_initial = 1.31
-    d_angle = zp * (angle - angle_offset_initial)
+    angle = linspace(0, 2 * pi / sym, Nt_tot)
+    output.elec.angle_rotor = rot_dir * angle
 
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
@@ -67,18 +62,20 @@ def comp_fluxlinkage(self, output):
 
     # Solve for all time step and store all the results in output
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
-    Phi_wind = tile(Phi_wind, sym)
+    
+    # Define d axis angle for the d,q transform
+    angle_offset_initial = output.get_angle_offset_initial()
+    d_angle = (angle-angle_offset_initial) * zp
     fluxdq = split(n2dq(Phi_wind, d_angle, n=qs), 2, axis=1)
-    Flux_link = mean(fluxdq[0])
+    Flux_link = mean(fluxdq[0]) / sqrt(3)
     
     flux = split(Phi_wind, 3, axis=1)
-    time = linspace(0, Nt_tot, Nt_tot)
     fig = plt.figure()
-    plt.plot(time, flux[0], color="tab:blue", label="A")
-    plt.plot(time, flux[1], color="tab:red", label="B")
-    plt.plot(time, flux[2], color="tab:olive", label="C")
-    plt.plot(time, fluxdq[0], color="k", label="D")
-    plt.plot(time, fluxdq[1], color="g", label="Q")
+    plt.plot(angle, flux[0], color="tab:blue", label="A")
+    plt.plot(angle, flux[1], color="tab:red", label="B")
+    plt.plot(angle, flux[2], color="tab:olive", label="C")
+    plt.plot(angle, fluxdq[0], color="k", label="D")
+    plt.plot(angle, fluxdq[1], color="g", label="Q")
     plt.legend()
     fig.savefig("test_fluxlink.png")
 
