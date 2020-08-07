@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
 
-try:
-    import pyvistaqt as pv
-
-    is_pyvistaqt = True
-except:
-    import pyvista as pv
-
-    is_pyvistaqt = False
 from numpy import real, min as np_min, max as np_max
 
 from ....Classes.MeshMat import MeshMat
@@ -26,6 +18,8 @@ def plot_deflection(
     factor=None,
     field_name=None,
     ifreq=0,
+    is_2d=False,
+    save_path=None,
 ):
     """Plot the operational deflection shape using pyvista plotter.
 
@@ -51,6 +45,20 @@ def plot_deflection(
     Returns
     -------
     """
+
+    if save_path is None:
+        try:
+            import pyvistaqt as pv
+
+            is_pyvistaqt = True
+        except:
+            import pyvista as pv
+
+            is_pyvistaqt = False
+    else:
+        import pyvista as pv
+
+        is_pyvistaqt = False
 
     # Get the mesh
     mesh = self.get_mesh(label=label, index=index)
@@ -122,4 +130,9 @@ def plot_deflection(
         clim=clim,
         scalar_bar_args=sargs,
     )
-    p.show()
+    if is_2d:
+        p.view_xy()
+    if save_path is None:
+        p.show()
+    else:
+        p.show(interactive=False, screenshot=save_path)

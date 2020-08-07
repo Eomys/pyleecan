@@ -493,10 +493,7 @@ def test_ecc_FEMM():
         join(save_path, "fig_19_Transform_list_model.fem"),
     )
     # Plot, check, save
-    out.plot_mesh(mesh=out.mag.meshsolution.mesh[0], title="FEMM Mesh")
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "fig_19_transform_list.png"))
-    fig.savefig(join(save_path, "fig_19_transform_list.svg"), format="svg")
+    out.mag.meshsolution.plot_mesh(save_path=join(save_path, "fig_19_transform_list.png"), is_2d=True)
 
 
 @pytest.mark.skip
