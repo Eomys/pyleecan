@@ -59,7 +59,13 @@ try:
 except ImportError as error:
     plot_glyph = error
 
+try:
+    from ..Methods.Mesh.MeshSolution.get_group import get_group
+except ImportError as error:
+    get_group = error
 
+
+from numpy import array, empty
 from ._check import InitUnKnowClassError
 from .Mesh import Mesh
 from .Solution import Solution
@@ -170,6 +176,17 @@ class MeshSolution(FrozenClass):
         )
     else:
         plot_glyph = plot_glyph
+    # cf Methods.Mesh.MeshSolution.get_group
+    if isinstance(get_group, ImportError):
+        get_group = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MeshSolution method get_group: " + str(get_group)
+                )
+            )
+        )
+    else:
+        get_group = get_group
     # save method is available in all object
     save = save
 
@@ -189,6 +206,7 @@ class MeshSolution(FrozenClass):
         is_same_mesh=True,
         solution=list(),
         dimension=3,
+        group=dict(),
         init_dict=None,
         init_str=None,
     ):
@@ -215,6 +233,7 @@ class MeshSolution(FrozenClass):
             is_same_mesh = obj.is_same_mesh
             solution = obj.solution
             dimension = obj.dimension
+            group = obj.group
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -228,6 +247,8 @@ class MeshSolution(FrozenClass):
                 solution = init_dict["solution"]
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
+            if "group" in list(init_dict.keys()):
+                group = init_dict["group"]
         # Initialisation by argument
         self.parent = None
         self.label = label
@@ -290,6 +311,19 @@ class MeshSolution(FrozenClass):
         else:
             self.solution = solution
         self.dimension = dimension
+        # group can be None or a dict of ndarray
+        self.group = dict()
+        if type(group) is dict:
+            for key, obj in group.items():
+                if obj is None:  # Default value
+                    value = empty(0)
+                elif isinstance(obj, list):
+                    value = array(obj)
+                self.group[key] = value
+        elif group is None:
+            self.group = dict()
+        else:
+            self.group = group  # Should raise an error
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -317,6 +351,12 @@ class MeshSolution(FrozenClass):
             tmp = self.solution[ii].__str__().replace(linesep, linesep + "\t") + linesep
             MeshSolution_str += "solution[" + str(ii) + "] =" + tmp + linesep + linesep
         MeshSolution_str += "dimension = " + str(self.dimension) + linesep
+        if len(self.group) == 0:
+            MeshSolution_str += "group = dict()"
+        for key, obj in self.group.items():
+            MeshSolution_str += (
+                "group[" + key + "] = " + str(self.group[key]) + linesep + linesep
+            )
         return MeshSolution_str
 
     def __eq__(self, other):
@@ -334,6 +374,8 @@ class MeshSolution(FrozenClass):
             return False
         if other.dimension != self.dimension:
             return False
+        if other.group != self.group:
+            return False
         return True
 
     def as_dict(self):
@@ -350,6 +392,9 @@ class MeshSolution(FrozenClass):
         for obj in self.solution:
             MeshSolution_dict["solution"].append(obj.as_dict())
         MeshSolution_dict["dimension"] = self.dimension
+        MeshSolution_dict["group"] = dict()
+        for key, obj in self.group.items():
+            MeshSolution_dict["group"][key] = obj.tolist()
         # The class name is added to the dict fordeserialisation purpose
         MeshSolution_dict["__class__"] = "MeshSolution"
         return MeshSolution_dict
@@ -364,6 +409,7 @@ class MeshSolution(FrozenClass):
         for obj in self.solution:
             obj._set_None()
         self.dimension = None
+        self.group = dict()
 
     def _get_label(self):
         """getter of label"""
@@ -456,4 +502,30 @@ class MeshSolution(FrozenClass):
         fget=_get_dimension,
         fset=_set_dimension,
         doc=u"""Dimension of the physical problem""",
+    )
+
+    def _get_group(self):
+        """getter of group"""
+        return self._group
+
+    def _set_group(self, value):
+        """setter of group"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if obj is None:
+                    obj = array([])
+                elif type(obj) is list:
+                    try:
+                        obj = array(obj)
+                    except:
+                        pass
+        check_var("group", value, "{ndarray}")
+        self._group = value
+
+    # Dict sorted by groups name with cells indices.
+    # Type : {ndarray}
+    group = property(
+        fget=_get_group,
+        fset=_set_group,
+        doc=u"""Dict sorted by groups name with cells indices. """,
     )

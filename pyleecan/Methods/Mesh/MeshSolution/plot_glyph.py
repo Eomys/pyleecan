@@ -4,9 +4,11 @@
 
 try:
     import pyvistaqt as pv
+
     is_pyvistaqt = True
 except:
     import pyvista as pv
+
     is_pyvistaqt = False
 from numpy import real, max as np_max
 

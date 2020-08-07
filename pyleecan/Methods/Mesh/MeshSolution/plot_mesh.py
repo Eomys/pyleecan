@@ -2,9 +2,11 @@
 
 try:
     import pyvistaqt as pv
+
     is_pyvistaqt = True
 except:
     import pyvista as pv
+
     is_pyvistaqt = False
 
 from ....Classes.MeshMat import MeshMat
@@ -33,7 +35,7 @@ def plot_mesh(self, label=None, index=None, indices=None):
     if isinstance(mesh_obj, MeshMat):
         mesh = mesh_obj.get_mesh_pv(indices=indices)
     else:
-        mesh = mesh_obj.get_mesh(indices=indices)
+        mesh = mesh_obj.get_mesh_pv(indices=indices)
 
     # Configure plot
     if is_pyvistaqt:

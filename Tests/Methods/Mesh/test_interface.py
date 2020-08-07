@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-from pyleecan.Classes.Mesh import Mesh
-from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.MeshMat import MeshMat
+from pyleecan.Classes.PointMat import PointMat
+from pyleecan.Classes.CellMat import CellMat
 import numpy as np
 
 
@@ -11,36 +11,36 @@ class unittest_interface(TestCase):
     """unittest for elements and nodes getter methods"""
 
     def setUp(self):
-        self.mesh = Mesh()
-        self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
-        self.mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)
-        self.mesh.node = NodeMat()
+        self.mesh = MeshMat()
+        self.mesh.cell["triangle3"] = CellMat(nb_pt_per_cell=3)
+        self.mesh.cell["segment2"] = CellMat(nb_pt_per_cell=2)
+        self.mesh.point = PointMat()
 
-        self.other_mesh = Mesh()
-        self.other_mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
-        self.other_mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)
-        self.other_mesh.node = self.mesh.node
+        self.other_mesh = MeshMat()
+        self.other_mesh.cell["triangle3"] = CellMat(nb_pt_per_cell=3)
+        self.other_mesh.cell["segment2"] = CellMat(nb_pt_per_cell=2)
+        self.other_mesh.point = self.mesh.point
 
-    def test_ElementMat_NodeMat_flat(self):
+    def test_MeshMat_flat(self):
         """unittest with ElementDict and PointMat objects"""
 
-        self.mesh.add_element([0, 1, 2], "Triangle3")
-        self.mesh.add_element([2, 3, 4], "Triangle3")
+        self.mesh.add_cell([0, 1, 2], "triangle3")
+        self.mesh.add_cell([2, 3, 4], "triangle3")
 
-        self.mesh.node.add_node([0, 0])
-        self.mesh.node.add_node([0.5, 1])
-        self.mesh.node.add_node([1, 0])
-        self.mesh.node.add_node([1.5, 1])
-        self.mesh.node.add_node([2, 0])
-        self.mesh.node.add_node([0.5, -1])
-        self.mesh.node.add_node([1.5, -1])
+        self.mesh.point.add_point([0, 0])
+        self.mesh.point.add_point([0.5, 1])
+        self.mesh.point.add_point([1, 0])
+        self.mesh.point.add_point([1.5, 1])
+        self.mesh.point.add_point([2, 0])
+        self.mesh.point.add_point([0.5, -1])
+        self.mesh.point.add_point([1.5, -1])
 
-        self.other_mesh.add_element([0, 5, 2], "Triangle3")
-        self.other_mesh.add_element([4, 6, 2], "Triangle3")
+        self.other_mesh.add_cell([0, 5, 2], "triangle3")
+        self.other_mesh.add_cell([4, 6, 2], "triangle3")
 
         new_seg_mesh = self.mesh.interface(self.other_mesh)
         solution = np.array([[0, 2], [2, 4]])
-        resultat = new_seg_mesh.element["Segment2"].connectivity
+        resultat = new_seg_mesh.cell["segment2"].connectivity
         testA = np.sum(abs(resultat - solution))
         msg = (
             "Wrong projection: returned "
@@ -53,25 +53,25 @@ class unittest_interface(TestCase):
 
     def test_ElementMat_NodeMat_corner_ext(self):
         """unittest with CellMat and PointMat objects, extract interface from the external mesh point of view"""
-        self.mesh.add_element([0, 1, 2], "Triangle3")
-        self.mesh.add_element([1, 2, 3], "Triangle3")
-        self.mesh.add_element([1, 5, 4], "Triangle3")
+        self.mesh.add_cell([0, 1, 2], "triangle3")
+        self.mesh.add_cell([1, 2, 3], "triangle3")
+        self.mesh.add_cell([1, 5, 4], "triangle3")
 
-        self.mesh.node.add_node([2, 0])
-        self.mesh.node.add_node([3, 0])
-        self.mesh.node.add_node([2.5, 1])
-        self.mesh.node.add_node([4, 0])
-        self.mesh.node.add_node([3.5, 1])
-        self.mesh.node.add_node([3, -1])
+        self.mesh.point.add_node([2, 0])
+        self.mesh.point.add_node([3, 0])
+        self.mesh.point.add_node([2.5, 1])
+        self.mesh.point.add_node([4, 0])
+        self.mesh.point.add_node([3.5, 1])
+        self.mesh.point.add_node([3, -1])
 
-        self.other_mesh.add_element([0, 1, 5], "Triangle3")
+        self.other_mesh.add_cell([0, 1, 5], "triangle3")
 
         # Method test 1
         new_seg_mesh = self.mesh.interface(self.other_mesh)
 
         # Check result
         solution = np.array([[0, 1], [1, 5]])
-        result = new_seg_mesh.element["Segment2"].connectivity
+        result = new_seg_mesh.cell["Segment2"].connectivity
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
@@ -79,25 +79,25 @@ class unittest_interface(TestCase):
 
     def test_ElementMat_NodeMat_corner_int(self):
         """unittest with CellMat and PointMat objects, extract interface from the internal mesh point of view"""
-        self.mesh.add_element([0, 1, 2], "Triangle3")
-        self.mesh.add_element([1, 2, 3], "Triangle3")
-        self.mesh.add_element([1, 5, 4], "Triangle3")
+        self.mesh.add_cell([0, 1, 2], "triangle3")
+        self.mesh.add_cell([1, 2, 3], "triangle3")
+        self.mesh.add_cell([1, 5, 4], "triangle3")
 
-        self.mesh.node.add_node([2, 0])
-        self.mesh.node.add_node([3, 0])
-        self.mesh.node.add_node([2.5, 1])
-        self.mesh.node.add_node([4, 0])
-        self.mesh.node.add_node([3.5, 1])
-        self.mesh.node.add_node([3, -1])
+        self.mesh.point.add_node([2, 0])
+        self.mesh.point.add_node([3, 0])
+        self.mesh.point.add_node([2.5, 1])
+        self.mesh.point.add_node([4, 0])
+        self.mesh.point.add_node([3.5, 1])
+        self.mesh.point.add_node([3, -1])
 
-        self.other_mesh.add_element([0, 1, 5], "Triangle3")
+        self.other_mesh.add_cell([0, 1, 5], "triangle3")
 
         # Method test 1
         new_seg_mesh = self.other_mesh.interface(self.mesh)
 
         # Check result
         solution = np.array([[0, 1], [1, 5]])
-        result = new_seg_mesh.element["Segment2"].connectivity
+        result = new_seg_mesh.cell["segment2"].connectivity
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
@@ -105,23 +105,23 @@ class unittest_interface(TestCase):
 
     def test_ElementMat_NodeMat_self(self):
         """unittest with CellMat and PointMat objects, extract interface on itself"""
-        self.mesh.add_element([0, 1, 2], "Triangle3")
-        self.mesh.add_element([0, 2, 3], "Triangle3")
-        self.mesh.add_element([0, 3, 4], "Triangle3")
-        self.mesh.add_element([0, 4, 1], "Triangle3")
+        self.mesh.add_cell([0, 1, 2], "triangle3")
+        self.mesh.add_cell([0, 2, 3], "triangle3")
+        self.mesh.add_cell([0, 3, 4], "triangle3")
+        self.mesh.add_cell([0, 4, 1], "triangle3")
 
-        self.mesh.node.add_node([0, 0])
-        self.mesh.node.add_node([0, 1])
-        self.mesh.node.add_node([1, 0])
-        self.mesh.node.add_node([-1, 0])
-        self.mesh.node.add_node([0, -1])
+        self.mesh.point.add_point([0, 0])
+        self.mesh.point.add_point([0, 1])
+        self.mesh.point.add_point([1, 0])
+        self.mesh.point.add_point([-1, 0])
+        self.mesh.point.add_point([0, -1])
 
         # Method test 1
         new_seg_mesh = self.mesh.interface(self.mesh)
 
         # Check result
         solution = np.array([])
-        result = new_seg_mesh.element["Segment2"].connectivity
+        result = new_seg_mesh.cell["segment2"].connectivity
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10

@@ -3,7 +3,7 @@ from ....Classes.MeshSolution import MeshSolution
 from SciDataTool import DataTime, Data1D
 
 
-def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu):
+def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
     """ Build the MeshSolution objets from FEMM outputs.
 
     Parameters
@@ -68,5 +68,7 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu):
         is_same_mesh=cond,
         dimension=2,
     )
+
+    meshsol.group = groups[0]
 
     return meshsol

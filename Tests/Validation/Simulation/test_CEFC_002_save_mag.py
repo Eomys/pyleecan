@@ -8,7 +8,8 @@ from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-from Tests import save_validation_path as save_path
+
+save_path = "C:\\Users\\Raphael\\Desktop\\Git\\EOMYS-Public\\pyleecan\\pyleecan\\Results\\SM_CEFC_002_save_mag\\Output"
 from Tests import save_load_path as load_results_path
 from os.path import join
 
@@ -55,7 +56,7 @@ def test_CEFC_002():
         type_BH_rotor=2,
         is_get_mesh=True,
         is_save_FEA=False,
-        is_sliding_band=False,
+        is_sliding_band=True,
     )
     simu.force = None
     simu.struct = None
@@ -89,3 +90,20 @@ def test_CEFC_002():
     FEMM.mag.meshsolution.plot_contour(label="\mu")
     FEMM.mag.meshsolution.plot_contour(label="B")
     FEMM.mag.meshsolution.plot_contour(label="H")
+
+
+def test_CEFC_002_bis():
+
+    load_path = join(save_path, "Output.json")
+    # Test to load the Meshsolution object (inside the output):
+    with open(load_path) as json_file:
+        json_tmp = json.load(json_file)
+        FEMM = Output(init_dict=json_tmp)
+
+    # [Important] To test that fields are still working after saving and loading
+    FEMM.mag.meshsolution.plot_mesh()
+    FEMM.mag.meshsolution.plot_contour(label="\mu")
+    FEMM.mag.meshsolution.plot_contour(label="B")
+    FEMM.mag.meshsolution.plot_contour(label="H")
+
+    FEMM.mag.meshsolution.plot_contour(label="H", group_names="stator")

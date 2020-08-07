@@ -27,11 +27,7 @@ class unittest_get_point(TestCase):
 
         testA = np.sum(abs(solution - points))
         msg = (
-            "Wrong projection: returned "
-            + str(points)
-            + ", expected: "
-            + str(solution)
+            "Wrong projection: returned " + str(points) + ", expected: " + str(solution)
         )
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
-

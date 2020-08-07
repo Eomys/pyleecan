@@ -44,11 +44,6 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     Rgap_mec_int = lam_int.comp_radius_mec()
     Rgap_mec_ext = lam_ext.comp_radius_mec()
 
-    if self.is_get_mesh or self.is_save_FEA:
-        meshFEMM = [MeshMat() for ii in range(Nt_tot)]
-    else:
-        meshFEMM = [MeshMat()]
-
     # Compute the data for each time step
     for ii in range(Nt_tot):
         # Update rotor position and currents
@@ -98,20 +93,21 @@ def solve_FEMM(self, output, sym, FEMM_dict):
             )
 
         # Load mesh data & solution
-        if self.is_get_mesh or self.is_save_FEA:
-            meshFEMM[ii], tmpB, tmpH, tmpmu = self.get_meshsolution(save_path, ii)
+        if self.is_sliding_band and (self.is_get_mesh or self.is_save_FEA):
+            tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
+                save_path, ii
+            )
 
-            if (
-                self.is_sliding_band or Nt_tot == 1
-            ):  # To make sure solution have the same size at every time step
-                if ii == 0:
-                    B = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                    H = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                    mu = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell])
+            if ii == 0:
+                meshFEMM = [tmpmeshFEMM]
+                groups = [tmpgroups]
+                B = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                H = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                mu = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell])
 
-                B[ii, :, 0:2] = tmpB
-                H[ii, :, 0:2] = tmpH
-                mu[ii, :] = tmpmu
+            B[ii, :, 0:2] = tmpB
+            H[ii, :, 0:2] = tmpH
+            mu[ii, :] = tmpmu
 
     # Shift to take into account stator position
     roll_id = int(self.angle_stator * Na_tot / (2 * pi))
@@ -167,7 +163,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
 
     if self.is_get_mesh:
         output.mag.meshsolution = self.build_meshsolution(
-            Nt_tot, meshFEMM, Time, B, H, mu
+            Nt_tot, meshFEMM, Time, B, H, mu, groups
         )
 
     if self.is_save_FEA:

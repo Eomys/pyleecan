@@ -22,7 +22,7 @@ def get_mesh_pv(self, path="temp.vtk", indices=None):
     """
 
     points = self.get_point()
-    cells = self.get_cell()
+    cells, nb_cell, indice_dict = self.get_cell()
 
     # for key in cells:
     cells = [("triangle", cells["triangle"])]  # TODO : Generalize to any cell type

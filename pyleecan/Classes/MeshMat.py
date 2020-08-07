@@ -43,11 +43,6 @@ except ImportError as error:
     get_cell_area = error
 
 try:
-    from ..Methods.Mesh.MeshMat.set_submesh import set_submesh
-except ImportError as error:
-    set_submesh = error
-
-try:
     from ..Methods.Mesh.MeshMat.add_cell import add_cell
 except ImportError as error:
     add_cell = error
@@ -67,17 +62,10 @@ try:
 except ImportError as error:
     plot_mesh = error
 
-try:
-    from ..Methods.Mesh.MeshMat.get_group import get_group
-except ImportError as error:
-    get_group = error
 
-
-from numpy import array, empty
 from ._check import InitUnKnowClassError
 from .CellMat import CellMat
 from .PointMat import PointMat
-from .Mesh import Mesh
 
 
 class MeshMat(Mesh):
@@ -142,15 +130,6 @@ class MeshMat(Mesh):
         )
     else:
         get_cell_area = get_cell_area
-    # cf Methods.Mesh.MeshMat.set_submesh
-    if isinstance(set_submesh, ImportError):
-        set_submesh = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method set_submesh: " + str(set_submesh))
-            )
-        )
-    else:
-        set_submesh = set_submesh
     # cf Methods.Mesh.MeshMat.add_cell
     if isinstance(add_cell, ImportError):
         add_cell = property(
@@ -187,15 +166,6 @@ class MeshMat(Mesh):
         )
     else:
         plot_mesh = plot_mesh
-    # cf Methods.Mesh.MeshMat.get_group
-    if isinstance(get_group, ImportError):
-        get_group = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_group: " + str(get_group))
-            )
-        )
-    else:
-        get_group = get_group
     # save method is available in all object
     save = save
 
@@ -209,14 +179,7 @@ class MeshMat(Mesh):
     get_logger = get_logger
 
     def __init__(
-        self,
-        cell=dict(),
-        point=-1,
-        submesh=list(),
-        group=dict(),
-        label=None,
-        init_dict=None,
-        init_str=None,
+        self, cell=dict(), point=-1, label=None, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -240,8 +203,6 @@ class MeshMat(Mesh):
             assert type(obj) is type(self)
             cell = obj.cell
             point = obj.point
-            submesh = obj.submesh
-            group = obj.group
             label = obj.label
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
@@ -250,10 +211,6 @@ class MeshMat(Mesh):
                 cell = init_dict["cell"]
             if "point" in list(init_dict.keys()):
                 point = init_dict["point"]
-            if "submesh" in list(init_dict.keys()):
-                submesh = init_dict["submesh"]
-            if "group" in list(init_dict.keys()):
-                group = init_dict["group"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
         # Initialisation by argument
@@ -278,46 +235,6 @@ class MeshMat(Mesh):
             self.point = load(point)
         else:
             self.point = point
-        # submesh can be None or a list of Mesh object
-        self.submesh = list()
-        if type(submesh) is list:
-            for obj in submesh:
-                if obj is None:  # Default value
-                    self.submesh.append(Mesh())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in ["Mesh", "MeshMat", "MeshVTK"]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for submesh"
-                        )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.submesh.append(class_obj(init_dict=obj))
-                else:
-                    self.submesh.append(obj)
-        elif submesh is None:
-            self.submesh = list()
-        else:
-            self.submesh = submesh
-        # group can be None or a dict of ndarray
-        self.group = dict()
-        if type(group) is dict:
-            for key, obj in group.items():
-                if obj is None:  # Default value
-                    value = empty(0)
-                elif isinstance(obj, list):
-                    value = array(obj)
-                self.group[key] = value
-        elif group is None:
-            self.group = dict()
-        else:
-            self.group = group  # Should raise an error
         # Call Mesh init
         super(MeshMat, self).__init__(label=label)
         # The class is frozen (in Mesh init), for now it's impossible to
@@ -339,17 +256,6 @@ class MeshMat(Mesh):
             MeshMat_str += "point = " + tmp
         else:
             MeshMat_str += "point = None" + linesep + linesep
-        if len(self.submesh) == 0:
-            MeshMat_str += "submesh = []" + linesep
-        for ii in range(len(self.submesh)):
-            tmp = self.submesh[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            MeshMat_str += "submesh[" + str(ii) + "] =" + tmp + linesep + linesep
-        if len(self.group) == 0:
-            MeshMat_str += "group = dict()"
-        for key, obj in self.group.items():
-            MeshMat_str += (
-                "group[" + key + "] = " + str(self.group[key]) + linesep + linesep
-            )
         return MeshMat_str
 
     def __eq__(self, other):
@@ -364,10 +270,6 @@ class MeshMat(Mesh):
         if other.cell != self.cell:
             return False
         if other.point != self.point:
-            return False
-        if other.submesh != self.submesh:
-            return False
-        if other.group != self.group:
             return False
         return True
 
@@ -384,12 +286,6 @@ class MeshMat(Mesh):
             MeshMat_dict["point"] = None
         else:
             MeshMat_dict["point"] = self.point.as_dict()
-        MeshMat_dict["submesh"] = list()
-        for obj in self.submesh:
-            MeshMat_dict["submesh"].append(obj.as_dict())
-        MeshMat_dict["group"] = dict()
-        for key, obj in self.group.items():
-            MeshMat_dict["group"][key] = obj.tolist()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         MeshMat_dict["__class__"] = "MeshMat"
@@ -402,9 +298,6 @@ class MeshMat(Mesh):
             obj._set_None()
         if self.point is not None:
             self.point._set_None()
-        for obj in self.submesh:
-            obj._set_None()
-        self.group = dict()
         # Set to None the properties inherited from Mesh
         super(MeshMat, self)._set_None()
 
@@ -439,53 +332,3 @@ class MeshMat(Mesh):
     # Storing nodes
     # Type : PointMat
     point = property(fget=_get_point, fset=_set_point, doc=u"""Storing nodes""")
-
-    def _get_submesh(self):
-        """getter of submesh"""
-        for obj in self._submesh:
-            if obj is not None:
-                obj.parent = self
-        return self._submesh
-
-    def _set_submesh(self, value):
-        """setter of submesh"""
-        check_var("submesh", value, "[Mesh]")
-        self._submesh = value
-
-        for obj in self._submesh:
-            if obj is not None:
-                obj.parent = self
-
-    # Storing submeshes. Node and element numbers/tags or group must be the same.
-    # Type : [Mesh]
-    submesh = property(
-        fget=_get_submesh,
-        fset=_set_submesh,
-        doc=u"""Storing submeshes. Node and element numbers/tags or group must be the same.""",
-    )
-
-    def _get_group(self):
-        """getter of group"""
-        return self._group
-
-    def _set_group(self, value):
-        """setter of group"""
-        if type(value) is dict:
-            for key, obj in value.items():
-                if obj is None:
-                    obj = array([])
-                elif type(obj) is list:
-                    try:
-                        obj = array(obj)
-                    except:
-                        pass
-        check_var("group", value, "{ndarray}")
-        self._group = value
-
-    # Dict sorted by groups name with cells indices.
-    # Type : {ndarray}
-    group = property(
-        fget=_get_group,
-        fset=_set_group,
-        doc=u"""Dict sorted by groups name with cells indices. """,
-    )

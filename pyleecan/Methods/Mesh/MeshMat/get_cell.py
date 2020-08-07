@@ -23,15 +23,19 @@ def get_cell(self, indices=None):
         indices = (indices,)
 
     cells = dict()
+    indice_dict = dict()
+    nb_cell = 0
     for key in self.cell:
         cells[key] = list()
-        if indices is None:
-            cells[key] = self.cell[key].get_connectivity()
-        else:
-            for ind in indices:
-                connect = self.cell[key].get_connectivity(ind)
-                if connect is not None:
-                    cells[key].append(connect)
+        indice_dict[key] = list()
+
+        for ind in indices:
+            connect = self.cell[key].get_connectivity(ind)
+            if connect is not None:
+                cells[key].append(connect)
+                nb_cell = len(connect)
+                indice_dict[key].append(ind)
+
         cells[key] = np.squeeze(np.array(cells[key]))
 
-    return cells
+    return cells, nb_cell, indice_dict

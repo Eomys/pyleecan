@@ -107,7 +107,7 @@ def get_meshsolution(self, save_path, j_t0):
     ## Create Mesh and Solution dictionaries
 
     # Save MeshMat for only 1 time step with sliding band
-    if (not self.is_sliding_band) or (j_t0 == 0):
+    if j_t0 == 0:
         mesh = MeshMat()
         mesh.label = "FEMM"
         mesh.cell["triangle"] = CellMat(
@@ -119,16 +119,17 @@ def get_meshsolution(self, save_path, j_t0):
         mesh.point = PointMat(
             coordinate=listNd[:, 0:2], nb_pt=NbNd, indice=np.linspace(0, NbNd - 1, NbNd)
         )
-        mesh.group = dict()
-        mesh.group["stator"] = mesh.cell["triangle"].indice[
+        groups = dict()
+        groups["stator"] = mesh.cell["triangle"].indice[
             np.where(listElem0[:, 6] == GROUP_SC)[0]
         ]
-        mesh.group["airgap"] = mesh.cell["triangle"].indice[
+        groups["airgap"] = mesh.cell["triangle"].indice[
             np.where(listElem0[:, 6] == GROUP_AG)[0]
         ]
-        mesh.group["stator_windings"] = mesh.cell["triangle"].indice[
+        groups["stator_windings"] = mesh.cell["triangle"].indice[
             np.where(listElem0[:, 6] == GROUP_SW)[0]
         ]
+
         # If necessary, other groups can be defined here
 
     else:
@@ -138,4 +139,4 @@ def get_meshsolution(self, save_path, j_t0):
     H = results[:, 2:4]
     mu = results[:, 4]
 
-    return mesh, B, H, mu
+    return mesh, B, H, mu, groups

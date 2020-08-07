@@ -4787,12 +4787,10 @@
             "get_normal",
             "get_surf",
             "get_cell_area",
-            "set_submesh",
             "add_cell",
             "interface",
             "get_vertice",
-            "plot_mesh",
-            "get_group"
+            "plot_mesh"
         ],
         "mother": "Mesh",
         "name": "MeshMat",
@@ -4814,24 +4812,6 @@
                 "min": "",
                 "name": "point",
                 "type": "PointMat",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Storing submeshes. Node and element numbers/tags or group must be the same.",
-                "max": "",
-                "min": "",
-                "name": "submesh",
-                "type": "[Mesh]",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Dict sorted by groups name with cells indices. ",
-                "max": "",
-                "min": "",
-                "name": "group",
-                "type": "{ndarray}",
                 "unit": "",
                 "value": ""
             }
@@ -4856,7 +4836,8 @@
             "plot_contour",
             "plot_deflection",
             "plot_deflection_animated",
-            "plot_glyph"
+            "plot_glyph",
+            "get_group"
         ],
         "mother": "",
         "name": "MeshSolution",
@@ -4907,6 +4888,15 @@
                 "type": "int",
                 "unit": "",
                 "value": 3
+            },
+            {
+                "desc": "Dict sorted by groups name with cells indices. ",
+                "max": "",
+                "min": "",
+                "name": "group",
+                "type": "{ndarray}",
+                "unit": "",
+                "value": null
             }
         ]
     },

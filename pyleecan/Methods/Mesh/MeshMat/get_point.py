@@ -24,4 +24,7 @@ def get_point(self, indices=None):
     if indices is None:
         return self.point.coordinate
     else:
-        return self.point.coordinate[indices, :]
+        if indices.size == 0:
+            return indices  # empty ndarray
+        else:
+            return self.point.coordinate[indices, :]
