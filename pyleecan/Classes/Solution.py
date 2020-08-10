@@ -30,22 +30,40 @@ class Solution(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, init_dict=None, init_str=None):
-        """Constructor of the class. Can be use in two ways :
+    def __init__(self, type_cell="triangle", label=None, init_dict=None, init_str=None):
+        """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
             for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary wiht every properties as keys
+        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+        - __init__ (init_str = s) s must be a string
+        s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_dict is not None:  # Initialisation by dict
-            assert init_dict == {"__class__": "Solution"}
         if init_str is not None:  # Initialisation by str
+            from ..Functions.load import load
+
             assert type(init_str) is str
-        # The class is frozen, for now it's impossible to add new properties
+            # load the object from a file
+            obj = load(init_str)
+            assert type(obj) is type(self)
+            type_cell = obj.type_cell
+            label = obj.label
+        if init_dict is not None:  # Initialisation by dict
+            assert type(init_dict) is dict
+            # Overwrite default value with init_dict content
+            if "type_cell" in list(init_dict.keys()):
+                type_cell = init_dict["type_cell"]
+            if "label" in list(init_dict.keys()):
+                label = init_dict["label"]
+        # Initialisation by argument
         self.parent = None
+        self.type_cell = type_cell
+        self.label = label
+
+        # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
@@ -56,12 +74,18 @@ class Solution(FrozenClass):
             Solution_str += "parent = None " + linesep
         else:
             Solution_str += "parent = " + str(type(self.parent)) + " object" + linesep
+        Solution_str += 'type_cell = "' + str(self.type_cell) + '"' + linesep
+        Solution_str += 'label = "' + str(self.label) + '"' + linesep
         return Solution_str
 
     def __eq__(self, other):
         """Compare two objects (skip parent)"""
 
         if type(other) != type(self):
+            return False
+        if other.type_cell != self.type_cell:
+            return False
+        if other.label != self.label:
             return False
         return True
 
@@ -70,9 +94,46 @@ class Solution(FrozenClass):
         """
 
         Solution_dict = dict()
+        Solution_dict["type_cell"] = self.type_cell
+        Solution_dict["label"] = self.label
         # The class name is added to the dict fordeserialisation purpose
         Solution_dict["__class__"] = "Solution"
         return Solution_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
+
+        self.type_cell = None
+        self.label = None
+
+    def _get_type_cell(self):
+        """getter of type_cell"""
+        return self._type_cell
+
+    def _set_type_cell(self, value):
+        """setter of type_cell"""
+        check_var("type_cell", value, "str")
+        self._type_cell = value
+
+    # Type of cell (Point, Segment2, Triangle3, etc.)
+    # Type : str
+    type_cell = property(
+        fget=_get_type_cell,
+        fset=_set_type_cell,
+        doc=u"""Type of cell (Point, Segment2, Triangle3, etc.)""",
+    )
+
+    def _get_label(self):
+        """getter of label"""
+        return self._label
+
+    def _set_label(self, value):
+        """setter of label"""
+        check_var("label", value, "str")
+        self._label = value
+
+    # Label to identify the solution
+    # Type : str
+    label = property(
+        fget=_get_label, fset=_set_label, doc=u"""Label to identify the solution"""
+    )

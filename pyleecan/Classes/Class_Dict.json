@@ -4779,6 +4779,8 @@
             "get_point",
             "get_cell",
             "get_mesh_pv",
+            "get_normal",
+            "get_surf",
             "get_cell_area",
             "add_cell",
             "interface",
@@ -4823,6 +4825,7 @@
         "methods": [
             "get_mesh",
             "get_solution",
+            "save_to_file",
             "get_field",
             "plot_mesh",
             "plot_contour",
@@ -4852,7 +4855,7 @@
                 "name": "mesh",
                 "type": "[Mesh]",
                 "unit": "",
-                "value": []
+                "value": null
             },
             {
                 "desc": "1 if the mesh is the same at each step (time, mode etc.)",
@@ -4870,7 +4873,7 @@
                 "name": "solution",
                 "type": "[Solution]",
                 "unit": "",
-                "value": []
+                "value": null
             },
             {
                 "desc": "Dimension of the physical problem",
@@ -8734,35 +8737,7 @@
         "name": "Solution",
         "package": "Mesh",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Solution.csv",
-        "properties": []
-    },
-    "SolutionData": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Define a Solution with SciDataTool objects.",
-        "is_internal": false,
-        "methods": [
-            "get_field"
-        ],
-        "mother": "Solution",
-        "name": "SolutionData",
-        "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/SolutionData.csv",
         "properties": [
-            {
-                "desc": "Data object containing the numerical values of a solution. One of the axis must be \"Indices\", a list of indices. If the solution is a vector, one of the axis must be \"Direction\", values ['x','y'] for example.",
-                "max": "",
-                "min": "",
-                "name": "field",
-                "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "-",
-                "value": "None"
-            },
             {
                 "desc": "Type of cell (Point, Segment2, Triangle3, etc.)",
                 "max": "",
@@ -8783,6 +8758,37 @@
             }
         ]
     },
+    "SolutionData": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Define a Solution with SciDataTool objects.",
+        "is_internal": false,
+        "methods": [
+            "get_field",
+            "get_axis",
+            "set_field"
+        ],
+        "mother": "Solution",
+        "name": "SolutionData",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/SolutionData.csv",
+        "properties": [
+            {
+                "desc": "Data object containing the numerical values of a solution. One of the axis must be \"Indices\", a list of indices. If the solution is a vector, one of the axis must be \"Direction\", values ['x','y'] for example.",
+                "max": "",
+                "min": "",
+                "name": "field",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "-",
+                "value": "None"
+            }
+        ]
+    },
     "SolutionMat": {
         "constants": [
             {
@@ -8796,7 +8802,8 @@
         "desc": "Define a Solution with ndarray object.",
         "is_internal": false,
         "methods": [
-            "get_field"
+            "get_field",
+            "get_axis"
         ],
         "mother": "Solution",
         "name": "SolutionMat",
@@ -8813,29 +8820,20 @@
                 "value": null
             },
             {
-                "desc": "Type of cell (Point, Segment2, Triangle3, etc.)",
-                "max": "",
-                "min": "",
-                "name": "type_cell",
-                "type": "str",
-                "unit": "-",
-                "value": "triangle"
-            },
-            {
-                "desc": "Label to identify the solution",
-                "max": "",
-                "min": "",
-                "name": "label",
-                "type": "str",
-                "unit": "-",
-                "value": "None"
-            },
-            {
                 "desc": "Indices of loaded cells. Set to None if all cells are loaded",
                 "max": "",
                 "min": "",
                 "name": "indice",
                 "type": "ndarray",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Dict of axis names storing axis sizes (e.g. time, direction )",
+                "max": "",
+                "min": "",
+                "name": "axis",
+                "type": "dict",
                 "unit": "-",
                 "value": null
             }

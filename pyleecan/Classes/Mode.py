@@ -103,9 +103,10 @@ class Mode(SolutionMat):
         order_circ=None,
         order_long=None,
         field=None,
+        indice=None,
+        axis=None,
         type_cell="triangle",
         label=None,
-        indice=None,
         init_dict=None,
         init_str=None,
     ):
@@ -131,9 +132,10 @@ class Mode(SolutionMat):
             order_circ = obj.order_circ
             order_long = obj.order_long
             field = obj.field
+            indice = obj.indice
+            axis = obj.axis
             type_cell = obj.type_cell
             label = obj.label
-            indice = obj.indice
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -145,19 +147,21 @@ class Mode(SolutionMat):
                 order_long = init_dict["order_long"]
             if "field" in list(init_dict.keys()):
                 field = init_dict["field"]
+            if "indice" in list(init_dict.keys()):
+                indice = init_dict["indice"]
+            if "axis" in list(init_dict.keys()):
+                axis = init_dict["axis"]
             if "type_cell" in list(init_dict.keys()):
                 type_cell = init_dict["type_cell"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
-            if "indice" in list(init_dict.keys()):
-                indice = init_dict["indice"]
         # Initialisation by argument
         self.nat_freq = nat_freq
         self.order_circ = order_circ
         self.order_long = order_long
         # Call SolutionMat init
         super(Mode, self).__init__(
-            field=field, type_cell=type_cell, label=label, indice=indice
+            field=field, indice=indice, axis=axis, type_cell=type_cell, label=label
         )
         # The class is frozen (in SolutionMat init), for now it's impossible to
         # add new properties
