@@ -73,26 +73,16 @@ def test_CEFC_002():
     out.mag.meshsolution.plot_contour(label="\mu")
     out.mag.meshsolution.plot_contour(label="B")
     out.mag.meshsolution.plot_contour(label="H")
+    out.mag.meshsolution.plot_contour(label="H", group_names="stator")
+    out.mag.meshsolution.plot_contour(label="\mu", group_names=["stator", "airgap"])
 
     # Test save with MeshSolution object in out
     out.save(save_path=save_path)
     # Test save with MeshSolution object in out
     out.save(save_path=save_path + "\Output.json")
 
-    load_path = join(save_path, "Output.json")
-    # Test to load the Meshsolution object (inside the output):
-    with open(load_path) as json_file:
-        json_tmp = json.load(json_file)
-        FEMM = Output(init_dict=json_tmp)
 
-    # [Important] To test that fields are still working after saving and loading
-    FEMM.mag.meshsolution.plot_mesh()
-    FEMM.mag.meshsolution.plot_contour(label="\mu")
-    FEMM.mag.meshsolution.plot_contour(label="B")
-    FEMM.mag.meshsolution.plot_contour(label="H")
-
-
-def test_CEFC_002_bis():
+def test_CEFC_002_load():
 
     load_path = join(save_path, "Output.json")
     # Test to load the Meshsolution object (inside the output):
@@ -102,8 +92,6 @@ def test_CEFC_002_bis():
 
     # [Important] To test that fields are still working after saving and loading
     FEMM.mag.meshsolution.plot_mesh()
-    FEMM.mag.meshsolution.plot_contour(label="\mu")
     FEMM.mag.meshsolution.plot_contour(label="B")
-    FEMM.mag.meshsolution.plot_contour(label="H")
-
     FEMM.mag.meshsolution.plot_contour(label="H", group_names="stator")
+    FEMM.mag.meshsolution.plot_contour(label="\mu", group_names=["stator", "airgap"])

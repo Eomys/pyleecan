@@ -6,11 +6,13 @@ import copy
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.PointMat import PointMat
+from pyleecan.Classes.SolutionMat import SolutionMat
 from pyleecan.definitions import PACKAGE_NAME
 
 
 def get_group(self, group_names):
-    """Return all cells of the group.
+    """Return all attributes of a MeshSolution object with only the cells, points and corresponding solutions of
+    the group.
 
      Parameters
      ----------
@@ -75,4 +77,42 @@ def get_group(self, group_names):
 
     mesh.label = label
 
-    return label, mesh, is_same_mesh, solution, dimension
+    sol_list = list()
+
+    for sol in self.solution:
+
+        label_sol = sol.label
+        type_cell_sol = sol.type_cell
+        field_sol = sol.get_field()
+        axis_dct = sol.get_axis()
+
+        if type_cell_sol == "point":
+            new_field_sol = field_sol[:, node_indice, :]
+            new_sol = SolutionMat(
+                label=label_sol,
+                type_cell=type_cell_sol,
+                field=new_field_sol,
+                indice=node_indice,
+            )
+        else:
+            if "direction" in axis_dct:
+                new_field_sol = field_sol[:, indice_dict[type_cell_sol], :]
+            else:
+                new_field_sol = field_sol[:, indice_dict[type_cell_sol]]
+            new_sol = SolutionMat(
+                label=label_sol,
+                type_cell=type_cell_sol,
+                field=new_field_sol,
+                indice=indice_dict[type_cell_sol],
+            )
+
+        sol_list.append(new_sol)
+
+    meshsol_grp = self.copy()
+    meshsol_grp.label = label
+    meshsol_grp.mesh = [mesh]
+    meshsol_grp.is_same_mesh = is_same_mesh
+    meshsol_grp.solution = sol_list
+    meshsol_grp.dimension = dimension
+
+    return meshsol_grp
