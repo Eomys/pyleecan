@@ -18,7 +18,7 @@ def plot_contour(
     is_center=False,
     clim=None,
     field_name=None,
-	group_names=None,
+    group_names=None,
     is_2d=False,
     save_path=None,
 ):
@@ -55,34 +55,33 @@ def plot_contour(
         meshsol_grp.plot_contour(
             label, index, indices, is_surf, is_radial, is_center, clim, field_name, None
         )
+    else:
+        if save_path is None:
+            try:
+                import pyvistaqt as pv
 
+                is_pyvistaqt = True
+            except:
+                import pyvista as pv
 
-    if save_path is None:
-        try:
-            import pyvistaqt as pv
-
-            is_pyvistaqt = True
-        except:
+                is_pyvistaqt = False
+        else:
             import pyvista as pv
 
             is_pyvistaqt = False
-    else:
-        import pyvista as pv
 
-        is_pyvistaqt = False
-
-    # Get the mesh
-    mesh = self.get_mesh(label=label, index=index)
-    if isinstance(mesh, MeshMat):
-        mesh_pv = mesh.get_mesh_pv(indices=indices)
-    else:
         # Get the mesh
         mesh = self.get_mesh(label=label, index=index)
-
         if isinstance(mesh, MeshMat):
             mesh_pv = mesh.get_mesh_pv(indices=indices)
         else:
-            mesh_pv = mesh.get_mesh(indices=indices)
+            # Get the mesh
+            mesh = self.get_mesh(label=label, index=index)
+
+            if isinstance(mesh, MeshMat):
+                mesh_pv = mesh.get_mesh_pv(indices=indices)
+            else:
+                mesh_pv = mesh.get_mesh(indices=indices)
 
         # Get the field
         field = self.get_field(
@@ -101,40 +100,40 @@ def plot_contour(
             else:
                 field_name = "Field"
 
-    # Add field to mesh
-    if is_surf:
-        surf = mesh_pv.get_surf(indices=indices)
-        surf[field_name] = real(field)
-        mesh_field = surf
-    else:
-        mesh_pv[field_name] = real(field)
-        mesh_field = mesh_pv
+        # Add field to mesh
+        if is_surf:
+            surf = mesh_pv.get_surf(indices=indices)
+            surf[field_name] = real(field)
+            mesh_field = surf
+        else:
+            mesh_pv[field_name] = real(field)
+            mesh_field = mesh_pv
 
-    # Configure plot
-    if is_pyvistaqt:
-        p = pv.BackgroundPlotter()
-        p.set_background("white")
-    else:
-        pv.set_plot_theme("document")
-        p = pv.Plotter(notebook=False)
-    sargs = dict(
-        interactive=True,
-        title_font_size=20,
-        label_font_size=16,
-        font_family="arial",
-        color="black",
-    )
-    p.add_mesh(
-        mesh_field,
-        scalars=field_name,
-        show_edges=False,
-        cmap=COLOR_MAP,
-        clim=clim,
-        scalar_bar_args=sargs,
-    )
-    if is_2d:
-        p.view_xy()
-    if save_path is None:
-        p.show()
-    else:
-        p.show(interactive=False, screenshot=save_path)
+        # Configure plot
+        if is_pyvistaqt:
+            p = pv.BackgroundPlotter()
+            p.set_background("white")
+        else:
+            pv.set_plot_theme("document")
+            p = pv.Plotter(notebook=False)
+        sargs = dict(
+            interactive=True,
+            title_font_size=20,
+            label_font_size=16,
+            font_family="arial",
+            color="black",
+        )
+        p.add_mesh(
+            mesh_field,
+            scalars=field_name,
+            show_edges=False,
+            cmap=COLOR_MAP,
+            clim=clim,
+            scalar_bar_args=sargs,
+        )
+        if is_2d:
+            p.view_xy()
+        if save_path is None:
+            p.show()
+        else:
+            p.show(interactive=False, screenshot=save_path)
