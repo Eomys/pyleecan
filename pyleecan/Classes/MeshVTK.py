@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/MeshVTK.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/MeshVTK.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/MeshVTK
 """
 
 from os import linesep
@@ -352,10 +353,13 @@ class MeshVTK(Mesh):
         else:
             self._mesh = value
 
-    # Pyvista object of the mesh (optional)
-    # Type : pyvista.core.pointset.UnstructuredGrid
     mesh = property(
-        fget=_get_mesh, fset=_set_mesh, doc=u"""Pyvista object of the mesh (optional)"""
+        fget=_get_mesh,
+        fset=_set_mesh,
+        doc=u"""Pyvista object of the mesh (optional)
+
+        :Type: pyvista.core.pointset.UnstructuredGrid
+        """,
     )
 
     def _get_is_pyvista_mesh(self):
@@ -367,12 +371,13 @@ class MeshVTK(Mesh):
         check_var("is_pyvista_mesh", value, "bool")
         self._is_pyvista_mesh = value
 
-    # Store the pyvista object
-    # Type : bool
     is_pyvista_mesh = property(
         fget=_get_is_pyvista_mesh,
         fset=_set_is_pyvista_mesh,
-        doc=u"""Store the pyvista object""",
+        doc=u"""Store the pyvista object
+
+        :Type: bool
+        """,
     )
 
     def _get_format(self):
@@ -384,12 +389,13 @@ class MeshVTK(Mesh):
         check_var("format", value, "str")
         self._format = value
 
-    # Format in which the mesh is stored
-    # Type : str
     format = property(
         fget=_get_format,
         fset=_set_format,
-        doc=u"""Format in which the mesh is stored""",
+        doc=u"""Format in which the mesh is stored
+
+        :Type: str
+        """,
     )
 
     def _get_path(self):
@@ -401,10 +407,13 @@ class MeshVTK(Mesh):
         check_var("path", value, "str")
         self._path = value
 
-    # Path where the mesh is stored
-    # Type : str
     path = property(
-        fget=_get_path, fset=_set_path, doc=u"""Path where the mesh is stored"""
+        fget=_get_path,
+        fset=_set_path,
+        doc=u"""Path where the mesh is stored
+
+        :Type: str
+        """,
     )
 
     def _get_name(self):
@@ -416,9 +425,14 @@ class MeshVTK(Mesh):
         check_var("name", value, "str")
         self._name = value
 
-    # Name of the mesh file
-    # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""Name of the mesh file""")
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Name of the mesh file
+
+        :Type: str
+        """,
+    )
 
     def _get_group(self):
         """getter of group"""
@@ -436,10 +450,13 @@ class MeshVTK(Mesh):
         check_var("group", value, "ndarray")
         self._group = value
 
-    # Contain all possible group numbers
-    # Type : ndarray
     group = property(
-        fget=_get_group, fset=_set_group, doc=u"""Contain all possible group numbers"""
+        fget=_get_group,
+        fset=_set_group,
+        doc=u"""Contain all possible group numbers
+
+        :Type: ndarray
+        """,
     )
 
     def _get_surf(self):
@@ -460,10 +477,13 @@ class MeshVTK(Mesh):
         else:
             self._surf = value
 
-    # Pyvista object of the outer surface
-    # Type : pyvista.core.pointset.PolyData
     surf = property(
-        fget=_get_surf, fset=_set_surf, doc=u"""Pyvista object of the outer surface"""
+        fget=_get_surf,
+        fset=_set_surf,
+        doc=u"""Pyvista object of the outer surface
+
+        :Type: pyvista.core.pointset.PolyData
+        """,
     )
 
     def _get_is_vtk_surf(self):
@@ -475,12 +495,13 @@ class MeshVTK(Mesh):
         check_var("is_vtk_surf", value, "bool")
         self._is_vtk_surf = value
 
-    # Save the surface mesh in a vtk file
-    # Type : bool
     is_vtk_surf = property(
         fget=_get_is_vtk_surf,
         fset=_set_is_vtk_surf,
-        doc=u"""Save the surface mesh in a vtk file""",
+        doc=u"""Save the surface mesh in a vtk file
+
+        :Type: bool
+        """,
     )
 
     def _get_surf_path(self):
@@ -492,12 +513,13 @@ class MeshVTK(Mesh):
         check_var("surf_path", value, "str")
         self._surf_path = value
 
-    # Path where the outer surface is stored
-    # Type : str
     surf_path = property(
         fget=_get_surf_path,
         fset=_set_surf_path,
-        doc=u"""Path where the outer surface is stored""",
+        doc=u"""Path where the outer surface is stored
+
+        :Type: str
+        """,
     )
 
     def _get_surf_name(self):
@@ -509,10 +531,11 @@ class MeshVTK(Mesh):
         check_var("surf_name", value, "str")
         self._surf_name = value
 
-    # Name of the outer surface file
-    # Type : str
     surf_name = property(
         fget=_get_surf_name,
         fset=_set_surf_name,
-        doc=u"""Name of the outer surface file""",
+        doc=u"""Name of the outer surface file
+
+        :Type: str
+        """,
     )

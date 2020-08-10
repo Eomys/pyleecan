@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Mode.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Mode.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Mode
 """
 
 from os import linesep
@@ -226,10 +227,13 @@ class Mode(SolutionMat):
         check_var("nat_freq", value, "float")
         self._nat_freq = value
 
-    # Natural frequency of the mode
-    # Type : float
     nat_freq = property(
-        fget=_get_nat_freq, fset=_set_nat_freq, doc=u"""Natural frequency of the mode"""
+        fget=_get_nat_freq,
+        fset=_set_nat_freq,
+        doc=u"""Natural frequency of the mode
+
+        :Type: float
+        """,
     )
 
     def _get_order_circ(self):
@@ -241,10 +245,14 @@ class Mode(SolutionMat):
         check_var("order_circ", value, "int", Vmin=0)
         self._order_circ = value
 
-    # Circumferential order
-    # Type : int, min = 0
     order_circ = property(
-        fget=_get_order_circ, fset=_set_order_circ, doc=u"""Circumferential order"""
+        fget=_get_order_circ,
+        fset=_set_order_circ,
+        doc=u"""Circumferential order
+
+        :Type: int
+        :min: 0
+        """,
     )
 
     def _get_order_long(self):
@@ -256,8 +264,12 @@ class Mode(SolutionMat):
         check_var("order_long", value, "int", Vmin=0)
         self._order_long = value
 
-    # Longitudinal order
-    # Type : int, min = 0
     order_long = property(
-        fget=_get_order_long, fset=_set_order_long, doc=u"""Longitudinal order"""
+        fget=_get_order_long,
+        fset=_set_order_long,
+        doc=u"""Longitudinal order
+
+        :Type: int
+        :min: 0
+        """,
     )

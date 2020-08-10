@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/SolutionMat.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/SolutionMat.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/SolutionMat
 """
 
 from os import linesep
@@ -21,6 +22,11 @@ try:
     from ..Methods.Mesh.SolutionMat.get_axis import get_axis
 except ImportError as error:
     get_axis = error
+
+try:
+    from ..Methods.Mesh.SolutionMat.set_field import set_field
+except ImportError as error:
+    set_field = error
 
 
 from numpy import array, array_equal
@@ -51,6 +57,15 @@ class SolutionMat(Solution):
         )
     else:
         get_axis = get_axis
+    # cf Methods.Mesh.SolutionMat.set_field
+    if isinstance(set_field, ImportError):
+        set_field = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SolutionMat method set_field: " + str(set_field))
+            )
+        )
+    else:
+        set_field = set_field
     # save method is available in all object
     save = save
 
@@ -205,12 +220,13 @@ class SolutionMat(Solution):
         check_var("field", value, "ndarray")
         self._field = value
 
-    # Matrix/Vector of the numerical values of the solutions.
-    # Type : ndarray
     field = property(
         fget=_get_field,
         fset=_set_field,
-        doc=u"""Matrix/Vector of the numerical values of the solutions.""",
+        doc=u"""Matrix/Vector of the numerical values of the solutions.
+
+        :Type: ndarray
+        """,
     )
 
     def _get_indice(self):
@@ -229,12 +245,13 @@ class SolutionMat(Solution):
         check_var("indice", value, "ndarray")
         self._indice = value
 
-    # Indices of loaded cells. Set to None if all cells are loaded
-    # Type : ndarray
     indice = property(
         fget=_get_indice,
         fset=_set_indice,
-        doc=u"""Indices of loaded cells. Set to None if all cells are loaded""",
+        doc=u"""Indices of loaded cells. Set to None if all cells are loaded
+
+        :Type: ndarray
+        """,
     )
 
     def _get_axis(self):
@@ -246,10 +263,11 @@ class SolutionMat(Solution):
         check_var("axis", value, "dict")
         self._axis = value
 
-    # Dict of axis names storing axis sizes (e.g. time, direction )
-    # Type : dict
     axis = property(
         fget=_get_axis,
         fset=_set_axis,
-        doc=u"""Dict of axis names storing axis sizes (e.g. time, direction )""",
+        doc=u"""Dict of axis names storing axis sizes (e.g. time, direction )
+
+        :Type: dict
+        """,
     )

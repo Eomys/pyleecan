@@ -6,6 +6,7 @@ from ..Functions.load_switch import load_switch
 from ..Classes.Material import Material
 from .Load.load_json import load_json
 from .Load.load_hdf5 import load_hdf5
+from .Load.load_pkl import load_pkl
 
 
 def init_data(obj, file_path):
@@ -83,6 +84,8 @@ def load(file_path):
 
     if file_path.endswith("hdf5") or file_path.endswith("h5"):
         file_path, init_dict = load_hdf5(file_path)
+    elif file_path.endswith(".pkl"):
+        return load_pkl(file_path)
     else:
         file_path, init_dict = load_json(file_path)
 

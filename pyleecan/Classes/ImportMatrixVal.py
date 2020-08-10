@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Import/ImportMatrixVal.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Import/ImportMatrixVal.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Import/ImportMatrixVal
 """
 
 from os import linesep
@@ -152,6 +153,11 @@ class ImportMatrixVal(ImportMatrix):
         check_var("value", value, "ndarray")
         self._value = value
 
-    # The matrix to return
-    # Type : ndarray
-    value = property(fget=_get_value, fset=_set_value, doc=u"""The matrix to return""")
+    value = property(
+        fget=_get_value,
+        fset=_set_value,
+        doc=u"""The matrix to return
+
+        :Type: ndarray
+        """,
+    )

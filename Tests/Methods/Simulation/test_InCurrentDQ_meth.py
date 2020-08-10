@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from unittest import TestCase
-
+from os.path import join
 from ddt import data, ddt
 from numpy import linspace, ones, pi, zeros, array, sqrt, transpose
 from numpy.testing import assert_array_almost_equal
@@ -18,7 +18,10 @@ from pyleecan.Classes.Simulation import Simulation
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Methods.Simulation.Input import InputError
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
 
+IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 InputCurrentDQ_Error_test = list()
 time_wrong = ImportMatrixVal(value=zeros((10, 2)))
 time = ImportGenVectLin(0, 10, 100)
@@ -38,19 +41,6 @@ angle_rotor = ImportMatrixVal(value=zeros((100)))
 Nr_wrong = ImportMatrixVal(value=zeros((10, 2)))
 Nr_wrong2 = ImportMatrixVal(value=zeros((102)))
 Nr = ImportMatrixVal(value=zeros((100)))
-
-# Winding stator only
-M1 = MachineIPMSM()
-M1.stator = LamSlotWind()
-M1.stator.winding = WindingDW1L()
-M1.stator.winding.qs = 3
-
-# Machine without 'comp_initial_angle' method
-M2 = MachineDFIM()
-M2.stator = LamSlotWind()
-M2.stator.winding.qs = 3
-M2.rotor.winding = None
-
 
 # Wrong time
 test_obj = Simulation()
@@ -81,12 +71,12 @@ InputCurrentDQ_Error_test.append(
     }
 )
 # Wrong Is
-test_obj = Simulation(machine=M1)
+test_obj = Simulation(machine=IPMSM_A)
 test_obj.input = InputCurrentDQ(time=time, angle=angle, Is=None)
 InputCurrentDQ_Error_test.append(
     {"test_obj": test_obj, "exp": "ERROR: InputCurrentDQ.Is missing"}
 )
-test_obj = Simulation(machine=M1)
+test_obj = Simulation(machine=IPMSM_A)
 test_obj.input = InputCurrentDQ(time=time, angle=angle, Is=I_3)
 InputCurrentDQ_Error_test.append(
     {
@@ -94,7 +84,7 @@ InputCurrentDQ_Error_test.append(
         "exp": "ERROR: InputCurrentDQ.Is must be a matrix with the shape (100, 2) (len(time), stator phase number), (2, 100) returned",
     }
 )
-test_obj = Simulation(machine=M1)
+test_obj = Simulation(machine=IPMSM_A)
 test_obj.input = InputCurrentDQ(time=time, angle=angle, Is=I_4)
 InputCurrentDQ_Error_test.append(
     {
@@ -102,15 +92,9 @@ InputCurrentDQ_Error_test.append(
         "exp": "ERROR: InputCurrentDQ.Is must be a matrix with the shape (100, 2) (len(time), stator phase number), (100,) returned",
     }
 )
-# 'comp_initial_angle' method not implemented
-test_obj = Simulation(machine=M2)
-test_obj.input = InputCurrentDQ(time=time, angle=angle, Is=I_1)
-InputCurrentDQ_Error_test.append(
-    {"test_obj": test_obj, "exp": "ERROR: 'comp_initial_angle' method not implemented"}
-)
 
 # Wrong Nr, alpha_rotor
-test_obj = Simulation(machine=M1)
+test_obj = Simulation(machine=IPMSM_A)
 test_obj.input = InputCurrentDQ(
     time=time, angle=angle, Is=I_1, Ir=None, angle_rotor=None, Nr=None
 )
@@ -120,7 +104,7 @@ InputCurrentDQ_Error_test.append(
         "exp": "ERROR: InputCurrentDQ.angle_rotor and InputCurrentDQ.Nr can't be None at the same time",
     }
 )
-test_obj = Simulation(machine=M1)
+test_obj = Simulation(machine=IPMSM_A)
 test_obj.input = InputCurrentDQ(
     time=time, angle=angle, Is=I_1, Ir=None, angle_rotor=angle_rotor_wrong, Nr=None
 )
@@ -130,7 +114,7 @@ InputCurrentDQ_Error_test.append(
         "exp": "ERROR: InputCurrentDQ.angle_rotor should be a vector of the same length as time, (10, 2) shape found, (100,) expected",
     }
 )
-test_obj = Simulation(machine=M1)
+test_obj = Simulation(machine=IPMSM_A)
 test_obj.input = InputCurrentDQ(
     time=time, angle=angle, Is=I_1, Ir=None, angle_rotor=angle_rotor_wrong2, Nr=None
 )
@@ -140,7 +124,7 @@ InputCurrentDQ_Error_test.append(
         "exp": "ERROR: InputCurrentDQ.angle_rotor should be a vector of the same length as time, (102,) shape found, (100,) expected",
     }
 )
-test_obj = Simulation(machine=M1)
+test_obj = Simulation(machine=IPMSM_A)
 test_obj.input = InputCurrentDQ(
     time=time, angle=angle, Is=I_1, Ir=None, angle_rotor=angle_rotor, Nr=Nr_wrong
 )
@@ -150,7 +134,7 @@ InputCurrentDQ_Error_test.append(
         "exp": "ERROR: InputCurrentDQ.Nr should be a vector of the same length as time, (10, 2) shape found, (100,) expected",
     }
 )
-test_obj = Simulation(machine=M1)
+test_obj = Simulation(machine=IPMSM_A)
 test_obj.input = InputCurrentDQ(
     time=time, angle=angle, Is=I_1, Ir=None, angle_rotor=angle_rotor, Nr=Nr_wrong2
 )
@@ -180,7 +164,7 @@ class unittest_InputCurrentDQ_meth(TestCase):
     def test_InputCurrentDQ_Ok(self):
         """Check that the input current can return a correct output
         """
-        test_obj = Simulation(machine=M1)
+        test_obj = Simulation(machine=IPMSM_A)
         output = Output(simu=test_obj)
         time = ImportGenVectLin(0, 1, 7)
         angle = ImportGenVectLin(0, 2 * pi, 20)
@@ -192,14 +176,14 @@ class unittest_InputCurrentDQ_meth(TestCase):
             array(
                 [
                     [2, 1, -1, -2, -1, 1, 2],
-                    [-1, 1, 2, 1, -1, -2, -1],
                     [-1, -2, -1, 1, 2, 1, -1],
+                    [-1, 1, 2, 1, -1, -2, -1],
                 ]
             )
         )
 
-        zp = M1.stator.get_pole_pair_number()
-        angle_rotor_initial = M1.comp_initial_angle()
+        zp = IPMSM_A.stator.get_pole_pair_number()
+        angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
         angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
 
         Nr = ImportMatrixVal(value=ones(7) * 60 / zp)

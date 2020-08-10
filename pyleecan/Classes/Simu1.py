@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Simu1.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Simu1.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Simu1
 """
 
 from os import linesep
@@ -13,9 +14,9 @@ from .Simulation import Simulation
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.Simu1.run import run
+    from ..Methods.Simulation.Simu1.run_single import run_single
 except ImportError as error:
-    run = error
+    run_single = error
 
 
 from ._check import InitUnKnowClassError
@@ -25,6 +26,7 @@ from .Structural import Structural
 from .Force import Force
 from .Machine import Machine
 from .Input import Input
+from .VarSimu import VarSimu
 
 
 class Simu1(Simulation):
@@ -32,15 +34,15 @@ class Simu1(Simulation):
 
     VERSION = 1
 
-    # cf Methods.Simulation.Simu1.run
-    if isinstance(run, ImportError):
-        run = property(
+    # cf Methods.Simulation.Simu1.run_single
+    if isinstance(run_single, ImportError):
+        run_single = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Simu1 method run: " + str(run))
+                ImportError("Can't use Simu1 method run_single: " + str(run_single))
             )
         )
     else:
-        run = run
+        run_single = run_single
     # save method is available in all object
     save = save
 
@@ -55,15 +57,16 @@ class Simu1(Simulation):
 
     def __init__(
         self,
-        elec=-1,
-        mag=-1,
-        struct=-1,
-        force=-1,
+        elec=None,
+        mag=None,
+        struct=None,
+        force=None,
         name="",
         desc="",
         machine=-1,
         input=-1,
         logger_name="Pyleecan.Simulation",
+        var_simu=None,
         init_dict=None,
         init_str=None,
     ):
@@ -90,6 +93,8 @@ class Simu1(Simulation):
             machine = Machine()
         if input == -1:
             input = Input()
+        if var_simu == -1:
+            var_simu = VarSimu()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -106,6 +111,7 @@ class Simu1(Simulation):
             machine = obj.machine
             input = obj.input
             logger_name = obj.logger_name
+            var_simu = obj.var_simu
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -127,6 +133,8 @@ class Simu1(Simulation):
                 input = init_dict["input"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "var_simu" in list(init_dict.keys()):
+                var_simu = init_dict["var_simu"]
         # Initialisation by argument
         # elec can be None, a Electrical object or a dict
         if isinstance(elec, dict):
@@ -198,7 +206,12 @@ class Simu1(Simulation):
             self.force = force
         # Call Simulation init
         super(Simu1, self).__init__(
-            name=name, desc=desc, machine=machine, input=input, logger_name=logger_name
+            name=name,
+            desc=desc,
+            machine=machine,
+            input=input,
+            logger_name=logger_name,
+            var_simu=var_simu,
         )
         # The class is frozen (in Simulation init), for now it's impossible to
         # add new properties
@@ -303,9 +316,14 @@ class Simu1(Simulation):
         if self._elec is not None:
             self._elec.parent = self
 
-    # Electrical module
-    # Type : Electrical
-    elec = property(fget=_get_elec, fset=_set_elec, doc=u"""Electrical module""")
+    elec = property(
+        fget=_get_elec,
+        fset=_set_elec,
+        doc=u"""Electrical module
+
+        :Type: Electrical
+        """,
+    )
 
     def _get_mag(self):
         """getter of mag"""
@@ -319,9 +337,14 @@ class Simu1(Simulation):
         if self._mag is not None:
             self._mag.parent = self
 
-    # Magnetic module
-    # Type : Magnetics
-    mag = property(fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module""")
+    mag = property(
+        fget=_get_mag,
+        fset=_set_mag,
+        doc=u"""Magnetic module
+
+        :Type: Magnetics
+        """,
+    )
 
     def _get_struct(self):
         """getter of struct"""
@@ -335,9 +358,14 @@ class Simu1(Simulation):
         if self._struct is not None:
             self._struct.parent = self
 
-    # Structural module
-    # Type : Structural
-    struct = property(fget=_get_struct, fset=_set_struct, doc=u"""Structural module""")
+    struct = property(
+        fget=_get_struct,
+        fset=_set_struct,
+        doc=u"""Structural module
+
+        :Type: Structural
+        """,
+    )
 
     def _get_force(self):
         """getter of force"""
@@ -351,6 +379,11 @@ class Simu1(Simulation):
         if self._force is not None:
             self._force.parent = self
 
-    # Force moduale
-    # Type : Force
-    force = property(fget=_get_force, fset=_set_force, doc=u"""Force moduale""")
+    force = property(
+        fget=_get_force,
+        fset=_set_force,
+        doc=u"""Force moduale
+
+        :Type: Force
+        """,
+    )

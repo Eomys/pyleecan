@@ -52,15 +52,22 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Warning
     class_file.write(
-        '"""File generated according to '
+        "# File generated according to "
         + class_dict["path"][class_dict["path"].find("Generator") :]
         + "\n"
     )
     if class_dict["is_internal"]:
         class_file.write(
-            "WARNING! Internal version of the class: DO NOT SHARE ON GITHUB !\n"
+            "# WARNING! Internal version of the class: DO NOT SHARE ON GITHUB !\n"
         )
-    class_file.write('WARNING! All changes made in this file will be lost!\n"""\n\n')
+    class_file.write("# WARNING! All changes made in this file will be lost!\n")
+    class_file.write(
+        '"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/'
+        + class_dict["package"]
+        + "/"
+        + class_dict["name"]
+        + '\n"""\n\n'
+    )
 
     # Import
     class_file.write("from os import linesep\n")

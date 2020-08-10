@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/Solution.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/Solution.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/Solution
 """
 
 from os import linesep
@@ -115,12 +116,13 @@ class Solution(FrozenClass):
         check_var("type_cell", value, "str")
         self._type_cell = value
 
-    # Type of cell (Point, Segment2, Triangle3, etc.)
-    # Type : str
     type_cell = property(
         fget=_get_type_cell,
         fset=_set_type_cell,
-        doc=u"""Type of cell (Point, Segment2, Triangle3, etc.)""",
+        doc=u"""Type of cell (Point, Segment2, Triangle3, etc.)
+
+        :Type: str
+        """,
     )
 
     def _get_label(self):
@@ -132,8 +134,11 @@ class Solution(FrozenClass):
         check_var("label", value, "str")
         self._label = value
 
-    # Label to identify the solution
-    # Type : str
     label = property(
-        fget=_get_label, fset=_set_label, doc=u"""Label to identify the solution"""
+        fget=_get_label,
+        fset=_set_label,
+        doc=u"""Label to identify the solution
+
+        :Type: str
+        """,
     )

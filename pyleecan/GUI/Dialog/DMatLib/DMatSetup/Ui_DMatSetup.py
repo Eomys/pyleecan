@@ -3,14 +3,13 @@
 # File generated according to DMatSetup.ui
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_DMatSetup(object):
     def setupUi(self, DMatSetup):
         DMatSetup.setObjectName("DMatSetup")
-        DMatSetup.resize(392, 451)
+        DMatSetup.resize(642, 451)
         self.verticalLayout = QtWidgets.QVBoxLayout(DMatSetup)
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -70,34 +69,10 @@ class Ui_DMatSetup(object):
         self.nav_phy.addTab(self.tab_elec, "")
         self.tab_mag = QtWidgets.QWidget()
         self.tab_mag.setObjectName("tab_mag")
-        self.gridLayout = QtWidgets.QGridLayout(self.tab_mag)
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.tab_mag)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
-        self.unit_Brm20 = QtWidgets.QLabel(self.tab_mag)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(False)
-        font.setWeight(50)
-        self.unit_Brm20.setFont(font)
-        self.unit_Brm20.setObjectName("unit_Brm20")
-        self.gridLayout.addWidget(self.unit_Brm20, 1, 2, 1, 1)
-        self.lf_alpha_Br = FloatEdit(self.tab_mag)
-        self.lf_alpha_Br.setObjectName("lf_alpha_Br")
-        self.gridLayout.addWidget(self.lf_alpha_Br, 2, 1, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
-        )
-        self.gridLayout.addItem(spacerItem1, 5, 1, 1, 1)
-        self.in_Wlam = QtWidgets.QLabel(self.tab_mag)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(False)
-        font.setWeight(50)
-        self.in_Wlam.setFont(font)
-        self.in_Wlam.setObjectName("in_Wlam")
-        self.gridLayout.addWidget(self.in_Wlam, 3, 0, 1, 1)
-        self.lf_Brm20 = FloatEdit(self.tab_mag)
-        self.lf_Brm20.setObjectName("lf_Brm20")
-        self.gridLayout.addWidget(self.lf_Brm20, 1, 1, 1, 1)
         self.in_mur_lin = QtWidgets.QLabel(self.tab_mag)
         font = QtGui.QFont()
         font.setPointSize(8)
@@ -109,6 +84,25 @@ class Ui_DMatSetup(object):
         self.lf_mur_lin = FloatEdit(self.tab_mag)
         self.lf_mur_lin.setObjectName("lf_mur_lin")
         self.gridLayout.addWidget(self.lf_mur_lin, 0, 1, 1, 1)
+        self.in_Brm20 = QtWidgets.QLabel(self.tab_mag)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(False)
+        font.setWeight(50)
+        self.in_Brm20.setFont(font)
+        self.in_Brm20.setObjectName("in_Brm20")
+        self.gridLayout.addWidget(self.in_Brm20, 1, 0, 1, 1)
+        self.lf_Brm20 = FloatEdit(self.tab_mag)
+        self.lf_Brm20.setObjectName("lf_Brm20")
+        self.gridLayout.addWidget(self.lf_Brm20, 1, 1, 1, 1)
+        self.unit_Brm20 = QtWidgets.QLabel(self.tab_mag)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(False)
+        font.setWeight(50)
+        self.unit_Brm20.setFont(font)
+        self.unit_Brm20.setObjectName("unit_Brm20")
+        self.gridLayout.addWidget(self.unit_Brm20, 1, 2, 1, 1)
         self.in_alpha_Br = QtWidgets.QLabel(self.tab_mag)
         font = QtGui.QFont()
         font.setPointSize(8)
@@ -117,6 +111,17 @@ class Ui_DMatSetup(object):
         self.in_alpha_Br.setFont(font)
         self.in_alpha_Br.setObjectName("in_alpha_Br")
         self.gridLayout.addWidget(self.in_alpha_Br, 2, 0, 1, 1)
+        self.lf_alpha_Br = FloatEdit(self.tab_mag)
+        self.lf_alpha_Br.setObjectName("lf_alpha_Br")
+        self.gridLayout.addWidget(self.lf_alpha_Br, 2, 1, 1, 1)
+        self.in_Wlam = QtWidgets.QLabel(self.tab_mag)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(False)
+        font.setWeight(50)
+        self.in_Wlam.setFont(font)
+        self.in_Wlam.setObjectName("in_Wlam")
+        self.gridLayout.addWidget(self.in_Wlam, 3, 0, 1, 1)
         self.lf_Wlam = FloatEdit(self.tab_mag)
         self.lf_Wlam.setObjectName("lf_Wlam")
         self.gridLayout.addWidget(self.lf_Wlam, 3, 1, 1, 1)
@@ -128,64 +133,14 @@ class Ui_DMatSetup(object):
         self.unit_Wlam.setFont(font)
         self.unit_Wlam.setObjectName("unit_Wlam")
         self.gridLayout.addWidget(self.unit_Wlam, 3, 2, 1, 1)
-        self.in_Brm20 = QtWidgets.QLabel(self.tab_mag)
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        font.setBold(False)
-        font.setWeight(50)
-        self.in_Brm20.setFont(font)
-        self.in_Brm20.setObjectName("in_Brm20")
-        self.gridLayout.addWidget(self.in_Brm20, 1, 0, 1, 1)
-        self.group_BH = QtWidgets.QGroupBox(self.tab_mag)
-        self.group_BH.setObjectName("group_BH")
-        self.gridLayout_4 = QtWidgets.QGridLayout(self.group_BH)
-        self.gridLayout_4.setContentsMargins(4, 4, 4, 4)
-        self.gridLayout_4.setObjectName("gridLayout_4")
-        self.in_BH_file = QtWidgets.QLabel(self.group_BH)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred
+        self.verticalLayout_3.addLayout(self.gridLayout)
+        self.w_BH_import = WImport(self.tab_mag)
+        self.w_BH_import.setObjectName("w_BH_import")
+        self.verticalLayout_3.addWidget(self.w_BH_import)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.in_BH_file.sizePolicy().hasHeightForWidth())
-        self.in_BH_file.setSizePolicy(sizePolicy)
-        self.in_BH_file.setAlignment(
-            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
-        )
-        self.in_BH_file.setObjectName("in_BH_file")
-        self.gridLayout_4.addWidget(self.in_BH_file, 0, 1, 1, 1)
-        self.in_file = QtWidgets.QLabel(self.group_BH)
-        self.in_file.setObjectName("in_file")
-        self.gridLayout_4.addWidget(self.in_file, 0, 0, 1, 1)
-        self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_8.setContentsMargins(0, -1, 0, -1)
-        self.horizontalLayout_8.setSpacing(1)
-        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        spacerItem2 = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
-        )
-        self.horizontalLayout_8.addItem(spacerItem2)
-        self.b_new = QtWidgets.QPushButton(self.group_BH)
-        self.b_new.setEnabled(False)
-        self.b_new.setObjectName("b_new")
-        self.horizontalLayout_8.addWidget(self.b_new)
-        self.b_edit = QtWidgets.QPushButton(self.group_BH)
-        self.b_edit.setEnabled(False)
-        self.b_edit.setObjectName("b_edit")
-        self.horizontalLayout_8.addWidget(self.b_edit)
-        self.b_plot = QtWidgets.QPushButton(self.group_BH)
-        self.b_plot.setEnabled(False)
-        self.b_plot.setObjectName("b_plot")
-        self.horizontalLayout_8.addWidget(self.b_plot)
-        self.b_xls = QtWidgets.QPushButton(self.group_BH)
-        self.b_xls.setObjectName("b_xls")
-        self.horizontalLayout_8.addWidget(self.b_xls)
-        self.b_csv = QtWidgets.QPushButton(self.group_BH)
-        self.b_csv.setEnabled(False)
-        self.b_csv.setObjectName("b_csv")
-        self.horizontalLayout_8.addWidget(self.b_csv)
-        self.gridLayout_4.addLayout(self.horizontalLayout_8, 3, 0, 1, 2)
-        self.gridLayout.addWidget(self.group_BH, 4, 0, 1, 3)
+        self.verticalLayout_3.addItem(spacerItem1)
         self.nav_phy.addTab(self.tab_mag, "")
         self.tab_mec = QtWidgets.QWidget()
         self.tab_mec.setObjectName("tab_mec")
@@ -333,10 +288,10 @@ class Ui_DMatSetup(object):
         self.lf_Gyz.setObjectName("lf_Gyz")
         self.horizontalLayout_4.addWidget(self.lf_Gyz)
         self.verticalLayout_4.addWidget(self.g_shear)
-        spacerItem3 = QtWidgets.QSpacerItem(
+        spacerItem2 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.verticalLayout_4.addItem(spacerItem3)
+        self.verticalLayout_4.addItem(spacerItem2)
         self.nav_meca.addWidget(self.page_niso_mec)
         self.page_iso_mec = QtWidgets.QWidget()
         self.page_iso_mec.setObjectName("page_iso_mec")
@@ -353,10 +308,10 @@ class Ui_DMatSetup(object):
         self.lf_G = FloatEdit(self.page_iso_mec)
         self.lf_G.setObjectName("lf_G")
         self.gridLayout_6.addWidget(self.lf_G, 2, 2, 1, 2)
-        spacerItem4 = QtWidgets.QSpacerItem(
+        spacerItem3 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.gridLayout_6.addItem(spacerItem4, 4, 3, 1, 1)
+        self.gridLayout_6.addItem(spacerItem3, 4, 3, 1, 1)
         self.unit_G = QtWidgets.QLabel(self.page_iso_mec)
         self.unit_G.setObjectName("unit_G")
         self.gridLayout_6.addWidget(self.unit_G, 2, 4, 1, 1)
@@ -491,10 +446,10 @@ class Ui_DMatSetup(object):
         self.lf_Cp.setObjectName("lf_Cp")
         self.gridLayout_3.addWidget(self.lf_Cp, 0, 1, 1, 1)
         self.verticalLayout_2.addLayout(self.gridLayout_3)
-        spacerItem5 = QtWidgets.QSpacerItem(
+        spacerItem4 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.verticalLayout_2.addItem(spacerItem5)
+        self.verticalLayout_2.addItem(spacerItem4)
         self.nav_phy.addTab(self.tab_ther, "")
         self.tab_eco = QtWidgets.QWidget()
         self.tab_eco.setObjectName("tab_eco")
@@ -517,20 +472,20 @@ class Ui_DMatSetup(object):
         self.unit_cost_unit.setObjectName("unit_cost_unit")
         self.horizontalLayout_6.addWidget(self.unit_cost_unit)
         self.verticalLayout_6.addLayout(self.horizontalLayout_6)
-        spacerItem6 = QtWidgets.QSpacerItem(
+        spacerItem5 = QtWidgets.QSpacerItem(
             20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
         )
-        self.verticalLayout_6.addItem(spacerItem6)
+        self.verticalLayout_6.addItem(spacerItem5)
         self.nav_phy.addTab(self.tab_eco, "")
         self.verticalLayout.addWidget(self.nav_phy)
         self.horizontalGroupBox = QtWidgets.QGroupBox(DMatSetup)
         self.horizontalGroupBox.setObjectName("horizontalGroupBox")
         self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.horizontalGroupBox)
         self.horizontalLayout_9.setObjectName("horizontalLayout_9")
-        spacerItem7 = QtWidgets.QSpacerItem(
+        spacerItem6 = QtWidgets.QSpacerItem(
             40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
         )
-        self.horizontalLayout_9.addItem(spacerItem7)
+        self.horizontalLayout_9.addItem(spacerItem6)
         self.b_add_matlib = QtWidgets.QPushButton(self.horizontalGroupBox)
         self.b_add_matlib.setObjectName("b_add_matlib")
         self.horizontalLayout_9.addWidget(self.b_add_matlib)
@@ -543,7 +498,7 @@ class Ui_DMatSetup(object):
         self.verticalLayout.addWidget(self.horizontalGroupBox)
 
         self.retranslateUi(DMatSetup)
-        self.nav_phy.setCurrentIndex(4)
+        self.nav_phy.setCurrentIndex(1)
         self.nav_meca.setCurrentIndex(1)
         self.nav_ther.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(DMatSetup)
@@ -559,20 +514,12 @@ class Ui_DMatSetup(object):
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_elec), _translate("DMatSetup", "Electrical")
         )
-        self.unit_Brm20.setText(_translate("DMatSetup", "T"))
-        self.in_Wlam.setText(_translate("DMatSetup", "Wlam"))
         self.in_mur_lin.setText(_translate("DMatSetup", "mur_lin"))
-        self.in_alpha_Br.setText(_translate("DMatSetup", "alphaBr"))
-        self.unit_Wlam.setText(_translate("DMatSetup", "m"))
         self.in_Brm20.setText(_translate("DMatSetup", "Brm20"))
-        self.group_BH.setTitle(_translate("DMatSetup", "BH curve"))
-        self.in_BH_file.setText(_translate("DMatSetup", "-"))
-        self.in_file.setText(_translate("DMatSetup", "File:"))
-        self.b_new.setText(_translate("DMatSetup", "New"))
-        self.b_edit.setText(_translate("DMatSetup", "Edit"))
-        self.b_plot.setText(_translate("DMatSetup", "Plot"))
-        self.b_xls.setText(_translate("DMatSetup", "XLS Import"))
-        self.b_csv.setText(_translate("DMatSetup", "CSV Import"))
+        self.unit_Brm20.setText(_translate("DMatSetup", "T"))
+        self.in_alpha_Br.setText(_translate("DMatSetup", "alphaBr"))
+        self.in_Wlam.setText(_translate("DMatSetup", "Wlam"))
+        self.unit_Wlam.setText(_translate("DMatSetup", "m"))
         self.nav_phy.setTabText(
             self.nav_phy.indexOf(self.tab_mag), _translate("DMatSetup", "Magnetics")
         )
@@ -621,4 +568,5 @@ class Ui_DMatSetup(object):
 
 
 from .....GUI.Tools.FloatEdit import FloatEdit
+from .....GUI.Tools.WImport.WImport import WImport
 from pyleecan.GUI.Resources import pyleecan_rc

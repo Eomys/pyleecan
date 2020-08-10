@@ -2,6 +2,7 @@
 
 from ..init_fig import init_fig
 from .plot_A_3D import plot_A_3D
+from ...definitions import config_dict
 from numpy import meshgrid, max as np_max
 
 
@@ -14,8 +15,10 @@ def plot_A_surf(
     z_max=None,
     is_norm=False,
     unit="SI",
-    colormap="RdBu_r",
+    colormap=None,
     save_path=None,
+    fig=None,
+    subplot_index=None,
 ):
     """Plots the isosurface of a field in 3D
 
@@ -41,11 +44,15 @@ def plot_A_surf(
         colormap prescribed by user
     save_path : str
         path and name of the png file to save
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
     """
 
     # Set plot
-    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     title = data.name + " as a function of time and space"
+    if colormap is None:
+        colormap = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
     xlabel = "Time [s]"
     if is_deg:
         ylabel = "Angle [°]"
@@ -100,7 +107,6 @@ def plot_A_surf(
         zlabel=zlabel,
         yticks=yticks,
         type="surf",
+        save_path=save_path,
+        subplot_index=subplot_index,
     )
-
-    if save_path is not None:
-        fig.savefig(save_path)

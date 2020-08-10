@@ -32,7 +32,11 @@ def comp_mmf_unit(self, Na=2048, Nt=50):
         return self.parent.parent.parent.elec.mmf_unit
 
     # Define the space dicretization
-    if is_out and self.parent.parent.parent.elec.angle is not None:
+    if (
+        is_out
+        and self.parent.parent.parent.elec.angle is not None
+        and self.parent.parent.parent.elec.angle.size > 0
+    ):
         # Use Electrical module discretization
         angle = self.parent.parent.parent.elec.angle
         Na = angle.size
@@ -43,7 +47,7 @@ def comp_mmf_unit(self, Na=2048, Nt=50):
     if (
         is_out
         and self.parent.parent.parent.elec.time is not None
-        and self.parent.parent.parent.elec.time.size != 1
+        and self.parent.parent.parent.elec.time.size > 1
     ):
         time = self.parent.parent.parent.elec.time
         Nt = time.size

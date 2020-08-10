@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Output/Output.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Output/Output.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/Output
 """
 
 from os import linesep
@@ -85,9 +86,21 @@ except ImportError as error:
     get_rot_dir = error
 
 try:
-    from ..Methods.Output.Output.getter.get_d_angle_diff import get_d_angle_diff
+    from ..Methods.Output.Output.getter.get_angle_offset_initial import (
+        get_angle_offset_initial,
+    )
 except ImportError as error:
-    get_d_angle_diff = error
+    get_angle_offset_initial = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_fft_space import plot_A_fft_space
+except ImportError as error:
+    plot_A_fft_space = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_fft_time import plot_A_fft_time
+except ImportError as error:
+    plot_A_fft_time = error
 
 
 from ._check import InitUnKnowClassError
@@ -253,17 +266,40 @@ class Output(FrozenClass):
         )
     else:
         get_rot_dir = get_rot_dir
-    # cf Methods.Output.Output.getter.get_d_angle_diff
-    if isinstance(get_d_angle_diff, ImportError):
-        get_d_angle_diff = property(
+    # cf Methods.Output.Output.getter.get_angle_offset_initial
+    if isinstance(get_angle_offset_initial, ImportError):
+        get_angle_offset_initial = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Output method get_d_angle_diff: " + str(get_d_angle_diff)
+                    "Can't use Output method get_angle_offset_initial: "
+                    + str(get_angle_offset_initial)
                 )
             )
         )
     else:
-        get_d_angle_diff = get_d_angle_diff
+        get_angle_offset_initial = get_angle_offset_initial
+    # cf Methods.Output.Output.plot.plot_A_fft_space
+    if isinstance(plot_A_fft_space, ImportError):
+        plot_A_fft_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_fft_space: " + str(plot_A_fft_space)
+                )
+            )
+        )
+    else:
+        plot_A_fft_space = plot_A_fft_space
+    # cf Methods.Output.Output.plot.plot_A_fft_time
+    if isinstance(plot_A_fft_time, ImportError):
+        plot_A_fft_time = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_fft_time: " + str(plot_A_fft_time)
+                )
+            )
+        )
+    else:
+        plot_A_fft_time = plot_A_fft_time
     # save method is available in all object
     save = save
 
@@ -582,12 +618,13 @@ class Output(FrozenClass):
         if self._simu is not None:
             self._simu.parent = self
 
-    # Simulation object that generated the Output
-    # Type : Simulation
     simu = property(
         fget=_get_simu,
         fset=_set_simu,
-        doc=u"""Simulation object that generated the Output""",
+        doc=u"""Simulation object that generated the Output
+
+        :Type: Simulation
+        """,
     )
 
     def _get_path_res(self):
@@ -599,12 +636,13 @@ class Output(FrozenClass):
         check_var("path_res", value, "str")
         self._path_res = value
 
-    # Path to the folder to same the results
-    # Type : str
     path_res = property(
         fget=_get_path_res,
         fset=_set_path_res,
-        doc=u"""Path to the folder to same the results""",
+        doc=u"""Path to the folder to same the results
+
+        :Type: str
+        """,
     )
 
     def _get_geo(self):
@@ -619,9 +657,14 @@ class Output(FrozenClass):
         if self._geo is not None:
             self._geo.parent = self
 
-    # Geometry output
-    # Type : OutGeo
-    geo = property(fget=_get_geo, fset=_set_geo, doc=u"""Geometry output""")
+    geo = property(
+        fget=_get_geo,
+        fset=_set_geo,
+        doc=u"""Geometry output
+
+        :Type: OutGeo
+        """,
+    )
 
     def _get_elec(self):
         """getter of elec"""
@@ -635,9 +678,14 @@ class Output(FrozenClass):
         if self._elec is not None:
             self._elec.parent = self
 
-    # Electrical module output
-    # Type : OutElec
-    elec = property(fget=_get_elec, fset=_set_elec, doc=u"""Electrical module output""")
+    elec = property(
+        fget=_get_elec,
+        fset=_set_elec,
+        doc=u"""Electrical module output
+
+        :Type: OutElec
+        """,
+    )
 
     def _get_mag(self):
         """getter of mag"""
@@ -651,9 +699,14 @@ class Output(FrozenClass):
         if self._mag is not None:
             self._mag.parent = self
 
-    # Magnetic module output
-    # Type : OutMag
-    mag = property(fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module output""")
+    mag = property(
+        fget=_get_mag,
+        fset=_set_mag,
+        doc=u"""Magnetic module output
+
+        :Type: OutMag
+        """,
+    )
 
     def _get_struct(self):
         """getter of struct"""
@@ -667,10 +720,13 @@ class Output(FrozenClass):
         if self._struct is not None:
             self._struct.parent = self
 
-    # Structural module output
-    # Type : OutStruct
     struct = property(
-        fget=_get_struct, fset=_set_struct, doc=u"""Structural module output"""
+        fget=_get_struct,
+        fset=_set_struct,
+        doc=u"""Structural module output
+
+        :Type: OutStruct
+        """,
     )
 
     def _get_post(self):
@@ -685,9 +741,14 @@ class Output(FrozenClass):
         if self._post is not None:
             self._post.parent = self
 
-    # Post-Processing settings
-    # Type : OutPost
-    post = property(fget=_get_post, fset=_set_post, doc=u"""Post-Processing settings""")
+    post = property(
+        fget=_get_post,
+        fset=_set_post,
+        doc=u"""Post-Processing settings
+
+        :Type: OutPost
+        """,
+    )
 
     def _get_logger_name(self):
         """getter of logger_name"""
@@ -698,12 +759,13 @@ class Output(FrozenClass):
         check_var("logger_name", value, "str")
         self._logger_name = value
 
-    # Name of the logger to use
-    # Type : str
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        doc=u"""Name of the logger to use
+
+        :Type: str
+        """,
     )
 
     def _get_force(self):
@@ -718,6 +780,11 @@ class Output(FrozenClass):
         if self._force is not None:
             self._force.parent = self
 
-    # Force module output
-    # Type : OutForce
-    force = property(fget=_get_force, fset=_set_force, doc=u"""Force module output""")
+    force = property(
+        fget=_get_force,
+        fset=_set_force,
+        doc=u"""Force module output
+
+        :Type: OutForce
+        """,
+    )

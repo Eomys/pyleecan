@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/PointMat.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/PointMat.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/PointMat
 """
 
 from os import linesep
@@ -229,10 +230,13 @@ class PointMat(FrozenClass):
         check_var("coordinate", value, "ndarray")
         self._coordinate = value
 
-    # Nodes coordinates
-    # Type : ndarray
     coordinate = property(
-        fget=_get_coordinate, fset=_set_coordinate, doc=u"""Nodes coordinates"""
+        fget=_get_coordinate,
+        fset=_set_coordinate,
+        doc=u"""Nodes coordinates
+
+        :Type: ndarray
+        """,
     )
 
     def _get_nb_pt(self):
@@ -244,9 +248,14 @@ class PointMat(FrozenClass):
         check_var("nb_pt", value, "int")
         self._nb_pt = value
 
-    # Total number of nodes
-    # Type : int
-    nb_pt = property(fget=_get_nb_pt, fset=_set_nb_pt, doc=u"""Total number of nodes""")
+    nb_pt = property(
+        fget=_get_nb_pt,
+        fset=_set_nb_pt,
+        doc=u"""Total number of nodes
+
+        :Type: int
+        """,
+    )
 
     def _get_indice(self):
         """getter of indice"""
@@ -264,9 +273,14 @@ class PointMat(FrozenClass):
         check_var("indice", value, "ndarray")
         self._indice = value
 
-    # Node indices
-    # Type : ndarray
-    indice = property(fget=_get_indice, fset=_set_indice, doc=u"""Node indices""")
+    indice = property(
+        fget=_get_indice,
+        fset=_set_indice,
+        doc=u"""Node indices
+
+        :Type: ndarray
+        """,
+    )
 
     def _get_delta(self):
         """getter of delta"""
@@ -277,8 +291,11 @@ class PointMat(FrozenClass):
         check_var("delta", value, "float")
         self._delta = value
 
-    # Sensibility for node searching
-    # Type : float
     delta = property(
-        fget=_get_delta, fset=_set_delta, doc=u"""Sensibility for node searching"""
+        fget=_get_delta,
+        fset=_set_delta,
+        doc=u"""Sensibility for node searching
+
+        :Type: float
+        """,
     )

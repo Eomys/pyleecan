@@ -4,7 +4,14 @@ from ....Functions.init_fig import init_fig
 
 
 def plot(
-    self, fig=None, sym=1, alpha=0, delta=0, is_edge_only=False, comp_machine=None
+    self,
+    fig=None,
+    sym=1,
+    alpha=0,
+    delta=0,
+    is_edge_only=False,
+    comp_machine=None,
+    is_show=True,
 ):
     """Plot the Machine in a matplotlib fig
 
@@ -24,6 +31,8 @@ def plot(
         To plot transparent Patches
     comp_machine : Machine
         A machine to plot in transparency on top of the self machine
+    is_show : bool
+        To call show at the end of the method
 
     Returns
     -------
@@ -72,6 +81,7 @@ def plot(
         "alpha": alpha,
         "delta": delta,
         "is_edge_only": is_edge_only,
+        "is_show": is_show,
     }
 
     _plot(plot_frame, fig, plot_args)
@@ -81,10 +91,10 @@ def plot(
 
     if comp_machine is not None:
         comp_machine.rotor.plot(
-            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=True
+            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=True, is_show=is_show
         )
         comp_machine.stator.plot(
-            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=True
+            fig, sym=sym, alpha=alpha, delta=delta, is_edge_only=True, is_show=is_show
         )
 
     axes.set_xlabel("(m)")
@@ -97,7 +107,8 @@ def plot(
     # The Lamination is centered in the figure
     axes.set_xlim(-Lim, Lim)
     axes.set_ylim(-Lim, Lim)
-    fig.show()
+    if is_show:
+        fig.show()
 
 
 def _plot(plt_fcn, fig, plot_args):

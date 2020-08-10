@@ -1,3 +1,2 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-Prad,N.m^2,Radial magnetic air-gap surface force,"(Nt_tot ,Na_tot)",Import,None,,,,Simulation,Input,gen_input,VERSION,1,Input to start with the structural one 
-Ptan,N.m^2,Tangential magnetic air-gap surface force,"(Nt_tot ,Na_tot)",Import,None,,,,,,,,,
+P,N.m^2,Magnetic air-gap surface force,,ImportVectorField,None,,,,Simulation,Input,gen_input,VERSION,1,Input to start with the structural one 

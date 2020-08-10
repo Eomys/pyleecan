@@ -1,7 +1,7 @@
 from numpy import zeros, ones, pi, array
 
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
+from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
@@ -64,7 +64,7 @@ def test_CEFC_003_t0():
 
     # Plot the AGSF as a function of space with the spatial fft
     r_max = 78
-    out.plot_A_space("force.Prad", is_fft=True, r_max=r_max)
+    out.plot_A_space("force.P", is_fft=True, r_max=r_max, component_list=["radial"])
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_CEFC_003_plot_force_space"))
     # ------------------------------------------------------

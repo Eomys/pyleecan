@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Optimization/OptiObjFunc.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Optimization/OptiObjFunc.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Optimization/OptiObjFunc
 """
 
 from os import linesep
@@ -131,12 +132,13 @@ class OptiObjFunc(FrozenClass):
         check_var("description", value, "str")
         self._description = value
 
-    # Description of the objective
-    # Type : str
     description = property(
         fget=_get_description,
         fset=_set_description,
-        doc=u"""Description of the objective""",
+        doc=u"""Description of the objective
+
+        :Type: str
+        """,
     )
 
     def _get_func(self):
@@ -160,6 +162,11 @@ class OptiObjFunc(FrozenClass):
                 "Expected function or list from a saved file, got: " + str(type(value))
             )
 
-    # Function to minimize
-    # Type : function
-    func = property(fget=_get_func, fset=_set_func, doc=u"""Function to minimize""")
+    func = property(
+        fget=_get_func,
+        fset=_set_func,
+        doc=u"""Function to minimize
+
+        :Type: function
+        """,
+    )

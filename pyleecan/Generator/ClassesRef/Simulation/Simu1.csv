@@ -1,5 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-elec,-,Electrical module,0,Electrical,,,,,Simulation,Simulation,run,VERSION,1,Five sequential weak coupling multi physics simulation
-mag,-,Magnetic module,0,Magnetics,,,,,,,,,,
-struct,-,Structural module,0,Structural,,,,,,,,,,
-force,-,Force moduale,0,Force,,,,,,,,,,
+elec,-,Electrical module,0,Electrical,None,,,,Simulation,Simulation,run_single,VERSION,1,Five sequential weak coupling multi physics simulation
+mag,-,Magnetic module,0,Magnetics,None,,,,,,,,,
+struct,-,Structural module,0,Structural,None,,,,,,,,,
+force,-,Force moduale,0,Force,None,,,,,,,,,

@@ -265,10 +265,13 @@ class SLamParam(Gen_SLamParam, QWidget):
         """
 
         # Check that everything is set
-        if lamination.L1 is None:
-            return "You must set L1 !"
-        elif lamination.Kf1 is None:
-            return "You must set Kf1 !"
+        try:
+            if lamination.L1 is None:
+                return "You must set L1 !"
+            elif lamination.Kf1 is None:
+                return "You must set Kf1 !"
+        except Exception as e:
+            return str(e)
 
     def check_gui(self):
         """Check that the widget are set right according to the current machine

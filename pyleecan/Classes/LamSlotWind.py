@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/LamSlotWind.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/LamSlotWind.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/LamSlotWind
 """
 
 from os import linesep
@@ -593,12 +594,15 @@ class LamSlotWind(LamSlot):
         check_var("Ksfill", value, "float", Vmin=0, Vmax=1)
         self._Ksfill = value
 
-    # Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)
-    # Type : float, min = 0, max = 1
     Ksfill = property(
         fget=_get_Ksfill,
         fset=_set_Ksfill,
-        doc=u"""Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)""",
+        doc=u"""Imposed Slot Fill factor (if None, will be computed according to the winding and the slot)
+
+        :Type: float
+        :min: 0
+        :max: 1
+        """,
     )
 
     def _get_winding(self):
@@ -613,8 +617,11 @@ class LamSlotWind(LamSlot):
         if self._winding is not None:
             self._winding.parent = self
 
-    # Lamination's Winding
-    # Type : Winding
     winding = property(
-        fget=_get_winding, fset=_set_winding, doc=u"""Lamination's Winding"""
+        fget=_get_winding,
+        fset=_set_winding,
+        doc=u"""Lamination's Winding
+
+        :Type: Winding
+        """,
     )

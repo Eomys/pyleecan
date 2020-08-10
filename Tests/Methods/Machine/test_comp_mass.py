@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-
+from os.path import join
 
 from mock import MagicMock
 from numpy import array, pi, zeros
@@ -14,7 +14,10 @@ from pyleecan.Classes.VentilationPolar import VentilationPolar
 from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.Frame import Frame
 from pyleecan.Classes.Shaft import Shaft
-from Tests.Validation.Machine.IPMSM_A import IPMSM_A
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
 # For AlmostEqual
 DELTA = 1e-4

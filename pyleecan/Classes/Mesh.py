@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/Mesh.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/Mesh.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/Mesh
 """
 
 from os import linesep
@@ -106,8 +107,11 @@ class Mesh(FrozenClass):
         check_var("label", value, "str")
         self._label = value
 
-    # Description of the mesh
-    # Type : str
     label = property(
-        fget=_get_label, fset=_set_label, doc=u"""Description of the mesh"""
+        fget=_get_label,
+        fset=_set_label,
+        doc=u"""Description of the mesh
+
+        :Type: str
+        """,
     )

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/MachineSync.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/MachineSync.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/MachineSync
 """
 
 from os import linesep
@@ -17,11 +18,6 @@ try:
 except ImportError as error:
     is_synchronous = error
 
-try:
-    from ..Methods.Machine.MachineSync.comp_initial_angle import comp_initial_angle
-except ImportError as error:
-    comp_initial_angle = error
-
 
 from ._check import InitUnKnowClassError
 from .Frame import Frame
@@ -33,7 +29,6 @@ class MachineSync(Machine):
 
     VERSION = 1
 
-    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Machine.MachineSync.is_synchronous
     if isinstance(is_synchronous, ImportError):
         is_synchronous = property(
@@ -46,18 +41,6 @@ class MachineSync(Machine):
         )
     else:
         is_synchronous = is_synchronous
-    # cf Methods.Machine.MachineSync.comp_initial_angle
-    if isinstance(comp_initial_angle, ImportError):
-        comp_initial_angle = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MachineSync method comp_initial_angle: "
-                    + str(comp_initial_angle)
-                )
-            )
-        )
-    else:
-        comp_initial_angle = comp_initial_angle
     # save method is available in all object
     save = save
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/SlotW13.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/SlotW13.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/SlotW13
 """
 
 from os import linesep
@@ -341,9 +342,15 @@ class SlotW13(SlotWind):
         check_var("W0", value, "float", Vmin=0)
         self._W0 = value
 
-    # Slot isthmus width.
-    # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus width.""")
+    W0 = property(
+        fget=_get_W0,
+        fset=_set_W0,
+        doc=u"""Slot isthmus width.
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H0(self):
         """getter of H0"""
@@ -354,9 +361,15 @@ class SlotW13(SlotWind):
         check_var("H0", value, "float", Vmin=0)
         self._H0 = value
 
-    # Slot isthmus height.
-    # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height.""")
+    H0 = property(
+        fget=_get_H0,
+        fset=_set_H0,
+        doc=u"""Slot isthmus height.
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H1(self):
         """getter of H1"""
@@ -367,12 +380,14 @@ class SlotW13(SlotWind):
         check_var("H1", value, "float", Vmin=0)
         self._H1 = value
 
-    # Slot wedge radial height or wedge angle .
-    # Type : float, min = 0
     H1 = property(
         fget=_get_H1,
         fset=_set_H1,
-        doc=u"""Slot wedge radial height or wedge angle .""",
+        doc=u"""Slot wedge radial height or wedge angle .
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_W1(self):
@@ -384,9 +399,15 @@ class SlotW13(SlotWind):
         check_var("W1", value, "float", Vmin=0)
         self._W1 = value
 
-    # Slot wedge width.
-    # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Slot wedge width.""")
+    W1 = property(
+        fget=_get_W1,
+        fset=_set_W1,
+        doc=u"""Slot wedge width.
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H2(self):
         """getter of H2"""
@@ -397,9 +418,15 @@ class SlotW13(SlotWind):
         check_var("H2", value, "float", Vmin=0)
         self._H2 = value
 
-    # Slot height below wedge
-    # Type : float, min = 0
-    H2 = property(fget=_get_H2, fset=_set_H2, doc=u"""Slot height below wedge """)
+    H2 = property(
+        fget=_get_H2,
+        fset=_set_H2,
+        doc=u"""Slot height below wedge 
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W2(self):
         """getter of W2"""
@@ -410,9 +437,15 @@ class SlotW13(SlotWind):
         check_var("W2", value, "float", Vmin=0)
         self._W2 = value
 
-    # Slot width below wedge
-    # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""Slot width below wedge """)
+    W2 = property(
+        fget=_get_W2,
+        fset=_set_W2,
+        doc=u"""Slot width below wedge 
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W3(self):
         """getter of W3"""
@@ -423,9 +456,15 @@ class SlotW13(SlotWind):
         check_var("W3", value, "float", Vmin=0)
         self._W3 = value
 
-    # Slot bottom width.
-    # Type : float, min = 0
-    W3 = property(fget=_get_W3, fset=_set_W3, doc=u"""Slot bottom width.""")
+    W3 = property(
+        fget=_get_W3,
+        fset=_set_W3,
+        doc=u"""Slot bottom width.
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H1_is_rad(self):
         """getter of H1_is_rad"""
@@ -436,8 +475,11 @@ class SlotW13(SlotWind):
         check_var("H1_is_rad", value, "bool")
         self._H1_is_rad = value
 
-    # H1 unit, 0 for m, 1 for rad
-    # Type : bool
     H1_is_rad = property(
-        fget=_get_H1_is_rad, fset=_set_H1_is_rad, doc=u"""H1 unit, 0 for m, 1 for rad"""
+        fget=_get_H1_is_rad,
+        fset=_set_H1_is_rad,
+        doc=u"""H1 unit, 0 for m, 1 for rad
+
+        :Type: bool
+        """,
     )

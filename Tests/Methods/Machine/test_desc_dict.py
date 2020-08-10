@@ -1,7 +1,11 @@
 import pytest
+from os.path import join
 
-from Tests.Validation.Machine.IPMSM_A import IPMSM_A
-from Tests.Validation.Machine.SCIM_001 import SCIM_001
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
+IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
 
 def test_desc_SCIM():
@@ -31,10 +35,10 @@ def test_desc_SCIM():
     assert desc_dict[6]["value"] == "double layer distributed"
 
     assert desc_dict[7]["name"] == "Rwinds"
-    assert desc_dict[7]["value"] == pytest.approx(0.0138, rel=0.1)
+    assert desc_dict[7]["value"] == pytest.approx(0.02392, rel=0.1)
 
     assert desc_dict[8]["name"] == "Mmachine"
-    assert desc_dict[8]["value"] == pytest.approx(303.11, rel=0.1)
+    assert desc_dict[8]["value"] == pytest.approx(328.1, rel=0.1)
 
 
 def test_desc_IPMSM():

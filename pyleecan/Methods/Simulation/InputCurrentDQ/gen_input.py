@@ -53,10 +53,7 @@ def gen_input(self):
     qs = len(simu.machine.stator.get_name_phase())
     qr = len(simu.machine.rotor.get_name_phase())
 
-    # stator angle to align coordinate systems
-    if not hasattr(simu.machine, "comp_initial_angle"):
-        raise InputError("ERROR: 'comp_initial_angle' method not implemented")
-    init_angle = simu.machine.comp_initial_angle()
+    angle_offset_initial = simu.machine.comp_angle_offset_initial()
 
     # Load and check Is
     if qs > 0:
@@ -134,6 +131,9 @@ def gen_input(self):
     else:
         output.angle_rotor_initial = self.angle_rotor_initial
 
+    if self.Tem_av_ref is not None:
+        output.Tem_av_ref = self.Tem_av_ref
+
     if self.parent.parent is None:
         raise InputError(
             "ERROR: The Simulation object must be in an Output object to run"
@@ -150,7 +150,7 @@ def gen_input(self):
 
     # calculate/get rotor angle and calculate phase currents
     angle_rotor = self.parent.parent.get_angle_rotor()
-    angle = angle_rotor - init_angle
+    angle = angle_rotor - angle_offset_initial
     zp = simu.machine.stator.get_pole_pair_number()
 
     # add stator current

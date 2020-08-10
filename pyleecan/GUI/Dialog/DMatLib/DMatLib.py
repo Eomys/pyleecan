@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from os import getcwd, rename, remove
-from os.path import join, dirname, abspath, split
+from os import getcwd, remove, rename
+from os.path import abspath, dirname, join, split
 from re import match
 
-from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QListWidget
-
-from ....Functions.load import load_matlib
-from ....GUI.Dialog.DMatLib.Gen_DMatLib import Gen_DMatLib
-from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
-from ....definitions import DATA_DIR, MATLIB_DIR
-from ....GUI import GUI_logger
-from ....Functions.path_tools import abs_file_path
 from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QDialog, QFileDialog, QListWidget, QMessageBox
+
+from ....Classes.ImportMatrixVal import ImportMatrixVal
+from ....Classes.ImportMatrixXls import ImportMatrixXls
+from ....Functions.load import load_matlib
+from ....Functions.path_tools import abs_file_path
+from ....GUI import GUI_logger
+from ....GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
+from ....GUI.Dialog.DMatLib.Gen_DMatLib import Gen_DMatLib
 
 
 class DMatLib(Gen_DMatLib, QDialog):
@@ -38,7 +39,6 @@ class DMatLib(Gen_DMatLib, QDialog):
         -------
 
         """
-        print(selected)
 
         # Build the interface according to the .ui file
         QDialog.__init__(self)
@@ -457,11 +457,13 @@ class DMatLib(Gen_DMatLib, QDialog):
             update_text(self.out_Brm20, "Brm20", mat.mag.Brm20, "T")
             update_text(self.out_alpha_Br, "alpha_Br", mat.mag.alpha_Br, None)
             update_text(self.out_wlam, "wlam", mat.mag.Wlam, "m")
-            if type(mat.mag.BH_curve).__name__ == "ImportMatrixXls":
-                text = split(mat.mag.BH_curve.file_path)[1]
+            if isinstance(mat.mag.BH_curve, ImportMatrixXls):
+                BH_text = split(mat.mag.BH_curve.file_path)[1]
+            elif isinstance(mat.mag.BH_curve, ImportMatrixVal):
+                BH_text = "Matrix " + str(mat.mag.BH_curve.get_data().shape)
             else:
-                text = "-"
-            self.out_BH.setText(text)
+                BH_text = "-"
+            self.out_BH.setText(BH_text)
 
 
 def update_text(label, name, value, unit):

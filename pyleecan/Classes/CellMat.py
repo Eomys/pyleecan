@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/CellMat.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/CellMat.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/CellMat
 """
 
 from os import linesep
@@ -234,12 +235,13 @@ class CellMat(FrozenClass):
         check_var("connectivity", value, "ndarray")
         self._connectivity = value
 
-    # Matrix of connectivity for one element type
-    # Type : ndarray
     connectivity = property(
         fget=_get_connectivity,
         fset=_set_connectivity,
-        doc=u"""Matrix of connectivity for one element type""",
+        doc=u"""Matrix of connectivity for one element type
+
+        :Type: ndarray
+        """,
     )
 
     def _get_nb_cell(self):
@@ -251,10 +253,13 @@ class CellMat(FrozenClass):
         check_var("nb_cell", value, "int")
         self._nb_cell = value
 
-    # Total number of elements
-    # Type : int
     nb_cell = property(
-        fget=_get_nb_cell, fset=_set_nb_cell, doc=u"""Total number of elements"""
+        fget=_get_nb_cell,
+        fset=_set_nb_cell,
+        doc=u"""Total number of elements
+
+        :Type: int
+        """,
     )
 
     def _get_nb_pt_per_cell(self):
@@ -266,12 +271,13 @@ class CellMat(FrozenClass):
         check_var("nb_pt_per_cell", value, "int")
         self._nb_pt_per_cell = value
 
-    # Define the number of node per element
-    # Type : int
     nb_pt_per_cell = property(
         fget=_get_nb_pt_per_cell,
         fset=_set_nb_pt_per_cell,
-        doc=u"""Define the number of node per element""",
+        doc=u"""Define the number of node per element
+
+        :Type: int
+        """,
     )
 
     def _get_indice(self):
@@ -290,6 +296,11 @@ class CellMat(FrozenClass):
         check_var("indice", value, "ndarray")
         self._indice = value
 
-    # Element indices
-    # Type : ndarray
-    indice = property(fget=_get_indice, fset=_set_indice, doc=u"""Element indices""")
+    indice = property(
+        fget=_get_indice,
+        fset=_set_indice,
+        doc=u"""Element indices
+
+        :Type: ndarray
+        """,
+    )

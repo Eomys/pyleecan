@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/MeshMat.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/MeshMat.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/MeshMat
 """
 
 from os import linesep
@@ -313,9 +314,14 @@ class MeshMat(Mesh):
         check_var("cell", value, "{CellMat}")
         self._cell = value
 
-    # Storing connectivity
-    # Type : {CellMat}
-    cell = property(fget=_get_cell, fset=_set_cell, doc=u"""Storing connectivity""")
+    cell = property(
+        fget=_get_cell,
+        fset=_set_cell,
+        doc=u"""Storing connectivity
+
+        :Type: {CellMat}
+        """,
+    )
 
     def _get_point(self):
         """getter of point"""
@@ -329,6 +335,11 @@ class MeshMat(Mesh):
         if self._point is not None:
             self._point.parent = self
 
-    # Storing nodes
-    # Type : PointMat
-    point = property(fget=_get_point, fset=_set_point, doc=u"""Storing nodes""")
+    point = property(
+        fget=_get_point,
+        fset=_set_point,
+        doc=u"""Storing nodes
+
+        :Type: PointMat
+        """,
+    )

@@ -44,7 +44,7 @@ def plot_contour(
         a list of 2 elements for the limits of the colorbar
     field_name : str
         title of the field to display on plot
-    group : list
+    group_names : list
         a list of str corresponding to group name(s)
 
     Returns

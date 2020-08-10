@@ -10,8 +10,6 @@ from pyleecan.Classes.import_all import *
 from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
 from Tests import save_plot_path
 from Tests.Plot.LamWind import wind_mat
-from Tests.Validation.Machine.SCIM_006 import SCIM_006
-from Tests.Validation.Machine.SPMSM_015 import SPMSM_015
 from pyleecan.Functions.load import load
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
@@ -26,6 +24,12 @@ from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 
 import numpy as np
 import random
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+
+SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
+SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
 
 # Gather results in the same folder
 save_path = join(save_plot_path, "ICEM_2020")

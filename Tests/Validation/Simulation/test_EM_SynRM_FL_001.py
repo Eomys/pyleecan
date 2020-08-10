@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
 
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Machine.SynRM_001 import SynRM_001
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.InputFlux import InputFlux
@@ -14,8 +13,13 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-from Tests import DATA_DIR
+from Tests import TEST_DATA_DIR
 import pytest
+
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+SynRM_001 = load(join(DATA_DIR, "Machine", "SynRM_001.json"))
 
 
 @pytest.mark.long

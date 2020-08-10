@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Output/OutStruct.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Output/OutStruct.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/OutStruct
 """
 
 from os import linesep
@@ -240,10 +241,13 @@ class OutStruct(FrozenClass):
         check_var("time", value, "ndarray")
         self._time = value
 
-    # Structural time vector (no symmetry)
-    # Type : ndarray
     time = property(
-        fget=_get_time, fset=_set_time, doc=u"""Structural time vector (no symmetry)"""
+        fget=_get_time,
+        fset=_set_time,
+        doc=u"""Structural time vector (no symmetry)
+
+        :Type: ndarray
+        """,
     )
 
     def _get_angle(self):
@@ -262,12 +266,13 @@ class OutStruct(FrozenClass):
         check_var("angle", value, "ndarray")
         self._angle = value
 
-    # Structural position vector (no symmetry)
-    # Type : ndarray
     angle = property(
         fget=_get_angle,
         fset=_set_angle,
-        doc=u"""Structural position vector (no symmetry)""",
+        doc=u"""Structural position vector (no symmetry)
+
+        :Type: ndarray
+        """,
     )
 
     def _get_Nt_tot(self):
@@ -279,10 +284,13 @@ class OutStruct(FrozenClass):
         check_var("Nt_tot", value, "int")
         self._Nt_tot = value
 
-    # Length of the time vector
-    # Type : int
     Nt_tot = property(
-        fget=_get_Nt_tot, fset=_set_Nt_tot, doc=u"""Length of the time vector"""
+        fget=_get_Nt_tot,
+        fset=_set_Nt_tot,
+        doc=u"""Length of the time vector
+
+        :Type: int
+        """,
     )
 
     def _get_Na_tot(self):
@@ -294,10 +302,13 @@ class OutStruct(FrozenClass):
         check_var("Na_tot", value, "int")
         self._Na_tot = value
 
-    # Length of the angle vector
-    # Type : int
     Na_tot = property(
-        fget=_get_Na_tot, fset=_set_Na_tot, doc=u"""Length of the angle vector"""
+        fget=_get_Na_tot,
+        fset=_set_Na_tot,
+        doc=u"""Length of the angle vector
+
+        :Type: int
+        """,
     )
 
     def _get_logger_name(self):
@@ -309,12 +320,13 @@ class OutStruct(FrozenClass):
         check_var("logger_name", value, "str")
         self._logger_name = value
 
-    # Name of the logger to use
-    # Type : str
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        doc=u"""Name of the logger to use
+
+        :Type: str
+        """,
     )
 
     def _get_Yr(self):
@@ -335,9 +347,14 @@ class OutStruct(FrozenClass):
         else:
             self._Yr = value
 
-    # Displacement output
-    # Type : SciDataTool.Classes.DataND.DataND
-    Yr = property(fget=_get_Yr, fset=_set_Yr, doc=u"""Displacement output""")
+    Yr = property(
+        fget=_get_Yr,
+        fset=_set_Yr,
+        doc=u"""Displacement output
+
+        :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )
 
     def _get_Vr(self):
         """getter of Vr"""
@@ -357,9 +374,14 @@ class OutStruct(FrozenClass):
         else:
             self._Vr = value
 
-    # Velocity output
-    # Type : SciDataTool.Classes.DataND.DataND
-    Vr = property(fget=_get_Vr, fset=_set_Vr, doc=u"""Velocity output""")
+    Vr = property(
+        fget=_get_Vr,
+        fset=_set_Vr,
+        doc=u"""Velocity output
+
+        :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )
 
     def _get_Ar(self):
         """getter of Ar"""
@@ -379,6 +401,11 @@ class OutStruct(FrozenClass):
         else:
             self._Ar = value
 
-    # Acceleration output
-    # Type : SciDataTool.Classes.DataND.DataND
-    Ar = property(fget=_get_Ar, fset=_set_Ar, doc=u"""Acceleration output""")
+    Ar = property(
+        fget=_get_Ar,
+        fset=_set_Ar,
+        doc=u"""Acceleration output
+
+        :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )

@@ -2,7 +2,7 @@
 
 from ..init_fig import init_fig
 from .plot_A_2D import plot_A_2D
-from ..Winding.gen_phase_list import gen_color
+from ...definitions import config_dict
 from numpy import squeeze, split
 
 
@@ -25,6 +25,9 @@ def plot_A_space(
     y_min=None,
     y_max=None,
     mag_max=None,
+    is_auto_ticks=True,
+    fig=None,
+    subplot_index=None,
 ):
     """Plots a field as a function of space (angle)
 
@@ -66,14 +69,22 @@ def plot_A_space(
         maximum value for the y-axis
     mag_max : float
         maximum alue for the y-axis of the fft
+    is_auto_ticks : bool
+        in fft, adjust ticks to wavenumbers (deactivate if too close)
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
     """
 
     # Set plot
-    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+    (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     data_list2 = [data] + data_list
     if legend_list == []:
         legend_list = [d.name for d in data_list2]
+    curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
+    phase_colors = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
     legends = []
+    colors = []
+    n_phase = len(index_list)
     list_str = None
     for i, d in enumerate(data_list2):
         is_components = False
@@ -85,13 +96,16 @@ def plot_A_space(
                         legend_list[i] + ": " + axis.values.tolist()[j]
                         for j in index_list
                     ]
+                    colors += [phase_colors[i * n_phase + j] for j in range(n_phase)]
                     list_str = axis.name
             except:
                 is_components = False
         if not is_components:
             legends += [legend_list[i]]
+            colors += [curve_colors[i]]
     if color_list == []:
-        color_list = gen_color(len(legends))
+        color_list = colors
+
     if unit == "SI":
         unit = data.unit
     if is_norm:
@@ -103,11 +117,9 @@ def plot_A_space(
     if is_deg:
         a_str = "angle{°}"
         xlabel = "Angle [°]"
-        xticks = [0, 60, 120, 180, 240, 300, 360]
     else:
         a_str = "angle"
         xlabel = "Angle [rad]"
-        xticks = None
     if t != None:
         t_str = "time=" + str(t)
     else:
@@ -115,7 +127,7 @@ def plot_A_space(
     if data_list == []:
         title = data.name + " over space at " + t_str
     else:
-        title = "Comparison over space at " + t_str
+        title = "Comparison of " + data.name + " over space at " + t_str
 
     # Extract the fields
     if list_str is not None:
@@ -132,6 +144,10 @@ def plot_A_space(
             a_str, t_str, data_list=data_list, unit=unit, is_norm=is_norm
         )
     angle = results["angle"]
+    if is_deg and int(max(angle)) % 6 == 0:
+        xticks = [i * int(max(angle)) / 6 for i in range(int(max(angle)))]
+    else:
+        xticks = None
     Ydatas = [results[data.symbol]] + [
         results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
     ]
@@ -156,17 +172,25 @@ def plot_A_space(
         y_min=y_min,
         y_max=y_max,
         xticks=xticks,
+        save_path=save_path,
+        subplot_index=subplot_index,
     )
 
     if is_fft:
+        if "dB" in unit:
+            unit_str = (
+                "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
+            )
+        else:
+            unit_str = "[" + unit + "]"
         if data_list == []:
             title = "FFT of " + data.name
         else:
-            title = "Comparison of FFT"
+            title = "Comparison of " + data.name + " FFT"
         if data.symbol == "Magnitude":
-            ylabel = "Magnitude [" + unit + "]"
+            ylabel = "Magnitude " + unit_str
         else:
-            ylabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
+            ylabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
         legend_list = [legend_list[0]] + [legend_list[-1]]
 
         if is_spaceorder:
@@ -194,10 +218,15 @@ def plot_A_space(
             results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
         ]
 
-        for i in range(len(Ydata)):
-            indices = [ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01]
-        indices = [0] + list(set(indices))
-        xticks = wavenumber[indices]
+        if is_auto_ticks:
+            indices = [0]
+            for i in range(len(Ydata)):
+                indices += list(
+                    set([ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01])
+                )
+            xticks = wavenumber[indices]
+        else:
+            xticks = None
 
         plot_A_2D(
             wavenumber,
@@ -213,9 +242,7 @@ def plot_A_space(
             fund_harm=fund_harm,
             y_max=mag_max,
             xticks=xticks,
+            save_path=save_path,
         )
-
-    if save_path is not None:
-        fig.savefig(save_path)
 
     return ax

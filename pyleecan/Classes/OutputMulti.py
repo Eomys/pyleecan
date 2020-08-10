@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Output/OutputMulti.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Output/OutputMulti.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/OutputMulti
 """
 
 from os import linesep
@@ -99,11 +100,27 @@ class OutputMulti(FrozenClass):
         self.parent = None
         # output_ref can be None, a Output object or a dict
         if isinstance(output_ref, dict):
-            self.output_ref = Output(init_dict=output_ref)
+            # Check that the type is correct (including daughter)
+            class_name = output_ref.get("__class__")
+            if class_name not in ["Output", "XOutput"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for output_ref"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.output_ref = class_obj(init_dict=output_ref)
         elif isinstance(output_ref, str):
             from ..Functions.load import load
 
-            self.output_ref = load(output_ref)
+            output_ref = load(output_ref)
+            # Check that the type is correct (including daughter)
+            class_name = output_ref.__class__.__name__
+            if class_name not in ["Output", "XOutput"]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for output_ref"
+                )
+            self.output_ref = output_ref
         else:
             self.output_ref = output_ref
         # outputs can be None or a list of Output object
@@ -113,7 +130,20 @@ class OutputMulti(FrozenClass):
                 if obj is None:  # Default value
                     self.outputs.append(Output())
                 elif isinstance(obj, dict):
-                    self.outputs.append(Output(init_dict=obj))
+                    # Check that the type is correct (including daughter)
+                    class_name = obj.get("__class__")
+                    if class_name not in ["Output", "XOutput"]:
+                        raise InitUnKnowClassError(
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for outputs"
+                        )
+                    # Dynamic import to call the correct constructor
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
+                    self.outputs.append(class_obj(init_dict=obj))
                 else:
                     self.outputs.append(obj)
         elif outputs is None:
@@ -228,12 +258,13 @@ class OutputMulti(FrozenClass):
         if self._output_ref is not None:
             self._output_ref.parent = self
 
-    # Reference output of the multi simulation
-    # Type : Output
     output_ref = property(
         fget=_get_output_ref,
         fset=_set_output_ref,
-        doc=u"""Reference output of the multi simulation""",
+        doc=u"""Reference output of the multi simulation
+
+        :Type: Output
+        """,
     )
 
     def _get_outputs(self):
@@ -252,12 +283,13 @@ class OutputMulti(FrozenClass):
             if obj is not None:
                 obj.parent = self
 
-    # list of output from the multi-simulation
-    # Type : [Output]
     outputs = property(
         fget=_get_outputs,
         fset=_set_outputs,
-        doc=u"""list of output from the multi-simulation""",
+        doc=u"""list of output from the multi-simulation
+
+        :Type: [Output]
+        """,
     )
 
     def _get_is_valid(self):
@@ -269,12 +301,13 @@ class OutputMulti(FrozenClass):
         check_var("is_valid", value, "list")
         self._is_valid = value
 
-    # list to indicate if the corresponding output is valid
-    # Type : list
     is_valid = property(
         fget=_get_is_valid,
         fset=_set_is_valid,
-        doc=u"""list to indicate if the corresponding output is valid""",
+        doc=u"""list to indicate if the corresponding output is valid
+
+        :Type: list
+        """,
     )
 
     def _get_design_var(self):
@@ -286,12 +319,13 @@ class OutputMulti(FrozenClass):
         check_var("design_var", value, "list")
         self._design_var = value
 
-    # list of design variables corresponding to the output
-    # Type : list
     design_var = property(
         fget=_get_design_var,
         fset=_set_design_var,
-        doc=u"""list of design variables corresponding to the output""",
+        doc=u"""list of design variables corresponding to the output
+
+        :Type: list
+        """,
     )
 
     def _get_design_var_names(self):
@@ -303,10 +337,11 @@ class OutputMulti(FrozenClass):
         check_var("design_var_names", value, "list")
         self._design_var_names = value
 
-    # list of str containing the design variables names sorted alphabetically
-    # Type : list
     design_var_names = property(
         fget=_get_design_var_names,
         fset=_set_design_var_names,
-        doc=u"""list of str containing the design variables names sorted alphabetically""",
+        doc=u"""list of str containing the design variables names sorted alphabetically
+
+        :Type: list
+        """,
     )

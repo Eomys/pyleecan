@@ -10,7 +10,6 @@ In Proceedings of the third international Conference on Genetic Algorithms (Mend
 from os.path import join
 import pytest
 from pyleecan.definitions import PACKAGE_NAME
-from Tests.Validation.Machine.SCIM_001 import SCIM_001
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
@@ -28,6 +27,11 @@ import matplotlib.image as img
 import numpy as np
 import random
 from Tests import save_validation_path as save_path
+
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR, TEST_DIR
+
+SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 
 
 @pytest.mark.validation
@@ -206,7 +210,9 @@ def test_Binh_and_Korn():
         axs[0].set_ylabel(r"$f_2(x)$")
         try:
             img_to_find = img.imread(
-                "Tests\\Validation\\Optimization\\Binh_and_Korn_function.jpg",
+                join(
+                    TEST_DIR, "Validation", "Optimization", "Binh_and_Korn_function.jpg"
+                ),
                 format="jpg",
             )
             axs[1].imshow(img_to_find, aspect="auto")

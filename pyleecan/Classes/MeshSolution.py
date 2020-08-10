@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/MeshSolution.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/MeshSolution.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/MeshSolution
 """
 
 from os import linesep
@@ -420,12 +421,13 @@ class MeshSolution(FrozenClass):
         check_var("label", value, "str")
         self._label = value
 
-    # (Optional) Descriptive name of the mesh
-    # Type : str
     label = property(
         fget=_get_label,
         fset=_set_label,
-        doc=u"""(Optional) Descriptive name of the mesh""",
+        doc=u"""(Optional) Descriptive name of the mesh
+
+        :Type: str
+        """,
     )
 
     def _get_mesh(self):
@@ -444,9 +446,14 @@ class MeshSolution(FrozenClass):
             if obj is not None:
                 obj.parent = self
 
-    # A list of Mesh objects.
-    # Type : [Mesh]
-    mesh = property(fget=_get_mesh, fset=_set_mesh, doc=u"""A list of Mesh objects. """)
+    mesh = property(
+        fget=_get_mesh,
+        fset=_set_mesh,
+        doc=u"""A list of Mesh objects. 
+
+        :Type: [Mesh]
+        """,
+    )
 
     def _get_is_same_mesh(self):
         """getter of is_same_mesh"""
@@ -457,12 +464,13 @@ class MeshSolution(FrozenClass):
         check_var("is_same_mesh", value, "bool")
         self._is_same_mesh = value
 
-    # 1 if the mesh is the same at each step (time, mode etc.)
-    # Type : bool
     is_same_mesh = property(
         fget=_get_is_same_mesh,
         fset=_set_is_same_mesh,
-        doc=u"""1 if the mesh is the same at each step (time, mode etc.)""",
+        doc=u"""1 if the mesh is the same at each step (time, mode etc.)
+
+        :Type: bool
+        """,
     )
 
     def _get_solution(self):
@@ -481,10 +489,13 @@ class MeshSolution(FrozenClass):
             if obj is not None:
                 obj.parent = self
 
-    # A list of Solution objects
-    # Type : [Solution]
     solution = property(
-        fget=_get_solution, fset=_set_solution, doc=u"""A list of Solution objects"""
+        fget=_get_solution,
+        fset=_set_solution,
+        doc=u"""A list of Solution objects
+
+        :Type: [Solution]
+        """,
     )
 
     def _get_dimension(self):
@@ -496,12 +507,15 @@ class MeshSolution(FrozenClass):
         check_var("dimension", value, "int", Vmin=1, Vmax=3)
         self._dimension = value
 
-    # Dimension of the physical problem
-    # Type : int, min = 1, max = 3
     dimension = property(
         fget=_get_dimension,
         fset=_set_dimension,
-        doc=u"""Dimension of the physical problem""",
+        doc=u"""Dimension of the physical problem
+
+        :Type: int
+        :min: 1
+        :max: 3
+        """,
     )
 
     def _get_group(self):
@@ -522,10 +536,11 @@ class MeshSolution(FrozenClass):
         check_var("group", value, "{ndarray}")
         self._group = value
 
-    # Dict sorted by groups name with cells indices.
-    # Type : {ndarray}
     group = property(
         fget=_get_group,
         fset=_set_group,
-        doc=u"""Dict sorted by groups name with cells indices. """,
+        doc=u"""Dict sorted by groups name with cells indices. 
+
+        :Type: {ndarray}
+        """,
     )

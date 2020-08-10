@@ -40,38 +40,9 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="1">
-        <widget class="QSpinBox" name="si_Nwpc1_tan">
-         <property name="minimumSize">
-          <size>
-           <width>70</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="value">
-          <number>99</number>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="FloatEdit" name="lf_Wwire">
-         <property name="minimumSize">
-          <size>
-           <width>50</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>100</height>
-          </size>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="in_Nwpc1_tan">
          <property name="minimumSize">
@@ -85,6 +56,32 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="1">
+        <widget class="QSpinBox" name="si_Nwpc1_tan">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="value">
+          <number>99</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="in_Nwpc1_rad">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Nwpc1_rad :</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="1">
         <widget class="QSpinBox" name="si_Nwpc1_rad">
          <property name="value">
@@ -92,8 +89,21 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="FloatEdit" name="lf_Hwire">
+       <item row="2" column="0">
+        <widget class="QLabel" name="in_Wwire">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Wwire :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="FloatEdit" name="lf_Wwire">
          <property name="minimumSize">
           <size>
            <width>50</width>
@@ -121,16 +131,32 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
-        <widget class="QLabel" name="unit_Wins_wire">
+       <item row="3" column="0">
+        <widget class="QLabel" name="in_Hwire">
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>40</width>
            <height>0</height>
           </size>
          </property>
          <property name="text">
-          <string>m</string>
+          <string>Hwire :</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="FloatEdit" name="lf_Hwire">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>100</height>
+          </size>
          </property>
         </widget>
        </item>
@@ -147,8 +173,8 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="in_Wwire">
+       <item row="4" column="0">
+        <widget class="QLabel" name="in_Wins_wire">
          <property name="minimumSize">
           <size>
            <width>40</width>
@@ -156,20 +182,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Wwire :</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="in_Nwpc1_rad">
-         <property name="minimumSize">
-          <size>
-           <width>40</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Nwpc1_rad :</string>
+          <string>Wins_wire :</string>
          </property>
         </widget>
        </item>
@@ -189,29 +202,76 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="in_Wins_wire">
+       <item row="4" column="2">
+        <widget class="QLabel" name="unit_Wins_wire">
          <property name="minimumSize">
           <size>
-           <width>40</width>
+           <width>0</width>
            <height>0</height>
           </size>
          </property>
          <property name="text">
-          <string>Wins_wire :</string>
+          <string>m</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="in_Hwire">
+       <item row="5" column="0">
+        <widget class="QLabel" name="in_Lewout">
          <property name="minimumSize">
           <size>
            <width>40</width>
            <height>0</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>End-winding length on one side for a half-turn</string>
+         </property>
+         <property name="whatsThis">
+          <string>End-winding length on one side for a half-turn</string>
+         </property>
          <property name="text">
-          <string>Hwire :</string>
+          <string>Lewout:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="FloatEdit" name="lf_Lewout">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>End-winding length on one side for a half-turn</string>
+         </property>
+         <property name="whatsThis">
+          <string>End-winding length on one side for a half-turn</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QLabel" name="unit_Lewout">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>End-winding length on one side for a half-turn</string>
+         </property>
+         <property name="whatsThis">
+          <string>End-winding length on one side for a half-turn</string>
+         </property>
+         <property name="text">
+          <string>m</string>
          </property>
         </widget>
        </item>

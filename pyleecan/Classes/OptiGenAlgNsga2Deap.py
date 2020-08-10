@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Optimization/OptiGenAlgNsga2Deap
 """
 
 from os import linesep
@@ -50,7 +51,7 @@ except ImportError:
     Toolbox = ImportError
 from ._check import InitUnKnowClassError
 from .OptiProblem import OptiProblem
-from .OutputMultiOpti import OutputMultiOpti
+from .XOutput import XOutput
 
 
 class OptiGenAlgNsga2Deap(OptiGenAlg):
@@ -135,8 +136,9 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         size_pop=40,
         nb_gen=100,
         problem=-1,
-        multi_output=-1,
+        xoutput=-1,
         logger_name="Pyleecan.OptiSolver",
+        is_keep_all_output=False,
         init_dict=None,
         init_str=None,
     ):
@@ -153,8 +155,8 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
 
         if problem == -1:
             problem = OptiProblem()
-        if multi_output == -1:
-            multi_output = OutputMultiOpti()
+        if xoutput == -1:
+            xoutput = XOutput()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -171,8 +173,9 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             size_pop = obj.size_pop
             nb_gen = obj.nb_gen
             problem = obj.problem
-            multi_output = obj.multi_output
+            xoutput = obj.xoutput
             logger_name = obj.logger_name
+            is_keep_all_output = obj.is_keep_all_output
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -194,10 +197,12 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
                 nb_gen = init_dict["nb_gen"]
             if "problem" in list(init_dict.keys()):
                 problem = init_dict["problem"]
-            if "multi_output" in list(init_dict.keys()):
-                multi_output = init_dict["multi_output"]
+            if "xoutput" in list(init_dict.keys()):
+                xoutput = init_dict["xoutput"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "is_keep_all_output" in list(init_dict.keys()):
+                is_keep_all_output = init_dict["is_keep_all_output"]
         # Initialisation by argument
         # Check if the type Toolbox has been imported with success
         if isinstance(Toolbox, ImportError):
@@ -213,8 +218,9 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             size_pop=size_pop,
             nb_gen=nb_gen,
             problem=problem,
-            multi_output=multi_output,
+            xoutput=xoutput,
             logger_name=logger_name,
+            is_keep_all_output=is_keep_all_output,
         )
         # The class is frozen (in OptiGenAlg init), for now it's impossible to
         # add new properties
@@ -285,6 +291,11 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         else:
             self._toolbox = value
 
-    # DEAP toolbox
-    # Type : deap.base.Toolbox
-    toolbox = property(fget=_get_toolbox, fset=_set_toolbox, doc=u"""DEAP toolbox""")
+    toolbox = property(
+        fget=_get_toolbox,
+        fset=_set_toolbox,
+        doc=u"""DEAP toolbox
+
+        :Type: deap.base.Toolbox
+        """,
+    )
