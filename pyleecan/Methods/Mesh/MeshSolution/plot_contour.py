@@ -5,7 +5,7 @@ from numpy import real, min as np_min, max as np_max
 from ....Classes.MeshMat import MeshMat
 from ....definitions import config_dict
 
-COLOR_MAP = config_dict["color_dict"]["COLOR_MAP"]
+COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 
 
 def plot_contour(

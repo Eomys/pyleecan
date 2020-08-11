@@ -16,7 +16,7 @@ from ....Classes.MeshMat import MeshMat
 from ....Classes.MeshVTK import MeshVTK
 from ....definitions import config_dict
 
-COLOR_MAP = config_dict["color_dict"]["COLOR_MAP"]
+COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 
 
 def plot_deflection_animated(
