@@ -9052,7 +9052,8 @@
             "Solution",
             "Mode",
             "SolutionData",
-            "SolutionMat"
+            "SolutionMat",
+            "SolutionVector"
         ],
         "desc": "Abstract class for solution related classes.",
         "is_internal": false,
@@ -9161,6 +9162,36 @@
                 "type": "dict",
                 "unit": "-",
                 "value": null
+            }
+        ]
+    },
+    "SolutionVector": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Define a Solution with SciDataTool objects.",
+        "is_internal": false,
+        "methods": [
+            "get_field",
+            "get_axis"
+        ],
+        "mother": "Solution",
+        "name": "SolutionVector",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/SolutionVector.csv",
+        "properties": [
+            {
+                "desc": "Data object containing the numerical values of a solution. One of the axis must be \"Indices\", a list of indices. If the solution is a vector, one of the axis must be \"Direction\", values ['x','y'] for example.",
+                "max": "",
+                "min": "",
+                "name": "field",
+                "type": "SciDataTool.Classes.VectorField.VectorField",
+                "unit": "-",
+                "value": "None"
             }
         ]
     },

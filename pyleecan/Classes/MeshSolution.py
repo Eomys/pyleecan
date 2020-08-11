@@ -293,6 +293,7 @@ class MeshSolution(FrozenClass):
                         "Mode",
                         "SolutionData",
                         "SolutionMat",
+                        "SolutionVector",
                     ]:
                         raise InitUnKnowClassError(
                             "Unknow class name "

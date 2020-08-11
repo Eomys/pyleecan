@@ -1,6 +1,8 @@
 from ....Classes.SolutionData import SolutionData
+from ....Classes.SolutionVector import SolutionVector
 from ....Classes.MeshSolution import MeshSolution
-from SciDataTool import DataTime, Data1D
+from SciDataTool import DataTime, Data1D, VectorField
+import numpy as np
 
 
 def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
@@ -31,21 +33,73 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
         Indices_Cell = Data1D(name="indice", values=indices_cell, is_components=True)
         Nodirection = Data1D(name="direction", values=["scalar"], is_components=False)
 
-        solB = DataTime(
-            name="Magnetic Flux Density",
+        # Store the results for B
+        components = {}
+
+        Bx_data = DataTime(
+            name="Magnetic Flux Density Bx",
             unit="T",
-            symbol="B",
-            axes=[Time, Indices_Cell, Direction],
-            values=B,
+            symbol="Bx",
+            axes=[Time, Indices_Cell],
+            values=B[:, :, 0],
+        )
+        components["x"] = Bx_data
+
+        By_data = DataTime(
+            name="Magnetic Flux Density By",
+            unit="T",
+            symbol="By",
+            axes=[Time, Indices_Cell],
+            values=B[:, :, 1],
+        )
+        components["y"] = By_data
+
+        if not np.all((B[:, :, 2] == 0)):
+            Bz_data = DataTime(
+                name="Magnetic Flux Density Bz",
+                unit="T",
+                symbol="Bz",
+                axes=[Time, Indices_Cell],
+                values=B[:, :, 2],
+            )
+            components["z"] = Bz_data
+
+        solB = VectorField(
+            name="Magnetic Flux Density", symbol="B", components=components
         )
 
-        solH = DataTime(
-            name="Magnetic Field",
+        # Store the results for H
+        componentsH = {}
+
+        Hx_data = DataTime(
+            name="Magnetic Field Hx",
             unit="A/m",
-            symbol="H",
-            axes=[Time, Indices_Cell, Direction],
-            values=H,
+            symbol="Hx",
+            axes=[Time, Indices_Cell],
+            values=H[:, :, 0],
         )
+        componentsH["x"] = Hx_data
+
+        Hy_data = DataTime(
+            name="Magnetic Field Hy",
+            unit="A/m",
+            symbol="Hy",
+            axes=[Time, Indices_Cell],
+            values=H[:, :, 1],
+        )
+        componentsH["y"] = Hy_data
+
+        if not np.all((H[:, :, 2] == 0)):
+            Hz_data = DataTime(
+                name="Magnetic Field Hz",
+                unit="A/m",
+                symbol="Hz",
+                axes=[Time, Indices_Cell],
+                values=H[:, :, 2],
+            )
+            componentsH["z"] = Hz_data
+
+        solH = VectorField(name="Magnetic Field", symbol="H", components=componentsH)
 
         solmu = DataTime(
             name="Magnetic Permeability",
@@ -56,9 +110,9 @@ def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
         )
 
         sollist.append(
-            SolutionData(field=solB, type_cell="triangle", label="B")
+            SolutionVector(field=solB, type_cell="triangle", label="B")
         )  # Face solution
-        sollist.append(SolutionData(field=solH, type_cell="triangle", label="H"))
+        sollist.append(SolutionVector(field=solH, type_cell="triangle", label="H"))
         sollist.append(SolutionData(field=solmu, type_cell="triangle", label="\mu"))
 
     meshsol = MeshSolution(

@@ -152,6 +152,7 @@ from ..Classes.SlotWind import SlotWind
 from ..Classes.Solution import Solution
 from ..Classes.SolutionData import SolutionData
 from ..Classes.SolutionMat import SolutionMat
+from ..Classes.SolutionVector import SolutionVector
 from ..Classes.Structural import Structural
 from ..Classes.SurfLine import SurfLine
 from ..Classes.SurfRing import SurfRing
