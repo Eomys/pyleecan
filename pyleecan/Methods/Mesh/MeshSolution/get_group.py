@@ -95,7 +95,7 @@ def get_group(self, group_names):
                 indice=node_indice,
             )
         else:
-            if "direction" in axis_dct:
+            if "component" in axis_dct:
                 new_field_sol = field_sol[:, indice_dict[type_cell_sol], :]
             else:
                 new_field_sol = field_sol[:, indice_dict[type_cell_sol]]
