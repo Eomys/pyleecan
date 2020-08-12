@@ -9,8 +9,9 @@ from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 
-save_path = "C:\\Users\\Raphael\\Desktop\\Git\\EOMYS-Public\\pyleecan\\pyleecan\\Results\\SM_CEFC_002_save_mag\\Output"
-from Tests import save_load_path as load_results_path
+from pyleecan.definitions import MAIN_DIR
+save_path = MAIN_DIR + "\\Results\\SM_CEFC_002_save_mag\\"
+
 from os.path import join
 
 import matplotlib.pyplot as plt
@@ -75,12 +76,6 @@ def test_CEFC_002():
     out.mag.meshsolution.plot_contour(label="H")
     out.mag.meshsolution.plot_contour(label="H", group_names="stator")
     out.mag.meshsolution.plot_contour(label="\mu", group_names=["stator", "airgap"])
-
-    # Test save with MeshSolution object in out
-    out.save(save_path=save_path)
-    # Test save with MeshSolution object in out
-    out.save(save_path=save_path + "\Output.json")
-
 
 def test_CEFC_002_load():
 
