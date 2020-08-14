@@ -8,7 +8,7 @@ import numpy as np
 
 
 class unittest_get_coord(TestCase):
-    """unittest for NodeMat get_node methods"""
+    """unittest for PointMat get_node methods"""
 
     def setUp(self):
         self.mesh = Mesh()
