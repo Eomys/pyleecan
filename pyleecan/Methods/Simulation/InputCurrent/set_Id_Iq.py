@@ -1,17 +1,13 @@
-from ....Functions.Electrical.coordinate_transformation import n2dq
-from numpy import pi, sin, linspace, zeros, mean
+from numpy import cos, sin
 
 
 def set_Id_Iq(self, I0, Phi0):
     """Set Id_ref and Iq_ref according to I0, Phi0
     """
 
-    time = linspace(0, 1, 100)
-    Iab = zeros((100, 3))
-    Iab[:, 0] = I0 * sin(time + Phi0)
-    Iab[:, 1] = I0 * sin(time + Phi0 + 2 * pi / 3)
-    Iab[:, 2] = I0 * sin(time + Phi0 + 4 * pi / 3)
-    felec = self.felec
-    Idq = n2dq(Iab, 2 * pi * felec * time)
-    self.Id_ref = mean(Idq[:, 0])
-    self.Iq_ref = mean(Idq[:, 1])
+    self.Id_ref = I0 * cos(Phi0)
+    self.Iq_ref = I0 * sin(Phi0)
+    if abs(self.Id_ref) < 1e-10:
+        self.Id_ref = 0
+    if abs(self.Iq_ref) < 1e-10:
+        self.Iq_ref = 0
