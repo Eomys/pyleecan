@@ -1,10 +1,5 @@
 from ....Classes.Simulation import Simulation
 from ....Classes.InputCurrent import InputCurrent
-from ....Classes.ImportMatrixVal import ImportMatrixVal
-from ....Classes.ImportMatrixXlsDir import ImportMatrixXlsDir
-from ....Classes.ImportGenMatrixSin import ImportGenMatrixSin
-from ....Classes.ImportGenVectLin import ImportGenVectLin
-from numpy import ones, array, pi, linspace
 
 
 def get_input_list(self):

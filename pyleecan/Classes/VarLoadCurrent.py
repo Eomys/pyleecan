@@ -34,6 +34,13 @@ try:
 except ImportError as error:
     check_param = error
 
+try:
+    from ..Methods.Simulation.VarLoadCurrent.get_elec_datakeeper import (
+        get_elec_datakeeper,
+    )
+except ImportError as error:
+    get_elec_datakeeper = error
+
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -93,6 +100,18 @@ class VarLoadCurrent(VarLoad):
         )
     else:
         check_param = check_param
+    # cf Methods.Simulation.VarLoadCurrent.get_elec_datakeeper
+    if isinstance(get_elec_datakeeper, ImportError):
+        get_elec_datakeeper = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarLoadCurrent method get_elec_datakeeper: "
+                    + str(get_elec_datakeeper)
+                )
+            )
+        )
+    else:
+        get_elec_datakeeper = get_elec_datakeeper
     # save method is available in all object
     save = save
 
