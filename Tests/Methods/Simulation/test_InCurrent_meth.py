@@ -223,8 +223,8 @@ class unittest_InputCurrent_meth(TestCase):
         test_obj.input.gen_input()
         assert_array_almost_equal(output.elec.time, linspace(0, 1, 16))
         assert_array_almost_equal(output.elec.angle, linspace(0, 2 * pi, 20))
-        assert_array_almost_equal(output.elec.Is, Is_exp)
-        assert_array_almost_equal(output.elec.Ir, Ir_exp)
+        assert_array_almost_equal(output.elec.Is.values, Is_exp)
+        assert_array_almost_equal(output.elec.Ir.values, Ir_exp)
         assert_array_almost_equal(output.elec.angle_rotor, linspace(0, 2 * pi, 16))
         assert_array_almost_equal(output.elec.N0, ones(16) * 10)
 
@@ -269,7 +269,7 @@ class unittest_InputCurrent_meth(TestCase):
         test_obj.input.gen_input()
         assert_array_almost_equal(output.elec.time, linspace(0, 1, 7))
         assert_array_almost_equal(output.elec.angle, linspace(0, 2 * pi, 20))
-        assert_array_almost_equal(output.elec.get_Is(), Is_exp)
+        assert_array_almost_equal(output.elec.get_Is().values, Is_exp)
         assert_array_almost_equal(output.get_angle_rotor(), angle_rotor_exp)
         assert_array_almost_equal(output.elec.N0, ones(7) * 60 / zp)
 

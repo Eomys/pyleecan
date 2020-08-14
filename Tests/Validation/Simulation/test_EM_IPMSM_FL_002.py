@@ -69,7 +69,6 @@ def test_EM_IPMSM_FL_002():
     simu_sym.mag.is_symmetry_a = True
     simu_sym.mag.sym_a = 4
     simu_sym.mag.is_antiper_a = True
-    simu_sym.struct = None
 
     out = Output(simu=simu)
     simu.run()

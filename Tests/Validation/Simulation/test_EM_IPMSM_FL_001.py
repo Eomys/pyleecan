@@ -37,13 +37,15 @@ def test_EM_IPMSM_FL_001():
         value=linspace(start=0, stop=2 * pi, num=1024, endpoint=False)
     )
     # Definition of the enforced output of the electrical module
-    simu.input.Is.value = array(  # Stator currents as a function of time
-        [
-            [6.97244193e-06, 2.25353053e02, -2.25353060e02],
-            [-2.60215295e02, 1.30107654e02, 1.30107642e02],
-            [-6.97244208e-06, -2.25353053e02, 2.25353060e02],
-            [2.60215295e02, -1.30107654e02, -1.30107642e02],
-        ]
+    simu.input.Is = ImportMatrixVal(
+        value=array(  # Stator currents as a function of time
+            [
+                [6.97244193e-06, 2.25353053e02, -2.25353060e02],
+                [-2.60215295e02, 1.30107654e02, 1.30107642e02],
+                [-6.97244208e-06, -2.25353053e02, 2.25353060e02],
+                [2.60215295e02, -1.30107654e02, -1.30107642e02],
+            ]
+        )
     )
     simu.input.Ir = None  # SPMSM machine => no rotor currents to define
     simu.input.N0 = 3000  # Rotor speed [rpm]
