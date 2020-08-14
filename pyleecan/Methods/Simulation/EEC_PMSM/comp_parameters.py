@@ -15,7 +15,7 @@ def comp_parameters(self, output):
     """
 
     phi = self.fluxlink.comp_fluxlinkage(output)
-    
+
     if "R20" not in self.parameters:
         self.parameters["R20"] = output.simu.machine.stator.comp_resistance_wind()
     if "Ld" not in self.parameters:

@@ -56,14 +56,13 @@ def solve_EEC(self, output):
     Phases = Data1D(
         name="phases", unit="dimless", values=phases_names, is_components=True
     )
-    output.elec.Currents = DataTime(
+    output.elec.Is = DataTime(
         name="Stator currents",
         unit="A",
         symbol="I_s",
         axes=[Phases, Time],
         values=transpose(Is),
     )
-    output.elec.Is = Is
     output.elec.Ir = None
     output.elec.Id_ref = Idq[0]
     output.elec.Iq_ref = Idq[1]

@@ -2,7 +2,6 @@
 
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Functions.Electrical.coordinate_transformation import n2dq
-
 from numpy import zeros, linspace, pi, split, mean, sqrt
 import matplotlib.pyplot as plt
 
@@ -30,8 +29,9 @@ def comp_fluxlinkage(self, output):
     Ir = output.elec.Ir
 
     # Set currents at 0A for the FEMM simulation
-    output.elec.Is = zeros((Nt_tot, qs))
-    output.elec.Ir = zeros((Nt_tot, qs))
+    output.elec.Is.values = zeros((Nt_tot, qs))
+    if output.elec.Ir is not None:
+        output.elec.Ir.values = zeros((Nt_tot, qs))
 
     # Set the symmetry factor if needed
     if self.is_symmetry_a:
@@ -62,13 +62,13 @@ def comp_fluxlinkage(self, output):
 
     # Solve for all time step and store all the results in output
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
-    
+
     # Define d axis angle for the d,q transform
     angle_offset_initial = output.get_angle_offset_initial()
-    d_angle = (angle-angle_offset_initial) * zp
+    d_angle = (angle - angle_offset_initial) * zp
     fluxdq = split(n2dq(Phi_wind, d_angle, n=qs), 2, axis=1)
     Flux_link = mean(fluxdq[0]) / sqrt(3)
-    
+
     flux = split(Phi_wind, 3, axis=1)
     fig = plt.figure()
     plt.plot(angle, flux[0], color="tab:blue", label="A")

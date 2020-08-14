@@ -22,6 +22,11 @@ try:
 except ImportError as error:
     set_Id_Iq = error
 
+try:
+    from ..Methods.Simulation.InputCurrent.comp_felec import comp_felec
+except ImportError as error:
+    comp_felec = error
+
 
 from ._check import InitUnKnowClassError
 from .Import import Import
@@ -55,6 +60,17 @@ class InputCurrent(Input):
         )
     else:
         set_Id_Iq = set_Id_Iq
+    # cf Methods.Simulation.InputCurrent.comp_felec
+    if isinstance(comp_felec, ImportError):
+        comp_felec = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use InputCurrent method comp_felec: " + str(comp_felec)
+                )
+            )
+        )
+    else:
+        comp_felec = comp_felec
     # save method is available in all object
     save = save
 

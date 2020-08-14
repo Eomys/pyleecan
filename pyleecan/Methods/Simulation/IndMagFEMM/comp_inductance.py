@@ -2,7 +2,6 @@
 
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Functions.Electrical.coordinate_transformation import n2dq, dq2n
-
 from numpy import array, zeros, linspace, pi, split, mean, sqrt
 
 import matplotlib.pyplot as plt
@@ -21,7 +20,7 @@ def comp_inductance(self, output):
 
     qs = output.simu.machine.stator.winding.qs
     zp = output.simu.machine.stator.get_pole_pair_number()
-    
+
     Nt_tot = self.Nt_tot
     angle_offset_initial = output.get_angle_offset_initial()
     rot_dir = output.get_rot_dir()
@@ -46,14 +45,15 @@ def comp_inductance(self, output):
     # Set rotor angle for the FEMM simulation
     angle = linspace(0, 2 * pi / sym, Nt_tot)
     output.elec.angle_rotor = rot_dir * angle
-    
+
     # Define d axis angle for the d,q transform
     angle_offset_initial = output.get_angle_offset_initial()
-    d_angle = (angle-angle_offset_initial) * zp
+    d_angle = (angle - angle_offset_initial) * zp
 
     # Set currents at 1A + Park transformation for the Id FEMM simulation
-    output.elec.Is = dq2n(array([1, 0]), d_angle, n=qs)
-    output.elec.Ir = zeros((Nt_tot, qs))
+    output.elec.Is.values = dq2n(array([1, 0]), d_angle, n=qs)
+    if output.elec.Ir is not None:
+        output.elec.Ir.values = zeros((Nt_tot, qs))
 
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
@@ -68,11 +68,11 @@ def comp_inductance(self, output):
 
     # Solve for all time step and store all the results in output
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
-    
+
     flux = split(Phi_wind, 3, axis=1)
     fluxdq = split(n2dq(Phi_wind, d_angle, n=qs), 2, axis=1)
     Lmd = mean(fluxdq[0]) / sqrt(3)
-    
+
     fig = plt.figure()
     plt.plot(angle, flux[0], color="tab:blue", label="A")
     plt.plot(angle, flux[1], color="tab:red", label="B")
@@ -83,16 +83,17 @@ def comp_inductance(self, output):
     fig.savefig("test_inductanceD.png")
 
     # Set currents at 1A + Park transformation for the Iq FEMM simulation
-    output.elec.Is = dq2n(array([0, 1]), d_angle, n=qs)
-    output.elec.Ir = zeros((Nt_tot, qs))
+    output.elec.Is.values = dq2n(array([0, 1]), d_angle, n=qs)
+    if output.elec.Ir is not None:
+        output.elec.Ir.values = zeros((Nt_tot, qs))
 
     # Solve for Lq
     Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
-    
+
     flux = split(Phi_wind, 3, axis=1)
     fluxdq = split(n2dq(Phi_wind, d_angle, n=qs), 2, axis=1)
     Lmq = mean(fluxdq[1]) / sqrt(3)
-    
+
     fig = plt.figure()
     plt.plot(angle, flux[0], color="tab:blue", label="A")
     plt.plot(angle, flux[1], color="tab:red", label="B")

@@ -5,6 +5,8 @@ from ....Classes.Simulation import Simulation
 from ....Methods.Simulation.Input import InputError
 from numpy import ndarray, linspace, pi, mean
 from ....Functions.Electrical.coordinate_transformation import n2dq
+from SciDataTool import Data1D, DataTime
+from ....Functions.Winding.gen_phase_list import gen_name
 
 
 def gen_input(self):
@@ -68,12 +70,8 @@ def gen_input(self):
     qs = len(simu.machine.stator.get_name_phase())
     qr = len(simu.machine.rotor.get_name_phase())
 
-    if self.N0 is not None:
-        output.N0 = self.N0
-        zp = simu.machine.stator.get_pole_pair_number()
-        output.felec = zp * self.N0 / 60
-    else:
-        output.felec = 1
+    output.N0 = self.N0
+    output.felec = self.comp_felec()
 
     # Load and check Is
     if qs > 0:
@@ -87,20 +85,32 @@ def gen_input(self):
                 output.Iq_ref = self.Iq_ref
                 output.Is = None
         else:
-            output.Is = self.Is.get_data()
-            if not isinstance(output.Is, ndarray) or output.Is.shape != (
-                self.Nt_tot,
-                qs,
-            ):
+            Is = self.Is.get_data()
+            if not isinstance(Is, ndarray) or Is.shape != (self.Nt_tot, qs):
                 raise InputError(
                     "ERROR: InputCurrent.Is must be a matrix with the shape "
                     + str((self.Nt_tot, qs))
                     + " (len(time), stator phase number), "
-                    + str(output.Is.shape)
+                    + str(Is.shape)
                     + " returned"
                 )
+            # Creating the data object
+            Time = Data1D(name="time", unit="s", values=output.time)
+            Phase = Data1D(
+                name="phase",
+                unit="",
+                values=gen_name(qs, is_add_phase=True),
+                is_components=True,
+            )
+            output.Is = DataTime(
+                name="Stator current",
+                unit="A",
+                symbol="Is",
+                axes=[Time, Phase],
+                values=Is,
+            )
             # Compute corresponding Id/Iq reference
-            Idq = n2dq(output.Is, 2 * pi * output.felec * output.time)
+            Idq = n2dq(output.Is.values, 2 * pi * output.felec * output.time)
             output.Id_ref = mean(Idq[:, 0])
             output.Iq_ref = mean(Idq[:, 1])
 
@@ -108,14 +118,30 @@ def gen_input(self):
     if qr > 0:
         if self.Ir is None:
             raise InputError("ERROR: InputCurrent.Ir missing")
-        output.Ir = self.Ir.get_data()
-        if not isinstance(output.Ir, ndarray) or output.Ir.shape != (self.Nt_tot, qr):
-            raise InputError(
-                "ERROR: InputCurrent.Ir must be a matrix with the shape "
-                + str((self.Nt_tot, qr))
-                + " (len(time), rotor phase number), "
-                + str(output.Ir.shape)
-                + " returned"
+        else:
+            Ir = self.Ir.get_data()
+            if not isinstance(Ir, ndarray) or Ir.shape != (self.Nt_tot, qr):
+                raise InputError(
+                    "ERROR: InputCurrent.Ir must be a matrix with the shape "
+                    + str((self.Nt_tot, qr))
+                    + " (len(time), rotor phase number), "
+                    + str(Ir.shape)
+                    + " returned"
+                )
+            # Creating the data object
+            Time = Data1D(name="time", unit="s", values=output.time)
+            Phase = Data1D(
+                name="phase",
+                unit="",
+                values=gen_name(qr, is_add_phase=True),
+                is_components=True,
+            )
+            output.Ir = DataTime(
+                name="Rotor current",
+                unit="A",
+                symbol="Ir",
+                axes=[Time, Phase],
+                values=Ir,
             )
 
     # Load and check alpha_rotor and N0
