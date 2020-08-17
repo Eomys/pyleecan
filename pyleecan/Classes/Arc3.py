@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Geometry/Arc3.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Geometry/Arc3.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Geometry/Arc3
 """
 
 from os import linesep
@@ -327,10 +328,13 @@ class Arc3(Arc):
         check_var("begin", value, "complex")
         self._begin = value
 
-    # begin point of the arc
-    # Type : complex
     begin = property(
-        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the arc"""
+        fget=_get_begin,
+        fset=_set_begin,
+        doc=u"""begin point of the arc
+
+        :Type: complex
+        """,
     )
 
     def _get_end(self):
@@ -342,9 +346,14 @@ class Arc3(Arc):
         check_var("end", value, "complex")
         self._end = value
 
-    # end of the arc
-    # Type : complex
-    end = property(fget=_get_end, fset=_set_end, doc=u"""end of the arc""")
+    end = property(
+        fget=_get_end,
+        fset=_set_end,
+        doc=u"""end of the arc
+
+        :Type: complex
+        """,
+    )
 
     def _get_is_trigo_direction(self):
         """getter of is_trigo_direction"""
@@ -355,10 +364,11 @@ class Arc3(Arc):
         check_var("is_trigo_direction", value, "bool")
         self._is_trigo_direction = value
 
-    # Rotation direction of the arc
-    # Type : bool
     is_trigo_direction = property(
         fget=_get_is_trigo_direction,
         fset=_set_is_trigo_direction,
-        doc=u"""Rotation direction of the arc""",
+        doc=u"""Rotation direction of the arc
+
+        :Type: bool
+        """,
     )

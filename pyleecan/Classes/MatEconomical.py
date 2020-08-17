@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Material/MatEconomical.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Material/MatEconomical.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Material/MatEconomical
 """
 
 from os import linesep
@@ -117,12 +118,14 @@ class MatEconomical(FrozenClass):
         check_var("cost_unit", value, "float", Vmin=0)
         self._cost_unit = value
 
-    # Cost of one kilo of material
-    # Type : float, min = 0
     cost_unit = property(
         fget=_get_cost_unit,
         fset=_set_cost_unit,
-        doc=u"""Cost of one kilo of material""",
+        doc=u"""Cost of one kilo of material
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_unit_name(self):
@@ -134,8 +137,11 @@ class MatEconomical(FrozenClass):
         check_var("unit_name", value, "str")
         self._unit_name = value
 
-    # Name of the unit
-    # Type : str
     unit_name = property(
-        fget=_get_unit_name, fset=_set_unit_name, doc=u"""Name of the unit"""
+        fget=_get_unit_name,
+        fset=_set_unit_name,
+        doc=u"""Name of the unit
+
+        :Type: str
+        """,
     )

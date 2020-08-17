@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/Hole.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/Hole.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/Hole
 """
 
 from os import linesep
@@ -224,10 +225,15 @@ class Hole(FrozenClass):
         check_var("Zh", value, "int", Vmin=0, Vmax=1000)
         self._Zh = value
 
-    # Number of Hole around the circumference
-    # Type : int, min = 0, max = 1000
     Zh = property(
-        fget=_get_Zh, fset=_set_Zh, doc=u"""Number of Hole around the circumference"""
+        fget=_get_Zh,
+        fset=_set_Zh,
+        doc=u"""Number of Hole around the circumference
+
+        :Type: int
+        :min: 0
+        :max: 1000
+        """,
     )
 
     def _get_mat_void(self):
@@ -242,10 +248,11 @@ class Hole(FrozenClass):
         if self._mat_void is not None:
             self._mat_void.parent = self
 
-    # Material of the void part of the hole (Air in general)
-    # Type : Material
     mat_void = property(
         fget=_get_mat_void,
         fset=_set_mat_void,
-        doc=u"""Material of the void part of the hole (Air in general)""",
+        doc=u"""Material of the void part of the hole (Air in general)
+
+        :Type: Material
+        """,
     )

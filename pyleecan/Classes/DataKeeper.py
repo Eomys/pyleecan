@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/DataKeeper.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/DataKeeper.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/DataKeeper
 """
 
 from os import linesep
@@ -197,9 +198,14 @@ class DataKeeper(FrozenClass):
         check_var("name", value, "str")
         self._name = value
 
-    # Data name
-    # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""Data name""")
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Data name
+
+        :Type: str
+        """,
+    )
 
     def _get_symbol(self):
         """getter of symbol"""
@@ -210,9 +216,14 @@ class DataKeeper(FrozenClass):
         check_var("symbol", value, "str")
         self._symbol = value
 
-    # Data symbol
-    # Type : str
-    symbol = property(fget=_get_symbol, fset=_set_symbol, doc=u"""Data symbol""")
+    symbol = property(
+        fget=_get_symbol,
+        fset=_set_symbol,
+        doc=u"""Data symbol
+
+        :Type: str
+        """,
+    )
 
     def _get_unit(self):
         """getter of unit"""
@@ -223,9 +234,14 @@ class DataKeeper(FrozenClass):
         check_var("unit", value, "str")
         self._unit = value
 
-    # Data unit
-    # Type : str
-    unit = property(fget=_get_unit, fset=_set_unit, doc=u"""Data unit""")
+    unit = property(
+        fget=_get_unit,
+        fset=_set_unit,
+        doc=u"""Data unit
+
+        :Type: str
+        """,
+    )
 
     def _get_keeper(self):
         """getter of keeper"""
@@ -248,12 +264,13 @@ class DataKeeper(FrozenClass):
                 "Expected function or list from a saved file, got: " + str(type(value))
             )
 
-    # Function that takes an Output in argument and return a value
-    # Type : function
     keeper = property(
         fget=_get_keeper,
         fset=_set_keeper,
-        doc=u"""Function that takes an Output in argument and return a value""",
+        doc=u"""Function that takes an Output in argument and return a value
+
+        :Type: function
+        """,
     )
 
     def _get_error_keeper(self):
@@ -277,12 +294,13 @@ class DataKeeper(FrozenClass):
                 "Expected function or list from a saved file, got: " + str(type(value))
             )
 
-    # Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices
-    # Type : function
     error_keeper = property(
         fget=_get_error_keeper,
         fset=_set_error_keeper,
-        doc=u"""Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices""",
+        doc=u"""Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices
+
+        :Type: function
+        """,
     )
 
     def _get_result(self):

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Structural.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Structural.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Structural
 """
 
 from os import linesep
@@ -179,6 +180,11 @@ class Structural(FrozenClass):
         if self._force is not None:
             self._force.parent = self
 
-    # Force module
-    # Type : Force
-    force = property(fget=_get_force, fset=_set_force, doc=u"""Force module""")
+    force = property(
+        fget=_get_force,
+        fset=_set_force,
+        doc=u"""Force module
+
+        :Type: Force
+        """,
+    )

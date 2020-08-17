@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/MachineSyRM.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/MachineSyRM.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/MachineSyRM
 """
 
 from os import linesep
@@ -272,9 +273,14 @@ class MachineSyRM(MachineSync):
         if self._rotor is not None:
             self._rotor.parent = self
 
-    # Machine's Rotor
-    # Type : LamHole
-    rotor = property(fget=_get_rotor, fset=_set_rotor, doc=u"""Machine's Rotor""")
+    rotor = property(
+        fget=_get_rotor,
+        fset=_set_rotor,
+        doc=u"""Machine's Rotor
+
+        :Type: LamHole
+        """,
+    )
 
     def _get_stator(self):
         """getter of stator"""
@@ -288,6 +294,11 @@ class MachineSyRM(MachineSync):
         if self._stator is not None:
             self._stator.parent = self
 
-    # Machine's Stator
-    # Type : LamSlotWind
-    stator = property(fget=_get_stator, fset=_set_stator, doc=u"""Machine's Stator""")
+    stator = property(
+        fget=_get_stator,
+        fset=_set_stator,
+        doc=u"""Machine's Stator
+
+        :Type: LamSlotWind
+        """,
+    )

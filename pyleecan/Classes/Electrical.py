@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Electrical.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Electrical.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Electrical
 """
 
 from os import linesep
@@ -161,8 +162,11 @@ class Electrical(FrozenClass):
         if self._eec is not None:
             self._eec.parent = self
 
-    # Electrical Equivalent Circuit
-    # Type : EEC
     eec = property(
-        fget=_get_eec, fset=_set_eec, doc=u"""Electrical Equivalent Circuit"""
+        fget=_get_eec,
+        fset=_set_eec,
+        doc=u"""Electrical Equivalent Circuit
+
+        :Type: EEC
+        """,
     )

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Output/OutMag.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Output/OutMag.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/OutMag
 """
 
 from os import linesep
@@ -343,10 +344,13 @@ class OutMag(FrozenClass):
         check_var("time", value, "ndarray")
         self._time = value
 
-    # Magnetic time vector (no symmetry)
-    # Type : ndarray
     time = property(
-        fget=_get_time, fset=_set_time, doc=u"""Magnetic time vector (no symmetry)"""
+        fget=_get_time,
+        fset=_set_time,
+        doc=u"""Magnetic time vector (no symmetry)
+
+        :Type: ndarray
+        """,
     )
 
     def _get_angle(self):
@@ -365,12 +369,13 @@ class OutMag(FrozenClass):
         check_var("angle", value, "ndarray")
         self._angle = value
 
-    # Magnetic position vector (no symmetry)
-    # Type : ndarray
     angle = property(
         fget=_get_angle,
         fset=_set_angle,
-        doc=u"""Magnetic position vector (no symmetry)""",
+        doc=u"""Magnetic position vector (no symmetry)
+
+        :Type: ndarray
+        """,
     )
 
     def _get_Nt_tot(self):
@@ -382,10 +387,13 @@ class OutMag(FrozenClass):
         check_var("Nt_tot", value, "int")
         self._Nt_tot = value
 
-    # Length of the time vector
-    # Type : int
     Nt_tot = property(
-        fget=_get_Nt_tot, fset=_set_Nt_tot, doc=u"""Length of the time vector"""
+        fget=_get_Nt_tot,
+        fset=_set_Nt_tot,
+        doc=u"""Length of the time vector
+
+        :Type: int
+        """,
     )
 
     def _get_Na_tot(self):
@@ -397,10 +405,13 @@ class OutMag(FrozenClass):
         check_var("Na_tot", value, "int")
         self._Na_tot = value
 
-    # Length of the angle vector
-    # Type : int
     Na_tot = property(
-        fget=_get_Na_tot, fset=_set_Na_tot, doc=u"""Length of the angle vector"""
+        fget=_get_Na_tot,
+        fset=_set_Na_tot,
+        doc=u"""Length of the angle vector
+
+        :Type: int
+        """,
     )
 
     def _get_B(self):
@@ -421,9 +432,14 @@ class OutMag(FrozenClass):
         else:
             self._B = value
 
-    # Airgap flux density components
-    # Type : SciDataTool.Classes.VectorField.VectorField
-    B = property(fget=_get_B, fset=_set_B, doc=u"""Airgap flux density components""")
+    B = property(
+        fget=_get_B,
+        fset=_set_B,
+        doc=u"""Airgap flux density components
+
+        :Type: SciDataTool.Classes.VectorField.VectorField
+        """,
+    )
 
     def _get_Tem(self):
         """getter of Tem"""
@@ -443,9 +459,14 @@ class OutMag(FrozenClass):
         else:
             self._Tem = value
 
-    # Electromagnetic torque
-    # Type : SciDataTool.Classes.DataND.DataND
-    Tem = property(fget=_get_Tem, fset=_set_Tem, doc=u"""Electromagnetic torque""")
+    Tem = property(
+        fget=_get_Tem,
+        fset=_set_Tem,
+        doc=u"""Electromagnetic torque
+
+        :Type: SciDataTool.Classes.DataND.DataND
+        """,
+    )
 
     def _get_Tem_av(self):
         """getter of Tem_av"""
@@ -456,10 +477,13 @@ class OutMag(FrozenClass):
         check_var("Tem_av", value, "float")
         self._Tem_av = value
 
-    # Average Electromagnetic torque
-    # Type : float
     Tem_av = property(
-        fget=_get_Tem_av, fset=_set_Tem_av, doc=u"""Average Electromagnetic torque"""
+        fget=_get_Tem_av,
+        fset=_set_Tem_av,
+        doc=u"""Average Electromagnetic torque
+
+        :Type: float
+        """,
     )
 
     def _get_Tem_rip_norm(self):
@@ -471,12 +495,13 @@ class OutMag(FrozenClass):
         check_var("Tem_rip_norm", value, "float")
         self._Tem_rip_norm = value
 
-    # Peak to Peak Torque ripple normalized according to average torque (None if average torque=0)
-    # Type : float
     Tem_rip_norm = property(
         fget=_get_Tem_rip_norm,
         fset=_set_Tem_rip_norm,
-        doc=u"""Peak to Peak Torque ripple normalized according to average torque (None if average torque=0)""",
+        doc=u"""Peak to Peak Torque ripple normalized according to average torque (None if average torque=0)
+
+        :Type: float
+        """,
     )
 
     def _get_Tem_rip_pp(self):
@@ -488,12 +513,13 @@ class OutMag(FrozenClass):
         check_var("Tem_rip_pp", value, "float")
         self._Tem_rip_pp = value
 
-    # Peak to Peak Torque ripple
-    # Type : float
     Tem_rip_pp = property(
         fget=_get_Tem_rip_pp,
         fset=_set_Tem_rip_pp,
-        doc=u"""Peak to Peak Torque ripple""",
+        doc=u"""Peak to Peak Torque ripple
+
+        :Type: float
+        """,
     )
 
     def _get_Phi_wind_stator(self):
@@ -512,12 +538,13 @@ class OutMag(FrozenClass):
         check_var("Phi_wind_stator", value, "ndarray")
         self._Phi_wind_stator = value
 
-    # Stator winding flux
-    # Type : ndarray
     Phi_wind_stator = property(
         fget=_get_Phi_wind_stator,
         fset=_set_Phi_wind_stator,
-        doc=u"""Stator winding flux""",
+        doc=u"""Stator winding flux
+
+        :Type: ndarray
+        """,
     )
 
     def _get_emf(self):
@@ -536,9 +563,14 @@ class OutMag(FrozenClass):
         check_var("emf", value, "ndarray")
         self._emf = value
 
-    # Electromotive force
-    # Type : ndarray
-    emf = property(fget=_get_emf, fset=_set_emf, doc=u"""Electromotive force""")
+    emf = property(
+        fget=_get_emf,
+        fset=_set_emf,
+        doc=u"""Electromotive force
+
+        :Type: ndarray
+        """,
+    )
 
     def _get_meshsolution(self):
         """getter of meshsolution"""
@@ -552,12 +584,13 @@ class OutMag(FrozenClass):
         if self._meshsolution is not None:
             self._meshsolution.parent = self
 
-    # FEA software mesh and solution
-    # Type : MeshSolution
     meshsolution = property(
         fget=_get_meshsolution,
         fset=_set_meshsolution,
-        doc=u"""FEA software mesh and solution""",
+        doc=u"""FEA software mesh and solution
+
+        :Type: MeshSolution
+        """,
     )
 
     def _get_FEMM_dict(self):
@@ -569,12 +602,13 @@ class OutMag(FrozenClass):
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 
-    # Dictionnary containing the main FEMM parameter
-    # Type : dict
     FEMM_dict = property(
         fget=_get_FEMM_dict,
         fset=_set_FEMM_dict,
-        doc=u"""Dictionnary containing the main FEMM parameter""",
+        doc=u"""Dictionnary containing the main FEMM parameter
+
+        :Type: dict
+        """,
     )
 
     def _get_logger_name(self):
@@ -586,10 +620,11 @@ class OutMag(FrozenClass):
         check_var("logger_name", value, "str")
         self._logger_name = value
 
-    # Name of the logger to use
-    # Type : str
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        doc=u"""Name of the logger to use
+
+        :Type: str
+        """,
     )

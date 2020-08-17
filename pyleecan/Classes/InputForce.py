@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/InputForce.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/InputForce.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/InputForce
 """
 
 from os import linesep
@@ -21,7 +22,6 @@ except ImportError as error:
 from ._check import InitUnKnowClassError
 from .ImportVectorField import ImportVectorField
 from .Import import Import
-from .ImportMatrixVal import ImportMatrixVal
 
 
 class InputForce(Input):
@@ -50,7 +50,17 @@ class InputForce(Input):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, P=None, time=-1, angle=-1, init_dict=None, init_str=None):
+    def __init__(
+        self,
+        P=None,
+        time=None,
+        angle=None,
+        Nt_tot=2048,
+        Nrev=1,
+        Na_tot=2048,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -65,9 +75,9 @@ class InputForce(Input):
         if P == -1:
             P = ImportVectorField()
         if time == -1:
-            time = ImportMatrixVal()
+            time = Import()
         if angle == -1:
-            angle = ImportMatrixVal()
+            angle = Import()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -78,6 +88,9 @@ class InputForce(Input):
             P = obj.P
             time = obj.time
             angle = obj.angle
+            Nt_tot = obj.Nt_tot
+            Nrev = obj.Nrev
+            Na_tot = obj.Na_tot
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -87,6 +100,12 @@ class InputForce(Input):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
                 angle = init_dict["angle"]
+            if "Nt_tot" in list(init_dict.keys()):
+                Nt_tot = init_dict["Nt_tot"]
+            if "Nrev" in list(init_dict.keys()):
+                Nrev = init_dict["Nrev"]
+            if "Na_tot" in list(init_dict.keys()):
+                Na_tot = init_dict["Na_tot"]
         # Initialisation by argument
         # P can be None, a ImportVectorField object or a dict
         if isinstance(P, dict):
@@ -98,7 +117,9 @@ class InputForce(Input):
         else:
             self.P = P
         # Call Input init
-        super(InputForce, self).__init__(time=time, angle=angle)
+        super(InputForce, self).__init__(
+            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
+        )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 
@@ -163,6 +184,11 @@ class InputForce(Input):
         if self._P is not None:
             self._P.parent = self
 
-    # Magnetic air-gap surface force
-    # Type : ImportVectorField
-    P = property(fget=_get_P, fset=_set_P, doc=u"""Magnetic air-gap surface force""")
+    P = property(
+        fget=_get_P,
+        fset=_set_P,
+        doc=u"""Magnetic air-gap surface force
+
+        :Type: ImportVectorField
+        """,
+    )

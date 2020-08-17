@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/SlotW22.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/SlotW22.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/SlotW22
 """
 
 from os import linesep
@@ -284,10 +285,14 @@ class SlotW22(SlotWind):
         check_var("W0", value, "float", Vmin=0)
         self._W0 = value
 
-    # Slot isthmus orthoradial angular width.
-    # Type : float, min = 0
     W0 = property(
-        fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus orthoradial angular width."""
+        fget=_get_W0,
+        fset=_set_W0,
+        doc=u"""Slot isthmus orthoradial angular width.
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_H0(self):
@@ -299,9 +304,15 @@ class SlotW22(SlotWind):
         check_var("H0", value, "float", Vmin=0)
         self._H0 = value
 
-    # Slot isthmus radial height.
-    # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus radial height.""")
+    H0 = property(
+        fget=_get_H0,
+        fset=_set_H0,
+        doc=u"""Slot isthmus radial height.
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H2(self):
         """getter of H2"""
@@ -312,10 +323,14 @@ class SlotW22(SlotWind):
         check_var("H2", value, "float", Vmin=0)
         self._H2 = value
 
-    # Slot radial height below wedge
-    # Type : float, min = 0
     H2 = property(
-        fget=_get_H2, fset=_set_H2, doc=u"""Slot radial height below wedge """
+        fget=_get_H2,
+        fset=_set_H2,
+        doc=u"""Slot radial height below wedge 
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_W2(self):
@@ -327,6 +342,12 @@ class SlotW22(SlotWind):
         check_var("W2", value, "float", Vmin=0)
         self._W2 = value
 
-    # Angle between slot edges
-    # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""Angle between slot edges""")
+    W2 = property(
+        fget=_get_W2,
+        fset=_set_W2,
+        doc=u"""Angle between slot edges
+
+        :Type: float
+        :min: 0
+        """,
+    )
