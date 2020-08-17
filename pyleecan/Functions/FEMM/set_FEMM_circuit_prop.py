@@ -37,7 +37,7 @@ def set_FEMM_circuit_prop(circuits, Clabel, I, is_mmf, Npcpp, j_t0):
     if Clabel in circuits:
         if I is not None and I.size != 0 and LA.norm(I) != 0:
             # Update existing circuit
-            femm.mi_modifycircprop(Clabel, 1, is_mmf * I[j_t0, q_id] / Npcpp)
+            femm.mi_modifycircprop(Clabel, 1, is_mmf * I[q_id, j_t0] / Npcpp)
     else:
         # Create new circuit
         femm.mi_addcircprop(Clabel, 0, 1)

@@ -23,5 +23,5 @@ def comp_FEMM_Jcus(lam, cname, I, j_t0, is_mmf):
     if I is None or LA.norm(I) == 0:
         Jcus = 0
     else:
-        Jcus = s * 1e-6 * Ksfill * (I[j_t0, q_id] / Npcpp) * is_mmf / Swire / Nwpc
+        Jcus = s * 1e-6 * Ksfill * (I[q_id, j_t0] / Npcpp) * is_mmf / Swire / Nwpc
     return Jcus

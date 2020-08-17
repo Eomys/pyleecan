@@ -3,7 +3,7 @@
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
 from ....Methods.Simulation.Input import InputError
-from numpy import ndarray, linspace, pi, mean
+from numpy import ndarray, linspace, pi, mean, transpose
 from ....Functions.Electrical.coordinate_transformation import n2dq
 from SciDataTool import Data1D, DataTime
 from ....Functions.Winding.gen_phase_list import gen_name
@@ -106,8 +106,8 @@ def gen_input(self):
                 name="Stator current",
                 unit="A",
                 symbol="Is",
-                axes=[Time, Phase],
-                values=Is,
+                axes=[Phase, Time],
+                values=transpose(Is),
             )
             # Compute corresponding Id/Iq reference
             Idq = n2dq(output.Is.values, 2 * pi * output.felec * output.time)
@@ -140,8 +140,8 @@ def gen_input(self):
                 name="Rotor current",
                 unit="A",
                 symbol="Ir",
-                axes=[Time, Phase],
-                values=Ir,
+                axes=[Phase, Time],
+                values=transpose(Ir),
             )
 
     # Load and check alpha_rotor and N0

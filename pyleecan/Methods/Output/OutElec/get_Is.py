@@ -1,6 +1,5 @@
 from ....Functions.Electrical.coordinate_transformation import dq2n
-from numpy import pi, array
-import matplotlib.pyplot as plt
+from numpy import pi, array, transpose
 from SciDataTool import Data1D, DataTime
 from ....Functions.Winding.gen_phase_list import gen_name
 
@@ -25,6 +24,6 @@ def get_Is(self):
             is_components=True,
         )
         self.Is = DataTime(
-            name="Stator current", unit="A", symbol="Is", axes=[Time, Phase], values=Is
+            name="Stator current", unit="A", symbol="Is", axes=[Phase, Time], values=transpose(Is)
         )
     return self.Is
