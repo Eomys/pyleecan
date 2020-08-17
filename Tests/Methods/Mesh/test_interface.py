@@ -7,6 +7,7 @@ from pyleecan.Classes.PointMat import PointMat
 from pyleecan.Classes.CellMat import CellMat
 import numpy as np
 
+
 @pytest.mark.MeshSol
 @pytest.mark.skip
 class unittest_interface(TestCase):

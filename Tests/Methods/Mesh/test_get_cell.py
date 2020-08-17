@@ -7,6 +7,7 @@ from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.PointMat import PointMat
 import numpy as np
 
+
 @pytest.mark.MeshSol
 class unittest_get_cell_MeshMat(TestCase):
     """unittest for Mesh get_cell methods. Indirect test add_element """
@@ -102,7 +103,9 @@ class unittest_get_cell_MeshMat(TestCase):
         solution["triangle3"] = np.array([])
         solution["segment2"] = np.array([])
 
-        result, nb_cell, indice_dict = self.mesh.get_cell(-99999)  # We test what happened with stupid entry
+        result, nb_cell, indice_dict = self.mesh.get_cell(
+            -99999
+        )  # We test what happened with stupid entry
 
         # Check result
         for key in result:

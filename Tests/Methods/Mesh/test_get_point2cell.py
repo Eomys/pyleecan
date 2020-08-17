@@ -6,6 +6,7 @@ from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.PointMat import PointMat
 import numpy as np
 
+
 @pytest.mark.MeshSol
 class unittest_get_point2cell(TestCase):
     """unittest to get cell containing specific point"""
