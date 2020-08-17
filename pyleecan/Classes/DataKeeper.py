@@ -312,10 +312,11 @@ class DataKeeper(FrozenClass):
         check_var("result", value, "list")
         self._result = value
 
-    # List containing datakeeper results for each simulation
-    # Type : list
     result = property(
         fget=_get_result,
         fset=_set_result,
-        doc=u"""List containing datakeeper results for each simulation""",
+        doc=u"""List containing datakeeper results for each simulation
+
+        :Type: list
+        """,
     )

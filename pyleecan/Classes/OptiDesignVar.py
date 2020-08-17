@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Optimization/OptiDesignVar.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Optimization/OptiDesignVar.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Optimization/OptiDesignVar
 """
 
 from os import linesep
@@ -176,12 +177,13 @@ class OptiDesignVar(ParamExplorer):
         check_var("type_var", value, "str")
         self._type_var = value
 
-    # Type of the variable interval or set.
-    # Type : str
     type_var = property(
         fget=_get_type_var,
         fset=_set_type_var,
-        doc=u"""Type of the variable interval or set.""",
+        doc=u"""Type of the variable interval or set.
+
+        :Type: str
+        """,
     )
 
     def _get_space(self):
@@ -193,9 +195,14 @@ class OptiDesignVar(ParamExplorer):
         check_var("space", value, "list")
         self._space = value
 
-    # Space of the variable
-    # Type : list
-    space = property(fget=_get_space, fset=_set_space, doc=u"""Space of the variable""")
+    space = property(
+        fget=_get_space,
+        fset=_set_space,
+        doc=u"""Space of the variable
+
+        :Type: list
+        """,
+    )
 
     def _get_get_value(self):
         """getter of get_value"""
@@ -218,10 +225,11 @@ class OptiDesignVar(ParamExplorer):
                 "Expected function or list from a saved file, got: " + str(type(value))
             )
 
-    # Function of the space to initiate the variable
-    # Type : function
     get_value = property(
         fget=_get_get_value,
         fset=_set_get_value,
-        doc=u"""Function of the space to initiate the variable""",
+        doc=u"""Function of the space to initiate the variable
+
+        :Type: function
+        """,
     )

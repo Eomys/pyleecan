@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Optimization/OptiProblem.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Optimization/OptiProblem.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Optimization/OptiProblem
 """
 
 from os import linesep
@@ -272,12 +273,13 @@ class OptiProblem(FrozenClass):
         if self._output is not None:
             self._output.parent = self
 
-    # Default output to define the default simulation.
-    # Type : Output
     output = property(
         fget=_get_output,
         fset=_set_output,
-        doc=u"""Default output to define the default simulation. """,
+        doc=u"""Default output to define the default simulation. 
+
+        :Type: Output
+        """,
     )
 
     def _get_design_var(self):
@@ -296,10 +298,13 @@ class OptiProblem(FrozenClass):
             if obj is not None:
                 obj.parent = self
 
-    # List of design variables
-    # Type : [OptiDesignVar]
     design_var = property(
-        fget=_get_design_var, fset=_set_design_var, doc=u"""List of design variables"""
+        fget=_get_design_var,
+        fset=_set_design_var,
+        doc=u"""List of design variables
+
+        :Type: [OptiDesignVar]
+        """,
     )
 
     def _get_obj_func(self):
@@ -318,10 +323,13 @@ class OptiProblem(FrozenClass):
             if obj is not None:
                 obj.parent = self
 
-    # List of objective functions
-    # Type : [DataKeeper]
     obj_func = property(
-        fget=_get_obj_func, fset=_set_obj_func, doc=u"""List of objective functions"""
+        fget=_get_obj_func,
+        fset=_set_obj_func,
+        doc=u"""List of objective functions
+
+        :Type: [DataKeeper]
+        """,
     )
 
     def _get_eval_func(self):
@@ -345,12 +353,13 @@ class OptiProblem(FrozenClass):
                 "Expected function or list from a saved file, got: " + str(type(value))
             )
 
-    # Function to evaluate before computing obj function and constraints
-    # Type : function
     eval_func = property(
         fget=_get_eval_func,
         fset=_set_eval_func,
-        doc=u"""Function to evaluate before computing obj function and constraints""",
+        doc=u"""Function to evaluate before computing obj function and constraints
+
+        :Type: function
+        """,
     )
 
     def _get_constraint(self):
@@ -369,10 +378,11 @@ class OptiProblem(FrozenClass):
             if obj is not None:
                 obj.parent = self
 
-    # List containing the constraints
-    # Type : [OptiConstraint]
     constraint = property(
         fget=_get_constraint,
         fset=_set_constraint,
-        doc=u"""List containing the constraints """,
+        doc=u"""List containing the constraints 
+
+        :Type: [OptiConstraint]
+        """,
     )
