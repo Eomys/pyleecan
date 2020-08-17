@@ -10,6 +10,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 
 from pyleecan.definitions import MAIN_DIR
+
 save_path = MAIN_DIR + "\\Results\\SM_CEFC_002_save_mag\\"
 
 from os.path import join
@@ -76,6 +77,7 @@ def test_CEFC_002():
     out.mag.meshsolution.plot_contour(label="H")
     out.mag.meshsolution.plot_contour(label="H", group_names="stator")
     out.mag.meshsolution.plot_contour(label="\mu", group_names=["stator", "airgap"])
+
 
 def test_CEFC_002_load():
 

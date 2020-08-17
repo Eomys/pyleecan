@@ -124,7 +124,9 @@ def plot_glyph(
         else:
             pv.set_plot_theme("document")
             p = pv.Plotter(notebook=False)
-        p.add_mesh(mesh_pv, color="grey", opacity=0.7, show_edges=True, edge_color="white")
+        p.add_mesh(
+            mesh_pv, color="grey", opacity=0.7, show_edges=True, edge_color="white"
+        )
         p.add_mesh(arrows_plt, color="red")
         if self.dimension:
             p.view_xy()
