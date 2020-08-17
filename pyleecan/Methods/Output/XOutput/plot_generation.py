@@ -63,29 +63,39 @@ def plot_generation(self, x_symbol, y_symbol, ax=None):
 
         # Plot fitness values
         scatter = ax.scatter(x_values, y_values, s=8, c=ngen, cmap=cm)
+
+        # Add legend
         legend1 = ax.legend(
             *scatter.legend_elements(), loc="upper right", title="Generation"
         )
         ax.add_artist(legend1)
+
+        # Extend xlim to give some space to the legend
+        left, right = ax.get_xlim()
+        ax.set_xlim(left, right + 0.2 * abs(right - left))
+
         ax.set_xlabel(x_label)
         ax.set_ylabel(y_label)
         ax.set_title("Fitness values for each individual")
-
-        ax.autoscale()
 
         fig.show()
 
     else:
         # Plot fitness values
         scatter = ax.scatter(x_values, y_values, s=8, c=ngen, cmap=cm)
+
+        # Add legend
         legend1 = ax.legend(
             *scatter.legend_elements(), loc="upper right", title="Generation"
         )
         ax.add_artist(legend1)
+
+        # Extend xlim to give some space to the legend
+        left, right = ax.get_xlim()
+        ax.set_xlim(left, right + 0.2 * abs(right - left))
+
         ax.set_xlabel(x_label)
         ax.set_ylabel(y_label)
         ax.set_title("Fitness values for each individual")
-
-        ax.autoscale()
 
         return ax

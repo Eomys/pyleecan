@@ -653,7 +653,7 @@ def test_Optimization_problem():
     # Design variables
     my_vars = [
         OptiDesignVar(
-            name="output.simu.machine.stator.slot.W0",
+            name="Stator slot opening",
             symbol="W0",
             unit="m",
             type_var="interval",
@@ -662,9 +662,10 @@ def test_Optimization_problem():
                 output.simu.machine.stator.slot.W2,
             ],
             get_value=lambda space: random.uniform(*space),
+            setter="simu.machine.stator.slot.W0",
         ),
         OptiDesignVar(
-            name="output.simu.machine.rotor.slot.magnet[0].Wmag",
+            name="Rotor magnet width",
             symbol="Wmag",
             unit="m",
             type_var="interval",
@@ -673,6 +674,7 @@ def test_Optimization_problem():
                 0.99 * output.simu.machine.rotor.slot.W0,
             ],  # May generate error in FEMM
             get_value=lambda space: random.uniform(*space),
+            setter="simu.machine.rotor.slot.magnet[0].Wmag",
         ),
     ]
 

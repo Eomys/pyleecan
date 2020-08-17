@@ -113,10 +113,10 @@ def plot_pareto(self, x_symbol, y_symbol, ax=None, title=None):
         label="Pareto Front",
     )
     ax.autoscale(1, 1)
-    ax.legend()
+
     ax.set_title("Pareto Front")
-    ax.set_xlabel(x_symbol)
-    ax.set_ylabel(y_symbol)
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
 
     # Add anotations in the plot see https://stackoverflow.com/a/47166787
     annot = ax.annotate(
@@ -160,4 +160,4 @@ def plot_pareto(self, x_symbol, y_symbol, ax=None, title=None):
     if return_ax:
         return ax
     else:
-        return fig
+        fig.show()
