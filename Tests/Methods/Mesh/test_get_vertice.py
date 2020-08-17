@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-
+import pytest
 from unittest import TestCase
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.PointMat import PointMat
 import numpy as np
 
-
+@pytest.mark.Mesh
 class unittest_get_vertice(TestCase):
     """unittest for Mesh and Element get_all_connectivity methods"""
 
+    @classmethod
     def setUp(self):
         self.mesh = MeshMat()
         self.mesh.cell["triangle"] = CellMat(nb_pt_per_cell=3)

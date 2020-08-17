@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-
+import pytest
 from unittest import TestCase
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.PointMat import PointMat
 import numpy as np
 
-
+@pytest.mark.Mesh
 class unittest_get_point2cell(TestCase):
     """unittest to get cell containing specific point"""
 
+    @classmethod
     def setUp(self):
         self.mesh = MeshMat()
         self.mesh.cell["triangle"] = CellMat(nb_pt_per_cell=3)
@@ -20,9 +21,9 @@ class unittest_get_point2cell(TestCase):
         self.mesh.point.add_node(np.array([2, 3]))
         self.mesh.point.add_node(np.array([3, 3]))
 
-        self.mesh.add_cell(np.array([0, 1, 2]), "triangle", group_name="stator")
-        self.mesh.add_cell(np.array([1, 2, 3]), "triangle", group_name="stator")
-        self.mesh.add_cell(np.array([4, 2, 3]), "triangle", group_name="rotor")
+        self.mesh.add_cell(np.array([0, 1, 2]), "triangle")
+        self.mesh.add_cell(np.array([1, 2, 3]), "triangle")
+        self.mesh.add_cell(np.array([4, 2, 3]), "triangle")
 
         self.DELTA = 1e-10
 

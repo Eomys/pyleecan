@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import pytest
 from unittest import TestCase
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
@@ -7,10 +7,11 @@ from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.PointMat import PointMat
 import numpy as np
 
-
+@pytest.mark.Mesh
 class unittest_get_group(TestCase):
     """unittest to extract a group as a Mesh object"""
 
+    @classmethod
     def setUp(self):
 
         mesh = MeshMat()
