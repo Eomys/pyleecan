@@ -7,7 +7,7 @@ from pyleecan.Classes.PointMat import PointMat
 from pyleecan.Classes.CellMat import CellMat
 import numpy as np
 
-@pytest.mark.Mesh
+@pytest.mark.MeshSol
 @pytest.mark.skip
 class unittest_interface(TestCase):
     """unittest for elements and nodes getter methods"""

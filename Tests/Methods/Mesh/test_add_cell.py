@@ -5,7 +5,7 @@ from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
 import numpy as np
 
-@pytest.mark.Mesh
+@pytest.mark.MeshSol
 class unittest_add_element(TestCase):
     """unittest for add_cell method in Mesh classes"""
 
