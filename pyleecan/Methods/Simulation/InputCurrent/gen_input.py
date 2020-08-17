@@ -3,7 +3,7 @@
 from ....Classes.OutElec import OutElec
 from ....Classes.Simulation import Simulation
 from ....Methods.Simulation.Input import InputError
-from numpy import ndarray, linspace, pi, mean
+from numpy import ndarray, linspace, pi, mean, transpose
 from ....Functions.Electrical.coordinate_transformation import n2dq
 from SciDataTool import Data1D, DataTime
 from ....Functions.Winding.gen_phase_list import gen_name
@@ -110,7 +110,7 @@ def gen_input(self):
                 values=Is,
             )
             # Compute corresponding Id/Iq reference
-            Idq = n2dq(output.Is.values, 2 * pi * output.felec * output.time)
+            Idq = n2dq(transpose(output.Is.values), 2 * pi * output.felec * output.time)
             output.Id_ref = mean(Idq[:, 0])
             output.Iq_ref = mean(Idq[:, 1])
 
