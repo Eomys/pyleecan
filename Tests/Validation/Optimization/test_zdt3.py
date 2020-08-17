@@ -37,7 +37,7 @@ def test_zdt3():
 
     # Definition of the enforced output of the electrical module
     Nt = 2
-    Nr = ImportMatrixVal(value=np.ones(Nt) * 3000)
+    N0 = 3000
     Is = ImportMatrixVal(
         value=np.array(
             [
@@ -60,7 +60,7 @@ def test_zdt3():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,

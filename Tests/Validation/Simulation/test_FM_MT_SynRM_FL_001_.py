@@ -56,7 +56,7 @@ def test_Magnetic_AGSF():
     simu.input = InputCurrent(
         Is=None,
         Ir=None,  # No winding on the rotor
-        Nr=None,
+        N0=None,
         angle_rotor=alpha_rotor,
         time=time_obj,
         angle=angle,

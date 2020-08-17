@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/SlotUD.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/SlotUD.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/SlotUD
 """
 
 from os import linesep
@@ -152,12 +153,13 @@ class SlotUD(Slot):
         check_var("point_list", value, "list")
         self._point_list = value
 
-    # Coordinates of the slot points (will be connected in order with Segments)
-    # Type : list
     point_list = property(
         fget=_get_point_list,
         fset=_set_point_list,
-        doc=u"""Coordinates of the slot points (will be connected in order with Segments)""",
+        doc=u"""Coordinates of the slot points (will be connected in order with Segments)
+
+        :Type: list
+        """,
     )
 
     def _get_is_sym(self):
@@ -169,10 +171,11 @@ class SlotUD(Slot):
         check_var("is_sym", value, "bool")
         self._is_sym = value
 
-    # True to enter only half of the point coordinates
-    # Type : bool
     is_sym = property(
         fget=_get_is_sym,
         fset=_set_is_sym,
-        doc=u"""True to enter only half of the point coordinates""",
+        doc=u"""True to enter only half of the point coordinates
+
+        :Type: bool
+        """,
     )

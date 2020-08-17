@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Import/ImportGenToothSaw.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Import/ImportGenToothSaw.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Import/ImportGenToothSaw
 """
 
 from os import linesep
@@ -190,12 +191,15 @@ class ImportGenToothSaw(ImportMatrix):
         check_var("type_signal", value, "int", Vmin=0, Vmax=2)
         self._type_signal = value
 
-    # 0: Forward toothsaw, 1: Backwards toothsaw, 2: symmetrical toothsaw
-    # Type : int, min = 0, max = 2
     type_signal = property(
         fget=_get_type_signal,
         fset=_set_type_signal,
-        doc=u"""0: Forward toothsaw, 1: Backwards toothsaw, 2: symmetrical toothsaw""",
+        doc=u"""0: Forward toothsaw, 1: Backwards toothsaw, 2: symmetrical toothsaw
+
+        :Type: int
+        :min: 0
+        :max: 2
+        """,
     )
 
     def _get_f(self):
@@ -207,10 +211,14 @@ class ImportGenToothSaw(ImportMatrix):
         check_var("f", value, "float", Vmin=0)
         self._f = value
 
-    # Frequency of the signal to generate
-    # Type : float, min = 0
     f = property(
-        fget=_get_f, fset=_set_f, doc=u"""Frequency of the signal to generate"""
+        fget=_get_f,
+        fset=_set_f,
+        doc=u"""Frequency of the signal to generate
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_A(self):
@@ -222,10 +230,13 @@ class ImportGenToothSaw(ImportMatrix):
         check_var("A", value, "float")
         self._A = value
 
-    # Amplitude of the signal to generate
-    # Type : float
     A = property(
-        fget=_get_A, fset=_set_A, doc=u"""Amplitude of the signal to generate"""
+        fget=_get_A,
+        fset=_set_A,
+        doc=u"""Amplitude of the signal to generate
+
+        :Type: float
+        """,
     )
 
     def _get_N(self):
@@ -237,9 +248,15 @@ class ImportGenToothSaw(ImportMatrix):
         check_var("N", value, "int", Vmin=0)
         self._N = value
 
-    # Length of the signal to generate
-    # Type : int, min = 0
-    N = property(fget=_get_N, fset=_set_N, doc=u"""Length of the signal to generate""")
+    N = property(
+        fget=_get_N,
+        fset=_set_N,
+        doc=u"""Length of the signal to generate
+
+        :Type: int
+        :min: 0
+        """,
+    )
 
     def _get_Tf(self):
         """getter of Tf"""
@@ -250,10 +267,14 @@ class ImportGenToothSaw(ImportMatrix):
         check_var("Tf", value, "float", Vmin=0)
         self._Tf = value
 
-    # End time of the signal generation
-    # Type : float, min = 0
     Tf = property(
-        fget=_get_Tf, fset=_set_Tf, doc=u"""End time of the signal generation"""
+        fget=_get_Tf,
+        fset=_set_Tf,
+        doc=u"""End time of the signal generation
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_Dt(self):
@@ -265,6 +286,11 @@ class ImportGenToothSaw(ImportMatrix):
         check_var("Dt", value, "float")
         self._Dt = value
 
-    # Time offset
-    # Type : float
-    Dt = property(fget=_get_Dt, fset=_set_Dt, doc=u"""Time offset""")
+    Dt = property(
+        fget=_get_Dt,
+        fset=_set_Dt,
+        doc=u"""Time offset
+
+        :Type: float
+        """,
+    )

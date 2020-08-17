@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/Conductor.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/Conductor.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/Conductor
 """
 
 from os import linesep
@@ -172,10 +173,13 @@ class Conductor(FrozenClass):
         if self._cond_mat is not None:
             self._cond_mat.parent = self
 
-    # Material of the conductor
-    # Type : Material
     cond_mat = property(
-        fget=_get_cond_mat, fset=_set_cond_mat, doc=u"""Material of the conductor"""
+        fget=_get_cond_mat,
+        fset=_set_cond_mat,
+        doc=u"""Material of the conductor
+
+        :Type: Material
+        """,
     )
 
     def _get_ins_mat(self):
@@ -190,8 +194,11 @@ class Conductor(FrozenClass):
         if self._ins_mat is not None:
             self._ins_mat.parent = self
 
-    # Material of the insulation
-    # Type : Material
     ins_mat = property(
-        fget=_get_ins_mat, fset=_set_ins_mat, doc=u"""Material of the insulation"""
+        fget=_get_ins_mat,
+        fset=_set_ins_mat,
+        doc=u"""Material of the insulation
+
+        :Type: Material
+        """,
     )

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Material/MatElectrical.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Material/MatElectrical.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Material/MatElectrical
 """
 
 from os import linesep
@@ -126,9 +127,15 @@ class MatElectrical(FrozenClass):
         check_var("rho", value, "float", Vmin=0)
         self._rho = value
 
-    # Resistivity at 20 deg C
-    # Type : float, min = 0
-    rho = property(fget=_get_rho, fset=_set_rho, doc=u"""Resistivity at 20 deg C""")
+    rho = property(
+        fget=_get_rho,
+        fset=_set_rho,
+        doc=u"""Resistivity at 20 deg C
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_epsr(self):
         """getter of epsr"""
@@ -139,10 +146,14 @@ class MatElectrical(FrozenClass):
         check_var("epsr", value, "float", Vmin=0)
         self._epsr = value
 
-    # Relative dielectric constant
-    # Type : float, min = 0
     epsr = property(
-        fget=_get_epsr, fset=_set_epsr, doc=u"""Relative dielectric constant"""
+        fget=_get_epsr,
+        fset=_set_epsr,
+        doc=u"""Relative dielectric constant
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_alpha(self):
@@ -154,6 +165,12 @@ class MatElectrical(FrozenClass):
         check_var("alpha", value, "float", Vmin=0)
         self._alpha = value
 
-    # Thermal Coefficient
-    # Type : float, min = 0
-    alpha = property(fget=_get_alpha, fset=_set_alpha, doc=u"""Thermal Coefficient""")
+    alpha = property(
+        fget=_get_alpha,
+        fset=_set_alpha,
+        doc=u"""Thermal Coefficient
+
+        :Type: float
+        :min: 0
+        """,
+    )

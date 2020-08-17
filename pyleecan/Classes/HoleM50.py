@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/HoleM50.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/HoleM50.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/HoleM50
 """
 
 from os import linesep
@@ -518,9 +519,15 @@ class HoleM50(HoleMag):
         check_var("H0", value, "float", Vmin=0)
         self._H0 = value
 
-    # Slot depth
-    # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot depth""")
+    H0 = property(
+        fget=_get_H0,
+        fset=_set_H0,
+        doc=u"""Slot depth
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W0(self):
         """getter of W0"""
@@ -531,9 +538,15 @@ class HoleM50(HoleMag):
         check_var("W0", value, "float", Vmin=0)
         self._W0 = value
 
-    # Slot opening
-    # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot opening""")
+    W0 = property(
+        fget=_get_W0,
+        fset=_set_W0,
+        doc=u"""Slot opening
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H1(self):
         """getter of H1"""
@@ -544,10 +557,14 @@ class HoleM50(HoleMag):
         check_var("H1", value, "float", Vmin=0)
         self._H1 = value
 
-    # Distance from the lamination Bore
-    # Type : float, min = 0
     H1 = property(
-        fget=_get_H1, fset=_set_H1, doc=u"""Distance from the lamination Bore"""
+        fget=_get_H1,
+        fset=_set_H1,
+        doc=u"""Distance from the lamination Bore
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_W1(self):
@@ -559,9 +576,15 @@ class HoleM50(HoleMag):
         check_var("W1", value, "float", Vmin=0)
         self._W1 = value
 
-    # Tooth width (at V bottom)
-    # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Tooth width (at V bottom)""")
+    W1 = property(
+        fget=_get_W1,
+        fset=_set_W1,
+        doc=u"""Tooth width (at V bottom)
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H2(self):
         """getter of H2"""
@@ -572,10 +595,14 @@ class HoleM50(HoleMag):
         check_var("H2", value, "float", Vmin=0)
         self._H2 = value
 
-    # Additional depth for the magnet
-    # Type : float, min = 0
     H2 = property(
-        fget=_get_H2, fset=_set_H2, doc=u"""Additional depth for the magnet"""
+        fget=_get_H2,
+        fset=_set_H2,
+        doc=u"""Additional depth for the magnet
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_W2(self):
@@ -587,10 +614,14 @@ class HoleM50(HoleMag):
         check_var("W2", value, "float", Vmin=0)
         self._W2 = value
 
-    # Distance Magnet to bottom of the V
-    # Type : float, min = 0
     W2 = property(
-        fget=_get_W2, fset=_set_W2, doc=u"""Distance Magnet to bottom of the V"""
+        fget=_get_W2,
+        fset=_set_W2,
+        doc=u"""Distance Magnet to bottom of the V
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_H3(self):
@@ -602,9 +633,15 @@ class HoleM50(HoleMag):
         check_var("H3", value, "float", Vmin=0)
         self._H3 = value
 
-    # Magnet Height
-    # Type : float, min = 0
-    H3 = property(fget=_get_H3, fset=_set_H3, doc=u"""Magnet Height""")
+    H3 = property(
+        fget=_get_H3,
+        fset=_set_H3,
+        doc=u"""Magnet Height
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W3(self):
         """getter of W3"""
@@ -615,9 +652,15 @@ class HoleM50(HoleMag):
         check_var("W3", value, "float", Vmin=0)
         self._W3 = value
 
-    # Tooth width (at V top)
-    # Type : float, min = 0
-    W3 = property(fget=_get_W3, fset=_set_W3, doc=u"""Tooth width (at V top)""")
+    W3 = property(
+        fget=_get_W3,
+        fset=_set_W3,
+        doc=u"""Tooth width (at V top)
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H4(self):
         """getter of H4"""
@@ -628,9 +671,15 @@ class HoleM50(HoleMag):
         check_var("H4", value, "float", Vmin=0)
         self._H4 = value
 
-    # Slot top height
-    # Type : float, min = 0
-    H4 = property(fget=_get_H4, fset=_set_H4, doc=u"""Slot top height""")
+    H4 = property(
+        fget=_get_H4,
+        fset=_set_H4,
+        doc=u"""Slot top height
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W4(self):
         """getter of W4"""
@@ -641,9 +690,15 @@ class HoleM50(HoleMag):
         check_var("W4", value, "float", Vmin=0)
         self._W4 = value
 
-    # Magnet Width
-    # Type : float, min = 0
-    W4 = property(fget=_get_W4, fset=_set_W4, doc=u"""Magnet Width""")
+    W4 = property(
+        fget=_get_W4,
+        fset=_set_W4,
+        doc=u"""Magnet Width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_magnet_0(self):
         """getter of magnet_0"""
@@ -657,9 +712,14 @@ class HoleM50(HoleMag):
         if self._magnet_0 is not None:
             self._magnet_0.parent = self
 
-    # First Magnet
-    # Type : Magnet
-    magnet_0 = property(fget=_get_magnet_0, fset=_set_magnet_0, doc=u"""First Magnet""")
+    magnet_0 = property(
+        fget=_get_magnet_0,
+        fset=_set_magnet_0,
+        doc=u"""First Magnet
+
+        :Type: Magnet
+        """,
+    )
 
     def _get_magnet_1(self):
         """getter of magnet_1"""
@@ -673,8 +733,11 @@ class HoleM50(HoleMag):
         if self._magnet_1 is not None:
             self._magnet_1.parent = self
 
-    # Second Magnet
-    # Type : Magnet
     magnet_1 = property(
-        fget=_get_magnet_1, fset=_set_magnet_1, doc=u"""Second Magnet"""
+        fget=_get_magnet_1,
+        fset=_set_magnet_1,
+        doc=u"""Second Magnet
+
+        :Type: Magnet
+        """,
     )
