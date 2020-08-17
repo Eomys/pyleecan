@@ -5593,60 +5593,6 @@
             }
         ]
     },
-    "OptiObjFunc": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Optimization",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "OptiObjFunc",
-        "package": "Optimization",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Optimization/OptiObjFunc.csv",
-        "properties": [
-            {
-                "desc": "Data name",
-                "max": "",
-                "min": "",
-                "name": "name",
-                "type": "str",
-                "unit": "-",
-                "value": ""
-            },
-            {
-                "desc": "Data symbol",
-                "max": "",
-                "min": "",
-                "name": "symbol",
-                "type": "str",
-                "unit": "-",
-                "value": ""
-            },
-            {
-                "desc": "Data unit",
-                "max": "",
-                "min": "",
-                "name": "unit",
-                "type": "str",
-                "unit": "-",
-                "value": ""
-            },
-            {
-                "desc": "Function to minimize",
-                "max": "",
-                "min": "",
-                "name": "func",
-                "type": "function",
-                "unit": "",
-                "value": null
-            }
-        ]
-    },
     "OptiProblem": {
         "constants": [
             {
@@ -5686,7 +5632,7 @@
                 "max": "",
                 "min": "",
                 "name": "obj_func",
-                "type": "[OptiObjFunc]",
+                "type": "[DataKeeper]",
                 "unit": "",
                 "value": -1
             },
@@ -9882,7 +9828,8 @@
             "get_paramexplorer",
             "plot_multi",
             "plot_pareto",
-            "plot_generation"
+            "plot_generation",
+            "get_pareto_index"
         ],
         "mother": "Output",
         "name": "XOutput",

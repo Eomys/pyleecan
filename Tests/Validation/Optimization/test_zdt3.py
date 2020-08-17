@@ -11,7 +11,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
-from pyleecan.Classes.OptiObjFunc import OptiObjFunc
+from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
@@ -101,15 +101,15 @@ def test_zdt3():
 
     # ### Objectives
     objs = [
-        OptiObjFunc(
+        DataKeeper(
             symbol="obj1",
             name="Maximization of the torque average",
-            func=lambda output: output.mag.Tem_av,
+            keeper=lambda output: output.mag.Tem_av,
         ),
-        OptiObjFunc(
+        DataKeeper(
             symbol="obj2",
             name="Minimization of the torque ripple",
-            func=lambda output: output.mag.Tem_rip_norm,
+            keeper=lambda output: output.mag.Tem_rip_norm,
         ),
     ]
 

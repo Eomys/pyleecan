@@ -1,5 +1,6 @@
 from logging import Logger, FileHandler, Formatter, INFO, NOTSET
 from datetime import datetime
+from ....Classes.DataKeeper import DataKeeper
 
 
 class OptimizationAttributeError(Exception):
@@ -45,8 +46,14 @@ def check_optimization_input(self):
 
     else:
         for obj_func in self.problem.obj_func:
-            if not callable(obj_func.func):
-                mess = "The objective function '{}' is not callable.".format(
+            if not isinstance(obj_func, DataKeeper):
+                raise TypeError(
+                    "Wrong obj_func type: DataKeeper expected, got {}".format(
+                        type(obj_func).__name__
+                    )
+                )
+            elif not callable(obj_func.keeper):
+                mess = "The objective function '{}' is not callable, please define the attribute 'keeper'.".format(
                     obj_func.name
                 )
                 raise OptimizationAttributeError(mess)

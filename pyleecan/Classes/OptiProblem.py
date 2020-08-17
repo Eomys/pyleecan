@@ -16,7 +16,7 @@ from ._check import CheckTypeError
 from ._check import InitUnKnowClassError
 from .Output import Output
 from .OptiDesignVar import OptiDesignVar
-from .OptiObjFunc import OptiObjFunc
+from .DataKeeper import DataKeeper
 from .OptiConstraint import OptiConstraint
 
 
@@ -126,14 +126,14 @@ class OptiProblem(FrozenClass):
             self.design_var = list()
         else:
             self.design_var = design_var
-        # obj_func can be None or a list of OptiObjFunc object
+        # obj_func can be None or a list of DataKeeper object
         self.obj_func = list()
         if type(obj_func) is list:
             for obj in obj_func:
                 if obj is None:  # Default value
-                    self.obj_func.append(OptiObjFunc())
+                    self.obj_func.append(DataKeeper())
                 elif isinstance(obj, dict):
-                    self.obj_func.append(OptiObjFunc(init_dict=obj))
+                    self.obj_func.append(DataKeeper(init_dict=obj))
                 else:
                     self.obj_func.append(obj)
         elif obj_func is None:
@@ -311,7 +311,7 @@ class OptiProblem(FrozenClass):
 
     def _set_obj_func(self, value):
         """setter of obj_func"""
-        check_var("obj_func", value, "[OptiObjFunc]")
+        check_var("obj_func", value, "[DataKeeper]")
         self._obj_func = value
 
         for obj in self._obj_func:
@@ -319,7 +319,7 @@ class OptiProblem(FrozenClass):
                 obj.parent = self
 
     # List of objective functions
-    # Type : [OptiObjFunc]
+    # Type : [DataKeeper]
     obj_func = property(
         fget=_get_obj_func, fset=_set_obj_func, doc=u"""List of objective functions"""
     )

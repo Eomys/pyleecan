@@ -117,6 +117,11 @@ try:
 except ImportError as error:
     plot_generation = error
 
+try:
+    from ..Methods.Output.XOutput.get_pareto_index import get_pareto_index
+except ImportError as error:
+    get_pareto_index = error
+
 
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
@@ -332,6 +337,18 @@ class XOutput(Output):
         )
     else:
         plot_generation = plot_generation
+    # cf Methods.Output.XOutput.get_pareto_index
+    if isinstance(get_pareto_index, ImportError):
+        get_pareto_index = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method get_pareto_index: "
+                    + str(get_pareto_index)
+                )
+            )
+        )
+    else:
+        get_pareto_index = get_pareto_index
     # save method is available in all object
     save = save
 

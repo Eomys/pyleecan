@@ -105,7 +105,6 @@ load_switch = {
     "OptiDesignVar": OptiDesignVar,
     "OptiGenAlg": OptiGenAlg,
     "OptiGenAlgNsga2Deap": OptiGenAlgNsga2Deap,
-    "OptiObjFunc": OptiObjFunc,
     "OptiProblem": OptiProblem,
     "OptiSolver": OptiSolver,
     "OutElec": OutElec,

@@ -8,7 +8,7 @@ def plot_pareto(self, x_symbol, y_symbol, ax=None, title=None):
     
     Parameters
     ----------
-    self : OutputMultiOpti
+    self : XOutput
     x_symbol : str
         symbol of the first objective function
     y_symbol: str 

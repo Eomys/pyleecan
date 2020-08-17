@@ -72,13 +72,10 @@ def solve(self):
         self.xoutput.xoutput_dict["ngen"] = []
         self.xoutput.xoutput_dict["is_valid"] = []
 
+        # Put objective functions in XOutput
         for obj_func in self.problem.obj_func:
-            self.xoutput.xoutput_dict[obj_func.symbol] = DataKeeper(
-                name=obj_func.name,
-                symbol=obj_func.symbol,
-                unit=obj_func.unit,
-                keeper=obj_func.func,
-            )
+            # obj_func is a DataKeeper instance
+            self.xoutput.xoutput_dict[obj_func.symbol] = obj_func
 
         # Create the first population
         pop = self.toolbox.population(self.size_pop)

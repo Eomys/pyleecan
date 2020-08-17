@@ -103,7 +103,6 @@ from ..Classes.OptiConstraint import OptiConstraint
 from ..Classes.OptiDesignVar import OptiDesignVar
 from ..Classes.OptiGenAlg import OptiGenAlg
 from ..Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
-from ..Classes.OptiObjFunc import OptiObjFunc
 from ..Classes.OptiProblem import OptiProblem
 from ..Classes.OptiSolver import OptiSolver
 from ..Classes.OutElec import OutElec
