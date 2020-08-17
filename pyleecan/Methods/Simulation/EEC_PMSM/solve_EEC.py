@@ -4,7 +4,7 @@ from ....Functions.Electrical.coordinate_transformation import dq2n
 from SciDataTool import Data1D, DataTime
 from ....Functions.Winding.gen_phase_list import gen_name
 
-from numpy import array, pi, zeros, transpose
+from numpy import array, pi, transpose
 from scipy.linalg import solve
 
 
@@ -32,9 +32,8 @@ def solve_EEC(self, output):
     """
 
     qs = output.simu.machine.stator.winding.qs
-    freq0 = self.freq0
-    ws = 2 * pi * freq0
-    rot_dir = output.get_rot_dir()
+    felec = output.elec.felec
+    ws = 2 * pi * felec
     time = output.elec.time
 
     # Prepare linear system
@@ -49,7 +48,7 @@ def solve_EEC(self, output):
     Idq = solve(XR, XU - XE)
 
     # dq to abc transform
-    Is = dq2n(Idq, -rot_dir * 2 * pi * freq0 * time, n=qs)
+    Is = dq2n(Idq, 2 * pi * felec * time, n=qs)
 
     # Store currents into a Data object
     Time = Data1D(name="time", unit="s", values=time)
@@ -57,12 +56,13 @@ def solve_EEC(self, output):
     Phases = Data1D(
         name="phases", unit="dimless", values=phases_names, is_components=True
     )
-    output.elec.Currents = DataTime(
+    output.elec.Is = DataTime(
         name="Stator currents",
         unit="A",
         symbol="I_s",
         axes=[Phases, Time],
         values=transpose(Is),
     )
-    output.elec.Is = Is
     output.elec.Ir = None
+    output.elec.Id_ref = Idq[0]
+    output.elec.Iq_ref = Idq[1]
