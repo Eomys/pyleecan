@@ -14,9 +14,9 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Mesh.PointMat.add_node import add_node
+    from ..Methods.Mesh.PointMat.add_point import add_point
 except ImportError as error:
-    add_node = error
+    add_point = error
 
 try:
     from ..Methods.Mesh.PointMat.get_coord import get_coord
@@ -44,15 +44,15 @@ class PointMat(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Mesh.PointMat.add_node
-    if isinstance(add_node, ImportError):
-        add_node = property(
+    # cf Methods.Mesh.PointMat.add_point
+    if isinstance(add_point, ImportError):
+        add_point = property(
             fget=lambda x: raise_(
-                ImportError("Can't use PointMat method add_node: " + str(add_node))
+                ImportError("Can't use PointMat method add_point: " + str(add_point))
             )
         )
     else:
-        add_node = add_node
+        add_point = add_point
     # cf Methods.Mesh.PointMat.get_coord
     if isinstance(get_coord, ImportError):
         get_coord = property(

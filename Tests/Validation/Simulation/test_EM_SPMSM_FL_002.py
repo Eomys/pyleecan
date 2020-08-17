@@ -41,14 +41,16 @@ def test_Magnetic_FEMM_sym():
     # Definition of the enforced output of the electrical module
     N0 = 3000
     Is = ImportMatrixVal(
-        value=transpose(array(
-            [
-                [6.97244193e-06, 2.25353053e02, -2.25353060e02],
-                [-2.60215295e02, 1.30107654e02, 1.30107642e02],
-                [-6.97244208e-06, -2.25353053e02, 2.25353060e02],
-                [2.60215295e02, -1.30107654e02, -1.30107642e02],
-            ]
-        ))
+        value=transpose(
+            array(
+                [
+                    [6.97244193e-06, 2.25353053e02, -2.25353060e02],
+                    [-2.60215295e02, 1.30107654e02, 1.30107642e02],
+                    [-6.97244208e-06, -2.25353053e02, 2.25353060e02],
+                    [2.60215295e02, -1.30107654e02, -1.30107642e02],
+                ]
+            )
+        )
     )
     time = ImportGenVectLin(start=0, stop=0.015, num=4, endpoint=True)
     angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
