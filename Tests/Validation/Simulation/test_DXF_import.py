@@ -23,7 +23,6 @@ IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
-@pytest.mark.only
 def test_():
     """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
     50 kW peak, 400 Nm peak at 1500 rpm from publication
