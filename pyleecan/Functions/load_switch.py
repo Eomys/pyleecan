@@ -116,8 +116,6 @@ load_switch = {
     "OutPost": OutPost,
     "OutStruct": OutStruct,
     "Output": Output,
-    "OutputMulti": OutputMulti,
-    "OutputMultiOpti": OutputMultiOpti,
     "ParamExplorer": ParamExplorer,
     "ParamExplorerSet": ParamExplorerSet,
     "PolarArc": PolarArc,

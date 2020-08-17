@@ -114,8 +114,6 @@ from ..Classes.OutMag import OutMag
 from ..Classes.OutPost import OutPost
 from ..Classes.OutStruct import OutStruct
 from ..Classes.Output import Output
-from ..Classes.OutputMulti import OutputMulti
-from ..Classes.OutputMultiOpti import OutputMultiOpti
 from ..Classes.ParamExplorer import ParamExplorer
 from ..Classes.ParamExplorerSet import ParamExplorerSet
 from ..Classes.PolarArc import PolarArc
