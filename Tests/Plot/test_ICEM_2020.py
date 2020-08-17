@@ -52,7 +52,7 @@ def test_FEMM_sym():
     simu.machine.name = "fig_09_FEMM_sym"
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(1) * 1500)
+    N0 = 1500
     Is = ImportMatrixVal(value=array([[20, -10, -10]]))
     Ir = ImportMatrixVal(value=zeros((1, 28)))
     time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=False)
@@ -60,7 +60,7 @@ def test_FEMM_sym():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
@@ -446,14 +446,14 @@ def test_ecc_FEMM():
     gap = SPMSM_015.comp_width_airgap_mec()
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(1) * 3000)
+    N0 = 3000
     Is = ImportMatrixVal(value=array([[0, 0, 0]]))
     time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=True)
     angle = ImportGenVectLin(start=0, stop=2 * 2 * pi / 9, num=2043, endpoint=False)
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,
         time=time,
         angle=angle,
@@ -568,7 +568,7 @@ def test_Optimization_problem():
             ]
         )
     )
-    Nr = ImportMatrixVal(value=np.ones(Nt) * 400)
+    N0 = 400
     Ir = ImportMatrixVal(value=np.zeros((Nt, 28)))
     time = ImportGenVectLin(start=0, stop=1 / (400 / 60) / 24, num=Nt, endpoint=False)
     angle = ImportGenVectLin(start=0, stop=2 * np.pi, num=Na, endpoint=False)
@@ -583,7 +583,7 @@ def test_Optimization_problem():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,

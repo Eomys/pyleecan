@@ -24,7 +24,7 @@ def run(self):
         self.eec.comp_parameters(output)
         # Solve the electrical equivalent circuit
         self.eec.solve_EEC(output)
-        # Compute losses due to Joule effects
+        # TODO Compute losses due to Joule effects
         # self.eec.comp_losses(output) # not implemented yed
-        # Compute torque
+        # TODO Compute torque
         # self.eec.comp_torque(output) # not implemented yet
