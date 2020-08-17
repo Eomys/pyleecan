@@ -31,10 +31,10 @@ def add_cell(self, pt_indice, cell_type, group_name=None):
     test_exist = self.cell[cell_type].add_cell(pt_indice, new_ind)
 
     if test_exist:
-        if group_name in self.group:
-            self.group[group_name] = np.append(self.group[group_name], new_ind)
-        else:
-            self.group[group_name] = np.array([new_ind])
+        # if group_name in self.group:
+        #     self.group[group_name] = np.append(self.group[group_name], new_ind)
+        # else:
+        #     self.group[group_name] = np.array([new_ind])
 
         return new_ind
     else:

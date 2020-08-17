@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
-
+import pytest
 from unittest import TestCase
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
 import numpy as np
 
-
+@pytest.mark.Mesh
 class unittest_add_element(TestCase):
-    """unittest for add_element methods in Mesh and Element classes"""
+    """unittest for add_cell method in Mesh classes"""
 
+    @classmethod
     def setUp(self):
         self.mesh = MeshMat()
         self.mesh.cell["triangle3"] = CellMat(nb_pt_per_cell=3)

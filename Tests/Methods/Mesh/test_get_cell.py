@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 
+import pytest
 from unittest import TestCase
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.PointMat import PointMat
 import numpy as np
 
-
+@pytest.mark.Mesh
 class unittest_get_cell_MeshMat(TestCase):
-    """unittest for Mesh and Element get_all_connectivity methods. Indirect test add_element """
+    """unittest for Mesh get_cell methods. Indirect test add_element """
 
+    @classmethod
     def setUp(self):
         self.mesh = MeshMat()
         self.mesh.cell["triangle3"] = CellMat(nb_pt_per_cell=3)
@@ -100,7 +102,7 @@ class unittest_get_cell_MeshMat(TestCase):
         solution["triangle3"] = np.array([])
         solution["segment2"] = np.array([])
 
-        result = self.mesh.get_cell(-99999)  # We test what happened with stupid entry
+        result, nb_cell, indice_dict = self.mesh.get_cell(-99999)  # We test what happened with stupid entry
 
         # Check result
         for key in result:
