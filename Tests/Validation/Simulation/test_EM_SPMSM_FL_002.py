@@ -1,16 +1,14 @@
 from numpy import ones, pi, array, transpose
 from os.path import join
+
 import matplotlib.pyplot as plt
-from Tests import save_validation_path as save_path
+import pytest
+from numpy import array, ones, pi
 
 from pyleecan.Classes.Simu1 import Simu1
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.InputFlux import InputFlux
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportMatlab import ImportMatlab
-
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 import pytest
@@ -41,15 +39,13 @@ def test_Magnetic_FEMM_sym():
     # Definition of the enforced output of the electrical module
     N0 = 3000
     Is = ImportMatrixVal(
-        value=transpose(
-            array(
-                [
-                    [6.97244193e-06, 2.25353053e02, -2.25353060e02],
-                    [-2.60215295e02, 1.30107654e02, 1.30107642e02],
-                    [-6.97244208e-06, -2.25353053e02, 2.25353060e02],
-                    [2.60215295e02, -1.30107654e02, -1.30107642e02],
-                ]
-            )
+        value=array(
+            [
+                [6.97244193e-06, 2.25353053e02, -2.25353060e02],
+                [-2.60215295e02, 1.30107654e02, 1.30107642e02],
+                [-6.97244208e-06, -2.25353053e02, 2.25353060e02],
+                [2.60215295e02, -1.30107654e02, -1.30107642e02],
+            ]
         )
     )
     time = ImportGenVectLin(start=0, stop=0.015, num=4, endpoint=True)
@@ -86,14 +82,14 @@ def test_Magnetic_FEMM_sym():
     simu_sym.run()
 
     out.mag.meshsolution.plot_mesh(
-        save_path=join(save_path, "EM_SPMSM_FL_002_mesh.png"), is_2d=True
+        save_path=join(save_path, "EM_SPMSM_FL_002_mesh.png")
     )
     out.mag.meshsolution.plot_contour(
-        label="\mu", save_path=join(save_path, "EM_SPMSM_FL_002_mu.png"), is_2d=True
+        label="\mu", save_path=join(save_path, "EM_SPMSM_FL_002_mu.png")
     )
     out.mag.meshsolution.plot_contour(
-        label="B", save_path=join(save_path, "EM_SPMSM_FL_002_B.png"), is_2d=True
+        label="B", save_path=join(save_path, "EM_SPMSM_FL_002_B.png")
     )
     out.mag.meshsolution.plot_contour(
-        label="H", save_path=join(save_path, "EM_SPMSM_FL_002_H.png"), is_2d=True
+        label="H", save_path=join(save_path, "EM_SPMSM_FL_002_H.png")
     )

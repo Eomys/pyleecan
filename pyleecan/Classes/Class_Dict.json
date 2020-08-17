@@ -17,7 +17,8 @@
             "draw_FEMM",
             "intersect_line",
             "is_on_arc",
-            "split_line"
+            "split_line",
+            "comp_distance"
         ],
         "mother": "Line",
         "name": "Arc",
@@ -680,6 +681,53 @@
                 "type": "Material",
                 "unit": "-",
                 "value": ""
+            }
+        ]
+    },
+    "DXFImport": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Use a DXF to define a lamination",
+        "is_internal": false,
+        "methods": [
+            "get_surfaces"
+        ],
+        "mother": "",
+        "name": "DXFImport",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/DXFImport.csv",
+        "properties": [
+            {
+                "desc": "Path to the DXF file to import",
+                "max": "",
+                "min": "",
+                "name": "file_path",
+                "type": "str",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Dictionnary to assign the surfaces: key=complex reference point coordinate, value=label of the surface",
+                "max": "",
+                "min": "",
+                "name": "surf_dict",
+                "type": "dict",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "List of tuple to apply boundary conditions (complex reference point coordinate, is_arc, label of the BC to apply)",
+                "max": "",
+                "min": "",
+                "name": "BC_list",
+                "type": "list",
+                "unit": "-",
+                "value": []
             }
         ]
     },
@@ -3982,6 +4030,24 @@
                 "type": "list",
                 "unit": "",
                 "value": []
+            },
+            {
+                "desc": "To use a dxf version of the rotor instead of build_geometry",
+                "max": "",
+                "min": "",
+                "name": "rotor_dxf",
+                "type": "DXFImport",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "To use a dxf version of the rotor instead of build_geometry",
+                "max": "",
+                "min": "",
+                "name": "stator_dxf",
+                "type": "DXFImport",
+                "unit": "",
+                "value": null
             }
         ]
     },

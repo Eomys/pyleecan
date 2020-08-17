@@ -19,6 +19,7 @@ load_switch = {
     "CondType21": CondType21,
     "CondType22": CondType22,
     "Conductor": Conductor,
+    "DXFImport": DXFImport,
     "DataKeeper": DataKeeper,
     "Drive": Drive,
     "DriveWave": DriveWave,
