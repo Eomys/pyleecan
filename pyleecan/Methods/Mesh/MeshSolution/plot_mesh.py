@@ -4,13 +4,7 @@ from ....Classes.MeshMat import MeshMat
 
 
 def plot_mesh(
-    self,
-    label=None,
-    index=None,
-    indices=None,
-    is_2d=False,
-    save_path=None,
-    group_names=None,
+    self, label=None, index=None, indices=None, save_path=None, group_names=None,
 ):
     """Plot the mesh using pyvista plotter.
 
@@ -31,7 +25,7 @@ def plot_mesh(
     if group_names is not None:
         meshsol_grp = self.get_group(group_names)
         meshsol_grp.plot_mesh(
-            self, label, index, indices, is_2d, save_path, None,
+            self, label, index, indices, save_path, None,
         )
     else:
 
@@ -73,7 +67,7 @@ def plot_mesh(
             edge_color="white",
             line_width=1,
         )
-        if is_2d:
+        if self.dimension == 2:
             p.view_xy()
         if save_path is None:
             p.show()

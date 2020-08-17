@@ -18,7 +18,6 @@ def plot_deflection(
     factor=None,
     field_name=None,
     ifreq=0,
-    is_2d=False,
     save_path=None,
 ):
     """Plot the operational deflection shape using pyvista plotter.
@@ -130,7 +129,7 @@ def plot_deflection(
         clim=clim,
         scalar_bar_args=sargs,
     )
-    if is_2d:
+    if self.dimension == 2:
         p.view_xy()
     if save_path is None:
         p.show()

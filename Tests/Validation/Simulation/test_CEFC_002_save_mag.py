@@ -67,29 +67,25 @@ def test_CEFC_002():
     load_path = join(save_path, "Output.json")
     out.save(save_path=load_path)
 
-    out.mag.meshsolution.plot_mesh(
-        save_path=join(save_path, "CEFC_002_mesh_save.png"), is_2d=True
+    out.mag.meshsolution.plot_mesh(save_path=join(save_path, "CEFC_002_mesh_save.png"),)
+    out.mag.meshsolution.plot_contour(
+        label="\mu", save_path=join(save_path, "CEFC_002_mu_save.png"),
     )
     out.mag.meshsolution.plot_contour(
-        label="\mu", save_path=join(save_path, "CEFC_002_mu_save.png"), is_2d=True
+        label="B", save_path=join(save_path, "CEFC_002_B_save.png"),
     )
     out.mag.meshsolution.plot_contour(
-        label="B", save_path=join(save_path, "CEFC_002_B_save.png"), is_2d=True
-    )
-    out.mag.meshsolution.plot_contour(
-        label="H", save_path=join(save_path, "CEFC_002_H_save.png"), is_2d=True
+        label="H", save_path=join(save_path, "CEFC_002_H_save.png"),
     )
     out.mag.meshsolution.plot_contour(
         label="H",
         group_names="stator",
         save_path=join(save_path, "CEFC_002_H_stator_save.png"),
-        is_2d=True,
     )
     out.mag.meshsolution.plot_contour(
         label="\mu",
         group_names=["stator", "airgap"],
         save_path=join(save_path, "CEFC_002_mu_stator_airgap_save.png"),
-        is_2d=True,
     )
 
 
@@ -102,21 +98,17 @@ def test_CEFC_002_load():
         FEMM = Output(init_dict=json_tmp)
 
     # [Important] To test that fields are still working after saving and loading
-    FEMM.mag.meshsolution.plot_mesh(
-        save_path=join(save_path, "CEFC_002_mesh_load.png"), is_2d=True
-    )
+    FEMM.mag.meshsolution.plot_mesh(save_path=join(save_path, "CEFC_002_mesh_load.png"))
     FEMM.mag.meshsolution.plot_contour(
         label="\mu",
         group_names=["stator", "airgap"],
-        save_path=join(save_path, "CEFC_002_mu_load.png"),
-        is_2d=True,
+        save_path=join(save_path, "CEFC_002_mu_stator_airgap_load.png"),
     )
     FEMM.mag.meshsolution.plot_contour(
-        label="B", save_path=join(save_path, "CEFC_002_B_load.png"), is_2d=True
+        label="B", save_path=join(save_path, "CEFC_002_B_load.png"),
     )
     FEMM.mag.meshsolution.plot_contour(
         label="H",
         group_names="stator",
-        save_path=join(save_path, "CEFC_002_H_load.png"),
-        is_2d=True,
+        save_path=join(save_path, "CEFC_002_H_stator_load.png"),
     )
