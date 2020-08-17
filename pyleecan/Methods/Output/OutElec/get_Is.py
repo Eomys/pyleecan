@@ -24,6 +24,10 @@ def get_Is(self):
             is_components=True,
         )
         self.Is = DataTime(
-            name="Stator current", unit="A", symbol="Is", axes=[Phase, Time], values=transpose(Is)
+            name="Stator current",
+            unit="A",
+            symbol="Is",
+            axes=[Phase, Time],
+            values=transpose(Is),
         )
     return self.Is

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/VarLoadCurrent.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/VarLoadCurrent.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/VarLoadCurrent
 """
 
 from os import linesep
@@ -299,12 +300,13 @@ class VarLoadCurrent(VarLoad):
         check_var("OP_matrix", value, "ndarray")
         self._OP_matrix = value
 
-    # Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P)
-    # Type : ndarray
     OP_matrix = property(
         fget=_get_OP_matrix,
         fset=_set_OP_matrix,
-        doc=u"""Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) """,
+        doc=u"""Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) 
+
+        :Type: ndarray
+        """,
     )
 
     def _get_type_OP_matrix(self):
@@ -316,12 +318,15 @@ class VarLoadCurrent(VarLoad):
         check_var("type_OP_matrix", value, "int", Vmin=0, Vmax=1)
         self._type_OP_matrix = value
 
-    # Select with kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P)
-    # Type : int, min = 0, max = 1
     type_OP_matrix = property(
         fget=_get_type_OP_matrix,
         fset=_set_type_OP_matrix,
-        doc=u"""Select with kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) """,
+        doc=u"""Select with kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) 
+
+        :Type: int
+        :min: 0
+        :max: 1
+        """,
     )
 
     def _get_is_torque(self):
@@ -333,12 +338,13 @@ class VarLoadCurrent(VarLoad):
         check_var("is_torque", value, "bool")
         self._is_torque = value
 
-    # True if the Torque is defined in OP_matrix
-    # Type : bool
     is_torque = property(
         fget=_get_is_torque,
         fset=_set_is_torque,
-        doc=u"""True if the Torque is defined in OP_matrix""",
+        doc=u"""True if the Torque is defined in OP_matrix
+
+        :Type: bool
+        """,
     )
 
     def _get_is_power(self):
@@ -350,10 +356,11 @@ class VarLoadCurrent(VarLoad):
         check_var("is_power", value, "bool")
         self._is_power = value
 
-    # True if the Power is defined in OP_matrix
-    # Type : bool
     is_power = property(
         fget=_get_is_power,
         fset=_set_is_power,
-        doc=u"""True if the Power is defined in OP_matrix""",
+        doc=u"""True if the Power is defined in OP_matrix
+
+        :Type: bool
+        """,
     )

@@ -335,10 +335,14 @@ class Input(FrozenClass):
         check_var("Nt_tot", value, "int", Vmin=1)
         self._Nt_tot = value
 
-    # Time discretization
-    # Type : int, min = 1
     Nt_tot = property(
-        fget=_get_Nt_tot, fset=_set_Nt_tot, doc=u"""Time discretization"""
+        fget=_get_Nt_tot,
+        fset=_set_Nt_tot,
+        doc=u"""Time discretization
+
+        :Type: int
+        :min: 1
+        """,
     )
 
     def _get_Nrev(self):
@@ -350,12 +354,14 @@ class Input(FrozenClass):
         check_var("Nrev", value, "float", Vmin=0)
         self._Nrev = value
 
-    # Number of rotor revolution (to compute the final time)
-    # Type : float, min = 0
     Nrev = property(
         fget=_get_Nrev,
         fset=_set_Nrev,
-        doc=u"""Number of rotor revolution (to compute the final time)""",
+        doc=u"""Number of rotor revolution (to compute the final time)
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_Na_tot(self):
@@ -367,8 +373,12 @@ class Input(FrozenClass):
         check_var("Na_tot", value, "int", Vmin=1)
         self._Na_tot = value
 
-    # Angular discretization
-    # Type : int, min = 1
     Na_tot = property(
-        fget=_get_Na_tot, fset=_set_Na_tot, doc=u"""Angular discretization"""
+        fget=_get_Na_tot,
+        fset=_set_Na_tot,
+        doc=u"""Angular discretization
+
+        :Type: int
+        :min: 1
+        """,
     )
