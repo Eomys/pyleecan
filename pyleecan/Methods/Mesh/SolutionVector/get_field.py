@@ -18,7 +18,7 @@ def get_field(self, args=None):
          an array of field values
 
      """
-    #if args is None:
+    # if args is None:
     #    args = dict()
 
     # along_arg = list()

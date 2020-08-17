@@ -2,8 +2,8 @@
 
 from unittest import TestCase
 from pyleecan.Classes.Mesh import Mesh
-from pyleecan.Classes.ElementMat import ElementMat
-from pyleecan.Classes.NodeMat import NodeMat
+from pyleecan.Classes.CellMat import CellMat
+from pyleecan.Classes.PointMat import PointMat
 from pyleecan.Classes.Simulation import Simulation
 from pyleecan.Classes.Output import Output
 from os.path import join
@@ -20,8 +20,8 @@ class unittest_plot_mesh_field(TestCase):
         self.simu = Simulation()
         self.out = Output(simu=self.simu)
         self.mesh = Mesh()
-        self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
-        self.mesh.node = NodeMat()
+        self.mesh.element["Triangle3"] = CellMat(nb_node_per_element=3)
+        self.mesh.node = PointMat()
         self.mesh.node.add_node(np.array([0, 0]))
         self.mesh.node.add_node(np.array([1, 0]))
         self.mesh.node.add_node(np.array([0, 1]))

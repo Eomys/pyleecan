@@ -51,7 +51,7 @@ class unittest_interface(TestCase):
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-    def test_ElementMat_NodeMat_corner_ext(self):
+    def test_CellMat_PointMat_corner_ext(self):
         """unittest with CellMat and PointMat objects, extract interface from the external mesh point of view"""
         self.mesh.add_cell([0, 1, 2], "triangle3")
         self.mesh.add_cell([1, 2, 3], "triangle3")
@@ -77,7 +77,7 @@ class unittest_interface(TestCase):
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-    def test_ElementMat_NodeMat_corner_int(self):
+    def test_CellMat_PointMat_corner_int(self):
         """unittest with CellMat and PointMat objects, extract interface from the internal mesh point of view"""
         self.mesh.add_cell([0, 1, 2], "triangle3")
         self.mesh.add_cell([1, 2, 3], "triangle3")
@@ -103,7 +103,7 @@ class unittest_interface(TestCase):
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-    def test_ElementMat_NodeMat_self(self):
+    def test_CellMat_PointMat_self(self):
         """unittest with CellMat and PointMat objects, extract interface on itself"""
         self.mesh.add_cell([0, 1, 2], "triangle3")
         self.mesh.add_cell([0, 2, 3], "triangle3")

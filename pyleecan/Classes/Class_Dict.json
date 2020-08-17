@@ -4999,13 +4999,11 @@
             "get_point",
             "get_cell",
             "get_mesh_pv",
-            "get_normal",
-            "get_surf",
             "get_cell_area",
             "add_cell",
             "interface",
             "get_vertice",
-            "plot_mesh"
+            "get_point2cell"
         ],
         "mother": "Mesh",
         "name": "MeshMat",
@@ -5045,7 +5043,6 @@
         "methods": [
             "get_mesh",
             "get_solution",
-            "save_to_file",
             "get_field",
             "plot_mesh",
             "plot_contour",
@@ -5075,7 +5072,7 @@
                 "name": "mesh",
                 "type": "[Mesh]",
                 "unit": "",
-                "value": null
+                "value": []
             },
             {
                 "desc": "1 if the mesh is the same at each step (time, mode etc.)",
@@ -5093,7 +5090,7 @@
                 "name": "solution",
                 "type": "[Solution]",
                 "unit": "",
-                "value": null
+                "value": []
             },
             {
                 "desc": "Dimension of the physical problem",
@@ -5111,7 +5108,7 @@
                 "name": "group",
                 "type": "{ndarray}",
                 "unit": "",
-                "value": null
+                "value": {}
             }
         ]
     },

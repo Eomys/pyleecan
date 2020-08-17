@@ -22,7 +22,7 @@ def get_axis(self, args=None):
     axis_dict = dict()
 
     along_arg = list()
-    comp = self.field.components['x']
+    comp = self.field.components["x"]
 
     for axis in comp.axes:
         along_arg.append(axis.name)
@@ -40,6 +40,6 @@ def get_axis(self, args=None):
         axis_dict[ax] = size_field[k]
         k = k + 1
 
-    axis_dict['component'] = len(self.field.components)
+    axis_dict["component"] = len(self.field.components)
 
     return axis_dict
