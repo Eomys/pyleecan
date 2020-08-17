@@ -33,6 +33,11 @@ try:
 except ImportError as error:
     split_line = error
 
+try:
+    from ..Methods.Geometry.Arc.comp_distance import comp_distance
+except ImportError as error:
+    comp_distance = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -81,6 +86,15 @@ class Arc(Line):
         )
     else:
         split_line = split_line
+    # cf Methods.Geometry.Arc.comp_distance
+    if isinstance(comp_distance, ImportError):
+        comp_distance = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Arc method comp_distance: " + str(comp_distance))
+            )
+        )
+    else:
+        comp_distance = comp_distance
     # save method is available in all object
     save = save
 

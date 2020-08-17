@@ -17,7 +17,8 @@
             "draw_FEMM",
             "intersect_line",
             "is_on_arc",
-            "split_line"
+            "split_line",
+            "comp_distance"
         ],
         "mother": "Line",
         "name": "Arc",
