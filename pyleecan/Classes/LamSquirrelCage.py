@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/LamSquirrelCage.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/LamSquirrelCage.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/LamSquirrelCage
 """
 
 from os import linesep
@@ -338,12 +339,14 @@ class LamSquirrelCage(LamSlotWind):
         check_var("Hscr", value, "float", Vmin=0)
         self._Hscr = value
 
-    # short circuit ring section radial height [m]
-    # Type : float, min = 0
     Hscr = property(
         fget=_get_Hscr,
         fset=_set_Hscr,
-        doc=u"""short circuit ring section radial height [m]""",
+        doc=u"""short circuit ring section radial height [m]
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_Lscr(self):
@@ -355,12 +358,14 @@ class LamSquirrelCage(LamSlotWind):
         check_var("Lscr", value, "float", Vmin=0)
         self._Lscr = value
 
-    # short circuit ring section axial length
-    # Type : float, min = 0
     Lscr = property(
         fget=_get_Lscr,
         fset=_set_Lscr,
-        doc=u"""short circuit ring section axial length""",
+        doc=u"""short circuit ring section axial length
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_ring_mat(self):
@@ -375,10 +380,11 @@ class LamSquirrelCage(LamSlotWind):
         if self._ring_mat is not None:
             self._ring_mat.parent = self
 
-    # Material of the Rotor short circuit ring
-    # Type : Material
     ring_mat = property(
         fget=_get_ring_mat,
         fset=_set_ring_mat,
-        doc=u"""Material of the Rotor short circuit ring""",
+        doc=u"""Material of the Rotor short circuit ring
+
+        :Type: Material
+        """,
     )

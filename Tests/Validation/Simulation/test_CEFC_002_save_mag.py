@@ -8,7 +8,11 @@ from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-from Tests import save_validation_path as save_path
+
+from pyleecan.definitions import MAIN_DIR
+
+save_path = MAIN_DIR + "\\Results\\SM_CEFC_002_save_mag\\"
+
 from os.path import join
 
 import matplotlib.pyplot as plt
@@ -53,8 +57,8 @@ def test_CEFC_002():
         type_BH_stator=2,
         type_BH_rotor=2,
         is_get_mesh=True,
-        is_save_FEA=True,
-        is_sliding_band=False,
+        is_save_FEA=False,
+        is_sliding_band=True,
     )
     simu.force = None
     simu.struct = None
@@ -63,19 +67,19 @@ def test_CEFC_002():
     out.post.legend_name = "Slotless lamination"
     simu.run()
 
-    out.plot_mesh(mesh=out.mag.meshsolution.mesh[0], title="FEA Mesh")
-
-    # out.plot_mesh_field(meshsolution=out.mag.meshsolution, title="Permeability")
-    out.plot_mesh_field(
-        mesh=out.mag.meshsolution.mesh[0],
-        title="Permeability",
-        field=out.mag.meshsolution.solution[0].face["mu"],
-    )
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_CEFC_002_save_mag"))
-
     # Test save with MeshSolution object in out
-    out.save(save_path=save_path + "\Output.json")
+    load_path = join(save_path, "Output.json")
+    out.save(save_path=load_path)
+
+    out.mag.meshsolution.plot_mesh()
+    out.mag.meshsolution.plot_contour(label="\mu")
+    out.mag.meshsolution.plot_contour(label="B")
+    out.mag.meshsolution.plot_contour(label="H")
+    out.mag.meshsolution.plot_contour(label="H", group_names="stator")
+    out.mag.meshsolution.plot_contour(label="\mu", group_names=["stator", "airgap"])
+
+
+def test_CEFC_002_load():
 
     load_path = join(save_path, "Output.json")
     # Test to load the Meshsolution object (inside the output):
@@ -83,9 +87,8 @@ def test_CEFC_002():
         json_tmp = json.load(json_file)
         FEMM = Output(init_dict=json_tmp)
 
-    # To test that the "mu" is still a ndarray after saving and loading
-    out.plot_mesh_field(
-        mesh=FEMM.mag.meshsolution.mesh[0],
-        title="Permeability",
-        field=FEMM.mag.meshsolution.solution[0].face["mu"],
-    )
+    # [Important] To test that fields are still working after saving and loading
+    FEMM.mag.meshsolution.plot_mesh()
+    FEMM.mag.meshsolution.plot_contour(label="B")
+    FEMM.mag.meshsolution.plot_contour(label="H", group_names="stator")
+    FEMM.mag.meshsolution.plot_contour(label="\mu", group_names=["stator", "airgap"])

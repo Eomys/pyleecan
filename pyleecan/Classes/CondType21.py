@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/CondType21.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/CondType21.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/CondType21
 """
 
 from os import linesep
@@ -233,9 +234,15 @@ class CondType21(Conductor):
         check_var("Hbar", value, "float", Vmin=0)
         self._Hbar = value
 
-    # Bar height
-    # Type : float, min = 0
-    Hbar = property(fget=_get_Hbar, fset=_set_Hbar, doc=u"""Bar height""")
+    Hbar = property(
+        fget=_get_Hbar,
+        fset=_set_Hbar,
+        doc=u"""Bar height
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_Wbar(self):
         """getter of Wbar"""
@@ -246,9 +253,15 @@ class CondType21(Conductor):
         check_var("Wbar", value, "float", Vmin=0)
         self._Wbar = value
 
-    # Bar width
-    # Type : float, min = 0
-    Wbar = property(fget=_get_Wbar, fset=_set_Wbar, doc=u"""Bar width""")
+    Wbar = property(
+        fget=_get_Wbar,
+        fset=_set_Wbar,
+        doc=u"""Bar width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_Wins(self):
         """getter of Wins"""
@@ -259,6 +272,12 @@ class CondType21(Conductor):
         check_var("Wins", value, "float", Vmin=0)
         self._Wins = value
 
-    # Width of insulation
-    # Type : float, min = 0
-    Wins = property(fget=_get_Wins, fset=_set_Wins, doc=u"""Width of insulation""")
+    Wins = property(
+        fget=_get_Wins,
+        fset=_set_Wins,
+        doc=u"""Width of insulation
+
+        :Type: float
+        :min: 0
+        """,
+    )

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/NotchEvenDist.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/NotchEvenDist.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/NotchEvenDist
 """
 
 from os import linesep
@@ -232,10 +233,13 @@ class NotchEvenDist(Notch):
         check_var("alpha", value, "float")
         self._alpha = value
 
-    # angular positon of the first notch
-    # Type : float
     alpha = property(
-        fget=_get_alpha, fset=_set_alpha, doc=u"""angular positon of the first notch"""
+        fget=_get_alpha,
+        fset=_set_alpha,
+        doc=u"""angular positon of the first notch
+
+        :Type: float
+        """,
     )
 
     def _get_notch_shape(self):
@@ -250,8 +254,11 @@ class NotchEvenDist(Notch):
         if self._notch_shape is not None:
             self._notch_shape.parent = self
 
-    # Shape of the Notch
-    # Type : Slot
     notch_shape = property(
-        fget=_get_notch_shape, fset=_set_notch_shape, doc=u"""Shape of the Notch"""
+        fget=_get_notch_shape,
+        fset=_set_notch_shape,
+        doc=u"""Shape of the Notch
+
+        :Type: Slot
+        """,
     )

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Input.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Input.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Input
 """
 
 from os import linesep
@@ -295,12 +296,13 @@ class Input(FrozenClass):
         if self._time is not None:
             self._time.parent = self
 
-    # Electrical time vector (no symmetry) to import
-    # Type : Import
     time = property(
         fget=_get_time,
         fset=_set_time,
-        doc=u"""Electrical time vector (no symmetry) to import""",
+        doc=u"""Electrical time vector (no symmetry) to import
+
+        :Type: Import
+        """,
     )
 
     def _get_angle(self):
@@ -315,12 +317,13 @@ class Input(FrozenClass):
         if self._angle is not None:
             self._angle.parent = self
 
-    # Electrical position vector (no symmetry) to import
-    # Type : Import
     angle = property(
         fget=_get_angle,
         fset=_set_angle,
-        doc=u"""Electrical position vector (no symmetry) to import""",
+        doc=u"""Electrical position vector (no symmetry) to import
+
+        :Type: Import
+        """,
     )
 
     def _get_Nt_tot(self):

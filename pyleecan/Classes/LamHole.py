@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/LamHole.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/LamHole.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/LamHole
 """
 
 from os import linesep
@@ -450,9 +451,14 @@ class LamHole(Lamination):
             if obj is not None:
                 obj.parent = self
 
-    # lamination Hole
-    # Type : [Hole]
-    hole = property(fget=_get_hole, fset=_set_hole, doc=u"""lamination Hole""")
+    hole = property(
+        fget=_get_hole,
+        fset=_set_hole,
+        doc=u"""lamination Hole
+
+        :Type: [Hole]
+        """,
+    )
 
     def _get_bore(self):
         """getter of bore"""
@@ -466,6 +472,11 @@ class LamHole(Lamination):
         if self._bore is not None:
             self._bore.parent = self
 
-    # Bore Shape
-    # Type : Bore
-    bore = property(fget=_get_bore, fset=_set_bore, doc=u"""Bore Shape""")
+    bore = property(
+        fget=_get_bore,
+        fset=_set_bore,
+        doc=u"""Bore Shape
+
+        :Type: Bore
+        """,
+    )

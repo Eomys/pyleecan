@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/HoleM51.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/HoleM51.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/HoleM51
 """
 
 from os import linesep
@@ -590,9 +591,15 @@ class HoleM51(HoleMag):
         check_var("H0", value, "float", Vmin=0)
         self._H0 = value
 
-    # Hole depth
-    # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Hole depth""")
+    H0 = property(
+        fget=_get_H0,
+        fset=_set_H0,
+        doc=u"""Hole depth
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H1(self):
         """getter of H1"""
@@ -603,10 +610,14 @@ class HoleM51(HoleMag):
         check_var("H1", value, "float", Vmin=0)
         self._H1 = value
 
-    # Distance from the lamination Bore
-    # Type : float, min = 0
     H1 = property(
-        fget=_get_H1, fset=_set_H1, doc=u"""Distance from the lamination Bore"""
+        fget=_get_H1,
+        fset=_set_H1,
+        doc=u"""Distance from the lamination Bore
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_H2(self):
@@ -618,9 +629,15 @@ class HoleM51(HoleMag):
         check_var("H2", value, "float", Vmin=0)
         self._H2 = value
 
-    # Hole width
-    # Type : float, min = 0
-    H2 = property(fget=_get_H2, fset=_set_H2, doc=u"""Hole width""")
+    H2 = property(
+        fget=_get_H2,
+        fset=_set_H2,
+        doc=u"""Hole width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W0(self):
         """getter of W0"""
@@ -631,9 +648,15 @@ class HoleM51(HoleMag):
         check_var("W0", value, "float", Vmin=0)
         self._W0 = value
 
-    # Hole bottom width
-    # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Hole bottom width""")
+    W0 = property(
+        fget=_get_W0,
+        fset=_set_W0,
+        doc=u"""Hole bottom width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W1(self):
         """getter of W1"""
@@ -644,9 +667,15 @@ class HoleM51(HoleMag):
         check_var("W1", value, "float", Vmin=0)
         self._W1 = value
 
-    # Hole angular width
-    # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Hole angular width""")
+    W1 = property(
+        fget=_get_W1,
+        fset=_set_W1,
+        doc=u"""Hole angular width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W2(self):
         """getter of W2"""
@@ -657,9 +686,15 @@ class HoleM51(HoleMag):
         check_var("W2", value, "float", Vmin=0)
         self._W2 = value
 
-    # magnet_1 position
-    # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""magnet_1 position""")
+    W2 = property(
+        fget=_get_W2,
+        fset=_set_W2,
+        doc=u"""magnet_1 position
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W3(self):
         """getter of W3"""
@@ -670,9 +705,15 @@ class HoleM51(HoleMag):
         check_var("W3", value, "float", Vmin=0)
         self._W3 = value
 
-    # magnet_1 width
-    # Type : float, min = 0
-    W3 = property(fget=_get_W3, fset=_set_W3, doc=u"""magnet_1 width""")
+    W3 = property(
+        fget=_get_W3,
+        fset=_set_W3,
+        doc=u"""magnet_1 width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W4(self):
         """getter of W4"""
@@ -683,9 +724,15 @@ class HoleM51(HoleMag):
         check_var("W4", value, "float", Vmin=0)
         self._W4 = value
 
-    # magnet_2 position
-    # Type : float, min = 0
-    W4 = property(fget=_get_W4, fset=_set_W4, doc=u"""magnet_2 position""")
+    W4 = property(
+        fget=_get_W4,
+        fset=_set_W4,
+        doc=u"""magnet_2 position
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W5(self):
         """getter of W5"""
@@ -696,9 +743,15 @@ class HoleM51(HoleMag):
         check_var("W5", value, "float", Vmin=0)
         self._W5 = value
 
-    # magnet_2 width
-    # Type : float, min = 0
-    W5 = property(fget=_get_W5, fset=_set_W5, doc=u"""magnet_2 width""")
+    W5 = property(
+        fget=_get_W5,
+        fset=_set_W5,
+        doc=u"""magnet_2 width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W6(self):
         """getter of W6"""
@@ -709,9 +762,15 @@ class HoleM51(HoleMag):
         check_var("W6", value, "float", Vmin=0)
         self._W6 = value
 
-    # magnet_0 position
-    # Type : float, min = 0
-    W6 = property(fget=_get_W6, fset=_set_W6, doc=u"""magnet_0 position""")
+    W6 = property(
+        fget=_get_W6,
+        fset=_set_W6,
+        doc=u"""magnet_0 position
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W7(self):
         """getter of W7"""
@@ -722,9 +781,15 @@ class HoleM51(HoleMag):
         check_var("W7", value, "float", Vmin=0)
         self._W7 = value
 
-    # magnet_0 width
-    # Type : float, min = 0
-    W7 = property(fget=_get_W7, fset=_set_W7, doc=u"""magnet_0 width""")
+    W7 = property(
+        fget=_get_W7,
+        fset=_set_W7,
+        doc=u"""magnet_0 width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_magnet_0(self):
         """getter of magnet_0"""
@@ -738,9 +803,14 @@ class HoleM51(HoleMag):
         if self._magnet_0 is not None:
             self._magnet_0.parent = self
 
-    # First Magnet
-    # Type : Magnet
-    magnet_0 = property(fget=_get_magnet_0, fset=_set_magnet_0, doc=u"""First Magnet""")
+    magnet_0 = property(
+        fget=_get_magnet_0,
+        fset=_set_magnet_0,
+        doc=u"""First Magnet
+
+        :Type: Magnet
+        """,
+    )
 
     def _get_magnet_1(self):
         """getter of magnet_1"""
@@ -754,10 +824,13 @@ class HoleM51(HoleMag):
         if self._magnet_1 is not None:
             self._magnet_1.parent = self
 
-    # Second Magnet
-    # Type : Magnet
     magnet_1 = property(
-        fget=_get_magnet_1, fset=_set_magnet_1, doc=u"""Second Magnet"""
+        fget=_get_magnet_1,
+        fset=_set_magnet_1,
+        doc=u"""Second Magnet
+
+        :Type: Magnet
+        """,
     )
 
     def _get_magnet_2(self):
@@ -772,6 +845,11 @@ class HoleM51(HoleMag):
         if self._magnet_2 is not None:
             self._magnet_2.parent = self
 
-    # Third Magnet
-    # Type : Magnet
-    magnet_2 = property(fget=_get_magnet_2, fset=_set_magnet_2, doc=u"""Third Magnet""")
+    magnet_2 = property(
+        fget=_get_magnet_2,
+        fset=_set_magnet_2,
+        doc=u"""Third Magnet
+
+        :Type: Magnet
+        """,
+    )

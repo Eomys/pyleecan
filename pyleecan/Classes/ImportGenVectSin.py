@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Import/ImportGenVectSin.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Import/ImportGenVectSin.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Import/ImportGenVectSin
 """
 
 from os import linesep
@@ -180,10 +181,14 @@ class ImportGenVectSin(ImportMatrix):
         check_var("f", value, "float", Vmin=0)
         self._f = value
 
-    # Frequency of the sinus to generate
-    # Type : float, min = 0
     f = property(
-        fget=_get_f, fset=_set_f, doc=u"""Frequency of the sinus to generate"""
+        fget=_get_f,
+        fset=_set_f,
+        doc=u"""Frequency of the sinus to generate
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_A(self):
@@ -195,10 +200,13 @@ class ImportGenVectSin(ImportMatrix):
         check_var("A", value, "float")
         self._A = value
 
-    # Amplitude of the sinus to generate
-    # Type : float
     A = property(
-        fget=_get_A, fset=_set_A, doc=u"""Amplitude of the sinus to generate"""
+        fget=_get_A,
+        fset=_set_A,
+        doc=u"""Amplitude of the sinus to generate
+
+        :Type: float
+        """,
     )
 
     def _get_Phi(self):
@@ -210,10 +218,15 @@ class ImportGenVectSin(ImportMatrix):
         check_var("Phi", value, "float", Vmin=-6.29, Vmax=6.29)
         self._Phi = value
 
-    # Phase of the sinus to generate
-    # Type : float, min = -6.29, max = 6.29
     Phi = property(
-        fget=_get_Phi, fset=_set_Phi, doc=u"""Phase of the sinus to generate"""
+        fget=_get_Phi,
+        fset=_set_Phi,
+        doc=u"""Phase of the sinus to generate
+
+        :Type: float
+        :min: -6.29
+        :max: 6.29
+        """,
     )
 
     def _get_N(self):
@@ -225,9 +238,15 @@ class ImportGenVectSin(ImportMatrix):
         check_var("N", value, "int", Vmin=0)
         self._N = value
 
-    # Length of the vector to generate
-    # Type : int, min = 0
-    N = property(fget=_get_N, fset=_set_N, doc=u"""Length of the vector to generate""")
+    N = property(
+        fget=_get_N,
+        fset=_set_N,
+        doc=u"""Length of the vector to generate
+
+        :Type: int
+        :min: 0
+        """,
+    )
 
     def _get_Tf(self):
         """getter of Tf"""
@@ -238,8 +257,12 @@ class ImportGenVectSin(ImportMatrix):
         check_var("Tf", value, "float", Vmin=0)
         self._Tf = value
 
-    # End time of the sinus generation
-    # Type : float, min = 0
     Tf = property(
-        fget=_get_Tf, fset=_set_Tf, doc=u"""End time of the sinus generation"""
+        fget=_get_Tf,
+        fset=_set_Tf,
+        doc=u"""End time of the sinus generation
+
+        :Type: float
+        :min: 0
+        """,
     )

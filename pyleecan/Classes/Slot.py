@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/Slot.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/Slot.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/Slot
 """
 
 from os import linesep
@@ -291,6 +292,13 @@ class Slot(FrozenClass):
         check_var("Zs", value, "int", Vmin=0, Vmax=1000)
         self._Zs = value
 
-    # slot number
-    # Type : int, min = 0, max = 1000
-    Zs = property(fget=_get_Zs, fset=_set_Zs, doc=u"""slot number""")
+    Zs = property(
+        fget=_get_Zs,
+        fset=_set_Zs,
+        doc=u"""slot number
+
+        :Type: int
+        :min: 0
+        :max: 1000
+        """,
+    )
