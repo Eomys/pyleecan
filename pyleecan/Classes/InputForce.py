@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/InputForce.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/InputForce.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/InputForce
 """
 
 from os import linesep
@@ -183,6 +184,11 @@ class InputForce(Input):
         if self._P is not None:
             self._P.parent = self
 
-    # Magnetic air-gap surface force
-    # Type : ImportVectorField
-    P = property(fget=_get_P, fset=_set_P, doc=u"""Magnetic air-gap surface force""")
+    P = property(
+        fget=_get_P,
+        fset=_set_P,
+        doc=u"""Magnetic air-gap surface force
+
+        :Type: ImportVectorField
+        """,
+    )

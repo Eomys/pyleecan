@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Drive.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Drive.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Drive
 """
 
 from os import linesep
@@ -126,10 +127,14 @@ class Drive(FrozenClass):
         check_var("Umax", value, "float", Vmin=0)
         self._Umax = value
 
-    # Maximum RMS voltage of the Drive
-    # Type : float, min = 0
     Umax = property(
-        fget=_get_Umax, fset=_set_Umax, doc=u"""Maximum RMS voltage of the Drive"""
+        fget=_get_Umax,
+        fset=_set_Umax,
+        doc=u"""Maximum RMS voltage of the Drive
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_Imax(self):
@@ -141,10 +146,14 @@ class Drive(FrozenClass):
         check_var("Imax", value, "float", Vmin=0)
         self._Imax = value
 
-    # Maximum RMS current of the Drive
-    # Type : float, min = 0
     Imax = property(
-        fget=_get_Imax, fset=_set_Imax, doc=u"""Maximum RMS current of the Drive"""
+        fget=_get_Imax,
+        fset=_set_Imax,
+        doc=u"""Maximum RMS current of the Drive
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_is_current(self):
@@ -156,10 +165,11 @@ class Drive(FrozenClass):
         check_var("is_current", value, "bool")
         self._is_current = value
 
-    # True to generate current waveform, False for voltage
-    # Type : bool
     is_current = property(
         fget=_get_is_current,
         fset=_set_is_current,
-        doc=u"""True to generate current waveform, False for voltage""",
+        doc=u"""True to generate current waveform, False for voltage
+
+        :Type: bool
+        """,
     )

@@ -10,6 +10,7 @@ from ..Classes.Arc2 import Arc2
 from ..Classes.Arc3 import Arc3
 from ..Classes.Bore import Bore
 from ..Classes.BoreFlower import BoreFlower
+from ..Classes.CellMat import CellMat
 from ..Classes.Circle import Circle
 from ..Classes.CondType11 import CondType11
 from ..Classes.CondType12 import CondType12
@@ -22,8 +23,6 @@ from ..Classes.DriveWave import DriveWave
 from ..Classes.EEC import EEC
 from ..Classes.EEC_PMSM import EEC_PMSM
 from ..Classes.Electrical import Electrical
-from ..Classes.Element import Element
-from ..Classes.ElementMat import ElementMat
 from ..Classes.FluxLink import FluxLink
 from ..Classes.FluxLinkFEMM import FluxLinkFEMM
 from ..Classes.Force import Force
@@ -92,10 +91,10 @@ from ..Classes.MatMagnetics import MatMagnetics
 from ..Classes.MatStructural import MatStructural
 from ..Classes.Material import Material
 from ..Classes.Mesh import Mesh
+from ..Classes.MeshMat import MeshMat
 from ..Classes.MeshSolution import MeshSolution
 from ..Classes.MeshVTK import MeshVTK
-from ..Classes.Node import Node
-from ..Classes.NodeMat import NodeMat
+from ..Classes.Mode import Mode
 from ..Classes.Notch import Notch
 from ..Classes.NotchEvenDist import NotchEvenDist
 from ..Classes.OptiConstraint import OptiConstraint
@@ -117,6 +116,7 @@ from ..Classes.OutputMulti import OutputMulti
 from ..Classes.OutputMultiOpti import OutputMultiOpti
 from ..Classes.ParamExplorer import ParamExplorer
 from ..Classes.ParamExplorerSet import ParamExplorerSet
+from ..Classes.PointMat import PointMat
 from ..Classes.PolarArc import PolarArc
 from ..Classes.Segment import Segment
 from ..Classes.Shaft import Shaft
@@ -149,6 +149,9 @@ from ..Classes.SlotW60 import SlotW60
 from ..Classes.SlotW61 import SlotW61
 from ..Classes.SlotWind import SlotWind
 from ..Classes.Solution import Solution
+from ..Classes.SolutionData import SolutionData
+from ..Classes.SolutionMat import SolutionMat
+from ..Classes.SolutionVector import SolutionVector
 from ..Classes.Structural import Structural
 from ..Classes.SurfLine import SurfLine
 from ..Classes.SurfRing import SurfRing

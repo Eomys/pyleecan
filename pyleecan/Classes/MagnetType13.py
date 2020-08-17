@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/MagnetType13.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/MagnetType13.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/MagnetType13
 """
 
 from os import linesep
@@ -209,9 +210,15 @@ class MagnetType13(MagnetFlat):
         check_var("Wmag", value, "float", Vmin=0)
         self._Wmag = value
 
-    # magnet bottom width [m]
-    # Type : float, min = 0
-    Wmag = property(fget=_get_Wmag, fset=_set_Wmag, doc=u"""magnet bottom width [m]""")
+    Wmag = property(
+        fget=_get_Wmag,
+        fset=_set_Wmag,
+        doc=u"""magnet bottom width [m]
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_Hmag(self):
         """getter of Hmag"""
@@ -222,9 +229,15 @@ class MagnetType13(MagnetFlat):
         check_var("Hmag", value, "float", Vmin=0)
         self._Hmag = value
 
-    # magnet radial height [m]
-    # Type : float, min = 0
-    Hmag = property(fget=_get_Hmag, fset=_set_Hmag, doc=u"""magnet radial height [m]""")
+    Hmag = property(
+        fget=_get_Hmag,
+        fset=_set_Hmag,
+        doc=u"""magnet radial height [m]
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_Rtop(self):
         """getter of Rtop"""
@@ -235,8 +248,12 @@ class MagnetType13(MagnetFlat):
         check_var("Rtop", value, "float", Vmin=0)
         self._Rtop = value
 
-    # radius of the circular top shape [m]
-    # Type : float, min = 0
     Rtop = property(
-        fget=_get_Rtop, fset=_set_Rtop, doc=u"""radius of the circular top shape [m]"""
+        fget=_get_Rtop,
+        fset=_set_Rtop,
+        doc=u"""radius of the circular top shape [m]
+
+        :Type: float
+        :min: 0
+        """,
     )

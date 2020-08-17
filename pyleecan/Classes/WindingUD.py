@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/WindingUD.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/WindingUD.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/WindingUD
 """
 
 from os import linesep
@@ -222,10 +223,11 @@ class WindingUD(Winding):
         check_var("user_wind_mat", value, "ndarray")
         self._user_wind_mat = value
 
-    # user defined Winding matrix
-    # Type : ndarray
     user_wind_mat = property(
         fget=_get_user_wind_mat,
         fset=_set_user_wind_mat,
-        doc=u"""user defined Winding matrix""",
+        doc=u"""user defined Winding matrix
+
+        :Type: ndarray
+        """,
     )

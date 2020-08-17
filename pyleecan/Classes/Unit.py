@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/GUI_Option/Unit.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/GUI_Option/Unit.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/GUI_Option/Unit
 """
 
 from os import linesep
@@ -211,10 +212,15 @@ class Unit(FrozenClass):
         check_var("unit_m", value, "int", Vmin=0, Vmax=1)
         self._unit_m = value
 
-    # 0: use m, 1: use mm
-    # Type : int, min = 0, max = 1
     unit_m = property(
-        fget=_get_unit_m, fset=_set_unit_m, doc=u"""0: use m, 1: use mm"""
+        fget=_get_unit_m,
+        fset=_set_unit_m,
+        doc=u"""0: use m, 1: use mm
+
+        :Type: int
+        :min: 0
+        :max: 1
+        """,
     )
 
     def _get_unit_rad(self):
@@ -226,10 +232,15 @@ class Unit(FrozenClass):
         check_var("unit_rad", value, "int", Vmin=0, Vmax=1)
         self._unit_rad = value
 
-    # 0: use rad, 1: use deg
-    # Type : int, min = 0, max = 1
     unit_rad = property(
-        fget=_get_unit_rad, fset=_set_unit_rad, doc=u"""0: use rad, 1: use deg"""
+        fget=_get_unit_rad,
+        fset=_set_unit_rad,
+        doc=u"""0: use rad, 1: use deg
+
+        :Type: int
+        :min: 0
+        :max: 1
+        """,
     )
 
     def _get_unit_m2(self):
@@ -241,8 +252,13 @@ class Unit(FrozenClass):
         check_var("unit_m2", value, "int", Vmin=0, Vmax=1)
         self._unit_m2 = value
 
-    # 0: use m^2, 1: use mm^2
-    # Type : int, min = 0, max = 1
     unit_m2 = property(
-        fget=_get_unit_m2, fset=_set_unit_m2, doc=u"""0: use m^2, 1: use mm^2"""
+        fget=_get_unit_m2,
+        fset=_set_unit_m2,
+        doc=u"""0: use m^2, 1: use mm^2
+
+        :Type: int
+        :min: 0
+        :max: 1
+        """,
     )

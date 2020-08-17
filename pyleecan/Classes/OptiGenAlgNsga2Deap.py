@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Optimization/OptiGenAlgNsga2Deap.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Optimization/OptiGenAlgNsga2Deap
 """
 
 from os import linesep
@@ -290,6 +291,11 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         else:
             self._toolbox = value
 
-    # DEAP toolbox
-    # Type : deap.base.Toolbox
-    toolbox = property(fget=_get_toolbox, fset=_set_toolbox, doc=u"""DEAP toolbox""")
+    toolbox = property(
+        fget=_get_toolbox,
+        fset=_set_toolbox,
+        doc=u"""DEAP toolbox
+
+        :Type: deap.base.Toolbox
+        """,
+    )

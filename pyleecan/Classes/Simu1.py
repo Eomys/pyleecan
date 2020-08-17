@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Simu1.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Simu1.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Simu1
 """
 
 from os import linesep
@@ -56,10 +57,10 @@ class Simu1(Simulation):
 
     def __init__(
         self,
-        elec=-1,
-        mag=-1,
-        struct=-1,
-        force=-1,
+        elec=None,
+        mag=None,
+        struct=None,
+        force=None,
         name="",
         desc="",
         machine=-1,
@@ -315,9 +316,14 @@ class Simu1(Simulation):
         if self._elec is not None:
             self._elec.parent = self
 
-    # Electrical module
-    # Type : Electrical
-    elec = property(fget=_get_elec, fset=_set_elec, doc=u"""Electrical module""")
+    elec = property(
+        fget=_get_elec,
+        fset=_set_elec,
+        doc=u"""Electrical module
+
+        :Type: Electrical
+        """,
+    )
 
     def _get_mag(self):
         """getter of mag"""
@@ -331,9 +337,14 @@ class Simu1(Simulation):
         if self._mag is not None:
             self._mag.parent = self
 
-    # Magnetic module
-    # Type : Magnetics
-    mag = property(fget=_get_mag, fset=_set_mag, doc=u"""Magnetic module""")
+    mag = property(
+        fget=_get_mag,
+        fset=_set_mag,
+        doc=u"""Magnetic module
+
+        :Type: Magnetics
+        """,
+    )
 
     def _get_struct(self):
         """getter of struct"""
@@ -347,9 +358,14 @@ class Simu1(Simulation):
         if self._struct is not None:
             self._struct.parent = self
 
-    # Structural module
-    # Type : Structural
-    struct = property(fget=_get_struct, fset=_set_struct, doc=u"""Structural module""")
+    struct = property(
+        fget=_get_struct,
+        fset=_set_struct,
+        doc=u"""Structural module
+
+        :Type: Structural
+        """,
+    )
 
     def _get_force(self):
         """getter of force"""
@@ -363,6 +379,11 @@ class Simu1(Simulation):
         if self._force is not None:
             self._force.parent = self
 
-    # Force moduale
-    # Type : Force
-    force = property(fget=_get_force, fset=_set_force, doc=u"""Force moduale""")
+    force = property(
+        fget=_get_force,
+        fset=_set_force,
+        doc=u"""Force moduale
+
+        :Type: Force
+        """,
+    )

@@ -1,8 +1,0 @@
-Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-connectivity,,Matrix of connectivity for one element type,,ndarray,,,,,Mesh,Element,add_element,VERSION,1,Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). 
-nb_elem,,Total number of elements,,int,0,,,,,,get_all_connectivity,,,
-nb_node_per_element,,Define the number of node per element,,int,0,,,,,,get_all_node_tags,,,
-group,,Attribute a group number (int) to each element . This group number should correspond to a subpart of the machine.,,ndarray,,,,,,,get_connectivity,,,
-tag,,Element tags,,ndarray,,,,,,,get_group,,,
-,,,,,,,,,,,get_node2element,,,
-,,,,,,,,,,,is_exist,,,

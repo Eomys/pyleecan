@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/MachineUD.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/MachineUD.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/MachineUD
 """
 
 from os import linesep
@@ -279,10 +280,13 @@ class MachineUD(Machine):
             if obj is not None:
                 obj.parent = self
 
-    # List of Lamination
-    # Type : [Lamination]
     lam_list = property(
-        fget=_get_lam_list, fset=_set_lam_list, doc=u"""List of Lamination"""
+        fget=_get_lam_list,
+        fset=_set_lam_list,
+        doc=u"""List of Lamination
+
+        :Type: [Lamination]
+        """,
     )
 
     def _get_is_sync(self):
@@ -294,10 +298,11 @@ class MachineUD(Machine):
         check_var("is_sync", value, "bool")
         self._is_sync = value
 
-    # True if the machine should be handled as a Synchronous machine
-    # Type : bool
     is_sync = property(
         fget=_get_is_sync,
         fset=_set_is_sync,
-        doc=u"""True if the machine should be handled as a Synchronous machine""",
+        doc=u"""True if the machine should be handled as a Synchronous machine
+
+        :Type: bool
+        """,
     )

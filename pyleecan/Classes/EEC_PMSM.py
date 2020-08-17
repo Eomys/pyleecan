@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/EEC_PMSM.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/EEC_PMSM.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/EEC_PMSM
 """
 
 from os import linesep
@@ -313,10 +314,13 @@ class EEC_PMSM(EEC):
         if self._indmag is not None:
             self._indmag.parent = self
 
-    # Magnetic inductance
-    # Type : IndMag
     indmag = property(
-        fget=_get_indmag, fset=_set_indmag, doc=u"""Magnetic inductance"""
+        fget=_get_indmag,
+        fset=_set_indmag,
+        doc=u"""Magnetic inductance
+
+        :Type: IndMag
+        """,
     )
 
     def _get_fluxlink(self):
@@ -331,9 +335,14 @@ class EEC_PMSM(EEC):
         if self._fluxlink is not None:
             self._fluxlink.parent = self
 
-    # Flux Linkage
-    # Type : FluxLink
-    fluxlink = property(fget=_get_fluxlink, fset=_set_fluxlink, doc=u"""Flux Linkage""")
+    fluxlink = property(
+        fget=_get_fluxlink,
+        fset=_set_fluxlink,
+        doc=u"""Flux Linkage
+
+        :Type: FluxLink
+        """,
+    )
 
     def _get_parameters(self):
         """getter of parameters"""
@@ -344,12 +353,13 @@ class EEC_PMSM(EEC):
         check_var("parameters", value, "dict")
         self._parameters = value
 
-    # Parameters of the EEC: computed if empty, or enforced
-    # Type : dict
     parameters = property(
         fget=_get_parameters,
         fset=_set_parameters,
-        doc=u"""Parameters of the EEC: computed if empty, or enforced""",
+        doc=u"""Parameters of the EEC: computed if empty, or enforced
+
+        :Type: dict
+        """,
     )
 
     def _get_freq0(self):
@@ -361,9 +371,14 @@ class EEC_PMSM(EEC):
         check_var("freq0", value, "float")
         self._freq0 = value
 
-    # Frequency
-    # Type : float
-    freq0 = property(fget=_get_freq0, fset=_set_freq0, doc=u"""Frequency""")
+    freq0 = property(
+        fget=_get_freq0,
+        fset=_set_freq0,
+        doc=u"""Frequency
+
+        :Type: float
+        """,
+    )
 
     def _get_drive(self):
         """getter of drive"""
@@ -377,6 +392,11 @@ class EEC_PMSM(EEC):
         if self._drive is not None:
             self._drive.parent = self
 
-    # Drive
-    # Type : Drive
-    drive = property(fget=_get_drive, fset=_set_drive, doc=u"""Drive""")
+    drive = property(
+        fget=_get_drive,
+        fset=_set_drive,
+        doc=u"""Drive
+
+        :Type: Drive
+        """,
+    )
