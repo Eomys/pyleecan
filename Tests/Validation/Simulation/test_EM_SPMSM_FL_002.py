@@ -1,16 +1,14 @@
 from numpy import ones, pi, array, transpose
 from os.path import join
+
 import matplotlib.pyplot as plt
-from Tests import save_validation_path as save_path
+import pytest
+from numpy import array, ones, pi
 
 from pyleecan.Classes.Simu1 import Simu1
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.InputFlux import InputFlux
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportMatlab import ImportMatlab
-
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 import pytest
