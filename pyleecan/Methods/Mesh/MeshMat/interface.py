@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from ....Classes.NodeMat import NodeMat
-from ....Classes.ElementMat import ElementMat
+from ....Classes.PointMat import PointMat
+from ....Classes.CellMat import CellMat
 from ....definitions import PACKAGE_NAME
 from collections import Counter
 import numpy as np
@@ -24,8 +24,8 @@ def interface(self, other_mesh):
     # Dynamic import
     module = __import__(PACKAGE_NAME + ".Classes." + "Mesh", fromlist=["Mesh"])
     new_mesh = getattr(module, "Mesh")()
-    new_mesh.node = NodeMat()
-    new_mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)
+    new_mesh.node = PointMat()
+    new_mesh.element["Segment2"] = CellMat(nb_node_per_element=2)
 
     for key in self.element:
         nodes_tags = self.element[key].get_all_node_tags()

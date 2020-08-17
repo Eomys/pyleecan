@@ -29,16 +29,6 @@ except ImportError as error:
     get_mesh_pv = error
 
 try:
-    from ..Methods.Mesh.MeshMat.get_normal import get_normal
-except ImportError as error:
-    get_normal = error
-
-try:
-    from ..Methods.Mesh.MeshMat.get_surf import get_surf
-except ImportError as error:
-    get_surf = error
-
-try:
     from ..Methods.Mesh.MeshMat.get_cell_area import get_cell_area
 except ImportError as error:
     get_cell_area = error
@@ -59,9 +49,9 @@ except ImportError as error:
     get_vertice = error
 
 try:
-    from ..Methods.Mesh.MeshMat.plot_mesh import plot_mesh
+    from ..Methods.Mesh.MeshMat.get_point2cell import get_point2cell
 except ImportError as error:
-    plot_mesh = error
+    get_point2cell = error
 
 
 from ._check import InitUnKnowClassError
@@ -102,24 +92,6 @@ class MeshMat(Mesh):
         )
     else:
         get_mesh_pv = get_mesh_pv
-    # cf Methods.Mesh.MeshMat.get_normal
-    if isinstance(get_normal, ImportError):
-        get_normal = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_normal: " + str(get_normal))
-            )
-        )
-    else:
-        get_normal = get_normal
-    # cf Methods.Mesh.MeshMat.get_surf
-    if isinstance(get_surf, ImportError):
-        get_surf = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method get_surf: " + str(get_surf))
-            )
-        )
-    else:
-        get_surf = get_surf
     # cf Methods.Mesh.MeshMat.get_cell_area
     if isinstance(get_cell_area, ImportError):
         get_cell_area = property(
@@ -158,15 +130,17 @@ class MeshMat(Mesh):
         )
     else:
         get_vertice = get_vertice
-    # cf Methods.Mesh.MeshMat.plot_mesh
-    if isinstance(plot_mesh, ImportError):
-        plot_mesh = property(
+    # cf Methods.Mesh.MeshMat.get_point2cell
+    if isinstance(get_point2cell, ImportError):
+        get_point2cell = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method plot_mesh: " + str(plot_mesh))
+                ImportError(
+                    "Can't use MeshMat method get_point2cell: " + str(get_point2cell)
+                )
             )
         )
     else:
-        plot_mesh = plot_mesh
+        get_point2cell = get_point2cell
     # save method is available in all object
     save = save
 

@@ -86,11 +86,11 @@ def gen_input(self):
                 output.Is = None
         else:
             Is = self.Is.get_data()
-            if not isinstance(Is, ndarray) or Is.shape != (self.Nt_tot, qs):
+            if not isinstance(Is, ndarray) or Is.shape != (qs, self.Nt_tot):
                 raise InputError(
                     "ERROR: InputCurrent.Is must be a matrix with the shape "
-                    + str((self.Nt_tot, qs))
-                    + " (len(time), stator phase number), "
+                    + str((qs, self.Nt_tot))
+                    + " (stator phase number, len(time)), "
                     + str(Is.shape)
                     + " returned"
                 )
@@ -107,10 +107,10 @@ def gen_input(self):
                 unit="A",
                 symbol="Is",
                 axes=[Phase, Time],
-                values=transpose(Is),
+                values=Is,
             )
             # Compute corresponding Id/Iq reference
-            Idq = n2dq(output.Is.values, 2 * pi * output.felec * output.time)
+            Idq = n2dq(transpose(output.Is.values), 2 * pi * output.felec * output.time)
             output.Id_ref = mean(Idq[:, 0])
             output.Iq_ref = mean(Idq[:, 1])
 
@@ -120,11 +120,11 @@ def gen_input(self):
             raise InputError("ERROR: InputCurrent.Ir missing")
         else:
             Ir = self.Ir.get_data()
-            if not isinstance(Ir, ndarray) or Ir.shape != (self.Nt_tot, qr):
+            if not isinstance(Ir, ndarray) or Ir.shape != (qr, self.Nt_tot):
                 raise InputError(
                     "ERROR: InputCurrent.Ir must be a matrix with the shape "
-                    + str((self.Nt_tot, qr))
-                    + " (len(time), rotor phase number), "
+                    + str((qr, self.Nt_tot))
+                    + " (rotor phase number, len(time)), "
                     + str(Ir.shape)
                     + " returned"
                 )
@@ -141,7 +141,7 @@ def gen_input(self):
                 unit="A",
                 symbol="Ir",
                 axes=[Phase, Time],
-                values=transpose(Ir),
+                values=Ir,
             )
 
     # Load and check alpha_rotor and N0

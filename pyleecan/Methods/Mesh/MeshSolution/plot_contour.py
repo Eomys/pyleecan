@@ -53,7 +53,17 @@ def plot_contour(
     if group_names is not None:
         meshsol_grp = self.get_group(group_names)
         meshsol_grp.plot_contour(
-            label, index, indices, is_surf, is_radial, is_center, clim, field_name, None
+            label=label,
+            index=index,
+            indices=indices,
+            is_surf=is_surf,
+            is_radial=is_radial,
+            is_center=is_center,
+            clim=clim,
+            field_name=field_name,
+            group_names=None,
+            is_2d=is_2d,
+            save_path=save_path,
         )
     else:
         if save_path is None:
