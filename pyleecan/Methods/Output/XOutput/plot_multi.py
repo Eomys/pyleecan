@@ -1,19 +1,22 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from ....Methods.Output.XOutput import XOutputError
 
 
 class PlotError(Exception):
     pass
 
 
-def plot_multi(self, param, data, plot_type="scatter", idx=None, ax=None, title=None):
+def plot_multi(
+    self, symbol_x, symbol_y, plot_type="scatter", idx=None, ax=None, title=None
+):
     """
     Plot data from a DataKeeper for a given parameter from a ParamExplorer
 
-    param: str
-        ParamExplorer symbol
-    data: str
-        DataKeeper symbol
+    symbol_x: str
+        Symbol of Datakeeper or Parameter for X axe
+    symbol_y: str
+        Symbol of Datakeeper of Parameter for Y axe
     plot_type: str
         scatter or plot to chose plot type
     idx: slice 
@@ -40,15 +43,23 @@ def plot_multi(self, param, data, plot_type="scatter", idx=None, ax=None, title=
     if plot_type not in ["scatter", "plot"]:
         raise PlotError("Unknown plot_type {}.".format(plot_type))
 
-    paramexplorer = self.get_paramexplorer(param)
+    x_label = symbol_x
+    try:
+        x_param = self.get_paramexplorer(symbol_x)
+        if x_param.unit not in ["", None]:
+            x_label += " [{}]".format(x_param.unit)
+        x_values = np.array(x_param[idx])
+    except XOutputError:
+        x_values = np.array(self[symbol_x][idx])
 
-    x_values = np.array(paramexplorer.value[idx])
-    y_values = np.array(self[data][idx])
-
-    # x_label definition
-    x_label = param
-    if paramexplorer.unit not in ["", None]:
-        x_label += " [{}]".format(paramexplorer.unit)
+    y_label = symbol_y
+    try:
+        y_param = self.get_paramexplorer(symbol_y)
+        if y_param.unit not in ["", None]:
+            y_label += " [{}]".format(y_param.unit)
+        y_values = np.array(y_param[idx])
+    except XOutputError:
+        y_values = np.array(self[symbol_y][idx])
 
     # Plot in new figure
     if ax is None:
@@ -61,7 +72,7 @@ def plot_multi(self, param, data, plot_type="scatter", idx=None, ax=None, title=
 
         fig.suptitle(title)
         ax.set_xlabel(x_label)
-        ax.set_ylabel(data)
+        ax.set_ylabel(y_label)
         return fig
     # Plot in ax
     else:
@@ -73,5 +84,5 @@ def plot_multi(self, param, data, plot_type="scatter", idx=None, ax=None, title=
 
         ax.set_title(title)
         ax.set_xlabel(x_label)
-        ax.set_ylabel(data)
+        ax.set_ylabel(y_label)
         return ax

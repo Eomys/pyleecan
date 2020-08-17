@@ -2730,14 +2730,14 @@
         "daughters": [
             "Input",
             "InputCurrent",
-            "InputCurrentDQ",
             "InputFlux",
             "InputForce"
         ],
         "desc": "Starting data of the simulation",
         "is_internal": false,
         "methods": [
-            "gen_input"
+            "gen_input",
+            "comp_time"
         ],
         "mother": "",
         "name": "Input",
@@ -2751,7 +2751,7 @@
                 "name": "time",
                 "type": "Import",
                 "unit": "s",
-                "value": "ImportMatrixVal()"
+                "value": null
             },
             {
                 "desc": "Electrical position vector (no symmetry) to import",
@@ -2760,7 +2760,34 @@
                 "name": "angle",
                 "type": "Import",
                 "unit": "rad",
-                "value": "ImportMatrixVal()"
+                "value": null
+            },
+            {
+                "desc": "Time discretization",
+                "max": "",
+                "min": "1",
+                "name": "Nt_tot",
+                "type": "int",
+                "unit": "-",
+                "value": 2048
+            },
+            {
+                "desc": "Number of rotor revolution (to compute the final time)",
+                "max": "",
+                "min": "0",
+                "name": "Nrev",
+                "type": "float",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "Angular discretization",
+                "max": "",
+                "min": "1",
+                "name": "Na_tot",
+                "type": "int",
+                "unit": "-",
+                "value": 2048
             }
         ]
     },
@@ -2776,7 +2803,8 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "set_Nr"
+            "set_Id_Iq",
+            "comp_felec"
         ],
         "mother": "Input",
         "name": "InputCurrent",
@@ -2790,7 +2818,7 @@
                 "name": "Is",
                 "type": "Import",
                 "unit": "A",
-                "value": "ImportMatrixVal()"
+                "value": null
             },
             {
                 "desc": "Rotor currents as a function of time (each column correspond to one phase) to import",
@@ -2799,89 +2827,6 @@
                 "name": "Ir",
                 "type": "Import",
                 "unit": "A",
-                "value": "ImportMatrixVal()"
-            },
-            {
-                "desc": "Rotor angular position as a function of time (if None computed according to Nr) to import",
-                "max": "",
-                "min": "",
-                "name": "angle_rotor",
-                "type": "Import",
-                "unit": "rad",
-                "value": null
-            },
-            {
-                "desc": "Rotor speed as a function of time to import",
-                "max": "",
-                "min": "",
-                "name": "Nr",
-                "type": "Import",
-                "unit": "rpm",
-                "value": "ImportMatrixVal()"
-            },
-            {
-                "desc": "Rotation direction of the rotor 1 trigo, -1 clockwise",
-                "max": "1",
-                "min": "-1",
-                "name": "rot_dir",
-                "type": "float",
-                "unit": "-",
-                "value": -1
-            },
-            {
-                "desc": "Initial angular position of the rotor at t=0",
-                "max": "",
-                "min": "",
-                "name": "angle_rotor_initial",
-                "type": "float",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Theorical Average Electromagnetic torque",
-                "max": "",
-                "min": "",
-                "name": "Tem_av_ref",
-                "type": "float",
-                "unit": "N.m",
-                "value": null
-            }
-        ]
-    },
-    "InputCurrentDQ": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Input to set the electrical module output",
-        "is_internal": false,
-        "methods": [
-            "gen_input"
-        ],
-        "mother": "Input",
-        "name": "InputCurrentDQ",
-        "package": "Simulation",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/InputCurrentDQ.csv",
-        "properties": [
-            {
-                "desc": "Stator dq-currents as a function of time to import",
-                "max": "",
-                "min": "",
-                "name": "Is",
-                "type": "Import",
-                "unit": "A",
-                "value": null
-            },
-            {
-                "desc": "Rotor currents as a function of time to import",
-                "max": "",
-                "min": "",
-                "name": "Ir",
-                "type": "Import",
-                "unit": "A",
                 "value": null
             },
             {
@@ -2894,11 +2839,11 @@
                 "value": null
             },
             {
-                "desc": "Rotor speed as a function of time to import",
+                "desc": "Rotor speed",
                 "max": "",
                 "min": "",
-                "name": "Nr",
-                "type": "Import",
+                "name": "N0",
+                "type": "float",
                 "unit": "rpm",
                 "value": null
             },
@@ -2927,6 +2872,24 @@
                 "name": "Tem_av_ref",
                 "type": "float",
                 "unit": "N.m",
+                "value": null
+            },
+            {
+                "desc": "d-axis current magnitude",
+                "max": "",
+                "min": "",
+                "name": "Id_ref",
+                "type": "float",
+                "unit": "A",
+                "value": null
+            },
+            {
+                "desc": "q-axis current magnitude",
+                "max": "",
+                "min": "",
+                "name": "Iq_ref",
+                "type": "float",
+                "unit": "A",
                 "value": null
             }
         ]
@@ -5731,7 +5694,10 @@
         "daughters": [],
         "desc": "Gather the electric module outputs",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_Nr",
+            "get_Is"
+        ],
         "mother": "",
         "name": "OutElec",
         "package": "Output",
@@ -5760,18 +5726,18 @@
                 "max": "",
                 "min": "",
                 "name": "Is",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "A",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Rotor currents as a function of time (each column correspond to one phase)",
                 "max": "",
                 "min": "",
                 "name": "Ir",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.DataND",
                 "unit": "A",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Rotor angular position as a function of time (if None computed according to Nr)",
@@ -5783,11 +5749,11 @@
                 "value": null
             },
             {
-                "desc": "Rotor speed as a function of time",
+                "desc": "Rotor speed",
                 "max": "",
                 "min": "",
-                "name": "Nr",
-                "type": "ndarray",
+                "name": "N0",
+                "type": "float",
                 "unit": "rpm",
                 "value": null
             },
@@ -5828,21 +5794,39 @@
                 "value": "None"
             },
             {
-                "desc": "Currents",
-                "max": "",
-                "min": "",
-                "name": "Currents",
-                "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "-",
-                "value": "None"
-            },
-            {
                 "desc": "Theorical Average Electromagnetic torque",
                 "max": "",
                 "min": "",
                 "name": "Tem_av_ref",
                 "type": "float",
                 "unit": "N.m",
+                "value": null
+            },
+            {
+                "desc": "d-axis current magnitude",
+                "max": "",
+                "min": "",
+                "name": "Id_ref",
+                "type": "float",
+                "unit": "A",
+                "value": null
+            },
+            {
+                "desc": "q-axis current magnitude",
+                "max": "",
+                "min": "",
+                "name": "Iq_ref",
+                "type": "float",
+                "unit": "A",
+                "value": null
+            },
+            {
+                "desc": "Electrical Frequency",
+                "max": "",
+                "min": "",
+                "name": "felec",
+                "type": "float",
+                "unit": "Hz",
                 "value": null
             }
         ]
@@ -9462,6 +9446,89 @@
             }
         ]
     },
+    "VarLoad": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "VarLoadCurrent"
+        ],
+        "desc": "Abstract class to generate multi-simulation by changing the operating point",
+        "is_internal": false,
+        "methods": [
+            "get_elec_datakeeper",
+            "get_mag_datakeeper",
+            "get_force_datakeeper"
+        ],
+        "mother": "VarSimu",
+        "name": "VarLoad",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/VarLoad.csv",
+        "properties": []
+    },
+    "VarLoadCurrent": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Generate a multisimulation with InputCurrent at variable operating point",
+        "is_internal": false,
+        "methods": [
+            "get_input_list",
+            "get_simulations",
+            "gen_datakeeper_list",
+            "check_param",
+            "get_elec_datakeeper"
+        ],
+        "mother": "VarLoad",
+        "name": "VarLoadCurrent",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/VarLoadCurrent.csv",
+        "properties": [
+            {
+                "desc": "Operating point matrix (N0,I0,Phi0,T,P) or (N0,Id,Iq,T,P) ",
+                "max": "",
+                "min": "",
+                "name": "OP_matrix",
+                "type": "ndarray",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Select with kind of OP_matrix is used 0: (N0,I0,Phi0,T,P), 1:(N0,Id,Iq,T,P) ",
+                "max": "1",
+                "min": "0",
+                "name": "type_OP_matrix",
+                "type": "int",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "True if the Torque is defined in OP_matrix",
+                "max": "",
+                "min": "",
+                "name": "is_torque",
+                "type": "bool",
+                "unit": "-",
+                "value": false
+            },
+            {
+                "desc": "True if the Power is defined in OP_matrix",
+                "max": "",
+                "min": "",
+                "name": "is_power",
+                "type": "bool",
+                "unit": "",
+                "value": false
+            }
+        ]
+    },
     "VarParam": {
         "constants": [
             {
@@ -9501,6 +9568,8 @@
         ],
         "daughters": [
             "VarSimu",
+            "VarLoad",
+            "VarLoadCurrent",
             "VarParam"
         ],
         "desc": "Abstract class for the multi-simulation",
