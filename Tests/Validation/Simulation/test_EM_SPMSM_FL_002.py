@@ -1,10 +1,9 @@
-from numpy import ones, pi, array
+from numpy import ones, pi, array, transpose
 from os.path import join
 import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
 
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Machine.SPMSM_003 import SPMSM_003
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.InputFlux import InputFlux
@@ -14,8 +13,13 @@ from pyleecan.Classes.ImportMatlab import ImportMatlab
 
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-from Tests import DATA_DIR
 import pytest
+
+from os.path import join
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
 
 
 @pytest.mark.long
@@ -35,16 +39,16 @@ def test_Magnetic_FEMM_sym():
     simu = Simu1(name="EM_SPMSM_FL_002", machine=SPMSM_003)
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(4) * 3000)
+    N0 = 3000
     Is = ImportMatrixVal(
-        value=array(
+        value=transpose(array(
             [
                 [6.97244193e-06, 2.25353053e02, -2.25353060e02],
                 [-2.60215295e02, 1.30107654e02, 1.30107642e02],
                 [-6.97244208e-06, -2.25353053e02, 2.25353060e02],
                 [2.60215295e02, -1.30107654e02, -1.30107642e02],
             ]
-        )
+        ))
     )
     time = ImportGenVectLin(start=0, stop=0.015, num=4, endpoint=True)
     angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
@@ -52,7 +56,7 @@ def test_Magnetic_FEMM_sym():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
