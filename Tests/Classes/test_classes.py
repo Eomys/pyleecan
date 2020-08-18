@@ -10,12 +10,7 @@ from numpy import array_equal, empty, array
 from pyleecan.Generator.read_fct import read_all
 from pyleecan.Generator.ClassGenerator.init_method_generator import get_mother_attr
 from pyleecan.definitions import DOC_DIR
-from Tests.find import (
-    find_test_value,
-    is_type_list,
-    is_type_dict,
-    MissingTypeError,
-)
+from Tests.find import find_test_value, is_type_list, is_type_dict, MissingTypeError
 from pyleecan.Generator import PYTHON_TYPE
 
 from Tests import save_path

@@ -28,9 +28,7 @@ def get_mesh_pv(self, path="temp.vtk", indices=None):
     cells = [("triangle", cells["triangle"])]  # TODO : Generalize to any cell type
 
     # Write .vtk file using meshio
-    meshio.write_points_cells(
-        filename=path, points=points, cells=cells,
-    )
+    meshio.write_points_cells(filename=path, points=points, cells=cells)
 
     # Read .vtk file with pyvista
     mesh = pv.read(path)

@@ -45,6 +45,7 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
+from .DXFImport import DXFImport
 
 
 class MagFEMM(Magnetics):
@@ -145,6 +146,8 @@ class MagFEMM(Magnetics):
         is_save_FEA=False,
         is_sliding_band=True,
         transform_list=[],
+        rotor_dxf=None,
+        stator_dxf=None,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_vent=False,
@@ -172,6 +175,10 @@ class MagFEMM(Magnetics):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if rotor_dxf == -1:
+            rotor_dxf = DXFImport()
+        if stator_dxf == -1:
+            stator_dxf = DXFImport()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -189,6 +196,8 @@ class MagFEMM(Magnetics):
             is_save_FEA = obj.is_save_FEA
             is_sliding_band = obj.is_sliding_band
             transform_list = obj.transform_list
+            rotor_dxf = obj.rotor_dxf
+            stator_dxf = obj.stator_dxf
             is_remove_slotS = obj.is_remove_slotS
             is_remove_slotR = obj.is_remove_slotR
             is_remove_vent = obj.is_remove_vent
@@ -225,6 +234,10 @@ class MagFEMM(Magnetics):
                 is_sliding_band = init_dict["is_sliding_band"]
             if "transform_list" in list(init_dict.keys()):
                 transform_list = init_dict["transform_list"]
+            if "rotor_dxf" in list(init_dict.keys()):
+                rotor_dxf = init_dict["rotor_dxf"]
+            if "stator_dxf" in list(init_dict.keys()):
+                stator_dxf = init_dict["stator_dxf"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -264,6 +277,24 @@ class MagFEMM(Magnetics):
         if transform_list == -1:
             transform_list = []
         self.transform_list = transform_list
+        # rotor_dxf can be None, a DXFImport object or a dict
+        if isinstance(rotor_dxf, dict):
+            self.rotor_dxf = DXFImport(init_dict=rotor_dxf)
+        elif isinstance(rotor_dxf, str):
+            from ..Functions.load import load
+
+            self.rotor_dxf = load(rotor_dxf)
+        else:
+            self.rotor_dxf = rotor_dxf
+        # stator_dxf can be None, a DXFImport object or a dict
+        if isinstance(stator_dxf, dict):
+            self.stator_dxf = DXFImport(init_dict=stator_dxf)
+        elif isinstance(stator_dxf, str):
+            from ..Functions.load import load
+
+            self.stator_dxf = load(stator_dxf)
+        else:
+            self.stator_dxf = stator_dxf
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -304,6 +335,18 @@ class MagFEMM(Magnetics):
             + str(self.transform_list).replace(linesep, linesep + "\t")
             + linesep
         )
+        if self.rotor_dxf is not None:
+            tmp = self.rotor_dxf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MagFEMM_str += "rotor_dxf = " + tmp
+        else:
+            MagFEMM_str += "rotor_dxf = None" + linesep + linesep
+        if self.stator_dxf is not None:
+            tmp = (
+                self.stator_dxf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
+            MagFEMM_str += "stator_dxf = " + tmp
+        else:
+            MagFEMM_str += "stator_dxf = None" + linesep + linesep
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -335,6 +378,10 @@ class MagFEMM(Magnetics):
             return False
         if other.transform_list != self.transform_list:
             return False
+        if other.rotor_dxf != self.rotor_dxf:
+            return False
+        if other.stator_dxf != self.stator_dxf:
+            return False
         return True
 
     def as_dict(self):
@@ -353,6 +400,14 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["is_save_FEA"] = self.is_save_FEA
         MagFEMM_dict["is_sliding_band"] = self.is_sliding_band
         MagFEMM_dict["transform_list"] = self.transform_list
+        if self.rotor_dxf is None:
+            MagFEMM_dict["rotor_dxf"] = None
+        else:
+            MagFEMM_dict["rotor_dxf"] = self.rotor_dxf.as_dict()
+        if self.stator_dxf is None:
+            MagFEMM_dict["stator_dxf"] = None
+        else:
+            MagFEMM_dict["stator_dxf"] = self.stator_dxf.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -371,6 +426,10 @@ class MagFEMM(Magnetics):
         self.is_save_FEA = None
         self.is_sliding_band = None
         self.transform_list = None
+        if self.rotor_dxf is not None:
+            self.rotor_dxf._set_None()
+        if self.stator_dxf is not None:
+            self.stator_dxf._set_None()
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -553,5 +612,47 @@ class MagFEMM(Magnetics):
         doc=u"""List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
 
         :Type: list
+        """,
+    )
+
+    def _get_rotor_dxf(self):
+        """getter of rotor_dxf"""
+        return self._rotor_dxf
+
+    def _set_rotor_dxf(self, value):
+        """setter of rotor_dxf"""
+        check_var("rotor_dxf", value, "DXFImport")
+        self._rotor_dxf = value
+
+        if self._rotor_dxf is not None:
+            self._rotor_dxf.parent = self
+
+    rotor_dxf = property(
+        fget=_get_rotor_dxf,
+        fset=_set_rotor_dxf,
+        doc=u"""To use a dxf version of the rotor instead of build_geometry
+
+        :Type: DXFImport
+        """,
+    )
+
+    def _get_stator_dxf(self):
+        """getter of stator_dxf"""
+        return self._stator_dxf
+
+    def _set_stator_dxf(self, value):
+        """setter of stator_dxf"""
+        check_var("stator_dxf", value, "DXFImport")
+        self._stator_dxf = value
+
+        if self._stator_dxf is not None:
+            self._stator_dxf.parent = self
+
+    stator_dxf = property(
+        fget=_get_stator_dxf,
+        fset=_set_stator_dxf,
+        doc=u"""To use a dxf version of the rotor instead of build_geometry
+
+        :Type: DXFImport
         """,
     )
