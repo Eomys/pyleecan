@@ -11,7 +11,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
-from pyleecan.Classes.OptiObjFunc import OptiObjFunc
+from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
@@ -79,27 +79,39 @@ def test_zdt3():
     output = Output(simu=simu)
 
     # ### Design variable
-    my_vars = {}
+    my_vars = []
+
+    def gen_setter(i):
+        def new_setter(simu, value):
+            simu.input.Ir.value[i] = value
+
+        return new_setter
 
     for i in range(30):
-        my_vars["var_" + str(i)] = OptiDesignVar(
-            name="output.simu.input.Ir.value[" + str(i) + "]",
-            type_var="interval",
-            space=[0, 1],
-            function=lambda space: np.random.uniform(*space),
+        my_vars.append(
+            OptiDesignVar(
+                name="Ir({})".format(i),
+                symbol="var_" + str(i),
+                type_var="interval",
+                space=[0, 1],
+                get_value=lambda space: np.random.uniform(*space),
+                setter=gen_setter(i),
+            )
         )
 
     # ### Objectives
-    objs = {
-        "obj1": OptiObjFunc(
-            description="Maximization of the torque average",
-            func=lambda output: output.mag.Tem_av,
+    objs = [
+        DataKeeper(
+            symbol="obj1",
+            name="Maximization of the torque average",
+            keeper=lambda output: output.mag.Tem_av,
         ),
-        "obj2": OptiObjFunc(
-            description="Minimization of the torque ripple",
-            func=lambda output: output.mag.Tem_rip_norm,
+        DataKeeper(
+            symbol="obj2",
+            name="Minimization of the torque ripple",
+            keeper=lambda output: output.mag.Tem_rip_norm,
         ),
-    }
+    ]
 
     # ### Evaluation
     def evaluate(output):
@@ -118,75 +130,20 @@ def test_zdt3():
     solver = OptiGenAlgNsga2Deap(problem=my_prob, size_pop=40, nb_gen=100, p_mutate=0.5)
     res = solver.solve()
 
-    def plot_pareto(self):
-        """Plot every fitness values with the pareto front for 2 fitness
-        
-        Parameters
-        ----------
-        self : OutputMultiOpti
-        """
-
-        # TODO Add a feature to return the design_varibles of each indiv from the Pareto front
-
-        # Get fitness and ngen
-        is_valid = np.array(self.is_valid)
-        fitness = np.array(self.fitness)
-        ngen = np.array(self.ngen)
-
-        # Keep only valid values
-        indx = np.where(is_valid)[0]
-
-        fitness = fitness[indx]
-        ngen = ngen[indx]
-
-        # Get pareto front
-        pareto = list(np.unique(fitness, axis=0))
-
-        # Get dominated values
-        to_remove = []
-        N = len(pareto)
-        for i in range(N):
-            for j in range(N):
-                if all(pareto[j] <= pareto[i]) and any(pareto[j] < pareto[i]):
-                    to_remove.append(pareto[i])
-                    break
-
-        # Remove dominated values
-        for i in to_remove:
-            for l in range(len(pareto)):
-                if all(i == pareto[l]):
-                    pareto.pop(l)
-                    break
-
-        pareto = np.array(pareto)
-
-        fig, axs = plt.subplots(1, 2, figsize=(16, 6))
-
-        # Plot Pareto front
-        axs[0].scatter(
-            pareto[:, 0],
-            pareto[:, 1],
-            facecolors="b",
-            edgecolors="b",
-            s=0.8,
-            label="Pareto Front",
+    #
+    fig, axs = plt.subplots(1, 2, figsize=(16, 6))
+    try:
+        img_to_find = img.imread(
+            join(TEST_DIR, "Validation", "Optimization", "zdt3.jpg"), format="jpg"
         )
-        axs[0].autoscale()
-        axs[0].legend()
-        axs[0].set_title("Pyleecan results")
-        axs[0].set_xlabel(r"$f_1(x)$")
-        axs[0].set_ylabel(r"$f_2(x)$")
-        try:
-            img_to_find = img.imread(
-                join(TEST_DIR, "Validation", "Optimization", "zdt3.jpg"), format="jpg"
-            )
-            axs[1].imshow(img_to_find, aspect="auto")
-            axs[1].axis("off")
-            axs[1].set_title("Pareto front of the problem")
-        except (TypeError, ValueError):
-            print("Pillow is needed to import jpg files")
+        axs[1].imshow(img_to_find, aspect="auto")
+        axs[1].axis("off")
+        axs[1].set_title("Pareto front of the problem")
+    except (TypeError, ValueError):
+        print("Pillow is needed to import jpg files")
 
-        return fig
-
-    fig = plot_pareto(res)
+    res.plot_pareto("obj1", "obj2", ax=axs[0])
+    axs[0].set_title("Pyleecan results")
+    axs[0].set_xlabel(r"$f_1(x)$")
+    axs[0].set_ylabel(r"$f_2(x)$")
     fig.savefig(join(save_path, "test_zdt3.png"))

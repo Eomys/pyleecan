@@ -108,6 +108,21 @@ try:
 except ImportError as error:
     plot_multi = error
 
+try:
+    from ..Methods.Output.XOutput.plot_pareto import plot_pareto
+except ImportError as error:
+    plot_pareto = error
+
+try:
+    from ..Methods.Output.XOutput.plot_generation import plot_generation
+except ImportError as error:
+    plot_generation = error
+
+try:
+    from ..Methods.Output.XOutput.get_pareto_index import get_pareto_index
+except ImportError as error:
+    get_pareto_index = error
+
 
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
@@ -303,6 +318,38 @@ class XOutput(Output):
         )
     else:
         plot_multi = plot_multi
+    # cf Methods.Output.XOutput.plot_pareto
+    if isinstance(plot_pareto, ImportError):
+        plot_pareto = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use XOutput method plot_pareto: " + str(plot_pareto))
+            )
+        )
+    else:
+        plot_pareto = plot_pareto
+    # cf Methods.Output.XOutput.plot_generation
+    if isinstance(plot_generation, ImportError):
+        plot_generation = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method plot_generation: " + str(plot_generation)
+                )
+            )
+        )
+    else:
+        plot_generation = plot_generation
+    # cf Methods.Output.XOutput.get_pareto_index
+    if isinstance(get_pareto_index, ImportError):
+        get_pareto_index = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method get_pareto_index: "
+                    + str(get_pareto_index)
+                )
+            )
+        )
+    else:
+        get_pareto_index = get_pareto_index
     # save method is available in all object
     save = save
 
@@ -408,7 +455,11 @@ class XOutput(Output):
             if "force" in list(init_dict.keys()):
                 force = init_dict["force"]
         # Initialisation by argument
+        if paramexplorer_list == -1:
+            paramexplorer_list = []
         self.paramexplorer_list = paramexplorer_list
+        if output_list == -1:
+            output_list = []
         self.output_list = output_list
         self.xoutput_dict = xoutput_dict
         self.nb_simu = nb_simu

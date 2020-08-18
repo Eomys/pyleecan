@@ -37,6 +37,11 @@ def generate_init(gen_dict, class_dict):
 
     for prop in class_dict["properties"]:
         if prop["type"] in PYTHON_TYPE or prop["type"] == "function":
+            # Enable to set -1 to instanciate a list
+            if prop["type"] == "list":
+                init_by_var += TAB2 + "if " + prop["name"] + " == -1:\n"
+                init_by_var += TAB3 + prop["name"] + " = []\n"
+
             # Add => "self.my_var = my_var\n" to init_by_var
             init_by_var += TAB2 + "self." + prop["name"] + " = " + prop["name"] + "\n"
         elif "." in prop["type"]:
