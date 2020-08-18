@@ -700,7 +700,7 @@
         "mother": "",
         "name": "DXFImport",
         "package": "Simulation",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/DXFImport.csv",
+        "path": "pyleecan_tests/pyleecan/Generator/ClassesRef/Simulation/DXFImport.csv",
         "properties": [
             {
                 "desc": "Path to the DXF file to import",

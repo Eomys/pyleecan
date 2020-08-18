@@ -21,6 +21,7 @@ import pytest
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
+@pytest.mark.MeshSol
 def test_CEFC_002():
     """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
     50 kW peak, 400 Nm peak at 1500 rpm from publication
@@ -86,6 +87,10 @@ def test_CEFC_002():
         label="\mu",
         group_names=["stator", "airgap"],
         save_path=join(save_path, "CEFC_002_mu_stator_airgap_save.png"),
+    )
+
+    out.mag.meshsolution.plot_contour(
+        label="\mu", group_names=["stator", "/", "airgap"],
     )
 
 
