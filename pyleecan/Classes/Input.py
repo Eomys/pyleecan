@@ -24,8 +24,10 @@ except ImportError as error:
     comp_time = error
 
 
+from ..Classes.ImportMatrixVal import ImportMatrixVal
+from numpy import ndarray
 from ._check import InitUnKnowClassError
-from .Import import Import
+from .ImportMatrix import ImportMatrix
 
 
 class Input(FrozenClass):
@@ -86,9 +88,9 @@ class Input(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if time == -1:
-            time = Import()
+            time = ImportMatrix()
         if angle == -1:
-            angle = Import()
+            angle = ImportMatrix()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -116,18 +118,16 @@ class Input(FrozenClass):
                 Na_tot = init_dict["Na_tot"]
         # Initialisation by argument
         self.parent = None
-        # time can be None, a Import object or a dict
+        # time can be None, a ImportMatrix object or a dict
         if isinstance(time, dict):
             # Check that the type is correct (including daughter)
             class_name = time.get("__class__")
             if class_name not in [
-                "Import",
+                "ImportMatrix",
                 "ImportGenMatrixSin",
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -145,13 +145,11 @@ class Input(FrozenClass):
             # Check that the type is correct (including daughter)
             class_name = time.__class__.__name__
             if class_name not in [
-                "Import",
+                "ImportMatrix",
                 "ImportGenMatrixSin",
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -161,18 +159,16 @@ class Input(FrozenClass):
             self.time = time
         else:
             self.time = time
-        # angle can be None, a Import object or a dict
+        # angle can be None, a ImportMatrix object or a dict
         if isinstance(angle, dict):
             # Check that the type is correct (including daughter)
             class_name = angle.get("__class__")
             if class_name not in [
-                "Import",
+                "ImportMatrix",
                 "ImportGenMatrixSin",
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -190,13 +186,11 @@ class Input(FrozenClass):
             # Check that the type is correct (including daughter)
             class_name = angle.__class__.__name__
             if class_name not in [
-                "Import",
+                "ImportMatrix",
                 "ImportGenMatrixSin",
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -290,7 +284,9 @@ class Input(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        check_var("time", value, "Import")
+        if isinstance(value, ndarray):
+            value = ImportMatrixVal(value=value)
+        check_var("time", value, "ImportMatrix")
         self._time = value
 
         if self._time is not None:
@@ -301,7 +297,7 @@ class Input(FrozenClass):
         fset=_set_time,
         doc=u"""Electrical time vector (no symmetry) to import
 
-        :Type: Import
+        :Type: ImportMatrix
         """,
     )
 
@@ -311,7 +307,9 @@ class Input(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        check_var("angle", value, "Import")
+        if isinstance(value, ndarray):
+            value = ImportMatrixVal(value=value)
+        check_var("angle", value, "ImportMatrix")
         self._angle = value
 
         if self._angle is not None:
@@ -322,7 +320,7 @@ class Input(FrozenClass):
         fset=_set_angle,
         doc=u"""Electrical position vector (no symmetry) to import
 
-        :Type: Import
+        :Type: ImportMatrix
         """,
     )
 

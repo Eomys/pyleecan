@@ -2797,7 +2797,7 @@
                 "max": "",
                 "min": "",
                 "name": "time",
-                "type": "Import",
+                "type": "ImportMatrix",
                 "unit": "s",
                 "value": null
             },
@@ -2806,7 +2806,7 @@
                 "max": "",
                 "min": "",
                 "name": "angle",
-                "type": "Import",
+                "type": "ImportMatrix",
                 "unit": "rad",
                 "value": null
             },
@@ -2864,7 +2864,7 @@
                 "max": "",
                 "min": "",
                 "name": "Is",
-                "type": "Import",
+                "type": "ImportMatrix",
                 "unit": "A",
                 "value": null
             },
@@ -2873,7 +2873,7 @@
                 "max": "",
                 "min": "",
                 "name": "Ir",
-                "type": "Import",
+                "type": "ImportMatrix",
                 "unit": "A",
                 "value": null
             },
