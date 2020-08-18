@@ -30,9 +30,7 @@ def plot_mesh(
     """
     if group_names is not None:
         meshsol_grp = self.get_group(group_names)
-        meshsol_grp.plot_mesh(
-            self, label, index, indices, is_2d, save_path, None,
-        )
+        meshsol_grp.plot_mesh(self, label, index, indices, is_2d, save_path, None)
     else:
 
         if save_path is None:

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Output/OutElec.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Output/OutElec.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/OutElec
 """
 
 from os import linesep
@@ -344,10 +345,13 @@ class OutElec(FrozenClass):
         check_var("time", value, "ndarray")
         self._time = value
 
-    # Electrical time vector (no symmetry)
-    # Type : ndarray
     time = property(
-        fget=_get_time, fset=_set_time, doc=u"""Electrical time vector (no symmetry)"""
+        fget=_get_time,
+        fset=_set_time,
+        doc=u"""Electrical time vector (no symmetry)
+
+        :Type: ndarray
+        """,
     )
 
     def _get_angle(self):
@@ -366,12 +370,13 @@ class OutElec(FrozenClass):
         check_var("angle", value, "ndarray")
         self._angle = value
 
-    # Electrical position vector (no symmetry)
-    # Type : ndarray
     angle = property(
         fget=_get_angle,
         fset=_set_angle,
-        doc=u"""Electrical position vector (no symmetry)""",
+        doc=u"""Electrical position vector (no symmetry)
+
+        :Type: ndarray
+        """,
     )
 
     def _get_Is(self):
@@ -392,12 +397,13 @@ class OutElec(FrozenClass):
         else:
             self._Is = value
 
-    # Stator currents as a function of time (each column correspond to one phase)
-    # Type : SciDataTool.Classes.DataND.DataND
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
-        doc=u"""Stator currents as a function of time (each column correspond to one phase)""",
+        doc=u"""Stator currents as a function of time (each column correspond to one phase)
+
+        :Type: SciDataTool.Classes.DataND.DataND
+        """,
     )
 
     def _get_Ir(self):
@@ -418,12 +424,13 @@ class OutElec(FrozenClass):
         else:
             self._Ir = value
 
-    # Rotor currents as a function of time (each column correspond to one phase)
-    # Type : SciDataTool.Classes.DataND.DataND
     Ir = property(
         fget=_get_Ir,
         fset=_set_Ir,
-        doc=u"""Rotor currents as a function of time (each column correspond to one phase)""",
+        doc=u"""Rotor currents as a function of time (each column correspond to one phase)
+
+        :Type: SciDataTool.Classes.DataND.DataND
+        """,
     )
 
     def _get_angle_rotor(self):
@@ -442,12 +449,13 @@ class OutElec(FrozenClass):
         check_var("angle_rotor", value, "ndarray")
         self._angle_rotor = value
 
-    # Rotor angular position as a function of time (if None computed according to Nr)
-    # Type : ndarray
     angle_rotor = property(
         fget=_get_angle_rotor,
         fset=_set_angle_rotor,
-        doc=u"""Rotor angular position as a function of time (if None computed according to Nr)""",
+        doc=u"""Rotor angular position as a function of time (if None computed according to Nr)
+
+        :Type: ndarray
+        """,
     )
 
     def _get_N0(self):
@@ -459,9 +467,14 @@ class OutElec(FrozenClass):
         check_var("N0", value, "float")
         self._N0 = value
 
-    # Rotor speed
-    # Type : float
-    N0 = property(fget=_get_N0, fset=_set_N0, doc=u"""Rotor speed""")
+    N0 = property(
+        fget=_get_N0,
+        fset=_set_N0,
+        doc=u"""Rotor speed
+
+        :Type: float
+        """,
+    )
 
     def _get_rot_dir(self):
         """getter of rot_dir"""
@@ -472,12 +485,15 @@ class OutElec(FrozenClass):
         check_var("rot_dir", value, "float", Vmin=-1, Vmax=1)
         self._rot_dir = value
 
-    # Rotation direction of the rotor 1 trigo, -1 clockwise
-    # Type : float, min = -1, max = 1
     rot_dir = property(
         fget=_get_rot_dir,
         fset=_set_rot_dir,
-        doc=u"""Rotation direction of the rotor 1 trigo, -1 clockwise""",
+        doc=u"""Rotation direction of the rotor 1 trigo, -1 clockwise
+
+        :Type: float
+        :min: -1
+        :max: 1
+        """,
     )
 
     def _get_angle_rotor_initial(self):
@@ -489,12 +505,13 @@ class OutElec(FrozenClass):
         check_var("angle_rotor_initial", value, "float")
         self._angle_rotor_initial = value
 
-    # Initial angular position of the rotor at t=0
-    # Type : float
     angle_rotor_initial = property(
         fget=_get_angle_rotor_initial,
         fset=_set_angle_rotor_initial,
-        doc=u"""Initial angular position of the rotor at t=0""",
+        doc=u"""Initial angular position of the rotor at t=0
+
+        :Type: float
+        """,
     )
 
     def _get_logger_name(self):
@@ -506,12 +523,13 @@ class OutElec(FrozenClass):
         check_var("logger_name", value, "str")
         self._logger_name = value
 
-    # Name of the logger to use
-    # Type : str
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        doc=u"""Name of the logger to use
+
+        :Type: str
+        """,
     )
 
     def _get_mmf_unit(self):
@@ -532,10 +550,13 @@ class OutElec(FrozenClass):
         else:
             self._mmf_unit = value
 
-    # Unit magnetomotive force
-    # Type : SciDataTool.Classes.DataND.DataND
     mmf_unit = property(
-        fget=_get_mmf_unit, fset=_set_mmf_unit, doc=u"""Unit magnetomotive force"""
+        fget=_get_mmf_unit,
+        fset=_set_mmf_unit,
+        doc=u"""Unit magnetomotive force
+
+        :Type: SciDataTool.Classes.DataND.DataND
+        """,
     )
 
     def _get_Tem_av_ref(self):
@@ -547,12 +568,13 @@ class OutElec(FrozenClass):
         check_var("Tem_av_ref", value, "float")
         self._Tem_av_ref = value
 
-    # Theorical Average Electromagnetic torque
-    # Type : float
     Tem_av_ref = property(
         fget=_get_Tem_av_ref,
         fset=_set_Tem_av_ref,
-        doc=u"""Theorical Average Electromagnetic torque""",
+        doc=u"""Theorical Average Electromagnetic torque
+
+        :Type: float
+        """,
     )
 
     def _get_Id_ref(self):
@@ -564,10 +586,13 @@ class OutElec(FrozenClass):
         check_var("Id_ref", value, "float")
         self._Id_ref = value
 
-    # d-axis current magnitude
-    # Type : float
     Id_ref = property(
-        fget=_get_Id_ref, fset=_set_Id_ref, doc=u"""d-axis current magnitude"""
+        fget=_get_Id_ref,
+        fset=_set_Id_ref,
+        doc=u"""d-axis current magnitude
+
+        :Type: float
+        """,
     )
 
     def _get_Iq_ref(self):
@@ -579,10 +604,13 @@ class OutElec(FrozenClass):
         check_var("Iq_ref", value, "float")
         self._Iq_ref = value
 
-    # q-axis current magnitude
-    # Type : float
     Iq_ref = property(
-        fget=_get_Iq_ref, fset=_set_Iq_ref, doc=u"""q-axis current magnitude"""
+        fget=_get_Iq_ref,
+        fset=_set_Iq_ref,
+        doc=u"""q-axis current magnitude
+
+        :Type: float
+        """,
     )
 
     def _get_felec(self):
@@ -594,6 +622,11 @@ class OutElec(FrozenClass):
         check_var("felec", value, "float")
         self._felec = value
 
-    # Electrical Frequency
-    # Type : float
-    felec = property(fget=_get_felec, fset=_set_felec, doc=u"""Electrical Frequency""")
+    felec = property(
+        fget=_get_felec,
+        fset=_set_felec,
+        doc=u"""Electrical Frequency
+
+        :Type: float
+        """,
+    )

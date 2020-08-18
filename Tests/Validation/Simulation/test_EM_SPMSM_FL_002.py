@@ -1,21 +1,22 @@
-from numpy import ones, pi, array
 from os.path import join
+
 import matplotlib.pyplot as plt
-from Tests import save_validation_path as save_path
+import pytest
+from numpy import array, ones, pi
 
-from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Machine.SPMSM_003 import SPMSM_003
-
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportMatlab import ImportMatlab
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.InputFlux import InputFlux
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.ImportMatlab import ImportMatlab
-
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-from Tests import DATA_DIR
-import pytest
+from pyleecan.Classes.Simu1 import Simu1
+from pyleecan.definitions import DATA_DIR
+from pyleecan.Functions.load import load
+from Tests import save_validation_path as save_path
+
+SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
 
 
 @pytest.mark.long

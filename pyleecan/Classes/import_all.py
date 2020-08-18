@@ -17,6 +17,7 @@ from ..Classes.CondType12 import CondType12
 from ..Classes.CondType21 import CondType21
 from ..Classes.CondType22 import CondType22
 from ..Classes.Conductor import Conductor
+from ..Classes.DXFImport import DXFImport
 from ..Classes.DataKeeper import DataKeeper
 from ..Classes.Drive import Drive
 from ..Classes.DriveWave import DriveWave
@@ -101,7 +102,6 @@ from ..Classes.OptiConstraint import OptiConstraint
 from ..Classes.OptiDesignVar import OptiDesignVar
 from ..Classes.OptiGenAlg import OptiGenAlg
 from ..Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
-from ..Classes.OptiObjFunc import OptiObjFunc
 from ..Classes.OptiProblem import OptiProblem
 from ..Classes.OptiSolver import OptiSolver
 from ..Classes.OutElec import OutElec
@@ -112,8 +112,6 @@ from ..Classes.OutMag import OutMag
 from ..Classes.OutPost import OutPost
 from ..Classes.OutStruct import OutStruct
 from ..Classes.Output import Output
-from ..Classes.OutputMulti import OutputMulti
-from ..Classes.OutputMultiOpti import OutputMultiOpti
 from ..Classes.ParamExplorer import ParamExplorer
 from ..Classes.ParamExplorerSet import ParamExplorerSet
 from ..Classes.PointMat import PointMat

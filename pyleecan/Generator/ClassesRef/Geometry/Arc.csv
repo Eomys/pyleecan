@@ -3,3 +3,4 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 ,,,,,,,,,,,intersect_line,,,
 ,,,,,,,,,,,is_on_arc,,,
 ,,,,,,,,,,,split_line,,,
+,,,,,,,,,,,comp_distance,,,
