@@ -274,6 +274,8 @@ class MagFEMM(Magnetics):
         self.is_get_mesh = is_get_mesh
         self.is_save_FEA = is_save_FEA
         self.is_sliding_band = is_sliding_band
+        if transform_list == -1:
+            transform_list = []
         self.transform_list = transform_list
         # rotor_dxf can be None, a DXFImport object or a dict
         if isinstance(rotor_dxf, dict):
