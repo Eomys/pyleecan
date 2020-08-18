@@ -17,7 +17,7 @@ from ._check import CheckTypeError
 from ._check import InitUnKnowClassError
 from .Output import Output
 from .OptiDesignVar import OptiDesignVar
-from .OptiObjFunc import OptiObjFunc
+from .DataKeeper import DataKeeper
 from .OptiConstraint import OptiConstraint
 
 
@@ -41,10 +41,10 @@ class OptiProblem(FrozenClass):
     def __init__(
         self,
         output=-1,
-        design_var=dict(),
-        obj_func=dict(),
+        design_var=list(),
+        obj_func=list(),
         eval_func=None,
-        constraint=dict(),
+        constraint=list(),
         init_dict=None,
         init_str=None,
     ):
@@ -113,43 +113,49 @@ class OptiProblem(FrozenClass):
             self.output = output
         else:
             self.output = output
-        # design_var can be None or a dict of OptiDesignVar object
-        self.design_var = dict()
-        if type(design_var) is dict:
-            for key, obj in design_var.items():
-                if isinstance(obj, dict):
-                    self.design_var[key] = OptiDesignVar(init_dict=obj)
+        # design_var can be None or a list of OptiDesignVar object
+        self.design_var = list()
+        if type(design_var) is list:
+            for obj in design_var:
+                if obj is None:  # Default value
+                    self.design_var.append(OptiDesignVar())
+                elif isinstance(obj, dict):
+                    self.design_var.append(OptiDesignVar(init_dict=obj))
                 else:
-                    self.design_var[key] = obj
+                    self.design_var.append(obj)
         elif design_var is None:
-            self.design_var = dict()
+            self.design_var = list()
         else:
-            self.design_var = design_var  # Should raise an error
-        # obj_func can be None or a dict of OptiObjFunc object
-        self.obj_func = dict()
-        if type(obj_func) is dict:
-            for key, obj in obj_func.items():
-                if isinstance(obj, dict):
-                    self.obj_func[key] = OptiObjFunc(init_dict=obj)
+            self.design_var = design_var
+        # obj_func can be None or a list of DataKeeper object
+        self.obj_func = list()
+        if type(obj_func) is list:
+            for obj in obj_func:
+                if obj is None:  # Default value
+                    self.obj_func.append(DataKeeper())
+                elif isinstance(obj, dict):
+                    self.obj_func.append(DataKeeper(init_dict=obj))
                 else:
-                    self.obj_func[key] = obj
+                    self.obj_func.append(obj)
         elif obj_func is None:
-            self.obj_func = dict()
+            self.obj_func = list()
         else:
-            self.obj_func = obj_func  # Should raise an error
+            self.obj_func = obj_func
         self.eval_func = eval_func
-        # constraint can be None or a dict of OptiConstraint object
-        self.constraint = dict()
-        if type(constraint) is dict:
-            for key, obj in constraint.items():
-                if isinstance(obj, dict):
-                    self.constraint[key] = OptiConstraint(init_dict=obj)
+        # constraint can be None or a list of OptiConstraint object
+        self.constraint = list()
+        if type(constraint) is list:
+            for obj in constraint:
+                if obj is None:  # Default value
+                    self.constraint.append(OptiConstraint())
+                elif isinstance(obj, dict):
+                    self.constraint.append(OptiConstraint(init_dict=obj))
                 else:
-                    self.constraint[key] = obj
+                    self.constraint.append(obj)
         elif constraint is None:
-            self.constraint = dict()
+            self.constraint = list()
         else:
-            self.constraint = constraint  # Should raise an error
+            self.constraint = constraint
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -170,20 +176,17 @@ class OptiProblem(FrozenClass):
         else:
             OptiProblem_str += "output = None" + linesep + linesep
         if len(self.design_var) == 0:
-            OptiProblem_str += "design_var = dict()" + linesep
-        for key, obj in self.design_var.items():
+            OptiProblem_str += "design_var = []" + linesep
+        for ii in range(len(self.design_var)):
             tmp = (
-                self.design_var[key].__str__().replace(linesep, linesep + "\t")
-                + linesep
+                self.design_var[ii].__str__().replace(linesep, linesep + "\t") + linesep
             )
-            OptiProblem_str += "design_var[" + key + "] =" + tmp + linesep + linesep
+            OptiProblem_str += "design_var[" + str(ii) + "] =" + tmp + linesep + linesep
         if len(self.obj_func) == 0:
-            OptiProblem_str += "obj_func = dict()" + linesep
-        for key, obj in self.obj_func.items():
-            tmp = (
-                self.obj_func[key].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            OptiProblem_str += "obj_func[" + key + "] =" + tmp + linesep + linesep
+            OptiProblem_str += "obj_func = []" + linesep
+        for ii in range(len(self.obj_func)):
+            tmp = self.obj_func[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            OptiProblem_str += "obj_func[" + str(ii) + "] =" + tmp + linesep + linesep
         if self._eval_func[1] is None:
             OptiProblem_str += "eval_func = " + str(self._eval_func[1])
         else:
@@ -191,13 +194,12 @@ class OptiProblem(FrozenClass):
                 "eval_func = " + linesep + str(self._eval_func[1]) + linesep + linesep
             )
         if len(self.constraint) == 0:
-            OptiProblem_str += "constraint = dict()" + linesep
-        for key, obj in self.constraint.items():
+            OptiProblem_str += "constraint = []" + linesep
+        for ii in range(len(self.constraint)):
             tmp = (
-                self.constraint[key].__str__().replace(linesep, linesep + "\t")
-                + linesep
+                self.constraint[ii].__str__().replace(linesep, linesep + "\t") + linesep
             )
-            OptiProblem_str += "constraint[" + key + "] =" + tmp + linesep + linesep
+            OptiProblem_str += "constraint[" + str(ii) + "] =" + tmp + linesep + linesep
         return OptiProblem_str
 
     def __eq__(self, other):
@@ -226,12 +228,12 @@ class OptiProblem(FrozenClass):
             OptiProblem_dict["output"] = None
         else:
             OptiProblem_dict["output"] = self.output.as_dict()
-        OptiProblem_dict["design_var"] = dict()
-        for key, obj in self.design_var.items():
-            OptiProblem_dict["design_var"][key] = obj.as_dict()
-        OptiProblem_dict["obj_func"] = dict()
-        for key, obj in self.obj_func.items():
-            OptiProblem_dict["obj_func"][key] = obj.as_dict()
+        OptiProblem_dict["design_var"] = list()
+        for obj in self.design_var:
+            OptiProblem_dict["design_var"].append(obj.as_dict())
+        OptiProblem_dict["obj_func"] = list()
+        for obj in self.obj_func:
+            OptiProblem_dict["obj_func"].append(obj.as_dict())
         if self.eval_func is None:
             OptiProblem_dict["eval_func"] = None
         else:
@@ -239,9 +241,9 @@ class OptiProblem(FrozenClass):
                 dumps(self._eval_func[0]).decode("ISO-8859-2"),
                 self._eval_func[1],
             ]
-        OptiProblem_dict["constraint"] = dict()
-        for key, obj in self.constraint.items():
-            OptiProblem_dict["constraint"][key] = obj.as_dict()
+        OptiProblem_dict["constraint"] = list()
+        for obj in self.constraint:
+            OptiProblem_dict["constraint"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         OptiProblem_dict["__class__"] = "OptiProblem"
         return OptiProblem_dict
@@ -251,12 +253,12 @@ class OptiProblem(FrozenClass):
 
         if self.output is not None:
             self.output._set_None()
-        for key, obj in self.design_var.items():
+        for obj in self.design_var:
             obj._set_None()
-        for key, obj in self.obj_func.items():
+        for obj in self.obj_func:
             obj._set_None()
         self.eval_func = None
-        for key, obj in self.constraint.items():
+        for obj in self.constraint:
             obj._set_None()
 
     def _get_output(self):
@@ -282,43 +284,51 @@ class OptiProblem(FrozenClass):
 
     def _get_design_var(self):
         """getter of design_var"""
-        for key, obj in self._design_var.items():
+        for obj in self._design_var:
             if obj is not None:
                 obj.parent = self
         return self._design_var
 
     def _set_design_var(self, value):
         """setter of design_var"""
-        check_var("design_var", value, "{OptiDesignVar}")
+        check_var("design_var", value, "[OptiDesignVar]")
         self._design_var = value
+
+        for obj in self._design_var:
+            if obj is not None:
+                obj.parent = self
 
     design_var = property(
         fget=_get_design_var,
         fset=_set_design_var,
-        doc=u"""Dict of design variables
+        doc=u"""List of design variables
 
-        :Type: {OptiDesignVar}
+        :Type: [OptiDesignVar]
         """,
     )
 
     def _get_obj_func(self):
         """getter of obj_func"""
-        for key, obj in self._obj_func.items():
+        for obj in self._obj_func:
             if obj is not None:
                 obj.parent = self
         return self._obj_func
 
     def _set_obj_func(self, value):
         """setter of obj_func"""
-        check_var("obj_func", value, "{OptiObjFunc}")
+        check_var("obj_func", value, "[DataKeeper]")
         self._obj_func = value
+
+        for obj in self._obj_func:
+            if obj is not None:
+                obj.parent = self
 
     obj_func = property(
         fget=_get_obj_func,
         fset=_set_obj_func,
-        doc=u"""Dict of objective functions
+        doc=u"""List of objective functions
 
-        :Type: {OptiObjFunc}
+        :Type: [DataKeeper]
         """,
     )
 
@@ -354,21 +364,25 @@ class OptiProblem(FrozenClass):
 
     def _get_constraint(self):
         """getter of constraint"""
-        for key, obj in self._constraint.items():
+        for obj in self._constraint:
             if obj is not None:
                 obj.parent = self
         return self._constraint
 
     def _set_constraint(self, value):
         """setter of constraint"""
-        check_var("constraint", value, "{OptiConstraint}")
+        check_var("constraint", value, "[OptiConstraint]")
         self._constraint = value
+
+        for obj in self._constraint:
+            if obj is not None:
+                obj.parent = self
 
     constraint = property(
         fget=_get_constraint,
         fset=_set_constraint,
-        doc=u"""Dict containing the constraints 
+        doc=u"""List containing the constraints 
 
-        :Type: {OptiConstraint}
+        :Type: [OptiConstraint]
         """,
     )

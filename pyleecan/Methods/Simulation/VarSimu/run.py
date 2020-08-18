@@ -22,7 +22,8 @@ def run(self):
 
     # Construct results
     for datakeeper in self.datakeeper_list:
-        xoutput.xoutput_dict[datakeeper.symbol] = [None for _ in range(self.nb_simu)]
+        xoutput.xoutput_dict[datakeeper.symbol] = datakeeper
+        datakeeper.result = [None for _ in range(self.nb_simu)]
 
     # TODO Parallelization
     if self.nb_proc > 1:

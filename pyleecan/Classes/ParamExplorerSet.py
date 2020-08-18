@@ -55,7 +55,7 @@ class ParamExplorerSet(ParamExplorer):
 
     def __init__(
         self,
-        value=[],
+        value=-1,
         name="",
         symbol="",
         unit="",
@@ -100,6 +100,8 @@ class ParamExplorerSet(ParamExplorer):
             if "setter" in list(init_dict.keys()):
                 setter = init_dict["setter"]
         # Initialisation by argument
+        if value == -1:
+            value = []
         self.value = value
         # Call ParamExplorer init
         super(ParamExplorerSet, self).__init__(

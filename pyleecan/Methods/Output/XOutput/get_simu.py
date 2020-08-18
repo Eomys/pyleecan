@@ -1,10 +1,10 @@
-def get_simu(self, *index):
+def get_simu(self, index):
     """
     Generate a simulation according to index
     
     Parameters
     ----------
-    index: tuple
+    index: int
         simulation index
     
     Returns
@@ -12,13 +12,6 @@ def get_simu(self, *index):
     simu : Simulation
         simulation generated
     """
-
-    if isinstance(index, int):
-        index = (index,)
-
-    assert len(index) == len(self.shape), Exception(
-        "Index must have {} dimensions".format(len(self.shape))
-    )
 
     # Get reference simulation
     ref_simu = self.simu
