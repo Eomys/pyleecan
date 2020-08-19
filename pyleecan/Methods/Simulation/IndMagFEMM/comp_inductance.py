@@ -49,7 +49,5 @@ def comp_inductance(self, output):
     time = output.elec.time
     felec = output.elec.felec
     fluxdq = split(n2dq(Phi_wind, 2 * pi * felec * time, n=qs), 2, axis=1)
-    Lmd = mean(fluxdq[0]) / output.elec.Id_ref
-    Lmq = mean(fluxdq[1]) / output.elec.Iq_ref
 
     return (mean(fluxdq[0]), mean(fluxdq[1]))

@@ -58,3 +58,7 @@ def solve_EEC(self, output):
     # Compute currents
     output.elec.Is = None
     output.elec.Is = output.elec.get_Is()
+
+    # Compute voltage
+    output.elec.Us = None
+    output.elec.Us = output.elec.get_Us()

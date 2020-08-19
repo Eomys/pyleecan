@@ -3028,24 +3028,6 @@
                 "type": "float",
                 "unit": "V",
                 "value": null
-            },
-            {
-                "desc": "d-axis flux linkage",
-                "max": "",
-                "min": "",
-                "name": "Phid",
-                "type": "float",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "q-axis flux linkage",
-                "max": "",
-                "min": "",
-                "name": "Phiq",
-                "type": "float",
-                "unit": "",
-                "value": null
             }
         ]
     },
@@ -5827,7 +5809,8 @@
         "is_internal": false,
         "methods": [
             "get_Nr",
-            "get_Is"
+            "get_Is",
+            "get_Us"
         ],
         "mother": "",
         "name": "OutElec",
@@ -5995,6 +5978,15 @@
                 "type": "float",
                 "unit": "W",
                 "value": null
+            },
+            {
+                "desc": "Stator voltage as a function of time (each column correspond to one phase)",
+                "max": "",
+                "min": "",
+                "name": "Us",
+                "type": "SciDataTool.Classes.DataND.DataND",
+                "unit": "V",
+                "value": "None"
             }
         ]
     },

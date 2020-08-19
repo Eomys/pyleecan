@@ -23,6 +23,11 @@ try:
 except ImportError as error:
     get_Is = error
 
+try:
+    from ..Methods.Output.OutElec.get_Us import get_Us
+except ImportError as error:
+    get_Us = error
+
 
 from numpy import array, array_equal
 from cloudpickle import dumps, loads
@@ -59,6 +64,15 @@ class OutElec(FrozenClass):
         )
     else:
         get_Is = get_Is
+    # cf Methods.Output.OutElec.get_Us
+    if isinstance(get_Us, ImportError):
+        get_Us = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method get_Us: " + str(get_Us))
+            )
+        )
+    else:
+        get_Us = get_Us
     # save method is available in all object
     save = save
 
@@ -91,6 +105,7 @@ class OutElec(FrozenClass):
         Uq_ref=None,
         Pj_losses=None,
         Pem_av_ref=None,
+        Us=None,
         init_dict=None,
         init_str=None,
     ):
@@ -130,6 +145,7 @@ class OutElec(FrozenClass):
             Uq_ref = obj.Uq_ref
             Pj_losses = obj.Pj_losses
             Pem_av_ref = obj.Pem_av_ref
+            Us = obj.Us
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -169,6 +185,8 @@ class OutElec(FrozenClass):
                 Pj_losses = init_dict["Pj_losses"]
             if "Pem_av_ref" in list(init_dict.keys()):
                 Pem_av_ref = init_dict["Pem_av_ref"]
+            if "Us" in list(init_dict.keys()):
+                Us = init_dict["Us"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -195,6 +213,7 @@ class OutElec(FrozenClass):
         self.Uq_ref = Uq_ref
         self.Pj_losses = Pj_losses
         self.Pem_av_ref = Pem_av_ref
+        self.Us = Us
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -245,6 +264,7 @@ class OutElec(FrozenClass):
         OutElec_str += "Uq_ref = " + str(self.Uq_ref) + linesep
         OutElec_str += "Pj_losses = " + str(self.Pj_losses) + linesep
         OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
+        OutElec_str += "Us = " + str(self.Us) + linesep + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -287,6 +307,8 @@ class OutElec(FrozenClass):
         if other.Pj_losses != self.Pj_losses:
             return False
         if other.Pem_av_ref != self.Pem_av_ref:
+            return False
+        if other.Us != self.Us:
             return False
         return True
 
@@ -343,6 +365,14 @@ class OutElec(FrozenClass):
         OutElec_dict["Uq_ref"] = self.Uq_ref
         OutElec_dict["Pj_losses"] = self.Pj_losses
         OutElec_dict["Pem_av_ref"] = self.Pem_av_ref
+        if self.Us is None:
+            OutElec_dict["Us"] = None
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutElec_dict["Us"] = {
+                "__class__": str(type(self._Us)),
+                "__repr__": str(self._Us.__repr__()),
+                "serialized": dumps(self._Us).decode("ISO-8859-2"),
+            }
         # The class name is added to the dict fordeserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -368,6 +398,7 @@ class OutElec(FrozenClass):
         self.Uq_ref = None
         self.Pj_losses = None
         self.Pem_av_ref = None
+        self.Us = None
 
     def _get_time(self):
         """getter of time"""
@@ -740,5 +771,32 @@ class OutElec(FrozenClass):
         doc=u"""Average Electromagnetic power
 
         :Type: float
+        """,
+    )
+
+    def _get_Us(self):
+        """getter of Us"""
+        return self._Us
+
+    def _set_Us(self, value):
+        """setter of Us"""
+        try:  # Check the type
+            check_var("Us", value, "dict")
+        except CheckTypeError:
+            check_var("Us", value, "SciDataTool.Classes.DataND.DataND")
+            # property can be set from a list to handle loads
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Us = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._Us = value
+
+    Us = property(
+        fget=_get_Us,
+        fset=_set_Us,
+        doc=u"""Stator voltage as a function of time (each column correspond to one phase)
+
+        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )

@@ -86,8 +86,6 @@ class InputElec(Input):
         Iq_ref=None,
         Ud_ref=None,
         Uq_ref=None,
-        Phid=None,
-        Phiq=None,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -124,8 +122,6 @@ class InputElec(Input):
             Iq_ref = obj.Iq_ref
             Ud_ref = obj.Ud_ref
             Uq_ref = obj.Uq_ref
-            Phid = obj.Phid
-            Phiq = obj.Phiq
             time = obj.time
             angle = obj.angle
             Nt_tot = obj.Nt_tot
@@ -146,10 +142,6 @@ class InputElec(Input):
                 Ud_ref = init_dict["Ud_ref"]
             if "Uq_ref" in list(init_dict.keys()):
                 Uq_ref = init_dict["Uq_ref"]
-            if "Phid" in list(init_dict.keys()):
-                Phid = init_dict["Phid"]
-            if "Phiq" in list(init_dict.keys()):
-                Phiq = init_dict["Phiq"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -167,8 +159,6 @@ class InputElec(Input):
         self.Iq_ref = Iq_ref
         self.Ud_ref = Ud_ref
         self.Uq_ref = Uq_ref
-        self.Phid = Phid
-        self.Phiq = Phiq
         # Call Input init
         super(InputElec, self).__init__(
             time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
@@ -188,8 +178,6 @@ class InputElec(Input):
         InputElec_str += "Iq_ref = " + str(self.Iq_ref) + linesep
         InputElec_str += "Ud_ref = " + str(self.Ud_ref) + linesep
         InputElec_str += "Uq_ref = " + str(self.Uq_ref) + linesep
-        InputElec_str += "Phid = " + str(self.Phid) + linesep
-        InputElec_str += "Phiq = " + str(self.Phiq) + linesep
         return InputElec_str
 
     def __eq__(self, other):
@@ -213,10 +201,6 @@ class InputElec(Input):
             return False
         if other.Uq_ref != self.Uq_ref:
             return False
-        if other.Phid != self.Phid:
-            return False
-        if other.Phiq != self.Phiq:
-            return False
         return True
 
     def as_dict(self):
@@ -231,8 +215,6 @@ class InputElec(Input):
         InputElec_dict["Iq_ref"] = self.Iq_ref
         InputElec_dict["Ud_ref"] = self.Ud_ref
         InputElec_dict["Uq_ref"] = self.Uq_ref
-        InputElec_dict["Phid"] = self.Phid
-        InputElec_dict["Phiq"] = self.Phiq
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         InputElec_dict["__class__"] = "InputElec"
@@ -247,8 +229,6 @@ class InputElec(Input):
         self.Iq_ref = None
         self.Ud_ref = None
         self.Uq_ref = None
-        self.Phid = None
-        self.Phiq = None
         # Set to None the properties inherited from Input
         super(InputElec, self)._set_None()
 
@@ -357,42 +337,6 @@ class InputElec(Input):
         fget=_get_Uq_ref,
         fset=_set_Uq_ref,
         doc=u"""q-axis voltage magnitude
-
-        :Type: float
-        """,
-    )
-
-    def _get_Phid(self):
-        """getter of Phid"""
-        return self._Phid
-
-    def _set_Phid(self, value):
-        """setter of Phid"""
-        check_var("Phid", value, "float")
-        self._Phid = value
-
-    Phid = property(
-        fget=_get_Phid,
-        fset=_set_Phid,
-        doc=u"""d-axis flux linkage
-
-        :Type: float
-        """,
-    )
-
-    def _get_Phiq(self):
-        """getter of Phiq"""
-        return self._Phiq
-
-    def _set_Phiq(self, value):
-        """setter of Phiq"""
-        check_var("Phiq", value, "float")
-        self._Phiq = value
-
-    Phiq = property(
-        fget=_get_Phiq,
-        fset=_set_Phiq,
-        doc=u"""q-axis flux linkage
 
         :Type: float
         """,
