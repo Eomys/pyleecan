@@ -25,7 +25,7 @@ def plot_mesh(
     if group_names is not None:
         meshsol_grp = self.get_group(group_names)
         meshsol_grp.plot_mesh(
-            self, label, index, indices, save_path, None,
+            label, index, indices, save_path, None,
         )
     else:
 

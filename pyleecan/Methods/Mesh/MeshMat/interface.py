@@ -22,14 +22,15 @@ def interface(self, other_mesh):
 
     # Dynamic import
     new_mesh = self.copy()
-    new_mesh.point = PointMat()
+    # new_mesh.point = PointMat()
     new_mesh.cell = dict()
-    new_mesh.cell["segment"] = CellMat(nb_pt_per_cell=2)
 
     for key in self.cell:
 
         # Developer info: IDK if this code works with other than triangle cells. To be checked.
         if self.cell[key].nb_pt_per_cell == 3:  # Triangle case
+
+            new_mesh.cell["line"] = CellMat(nb_pt_per_cell=2)
             points_tags = np.unique(self.cell[key].get_connectivity())
             other_points_tags = np.unique(other_mesh.cell[key].get_connectivity())
 
@@ -86,7 +87,7 @@ def interface(self, other_mesh):
             nb_elem_segm = len(seg_elem_tag)
             for i_seg in range(nb_elem_segm):
                 tag_two_points = elem2point_dict[seg_elem_tag[i_seg]]
-                new_mesh.add_cell(tag_two_points, "segment")
+                new_mesh.add_cell(tag_two_points, "line")
 
             # The same operation is applied in the other mesh because in the corners, 1 cell will contain 3 points,
             # and it will not be detected by seg_elem_pos. Applying the same process to the other mesh solve the issue
@@ -120,7 +121,7 @@ def interface(self, other_mesh):
                 tag_two_points = elem2point_other_dict[seg_elem_tag[i_seg]]
                 # It is not really added if it already exist
                 # new_tag = new_mesh.get_new_tag()
-                new_mesh.add_cell(tag_two_points, "segment")
+                new_mesh.add_cell(tag_two_points, "line")
 
     return new_mesh
     # TODO : Extend the code to higher dimension (3 points triangles for tetrahedra interfaces ...)
