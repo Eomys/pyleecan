@@ -164,7 +164,13 @@ class Simulation(FrozenClass):
         if isinstance(input, dict):
             # Check that the type is correct (including daughter)
             class_name = input.get("__class__")
-            if class_name not in ["Input", "InputCurrent", "InputFlux", "InputForce"]:
+            if class_name not in [
+                "Input",
+                "InputCurrent",
+                "InputElec",
+                "InputFlux",
+                "InputForce",
+            ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for input"
                 )
@@ -178,7 +184,13 @@ class Simulation(FrozenClass):
             input = load(input)
             # Check that the type is correct (including daughter)
             class_name = input.__class__.__name__
-            if class_name not in ["Input", "InputCurrent", "InputFlux", "InputForce"]:
+            if class_name not in [
+                "Input",
+                "InputCurrent",
+                "InputElec",
+                "InputFlux",
+                "InputForce",
+            ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for input"
                 )

@@ -18,6 +18,16 @@ try:
 except ImportError as error:
     run = error
 
+try:
+    from ..Methods.Simulation.Electrical.comp_power import comp_power
+except ImportError as error:
+    comp_power = error
+
+try:
+    from ..Methods.Simulation.Electrical.comp_torque import comp_torque
+except ImportError as error:
+    comp_torque = error
+
 
 from ._check import InitUnKnowClassError
 from .EEC import EEC
@@ -28,6 +38,7 @@ class Electrical(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.Electrical.run
     if isinstance(run, ImportError):
         run = property(
@@ -37,6 +48,28 @@ class Electrical(FrozenClass):
         )
     else:
         run = run
+    # cf Methods.Simulation.Electrical.comp_power
+    if isinstance(comp_power, ImportError):
+        comp_power = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Electrical method comp_power: " + str(comp_power)
+                )
+            )
+        )
+    else:
+        comp_power = comp_power
+    # cf Methods.Simulation.Electrical.comp_torque
+    if isinstance(comp_torque, ImportError):
+        comp_torque = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Electrical method comp_torque: " + str(comp_torque)
+                )
+            )
+        )
+    else:
+        comp_torque = comp_torque
     # save method is available in all object
     save = save
 
