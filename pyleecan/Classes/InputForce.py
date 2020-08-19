@@ -21,6 +21,7 @@ except ImportError as error:
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .ImportVectorField import ImportVectorField
 from .ImportMatrix import ImportMatrix

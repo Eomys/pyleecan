@@ -26,6 +26,7 @@ except ImportError as error:
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .ImportMatrix import ImportMatrix
 
@@ -128,6 +129,7 @@ class Input(FrozenClass):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -150,6 +152,7 @@ class Input(FrozenClass):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -169,6 +172,7 @@ class Input(FrozenClass):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -191,6 +195,7 @@ class Input(FrozenClass):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -286,6 +291,8 @@ class Input(FrozenClass):
         """setter of time"""
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
+        elif isinstance(value, list):
+            value = ImportMatrixVal(value=array(value))
         check_var("time", value, "ImportMatrix")
         self._time = value
 
@@ -309,6 +316,8 @@ class Input(FrozenClass):
         """setter of angle"""
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
+        elif isinstance(value, list):
+            value = ImportMatrixVal(value=array(value))
         check_var("angle", value, "ImportMatrix")
         self._angle = value
 

@@ -31,6 +31,7 @@ except ImportError as error:
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from numpy import ndarray
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .ImportMatrix import ImportMatrix
 from .Import import Import
@@ -190,6 +191,7 @@ class InputCurrent(Input):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -212,6 +214,7 @@ class InputCurrent(Input):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -231,6 +234,7 @@ class InputCurrent(Input):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -253,6 +257,7 @@ class InputCurrent(Input):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -437,6 +442,8 @@ class InputCurrent(Input):
         """setter of Is"""
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
+        elif isinstance(value, list):
+            value = ImportMatrixVal(value=array(value))
         check_var("Is", value, "ImportMatrix")
         self._Is = value
 
@@ -460,6 +467,8 @@ class InputCurrent(Input):
         """setter of Ir"""
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
+        elif isinstance(value, list):
+            value = ImportMatrixVal(value=array(value))
         check_var("Ir", value, "ImportMatrix")
         self._Ir = value
 
