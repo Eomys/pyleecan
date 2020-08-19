@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ....Functions.Electrical.coordinate_transformation import dq2n
-from SciDataTool import Data1D, DataTime
-from ....Functions.Winding.gen_phase_list import gen_name
-
-from numpy import array, pi, transpose
+from numpy import array, pi
 from scipy.linalg import solve
 
 
@@ -31,38 +27,34 @@ def solve_EEC(self, output):
         an Output object
     """
 
-    qs = output.simu.machine.stator.winding.qs
     felec = output.elec.felec
     ws = 2 * pi * felec
-    time = output.elec.time
 
     # Prepare linear system
-    XR = array(
-        [
-            [self.parameters["R20"], -ws * self.parameters["Lq"]],
-            [ws * self.parameters["Ld"], self.parameters["R20"]],
-        ]
-    )
-    XE = array([0, self.parameters["BEMF"]])
-    XU = array([self.parameters["Ud"], self.parameters["Uq"]])
-    Idq = solve(XR, XU - XE)
 
-    # dq to abc transform
-    Is = dq2n(Idq, 2 * pi * felec * time, n=qs)
+    # Solve system
+    if "Ud" in self.parameters:
+        XR = array(
+            [
+                [self.parameters["R20"], -ws * self.parameters["Lq"]],
+                [ws * self.parameters["Ld"], self.parameters["R20"]],
+            ]
+        )
+        XE = array([0, ws * self.parameters["phi"]])
+        XU = array([self.parameters["Ud"], self.parameters["Uq"]])
+        XI = solve(XR, XU - XE)
+        output.elec.Id_ref = XI[0]
+        output.elec.Iq_ref = XI[1]
+    else:
+        output.elec.Ud_ref = (
+            self.parameters["R20"] * self.parameters["Id"]
+            - ws * self.parameters["Phiq"]
+        )
+        output.elec.Uq_ref = (
+            self.parameters["R20"] * self.parameters["Iq"]
+            + ws * self.parameters["Phid"]
+        )
 
-    # Store currents into a Data object
-    Time = Data1D(name="time", unit="s", values=time)
-    phases_names = gen_name(qs, is_add_phase=True)
-    Phases = Data1D(
-        name="phases", unit="dimless", values=phases_names, is_components=True
-    )
-    output.elec.Is = DataTime(
-        name="Stator currents",
-        unit="A",
-        symbol="I_s",
-        axes=[Phases, Time],
-        values=transpose(Is),
-    )
-    output.elec.Ir = None
-    output.elec.Id_ref = Idq[0]
-    output.elec.Iq_ref = Idq[1]
+    # Compute currents
+    output.elec.Is = None
+    output.elec.Is = output.elec.get_Is()

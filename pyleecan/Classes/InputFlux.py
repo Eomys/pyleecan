@@ -127,7 +127,13 @@ class InputFlux(Input):
         if isinstance(OP, dict):
             # Check that the type is correct (including daughter)
             class_name = OP.get("__class__")
-            if class_name not in ["Input", "InputCurrent", "InputFlux", "InputForce"]:
+            if class_name not in [
+                "Input",
+                "InputCurrent",
+                "InputElec",
+                "InputFlux",
+                "InputForce",
+            ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for OP"
                 )
@@ -141,7 +147,13 @@ class InputFlux(Input):
             OP = load(OP)
             # Check that the type is correct (including daughter)
             class_name = OP.__class__.__name__
-            if class_name not in ["Input", "InputCurrent", "InputFlux", "InputForce"]:
+            if class_name not in [
+                "Input",
+                "InputCurrent",
+                "InputElec",
+                "InputFlux",
+                "InputForce",
+            ]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for OP"
                 )

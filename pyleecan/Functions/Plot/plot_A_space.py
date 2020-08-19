@@ -145,7 +145,7 @@ def plot_A_space(
         )
     angle = results["angle"]
     if is_deg and int(max(angle)) % 6 == 0:
-        xticks = [i * int(max(angle)) / 6 for i in range(int(max(angle)))]
+        xticks = [i * int(max(angle)) / 6 for i in range(7)]
     else:
         xticks = None
     Ydatas = [results[data.symbol]] + [

@@ -44,15 +44,14 @@ def get_elec_datakeeper(self):
             )
         )
     # Keep torque
-    if self.is_torque:
-        dk_list.append(
-            DataKeeper(
-                name="Reference Average Torque",
-                symbol="Tem_av_ref",
-                unit="N.m",
-                keeper=lambda output: output.elec.Tem_av_ref,
-            )
+    dk_list.append(
+        DataKeeper(
+            name="Reference Average Torque",
+            symbol="Tem_av_ref",
+            unit="N.m",
+            keeper=lambda output: output.elec.Tem_av_ref,
         )
+    )
 
     # TODO Save power
     # if self.is_power:

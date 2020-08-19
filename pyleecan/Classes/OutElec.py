@@ -87,6 +87,10 @@ class OutElec(FrozenClass):
         Id_ref=None,
         Iq_ref=None,
         felec=None,
+        Ud_ref=None,
+        Uq_ref=None,
+        Pj_losses=None,
+        Pem_av_ref=None,
         init_dict=None,
         init_str=None,
     ):
@@ -122,6 +126,10 @@ class OutElec(FrozenClass):
             Id_ref = obj.Id_ref
             Iq_ref = obj.Iq_ref
             felec = obj.felec
+            Ud_ref = obj.Ud_ref
+            Uq_ref = obj.Uq_ref
+            Pj_losses = obj.Pj_losses
+            Pem_av_ref = obj.Pem_av_ref
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -153,6 +161,14 @@ class OutElec(FrozenClass):
                 Iq_ref = init_dict["Iq_ref"]
             if "felec" in list(init_dict.keys()):
                 felec = init_dict["felec"]
+            if "Ud_ref" in list(init_dict.keys()):
+                Ud_ref = init_dict["Ud_ref"]
+            if "Uq_ref" in list(init_dict.keys()):
+                Uq_ref = init_dict["Uq_ref"]
+            if "Pj_losses" in list(init_dict.keys()):
+                Pj_losses = init_dict["Pj_losses"]
+            if "Pem_av_ref" in list(init_dict.keys()):
+                Pem_av_ref = init_dict["Pem_av_ref"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -175,6 +191,10 @@ class OutElec(FrozenClass):
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
         self.felec = felec
+        self.Ud_ref = Ud_ref
+        self.Uq_ref = Uq_ref
+        self.Pj_losses = Pj_losses
+        self.Pem_av_ref = Pem_av_ref
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -221,6 +241,10 @@ class OutElec(FrozenClass):
         OutElec_str += "Id_ref = " + str(self.Id_ref) + linesep
         OutElec_str += "Iq_ref = " + str(self.Iq_ref) + linesep
         OutElec_str += "felec = " + str(self.felec) + linesep
+        OutElec_str += "Ud_ref = " + str(self.Ud_ref) + linesep
+        OutElec_str += "Uq_ref = " + str(self.Uq_ref) + linesep
+        OutElec_str += "Pj_losses = " + str(self.Pj_losses) + linesep
+        OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -255,6 +279,14 @@ class OutElec(FrozenClass):
         if other.Iq_ref != self.Iq_ref:
             return False
         if other.felec != self.felec:
+            return False
+        if other.Ud_ref != self.Ud_ref:
+            return False
+        if other.Uq_ref != self.Uq_ref:
+            return False
+        if other.Pj_losses != self.Pj_losses:
+            return False
+        if other.Pem_av_ref != self.Pem_av_ref:
             return False
         return True
 
@@ -307,6 +339,10 @@ class OutElec(FrozenClass):
         OutElec_dict["Id_ref"] = self.Id_ref
         OutElec_dict["Iq_ref"] = self.Iq_ref
         OutElec_dict["felec"] = self.felec
+        OutElec_dict["Ud_ref"] = self.Ud_ref
+        OutElec_dict["Uq_ref"] = self.Uq_ref
+        OutElec_dict["Pj_losses"] = self.Pj_losses
+        OutElec_dict["Pem_av_ref"] = self.Pem_av_ref
         # The class name is added to the dict fordeserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -328,6 +364,10 @@ class OutElec(FrozenClass):
         self.Id_ref = None
         self.Iq_ref = None
         self.felec = None
+        self.Ud_ref = None
+        self.Uq_ref = None
+        self.Pj_losses = None
+        self.Pem_av_ref = None
 
     def _get_time(self):
         """getter of time"""
@@ -626,6 +666,78 @@ class OutElec(FrozenClass):
         fget=_get_felec,
         fset=_set_felec,
         doc=u"""Electrical Frequency
+
+        :Type: float
+        """,
+    )
+
+    def _get_Ud_ref(self):
+        """getter of Ud_ref"""
+        return self._Ud_ref
+
+    def _set_Ud_ref(self, value):
+        """setter of Ud_ref"""
+        check_var("Ud_ref", value, "float")
+        self._Ud_ref = value
+
+    Ud_ref = property(
+        fget=_get_Ud_ref,
+        fset=_set_Ud_ref,
+        doc=u"""d-axis voltage magnitude
+
+        :Type: float
+        """,
+    )
+
+    def _get_Uq_ref(self):
+        """getter of Uq_ref"""
+        return self._Uq_ref
+
+    def _set_Uq_ref(self, value):
+        """setter of Uq_ref"""
+        check_var("Uq_ref", value, "float")
+        self._Uq_ref = value
+
+    Uq_ref = property(
+        fget=_get_Uq_ref,
+        fset=_set_Uq_ref,
+        doc=u"""q-axis voltage magnitude
+
+        :Type: float
+        """,
+    )
+
+    def _get_Pj_losses(self):
+        """getter of Pj_losses"""
+        return self._Pj_losses
+
+    def _set_Pj_losses(self, value):
+        """setter of Pj_losses"""
+        check_var("Pj_losses", value, "float")
+        self._Pj_losses = value
+
+    Pj_losses = property(
+        fget=_get_Pj_losses,
+        fset=_set_Pj_losses,
+        doc=u"""Electrical Joule losses
+
+        :Type: float
+        """,
+    )
+
+    def _get_Pem_av_ref(self):
+        """getter of Pem_av_ref"""
+        return self._Pem_av_ref
+
+    def _set_Pem_av_ref(self, value):
+        """setter of Pem_av_ref"""
+        check_var("Pem_av_ref", value, "float")
+        self._Pem_av_ref = value
+
+    Pem_av_ref = property(
+        fget=_get_Pem_av_ref,
+        fset=_set_Pem_av_ref,
+        doc=u"""Average Electromagnetic power
 
         :Type: float
         """,
