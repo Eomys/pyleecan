@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from numpy import pi, sqrt
-
 
 def comp_parameters(self, output):
     """Compute the parameters dict for the equivalent electrical circuit:
@@ -14,14 +12,19 @@ def comp_parameters(self, output):
         an Output object
     """
 
-    phi = self.fluxlink.comp_fluxlinkage(output)
-
+    # Parameters to compute only once
     if "R20" not in self.parameters:
         self.parameters["R20"] = output.simu.machine.stator.comp_resistance_wind()
-    if "Ld" not in self.parameters:
-        (Lmd, Lmq) = self.indmag.comp_inductance(output)
-        self.parameters["Ld"] = Lmd - phi
-        self.parameters["Lq"] = Lmq
-    if "BEMF" not in self.parameters:
-        felec = output.elec.felec
-        self.parameters["BEMF"] = 2 * pi * felec * phi
+    if "phi" not in self.parameters:
+        self.parameters["phi"] = self.fluxlink.comp_fluxlinkage(output)
+
+    # Parameters which vary for each simulation
+    self.parameters["Id"] = output.elec.Id_ref
+    self.parameters["Iq"] = output.elec.Iq_ref
+    (phid, phiq) = self.indmag.comp_inductance(output)
+    if self.parameters["Id"] != 0:
+        self.parameters["Ld"] = (phid - self.parameters["phi"]) / self.parameters["Id"]
+    if self.parameters["Iq"] != 0:
+        self.parameters["Lq"] = phiq / self.parameters["Iq"]
+    self.parameters["Phid"] = phid
+    self.parameters["Phiq"] = self.parameters["Lq"] * self.parameters["Iq"]
