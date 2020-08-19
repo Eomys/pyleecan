@@ -34,9 +34,9 @@ def test_():
     Test compute the Flux in FEMM, with and without DXF Import
     """
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    
+
     simu = Simu1(name="DXF_import", machine=IPMSM_A)
-    
+
     # Definition of the magnetic simulation (FEMM with symmetry and sliding band)
     simu.mag = MagFEMM(
         type_BH_stator=0,
@@ -49,7 +49,7 @@ def test_():
     # Run only Magnetic module
     simu.force = None
     simu.struct = None
-    
+
     simu.input = InputCurrent()
     simu.input.Id_ref = -100  # [A]
     simu.input.Iq_ref = 200  # [A]
@@ -57,7 +57,7 @@ def test_():
     simu.input.Na_tot = 2048  # Spatial discretization
     simu.input.N0 = 2000  # Rotor speed [rpm]
     simu.input.rot_dir = 1  # To enforce the rotation direction
-    
+
     # DXF import setup
     simu.mag.rotor_dxf = DXFImport(
         file_path=join(TEST_DATA_DIR, "prius_test.dxf").replace("\\", "/")
@@ -77,15 +77,15 @@ def test_():
     BC_list.append((0, True, "bc_A0"))
     BC_list.append((0.067, False, "bc_r1"))
     simu.mag.rotor_dxf.BC_list = BC_list
-    
+
     # Run DXF simulation
     out = simu.run()
-    
+
     # Run Normal simulation
     simu2 = simu.copy()
     simu2.mag.rotor_dxf = None
     out2 = simu2.run()
-    
+
     # Plot/compare the flux
     out.plot_A_space(
         "mag.B",

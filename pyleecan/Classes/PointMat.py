@@ -96,8 +96,8 @@ class PointMat(FrozenClass):
         self,
         coordinate=None,
         nb_pt=0,
-        indice=None,
         delta=1e-10,
+        indice=None,
         init_dict=None,
         init_str=None,
     ):
@@ -121,8 +121,8 @@ class PointMat(FrozenClass):
             assert type(obj) is type(self)
             coordinate = obj.coordinate
             nb_pt = obj.nb_pt
-            indice = obj.indice
             delta = obj.delta
+            indice = obj.indice
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -130,18 +130,18 @@ class PointMat(FrozenClass):
                 coordinate = init_dict["coordinate"]
             if "nb_pt" in list(init_dict.keys()):
                 nb_pt = init_dict["nb_pt"]
-            if "indice" in list(init_dict.keys()):
-                indice = init_dict["indice"]
             if "delta" in list(init_dict.keys()):
                 delta = init_dict["delta"]
+            if "indice" in list(init_dict.keys()):
+                indice = init_dict["indice"]
         # Initialisation by argument
         self.parent = None
         # coordinate can be None, a ndarray or a list
         set_array(self, "coordinate", coordinate)
         self.nb_pt = nb_pt
+        self.delta = delta
         # indice can be None, a ndarray or a list
         set_array(self, "indice", indice)
-        self.delta = delta
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -162,6 +162,7 @@ class PointMat(FrozenClass):
             + linesep
         )
         PointMat_str += "nb_pt = " + str(self.nb_pt) + linesep
+        PointMat_str += "delta = " + str(self.delta) + linesep
         PointMat_str += (
             "indice = "
             + linesep
@@ -169,7 +170,6 @@ class PointMat(FrozenClass):
             + linesep
             + linesep
         )
-        PointMat_str += "delta = " + str(self.delta) + linesep
         return PointMat_str
 
     def __eq__(self, other):
@@ -181,9 +181,9 @@ class PointMat(FrozenClass):
             return False
         if other.nb_pt != self.nb_pt:
             return False
-        if not array_equal(other.indice, self.indice):
-            return False
         if other.delta != self.delta:
+            return False
+        if not array_equal(other.indice, self.indice):
             return False
         return True
 
@@ -197,11 +197,11 @@ class PointMat(FrozenClass):
         else:
             PointMat_dict["coordinate"] = self.coordinate.tolist()
         PointMat_dict["nb_pt"] = self.nb_pt
+        PointMat_dict["delta"] = self.delta
         if self.indice is None:
             PointMat_dict["indice"] = None
         else:
             PointMat_dict["indice"] = self.indice.tolist()
-        PointMat_dict["delta"] = self.delta
         # The class name is added to the dict fordeserialisation purpose
         PointMat_dict["__class__"] = "PointMat"
         return PointMat_dict
@@ -211,8 +211,8 @@ class PointMat(FrozenClass):
 
         self.coordinate = None
         self.nb_pt = None
-        self.indice = None
         self.delta = None
+        self.indice = None
 
     def _get_coordinate(self):
         """getter of coordinate"""
@@ -257,6 +257,24 @@ class PointMat(FrozenClass):
         """,
     )
 
+    def _get_delta(self):
+        """getter of delta"""
+        return self._delta
+
+    def _set_delta(self, value):
+        """setter of delta"""
+        check_var("delta", value, "float")
+        self._delta = value
+
+    delta = property(
+        fget=_get_delta,
+        fset=_set_delta,
+        doc=u"""Sensibility for node searching
+
+        :Type: float
+        """,
+    )
+
     def _get_indice(self):
         """getter of indice"""
         return self._indice
@@ -276,26 +294,8 @@ class PointMat(FrozenClass):
     indice = property(
         fget=_get_indice,
         fset=_set_indice,
-        doc=u"""Node indices
+        doc=u"""Point indices
 
         :Type: ndarray
-        """,
-    )
-
-    def _get_delta(self):
-        """getter of delta"""
-        return self._delta
-
-    def _set_delta(self, value):
-        """setter of delta"""
-        check_var("delta", value, "float")
-        self._delta = value
-
-    delta = property(
-        fget=_get_delta,
-        fset=_set_delta,
-        doc=u"""Sensibility for node searching
-
-        :Type: float
         """,
     )

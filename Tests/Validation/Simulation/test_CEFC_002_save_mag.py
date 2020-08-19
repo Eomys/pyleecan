@@ -70,7 +70,10 @@ def test_CEFC_002():
 
     out.mag.meshsolution.plot_mesh(save_path=join(save_path, "CEFC_002_mesh_save.png"),)
 
-    out.mag.meshsolution.plot_mesh(group_names=["stator", "/", "airgap"])
+    out.mag.meshsolution.plot_mesh(
+        save_path=join(save_path, "CEFC_002_mesh_interface_save.png"),
+        group_names=["stator", "/", "airgap"],
+    )
 
     out.mag.meshsolution.plot_contour(
         label="\mu", save_path=join(save_path, "CEFC_002_mu_save.png"),
@@ -93,6 +96,7 @@ def test_CEFC_002():
     )
 
 
+@pytest.mark.skip
 def test_CEFC_002_load():
     save_path = "C:\\Users\\Raphael\\Desktop\\Git\\pyleecan_tests\\pyleecan\\Results\\SM_CEFC_002_save_mag"
     load_path = join(save_path, "Output.json")
