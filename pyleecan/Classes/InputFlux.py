@@ -19,10 +19,13 @@ except ImportError as error:
     gen_input = error
 
 
+from ..Classes.ImportMatrixVal import ImportMatrixVal
+from numpy import ndarray
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .ImportVectorField import ImportVectorField
 from .Input import Input
-from .Import import Import
+from .ImportMatrix import ImportMatrix
 
 
 class InputFlux(Input):
@@ -79,9 +82,9 @@ class InputFlux(Input):
         if OP == -1:
             OP = Input()
         if time == -1:
-            time = Import()
+            time = ImportMatrix()
         if angle == -1:
-            angle = Import()
+            angle = ImportMatrix()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 

@@ -29,7 +29,11 @@ except ImportError as error:
     comp_felec = error
 
 
+from ..Classes.ImportMatrixVal import ImportMatrixVal
+from numpy import ndarray
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
+from .ImportMatrix import ImportMatrix
 from .Import import Import
 
 
@@ -115,15 +119,15 @@ class InputCurrent(Input):
         object or dict can be given for pyleecan Object"""
 
         if Is == -1:
-            Is = Import()
+            Is = ImportMatrix()
         if Ir == -1:
-            Ir = Import()
+            Ir = ImportMatrix()
         if angle_rotor == -1:
             angle_rotor = Import()
         if time == -1:
-            time = Import()
+            time = ImportMatrix()
         if angle == -1:
-            angle = Import()
+            angle = ImportMatrix()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -177,18 +181,17 @@ class InputCurrent(Input):
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
         # Initialisation by argument
-        # Is can be None, a Import object or a dict
+        # Is can be None, a ImportMatrix object or a dict
         if isinstance(Is, dict):
             # Check that the type is correct (including daughter)
             class_name = Is.get("__class__")
             if class_name not in [
-                "Import",
+                "ImportMatrix",
                 "ImportGenMatrixSin",
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",
-                "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -206,13 +209,12 @@ class InputCurrent(Input):
             # Check that the type is correct (including daughter)
             class_name = Is.__class__.__name__
             if class_name not in [
-                "Import",
+                "ImportMatrix",
                 "ImportGenMatrixSin",
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",
-                "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -222,18 +224,17 @@ class InputCurrent(Input):
             self.Is = Is
         else:
             self.Is = Is
-        # Ir can be None, a Import object or a dict
+        # Ir can be None, a ImportMatrix object or a dict
         if isinstance(Ir, dict):
             # Check that the type is correct (including daughter)
             class_name = Ir.get("__class__")
             if class_name not in [
-                "Import",
+                "ImportMatrix",
                 "ImportGenMatrixSin",
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",
-                "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -251,13 +252,12 @@ class InputCurrent(Input):
             # Check that the type is correct (including daughter)
             class_name = Ir.__class__.__name__
             if class_name not in [
-                "Import",
+                "ImportMatrix",
                 "ImportGenMatrixSin",
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
                 "ImportMatlab",
-                "ImportMatrix",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -440,7 +440,11 @@ class InputCurrent(Input):
 
     def _set_Is(self, value):
         """setter of Is"""
-        check_var("Is", value, "Import")
+        if isinstance(value, ndarray):
+            value = ImportMatrixVal(value=value)
+        elif isinstance(value, list):
+            value = ImportMatrixVal(value=array(value))
+        check_var("Is", value, "ImportMatrix")
         self._Is = value
 
         if self._Is is not None:
@@ -451,7 +455,7 @@ class InputCurrent(Input):
         fset=_set_Is,
         doc=u"""Stator currents as a function of time (each column correspond to one phase) to import
 
-        :Type: Import
+        :Type: ImportMatrix
         """,
     )
 
@@ -461,7 +465,11 @@ class InputCurrent(Input):
 
     def _set_Ir(self, value):
         """setter of Ir"""
-        check_var("Ir", value, "Import")
+        if isinstance(value, ndarray):
+            value = ImportMatrixVal(value=value)
+        elif isinstance(value, list):
+            value = ImportMatrixVal(value=array(value))
+        check_var("Ir", value, "ImportMatrix")
         self._Ir = value
 
         if self._Ir is not None:
@@ -472,7 +480,7 @@ class InputCurrent(Input):
         fset=_set_Ir,
         doc=u"""Rotor currents as a function of time (each column correspond to one phase) to import
 
-        :Type: Import
+        :Type: ImportMatrix
         """,
     )
 

@@ -16,7 +16,7 @@
         "methods": [
             "draw_FEMM",
             "intersect_line",
-            "is_on_arc",
+            "is_on_line",
             "split_line",
             "comp_distance"
         ],
@@ -2482,7 +2482,7 @@
         "methods": [
             "get_data"
         ],
-        "mother": "Import",
+        "mother": "ImportMatrix",
         "name": "ImportMatlab",
         "package": "Import",
         "path": "pyleecan/Generator/ClassesRef/Import/ImportMatlab.csv",
@@ -2520,6 +2520,7 @@
             "ImportGenToothSaw",
             "ImportGenVectLin",
             "ImportGenVectSin",
+            "ImportMatlab",
             "ImportMatrixVal",
             "ImportMatrixXls"
         ],
@@ -2810,7 +2811,7 @@
                 "max": "",
                 "min": "",
                 "name": "time",
-                "type": "Import",
+                "type": "ImportMatrix",
                 "unit": "s",
                 "value": null
             },
@@ -2819,7 +2820,7 @@
                 "max": "",
                 "min": "",
                 "name": "angle",
-                "type": "Import",
+                "type": "ImportMatrix",
                 "unit": "rad",
                 "value": null
             },
@@ -2877,7 +2878,7 @@
                 "max": "",
                 "min": "",
                 "name": "Is",
-                "type": "Import",
+                "type": "ImportMatrix",
                 "unit": "A",
                 "value": null
             },
@@ -2886,7 +2887,7 @@
                 "max": "",
                 "min": "",
                 "name": "Ir",
-                "type": "Import",
+                "type": "ImportMatrix",
                 "unit": "A",
                 "value": null
             },

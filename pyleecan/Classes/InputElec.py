@@ -29,8 +29,11 @@ except ImportError as error:
     set_Id_Iq = error
 
 
+from ..Classes.ImportMatrixVal import ImportMatrixVal
+from numpy import ndarray
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .Import import Import
+from .ImportMatrix import ImportMatrix
 
 
 class InputElec(Input):
@@ -106,9 +109,9 @@ class InputElec(Input):
         object or dict can be given for pyleecan Object"""
 
         if time == -1:
-            time = Import()
+            time = ImportMatrix()
         if angle == -1:
-            angle = Import()
+            angle = ImportMatrix()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
