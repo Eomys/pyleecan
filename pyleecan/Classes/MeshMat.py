@@ -53,6 +53,11 @@ try:
 except ImportError as error:
     get_point2cell = error
 
+try:
+    from ..Methods.Mesh.MeshMat.renum import renum
+except ImportError as error:
+    renum = error
+
 
 from ._check import InitUnKnowClassError
 from .CellMat import CellMat
@@ -141,6 +146,15 @@ class MeshMat(Mesh):
         )
     else:
         get_point2cell = get_point2cell
+    # cf Methods.Mesh.MeshMat.renum
+    if isinstance(renum, ImportError):
+        renum = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method renum: " + str(renum))
+            )
+        )
+    else:
+        renum = renum
     # save method is available in all object
     save = save
 

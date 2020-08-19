@@ -5032,7 +5032,8 @@
             "add_cell",
             "interface",
             "get_vertice",
-            "get_point2cell"
+            "get_point2cell",
+            "renum"
         ],
         "mother": "Mesh",
         "name": "MeshMat",
