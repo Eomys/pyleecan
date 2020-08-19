@@ -24,11 +24,6 @@ except ImportError as error:
     get_solution = error
 
 try:
-    from ..Methods.Mesh.MeshSolution.save_to_file import save_to_file
-except ImportError as error:
-    save_to_file = error
-
-try:
     from ..Methods.Mesh.MeshSolution.get_field import get_field
 except ImportError as error:
     get_field = error
@@ -98,17 +93,6 @@ class MeshSolution(FrozenClass):
         )
     else:
         get_solution = get_solution
-    # cf Methods.Mesh.MeshSolution.save_to_file
-    if isinstance(save_to_file, ImportError):
-        save_to_file = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MeshSolution method save_to_file: " + str(save_to_file)
-                )
-            )
-        )
-    else:
-        save_to_file = save_to_file
     # cf Methods.Mesh.MeshSolution.get_field
     if isinstance(get_field, ImportError):
         get_field = property(

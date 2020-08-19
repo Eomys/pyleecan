@@ -193,25 +193,21 @@ class unittest_InputCurrent_meth(TestCase):
         Is = ImportGenMatrixSin(is_transpose=True)
         Is.init_vector(f=[2, 2, 2], A=[2, 2, 2], Phi=[pi / 2, 0, -pi / 2], N=16, Tf=1)
         S = sqrt(2)
-        Is_exp = transpose(
-            array(
-                [
-                    [2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S],
-                    [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],
-                    [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],
-                ]
-            )
+        Is_exp = array(
+            [
+                [2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S],
+                [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],
+                [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],
+            ]
         )
 
         Ir = ImportGenMatrixSin(is_transpose=True)
         Ir.init_vector(f=[2, 2], A=[2, 2], Phi=[0, -pi / 2], N=16, Tf=1)
-        Ir_exp = transpose(
-            array(
-                [
-                    [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],
-                    [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],
-                ]
-            )
+        Ir_exp = array(
+            [
+                [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],
+                [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],
+            ]
         )
 
         angle_rotor = ImportGenVectLin(0, 2 * pi, 16)
@@ -238,14 +234,12 @@ class unittest_InputCurrent_meth(TestCase):
         Id_ref = 2
         Iq_ref = 0
 
-        Is_exp = transpose(
-            array(
-                [
-                    [2, 1, -1, -2, -1, 1, 2],
-                    [-1, -2, -1, 1, 2, 1, -1],
-                    [-1, 1, 2, 1, -1, -2, -1],
-                ]
-            )
+        Is_exp = array(
+            [
+                [2, 1, -1, -2, -1, 1, 2],
+                [-1, -2, -1, 1, 2, 1, -1],
+                [-1, 1, 2, 1, -1, -2, -1],
+            ]
         )
 
         zp = IPMSM_A.stator.get_pole_pair_number()

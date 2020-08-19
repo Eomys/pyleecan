@@ -5118,13 +5118,12 @@
             "get_point",
             "get_cell",
             "get_mesh_pv",
-            "get_normal",
-            "get_surf",
             "get_cell_area",
             "add_cell",
             "interface",
             "get_vertice",
-            "plot_mesh"
+            "get_point2cell",
+            "renum"
         ],
         "mother": "Mesh",
         "name": "MeshMat",
@@ -5164,7 +5163,6 @@
         "methods": [
             "get_mesh",
             "get_solution",
-            "save_to_file",
             "get_field",
             "plot_mesh",
             "plot_contour",
@@ -5194,7 +5192,7 @@
                 "name": "mesh",
                 "type": "[Mesh]",
                 "unit": "",
-                "value": null
+                "value": []
             },
             {
                 "desc": "1 if the mesh is the same at each step (time, mode etc.)",
@@ -5212,7 +5210,7 @@
                 "name": "solution",
                 "type": "[Solution]",
                 "unit": "",
-                "value": null
+                "value": []
             },
             {
                 "desc": "Dimension of the physical problem",
@@ -5230,7 +5228,7 @@
                 "name": "group",
                 "type": "{ndarray}",
                 "unit": "",
-                "value": null
+                "value": {}
             }
         ]
     },
@@ -6742,7 +6740,7 @@
         "desc": "Class to define nodes coordinates and getter.",
         "is_internal": false,
         "methods": [
-            "add_node",
+            "add_point",
             "get_coord",
             "get_group",
             "is_exist"
@@ -6771,15 +6769,6 @@
                 "value": 0
             },
             {
-                "desc": "Node indices",
-                "max": "",
-                "min": "",
-                "name": "indice",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            },
-            {
                 "desc": "Sensibility for node searching",
                 "max": "",
                 "min": "",
@@ -6787,6 +6776,15 @@
                 "type": "float",
                 "unit": "",
                 "value": 1e-10
+            },
+            {
+                "desc": "Point indices",
+                "max": "",
+                "min": "",
+                "name": "indice",
+                "type": "ndarray",
+                "unit": "",
+                "value": ""
             }
         ]
     },
