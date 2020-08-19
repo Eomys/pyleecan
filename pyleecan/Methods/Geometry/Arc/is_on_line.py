@@ -3,7 +3,7 @@
 from numpy import exp, pi, angle, abs as np_abs
 
 
-def is_on_arc(self, Z):
+def is_on_line(self, Z):
     """Check is a point defined by its complex coordinate is on the arc
 
     Parameters
@@ -15,7 +15,7 @@ def is_on_arc(self, Z):
 
     Returns
     -------
-    is_on_arc : bool
+    is_on_line : bool
         True if the point is on the arc
     """
 

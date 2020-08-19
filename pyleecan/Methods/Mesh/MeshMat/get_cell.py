@@ -33,7 +33,7 @@ def get_cell(self, indices=None):
             connect = self.cell[key].get_connectivity(ind)
             if connect is not None:
                 cells[key].append(connect)
-                nb_cell = len(connect)
+                nb_cell = nb_cell + len(connect)
                 indice_dict[key].append(ind)
 
         cells[key] = np.squeeze(np.array(cells[key]))

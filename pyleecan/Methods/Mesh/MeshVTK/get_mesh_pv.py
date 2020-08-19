@@ -4,7 +4,7 @@ import pyvista as pv
 from meshio import read
 
 
-def get_mesh(self, indices=None):
+def get_mesh_pv(self, indices=None):
     """Return the pyvista mesh object (or submesh).
 
     Parameters

@@ -134,6 +134,7 @@ def get_meshsolution(self, save_path, j_t0):
 
     else:
         mesh = None
+        groups = None
 
     B = results[:, 0:2]
     H = results[:, 2:4]

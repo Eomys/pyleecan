@@ -89,7 +89,9 @@ def solve_FEMM(self, output, sym, FEMM_dict):
             )
 
         # Load mesh data & solution
-        if self.is_sliding_band and (self.is_get_mesh or self.is_save_FEA):
+        if (self.is_sliding_band or Nt_tot == 1) and (
+            self.is_get_mesh or self.is_save_FEA
+        ):
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
                 save_path, ii
             )

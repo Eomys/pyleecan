@@ -109,6 +109,13 @@ def generate_class(gen_dict, class_name, path_to_gen):
     if len(class_dict["methods"]) > 0:
         class_file.write("\n")
 
+    # ImportMatrixVal for ImportMatrix setter
+    if "ImportMatrix" in import_type_list:
+        class_file.write("from ..Classes.ImportMatrixVal import ImportMatrixVal\n")
+        class_file.write("from numpy import ndarray\n")
+        if "ndarray" not in import_type_list and "{ndarray}" not in import_type_list:
+            import_type_list.append("ndarray")
+    # Import Array from numpy
     if "{ndarray}" in import_type_list and "ndarray" in import_type_list:
         class_file.write("from numpy import array, empty, array_equal\n")
         import_type_list.remove("{ndarray}")

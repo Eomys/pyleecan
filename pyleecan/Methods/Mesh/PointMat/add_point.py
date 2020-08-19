@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def add_node(self, coord):
+def add_point(self, coord):
     """Define a new PointMat object based on a set of elements.
 
      Parameters

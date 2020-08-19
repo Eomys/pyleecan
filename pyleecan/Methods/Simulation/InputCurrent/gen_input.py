@@ -110,7 +110,7 @@ def gen_input(self):
                 values=transpose(Is),
             )
             # Compute corresponding Id/Iq reference
-            Idq = n2dq(output.Is.values, 2 * pi * output.felec * output.time)
+            Idq = n2dq(transpose(output.Is.values), 2 * pi * output.felec * output.time)
             output.Id_ref = mean(Idq[:, 0])
             output.Iq_ref = mean(Idq[:, 1])
 

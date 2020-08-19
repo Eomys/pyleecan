@@ -71,6 +71,22 @@ class test_DAVDuct(TestCase):
         self.assertEqual(self.widget.tab_vent.widget(1).w_vent.lf_D0.value(), 50e-3)
         self.assertEqual(self.widget.tab_vent.widget(1).w_vent.lf_Alpha0.value(), 0)
 
+        # Set Values
+        self.widget.tab_vent.widget(0).w_vent.si_Zh.setValue(10)
+        self.widget.tab_vent.widget(0).w_vent.lf_H0.setValue(11e-3)
+        self.widget.tab_vent.widget(0).w_vent.lf_D0.setValue(41e-3)
+        self.widget.tab_vent.widget(0).w_vent.lf_Alpha0.setValue(0.2)
+        # Raise signal to update object
+        self.widget.tab_vent.widget(0).w_vent.si_Zh.editingFinished.emit()
+        self.widget.tab_vent.widget(0).w_vent.lf_H0.editingFinished.emit()
+        self.widget.tab_vent.widget(0).w_vent.lf_D0.editingFinished.emit()
+        self.widget.tab_vent.widget(0).w_vent.lf_Alpha0.editingFinished.emit()
+        # Check changes
+        self.assertEqual(self.widget.lam.axial_vent[0].Zh, 10)
+        self.assertEqual(self.widget.lam.axial_vent[0].H0, 11e-3)
+        self.assertEqual(self.widget.lam.axial_vent[0].D0, 41e-3)
+        self.assertEqual(self.widget.lam.axial_vent[0].Alpha0, 0.2)
+
     def test_init_trap(self):
         """Check that the Widget initialise for polar ventilations"""
         # Init the widget with Polar vent
@@ -91,6 +107,28 @@ class test_DAVDuct(TestCase):
         self.assertEqual(self.widget.tab_vent.widget(0).w_vent.lf_W1.value(), 44e-3)
         self.assertEqual(self.widget.tab_vent.widget(0).w_vent.lf_W2.value(), 54e-3)
         self.assertEqual(self.widget.tab_vent.widget(0).w_vent.lf_Alpha0.value(), 0)
+
+        # Set Values
+        self.widget.tab_vent.widget(0).w_vent.si_Zh.setValue(12)
+        self.widget.tab_vent.widget(0).w_vent.lf_H0.setValue(12e-3)
+        self.widget.tab_vent.widget(0).w_vent.lf_D0.setValue(42e-3)
+        self.widget.tab_vent.widget(0).w_vent.lf_W1.setValue(45e-3)
+        self.widget.tab_vent.widget(0).w_vent.lf_W2.setValue(55e-3)
+        self.widget.tab_vent.widget(0).w_vent.lf_Alpha0.setValue(0.3)
+        # Raise signal to update object
+        self.widget.tab_vent.widget(0).w_vent.si_Zh.editingFinished.emit()
+        self.widget.tab_vent.widget(0).w_vent.lf_H0.editingFinished.emit()
+        self.widget.tab_vent.widget(0).w_vent.lf_D0.editingFinished.emit()
+        self.widget.tab_vent.widget(0).w_vent.lf_W1.editingFinished.emit()
+        self.widget.tab_vent.widget(0).w_vent.lf_W2.editingFinished.emit()
+        self.widget.tab_vent.widget(0).w_vent.lf_Alpha0.editingFinished.emit()
+        # Check changes
+        self.assertEqual(self.widget.lam.axial_vent[0].Zh, 12)
+        self.assertEqual(self.widget.lam.axial_vent[0].H0, 12e-3)
+        self.assertEqual(self.widget.lam.axial_vent[0].D0, 42e-3)
+        self.assertEqual(self.widget.lam.axial_vent[0].W1, 45e-3)
+        self.assertEqual(self.widget.lam.axial_vent[0].W2, 55e-3)
+        self.assertEqual(self.widget.lam.axial_vent[0].Alpha0, 0.3)
 
     def test_init_polar(self):
         """Check that the Widget initialise for polar ventilations
@@ -133,6 +171,25 @@ class test_DAVDuct(TestCase):
         self.assertEqual(self.widget.tab_vent.widget(2).w_vent.lf_D0.value(), 33e-3)
         self.assertEqual(self.widget.tab_vent.widget(2).w_vent.lf_W1.value(), 43e-3)
         self.assertEqual(self.widget.tab_vent.widget(2).w_vent.lf_Alpha0.value(), 0)
+
+        # Set Values
+        self.widget.tab_vent.widget(1).w_vent.si_Zh.setValue(9)
+        self.widget.tab_vent.widget(1).w_vent.lf_H0.setValue(33e-3)
+        self.widget.tab_vent.widget(1).w_vent.lf_D0.setValue(44e-3)
+        self.widget.tab_vent.widget(1).w_vent.lf_W1.setValue(55e-3)
+        self.widget.tab_vent.widget(1).w_vent.lf_Alpha0.setValue(0.4)
+        # Raise signal to update object
+        self.widget.tab_vent.widget(1).w_vent.si_Zh.editingFinished.emit()
+        self.widget.tab_vent.widget(1).w_vent.lf_H0.editingFinished.emit()
+        self.widget.tab_vent.widget(1).w_vent.lf_D0.editingFinished.emit()
+        self.widget.tab_vent.widget(1).w_vent.lf_W1.editingFinished.emit()
+        self.widget.tab_vent.widget(1).w_vent.lf_Alpha0.editingFinished.emit()
+        # Check changes
+        self.assertEqual(self.widget.lam.axial_vent[1].Zh, 9)
+        self.assertEqual(self.widget.lam.axial_vent[1].H0, 33e-3)
+        self.assertEqual(self.widget.lam.axial_vent[1].D0, 44e-3)
+        self.assertEqual(self.widget.lam.axial_vent[1].W1, 55e-3)
+        self.assertEqual(self.widget.lam.axial_vent[1].Alpha0, 0.4)
 
     def test_init_all_type(self):
         """Check that you can combine several kind of ventilations

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import pytest
 from unittest import TestCase
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
@@ -7,19 +7,21 @@ from pyleecan.Classes.PointMat import PointMat
 import numpy as np
 
 
+@pytest.mark.MeshSol
 class unittest_get_vertice(TestCase):
     """unittest for Mesh and Element get_all_connectivity methods"""
 
+    @classmethod
     def setUp(self):
         self.mesh = MeshMat()
         self.mesh.cell["triangle"] = CellMat(nb_pt_per_cell=3)
         self.mesh.cell["segment"] = CellMat(nb_pt_per_cell=2)
         self.mesh.point = PointMat()
-        self.mesh.point.add_node(np.array([0, 0]))
-        self.mesh.point.add_node(np.array([1, 0]))
-        self.mesh.point.add_node(np.array([1, 2]))
-        self.mesh.point.add_node(np.array([2, 3]))
-        self.mesh.point.add_node(np.array([3, 3]))
+        self.mesh.point.add_point(np.array([0, 0]))
+        self.mesh.point.add_point(np.array([1, 0]))
+        self.mesh.point.add_point(np.array([1, 2]))
+        self.mesh.point.add_point(np.array([2, 3]))
+        self.mesh.point.add_point(np.array([3, 3]))
 
         self.mesh.add_cell(np.array([0, 1, 2]), "triangle", group_name="stator")
         self.mesh.add_cell(np.array([1, 2, 3]), "triangle", group_name="stator")
