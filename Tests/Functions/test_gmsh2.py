@@ -11,7 +11,7 @@ from pyleecan.Functions.GMSH.draw_GMSH import draw_GMSH
 
 
 @pytest.mark.long
-@pytest.mark.GMSH2D
+@pytest.mark.GMSH
 def test_gmsh_2d():
     """Check generation of the 2D mesh with gmsh
     """
