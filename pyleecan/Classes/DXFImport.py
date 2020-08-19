@@ -87,6 +87,8 @@ class DXFImport(FrozenClass):
         self.parent = None
         self.file_path = file_path
         self.surf_dict = surf_dict
+        if BC_list == -1:
+            BC_list = []
         self.BC_list = BC_list
 
         # The class is frozen, for now it's impossible to add new properties

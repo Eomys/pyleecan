@@ -37,6 +37,8 @@ def test_():
     Electric Machines & Drives Conference (IEMDC), 2013 IEEE International, Chicago, IL, 2013, pp. 295-302.
     Test compute the Flux in FEMM, with and without DXF Import
     """
+
+
 IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
 simu = Simu1(name="DXF_import", machine=IPMSM_A)

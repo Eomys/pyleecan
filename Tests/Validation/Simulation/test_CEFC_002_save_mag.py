@@ -69,6 +69,9 @@ def test_CEFC_002():
     out.save(save_path=load_path)
 
     out.mag.meshsolution.plot_mesh(save_path=join(save_path, "CEFC_002_mesh_save.png"),)
+
+    out.mag.meshsolution.plot_mesh(group_names=["stator", "/", "airgap"])
+
     out.mag.meshsolution.plot_contour(
         label="\mu", save_path=join(save_path, "CEFC_002_mu_save.png"),
     )
@@ -89,13 +92,9 @@ def test_CEFC_002():
         save_path=join(save_path, "CEFC_002_mu_stator_airgap_save.png"),
     )
 
-    out.mag.meshsolution.plot_contour(
-        label="\mu", group_names=["stator", "/", "airgap"],
-    )
-
 
 def test_CEFC_002_load():
-
+    save_path = "C:\\Users\\Raphael\\Desktop\\Git\\pyleecan_tests\\pyleecan\\Results\\SM_CEFC_002_save_mag"
     load_path = join(save_path, "Output.json")
     # Test to load the Meshsolution object (inside the output):
     with open(load_path) as json_file:
@@ -104,6 +103,9 @@ def test_CEFC_002_load():
 
     # [Important] To test that fields are still working after saving and loading
     FEMM.mag.meshsolution.plot_mesh(save_path=join(save_path, "CEFC_002_mesh_load.png"))
+
+    FEMM.mag.meshsolution.plot_mesh(group_names=["stator", "/", "airgap"])
+
     FEMM.mag.meshsolution.plot_contour(
         label="\mu",
         group_names=["stator", "airgap"],
@@ -116,4 +118,8 @@ def test_CEFC_002_load():
         label="H",
         group_names="stator",
         save_path=join(save_path, "CEFC_002_H_stator_load.png"),
+    )
+
+    FEMM.mag.meshsolution.plot_contour(
+        label="H", group_names=["stator", "/", "airgap"],
     )

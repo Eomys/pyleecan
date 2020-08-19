@@ -16,7 +16,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
-from pyleecan.Classes.OptiObjFunc import OptiObjFunc
+from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
@@ -635,36 +635,48 @@ def test_Optimization_problem():
         sp = 2 / N * np.abs(sp)
         return sp[1]
 
-    objs = {
-        "Opposite average torque (Nm)": OptiObjFunc(
-            description="Maximization of the average torque", func=harm1
+    objs = [
+        DataKeeper(
+            name="Maximization of the average torque",
+            symbol="Tem_av",
+            unit="N.m",
+            keeper=harm1,
         ),
-        "First torque harmonic (Nm)": OptiObjFunc(
-            description="Minimization of the first torque harmonic", func=harm2
+        DataKeeper(
+            name="Minimization of the first torque harmonic",
+            symbol="Tem_h1",
+            unit="N.m",
+            keeper=harm2,
         ),
-    }
+    ]
 
     # Design variables
-    my_vars = {
-        "design var 1": OptiDesignVar(
-            name="output.simu.machine.stator.slot.W0",
+    my_vars = [
+        OptiDesignVar(
+            name="Stator slot opening",
+            symbol="W0",
+            unit="m",
             type_var="interval",
             space=[
                 0.2 * output.simu.machine.stator.slot.W2,
                 output.simu.machine.stator.slot.W2,
             ],
-            function=lambda space: random.uniform(*space),
+            get_value=lambda space: random.uniform(*space),
+            setter="simu.machine.stator.slot.W0",
         ),
-        "design var 2": OptiDesignVar(
-            name="output.simu.machine.rotor.slot.magnet[0].Wmag",
+        OptiDesignVar(
+            name="Rotor magnet width",
+            symbol="Wmag",
+            unit="m",
             type_var="interval",
             space=[
                 0.5 * output.simu.machine.rotor.slot.W0,
                 0.99 * output.simu.machine.rotor.slot.W0,
             ],  # May generate error in FEMM
-            function=lambda space: random.uniform(*space),
+            get_value=lambda space: random.uniform(*space),
+            setter="simu.machine.rotor.slot.magnet[0].Wmag",
         ),
-    }
+    ]
 
     # Problem creation
     my_prob = OptiProblem(output=output, design_var=my_vars, obj_func=objs)
@@ -677,42 +689,50 @@ def test_Optimization_problem():
     # PLOTS RESULTS #
     # ------------- #
 
-    res.plot_generation()
+    res.plot_generation(x_symbol="Tem_av", y_symbol="Tem_h1")
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_20_Individuals_in_fitness_space.png"))
     fig.savefig(
         join(save_path, "fig_20_Individuals_in_fitness_space.svg"), format="svg"
     )
 
-    res.plot_pareto()
+    res.plot_pareto(x_symbol="Tem_av", y_symbol="Tem_h1")
     fig = plt.gcf()
     fig.savefig(join(save_path, "Pareto_front_in_fitness_space.png"))
     fig.savefig(join(save_path, "Pareto_front_in_fitness_space.svg"), format="svg")
 
     # Extraction of best topologies for every objective
-    pareto = res.get_pareto()  # Extraction of the pareto front
+    pareto_index = (
+        res.get_pareto_index()
+    )  # Extract individual index in the pareto front
 
-    out1 = [pareto[0]["output"], pareto[0]["fitness"]]  # First objective
-    out2 = [pareto[0]["output"], pareto[0]["fitness"]]  # Second objective
+    idx_1 = pareto_index[0]  # First objective
+    idx_2 = pareto_index[0]  # Second objective
 
-    for pm in pareto:
-        if pm["fitness"][0] < out1[1][0]:
-            out1 = [pm["output"], pm["fitness"]]
-        if pm["fitness"][1] < out2[1][1]:
-            out2 = [pm["output"], pm["fitness"]]
+    for i in pareto_index:
+        # First objective
+        if res["Tem_av"][i] < res["Tem_av"][idx_1]:
+            idx_1 = i
+        # Second objective
+        if res["Tem_h1"][i] < res["Tem_h1"][idx_2]:
+            idx_2 = i
+
+    # Get corresponding simulations
+    simu1 = res.get_simu(idx_1)
+    simu2 = res.get_simu(idx_2)
 
     # Rename machine to modify the title
     name1 = "Machine that maximizes the average torque ({:.3f} Nm)".format(
-        abs(out1[1][0])
+        abs(res["Tem_av"][idx_1])
     )
-    out1[0].simu.machine.name = name1
+    simu1.machine.name = name1
     name2 = "Machine that minimizes the first torque harmonic ({:.4f}Nm)".format(
-        abs(out1[1][1])
+        abs(res["Tem_h1"][idx_2])
     )
-    out2[0].simu.machine.name = name2
+    simu2.machine.name = name2
 
     # plot the machine
-    out1[0].simu.machine.plot()
+    simu1.machine.plot()
     fig = plt.gcf()
     fig.savefig(
         join(save_path, "fig_21_Topology_to_maximize_average_torque.png"), format="png"
@@ -721,7 +741,7 @@ def test_Optimization_problem():
         join(save_path, "fig_21_Topology_to_maximize_average_torque.svg"), format="svg"
     )
 
-    out2[0].simu.machine.plot()
+    simu2.machine.plot()
     fig = plt.gcf()
     fig.savefig(
         join(save_path, "fig_21_Topology_to_minimize_first_torque_harmonic.png"),

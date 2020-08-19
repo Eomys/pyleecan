@@ -9,7 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
-from ._frozen import FrozenClass
+from .ParamExplorer import ParamExplorer
 
 from inspect import getsource
 from cloudpickle import dumps, loads
@@ -17,7 +17,7 @@ from ._check import CheckTypeError
 from ._check import InitUnKnowClassError
 
 
-class OptiDesignVar(FrozenClass):
+class OptiDesignVar(ParamExplorer):
     """Optimization"""
 
     VERSION = 1
@@ -36,10 +36,13 @@ class OptiDesignVar(FrozenClass):
 
     def __init__(
         self,
-        name="",
         type_var="interval",
         space=[0, 1],
-        function=None,
+        get_value=None,
+        name="",
+        symbol="",
+        unit="",
+        setter=None,
         init_dict=None,
         init_str=None,
     ):
@@ -61,42 +64,49 @@ class OptiDesignVar(FrozenClass):
             # load the object from a file
             obj = load(init_str)
             assert type(obj) is type(self)
-            name = obj.name
             type_var = obj.type_var
             space = obj.space
-            function = obj.function
+            get_value = obj.get_value
+            name = obj.name
+            symbol = obj.symbol
+            unit = obj.unit
+            setter = obj.setter
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "name" in list(init_dict.keys()):
-                name = init_dict["name"]
             if "type_var" in list(init_dict.keys()):
                 type_var = init_dict["type_var"]
             if "space" in list(init_dict.keys()):
                 space = init_dict["space"]
-            if "function" in list(init_dict.keys()):
-                function = init_dict["function"]
+            if "get_value" in list(init_dict.keys()):
+                get_value = init_dict["get_value"]
+            if "name" in list(init_dict.keys()):
+                name = init_dict["name"]
+            if "symbol" in list(init_dict.keys()):
+                symbol = init_dict["symbol"]
+            if "unit" in list(init_dict.keys()):
+                unit = init_dict["unit"]
+            if "setter" in list(init_dict.keys()):
+                setter = init_dict["setter"]
         # Initialisation by argument
-        self.parent = None
-        self.name = name
         self.type_var = type_var
+        if space == -1:
+            space = []
         self.space = space
-        self.function = function
-
-        # The class is frozen, for now it's impossible to add new properties
-        self._freeze()
+        self.get_value = get_value
+        # Call ParamExplorer init
+        super(OptiDesignVar, self).__init__(
+            name=name, symbol=symbol, unit=unit, setter=setter
+        )
+        # The class is frozen (in ParamExplorer init), for now it's impossible to
+        # add new properties
 
     def __str__(self):
         """Convert this objet in a readeable string (for print)"""
 
         OptiDesignVar_str = ""
-        if self.parent is None:
-            OptiDesignVar_str += "parent = None " + linesep
-        else:
-            OptiDesignVar_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
-        OptiDesignVar_str += 'name = "' + str(self.name) + '"' + linesep
+        # Get the properties inherited from ParamExplorer
+        OptiDesignVar_str += super(OptiDesignVar, self).__str__()
         OptiDesignVar_str += 'type_var = "' + str(self.type_var) + '"' + linesep
         OptiDesignVar_str += (
             "space = "
@@ -104,11 +114,11 @@ class OptiDesignVar(FrozenClass):
             + str(self.space).replace(linesep, linesep + "\t")
             + linesep
         )
-        if self._function[1] is None:
-            OptiDesignVar_str += "function = " + str(self._function[1])
+        if self._get_value[1] is None:
+            OptiDesignVar_str += "get_value = " + str(self._get_value[1])
         else:
             OptiDesignVar_str += (
-                "function = " + linesep + str(self._function[1]) + linesep + linesep
+                "get_value = " + linesep + str(self._get_value[1]) + linesep + linesep
             )
         return OptiDesignVar_str
 
@@ -117,13 +127,15 @@ class OptiDesignVar(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.name != self.name:
+
+        # Check the properties inherited from ParamExplorer
+        if not super(OptiDesignVar, self).__eq__(other):
             return False
         if other.type_var != self.type_var:
             return False
         if other.space != self.space:
             return False
-        if other.function != self.function:
+        if other.get_value != self.get_value:
             return False
         return True
 
@@ -131,46 +143,30 @@ class OptiDesignVar(FrozenClass):
         """Convert this objet in a json seriable dict (can be use in __init__)
         """
 
-        OptiDesignVar_dict = dict()
-        OptiDesignVar_dict["name"] = self.name
+        # Get the properties inherited from ParamExplorer
+        OptiDesignVar_dict = super(OptiDesignVar, self).as_dict()
         OptiDesignVar_dict["type_var"] = self.type_var
         OptiDesignVar_dict["space"] = self.space
-        if self.function is None:
-            OptiDesignVar_dict["function"] = None
+        if self.get_value is None:
+            OptiDesignVar_dict["get_value"] = None
         else:
-            OptiDesignVar_dict["function"] = [
-                dumps(self._function[0]).decode("ISO-8859-2"),
-                self._function[1],
+            OptiDesignVar_dict["get_value"] = [
+                dumps(self._get_value[0]).decode("ISO-8859-2"),
+                self._get_value[1],
             ]
         # The class name is added to the dict fordeserialisation purpose
+        # Overwrite the mother class name
         OptiDesignVar_dict["__class__"] = "OptiDesignVar"
         return OptiDesignVar_dict
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.name = None
         self.type_var = None
         self.space = None
-        self.function = None
-
-    def _get_name(self):
-        """getter of name"""
-        return self._name
-
-    def _set_name(self, value):
-        """setter of name"""
-        check_var("name", value, "str")
-        self._name = value
-
-    name = property(
-        fget=_get_name,
-        fset=_set_name,
-        doc=u"""name of the design variable
-
-        :Type: str
-        """,
-    )
+        self.get_value = None
+        # Set to None the properties inherited from ParamExplorer
+        super(OptiDesignVar, self)._set_None()
 
     def _get_type_var(self):
         """getter of type_var"""
@@ -208,30 +204,30 @@ class OptiDesignVar(FrozenClass):
         """,
     )
 
-    def _get_function(self):
-        """getter of function"""
-        return self._function[0]
+    def _get_get_value(self):
+        """getter of get_value"""
+        return self._get_value[0]
 
-    def _set_function(self, value):
-        """setter of function"""
+    def _set_get_value(self, value):
+        """setter of get_value"""
         try:
-            check_var("function", value, "list")
+            check_var("get_value", value, "list")
         except CheckTypeError:
-            check_var("function", value, "function")
+            check_var("get_value", value, "function")
         if isinstance(value, list):  # Load function from saved dict
-            self._function = [loads(value[0].encode("ISO-8859-2")), value[1]]
+            self._get_value = [loads(value[0].encode("ISO-8859-2")), value[1]]
         elif value is None:
-            self._function = [None, None]
+            self._get_value = [None, None]
         elif callable(value):
-            self._function = [value, getsource(value)]
+            self._get_value = [value, getsource(value)]
         else:
             raise TypeError(
                 "Expected function or list from a saved file, got: " + str(type(value))
             )
 
-    function = property(
-        fget=_get_function,
-        fset=_set_function,
+    get_value = property(
+        fget=_get_get_value,
+        fset=_set_get_value,
         doc=u"""Function of the space to initiate the variable
 
         :Type: function
