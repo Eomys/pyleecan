@@ -498,7 +498,7 @@ def test_ecc_FEMM():
     )
     # Plot, check, save
     out.mag.meshsolution.plot_mesh(
-        save_path=join(save_path, "fig_19_transform_list.png"), is_2d=True
+        save_path=join(save_path, "fig_19_transform_list.png")
     )
 
 

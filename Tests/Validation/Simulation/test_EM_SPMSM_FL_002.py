@@ -1,19 +1,19 @@
-from os.path import join
+# -*- coding: utf-8 -*-
 
-import matplotlib.pyplot as plt
+# External import
 import pytest
 from numpy import array, ones, pi
+from os.path import join
 
+# Pyleecan import
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatlab import ImportMatlab
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.InputFlux import InputFlux
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-from pyleecan.Classes.Simu1 import Simu1
-from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
 from Tests import save_validation_path as save_path
 
 SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
@@ -22,6 +22,7 @@ SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
+@pytest.mark.MeshSol
 def test_Magnetic_FEMM_sym():
     """Validation of a polar SIPMSM with surface magnet
     Linear lamination material
@@ -36,7 +37,7 @@ def test_Magnetic_FEMM_sym():
     simu = Simu1(name="EM_SPMSM_FL_002", machine=SPMSM_003)
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(4) * 3000)
+    N0 = 3000
     Is = ImportMatrixVal(
         value=array(
             [
@@ -53,7 +54,7 @@ def test_Magnetic_FEMM_sym():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
@@ -81,14 +82,19 @@ def test_Magnetic_FEMM_sym():
     simu_sym.run()
 
     out.mag.meshsolution.plot_mesh(
-        save_path=join(save_path, "EM_SPMSM_FL_002_mesh.png"), is_2d=True
+        save_path=join(save_path, "EM_SPMSM_FL_002_mesh.png")
+    )
+
+    out.mag.meshsolution.plot_mesh(
+        group_names=["stator", "/", "airgap", "stator_windings"]
+    )
+
+    out.mag.meshsolution.plot_contour(
+        label="\mu", save_path=join(save_path, "EM_SPMSM_FL_002_mu.png")
     )
     out.mag.meshsolution.plot_contour(
-        label="\mu", save_path=join(save_path, "EM_SPMSM_FL_002_mu.png"), is_2d=True
+        label="B", save_path=join(save_path, "EM_SPMSM_FL_002_B.png")
     )
     out.mag.meshsolution.plot_contour(
-        label="B", save_path=join(save_path, "EM_SPMSM_FL_002_B.png"), is_2d=True
-    )
-    out.mag.meshsolution.plot_contour(
-        label="H", save_path=join(save_path, "EM_SPMSM_FL_002_H.png"), is_2d=True
+        label="H", save_path=join(save_path, "EM_SPMSM_FL_002_H.png")
     )

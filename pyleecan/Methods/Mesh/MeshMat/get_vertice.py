@@ -22,7 +22,7 @@ def get_vertice(self, indices=None):
 
     """
 
-    cells = self.get_cell(indices=indices)
+    cells, nb_cell, indices = self.get_cell(indices=indices)
     vertices = dict()
     for key in cells:
         vertices[key] = self.get_point(cells[key])

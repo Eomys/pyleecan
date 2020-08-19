@@ -12,7 +12,7 @@ from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-
+from pyleecan.Classes.Electrical import Electrical
 from pyleecan.Classes.EEC_PMSM import EEC_PMSM
 from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
 from pyleecan.Classes.IndMagFEMM import IndMagFEMM
@@ -65,6 +65,7 @@ def test_E_IPMSM_FL_002():
     )
 
     # Definition of the electrical simulation (FEMM)
+    simu.elec = Electrical()
     simu.elec.eec = EEC_PMSM(
         indmag=IndMagFEMM(is_symmetry_a=True, sym_a=4, is_antiper_a=True, Nt_tot=3),
         fluxlink=FluxLinkFEMM(is_symmetry_a=True, sym_a=4, is_antiper_a=True, Nt_tot=3),

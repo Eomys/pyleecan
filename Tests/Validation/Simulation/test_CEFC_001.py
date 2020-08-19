@@ -1,15 +1,13 @@
-from numpy import ones, pi, array
-
+# -*- coding: utf-8 -*-
+import pytest
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
-
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-import pytest
+from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
+from numpy import ones, pi, array
 
 
 @pytest.mark.long

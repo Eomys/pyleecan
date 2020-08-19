@@ -25,10 +25,11 @@ def get_mesh_pv(self, path="temp.vtk", indices=None):
     cells, nb_cell, indice_dict = self.get_cell()
 
     # for key in cells:
-    cells = [("triangle", cells["triangle"])]  # TODO : Generalize to any cell type
+    for key in cells:
+        cells_meshio = [(key, cells[key])]  # TODO : Generalize to any cell type
 
-    # Write .vtk file using meshio
-    meshio.write_points_cells(filename=path, points=points, cells=cells)
+        # Write .vtk file using meshio
+        meshio.write_points_cells(filename=path, points=points, cells=cells_meshio)
 
     # Read .vtk file with pyvista
     mesh = pv.read(path)

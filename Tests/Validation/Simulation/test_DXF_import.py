@@ -90,7 +90,6 @@ def test_():
     out.plot_A_space(
         "mag.B",
         data_list=[out2.mag.B],
-        is_deg=False,
         color_list=["k", "r"],
         legend_list=["Rotor from DXF", "Rotor from pyleecan"],
     )
