@@ -16,7 +16,7 @@
         "methods": [
             "draw_FEMM",
             "intersect_line",
-            "is_on_arc",
+            "is_on_line",
             "split_line",
             "comp_distance"
         ],
