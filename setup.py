@@ -62,7 +62,7 @@ setuptools.setup(
     download_url="https://github.com/Eomys/pyleecan/SciDataTool/archive/"
     + PYLEECAN_VERSION
     + ".tar.gz",
-    packages=setuptools.find_packages(exclude=["Tests", "Tutorials"]),
+    packages=setuptools.find_packages(exclude=["Tests*", "Tutorials*"]),
     package_data={
         # Include any *.json files found in pyleecan:
         # '': ['*.json'],

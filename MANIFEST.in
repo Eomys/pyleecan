@@ -1,3 +1,4 @@
+include LICENSE README.md
 prune Tests
 prune Tutorials
 graft pyleecan
