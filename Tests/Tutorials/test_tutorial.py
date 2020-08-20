@@ -4,7 +4,7 @@ import pytest
 from Tests import TEST_DIR
 from os.path import join, abspath, isfile
 
-TUTO_DIR = join(join(TEST_DIR, ".."), "Tutorials")
+TUTO_DIR = abspath(join(TEST_DIR, "..", "Tutorials"))
 
 
 @pytest.mark.tutorial
@@ -17,7 +17,7 @@ def test_short_tutorial(tuto_name):
 
     # Execute it
     ep = ExecutePreprocessor(timeout=-1, kernel_name="python3")
-    ep.preprocess(nb, {"metadata": {"path": TUTO_DIR}})
+    ep.preprocess(nb, {"metadata": {"path": abspath(join(TEST_DIR, ".."))}})
 
 
 @pytest.mark.tutorial
@@ -31,4 +31,4 @@ def test_long_tutorial(tuto_name):
 
     # Execute it
     ep = ExecutePreprocessor(timeout=-1, kernel_name="python3")
-    ep.preprocess(nb, {"metadata": {"path": TUTO_DIR}})
+    ep.preprocess(nb, {"metadata": {"path": abspath(join(TEST_DIR, ".."))}})
