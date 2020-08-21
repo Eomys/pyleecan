@@ -56,10 +56,8 @@ def plot_A_surf(
     xlabel = "Time [s]"
     if is_deg:
         ylabel = "Angle [°]"
-        yticks = [0, 60, 120, 180, 240, 300, 360]
     else:
         ylabel = "Angle [rad]"
-        yticks = (None,)
     if unit == "SI":
         unit = data.unit
     if is_norm:
@@ -76,6 +74,11 @@ def plot_A_surf(
     angle = results["angle"]
     time = results["time"]
     Ydata = results[data.symbol]
+
+    if is_deg and round(max(angle) / 6) % 5 == 0:
+        yticks = [i * round(max(angle) / 6) for i in range(7)]
+    else:
+        yticks = None
 
     angle_map, time_map = meshgrid(angle, time)
 
