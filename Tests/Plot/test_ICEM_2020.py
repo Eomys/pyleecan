@@ -525,7 +525,7 @@ def test_Optimization_problem():
     # This simulation will the base of every simulation during the optimization process
 
     # Load the machine
-    SPMSM_001 = load("pyleecan/Tests/Validation/Machine/SPMSM_001.json")
+    SPMSM_001 = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
 
     # Definition of the enforced output of the electrical module
     Na = 1024  # Angular steps
@@ -612,41 +612,32 @@ def test_Optimization_problem():
     fig.savefig(
         join(save_path, "fig_21_Machine_topology_before_optimization.svg"), format="svg"
     )
-
+    plt.close("all")
     # -------------------- #
     # OPTIMIZATION PROBLEM #
     # -------------------- #
 
     # Objective functions
-
-    def harm1(output):
+    def tem_av(output):
         """Return the average torque opposite (opposite to be maximized)"""
-        N = output.simu.input.time.num
-        x = output.mag.Tem.values[:, 0]
-        sp = np.fft.rfft(x)
-        sp = 2 / N * np.abs(sp)
-        return -sp[0] / 2
+        return -abs(output.mag.Tem_av)
 
-    def harm2(output):
-        """Return the first torque harmonic """
-        N = output.simu.input.time.num
-        x = output.mag.Tem.values[:, 0]
-        sp = np.fft.rfft(x)
-        sp = 2 / N * np.abs(sp)
-        return sp[1]
+    def Tem_rip_pp(output):
+        """Return the torque ripple """
+        return abs(output.mag.Tem_rip_pp)
 
-    objs = [
+    my_objs = [
         DataKeeper(
             name="Maximization of the average torque",
             symbol="Tem_av",
             unit="N.m",
-            keeper=harm1,
+            keeper=tem_av,
         ),
         DataKeeper(
-            name="Minimization of the first torque harmonic",
-            symbol="Tem_h1",
+            name="Minimization of the torque ripple",
+            symbol="Tem_rip_pp",
             unit="N.m",
-            keeper=harm2,
+            keeper=Tem_rip_pp,
         ),
     ]
 
@@ -679,7 +670,7 @@ def test_Optimization_problem():
     ]
 
     # Problem creation
-    my_prob = OptiProblem(output=output, design_var=my_vars, obj_func=objs)
+    my_prob = OptiProblem(output=output, design_var=my_vars, obj_func=my_objs)
 
     # Solve problem with NSGA-II
     solver = OptiGenAlgNsga2Deap(problem=my_prob, size_pop=12, nb_gen=40, p_mutate=0.5)
@@ -689,14 +680,14 @@ def test_Optimization_problem():
     # PLOTS RESULTS #
     # ------------- #
 
-    res.plot_generation(x_symbol="Tem_av", y_symbol="Tem_h1")
+    res.plot_generation(x_symbol="Tem_av", y_symbol="Tem_rip_pp")
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_20_Individuals_in_fitness_space.png"))
     fig.savefig(
         join(save_path, "fig_20_Individuals_in_fitness_space.svg"), format="svg"
     )
 
-    res.plot_pareto(x_symbol="Tem_av", y_symbol="Tem_h1")
+    res.plot_pareto(x_symbol="Tem_av", y_symbol="Tem_rip_pp")
     fig = plt.gcf()
     fig.savefig(join(save_path, "Pareto_front_in_fitness_space.png"))
     fig.savefig(join(save_path, "Pareto_front_in_fitness_space.svg"), format="svg")
@@ -709,12 +700,15 @@ def test_Optimization_problem():
     idx_1 = pareto_index[0]  # First objective
     idx_2 = pareto_index[0]  # Second objective
 
+    Tem_av = res["Tem_av"].result
+    Tem_rip_pp = res["Tem_rip_pp"].result
+
     for i in pareto_index:
         # First objective
-        if res["Tem_av"][i] < res["Tem_av"][idx_1]:
+        if Tem_av[i] < Tem_av[idx_1]:
             idx_1 = i
         # Second objective
-        if res["Tem_h1"][i] < res["Tem_h1"][idx_2]:
+        if Tem_rip_pp[i] < Tem_rip_pp[idx_2]:
             idx_2 = i
 
     # Get corresponding simulations
@@ -723,11 +717,11 @@ def test_Optimization_problem():
 
     # Rename machine to modify the title
     name1 = "Machine that maximizes the average torque ({:.3f} Nm)".format(
-        abs(res["Tem_av"][idx_1])
+        abs(Tem_av[idx_1])
     )
     simu1.machine.name = name1
-    name2 = "Machine that minimizes the first torque harmonic ({:.4f}Nm)".format(
-        abs(res["Tem_h1"][idx_2])
+    name2 = "Machine that minimizes the torque ripple ({:.4f}Nm)".format(
+        abs(Tem_rip_pp[idx_2])
     )
     simu2.machine.name = name2
 
@@ -744,10 +738,8 @@ def test_Optimization_problem():
     simu2.machine.plot()
     fig = plt.gcf()
     fig.savefig(
-        join(save_path, "fig_21_Topology_to_minimize_first_torque_harmonic.png"),
-        format="png",
+        join(save_path, "fig_21_Topology_to_minimize_torque_ripple.png"), format="png",
     )
     fig.savefig(
-        join(save_path, "fig_21_Topology_to_minimize_first_torque_harmonic.svg"),
-        format="svg",
+        join(save_path, "fig_21_Topology_to_minimize_torque_ripple.svg"), format="svg",
     )

@@ -2,7 +2,7 @@ from numpy import linspace, sin, squeeze
 from unittest import TestCase
 from os.path import join
 import matplotlib.pyplot as plt
-from Tests import save_validation_path as save_path
+from Tests import save_plot_path as save_path
 import pytest
 
 from pyleecan.Classes.Simu1 import Simu1
