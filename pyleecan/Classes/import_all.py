@@ -148,6 +148,7 @@ from ..Classes.SlotW28 import SlotW28
 from ..Classes.SlotW29 import SlotW29
 from ..Classes.SlotW60 import SlotW60
 from ..Classes.SlotW61 import SlotW61
+from ..Classes.SlotWLSPRM import SlotWLSPRM
 from ..Classes.SlotWind import SlotWind
 from ..Classes.Solution import Solution
 from ..Classes.Structural import Structural

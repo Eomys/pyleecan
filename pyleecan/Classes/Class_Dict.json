@@ -7048,6 +7048,7 @@
             "SlotW29",
             "SlotW60",
             "SlotW61",
+            "SlotWLSPRM",
             "SlotWind"
         ],
         "desc": "Generic class for slot (abstract)",
@@ -8967,6 +8968,83 @@
             }
         ]
     },
+    "SlotWLSPRM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Open Rectangular or trapezoidal slot with wedge",
+        "is_internal": false,
+        "methods": [
+            "_comp_point_coordinate",
+            "build_geometry",
+            "build_geometry_wind",
+            "check",
+            "comp_angle_opening",
+            "comp_height",
+            "comp_height_wind",
+            "comp_surface",
+            "comp_surface_wind"
+        ],
+        "mother": "SlotWind",
+        "name": "SlotWLSPRM",
+        "package": "Slot",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotWLSPRM.csv",
+        "properties": [
+            {
+                "desc": "Slot bottom side width.",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.008
+            },
+            {
+                "desc": "Tooth width",
+                "max": "",
+                "min": "0",
+                "name": "W3",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0116
+            },
+            {
+                "desc": "Slot yoke height",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0.007
+            },
+            {
+                "desc": "Slot height ",
+                "max": "",
+                "min": "0",
+                "name": "H2",
+                "type": "float",
+                "unit": "m",
+                "value": 0.0148
+            },
+            {
+                "desc": "Top radius",
+                "max": "",
+                "min": "",
+                "name": "R1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.00075
+            }
+        ]
+    },
     "SlotWind": {
         "constants": [
             {
@@ -8993,7 +9071,8 @@
             "SlotW28",
             "SlotW29",
             "SlotW60",
-            "SlotW61"
+            "SlotW61",
+            "SlotWLSPRM"
         ],
         "desc": "Slot for winding (abstract)",
         "is_internal": false,

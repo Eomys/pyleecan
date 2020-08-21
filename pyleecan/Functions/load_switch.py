@@ -150,6 +150,7 @@ load_switch = {
     "SlotW29": SlotW29,
     "SlotW60": SlotW60,
     "SlotW61": SlotW61,
+    "SlotWLSPRM": SlotWLSPRM,
     "SlotWind": SlotWind,
     "Solution": Solution,
     "Structural": Structural,

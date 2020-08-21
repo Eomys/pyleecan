@@ -298,6 +298,7 @@ class LamSlotMulti(Lamination):
                         "SlotW29",
                         "SlotW60",
                         "SlotW61",
+                        "SlotWLSPRM",
                         "SlotWind",
                     ]:
                         raise InitUnKnowClassError(
