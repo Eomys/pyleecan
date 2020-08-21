@@ -4,6 +4,8 @@ import imageio
 from os.path import join
 from os import remove
 from glob import glob
+from SciDataTool import VectorField
+from matplotlib.pyplot import subplots
 
 
 def animate_as_gif(
@@ -14,6 +16,7 @@ def animate_as_gif(
     index_var="t_index",
     index_max=50,
     index_step=1,
+    component_list=None,
     **kwargs
 ):
     """Animate an existing plot command as a gif: animate
@@ -34,6 +37,8 @@ def animate_as_gif(
         maximum value of the index
     index_step : int
         step for the index (number of frames = index_max / index_step)
+    component_list : list
+        list of component names to plot in separate figures
     kwargs : dict
         parameters of func
     """
@@ -41,19 +46,50 @@ def animate_as_gif(
     with imageio.get_writer(join(save_path, file_name), mode="I") as writer:
         if isinstance(data_list, list):
             for i, data in enumerate(data_list):
-                save_path_temp = save_path + "\\temp_" + str(i) + ".png"
-                kwargs["save_path"] = save_path_temp
-                func(data, **kwargs)
-                image = imageio.imread(save_path_temp)
-                writer.append_data(image)
+                if isinstance(data, VectorField):
+                    if component_list is None:  # default: extract all components
+                        component_list = data.components.keys()
+                    ncomp = len(component_list)
+                    fig, axs = subplots(2, ncomp, tight_layout=True, figsize=(20, 10))
+                    for j in range(0, index_max, index_step):
+                        save_path_temp = save_path + "\\temp_" + str(j) + ".png"
+                        kwargs["save_path"] = save_path_temp
+                        for k, comp in enumerate(component_list):
+                            func(data.components[comp], fig=fig, subplot_index=k, **kwargs)
+                        image = imageio.imread(save_path_temp)
+                        writer.append_data(image)
+                
+
+                else:
+                    for j in range(0, index_max, index_step):
+                        save_path_temp = save_path + "\\temp_" + str(j) + ".png"
+                        kwargs["save_path"] = save_path_temp
+                        func(data, **kwargs)
+                        image = imageio.imread(save_path_temp)
+                        writer.append_data(image)
+       
         else:
-            for i in range(0, index_max, index_step):
-                save_path_temp = save_path + "\\temp_" + str(i) + ".png"
-                kwargs[index_var] = i
-                kwargs["save_path"] = save_path_temp
-                func(data_list, **kwargs)
-                image = imageio.imread(save_path_temp)
-                writer.append_data(image)
+            if isinstance(data_list, VectorField):
+                if component_list is None:  # default: extract all components
+                    component_list = data.components.keys()
+                ncomp = len(component_list)
+                for j in range(0, index_max, index_step):
+                    fig, axs = subplots(1, ncomp, tight_layout=True, figsize=(20, 10))
+                    save_path_temp = save_path + "\\temp_" + str(j) + ".png"
+                    kwargs[index_var] = j
+                    kwargs["save_path"] = save_path_temp
+                    for k, comp in enumerate(component_list):
+                        func(data_list.components[comp], fig=fig, subplot_index=k, **kwargs)
+                    image = imageio.imread(save_path_temp)
+                    writer.append_data(image)
+            else:
+                for j in range(0, index_max, index_step):
+                    save_path_temp = save_path + "\\temp_" + str(j) + ".png"
+                    kwargs[index_var] = j
+                    kwargs["save_path"] = save_path_temp
+                    func(data_list, **kwargs)
+                    image = imageio.imread(save_path_temp)
+                    writer.append_data(image)
 
     for file in glob(save_path + "\\temp_*"):
         remove(file)
