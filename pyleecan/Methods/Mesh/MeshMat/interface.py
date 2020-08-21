@@ -6,7 +6,7 @@ from collections import Counter
 import numpy as np
 
 
-def interface(self, other_mesh):
+def interface(self, other_mesh, list_surf):
     """Define a MeshMat object corresponding to the exact intersection between two meshes (points must be in both meshes).
 
     Parameters
@@ -120,8 +120,35 @@ def interface(self, other_mesh):
             for i_seg in range(nb_elem_segm):
                 tag_two_points = elem2point_other_dict[seg_elem_tag[i_seg]]
                 # It is not really added if it already exist
-                # new_tag = new_mesh.get_new_tag()
                 new_mesh.add_cell(tag_two_points, "line")
+
+            # This last step aims to remove "bridge" lines: in a corner, the previous conditions are also fulfilled
+            # by the third side of the triangle. Thus, this additional line must be removed from the line-mesh.
+            connect_final = new_mesh.cell["line"].connectivity
+            connect_binar = np.zeros(connect_final.shape)
+            list_nd_final, nb_count = np.unique(connect_final, return_counts=True)
+            Ipos = np.where(nb_count > 2)[0]
+            for ind in Ipos:
+                Ipos_connect = np.where(list_nd_final[ind] == connect_final[:,0])[0]
+                connect_binar[Ipos_connect,0] = connect_binar[Ipos_connect,0] + 1
+                Ipos_connect = np.where(list_nd_final[ind] == connect_final[:,1])[0]
+                connect_binar[Ipos_connect,1] = connect_binar[Ipos_connect,1] + 1
+
+            sum_binar = np.sum(connect_binar, axis=1)
+            Iremove = np.where(sum_binar == 2)[0] # both sides of the line are already connected to
+            Irem2 = list()
+
+            for surf in list_surf:
+                for line in surf.get_lines():
+                    for ind_e in Iremove:
+                        ind = new_mesh.cell["line"].indice[ind_e]
+                        point = new_mesh.get_vertice(ind)["line"]
+                        mid_point = (point[0,0] + point[1,0])/2 + 1j*(point[0,1] + point[1,1])/2
+                        if line.is_on_line(mid_point):
+                            mid_point = 0
+                            break
+
+            new_mesh.cell["line"].connectivity = np.delete(connect_final, Irem2, axis=0)
 
     return new_mesh
     # TODO : Extend the code to higher dimension (3 points triangles for tetrahedra interfaces ...)
