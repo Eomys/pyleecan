@@ -2,5 +2,5 @@ Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximu
 indmag,-,Magnetic inductance,,IndMag,None,,,,Simulation,EEC,comp_parameters,VERSION,1,Electric module: Electrical Equivalent Circuit,
 fluxlink,-,Flux Linkage,,FluxLink,None,,,,,,solve_EEC,,,,
 parameters,-,"Parameters of the EEC: computed if empty, or enforced",,dict,{},,,,,,gen_drive,,,,
-freq0,Hz,Frequency,,float,None,,,,,,,,,,
+freq0,Hz,Frequency,,float,None,,,,,,comp_joule_losses,,,,
 drive,-,Drive,,Drive,None,,,,,,,,,,

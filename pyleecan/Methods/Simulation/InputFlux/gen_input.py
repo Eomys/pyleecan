@@ -20,7 +20,11 @@ def gen_input(self):
         raise InputError("ERROR: InFlux.time missing")
     output.time = self.time.get_data()
 
-    if not isinstance(output.time, ndarray) or len(output.time.shape) != 1:
+    if (
+        not isinstance(output.time, ndarray)
+        or len(output.time.shape) > 2
+        or (len(output.time.shape) == 2 and output.time.shape[0] != 1)
+    ):
         # time should be a vector
         raise InputError(
             "ERROR: InFlux.time should be a vector, "
@@ -32,7 +36,11 @@ def gen_input(self):
     if self.angle is None:
         raise InputError("ERROR: InFlux.angle missing")
     output.angle = self.angle.get_data()
-    if not isinstance(output.angle, ndarray) or len(output.angle.shape) != 1:
+    if (
+        not isinstance(output.angle, ndarray)
+        or len(output.angle.shape) > 2
+        or (len(output.angle.shape) == 2 and output.angle.shape[0] != 1)
+    ):
         # angle should be a vector
         raise InputError(
             "ERROR: InFlux.angle should be a vector, "

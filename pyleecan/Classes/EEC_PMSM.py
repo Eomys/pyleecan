@@ -28,6 +28,11 @@ try:
 except ImportError as error:
     gen_drive = error
 
+try:
+    from ..Methods.Simulation.EEC_PMSM.comp_joule_losses import comp_joule_losses
+except ImportError as error:
+    comp_joule_losses = error
+
 
 from ._check import InitUnKnowClassError
 from .IndMag import IndMag
@@ -70,6 +75,18 @@ class EEC_PMSM(EEC):
         )
     else:
         gen_drive = gen_drive
+    # cf Methods.Simulation.EEC_PMSM.comp_joule_losses
+    if isinstance(comp_joule_losses, ImportError):
+        comp_joule_losses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_PMSM method comp_joule_losses: "
+                    + str(comp_joule_losses)
+                )
+            )
+        )
+    else:
+        comp_joule_losses = comp_joule_losses
     # save method is available in all object
     save = save
 

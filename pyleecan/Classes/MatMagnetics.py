@@ -24,6 +24,9 @@ except ImportError as error:
     plot_BH = error
 
 
+from ..Classes.ImportMatrixVal import ImportMatrixVal
+from numpy import ndarray
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .ImportMatrix import ImportMatrix
 
@@ -133,6 +136,7 @@ class MatMagnetics(FrozenClass):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -155,6 +159,7 @@ class MatMagnetics(FrozenClass):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -337,6 +342,10 @@ class MatMagnetics(FrozenClass):
 
     def _set_BH_curve(self, value):
         """setter of BH_curve"""
+        if isinstance(value, ndarray):
+            value = ImportMatrixVal(value=value)
+        elif isinstance(value, list):
+            value = ImportMatrixVal(value=array(value))
         check_var("BH_curve", value, "ImportMatrix")
         self._BH_curve = value
 

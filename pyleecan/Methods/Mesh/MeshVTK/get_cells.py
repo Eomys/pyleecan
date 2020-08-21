@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from meshio import read
+from os import remove
 
 
-def get_cells(self, indices=[]):
+def get_cells(self, indices=None):
     """Return the cells (connectivities).
 
     Parameters
@@ -19,7 +20,21 @@ def get_cells(self, indices=[]):
         List of cell groups (type + array)
     """
 
-    # Read mesh file with meshio (pyvista does not provide the correct cell format)
-    mesh = read(self.path + "/" + self.name + "." + self.format)
+    if indices is not None:
+        # Extract submesh
+        mesh = self.get_mesh(indices=indices)
+        # Write submesh in .vtk file
+        mesh.save("temp.vtk")
+        # Read mesh file with meshio (pyvista does not provide the correct cell format)
+        mesh = read("temp.vtk")
 
-    return mesh.cells
+    else:
+        # Read mesh file with meshio (pyvista does not provide the correct cell format)
+        mesh = read(self.path + "/" + self.name + "." + self.format)
+
+    cells = mesh.cells
+
+    if indices is not None:
+        remove("temp.vtk")
+
+    return cells

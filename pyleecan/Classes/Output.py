@@ -39,16 +39,6 @@ except ImportError as error:
     plot_B_space = error
 
 try:
-    from ..Methods.Output.Output.plot.Magnetic.plot_mesh import plot_mesh
-except ImportError as error:
-    plot_mesh = error
-
-try:
-    from ..Methods.Output.Output.plot.Magnetic.plot_mesh_field import plot_mesh_field
-except ImportError as error:
-    plot_mesh_field = error
-
-try:
     from ..Methods.Output.Output.plot.plot_A_cfft2 import plot_A_cfft2
 except ImportError as error:
     plot_A_cfft2 = error
@@ -84,11 +74,6 @@ try:
     )
 except ImportError as error:
     plot_force_space = error
-
-try:
-    from ..Methods.Output.Output.plot.Magnetic.plot_mesh_field import plot_mesh_field
-except ImportError as error:
-    plot_mesh_field = error
 
 try:
     from ..Methods.Output.Output.plot.plot_A_quiver_2D import plot_A_quiver_2D
@@ -189,26 +174,6 @@ class Output(FrozenClass):
         )
     else:
         plot_B_space = plot_B_space
-    # cf Methods.Output.Output.plot.Magnetic.plot_mesh
-    if isinstance(plot_mesh, ImportError):
-        plot_mesh = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method plot_mesh: " + str(plot_mesh))
-            )
-        )
-    else:
-        plot_mesh = plot_mesh
-    # cf Methods.Output.Output.plot.Magnetic.plot_mesh_field
-    if isinstance(plot_mesh_field, ImportError):
-        plot_mesh_field = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_mesh_field: " + str(plot_mesh_field)
-                )
-            )
-        )
-    else:
-        plot_mesh_field = plot_mesh_field
     # cf Methods.Output.Output.plot.plot_A_cfft2
     if isinstance(plot_A_cfft2, ImportError):
         plot_A_cfft2 = property(
@@ -281,17 +246,6 @@ class Output(FrozenClass):
         )
     else:
         plot_force_space = plot_force_space
-    # cf Methods.Output.Output.plot.Magnetic.plot_mesh_field
-    if isinstance(plot_mesh_field, ImportError):
-        plot_mesh_field = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_mesh_field: " + str(plot_mesh_field)
-                )
-            )
-        )
-    else:
-        plot_mesh_field = plot_mesh_field
     # cf Methods.Output.Output.plot.plot_A_quiver_2D
     if isinstance(plot_A_quiver_2D, ImportError):
         plot_A_quiver_2D = property(

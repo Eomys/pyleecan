@@ -23,7 +23,7 @@ def check_cstr(solver, indiv):
         return True  # To not add errors to infeasible
 
     # Browse constraints
-    for _, constraint in solver.problem.constraint.items():
+    for constraint in solver.problem.constraint:
         # Compute value to compare
         var_val = constraint.get_variable(indiv.output)
 

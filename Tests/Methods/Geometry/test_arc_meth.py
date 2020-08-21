@@ -923,3 +923,117 @@ def test_split_line(test_dict):
         assert split_list[ii].get_angle() == pytest.approx(
             test_dict["Zs_bot"][ii].get_angle(), abs=DELTA
         ), ("Angle error: " + msg)
+
+
+# Compute the distance
+D_test = list()
+# 0
+D_test.append(
+    {
+        "arc": Arc1(begin=1, end=1j, radius=1, is_trigo_direction=True),
+        "Z": 2,  # First point of cutting line
+        "D": 1,
+    }
+)
+# 1
+D_test.append(
+    {
+        "arc": Arc1(begin=1, end=1j, radius=1, is_trigo_direction=True),
+        "Z": 0,  # First point of cutting line
+        "D": 1,
+    }
+)
+# 2
+D_test.append(
+    {
+        "arc": Arc1(begin=1, end=1j, radius=1, is_trigo_direction=True),
+        "Z": -1j,  # First point of cutting line
+        "D": sqrt(2),
+    }
+)
+# 3
+D_test.append(
+    {
+        "arc": Arc1(begin=1, end=1j, radius=1, is_trigo_direction=True),
+        "Z": -2j,  # First point of cutting line
+        "D": sqrt(5),
+    }
+)
+# 4
+D_test.append(
+    {
+        "arc": Arc1(begin=1, end=1j, radius=1, is_trigo_direction=True),
+        "Z": exp(1j * pi / 4),  # First point of cutting line
+        "D": 0,
+    }
+)
+# 5
+D_test.append(
+    {
+        "arc": Arc1(begin=1, end=1j, radius=1, is_trigo_direction=True),
+        "Z": 1 + 1j,  # First point of cutting line
+        "D": abs(1 + 1j - exp(1j * pi / 4)),
+    }
+)
+# 6
+D_test.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=1, is_trigo_direction=False),
+        "Z": -2j + 1,  # First point of cutting line
+        "D": 1,
+    }
+)
+# 7
+D_test.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1j,  # First point of cutting line
+        "D": 1,
+    }
+)
+# 8
+D_test.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": 0,  # First point of cutting line
+        "D": sqrt(2),
+    }
+)
+# 9
+D_test.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": 1,  # First point of cutting line
+        "D": sqrt(5),
+    }
+)
+# 10
+D_test.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1j + exp(1j * 5 * pi / 4),  # First point of cutting line
+        "D": 0,
+    }
+)
+# 11
+D_test.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1 - 2j,  # First point of cutting line
+        "D": abs(-1 - 2j - (-1j + exp(1j * 5 * pi / 4))),
+    }
+)
+
+
+@pytest.mark.parametrize("test_dict", D_test)
+def test_distance(test_dict):
+    """Check the comp_distance method
+    """
+    arc_obj = test_dict["arc"]
+
+    # Check center
+    result = arc_obj.comp_distance(test_dict["Z"])
+    msg = (
+        "Wrong distance: returned " + str(result) + ", expected: " + str(test_dict["D"])
+    )
+    assert result == pytest.approx(test_dict["D"], abs=DELTA), msg

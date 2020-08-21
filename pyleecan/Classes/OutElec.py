@@ -11,6 +11,24 @@ from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Output.OutElec.get_Nr import get_Nr
+except ImportError as error:
+    get_Nr = error
+
+try:
+    from ..Methods.Output.OutElec.get_Is import get_Is
+except ImportError as error:
+    get_Is = error
+
+try:
+    from ..Methods.Output.OutElec.get_Us import get_Us
+except ImportError as error:
+    get_Us = error
+
+
 from numpy import array, array_equal
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
@@ -27,6 +45,34 @@ class OutElec(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Output.OutElec.get_Nr
+    if isinstance(get_Nr, ImportError):
+        get_Nr = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method get_Nr: " + str(get_Nr))
+            )
+        )
+    else:
+        get_Nr = get_Nr
+    # cf Methods.Output.OutElec.get_Is
+    if isinstance(get_Is, ImportError):
+        get_Is = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method get_Is: " + str(get_Is))
+            )
+        )
+    else:
+        get_Is = get_Is
+    # cf Methods.Output.OutElec.get_Us
+    if isinstance(get_Us, ImportError):
+        get_Us = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutElec method get_Us: " + str(get_Us))
+            )
+        )
+    else:
+        get_Us = get_Us
     # save method is available in all object
     save = save
 
@@ -46,13 +92,20 @@ class OutElec(FrozenClass):
         Is=None,
         Ir=None,
         angle_rotor=None,
-        Nr=None,
+        N0=None,
         rot_dir=-1,
         angle_rotor_initial=0,
         logger_name="Pyleecan.OutElec",
         mmf_unit=None,
-        Currents=None,
         Tem_av_ref=None,
+        Id_ref=None,
+        Iq_ref=None,
+        felec=None,
+        Ud_ref=None,
+        Uq_ref=None,
+        Pj_losses=None,
+        Pem_av_ref=None,
+        Us=None,
         init_dict=None,
         init_str=None,
     ):
@@ -79,13 +132,20 @@ class OutElec(FrozenClass):
             Is = obj.Is
             Ir = obj.Ir
             angle_rotor = obj.angle_rotor
-            Nr = obj.Nr
+            N0 = obj.N0
             rot_dir = obj.rot_dir
             angle_rotor_initial = obj.angle_rotor_initial
             logger_name = obj.logger_name
             mmf_unit = obj.mmf_unit
-            Currents = obj.Currents
             Tem_av_ref = obj.Tem_av_ref
+            Id_ref = obj.Id_ref
+            Iq_ref = obj.Iq_ref
+            felec = obj.felec
+            Ud_ref = obj.Ud_ref
+            Uq_ref = obj.Uq_ref
+            Pj_losses = obj.Pj_losses
+            Pem_av_ref = obj.Pem_av_ref
+            Us = obj.Us
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -99,8 +159,8 @@ class OutElec(FrozenClass):
                 Ir = init_dict["Ir"]
             if "angle_rotor" in list(init_dict.keys()):
                 angle_rotor = init_dict["angle_rotor"]
-            if "Nr" in list(init_dict.keys()):
-                Nr = init_dict["Nr"]
+            if "N0" in list(init_dict.keys()):
+                N0 = init_dict["N0"]
             if "rot_dir" in list(init_dict.keys()):
                 rot_dir = init_dict["rot_dir"]
             if "angle_rotor_initial" in list(init_dict.keys()):
@@ -109,33 +169,51 @@ class OutElec(FrozenClass):
                 logger_name = init_dict["logger_name"]
             if "mmf_unit" in list(init_dict.keys()):
                 mmf_unit = init_dict["mmf_unit"]
-            if "Currents" in list(init_dict.keys()):
-                Currents = init_dict["Currents"]
             if "Tem_av_ref" in list(init_dict.keys()):
                 Tem_av_ref = init_dict["Tem_av_ref"]
+            if "Id_ref" in list(init_dict.keys()):
+                Id_ref = init_dict["Id_ref"]
+            if "Iq_ref" in list(init_dict.keys()):
+                Iq_ref = init_dict["Iq_ref"]
+            if "felec" in list(init_dict.keys()):
+                felec = init_dict["felec"]
+            if "Ud_ref" in list(init_dict.keys()):
+                Ud_ref = init_dict["Ud_ref"]
+            if "Uq_ref" in list(init_dict.keys()):
+                Uq_ref = init_dict["Uq_ref"]
+            if "Pj_losses" in list(init_dict.keys()):
+                Pj_losses = init_dict["Pj_losses"]
+            if "Pem_av_ref" in list(init_dict.keys()):
+                Pem_av_ref = init_dict["Pem_av_ref"]
+            if "Us" in list(init_dict.keys()):
+                Us = init_dict["Us"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
         set_array(self, "time", time)
         # angle can be None, a ndarray or a list
         set_array(self, "angle", angle)
-        # Is can be None, a ndarray or a list
-        set_array(self, "Is", Is)
-        # Ir can be None, a ndarray or a list
-        set_array(self, "Ir", Ir)
-        # angle_rotor can be None, a ndarray or a list
-        set_array(self, "angle_rotor", angle_rotor)
-        # Nr can be None, a ndarray or a list
-        set_array(self, "Nr", Nr)
-        self.rot_dir = rot_dir
-        self.angle_rotor_initial = angle_rotor_initial
-        self.logger_name = logger_name
         # Check if the type DataND has been imported with success
         if isinstance(DataND, ImportError):
             raise ImportError("Unknown type DataND please install SciDataTool")
+        self.Is = Is
+        self.Ir = Ir
+        # angle_rotor can be None, a ndarray or a list
+        set_array(self, "angle_rotor", angle_rotor)
+        self.N0 = N0
+        self.rot_dir = rot_dir
+        self.angle_rotor_initial = angle_rotor_initial
+        self.logger_name = logger_name
         self.mmf_unit = mmf_unit
-        self.Currents = Currents
         self.Tem_av_ref = Tem_av_ref
+        self.Id_ref = Id_ref
+        self.Iq_ref = Iq_ref
+        self.felec = felec
+        self.Ud_ref = Ud_ref
+        self.Uq_ref = Uq_ref
+        self.Pj_losses = Pj_losses
+        self.Pem_av_ref = Pem_av_ref
+        self.Us = Us
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -162,20 +240,8 @@ class OutElec(FrozenClass):
             + linesep
             + linesep
         )
-        OutElec_str += (
-            "Is = "
-            + linesep
-            + str(self.Is).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutElec_str += (
-            "Ir = "
-            + linesep
-            + str(self.Ir).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutElec_str += "Is = " + str(self.Is) + linesep + linesep
+        OutElec_str += "Ir = " + str(self.Ir) + linesep + linesep
         OutElec_str += (
             "angle_rotor = "
             + linesep
@@ -183,21 +249,22 @@ class OutElec(FrozenClass):
             + linesep
             + linesep
         )
-        OutElec_str += (
-            "Nr = "
-            + linesep
-            + str(self.Nr).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutElec_str += "N0 = " + str(self.N0) + linesep
         OutElec_str += "rot_dir = " + str(self.rot_dir) + linesep
         OutElec_str += (
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         )
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         OutElec_str += "mmf_unit = " + str(self.mmf_unit) + linesep + linesep
-        OutElec_str += "Currents = " + str(self.Currents) + linesep + linesep
         OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
+        OutElec_str += "Id_ref = " + str(self.Id_ref) + linesep
+        OutElec_str += "Iq_ref = " + str(self.Iq_ref) + linesep
+        OutElec_str += "felec = " + str(self.felec) + linesep
+        OutElec_str += "Ud_ref = " + str(self.Ud_ref) + linesep
+        OutElec_str += "Uq_ref = " + str(self.Uq_ref) + linesep
+        OutElec_str += "Pj_losses = " + str(self.Pj_losses) + linesep
+        OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
+        OutElec_str += "Us = " + str(self.Us) + linesep + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -209,13 +276,13 @@ class OutElec(FrozenClass):
             return False
         if not array_equal(other.angle, self.angle):
             return False
-        if not array_equal(other.Is, self.Is):
+        if other.Is != self.Is:
             return False
-        if not array_equal(other.Ir, self.Ir):
+        if other.Ir != self.Ir:
             return False
         if not array_equal(other.angle_rotor, self.angle_rotor):
             return False
-        if not array_equal(other.Nr, self.Nr):
+        if other.N0 != self.N0:
             return False
         if other.rot_dir != self.rot_dir:
             return False
@@ -225,9 +292,23 @@ class OutElec(FrozenClass):
             return False
         if other.mmf_unit != self.mmf_unit:
             return False
-        if other.Currents != self.Currents:
-            return False
         if other.Tem_av_ref != self.Tem_av_ref:
+            return False
+        if other.Id_ref != self.Id_ref:
+            return False
+        if other.Iq_ref != self.Iq_ref:
+            return False
+        if other.felec != self.felec:
+            return False
+        if other.Ud_ref != self.Ud_ref:
+            return False
+        if other.Uq_ref != self.Uq_ref:
+            return False
+        if other.Pj_losses != self.Pj_losses:
+            return False
+        if other.Pem_av_ref != self.Pem_av_ref:
+            return False
+        if other.Us != self.Us:
             return False
         return True
 
@@ -246,20 +327,25 @@ class OutElec(FrozenClass):
             OutElec_dict["angle"] = self.angle.tolist()
         if self.Is is None:
             OutElec_dict["Is"] = None
-        else:
-            OutElec_dict["Is"] = self.Is.tolist()
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutElec_dict["Is"] = {
+                "__class__": str(type(self._Is)),
+                "__repr__": str(self._Is.__repr__()),
+                "serialized": dumps(self._Is).decode("ISO-8859-2"),
+            }
         if self.Ir is None:
             OutElec_dict["Ir"] = None
-        else:
-            OutElec_dict["Ir"] = self.Ir.tolist()
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutElec_dict["Ir"] = {
+                "__class__": str(type(self._Ir)),
+                "__repr__": str(self._Ir.__repr__()),
+                "serialized": dumps(self._Ir).decode("ISO-8859-2"),
+            }
         if self.angle_rotor is None:
             OutElec_dict["angle_rotor"] = None
         else:
             OutElec_dict["angle_rotor"] = self.angle_rotor.tolist()
-        if self.Nr is None:
-            OutElec_dict["Nr"] = None
-        else:
-            OutElec_dict["Nr"] = self.Nr.tolist()
+        OutElec_dict["N0"] = self.N0
         OutElec_dict["rot_dir"] = self.rot_dir
         OutElec_dict["angle_rotor_initial"] = self.angle_rotor_initial
         OutElec_dict["logger_name"] = self.logger_name
@@ -271,15 +357,22 @@ class OutElec(FrozenClass):
                 "__repr__": str(self._mmf_unit.__repr__()),
                 "serialized": dumps(self._mmf_unit).decode("ISO-8859-2"),
             }
-        if self.Currents is None:
-            OutElec_dict["Currents"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutElec_dict["Currents"] = {
-                "__class__": str(type(self._Currents)),
-                "__repr__": str(self._Currents.__repr__()),
-                "serialized": dumps(self._Currents).decode("ISO-8859-2"),
-            }
         OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
+        OutElec_dict["Id_ref"] = self.Id_ref
+        OutElec_dict["Iq_ref"] = self.Iq_ref
+        OutElec_dict["felec"] = self.felec
+        OutElec_dict["Ud_ref"] = self.Ud_ref
+        OutElec_dict["Uq_ref"] = self.Uq_ref
+        OutElec_dict["Pj_losses"] = self.Pj_losses
+        OutElec_dict["Pem_av_ref"] = self.Pem_av_ref
+        if self.Us is None:
+            OutElec_dict["Us"] = None
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutElec_dict["Us"] = {
+                "__class__": str(type(self._Us)),
+                "__repr__": str(self._Us.__repr__()),
+                "serialized": dumps(self._Us).decode("ISO-8859-2"),
+            }
         # The class name is added to the dict fordeserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -292,13 +385,20 @@ class OutElec(FrozenClass):
         self.Is = None
         self.Ir = None
         self.angle_rotor = None
-        self.Nr = None
+        self.N0 = None
         self.rot_dir = None
         self.angle_rotor_initial = None
         self.logger_name = None
         self.mmf_unit = None
-        self.Currents = None
         self.Tem_av_ref = None
+        self.Id_ref = None
+        self.Iq_ref = None
+        self.felec = None
+        self.Ud_ref = None
+        self.Uq_ref = None
+        self.Pj_losses = None
+        self.Pem_av_ref = None
+        self.Us = None
 
     def _get_time(self):
         """getter of time"""
@@ -356,22 +456,24 @@ class OutElec(FrozenClass):
 
     def _set_Is(self, value):
         """setter of Is"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Is", value, "ndarray")
-        self._Is = value
+        try:  # Check the type
+            check_var("Is", value, "dict")
+        except CheckTypeError:
+            check_var("Is", value, "SciDataTool.Classes.DataND.DataND")
+            # property can be set from a list to handle loads
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Is = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._Is = value
 
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
         doc=u"""Stator currents as a function of time (each column correspond to one phase)
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )
 
@@ -381,22 +483,24 @@ class OutElec(FrozenClass):
 
     def _set_Ir(self, value):
         """setter of Ir"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Ir", value, "ndarray")
-        self._Ir = value
+        try:  # Check the type
+            check_var("Ir", value, "dict")
+        except CheckTypeError:
+            check_var("Ir", value, "SciDataTool.Classes.DataND.DataND")
+            # property can be set from a list to handle loads
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Ir = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._Ir = value
 
     Ir = property(
         fget=_get_Ir,
         fset=_set_Ir,
         doc=u"""Rotor currents as a function of time (each column correspond to one phase)
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )
 
@@ -425,28 +529,21 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_Nr(self):
-        """getter of Nr"""
-        return self._Nr
+    def _get_N0(self):
+        """getter of N0"""
+        return self._N0
 
-    def _set_Nr(self, value):
-        """setter of Nr"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Nr", value, "ndarray")
-        self._Nr = value
+    def _set_N0(self, value):
+        """setter of N0"""
+        check_var("N0", value, "float")
+        self._N0 = value
 
-    Nr = property(
-        fget=_get_Nr,
-        fset=_set_Nr,
-        doc=u"""Rotor speed as a function of time
+    N0 = property(
+        fget=_get_N0,
+        fset=_set_N0,
+        doc=u"""Rotor speed
 
-        :Type: ndarray
+        :Type: float
         """,
     )
 
@@ -533,33 +630,6 @@ class OutElec(FrozenClass):
         """,
     )
 
-    def _get_Currents(self):
-        """getter of Currents"""
-        return self._Currents
-
-    def _set_Currents(self, value):
-        """setter of Currents"""
-        try:  # Check the type
-            check_var("Currents", value, "dict")
-        except CheckTypeError:
-            check_var("Currents", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Currents = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Currents = value
-
-    Currents = property(
-        fget=_get_Currents,
-        fset=_set_Currents,
-        doc=u"""Currents
-
-        :Type: SciDataTool.Classes.DataND.DataND
-        """,
-    )
-
     def _get_Tem_av_ref(self):
         """getter of Tem_av_ref"""
         return self._Tem_av_ref
@@ -575,5 +645,158 @@ class OutElec(FrozenClass):
         doc=u"""Theorical Average Electromagnetic torque
 
         :Type: float
+        """,
+    )
+
+    def _get_Id_ref(self):
+        """getter of Id_ref"""
+        return self._Id_ref
+
+    def _set_Id_ref(self, value):
+        """setter of Id_ref"""
+        check_var("Id_ref", value, "float")
+        self._Id_ref = value
+
+    Id_ref = property(
+        fget=_get_Id_ref,
+        fset=_set_Id_ref,
+        doc=u"""d-axis current magnitude
+
+        :Type: float
+        """,
+    )
+
+    def _get_Iq_ref(self):
+        """getter of Iq_ref"""
+        return self._Iq_ref
+
+    def _set_Iq_ref(self, value):
+        """setter of Iq_ref"""
+        check_var("Iq_ref", value, "float")
+        self._Iq_ref = value
+
+    Iq_ref = property(
+        fget=_get_Iq_ref,
+        fset=_set_Iq_ref,
+        doc=u"""q-axis current magnitude
+
+        :Type: float
+        """,
+    )
+
+    def _get_felec(self):
+        """getter of felec"""
+        return self._felec
+
+    def _set_felec(self, value):
+        """setter of felec"""
+        check_var("felec", value, "float")
+        self._felec = value
+
+    felec = property(
+        fget=_get_felec,
+        fset=_set_felec,
+        doc=u"""Electrical Frequency
+
+        :Type: float
+        """,
+    )
+
+    def _get_Ud_ref(self):
+        """getter of Ud_ref"""
+        return self._Ud_ref
+
+    def _set_Ud_ref(self, value):
+        """setter of Ud_ref"""
+        check_var("Ud_ref", value, "float")
+        self._Ud_ref = value
+
+    Ud_ref = property(
+        fget=_get_Ud_ref,
+        fset=_set_Ud_ref,
+        doc=u"""d-axis voltage magnitude
+
+        :Type: float
+        """,
+    )
+
+    def _get_Uq_ref(self):
+        """getter of Uq_ref"""
+        return self._Uq_ref
+
+    def _set_Uq_ref(self, value):
+        """setter of Uq_ref"""
+        check_var("Uq_ref", value, "float")
+        self._Uq_ref = value
+
+    Uq_ref = property(
+        fget=_get_Uq_ref,
+        fset=_set_Uq_ref,
+        doc=u"""q-axis voltage magnitude
+
+        :Type: float
+        """,
+    )
+
+    def _get_Pj_losses(self):
+        """getter of Pj_losses"""
+        return self._Pj_losses
+
+    def _set_Pj_losses(self, value):
+        """setter of Pj_losses"""
+        check_var("Pj_losses", value, "float")
+        self._Pj_losses = value
+
+    Pj_losses = property(
+        fget=_get_Pj_losses,
+        fset=_set_Pj_losses,
+        doc=u"""Electrical Joule losses
+
+        :Type: float
+        """,
+    )
+
+    def _get_Pem_av_ref(self):
+        """getter of Pem_av_ref"""
+        return self._Pem_av_ref
+
+    def _set_Pem_av_ref(self, value):
+        """setter of Pem_av_ref"""
+        check_var("Pem_av_ref", value, "float")
+        self._Pem_av_ref = value
+
+    Pem_av_ref = property(
+        fget=_get_Pem_av_ref,
+        fset=_set_Pem_av_ref,
+        doc=u"""Average Electromagnetic power
+
+        :Type: float
+        """,
+    )
+
+    def _get_Us(self):
+        """getter of Us"""
+        return self._Us
+
+    def _set_Us(self, value):
+        """setter of Us"""
+        try:  # Check the type
+            check_var("Us", value, "dict")
+        except CheckTypeError:
+            check_var("Us", value, "SciDataTool.Classes.DataND.DataND")
+            # property can be set from a list to handle loads
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Us = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._Us = value
+
+    Us = property(
+        fget=_get_Us,
+        fset=_set_Us,
+        doc=u"""Stator voltage as a function of time (each column correspond to one phase)
+
+        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )
