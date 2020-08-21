@@ -87,12 +87,12 @@ def test_Magnetic_FEMM_sym():
 
     out.mag.meshsolution.plot_mesh(
         group_names="stator",
-        save_path=join(save_path, "EM_SPMSM_FL_002_mesh_stator.png")
+        save_path=join(save_path, "EM_SPMSM_FL_002_mesh_stator.png"),
     )
 
     out.mag.meshsolution.plot_mesh(
         group_names=["stator", "/", "airgap", "stator_windings"],
-        save_path=join(save_path, "EM_SPMSM_FL_002_mesh_stator_interface.png")
+        save_path=join(save_path, "EM_SPMSM_FL_002_mesh_stator_interface.png"),
     )
 
     out.mag.meshsolution.plot_contour(
@@ -104,4 +104,3 @@ def test_Magnetic_FEMM_sym():
     out.mag.meshsolution.plot_contour(
         label="H", save_path=join(save_path, "EM_SPMSM_FL_002_H.png")
     )
-

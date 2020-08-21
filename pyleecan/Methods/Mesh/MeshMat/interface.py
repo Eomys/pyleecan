@@ -6,6 +6,7 @@ from collections import Counter
 import numpy as np
 from itertools import combinations
 
+
 def interface(self, other_mesh):
     """Define a MeshMat object corresponding to the exact intersection between two meshes (points must be in both meshes).
 
@@ -60,7 +61,7 @@ def interface(self, other_mesh):
                     col2_bin[Icol2i] = 1
 
                 # Position in vector where 2 nodes of the same element are on the interface (potential line element)
-                I_target = np.where(col1_bin + col2_bin== 2)[0]
+                I_target = np.where(col1_bin + col2_bin == 2)[0]
 
                 comb2 = combinations(range(other_mesh.cell[key].nb_pt_per_cell), 2)
                 for duo2 in list(comb2):
@@ -79,12 +80,15 @@ def interface(self, other_mesh):
                         col22_bin[Icol2i] = 1
 
                     # Same but in the second mesh
-                    I_target2 = np.where(col12_bin + col22_bin== 2)[0]
+                    I_target2 = np.where(col12_bin + col22_bin == 2)[0]
 
                     for itag in I_target2:
                         e_tag1 = col12[itag]
                         e_tag2 = col22[itag]
-                        Iline = np.where(((col1[I_target] == e_tag1) & (col2[I_target] == e_tag2)) | ((col2[I_target] == e_tag1) & (col1[I_target] == e_tag2)))[0]
+                        Iline = np.where(
+                            ((col1[I_target] == e_tag1) & (col2[I_target] == e_tag2))
+                            | ((col2[I_target] == e_tag1) & (col1[I_target] == e_tag2))
+                        )[0]
                         if Iline.size != 0:
                             new_mesh.add_cell([e_tag1, e_tag2], "line")
 

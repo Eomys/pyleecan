@@ -124,7 +124,7 @@ class unittest_interface(TestCase):
         new_seg_mesh = self.mesh.interface(self.mesh)
 
         # Check result
-        solution = np.array([[0,1], [0,2], [0,3], [1,2], [2,3]])
+        solution = np.array([[0, 1], [0, 2], [0, 3], [1, 2], [2, 3]])
         result = new_seg_mesh.cell["line"].connectivity
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
