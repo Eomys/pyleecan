@@ -43,6 +43,11 @@ try:
 except ImportError as error:
     plot = error
 
+try:
+    from ..Methods.Slot.Hole.comp_height import comp_height
+except ImportError as error:
+    comp_height = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -110,6 +115,15 @@ class Hole(FrozenClass):
         )
     else:
         plot = plot
+    # cf Methods.Slot.Hole.comp_height
+    if isinstance(comp_height, ImportError):
+        comp_height = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Hole method comp_height: " + str(comp_height))
+            )
+        )
+    else:
+        comp_height = comp_height
     # save method is available in all object
     save = save
 

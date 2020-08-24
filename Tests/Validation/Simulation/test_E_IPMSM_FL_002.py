@@ -30,7 +30,7 @@ def test_E_IPMSM_FL_002():
 
     # Definition of the input
     simu.input = InputElec(
-        N0=2000, Id_ref=-100, Iq_ref=200, Nt_tot=10, Na_tot=2048, rot_dir=1,
+        N0=2000, Id_ref=-100, Iq_ref=200, Nt_tot=10, Na_tot=2048, rot_dir=1
     )
 
     # Definition of the electrical simulation (FEMM)

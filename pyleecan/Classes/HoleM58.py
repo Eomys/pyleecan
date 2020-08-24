@@ -24,29 +24,9 @@ except ImportError as error:
     check = error
 
 try:
-    from ..Methods.Slot.HoleM58.comp_mass_magnets import comp_mass_magnets
-except ImportError as error:
-    comp_mass_magnets = error
-
-try:
     from ..Methods.Slot.HoleM58.comp_radius import comp_radius
 except ImportError as error:
     comp_radius = error
-
-try:
-    from ..Methods.Slot.HoleM58.comp_surface_magnets import comp_surface_magnets
-except ImportError as error:
-    comp_surface_magnets = error
-
-try:
-    from ..Methods.Slot.HoleM58.comp_volume_magnets import comp_volume_magnets
-except ImportError as error:
-    comp_volume_magnets = error
-
-try:
-    from ..Methods.Slot.HoleM58.get_height_magnet import get_height_magnet
-except ImportError as error:
-    get_height_magnet = error
 
 try:
     from ..Methods.Slot.HoleM58.remove_magnet import remove_magnet
@@ -57,6 +37,11 @@ try:
     from ..Methods.Slot.HoleM58.has_magnet import has_magnet
 except ImportError as error:
     has_magnet = error
+
+try:
+    from ..Methods.Slot.HoleM58.comp_surface_magnet_id import comp_surface_magnet_id
+except ImportError as error:
+    comp_surface_magnet_id = error
 
 
 from ._check import InitUnKnowClassError
@@ -91,18 +76,6 @@ class HoleM58(HoleMag):
         )
     else:
         check = check
-    # cf Methods.Slot.HoleM58.comp_mass_magnets
-    if isinstance(comp_mass_magnets, ImportError):
-        comp_mass_magnets = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM58 method comp_mass_magnets: "
-                    + str(comp_mass_magnets)
-                )
-            )
-        )
-    else:
-        comp_mass_magnets = comp_mass_magnets
     # cf Methods.Slot.HoleM58.comp_radius
     if isinstance(comp_radius, ImportError):
         comp_radius = property(
@@ -112,42 +85,6 @@ class HoleM58(HoleMag):
         )
     else:
         comp_radius = comp_radius
-    # cf Methods.Slot.HoleM58.comp_surface_magnets
-    if isinstance(comp_surface_magnets, ImportError):
-        comp_surface_magnets = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM58 method comp_surface_magnets: "
-                    + str(comp_surface_magnets)
-                )
-            )
-        )
-    else:
-        comp_surface_magnets = comp_surface_magnets
-    # cf Methods.Slot.HoleM58.comp_volume_magnets
-    if isinstance(comp_volume_magnets, ImportError):
-        comp_volume_magnets = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM58 method comp_volume_magnets: "
-                    + str(comp_volume_magnets)
-                )
-            )
-        )
-    else:
-        comp_volume_magnets = comp_volume_magnets
-    # cf Methods.Slot.HoleM58.get_height_magnet
-    if isinstance(get_height_magnet, ImportError):
-        get_height_magnet = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM58 method get_height_magnet: "
-                    + str(get_height_magnet)
-                )
-            )
-        )
-    else:
-        get_height_magnet = get_height_magnet
     # cf Methods.Slot.HoleM58.remove_magnet
     if isinstance(remove_magnet, ImportError):
         remove_magnet = property(
@@ -168,6 +105,18 @@ class HoleM58(HoleMag):
         )
     else:
         has_magnet = has_magnet
+    # cf Methods.Slot.HoleM58.comp_surface_magnet_id
+    if isinstance(comp_surface_magnet_id, ImportError):
+        comp_surface_magnet_id = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleM58 method comp_surface_magnet_id: "
+                    + str(comp_surface_magnet_id)
+                )
+            )
+        )
+    else:
+        comp_surface_magnet_id = comp_surface_magnet_id
     # save method is available in all object
     save = save
 
