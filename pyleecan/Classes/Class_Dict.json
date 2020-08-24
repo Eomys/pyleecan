@@ -2108,10 +2108,12 @@
         "desc": "Hole with magnets for lamination (abstract)",
         "is_internal": false,
         "methods": [
-            "has_magnet",
+            "comp_mass_magnet_id",
             "comp_mass_magnets",
             "comp_surface_magnets",
-            "get_magnet_list"
+            "comp_volume_magnets",
+            "get_magnet_list",
+            "has_magnet"
         ],
         "mother": "Hole",
         "name": "HoleMag",
@@ -2135,9 +2137,9 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "remove_magnet",
+            "comp_surface_magnet_id",
             "has_magnet",
-            "comp_surface_magnet_id"
+            "remove_magnet"
         ],
         "mother": "HoleMag",
         "name": "HoleUD",

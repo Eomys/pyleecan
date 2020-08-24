@@ -14,9 +14,9 @@ from .Hole import Hole
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Slot.HoleMag.has_magnet import has_magnet
+    from ..Methods.Slot.HoleMag.comp_mass_magnet_id import comp_mass_magnet_id
 except ImportError as error:
-    has_magnet = error
+    comp_mass_magnet_id = error
 
 try:
     from ..Methods.Slot.HoleMag.comp_mass_magnets import comp_mass_magnets
@@ -29,9 +29,19 @@ except ImportError as error:
     comp_surface_magnets = error
 
 try:
+    from ..Methods.Slot.HoleMag.comp_volume_magnets import comp_volume_magnets
+except ImportError as error:
+    comp_volume_magnets = error
+
+try:
     from ..Methods.Slot.HoleMag.get_magnet_list import get_magnet_list
 except ImportError as error:
     get_magnet_list = error
+
+try:
+    from ..Methods.Slot.HoleMag.has_magnet import has_magnet
+except ImportError as error:
+    has_magnet = error
 
 
 from ._check import InitUnKnowClassError
@@ -44,15 +54,18 @@ class HoleMag(Hole):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Slot.HoleMag.has_magnet
-    if isinstance(has_magnet, ImportError):
-        has_magnet = property(
+    # cf Methods.Slot.HoleMag.comp_mass_magnet_id
+    if isinstance(comp_mass_magnet_id, ImportError):
+        comp_mass_magnet_id = property(
             fget=lambda x: raise_(
-                ImportError("Can't use HoleMag method has_magnet: " + str(has_magnet))
+                ImportError(
+                    "Can't use HoleMag method comp_mass_magnet_id: "
+                    + str(comp_mass_magnet_id)
+                )
             )
         )
     else:
-        has_magnet = has_magnet
+        comp_mass_magnet_id = comp_mass_magnet_id
     # cf Methods.Slot.HoleMag.comp_mass_magnets
     if isinstance(comp_mass_magnets, ImportError):
         comp_mass_magnets = property(
@@ -77,6 +90,18 @@ class HoleMag(Hole):
         )
     else:
         comp_surface_magnets = comp_surface_magnets
+    # cf Methods.Slot.HoleMag.comp_volume_magnets
+    if isinstance(comp_volume_magnets, ImportError):
+        comp_volume_magnets = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMag method comp_volume_magnets: "
+                    + str(comp_volume_magnets)
+                )
+            )
+        )
+    else:
+        comp_volume_magnets = comp_volume_magnets
     # cf Methods.Slot.HoleMag.get_magnet_list
     if isinstance(get_magnet_list, ImportError):
         get_magnet_list = property(
@@ -88,6 +113,15 @@ class HoleMag(Hole):
         )
     else:
         get_magnet_list = get_magnet_list
+    # cf Methods.Slot.HoleMag.has_magnet
+    if isinstance(has_magnet, ImportError):
+        has_magnet = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleMag method has_magnet: " + str(has_magnet))
+            )
+        )
+    else:
+        has_magnet = has_magnet
     # save method is available in all object
     save = save
 

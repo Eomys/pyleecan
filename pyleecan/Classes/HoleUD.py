@@ -19,9 +19,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.HoleUD.remove_magnet import remove_magnet
+    from ..Methods.Slot.HoleUD.comp_surface_magnet_id import comp_surface_magnet_id
 except ImportError as error:
-    remove_magnet = error
+    comp_surface_magnet_id = error
 
 try:
     from ..Methods.Slot.HoleUD.has_magnet import has_magnet
@@ -29,9 +29,9 @@ except ImportError as error:
     has_magnet = error
 
 try:
-    from ..Methods.Slot.HoleUD.comp_surface_magnet_id import comp_surface_magnet_id
+    from ..Methods.Slot.HoleUD.remove_magnet import remove_magnet
 except ImportError as error:
-    comp_surface_magnet_id = error
+    remove_magnet = error
 
 
 from ._check import InitUnKnowClassError
@@ -57,26 +57,6 @@ class HoleUD(HoleMag):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.HoleUD.remove_magnet
-    if isinstance(remove_magnet, ImportError):
-        remove_magnet = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleUD method remove_magnet: " + str(remove_magnet)
-                )
-            )
-        )
-    else:
-        remove_magnet = remove_magnet
-    # cf Methods.Slot.HoleUD.has_magnet
-    if isinstance(has_magnet, ImportError):
-        has_magnet = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use HoleUD method has_magnet: " + str(has_magnet))
-            )
-        )
-    else:
-        has_magnet = has_magnet
     # cf Methods.Slot.HoleUD.comp_surface_magnet_id
     if isinstance(comp_surface_magnet_id, ImportError):
         comp_surface_magnet_id = property(
@@ -89,6 +69,26 @@ class HoleUD(HoleMag):
         )
     else:
         comp_surface_magnet_id = comp_surface_magnet_id
+    # cf Methods.Slot.HoleUD.has_magnet
+    if isinstance(has_magnet, ImportError):
+        has_magnet = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use HoleUD method has_magnet: " + str(has_magnet))
+            )
+        )
+    else:
+        has_magnet = has_magnet
+    # cf Methods.Slot.HoleUD.remove_magnet
+    if isinstance(remove_magnet, ImportError):
+        remove_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleUD method remove_magnet: " + str(remove_magnet)
+                )
+            )
+        )
+    else:
+        remove_magnet = remove_magnet
     # save method is available in all object
     save = save
 
