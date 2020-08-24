@@ -33,11 +33,6 @@ try:
 except ImportError as error:
     comp_surface = error
 
-try:
-    from ..Methods.Slot.HoleM54.get_height_magnet import get_height_magnet
-except ImportError as error:
-    get_height_magnet = error
-
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -90,18 +85,6 @@ class HoleM54(Hole):
         )
     else:
         comp_surface = comp_surface
-    # cf Methods.Slot.HoleM54.get_height_magnet
-    if isinstance(get_height_magnet, ImportError):
-        get_height_magnet = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM54 method get_height_magnet: "
-                    + str(get_height_magnet)
-                )
-            )
-        )
-    else:
-        get_height_magnet = get_height_magnet
     # save method is available in all object
     save = save
 

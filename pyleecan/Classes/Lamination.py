@@ -468,6 +468,7 @@ class Lamination(FrozenClass):
                         "HoleM57",
                         "HoleM58",
                         "HoleMag",
+                        "HoleUD",
                         "VentilationCirc",
                         "VentilationPolar",
                         "VentilationTrap",

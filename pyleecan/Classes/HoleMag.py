@@ -18,6 +18,21 @@ try:
 except ImportError as error:
     has_magnet = error
 
+try:
+    from ..Methods.Slot.HoleMag.comp_mass_magnets import comp_mass_magnets
+except ImportError as error:
+    comp_mass_magnets = error
+
+try:
+    from ..Methods.Slot.HoleMag.comp_surface_magnets import comp_surface_magnets
+except ImportError as error:
+    comp_surface_magnets = error
+
+try:
+    from ..Methods.Slot.HoleMag.get_magnet_list import get_magnet_list
+except ImportError as error:
+    get_magnet_list = error
+
 
 from ._check import InitUnKnowClassError
 from .Material import Material
@@ -28,6 +43,7 @@ class HoleMag(Hole):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Slot.HoleMag.has_magnet
     if isinstance(has_magnet, ImportError):
         has_magnet = property(
@@ -37,6 +53,41 @@ class HoleMag(Hole):
         )
     else:
         has_magnet = has_magnet
+    # cf Methods.Slot.HoleMag.comp_mass_magnets
+    if isinstance(comp_mass_magnets, ImportError):
+        comp_mass_magnets = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMag method comp_mass_magnets: "
+                    + str(comp_mass_magnets)
+                )
+            )
+        )
+    else:
+        comp_mass_magnets = comp_mass_magnets
+    # cf Methods.Slot.HoleMag.comp_surface_magnets
+    if isinstance(comp_surface_magnets, ImportError):
+        comp_surface_magnets = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMag method comp_surface_magnets: "
+                    + str(comp_surface_magnets)
+                )
+            )
+        )
+    else:
+        comp_surface_magnets = comp_surface_magnets
+    # cf Methods.Slot.HoleMag.get_magnet_list
+    if isinstance(get_magnet_list, ImportError):
+        get_magnet_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMag method get_magnet_list: " + str(get_magnet_list)
+                )
+            )
+        )
+    else:
+        get_magnet_list = get_magnet_list
     # save method is available in all object
     save = save
 
