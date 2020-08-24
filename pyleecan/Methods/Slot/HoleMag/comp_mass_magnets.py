@@ -17,7 +17,7 @@ def comp_mass_magnets(self):
 
     M = 0
     mag_list = self.get_magnet_list()
-    for ii, mag in mag_list.enumerate():
+    for ii, mag in enumerate(mag_list):
         if mag is not None:
             Smag = self.comp_surface_magnet_id(ii)
             M += Smag * mag.Lmag * mag.mat_type.struct.rho

@@ -16,6 +16,7 @@ def comp_surface_magnets(self):
     """
 
     mag_list = self.get_magnet_list()
+    Smag = 0
     for ii in range(len(mag_list)):
         Smag += self.comp_surface_magnet_id(ii)
     return Smag
