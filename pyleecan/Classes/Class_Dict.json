@@ -7015,6 +7015,99 @@
             }
         ]
     },
+    "Skew": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class for the skew (rotor or stator)",
+        "is_internal": false,
+        "methods": [
+            "comp_angle",
+            "plot"
+        ],
+        "mother": "",
+        "name": "Skew",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Skew.csv",
+        "properties": [
+            {
+                "desc": "Type of skew (\"linear\", \"step\", \"vshape\", \"user-defined\")",
+                "max": "",
+                "min": "",
+                "name": "type",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
+            },
+            {
+                "desc": "Number of slices",
+                "max": "",
+                "min": "",
+                "name": "Nslices",
+                "type": "int",
+                "unit": "-",
+                "value": 10
+            },
+            {
+                "desc": "Skew rate",
+                "max": "",
+                "min": "",
+                "name": "rate",
+                "type": "float",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "Number of segments for step skew",
+                "max": "",
+                "min": "",
+                "name": "Nsegm",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Curve for user-defined skew",
+                "max": "",
+                "min": "",
+                "name": "curve",
+                "type": "function",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "List of skew angles",
+                "max": "",
+                "min": "",
+                "name": "angle_list",
+                "type": "list",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "desc": "List of indices to avoid redundant computations",
+                "max": "",
+                "min": "",
+                "name": "index_list",
+                "type": "list",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Is the skew defined for a stator",
+                "max": "",
+                "min": "",
+                "name": "is_stator",
+                "type": "bool",
+                "unit": "-",
+                "value": true
+            }
+        ]
+    },
     "Slot": {
         "constants": [
             {

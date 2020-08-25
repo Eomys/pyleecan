@@ -123,6 +123,7 @@ from ..Classes.Segment import Segment
 from ..Classes.Shaft import Shaft
 from ..Classes.Simu1 import Simu1
 from ..Classes.Simulation import Simulation
+from ..Classes.Skew import Skew
 from ..Classes.Slot import Slot
 from ..Classes.Slot19 import Slot19
 from ..Classes.SlotCirc import SlotCirc

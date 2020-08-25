@@ -1,0 +1,9 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+type,-,"Type of skew (""linear"", ""step"", ""vshape"", ""user-defined"")",0,str,None,,,,Simulation,,comp_angle,VERSION,1,Class for the skew (rotor or stator)
+Nslices,-,Number of slices,0,int,10,,,,,,plot,,,
+rate,-,Skew rate,0,float,0,,,,,,,,,
+Nsegm,-,Number of segments for step skew,0,int,None,,,,,,,,,
+curve,-,Curve for user-defined skew,0,function,None,,,,,,,,,
+angle_list,rad,List of skew angles,1,list,None,,,,,,,,,
+index_list,-,List of indices to avoid redundant computations,1,list,None,,,,,,,,,
+is_stator,-,Is the skew defined for a stator,0,bool,True,,,,,,,,,
