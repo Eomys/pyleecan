@@ -27,6 +27,6 @@ def comp_surface_magnet_id(self, index):
             for surf in self.surf_list:
                 if "HoleMagnet" in surf.label and mag_id == index:
                     return surf.comp_surface()
-                else:
+                elif "HoleMagnet" in surf.label:
                     mag_id += 1
             return 0
