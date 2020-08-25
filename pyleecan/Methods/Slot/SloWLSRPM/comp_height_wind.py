@@ -3,8 +3,8 @@ def comp_height_wind(self):
 
     Parameters
     ----------
-    self : SlotW16
-        A SlotW16 object
+    self : SlotWLSRPM
+        A SlotWLSRPM object
 
     Returns
     -------

@@ -4,8 +4,8 @@ def comp_height(self):
 
     Parameters
     ----------
-    self : SlotW16
-        A SlotW16 object
+    self : SlotWLSRPM
+        A SlotWLSRPM object
 
     Returns
     -------
@@ -14,4 +14,4 @@ def comp_height(self):
 
     """
 
-    return self.H0 + self.H2
+    return self.get_Ryoke()-self.get_Rbo()

@@ -13,8 +13,8 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
 
     Parameters
     ----------
-    self : SlotW16
-        A SlotW16 object
+    self : SlotWLSRPM
+        A SlotWLSRPM object
     Nrad : int
         Number of radial layer
     Ntan : int
@@ -39,7 +39,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
         st = "R"
     Rbo = self.get_Rbo()
 
-    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10] = self._comp_point_coordinate()
+    [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8] = self._comp_point_coordinate()
 
     Ztan1 = Rbo - self.H0
     Ztan2 = Rbo - self.H0 - self.H2

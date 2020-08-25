@@ -1,10 +1,12 @@
+
+from numpy import arcsin, exp, pi, sqrt, sin, cos
 def comp_angle_opening(self):
     """Compute the average opening angle of the Slot
 
     Parameters
     ----------
-    self : SlotW16
-        A SlotW16 object
+    self : SlotWLSRPM：
+        A SlotWLSRPM： object
 
     Returns
     -------
@@ -12,5 +14,5 @@ def comp_angle_opening(self):
         Average opening angle of the slot [rad]
 
     """
-
-    return self.W0
+    Rbo = self.get_Rbo()
+    return 2*(pi / self.Zs-arcsin(self.W3/2/Rbo))
