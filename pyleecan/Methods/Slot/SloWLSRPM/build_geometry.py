@@ -17,7 +17,7 @@ def build_geometry(self):
     Returns
     -------
     curve_list: llist
-        A list of 5 Segment and 3 Arc
+        A list of 5 Segments and 2 Arcs
 
     """
 
@@ -27,13 +27,12 @@ def build_geometry(self):
 
     # Creation of curve
     curve_list = list()
-    curve_list.append(Segment(Z8, Z1))
     curve_list.append(Segment(Z1, Z2))
-    curve_list.append(Arc1(Z2, Z3, -self.R1, is_trigo_direction=False))
+    curve_list.append(Arc1(Z2, Z3, self.R1, is_trigo_direction= True))
     curve_list.append(Segment(Z3, Z4))
-    curve_list.append(Arc1(Z4, Z5, Rbo, is_trigo_direction=True))
+    curve_list.append(Segment(Z4, Z5))
     curve_list.append(Segment(Z5, Z6))
-    curve_list.append(Arc1(Z6, Z7, -self.R1, is_trigo_direction=False))
+    curve_list.append(Arc1(Z6, Z7, self.R1, is_trigo_direction=True))
     curve_list.append(Segment(Z7, Z8))
    
 

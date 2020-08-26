@@ -24,9 +24,9 @@ def _comp_point_coordinate(self):
     # ZXt => Complex coordinate in the tooth ref
     # ZX => Complex coordinate in the slot ref
     y1t=self.W1+self.W3/2
-    #Point Zch
+    #Point Zch slot midium high point
     Zch=Rbo+self.H2
-    #Zcl
+    #Point Zcl slot midium low point
     Zcl=Rbo
     
     
@@ -40,31 +40,36 @@ def _comp_point_coordinate(self):
     yclt=Zcl*sin(hsp)
     
     #Line Zch Zcl
-    y=-(xcht-xclt)/(ycht-yclt)*x+ycht+xcht*(xcht-xclt)/(ycht-yclt)
+    #y=-(xcht-xclt)/(ycht-yclt)*x+ycht+xcht*(xcht-xclt)/(ycht-yclt)
     
-    #Z1
-    x1t=(self.W1+self.W3/2-ycht-xcht*(xcht-xclt)/(ycht-yclt))*-(ycht-yclt)/(xcht-xclt)
-    y1t=-(xcht-xclt)/(ycht-yclt)*x1t+ycht+xcht*(xcht-xclt)/(ycht-yclt)
-    Z1t=x1t+1j*y1t
-    Z1=Z1t*exp(-1j*hsp)
     
-    #Z2
-    x2t=x1t
-    y2t=self.W3/2+self.R1
-    Z2t=x2t+1j*y2t
-    Z2=Z2t*exp(-1j*hsp)
-    
-    #Z3
-    x3t=x2t-self.R1
-    y3t=self.W3/2
-    Z3t=x3t+1j*y3t
-    Z3=Z3t*exp(-1j*hsp)
-    
+ 
     #Z4
-    y4t=y3t
-    x4t=sqrt((Rbo)**2-(y4t)**2)
+    x4t=(self.W1+self.W3/2-ycht-xcht*(xcht-xclt)/(ycht-yclt))*-(ycht-yclt)/(xcht-xclt)
+    y4t=-(xcht-xclt)/(ycht-yclt)*x4t+ycht+xcht*(xcht-xclt)/(ycht-yclt)
     Z4t=x4t+1j*y4t
     Z4=Z4t*exp(-1j*hsp)
+    #Z3
+    x3t=x4t
+    y3t=self.W3/2+self.R1
+    Z3t=x3t+1j*y3t
+    Z3=Z3t*exp(-1j*hsp)
+    #Z2
+    x2t=x3t-self.R1
+    y2t=y1t
+    Z2t=x2t+1j*y2t
+    Z2=Z2t*exp(-1j*hsp)
+    #Z1
+    y1t=self.W3/2
+    x1t=sqrt((Rbo)**2-(y1t)**2)
+    Z1t=x1t+1j*y1t
+    Z1=Z1t*exp(-1j*hsp)
+ 
+   
+    
+    
+
+
 
 
     # symetry
