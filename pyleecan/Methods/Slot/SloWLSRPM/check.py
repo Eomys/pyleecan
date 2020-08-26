@@ -17,7 +17,6 @@ def check(self):
     -------
 
     """
-if self.is_outwards():
-raise SLSRPMOutterError(“Slot Type LSRPM can’t be used on outer lamination”)
 
-
+    if self.is_outwards():
+        raise SLSRPMOutterError("Slot Type LSRPM can’t be used on outer lamination")

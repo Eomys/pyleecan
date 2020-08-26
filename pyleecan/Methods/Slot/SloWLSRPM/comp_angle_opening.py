@@ -1,5 +1,6 @@
-
 from numpy import arcsin, exp, pi, sqrt, sin, cos
+
+
 def comp_angle_opening(self):
     """Compute the average opening angle of the Slot
 
@@ -15,4 +16,4 @@ def comp_angle_opening(self):
 
     """
     Rbo = self.get_Rbo()
-    return 2*(pi / self.Zs-arcsin(self.W3/2/Rbo))
+    return 2 * (pi / self.Zs - arcsin(self.W3 / 2 / Rbo))

@@ -114,7 +114,7 @@ class NotchEvenDist(Notch):
                 "SlotW29",
                 "SlotW60",
                 "SlotW61",
-                "SlotWLSPRM",
+                "SlotWLSRPM",
                 "SlotWind",
             ]:
                 raise InitUnKnowClassError(
@@ -156,7 +156,7 @@ class NotchEvenDist(Notch):
                 "SlotW29",
                 "SlotW60",
                 "SlotW61",
-                "SlotWLSPRM",
+                "SlotWLSRPM",
                 "SlotWind",
             ]:
                 raise InitUnKnowClassError(
