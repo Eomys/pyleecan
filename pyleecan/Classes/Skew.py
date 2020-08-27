@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Skew.csv
+"""File generated according to Generator/ClassesRef/Machine/Skew.csv
 WARNING! All changes made in this file will be lost!
 """
 
@@ -13,14 +13,24 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
-    from ..Methods.Simulation.Skew.comp_angle import comp_angle
+    from ..Methods.Machine.Skew.comp_angle import comp_angle
 except ImportError as error:
     comp_angle = error
 
 try:
-    from ..Methods.Simulation.Skew.plot import plot
+    from ..Methods.Machine.Skew.plot import plot
 except ImportError as error:
     plot = error
+
+try:
+    from ..Methods.Machine.Skew.get_angle_unique import get_angle_unique
+except ImportError as error:
+    get_angle_unique = error
+
+try:
+    from ..Methods.Machine.Skew.get_ind_unique import get_ind_unique
+except ImportError as error:
+    get_ind_unique = error
 
 
 from inspect import getsource
@@ -35,7 +45,7 @@ class Skew(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
-    # cf Methods.Simulation.Skew.comp_angle
+    # cf Methods.Machine.Skew.comp_angle
     if isinstance(comp_angle, ImportError):
         comp_angle = property(
             fget=lambda x: raise_(
@@ -44,7 +54,7 @@ class Skew(FrozenClass):
         )
     else:
         comp_angle = comp_angle
-    # cf Methods.Simulation.Skew.plot
+    # cf Methods.Machine.Skew.plot
     if isinstance(plot, ImportError):
         plot = property(
             fget=lambda x: raise_(
@@ -53,6 +63,28 @@ class Skew(FrozenClass):
         )
     else:
         plot = plot
+    # cf Methods.Machine.Skew.get_angle_unique
+    if isinstance(get_angle_unique, ImportError):
+        get_angle_unique = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Skew method get_angle_unique: " + str(get_angle_unique)
+                )
+            )
+        )
+    else:
+        get_angle_unique = get_angle_unique
+    # cf Methods.Machine.Skew.get_ind_unique
+    if isinstance(get_ind_unique, ImportError):
+        get_ind_unique = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Skew method get_ind_unique: " + str(get_ind_unique)
+                )
+            )
+        )
+    else:
+        get_ind_unique = get_ind_unique
     # save method is available in all object
     save = save
 
@@ -68,13 +100,11 @@ class Skew(FrozenClass):
     def __init__(
         self,
         type=None,
-        Nslices=10,
         rate=0,
-        Nsegm=None,
-        curve=None,
+        is_step=True,
+        function=None,
         angle_list=None,
-        index_list=None,
-        is_stator=True,
+        z_list=None,
         init_dict=None,
         init_str=None,
     ):
@@ -97,42 +127,34 @@ class Skew(FrozenClass):
             obj = load(init_str)
             assert type(obj) is type(self)
             type = obj.type
-            Nslices = obj.Nslices
             rate = obj.rate
-            Nsegm = obj.Nsegm
-            curve = obj.curve
+            is_step = obj.is_step
+            function = obj.function
             angle_list = obj.angle_list
-            index_list = obj.index_list
-            is_stator = obj.is_stator
+            z_list = obj.z_list
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "type" in list(init_dict.keys()):
                 type = init_dict["type"]
-            if "Nslices" in list(init_dict.keys()):
-                Nslices = init_dict["Nslices"]
             if "rate" in list(init_dict.keys()):
                 rate = init_dict["rate"]
-            if "Nsegm" in list(init_dict.keys()):
-                Nsegm = init_dict["Nsegm"]
-            if "curve" in list(init_dict.keys()):
-                curve = init_dict["curve"]
+            if "is_step" in list(init_dict.keys()):
+                is_step = init_dict["is_step"]
+            if "function" in list(init_dict.keys()):
+                function = init_dict["function"]
             if "angle_list" in list(init_dict.keys()):
                 angle_list = init_dict["angle_list"]
-            if "index_list" in list(init_dict.keys()):
-                index_list = init_dict["index_list"]
-            if "is_stator" in list(init_dict.keys()):
-                is_stator = init_dict["is_stator"]
+            if "z_list" in list(init_dict.keys()):
+                z_list = init_dict["z_list"]
         # Initialisation by argument
         self.parent = None
         self.type = type
-        self.Nslices = Nslices
         self.rate = rate
-        self.Nsegm = Nsegm
-        self.curve = curve
+        self.is_step = is_step
+        self.function = function
         self.angle_list = angle_list
-        self.index_list = index_list
-        self.is_stator = is_stator
+        self.z_list = z_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -146,13 +168,14 @@ class Skew(FrozenClass):
         else:
             Skew_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Skew_str += 'type = "' + str(self.type) + '"' + linesep
-        Skew_str += "Nslices = " + str(self.Nslices) + linesep
         Skew_str += "rate = " + str(self.rate) + linesep
-        Skew_str += "Nsegm = " + str(self.Nsegm) + linesep
-        if self._curve[1] is None:
-            Skew_str += "curve = " + str(self._curve[1])
+        Skew_str += "is_step = " + str(self.is_step) + linesep
+        if self._function[1] is None:
+            Skew_str += "function = " + str(self._function[1])
         else:
-            Skew_str += "curve = " + linesep + str(self._curve[1]) + linesep + linesep
+            Skew_str += (
+                "function = " + linesep + str(self._function[1]) + linesep + linesep
+            )
         Skew_str += (
             "angle_list = "
             + linesep
@@ -160,12 +183,11 @@ class Skew(FrozenClass):
             + linesep
         )
         Skew_str += (
-            "index_list = "
+            "z_list = "
             + linesep
-            + str(self.index_list).replace(linesep, linesep + "\t")
+            + str(self.z_list).replace(linesep, linesep + "\t")
             + linesep
         )
-        Skew_str += "is_stator = " + str(self.is_stator) + linesep
         return Skew_str
 
     def __eq__(self, other):
@@ -175,19 +197,15 @@ class Skew(FrozenClass):
             return False
         if other.type != self.type:
             return False
-        if other.Nslices != self.Nslices:
-            return False
         if other.rate != self.rate:
             return False
-        if other.Nsegm != self.Nsegm:
+        if other.is_step != self.is_step:
             return False
-        if other.curve != self.curve:
+        if other.function != self.function:
             return False
         if other.angle_list != self.angle_list:
             return False
-        if other.index_list != self.index_list:
-            return False
-        if other.is_stator != self.is_stator:
+        if other.z_list != self.z_list:
             return False
         return True
 
@@ -197,19 +215,17 @@ class Skew(FrozenClass):
 
         Skew_dict = dict()
         Skew_dict["type"] = self.type
-        Skew_dict["Nslices"] = self.Nslices
         Skew_dict["rate"] = self.rate
-        Skew_dict["Nsegm"] = self.Nsegm
-        if self.curve is None:
-            Skew_dict["curve"] = None
+        Skew_dict["is_step"] = self.is_step
+        if self.function is None:
+            Skew_dict["function"] = None
         else:
-            Skew_dict["curve"] = [
-                dumps(self._curve[0]).decode("ISO-8859-2"),
-                self._curve[1],
+            Skew_dict["function"] = [
+                dumps(self._function[0]).decode("ISO-8859-2"),
+                self._function[1],
             ]
         Skew_dict["angle_list"] = self.angle_list
-        Skew_dict["index_list"] = self.index_list
-        Skew_dict["is_stator"] = self.is_stator
+        Skew_dict["z_list"] = self.z_list
         # The class name is added to the dict fordeserialisation purpose
         Skew_dict["__class__"] = "Skew"
         return Skew_dict
@@ -218,13 +234,11 @@ class Skew(FrozenClass):
         """Set all the properties to None (except pyleecan object)"""
 
         self.type = None
-        self.Nslices = None
         self.rate = None
-        self.Nsegm = None
-        self.curve = None
+        self.is_step = None
+        self.function = None
         self.angle_list = None
-        self.index_list = None
-        self.is_stator = None
+        self.z_list = None
 
     def _get_type(self):
         """getter of type"""
@@ -235,27 +249,12 @@ class Skew(FrozenClass):
         check_var("type", value, "str")
         self._type = value
 
-    # Type of skew ("linear", "step", "vshape", "user-defined")
+    # Type of skew ("linear", "vshape", "function", "user-defined")
     # Type : str
     type = property(
         fget=_get_type,
         fset=_set_type,
-        doc=u"""Type of skew ("linear", "step", "vshape", "user-defined")""",
-    )
-
-    def _get_Nslices(self):
-        """getter of Nslices"""
-        return self._Nslices
-
-    def _set_Nslices(self, value):
-        """setter of Nslices"""
-        check_var("Nslices", value, "int")
-        self._Nslices = value
-
-    # Number of slices
-    # Type : int
-    Nslices = property(
-        fget=_get_Nslices, fset=_set_Nslices, doc=u"""Number of slices"""
+        doc=u"""Type of skew ("linear", "vshape", "function", "user-defined")""",
     )
 
     def _get_rate(self):
@@ -271,46 +270,46 @@ class Skew(FrozenClass):
     # Type : float
     rate = property(fget=_get_rate, fset=_set_rate, doc=u"""Skew rate""")
 
-    def _get_Nsegm(self):
-        """getter of Nsegm"""
-        return self._Nsegm
+    def _get_is_step(self):
+        """getter of is_step"""
+        return self._is_step
 
-    def _set_Nsegm(self, value):
-        """setter of Nsegm"""
-        check_var("Nsegm", value, "int")
-        self._Nsegm = value
+    def _set_is_step(self, value):
+        """setter of is_step"""
+        check_var("is_step", value, "bool")
+        self._is_step = value
 
-    # Number of segments for step skew
-    # Type : int
-    Nsegm = property(
-        fget=_get_Nsegm, fset=_set_Nsegm, doc=u"""Number of segments for step skew"""
+    # Skew is defined as steps
+    # Type : bool
+    is_step = property(
+        fget=_get_is_step, fset=_set_is_step, doc=u"""Skew is defined as steps"""
     )
 
-    def _get_curve(self):
-        """getter of curve"""
-        return self._curve[0]
+    def _get_function(self):
+        """getter of function"""
+        return self._function[0]
 
-    def _set_curve(self, value):
-        """setter of curve"""
+    def _set_function(self, value):
+        """setter of function"""
         try:
-            check_var("curve", value, "list")
+            check_var("function", value, "list")
         except CheckTypeError:
-            check_var("curve", value, "function")
+            check_var("function", value, "function")
         if isinstance(value, list):  # Load function from saved dict
-            self._curve = [loads(value[0].encode("ISO-8859-2")), value[1]]
+            self._function = [loads(value[0].encode("ISO-8859-2")), value[1]]
         elif value is None:
-            self._curve = [None, None]
+            self._function = [None, None]
         elif callable(value):
-            self._curve = [value, getsource(value)]
+            self._function = [value, getsource(value)]
         else:
             raise TypeError(
                 "Expected function or list from a saved file, got: " + str(type(value))
             )
 
-    # Curve for user-defined skew
+    # Function for function skew
     # Type : function
-    curve = property(
-        fget=_get_curve, fset=_set_curve, doc=u"""Curve for user-defined skew"""
+    function = property(
+        fget=_get_function, fset=_set_function, doc=u"""Function for function skew"""
     )
 
     def _get_angle_list(self):
@@ -328,36 +327,17 @@ class Skew(FrozenClass):
         fget=_get_angle_list, fset=_set_angle_list, doc=u"""List of skew angles"""
     )
 
-    def _get_index_list(self):
-        """getter of index_list"""
-        return self._index_list
+    def _get_z_list(self):
+        """getter of z_list"""
+        return self._z_list
 
-    def _set_index_list(self, value):
-        """setter of index_list"""
-        check_var("index_list", value, "list")
-        self._index_list = value
+    def _set_z_list(self, value):
+        """setter of z_list"""
+        check_var("z_list", value, "list")
+        self._z_list = value
 
-    # List of indices to avoid redundant computations
+    # List of slice positions
     # Type : list
-    index_list = property(
-        fget=_get_index_list,
-        fset=_set_index_list,
-        doc=u"""List of indices to avoid redundant computations""",
-    )
-
-    def _get_is_stator(self):
-        """getter of is_stator"""
-        return self._is_stator
-
-    def _set_is_stator(self, value):
-        """setter of is_stator"""
-        check_var("is_stator", value, "bool")
-        self._is_stator = value
-
-    # Is the skew defined for a stator
-    # Type : bool
-    is_stator = property(
-        fget=_get_is_stator,
-        fset=_set_is_stator,
-        doc=u"""Is the skew defined for a stator""",
+    z_list = property(
+        fget=_get_z_list, fset=_set_z_list, doc=u"""List of slice positions"""
     )

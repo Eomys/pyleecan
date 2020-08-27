@@ -29,6 +29,7 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
+from .SkewModel import SkewModel
 
 
 class Magnetics(FrozenClass):
@@ -94,6 +95,7 @@ class Magnetics(FrozenClass):
         is_symmetry_a=False,
         sym_a=1,
         is_antiper_a=False,
+        skew_model=None,
         init_dict=None,
         init_str=None,
     ):
@@ -108,6 +110,8 @@ class Magnetics(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if skew_model == -1:
+            skew_model = SkewModel()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -128,6 +132,7 @@ class Magnetics(FrozenClass):
             is_symmetry_a = obj.is_symmetry_a
             sym_a = obj.sym_a
             is_antiper_a = obj.is_antiper_a
+            skew_model = obj.skew_model
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -157,6 +162,8 @@ class Magnetics(FrozenClass):
                 sym_a = init_dict["sym_a"]
             if "is_antiper_a" in list(init_dict.keys()):
                 is_antiper_a = init_dict["is_antiper_a"]
+            if "skew_model" in list(init_dict.keys()):
+                skew_model = init_dict["skew_model"]
         # Initialisation by argument
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
@@ -172,6 +179,15 @@ class Magnetics(FrozenClass):
         self.is_symmetry_a = is_symmetry_a
         self.sym_a = sym_a
         self.is_antiper_a = is_antiper_a
+        # skew_model can be None, a SkewModel object or a dict
+        if isinstance(skew_model, dict):
+            self.skew_model = SkewModel(init_dict=skew_model)
+        elif isinstance(skew_model, str):
+            from ..Functions.load import load
+
+            self.skew_model = load(skew_model)
+        else:
+            self.skew_model = skew_model
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -197,6 +213,13 @@ class Magnetics(FrozenClass):
         Magnetics_str += "is_symmetry_a = " + str(self.is_symmetry_a) + linesep
         Magnetics_str += "sym_a = " + str(self.sym_a) + linesep
         Magnetics_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
+        if self.skew_model is not None:
+            tmp = (
+                self.skew_model.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
+            Magnetics_str += "skew_model = " + tmp
+        else:
+            Magnetics_str += "skew_model = None" + linesep + linesep
         return Magnetics_str
 
     def __eq__(self, other):
@@ -230,6 +253,8 @@ class Magnetics(FrozenClass):
             return False
         if other.is_antiper_a != self.is_antiper_a:
             return False
+        if other.skew_model != self.skew_model:
+            return False
         return True
 
     def as_dict(self):
@@ -250,6 +275,10 @@ class Magnetics(FrozenClass):
         Magnetics_dict["is_symmetry_a"] = self.is_symmetry_a
         Magnetics_dict["sym_a"] = self.sym_a
         Magnetics_dict["is_antiper_a"] = self.is_antiper_a
+        if self.skew_model is None:
+            Magnetics_dict["skew_model"] = None
+        else:
+            Magnetics_dict["skew_model"] = self.skew_model.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -270,6 +299,8 @@ class Magnetics(FrozenClass):
         self.is_symmetry_a = None
         self.sym_a = None
         self.is_antiper_a = None
+        if self.skew_model is not None:
+            self.skew_model._set_None()
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -490,4 +521,22 @@ class Magnetics(FrozenClass):
         fget=_get_is_antiper_a,
         fset=_set_is_antiper_a,
         doc=u"""To add an antiperiodicity to the angle vector""",
+    )
+
+    def _get_skew_model(self):
+        """getter of skew_model"""
+        return self._skew_model
+
+    def _set_skew_model(self, value):
+        """setter of skew_model"""
+        check_var("skew_model", value, "SkewModel")
+        self._skew_model = value
+
+        if self._skew_model is not None:
+            self._skew_model.parent = self
+
+    # Skew model
+    # Type : SkewModel
+    skew_model = property(
+        fget=_get_skew_model, fset=_set_skew_model, doc=u"""Skew model"""
     )

@@ -3451,6 +3451,15 @@
                 "type": "[Notch]",
                 "unit": "-",
                 "value": ""
+            },
+            {
+                "desc": "Skew object",
+                "max": "",
+                "min": "",
+                "name": "skew",
+                "type": "Skew",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -4556,6 +4565,15 @@
                 "type": "bool",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "Skew model",
+                "max": "",
+                "min": "",
+                "name": "skew_model",
+                "type": "SkewModel",
+                "unit": "-",
+                "value": null
             }
         ]
     },
@@ -6277,6 +6295,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "Pyleecan.OutMag"
+            },
+            {
+                "desc": "z-axis for skew",
+                "max": "",
+                "min": "",
+                "name": "skew_axis",
+                "type": "list",
+                "unit": "m",
+                "value": null
             }
         ]
     },
@@ -7027,30 +7054,23 @@
         "is_internal": false,
         "methods": [
             "comp_angle",
-            "plot"
+            "plot",
+            "get_angle_unique",
+            "get_ind_unique"
         ],
         "mother": "",
         "name": "Skew",
-        "package": "Simulation",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Skew.csv",
+        "package": "Machine",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Machine/Skew.csv",
         "properties": [
             {
-                "desc": "Type of skew (\"linear\", \"step\", \"vshape\", \"user-defined\")",
+                "desc": "Type of skew (\"linear\", \"vshape\", \"function\", \"user-defined\")",
                 "max": "",
                 "min": "",
                 "name": "type",
                 "type": "str",
                 "unit": "-",
                 "value": "None"
-            },
-            {
-                "desc": "Number of slices",
-                "max": "",
-                "min": "",
-                "name": "Nslices",
-                "type": "int",
-                "unit": "-",
-                "value": 10
             },
             {
                 "desc": "Skew rate",
@@ -7062,19 +7082,19 @@
                 "value": 0
             },
             {
-                "desc": "Number of segments for step skew",
+                "desc": "Skew is defined as steps",
                 "max": "",
                 "min": "",
-                "name": "Nsegm",
-                "type": "int",
+                "name": "is_step",
+                "type": "bool",
                 "unit": "-",
-                "value": null
+                "value": true
             },
             {
-                "desc": "Curve for user-defined skew",
+                "desc": "Function for function skew",
                 "max": "",
                 "min": "",
-                "name": "curve",
+                "name": "function",
                 "type": "function",
                 "unit": "-",
                 "value": null
@@ -7089,22 +7109,80 @@
                 "value": null
             },
             {
-                "desc": "List of indices to avoid redundant computations",
+                "desc": "List of slice positions",
                 "max": "",
                 "min": "",
-                "name": "index_list",
+                "name": "z_list",
                 "type": "list",
+                "unit": "m",
+                "value": null
+            }
+        ]
+    },
+    "SkewModel": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Class for the skew model",
+        "is_internal": false,
+        "methods": [
+            "comp_dist",
+            "comp_skew",
+            "plot"
+        ],
+        "mother": "",
+        "name": "SkewModel",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/SkewModel.csv",
+        "properties": [
+            {
+                "desc": "Type of slice distribution to use for rotor skew (\"uniform\", \"gauss\", \"user-defined\")",
+                "max": "",
+                "min": "",
+                "name": "type_dist",
+                "type": "str",
                 "unit": "-",
+                "value": "const"
+            },
+            {
+                "desc": "Number of slices",
+                "max": "",
+                "min": "",
+                "name": "Nslices",
+                "type": "int",
+                "unit": "-",
+                "value": 5
+            },
+            {
+                "desc": "List of slice positions (for user-defined skew) to be multiplied by lamination length",
+                "max": "",
+                "min": "",
+                "name": "z_list",
+                "type": "list",
+                "unit": "m",
                 "value": null
             },
             {
-                "desc": "Is the skew defined for a stator",
+                "desc": "List of rotor skew angles for user-defined skew (optional)",
                 "max": "",
                 "min": "",
-                "name": "is_stator",
-                "type": "bool",
-                "unit": "-",
-                "value": true
+                "name": "angle_list_rotor",
+                "type": "list",
+                "unit": "rad",
+                "value": null
+            },
+            {
+                "desc": "List of stator skew angles for user-defined skew (optional)",
+                "max": "",
+                "min": "",
+                "name": "angle_list_stator",
+                "type": "list",
+                "unit": "rad",
+                "value": null
             }
         ]
     },

@@ -73,6 +73,7 @@ from .Hole import Hole
 from .Bore import Bore
 from .Material import Material
 from .Notch import Notch
+from .Skew import Skew
 
 
 class LamHole(Lamination):
@@ -225,6 +226,7 @@ class LamHole(Lamination):
         is_stator=True,
         axial_vent=list(),
         notch=list(),
+        skew=None,
         init_dict=None,
         init_str=None,
     ):
@@ -243,6 +245,8 @@ class LamHole(Lamination):
             bore = Bore()
         if mat_type == -1:
             mat_type = Material()
+        if skew == -1:
+            skew = Skew()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -263,6 +267,7 @@ class LamHole(Lamination):
             is_stator = obj.is_stator
             axial_vent = obj.axial_vent
             notch = obj.notch
+            skew = obj.skew
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -292,6 +297,8 @@ class LamHole(Lamination):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "skew" in list(init_dict.keys()):
+                skew = init_dict["skew"]
         # Initialisation by argument
         # hole can be None or a list of Hole object
         self.hole = list()
@@ -369,6 +376,7 @@ class LamHole(Lamination):
             is_stator=is_stator,
             axial_vent=axial_vent,
             notch=notch,
+            skew=skew,
         )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties

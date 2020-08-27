@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import matplotlib.pyplot as plt
-from numpy import where, argmin, abs, squeeze, split
+from numpy import where, argmin, abs, squeeze, split, floor, ceil
 
 from ...Functions.init_fig import init_subplot, init_fig
 from ...definitions import config_dict
@@ -19,6 +19,7 @@ def plot_A_2D(
     xlabel="",
     ylabel="",
     fig=None,
+    ax=None,
     subplot_index=None,
     is_logscale_x=False,
     is_logscale_y=False,
@@ -81,7 +82,8 @@ def plot_A_2D(
     # Set figure/subplot
     if fig is None:
         (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
-    fig, ax = init_subplot(fig=fig, subplot_index=subplot_index)
+    if ax is None:
+        fig, ax = init_subplot(fig=fig, subplot_index=subplot_index)
 
     # Expend default argument
     if len(color_list) < len(Ydatas) and len(color_list) == 1:
@@ -158,6 +160,29 @@ def plot_A_2D(
             vect_list = split(Ydatas[i], 2)
             ax.quiver(x, y, squeeze(vect_list[0]), squeeze(vect_list[1]))
             ax.axis("equal")
+    elif type == "step":
+        for i in range(len(Ydatas)):
+            ax.step(
+                Xdata,
+                Ydatas[i],
+                color=color_list[i],
+                label=legend_list[i],
+                linewidth=linewidth_list[i],
+                where="post",
+            )
+    elif type == "curve_point":
+        for i in range(len(Ydatas)):
+            ax.plot(
+                Xdata,
+                Ydatas[i],
+                color=color_list[i],
+                label=legend_list[i],
+                linewidth=linewidth_list[i],
+            )
+            ax.plot(Xdata, Ydatas[i], "C2o", color=color_list[i], markersize=12)
+    elif type == "scatter":
+        for i in range(len(Ydatas)):
+            ax.plot(Xdata, Ydatas[i], "C2o", color=color_list[i], markersize=12)
 
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)

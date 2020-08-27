@@ -59,6 +59,7 @@ class OutMag(FrozenClass):
         meshsolution=-1,
         FEMM_dict=None,
         logger_name="Pyleecan.OutMag",
+        skew_axis=None,
         init_dict=None,
         init_str=None,
     ):
@@ -96,6 +97,7 @@ class OutMag(FrozenClass):
             meshsolution = obj.meshsolution
             FEMM_dict = obj.FEMM_dict
             logger_name = obj.logger_name
+            skew_axis = obj.skew_axis
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -127,6 +129,8 @@ class OutMag(FrozenClass):
                 FEMM_dict = init_dict["FEMM_dict"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
+            if "skew_axis" in list(init_dict.keys()):
+                skew_axis = init_dict["skew_axis"]
         # Initialisation by argument
         self.parent = None
         # time can be None, a ndarray or a list
@@ -161,6 +165,7 @@ class OutMag(FrozenClass):
             self.meshsolution = meshsolution
         self.FEMM_dict = FEMM_dict
         self.logger_name = logger_name
+        self.skew_axis = skew_axis
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -219,6 +224,12 @@ class OutMag(FrozenClass):
             OutMag_str += "meshsolution = None" + linesep + linesep
         OutMag_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
         OutMag_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
+        OutMag_str += (
+            "skew_axis = "
+            + linesep
+            + str(self.skew_axis).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return OutMag_str
 
     def __eq__(self, other):
@@ -253,6 +264,8 @@ class OutMag(FrozenClass):
         if other.FEMM_dict != self.FEMM_dict:
             return False
         if other.logger_name != self.logger_name:
+            return False
+        if other.skew_axis != self.skew_axis:
             return False
         return True
 
@@ -304,6 +317,7 @@ class OutMag(FrozenClass):
             OutMag_dict["meshsolution"] = self.meshsolution.as_dict()
         OutMag_dict["FEMM_dict"] = self.FEMM_dict
         OutMag_dict["logger_name"] = self.logger_name
+        OutMag_dict["skew_axis"] = self.skew_axis
         # The class name is added to the dict fordeserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
@@ -326,6 +340,7 @@ class OutMag(FrozenClass):
             self.meshsolution._set_None()
         self.FEMM_dict = None
         self.logger_name = None
+        self.skew_axis = None
 
     def _get_time(self):
         """getter of time"""
@@ -592,4 +607,19 @@ class OutMag(FrozenClass):
         fget=_get_logger_name,
         fset=_set_logger_name,
         doc=u"""Name of the logger to use""",
+    )
+
+    def _get_skew_axis(self):
+        """getter of skew_axis"""
+        return self._skew_axis
+
+    def _set_skew_axis(self, value):
+        """setter of skew_axis"""
+        check_var("skew_axis", value, "list")
+        self._skew_axis = value
+
+    # z-axis for skew
+    # Type : list
+    skew_axis = property(
+        fget=_get_skew_axis, fset=_set_skew_axis, doc=u"""z-axis for skew"""
     )

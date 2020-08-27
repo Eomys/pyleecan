@@ -63,6 +63,7 @@ from .Slot import Slot
 from .Material import Material
 from .Hole import Hole
 from .Notch import Notch
+from .Skew import Skew
 
 
 class LamSlotMag(LamSlot):
@@ -192,6 +193,7 @@ class LamSlotMag(LamSlot):
         is_stator=True,
         axial_vent=list(),
         notch=list(),
+        skew=None,
         init_dict=None,
         init_str=None,
     ):
@@ -210,6 +212,8 @@ class LamSlotMag(LamSlot):
             slot = Slot()
         if mat_type == -1:
             mat_type = Material()
+        if skew == -1:
+            skew = Skew()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -229,6 +233,7 @@ class LamSlotMag(LamSlot):
             is_stator = obj.is_stator
             axial_vent = obj.axial_vent
             notch = obj.notch
+            skew = obj.skew
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -256,6 +261,8 @@ class LamSlotMag(LamSlot):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "skew" in list(init_dict.keys()):
+                skew = init_dict["skew"]
         # Initialisation by argument
         # Call LamSlot init
         super(LamSlotMag, self).__init__(
@@ -271,6 +278,7 @@ class LamSlotMag(LamSlot):
             is_stator=is_stator,
             axial_vent=axial_vent,
             notch=notch,
+            skew=skew,
         )
         # The class is frozen (in LamSlot init), for now it's impossible to
         # add new properties

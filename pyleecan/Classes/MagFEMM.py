@@ -39,6 +39,7 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
+from .SkewModel import SkewModel
 
 
 class MagFEMM(Magnetics):
@@ -140,6 +141,7 @@ class MagFEMM(Magnetics):
         is_symmetry_a=False,
         sym_a=1,
         is_antiper_a=False,
+        skew_model=None,
         init_dict=None,
         init_str=None,
     ):
@@ -154,6 +156,8 @@ class MagFEMM(Magnetics):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if skew_model == -1:
+            skew_model = SkewModel()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -184,6 +188,7 @@ class MagFEMM(Magnetics):
             is_symmetry_a = obj.is_symmetry_a
             sym_a = obj.sym_a
             is_antiper_a = obj.is_antiper_a
+            skew_model = obj.skew_model
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -233,6 +238,8 @@ class MagFEMM(Magnetics):
                 sym_a = init_dict["sym_a"]
             if "is_antiper_a" in list(init_dict.keys()):
                 is_antiper_a = init_dict["is_antiper_a"]
+            if "skew_model" in list(init_dict.keys()):
+                skew_model = init_dict["skew_model"]
         # Initialisation by argument
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -259,6 +266,7 @@ class MagFEMM(Magnetics):
             is_symmetry_a=is_symmetry_a,
             sym_a=sym_a,
             is_antiper_a=is_antiper_a,
+            skew_model=skew_model,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties

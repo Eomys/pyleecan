@@ -119,6 +119,7 @@ from ._check import InitUnKnowClassError
 from .Material import Material
 from .Hole import Hole
 from .Notch import Notch
+from .Skew import Skew
 
 
 class Lamination(FrozenClass):
@@ -370,6 +371,7 @@ class Lamination(FrozenClass):
         is_stator=True,
         axial_vent=list(),
         notch=list(),
+        skew=None,
         init_dict=None,
         init_str=None,
     ):
@@ -386,6 +388,8 @@ class Lamination(FrozenClass):
 
         if mat_type == -1:
             mat_type = Material()
+        if skew == -1:
+            skew = Skew()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -404,6 +408,7 @@ class Lamination(FrozenClass):
             is_stator = obj.is_stator
             axial_vent = obj.axial_vent
             notch = obj.notch
+            skew = obj.skew
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -429,6 +434,8 @@ class Lamination(FrozenClass):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
+            if "skew" in list(init_dict.keys()):
+                skew = init_dict["skew"]
         # Initialisation by argument
         self.parent = None
         self.L1 = L1
@@ -515,6 +522,15 @@ class Lamination(FrozenClass):
             self.notch = list()
         else:
             self.notch = notch
+        # skew can be None, a Skew object or a dict
+        if isinstance(skew, dict):
+            self.skew = Skew(init_dict=skew)
+        elif isinstance(skew, str):
+            from ..Functions.load import load
+
+            self.skew = load(skew)
+        else:
+            self.skew = skew
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -552,6 +568,11 @@ class Lamination(FrozenClass):
         for ii in range(len(self.notch)):
             tmp = self.notch[ii].__str__().replace(linesep, linesep + "\t") + linesep
             Lamination_str += "notch[" + str(ii) + "] =" + tmp + linesep + linesep
+        if self.skew is not None:
+            tmp = self.skew.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Lamination_str += "skew = " + tmp
+        else:
+            Lamination_str += "skew = None" + linesep + linesep
         return Lamination_str
 
     def __eq__(self, other):
@@ -581,6 +602,8 @@ class Lamination(FrozenClass):
             return False
         if other.notch != self.notch:
             return False
+        if other.skew != self.skew:
+            return False
         return True
 
     def as_dict(self):
@@ -606,6 +629,10 @@ class Lamination(FrozenClass):
         Lamination_dict["notch"] = list()
         for obj in self.notch:
             Lamination_dict["notch"].append(obj.as_dict())
+        if self.skew is None:
+            Lamination_dict["skew"] = None
+        else:
+            Lamination_dict["skew"] = self.skew.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         Lamination_dict["__class__"] = "Lamination"
         return Lamination_dict
@@ -627,6 +654,8 @@ class Lamination(FrozenClass):
             obj._set_None()
         for obj in self.notch:
             obj._set_None()
+        if self.skew is not None:
+            self.skew._set_None()
 
     def _get_L1(self):
         """getter of L1"""
@@ -811,3 +840,19 @@ class Lamination(FrozenClass):
     notch = property(
         fget=_get_notch, fset=_set_notch, doc=u"""Lamination bore notches"""
     )
+
+    def _get_skew(self):
+        """getter of skew"""
+        return self._skew
+
+    def _set_skew(self, value):
+        """setter of skew"""
+        check_var("skew", value, "Skew")
+        self._skew = value
+
+        if self._skew is not None:
+            self._skew.parent = self
+
+    # Skew object
+    # Type : Skew
+    skew = property(fget=_get_skew, fset=_set_skew, doc=u"""Skew object""")
