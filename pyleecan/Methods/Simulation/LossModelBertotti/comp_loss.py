@@ -39,7 +39,10 @@ def comp_loss(self, output, lam, typ):
 
     # apply model
     # #TODO model equation should be a func that takes SciDataTool Data as input
-    Loss = self.comp_loss_norm(output.mag.meshsolution.solution[0].field)
+    field = output.mag.meshsolution.solution[0].field
+
+    # TODO filter machine parts
+    Loss = self.comp_loss_norm(field)
 
     # store losses field
 

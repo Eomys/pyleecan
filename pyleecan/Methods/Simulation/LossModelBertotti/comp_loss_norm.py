@@ -29,8 +29,6 @@ def comp_loss_norm(self, data):
     # TODO assumption is that direction is 3rd axis
     # TODO better data check (axis size, ...) and data handling
 
-    # TODO filter indices
-
     f_norm = abs(mag_dict["freqs"][:, newaxis, newaxis] / self.F_REF)
     B_norm = 1 / 2* mag_dict["B"] / self.B_REF # factor 1/2 to account for SciDataTool FFT
 
