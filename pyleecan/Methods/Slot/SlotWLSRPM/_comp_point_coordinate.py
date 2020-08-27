@@ -12,12 +12,12 @@ def _comp_point_coordinate(self):
     Returns
     -------
     point_list: list
-        A list of 10 Point
+        A list of 8 Point
 
     """
 
     Rbo = self.get_Rbo()
-    Ryo = self.get_Ryoke()
+ 
 
     hsp = pi / self.Zs  # Half slot pitch
 
@@ -56,12 +56,12 @@ def _comp_point_coordinate(self):
     Z4 = Z4t * exp(-1j * hsp)
     # Z3
     x3t = x4t
-    y3t = self.W3 / 2 + self.R1
+    y3t = y4t-self.W1
     Z3t = x3t + 1j * y3t
     Z3 = Z3t * exp(-1j * hsp)
     # Z2
     x2t = x3t - self.R1
-    y2t = y1t
+    y2t = self.W3 / 2
     Z2t = x2t + 1j * y2t
     Z2 = Z2t * exp(-1j * hsp)
     # Z1

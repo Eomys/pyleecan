@@ -1,10 +1,5 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 W1,m,Slot bottom side width.,0,float,0.008,0,,,Slot,SlotWind,_comp_point_coordinate,VERSION,1,Open Rectangular or trapezoidal slot with wedge
 W3,m,Tooth width,0,float,11.6E-03,0,,,,,build_geometry,IS_SYMMETRICAL,1,
-H0,m,Slot yoke height,0,float,0.007,0,,,,,build_geometry_wind,,,
-H2,m,Slot height ,0,float,14.8E-03,0,,,,,check,,,
-R1,m,Top radius,0,float,0.00075,,,,,,comp_angle_opening,,,
-,,,,,,,,,,,comp_height,,,
-,,,,,,,,,,,comp_height_wind,,,
-,,,,,,,,,,,comp_surface,,,
-,,,,,,,,,,,comp_surface_wind,,,
+H2,m,Slot height ,0,float,14.8E-03,0,,,,,build_geometry_wind,,,
+R1,m,Top radius,0,float,0.00075,0,,,,,check,,,
