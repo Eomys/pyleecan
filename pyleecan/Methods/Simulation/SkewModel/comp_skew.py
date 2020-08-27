@@ -80,8 +80,8 @@ def comp_skew(self):
         self.angle_list_rotor = [0 for z in self.z_list]
 
     # Compute skew
-    stator.skew.comp_angle(z_list=self.z_list, angle_list=self.angle_list_stator)
-    rotor.skew.comp_angle(z_list=self.z_list, angle_list=self.angle_list_rotor)
+    z_list_stator = stator.skew.comp_angle(z_list=self.z_list, angle_list=self.angle_list_stator)
+    z_list_rotor = rotor.skew.comp_angle(z_list=self.z_list, angle_list=self.angle_list_rotor)
 
     # Store skew axis in Outmag
-    self.parent.parent.parent.mag.skew_axis = self.z_list
+    self.parent.parent.parent.mag.skew_axis = sorted(set(z_list_stator + z_list_rotor))

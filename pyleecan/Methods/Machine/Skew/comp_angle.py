@@ -53,6 +53,7 @@ def comp_angle(self, z_list=None, angle_list=None):
         else:
             self.angle_list = angle_list
             self.z_list = z_list
+        return z_list
 
     else:
 
@@ -87,3 +88,4 @@ def comp_angle(self, z_list=None, angle_list=None):
 
         self.angle_list = angle_list
         self.z_list = z_list
+        return z_list
