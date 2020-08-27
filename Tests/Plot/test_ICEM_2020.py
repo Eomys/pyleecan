@@ -10,15 +10,13 @@ from pyleecan.Classes.import_all import *
 from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
 from Tests import save_plot_path
 from Tests.Plot.LamWind import wind_mat
-from Tests.Validation.Machine.SCIM_006 import SCIM_006
-from Tests.Validation.Machine.SPMSM_015 import SPMSM_015
 from pyleecan.Functions.load import load
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
-from pyleecan.Classes.OptiObjFunc import OptiObjFunc
+from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
@@ -26,6 +24,12 @@ from pyleecan.Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
 
 import numpy as np
 import random
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+
+SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
+SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
 
 # Gather results in the same folder
 save_path = join(save_plot_path, "ICEM_2020")
@@ -48,7 +52,7 @@ def test_FEMM_sym():
     simu.machine.name = "fig_09_FEMM_sym"
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(1) * 1500)
+    N0 = 1500
     Is = ImportMatrixVal(value=array([[20, -10, -10]]))
     Ir = ImportMatrixVal(value=zeros((1, 28)))
     time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=False)
@@ -56,7 +60,7 @@ def test_FEMM_sym():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
@@ -442,14 +446,14 @@ def test_ecc_FEMM():
     gap = SPMSM_015.comp_width_airgap_mec()
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(1) * 3000)
+    N0 = 3000
     Is = ImportMatrixVal(value=array([[0, 0, 0]]))
     time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=True)
     angle = ImportGenVectLin(start=0, stop=2 * 2 * pi / 9, num=2043, endpoint=False)
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,
         time=time,
         angle=angle,
@@ -493,10 +497,9 @@ def test_ecc_FEMM():
         join(save_path, "fig_19_Transform_list_model.fem"),
     )
     # Plot, check, save
-    out.plot_mesh(mesh=out.mag.meshsolution.mesh[0], title="FEMM Mesh")
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "fig_19_transform_list.png"))
-    fig.savefig(join(save_path, "fig_19_transform_list.svg"), format="svg")
+    out.mag.meshsolution.plot_mesh(
+        save_path=join(save_path, "fig_19_transform_list.png")
+    )
 
 
 @pytest.mark.skip
@@ -522,7 +525,7 @@ def test_Optimization_problem():
     # This simulation will the base of every simulation during the optimization process
 
     # Load the machine
-    SPMSM_001 = load("pyleecan/Tests/Validation/Machine/SPMSM_001.json")
+    SPMSM_001 = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
 
     # Definition of the enforced output of the electrical module
     Na = 1024  # Angular steps
@@ -565,7 +568,7 @@ def test_Optimization_problem():
             ]
         )
     )
-    Nr = ImportMatrixVal(value=np.ones(Nt) * 400)
+    N0 = 400
     Ir = ImportMatrixVal(value=np.zeros((Nt, 28)))
     time = ImportGenVectLin(start=0, stop=1 / (400 / 60) / 24, num=Nt, endpoint=False)
     angle = ImportGenVectLin(start=0, stop=2 * np.pi, num=Na, endpoint=False)
@@ -580,7 +583,7 @@ def test_Optimization_problem():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
@@ -609,62 +612,65 @@ def test_Optimization_problem():
     fig.savefig(
         join(save_path, "fig_21_Machine_topology_before_optimization.svg"), format="svg"
     )
-
+    plt.close("all")
     # -------------------- #
     # OPTIMIZATION PROBLEM #
     # -------------------- #
 
     # Objective functions
-
-    def harm1(output):
+    def tem_av(output):
         """Return the average torque opposite (opposite to be maximized)"""
-        N = output.simu.input.time.num
-        x = output.mag.Tem.values[:, 0]
-        sp = np.fft.rfft(x)
-        sp = 2 / N * np.abs(sp)
-        return -sp[0] / 2
+        return -abs(output.mag.Tem_av)
 
-    def harm2(output):
-        """Return the first torque harmonic """
-        N = output.simu.input.time.num
-        x = output.mag.Tem.values[:, 0]
-        sp = np.fft.rfft(x)
-        sp = 2 / N * np.abs(sp)
-        return sp[1]
+    def Tem_rip_pp(output):
+        """Return the torque ripple """
+        return abs(output.mag.Tem_rip_pp)
 
-    objs = {
-        "Opposite average torque (Nm)": OptiObjFunc(
-            description="Maximization of the average torque", func=harm1
+    my_objs = [
+        DataKeeper(
+            name="Maximization of the average torque",
+            symbol="Tem_av",
+            unit="N.m",
+            keeper=tem_av,
         ),
-        "First torque harmonic (Nm)": OptiObjFunc(
-            description="Minimization of the first torque harmonic", func=harm2
+        DataKeeper(
+            name="Minimization of the torque ripple",
+            symbol="Tem_rip_pp",
+            unit="N.m",
+            keeper=Tem_rip_pp,
         ),
-    }
+    ]
 
     # Design variables
-    my_vars = {
-        "design var 1": OptiDesignVar(
-            name="output.simu.machine.stator.slot.W0",
+    my_vars = [
+        OptiDesignVar(
+            name="Stator slot opening",
+            symbol="W0",
+            unit="m",
             type_var="interval",
             space=[
                 0.2 * output.simu.machine.stator.slot.W2,
                 output.simu.machine.stator.slot.W2,
             ],
-            function=lambda space: random.uniform(*space),
+            get_value=lambda space: random.uniform(*space),
+            setter="simu.machine.stator.slot.W0",
         ),
-        "design var 2": OptiDesignVar(
-            name="output.simu.machine.rotor.slot.magnet[0].Wmag",
+        OptiDesignVar(
+            name="Rotor magnet width",
+            symbol="Wmag",
+            unit="m",
             type_var="interval",
             space=[
                 0.5 * output.simu.machine.rotor.slot.W0,
                 0.99 * output.simu.machine.rotor.slot.W0,
             ],  # May generate error in FEMM
-            function=lambda space: random.uniform(*space),
+            get_value=lambda space: random.uniform(*space),
+            setter="simu.machine.rotor.slot.magnet[0].Wmag",
         ),
-    }
+    ]
 
     # Problem creation
-    my_prob = OptiProblem(output=output, design_var=my_vars, obj_func=objs)
+    my_prob = OptiProblem(output=output, design_var=my_vars, obj_func=my_objs)
 
     # Solve problem with NSGA-II
     solver = OptiGenAlgNsga2Deap(problem=my_prob, size_pop=12, nb_gen=40, p_mutate=0.5)
@@ -674,42 +680,53 @@ def test_Optimization_problem():
     # PLOTS RESULTS #
     # ------------- #
 
-    res.plot_generation()
+    res.plot_generation(x_symbol="Tem_av", y_symbol="Tem_rip_pp")
     fig = plt.gcf()
     fig.savefig(join(save_path, "fig_20_Individuals_in_fitness_space.png"))
     fig.savefig(
         join(save_path, "fig_20_Individuals_in_fitness_space.svg"), format="svg"
     )
 
-    res.plot_pareto()
+    res.plot_pareto(x_symbol="Tem_av", y_symbol="Tem_rip_pp")
     fig = plt.gcf()
     fig.savefig(join(save_path, "Pareto_front_in_fitness_space.png"))
     fig.savefig(join(save_path, "Pareto_front_in_fitness_space.svg"), format="svg")
 
     # Extraction of best topologies for every objective
-    pareto = res.get_pareto()  # Extraction of the pareto front
+    pareto_index = (
+        res.get_pareto_index()
+    )  # Extract individual index in the pareto front
 
-    out1 = [pareto[0]["output"], pareto[0]["fitness"]]  # First objective
-    out2 = [pareto[0]["output"], pareto[0]["fitness"]]  # Second objective
+    idx_1 = pareto_index[0]  # First objective
+    idx_2 = pareto_index[0]  # Second objective
 
-    for pm in pareto:
-        if pm["fitness"][0] < out1[1][0]:
-            out1 = [pm["output"], pm["fitness"]]
-        if pm["fitness"][1] < out2[1][1]:
-            out2 = [pm["output"], pm["fitness"]]
+    Tem_av = res["Tem_av"].result
+    Tem_rip_pp = res["Tem_rip_pp"].result
+
+    for i in pareto_index:
+        # First objective
+        if Tem_av[i] < Tem_av[idx_1]:
+            idx_1 = i
+        # Second objective
+        if Tem_rip_pp[i] < Tem_rip_pp[idx_2]:
+            idx_2 = i
+
+    # Get corresponding simulations
+    simu1 = res.get_simu(idx_1)
+    simu2 = res.get_simu(idx_2)
 
     # Rename machine to modify the title
     name1 = "Machine that maximizes the average torque ({:.3f} Nm)".format(
-        abs(out1[1][0])
+        abs(Tem_av[idx_1])
     )
-    out1[0].simu.machine.name = name1
-    name2 = "Machine that minimizes the first torque harmonic ({:.4f}Nm)".format(
-        abs(out1[1][1])
+    simu1.machine.name = name1
+    name2 = "Machine that minimizes the torque ripple ({:.4f}Nm)".format(
+        abs(Tem_rip_pp[idx_2])
     )
-    out2[0].simu.machine.name = name2
+    simu2.machine.name = name2
 
     # plot the machine
-    out1[0].simu.machine.plot()
+    simu1.machine.plot()
     fig = plt.gcf()
     fig.savefig(
         join(save_path, "fig_21_Topology_to_maximize_average_torque.png"), format="png"
@@ -718,13 +735,11 @@ def test_Optimization_problem():
         join(save_path, "fig_21_Topology_to_maximize_average_torque.svg"), format="svg"
     )
 
-    out2[0].simu.machine.plot()
+    simu2.machine.plot()
     fig = plt.gcf()
     fig.savefig(
-        join(save_path, "fig_21_Topology_to_minimize_first_torque_harmonic.png"),
-        format="png",
+        join(save_path, "fig_21_Topology_to_minimize_torque_ripple.png"), format="png"
     )
     fig.savefig(
-        join(save_path, "fig_21_Topology_to_minimize_first_torque_harmonic.svg"),
-        format="svg",
+        join(save_path, "fig_21_Topology_to_minimize_torque_ripple.svg"), format="svg"
     )

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/Mesh.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/Mesh.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/Mesh
 """
 
 from os import linesep
@@ -10,14 +11,6 @@ from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ._frozen import FrozenClass
 
-# Import all class method
-# Try/catch to remove unnecessary dependencies in unused method
-try:
-    from ..Methods.Mesh.Mesh.get_mesh import get_mesh
-except ImportError as error:
-    get_mesh = error
-
-
 from ._check import InitUnKnowClassError
 
 
@@ -26,15 +19,6 @@ class Mesh(FrozenClass):
 
     VERSION = 1
 
-    # cf Methods.Mesh.Mesh.get_mesh
-    if isinstance(get_mesh, ImportError):
-        get_mesh = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Mesh method get_mesh: " + str(get_mesh))
-            )
-        )
-    else:
-        get_mesh = get_mesh
     # save method is available in all object
     save = save
 
@@ -123,8 +107,11 @@ class Mesh(FrozenClass):
         check_var("label", value, "str")
         self._label = value
 
-    # Description of the mesh
-    # Type : str
     label = property(
-        fget=_get_label, fset=_set_label, doc=u"""Description of the mesh"""
+        fget=_get_label,
+        fset=_set_label,
+        doc=u"""Description of the mesh
+
+        :Type: str
+        """,
     )

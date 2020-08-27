@@ -1,2 +1,2 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-label,-,Description of the mesh,,str,None,,,,Mesh,,get_mesh,VERSION,1,Abstract Class for mesh related classes
+label,-,Description of the mesh,,str,None,,,,Mesh,,,VERSION,1,Abstract Class for mesh related classes

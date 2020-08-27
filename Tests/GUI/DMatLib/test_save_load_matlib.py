@@ -15,7 +15,7 @@ from pyleecan.Functions.load import load
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
 from pyleecan.GUI.Dialog.DMatLib.DMatLib import DMatLib
 from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
-from Tests import DATA_DIR
+from Tests import TEST_DATA_DIR
 from Tests import save_load_path as save_path
 
 
@@ -59,17 +59,17 @@ class test_save_load_matlib(TestCase):
         mkdir(join(self.work_path, "Lamination"))
         mkdir(join(self.work_path, "Magnet"))
         copyfile(
-            join(DATA_DIR, "Material", "Magnet1.json"),
+            join(TEST_DATA_DIR, "Material", "Magnet1.json"),
             join(self.work_path, "Magnet", "Magnet1.json"),
         )
         cop_path = join(self.work_path, "Copper1.json")
-        copyfile(join(DATA_DIR, "Material", "Copper1.json"), cop_path)
+        copyfile(join(TEST_DATA_DIR, "Material", "Copper1.json"), cop_path)
         copyfile(
-            join(DATA_DIR, "Material", "Insulator1.json"),
+            join(TEST_DATA_DIR, "Material", "Insulator1.json"),
             join(self.work_path, "Insulator1.json"),
         )
         lam_path = join(self.work_path, "Lamination", "M400-50A.json")
-        copyfile(join(DATA_DIR, "Material", "M400-50A.json"), lam_path)
+        copyfile(join(TEST_DATA_DIR, "Material", "M400-50A.json"), lam_path)
         # Check initial state
         nb_file = len(
             [

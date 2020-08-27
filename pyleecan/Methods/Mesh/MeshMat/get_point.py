@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def get_point(self, indices=None, is_indice=False):
+def get_point(self, indices=None):
     """Return a matrix of points coordinates.
 
     Parameters
@@ -22,12 +22,9 @@ def get_point(self, indices=None, is_indice=False):
 
     """
     if indices is None:
-        if is_indice:
-            return self.point.coordinate, self.point.indice
-        else:
-            return self.point.coordinate
+        return self.point.coordinate
     else:
-        if indices.size == 0:
-            return indices
+        if len(indices) == 0:
+            return indices  # empty ndarray
         else:
             return self.point.coordinate[indices, :]

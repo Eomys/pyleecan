@@ -218,54 +218,58 @@ class SMagnet(Ui_SMagnet, QDialog):
             A SMagnet object
         """
         # We have to make sure the slot is right before truing to plot it
-        error = self.check()
+        error = self.check(self.machine.rotor)
 
         if error:  # Error => Display it
             QMessageBox().critical(self, self.tr("Error"), error)
         else:  # No error => Plot the machine
             self.machine.plot()
 
-    def check(self):
+    @staticmethod
+    def check(lamination):
         """Check that the current machine have all the needed field set
 
         Parameters
         ----------
-        self : SMagnet
-            A SMagnet object
+        lamination : Lamination
+            Lamination to check
 
         Returns
         -------
         error: str
             Error message (return None if no error)
         """
-        # Check that everything is set
-        if self.machine.rotor.slot.magnet[0].Wmag is None:
-            return self.tr("You must set Wmag !")
-        if self.machine.rotor.slot.magnet[0].Hmag is None:
-            return self.tr("You must set Hmag !")
-        if (
-            hasattr(self.machine.rotor.slot.magnet[0], "Rtop")
-            and self.machine.rotor.slot.magnet[0].Rtop is None
-        ):
-            return self.tr("You must set Rtopm !")
-        if self.machine.rotor.slot.H0 is None:
-            return self.tr("You must set H0 !")
+        try:
+            # Check that everything is set
+            if lamination.slot.magnet[0].Wmag is None:
+                return "You must set Wmag !"
+            if lamination.slot.magnet[0].Hmag is None:
+                return "You must set Hmag !"
+            if (
+                hasattr(lamination.slot.magnet[0], "Rtop")
+                and lamination.slot.magnet[0].Rtop is None
+            ):
+                return "You must set Rtopm !"
+            if lamination.slot.H0 is None:
+                return "You must set H0 !"
+        except Exception as e:
+            return str(e)
 
         # Check that everything is set right
         try:
-            mec_gap = self.machine.comp_width_airgap_mec()
+            mec_gap = lamination.parent.comp_width_airgap_mec()
         except:
-            return self.tr("Unable to draw the magnet, " "please check your geometry !")
+            return "Unable to draw the magnet, " "please check your geometry !"
 
         if mec_gap <= 0:
-            return self.tr("You must have gap_min > 0 (reduce Hmag) !")
-        if hasattr(self.machine.rotor.slot.magnet[0], "Rtop"):
+            return "You must have gap_min > 0 (reduce Hmag) !"
+        if hasattr(lamination.slot.magnet[0], "Rtop"):
             if (
-                type(self.machine.rotor.slot.magnet[0]) is MagnetType13
-                and self.machine.rotor.slot.magnet[0].Rtop
-                < self.machine.rotor.slot.magnet[0].Wmag / 2.0
+                type(lamination.slot.magnet[0]) is MagnetType13
+                and lamination.slot.magnet[0].Rtop
+                < lamination.slot.magnet[0].Wmag / 2.0
             ):
-                return self.tr("You must have Rtopm >= Wmag/2 !")
+                return "You must have Rtopm >= Wmag/2 !"
 
     def s_set_type_magnetization(self, index):
         """Signal to update the value of type_magnetization according to the combobox

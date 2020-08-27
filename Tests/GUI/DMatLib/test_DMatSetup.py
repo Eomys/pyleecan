@@ -14,7 +14,7 @@ from PyQt5.QtTest import QTest
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
 from pyleecan.GUI.Dialog.DMatLib.DMatSetup.DMatSetup import DMatSetup
-from Tests import save_load_path as save_path, DATA_DIR
+from Tests import save_load_path as save_path, TEST_DATA_DIR
 
 
 class test_DMatSetup(TestCase):
@@ -28,7 +28,7 @@ class test_DMatSetup(TestCase):
             rmtree(self.work_path)
         mkdir(self.work_path)
         copyfile(
-            join(DATA_DIR, "Material", "Magnet1.json"),
+            join(TEST_DATA_DIR, "Material", "Magnet1.json"),
             join(self.work_path, "Magnet1.json"),
         )
 

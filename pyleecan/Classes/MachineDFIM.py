@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/MachineDFIM.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/MachineDFIM.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/MachineDFIM
 """
 
 from os import linesep
@@ -21,6 +22,11 @@ try:
     from ..Methods.Machine.MachineDFIM.get_machine_type import get_machine_type
 except ImportError as error:
     get_machine_type = error
+
+try:
+    from ..Methods.Machine.MachineDFIM.get_lam_list import get_lam_list
+except ImportError as error:
+    get_lam_list = error
 
 
 from ._check import InitUnKnowClassError
@@ -56,6 +62,17 @@ class MachineDFIM(MachineAsync):
         )
     else:
         get_machine_type = get_machine_type
+    # cf Methods.Machine.MachineDFIM.get_lam_list
+    if isinstance(get_lam_list, ImportError):
+        get_lam_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MachineDFIM method get_lam_list: " + str(get_lam_list)
+                )
+            )
+        )
+    else:
+        get_lam_list = get_lam_list
     # save method is available in all object
     save = save
 
@@ -271,9 +288,14 @@ class MachineDFIM(MachineAsync):
         if self._rotor is not None:
             self._rotor.parent = self
 
-    # Machine's Rotor
-    # Type : LamSlotWind
-    rotor = property(fget=_get_rotor, fset=_set_rotor, doc=u"""Machine's Rotor""")
+    rotor = property(
+        fget=_get_rotor,
+        fset=_set_rotor,
+        doc=u"""Machine's Rotor
+
+        :Type: LamSlotWind
+        """,
+    )
 
     def _get_stator(self):
         """getter of stator"""
@@ -287,6 +309,11 @@ class MachineDFIM(MachineAsync):
         if self._stator is not None:
             self._stator.parent = self
 
-    # Machine's Stator
-    # Type : LamSlotWind
-    stator = property(fget=_get_stator, fset=_set_stator, doc=u"""Machine's Stator""")
+    stator = property(
+        fget=_get_stator,
+        fset=_set_stator,
+        doc=u"""Machine's Stator
+
+        :Type: LamSlotWind
+        """,
+    )

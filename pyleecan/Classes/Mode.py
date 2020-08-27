@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Mode.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Mode.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Mode
 """
 
 from os import linesep
@@ -103,9 +104,10 @@ class Mode(SolutionMat):
         order_circ=None,
         order_long=None,
         field=None,
+        indice=None,
+        axis=None,
         type_cell="triangle",
         label=None,
-        indice=None,
         init_dict=None,
         init_str=None,
     ):
@@ -131,9 +133,10 @@ class Mode(SolutionMat):
             order_circ = obj.order_circ
             order_long = obj.order_long
             field = obj.field
+            indice = obj.indice
+            axis = obj.axis
             type_cell = obj.type_cell
             label = obj.label
-            indice = obj.indice
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -145,19 +148,21 @@ class Mode(SolutionMat):
                 order_long = init_dict["order_long"]
             if "field" in list(init_dict.keys()):
                 field = init_dict["field"]
+            if "indice" in list(init_dict.keys()):
+                indice = init_dict["indice"]
+            if "axis" in list(init_dict.keys()):
+                axis = init_dict["axis"]
             if "type_cell" in list(init_dict.keys()):
                 type_cell = init_dict["type_cell"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
-            if "indice" in list(init_dict.keys()):
-                indice = init_dict["indice"]
         # Initialisation by argument
         self.nat_freq = nat_freq
         self.order_circ = order_circ
         self.order_long = order_long
         # Call SolutionMat init
         super(Mode, self).__init__(
-            field=field, type_cell=type_cell, label=label, indice=indice
+            field=field, indice=indice, axis=axis, type_cell=type_cell, label=label
         )
         # The class is frozen (in SolutionMat init), for now it's impossible to
         # add new properties
@@ -222,10 +227,13 @@ class Mode(SolutionMat):
         check_var("nat_freq", value, "float")
         self._nat_freq = value
 
-    # Natural frequency of the mode
-    # Type : float
     nat_freq = property(
-        fget=_get_nat_freq, fset=_set_nat_freq, doc=u"""Natural frequency of the mode"""
+        fget=_get_nat_freq,
+        fset=_set_nat_freq,
+        doc=u"""Natural frequency of the mode
+
+        :Type: float
+        """,
     )
 
     def _get_order_circ(self):
@@ -237,10 +245,14 @@ class Mode(SolutionMat):
         check_var("order_circ", value, "int", Vmin=0)
         self._order_circ = value
 
-    # Circumferential order
-    # Type : int, min = 0
     order_circ = property(
-        fget=_get_order_circ, fset=_set_order_circ, doc=u"""Circumferential order"""
+        fget=_get_order_circ,
+        fset=_set_order_circ,
+        doc=u"""Circumferential order
+
+        :Type: int
+        :min: 0
+        """,
     )
 
     def _get_order_long(self):
@@ -252,8 +264,12 @@ class Mode(SolutionMat):
         check_var("order_long", value, "int", Vmin=0)
         self._order_long = value
 
-    # Longitudinal order
-    # Type : int, min = 0
     order_long = property(
-        fget=_get_order_long, fset=_set_order_long, doc=u"""Longitudinal order"""
+        fget=_get_order_long,
+        fset=_set_order_long,
+        doc=u"""Longitudinal order
+
+        :Type: int
+        :min: 0
+        """,
     )

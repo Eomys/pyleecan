@@ -15,7 +15,6 @@ from pyleecan.Classes.SlotMPolar import SlotMPolar
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Classes.Shaft import Shaft
-from pyleecan.Functions.load import load
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
@@ -23,9 +22,9 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Machine.CEFC_Lam import CEFC_Lam
+from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
 
-from Tests import DATA_DIR, save_load_path as save_path, x as logger
+from Tests import TEST_DATA_DIR, save_load_path as save_path, x as logger
 from pyleecan.Functions.load import (
     load,
     load_list,
@@ -37,9 +36,9 @@ from pyleecan.Functions.load import (
 from pyleecan.Functions.Save.save_json import save_json
 from pyleecan.Functions.Load.load_json import LoadMissingFileError
 
-load_file_1 = join(DATA_DIR, "test_wrong_slot_load_1.json")
-load_file_2 = join(DATA_DIR, "test_wrong_slot_load_2.json")
-load_file_3 = join(DATA_DIR, "test_wrong_slot_load_3.json")
+load_file_1 = join(TEST_DATA_DIR, "test_wrong_slot_load_1.json")
+load_file_2 = join(TEST_DATA_DIR, "test_wrong_slot_load_2.json")
+load_file_3 = join(TEST_DATA_DIR, "test_wrong_slot_load_3.json")
 logger.info(save_path)
 
 """test for save and load fonctions"""
@@ -108,7 +107,7 @@ def test_save_load_folder_path():
     simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(1) * 3000)
+    N0 = 3000
     Is = ImportMatrixVal(value=array([[2.25353053e02, 2.25353053e02, 2.25353053e02]]))
     time = ImportGenVectLin(start=0, stop=1, num=1, endpoint=True)
     angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
@@ -116,7 +115,7 @@ def test_save_load_folder_path():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
@@ -296,13 +295,14 @@ def test_save_load_dict():
 
 @pytest.mark.long
 @pytest.mark.FEMM
-def test_save_hdf5():
+@pytest.mark.parametrize("type_file", ["json", "h5", "pkl"])
+def test_save_load_simu(type_file):
     """Save in hdf5 file
     """
     simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(1) * 3000)
+    N0 = 3000
     Is = ImportMatrixVal(value=array([[2.25353053e02, 2.25353053e02, 2.25353053e02]]))
     time = ImportGenVectLin(start=0, stop=1, num=1, endpoint=True)
     angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
@@ -310,7 +310,7 @@ def test_save_hdf5():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
@@ -325,51 +325,7 @@ def test_save_hdf5():
     test_obj.simu.run()
     test_obj.post.legend_name = "Slotless lamination"
 
-    file_path = join(save_path, "test_save_h5.h5")
-    logger.debug(file_path)
-
-    if isfile(file_path):
-        remove(file_path)
-
-    assert isfile(file_path) == False
-    test_obj.save(file_path)
-    assert isfile(file_path)
-    test_obj2 = load(file_path)
-    assert test_obj == test_obj2
-
-
-@pytest.mark.long
-@pytest.mark.FEMM
-def test_save_json():
-    """Save in json file
-    """
-    simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
-
-    # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(1) * 3000)
-    Is = ImportMatrixVal(value=array([[2.25353053e02, 2.25353053e02, 2.25353053e02]]))
-    time = ImportGenVectLin(start=0, stop=1, num=1, endpoint=True)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
-
-    simu.input = InputCurrent(
-        Is=Is,
-        Ir=None,  # No winding on the rotor
-        Nr=Nr,
-        angle_rotor=None,  # Will be computed
-        time=time,
-        angle=angle,
-    )
-
-    # Definition of the magnetic simulation (no symmetry)
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=0, is_sliding_band=False)
-    simu.force = None
-    simu.struct = None
-
-    test_obj = Output(simu=simu)
-    test_obj.simu.run()
-    test_obj.post.legend_name = "Slotless lamination"
-
-    file_path = join(save_path, "test_save_json.json")
+    file_path = join(save_path, "test_save_{}.{}".format(type_file, type_file))
     logger.debug(file_path)
 
     if isfile(file_path):

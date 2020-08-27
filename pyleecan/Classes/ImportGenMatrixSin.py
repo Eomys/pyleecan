@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Import/ImportGenMatrixSin.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Import/ImportGenMatrixSin.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Import/ImportGenMatrixSin
 """
 
 from os import linesep
@@ -184,10 +185,11 @@ class ImportGenMatrixSin(ImportMatrix):
             if obj is not None:
                 obj.parent = self
 
-    # List of sinus vector to generate the matrix lines
-    # Type : [ImportGenVectSin]
     sin_list = property(
         fget=_get_sin_list,
         fset=_set_sin_list,
-        doc=u"""List of sinus vector to generate the matrix lines""",
+        doc=u"""List of sinus vector to generate the matrix lines
+
+        :Type: [ImportGenVectSin]
+        """,
     )

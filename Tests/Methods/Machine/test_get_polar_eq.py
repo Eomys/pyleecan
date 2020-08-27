@@ -5,8 +5,11 @@ from unittest import TestCase
 import matplotlib.pyplot as plt
 from numpy import pi
 
-from Tests.Validation.Machine.SCIM_001 import SCIM_001
 from Tests import save_plot_path as save_path
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 
 
 class test_get_polar_eq(TestCase):

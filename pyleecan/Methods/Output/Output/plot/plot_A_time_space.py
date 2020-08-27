@@ -3,6 +3,7 @@
 from .....Functions.Plot.plot_A_time_space import (
     plot_A_time_space as plot_A_time_space_fct,
 )
+from SciDataTool import VectorField
 
 
 def plot_A_time_space(
@@ -16,8 +17,10 @@ def plot_A_time_space(
     z_max=None,
     is_norm=False,
     unit="SI",
-    colormap="RdBu_r",
+    colormap=None,
     save_path=None,
+    is_auto_ticks=True,
+    component_list=None,
 ):
     """Plots a field as a function of time and space (angle)
 
@@ -47,6 +50,10 @@ def plot_A_time_space(
         colormap prescribed by user
     save_path : str
         path and name of the png file to save
+    is_auto_ticks : bool
+        in fft, adjust ticks to freqs and wavenumbers (deactivate if too close)
+    component_list : list
+        list of component names to plot in separate figures
     """
 
     # Get Data object names
@@ -54,16 +61,37 @@ def plot_A_time_space(
     data = getattr(phys, Data_str.split(".")[1])
 
     # Call the plot function
-    plot_A_time_space_fct(
-        data,
-        is_deg=is_deg,
-        is_elecorder=is_elecorder,
-        is_spaceorder=is_spaceorder,
-        freq_max=freq_max,
-        r_max=r_max,
-        z_max=z_max,
-        is_norm=is_norm,
-        unit=unit,
-        colormap=colormap,
-        save_path=save_path,
-    )
+    if isinstance(data, VectorField):
+        if component_list is None:  # default: extract all components
+            component_list = data.components.keys()
+        for comp in component_list:
+            plot_A_time_space_fct(
+                data.components[comp],
+                is_deg=is_deg,
+                is_elecorder=is_elecorder,
+                is_spaceorder=is_spaceorder,
+                freq_max=freq_max,
+                r_max=r_max,
+                z_max=z_max,
+                is_norm=is_norm,
+                unit=unit,
+                colormap=colormap,
+                save_path=save_path,
+                is_auto_ticks=is_auto_ticks,
+            )
+
+    else:
+        plot_A_time_space_fct(
+            data,
+            is_deg=is_deg,
+            is_elecorder=is_elecorder,
+            is_spaceorder=is_spaceorder,
+            freq_max=freq_max,
+            r_max=r_max,
+            z_max=z_max,
+            is_norm=is_norm,
+            unit=unit,
+            colormap=colormap,
+            save_path=save_path,
+            is_auto_ticks=is_auto_ticks,
+        )

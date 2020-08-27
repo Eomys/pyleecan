@@ -219,19 +219,7 @@ class PHoleM52(Gen_PHoleM52, QWidget):
             Error message (return None if no error)
         """
 
-        # Check that everything is set
-        if self.hole.W0 is None:
-            return self.tr("You must set W0 !")
-        elif self.hole.W3 is None:
-            return self.tr("You must set W3 !")
-        elif self.hole.H0 is None:
-            return self.tr("You must set H0 !")
-        elif self.hole.H1 is None:
-            return self.tr("You must set H1 !")
-        elif self.hole.H2 is None:
-            return self.tr("You must set H2 !")
-
-        # Constraints
+        # Constraints and None
         try:
             self.hole.check()
         except SlotCheckError as error:

@@ -1,6 +1,11 @@
-# <img alt="Pyleecan" src="https://www.pyleecan.org/_static/favicon.png" height="60">
+# <img alt="Pyleecan" src="https://www.pyleecan.org/_static/favicon.png" height="120">
+
+[![PyPI version](https://badge.fury.io/py/pyleecan.svg)](https://badge.fury.io/py/pyleecan)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+
 ## Presentation
-PYLEECAN™ objective is to provide a **user-friendly, unified, flexible simulation framework for the multiphysic design and optimization of electrical machines and drives** based on fully open-source software.
+PYLEECAN objective is to provide a **user-friendly, unified, flexible simulation framework for the multiphysic design and optimization of electrical machines and drives** based on fully open-source software.
 
 It is meant to be used by researchers, R&D engineers and teachers in electrical engineering, both on standard topologies of electrical machines and on novel topologies (e.g. during a PhD work). 
 An objective of PYLEECAN is that **every PhD student should start with PYLEECAN instead of implementing his own scripts (e.g. coupling Scilab or Matlab with Femm)**.

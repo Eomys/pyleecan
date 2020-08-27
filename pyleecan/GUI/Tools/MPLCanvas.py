@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.pyplot import subplots
-
+from matplotlib.figure import Figure
 import numpy as np
 
 
@@ -19,3 +19,10 @@ class MPLCanvas(QtWidgets.QDialog):
         self.fig.show = self.canvas.draw
 
         self.layout().addWidget(self.canvas, 0, 0, 1, 1)
+
+
+class MPLCanvas2(FigureCanvas):
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        self.fig = Figure()
+        self.axes = self.fig.add_subplot(111)
+        super(MPLCanvas2, self).__init__(self.fig)

@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from .....Functions.Plot.plot_A_time import plot_A_time as plot_A_time_fct
+from .....Functions.Plot.plot_A_fft_time import plot_A_fft_time as plot_A_fft_time_fct
+from .....Functions.init_fig import init_fig
+from SciDataTool import VectorField
+
+from matplotlib.pyplot import subplots
 
 
 def plot_A_time(
@@ -15,12 +20,14 @@ def plot_A_time(
     is_norm=False,
     unit="SI",
     data_list=[],
+    component_list=None,
     legend_list=[],
     color_list=[],
     save_path=None,
     y_min=None,
     y_max=None,
     mag_max=None,
+    is_auto_ticks=True,
 ):
     """Plots a field as a function of time
 
@@ -48,6 +55,8 @@ def plot_A_time(
         unit in which to plot the field
     data_list : list
         list of Data objects to compare
+    component_list : list
+        list of component names to plot in separate figures
     legend_list : list
         list of legends to use for each Data object (including reference one) instead of data.name
     color_list : list
@@ -60,6 +69,8 @@ def plot_A_time(
         maximum value for the y-axis
     mag_max : float
         maximum alue for the y-axis of the fft
+    is_auto_ticks : bool
+        in fft, adjust ticks to freqs (deactivate if too close)
     """
 
     # Get Data object names
@@ -67,21 +78,86 @@ def plot_A_time(
     data = getattr(phys, Data_str.split(".")[1])
 
     # Call the plot function
-    plot_A_time_fct(
-        data,
-        index_list=index_list,
-        alpha=alpha,
-        alpha_index=alpha_index,
-        is_fft=is_fft,
-        is_elecorder=is_elecorder,
-        freq_max=freq_max,
-        is_norm=is_norm,
-        unit=unit,
-        data_list=data_list,
-        legend_list=legend_list,
-        color_list=color_list,
-        save_path=save_path,
-        y_min=y_min,
-        y_max=y_max,
-        mag_max=mag_max,
-    )
+    if isinstance(data, VectorField):
+        if component_list is None:  # default: extract all components
+            component_list = data.components.keys()
+        ncomp = len(component_list)
+        if is_fft:
+            fig, axs = subplots(2, ncomp, tight_layout=True, figsize=(20, 10))
+            for i, comp in enumerate(component_list):
+                plot_A_time_fct(
+                    data.components[comp],
+                    index_list=index_list,
+                    alpha=alpha,
+                    alpha_index=alpha_index,
+                    is_norm=is_norm,
+                    unit=unit,
+                    data_list=[dat.components[comp] for dat in data_list],
+                    legend_list=legend_list,
+                    color_list=color_list,
+                    save_path=save_path,
+                    y_min=y_min,
+                    y_max=y_max,
+                    is_auto_ticks=is_auto_ticks,
+                    fig=fig,
+                    subplot_index=i,
+                )
+                plot_A_fft_time_fct(
+                    data.components[comp],
+                    alpha=alpha,
+                    alpha_index=alpha_index,
+                    is_elecorder=is_elecorder,
+                    freq_max=freq_max,
+                    unit=unit,
+                    data_list=[dat.components[comp] for dat in data_list],
+                    legend_list=legend_list,
+                    color_list=color_list,
+                    save_path=save_path,
+                    mag_max=mag_max,
+                    is_auto_ticks=is_auto_ticks,
+                    fig=fig,
+                    subplot_index=i + ncomp,
+                )
+        else:
+            fig, axs = subplots(1, ncomp, tight_layout=True, figsize=(20, 10))
+            for i, comp in enumerate(component_list):
+                plot_A_time_fct(
+                    data.components[comp],
+                    index_list=index_list,
+                    alpha=alpha,
+                    alpha_index=alpha_index,
+                    is_norm=is_norm,
+                    unit=unit,
+                    data_list=[dat.components[comp] for dat in data_list],
+                    legend_list=legend_list,
+                    color_list=color_list,
+                    save_path=save_path,
+                    y_min=y_min,
+                    y_max=y_max,
+                    is_auto_ticks=is_auto_ticks,
+                    fig=fig,
+                    subplot_index=i,
+                )
+
+    else:
+        (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+        plot_A_time_fct(
+            data,
+            index_list=index_list,
+            alpha=alpha,
+            alpha_index=alpha_index,
+            is_fft=is_fft,
+            is_elecorder=is_elecorder,
+            freq_max=freq_max,
+            is_norm=is_norm,
+            unit=unit,
+            data_list=data_list,
+            legend_list=legend_list,
+            color_list=color_list,
+            save_path=save_path,
+            y_min=y_min,
+            y_max=y_max,
+            mag_max=mag_max,
+            is_auto_ticks=is_auto_ticks,
+            fig=fig,
+        )

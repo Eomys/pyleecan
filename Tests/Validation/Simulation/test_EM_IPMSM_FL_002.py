@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
 
 from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Machine.IPMSM_A import IPMSM_A
 
 from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
@@ -14,6 +13,10 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.ForceMT import ForceMT
 from pyleecan.Classes.Output import Output
 import pytest
+from pyleecan.Functions.load import load
+from pyleecan.definitions import DATA_DIR
+
+IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
 
 @pytest.mark.long
@@ -32,7 +35,7 @@ def test_EM_IPMSM_FL_002():
     simu = Simu1(name="EM_IPMSM_FL_002", machine=IPMSM_A)
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(1) * 2504)
+    N0 = 2504
     Is_mat = zeros((1, 3))
     Is_mat[0, :] = array([0, 12.2474, -12.2474])
     Is = ImportMatrixVal(value=Is_mat)
@@ -42,7 +45,7 @@ def test_EM_IPMSM_FL_002():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
@@ -66,20 +69,18 @@ def test_EM_IPMSM_FL_002():
     simu_sym.mag.is_symmetry_a = True
     simu_sym.mag.sym_a = 4
     simu_sym.mag.is_antiper_a = True
-    simu_sym.struct = None
 
     out = Output(simu=simu)
-    out.post.legend_name = "No symmetry"
     simu.run()
 
     out2 = Output(simu=simu_sym)
-    out2.post.legend_name = "1/2 symmetry"
-    out2.post.line_color = "r--"
     simu_sym.run()
 
     # Plot the result by comparing the two simulation
     plt.close("all")
-    out.plot_B_space(out_list=[out2])
+    out.plot_A_space(
+        "mag.B", data_list=[out2.mag.B], legend_list=["No symmetry", "1/2 symmetry"]
+    )
 
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_EM_IPMSM_FL_002_sym.png"))

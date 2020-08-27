@@ -1,0 +1,51 @@
+{
+    "HT": {
+        "Cp": 381.0,
+        "__class__": "MatHT",
+        "alpha": 0.003,
+        "lambda_x": 385.0,
+        "lambda_y": 385.0,
+        "lambda_z": 385.0
+    },
+    "__class__": "Material",
+    "desc": "COPPER WINDING",
+    "eco": {
+        "__class__": "MatEconomical",
+        "cost_unit": 60.0,
+        "unit_name": "$"
+    },
+    "elec": {
+        "__class__": "MatElectrical",
+        "alpha": 1,
+        "epsr": null,
+        "rho": 2.2e-08
+    },
+    "is_isotropic": true,
+    "mag": {
+        "BH_curve": {
+            "__class__": "ImportMatrix",
+            "is_transpose": false
+        },
+        "Brm20": 0,
+        "Hc": 0,
+        "Wlam": 0,
+        "__class__": "MatMagnetics",
+        "alpha_Br": 0.0,
+        "mur_lin": 1
+    },
+    "name": "Copper2",
+    "path": "Copper2.json",
+    "struct": {
+        "Ex": 115000000000.0,
+        "Ey": 115000000000.0,
+        "Ez": 115000000000.0,
+        "Gxy": null,
+        "Gxz": null,
+        "Gyz": null,
+        "__class__": "MatStructural",
+        "nu_xy": null,
+        "nu_xz": null,
+        "nu_yz": null,
+        "rho": 8900.0
+    }
+}

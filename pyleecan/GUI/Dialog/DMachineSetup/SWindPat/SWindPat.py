@@ -303,7 +303,9 @@ class SWindPat(Gen_SWindPat, QWidget):
         error: str
             Error message (return None if no error)
         """
-
-        # Check that everything is set
-        if lamination.winding.qs is None:
-            return "You must set qs !"
+        try:
+            # Check that everything is set
+            if lamination.winding.qs is None:
+                return "You must set qs !"
+        except Exception as e:
+            return str(e)

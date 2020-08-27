@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/SlotW60.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/SlotW60.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/SlotW60
 """
 
 from os import linesep
@@ -340,9 +341,15 @@ class SlotW60(SlotWind):
         check_var("W1", value, "float", Vmin=0)
         self._W1 = value
 
-    # Pole top width
-    # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Pole top width""")
+    W1 = property(
+        fget=_get_W1,
+        fset=_set_W1,
+        doc=u"""Pole top width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W2(self):
         """getter of W2"""
@@ -353,9 +360,15 @@ class SlotW60(SlotWind):
         check_var("W2", value, "float", Vmin=0)
         self._W2 = value
 
-    # Pole bottom width
-    # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""Pole bottom width""")
+    W2 = property(
+        fget=_get_W2,
+        fset=_set_W2,
+        doc=u"""Pole bottom width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H1(self):
         """getter of H1"""
@@ -366,9 +379,15 @@ class SlotW60(SlotWind):
         check_var("H1", value, "float", Vmin=0)
         self._H1 = value
 
-    # Pole top height
-    # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Pole top height""")
+    H1 = property(
+        fget=_get_H1,
+        fset=_set_H1,
+        doc=u"""Pole top height
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H2(self):
         """getter of H2"""
@@ -379,9 +398,15 @@ class SlotW60(SlotWind):
         check_var("H2", value, "float", Vmin=0)
         self._H2 = value
 
-    # Pole bottom height
-    # Type : float, min = 0
-    H2 = property(fget=_get_H2, fset=_set_H2, doc=u"""Pole bottom height""")
+    H2 = property(
+        fget=_get_H2,
+        fset=_set_H2,
+        doc=u"""Pole bottom height
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_R1(self):
         """getter of R1"""
@@ -392,9 +417,15 @@ class SlotW60(SlotWind):
         check_var("R1", value, "float", Vmin=0)
         self._R1 = value
 
-    # Pole top radius
-    # Type : float, min = 0
-    R1 = property(fget=_get_R1, fset=_set_R1, doc=u"""Pole top radius""")
+    R1 = property(
+        fget=_get_R1,
+        fset=_set_R1,
+        doc=u"""Pole top radius
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H3(self):
         """getter of H3"""
@@ -405,9 +436,15 @@ class SlotW60(SlotWind):
         check_var("H3", value, "float", Vmin=0)
         self._H3 = value
 
-    # Top Distance Ploe-coil
-    # Type : float, min = 0
-    H3 = property(fget=_get_H3, fset=_set_H3, doc=u"""Top Distance Ploe-coil """)
+    H3 = property(
+        fget=_get_H3,
+        fset=_set_H3,
+        doc=u"""Top Distance Ploe-coil 
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H4(self):
         """getter of H4"""
@@ -418,9 +455,15 @@ class SlotW60(SlotWind):
         check_var("H4", value, "float", Vmin=0)
         self._H4 = value
 
-    # Bottom Distance Ploe-coil
-    # Type : float, min = 0
-    H4 = property(fget=_get_H4, fset=_set_H4, doc=u"""Bottom Distance Ploe-coil """)
+    H4 = property(
+        fget=_get_H4,
+        fset=_set_H4,
+        doc=u"""Bottom Distance Ploe-coil 
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W3(self):
         """getter of W3"""
@@ -431,6 +474,12 @@ class SlotW60(SlotWind):
         check_var("W3", value, "float", Vmin=0)
         self._W3 = value
 
-    # Edge Distance Ploe-coil
-    # Type : float, min = 0
-    W3 = property(fget=_get_W3, fset=_set_W3, doc=u"""Edge Distance Ploe-coil """)
+    W3 = property(
+        fget=_get_W3,
+        fset=_set_W3,
+        doc=u"""Edge Distance Ploe-coil 
+
+        :Type: float
+        :min: 0
+        """,
+    )

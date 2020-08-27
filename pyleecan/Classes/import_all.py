@@ -17,6 +17,8 @@ from ..Classes.CondType12 import CondType12
 from ..Classes.CondType21 import CondType21
 from ..Classes.CondType22 import CondType22
 from ..Classes.Conductor import Conductor
+from ..Classes.DXFImport import DXFImport
+from ..Classes.DataKeeper import DataKeeper
 from ..Classes.Drive import Drive
 from ..Classes.DriveWave import DriveWave
 from ..Classes.EEC import EEC
@@ -37,7 +39,9 @@ from ..Classes.HoleM54 import HoleM54
 from ..Classes.HoleM57 import HoleM57
 from ..Classes.HoleM58 import HoleM58
 from ..Classes.HoleMag import HoleMag
+from ..Classes.HoleUD import HoleUD
 from ..Classes.Import import Import
+from ..Classes.ImportData import ImportData
 from ..Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from ..Classes.ImportGenToothSaw import ImportGenToothSaw
 from ..Classes.ImportGenVectLin import ImportGenVectLin
@@ -46,11 +50,12 @@ from ..Classes.ImportMatlab import ImportMatlab
 from ..Classes.ImportMatrix import ImportMatrix
 from ..Classes.ImportMatrixVal import ImportMatrixVal
 from ..Classes.ImportMatrixXls import ImportMatrixXls
+from ..Classes.ImportVectorField import ImportVectorField
 from ..Classes.IndMag import IndMag
 from ..Classes.IndMagFEMM import IndMagFEMM
 from ..Classes.Input import Input
 from ..Classes.InputCurrent import InputCurrent
-from ..Classes.InputCurrentDQ import InputCurrentDQ
+from ..Classes.InputElec import InputElec
 from ..Classes.InputFlux import InputFlux
 from ..Classes.InputForce import InputForce
 from ..Classes.LamHole import LamHole
@@ -103,7 +108,6 @@ from ..Classes.OptiConstraint import OptiConstraint
 from ..Classes.OptiDesignVar import OptiDesignVar
 from ..Classes.OptiGenAlg import OptiGenAlg
 from ..Classes.OptiGenAlgNsga2Deap import OptiGenAlgNsga2Deap
-from ..Classes.OptiObjFunc import OptiObjFunc
 from ..Classes.OptiProblem import OptiProblem
 from ..Classes.OptiSolver import OptiSolver
 from ..Classes.OutElec import OutElec
@@ -115,8 +119,8 @@ from ..Classes.OutMag import OutMag
 from ..Classes.OutPost import OutPost
 from ..Classes.OutStruct import OutStruct
 from ..Classes.Output import Output
-from ..Classes.OutputMulti import OutputMulti
-from ..Classes.OutputMultiOpti import OutputMultiOpti
+from ..Classes.ParamExplorer import ParamExplorer
+from ..Classes.ParamExplorerSet import ParamExplorerSet
 from ..Classes.PointMat import PointMat
 from ..Classes.PolarArc import PolarArc
 from ..Classes.Segment import Segment
@@ -152,12 +156,17 @@ from ..Classes.SlotWind import SlotWind
 from ..Classes.Solution import Solution
 from ..Classes.SolutionData import SolutionData
 from ..Classes.SolutionMat import SolutionMat
+from ..Classes.SolutionVector import SolutionVector
 from ..Classes.Structural import Structural
 from ..Classes.SurfLine import SurfLine
 from ..Classes.SurfRing import SurfRing
 from ..Classes.Surface import Surface
 from ..Classes.Trapeze import Trapeze
 from ..Classes.Unit import Unit
+from ..Classes.VarLoad import VarLoad
+from ..Classes.VarLoadCurrent import VarLoadCurrent
+from ..Classes.VarParam import VarParam
+from ..Classes.VarSimu import VarSimu
 from ..Classes.VentilationCirc import VentilationCirc
 from ..Classes.VentilationPolar import VentilationPolar
 from ..Classes.VentilationTrap import VentilationTrap
@@ -169,3 +178,4 @@ from ..Classes.WindingDW1L import WindingDW1L
 from ..Classes.WindingDW2L import WindingDW2L
 from ..Classes.WindingSC import WindingSC
 from ..Classes.WindingUD import WindingUD
+from ..Classes.XOutput import XOutput

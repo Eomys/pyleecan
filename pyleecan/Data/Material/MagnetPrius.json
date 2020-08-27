@@ -1,0 +1,51 @@
+{
+    "HT": {
+        "Cp": 450.0,
+        "__class__": "MatHT",
+        "alpha": null,
+        "lambda_x": 8.5,
+        "lambda_y": 8.5,
+        "lambda_z": 8.5
+    },
+    "__class__": "Material",
+    "desc": "MAGNET1 for SIPMSM",
+    "eco": {
+        "__class__": "MatEconomical",
+        "cost_unit": 252.0,
+        "unit_name": "$"
+    },
+    "elec": {
+        "__class__": "MatElectrical",
+        "alpha": 1,
+        "epsr": null,
+        "rho": 1.6e-06
+    },
+    "is_isotropic": true,
+    "mag": {
+        "BH_curve": {
+            "__class__": "ImportMatrix",
+            "is_transpose": false
+        },
+        "Brm20": 1.24,
+        "Hc": 902181.163126629,
+        "Wlam": 0,
+        "__class__": "MatMagnetics",
+        "alpha_Br": -0.001,
+        "mur_lin": 1.05
+    },
+    "name": "MagnetPrius",
+    "path": "MagnetPrius.json",
+    "struct": {
+        "Ex": null,
+        "Ey": null,
+        "Ez": null,
+        "Gxy": null,
+        "Gxz": null,
+        "Gyz": null,
+        "__class__": "MatStructural",
+        "nu_xy": null,
+        "nu_xz": null,
+        "nu_yz": null,
+        "rho": 7500.0
+    }
+}

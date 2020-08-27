@@ -3,7 +3,7 @@ import numpy as np
 
 from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
 from os.path import basename, splitext
-from SciDataTool import DataLinspace, DataTime
+from SciDataTool import DataLinspace, DataTime, VectorField
 from os.path import join
 
 from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
@@ -39,15 +39,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     Bt = zeros((Nt_tot, Na_tot))
     Tem = zeros((Nt_tot))
 
-    lam_int = output.simu.machine.get_lamination(True)
-    lam_ext = output.simu.machine.get_lamination(False)
-    Rgap_mec_int = lam_int.comp_radius_mec()
-    Rgap_mec_ext = lam_ext.comp_radius_mec()
-
-    if self.is_get_mesh or self.is_save_FEA:
-        meshFEMM = [MeshMat() for ii in range(Nt_tot)]
-    else:
-        meshFEMM = [MeshMat()]
+    Rag = output.simu.machine.comp_Rgap_mec()
 
     # Compute the data for each time step
     for ii in range(Nt_tot):
@@ -79,7 +71,6 @@ def solve_FEMM(self, output, sym, FEMM_dict):
             for jj in range(Na_tot):
                 Br[ii, jj], Bt[ii, jj] = femm.mo_getgapb("bc_ag2", angle[jj] * 180 / pi)
         else:
-            Rag = (Rgap_mec_ext + Rgap_mec_int) / 2
             for jj in range(Na_tot):
                 B = femm.mo_getb(Rag * np.cos(angle[jj]), Rag * np.sin(angle[jj]))
                 Br[ii, jj] = B[0] * np.cos(angle[jj]) + B[1] * np.sin(angle[jj])
@@ -98,20 +89,23 @@ def solve_FEMM(self, output, sym, FEMM_dict):
             )
 
         # Load mesh data & solution
-        if self.is_get_mesh or self.is_save_FEA:
-            meshFEMM[ii], tmpB, tmpH, tmpmu = self.get_meshsolution(save_path, ii)
+        if (self.is_sliding_band or Nt_tot == 1) and (
+            self.is_get_mesh or self.is_save_FEA
+        ):
+            tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
+                save_path, ii
+            )
 
-            if (
-                self.is_sliding_band or Nt_tot == 1
-            ):  # To make sure solution have the same size at every time step
-                if ii == 0:
-                    B = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                    H = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                    mu = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell])
+            if ii == 0:
+                meshFEMM = [tmpmeshFEMM]
+                groups = [tmpgroups]
+                B = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                H = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                mu = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell])
 
-                B[ii, :, 0:2] = tmpB
-                H[ii, :, 0:2] = tmpH
-                mu[ii, :] = tmpmu
+            B[ii, :, 0:2] = tmpB
+            H[ii, :, 0:2] = tmpH
+            mu[ii, :] = tmpmu
 
     # Shift to take into account stator position
     roll_id = int(self.angle_stator * Na_tot / (2 * pi))
@@ -126,6 +120,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         initial=output.mag.time[0],
         final=output.mag.time[-1],
         number=Nt_tot,
+        include_endpoint=True,
     )
     Angle = DataLinspace(
         name="angle",
@@ -134,21 +129,28 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         initial=angle[0],
         final=angle[-1],
         number=Na_tot,
+        include_endpoint=True,
     )
-    output.mag.Br = DataTime(
+    Br_data = DataTime(
         name="Airgap radial flux density",
         unit="T",
         symbol="B_r",
         axes=[Time, Angle],
         values=Br,
     )
-    output.mag.Bt = DataTime(
+    Bt_data = DataTime(
         name="Airgap tangential flux density",
         unit="T",
         symbol="B_t",
         axes=[Time, Angle],
         values=Bt,
     )
+    output.mag.B = VectorField(
+        name="Airgap flux density",
+        symbol="B",
+        components={"radial": Br_data, "tangential": Bt_data},
+    )
+
     output.mag.Tem = DataTime(
         name="Electromagnetic torque",
         unit="Nm",
@@ -167,12 +169,12 @@ def solve_FEMM(self, output, sym, FEMM_dict):
 
     if self.is_get_mesh:
         output.mag.meshsolution = self.build_meshsolution(
-            Nt_tot, meshFEMM, Time, B, H, mu
+            Nt_tot, meshFEMM, Time, B, H, mu, groups
         )
 
     if self.is_save_FEA:
-        save_path_fea = join(save_path, "MeshSolutionFEMM.json")
-        output.mag.meshsolution.save_to_file(save_path_fea)
+        save_path_fea = join(save_path, "MeshSolutionFEMM.h5")
+        output.mag.meshsolution.save(save_path_fea)
 
     if (
         hasattr(output.simu.machine.stator, "winding")

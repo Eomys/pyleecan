@@ -3,7 +3,6 @@
 # File generated according to PMagnet11.ui
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -20,7 +19,7 @@ class Ui_PMagnet11(object):
         self.img_magnet.setText("")
         self.img_magnet.setPixmap(
             QtGui.QPixmap(
-                ":/images/images/MachineSetup/P_Magnet/Surface Magnet type 10.PNG"
+                ":/images/images/MachineSetup/P_Magnet/Surface Magnet type 11.PNG"
             )
         )
         self.img_magnet.setScaledContents(True)

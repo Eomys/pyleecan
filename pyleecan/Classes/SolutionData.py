@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Mesh/SolutionData.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Mesh/SolutionData.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Mesh/SolutionData
 """
 
 from os import linesep
@@ -16,6 +17,16 @@ try:
     from ..Methods.Mesh.SolutionData.get_field import get_field
 except ImportError as error:
     get_field = error
+
+try:
+    from ..Methods.Mesh.SolutionData.get_axis import get_axis
+except ImportError as error:
+    get_axis = error
+
+try:
+    from ..Methods.Mesh.SolutionData.set_field import set_field
+except ImportError as error:
+    set_field = error
 
 
 from cloudpickle import dumps, loads
@@ -33,6 +44,7 @@ class SolutionData(Solution):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Mesh.SolutionData.get_field
     if isinstance(get_field, ImportError):
         get_field = property(
@@ -44,6 +56,26 @@ class SolutionData(Solution):
         )
     else:
         get_field = get_field
+    # cf Methods.Mesh.SolutionData.get_axis
+    if isinstance(get_axis, ImportError):
+        get_axis = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SolutionData method get_axis: " + str(get_axis))
+            )
+        )
+    else:
+        get_axis = get_axis
+    # cf Methods.Mesh.SolutionData.set_field
+    if isinstance(set_field, ImportError):
+        set_field = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SolutionData method set_field: " + str(set_field)
+                )
+            )
+        )
+    else:
+        set_field = set_field
     # save method is available in all object
     save = save
 
@@ -99,10 +131,8 @@ class SolutionData(Solution):
         if isinstance(DataND, ImportError):
             raise ImportError("Unknown type DataND please install SciDataTool")
         self.field = field
-        self.type_cell = type_cell
-        self.label = label
         # Call Solution init
-        super(SolutionData, self).__init__()
+        super(SolutionData, self).__init__(type_cell=type_cell, label=label)
         # The class is frozen (in Solution init), for now it's impossible to
         # add new properties
 
@@ -113,8 +143,6 @@ class SolutionData(Solution):
         # Get the properties inherited from Solution
         SolutionData_str += super(SolutionData, self).__str__()
         SolutionData_str += "field = " + str(self.field) + linesep + linesep
-        SolutionData_str += 'type_cell = "' + str(self.type_cell) + '"' + linesep
-        SolutionData_str += 'label = "' + str(self.label) + '"' + linesep
         return SolutionData_str
 
     def __eq__(self, other):
@@ -127,10 +155,6 @@ class SolutionData(Solution):
         if not super(SolutionData, self).__eq__(other):
             return False
         if other.field != self.field:
-            return False
-        if other.type_cell != self.type_cell:
-            return False
-        if other.label != self.label:
             return False
         return True
 
@@ -148,8 +172,6 @@ class SolutionData(Solution):
                 "__repr__": str(self._field.__repr__()),
                 "serialized": dumps(self._field).decode("ISO-8859-2"),
             }
-        SolutionData_dict["type_cell"] = self.type_cell
-        SolutionData_dict["label"] = self.label
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         SolutionData_dict["__class__"] = "SolutionData"
@@ -159,8 +181,6 @@ class SolutionData(Solution):
         """Set all the properties to None (except pyleecan object)"""
 
         self.field = None
-        self.type_cell = None
-        self.label = None
         # Set to None the properties inherited from Solution
         super(SolutionData, self)._set_None()
 
@@ -182,42 +202,11 @@ class SolutionData(Solution):
         else:
             self._field = value
 
-    # Data object containing the numerical values of a solution. One of the axis must be "Indices", a list of indices. If the solution is a vector, one of the axis must be "Direction", values ['x','y'] for example.
-    # Type : SciDataTool.Classes.DataND.DataND
     field = property(
         fget=_get_field,
         fset=_set_field,
-        doc=u"""Data object containing the numerical values of a solution. One of the axis must be "Indices", a list of indices. If the solution is a vector, one of the axis must be "Direction", values ['x','y'] for example.""",
-    )
+        doc=u"""Data object containing the numerical values of a solution. One of the axis must be "Indices", a list of indices. If the solution is a vector, one of the axis must be "Direction", values ['x','y'] for example.
 
-    def _get_type_cell(self):
-        """getter of type_cell"""
-        return self._type_cell
-
-    def _set_type_cell(self, value):
-        """setter of type_cell"""
-        check_var("type_cell", value, "str")
-        self._type_cell = value
-
-    # Type of cell (Point, Segment2, Triangle3, etc.)
-    # Type : str
-    type_cell = property(
-        fget=_get_type_cell,
-        fset=_set_type_cell,
-        doc=u"""Type of cell (Point, Segment2, Triangle3, etc.)""",
-    )
-
-    def _get_label(self):
-        """getter of label"""
-        return self._label
-
-    def _set_label(self, value):
-        """setter of label"""
-        check_var("label", value, "str")
-        self._label = value
-
-    # Label to identify the solution
-    # Type : str
-    label = property(
-        fget=_get_label, fset=_set_label, doc=u"""Label to identify the solution"""
+        :Type: SciDataTool.Classes.DataND.DataND
+        """,
     )

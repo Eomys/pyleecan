@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 from numpy import where, argmin, abs, squeeze, split
 
 from ...Functions.init_fig import init_subplot, init_fig
+from ...definitions import config_dict
+
+FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 
 
 def plot_A_2D(
@@ -27,6 +30,7 @@ def plot_A_2D(
     y_min=None,
     y_max=None,
     xticks=None,
+    save_path=None,
 ):
     """Plots a 2D graph (curve, bargraph or barchart) comparing fields in Ydatas
 
@@ -103,34 +107,27 @@ def plot_A_2D(
                 label=legend_list[i],
                 linewidth=linewidth_list[i],
             )
+        if xticks is not None:
+            ax.xaxis.set_ticks(xticks)
     elif type == "bargraph":
-        for i in range(len(Ydatas)):
-            width = Xdata[1] - Xdata[0]
-            if i == 0:
-                barlist = ax.bar(
-                    Xdata,
-                    Ydatas[i],
-                    color=color_list[i],
-                    width=width,
-                    label=legend_list[i],
-                )
-            else:
-                barlist = ax.bar(
-                    Xdata,
-                    Ydatas[i],
-                    edgecolor=color_list[i],
-                    width=width,
-                    fc="None",
-                    lw=1,
-                    label=legend_list[i],
-                )
+        ndatas = len(Ydatas)
+        positions = range(-ndatas + 1, ndatas, 2)
+        for i in range(ndatas):
+            width = (Xdata[1] - Xdata[0]) / ndatas
+            barlist = ax.bar(
+                Xdata + positions[i] * width / (2 * ndatas),
+                Ydatas[i],
+                color=color_list[i],
+                width=width,
+                label=legend_list[i],
+            )
             if is_fund:  # Find fundamental
                 if fund_harm is None:
                     mag_max = max(Ydatas[i])
                     imax = int(where(Ydatas[i] == mag_max)[0])
                 else:
                     imax = argmin(abs(Xdata - fund_harm))
-                barlist[imax].set_color("r")
+                barlist[imax].set_edgecolor("k")
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
     elif type == "barchart":
@@ -179,12 +176,19 @@ def plot_A_2D(
         ax.grid()
 
     if len(Ydatas) > 1 and not no_legend:
-        ax.legend()
+        ax.legend(prop={"family": FONT_NAME, "size": 22})
 
     plt.tight_layout()
     for item in (
         [ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()
     ):
+        item.set_fontname(FONT_NAME)
         item.set_fontsize(22)
+    ax.title.set_fontname(FONT_NAME)
     ax.title.set_fontsize(24)
+
+    if save_path is not None:
+        fig.savefig(save_path)
+        plt.close()
+
     return ax

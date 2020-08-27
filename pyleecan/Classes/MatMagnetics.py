@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Material/MatMagnetics.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Material/MatMagnetics.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Material/MatMagnetics
 """
 
 from os import linesep
@@ -23,6 +24,9 @@ except ImportError as error:
     plot_BH = error
 
 
+from ..Classes.ImportMatrixVal import ImportMatrixVal
+from numpy import ndarray
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .ImportMatrix import ImportMatrix
 
@@ -138,6 +142,7 @@ class MatMagnetics(FrozenClass):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -160,6 +165,7 @@ class MatMagnetics(FrozenClass):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -306,10 +312,14 @@ class MatMagnetics(FrozenClass):
         check_var("mur_lin", value, "float", Vmin=0)
         self._mur_lin = value
 
-    # Relative magnetic permeability
-    # Type : float, min = 0
     mur_lin = property(
-        fget=_get_mur_lin, fset=_set_mur_lin, doc=u"""Relative magnetic permeability"""
+        fget=_get_mur_lin,
+        fset=_set_mur_lin,
+        doc=u"""Relative magnetic permeability
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_Hc(self):
@@ -321,9 +331,15 @@ class MatMagnetics(FrozenClass):
         check_var("Hc", value, "float", Vmin=0)
         self._Hc = value
 
-    # Coercitivity field
-    # Type : float, min = 0
-    Hc = property(fget=_get_Hc, fset=_set_Hc, doc=u"""Coercitivity field""")
+    Hc = property(
+        fget=_get_Hc,
+        fset=_set_Hc,
+        doc=u"""Coercitivity field
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_Brm20(self):
         """getter of Brm20"""
@@ -334,12 +350,13 @@ class MatMagnetics(FrozenClass):
         check_var("Brm20", value, "float")
         self._Brm20 = value
 
-    # magnet remanence induction at 20degC
-    # Type : float
     Brm20 = property(
         fget=_get_Brm20,
         fset=_set_Brm20,
-        doc=u"""magnet remanence induction at 20degC""",
+        doc=u"""magnet remanence induction at 20degC
+
+        :Type: float
+        """,
     )
 
     def _get_alpha_Br(self):
@@ -351,12 +368,13 @@ class MatMagnetics(FrozenClass):
         check_var("alpha_Br", value, "float")
         self._alpha_Br = value
 
-    # temperature coefficient for remanent flux density /degC compared to 20degC
-    # Type : float
     alpha_Br = property(
         fget=_get_alpha_Br,
         fset=_set_alpha_Br,
-        doc=u"""temperature coefficient for remanent flux density /degC compared to 20degC""",
+        doc=u"""temperature coefficient for remanent flux density /degC compared to 20degC
+
+        :Type: float
+        """,
     )
 
     def _get_Wlam(self):
@@ -368,12 +386,14 @@ class MatMagnetics(FrozenClass):
         check_var("Wlam", value, "float", Vmin=0)
         self._Wlam = value
 
-    # lamination sheet width without insulation [m] (0 == not laminated)
-    # Type : float, min = 0
     Wlam = property(
         fget=_get_Wlam,
         fset=_set_Wlam,
-        doc=u"""lamination sheet width without insulation [m] (0 == not laminated)""",
+        doc=u"""lamination sheet width without insulation [m] (0 == not laminated)
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_BH_curve(self):
@@ -382,18 +402,23 @@ class MatMagnetics(FrozenClass):
 
     def _set_BH_curve(self, value):
         """setter of BH_curve"""
+        if isinstance(value, ndarray):
+            value = ImportMatrixVal(value=value)
+        elif isinstance(value, list):
+            value = ImportMatrixVal(value=array(value))
         check_var("BH_curve", value, "ImportMatrix")
         self._BH_curve = value
 
         if self._BH_curve is not None:
             self._BH_curve.parent = self
 
-    # nonlinear B(H) curve (two columns matrix, H and B(H))
-    # Type : ImportMatrix
     BH_curve = property(
         fget=_get_BH_curve,
         fset=_set_BH_curve,
-        doc=u"""nonlinear B(H) curve (two columns matrix, H and B(H))""",
+        doc=u"""nonlinear B(H) curve (two columns matrix, H and B(H))
+
+        :Type: ImportMatrix
+        """,
     )
 
     def _get_LossData(self):

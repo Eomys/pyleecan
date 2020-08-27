@@ -13,8 +13,8 @@ def update(indiv):
 
     indiv.output = Output(simu=indiv.output.simu.as_dict())
 
-    for k, dv_name in enumerate(indiv.design_var_name_list):
-        exec("indiv." + indiv.design_var[dv_name].name + "=indiv[k]")
+    for k, setter in enumerate(indiv.setter_list):
+        setter(indiv.output.simu, indiv[k])
 
     indiv.is_simu_valid = False
     indiv.cstr_viol = 0

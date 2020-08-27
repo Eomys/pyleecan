@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Import/ImportGenVectLin.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Import/ImportGenVectLin.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Import/ImportGenVectLin
 """
 
 from os import linesep
@@ -12,6 +13,16 @@ from .ImportMatrix import ImportMatrix
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Import.ImportGenVectLin.check import check
+except ImportError as error:
+    check = error
+
+try:
+    from ..Methods.Import.ImportGenVectLin.comp_step import comp_step
+except ImportError as error:
+    comp_step = error
+
 try:
     from ..Methods.Import.ImportGenVectLin.get_data import get_data
 except ImportError as error:
@@ -26,6 +37,27 @@ class ImportGenVectLin(ImportMatrix):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Import.ImportGenVectLin.check
+    if isinstance(check, ImportError):
+        check = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use ImportGenVectLin method check: " + str(check))
+            )
+        )
+    else:
+        check = check
+    # cf Methods.Import.ImportGenVectLin.comp_step
+    if isinstance(comp_step, ImportError):
+        comp_step = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use ImportGenVectLin method comp_step: " + str(comp_step)
+                )
+            )
+        )
+    else:
+        comp_step = comp_step
     # cf Methods.Import.ImportGenVectLin.get_data
     if isinstance(get_data, ImportError):
         get_data = property(
@@ -170,10 +202,13 @@ class ImportGenVectLin(ImportMatrix):
         check_var("start", value, "float")
         self._start = value
 
-    # Begin point of the linspace
-    # Type : float
     start = property(
-        fget=_get_start, fset=_set_start, doc=u"""Begin point of the linspace"""
+        fget=_get_start,
+        fset=_set_start,
+        doc=u"""Begin point of the linspace
+
+        :Type: float
+        """,
     )
 
     def _get_stop(self):
@@ -185,10 +220,13 @@ class ImportGenVectLin(ImportMatrix):
         check_var("stop", value, "float")
         self._stop = value
 
-    # End point of the linspace
-    # Type : float
     stop = property(
-        fget=_get_stop, fset=_set_stop, doc=u"""End point of the linspace"""
+        fget=_get_stop,
+        fset=_set_stop,
+        doc=u"""End point of the linspace
+
+        :Type: float
+        """,
     )
 
     def _get_num(self):
@@ -200,10 +238,13 @@ class ImportGenVectLin(ImportMatrix):
         check_var("num", value, "float")
         self._num = value
 
-    # Number of value in the linspace
-    # Type : float
     num = property(
-        fget=_get_num, fset=_set_num, doc=u"""Number of value in the linspace"""
+        fget=_get_num,
+        fset=_set_num,
+        doc=u"""Number of value in the linspace
+
+        :Type: float
+        """,
     )
 
     def _get_endpoint(self):
@@ -215,10 +256,11 @@ class ImportGenVectLin(ImportMatrix):
         check_var("endpoint", value, "bool")
         self._endpoint = value
 
-    # If True, stop is the last sample. Otherwise, it is not included
-    # Type : bool
     endpoint = property(
         fget=_get_endpoint,
         fset=_set_endpoint,
-        doc=u"""If True, stop is the last sample. Otherwise, it is not included""",
+        doc=u"""If True, stop is the last sample. Otherwise, it is not included
+
+        :Type: bool
+        """,
     )

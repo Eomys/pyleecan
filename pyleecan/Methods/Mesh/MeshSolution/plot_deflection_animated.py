@@ -16,7 +16,7 @@ from ....Classes.MeshMat import MeshMat
 from ....Classes.MeshVTK import MeshVTK
 from ....definitions import config_dict
 
-COLOR_MAP = config_dict["color_dict"]["COLOR_MAP"]
+COLOR_MAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 
 
 def plot_deflection_animated(
@@ -96,7 +96,8 @@ def plot_deflection_animated(
     if clim is None:
         clim = [np_min(real(field)), np_max(real(field))]
         if (clim[1] - clim[0]) / clim[1] < 0.01:
-            clim[0] = -clim[1]
+            clim[0] = -abs(clim[1])
+            clim[1] = abs(clim[1])
 
     # Compute deformation factor
     if factor is None:

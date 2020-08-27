@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/BoreFlower.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/BoreFlower.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/BoreFlower
 """
 
 from os import linesep
@@ -149,9 +150,15 @@ class BoreFlower(Bore):
         check_var("N", value, "int", Vmin=0)
         self._N = value
 
-    # Number of flower arc
-    # Type : int, min = 0
-    N = property(fget=_get_N, fset=_set_N, doc=u"""Number of flower arc""")
+    N = property(
+        fget=_get_N,
+        fset=_set_N,
+        doc=u"""Number of flower arc
+
+        :Type: int
+        :min: 0
+        """,
+    )
 
     def _get_Rarc(self):
         """getter of Rarc"""
@@ -162,9 +169,15 @@ class BoreFlower(Bore):
         check_var("Rarc", value, "float", Vmin=0)
         self._Rarc = value
 
-    # Radius of the flower arc
-    # Type : float, min = 0
-    Rarc = property(fget=_get_Rarc, fset=_set_Rarc, doc=u"""Radius of the flower arc""")
+    Rarc = property(
+        fget=_get_Rarc,
+        fset=_set_Rarc,
+        doc=u"""Radius of the flower arc
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_alpha(self):
         """getter of alpha"""
@@ -175,8 +188,11 @@ class BoreFlower(Bore):
         check_var("alpha", value, "float")
         self._alpha = value
 
-    # Angular offset for the arc
-    # Type : float
     alpha = property(
-        fget=_get_alpha, fset=_set_alpha, doc=u"""Angular offset for the arc"""
+        fget=_get_alpha,
+        fset=_set_alpha,
+        doc=u"""Angular offset for the arc
+
+        :Type: float
+        """,
     )

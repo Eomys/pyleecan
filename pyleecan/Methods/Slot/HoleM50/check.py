@@ -32,6 +32,28 @@ def check(self):
     """
     Rbo = self.get_Rbo()
 
+    # Check that everything is set
+    if self.W0 is None:
+        raise S50_NoneError("You must set W0 !")
+    elif self.W1 is None:
+        raise S50_NoneError("You must set W1 !")
+    elif self.W2 is None:
+        raise S50_NoneError("You must set W2 !")
+    elif self.W3 is None:
+        raise S50_NoneError("You must set W3 !")
+    elif self.W4 is None:
+        raise S50_NoneError("You must set W4 !")
+    elif self.H0 is None:
+        raise S50_NoneError("You must set H0 !")
+    elif self.H1 is None:
+        raise S50_NoneError("You must set H1 !")
+    elif self.H2 is None:
+        raise S50_NoneError("You must set H2 !")
+    elif self.H3 is None:
+        raise S50_NoneError("You must set H3 !")
+    elif self.H4 is None:
+        raise S50_NoneError("You must set H4 !")
+
     if self.W0 <= self.W1:
         raise S50_W01CheckError("You must have W1 < W0")
 
@@ -48,6 +70,13 @@ def check(self):
     alpha_3 = 2 * arcsin(self.W3 / (2 * (Rbo - self.H1)))  # W3 in rad
     if alpha_0 + alpha_3 > 2 * pi / self.Zh:
         raise S50_SpCheckError("Slot pitch too small for the slot, reduce Zh, W3 or W0")
+
+
+class S50_NoneError(SlotCheckError):
+    """Raised when a propery of HoleM50 is None
+    """
+
+    pass
 
 
 class S50_W01CheckError(SlotCheckError):
