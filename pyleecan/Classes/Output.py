@@ -809,9 +809,14 @@ class Output(FrozenClass):
         if self._force is not None:
             self._force.parent = self
 
-    # Force module output
-    # Type : OutForce
-    force = property(fget=_get_force, fset=_set_force, doc=u"""Force module output""")
+    force = property(
+        fget=_get_force,
+        fset=_set_force,
+        doc=u"""Force module output
+
+        :Type: OutForce
+        """,
+    )
 
     def _get_loss(self):
         """getter of loss"""
@@ -825,6 +830,11 @@ class Output(FrozenClass):
         if self._loss is not None:
             self._loss.parent = self
 
-    # Loss module output
-    # Type : OutLoss
-    loss = property(fget=_get_loss, fset=_set_loss, doc=u"""Loss module output""")
+    loss = property(
+        fget=_get_loss,
+        fset=_set_loss,
+        doc=u"""Loss module output
+
+        :Type: OutLoss
+        """,
+    )

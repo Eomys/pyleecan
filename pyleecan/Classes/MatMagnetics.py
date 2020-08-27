@@ -185,6 +185,7 @@ class MatMagnetics(FrozenClass):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -207,6 +208,7 @@ class MatMagnetics(FrozenClass):
                 "ImportGenToothSaw",
                 "ImportGenVectLin",
                 "ImportGenVectSin",
+                "ImportMatlab",
                 "ImportMatrixVal",
                 "ImportMatrixXls",
             ]:
@@ -427,16 +429,21 @@ class MatMagnetics(FrozenClass):
 
     def _set_LossData(self, value):
         """setter of LossData"""
+        if isinstance(value, ndarray):
+            value = ImportMatrixVal(value=value)
+        elif isinstance(value, list):
+            value = ImportMatrixVal(value=array(value))
         check_var("LossData", value, "ImportMatrix")
         self._LossData = value
 
         if self._LossData is not None:
             self._LossData.parent = self
 
-    # specific loss data value triplets, i.e. B, f, P
-    # Type : ImportMatrix
     LossData = property(
         fget=_get_LossData,
         fset=_set_LossData,
-        doc=u"""specific loss data value triplets, i.e. B, f, P""",
+        doc=u"""specific loss data value triplets, i.e. B, f, P
+
+        :Type: ImportMatrix
+        """,
     )

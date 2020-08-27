@@ -2,6 +2,7 @@
 from SciDataTool import DataFreq, Data1D
 from numpy import newaxis, abs
 
+
 def comp_loss_norm(self, data):
     """ 
     Compute the normalized (per kg) losses according to the following model equation:
@@ -30,7 +31,9 @@ def comp_loss_norm(self, data):
     # TODO better data check (axis size, ...) and data handling
 
     f_norm = abs(mag_dict["freqs"][:, newaxis, newaxis] / self.F_REF)
-    B_norm = 1 / 2* mag_dict["B"] / self.B_REF # factor 1/2 to account for SciDataTool FFT
+    B_norm = (
+        1 / 2 * mag_dict["B"] / self.B_REF
+    )  # factor 1/2 to account for SciDataTool FFT
 
     HY = Coeff[0] * f_norm * B_norm ** Coeff[1]
     ED = Coeff[2] * (f_norm * B_norm) ** Coeff[3]

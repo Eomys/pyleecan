@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/LossModelBertotti.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/LossModelBertotti.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/LossModelBertotti
 """
 
 from os import linesep
@@ -225,10 +226,13 @@ class LossModelBertotti(LossModel):
         check_var("k_hy", value, "float")
         self._k_hy = value
 
-    # Hysteresis loss coefficient
-    # Type : float
     k_hy = property(
-        fget=_get_k_hy, fset=_set_k_hy, doc=u"""Hysteresis loss coefficient"""
+        fget=_get_k_hy,
+        fset=_set_k_hy,
+        doc=u"""Hysteresis loss coefficient
+
+        :Type: float
+        """,
     )
 
     def _get_k_ed(self):
@@ -240,10 +244,13 @@ class LossModelBertotti(LossModel):
         check_var("k_ed", value, "float")
         self._k_ed = value
 
-    # Eddy current loss coefficient
-    # Type : float
     k_ed = property(
-        fget=_get_k_ed, fset=_set_k_ed, doc=u"""Eddy current loss coefficient"""
+        fget=_get_k_ed,
+        fset=_set_k_ed,
+        doc=u"""Eddy current loss coefficient
+
+        :Type: float
+        """,
     )
 
     def _get_k_ex(self):
@@ -255,9 +262,14 @@ class LossModelBertotti(LossModel):
         check_var("k_ex", value, "float")
         self._k_ex = value
 
-    # Excess loss coefficient
-    # Type : float
-    k_ex = property(fget=_get_k_ex, fset=_set_k_ex, doc=u"""Excess loss coefficient""")
+    k_ex = property(
+        fget=_get_k_ex,
+        fset=_set_k_ex,
+        doc=u"""Excess loss coefficient
+
+        :Type: float
+        """,
+    )
 
     def _get_alpha_hy(self):
         """getter of alpha_hy"""
@@ -268,12 +280,13 @@ class LossModelBertotti(LossModel):
         check_var("alpha_hy", value, "float")
         self._alpha_hy = value
 
-    # Hysteresis loss power coefficient
-    # Type : float
     alpha_hy = property(
         fget=_get_alpha_hy,
         fset=_set_alpha_hy,
-        doc=u"""Hysteresis loss power coefficient""",
+        doc=u"""Hysteresis loss power coefficient
+
+        :Type: float
+        """,
     )
 
     def _get_alpha_ed(self):
@@ -285,12 +298,13 @@ class LossModelBertotti(LossModel):
         check_var("alpha_ed", value, "float")
         self._alpha_ed = value
 
-    # Eddy current loss power coefficient
-    # Type : float
     alpha_ed = property(
         fget=_get_alpha_ed,
         fset=_set_alpha_ed,
-        doc=u"""Eddy current loss power coefficient""",
+        doc=u"""Eddy current loss power coefficient
+
+        :Type: float
+        """,
     )
 
     def _get_alpha_ex(self):
@@ -302,8 +316,11 @@ class LossModelBertotti(LossModel):
         check_var("alpha_ex", value, "float")
         self._alpha_ex = value
 
-    # Excess loss power coefficient
-    # Type : float
     alpha_ex = property(
-        fget=_get_alpha_ex, fset=_set_alpha_ex, doc=u"""Excess loss power coefficient"""
+        fget=_get_alpha_ex,
+        fset=_set_alpha_ex,
+        doc=u"""Excess loss power coefficient
+
+        :Type: float
+        """,
     )

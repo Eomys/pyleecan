@@ -34,8 +34,8 @@ def comp_loss(self, output, lam, typ):
     # TODO
 
     # TODO time data hot fix
-    #output.mag.meshsolution.solution[0].field.axes[0].final=output.mag.time[-1]
-    #output.mag.meshsolution.solution[0].field.axes[0].include_endpoint=True
+    # output.mag.meshsolution.solution[0].field.axes[0].final=output.mag.time[-1]
+    # output.mag.meshsolution.solution[0].field.axes[0].include_endpoint=True
 
     # apply model
     # #TODO model equation should be a func that takes SciDataTool Data as input

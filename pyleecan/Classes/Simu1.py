@@ -424,9 +424,14 @@ class Simu1(Simulation):
         if self._force is not None:
             self._force.parent = self
 
-    # Force moduale
-    # Type : Force
-    force = property(fget=_get_force, fset=_set_force, doc=u"""Force moduale""")
+    force = property(
+        fget=_get_force,
+        fset=_set_force,
+        doc=u"""Force moduale
+
+        :Type: Force
+        """,
+    )
 
     def _get_loss(self):
         """getter of loss"""
@@ -440,6 +445,11 @@ class Simu1(Simulation):
         if self._loss is not None:
             self._loss.parent = self
 
-    # Loss moduale
-    # Type : Loss
-    loss = property(fget=_get_loss, fset=_set_loss, doc=u"""Loss moduale""")
+    loss = property(
+        fget=_get_loss,
+        fset=_set_loss,
+        doc=u"""Loss moduale
+
+        :Type: Loss
+        """,
+    )

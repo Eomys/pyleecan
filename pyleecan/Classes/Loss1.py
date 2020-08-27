@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Loss1.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Loss1.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Loss1
 """
 
 from os import linesep
@@ -622,12 +623,13 @@ class Loss1(Loss):
         if self._lam_stator is not None:
             self._lam_stator.parent = self
 
-    # Stator Lamination Loss Model
-    # Type : LossModel
     lam_stator = property(
         fget=_get_lam_stator,
         fset=_set_lam_stator,
-        doc=u"""Stator Lamination Loss Model""",
+        doc=u"""Stator Lamination Loss Model
+
+        :Type: LossModel
+        """,
     )
 
     def _get_lam_rotor(self):
@@ -642,10 +644,13 @@ class Loss1(Loss):
         if self._lam_rotor is not None:
             self._lam_rotor.parent = self
 
-    # Rotor Lamination Loss Model
-    # Type : LossModel
     lam_rotor = property(
-        fget=_get_lam_rotor, fset=_set_lam_rotor, doc=u"""Rotor Lamination Loss Model"""
+        fget=_get_lam_rotor,
+        fset=_set_lam_rotor,
+        doc=u"""Rotor Lamination Loss Model
+
+        :Type: LossModel
+        """,
     )
 
     def _get_wind_stator(self):
@@ -660,12 +665,13 @@ class Loss1(Loss):
         if self._wind_stator is not None:
             self._wind_stator.parent = self
 
-    # Stator Winding Loss Model
-    # Type : LossModel
     wind_stator = property(
         fget=_get_wind_stator,
         fset=_set_wind_stator,
-        doc=u"""Stator Winding Loss Model""",
+        doc=u"""Stator Winding Loss Model
+
+        :Type: LossModel
+        """,
     )
 
     def _get_wind_rotor(self):
@@ -680,10 +686,13 @@ class Loss1(Loss):
         if self._wind_rotor is not None:
             self._wind_rotor.parent = self
 
-    # Rotor Winding Loss Model
-    # Type : LossModel
     wind_rotor = property(
-        fget=_get_wind_rotor, fset=_set_wind_rotor, doc=u"""Rotor Winding Loss Model"""
+        fget=_get_wind_rotor,
+        fset=_set_wind_rotor,
+        doc=u"""Rotor Winding Loss Model
+
+        :Type: LossModel
+        """,
     )
 
     def _get_mag_stator(self):
@@ -698,10 +707,13 @@ class Loss1(Loss):
         if self._mag_stator is not None:
             self._mag_stator.parent = self
 
-    # Stator Magnet Loss Model
-    # Type : LossModel
     mag_stator = property(
-        fget=_get_mag_stator, fset=_set_mag_stator, doc=u"""Stator Magnet Loss Model"""
+        fget=_get_mag_stator,
+        fset=_set_mag_stator,
+        doc=u"""Stator Magnet Loss Model
+
+        :Type: LossModel
+        """,
     )
 
     def _get_mag_rotor(self):
@@ -716,10 +728,13 @@ class Loss1(Loss):
         if self._mag_rotor is not None:
             self._mag_rotor.parent = self
 
-    # Rotor Magnet Loss Model
-    # Type : LossModel
     mag_rotor = property(
-        fget=_get_mag_rotor, fset=_set_mag_rotor, doc=u"""Rotor Magnet Loss Model"""
+        fget=_get_mag_rotor,
+        fset=_set_mag_rotor,
+        doc=u"""Rotor Magnet Loss Model
+
+        :Type: LossModel
+        """,
     )
 
     def _get_windage(self):
@@ -734,10 +749,13 @@ class Loss1(Loss):
         if self._windage is not None:
             self._windage.parent = self
 
-    # Windage Loss Model
-    # Type : LossModel
     windage = property(
-        fget=_get_windage, fset=_set_windage, doc=u"""Windage Loss Model"""
+        fget=_get_windage,
+        fset=_set_windage,
+        doc=u"""Windage Loss Model
+
+        :Type: LossModel
+        """,
     )
 
     def _get_bearing(self):
@@ -752,10 +770,13 @@ class Loss1(Loss):
         if self._bearing is not None:
             self._bearing.parent = self
 
-    # Bearing Loss Model
-    # Type : LossModel
     bearing = property(
-        fget=_get_bearing, fset=_set_bearing, doc=u"""Bearing Loss Model"""
+        fget=_get_bearing,
+        fset=_set_bearing,
+        doc=u"""Bearing Loss Model
+
+        :Type: LossModel
+        """,
     )
 
     def _get_shaft(self):
@@ -770,9 +791,14 @@ class Loss1(Loss):
         if self._shaft is not None:
             self._shaft.parent = self
 
-    # Shaft Loss Model
-    # Type : LossModel
-    shaft = property(fget=_get_shaft, fset=_set_shaft, doc=u"""Shaft Loss Model""")
+    shaft = property(
+        fget=_get_shaft,
+        fset=_set_shaft,
+        doc=u"""Shaft Loss Model
+
+        :Type: LossModel
+        """,
+    )
 
     def _get_frame(self):
         """getter of frame"""
@@ -786,9 +812,14 @@ class Loss1(Loss):
         if self._frame is not None:
             self._frame.parent = self
 
-    # Frame Loss Model
-    # Type : LossModel
-    frame = property(fget=_get_frame, fset=_set_frame, doc=u"""Frame Loss Model""")
+    frame = property(
+        fget=_get_frame,
+        fset=_set_frame,
+        doc=u"""Frame Loss Model
+
+        :Type: LossModel
+        """,
+    )
 
     def _get_additional(self):
         """getter of additional"""
@@ -802,8 +833,11 @@ class Loss1(Loss):
         if self._additional is not None:
             self._additional.parent = self
 
-    # Loss moduale
-    # Type : LossModel
     additional = property(
-        fget=_get_additional, fset=_set_additional, doc=u"""Loss moduale"""
+        fget=_get_additional,
+        fset=_set_additional,
+        doc=u"""Loss moduale
+
+        :Type: LossModel
+        """,
     )

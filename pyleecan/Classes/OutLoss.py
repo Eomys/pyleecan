@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Output/OutLoss.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Output/OutLoss.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/OutLoss
 """
 
 from os import linesep
@@ -369,10 +370,13 @@ class OutLoss(FrozenClass):
         check_var("time", value, "ndarray")
         self._time = value
 
-    # Structural time vector (no symmetry)
-    # Type : ndarray
     time = property(
-        fget=_get_time, fset=_set_time, doc=u"""Structural time vector (no symmetry)"""
+        fget=_get_time,
+        fset=_set_time,
+        doc=u"""Structural time vector (no symmetry)
+
+        :Type: ndarray
+        """,
     )
 
     def _get_Nt_tot(self):
@@ -384,10 +388,13 @@ class OutLoss(FrozenClass):
         check_var("Nt_tot", value, "int")
         self._Nt_tot = value
 
-    # Length of the time vector
-    # Type : int
     Nt_tot = property(
-        fget=_get_Nt_tot, fset=_set_Nt_tot, doc=u"""Length of the time vector"""
+        fget=_get_Nt_tot,
+        fset=_set_Nt_tot,
+        doc=u"""Length of the time vector
+
+        :Type: int
+        """,
     )
 
     def _get_Plam_stator(self):
@@ -406,12 +413,13 @@ class OutLoss(FrozenClass):
         check_var("Plam_stator", value, "ndarray")
         self._Plam_stator = value
 
-    # Stator Lamination Losses
-    # Type : ndarray
     Plam_stator = property(
         fget=_get_Plam_stator,
         fset=_set_Plam_stator,
-        doc=u"""Stator Lamination Losses""",
+        doc=u"""Stator Lamination Losses
+
+        :Type: ndarray
+        """,
     )
 
     def _get_Plam_rotor(self):
@@ -430,10 +438,13 @@ class OutLoss(FrozenClass):
         check_var("Plam_rotor", value, "ndarray")
         self._Plam_rotor = value
 
-    # Rotor Lamination Losses
-    # Type : ndarray
     Plam_rotor = property(
-        fget=_get_Plam_rotor, fset=_set_Plam_rotor, doc=u"""Rotor Lamination Losses"""
+        fget=_get_Plam_rotor,
+        fset=_set_Plam_rotor,
+        doc=u"""Rotor Lamination Losses
+
+        :Type: ndarray
+        """,
     )
 
     def _get_Pwind_stator(self):
@@ -452,10 +463,13 @@ class OutLoss(FrozenClass):
         check_var("Pwind_stator", value, "ndarray")
         self._Pwind_stator = value
 
-    # Stator Winding Losses
-    # Type : ndarray
     Pwind_stator = property(
-        fget=_get_Pwind_stator, fset=_set_Pwind_stator, doc=u"""Stator Winding Losses"""
+        fget=_get_Pwind_stator,
+        fset=_set_Pwind_stator,
+        doc=u"""Stator Winding Losses
+
+        :Type: ndarray
+        """,
     )
 
     def _get_Pwind_rotor(self):
@@ -474,10 +488,13 @@ class OutLoss(FrozenClass):
         check_var("Pwind_rotor", value, "ndarray")
         self._Pwind_rotor = value
 
-    # Rotor Winding Losses
-    # Type : ndarray
     Pwind_rotor = property(
-        fget=_get_Pwind_rotor, fset=_set_Pwind_rotor, doc=u"""Rotor Winding Losses"""
+        fget=_get_Pwind_rotor,
+        fset=_set_Pwind_rotor,
+        doc=u"""Rotor Winding Losses
+
+        :Type: ndarray
+        """,
     )
 
     def _get_Pmag_stator(self):
@@ -496,10 +513,13 @@ class OutLoss(FrozenClass):
         check_var("Pmag_stator", value, "ndarray")
         self._Pmag_stator = value
 
-    # Stator Magnet Losses
-    # Type : ndarray
     Pmag_stator = property(
-        fget=_get_Pmag_stator, fset=_set_Pmag_stator, doc=u"""Stator Magnet Losses"""
+        fget=_get_Pmag_stator,
+        fset=_set_Pmag_stator,
+        doc=u"""Stator Magnet Losses
+
+        :Type: ndarray
+        """,
     )
 
     def _get_Pmag_rotor(self):
@@ -518,10 +538,13 @@ class OutLoss(FrozenClass):
         check_var("Pmag_rotor", value, "ndarray")
         self._Pmag_rotor = value
 
-    # Rotor Magnet Losses
-    # Type : ndarray
     Pmag_rotor = property(
-        fget=_get_Pmag_rotor, fset=_set_Pmag_rotor, doc=u"""Rotor Magnet Losses"""
+        fget=_get_Pmag_rotor,
+        fset=_set_Pmag_rotor,
+        doc=u"""Rotor Magnet Losses
+
+        :Type: ndarray
+        """,
     )
 
     def _get_Pwindage(self):
@@ -540,10 +563,13 @@ class OutLoss(FrozenClass):
         check_var("Pwindage", value, "ndarray")
         self._Pwindage = value
 
-    # Windage Losses
-    # Type : ndarray
     Pwindage = property(
-        fget=_get_Pwindage, fset=_set_Pwindage, doc=u"""Windage Losses"""
+        fget=_get_Pwindage,
+        fset=_set_Pwindage,
+        doc=u"""Windage Losses
+
+        :Type: ndarray
+        """,
     )
 
     def _get_Pbearing(self):
@@ -562,10 +588,13 @@ class OutLoss(FrozenClass):
         check_var("Pbearing", value, "ndarray")
         self._Pbearing = value
 
-    # Bearing Losses
-    # Type : ndarray
     Pbearing = property(
-        fget=_get_Pbearing, fset=_set_Pbearing, doc=u"""Bearing Losses"""
+        fget=_get_Pbearing,
+        fset=_set_Pbearing,
+        doc=u"""Bearing Losses
+
+        :Type: ndarray
+        """,
     )
 
     def _get_Pshaft(self):
@@ -584,9 +613,14 @@ class OutLoss(FrozenClass):
         check_var("Pshaft", value, "ndarray")
         self._Pshaft = value
 
-    # Shaft Iron Losses
-    # Type : ndarray
-    Pshaft = property(fget=_get_Pshaft, fset=_set_Pshaft, doc=u"""Shaft Iron Losses""")
+    Pshaft = property(
+        fget=_get_Pshaft,
+        fset=_set_Pshaft,
+        doc=u"""Shaft Iron Losses
+
+        :Type: ndarray
+        """,
+    )
 
     def _get_Pframe(self):
         """getter of Pframe"""
@@ -604,9 +638,14 @@ class OutLoss(FrozenClass):
         check_var("Pframe", value, "ndarray")
         self._Pframe = value
 
-    # Frame Iron Losses
-    # Type : ndarray
-    Pframe = property(fget=_get_Pframe, fset=_set_Pframe, doc=u"""Frame Iron Losses""")
+    Pframe = property(
+        fget=_get_Pframe,
+        fset=_set_Pframe,
+        doc=u"""Frame Iron Losses
+
+        :Type: ndarray
+        """,
+    )
 
     def _get_Padd(self):
         """getter of Padd"""
@@ -624,9 +663,14 @@ class OutLoss(FrozenClass):
         check_var("Padd", value, "ndarray")
         self._Padd = value
 
-    # Additional Losses
-    # Type : ndarray
-    Padd = property(fget=_get_Padd, fset=_set_Padd, doc=u"""Additional Losses""")
+    Padd = property(
+        fget=_get_Padd,
+        fset=_set_Padd,
+        doc=u"""Additional Losses
+
+        :Type: ndarray
+        """,
+    )
 
     def _get_logger_name(self):
         """getter of logger_name"""
@@ -637,10 +681,11 @@ class OutLoss(FrozenClass):
         check_var("logger_name", value, "str")
         self._logger_name = value
 
-    # Name of the logger to use
-    # Type : str
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        doc=u"""Name of the logger to use
+
+        :Type: str
+        """,
     )

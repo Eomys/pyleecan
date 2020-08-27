@@ -7429,6 +7429,15 @@
                 "type": "Force",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Loss moduale",
+                "max": "",
+                "min": "",
+                "name": "loss",
+                "type": "Loss",
+                "unit": "-",
+                "value": null
             }
         ]
     },

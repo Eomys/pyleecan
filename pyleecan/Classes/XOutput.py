@@ -132,6 +132,7 @@ from .OutMag import OutMag
 from .OutStruct import OutStruct
 from .OutPost import OutPost
 from .OutForce import OutForce
+from .OutLoss import OutLoss
 
 
 class XOutput(Output):
@@ -377,6 +378,7 @@ class XOutput(Output):
         post=-1,
         logger_name="Pyleecan.Output",
         force=-1,
+        loss=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -405,6 +407,8 @@ class XOutput(Output):
             post = OutPost()
         if force == -1:
             force = OutForce()
+        if loss == -1:
+            loss = OutLoss()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -425,6 +429,7 @@ class XOutput(Output):
             post = obj.post
             logger_name = obj.logger_name
             force = obj.force
+            loss = obj.loss
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -454,6 +459,8 @@ class XOutput(Output):
                 logger_name = init_dict["logger_name"]
             if "force" in list(init_dict.keys()):
                 force = init_dict["force"]
+            if "loss" in list(init_dict.keys()):
+                loss = init_dict["loss"]
         # Initialisation by argument
         if paramexplorer_list == -1:
             paramexplorer_list = []
@@ -474,6 +481,7 @@ class XOutput(Output):
             post=post,
             logger_name=logger_name,
             force=force,
+            loss=loss,
         )
         # The class is frozen (in Output init), for now it's impossible to
         # add new properties
