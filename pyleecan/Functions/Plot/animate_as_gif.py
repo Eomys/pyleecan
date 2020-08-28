@@ -55,10 +55,14 @@ def animate_as_gif(
                         save_path_temp = save_path + "\\temp_" + str(j) + ".png"
                         kwargs["save_path"] = save_path_temp
                         for k, comp in enumerate(component_list):
-                            func(data.components[comp], fig=fig, subplot_index=k, **kwargs)
+                            func(
+                                data.components[comp],
+                                fig=fig,
+                                subplot_index=k,
+                                **kwargs
+                            )
                         image = imageio.imread(save_path_temp)
                         writer.append_data(image)
-                
 
                 else:
                     for j in range(0, index_max, index_step):
@@ -67,7 +71,7 @@ def animate_as_gif(
                         func(data, **kwargs)
                         image = imageio.imread(save_path_temp)
                         writer.append_data(image)
-       
+
         else:
             if isinstance(data_list, VectorField):
                 if component_list is None:  # default: extract all components
@@ -79,7 +83,12 @@ def animate_as_gif(
                     kwargs[index_var] = j
                     kwargs["save_path"] = save_path_temp
                     for k, comp in enumerate(component_list):
-                        func(data_list.components[comp], fig=fig, subplot_index=k, **kwargs)
+                        func(
+                            data_list.components[comp],
+                            fig=fig,
+                            subplot_index=k,
+                            **kwargs
+                        )
                     image = imageio.imread(save_path_temp)
                     writer.append_data(image)
             else:
