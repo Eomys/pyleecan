@@ -738,8 +738,8 @@ def test_Optimization_problem():
     simu2.machine.plot()
     fig = plt.gcf()
     fig.savefig(
-        join(save_path, "fig_21_Topology_to_minimize_torque_ripple.png"), format="png",
+        join(save_path, "fig_21_Topology_to_minimize_torque_ripple.png"), format="png"
     )
     fig.savefig(
-        join(save_path, "fig_21_Topology_to_minimize_torque_ripple.svg"), format="svg",
+        join(save_path, "fig_21_Topology_to_minimize_torque_ripple.svg"), format="svg"
     )
