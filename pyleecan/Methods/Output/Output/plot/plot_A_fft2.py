@@ -59,7 +59,10 @@ def plot_A_fft2(
 
     # Get Data object names
     phys = getattr(self, Data_str.split(".")[0])
-    data = getattr(phys, Data_str.split(".")[1])
+    if "get_" in Data_str.split(".")[1]: # get method
+        data = getattr(phys, Data_str.split(".")[1])()
+    else:
+        data = getattr(phys, Data_str.split(".")[1])
 
     # Call the plot function
     if isinstance(data, VectorField):

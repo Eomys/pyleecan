@@ -77,7 +77,7 @@ def plot_A_space(
     y_max : float
         maximum value for the y-axis
     mag_max : float
-        maximum alue for the y-axis of the fft
+        maximum value for the y-axis of the fft
     is_auto_ticks : bool
         in fft, adjust ticks to wavenumbers (deactivate if too close)
     fig : Matplotlib.figure.Figure
@@ -86,7 +86,10 @@ def plot_A_space(
 
     # Get Data object names
     phys = getattr(self, Data_str.split(".")[0])
-    data = getattr(phys, Data_str.split(".")[1])
+    if "get_" in Data_str.split(".")[1]: # get method
+        data = getattr(phys, Data_str.split(".")[1])()
+    else:
+        data = getattr(phys, Data_str.split(".")[1])
 
     # Call the plot function
     if isinstance(data, VectorField):

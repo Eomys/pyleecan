@@ -26,7 +26,10 @@ def plot_A_quiver_2D(self, Data_str, t=None, t_index=0, is_norm=False, unit="SI"
 
     # Get Data object names
     phys = getattr(self, Data_str.split(".")[0])
-    data = getattr(phys, Data_str.split(".")[1])
+    if "get_" in Data_str.split(".")[1]: # get method
+        data = getattr(phys, Data_str.split(".")[1])()
+    else:
+        data = getattr(phys, Data_str.split(".")[1])
 
     # Call the plot function
     plot_A_quiver_2D_fct(data, t=t, t_index=t_index, is_norm=is_norm, unit=unit)

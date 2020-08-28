@@ -60,7 +60,10 @@ def plot_A_fft_time(
 
     # Get Data object names
     phys = getattr(self, Data_str.split(".")[0])
-    data = getattr(phys, Data_str.split(".")[1])
+    if "get_" in Data_str.split(".")[1]: # get method
+        data = getattr(phys, Data_str.split(".")[1])()
+    else:
+        data = getattr(phys, Data_str.split(".")[1])
 
     (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
 
