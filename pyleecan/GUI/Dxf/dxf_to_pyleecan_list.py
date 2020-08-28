@@ -13,7 +13,7 @@ def dxf_to_pyleecan_list(entities):
 
         dxftype = entity.dxftype()
         dxf = entity.dxf
-        if dxftype in {"LINE", "XLINE", "RAY"}:
+        if dxftype == "LINE":  # {"LINE", "XLINE", "RAY"}:
             start = complex(*dxf.start[:-1])
             end = complex(*dxf.end[:-1])
             obj_list.append(Segment(start, end))

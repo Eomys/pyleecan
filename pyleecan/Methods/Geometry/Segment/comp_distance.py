@@ -35,4 +35,3 @@ def comp_distance(self, Z):
     Z2 = array([self.end.real, self.end.imag])
     Z3 = array([Z.real, Z.imag])
     return distance_numpy(Z1, Z2, Z3)
-
