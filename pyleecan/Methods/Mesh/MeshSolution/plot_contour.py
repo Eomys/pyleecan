@@ -100,13 +100,18 @@ def plot_contour(
         )
 
         # Extract time index
-        if len(field.shape) > 1:
+        if len(field.shape) > 2:
             # Extract time index
             if field.shape[1] > 3:
                 field = field[itime, :, :]
             # Compute norm
             if field.shape[-1] == 2 or field.shape[-1] == 3:
                 field = norm(field, axis=-1)
+
+        elif len(field.shape) > 1:
+            # Extract time index
+            if field.shape[1] > 3:
+                field = field[itime, :]
 
         if field_name is None:
             if label is not None:
