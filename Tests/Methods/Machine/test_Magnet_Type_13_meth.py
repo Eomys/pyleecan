@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
-
-from ddt import ddt, data
+import pytest
 
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.SlotMFlat import SlotMFlat
@@ -32,43 +30,42 @@ Mag13_test.append({"test_obj": lam, "S_exp": 2.43619e-3, "Ao": 0.9211, "H_exp": 
 DELTA = 1e-4
 
 
-@ddt
-class test_Magnet_Type_13_meth(TestCase):
+@pytest.mark.METHODS
+class Test_Magnet_Type_13_meth(object):
     """unittest for MagnetType13 methods
-    """
-
-    @data(*Mag13_test)
-    def test_comp_surface(self, test_dict):
-        """Check that the computation of the surface is correct
         """
+    @pytest.mark.parametrize("test_dict", Mag13_test)
+    def test_comp_surface(self,test_dict):
+        """Check that the computation of the surface is correct
+            """
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_surface()
 
         a = result
         b = test_dict["S_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a-0) < DELTA, msg
 
-    @data(*Mag13_test)
-    def test_comp_height(self, test_dict):
+    @pytest.mark.parametrize("test_dict", Mag13_test)
+    def test_comp_height(self,test_dict):
         """Check that the computation of the height is correct
-        """
+            """
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_height()
 
         a = result
         b = test_dict["H_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a-0) < DELTA, msg
 
-    @data(*Mag13_test)
-    def test_comp_angle_op(self, test_dict):
+    @pytest.mark.parametrize("test_dict", Mag13_test)
+    def test_comp_angle_op(self,test_dict):
         """Check that the computation of the opening angle is correct
-        """
+            """
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_angle_opening()
-
+        
         a = result
         b = test_dict["Ao"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a-0) < DELTA, msg
