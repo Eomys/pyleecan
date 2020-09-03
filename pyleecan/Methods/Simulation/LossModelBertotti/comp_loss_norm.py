@@ -50,11 +50,11 @@ def comp_loss_norm(self, data_list):
         loss_ = HY + ED + EX
         loss = loss_ if loss is None else loss + loss_
 
-
-
     Freq = Data1D(name="freqs", unit="", values=mag_dict["freqs"])
     axes = [Freq if x.name == "time" else x for x in data.axes]
 
-    loss_data = DataFreq(name="Losses", unit="T", symbol="P", axes=axes, values=loss,)
+    loss_data = DataFreq(
+        name="Loss Density", unit="T", symbol="LossDens", axes=axes, values=loss,
+    )
 
     return loss_data
