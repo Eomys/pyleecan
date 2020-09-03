@@ -73,6 +73,11 @@ def generate_properties(gen_dict, class_dict):
                 prop_str += TAB6 + "obj = array(obj)\n"
                 prop_str += TAB5 + "except:\n"
                 prop_str += TAB6 + "pass\n"
+            elif prop["type"] == "ImportMatrix":
+                prop_str += TAB2 + "if isinstance(value,ndarray):\n"
+                prop_str += TAB3 + "value = ImportMatrixVal(value=value)\n"
+                prop_str += TAB2 + "elif isinstance(value,list):\n"
+                prop_str += TAB3 + "value = ImportMatrixVal(value=array(value))\n"
 
             # Add check_var("var_name",value, "var_type", min=var_min, max=var_max)
             if prop["type"] == "function":
@@ -169,35 +174,21 @@ def generate_properties(gen_dict, class_dict):
                 prop_str += TAB2 + "if self._" + prop["name"] + " is not None:\n"
                 prop_str += TAB3 + "self._" + prop["name"] + ".parent = self\n"
 
-        # Property declaration
-        # For doxygen : TODO: still needed for sphinx ?
-        prop_str += TAB + "# " + prop["desc"] + "\n"
-        prop_str += TAB + "# Type : " + prop["type"]
+        # For sphinx doc
+        desc_str = '"""' + prop["desc"] + "\n\n"
+        desc_str += TAB2 + ":Type: " + prop["type"] + "\n"
         if str(prop["min"]) is not "":
-            prop_str += ", min = " + str(prop["min"])
+            desc_str += TAB2 + ":min: " + str(prop["min"]) + "\n"
         if str(prop["max"]) is not "":
-            prop_str += ", max = " + str(prop["max"])
-        prop_str += "\n"
+            desc_str += TAB2 + ":max: " + str(prop["max"]) + "\n"
+        desc_str += TAB2 + '"""'
         # Add "var_name = property(fget=_get_var_name, fset=_set_var_name,
         # doc = "this is doc")"
-        if len(prop["desc"]) > 40:  # PEP8
-            # Three lines definition
-            prop_str += TAB + prop["name"] + " = property(\n"
-            prop_str += TAB2 + "fget=_get_" + prop["name"] + ",\n"
-            prop_str += TAB2 + "fset=_set_" + prop["name"] + ",\n"
-            prop_str += TAB2 + 'doc=u"""' + prop["desc"] + '""",\n'
-            prop_str += TAB + ")\n\n"
-        elif len(prop["desc"]) + 2 * len(prop["name"]) > 25:
-            prop_str += TAB + prop["name"] + " = property(\n"
-            prop_str += TAB2 + "fget=_get_" + prop["name"]
-            prop_str += ", fset=_set_" + prop["name"]
-            prop_str += ', doc=u"""' + prop["desc"] + '"""\n'
-            prop_str += TAB + ")\n\n"
-        else:
-            # All on one line
-            prop_str += TAB + prop["name"] + " = property("
-            prop_str += "fget=_get_" + prop["name"]
-            prop_str += ", fset=_set_" + prop["name"]
-            prop_str += ', doc=u"""' + prop["desc"] + '""")\n\n'
+        # Three lines definition
+        prop_str += TAB + prop["name"] + " = property(\n"
+        prop_str += TAB2 + "fget=_get_" + prop["name"] + ",\n"
+        prop_str += TAB2 + "fset=_set_" + prop["name"] + ",\n"
+        prop_str += TAB2 + "doc=u" + desc_str + ",\n"
+        prop_str += TAB + ")\n\n"
 
     return prop_str[:-2]  # Remove last \n\n

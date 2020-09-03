@@ -6,6 +6,8 @@ from .plot_A_3D import plot_A_3D
 from ...definitions import config_dict
 from numpy import meshgrid, max as np_max
 
+FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
+
 
 def plot_A_time_space(
     data,
@@ -61,10 +63,8 @@ def plot_A_time_space(
     # pcolorplot
     if is_deg:
         xlabel = "Angle [°]"
-        xticks = [0, 60, 120, 180, 240, 300, 360]
     else:
         xlabel = "Angle [rad]"
-        xticks = None
     ylabel = "Time [s]"
     if unit == "SI":
         unit = data.unit
@@ -78,6 +78,10 @@ def plot_A_time_space(
     else:
         results = data.get_along("time", "angle", unit=unit, is_norm=is_norm)
     angle = results["angle"]
+    if is_deg and round(max(angle) / 6) % 5 == 0:
+        xticks = [i * round(max(angle) / 6) for i in range(7)]
+    else:
+        xticks = None
     time = results["time"]
     A_t_s = results[data.symbol]
     angle_map, time_map = meshgrid(angle, time)
@@ -145,10 +149,16 @@ def plot_A_time_space(
     )
 
     # fft time
+    if "dB" in unit:
+        unit_str = (
+            "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
+        )
+    else:
+        unit_str = "[" + unit + "]"
     if data.symbol == "Magnitude":
         ylabel = "Magnitude [" + unit + "]"
     else:
-        ylabel = r"$|\widehat{" + data.symbol + "}|\, [" + unit + "]$"
+        ylabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
     if is_elecorder:
         elec_max = freq_max / data.normalizations.get("elec_order")
         xlabel = "Electrical order []"
@@ -221,8 +231,9 @@ def plot_A_time_space(
     axs[0, 1].axis("off")
 
     fig.canvas.set_window_title(title)
-    fig.suptitle(title, x=0.65, fontsize=16)
+    fig.suptitle(title, x=0.65, fontsize=24, fontname=FONT_NAME)
     fig.tight_layout()
 
     if save_path is not None:
         fig.savefig(save_path)
+        plt.close()

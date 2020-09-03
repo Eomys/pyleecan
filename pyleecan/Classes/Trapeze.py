@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Geometry/Trapeze.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Geometry/Trapeze.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Geometry/Trapeze
 """
 
 from os import linesep
@@ -272,10 +273,14 @@ class Trapeze(Surface):
         check_var("height", value, "float", Vmin=0)
         self._height = value
 
-    # the height of the Trapeze
-    # Type : float, min = 0
     height = property(
-        fget=_get_height, fset=_set_height, doc=u"""the height of the Trapeze"""
+        fget=_get_height,
+        fset=_set_height,
+        doc=u"""the height of the Trapeze
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_W2(self):
@@ -287,9 +292,15 @@ class Trapeze(Surface):
         check_var("W2", value, "float", Vmin=0)
         self._W2 = value
 
-    # the big base of Trapeze
-    # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""the big base of Trapeze""")
+    W2 = property(
+        fget=_get_W2,
+        fset=_set_W2,
+        doc=u"""the big base of Trapeze
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W1(self):
         """getter of W1"""
@@ -300,6 +311,12 @@ class Trapeze(Surface):
         check_var("W1", value, "float", Vmin=0)
         self._W1 = value
 
-    # the small base of the Trapeze
-    # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""the small base of the Trapeze""")
+    W1 = property(
+        fget=_get_W1,
+        fset=_set_W1,
+        doc=u"""the small base of the Trapeze
+
+        :Type: float
+        :min: 0
+        """,
+    )

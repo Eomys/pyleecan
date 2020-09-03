@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Optimization/OptiSolver.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Optimization/OptiSolver.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Optimization/OptiSolver
 """
 
 from os import linesep
@@ -184,10 +185,13 @@ class OptiSolver(FrozenClass):
         if self._problem is not None:
             self._problem.parent = self
 
-    # Problem to solve
-    # Type : OptiProblem
     problem = property(
-        fget=_get_problem, fset=_set_problem, doc=u"""Problem to solve"""
+        fget=_get_problem,
+        fset=_set_problem,
+        doc=u"""Problem to solve
+
+        :Type: OptiProblem
+        """,
     )
 
     def _get_xoutput(self):
@@ -202,12 +206,13 @@ class OptiSolver(FrozenClass):
         if self._xoutput is not None:
             self._xoutput.parent = self
 
-    # Optimization results containing every output
-    # Type : XOutput
     xoutput = property(
         fget=_get_xoutput,
         fset=_set_xoutput,
-        doc=u"""Optimization results containing every output""",
+        doc=u"""Optimization results containing every output
+
+        :Type: XOutput
+        """,
     )
 
     def _get_logger_name(self):
@@ -219,12 +224,13 @@ class OptiSolver(FrozenClass):
         check_var("logger_name", value, "str")
         self._logger_name = value
 
-    # Name of the logger to use
-    # Type : str
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        doc=u"""Name of the logger to use
+
+        :Type: str
+        """,
     )
 
     def _get_is_keep_all_output(self):
@@ -236,10 +242,11 @@ class OptiSolver(FrozenClass):
         check_var("is_keep_all_output", value, "bool")
         self._is_keep_all_output = value
 
-    # Boolean to keep every output
-    # Type : bool
     is_keep_all_output = property(
         fget=_get_is_keep_all_output,
         fset=_set_is_keep_all_output,
-        doc=u"""Boolean to keep every output""",
+        doc=u"""Boolean to keep every output
+
+        :Type: bool
+        """,
     )

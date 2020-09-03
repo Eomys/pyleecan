@@ -3,10 +3,11 @@
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.art3d as art3d
 
-from ...Functions.init_fig import init_fig, init_subplot
+from ...Functions.init_fig import init_subplot
 from ...definitions import config_dict
 
 COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
+FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 
 
 def plot_A_3D(
@@ -33,6 +34,7 @@ def plot_A_3D(
     is_logscale_z=False,
     is_disp_title=True,
     type="stem",
+    save_path=None,
 ):
     """Plots a 3D graph ("stem", "surf" or "pcolor")
 
@@ -151,8 +153,10 @@ def plot_A_3D(
     elif type == "pcolor":
         c = ax.pcolormesh(Xdata, Ydata, Zdata, cmap=colormap, vmin=z_min, vmax=z_max)
         clb = fig.colorbar(c, ax=ax)
-        clb.ax.set_title(zlabel, fontsize=18)
+        clb.ax.set_title(zlabel, fontsize=18, fontname=FONT_NAME)
         clb.ax.tick_params(labelsize=18)
+        for l in clb.ax.yaxis.get_ticklabels():
+            l.set_family(FONT_NAME)
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
         if yticks is not None:
@@ -162,8 +166,10 @@ def plot_A_3D(
             Xdata, Ydata, c=Zdata, marker="s", cmap=colormap, vmin=z_min, vmax=z_max
         )
         clb = fig.colorbar(c, ax=ax)
-        clb.ax.set_title(zlabel, fontsize=18)
+        clb.ax.set_title(zlabel, fontsize=18, fontname=FONT_NAME)
         clb.ax.tick_params(labelsize=18)
+        for l in clb.ax.yaxis.get_ticklabels():
+            l.set_family(FONT_NAME)
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
         if yticks is not None:
@@ -196,4 +202,10 @@ def plot_A_3D(
             + ax.get_yticklabels()
         ):
             item.set_fontsize(22)
+            item.set_fontname(FONT_NAME)
     ax.title.set_fontsize(24)
+    ax.title.set_fontname(FONT_NAME)
+
+    if save_path is not None:
+        fig.savefig(save_path)
+        plt.close()

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/ParamExplorerSet.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/ParamExplorerSet.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/ParamExplorerSet
 """
 
 from os import linesep
@@ -54,7 +55,7 @@ class ParamExplorerSet(ParamExplorer):
 
     def __init__(
         self,
-        value=[],
+        value=-1,
         name="",
         symbol="",
         unit="",
@@ -99,6 +100,8 @@ class ParamExplorerSet(ParamExplorer):
             if "setter" in list(init_dict.keys()):
                 setter = init_dict["setter"]
         # Initialisation by argument
+        if value == -1:
+            value = []
         self.value = value
         # Call ParamExplorer init
         super(ParamExplorerSet, self).__init__(
@@ -162,10 +165,11 @@ class ParamExplorerSet(ParamExplorer):
         check_var("value", value, "list")
         self._value = value
 
-    # List containing the different parameter values to explore
-    # Type : list
     value = property(
         fget=_get_value,
         fset=_set_value,
-        doc=u"""List containing the different parameter values to explore""",
+        doc=u"""List containing the different parameter values to explore
+
+        :Type: list
+        """,
     )

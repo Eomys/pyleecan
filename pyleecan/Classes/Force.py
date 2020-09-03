@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Force.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Force.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Force
 """
 
 from os import linesep
@@ -140,10 +141,11 @@ class Force(FrozenClass):
         check_var("is_comp_nodal_force", value, "bool")
         self._is_comp_nodal_force = value
 
-    # 1 to compute lumped tooth forces
-    # Type : bool
     is_comp_nodal_force = property(
         fget=_get_is_comp_nodal_force,
         fset=_set_is_comp_nodal_force,
-        doc=u"""1 to compute lumped tooth forces""",
+        doc=u"""1 to compute lumped tooth forces
+
+        :Type: bool
+        """,
     )

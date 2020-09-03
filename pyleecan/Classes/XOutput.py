@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Output/XOutput.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Output/XOutput.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/XOutput
 """
 
 from os import linesep
@@ -106,6 +107,21 @@ try:
     from ..Methods.Output.XOutput.plot_multi import plot_multi
 except ImportError as error:
     plot_multi = error
+
+try:
+    from ..Methods.Output.XOutput.plot_pareto import plot_pareto
+except ImportError as error:
+    plot_pareto = error
+
+try:
+    from ..Methods.Output.XOutput.plot_generation import plot_generation
+except ImportError as error:
+    plot_generation = error
+
+try:
+    from ..Methods.Output.XOutput.get_pareto_index import get_pareto_index
+except ImportError as error:
+    get_pareto_index = error
 
 
 from ._check import InitUnKnowClassError
@@ -302,6 +318,38 @@ class XOutput(Output):
         )
     else:
         plot_multi = plot_multi
+    # cf Methods.Output.XOutput.plot_pareto
+    if isinstance(plot_pareto, ImportError):
+        plot_pareto = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use XOutput method plot_pareto: " + str(plot_pareto))
+            )
+        )
+    else:
+        plot_pareto = plot_pareto
+    # cf Methods.Output.XOutput.plot_generation
+    if isinstance(plot_generation, ImportError):
+        plot_generation = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method plot_generation: " + str(plot_generation)
+                )
+            )
+        )
+    else:
+        plot_generation = plot_generation
+    # cf Methods.Output.XOutput.get_pareto_index
+    if isinstance(get_pareto_index, ImportError):
+        get_pareto_index = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use XOutput method get_pareto_index: "
+                    + str(get_pareto_index)
+                )
+            )
+        )
+    else:
+        get_pareto_index = get_pareto_index
     # save method is available in all object
     save = save
 
@@ -407,7 +455,11 @@ class XOutput(Output):
             if "force" in list(init_dict.keys()):
                 force = init_dict["force"]
         # Initialisation by argument
+        if paramexplorer_list == -1:
+            paramexplorer_list = []
         self.paramexplorer_list = paramexplorer_list
+        if output_list == -1:
+            output_list = []
         self.output_list = output_list
         self.xoutput_dict = xoutput_dict
         self.nb_simu = nb_simu
@@ -501,12 +553,13 @@ class XOutput(Output):
         check_var("paramexplorer_list", value, "list")
         self._paramexplorer_list = value
 
-    # List containing ParamExplorer
-    # Type : list
     paramexplorer_list = property(
         fget=_get_paramexplorer_list,
         fset=_set_paramexplorer_list,
-        doc=u"""List containing ParamExplorer""",
+        doc=u"""List containing ParamExplorer
+
+        :Type: list
+        """,
     )
 
     def _get_output_list(self):
@@ -518,12 +571,13 @@ class XOutput(Output):
         check_var("output_list", value, "list")
         self._output_list = value
 
-    # List containing Output for each simulation
-    # Type : list
     output_list = property(
         fget=_get_output_list,
         fset=_set_output_list,
-        doc=u"""List containing Output for each simulation""",
+        doc=u"""List containing Output for each simulation
+
+        :Type: list
+        """,
     )
 
     def _get_xoutput_dict(self):
@@ -535,12 +589,13 @@ class XOutput(Output):
         check_var("xoutput_dict", value, "dict")
         self._xoutput_dict = value
 
-    # Dictionnary containing VarParam DataKeeper results in ndarray
-    # Type : dict
     xoutput_dict = property(
         fget=_get_xoutput_dict,
         fset=_set_xoutput_dict,
-        doc=u"""Dictionnary containing VarParam DataKeeper results in ndarray""",
+        doc=u"""Dictionnary containing VarParam DataKeeper results in ndarray
+
+        :Type: dict
+        """,
     )
 
     def _get_nb_simu(self):
@@ -552,10 +607,12 @@ class XOutput(Output):
         check_var("nb_simu", value, "int", Vmin=0)
         self._nb_simu = value
 
-    # Number of simulations excluding reference simulation
-    # Type : int, min = 0
     nb_simu = property(
         fget=_get_nb_simu,
         fset=_set_nb_simu,
-        doc=u"""Number of simulations excluding reference simulation""",
+        doc=u"""Number of simulations excluding reference simulation
+
+        :Type: int
+        :min: 0
+        """,
     )

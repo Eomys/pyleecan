@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Simulation.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Simulation.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Simulation
 """
 
 from os import linesep
@@ -166,7 +167,7 @@ class Simulation(FrozenClass):
             if class_name not in [
                 "Input",
                 "InputCurrent",
-                "InputCurrentDQ",
+                "InputElec",
                 "InputFlux",
                 "InputForce",
             ]:
@@ -186,7 +187,7 @@ class Simulation(FrozenClass):
             if class_name not in [
                 "Input",
                 "InputCurrent",
-                "InputCurrentDQ",
+                "InputElec",
                 "InputFlux",
                 "InputForce",
             ]:
@@ -201,7 +202,7 @@ class Simulation(FrozenClass):
         if isinstance(var_simu, dict):
             # Check that the type is correct (including daughter)
             class_name = var_simu.get("__class__")
-            if class_name not in ["VarSimu", "VarParam"]:
+            if class_name not in ["VarSimu", "VarLoad", "VarLoadCurrent", "VarParam"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for var_simu"
                 )
@@ -215,7 +216,7 @@ class Simulation(FrozenClass):
             var_simu = load(var_simu)
             # Check that the type is correct (including daughter)
             class_name = var_simu.__class__.__name__
-            if class_name not in ["VarSimu", "VarParam"]:
+            if class_name not in ["VarSimu", "VarLoad", "VarLoadCurrent", "VarParam"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for var_simu"
                 )
@@ -319,9 +320,14 @@ class Simulation(FrozenClass):
         check_var("name", value, "str")
         self._name = value
 
-    # Name of the simulation
-    # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""Name of the simulation""")
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Name of the simulation
+
+        :Type: str
+        """,
+    )
 
     def _get_desc(self):
         """getter of desc"""
@@ -332,9 +338,14 @@ class Simulation(FrozenClass):
         check_var("desc", value, "str")
         self._desc = value
 
-    # Simulation description
-    # Type : str
-    desc = property(fget=_get_desc, fset=_set_desc, doc=u"""Simulation description""")
+    desc = property(
+        fget=_get_desc,
+        fset=_set_desc,
+        doc=u"""Simulation description
+
+        :Type: str
+        """,
+    )
 
     def _get_machine(self):
         """getter of machine"""
@@ -348,10 +359,13 @@ class Simulation(FrozenClass):
         if self._machine is not None:
             self._machine.parent = self
 
-    # Machine to simulate
-    # Type : Machine
     machine = property(
-        fget=_get_machine, fset=_set_machine, doc=u"""Machine to simulate"""
+        fget=_get_machine,
+        fset=_set_machine,
+        doc=u"""Machine to simulate
+
+        :Type: Machine
+        """,
     )
 
     def _get_input(self):
@@ -366,10 +380,13 @@ class Simulation(FrozenClass):
         if self._input is not None:
             self._input.parent = self
 
-    # Input of the simulation
-    # Type : Input
     input = property(
-        fget=_get_input, fset=_set_input, doc=u"""Input of the simulation"""
+        fget=_get_input,
+        fset=_set_input,
+        doc=u"""Input of the simulation
+
+        :Type: Input
+        """,
     )
 
     def _get_logger_name(self):
@@ -381,12 +398,13 @@ class Simulation(FrozenClass):
         check_var("logger_name", value, "str")
         self._logger_name = value
 
-    # Name of the logger to use
-    # Type : str
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        doc=u"""Name of the logger to use
+
+        :Type: str
+        """,
     )
 
     def _get_var_simu(self):
@@ -401,8 +419,11 @@ class Simulation(FrozenClass):
         if self._var_simu is not None:
             self._var_simu.parent = self
 
-    # Multi-simulation definition
-    # Type : VarSimu
     var_simu = property(
-        fget=_get_var_simu, fset=_set_var_simu, doc=u"""Multi-simulation definition"""
+        fget=_get_var_simu,
+        fset=_set_var_simu,
+        doc=u"""Multi-simulation definition
+
+        :Type: VarSimu
+        """,
     )

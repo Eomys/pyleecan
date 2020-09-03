@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/InputFlux.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/InputFlux.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/InputFlux
 """
 
 from os import linesep
@@ -18,9 +19,13 @@ except ImportError as error:
     gen_input = error
 
 
+from ..Classes.ImportMatrixVal import ImportMatrixVal
+from numpy import ndarray
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
-from .Import import Import
-from .ImportMatrixVal import ImportMatrixVal
+from .ImportVectorField import ImportVectorField
+from .Input import Input
+from .ImportMatrix import ImportMatrix
 
 
 class InputFlux(Input):
@@ -50,7 +55,16 @@ class InputFlux(Input):
     get_logger = get_logger
 
     def __init__(
-        self, Br=None, Bt=None, time=-1, angle=-1, init_dict=None, init_str=None
+        self,
+        B=None,
+        OP=None,
+        time=None,
+        angle=None,
+        Nt_tot=2048,
+        Nrev=1,
+        Na_tot=2048,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -63,14 +77,14 @@ class InputFlux(Input):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if Br == -1:
-            Br = Import()
-        if Bt == -1:
-            Bt = Import()
+        if B == -1:
+            B = ImportVectorField()
+        if OP == -1:
+            OP = Input()
         if time == -1:
-            time = ImportMatrixVal()
+            time = ImportMatrix()
         if angle == -1:
-            angle = ImportMatrixVal()
+            angle = ImportMatrix()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -78,114 +92,81 @@ class InputFlux(Input):
             # load the object from a file
             obj = load(init_str)
             assert type(obj) is type(self)
-            Br = obj.Br
-            Bt = obj.Bt
+            B = obj.B
+            OP = obj.OP
             time = obj.time
             angle = obj.angle
+            Nt_tot = obj.Nt_tot
+            Nrev = obj.Nrev
+            Na_tot = obj.Na_tot
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "Br" in list(init_dict.keys()):
-                Br = init_dict["Br"]
-            if "Bt" in list(init_dict.keys()):
-                Bt = init_dict["Bt"]
+            if "B" in list(init_dict.keys()):
+                B = init_dict["B"]
+            if "OP" in list(init_dict.keys()):
+                OP = init_dict["OP"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
                 angle = init_dict["angle"]
+            if "Nt_tot" in list(init_dict.keys()):
+                Nt_tot = init_dict["Nt_tot"]
+            if "Nrev" in list(init_dict.keys()):
+                Nrev = init_dict["Nrev"]
+            if "Na_tot" in list(init_dict.keys()):
+                Na_tot = init_dict["Na_tot"]
         # Initialisation by argument
-        # Br can be None, a Import object or a dict
-        if isinstance(Br, dict):
+        # B can be None, a ImportVectorField object or a dict
+        if isinstance(B, dict):
+            self.B = ImportVectorField(init_dict=B)
+        elif isinstance(B, str):
+            from ..Functions.load import load
+
+            self.B = load(B)
+        else:
+            self.B = B
+        # OP can be None, a Input object or a dict
+        if isinstance(OP, dict):
             # Check that the type is correct (including daughter)
-            class_name = Br.get("__class__")
+            class_name = OP.get("__class__")
             if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
+                "Input",
+                "InputCurrent",
+                "InputElec",
+                "InputFlux",
+                "InputForce",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Br"
+                    "Unknow class name " + class_name + " in init_dict for OP"
                 )
             # Dynamic import to call the correct constructor
             module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
             class_obj = getattr(module, class_name)
-            self.Br = class_obj(init_dict=Br)
-        elif isinstance(Br, str):
+            self.OP = class_obj(init_dict=OP)
+        elif isinstance(OP, str):
             from ..Functions.load import load
 
-            Br = load(Br)
+            OP = load(OP)
             # Check that the type is correct (including daughter)
-            class_name = Br.__class__.__name__
+            class_name = OP.__class__.__name__
             if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
+                "Input",
+                "InputCurrent",
+                "InputElec",
+                "InputFlux",
+                "InputForce",
             ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Br"
+                    "Unknow class name " + class_name + " in init_dict for OP"
                 )
-            self.Br = Br
+            self.OP = OP
         else:
-            self.Br = Br
-        # Bt can be None, a Import object or a dict
-        if isinstance(Bt, dict):
-            # Check that the type is correct (including daughter)
-            class_name = Bt.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Bt"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.Bt = class_obj(init_dict=Bt)
-        elif isinstance(Bt, str):
-            from ..Functions.load import load
-
-            Bt = load(Bt)
-            # Check that the type is correct (including daughter)
-            class_name = Bt.__class__.__name__
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for Bt"
-                )
-            self.Bt = Bt
-        else:
-            self.Bt = Bt
+            self.OP = OP
         # Call Input init
-        super(InputFlux, self).__init__(time=time, angle=angle)
+        super(InputFlux, self).__init__(
+            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
+        )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 
@@ -195,16 +176,16 @@ class InputFlux(Input):
         InputFlux_str = ""
         # Get the properties inherited from Input
         InputFlux_str += super(InputFlux, self).__str__()
-        if self.Br is not None:
-            tmp = self.Br.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputFlux_str += "Br = " + tmp
+        if self.B is not None:
+            tmp = self.B.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            InputFlux_str += "B = " + tmp
         else:
-            InputFlux_str += "Br = None" + linesep + linesep
-        if self.Bt is not None:
-            tmp = self.Bt.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputFlux_str += "Bt = " + tmp
+            InputFlux_str += "B = None" + linesep + linesep
+        if self.OP is not None:
+            tmp = self.OP.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            InputFlux_str += "OP = " + tmp
         else:
-            InputFlux_str += "Bt = None" + linesep + linesep
+            InputFlux_str += "OP = None" + linesep + linesep
         return InputFlux_str
 
     def __eq__(self, other):
@@ -216,9 +197,9 @@ class InputFlux(Input):
         # Check the properties inherited from Input
         if not super(InputFlux, self).__eq__(other):
             return False
-        if other.Br != self.Br:
+        if other.B != self.B:
             return False
-        if other.Bt != self.Bt:
+        if other.OP != self.OP:
             return False
         return True
 
@@ -228,14 +209,14 @@ class InputFlux(Input):
 
         # Get the properties inherited from Input
         InputFlux_dict = super(InputFlux, self).as_dict()
-        if self.Br is None:
-            InputFlux_dict["Br"] = None
+        if self.B is None:
+            InputFlux_dict["B"] = None
         else:
-            InputFlux_dict["Br"] = self.Br.as_dict()
-        if self.Bt is None:
-            InputFlux_dict["Bt"] = None
+            InputFlux_dict["B"] = self.B.as_dict()
+        if self.OP is None:
+            InputFlux_dict["OP"] = None
         else:
-            InputFlux_dict["Bt"] = self.Bt.as_dict()
+            InputFlux_dict["OP"] = self.OP.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         InputFlux_dict["__class__"] = "InputFlux"
@@ -244,41 +225,51 @@ class InputFlux(Input):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        if self.Br is not None:
-            self.Br._set_None()
-        if self.Bt is not None:
-            self.Bt._set_None()
+        if self.B is not None:
+            self.B._set_None()
+        if self.OP is not None:
+            self.OP._set_None()
         # Set to None the properties inherited from Input
         super(InputFlux, self)._set_None()
 
-    def _get_Br(self):
-        """getter of Br"""
-        return self._Br
+    def _get_B(self):
+        """getter of B"""
+        return self._B
 
-    def _set_Br(self, value):
-        """setter of Br"""
-        check_var("Br", value, "Import")
-        self._Br = value
+    def _set_B(self, value):
+        """setter of B"""
+        check_var("B", value, "ImportVectorField")
+        self._B = value
 
-        if self._Br is not None:
-            self._Br.parent = self
+        if self._B is not None:
+            self._B.parent = self
 
-    # Radial airgap flux density
-    # Type : Import
-    Br = property(fget=_get_Br, fset=_set_Br, doc=u"""Radial airgap flux density""")
+    B = property(
+        fget=_get_B,
+        fset=_set_B,
+        doc=u"""Airgap flux density
 
-    def _get_Bt(self):
-        """getter of Bt"""
-        return self._Bt
+        :Type: ImportVectorField
+        """,
+    )
 
-    def _set_Bt(self, value):
-        """setter of Bt"""
-        check_var("Bt", value, "Import")
-        self._Bt = value
+    def _get_OP(self):
+        """getter of OP"""
+        return self._OP
 
-        if self._Bt is not None:
-            self._Bt.parent = self
+    def _set_OP(self, value):
+        """setter of OP"""
+        check_var("OP", value, "Input")
+        self._OP = value
 
-    # Tangential airgap flux density
-    # Type : Import
-    Bt = property(fget=_get_Bt, fset=_set_Bt, doc=u"""Tangential airgap flux density""")
+        if self._OP is not None:
+            self._OP.parent = self
+
+    OP = property(
+        fget=_get_OP,
+        fset=_set_OP,
+        doc=u"""InputCurrent to define Operating Point (not mandatory)
+
+        :Type: Input
+        """,
+    )

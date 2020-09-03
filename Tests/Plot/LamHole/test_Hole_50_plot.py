@@ -83,6 +83,11 @@ def test_Lam_Hole_50_W01(machine):
     # 2 for lam + (3*2)*8 for holes + 16 vents
     assert len(fig.axes[0].patches) == 66
 
+    machine.rotor.axial_vent[0].plot()
+    fig = plt.gcf()
+    fig.savefig(join(save_path, "test_Lam_Hole_CircVent.png"))
+    assert len(fig.axes[0].patches) == 8
+
 
 def test_Lam_Hole_50_N01(machine):
     """Test machine plot hole 50 with W1 = 0 and both magnets

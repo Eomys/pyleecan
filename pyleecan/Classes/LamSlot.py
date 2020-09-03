@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/LamSlot.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/LamSlot.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/LamSlot
 """
 
 from os import linesep
@@ -445,6 +446,11 @@ class LamSlot(Lamination):
         if self._slot is not None:
             self._slot.parent = self
 
-    # lamination Slot
-    # Type : Slot
-    slot = property(fget=_get_slot, fset=_set_slot, doc=u"""lamination Slot""")
+    slot = property(
+        fget=_get_slot,
+        fset=_set_slot,
+        doc=u"""lamination Slot
+
+        :Type: Slot
+        """,
+    )

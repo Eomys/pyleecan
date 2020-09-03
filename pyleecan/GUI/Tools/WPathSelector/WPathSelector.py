@@ -33,6 +33,7 @@ class WPathSelector(Ui_WPathSelector, QWidget):
         )
         self.param_name = ""  # path property name
         self.is_file = True  # True path to a file, False path to a folder
+        self.extension = ""  # Filter file type
 
         # Connect the slot/signals
         self.le_path.editingFinished.connect(self.set_obj_path)
@@ -76,11 +77,11 @@ class WPathSelector(Ui_WPathSelector, QWidget):
     def set_obj_path(self):
         """Update the object with the current path (if correct)
         """
-        path = self.get_path()
+        path = self.get_path().replace("\\", "/")
         if (self.is_file and isfile(path)) or (not self.is_file and isdir(path)):
-            self.pathChanged.emit()
             if self.obj is not None:
                 setattr(self.obj, self.param_name, path)
+            self.pathChanged.emit()
 
     def select_path(self):
         """Open a popup to select the correct path
@@ -90,9 +91,12 @@ class WPathSelector(Ui_WPathSelector, QWidget):
         if self.is_file:  # Select a file
             if not isfile(default_path):
                 default_path = ""
-            path = QFileDialog.getExistingFile(
-                self, "Select " + self.verbose_name + " file", default_path
-            )
+            path = QFileDialog.getOpenFileName(
+                self,
+                "Select " + self.verbose_name + " file",
+                default_path,
+                filter=self.extension,
+            )[0]
         else:  # Select a Folder
             if not isdir(default_path):
                 default_path = ""
@@ -103,4 +107,4 @@ class WPathSelector(Ui_WPathSelector, QWidget):
         if path is not None:
             path = path.replace("\\", "/")
             self.le_path.setText(path)
-            self.pathChanged.emit()
+            self.set_obj_path()

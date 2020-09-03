@@ -18,13 +18,15 @@ def run(self):
     output = self.parent.parent
 
     if self.eec is not None:
-        # Generate drive
-        self.eec.gen_drive(output)
+        # # Generate drive
+        # self.eec.gen_drive(output)
         # Compute parameters of the electrical equivalent circuit
         self.eec.comp_parameters(output)
         # Solve the electrical equivalent circuit
         self.eec.solve_EEC(output)
         # Compute losses due to Joule effects
-        # self.eec.comp_losses(output) # not implemented yed
+        self.eec.comp_joule_losses(output)
+        # Compute electromagnetic power
+        self.comp_power(output)
         # Compute torque
-        # self.eec.comp_torque(output) # not implemented yet
+        self.comp_torque(output)

@@ -23,20 +23,20 @@ h.setFormatter(f)
 x.addHandler(h)
 
 # Init the result folder for the test
-save_path = join(TEST_DIR, "Results")
+save_path = join(TEST_DIR, "Results").replace("\\", "/")
 if isdir(save_path):  # Delete previous test result
     rmtree(save_path)
 # To save all the plot geometry results
-save_plot_path = join(save_path, "Plot")
+save_plot_path = join(save_path, "Plot").replace("\\", "/")
 makedirs(save_plot_path)
 # To save the validation results
-save_validation_path = join(save_path, "Validation")
+save_validation_path = join(save_path, "Validation").replace("\\", "/")
 makedirs(save_validation_path)
 # To save the Save/Load .json results
-save_load_path = join(save_path, "Save_Load")
+save_load_path = join(save_path, "Save_Load").replace("\\", "/")
 makedirs(save_load_path)
 # To save the GUI results
-save_gui_path = join(save_path, "GUI")
+save_gui_path = join(save_path, "GUI").replace("\\", "/")
 makedirs(save_gui_path)
 
 # To clean all the results at the end of the corresponding test

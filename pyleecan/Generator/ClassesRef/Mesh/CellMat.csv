@@ -1,0 +1,5 @@
+Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
+connectivity,,Matrix of connectivity for one element type,,ndarray,,,,,Mesh,,add_cell,VERSION,1,Define the connectivity under matricial format containing one type of element (example: only triangles with 3 nodes). 
+nb_cell,,Total number of elements,,int,0,,,,,,get_connectivity,,,
+nb_pt_per_cell,,Define the number of node per element,,int,0,,,,,,get_point2cell,,,
+indice,,Element indices,,ndarray,,,,,,,is_exist,,,
