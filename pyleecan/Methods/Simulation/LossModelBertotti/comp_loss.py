@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import array, nan, tile, npsum
+from numpy import array, nan, tile, sum as npsum
 from SciDataTool import DataTime, DataFreq, Data1D
 
 from ....Classes.SolutionData import SolutionData
