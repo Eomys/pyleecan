@@ -17,9 +17,9 @@ from pyleecan.Functions.Electrical.coordinate_transformation import (
     ab2dq,
 )
 
+import pytest
 
 """unittest for coordinate transformation functions"""
-
 
 def test_coordinate_transformation_Ok():
     """Check that the coordinate transformations can return a correct output

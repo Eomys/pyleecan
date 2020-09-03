@@ -1,6 +1,5 @@
 from os import remove, getcwd
 from os.path import isfile, join
-from unittest import TestCase
 import pytest
 
 try:
