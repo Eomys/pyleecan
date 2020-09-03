@@ -2,7 +2,6 @@
 
 import sys
 from random import uniform
-from unittest import TestCase
 
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
@@ -48,10 +47,10 @@ import pytest
 
 
 @pytest.mark.GUI
-class test_SWSlot(TestCase):
+class TestSWSlot(object):
     """Test that the widget SWSlot behave like it should"""
 
-    def setUp(self):
+    def setup_method(self, method):
         """Run at the begining of every test to setup the gui"""
 
         self.test_obj = MachineSCIM()
@@ -69,23 +68,24 @@ class test_SWSlot(TestCase):
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
     @classmethod
-    def setUpClass(cls):
+    def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test SWSlot")
         cls.app = QtWidgets.QApplication(sys.argv)
 
     @classmethod
-    def tearDownClass(cls):
+    def teardown_class(cls):
         """Exit the app after the test"""
         cls.app.quit()
 
+
     def test_init(self):
         """Check that the Widget initialize to the correct slot"""
-
-        self.assertEqual(self.widget.si_Zs.value(), 123)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 10")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 0)
-        self.assertEqual(type(self.widget.w_slot), PWSlot10)
+        
+        assert self.widget.si_Zs.value() == 123
+        assert self.widget.c_slot_type.currentText() == "Slot Type 10"
+        assert self.widget.c_slot_type.currentIndex() == 0
+        assert type(self.widget.w_slot) == PWSlot10
 
     def test_set_slot_11(self):
         """Check that you can edit a Slot 11"""
@@ -93,10 +93,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW11(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 11")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 1)
-        self.assertEqual(type(self.widget.w_slot), PWSlot11)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 11"
+        assert self.widget.c_slot_type.currentIndex() == 1
+        assert type(self.widget.w_slot) == PWSlot11
 
     def test_set_slot_12(self):
         """Check that you can edit a Slot 12"""
@@ -104,10 +104,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW12(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 12")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 2)
-        self.assertEqual(type(self.widget.w_slot), PWSlot12)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 12"
+        assert self.widget.c_slot_type.currentIndex() == 2
+        assert type(self.widget.w_slot) == PWSlot12
 
     def test_set_slot_13(self):
         """Check that you can edit a Slot 13"""
@@ -115,10 +115,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW13(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 13")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 3)
-        self.assertEqual(type(self.widget.w_slot), PWSlot13)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 13"
+        assert self.widget.c_slot_type.currentIndex() == 3
+        assert type(self.widget.w_slot) == PWSlot13
 
     def test_set_slot_14(self):
         """Check that you can edit a Slot 14"""
@@ -126,10 +126,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW14(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 14")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 4)
-        self.assertEqual(type(self.widget.w_slot), PWSlot14)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 14"
+        assert self.widget.c_slot_type.currentIndex() == 4
+        assert type(self.widget.w_slot) == PWSlot14
 
     def test_set_slot_15(self):
         """Check that you can edit a Slot 15"""
@@ -137,10 +137,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW15(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 15")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 5)
-        self.assertEqual(type(self.widget.w_slot), PWSlot15)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 15"
+        assert self.widget.c_slot_type.currentIndex() == 5
+        assert type(self.widget.w_slot) == PWSlot15
 
     def test_set_slot_16(self):
         """Check that you can edit a Slot 16"""
@@ -148,10 +148,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW16(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 16")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 6)
-        self.assertEqual(type(self.widget.w_slot), PWSlot16)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 16"
+        assert self.widget.c_slot_type.currentIndex() == 6
+        assert type(self.widget.w_slot) == PWSlot16
 
     def test_set_slot_21(self):
         """Check that you can edit a Slot 21"""
@@ -159,10 +159,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW21(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 21")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 7)
-        self.assertEqual(type(self.widget.w_slot), PWSlot21)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 21"
+        assert self.widget.c_slot_type.currentIndex() == 7
+        assert type(self.widget.w_slot) == PWSlot21
 
     def test_set_slot_22(self):
         """Check that you can edit a Slot 22"""
@@ -170,10 +170,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW22(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 22")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 8)
-        self.assertEqual(type(self.widget.w_slot), PWSlot22)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 22"
+        assert self.widget.c_slot_type.currentIndex() == 8
+        assert type(self.widget.w_slot) == PWSlot22
 
     def test_set_slot_23(self):
         """Check that you can edit a Slot 23"""
@@ -181,10 +181,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW23(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 23")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 9)
-        self.assertEqual(type(self.widget.w_slot), PWSlot23)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 23"
+        assert self.widget.c_slot_type.currentIndex() == 9
+        assert type(self.widget.w_slot) == PWSlot23
 
     def test_set_slot_24(self):
         """Check that you can edit a Slot 24"""
@@ -192,10 +192,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW24(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 24")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 10)
-        self.assertEqual(type(self.widget.w_slot), PWSlot24)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 24"
+        assert self.widget.c_slot_type.currentIndex() == 10
+        assert type(self.widget.w_slot) == PWSlot24
 
     def test_set_slot_25(self):
         """Check that you can edit a Slot 25"""
@@ -203,10 +203,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW25(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 25")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 11)
-        self.assertEqual(type(self.widget.w_slot), PWSlot25)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 25"
+        assert self.widget.c_slot_type.currentIndex() == 11
+        assert type(self.widget.w_slot) == PWSlot25
 
     def test_set_slot_26(self):
         """Check that you can edit a Slot 26"""
@@ -214,10 +214,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW26(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 26")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 12)
-        self.assertEqual(type(self.widget.w_slot), PWSlot26)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 26"
+        assert self.widget.c_slot_type.currentIndex() == 12
+        assert type(self.widget.w_slot) == PWSlot26
 
     def test_set_slot_27(self):
         """Check that you can edit a Slot 27"""
@@ -225,10 +225,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW27(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 27")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 13)
-        self.assertEqual(type(self.widget.w_slot), PWSlot27)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 27"
+        assert self.widget.c_slot_type.currentIndex() == 13
+        assert type(self.widget.w_slot) == PWSlot27
 
     def test_set_slot_28(self):
         """Check that you can edit a Slot 28"""
@@ -236,10 +236,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW28(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 28")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 14)
-        self.assertEqual(type(self.widget.w_slot), PWSlot28)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 28"
+        assert self.widget.c_slot_type.currentIndex() == 14
+        assert type(self.widget.w_slot) == PWSlot28
 
     def test_set_slot_29(self):
         """Check that you can edit a Slot 29"""
@@ -247,10 +247,10 @@ class test_SWSlot(TestCase):
         self.test_obj.stator.slot = SlotW29(Zs=Zs)
         self.widget = SWSlot(self.test_obj, matlib=[], is_stator=True)
 
-        self.assertEqual(self.widget.si_Zs.value(), Zs)
-        self.assertEqual(self.widget.c_slot_type.currentText(), "Slot Type 29")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 15)
-        self.assertEqual(type(self.widget.w_slot), PWSlot29)
+        assert self.widget.si_Zs.value() == Zs
+        assert self.widget.c_slot_type.currentText() == "Slot Type 29"
+        assert self.widget.c_slot_type.currentIndex() == 15
+        assert type(self.widget.w_slot) == PWSlot29
 
     def test_set_Zs(self):
         """Check that the Widget allow to update Zs"""
@@ -258,52 +258,50 @@ class test_SWSlot(TestCase):
         self.widget.si_Zs.clear()
         value = int(uniform(1, 100))
         QTest.keyClicks(self.widget.si_Zs, str(value))
-        self.widget.si_Zs.editingFinished.emit()  # To trigger the slot
+        self.widget.si_Zs.editingFinished.emit()    # To trigger the slot
 
-        self.assertEqual(self.test_obj.stator.slot.Zs, value)
+        assert self.test_obj.stator.slot.Zs == value
 
     def test_c_slot_type(self):
         """Check that the combobox allow to update the slot type"""
-        slot_list = [
-            SlotW10,
-            SlotW11,
-            SlotW12,
-            SlotW13,
-            SlotW14,
-            SlotW15,
-            SlotW16,
-            SlotW21,
-            SlotW22,
-            SlotW23,
-            SlotW24,
-            SlotW25,
-            SlotW26,
-            SlotW27,
-            SlotW28,
-            SlotW29,
+        slot_list = [    
+            SlotW10,    
+            SlotW11,    
+            SlotW12,    
+            SlotW13,    
+            SlotW14,    
+            SlotW15,    
+            SlotW16,    
+            SlotW21,    
+            SlotW22,    
+            SlotW23,    
+            SlotW24,    
+            SlotW25,    
+            SlotW26,    
+            SlotW27,    
+            SlotW28,    
+            SlotW29,    
         ]
-        WIDGET_LIST = [
-            PWSlot10,
-            PWSlot11,
-            PWSlot12,
-            PWSlot13,
-            PWSlot14,
-            PWSlot15,
-            PWSlot16,
-            PWSlot21,
-            PWSlot22,
-            PWSlot23,
-            PWSlot24,
-            PWSlot25,
-            PWSlot26,
-            PWSlot27,
-            PWSlot28,
-            PWSlot29,
+        WIDGET_LIST = [    
+            PWSlot10,    
+            PWSlot11,    
+            PWSlot12,    
+            PWSlot13,    
+            PWSlot14,    
+            PWSlot15,    
+            PWSlot16,    
+            PWSlot21,    
+            PWSlot22,    
+            PWSlot23,    
+            PWSlot24,    
+            PWSlot25,    
+            PWSlot26,    
+            PWSlot27,    
+            PWSlot28,    
+            PWSlot29,    
         ]
         for ii in range(len(WIDGET_LIST)):
             self.widget.c_slot_type.setCurrentIndex(ii)
-            self.assertEqual(type(self.test_obj.stator.slot), slot_list[ii])
-            self.assertEqual(type(self.widget.w_slot), WIDGET_LIST[ii])
-            self.assertEqual(
-                self.widget.w_slot.w_out.out_Wlam.text(), "Lamination width: 0.1 m"
-            )
+            assert type(self.test_obj.stator.slot) == slot_list[ii]
+            assert type(self.widget.w_slot) == WIDGET_LIST[ii]
+            assert self.widget.w_slot.w_out.out_Wlam.text() == "Lamination width: 0.1 m"
