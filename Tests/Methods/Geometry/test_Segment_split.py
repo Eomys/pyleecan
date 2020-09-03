@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-
-from unittest import TestCase
-
-from ddt import ddt, data
+import pytest
 
 from pyleecan.Classes.Segment import Segment
 
@@ -115,68 +112,67 @@ split_list.append(
 )
 
 
-@ddt
-class test_Segment_split_meth(TestCase):
+@pytest.mark.METHODS
+class Test_Segment_Split(object):
     """unittest for Segment split methods"""
 
-    @data(*split_list)
-    def test_intersect(self, test_dict):
+    @pytest.mark.parametrize("test_dict", split_list)
+    def test_intersect(self,test_dict):
         """Check that the intersection is computed correctly
-        """
+            """
         seg = Segment(test_dict["begin"], test_dict["end"])
 
         # Check intersection
         result = seg.intersect_line(test_dict["Z1"], test_dict["Z2"])
-        self.assertEqual(len(result), len(test_dict["Zi"]))
-        msg = (
-            "Wrong intersection: returned "
-            + str(result)
-            + ", expected: "
-            + str(test_dict["Zi"])
+        assert len(result) == len(test_dict["Zi"])
+        msg = (    
+            "Wrong intersection: returned "    
+            + str(result)    + ", expected: "    
+            + str(test_dict["Zi"])    
         )
         for ii in range(len(result)):
-            self.assertAlmostEqual(abs(result[ii] - test_dict["Zi"][ii]), 0, msg=msg)
+            assert round(abs(abs(result[ii] - test_dict["Zi"][ii])-0), 7) == 0, msg
 
         # Check split_line is_top=True
         seg2 = seg.split_line(test_dict["Z1"], test_dict["Z2"], is_top=True)
-        self.assertEqual(type(seg2), list)
-        if len(seg2) > 0:
-            self.assertEqual(len(seg2), 1)
-            msg = (
-                "Wrong begin with is_top: returned "
-                + str(seg2[0].begin)
-                + ", expected: "
-                + str(test_dict["Zb_top"])
+        assert type(seg2)==list
+        if len(seg2)>0:
+            assert len(seg2) == 1
+            msg = (        
+                "Wrong begin with is_top: returned "        
+                + str(seg2[0].begin)        
+                + ", expected: "        
+                + str(test_dict["Zb_top"])        
             )
-            self.assertAlmostEqual(abs(seg2[0].begin - test_dict["Zb_top"]), 0, msg=msg)
-            msg = (
-                "Wrong end with is_top: returned "
-                + str(seg2[0].end)
-                + ", expected: "
-                + str(test_dict["Ze_top"])
+            assert round(abs(abs(seg2[0].begin - test_dict["Zb_top"])-0), 7) == 0, msg
+            msg = (        
+                "Wrong end with is_top: returned "        
+                + str(seg2[0].end)        
+                + ", expected: "        
+                + str(test_dict["Ze_top"])        
             )
-            self.assertAlmostEqual(abs(seg2[0].end - test_dict["Ze_top"]), 0, msg=msg)
+            assert round(abs(abs(seg2[0].end - test_dict["Ze_top"])-0), 7) == 0, msg
         else:  # No intersection
-            self.assertIsNone(test_dict["Zb_top"])
+            assert test_dict["Zb_top"] is None
 
         # Check split_line is_top=False
         seg3 = seg.split_line(test_dict["Z1"], test_dict["Z2"], is_top=False)
-        self.assertEqual(type(seg3), list)
-        if len(seg3) > 0:
-            self.assertEqual(len(seg3), 1)
-            msg = (
-                "Wrong begin with not is_top: returned "
-                + str(seg3[0].begin)
-                + ", expected: "
-                + str(test_dict["Zb_bot"])
+        assert type(seg3)==list
+        if len(seg3)>0:
+            assert len(seg3) == 1
+            msg = (        
+                "Wrong begin with not is_top: returned "        
+                + str(seg3[0].begin)        
+                + ", expected: "        
+                + str(test_dict["Zb_bot"])        
             )
-            self.assertAlmostEqual(abs(seg3[0].begin - test_dict["Zb_bot"]), 0, msg=msg)
-            msg = (
-                "Wrong end with not is_top: returned "
-                + str(seg3[0].end)
-                + ", expected: "
-                + str(test_dict["Ze_bot"])
+            assert round(abs(abs(seg3[0].begin - test_dict["Zb_bot"])-0), 7) == 0, msg
+            msg = (        
+                "Wrong end with not is_top: returned "        
+                + str(seg3[0].end)        
+                + ", expected: "        
+                + str(test_dict["Ze_bot"])        
             )
-            self.assertAlmostEqual(abs(seg3[0].end - test_dict["Ze_bot"]), 0, msg=msg)
+            assert round(abs(abs(seg3[0].end - test_dict["Ze_bot"])-0), 7) == 0, msg
         else:  # No intersection
-            self.assertIsNone(test_dict["Zb_bot"])
+            assert test_dict["Zb_bot"] is None
