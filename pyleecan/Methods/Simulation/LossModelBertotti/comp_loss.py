@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import array, nan, tile, sum as npsum
+from numpy import array, nan, tile
 from SciDataTool import DataTime, DataFreq, Data1D
 
 from ....Classes.SolutionData import SolutionData
@@ -19,7 +19,7 @@ def _comp_loss_sum(meshsolution, grp, L1=1, rho=7650):
 
     loss = area * loss_norm * L1 * rho
 
-    mass = area.npsum() * L1 * rho
+    mass = area.sum() * L1 * rho
     print(f"{grp} mass = {mass} kg")
 
     return loss.sum()
