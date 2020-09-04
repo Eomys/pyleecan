@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
-from ddt import ddt, data
+import pytest
 
 from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.SurfLine import SurfLine
@@ -25,59 +24,57 @@ HoleM54_test.append(
 )
 
 
-@ddt
-class test_HoleM54_meth(TestCase):
+@pytest.mark.METHODS
+class Test_HoleM54_meth(object):
     """unittest for HoleM54 methods"""
-
-    @data(*HoleM54_test)
-    def test_comp_surface(self, test_dict):
+    @pytest.mark.parametrize("test_dict", HoleM54_test)
+    def test_comp_surface(self,test_dict):
         """Check that the computation of the surface is correct
-        """
+            """
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_surface()
 
         a = result
         b = test_dict["S_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a-0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
         b = comp_surface(test_obj.hole[0])
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=1e-4, msg=msg)
+        assert abs((a - b) / a-0) < 1e-4, msg
 
-    @data(*HoleM54_test)
-    def test_comp_radius(self, test_dict):
+    @pytest.mark.parametrize("test_dict", HoleM54_test)
+    def test_comp_radius(self,test_dict):
         """Check that the computation of the radius is correct
-        """
+            """
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_radius()
 
         a = result[0]
         b = test_dict["Rmin"]
         msg = "For Rmin: Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a-0) < DELTA, msg
 
         a = result[1]
         b = test_dict["Rmax"]
         msg = "For Rmax: Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a-0) < DELTA, msg
 
-    @data(*HoleM54_test)
-    def test_build_geometry(self, test_dict):
+    @pytest.mark.parametrize("test_dict", HoleM54_test)
+    def test_build_geometry(self,test_dict):
         """Check that the surf list is correct
-        """
+            """
         test_obj = LamHole(init_dict=test_dict["test_obj"].as_dict())
         result = test_obj.hole[0].build_geometry()
-
-        self.assertEqual(len(result), 1)
+        assert len(result) == 1
         for surf in result:
-            self.assertTrue(type(surf) == SurfLine)
+            assert type(surf) == SurfLine
 
-        self.assertEqual(result[0].label[:4], "Hole")
-        self.assertEqual(result[0].label[-9:], "_R0_T0_S0")
-        self.assertEqual(len(result[0].line_list), 4)
-        self.assertEqual(type(result[0].line_list[0]), Arc1)
-        self.assertEqual(type(result[0].line_list[1]), Arc3)
-        self.assertEqual(type(result[0].line_list[2]), Arc1)
-        self.assertEqual(type(result[0].line_list[3]), Arc3)
+        assert result[0].label[:4]== "Hole"
+        assert result[0].label[-9:]=="_R0_T0_S0"
+        assert len(result[0].line_list)==4
+        assert type(result[0].line_list[0])==Arc1
+        assert type(result[0].line_list[1])==Arc3
+        assert type(result[0].line_list[2])==Arc1
+        assert type(result[0].line_list[3])==Arc3
