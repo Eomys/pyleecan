@@ -71,6 +71,7 @@ def get_group(self, group_names):
                 nb_cell=len(connect_dict[key]),
                 nb_pt_per_cell=mesh_init.cell[key].nb_pt_per_cell,
                 indice=indice_dict[key],
+                interpolation=mesh_init.cell[key].interpolation,
             )
         node_indice = np.unique(node_indice)
 
@@ -98,17 +99,20 @@ def get_group(self, group_names):
         axis_dct = sol.get_axis()
 
         if type_cell_sol == "point":
+            axis_dct["indice"] = len(node_indice)
             new_field_sol = field_sol[:, node_indice, :]
             new_sol = SolutionMat(
                 label=label_sol,
                 type_cell=type_cell_sol,
                 field=new_field_sol,
                 indice=node_indice,
+                axis=axis_dct,
             )
             sol_list.append(new_sol)
 
         elif not is_interface:  # Interface is only available for point solution.
             if "component" in axis_dct:
+                axis_dct["indice"] = len(indice_dict[type_cell_sol])
                 new_field_sol = field_sol[:, indice_dict[type_cell_sol], :]
             else:
                 new_field_sol = field_sol[:, indice_dict[type_cell_sol]]
@@ -117,6 +121,7 @@ def get_group(self, group_names):
                 type_cell=type_cell_sol,
                 field=new_field_sol,
                 indice=indice_dict[type_cell_sol],
+                axis=axis_dct,
             )
 
             sol_list.append(new_sol)
