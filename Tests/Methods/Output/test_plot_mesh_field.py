@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
+import pytest
 from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
@@ -11,11 +11,10 @@ import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
 import numpy as np
 
-
-class unittest_plot_mesh_field(TestCase):
+@pytest.mark.METHODS
+class Test_plot_mesh_field(object):
     """unittest to get elements containing specific node(s)"""
-
-    def setUp(self):
+    def setup_method(self, method):
 
         self.simu = Simulation()
         self.out = Output(simu=self.simu)
