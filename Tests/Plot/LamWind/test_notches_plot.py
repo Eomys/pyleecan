@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from os.path import join
 
+import pytest
+
 import matplotlib.pyplot as plt
 from numpy import array, pi, zeros
 
@@ -26,76 +28,77 @@ from Tests.Plot.LamWind import wind_mat
 
 """unittest for Lamination with notches plot"""
 
+@pytest.mark.PLOT
+class Test_notches_plot(object):
+    def test_Lam_evenly_dist(self):
+        """Test machine plot with evenly distributed notches (sym and no sym)
+        """
+        print("\nTest plot Notch")
+        plt.close("all")
+        test_obj = MachineDFIM()
+        test_obj.rotor = LamSlotWind(
+            Rint=0.2,
+            Rext=0.5,
+            is_internal=True,
+            is_stator=False,
+            L1=0.95,
+            Nrvd=1,
+            Wrvd=0.05,
+        )
+        test_obj.rotor.slot = SlotW10(
+            Zs=6,
+            W0=50e-3,
+            W1=90e-3,
+            W2=100e-3,
+            H0=20e-3,
+            H1=35e-3,
+            H2=130e-3,
+            H1_is_rad=False,
+        )
+        test_obj.rotor.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+        test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 
-def test_Lam_evenly_dist():
-    """Test machine plot with evenly distributed notches (sym and no sym)
-    """
-    print("\nTest plot Notch")
-    plt.close("all")
-    test_obj = MachineDFIM()
-    test_obj.rotor = LamSlotWind(
-        Rint=0.2,
-        Rext=0.5,
-        is_internal=True,
-        is_stator=False,
-        L1=0.95,
-        Nrvd=1,
-        Wrvd=0.05,
-    )
-    test_obj.rotor.slot = SlotW10(
-        Zs=6,
-        W0=50e-3,
-        W1=90e-3,
-        W2=100e-3,
-        H0=20e-3,
-        H1=35e-3,
-        H2=130e-3,
-        H1_is_rad=False,
-    )
-    test_obj.rotor.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
-    test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
+        test_obj.stator = LamSlotWind(
+            Rint=0.51,
+            Rext=0.8,
+            is_internal=False,
+            is_stator=True,
+            L1=0.95,
+            Nrvd=1,
+            Wrvd=0.05,
+        )
+        test_obj.stator.slot = SlotW10(
+            Zs=6,
+            W0=50e-3,
+            W1=80e-3,
+            W2=50e-3,
+            H0=15e-3,
+            H1=25e-3,
+            H2=140e-3,
+            H1_is_rad=False,
+        )
+        test_obj.stator.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
 
-    test_obj.stator = LamSlotWind(
-        Rint=0.51,
-        Rext=0.8,
-        is_internal=False,
-        is_stator=True,
-        L1=0.95,
-        Nrvd=1,
-        Wrvd=0.05,
-    )
-    test_obj.stator.slot = SlotW10(
-        Zs=6,
-        W0=50e-3,
-        W1=80e-3,
-        W2=50e-3,
-        H0=15e-3,
-        H1=25e-3,
-        H2=140e-3,
-        H1_is_rad=False,
-    )
-    test_obj.stator.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+        test_obj.frame = None
 
-    test_obj.frame = None
+        # Notches setup
+        slot_r = SlotW10(Zs=6, W0=40e-3, W1=40e-3, W2=40e-3, H0=0, H1=0, H2=25e-3)
+        notch = NotchEvenDist(notch_shape=slot_r, alpha=0)
+        test_obj.rotor.notch = [notch]
 
-    # Notches setup
-    slot_r = SlotW10(Zs=6, W0=40e-3, W1=40e-3, W2=40e-3, H0=0, H1=0, H2=25e-3)
-    notch = NotchEvenDist(notch_shape=slot_r, alpha=0)
-    test_obj.rotor.notch = [notch]
+        slot_s = SlotW10(Zs=6, W0=80e-3, W1=80e-3, W2=80e-3, H0=0, H1=0, H2=30e-3)
+        notch = NotchEvenDist(notch_shape=slot_s, alpha=0.5 * pi / 6)
+        test_obj.stator.notch = [notch]
 
-    slot_s = SlotW10(Zs=6, W0=80e-3, W1=80e-3, W2=80e-3, H0=0, H1=0, H2=30e-3)
-    notch = NotchEvenDist(notch_shape=slot_s, alpha=0.5 * pi / 6)
-    test_obj.stator.notch = [notch]
+        # Plot, save and check
+        test_obj.plot(sym=1)
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_notch_sym_1.png"))
+        # Rotor + Stator + 1 for Shaft
+        assert len(fig.axes[0].patches) == 53
 
-    # Plot, save and check
-    test_obj.plot(sym=1)
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_Lam_notch_sym_1.png"))
-    # Rotor + Stator + 1 for Shaft
-    assert len(fig.axes[0].patches) == 53
-
-    test_obj.stator.plot(sym=2)
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_Lam_notch_sym_2.png"))
-    # Rotor + Stator + 2 for frame + 1 for Shaft
-    assert len(fig.axes[0].patches) == 13
+        test_obj.stator.plot(sym=2)
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_notch_sym_2.png"))
+        # Rotor + Stator + 2 for frame + 1 for Shaft
+        assert len(fig.axes[0].patches) == 13
