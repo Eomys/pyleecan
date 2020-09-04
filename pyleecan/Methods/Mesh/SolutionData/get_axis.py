@@ -28,7 +28,7 @@ def get_axis(self, args=None):
     field = self.field.get_along(tuple(along_arg))[self.field.symbol]
 
     ## HOTFIX: Remove for next SCIDATATOOL release
-    if self.parent.parent.Nt_tot == 1:
+    if self.field.axes[0].get_values().size == 1:
         field = field[np.newaxis, :]
 
     size_field = field.shape
