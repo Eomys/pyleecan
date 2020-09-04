@@ -23,11 +23,6 @@ try:
 except ImportError as error:
     get_axis = error
 
-try:
-    from ..Methods.Mesh.SolutionMat.set_field import set_field
-except ImportError as error:
-    set_field = error
-
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
@@ -57,15 +52,6 @@ class SolutionMat(Solution):
         )
     else:
         get_axis = get_axis
-    # cf Methods.Mesh.SolutionMat.set_field
-    if isinstance(set_field, ImportError):
-        set_field = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use SolutionMat method set_field: " + str(set_field))
-            )
-        )
-    else:
-        set_field = set_field
     # save method is available in all object
     save = save
 
@@ -85,6 +71,7 @@ class SolutionMat(Solution):
         axis=None,
         type_cell="triangle",
         label=None,
+        dimension=2,
         init_dict=None,
         init_str=None,
     ):
@@ -111,6 +98,7 @@ class SolutionMat(Solution):
             axis = obj.axis
             type_cell = obj.type_cell
             label = obj.label
+            dimension = obj.dimension
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -124,6 +112,8 @@ class SolutionMat(Solution):
                 type_cell = init_dict["type_cell"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
+            if "dimension" in list(init_dict.keys()):
+                dimension = init_dict["dimension"]
         # Initialisation by argument
         # field can be None, a ndarray or a list
         set_array(self, "field", field)
@@ -131,7 +121,9 @@ class SolutionMat(Solution):
         set_array(self, "indice", indice)
         self.axis = axis
         # Call Solution init
-        super(SolutionMat, self).__init__(type_cell=type_cell, label=label)
+        super(SolutionMat, self).__init__(
+            type_cell=type_cell, label=label, dimension=dimension
+        )
         # The class is frozen (in Solution init), for now it's impossible to
         # add new properties
 
