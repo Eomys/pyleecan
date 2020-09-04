@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
+import pytest
 from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
-
-class unittest_get_node2element(TestCase):
+@pytest.mark.METHODS
+class Test_get_node2element(object):
     """unittest to get elements containing specific node(s)"""
-
-    def setUp(self):
+    def setup_method(self, method):
         self.mesh = Mesh()
         self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
         self.mesh.add_element(np.array([0, 1, 2]), "Triangle3", group=int(3))
@@ -24,7 +23,7 @@ class unittest_get_node2element(TestCase):
         testA = np.sum(abs(solution - elem_tag))
         msg = "Wrong output: returned " + str(elem_tag) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
 
     def test_ElementMat_fakenode(self):
         """unittest for one non-existing node """
@@ -33,7 +32,7 @@ class unittest_get_node2element(TestCase):
         testA = np.sum(abs(solution - elem_tag))
         msg = "Wrong output: returned " + str(elem_tag) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
 
     def test_ElementMat_None(self):
         """unittest for None input """
@@ -42,4 +41,4 @@ class unittest_get_node2element(TestCase):
         testA = np.sum(abs(solution - elem_tag))
         msg = "Wrong output: returned " + str(elem_tag) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
