@@ -1,5 +1,4 @@
 from numpy import linspace, sin, squeeze
-from unittest import TestCase
 from os.path import join
 import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
@@ -68,7 +67,8 @@ r_max = 78
 
 
 @pytest.mark.validation
-class tests_plots(TestCase):
+@pytest.mark.PLOT
+class Test_plots(object):
     def test_default_proj_Br_time_space(self):
 
         time_arr = squeeze(time.get_data())
