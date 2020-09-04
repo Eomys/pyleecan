@@ -1,5 +1,6 @@
 from logging import Logger, FileHandler, Formatter, INFO, NOTSET
 from datetime import datetime
+from ....Classes.DataKeeper import DataKeeper
 
 
 class OptimizationAttributeError(Exception):
@@ -44,31 +45,59 @@ def check_optimization_input(self):
         )
 
     else:
-        for name, obj_func in self.problem.obj_func.items():
-            if not callable(obj_func.func):
-                mess = "The objective function '{}' is not callable.".format(name)
+        for obj_func in self.problem.obj_func:
+            if not isinstance(obj_func, DataKeeper):
+                raise TypeError(
+                    "Wrong obj_func type: DataKeeper expected, got {}".format(
+                        type(obj_func).__name__
+                    )
+                )
+            elif not callable(obj_func.keeper):
+                mess = "The objective function '{}' is not callable, please define the attribute 'keeper'.".format(
+                    obj_func.name
+                )
                 raise OptimizationAttributeError(mess)
 
     # Check the problem contains at least one objective function
     if self.problem.design_var == None or (
-        isinstance(self.problem.design_var, dict) and len(self.problem.design_var) == 0
+        isinstance(self.problem.design_var, list) and len(self.problem.design_var) == 0
     ):
         raise OptimizationAttributeError(
             "Optimization problem must contain at least one design variable"
         )
     else:
-        for name, design_var in self.problem.design_var.items():
+        for design_var in self.problem.design_var:
             if design_var.type_var not in ["set", "interval"]:
                 mess = 'The design variable \'{}\' has a wrong type_var got {} expected "set" or "interval".'.format(
-                    name, design_var.type_var
+                    design_var.name, design_var.type_var
+                )
+                raise OptimizationAttributeError(mess)
+            elif design_var.symbol in [None, ""]:
+                mess = "The design variable '{}' has no symbol.".format(design_var.name)
+                raise OptimizationAttributeError(mess)
+            elif not callable(design_var.get_value):
+                mess = "OptiDesignVar '{}' get_value is not callable.".format(
+                    design_var.name
+                )
+                raise OptimizationAttributeError(mess)
+            elif not callable(design_var.setter):
+                mess = "OptiDesignVar '{}' setter is not callable.".format(
+                    design_var.name
                 )
                 raise OptimizationAttributeError(mess)
 
     # Check constraints type
     if self.problem.constraint != None:
-        for name, cstr in self.problem.constraint.items():
+        for cstr in self.problem.constraint:
+            # Check type of constraint
             if cstr.type_const not in ["<=", "<", "==", "=", ">=", ">"]:
                 mess = "The constraint '{}' has a wrong type: expected one of {} received '{}'.".format(
-                    name, ["<=", "<", "==", "=", ">=", ">"], cstr.type_const
+                    cstr.name, ["<=", "<", "==", "=", ">=", ">"], cstr.type_const
+                )
+                raise OptimizationAttributeError(mess)
+            # Check getter
+            elif not callable(cstr.get_variable):
+                mess = "The constraint '{}' function get_variable is not callable.".format(
+                    cstr.name
                 )
                 raise OptimizationAttributeError(mess)

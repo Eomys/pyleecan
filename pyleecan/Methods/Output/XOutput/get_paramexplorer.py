@@ -1,5 +1,4 @@
-class XOutputError(Exception):
-    pass
+from ....Methods.Output.XOutput import XOutputError
 
 
 def get_paramexplorer(self, symbol):

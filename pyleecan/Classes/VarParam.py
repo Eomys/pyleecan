@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/VarParam.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/VarParam.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/VarParam
 """
 
 from os import linesep
@@ -140,7 +141,11 @@ class VarParam(VarSimu):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in ["ParamExplorer", "ParamExplorerSet"]:
+                    if class_name not in [
+                        "ParamExplorer",
+                        "OptiDesignVar",
+                        "ParamExplorerSet",
+                    ]:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -241,10 +246,11 @@ class VarParam(VarSimu):
             if obj is not None:
                 obj.parent = self
 
-    # List containing ParamSetter to define every simulation
-    # Type : [ParamExplorer]
     paramexplorer_list = property(
         fget=_get_paramexplorer_list,
         fset=_set_paramexplorer_list,
-        doc=u"""List containing ParamSetter to define every simulation""",
+        doc=u"""List containing ParamSetter to define every simulation
+
+        :Type: [ParamExplorer]
+        """,
     )

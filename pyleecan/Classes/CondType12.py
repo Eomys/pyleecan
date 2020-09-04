@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/CondType12.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/CondType12.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/CondType12
 """
 
 from os import linesep
@@ -267,12 +268,14 @@ class CondType12(Conductor):
         check_var("Wwire", value, "float", Vmin=0)
         self._Wwire = value
 
-    # cf schematics, single wire diameter without insulation [m]
-    # Type : float, min = 0
     Wwire = property(
         fget=_get_Wwire,
         fset=_set_Wwire,
-        doc=u"""cf schematics, single wire diameter without insulation [m]""",
+        doc=u"""cf schematics, single wire diameter without insulation [m]
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_Wins_cond(self):
@@ -284,12 +287,14 @@ class CondType12(Conductor):
         check_var("Wins_cond", value, "float", Vmin=0)
         self._Wins_cond = value
 
-    # (advanced) cf schematics, winding coil insulation diameter [m]
-    # Type : float, min = 0
     Wins_cond = property(
         fget=_get_Wins_cond,
         fset=_set_Wins_cond,
-        doc=u"""(advanced) cf schematics, winding coil insulation diameter [m]""",
+        doc=u"""(advanced) cf schematics, winding coil insulation diameter [m]
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_Nwppc(self):
@@ -301,12 +306,14 @@ class CondType12(Conductor):
         check_var("Nwppc", value, "int", Vmin=1)
         self._Nwppc = value
 
-    # cf schematics, winding number of random wires (strands) in parallel per coil
-    # Type : int, min = 1
     Nwppc = property(
         fget=_get_Nwppc,
         fset=_set_Nwppc,
-        doc=u"""cf schematics, winding number of random wires (strands) in parallel per coil""",
+        doc=u"""cf schematics, winding number of random wires (strands) in parallel per coil
+
+        :Type: int
+        :min: 1
+        """,
     )
 
     def _get_Wins_wire(self):
@@ -318,12 +325,14 @@ class CondType12(Conductor):
         check_var("Wins_wire", value, "float", Vmin=0)
         self._Wins_wire = value
 
-    # (advanced) cf schematics, winding strand insulation thickness [m]
-    # Type : float, min = 0
     Wins_wire = property(
         fget=_get_Wins_wire,
         fset=_set_Wins_wire,
-        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]""",
+        doc=u"""(advanced) cf schematics, winding strand insulation thickness [m]
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_Kwoh(self):
@@ -335,10 +344,12 @@ class CondType12(Conductor):
         check_var("Kwoh", value, "float", Vmin=0)
         self._Kwoh = value
 
-    # winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)
-    # Type : float, min = 0
     Kwoh = property(
         fget=_get_Kwoh,
         fset=_set_Kwoh,
-        doc=u"""winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)""",
+        doc=u"""winding overhang factor which describes the fact that random round wire end-windings can be more or less compressed (0.5 for small motors, 0.8 for large motors) - can be used to tune the average turn length (relevant if type_cond==1)
+
+        :Type: float
+        :min: 0
+        """,
     )

@@ -2,15 +2,33 @@ import os
 import numpy as np
 
 from ....definitions import MAIN_DIR
-from ....Classes.Mesh import Mesh
-from ....Classes.ElementMat import ElementMat
-from ....Classes.NodeMat import NodeMat
-from ....Classes.Solution import Solution
+from ....Classes.MeshMat import MeshMat
+from ....Classes.CellMat import CellMat
+from ....Classes.PointMat import PointMat
 from femm import callfemm
 from os.path import join
 
+from ....Functions.FEMM import (
+    GROUP_SC,
+    GROUP_AG,
+    GROUP_RC,
+    GROUP_SW,
+    GROUP_RW,
+    GROUP_AGM,
+    GROUP_IN,
+    GROUP_FM,
+    GROUP_SV,
+    GROUP_RV,
+    GROUP_SSI,
+    GROUP_RSI,
+    GROUP_SN,
+    GROUP_RN,
+    GROUP_SH,
+    GROUP_RH,
+)
 
-def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
+
+def get_meshsolution(self, save_path, j_t0):
     """Load the mesh data and solution data. FEMM must be working and a simulation must have been solved.
 
     Parameters
@@ -86,33 +104,40 @@ def get_meshsolution(self, is_get_mesh, is_save_FEA, save_path, j_t0):
     # Delete text files
     os.remove(path_results)
 
-    # Create Mesh and Solution dictionaries
-    if (not self.is_sliding_band) or (j_t0 == 0):
-        mesh = Mesh()
-        mesh.element["Triangle3"] = ElementMat(
-            connectivity=listElem,
-            nb_elem=NbElem,
-            group=listElem0[:, 6],
-            nb_node_per_element=3,
-            tag=np.linspace(0, NbElem - 1, NbElem),
-        )
-        mesh.node = NodeMat(
-            coordinate=listNd[:, 0:2], nb_node=NbNd, tag=np.linspace(0, NbNd - 1, NbNd)
-        )
+    ## Create Mesh and Solution dictionaries
 
-        mesh.group = np.unique(listElem0[:, 6])
+    # Save MeshMat for only 1 time step with sliding band
+    if j_t0 == 0:
+        mesh = MeshMat()
+        mesh.label = "FEMM"
+        mesh.cell["triangle"] = CellMat(
+            connectivity=listElem,
+            nb_cell=NbElem,
+            nb_pt_per_cell=3,
+            indice=np.linspace(0, NbElem - 1, NbElem, dtype=int),
+        )
+        mesh.point = PointMat(
+            coordinate=listNd[:, 0:2], nb_pt=NbNd, indice=np.linspace(0, NbNd - 1, NbNd)
+        )
+        groups = dict()
+        groups["stator"] = mesh.cell["triangle"].indice[
+            np.where(listElem0[:, 6] == GROUP_SC)[0]
+        ]
+        groups["airgap"] = mesh.cell["triangle"].indice[
+            np.where(listElem0[:, 6] == GROUP_AG)[0]
+        ]
+        groups["stator_windings"] = mesh.cell["triangle"].indice[
+            np.where(listElem0[:, 6] == GROUP_SW)[0]
+        ]
+
+        # If necessary, other groups can be defined here
+
     else:
         mesh = None
+        groups = None
 
     B = results[:, 0:2]
     H = results[:, 2:4]
     mu = results[:, 4]
-    Az = results[:, 5]
 
-    solution = Solution()
-    solution.set_field(field_value=B, field_name="B", field_type="face")
-    solution.set_field(field_value=H, field_name="H", field_type="face")
-    solution.set_field(field_value=mu, field_name="mu", field_type="face")
-    solution.set_field(field_value=Az, field_name="Az", field_type="nodal")
-
-    return mesh, solution
+    return mesh, B, H, mu, groups

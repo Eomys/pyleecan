@@ -1,46 +1,49 @@
 # -*- coding: utf-8 -*-
 
+import pytest
 from unittest import TestCase
-from pyleecan.Classes.Mesh import Mesh
-from pyleecan.Classes.NodeMat import NodeMat
-from pyleecan.Classes.ElementMat import ElementMat
+from pyleecan.Classes.MeshMat import MeshMat
+from pyleecan.Classes.PointMat import PointMat
+from pyleecan.Classes.CellMat import CellMat
 import numpy as np
 
 
+@pytest.mark.MeshSol
 class unittest_interface(TestCase):
-    """unittest for elements and nodes getter methods"""
+    """unittest for interface method"""
 
+    @classmethod
     def setUp(self):
-        self.mesh = Mesh()
-        self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
-        self.mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)
-        self.mesh.node = NodeMat()
+        self.mesh = MeshMat()
+        self.mesh.cell["triangle"] = CellMat(nb_pt_per_cell=3)
+        self.mesh.cell["line"] = CellMat(nb_pt_per_cell=2)
+        self.mesh.point = PointMat()
 
-        self.other_mesh = Mesh()
-        self.other_mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
-        self.other_mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)
-        self.other_mesh.node = self.mesh.node
+        self.other_mesh = MeshMat()
+        self.other_mesh.cell["triangle"] = CellMat(nb_pt_per_cell=3)
+        self.other_mesh.cell["line"] = CellMat(nb_pt_per_cell=2)
+        self.other_mesh.point = self.mesh.point
 
-    def test_ElementMat_NodeMat_flat(self):
-        """unittest with ElementDict and NodeMat objects"""
+    def test_MeshMat_flat(self):
+        """unittest with a flat interface"""
 
-        self.mesh.add_element([0, 1, 2], "Triangle3")
-        self.mesh.add_element([2, 3, 4], "Triangle3")
+        self.mesh.add_cell([0, 1, 2], "triangle")
+        self.mesh.add_cell([2, 3, 4], "triangle")
 
-        self.mesh.node.add_node([0, 0])
-        self.mesh.node.add_node([0.5, 1])
-        self.mesh.node.add_node([1, 0])
-        self.mesh.node.add_node([1.5, 1])
-        self.mesh.node.add_node([2, 0])
-        self.mesh.node.add_node([0.5, -1])
-        self.mesh.node.add_node([1.5, -1])
+        self.mesh.point.add_point([0, 0])
+        self.mesh.point.add_point([0.5, 1])
+        self.mesh.point.add_point([1, 0])
+        self.mesh.point.add_point([1.5, 1])
+        self.mesh.point.add_point([2, 0])
+        self.mesh.point.add_point([0.5, -1])
+        self.mesh.point.add_point([1.5, -1])
 
-        self.other_mesh.add_element([0, 5, 2], "Triangle3")
-        self.other_mesh.add_element([4, 6, 2], "Triangle3")
+        self.other_mesh.add_cell([0, 5, 2], "triangle")
+        self.other_mesh.add_cell([4, 6, 2], "triangle")
 
         new_seg_mesh = self.mesh.interface(self.other_mesh)
-        solution = np.array([[0, 2], [2, 4]])
-        resultat = new_seg_mesh.element["Segment2"].connectivity
+        solution = np.array([[0, 2], [4, 2]])
+        resultat = new_seg_mesh.cell["line"].connectivity
         testA = np.sum(abs(resultat - solution))
         msg = (
             "Wrong projection: returned "
@@ -51,77 +54,78 @@ class unittest_interface(TestCase):
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-    def test_ElementMat_NodeMat_corner_ext(self):
-        """unittest with ElementMat and NodeMat objects, extract interface from the external mesh point of view"""
-        self.mesh.add_element([0, 1, 2], "Triangle3")
-        self.mesh.add_element([1, 2, 3], "Triangle3")
-        self.mesh.add_element([1, 5, 4], "Triangle3")
+    def test_CellMat_PointMat_corner_ext(self):
+        """unittest with an external corner interface"""
+        self.mesh.add_cell([0, 1, 2], "triangle")
+        self.mesh.add_cell([1, 2, 3], "triangle")
+        self.mesh.add_cell([1, 5, 4], "triangle")
 
-        self.mesh.node.add_node([2, 0])
-        self.mesh.node.add_node([3, 0])
-        self.mesh.node.add_node([2.5, 1])
-        self.mesh.node.add_node([4, 0])
-        self.mesh.node.add_node([3.5, 1])
-        self.mesh.node.add_node([3, -1])
+        self.mesh.point.add_point([2, 0])
+        self.mesh.point.add_point([3, 0])
+        self.mesh.point.add_point([2.5, 1])
+        self.mesh.point.add_point([4, 0])
+        self.mesh.point.add_point([3.5, 1])
+        self.mesh.point.add_point([3, -1])
+        self.mesh.point.add_point([10, 10])
 
-        self.other_mesh.add_element([0, 1, 5], "Triangle3")
+        self.other_mesh.add_cell([0, 1, 5], "triangle")
+        self.other_mesh.add_cell([0, 5, 6], "triangle")
 
         # Method test 1
         new_seg_mesh = self.mesh.interface(self.other_mesh)
 
         # Check result
         solution = np.array([[0, 1], [1, 5]])
-        result = new_seg_mesh.element["Segment2"].connectivity
+        result = new_seg_mesh.cell["line"].connectivity
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-    def test_ElementMat_NodeMat_corner_int(self):
-        """unittest with ElementMat and NodeMat objects, extract interface from the internal mesh point of view"""
-        self.mesh.add_element([0, 1, 2], "Triangle3")
-        self.mesh.add_element([1, 2, 3], "Triangle3")
-        self.mesh.add_element([1, 5, 4], "Triangle3")
+    def test_CellMat_PointMat_corner_int(self):
+        """unittest with an internal corner interface"""
+        self.mesh.add_cell([0, 1, 2], "triangle")
+        self.mesh.add_cell([1, 2, 3], "triangle")
+        self.mesh.add_cell([1, 5, 4], "triangle")
 
-        self.mesh.node.add_node([2, 0])
-        self.mesh.node.add_node([3, 0])
-        self.mesh.node.add_node([2.5, 1])
-        self.mesh.node.add_node([4, 0])
-        self.mesh.node.add_node([3.5, 1])
-        self.mesh.node.add_node([3, -1])
+        self.mesh.point.add_point([2, 0])
+        self.mesh.point.add_point([3, 0])
+        self.mesh.point.add_point([2.5, 1])
+        self.mesh.point.add_point([4, 0])
+        self.mesh.point.add_point([3.5, 1])
+        self.mesh.point.add_point([3, -1])
+        self.mesh.point.add_point([10, 10])
 
-        self.other_mesh.add_element([0, 1, 5], "Triangle3")
+        self.other_mesh.add_cell([0, 1, 5], "triangle")
+        self.other_mesh.add_cell([0, 5, 6], "triangle")
 
         # Method test 1
         new_seg_mesh = self.other_mesh.interface(self.mesh)
 
         # Check result
         solution = np.array([[0, 1], [1, 5]])
-        result = new_seg_mesh.element["Segment2"].connectivity
+        result = new_seg_mesh.cell["line"].connectivity
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
         self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
 
-    def test_ElementMat_NodeMat_self(self):
-        """unittest with ElementMat and NodeMat objects, extract interface on itself"""
-        self.mesh.add_element([0, 1, 2], "Triangle3")
-        self.mesh.add_element([0, 2, 3], "Triangle3")
-        self.mesh.add_element([0, 3, 4], "Triangle3")
-        self.mesh.add_element([0, 4, 1], "Triangle3")
+    def test_CellMat_PointMat_self(self):
+        """unittest with interface of a mesh on itself"""
+        self.mesh.add_cell([0, 1, 2], "triangle")
+        self.mesh.add_cell([0, 2, 3], "triangle")
 
-        self.mesh.node.add_node([0, 0])
-        self.mesh.node.add_node([0, 1])
-        self.mesh.node.add_node([1, 0])
-        self.mesh.node.add_node([-1, 0])
-        self.mesh.node.add_node([0, -1])
+        self.mesh.point.add_point([0, 0])
+        self.mesh.point.add_point([0, 1])
+        self.mesh.point.add_point([1, 0])
+        self.mesh.point.add_point([-1, 0])
 
         # Method test 1
         new_seg_mesh = self.mesh.interface(self.mesh)
 
         # Check result
-        solution = np.array([])
-        result = new_seg_mesh.element["Segment2"].connectivity
+        solution = np.array([[0, 1], [0, 2], [0, 3], [1, 2], [2, 3]])
+        result = new_seg_mesh.cell["line"].connectivity
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10

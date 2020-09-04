@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Geometry/Arc2.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Geometry/Arc2.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Geometry/Arc2
 """
 
 from os import linesep
@@ -327,10 +328,13 @@ class Arc2(Arc):
         check_var("begin", value, "complex")
         self._begin = value
 
-    # begin point of the arc
-    # Type : complex
     begin = property(
-        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the arc"""
+        fget=_get_begin,
+        fset=_set_begin,
+        doc=u"""begin point of the arc
+
+        :Type: complex
+        """,
     )
 
     def _get_center(self):
@@ -342,9 +346,14 @@ class Arc2(Arc):
         check_var("center", value, "complex")
         self._center = value
 
-    # center of the arc
-    # Type : complex
-    center = property(fget=_get_center, fset=_set_center, doc=u"""center of the arc""")
+    center = property(
+        fget=_get_center,
+        fset=_set_center,
+        doc=u"""center of the arc
+
+        :Type: complex
+        """,
+    )
 
     def _get_angle(self):
         """getter of angle"""
@@ -355,8 +364,13 @@ class Arc2(Arc):
         check_var("angle", value, "float", Vmin=-6.2831853071796, Vmax=6.2831853071796)
         self._angle = value
 
-    # opening angle of the arc
-    # Type : float, min = -6.2831853071796, max = 6.2831853071796
     angle = property(
-        fget=_get_angle, fset=_set_angle, doc=u"""opening angle of the arc"""
+        fget=_get_angle,
+        fset=_set_angle,
+        doc=u"""opening angle of the arc
+
+        :Type: float
+        :min: -6.2831853071796
+        :max: 6.2831853071796
+        """,
     )

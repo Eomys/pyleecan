@@ -46,7 +46,7 @@ def list_to_hdf5(file, group_name, name, list_to_save):
     array_list = np.array(list_to_save)
 
     # Check the type to split or save as an array
-    if array_list.dtype in [np.dtype("O"), np.dtype("<U36")]:
+    if array_list.dtype.kind in ["O", "U"]:
         # Split the list into several datasets
         # Create a new group to contain every dataset
         group_name = group_name + "/" + name

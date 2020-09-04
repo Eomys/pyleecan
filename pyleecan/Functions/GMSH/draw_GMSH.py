@@ -1,5 +1,6 @@
 from ...Classes.Arc import Arc
 from ...Classes.Arc2 import Arc2
+from ...Classes.MachineSIPMSM import MachineSIPMSM
 
 import sys
 import gmsh
@@ -167,18 +168,23 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0):
             if n_elements > 0:
                 geo.mesh.setTransfiniteCurve(ltag, n_elements + 1, "Progression")
 
-        nline = len(d[idx]) - 2
-        d[idx].update(
-            {
-                nline: {
-                    "tag": ltag,
-                    "n_elements": n_elements,
-                    "begin": {"tag": btag, "coord": complex(bx, by)},
-                    "end": {"tag": etag, "coord": complex(ex, ey)},
-                    "cent": {"tag": ctag, "coord": complex(cx, cy)},
-                }
-            }
-        )
+        # To avoid fill the dictionary with repeated lines
+        repeated = False
+        for lid, lvalues in d[idx].items():
+            if type(lvalues) is not dict:
+                continue
+            else:
+                if lvalues['tag'] == ltag:
+                    repeated = True
+
+        if not repeated:
+            nline = len(d[idx]) - 2
+            d[idx].update({nline: {'tag': ltag,
+                               'n_elements': n_elements,
+                               'begin': {'tag': btag, 'coord': complex(bx, by)},
+                               'end': {'tag': etag, 'coord': complex(ex, ey)},
+                               'cent': {'tag': ctag, 'coord': complex(cx, cy)}}})
+
     else:
         if len(dlines) > 0:
             for iline in dlines:
@@ -199,17 +205,23 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0):
             ltag = geo.addLine(btag, etag, tag=-1)
             if n_elements > 0:
                 geo.mesh.setTransfiniteCurve(ltag, n_elements + 1, "Progression")
-        nline = len(d[idx]) - 2
-        d[idx].update(
-            {
-                nline: {
-                    "tag": ltag,
-                    "n_elements": n_elements,
-                    "begin": {"tag": btag, "coord": complex(bx, by)},
-                    "end": {"tag": etag, "coord": complex(ex, ey)},
-                }
-            }
-        )
+
+        # To avoid fill the dictionary with repeated lines
+        repeated = False
+        for lid, lvalues in d[idx].items():
+            if type(lvalues) is not dict:
+                continue
+            else:
+                if lvalues['tag'] == ltag:
+                    repeated = True
+
+        if not repeated:
+            nline = len(d[idx]) - 2
+            d[idx].update({nline: {'tag': ltag,
+                               'n_elements': n_elements,
+                               'begin': {'tag': btag, 'coord': complex(bx, by)},
+                               'end': {'tag': etag, 'coord': complex(ex, ey)}}})
+
     return None
 
 
@@ -262,14 +274,14 @@ def draw_GMSH(
 
     machine = output.simu.machine
     mesh_dict = {}
-
+    tol = 1e-6
     # For readibility
     model = gmsh.model
     factory = model.geo
 
     # Start a new model
     gmsh.initialize(sys.argv)
-    gmsh.option.setNumber("General.Terminal", int(False))
+    gmsh.option.setNumber("General.Terminal", int(True))
     gmsh.option.setNumber("Geometry.CopyMeshingMethod", 1)
     gmsh.option.setNumber("Geometry.PointNumbers", 0)
     gmsh.option.setNumber("Geometry.LineNumbers", 0)
@@ -281,6 +293,7 @@ def draw_GMSH(
     stator_list = list()
     stator_list.extend(machine.stator.build_geometry(sym=sym))
     oo = factory.addPoint(0, 0, 0, 0, tag=-1)
+
     gmsh_dict = {
         0: {
             "tag": 0,
@@ -296,6 +309,7 @@ def draw_GMSH(
         }
     }
 
+    # Default rotor mesh element size
     mesh_size = machine.rotor.Rext / 25.0
     nsurf = 0
     for surf in rotor_list:
@@ -310,10 +324,13 @@ def draw_GMSH(
             mesh_dict = surf.comp_mesh_dict(element_size=mesh_size)
             mesh_dict.update(user_mesh_dict)
         for line in surf.get_lines():
+            # When symmetry is 1 the shaft surface is substrtacted from Rotor Lam instead
+            if sym == 1 and line.label == "Lamination_Rotor_Yoke_Radius_Int":
+                continue
             n_elem = mesh_dict.get(line.label)
             if (
                 isinstance(line, Arc)
-                and abs(line.get_angle() * 180.0 / cmath.pi) == 180.0
+                and abs(line.get_angle() * 180.0 / cmath.pi) >= 180.0
             ):
                 if line.is_trigo_direction == True:
                     arc1 = Arc2(
@@ -371,6 +388,9 @@ def draw_GMSH(
                         idx=nsurf,
                         mesh_size=mesh_size,
                     )
+            elif isinstance(line, Arc) and (abs(line.get_angle()*180.0/cmath.pi) <= tol):
+                # Don't draw anything, this is a circle and usually is repeated ?
+                pass
             else:
                 if n_elem is not None:
                     _add_line_to_dict(
@@ -400,22 +420,37 @@ def draw_GMSH(
                 continue
             lloop.extend([lvalues["tag"]])
         cloop = factory.addCurveLoop(lloop)
-        if s_data["label"].find("Lamination_Rotor") != -1:
+        # search for the holes to substract from rotor lam
+        if s_data['label'].find('Lamination_Rotor') != -1:
             ext_lam_loop = cloop
         else:
-            if s_data["label"] != "Shaft":
-                lam_and_holes.extend([cloop])
+            # MachineSIPSM does not have holes in rotor lam
+            # only shaft is taken out if symmetry is one
+            if isinstance(machine, MachineSIPMSM):
+                if sym == 1 and s_data['label'] == "Shaft":
+                    lam_and_holes.extend([cloop])
+            else:
+                if sym == 1:
+                    lam_and_holes.extend([cloop])
+                elif s_data['label'] != "Shaft":
+                    lam_and_holes.extend([cloop])
+                else:
+                    pass
+
+            # Shaft, magnets and magnet pocket surfaces are created
             if not is_lam_only_R:
                 s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
                 pg = model.addPhysicalGroup(2, [s_data["tag"]])
                 model.setPhysicalName(2, pg, s_data["label"])
 
+    # Finally rotor lamination is built
     if ext_lam_loop is not None:
         lam_and_holes.insert(0, ext_lam_loop)
     gmsh_dict[lam_rotor_surf_id]["tag"] = factory.addPlaneSurface(lam_and_holes, tag=-1)
     pg = model.addPhysicalGroup(2, [gmsh_dict[lam_rotor_surf_id]["tag"]])
     model.setPhysicalName(2, pg, gmsh_dict[lam_rotor_surf_id]["label"])
 
+    # Default rotor mesh element size
     mesh_size = machine.stator.Rext / 100.0
     nsurf = 0
     for surf in stator_list:
@@ -430,6 +465,8 @@ def draw_GMSH(
             mesh_dict.update(user_mesh_dict)
         for line in surf.get_lines():
             n_elem = mesh_dict.get(line.label)
+            # Gmsh built-in engine does not allow arcs larger than 180deg
+            # so arcs are split into two
             if (
                 isinstance(line, Arc)
                 and abs(line.get_angle() * 180.0 / cmath.pi) == 180.0
@@ -517,11 +554,13 @@ def draw_GMSH(
                 continue
             lloop.extend([lvalues["tag"]])
         cloop = factory.addCurveLoop(lloop)
-        if s_data["label"].find("Lamination_Stator") != -1:
-            s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
-            pg = model.addPhysicalGroup(2, [s_data["tag"]])
-            model.setPhysicalName(2, pg, s_data["label"])
+        # Winding surfaces are created
+        if s_data['label'].find('Lamination_Stator') != -1:
+            s_data['tag'] = factory.addPlaneSurface([cloop], tag=-1)
+            pg = model.addPhysicalGroup(2, [s_data['tag']])
+            model.setPhysicalName(2, pg, s_data['label'])
         else:
+            # Stator lamination is built
             if not is_lam_only_S:
                 s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
                 pg = model.addPhysicalGroup(2, [s_data["tag"]])
@@ -532,7 +571,7 @@ def draw_GMSH(
 
     # Save and close
     gmsh.write(path_save)
-    # gmsh.fltk.run()
+    #gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
     gmsh.finalize()
 
     return gmsh_dict

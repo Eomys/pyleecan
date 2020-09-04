@@ -7,6 +7,7 @@ import numpy as np
 
 from ....Classes.Output import Output
 from ....Classes.XOutput import XOutput
+from ....Classes.DataKeeper import DataKeeper
 from ....Classes.ParamExplorerSet import ParamExplorerSet
 from ....Functions.Optimization.evaluate import evaluate
 from ....Functions.Optimization.update import update
@@ -63,31 +64,18 @@ def solve(self):
         # Add the reference output to multi_output
         self.xoutput = XOutput(init_dict=self.problem.output.as_dict())
 
-        # Add the design variable names
-        paramexplorer_symbol = list(self.problem.design_var.keys())
-
-        # Create setters to reproduce multisimulation later
-        # TODO change OptiDesignVar to have a setter that takes a Simulation in argument
-        paramexplorer_setter = []
-        for _, d_var in self.problem.design_var.items():
-            _, *objs, attr = d_var.name.split(
-                "."
-            )  # remove output, it assumes that OptiDesignVar.name starts with output.simu
-            accessor = ".".join(objs)
-            attr = attr
-            paramexplorer_setter.append(create_setter(accessor, attr))
-
-        # Get the fitness names
-        fitness_names = list(self.problem.obj_func.keys())
-        fitness_names.sort()
+        # Fitness symbol
+        fitness_symbol = [of.symbol for of in self.problem.obj_func]
 
         # Set-up output data as list to be changed into ndarray at the end of the optimization
         paramexplorer_value = []
         self.xoutput.xoutput_dict["ngen"] = []
         self.xoutput.xoutput_dict["is_valid"] = []
 
-        for fit_name in fitness_names:
-            self.xoutput.xoutput_dict[fit_name] = []
+        # Put objective functions in XOutput
+        for obj_func in self.problem.obj_func:
+            # obj_func is a DataKeeper instance
+            self.xoutput.xoutput_dict[obj_func.symbol] = obj_func
 
         # Create the first population
         pop = self.toolbox.population(self.size_pop)
@@ -134,9 +122,9 @@ def solve(self):
             # Design variable values
             paramexplorer_value.append(list(indiv))
 
-            # Fitness values
-            for i, fit_name in enumerate(fitness_names):
-                self.xoutput.xoutput_dict[fit_name].append(indiv.fitness.values[i])
+            # Add fitness values to DataKeeper
+            for i, symbol in enumerate(fitness_symbol):
+                self.xoutput.xoutput_dict[symbol].result.append(indiv.fitness.values[i])
 
             # ngen
             self.xoutput.xoutput_dict["ngen"].append(0)
@@ -222,9 +210,10 @@ def solve(self):
                 paramexplorer_value.append(list(indiv))
 
                 # Fitness values
-                for i, fit_name in enumerate(fitness_names):
-                    self.xoutput.xoutput_dict[fit_name].append(indiv.fitness.values[i])
-
+                for i, symbol in enumerate(fitness_symbol):
+                    self.xoutput.xoutput_dict[symbol].result.append(
+                        indiv.fitness.values[i]
+                    )
                 # ngen
                 self.xoutput.xoutput_dict["ngen"].append(ngen)
 
@@ -237,15 +226,18 @@ def solve(self):
         # Change xoutput variables in ndarray
         paramexplorer_value = np.array(paramexplorer_value)
 
+        # Storing number of simulations
         self.xoutput.nb_simu = shape
-        for i, setter, symbol in zip(
-            range(shape), paramexplorer_setter, paramexplorer_symbol
-        ):
+
+        # Save design variable values in ParamExplorerSet
+        for i, param_explorer in enumerate(self.problem.design_var):
             self.xoutput.paramexplorer_list.append(
                 ParamExplorerSet(
+                    name=param_explorer.name,
+                    unit=param_explorer.unit,
+                    symbol=param_explorer.symbol,
+                    setter=param_explorer.setter,
                     value=paramexplorer_value[:, i].tolist(),
-                    setter=setter,
-                    symbol=symbol,
                 )
             )
 
@@ -255,15 +247,18 @@ def solve(self):
         # Change xoutput variables in ndarray
         paramexplorer_value = np.array(paramexplorer_value)
 
+        # Storing number of simulations
         self.xoutput.nb_simu = shape
-        for i, setter, symbol in zip(
-            range(shape), paramexplorer_setter, paramexplorer_symbol
-        ):
+
+        # Save design variable values in ParamExplorerSet
+        for i, param_explorer in enumerate(self.problem.design_var):
             self.xoutput.paramexplorer_list.append(
                 ParamExplorerSet(
+                    name=param_explorer.name,
+                    unit=param_explorer.unit,
+                    symbol=param_explorer.symbol,
+                    setter=param_explorer.setter,
                     value=paramexplorer_value[:, i].tolist(),
-                    setter=setter,
-                    symbol=symbol,
                 )
             )
 

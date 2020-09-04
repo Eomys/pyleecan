@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/SlotMag.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/SlotMag.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/SlotMag
 """
 
 from os import linesep
@@ -115,8 +116,11 @@ class SlotMag(Slot):
         check_var("W3", value, "float")
         self._W3 = value
 
-    # Angle between magnet in the slot
-    # Type : float
     W3 = property(
-        fget=_get_W3, fset=_set_W3, doc=u"""Angle between magnet in the slot"""
+        fget=_get_W3,
+        fset=_set_W3,
+        doc=u"""Angle between magnet in the slot
+
+        :Type: float
+        """,
     )

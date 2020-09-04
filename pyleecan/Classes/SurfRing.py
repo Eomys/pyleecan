@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Geometry/SurfRing.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Geometry/SurfRing.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Geometry/SurfRing
 """
 
 from os import linesep
@@ -387,10 +388,13 @@ class SurfRing(Surface):
         if self._out_surf is not None:
             self._out_surf.parent = self
 
-    # Outter surface
-    # Type : Surface
     out_surf = property(
-        fget=_get_out_surf, fset=_set_out_surf, doc=u"""Outter surface"""
+        fget=_get_out_surf,
+        fset=_set_out_surf,
+        doc=u"""Outter surface
+
+        :Type: Surface
+        """,
     )
 
     def _get_in_surf(self):
@@ -405,6 +409,11 @@ class SurfRing(Surface):
         if self._in_surf is not None:
             self._in_surf.parent = self
 
-    # Inner surface
-    # Type : Surface
-    in_surf = property(fget=_get_in_surf, fset=_set_in_surf, doc=u"""Inner surface""")
+    in_surf = property(
+        fget=_get_in_surf,
+        fset=_set_in_surf,
+        doc=u"""Inner surface
+
+        :Type: Surface
+        """,
+    )

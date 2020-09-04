@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/DataKeeper.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/DataKeeper.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/DataKeeper
 """
 
 from os import linesep
@@ -40,6 +41,7 @@ class DataKeeper(FrozenClass):
         unit="",
         keeper=None,
         error_keeper=None,
+        result=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -66,6 +68,7 @@ class DataKeeper(FrozenClass):
             unit = obj.unit
             keeper = obj.keeper
             error_keeper = obj.error_keeper
+            result = obj.result
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -79,6 +82,8 @@ class DataKeeper(FrozenClass):
                 keeper = init_dict["keeper"]
             if "error_keeper" in list(init_dict.keys()):
                 error_keeper = init_dict["error_keeper"]
+            if "result" in list(init_dict.keys()):
+                result = init_dict["result"]
         # Initialisation by argument
         self.parent = None
         self.name = name
@@ -86,6 +91,9 @@ class DataKeeper(FrozenClass):
         self.unit = unit
         self.keeper = keeper
         self.error_keeper = error_keeper
+        if result == -1:
+            result = []
+        self.result = result
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -117,6 +125,12 @@ class DataKeeper(FrozenClass):
                 + linesep
                 + linesep
             )
+        DataKeeper_str += (
+            "result = "
+            + linesep
+            + str(self.result).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return DataKeeper_str
 
     def __eq__(self, other):
@@ -133,6 +147,8 @@ class DataKeeper(FrozenClass):
         if other.keeper != self.keeper:
             return False
         if other.error_keeper != self.error_keeper:
+            return False
+        if other.result != self.result:
             return False
         return True
 
@@ -158,6 +174,7 @@ class DataKeeper(FrozenClass):
                 dumps(self._error_keeper[0]).decode("ISO-8859-2"),
                 self._error_keeper[1],
             ]
+        DataKeeper_dict["result"] = self.result
         # The class name is added to the dict fordeserialisation purpose
         DataKeeper_dict["__class__"] = "DataKeeper"
         return DataKeeper_dict
@@ -170,6 +187,7 @@ class DataKeeper(FrozenClass):
         self.unit = None
         self.keeper = None
         self.error_keeper = None
+        self.result = None
 
     def _get_name(self):
         """getter of name"""
@@ -180,9 +198,14 @@ class DataKeeper(FrozenClass):
         check_var("name", value, "str")
         self._name = value
 
-    # Data name
-    # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""Data name""")
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Data name
+
+        :Type: str
+        """,
+    )
 
     def _get_symbol(self):
         """getter of symbol"""
@@ -193,9 +216,14 @@ class DataKeeper(FrozenClass):
         check_var("symbol", value, "str")
         self._symbol = value
 
-    # Data symbol
-    # Type : str
-    symbol = property(fget=_get_symbol, fset=_set_symbol, doc=u"""Data symbol""")
+    symbol = property(
+        fget=_get_symbol,
+        fset=_set_symbol,
+        doc=u"""Data symbol
+
+        :Type: str
+        """,
+    )
 
     def _get_unit(self):
         """getter of unit"""
@@ -206,9 +234,14 @@ class DataKeeper(FrozenClass):
         check_var("unit", value, "str")
         self._unit = value
 
-    # Data unit
-    # Type : str
-    unit = property(fget=_get_unit, fset=_set_unit, doc=u"""Data unit""")
+    unit = property(
+        fget=_get_unit,
+        fset=_set_unit,
+        doc=u"""Data unit
+
+        :Type: str
+        """,
+    )
 
     def _get_keeper(self):
         """getter of keeper"""
@@ -231,12 +264,13 @@ class DataKeeper(FrozenClass):
                 "Expected function or list from a saved file, got: " + str(type(value))
             )
 
-    # Function that takes an Output in argument and return a value
-    # Type : function
     keeper = property(
         fget=_get_keeper,
         fset=_set_keeper,
-        doc=u"""Function that takes an Output in argument and return a value""",
+        doc=u"""Function that takes an Output in argument and return a value
+
+        :Type: function
+        """,
     )
 
     def _get_error_keeper(self):
@@ -260,10 +294,29 @@ class DataKeeper(FrozenClass):
                 "Expected function or list from a saved file, got: " + str(type(value))
             )
 
-    # Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices
-    # Type : function
     error_keeper = property(
         fget=_get_error_keeper,
         fset=_set_error_keeper,
-        doc=u"""Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices""",
+        doc=u"""Function that takes a Simulation in argument and returns a value, this attribute enables to handle errors and to put NaN values in the result matrices
+
+        :Type: function
+        """,
+    )
+
+    def _get_result(self):
+        """getter of result"""
+        return self._result
+
+    def _set_result(self, value):
+        """setter of result"""
+        check_var("result", value, "list")
+        self._result = value
+
+    result = property(
+        fget=_get_result,
+        fset=_set_result,
+        doc=u"""List containing datakeeper results for each simulation
+
+        :Type: list
+        """,
     )

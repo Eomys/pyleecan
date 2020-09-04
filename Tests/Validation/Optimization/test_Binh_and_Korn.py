@@ -15,7 +15,7 @@ from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.Classes.OptiDesignVar import OptiDesignVar
-from pyleecan.Classes.OptiObjFunc import OptiObjFunc
+from pyleecan.Classes.DataKeeper import DataKeeper
 from pyleecan.Classes.OptiConstraint import OptiConstraint
 from pyleecan.Classes.OptiProblem import OptiProblem
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
@@ -41,7 +41,7 @@ def test_Binh_and_Korn():
     # Defining reference Output
     # Definition of the enforced output of the electrical module
     Nt = 2
-    Nr = ImportMatrixVal(value=np.ones(Nt) * 3000)
+    N0 = 3000
     Is = ImportMatrixVal(
         value=np.array(
             [
@@ -64,7 +64,7 @@ def test_Binh_and_Korn():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
@@ -83,48 +83,58 @@ def test_Binh_and_Korn():
     output = Output(simu=simu)
 
     # ### Design variable
-    my_vars = {
-        "RH0": OptiDesignVar(
-            name="output.simu.machine.rotor.slot.H0",
+    my_vars = [
+        OptiDesignVar(
+            name="Rotor slot height",
+            symbol="RH0",
             type_var="interval",
             space=[0, 5],  # May generate error in FEMM
-            function=lambda space: random.uniform(*space),
+            get_value=lambda space: random.uniform(*space),
+            setter="simu.machine.rotor.slot.H0",
         ),
-        "SH0": OptiDesignVar(
-            name="output.simu.machine.stator.slot.H0",
+        OptiDesignVar(
+            name="Stator slot height",
+            symbol="SH0",
             type_var="interval",
             space=[0, 3],  # May generate error in FEMM
-            function=lambda space: random.uniform(*space),
+            get_value=lambda space: random.uniform(*space),
+            setter="simu.machine.stator.slot.H0",
         ),
-    }
+    ]
 
     # ### Constraints
-    cstrs = {
-        "first": OptiConstraint(
+    cstrs = [
+        OptiConstraint(
+            name="first",
             get_variable=lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2
             + output.simu.machine.stator.slot.H0 ** 2,
             type_const="<=",
             value=25,
         ),
-        "second": OptiConstraint(
+        OptiConstraint(
+            name="second",
             get_variable=lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2
             + (output.simu.machine.stator.slot.H0 + 3) ** 2,
             type_const=">=",
             value=7.7,
         ),
-    }
+    ]
 
     # ### Objectives
-    objs = {
-        "obj1": OptiObjFunc(
-            description="Maximization of the torque average",
-            func=lambda output: output.mag.Tem_av,
+    objs = [
+        DataKeeper(
+            name="Maximization of the torque average",
+            symbol="obj1",
+            unit="N.m",
+            keeper=lambda output: output.mag.Tem_av,
         ),
-        "obj2": OptiObjFunc(
-            description="Minimization of the torque ripple",
-            func=lambda output: output.mag.Tem_rip_norm,
+        DataKeeper(
+            name="Minimization of the torque ripple",
+            symbol="obj2",
+            unit="N.m",
+            keeper=lambda output: output.mag.Tem_rip_norm,
         ),
-    }
+    ]
 
     # ### Evaluation function
     def evaluate(output):
@@ -149,79 +159,18 @@ def test_Binh_and_Korn():
     res = solver.solve()
 
     # ### Plot results
+    fig, axs = plt.subplots(1, 2, figsize=(16, 6))
 
-    def plot_pareto(self):
-        """Plot every fitness values with the pareto front for 2 fitness
-        
-        Parameters
-        ----------
-        self : OutputMultiOpti
-        """
-
-        # TODO Add a feature to return the design_varibles of each indiv from the Pareto front
-
-        # Get fitness and ngen
-        is_valid = np.array(self.is_valid)
-        fitness = np.array(self.fitness)
-        ngen = np.array(self.ngen)
-
-        # Keep only valid values
-        indx = np.where(is_valid)[0]
-
-        fitness = fitness[indx]
-        ngen = ngen[indx]
-
-        # Get pareto front
-        pareto = list(np.unique(fitness, axis=0))
-
-        # Get dominated values
-        to_remove = []
-        N = len(pareto)
-        for i in range(N):
-            for j in range(N):
-                if all(pareto[j] <= pareto[i]) and any(pareto[j] < pareto[i]):
-                    to_remove.append(pareto[i])
-                    break
-
-        # Remove dominated values
-        for i in to_remove:
-            for l in range(len(pareto)):
-                if all(i == pareto[l]):
-                    pareto.pop(l)
-                    break
-
-        pareto = np.array(pareto)
-
-        fig, axs = plt.subplots(1, 2, figsize=(16, 6))
-
-        # Plot Pareto front
-        axs[0].scatter(
-            pareto[:, 0],
-            pareto[:, 1],
-            facecolors="b",
-            edgecolors="b",
-            s=0.8,
-            label="Pareto Front",
+    try:
+        img_to_find = img.imread(
+            join(TEST_DIR, "Validation", "Optimization", "Binh_and_Korn_function.jpg"),
+            format="jpg",
         )
-        axs[0].autoscale()
-        axs[0].legend()
-        axs[0].set_title("Pyleecan results")
-        axs[0].set_xlabel(r"$f_1(x)$")
-        axs[0].set_ylabel(r"$f_2(x)$")
-        try:
-            img_to_find = img.imread(
-                join(
-                    TEST_DIR, "Validation", "Optimization", "Binh_and_Korn_function.jpg"
-                ),
-                format="jpg",
-            )
-            axs[1].imshow(img_to_find, aspect="auto")
-            axs[1].axis("off")
-            axs[1].set_title("Pareto front of the problem")
-        except (TypeError, ValueError):
-            print("Pillow is needed to import jpg files")
+        axs[1].imshow(img_to_find, aspect="auto")
+        axs[1].axis("off")
+        axs[1].set_title("Pareto front of the problem")
+    except (TypeError, ValueError):
+        print("Pillow is needed to import jpg files")
 
-        return fig
-
-    fig = plot_pareto(res)
+    res.plot_pareto("obj1", "obj2", axs[0])
     fig.savefig(join(save_path, "test_Binh_and_Korn.png"))
