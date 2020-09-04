@@ -111,6 +111,7 @@ from .OutMag import OutMag
 from .OutStruct import OutStruct
 from .OutPost import OutPost
 from .OutForce import OutForce
+from .OutLoss import OutLoss
 
 
 class Output(FrozenClass):
@@ -323,6 +324,7 @@ class Output(FrozenClass):
         post=-1,
         logger_name="Pyleecan.Output",
         force=-1,
+        loss=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -351,6 +353,8 @@ class Output(FrozenClass):
             post = OutPost()
         if force == -1:
             force = OutForce()
+        if loss == -1:
+            loss = OutLoss()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -367,6 +371,7 @@ class Output(FrozenClass):
             post = obj.post
             logger_name = obj.logger_name
             force = obj.force
+            loss = obj.loss
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -388,6 +393,8 @@ class Output(FrozenClass):
                 logger_name = init_dict["logger_name"]
             if "force" in list(init_dict.keys()):
                 force = init_dict["force"]
+            if "loss" in list(init_dict.keys()):
+                loss = init_dict["loss"]
         # Initialisation by argument
         self.parent = None
         # simu can be None, a Simulation object or a dict
@@ -471,6 +478,15 @@ class Output(FrozenClass):
             self.force = load(force)
         else:
             self.force = force
+        # loss can be None, a OutLoss object or a dict
+        if isinstance(loss, dict):
+            self.loss = OutLoss(init_dict=loss)
+        elif isinstance(loss, str):
+            from ..Functions.load import load
+
+            self.loss = load(loss)
+        else:
+            self.loss = loss
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -520,6 +536,11 @@ class Output(FrozenClass):
             Output_str += "force = " + tmp
         else:
             Output_str += "force = None" + linesep + linesep
+        if self.loss is not None:
+            tmp = self.loss.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            Output_str += "loss = " + tmp
+        else:
+            Output_str += "loss = None" + linesep + linesep
         return Output_str
 
     def __eq__(self, other):
@@ -544,6 +565,8 @@ class Output(FrozenClass):
         if other.logger_name != self.logger_name:
             return False
         if other.force != self.force:
+            return False
+        if other.loss != self.loss:
             return False
         return True
 
@@ -582,6 +605,10 @@ class Output(FrozenClass):
             Output_dict["force"] = None
         else:
             Output_dict["force"] = self.force.as_dict()
+        if self.loss is None:
+            Output_dict["loss"] = None
+        else:
+            Output_dict["loss"] = self.loss.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         Output_dict["__class__"] = "Output"
         return Output_dict
@@ -605,6 +632,8 @@ class Output(FrozenClass):
         self.logger_name = None
         if self.force is not None:
             self.force._set_None()
+        if self.loss is not None:
+            self.loss._set_None()
 
     def _get_simu(self):
         """getter of simu"""
@@ -786,5 +815,26 @@ class Output(FrozenClass):
         doc=u"""Force module output
 
         :Type: OutForce
+        """,
+    )
+
+    def _get_loss(self):
+        """getter of loss"""
+        return self._loss
+
+    def _set_loss(self, value):
+        """setter of loss"""
+        check_var("loss", value, "OutLoss")
+        self._loss = value
+
+        if self._loss is not None:
+            self._loss.parent = self
+
+    loss = property(
+        fget=_get_loss,
+        fset=_set_loss,
+        doc=u"""Loss module output
+
+        :Type: OutLoss
         """,
     )

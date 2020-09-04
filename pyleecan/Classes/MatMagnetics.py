@@ -75,6 +75,7 @@ class MatMagnetics(FrozenClass):
         alpha_Br=0,
         Wlam=0,
         BH_curve=-1,
+        LossData=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -91,6 +92,8 @@ class MatMagnetics(FrozenClass):
 
         if BH_curve == -1:
             BH_curve = ImportMatrix()
+        if LossData == -1:
+            LossData = ImportMatrix()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -104,6 +107,7 @@ class MatMagnetics(FrozenClass):
             alpha_Br = obj.alpha_Br
             Wlam = obj.Wlam
             BH_curve = obj.BH_curve
+            LossData = obj.LossData
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -119,6 +123,8 @@ class MatMagnetics(FrozenClass):
                 Wlam = init_dict["Wlam"]
             if "BH_curve" in list(init_dict.keys()):
                 BH_curve = init_dict["BH_curve"]
+            if "LossData" in list(init_dict.keys()):
+                LossData = init_dict["LossData"]
         # Initialisation by argument
         self.parent = None
         self.mur_lin = mur_lin
@@ -169,6 +175,49 @@ class MatMagnetics(FrozenClass):
             self.BH_curve = BH_curve
         else:
             self.BH_curve = BH_curve
+        # LossData can be None, a ImportMatrix object or a dict
+        if isinstance(LossData, dict):
+            # Check that the type is correct (including daughter)
+            class_name = LossData.get("__class__")
+            if class_name not in [
+                "ImportMatrix",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for LossData"
+                )
+            # Dynamic import to call the correct constructor
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
+            self.LossData = class_obj(init_dict=LossData)
+        elif isinstance(LossData, str):
+            from ..Functions.load import load
+
+            LossData = load(LossData)
+            # Check that the type is correct (including daughter)
+            class_name = LossData.__class__.__name__
+            if class_name not in [
+                "ImportMatrix",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
+                raise InitUnKnowClassError(
+                    "Unknow class name " + class_name + " in init_dict for LossData"
+                )
+            self.LossData = LossData
+        else:
+            self.LossData = LossData
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -193,6 +242,11 @@ class MatMagnetics(FrozenClass):
             MatMagnetics_str += "BH_curve = " + tmp
         else:
             MatMagnetics_str += "BH_curve = None" + linesep + linesep
+        if self.LossData is not None:
+            tmp = self.LossData.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MatMagnetics_str += "LossData = " + tmp
+        else:
+            MatMagnetics_str += "LossData = None" + linesep + linesep
         return MatMagnetics_str
 
     def __eq__(self, other):
@@ -212,6 +266,8 @@ class MatMagnetics(FrozenClass):
             return False
         if other.BH_curve != self.BH_curve:
             return False
+        if other.LossData != self.LossData:
+            return False
         return True
 
     def as_dict(self):
@@ -228,6 +284,10 @@ class MatMagnetics(FrozenClass):
             MatMagnetics_dict["BH_curve"] = None
         else:
             MatMagnetics_dict["BH_curve"] = self.BH_curve.as_dict()
+        if self.LossData is None:
+            MatMagnetics_dict["LossData"] = None
+        else:
+            MatMagnetics_dict["LossData"] = self.LossData.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         MatMagnetics_dict["__class__"] = "MatMagnetics"
         return MatMagnetics_dict
@@ -242,6 +302,8 @@ class MatMagnetics(FrozenClass):
         self.Wlam = None
         if self.BH_curve is not None:
             self.BH_curve._set_None()
+        if self.LossData is not None:
+            self.LossData._set_None()
 
     def _get_mur_lin(self):
         """getter of mur_lin"""
@@ -356,6 +418,31 @@ class MatMagnetics(FrozenClass):
         fget=_get_BH_curve,
         fset=_set_BH_curve,
         doc=u"""nonlinear B(H) curve (two columns matrix, H and B(H))
+
+        :Type: ImportMatrix
+        """,
+    )
+
+    def _get_LossData(self):
+        """getter of LossData"""
+        return self._LossData
+
+    def _set_LossData(self, value):
+        """setter of LossData"""
+        if isinstance(value, ndarray):
+            value = ImportMatrixVal(value=value)
+        elif isinstance(value, list):
+            value = ImportMatrixVal(value=array(value))
+        check_var("LossData", value, "ImportMatrix")
+        self._LossData = value
+
+        if self._LossData is not None:
+            self._LossData.parent = self
+
+    LossData = property(
+        fget=_get_LossData,
+        fset=_set_LossData,
+        doc=u"""specific loss data value triplets, i.e. B, f, P
 
         :Type: ImportMatrix
         """,

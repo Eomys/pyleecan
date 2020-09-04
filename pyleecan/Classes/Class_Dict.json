@@ -3726,6 +3726,251 @@
             }
         ]
     },
+    "Loss": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "Loss",
+            "Loss1"
+        ],
+        "desc": "Losses module abstract object",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "Loss",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
+        "properties": []
+    },
+    "Loss1": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Gather loss modules loss calculation models",
+        "is_internal": false,
+        "methods": [
+            "run"
+        ],
+        "mother": "Loss",
+        "name": "Loss1",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Loss1.csv",
+        "properties": [
+            {
+                "desc": "Stator Lamination Loss Model",
+                "max": "",
+                "min": "",
+                "name": "lam_stator",
+                "type": "LossModel",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Rotor Lamination Loss Model",
+                "max": "",
+                "min": "",
+                "name": "lam_rotor",
+                "type": "LossModel",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Stator Winding Loss Model",
+                "max": "",
+                "min": "",
+                "name": "wind_stator",
+                "type": "LossModel",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Rotor Winding Loss Model",
+                "max": "",
+                "min": "",
+                "name": "wind_rotor",
+                "type": "LossModel",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Stator Magnet Loss Model",
+                "max": "",
+                "min": "",
+                "name": "mag_stator",
+                "type": "LossModel",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Rotor Magnet Loss Model",
+                "max": "",
+                "min": "",
+                "name": "mag_rotor",
+                "type": "LossModel",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Windage Loss Model",
+                "max": "",
+                "min": "",
+                "name": "windage",
+                "type": "LossModel",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Bearing Loss Model",
+                "max": "",
+                "min": "",
+                "name": "bearing",
+                "type": "LossModel",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Shaft Loss Model",
+                "max": "",
+                "min": "",
+                "name": "shaft",
+                "type": "LossModel",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Frame Loss Model",
+                "max": "",
+                "min": "",
+                "name": "frame",
+                "type": "LossModel",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Loss moduale",
+                "max": "",
+                "min": "",
+                "name": "additional",
+                "type": "LossModel",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "LossModel": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "LossModel",
+            "LossModelBertotti"
+        ],
+        "desc": "Abstract Loss Model Class",
+        "is_internal": false,
+        "methods": [
+            "comp_loss"
+        ],
+        "mother": "",
+        "name": "LossModel",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/LossModel.csv",
+        "properties": []
+    },
+    "LossModelBertotti": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "F_REF",
+                "value": "50"
+            },
+            {
+                "name": "B_REF",
+                "value": "1.5"
+            }
+        ],
+        "daughters": [],
+        "desc": "Bertotti Loss Model Class",
+        "is_internal": false,
+        "methods": [
+            "comp_loss",
+            "comp_coeff_Bertotti",
+            "comp_loss_norm"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelBertotti",
+        "package": "Simulation",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/LossModelBertotti.csv",
+        "properties": [
+            {
+                "desc": "Hysteresis loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_hy",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Eddy current loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_ed",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Excess loss coefficient",
+                "max": "",
+                "min": "",
+                "name": "k_ex",
+                "type": "float",
+                "unit": "W/kg",
+                "value": null
+            },
+            {
+                "desc": "Hysteresis loss power coefficient",
+                "max": "",
+                "min": "",
+                "name": "alpha_hy",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Eddy current loss power coefficient",
+                "max": "",
+                "min": "",
+                "name": "alpha_ed",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Excess loss power coefficient",
+                "max": "",
+                "min": "",
+                "name": "alpha_ex",
+                "type": "float",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
     "Machine": {
         "constants": [
             {
@@ -5031,6 +5276,15 @@
                 "name": "BH_curve",
                 "type": "ImportMatrix",
                 "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "specific loss data value triplets, i.e. B, f, P",
+                "max": "",
+                "min": "",
+                "name": "LossData",
+                "type": "ImportMatrix",
+                "unit": "W/kg",
                 "value": ""
             }
         ]
@@ -6420,6 +6674,150 @@
             }
         ]
     },
+    "OutLoss": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Gather the loss module outputs",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "OutLoss",
+        "package": "Output",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutLoss.csv",
+        "properties": [
+            {
+                "desc": "Structural time vector (no symmetry)",
+                "max": "",
+                "min": "",
+                "name": "time",
+                "type": "ndarray",
+                "unit": "s",
+                "value": null
+            },
+            {
+                "desc": "Length of the time vector",
+                "max": "",
+                "min": "",
+                "name": "Nt_tot",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Stator Lamination Losses",
+                "max": "",
+                "min": "",
+                "name": "Plam_stator",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Rotor Lamination Losses",
+                "max": "",
+                "min": "",
+                "name": "Plam_rotor",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Stator Winding Losses",
+                "max": "",
+                "min": "",
+                "name": "Pwind_stator",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Rotor Winding Losses",
+                "max": "",
+                "min": "",
+                "name": "Pwind_rotor",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Stator Magnet Losses",
+                "max": "",
+                "min": "",
+                "name": "Pmag_stator",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Rotor Magnet Losses",
+                "max": "",
+                "min": "",
+                "name": "Pmag_rotor",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Windage Losses",
+                "max": "",
+                "min": "",
+                "name": "Pwindage",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Bearing Losses",
+                "max": "",
+                "min": "",
+                "name": "Pbearing",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Shaft Iron Losses",
+                "max": "",
+                "min": "",
+                "name": "Pshaft",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Frame Iron Losses",
+                "max": "",
+                "min": "",
+                "name": "Pframe",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Additional Losses",
+                "max": "",
+                "min": "",
+                "name": "Padd",
+                "type": "ndarray",
+                "unit": "W",
+                "value": null
+            },
+            {
+                "desc": "Name of the logger to use",
+                "max": "",
+                "min": "",
+                "name": "logger_name",
+                "type": "str",
+                "unit": "-",
+                "value": "Pyleecan.OutLoss"
+            }
+        ]
+    },
     "OutMag": {
         "constants": [
             {
@@ -6805,6 +7203,15 @@
                 "min": "",
                 "name": "force",
                 "type": "OutForce",
+                "unit": "-",
+                "value": ""
+            },
+            {
+                "desc": "Loss module output",
+                "max": "",
+                "min": "",
+                "name": "loss",
+                "type": "OutLoss",
                 "unit": "-",
                 "value": ""
             }
@@ -7275,6 +7682,15 @@
                 "min": "",
                 "name": "force",
                 "type": "Force",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Loss moduale",
+                "max": "",
+                "min": "",
+                "name": "loss",
+                "type": "Loss",
                 "unit": "-",
                 "value": null
             }

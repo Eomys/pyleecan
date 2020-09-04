@@ -3,6 +3,7 @@
 import pyvista as pv
 import meshio
 import os
+import tempfile
 
 
 def get_mesh_pv(self, path="temp.vtk", indices=None):
