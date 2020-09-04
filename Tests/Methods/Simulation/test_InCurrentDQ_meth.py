@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
 from os.path import join
-from ddt import data, ddt
 from numpy import linspace, ones, pi, zeros, array, sqrt, transpose
 from numpy.testing import assert_array_almost_equal
 
@@ -20,6 +18,7 @@ from pyleecan.Classes.WindingDW1L import WindingDW1L
 from pyleecan.Methods.Simulation.Input import InputError
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
+import pytest
 
 IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 InputCurrentDQ_Error_test = list()
@@ -146,58 +145,55 @@ InputCurrentDQ_Error_test.append(
 )
 
 
-@ddt
-class unittest_InputCurrentDQ_meth(TestCase):
+@pytest.mark.METHODS
+class Test_InCurrentDQ_meth(object):
     """unittest for InputCurrentDQ object methods"""
 
-    @data(*InputCurrentDQ_Error_test)
-    def test_InputCurrentDQ_Error_test(self, test_dict):
+    @pytest.mark.parametrize("test_dict", InputCurrentDQ_Error_test)
+    def test_InputCurrentDQ_Error_test(self,test_dict):
         """Check that the input current raises the correct errors
-        """
+            """
         output = Output(simu=test_dict["test_obj"])
-        with self.assertRaises(
-            InputError, msg="Expect: " + test_dict["exp"]
-        ) as context:
+        with pytest.raises(InputError) as context:
             output.simu.input.gen_input()
-        self.assertEqual(test_dict["exp"], str(context.exception))
+            assert test_dict["exp"]== str(context.exception)
 
     def test_InputCurrentDQ_Ok(self):
         """Check that the input current can return a correct output
-        """
+            """
         test_obj = Simulation(machine=IPMSM_A)
         output = Output(simu=test_obj)
         time = ImportGenVectLin(0, 1, 7)
         angle = ImportGenVectLin(0, 2 * pi, 20)
-        Is = ImportMatrixVal(
+        Is = ImportMatrixVal(    
             value=transpose(array([[2, 2, 2, 2, 2, 2, 2], [0, 0, 0, 0, 0, 0, 0]]))
         )
 
-        Is_exp = transpose(
-            array(
-                [
-                    [2, 1, -1, -2, -1, 1, 2],
-                    [-1, -2, -1, 1, 2, 1, -1],
-                    [-1, 1, 2, 1, -1, -2, -1],
-                ]
-            )
+        Is_exp = transpose(    
+            array(    
+                [    
+                    [2, 1, -1, -2, -1, 1, 2],    
+                    [-1, -2, -1, 1, 2, 1, -1],    
+                    [-1, 1, 2, 1, -1, -2, -1],    
+                ]    
+            )    
         )
-
         zp = IPMSM_A.stator.get_pole_pair_number()
         angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
         angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
 
         Nr = ImportMatrixVal(value=ones(7) * 60 / zp)
-        test_obj.input = InputCurrentDQ(
-            time=time,
-            angle=angle,
-            Is=Is,
-            Ir=None,
-            angle_rotor=None,
-            Nr=Nr,
-            angle_rotor_initial=angle_rotor_initial,
-            rot_dir=1,
+        test_obj.input = InputCurrentDQ(    
+            time=time,    
+            angle=angle,    
+            Is=Is,    
+            Ir=None,    
+            angle_rotor=None,    
+            Nr=Nr,    
+            angle_rotor_initial=angle_rotor_initial,    
+            rot_dir=1,    
         )
-
+        
         test_obj.input.gen_input()
         assert_array_almost_equal(output.elec.time, linspace(0, 1, 7))
         assert_array_almost_equal(output.elec.angle, linspace(0, 2 * pi, 20))

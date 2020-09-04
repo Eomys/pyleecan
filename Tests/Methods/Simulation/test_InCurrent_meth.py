@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
-
-from ddt import data, ddt
 from numpy import linspace, ones, pi, zeros, array, sqrt, transpose
 from numpy.testing import assert_array_almost_equal
 
@@ -16,6 +13,7 @@ from pyleecan.Classes.MachineDFIM import MachineDFIM
 from pyleecan.Classes.Simulation import Simulation
 from pyleecan.Classes.Output import Output
 from pyleecan.Methods.Simulation.Input import InputError
+import pytest
 
 InputCurrent_Error_test = list()
 time_wrong = ImportMatrixVal(value=zeros((10, 2)))
@@ -180,24 +178,22 @@ InputCurrent_Error_test.append(
 )
 
 
-@ddt
-class unittest_InputCurrent_meth(TestCase):
+@pytest.mark.METHODS
+class Test_InCurrent_meth(object):
     """unittest for InputCurrent object methods"""
 
-    @data(*InputCurrent_Error_test)
-    def test_InputCurrent_Error_test(self, test_dict):
+    @pytest.mark.parametrize("test_dict", InputCurrent_Error_test)
+    def test_InputCurrent_Error_test(self,test_dict):
         """Check that the input current raises the correct errors
-        """
+            """
         output = Output(simu=test_dict["test_obj"])
-        with self.assertRaises(
-            InputError, msg="Expect: " + test_dict["exp"]
-        ) as context:
+        with pytest.raises(InputError) as context:
             output.simu.input.gen_input()
-        self.assertEqual(test_dict["exp"], str(context.exception))
+            assert test_dict["exp"]== str(context.exception)
 
     def test_InputCurrent_Ok(self):
         """Check that the input current can return a correct output
-        """
+            """
         test_obj = Simulation(machine=M3)
         output = Output(simu=test_obj)
         time = ImportGenVectLin(0, 1, 16)
@@ -205,31 +201,31 @@ class unittest_InputCurrent_meth(TestCase):
         Is = ImportGenMatrixSin(is_transpose=True)
         Is.init_vector(f=[2, 2, 2], A=[2, 2, 2], Phi=[pi / 2, 0, -pi / 2], N=16, Tf=1)
         S = sqrt(2)
-        Is_exp = transpose(
-            array(
-                [
-                    [2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S],
-                    [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],
-                    [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],
-                ]
-            )
+        Is_exp = transpose(    
+            array(    
+                [    
+                    [2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S],    
+                    [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],    
+                    [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],    
+                ]    
+            )    
         )
 
         Ir = ImportGenMatrixSin(is_transpose=True)
         Ir.init_vector(f=[2, 2], A=[2, 2], Phi=[0, -pi / 2], N=16, Tf=1)
-        Ir_exp = transpose(
-            array(
-                [
-                    [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],
-                    [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],
-                ]
-            )
+        Ir_exp = transpose(    
+            array(    
+                [    
+                    [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],    
+                    [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],    
+                ]    
+            )    
         )
 
         angle_rotor = ImportGenVectLin(0, 2 * pi, 16)
         Nr = ImportMatrixVal(value=ones(16) * 10)
-        test_obj.input = InputCurrent(
-            time=time, angle=angle, Is=Is, Ir=Ir, angle_rotor=angle_rotor, Nr=Nr
+        test_obj.input = InputCurrent(    
+            time=time, angle=angle, Is=Is, Ir=Ir, angle_rotor=angle_rotor, Nr=Nr    
         )
 
         test_obj.input.gen_input()
