@@ -32,7 +32,7 @@ HoleM52_test.append(
 
 @pytest.mark.METHODS
 class Test_Hole52_meth(object):
-    """unittest for holeB52 methods"""
+    """pytest for holeB52 methods"""
 
     @pytest.mark.parametrize("test_dict", HoleM52_test)
     def test_comp_surface(self,test_dict):

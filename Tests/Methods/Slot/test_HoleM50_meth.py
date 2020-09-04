@@ -12,7 +12,7 @@ DELTA = 1e-4
 
 @pytest.mark.METHODS
 class Test_HoleM50_meth(object):
-    """unittest for HoleM50 methods"""
+    """pytest for HoleM50 methods"""
     def test_comp_alpha(self):
         """Check that the computation of the alpha is correct
             """

@@ -26,7 +26,7 @@ HoleM54_test.append(
 
 @pytest.mark.METHODS
 class Test_HoleM54_meth(object):
-    """unittest for HoleM54 methods"""
+    """pytest for HoleM54 methods"""
     @pytest.mark.parametrize("test_dict", HoleM54_test)
     def test_comp_surface(self,test_dict):
         """Check that the computation of the surface is correct
