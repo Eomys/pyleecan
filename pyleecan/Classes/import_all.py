@@ -24,6 +24,7 @@ from ..Classes.DriveWave import DriveWave
 from ..Classes.EEC import EEC
 from ..Classes.EEC_PMSM import EEC_PMSM
 from ..Classes.Electrical import Electrical
+from ..Classes.FPGNSeg import FPGNSeg
 from ..Classes.FPGNTri import FPGNTri
 from ..Classes.FluxLink import FluxLink
 from ..Classes.FluxLinkFEMM import FluxLinkFEMM
@@ -121,6 +122,7 @@ from ..Classes.ParamExplorerSet import ParamExplorerSet
 from ..Classes.PointMat import PointMat
 from ..Classes.PolarArc import PolarArc
 from ..Classes.RefCell import RefCell
+from ..Classes.RefSegmentP1 import RefSegmentP1
 from ..Classes.RefTriangle3 import RefTriangle3
 from ..Classes.ScalarProduct import ScalarProduct
 from ..Classes.ScalarProductL2 import ScalarProductL2

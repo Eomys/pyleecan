@@ -1008,6 +1008,35 @@
             }
         ]
     },
+    "FPGNSeg": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Compute N gauss point for segment elements",
+        "is_internal": false,
+        "methods": [
+            "get_gauss_points"
+        ],
+        "mother": "GaussPoint",
+        "name": "FPGNSeg",
+        "package": "Mesh",
+        "path": "pyleecan_tests/pyleecan/Generator/ClassesRef/Mesh/Interpolation/FPGNSeg.csv",
+        "properties": [
+            {
+                "desc": "Nb of gauss point to be used",
+                "max": "",
+                "min": "",
+                "name": "nb_gauss_point",
+                "type": "int",
+                "unit": "",
+                "value": 4
+            }
+        ]
+    },
     "FPGNTri": {
         "constants": [
             {
@@ -1292,6 +1321,7 @@
         ],
         "daughters": [
             "GaussPoint",
+            "FPGNSeg",
             "FPGNTri"
         ],
         "desc": "Store set of gauss points",
@@ -6949,6 +6979,7 @@
         ],
         "daughters": [
             "RefCell",
+            "RefSegmentP1",
             "RefTriangle3"
         ],
         "desc": "Store shape functions definition in the reference element",
@@ -6969,6 +7000,32 @@
                 "value": 0.05
             }
         ]
+    },
+    "RefSegmentP1": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store triangle elements for 2D mesh",
+        "is_internal": false,
+        "methods": [
+            "shape_function",
+            "jacobian",
+            "grad_shape_function",
+            "get_real_point",
+            "interpolation",
+            "is_inside",
+            "get_ref_point",
+            "get_normal"
+        ],
+        "mother": "RefCell",
+        "name": "RefSegmentP1",
+        "package": "Mesh",
+        "path": "pyleecan_tests/pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefSegmentP1.csv",
+        "properties": []
     },
     "RefTriangle3": {
         "constants": [

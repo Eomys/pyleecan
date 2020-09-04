@@ -104,7 +104,7 @@ class Interpolation(FrozenClass):
         if isinstance(ref_cell, dict):
             # Check that the type is correct (including daughter)
             class_name = ref_cell.get("__class__")
-            if class_name not in ["RefCell", "RefTriangle3"]:
+            if class_name not in ["RefCell", "RefSegmentP1", "RefTriangle3"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for ref_cell"
                 )
@@ -118,7 +118,7 @@ class Interpolation(FrozenClass):
             ref_cell = load(ref_cell)
             # Check that the type is correct (including daughter)
             class_name = ref_cell.__class__.__name__
-            if class_name not in ["RefCell", "RefTriangle3"]:
+            if class_name not in ["RefCell", "RefSegmentP1", "RefTriangle3"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for ref_cell"
                 )
@@ -129,7 +129,7 @@ class Interpolation(FrozenClass):
         if isinstance(gauss_point, dict):
             # Check that the type is correct (including daughter)
             class_name = gauss_point.get("__class__")
-            if class_name not in ["GaussPoint", "FPGNTri"]:
+            if class_name not in ["GaussPoint", "FPGNSeg", "FPGNTri"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for gauss_point"
                 )
@@ -143,7 +143,7 @@ class Interpolation(FrozenClass):
             gauss_point = load(gauss_point)
             # Check that the type is correct (including daughter)
             class_name = gauss_point.__class__.__name__
-            if class_name not in ["GaussPoint", "FPGNTri"]:
+            if class_name not in ["GaussPoint", "FPGNSeg", "FPGNTri"]:
                 raise InitUnKnowClassError(
                     "Unknow class name " + class_name + " in init_dict for gauss_point"
                 )
