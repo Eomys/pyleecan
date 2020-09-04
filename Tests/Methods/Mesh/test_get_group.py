@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
+import pytest
 from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
-
-class unittest_get_group(TestCase):
+@pytest.mark.METHODS
+class Test_get_group(object):
     """unittest to extract a group as a Mesh object"""
 
-    def setUp(self):
+    def setup_method(self, method):
         self.mesh = Mesh()
         self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
         self.mesh.node = NodeMat()
@@ -33,4 +33,4 @@ class unittest_get_group(TestCase):
         testA = np.sum(abs(solution - results))
         msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg

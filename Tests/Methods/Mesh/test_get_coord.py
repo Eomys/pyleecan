@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
+import pytest
 from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.ElementMat import ElementMat
 import numpy as np
 
-
-class unittest_get_coord(TestCase):
+@pytest.mark.METHODS
+class Test_get_coord(object):
     """unittest for NodeMat get_node methods"""
-
-    def setUp(self):
+    def setup_method(self, method):
         self.mesh = Mesh()
         self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
         self.mesh.node = NodeMat()
@@ -32,7 +31,7 @@ class unittest_get_coord(TestCase):
         testA = np.sum(abs(solution - coord))
         msg = "Wrong output: returned " + str(coord) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
 
     def test_NodeMat_false(self):
         """unittest for a false node tag"""
@@ -41,13 +40,13 @@ class unittest_get_coord(TestCase):
         solution = None
         testA = coord is None
         msg = "Wrong out: returned " + str(coord) + ", expected: " + str(solution)
-        self.assertTrue(testA, msg=msg)
+        assert testA, msg
 
     def test_NodeMat_None(self):
         """unittest for a None node tag"""
-
+        
         coord = self.mesh.node.get_coord(None)
         solution = None
         testA = coord is None
         msg = "Wrong output: returned " + str(coord) + ", expected: " + str(solution)
-        self.assertTrue(testA, msg=msg)
+        assert testA, msg
