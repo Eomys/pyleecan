@@ -20,7 +20,7 @@ import platform
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "0.1.0.rc1"
+PYLEECAN_VERSION = "1.0.0"
 
 
 with open("README.md", "r") as fh:

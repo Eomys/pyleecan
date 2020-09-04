@@ -1350,6 +1350,7 @@
             "HoleM57",
             "HoleM58",
             "HoleMag",
+            "HoleUD",
             "VentilationCirc",
             "VentilationPolar",
             "VentilationTrap"
@@ -1362,7 +1363,8 @@
             "get_is_stator",
             "get_Rbo",
             "has_magnet",
-            "plot"
+            "plot",
+            "comp_height"
         ],
         "mother": "",
         "name": "Hole",
@@ -1407,14 +1409,11 @@
             "build_geometry",
             "check",
             "comp_alpha",
-            "comp_mass_magnets",
             "comp_radius",
-            "comp_surface_magnets",
-            "comp_volume_magnets",
             "comp_W5",
-            "get_height_magnet",
+            "has_magnet",
             "remove_magnet",
-            "has_magnet"
+            "comp_surface_magnet_id"
         ],
         "mother": "HoleMag",
         "name": "HoleM50",
@@ -1549,14 +1548,11 @@
             "build_geometry",
             "check",
             "comp_alpha",
-            "comp_mass_magnets",
             "comp_radius",
-            "comp_surface_magnets",
-            "comp_volume_magnets",
             "comp_width",
-            "get_height_magnet",
+            "has_magnet",
             "remove_magnet",
-            "has_magnet"
+            "comp_surface_magnet_id"
         ],
         "mother": "HoleMag",
         "name": "HoleM51",
@@ -1709,15 +1705,12 @@
             "build_geometry",
             "check",
             "comp_alpha",
-            "comp_mass_magnets",
             "comp_radius",
             "comp_surface",
-            "comp_surface_magnets",
-            "comp_volume_magnets",
             "comp_W1",
-            "get_height_magnet",
+            "has_magnet",
             "remove_magnet",
-            "has_magnet"
+            "comp_surface_magnet_id"
         ],
         "mother": "HoleMag",
         "name": "HoleM52",
@@ -1798,14 +1791,11 @@
             "build_geometry",
             "check",
             "comp_alpha",
-            "comp_mass_magnets",
             "comp_radius",
-            "comp_surface_magnets",
-            "comp_volume_magnets",
             "comp_W5",
-            "get_height_magnet",
+            "has_magnet",
             "remove_magnet",
-            "has_magnet"
+            "comp_surface_magnet_id"
         ],
         "mother": "HoleMag",
         "name": "HoleM53",
@@ -1922,8 +1912,7 @@
             "build_geometry",
             "check",
             "comp_radius",
-            "comp_surface",
-            "get_height_magnet"
+            "comp_surface"
         ],
         "mother": "Hole",
         "name": "HoleM54",
@@ -1985,13 +1974,10 @@
         "methods": [
             "build_geometry",
             "check",
-            "comp_mass_magnets",
             "comp_radius",
-            "comp_surface_magnets",
-            "comp_volume_magnets",
             "remove_magnet",
-            "get_height_magnet",
-            "has_magnet"
+            "has_magnet",
+            "comp_surface_magnet_id"
         ],
         "mother": "HoleMag",
         "name": "HoleM57",
@@ -2098,13 +2084,10 @@
         "methods": [
             "build_geometry",
             "check",
-            "comp_mass_magnets",
             "comp_radius",
-            "comp_surface_magnets",
-            "comp_volume_magnets",
-            "get_height_magnet",
             "remove_magnet",
-            "has_magnet"
+            "has_magnet",
+            "comp_surface_magnet_id"
         ],
         "mother": "HoleMag",
         "name": "HoleM58",
@@ -2207,11 +2190,17 @@
             "HoleM52",
             "HoleM53",
             "HoleM57",
-            "HoleM58"
+            "HoleM58",
+            "HoleUD"
         ],
         "desc": "Hole with magnets for lamination (abstract)",
         "is_internal": false,
         "methods": [
+            "comp_mass_magnet_id",
+            "comp_mass_magnets",
+            "comp_surface_magnets",
+            "comp_volume_magnets",
+            "get_magnet_list",
             "has_magnet"
         ],
         "mother": "Hole",
@@ -2219,6 +2208,51 @@
         "package": "Slot",
         "path": "pyleecan_tests/pyleecan/Generator/ClassesRef/Slot/HoleMag.csv",
         "properties": []
+    },
+    "HoleUD": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "User defined hole from list of surface",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "comp_surface_magnet_id",
+            "has_magnet",
+            "remove_magnet"
+        ],
+        "mother": "HoleMag",
+        "name": "HoleUD",
+        "package": "Slot",
+        "path": "pyleecan_tests/pyleecan/Generator/ClassesRef/Slot/HoleUD.csv",
+        "properties": [
+            {
+                "desc": "List of surface to draw the Hole. Surfaces must be ordered in trigo order, label must contain HoleMagnet for Magnet and Hole for holes",
+                "max": "",
+                "min": "",
+                "name": "surf_list",
+                "type": "[Surface]",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "dictionnary with the magnet for the Hole (None to remove magnet, key should be magnet_X)",
+                "max": "",
+                "min": "",
+                "name": "magnet_dict",
+                "type": "dict",
+                "unit": "",
+                "value": ""
+            }
+        ]
     },
     "Import": {
         "constants": [
