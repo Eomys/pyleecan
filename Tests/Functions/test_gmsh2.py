@@ -1,4 +1,5 @@
 import pytest
+import sys
 
 from os import makedirs
 from os.path import join
@@ -41,9 +42,12 @@ def test_gmsh_2d():
 
     draw_GMSH(
         output=myResults,
-        sym=8,
+        sym=2,
         is_lam_only_S=False,
         is_lam_only_R=False,
         user_mesh_dict=mesh_dict,
         path_save=join(save_path, "GSMH_model.msh"),
     )
+
+if __name__ == '__main__':
+    sys.exit(test_gmsh_2d())
