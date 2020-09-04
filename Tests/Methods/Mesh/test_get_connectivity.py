@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
+import pytest
 from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
-
-class unittest_get_all_connectivity(TestCase):
+@pytest.mark.METHODS
+class Test_get_connectivity(object):
     """unittest for Mesh and Element get_all_connectivity methods. Indirect test add_element """
-
-    def setUp(self):
+    def setup_method(self, method):
         self.mesh = Mesh()
         self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
         self.mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)
@@ -34,7 +33,7 @@ class unittest_get_all_connectivity(TestCase):
         testA = np.sum(abs(result - solution))
         msg = "Wrong output: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
 
     def test_ElementMat_NodeMat_1tgl(self):
         """unittest with ElementDict and NodeMat objects, with input None"""
@@ -42,14 +41,14 @@ class unittest_get_all_connectivity(TestCase):
 
         testA = result is None
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(None)
-        self.assertTrue(testA, msg=msg)
+        assert testA, msg
 
     def test_ElementMat_NodeMat_1seg_stupid(self):
         """unittest with ElementDict and NodeMat objects, with only 1 segment"""
-        result = self.mesh.get_connectivity(
-            -99999
-        )  # We test what happened with stupid entry
+        result = self.mesh.get_connectivity(    
+            -99999    
+        )    # We test what happened with stupid entry
         # Check result
         testA = result is None
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(None)
-        self.assertTrue(testA, msg=msg)
+        assert testA, msg
