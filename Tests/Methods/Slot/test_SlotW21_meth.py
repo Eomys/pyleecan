@@ -66,7 +66,7 @@ slotW21_test.append(
 
 @pytest.mark.METHODS
 class Test_SlowW21_meth(object):
-    """unittest for SlotW21 methods"""
+    """pytest for SlotW21 methods"""
     @pytest.mark.parametrize("test_dict", slotW21_test) 
     def test_comp_surface(self,test_dict):
         """Check that the computation of the surface is correct

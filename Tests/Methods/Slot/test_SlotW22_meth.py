@@ -34,7 +34,7 @@ slotW22_test.append(
 
 @pytest.mark.METHODS
 class Test_SlotW22_meth(object):
-    """unittest for SlotW22 methods"""
+    """pytest for SlotW22 methods"""
     
     @pytest.mark.parametrize("test_dict", slotW22_test) 
     def test_comp_surface(self,test_dict):
