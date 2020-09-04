@@ -41,7 +41,7 @@ def comp_loss_norm(self, data_list):
         f_norm = abs(mag_dict["freqs"][:, newaxis] / F_REF)
         B_norm = (
             1 / 2 * mag_dict[symbol] / B_REF
-        )  # factor 1/2 to account for SciDataTool FFT
+        )  # factor 1/2 to account for SciDataTool FFT of double sided spectrum
 
         HY = Coeff[0] * f_norm * B_norm ** Coeff[1]
         ED = Coeff[2] * (f_norm * B_norm) ** Coeff[3]

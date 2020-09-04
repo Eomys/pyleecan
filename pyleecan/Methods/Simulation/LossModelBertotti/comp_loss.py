@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from numpy import array, nan, tile
+from numpy import array, nan, tile, newaxis
 from SciDataTool import DataTime, DataFreq, Data1D
 
 from ....Classes.SolutionData import SolutionData
 from ....Methods.Simulation.Input import InputError
 
+def _store_solution(meshsolution, field, label=""):
+    solution = SolutionData()
+    solution.field = field
+    solution.label = label
+    meshsolution.solution.append(solution)
 
-def _comp_loss_sum(meshsolution, grp, L1=1, rho=7650):
+def _comp_loss_sum(meshsolution, grp, L1=1, rho=7650, sym=1):
     """ 
     Compute losses sum
     """
@@ -17,9 +22,9 @@ def _comp_loss_sum(meshsolution, grp, L1=1, rho=7650):
     area = grp_sol.get_mesh().get_cell_area()
     loss_norm = grp_sol.get_field(label="LossSum")[0, :]
 
-    loss = area * loss_norm * L1 * rho
+    loss = area * loss_norm * L1 * rho * sym
 
-    mass = area.sum() * L1 * rho
+    mass = area.sum() * L1 * rho * sym
     print(f"{grp} mass = {mass} kg")
 
     return loss.sum()
@@ -45,60 +50,44 @@ def comp_loss(self, output, lam, typ):
     # compute needed model parameter from material data
     self.comp_coeff_Bertotti(lam.mat_type)
 
-    # comp. fft of elemental FEA results
-    print(type(output.mag.meshsolution).__name__)
-    print(type(output.mag.meshsolution.solution[0]).__name__)
-
-    # B_fft = output.mag.meshsolution.solution[0].field.time_to_freq()
-    # print("FFT of B calculated")
-
     # calculate principle axes and transform for exponentials other than 2
     # TODO
 
-    # apply model
-    # #TODO model equation should be a func that takes SciDataTool Data as input
+    # --- compute loss density ---
     field = output.mag.meshsolution.get_solution(label="B").field
 
-    field_list = []
+    components = []
     for comp in field.components.values():
-        field_list.append(comp)
+        components.append(comp)
 
     # TODO filter machine parts
-    Loss = self.comp_loss_norm(field_list)
-
-    # store losses density field
-    sol = SolutionData()
-    sol.field = Loss
-    sol.label = "LossDens"
-    output.mag.meshsolution.solution.append(sol)
+    LossDens = self.comp_loss_norm(components)
+    _store_solution(output.mag.meshsolution, LossDens, label="LossDens")
 
     # --- compute sum over freqs axes ---
-    axes_list = [axis.name for axis in sol.field.axes]
+    axes_list = [axis.name for axis in LossDens.axes]
     freqs_idx = [idx for idx, axis_name in enumerate(axes_list) if axis_name == "freqs"]
     if len(freqs_idx) > 1:
-        # TODO error
-        raise ("more than one freqs axis found")
+        raise Exception("more than one freqs axis found") # TODO improve error msg
     if len(freqs_idx) == 0:
-        # TODO error
-        raise ("no freqs axis found")
+        raise Exception("no freqs axis found")  # TODO improve error msg
 
-    loss_sum = sol.field.get_along(*axes_list)["LossDens"].sum(axis=freqs_idx[0])
+    loss_sum = LossDens.get_along(*axes_list)["LossDens"].sum(axis=freqs_idx[0])
 
-    time = Data1D(name="time", unit="", values=array([0, 1]))
-    axes = [axis for axis in sol.field.axes if axis.name not in ["time", "freqs"]]
+    time = Data1D(name="time", unit="", values=array([0, 1]), )
+    # time = Data1D(name="time", unit="", values=array([0]), ) # TODO squeeze issue
+    axes = [axis for axis in LossDens.axes if axis.name not in ["time", "freqs"]]
 
     loss_sum_ = DataTime(
         name="Losses sum",
         unit="W/kg",
         symbol="LossSum",
         axes=[time, *axes],
-        values=tile(loss_sum, (2, 1)),
+        values=tile(loss_sum, (2,1)), 
+        # values=loss_sum[newaxis,:], # TODO squeeze issue
     )
-    data = SolutionData()
-    data.field = loss_sum_
-    data.label = "LossSum"
-    output.mag.meshsolution.solution.append(data)
-
+    _store_solution(output.mag.meshsolution, loss_sum_, label="LossSum")
+    
     # compute FFT of induction magnitude
     field_list = [f for f in field.components.values()]
     Bmag_sq = None
@@ -120,19 +109,16 @@ def comp_loss(self, output, lam, typ):
     Bmag = DataFreq(
         name="Bfft", unit="T", symbol="Bfft", axes=axes, values=Bmag_sq ** 0.5,
     )
-    sol = SolutionData()
-    sol.field = Bmag
-    sol.label = "Bfft"
-    output.mag.meshsolution.solution.append(sol)
+    _store_solution(output.mag.meshsolution, Bmag, label="Bfft")
 
     # store results
+    sym = 1 if not output.simu.mag.is_symmetry_a else output.simu.mag.sym_a
     if typ == "Lamination":
         if lam.is_stator:
             L1 = output.simu.machine.stator.L1
             rho = output.simu.machine.stator.mat_type.struct.rho
             loss_sum = _comp_loss_sum(
-                output.mag.meshsolution, grp="stator", L1=L1, rho=rho
+                output.mag.meshsolution, grp="stator", L1=L1, rho=rho, sym=sym
             )
             output.loss.Plam_stator = array([loss_sum])
 
-    return Loss
