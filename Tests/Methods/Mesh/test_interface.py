@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
+import pytest
 from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.ElementMat import ElementMat
 import numpy as np
 
-
-class unittest_interface(TestCase):
+@pytest.mark.METHODS
+class Test_interface(object):
     """unittest for elements and nodes getter methods"""
-
-    def setUp(self):
+    def setup_method(self, method):
         self.mesh = Mesh()
         self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
         self.mesh.element["Segment2"] = ElementMat(nb_node_per_element=2)
@@ -42,14 +41,14 @@ class unittest_interface(TestCase):
         solution = np.array([[0, 2], [2, 4]])
         resultat = new_seg_mesh.element["Segment2"].connectivity
         testA = np.sum(abs(resultat - solution))
-        msg = (
-            "Wrong projection: returned "
-            + str(resultat)
-            + ", expected: "
-            + str(solution)
+        msg = (    
+            "Wrong projection: returned "    
+            + str(resultat)    
+            + ", expected: "    
+            + str(solution)    
         )
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
 
     def test_ElementMat_NodeMat_corner_ext(self):
         """unittest with ElementMat and NodeMat objects, extract interface from the external mesh point of view"""
@@ -75,7 +74,7 @@ class unittest_interface(TestCase):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
 
     def test_ElementMat_NodeMat_corner_int(self):
         """unittest with ElementMat and NodeMat objects, extract interface from the internal mesh point of view"""
@@ -101,7 +100,7 @@ class unittest_interface(TestCase):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
 
     def test_ElementMat_NodeMat_self(self):
         """unittest with ElementMat and NodeMat objects, extract interface on itself"""
@@ -125,4 +124,4 @@ class unittest_interface(TestCase):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg

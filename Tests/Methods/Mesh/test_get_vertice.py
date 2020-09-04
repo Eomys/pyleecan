@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
+import pytest
 from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
-
-class unittest_get_vertice(TestCase):
+@pytest.mark.METHODS
+class Test_get_vertice(object):
     """unittest for Mesh and Element get_all_connectivity methods"""
-
-    def setUp(self):
+    def setup_method(self, method):
         self.mesh = Mesh()
         self.mesh.element["Quad4"] = ElementMat(nb_node_per_element=4)
         self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
@@ -33,14 +32,14 @@ class unittest_get_vertice(TestCase):
         solution = 0
         result = self.mesh.get_vertice("Quad4")[0]
         testA = result.size
-        msg = (
-            "Wrong output: returned "
-            + str(result.size)
-            + ", expected: "
-            + str(solution)
+        msg = (    
+            "Wrong output: returned "    
+            + str(result.size)    
+            + ", expected: "    
+            + str(solution)    
         )
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, solution, msg=msg, delta=DELTA)
+        assert abs(testA-solution) < DELTA, msg
 
     def test_ElementMat_seg(self):
         """unittest with ElementMat object. Test for empty Mesh"""
@@ -48,14 +47,14 @@ class unittest_get_vertice(TestCase):
         solution = 4
         result = self.mesh.get_vertice("Segment2")[0]
         testA = result.size
-        msg = (
-            "Wrong output: returned "
-            + str(result.size)
-            + ", expected: "
-            + str(solution)
+        msg = (    
+            "Wrong output: returned "    
+            + str(result.size)    
+            + ", expected: "    
+            + str(solution)    
         )
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, solution, msg=msg, delta=DELTA)
+        assert abs(testA-solution) < DELTA, msg
 
     def test_ElementMat_tgl(self):
         """unittest with ElementMat object. Test for empty Mesh"""
@@ -63,11 +62,11 @@ class unittest_get_vertice(TestCase):
         solution = 18
         result = self.mesh.get_vertice("Triangle3")[0]
         testA = result.size
-        msg = (
-            "Wrong output: returned "
-            + str(result.size)
-            + ", expected: "
-            + str(solution)
+        msg = (    
+            "Wrong output: returned "    
+            + str(result.size)    
+            + ", expected: "    
+            + str(solution)    
         )
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, solution, msg=msg, delta=DELTA)
+        assert abs(testA-solution) < DELTA, msg

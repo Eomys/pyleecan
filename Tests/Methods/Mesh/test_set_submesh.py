@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
+import pytest
 from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
-
-class unittest_getnode2element(TestCase):
+@pytest.mark.METHODS
+class Test_set_submesh(object):
     """unittest to get elements containing specific node(s)"""
-
     def test_ElementMat_NodeMat(self):
         # Init 1
         # Init
@@ -34,7 +33,7 @@ class unittest_getnode2element(TestCase):
         testA = np.sum(abs(solution - results))
         msg = "Wrong result: returned " + str(results) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
 
         # Method test 2
         mesh_grp4 = mesh.set_submesh([3, 2])
@@ -44,4 +43,4 @@ class unittest_getnode2element(TestCase):
         testA = np.sum(abs(solution - results))
         msg = "Wrong result: returned " + str(results) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
