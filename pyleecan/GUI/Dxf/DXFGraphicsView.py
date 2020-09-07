@@ -35,7 +35,6 @@ symmetry_line = ezdxf.new().modelspace().add_line((0, 0), (1000, 0))
 
 class DXFGraphicsView(qw.QGraphicsView):
     mouse_moved = qc.pyqtSignal(qc.QPointF)
-    element_selected = qc.pyqtSignal(object, int)
     mouse_released = qc.pyqtSignal(qc.QPointF)
     surface_added = qc.pyqtSignal(dict)
 
@@ -86,8 +85,6 @@ class DXFGraphicsView(qw.QGraphicsView):
         self.pyleecan_geo = []
 
         # Connect signal
-        # self.element_selected.connect(self._on_element_selected)
-        # self.mouse_moved.connect(self._on_mouse_moved)
         self.mouse_released.connect(self._selection)
 
         self.setScene(qw.QGraphicsScene())
@@ -104,11 +101,10 @@ class DXFGraphicsView(qw.QGraphicsView):
         # Model Space
         self.modelspace = document.modelspace()
 
-        self.refresh_drawing()
-
         # Create pyleecan objects
         self.pyleecan_geo = dxf_to_pyleecan_list(self.modelspace)
         self.fit_to_scene()
+        self.refresh_drawing()
 
     def clear(self):
         pass
@@ -120,29 +116,8 @@ class DXFGraphicsView(qw.QGraphicsView):
         prop.color = "#007d00"
         # self.frontend.draw_entity(symmetry_line, prop)
 
-        ## https://stackoverflow.com/questions/55444588/drawing-of-infinite-line-in-qt
-        # direction = -45
-        # basePoint = qc.QPointF(200, 200)
+        ## TODO add the symetry line : https://stackoverflow.com/questions/55444588/drawing-of-infinite-line-in-qt
 
-        # maxLength = math.sqrt(self.scene().width() ** 2 * self.scene().height() ** 2)
-
-        # line1 = qc.QLineF(
-        #     basePoint, basePoint + qc.QPointF(1, 0)
-        # )  # Avoid an invalid line
-        # line2 = qc.QLineF(basePoint, basePoint + qc.QPointF(1, 0))
-
-        # # Find the first point outside the scene
-        # line1.setLength(maxLength / 2)
-        # line1.setAngle(direction)
-
-        # # Find the sceond point outside the scene
-        # line2.setLength(maxLength / 2)
-        # line2.setAngle(direction + 180)
-
-        # # Make a new line with the two end points
-        # line = qc.QLineF(line1.p2(), line2.p2())
-
-        # self.scene().addItem(qw.QGraphicsLineItem(line))
         self.frontend.draw_layout(self.modelspace)
 
     def begin_loading(self):
@@ -163,10 +138,32 @@ class DXFGraphicsView(qw.QGraphicsView):
         scene.setSceneRect(r.adjusted(-bx, -by, bx, by))
 
     def fit_to_scene(self):
+        x_min = float("inf")
+        y_min = float("inf")
+        x_max = float("-inf")
+        y_max = float("-inf")
+
+        for obj in self.pyleecan_geo:
+            x_coord = [obj.get_begin().real, obj.get_end().real]
+            y_coord = [obj.get_begin().imag, obj.get_end().imag]
+            if x_min > min(x_coord):
+                x_min = min(x_coord)
+            if y_min > min(y_coord):
+                y_min = min(y_coord)
+            if x_max < max(x_coord):
+                x_max = max(x_coord)
+            if y_max < max(y_coord):
+                y_max = max(y_coord)
+
+        width = x_max - x_min
+        height = y_max - y_min
+
+        self.scene().setSceneRect(
+            x_min - 0.1 * width, y_min - 0.1 * height, 1.2 * width, 1.2 * height
+        )
         self.fitInView(self.sceneRect(), qc.Qt.KeepAspectRatio)
         self._default_zoom = _get_x_scale(self.transform())
         self._zoom = 1
-        # self.centerOn(0, 0)
 
     def highlight_surface(self, surf_name):
         """Highlight lines of an existing surface"""
@@ -211,35 +208,9 @@ class DXFGraphicsView(qw.QGraphicsView):
         self.scale(factor, factor)
         self._zoom *= factor
 
-    # def drawForeground(self, painter: qg.QPainter, rect: qc.QRectF) -> None:
-    #     if self._is_loading and self._loading_overlay:
-    #         painter.save()
-    #         # painter.fillRect(rect, qg.QColor("#aa000000"))
-    #         painter.setWorldMatrixEnabled(False)
-    #         r = self.viewport().rect()
-    #         painter.setBrush(qc.Qt.NoBrush)
-    #         painter.setPen(qc.Qt.white)
-    #         painter.drawText(r.center(), "Loading...")
-    #         painter.restore()
-
-    # def mouseMoveEvent(self, event: qg.QMouseEvent) -> None:
-    #     super().mouseMoveEvent(event)
-    #     pos = self.mapToScene(event.pos())
-    #     self.mouse_moved.emit(pos)
-    #     selected_items = self.scene().items(pos)
-    #     if selected_items != self._selected_items:
-    #         self._selected_items = selected_items
-    #         self._selected_index = 0 if self._selected_items else None
-    #         self._emit_selected()
-
     def mouseReleaseEvent(self, event: qg.QMouseEvent) -> None:
         super().mouseReleaseEvent(event)
         pos = self.mapToScene(event.pos())
-        # if event.button() == qc.Qt.LeftButton and self._selected_items:
-        #     self._selected_index = (self._selected_index + 1) % len(
-        #         self._selected_items
-        #     )
-        #     self._emit_selected()
         if event.button() == qc.Qt.RightButton:
             self.remove_highlight_surface()
             self.mouse_released.emit(pos)
@@ -350,10 +321,6 @@ class DXFGraphicsView(qw.QGraphicsView):
 
         self.surface_added.emit(new_element)
         return surface
-
-    # def _emit_selected(self):
-    #     self.element_selected.emit(self._selected_items, self._selected_index)
-    #     self.scene().invalidate(self.sceneRect(), qw.QGraphicsScene.ForegroundLayer)
 
     @qc.pyqtSlot(qc.QPointF)
     def _selection(self, mouse_pos: qc.QPointF):
