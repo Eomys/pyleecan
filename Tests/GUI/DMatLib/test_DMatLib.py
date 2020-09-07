@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from unittest import TestCase
 
 from PyQt5 import QtWidgets
 

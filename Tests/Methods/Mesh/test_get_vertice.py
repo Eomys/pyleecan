@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import pytest
-from unittest import TestCase
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.PointMat import PointMat

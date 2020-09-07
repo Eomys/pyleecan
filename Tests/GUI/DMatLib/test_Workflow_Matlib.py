@@ -4,7 +4,6 @@ import sys
 from os import remove, mkdir
 from os.path import abspath, join, isdir
 from shutil import copyfile, rmtree
-from unittest import TestCase
 
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
