@@ -302,8 +302,14 @@ class Arc3(Arc):
 
         # Get the properties inherited from Arc
         Arc3_dict = super(Arc3, self).as_dict()
-        Arc3_dict["begin"] = self.begin
-        Arc3_dict["end"] = self.end
+        if self.begin is None:
+            Arc3_dict["begin"] = None
+        else:
+            Arc3_dict["begin"] = str(self.begin)
+        if self.end is None:
+            Arc3_dict["end"] = None
+        else:
+            Arc3_dict["end"] = str(self.end)
         Arc3_dict["is_trigo_direction"] = self.is_trigo_direction
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
@@ -325,6 +331,8 @@ class Arc3(Arc):
 
     def _set_begin(self, value):
         """setter of begin"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("begin", value, "complex")
         self._begin = value
 
@@ -343,6 +351,8 @@ class Arc3(Arc):
 
     def _set_end(self, value):
         """setter of end"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("end", value, "complex")
         self._end = value
 

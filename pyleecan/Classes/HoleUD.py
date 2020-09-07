@@ -36,6 +36,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .Surface import Surface
+from .Magnet import Magnet
 from .Material import Material
 
 
@@ -104,7 +105,7 @@ class HoleUD(HoleMag):
     def __init__(
         self,
         surf_list=list(),
-        magnet_dict={},
+        magnet_dict=dict(),
         Zh=36,
         mat_void=-1,
         init_dict=None,
@@ -180,7 +181,40 @@ class HoleUD(HoleMag):
             self.surf_list = list()
         else:
             self.surf_list = surf_list
-        self.magnet_dict = magnet_dict
+        # magnet_dict can be None or a dict of Magnet object
+        self.magnet_dict = dict()
+        if type(magnet_dict) is dict:
+            for key, obj in magnet_dict.items():
+                if isinstance(obj, dict):
+                    # Check that the type is correct (including daughter)
+                    class_name = obj.get("__class__")
+                    if class_name not in [
+                        "Magnet",
+                        "MagnetFlat",
+                        "MagnetPolar",
+                        "MagnetType10",
+                        "MagnetType11",
+                        "MagnetType12",
+                        "MagnetType13",
+                        "MagnetType14",
+                    ]:
+                        raise InitUnKnowClassError(
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for magnet_dict"
+                        )
+                    # Dynamic import to call the correct constructor
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
+                    self.magnet_dict[key] = class_obj(init_dict=obj)
+                else:
+                    self.magnet_dict[key] = obj
+        elif magnet_dict is None:
+            self.magnet_dict = dict()
+        else:
+            self.magnet_dict = magnet_dict  # Should raise an error
         # Call HoleMag init
         super(HoleUD, self).__init__(Zh=Zh, mat_void=mat_void)
         # The class is frozen (in HoleMag init), for now it's impossible to
@@ -199,7 +233,14 @@ class HoleUD(HoleMag):
                 self.surf_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
             )
             HoleUD_str += "surf_list[" + str(ii) + "] =" + tmp + linesep + linesep
-        HoleUD_str += "magnet_dict = " + str(self.magnet_dict) + linesep
+        if len(self.magnet_dict) == 0:
+            HoleUD_str += "magnet_dict = dict()" + linesep
+        for key, obj in self.magnet_dict.items():
+            tmp = (
+                self.magnet_dict[key].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            HoleUD_str += "magnet_dict[" + key + "] =" + tmp + linesep + linesep
         return HoleUD_str
 
     def __eq__(self, other):
@@ -226,7 +267,9 @@ class HoleUD(HoleMag):
         HoleUD_dict["surf_list"] = list()
         for obj in self.surf_list:
             HoleUD_dict["surf_list"].append(obj.as_dict())
-        HoleUD_dict["magnet_dict"] = self.magnet_dict
+        HoleUD_dict["magnet_dict"] = dict()
+        for key, obj in self.magnet_dict.items():
+            HoleUD_dict["magnet_dict"][key] = obj.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         HoleUD_dict["__class__"] = "HoleUD"
@@ -237,7 +280,8 @@ class HoleUD(HoleMag):
 
         for obj in self.surf_list:
             obj._set_None()
-        self.magnet_dict = None
+        for key, obj in self.magnet_dict.items():
+            obj._set_None()
         # Set to None the properties inherited from HoleMag
         super(HoleUD, self)._set_None()
 
@@ -268,11 +312,14 @@ class HoleUD(HoleMag):
 
     def _get_magnet_dict(self):
         """getter of magnet_dict"""
+        for key, obj in self._magnet_dict.items():
+            if obj is not None:
+                obj.parent = self
         return self._magnet_dict
 
     def _set_magnet_dict(self, value):
         """setter of magnet_dict"""
-        check_var("magnet_dict", value, "dict")
+        check_var("magnet_dict", value, "{Magnet}")
         self._magnet_dict = value
 
     magnet_dict = property(
@@ -280,6 +327,6 @@ class HoleUD(HoleMag):
         fset=_set_magnet_dict,
         doc=u"""dictionnary with the magnet for the Hole (None to remove magnet, key should be magnet_X)
 
-        :Type: dict
+        :Type: {Magnet}
         """,
     )

@@ -302,8 +302,14 @@ class Arc2(Arc):
 
         # Get the properties inherited from Arc
         Arc2_dict = super(Arc2, self).as_dict()
-        Arc2_dict["begin"] = self.begin
-        Arc2_dict["center"] = self.center
+        if self.begin is None:
+            Arc2_dict["begin"] = None
+        else:
+            Arc2_dict["begin"] = str(self.begin)
+        if self.center is None:
+            Arc2_dict["center"] = None
+        else:
+            Arc2_dict["center"] = str(self.center)
         Arc2_dict["angle"] = self.angle
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
@@ -325,6 +331,8 @@ class Arc2(Arc):
 
     def _set_begin(self, value):
         """setter of begin"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("begin", value, "complex")
         self._begin = value
 
@@ -343,6 +351,8 @@ class Arc2(Arc):
 
     def _set_center(self, value):
         """setter of center"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("center", value, "complex")
         self._center = value
 

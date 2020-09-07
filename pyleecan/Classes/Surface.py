@@ -157,7 +157,10 @@ class Surface(FrozenClass):
         """
 
         Surface_dict = dict()
-        Surface_dict["point_ref"] = self.point_ref
+        if self.point_ref is None:
+            Surface_dict["point_ref"] = None
+        else:
+            Surface_dict["point_ref"] = str(self.point_ref)
         Surface_dict["label"] = self.label
         # The class name is added to the dict fordeserialisation purpose
         Surface_dict["__class__"] = "Surface"
@@ -175,6 +178,8 @@ class Surface(FrozenClass):
 
     def _set_point_ref(self, value):
         """setter of point_ref"""
+        if isinstance(value, str):
+            value = complex(value)
         check_var("point_ref", value, "complex")
         self._point_ref = value
 

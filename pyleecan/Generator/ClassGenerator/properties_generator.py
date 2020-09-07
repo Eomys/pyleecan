@@ -78,6 +78,11 @@ def generate_properties(gen_dict, class_dict):
                 prop_str += TAB3 + "value = ImportMatrixVal(value=value)\n"
                 prop_str += TAB2 + "elif isinstance(value,list):\n"
                 prop_str += TAB3 + "value = ImportMatrixVal(value=array(value))\n"
+            elif (
+                prop["type"] == "complex"
+            ):  # Allow to set a complex as a string to serialize in json
+                prop_str += TAB2 + "if isinstance(value,str):\n"
+                prop_str += TAB3 + "value = complex(value)\n"
 
             # Add check_var("var_name",value, "var_type", min=var_min, max=var_max)
             if prop["type"] == "function":
