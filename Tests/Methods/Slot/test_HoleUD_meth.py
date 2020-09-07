@@ -28,34 +28,35 @@ if isfile(mach_path):
     IPMSM_B = IPMSM_A.copy()
     IPMSM_B.rotor.hole[0] = HUD
 
+@pytest.mark.METHODS
+class Test_HoleUD_meth(object):
+    def test_comp_magnet_surface(self):
+        """Check that the computation of the magnet surface"""
+        exp = IPMSM_A.rotor.hole[0].comp_surface_magnets()
+        result = IPMSM_B.rotor.hole[0].comp_surface_magnets()
 
-def test_comp_magnet_surface():
-    """Check that the computation of the magnet surface"""
-    exp = IPMSM_A.rotor.hole[0].comp_surface_magnets()
-    result = IPMSM_B.rotor.hole[0].comp_surface_magnets()
-
-    assert exp == pytest.approx(result, rel=0.01)
-
-
-def test_comp_surface():
-    """Check that the computation of the slot surface is correct"""
-    exp = IPMSM_A.rotor.hole[0].comp_surface()
-    result = IPMSM_B.rotor.hole[0].comp_surface()
-
-    assert exp == pytest.approx(result, rel=0.01)
+        assert exp == pytest.approx(result, rel=0.01)
 
 
-def test_build_geometry_no_mag():
-    """check that curve_list is correct (Remove magnet)"""
-    assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_0"] is not None
-    assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_1"] is not None
-    IPMSM_B.rotor.hole[0].remove_magnet()
-    assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_0"] is None
-    assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_1"] is None
+    def test_comp_surface(self):
+        """Check that the computation of the slot surface is correct"""
+        exp = IPMSM_A.rotor.hole[0].comp_surface()
+        result = IPMSM_B.rotor.hole[0].comp_surface()
 
-    surf_list = IPMSM_B.rotor.hole[0].build_geometry()
+        assert exp == pytest.approx(result, rel=0.01)
 
-    assert len(surf_list) == 5
-    for ii, surf in enumerate(surf_list):
-        assert type(surf) is SurfLine
-        assert surf.label == "Hole_Rotor_R0_T" + str(ii) + "_S0"
+
+    def test_build_geometry_no_mag(self):
+        """check that curve_list is correct (Remove magnet)"""
+        assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_0"] is not None
+        assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_1"] is not None
+        IPMSM_B.rotor.hole[0].remove_magnet()
+        assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_0"] is None
+        assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_1"] is None
+
+        surf_list = IPMSM_B.rotor.hole[0].build_geometry()
+
+        assert len(surf_list) == 5
+        for ii, surf in enumerate(surf_list):
+            assert type(surf) is SurfLine
+            assert surf.label == "Hole_Rotor_R0_T" + str(ii) + "_S0"

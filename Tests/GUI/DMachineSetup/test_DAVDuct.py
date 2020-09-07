@@ -81,10 +81,10 @@ class TestDAVDuct(object):
         self.widget.tab_vent.widget(0).w_vent.lf_D0.editingFinished.emit()
         self.widget.tab_vent.widget(0).w_vent.lf_Alpha0.editingFinished.emit()
         # Check changes
-        self.assertEqual(self.widget.lam.axial_vent[0].Zh, 10)
-        self.assertEqual(self.widget.lam.axial_vent[0].H0, 11e-3)
-        self.assertEqual(self.widget.lam.axial_vent[0].D0, 41e-3)
-        self.assertEqual(self.widget.lam.axial_vent[0].Alpha0, 0.2)
+        assert self.widget.lam.axial_vent[0].Zh == 10
+        assert self.widget.lam.axial_vent[0].H0 == 11e-3
+        assert self.widget.lam.axial_vent[0].D0 == 41e-3
+        assert self.widget.lam.axial_vent[0].Alpha0 == 0.2
 
     def test_init_trap(self):
         """Check that the Widget initialise for polar ventilations"""
@@ -123,12 +123,12 @@ class TestDAVDuct(object):
         self.widget.tab_vent.widget(0).w_vent.lf_W2.editingFinished.emit()
         self.widget.tab_vent.widget(0).w_vent.lf_Alpha0.editingFinished.emit()
         # Check changes
-        self.assertEqual(self.widget.lam.axial_vent[0].Zh, 12)
-        self.assertEqual(self.widget.lam.axial_vent[0].H0, 12e-3)
-        self.assertEqual(self.widget.lam.axial_vent[0].D0, 42e-3)
-        self.assertEqual(self.widget.lam.axial_vent[0].W1, 45e-3)
-        self.assertEqual(self.widget.lam.axial_vent[0].W2, 55e-3)
-        self.assertEqual(self.widget.lam.axial_vent[0].Alpha0, 0.3)
+        assert self.widget.lam.axial_vent[0].Zh == 12
+        assert self.widget.lam.axial_vent[0].H0 == 12e-3
+        assert self.widget.lam.axial_vent[0].D0 == 42e-3
+        assert self.widget.lam.axial_vent[0].W1 == 45e-3
+        assert self.widget.lam.axial_vent[0].W2 == 55e-3
+        assert self.widget.lam.axial_vent[0].Alpha0 == 0.3
 
     def test_init_polar(self):
         """Check that the Widget initialise for polar ventilations"""
@@ -184,11 +184,11 @@ class TestDAVDuct(object):
         self.widget.tab_vent.widget(1).w_vent.lf_W1.editingFinished.emit()
         self.widget.tab_vent.widget(1).w_vent.lf_Alpha0.editingFinished.emit()
         # Check changes
-        self.assertEqual(self.widget.lam.axial_vent[1].Zh, 9)
-        self.assertEqual(self.widget.lam.axial_vent[1].H0, 33e-3)
-        self.assertEqual(self.widget.lam.axial_vent[1].D0, 44e-3)
-        self.assertEqual(self.widget.lam.axial_vent[1].W1, 55e-3)
-        self.assertEqual(self.widget.lam.axial_vent[1].Alpha0, 0.4)
+        assert self.widget.lam.axial_vent[1].Zh == 9
+        assert self.widget.lam.axial_vent[1].H0 == 33e-3
+        assert self.widget.lam.axial_vent[1].D0 == 44e-3
+        assert self.widget.lam.axial_vent[1].W1 == 55e-3
+        assert self.widget.lam.axial_vent[1].Alpha0 == 0.4
 
     def test_init_all_type(self):
         """Check that you can combine several kind of ventilations"""

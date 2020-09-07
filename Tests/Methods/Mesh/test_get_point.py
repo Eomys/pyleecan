@@ -8,11 +8,12 @@ import numpy as np
 
 
 @pytest.mark.MeshSol
-class unittest_get_point(TestCase):
+@pytest.mark.METHODS
+class Test_get_point(object):
     """unittest for points getter methods"""
 
     @classmethod
-    def setUp(self):
+    def setup_method(self, method):
         self.mesh = MeshMat()
         self.mesh.point = PointMat()
         self.mesh.point.add_point(np.array([0, 0]))
@@ -32,4 +33,4 @@ class unittest_get_point(TestCase):
             "Wrong projection: returned " + str(points) + ", expected: " + str(solution)
         )
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg

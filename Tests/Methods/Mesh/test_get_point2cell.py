@@ -8,11 +8,11 @@ import numpy as np
 
 
 @pytest.mark.MeshSol
-class unittest_get_point2cell(TestCase):
+@pytest.mark.METHODS
+class Test_get_point2cell(object):
     """unittest to get cell containing specific point"""
 
-    @classmethod
-    def setUp(self):
+    def setup_method(self, method):
         self.mesh = MeshMat()
         self.mesh.cell["triangle"] = CellMat(nb_pt_per_cell=3)
         self.mesh.point = PointMat()
@@ -34,7 +34,7 @@ class unittest_get_point2cell(TestCase):
         solution = np.array([0, 1])
         testA = np.sum(abs(solution - ind_elem))
         msg = "Wrong output: returned " + str(ind_elem) + ", expected: " + str(solution)
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=self.DELTA)
+        assert abs(testA-0) < self.DELTA, msg
 
     def test_MeshMat_fakepoint(self):
         """unittest for one non-existing point """
@@ -43,9 +43,9 @@ class unittest_get_point2cell(TestCase):
         testA = np.sum(abs(solution - ind_elem))
         msg = "Wrong output: returned " + str(ind_elem) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
 
         elem_tag = self.mesh.cell["triangle"].get_point2cell(None)
         testA = np.sum(abs(solution - elem_tag))
         msg = "Wrong output: returned " + str(ind_elem) + ", expected: " + str(solution)
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=self.DELTA)
+        assert abs(testA-0) < self.DELTA, msg
