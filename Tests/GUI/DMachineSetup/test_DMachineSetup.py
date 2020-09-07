@@ -64,10 +64,11 @@ import pytest
 
 matlib_path = join(TEST_DATA_DIR, "Material")
 
+
 @pytest.mark.GUI
 class TestDMachineSetup(object):
     """Test that the widget DMachineSetup behave like it should"""
-    
+
     def setup_method(self, method):
         """Run at the begining of every test to setup the gui"""
         # MatLib widget
@@ -89,34 +90,32 @@ class TestDMachineSetup(object):
         cls.app.quit()
 
     @pytest.mark.parametrize("test_dict", load_test)
-    def test_load(self,test_dict):
-        """Check that you can load a machine
-            """
+    def test_load(self, test_dict):
+        """Check that you can load a machine"""
 
-        return_value = (    
-            join(join(TEST_DATA_DIR, "Load_GUI"), test_dict["name"] + ".json"),    
-            "Json (*.json)",    
+        return_value = (
+            join(join(TEST_DATA_DIR, "Load_GUI"), test_dict["name"] + ".json"),
+            "Json (*.json)",
         )
-        with mock.patch(    
-            "PyQt5.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value    
+        with mock.patch(
+            "PyQt5.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
             self.widget.b_load.clicked.emit(True)
         self.widget.nav_step.setCurrentRow(0)
         # To remember to update when adding a new machine type
-        assert self.widget.w_step.c_type.count()==8
+        assert self.widget.w_step.c_type.count() == 8
         # Check load MachineType
-        assert type(self.widget.w_step)==SMachineType
-        assert self.widget.w_step.c_type.currentIndex()==test_dict["index"]
-        assert self.widget.w_step.c_type.currentText()==test_dict["type"]
-        assert self.widget.w_step.si_p.value()==test_dict["p"]
-        assert self.widget.w_step.le_name.text()==test_dict["name"]
+        assert type(self.widget.w_step) == SMachineType
+        assert self.widget.w_step.c_type.currentIndex() == test_dict["index"]
+        assert self.widget.w_step.c_type.currentText() == test_dict["type"]
+        assert self.widget.w_step.si_p.value() == test_dict["p"]
+        assert self.widget.w_step.le_name.text() == test_dict["name"]
         # Check that the nav_step is correct
-        assert self.widget.nav_step.count()==test_dict["count"]
+        assert self.widget.nav_step.count() == test_dict["count"]
 
     def test_set_save_machine_type(self):
-        """Check that the Widget allow to change the machine type and save
-            """
+        """Check that the Widget allow to change the machine type and save"""
         # Check that all the machine type are available
         assert self.widget.w_step.c_type.count() == 8
         # DFIM
@@ -159,9 +158,9 @@ class TestDMachineSetup(object):
         assert self.widget.w_step.c_type.currentText() == "SCIM"
         assert type(self.widget.machine) == MachineSCIM
 
+
 def save_function(widget, file_name):
-    """Function to save a machine from the GUI
-    """
+    """Function to save a machine from the GUI"""
     file_path = join(save_path, file_name + ".json")
 
     # Check that the file didn't already exist

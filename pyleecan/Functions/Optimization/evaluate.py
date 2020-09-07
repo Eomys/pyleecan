@@ -14,14 +14,14 @@ from datetime import datetime
 
 def evaluate(solver, indiv):
     """Evaluate the individual according to the solver method
-    
+
     Parameters
     ----------
     solver : Solver
         optimization solver
-    indiv : individual 
+    indiv : individual
         individual to evaluate
-    
+
     Returns
     -------
     evaluation_failure : bool
@@ -42,14 +42,37 @@ def evaluate(solver, indiv):
         else:
             solver.problem.eval_func(indiv.output)
 
-        # Sort the obj_func
-        obj_func_list = list(solver.problem.obj_func.keys())
-        obj_func_list.sort()
-
-        # Add the fitness values
+        # Add the fitness values, handle exception for each fitness
         fitness = []
-        for of in obj_func_list:
-            fitness.append(float(solver.problem.obj_func[of].func(indiv.output)))
+        for obj_func in solver.problem.obj_func:
+            try:
+                fitness.append(float(obj_func.keeper(indiv.output)))
+            # Raise KeyboardInterrupt to stop optimization
+            except KeyboardInterrupt:
+                raise KeyboardInterrupt
+
+            # Except error and try to compute the error_keeper
+            except Exception as err:
+                logger.warning(
+                    "Objectif computation " + obj_func.name + " failed:" + err
+                )
+                if obj_func.error_keeper is None:  # Set fitness value as infinity
+                    fitness.append(float("inf"))
+                else:
+                    try:
+                        fitness.append(float(obj_func.error_keeper(indiv.output)))
+                    # Raise KeyboardInterrupt to stop optimization
+                    except KeyboardInterrupt:
+                        raise KeyboardInterrupt
+                    # Set the fitness value as infinity
+                    except Exception as err:
+                        logger.warning(
+                            "Objectif error computation "
+                            + obj_func.name
+                            + " failed:"
+                            + err
+                        )
+                        fitness.append(float("inf"))
 
         indiv.fitness.values = fitness
         indiv.is_simu_valid = True
@@ -72,12 +95,8 @@ def evaluate(solver, indiv):
         traceback.print_exc(file=tb)
         logger.warning(tb.getvalue())
 
-        # Sort the obj_func
-        obj_func_list = list(solver.problem.obj_func.keys())
-        obj_func_list.sort()
-
         # Set fitness as inf
-        indiv.fitness.values = [float("inf") for _ in obj_func_list]
+        indiv.fitness.values = [float("inf") for _ in solver.problem.obj_func]
         indiv.is_simu_valid = False
 
         # Reset standard output and error

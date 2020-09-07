@@ -16,6 +16,7 @@ from pyleecan.Classes.Material import Material
 
 import pytest
 
+
 @pytest.mark.GUI
 class TestPHoleM50(object):
     """Test that the widget PHoleM50 behave like it should"""
@@ -63,7 +64,7 @@ class TestPHoleM50(object):
 
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
-        
+
         assert self.widget.lf_H0.value() == 0.10
         assert self.widget.lf_H1.value() == 0.11
         assert self.widget.lf_H2.value() == 0.12
@@ -81,18 +82,18 @@ class TestPHoleM50(object):
         assert not self.widget.w_mat_2.isHidden()
         assert self.widget.w_mat_2.c_mat_type.currentText() == "Magnet2"
         assert self.widget.w_mat_2.c_mat_type.currentIndex() == 1
-        
-        self.test_obj.hole[0] = HoleM50(    
-            H0=0.20,    
-            H1=0.21,    
-            H2=0.22,    
-            W0=0.23,    
-            W1=0.24,    
-            W2=0.25,    
-            H3=0.26,   
-            W3=0.27,    
-            H4=0.28,    
-            W4=0.29,    
+
+        self.test_obj.hole[0] = HoleM50(
+            H0=0.20,
+            H1=0.21,
+            H2=0.22,
+            W0=0.23,
+            W1=0.24,
+            W2=0.25,
+            H3=0.26,
+            W3=0.27,
+            H4=0.28,
+            W4=0.29,
         )
         self.widget = PHoleM50(self.test_obj.hole[0], self.matlib)
         assert self.widget.lf_H0.value() == 0.20
@@ -121,8 +122,8 @@ class TestPHoleM50(object):
         # Clear the field before writing the new value
         self.widget.lf_W1.clear()
         QTest.keyClicks(self.widget.lf_W1, "0.32")
-        self.widget.lf_W1.editingFinished.emit() # To trigger the slot
-        
+        self.widget.lf_W1.editingFinished.emit()  # To trigger the slot
+
         assert self.widget.hole.W1 == 0.32
         assert self.test_obj.hole[0].W1 == 0.32
 
@@ -130,7 +131,7 @@ class TestPHoleM50(object):
         """Check that the Widget allow to update W2"""
         self.widget.lf_W2.clear()
         QTest.keyClicks(self.widget.lf_W2, "0.33")
-        self.widget.lf_W2.editingFinished.emit() # To trigger the slot
+        self.widget.lf_W2.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.hole.W2 == 0.33
         assert self.test_obj.hole[0].W2 == 0.33
@@ -139,7 +140,7 @@ class TestPHoleM50(object):
         """Check that the Widget allow to update W3"""
         self.widget.lf_W3.clear()
         QTest.keyClicks(self.widget.lf_W3, "0.323")
-        self.widget.lf_W3.editingFinished.emit() # To trigger the slot
+        self.widget.lf_W3.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.hole.W3 == 0.323
         assert self.test_obj.hole[0].W3 == 0.323
@@ -148,7 +149,7 @@ class TestPHoleM50(object):
         """Check that the Widget allow to update W4"""
         self.widget.lf_W4.clear()
         QTest.keyClicks(self.widget.lf_W4, "0.334")
-        self.widget.lf_W4.editingFinished.emit() # To trigger the slot
+        self.widget.lf_W4.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.hole.W4 == 0.334
         assert self.test_obj.hole[0].W4 == 0.334
@@ -157,7 +158,7 @@ class TestPHoleM50(object):
         """Check that the Widget allow to update H0"""
         self.widget.lf_H0.clear()
         QTest.keyClicks(self.widget.lf_H0, "0.34")
-        self.widget.lf_H0.editingFinished.emit() # To trigger the slot
+        self.widget.lf_H0.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.hole.H0 == 0.34
         assert self.test_obj.hole[0].H0 == 0.34
@@ -175,7 +176,7 @@ class TestPHoleM50(object):
         """Check that the Widget allow to update H2"""
         self.widget.lf_H2.clear()
         QTest.keyClicks(self.widget.lf_H2, "0.36")
-        self.widget.lf_H2.editingFinished.emit() # To trigger the slot
+        self.widget.lf_H2.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.hole.H2 == 0.36
         assert self.test_obj.hole[0].H2 == 0.36
@@ -184,7 +185,7 @@ class TestPHoleM50(object):
         """Check that the Widget allow to update H3"""
         self.widget.lf_H3.clear()
         QTest.keyClicks(self.widget.lf_H3, "0.363")
-        self.widget.lf_H3.editingFinished.emit() # To trigger the slot
+        self.widget.lf_H3.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.hole.H3 == 0.363
         assert self.test_obj.hole[0].H3 == 0.363
@@ -194,7 +195,7 @@ class TestPHoleM50(object):
         self.widget.lf_H4.clear()
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_H4, str(value))
-        self.widget.lf_H4.editingFinished.emit() # To trigger the slot
+        self.widget.lf_H4.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.hole.H4 == value
         assert self.test_obj.hole[0].H4 == value

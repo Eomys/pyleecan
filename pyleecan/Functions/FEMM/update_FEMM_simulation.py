@@ -12,8 +12,8 @@ def update_FEMM_simulation(
 ):
     """Update the simulation by changing the rotor position and
     updating the currents
-    
-    
+
+
     Parameters
     ----------
     output :
@@ -33,7 +33,7 @@ def update_FEMM_simulation(
                 set_FEMM_circuit_prop(
                     circuits,
                     label,
-                    output.elec.Is,
+                    output.elec.get_Is(),
                     is_mmfs,
                     output.simu.machine.stator.winding.Npcpp,
                     j_t0,
@@ -51,7 +51,7 @@ def update_FEMM_simulation(
         for mat in materials:
             if "Js" in mat:  # Stator winding
                 Jcus = comp_FEMM_Jcus(
-                    output.simu.machine.stator, mat, output.elec.Is, j_t0, is_mmfs
+                    output.simu.machine.stator, mat, output.elec.get_Is(), j_t0, is_mmfs
                 )
                 materials = set_FEMM_wind_material(materials, mat, Jcus)
             elif "Jr" in mat:  # Rotor winding

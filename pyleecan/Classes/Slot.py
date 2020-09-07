@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/Slot.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/Slot.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/Slot
 """
 
 from os import linesep
@@ -208,8 +209,7 @@ class Slot(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -268,8 +268,7 @@ class Slot(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         Slot_dict = dict()
         Slot_dict["Zs"] = self.Zs
@@ -291,6 +290,13 @@ class Slot(FrozenClass):
         check_var("Zs", value, "int", Vmin=0, Vmax=1000)
         self._Zs = value
 
-    # slot number
-    # Type : int, min = 0, max = 1000
-    Zs = property(fget=_get_Zs, fset=_set_Zs, doc=u"""slot number""")
+    Zs = property(
+        fget=_get_Zs,
+        fset=_set_Zs,
+        doc=u"""slot number
+
+        :Type: int
+        :min: 0
+        :max: 1000
+        """,
+    )

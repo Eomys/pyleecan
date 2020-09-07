@@ -72,36 +72,36 @@ class TestSWindParam(object):
         self.widget_1.si_Npcpp.clear()
         value = int(uniform(5, 100))
         QTest.keyClicks(self.widget_1.si_Npcpp, str(value))
-        self.widget_1.si_Npcpp.editingFinished.emit()    # To trigger the slot
+        self.widget_1.si_Npcpp.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.stator.winding.Npcpp == value
 
     def test_set_Npcp2(self):
         """Check that the Widget allow to update Npcp2"""
         # Clear the field before writing the new value
-        self.widget_2.si_Npcpp.clear()    
+        self.widget_2.si_Npcpp.clear()
         value = int(uniform(5, 100))
         QTest.keyClicks(self.widget_2.si_Npcpp, str(value))
-        self.widget_2.si_Npcpp.editingFinished.emit()    # To trigger the slot
+        self.widget_2.si_Npcpp.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.rotor.winding.Npcpp == value
 
     def test_set_Ntcoil1(self):
         """Check that the Widget allow to update Ntcoil1"""
         # Clear the field before writing the new value
-        self.widget_1.si_Ntcoil.clear()    
+        self.widget_1.si_Ntcoil.clear()
         value = int(uniform(5, 100))
         QTest.keyClicks(self.widget_1.si_Ntcoil, str(value))
-        self.widget_1.si_Ntcoil.editingFinished.emit()    # To trigger the slot
+        self.widget_1.si_Ntcoil.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.stator.winding.Ntcoil == value
 
     def test_set_Ntcoil2(self):
         """Check that the Widget allow to update Ntcoil2"""
         # Clear the field before writing the new value
-        self.widget_2.si_Ntcoil.clear()    
+        self.widget_2.si_Ntcoil.clear()
         value = int(uniform(5, 100))
         QTest.keyClicks(self.widget_2.si_Ntcoil, str(value))
-        self.widget_2.si_Ntcoil.editingFinished.emit()    # To trigger the slot
+        self.widget_2.si_Ntcoil.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.rotor.winding.Ntcoil == value

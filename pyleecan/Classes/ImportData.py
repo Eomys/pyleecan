@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Import/ImportData.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Import/ImportData.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Import/ImportData
 """
 
 from os import linesep
@@ -41,8 +42,7 @@ class ImportData(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -221,8 +221,7 @@ class ImportData(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         ImportData_dict = dict()
         ImportData_dict["axes"] = list()
@@ -270,9 +269,14 @@ class ImportData(FrozenClass):
             if obj is not None:
                 obj.parent = self
 
-    # List of axes of the data
-    # Type : [ImportData]
-    axes = property(fget=_get_axes, fset=_set_axes, doc=u"""List of axes of the data""")
+    axes = property(
+        fget=_get_axes,
+        fset=_set_axes,
+        doc=u"""List of axes of the data
+
+        :Type: [ImportData]
+        """,
+    )
 
     def _get_field(self):
         """getter of field"""
@@ -286,9 +290,14 @@ class ImportData(FrozenClass):
         if self._field is not None:
             self._field.parent = self
 
-    # Field (Import object)
-    # Type : Import
-    field = property(fget=_get_field, fset=_set_field, doc=u"""Field (Import object)""")
+    field = property(
+        fget=_get_field,
+        fset=_set_field,
+        doc=u"""Field (Import object)
+
+        :Type: Import
+        """,
+    )
 
     def _get_unit(self):
         """getter of unit"""
@@ -299,9 +308,14 @@ class ImportData(FrozenClass):
         check_var("unit", value, "str")
         self._unit = value
 
-    # Unit of the field
-    # Type : str
-    unit = property(fget=_get_unit, fset=_set_unit, doc=u"""Unit of the field""")
+    unit = property(
+        fget=_get_unit,
+        fset=_set_unit,
+        doc=u"""Unit of the field
+
+        :Type: str
+        """,
+    )
 
     def _get_name(self):
         """getter of name"""
@@ -312,9 +326,14 @@ class ImportData(FrozenClass):
         check_var("name", value, "str")
         self._name = value
 
-    # Name of the field
-    # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""Name of the field""")
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Name of the field
+
+        :Type: str
+        """,
+    )
 
     def _get_symbol(self):
         """getter of symbol"""
@@ -325,10 +344,13 @@ class ImportData(FrozenClass):
         check_var("symbol", value, "str")
         self._symbol = value
 
-    # Symbol of the field
-    # Type : str
     symbol = property(
-        fget=_get_symbol, fset=_set_symbol, doc=u"""Symbol of the field"""
+        fget=_get_symbol,
+        fset=_set_symbol,
+        doc=u"""Symbol of the field
+
+        :Type: str
+        """,
     )
 
     def _get_normalizations(self):
@@ -340,12 +362,13 @@ class ImportData(FrozenClass):
         check_var("normalizations", value, "dict")
         self._normalizations = value
 
-    # Dict of normalizations
-    # Type : dict
     normalizations = property(
         fget=_get_normalizations,
         fset=_set_normalizations,
-        doc=u"""Dict of normalizations""",
+        doc=u"""Dict of normalizations
+
+        :Type: dict
+        """,
     )
 
     def _get_symmetries(self):
@@ -357,8 +380,11 @@ class ImportData(FrozenClass):
         check_var("symmetries", value, "dict")
         self._symmetries = value
 
-    # Dict of symmetries
-    # Type : dict
     symmetries = property(
-        fget=_get_symmetries, fset=_set_symmetries, doc=u"""Dict of symmetries"""
+        fget=_get_symmetries,
+        fset=_set_symmetries,
+        doc=u"""Dict of symmetries
+
+        :Type: dict
+        """,
     )

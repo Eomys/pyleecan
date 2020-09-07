@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Material/MatHT.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Material/MatHT.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Material/MatHT
 """
 
 from os import linesep
@@ -23,8 +24,7 @@ class MatHT(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -120,8 +120,7 @@ class MatHT(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         MatHT_dict = dict()
         MatHT_dict["lambda_x"] = self.lambda_x
@@ -151,12 +150,14 @@ class MatHT(FrozenClass):
         check_var("lambda_x", value, "float", Vmin=0)
         self._lambda_x = value
 
-    # thermal conductivity (XY is lamination plane, Z is rotation axis)
-    # Type : float, min = 0
     lambda_x = property(
         fget=_get_lambda_x,
         fset=_set_lambda_x,
-        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis)""",
+        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis)
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_lambda_y(self):
@@ -168,12 +169,14 @@ class MatHT(FrozenClass):
         check_var("lambda_y", value, "float", Vmin=0)
         self._lambda_y = value
 
-    # thermal conductivity (XY is lamination plane, Z is rotation axis)
-    # Type : float, min = 0
     lambda_y = property(
         fget=_get_lambda_y,
         fset=_set_lambda_y,
-        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis)""",
+        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis)
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_lambda_z(self):
@@ -185,12 +188,14 @@ class MatHT(FrozenClass):
         check_var("lambda_z", value, "float", Vmin=0)
         self._lambda_z = value
 
-    # thermal conductivity (XY is lamination plane, Z is rotation axis)
-    # Type : float, min = 0
     lambda_z = property(
         fget=_get_lambda_z,
         fset=_set_lambda_z,
-        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis)""",
+        doc=u"""thermal conductivity (XY is lamination plane, Z is rotation axis)
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_Cp(self):
@@ -202,9 +207,15 @@ class MatHT(FrozenClass):
         check_var("Cp", value, "float", Vmin=0)
         self._Cp = value
 
-    # specific heat capacity
-    # Type : float, min = 0
-    Cp = property(fget=_get_Cp, fset=_set_Cp, doc=u"""specific heat capacity""")
+    Cp = property(
+        fget=_get_Cp,
+        fset=_set_Cp,
+        doc=u"""specific heat capacity
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_alpha(self):
         """getter of alpha"""
@@ -215,8 +226,12 @@ class MatHT(FrozenClass):
         check_var("alpha", value, "float", Vmin=0)
         self._alpha = value
 
-    # thermal expansion coefficient
-    # Type : float, min = 0
     alpha = property(
-        fget=_get_alpha, fset=_set_alpha, doc=u"""thermal expansion coefficient"""
+        fget=_get_alpha,
+        fset=_set_alpha,
+        doc=u"""thermal expansion coefficient
+
+        :Type: float
+        :min: 0
+        """,
     )

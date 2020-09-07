@@ -7,8 +7,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SBar.Ui_SBar import Ui_SBar
 
 class Gen_SBar(Ui_SBar):
     def setupUi(self, SBar):
-        """Abstract class to update the widget according to the csv doc
-        """
+        """Abstract class to update the widget according to the csv doc"""
         Ui_SBar.setupUi(self, SBar)
         # Setup of in_Hscr
         txt = self.tr(u"""short circuit ring section radial height [m]""")

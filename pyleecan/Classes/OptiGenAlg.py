@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Optimization/OptiGenAlg.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Optimization/OptiGenAlg.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Optimization/OptiGenAlg
 """
 
 from os import linesep
@@ -28,8 +29,7 @@ class OptiGenAlg(OptiSolver):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -183,8 +183,7 @@ class OptiGenAlg(OptiSolver):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from OptiSolver
         OptiGenAlg_dict = super(OptiGenAlg, self).as_dict()
@@ -252,12 +251,13 @@ class OptiGenAlg(OptiSolver):
                 "Expected function or list from a saved file, got: " + str(type(value))
             )
 
-    # Selector of the genetic algorithm
-    # Type : function
     selector = property(
         fget=_get_selector,
         fset=_set_selector,
-        doc=u"""Selector of the genetic algorithm""",
+        doc=u"""Selector of the genetic algorithm
+
+        :Type: function
+        """,
     )
 
     def _get_crossover(self):
@@ -281,12 +281,13 @@ class OptiGenAlg(OptiSolver):
                 "Expected function or list from a saved file, got: " + str(type(value))
             )
 
-    # Crossover of the genetic algorithm
-    # Type : function
     crossover = property(
         fget=_get_crossover,
         fset=_set_crossover,
-        doc=u"""Crossover of the genetic algorithm""",
+        doc=u"""Crossover of the genetic algorithm
+
+        :Type: function
+        """,
     )
 
     def _get_mutator(self):
@@ -310,12 +311,13 @@ class OptiGenAlg(OptiSolver):
                 "Expected function or list from a saved file, got: " + str(type(value))
             )
 
-    # Mutator of the genetic algorithm
-    # Type : function
     mutator = property(
         fget=_get_mutator,
         fset=_set_mutator,
-        doc=u"""Mutator of the genetic algorithm""",
+        doc=u"""Mutator of the genetic algorithm
+
+        :Type: function
+        """,
     )
 
     def _get_p_cross(self):
@@ -327,10 +329,15 @@ class OptiGenAlg(OptiSolver):
         check_var("p_cross", value, "float", Vmin=0, Vmax=1)
         self._p_cross = value
 
-    # Probability of crossover
-    # Type : float, min = 0, max = 1
     p_cross = property(
-        fget=_get_p_cross, fset=_set_p_cross, doc=u"""Probability of crossover"""
+        fget=_get_p_cross,
+        fset=_set_p_cross,
+        doc=u"""Probability of crossover
+
+        :Type: float
+        :min: 0
+        :max: 1
+        """,
     )
 
     def _get_p_mutate(self):
@@ -342,10 +349,15 @@ class OptiGenAlg(OptiSolver):
         check_var("p_mutate", value, "float", Vmin=0, Vmax=1)
         self._p_mutate = value
 
-    # Probability of mutation
-    # Type : float, min = 0, max = 1
     p_mutate = property(
-        fget=_get_p_mutate, fset=_set_p_mutate, doc=u"""Probability of mutation """
+        fget=_get_p_mutate,
+        fset=_set_p_mutate,
+        doc=u"""Probability of mutation 
+
+        :Type: float
+        :min: 0
+        :max: 1
+        """,
     )
 
     def _get_size_pop(self):
@@ -357,10 +369,14 @@ class OptiGenAlg(OptiSolver):
         check_var("size_pop", value, "int", Vmin=1)
         self._size_pop = value
 
-    # Size of the population
-    # Type : int, min = 1
     size_pop = property(
-        fget=_get_size_pop, fset=_set_size_pop, doc=u"""Size of the population"""
+        fget=_get_size_pop,
+        fset=_set_size_pop,
+        doc=u"""Size of the population
+
+        :Type: int
+        :min: 1
+        """,
     )
 
     def _get_nb_gen(self):
@@ -372,8 +388,12 @@ class OptiGenAlg(OptiSolver):
         check_var("nb_gen", value, "int", Vmin=1)
         self._nb_gen = value
 
-    # Number of generations
-    # Type : int, min = 1
     nb_gen = property(
-        fget=_get_nb_gen, fset=_set_nb_gen, doc=u"""Number of generations"""
+        fget=_get_nb_gen,
+        fset=_set_nb_gen,
+        doc=u"""Number of generations
+
+        :Type: int
+        :min: 1
+        """,
     )

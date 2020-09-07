@@ -14,6 +14,7 @@ from pyleecan.Classes.Material import Material
 
 import pytest
 
+
 @pytest.mark.GUI
 class TestPHoleM54(object):
     """Test that the widget PHoleM54 behave like it should"""
@@ -43,7 +44,6 @@ class TestPHoleM54(object):
         """Exit the app after the test"""
         cls.app.quit()
 
-
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
 
@@ -66,7 +66,7 @@ class TestPHoleM54(object):
         """Check that the Widget allow to update H0"""
         self.widget.lf_H0.clear()
         QTest.keyClicks(self.widget.lf_H0, "0.34")
-        self.widget.lf_H0.editingFinished.emit() # To trigger the slot
+        self.widget.lf_H0.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.hole.H0 == 0.34
         assert self.test_obj.hole[0].H0 == 0.34
@@ -84,7 +84,7 @@ class TestPHoleM54(object):
         """Check that the Widget allow to update R1"""
         self.widget.lf_R1.clear()
         QTest.keyClicks(self.widget.lf_R1, "0.36")
-        self.widget.lf_R1.editingFinished.emit() # To trigger the slot
+        self.widget.lf_R1.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.hole.R1 == 0.36
         assert self.test_obj.hole[0].R1 == 0.36

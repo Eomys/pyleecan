@@ -41,7 +41,7 @@ def test_Magnetic_FEMM_sym():
     simu = Simu1(name="EM_SPMSM_FL_001", machine=SPMSM_003)
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(4) * 3000)
+    N0 = 3000
     Is = ImportMatrixVal(
         value=array(
             [
@@ -58,7 +58,7 @@ def test_Magnetic_FEMM_sym():
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,

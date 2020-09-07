@@ -1,7 +1,7 @@
 from numpy import linspace, sin, squeeze
 from os.path import join
 import matplotlib.pyplot as plt
-from Tests import save_validation_path as save_path
+from Tests import save_plot_path as save_path
 import pytest
 
 from pyleecan.Classes.Simu1 import Simu1
@@ -120,7 +120,7 @@ class Test_plots(object):
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B)
+        simu.input = InputFlux(B=B, time=time, angle=angle)
         out = Output(simu=simu)
         simu.run()
 
@@ -225,11 +225,11 @@ class Test_plots(object):
         )
 
         simu4 = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu4.input = InputFlux(B=B_FT)
+        simu4.input = InputFlux(B=B_FT, time=time, angle=angle)
         simu4.mag = None
         simu4.force = None
         simu4.struct = None
-        simu4.input = InputFlux(B=B)
+        simu4.input = InputFlux(B=B, time=time, angle=angle)
         out4 = Output(simu=simu4)
         simu4.run()
         out4.post.legend_name = "Inverse FT"
@@ -313,11 +313,11 @@ class Test_plots(object):
         N_stem = 100
 
         simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.input = InputFlux(B=B)
+        simu.input = InputFlux(B=B, time=time, angle=angle)
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B)
+        simu.input = InputFlux(B=B, time=time, angle=angle)
         out = Output(simu=simu)
         simu.run()
 
@@ -352,11 +352,11 @@ class Test_plots(object):
         r_max = import_data["r_max"]
 
         simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.input = InputFlux(B=B_FT)
+        simu.input = InputFlux(B=B_FT, time=time, angle=angle)
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B)
+        simu.input = InputFlux(B=B, time=time, angle=angle)
         out = Output(simu=simu)
         simu.run()
 
@@ -389,11 +389,11 @@ class Test_plots(object):
         r_max = import_data["r_max"]
 
         simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.input = InputFlux(B=B_FT)
+        simu.input = InputFlux(B=B_FT, time=time, angle=angle)
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B)
+        simu.input = InputFlux(B=B, time=time, angle=angle)
         out = Output(simu=simu)
         simu.run()
 
@@ -427,11 +427,11 @@ class Test_plots(object):
         r_max = import_data["r_max"]
 
         simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.input = InputFlux(B=B)
+        simu.input = InputFlux(B=B, time=time, angle=angle)
         simu.mag = None
         simu.force = None
         simu.struct = None
-        simu.input = InputFlux(B=B)
+        simu.input = InputFlux(B=B, time=time, angle=angle)
         out = Output(simu=simu)
         simu.run()
 

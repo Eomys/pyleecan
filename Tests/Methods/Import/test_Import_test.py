@@ -174,21 +174,20 @@ ImportMatrix_test.append(
     }
 )
 
+
 @pytest.mark.METHODS
 class Test_Import_test(object):
     """unittest for Import object methods"""
 
     @pytest.mark.parametrize("test_dict", ImportMatrix_test)
-    def test_ImportMatrix(self,test_dict):
-        """Check that the import of a Matrix is correct
-            """
+    def test_ImportMatrix(self, test_dict):
+        """Check that the import of a Matrix is correct"""
 
         result = test_dict["test_obj"].get_data()
         assert_array_almost_equal(test_dict["exp"], result)
 
     def test_ImportGenMatrixSin_init(self):
-        """Check that the ImportGenMatrixSin can be set by list
-            """
+        """Check that the ImportGenMatrixSin can be set by list"""
         f = [100, 100, 100]
         A = [1, 0.5, 2]
         Phi = linspace(0, 2 * pi, 3, endpoint=False)
@@ -217,24 +216,35 @@ class Test_Import_test(object):
         assert test_obj.sin_list[2].Tf == 2.5
 
     def test_ImportGenMatrixSin_Error(self):
-        """Check that the ImportGenMatrixSin can detect wrong input
-            """
+        """Check that the ImportGenMatrixSin can detect wrong input"""
         test_obj = ImportGenMatrixSin(sin_list=[], is_transpose=True)
         with pytest.raises(GenSinEmptyError):
             test_obj.get_data()
 
         sin_list = list()
-        sin_list.append(ImportGenVectSin(A=2,f=2,Phi=pi/2,N=16,Tf=1,is_transpose=False))
-        sin_list.append(ImportGenVectSin(A=2,f=2,Phi=0,N=8,Tf=1,is_transpose=False))
-        sin_list.append(ImportGenVectSin(A=2,f=2,Phi=-pi/2,N=16,Tf=1,is_transpose=False))
-        test_obj=ImportGenMatrixSin(sin_list=sin_list,is_transpose=True)
+        sin_list.append(
+            ImportGenVectSin(A=2, f=2, Phi=pi / 2, N=16, Tf=1, is_transpose=False)
+        )
+        sin_list.append(
+            ImportGenVectSin(A=2, f=2, Phi=0, N=8, Tf=1, is_transpose=False)
+        )
+        sin_list.append(
+            ImportGenVectSin(A=2, f=2, Phi=-pi / 2, N=16, Tf=1, is_transpose=False)
+        )
+        test_obj = ImportGenMatrixSin(sin_list=sin_list, is_transpose=True)
         with pytest.raises(GenSinDimError):
             test_obj.get_data()
 
         sin_list = list()
-        sin_list.append(ImportGenVectSin(A=2,f=2,Phi=pi/2,N=16,Tf=1,is_transpose=False))
-        sin_list.append(ImportGenVectSin(A=2,f=2,Phi=0,N=16,Tf=1,is_transpose=False))
-        sin_list.append(ImportGenVectSin(A=2,f=2,Phi=-pi/2,N=16,Tf=1,is_transpose=True))
-        test_obj=ImportGenMatrixSin(sin_list=sin_list,is_transpose=True)
+        sin_list.append(
+            ImportGenVectSin(A=2, f=2, Phi=pi / 2, N=16, Tf=1, is_transpose=False)
+        )
+        sin_list.append(
+            ImportGenVectSin(A=2, f=2, Phi=0, N=16, Tf=1, is_transpose=False)
+        )
+        sin_list.append(
+            ImportGenVectSin(A=2, f=2, Phi=-pi / 2, N=16, Tf=1, is_transpose=True)
+        )
+        test_obj = ImportGenMatrixSin(sin_list=sin_list, is_transpose=True)
         with pytest.raises(GenSinTransposeError):
             test_obj.get_data()

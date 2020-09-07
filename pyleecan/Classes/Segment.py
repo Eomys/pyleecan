@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Geometry/Segment.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Geometry/Segment.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Geometry/Segment
 """
 
 from os import linesep
@@ -241,8 +242,7 @@ class Segment(Line):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -313,8 +313,7 @@ class Segment(Line):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Line
         Segment_dict = super(Segment, self).as_dict()
@@ -342,10 +341,13 @@ class Segment(Line):
         check_var("begin", value, "complex")
         self._begin = value
 
-    # begin point of the line
-    # Type : complex
     begin = property(
-        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the line"""
+        fget=_get_begin,
+        fset=_set_begin,
+        doc=u"""begin point of the line
+
+        :Type: complex
+        """,
     )
 
     def _get_end(self):
@@ -357,6 +359,11 @@ class Segment(Line):
         check_var("end", value, "complex")
         self._end = value
 
-    # end point of the line
-    # Type : complex
-    end = property(fget=_get_end, fset=_set_end, doc=u"""end point of the line""")
+    end = property(
+        fget=_get_end,
+        fset=_set_end,
+        doc=u"""end point of the line
+
+        :Type: complex
+        """,
+    )

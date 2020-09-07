@@ -1,4 +1,5 @@
 import pytest
+import sys
 
 from os import makedirs
 from os.path import join
@@ -11,10 +12,9 @@ from pyleecan.Functions.GMSH.draw_GMSH import draw_GMSH
 
 
 @pytest.mark.long
-@pytest.mark.GMSH2D
+@pytest.mark.GMSH
 def test_gmsh_2d():
-    """Check generation of the 2D mesh with gmsh
-    """
+    """Check generation of the 2D mesh with gmsh"""
     # Import the machine from a script
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     IPMSM_A.stator.slot.H1 = 1e-3
@@ -41,9 +41,13 @@ def test_gmsh_2d():
 
     draw_GMSH(
         output=myResults,
-        sym=8,
+        sym=2,
         is_lam_only_S=False,
         is_lam_only_R=False,
         user_mesh_dict=mesh_dict,
         path_save=join(save_path, "GSMH_model.msh"),
     )
+
+
+if __name__ == "__main__":
+    sys.exit(test_gmsh_2d())

@@ -32,7 +32,7 @@ SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
 def test_Magnetic_FEMM_sym():
     """Validation of the FEMM model of a polar SCIM machine
     Only one time step
-    
+
     From publication:
     K. Boughrara
     Analytical Analysis of Cage Rotor Induction Motors in Healthy, Defective and Broken Bars Conditions
@@ -44,7 +44,7 @@ def test_Magnetic_FEMM_sym():
     simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
 
     # Definition of the enforced output of the electrical module
-    Nr = ImportMatrixVal(value=ones(1) * 1500)
+    N0 = 1500
     Is = ImportMatrixVal(value=array([[20, -10, -10]]))
     Ir = ImportMatrixVal(value=zeros((1, 28)))
     time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=False)
@@ -53,7 +53,7 @@ def test_Magnetic_FEMM_sym():
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
-        Nr=Nr,
+        N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,

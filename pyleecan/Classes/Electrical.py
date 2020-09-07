@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Electrical.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Electrical.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Electrical
 """
 
 from os import linesep
@@ -17,6 +18,16 @@ try:
 except ImportError as error:
     run = error
 
+try:
+    from ..Methods.Simulation.Electrical.comp_power import comp_power
+except ImportError as error:
+    comp_power = error
+
+try:
+    from ..Methods.Simulation.Electrical.comp_torque import comp_torque
+except ImportError as error:
+    comp_torque = error
+
 
 from ._check import InitUnKnowClassError
 from .EEC import EEC
@@ -27,6 +38,7 @@ class Electrical(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.Electrical.run
     if isinstance(run, ImportError):
         run = property(
@@ -36,13 +48,34 @@ class Electrical(FrozenClass):
         )
     else:
         run = run
+    # cf Methods.Simulation.Electrical.comp_power
+    if isinstance(comp_power, ImportError):
+        comp_power = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Electrical method comp_power: " + str(comp_power)
+                )
+            )
+        )
+    else:
+        comp_power = comp_power
+    # cf Methods.Simulation.Electrical.comp_torque
+    if isinstance(comp_torque, ImportError):
+        comp_torque = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Electrical method comp_torque: " + str(comp_torque)
+                )
+            )
+        )
+    else:
+        comp_torque = comp_torque
     # save method is available in all object
     save = save
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -131,8 +164,7 @@ class Electrical(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         Electrical_dict = dict()
         if self.eec is None:
@@ -161,8 +193,11 @@ class Electrical(FrozenClass):
         if self._eec is not None:
             self._eec.parent = self
 
-    # Electrical Equivalent Circuit
-    # Type : EEC
     eec = property(
-        fget=_get_eec, fset=_set_eec, doc=u"""Electrical Equivalent Circuit"""
+        fget=_get_eec,
+        fset=_set_eec,
+        doc=u"""Electrical Equivalent Circuit
+
+        :Type: EEC
+        """,
     )

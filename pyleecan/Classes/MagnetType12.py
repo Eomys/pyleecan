@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/MagnetType12.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/MagnetType12.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/MagnetType12
 """
 
 from os import linesep
@@ -79,8 +80,7 @@ class MagnetType12(MagnetFlat):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -170,8 +170,7 @@ class MagnetType12(MagnetFlat):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from MagnetFlat
         MagnetType12_dict = super(MagnetType12, self).as_dict()
@@ -199,9 +198,15 @@ class MagnetType12(MagnetFlat):
         check_var("Wmag", value, "float", Vmin=0)
         self._Wmag = value
 
-    # magnet bottom width [m]
-    # Type : float, min = 0
-    Wmag = property(fget=_get_Wmag, fset=_set_Wmag, doc=u"""magnet bottom width [m]""")
+    Wmag = property(
+        fget=_get_Wmag,
+        fset=_set_Wmag,
+        doc=u"""magnet bottom width [m]
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_Hmag(self):
         """getter of Hmag"""
@@ -212,6 +217,12 @@ class MagnetType12(MagnetFlat):
         check_var("Hmag", value, "float", Vmin=0)
         self._Hmag = value
 
-    # magnet radial height [m]
-    # Type : float, min = 0
-    Hmag = property(fget=_get_Hmag, fset=_set_Hmag, doc=u"""magnet radial height [m]""")
+    Hmag = property(
+        fget=_get_Hmag,
+        fset=_set_Hmag,
+        doc=u"""magnet radial height [m]
+
+        :Type: float
+        :min: 0
+        """,
+    )

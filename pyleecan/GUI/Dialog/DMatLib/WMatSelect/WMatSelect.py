@@ -7,8 +7,8 @@ from PyQt5.QtCore import pyqtSignal
 
 class WMatSelect(Ui_WMatSelect, QWidget):
     """
-    Material related widget including a Label, a Combobox to select a material 
-    and a Button to edit a material libary.  
+    Material related widget including a Label, a Combobox to select a material
+    and a Button to edit a material libary.
     WMatSelect is instantiated to empty material data, so it has to be referenced
     to actual material data with the update method prior to its first usage.
     """
@@ -18,8 +18,8 @@ class WMatSelect(Ui_WMatSelect, QWidget):
 
     def __init__(self, parent=None):
         """
-        Set a reference to a material libray and material data path, 
-        updates the Combobox by the material names of the libary 
+        Set a reference to a material libray and material data path,
+        updates the Combobox by the material names of the libary
         and set a referenced material by name.
 
         Parameters
@@ -28,7 +28,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
             A WMatSelect object
         parent :
             A reference to the widgets parent
-        
+
         Returns
         -------
 
@@ -52,8 +52,8 @@ class WMatSelect(Ui_WMatSelect, QWidget):
 
     def update(self, obj, mat_attr_name, matlib, matlib_path=""):
         """
-        Set a reference to a material libray and material data path, 
-        updates the Combobox by the material names of the libary 
+        Set a reference to a material libray and material data path,
+        updates the Combobox by the material names of the libary
         and set a referenced material by name.
 
         Parameters
@@ -115,8 +115,8 @@ class WMatSelect(Ui_WMatSelect, QWidget):
         self :
             A WMatSelect object
         txt :
-            A text string 
-        
+            A text string
+
         Returns
         -------
 
@@ -126,7 +126,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
     def set_mat_type(self, index):
         """
         Signal to set the referenced material from the material libary
-        by the selected Combobox index 
+        by the selected Combobox index
 
         Parameters
         ----------

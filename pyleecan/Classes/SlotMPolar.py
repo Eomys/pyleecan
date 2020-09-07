@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/SlotMPolar.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/SlotMPolar.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/SlotMPolar
 """
 
 from os import linesep
@@ -131,8 +132,7 @@ class SlotMPolar(SlotMag):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -249,8 +249,7 @@ class SlotMPolar(SlotMag):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from SlotMag
         SlotMPolar_dict = super(SlotMPolar, self).as_dict()
@@ -283,9 +282,15 @@ class SlotMPolar(SlotMag):
         check_var("W0", value, "float", Vmin=0)
         self._W0 = value
 
-    # Slot isthmus width.
-    # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus width.""")
+    W0 = property(
+        fget=_get_W0,
+        fset=_set_W0,
+        doc=u"""Slot isthmus width.
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H0(self):
         """getter of H0"""
@@ -296,9 +301,15 @@ class SlotMPolar(SlotMag):
         check_var("H0", value, "float", Vmin=0)
         self._H0 = value
 
-    # Slot isthmus height
-    # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height""")
+    H0 = property(
+        fget=_get_H0,
+        fset=_set_H0,
+        doc=u"""Slot isthmus height
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_magnet(self):
         """getter of magnet"""
@@ -316,6 +327,11 @@ class SlotMPolar(SlotMag):
             if obj is not None:
                 obj.parent = self
 
-    # List of magnet
-    # Type : [MagnetPolar]
-    magnet = property(fget=_get_magnet, fset=_set_magnet, doc=u"""List of magnet""")
+    magnet = property(
+        fget=_get_magnet,
+        fset=_set_magnet,
+        doc=u"""List of magnet
+
+        :Type: [MagnetPolar]
+        """,
+    )

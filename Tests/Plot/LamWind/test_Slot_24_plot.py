@@ -24,21 +24,30 @@ from Tests import save_plot_path as save_path
 from Tests.Plot.LamWind import wind_mat
 
 import pytest
+
 """pytest for Lamination with winding plot"""
+
 
 @pytest.mark.PLOT
 class Test_Slot_24_plot(object):
     def test_Lam_Wind_24_wind_22(self):
-        """Test machine plot with Slot 24 and winding rad=2, tan=2
-        """
+        """Test machine plot with Slot 24 and winding rad=2, tan=2"""
         print("\nTest plot Slot 24")
         plt.close("all")
         test_obj = MachineDFIM()
         test_obj.rotor = LamSlotWind(
-            Rint=0.2, Rext=0.5, is_internal=True, is_stator=False, L1=0.8, Nrvd=4, Wrvd=0.05
+            Rint=0.2,
+            Rext=0.5,
+            is_internal=True,
+            is_stator=False,
+            L1=0.8,
+            Nrvd=4,
+            Wrvd=0.05,
         )
         test_obj.rotor.slot = SlotW24(Zs=6, W3=100e-3, H2=150e-3)
-        test_obj.rotor.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=120e-3)
+        test_obj.rotor.winding = WindingUD(
+            user_wind_mat=wind_mat, qs=4, p=4, Lewout=120e-3
+        )
         test_obj.rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 

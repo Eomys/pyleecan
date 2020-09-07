@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Material/MatEconomical.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Material/MatEconomical.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Material/MatEconomical
 """
 
 from os import linesep
@@ -23,8 +24,7 @@ class MatEconomical(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -92,8 +92,7 @@ class MatEconomical(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         MatEconomical_dict = dict()
         MatEconomical_dict["cost_unit"] = self.cost_unit
@@ -117,12 +116,14 @@ class MatEconomical(FrozenClass):
         check_var("cost_unit", value, "float", Vmin=0)
         self._cost_unit = value
 
-    # Cost of one kilo of material
-    # Type : float, min = 0
     cost_unit = property(
         fget=_get_cost_unit,
         fset=_set_cost_unit,
-        doc=u"""Cost of one kilo of material""",
+        doc=u"""Cost of one kilo of material
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_unit_name(self):
@@ -134,8 +135,11 @@ class MatEconomical(FrozenClass):
         check_var("unit_name", value, "str")
         self._unit_name = value
 
-    # Name of the unit
-    # Type : str
     unit_name = property(
-        fget=_get_unit_name, fset=_set_unit_name, doc=u"""Name of the unit"""
+        fget=_get_unit_name,
+        fset=_set_unit_name,
+        doc=u"""Name of the unit
+
+        :Type: str
+        """,
     )

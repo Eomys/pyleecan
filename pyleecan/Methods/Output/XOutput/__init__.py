@@ -1,0 +1,2 @@
+class XOutputError(Exception):
+    pass

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Geometry/SurfRing.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Geometry/SurfRing.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Geometry/SurfRing
 """
 
 from os import linesep
@@ -176,8 +177,7 @@ class SurfRing(Surface):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -347,8 +347,7 @@ class SurfRing(Surface):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Surface
         SurfRing_dict = super(SurfRing, self).as_dict()
@@ -387,10 +386,13 @@ class SurfRing(Surface):
         if self._out_surf is not None:
             self._out_surf.parent = self
 
-    # Outter surface
-    # Type : Surface
     out_surf = property(
-        fget=_get_out_surf, fset=_set_out_surf, doc=u"""Outter surface"""
+        fget=_get_out_surf,
+        fset=_set_out_surf,
+        doc=u"""Outter surface
+
+        :Type: Surface
+        """,
     )
 
     def _get_in_surf(self):
@@ -405,6 +407,11 @@ class SurfRing(Surface):
         if self._in_surf is not None:
             self._in_surf.parent = self
 
-    # Inner surface
-    # Type : Surface
-    in_surf = property(fget=_get_in_surf, fset=_set_in_surf, doc=u"""Inner surface""")
+    in_surf = property(
+        fget=_get_in_surf,
+        fset=_set_in_surf,
+        doc=u"""Inner surface
+
+        :Type: Surface
+        """,
+    )

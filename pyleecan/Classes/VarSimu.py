@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/VarSimu.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/VarSimu.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/VarSimu
 """
 
 from os import linesep
@@ -41,8 +42,7 @@ class VarSimu(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -184,8 +184,7 @@ class VarSimu(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         VarSimu_dict = dict()
         VarSimu_dict["name"] = self.name
@@ -224,10 +223,13 @@ class VarSimu(FrozenClass):
         check_var("name", value, "str")
         self._name = value
 
-    # Name of the multi-simulation
-    # Type : str
     name = property(
-        fget=_get_name, fset=_set_name, doc=u"""Name of the multi-simulation"""
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Name of the multi-simulation
+
+        :Type: str
+        """,
     )
 
     def _get_desc(self):
@@ -239,10 +241,13 @@ class VarSimu(FrozenClass):
         check_var("desc", value, "str")
         self._desc = value
 
-    # Multi-simulation description
-    # Type : str
     desc = property(
-        fget=_get_desc, fset=_set_desc, doc=u"""Multi-simulation description"""
+        fget=_get_desc,
+        fset=_set_desc,
+        doc=u"""Multi-simulation description
+
+        :Type: str
+        """,
     )
 
     def _get_datakeeper_list(self):
@@ -261,12 +266,13 @@ class VarSimu(FrozenClass):
             if obj is not None:
                 obj.parent = self
 
-    # List containing DataKeepers to extract VarSimu results
-    # Type : [DataKeeper]
     datakeeper_list = property(
         fget=_get_datakeeper_list,
         fset=_set_datakeeper_list,
-        doc=u"""List containing DataKeepers to extract VarSimu results """,
+        doc=u"""List containing DataKeepers to extract VarSimu results 
+
+        :Type: [DataKeeper]
+        """,
     )
 
     def _get_nb_proc(self):
@@ -278,12 +284,14 @@ class VarSimu(FrozenClass):
         check_var("nb_proc", value, "int", Vmin=1)
         self._nb_proc = value
 
-    # Number of processors used to run the simulations
-    # Type : int, min = 1
     nb_proc = property(
         fget=_get_nb_proc,
         fset=_set_nb_proc,
-        doc=u"""Number of processors used to run the simulations""",
+        doc=u"""Number of processors used to run the simulations
+
+        :Type: int
+        :min: 1
+        """,
     )
 
     def _get_is_keep_all_output(self):
@@ -295,12 +303,13 @@ class VarSimu(FrozenClass):
         check_var("is_keep_all_output", value, "bool")
         self._is_keep_all_output = value
 
-    # True to store every output in a list
-    # Type : bool
     is_keep_all_output = property(
         fget=_get_is_keep_all_output,
         fset=_set_is_keep_all_output,
-        doc=u"""True to store every output in a list""",
+        doc=u"""True to store every output in a list
+
+        :Type: bool
+        """,
     )
 
     def _get_stop_if_error(self):
@@ -312,12 +321,13 @@ class VarSimu(FrozenClass):
         check_var("stop_if_error", value, "bool")
         self._stop_if_error = value
 
-    # Stop the multi-simulation if a simulation fails
-    # Type : bool
     stop_if_error = property(
         fget=_get_stop_if_error,
         fset=_set_stop_if_error,
-        doc=u"""Stop the multi-simulation if a simulation fails """,
+        doc=u"""Stop the multi-simulation if a simulation fails 
+
+        :Type: bool
+        """,
     )
 
     def _get_ref_simu_index(self):
@@ -329,12 +339,14 @@ class VarSimu(FrozenClass):
         check_var("ref_simu_index", value, "int", Vmin=0)
         self._ref_simu_index = value
 
-    # Index of the reference simulation, if None the reference simulation is not in the multi-simulation
-    # Type : int, min = 0
     ref_simu_index = property(
         fget=_get_ref_simu_index,
         fset=_set_ref_simu_index,
-        doc=u"""Index of the reference simulation, if None the reference simulation is not in the multi-simulation""",
+        doc=u"""Index of the reference simulation, if None the reference simulation is not in the multi-simulation
+
+        :Type: int
+        :min: 0
+        """,
     )
 
     def _get_nb_simu(self):
@@ -346,8 +358,11 @@ class VarSimu(FrozenClass):
         check_var("nb_simu", value, "int")
         self._nb_simu = value
 
-    # Number of simulations
-    # Type : int
     nb_simu = property(
-        fget=_get_nb_simu, fset=_set_nb_simu, doc=u"""Number of simulations"""
+        fget=_get_nb_simu,
+        fset=_set_nb_simu,
+        doc=u"""Number of simulations
+
+        :Type: int
+        """,
     )

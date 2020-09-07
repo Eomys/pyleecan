@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/Slot19.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/Slot19.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/Slot19
 """
 
 from os import linesep
@@ -139,8 +140,7 @@ class Slot19(Slot):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -234,8 +234,7 @@ class Slot19(Slot):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Slot
         Slot19_dict = super(Slot19, self).as_dict()
@@ -267,9 +266,15 @@ class Slot19(Slot):
         check_var("W0", value, "float", Vmin=0)
         self._W0 = value
 
-    # Slot top width
-    # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot top width""")
+    W0 = property(
+        fget=_get_W0,
+        fset=_set_W0,
+        doc=u"""Slot top width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H0(self):
         """getter of H0"""
@@ -280,9 +285,15 @@ class Slot19(Slot):
         check_var("H0", value, "float", Vmin=0)
         self._H0 = value
 
-    # Slot height
-    # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot height""")
+    H0 = property(
+        fget=_get_H0,
+        fset=_set_H0,
+        doc=u"""Slot height
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W1(self):
         """getter of W1"""
@@ -293,9 +304,15 @@ class Slot19(Slot):
         check_var("W1", value, "float", Vmin=0)
         self._W1 = value
 
-    # Slot bottom width.
-    # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Slot bottom width.""")
+    W1 = property(
+        fget=_get_W1,
+        fset=_set_W1,
+        doc=u"""Slot bottom width.
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_Wx_is_rad(self):
         """getter of Wx_is_rad"""
@@ -306,8 +323,11 @@ class Slot19(Slot):
         check_var("Wx_is_rad", value, "bool")
         self._Wx_is_rad = value
 
-    # Wx unit, 0 for m, 1 for rad
-    # Type : bool
     Wx_is_rad = property(
-        fget=_get_Wx_is_rad, fset=_set_Wx_is_rad, doc=u"""Wx unit, 0 for m, 1 for rad"""
+        fget=_get_Wx_is_rad,
+        fset=_set_Wx_is_rad,
+        doc=u"""Wx unit, 0 for m, 1 for rad
+
+        :Type: bool
+        """,
     )

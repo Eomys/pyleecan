@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/WindingUD.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/WindingUD.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/WindingUD
 """
 
 from os import linesep
@@ -63,8 +64,7 @@ class WindingUD(Winding):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -185,8 +185,7 @@ class WindingUD(Winding):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Winding
         WindingUD_dict = super(WindingUD, self).as_dict()
@@ -222,10 +221,11 @@ class WindingUD(Winding):
         check_var("user_wind_mat", value, "ndarray")
         self._user_wind_mat = value
 
-    # user defined Winding matrix
-    # Type : ndarray
     user_wind_mat = property(
         fget=_get_user_wind_mat,
         fset=_set_user_wind_mat,
-        doc=u"""user defined Winding matrix""",
+        doc=u"""user defined Winding matrix
+
+        :Type: ndarray
+        """,
     )

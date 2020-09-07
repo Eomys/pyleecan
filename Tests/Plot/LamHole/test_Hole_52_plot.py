@@ -18,6 +18,7 @@ from Tests import save_plot_path as save_path
 
 """pytest for Lamination with Hole 52 plot"""
 
+
 @pytest.mark.PLOT
 class Test_Hole_52_plot(object):
     @pytest.fixture
@@ -40,10 +41,8 @@ class Test_Hole_52_plot(object):
         test_obj.frame = Frame(Rint=0.12, Rext=0.12, Lfra=0.7)
         return test_obj
 
-
     def test_Lam_Hole_52(self, machine):
-        """Test machine plot hole 52 with magnet
-        """
+        """Test machine plot hole 52 with magnet"""
         machine.plot()
         fig = plt.gcf()
         # Rotor + 2 for stator + 0 for frame + 1 for shaft
@@ -56,13 +55,13 @@ class Test_Hole_52_plot(object):
         # 2 for lam + 3*8 for holes
         assert len(fig.axes[0].patches) == 26
 
-
     def test_Lam_Hole_52_no_mag(self, machine):
-        """Test machine plot hole 52 without magnet
-        """
+        """Test machine plot hole 52 without magnet"""
         machine.rotor.hole[0].magnet_0 = None
         machine.rotor.plot()
         fig = plt.gcf()
         # 2 for lam + 1*8 for holes
         assert len(fig.axes[0].patches) == 10
-        fig.savefig(join(save_path, "test_Lam_Hole_s52_3-Rotor hole without " "magnet.png"))
+        fig.savefig(
+            join(save_path, "test_Lam_Hole_s52_3-Rotor hole without " "magnet.png")
+        )

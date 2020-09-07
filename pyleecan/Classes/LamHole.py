@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/LamHole.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/LamHole.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/LamHole
 """
 
 from os import linesep
@@ -203,8 +204,7 @@ class LamHole(Lamination):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -312,6 +312,7 @@ class LamHole(Lamination):
                         "HoleM57",
                         "HoleM58",
                         "HoleMag",
+                        "HoleUD",
                         "VentilationCirc",
                         "VentilationPolar",
                         "VentilationTrap",
@@ -407,8 +408,7 @@ class LamHole(Lamination):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Lamination
         LamHole_dict = super(LamHole, self).as_dict()
@@ -450,9 +450,14 @@ class LamHole(Lamination):
             if obj is not None:
                 obj.parent = self
 
-    # lamination Hole
-    # Type : [Hole]
-    hole = property(fget=_get_hole, fset=_set_hole, doc=u"""lamination Hole""")
+    hole = property(
+        fget=_get_hole,
+        fset=_set_hole,
+        doc=u"""lamination Hole
+
+        :Type: [Hole]
+        """,
+    )
 
     def _get_bore(self):
         """getter of bore"""
@@ -466,6 +471,11 @@ class LamHole(Lamination):
         if self._bore is not None:
             self._bore.parent = self
 
-    # Bore Shape
-    # Type : Bore
-    bore = property(fget=_get_bore, fset=_set_bore, doc=u"""Bore Shape""")
+    bore = property(
+        fget=_get_bore,
+        fset=_set_bore,
+        doc=u"""Bore Shape
+
+        :Type: Bore
+        """,
+    )

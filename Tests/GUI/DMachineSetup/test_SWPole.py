@@ -15,6 +15,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWPole.SWPole import SWPole
 
 import pytest
 
+
 @pytest.mark.GUI
 class TestSWPole(object):
     """Test that the widget SWPole behave like it should"""
@@ -50,17 +51,17 @@ class TestSWPole(object):
 
     def test_init_61(self):
         """Check that the Widget initialize to the correct slot"""
-        self.test_obj.rotor.slot = SlotW61(    
-            Zs=0,    
-            H0=0.10,    
-            H1=0.11,    
-            H2=0.12,    
-            W0=0.125,    
-            W1=0.14,    
-            W2=0.15,    
-            H3=0.16,    
-            H4=0.17,    
-            W3=0.18,    
+        self.test_obj.rotor.slot = SlotW61(
+            Zs=0,
+            H0=0.10,
+            H1=0.11,
+            H2=0.12,
+            W0=0.125,
+            W1=0.14,
+            W2=0.15,
+            H3=0.16,
+            H4=0.17,
+            W3=0.18,
         )
         self.test_obj.rotor.winding.p = 8
 

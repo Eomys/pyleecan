@@ -17,7 +17,7 @@ class WImportLinspace(Ui_WImportLinspace, QWidget):
 
         Parameters
         ----------
-        data : ImportGenVectLin 
+        data : ImportGenVectLin
             Data import to define
         verbose_name : str
             Name of the imported data
@@ -43,8 +43,7 @@ class WImportLinspace(Ui_WImportLinspace, QWidget):
         self.c_type_lin.currentIndexChanged.connect(self.set_type_lin)
 
     def update(self):
-        """Fill the widget with the current value of the data
-        """
+        """Fill the widget with the current value of the data"""
         self.c_type_lin.setCurrentIndex(0)  # Start, Stop, N
         self.set_type_lin()
         self.lf_start.setValue(self.data.start)
@@ -70,22 +69,19 @@ class WImportLinspace(Ui_WImportLinspace, QWidget):
             self.lf_step.show()
 
     def set_start(self):
-        """Change the value according to the widget
-        """
+        """Change the value according to the widget"""
         self.data.start = self.lf_start.value()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
     def set_stop(self):
-        """Change the value according to the widget
-        """
+        """Change the value according to the widget"""
         self.data.stop = self.lf_stop.value()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()
 
     def set_N(self):
-        """Change the value according to the widget
-        """
+        """Change the value according to the widget"""
         self.data.num = self.si_N.value()
         # Notify the machine GUI that the machine has changed
         self.saveNeeded.emit()

@@ -15,8 +15,7 @@ from ......GUI.Dialog.DMachineSetup.SMHoleMag.WHoleMag.Ui_WHoleMag import Ui_WHo
 
 
 class WHoleMag(Ui_WHoleMag, QWidget):
-    """Widget to Setup a single Hole in a list
-    """
+    """Widget to Setup a single Hole in a list"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -28,14 +27,14 @@ class WHoleMag(Ui_WHoleMag, QWidget):
         ----------
         self : WHoleMag
             A WHoleMag object
-        parent : 
+        parent :
             A parent object containing the lamination (LamHole) to edit
         is_mag : bool
             False: no magnet in the Hole (for the SyRM)
         index : int
             Index of the hole to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         """
 
         # Build the interface according to the .ui file
@@ -91,8 +90,7 @@ class WHoleMag(Ui_WHoleMag, QWidget):
         self.c_hole_type.currentIndexChanged.connect(self.set_hole_type)
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     def set_hole_type(self, c_index):

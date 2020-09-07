@@ -16,8 +16,7 @@ COND_NAME = [wid.cond_name for wid in WIDGET_LIST]
 
 
 class SBar(Gen_SBar, QWidget):
-    """Step to setup the Rotor Bar for SCIM machine
-    """
+    """Step to setup the Rotor Bar for SCIM machine"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -34,7 +33,7 @@ class SBar(Gen_SBar, QWidget):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -94,8 +93,7 @@ class SBar(Gen_SBar, QWidget):
         self.w_mat.saveNeeded.connect(self.emit_save)
 
     def emit_save(self):
-        """Emit the saveNeeded signal
-        """
+        """Emit the saveNeeded signal"""
         self.saveNeeded.emit()
 
     def set_Hscr(self):

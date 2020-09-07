@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from unittest import TestCase
 
 from PyQt5 import QtWidgets
 
@@ -101,4 +100,6 @@ class TestDMatLib(object):
         # Check list
         assert self.widget.nav_mat.count() == 7
         for ii in range(0, self.widget.nav_mat.count()):
-            assert self.widget.nav_mat.item(ii).text() ==        "00" + str(ii + 1) + " - test_material_" + str(ii + 1)
+            assert self.widget.nav_mat.item(ii).text() == "00" + str(
+                ii + 1
+            ) + " - test_material_" + str(ii + 1)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/VentilationPolar.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/VentilationPolar.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/VentilationPolar
 """
 
 from os import linesep
@@ -108,8 +109,7 @@ class VentilationPolar(Hole):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -209,8 +209,7 @@ class VentilationPolar(Hole):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Hole
         VentilationPolar_dict = super(VentilationPolar, self).as_dict()
@@ -242,12 +241,15 @@ class VentilationPolar(Hole):
         check_var("Alpha0", value, "float", Vmin=0, Vmax=6.29)
         self._Alpha0 = value
 
-    # Shift angle of the hole around circumference
-    # Type : float, min = 0, max = 6.29
     Alpha0 = property(
         fget=_get_Alpha0,
         fset=_set_Alpha0,
-        doc=u"""Shift angle of the hole around circumference""",
+        doc=u"""Shift angle of the hole around circumference
+
+        :Type: float
+        :min: 0
+        :max: 6.29
+        """,
     )
 
     def _get_D0(self):
@@ -259,9 +261,15 @@ class VentilationPolar(Hole):
         check_var("D0", value, "float", Vmin=0)
         self._D0 = value
 
-    # Height of the hole
-    # Type : float, min = 0
-    D0 = property(fget=_get_D0, fset=_set_D0, doc=u"""Height of the hole""")
+    D0 = property(
+        fget=_get_D0,
+        fset=_set_D0,
+        doc=u"""Height of the hole
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H0(self):
         """getter of H0"""
@@ -272,9 +280,15 @@ class VentilationPolar(Hole):
         check_var("H0", value, "float", Vmin=0)
         self._H0 = value
 
-    # Radius of the bottom of Hole
-    # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Radius of the bottom of Hole""")
+    H0 = property(
+        fget=_get_H0,
+        fset=_set_H0,
+        doc=u"""Radius of the bottom of Hole
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W1(self):
         """getter of W1"""
@@ -285,6 +299,13 @@ class VentilationPolar(Hole):
         check_var("W1", value, "float", Vmin=0, Vmax=6.29)
         self._W1 = value
 
-    # Hole angular width
-    # Type : float, min = 0, max = 6.29
-    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Hole angular width""")
+    W1 = property(
+        fget=_get_W1,
+        fset=_set_W1,
+        doc=u"""Hole angular width
+
+        :Type: float
+        :min: 0
+        :max: 6.29
+        """,
+    )

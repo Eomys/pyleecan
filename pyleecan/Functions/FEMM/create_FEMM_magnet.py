@@ -23,7 +23,7 @@ def create_FEMM_magnet(label, is_mmf, is_eddies, materials, lam):
     -------
     (str, list)
         property, materials
-    
+
     """
     # some if's and else's to find the correct material parameter from magnet label
     if "HoleMagnet" in label:

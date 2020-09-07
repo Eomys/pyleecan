@@ -12,11 +12,12 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWPole.PWSlot61.PWSlot61 import PWSlot61
 
 import pytest
 
+
 @pytest.mark.GUI
 class TestPWSlot61(object):
     """Test that the widget PWSlot61 behave like it should"""
 
-    def setup_method(self,method):
+    def setup_method(self, method):
         """Run at the begining of every test to setup the gui"""
 
         self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2)
@@ -58,22 +59,21 @@ class TestPWSlot61(object):
         assert self.widget.lf_W3.value() == 0.18
 
     def test_out(self):
-        """Checking output 
-            """
-        self.test_obj = LamSlotWind(    
-            Rint=0, Rext=0.1325, is_internal=True, is_stator=False, L1=0.9    
+        """Checking output"""
+        self.test_obj = LamSlotWind(
+            Rint=0, Rext=0.1325, is_internal=True, is_stator=False, L1=0.9
         )
-        self.test_obj.slot = SlotW61(    
-            Zs=12,    
-            W0=15e-3,    
-            W1=35e-3,    
-            W2=12.5e-3,    
-            H0=15e-3,    
-            H1=20e-3,    
-            H2=25e-3,    
-            H3=1e-3,    
-            H4=2e-3,    
-            W3=3e-3,    
+        self.test_obj.slot = SlotW61(
+            Zs=12,
+            W0=15e-3,
+            W1=35e-3,
+            W2=12.5e-3,
+            H0=15e-3,
+            H1=20e-3,
+            H2=25e-3,
+            H3=1e-3,
+            H4=2e-3,
+            W3=3e-3,
         )
         self.widget = PWSlot61(self.test_obj)
         assert self.widget.out_slot_height.text() == "Slot height: 0.05994 m"
@@ -81,9 +81,9 @@ class TestPWSlot61(object):
 
     def test_set_W0(self):
         """Check that the Widget allow to update W0"""
-        self.widget.lf_W0.clear()    # Clear the field before writing
+        self.widget.lf_W0.clear()  # Clear the field before writing
         QTest.keyClicks(self.widget.lf_W0, "0.31")
-        self.widget.lf_W0.editingFinished.emit() # To trigger the slot
+        self.widget.lf_W0.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.slot.W0 == 0.31
         assert self.test_obj.slot.W0 == 0.31
@@ -92,7 +92,7 @@ class TestPWSlot61(object):
         """Check that the Widget allow to update W1"""
         self.widget.lf_W1.clear()  # Clear the field before writing
         QTest.keyClicks(self.widget.lf_W1, str(0.32))
-        self.widget.lf_W1.editingFinished.emit() # To trigger the slot
+        self.widget.lf_W1.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.slot.W1 == 0.32
         assert self.test_obj.slot.W1 == 0.32
@@ -101,7 +101,7 @@ class TestPWSlot61(object):
         """Check that the Widget allow to update W2"""
         self.widget.lf_W2.clear()  # Clear the field before writing
         QTest.keyClicks(self.widget.lf_W2, "0.33")
-        self.widget.lf_W2.editingFinished.emit() # To trigger the slot
+        self.widget.lf_W2.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.slot.W2 == 0.33
         assert self.test_obj.slot.W2 == 0.33
@@ -110,7 +110,7 @@ class TestPWSlot61(object):
         """Check that the Widget allow to update H0"""
         self.widget.lf_H0.clear()  # Clear the field before writing
         QTest.keyClicks(self.widget.lf_H0, "0.34")
-        self.widget.lf_H0.editingFinished.emit() # To trigger the slot
+        self.widget.lf_H0.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.slot.H0 == 0.34
         assert self.test_obj.slot.H0 == 0.34
@@ -137,7 +137,7 @@ class TestPWSlot61(object):
         """Check that the Widget allow to update W3"""
         self.widget.lf_W3.clear()  # Clear the field before writing
         QTest.keyClicks(self.widget.lf_W3, "0.37")
-        self.widget.lf_W3.editingFinished.emit() # To trigger the slot
+        self.widget.lf_W3.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.slot.W3 == 0.37
         assert self.test_obj.slot.W3 == 0.37
@@ -146,7 +146,7 @@ class TestPWSlot61(object):
         """Check that the Widget allow to update H3"""
         self.widget.lf_H3.clear()  # Clear the field before writing
         QTest.keyClicks(self.widget.lf_H3, "0.38")
-        self.widget.lf_H3.editingFinished.emit() # To trigger the slot
+        self.widget.lf_H3.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.slot.H3 == 0.38
         assert self.test_obj.slot.H3 == 0.38
@@ -155,7 +155,7 @@ class TestPWSlot61(object):
         """Check that the Widget allow to update H4"""
         self.widget.lf_H4.clear()  # Clear the field before writing
         QTest.keyClicks(self.widget.lf_H4, "0.39")
-        self.widget.lf_H4.editingFinished.emit() # To trigger the slot
+        self.widget.lf_H4.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.slot.H4 == 0.39
         assert self.test_obj.slot.H4 == 0.39

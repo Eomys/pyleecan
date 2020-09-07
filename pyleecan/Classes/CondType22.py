@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/CondType22.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/CondType22.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/CondType22
 """
 
 from os import linesep
@@ -61,8 +62,7 @@ class CondType22(Conductor):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -135,8 +135,7 @@ class CondType22(Conductor):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Conductor
         CondType22_dict = super(CondType22, self).as_dict()
@@ -162,6 +161,12 @@ class CondType22(Conductor):
         check_var("Sbar", value, "float", Vmin=0)
         self._Sbar = value
 
-    # Surface of the Slot
-    # Type : float, min = 0
-    Sbar = property(fget=_get_Sbar, fset=_set_Sbar, doc=u"""Surface of the Slot""")
+    Sbar = property(
+        fget=_get_Sbar,
+        fset=_set_Sbar,
+        doc=u"""Surface of the Slot
+
+        :Type: float
+        :min: 0
+        """,
+    )

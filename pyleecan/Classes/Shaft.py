@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/Shaft.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/Shaft.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/Shaft
 """
 
 from os import linesep
@@ -72,8 +73,7 @@ class Shaft(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -162,8 +162,7 @@ class Shaft(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         Shaft_dict = dict()
         Shaft_dict["Lshaft"] = self.Lshaft
@@ -193,12 +192,15 @@ class Shaft(FrozenClass):
         check_var("Lshaft", value, "float", Vmin=0, Vmax=100)
         self._Lshaft = value
 
-    # length of the rotor shaft [m] (used for weight & cost estimation only)
-    # Type : float, min = 0, max = 100
     Lshaft = property(
         fget=_get_Lshaft,
         fset=_set_Lshaft,
-        doc=u"""length of the rotor shaft [m] (used for weight & cost estimation only)""",
+        doc=u"""length of the rotor shaft [m] (used for weight & cost estimation only)
+
+        :Type: float
+        :min: 0
+        :max: 100
+        """,
     )
 
     def _get_mat_type(self):
@@ -213,10 +215,13 @@ class Shaft(FrozenClass):
         if self._mat_type is not None:
             self._mat_type.parent = self
 
-    # Shaft's Material
-    # Type : Material
     mat_type = property(
-        fget=_get_mat_type, fset=_set_mat_type, doc=u"""Shaft's Material"""
+        fget=_get_mat_type,
+        fset=_set_mat_type,
+        doc=u"""Shaft's Material
+
+        :Type: Material
+        """,
     )
 
     def _get_Drsh(self):
@@ -228,10 +233,13 @@ class Shaft(FrozenClass):
         check_var("Drsh", value, "float", Vmin=0, Vmax=8)
         self._Drsh = value
 
-    # diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses
-    # Type : float, min = 0, max = 8
     Drsh = property(
         fget=_get_Drsh,
         fset=_set_Drsh,
-        doc=u"""diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses""",
+        doc=u"""diameter of the rotor shaft [m], used to estimate bearing diameter for friction losses
+
+        :Type: float
+        :min: 0
+        :max: 8
+        """,
     )

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/Magnet.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/Magnet.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/Magnet
 """
 
 from os import linesep
@@ -148,8 +149,7 @@ class Magnet(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -243,8 +243,7 @@ class Magnet(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         Magnet_dict = dict()
         if self.mat_type is None:
@@ -277,10 +276,13 @@ class Magnet(FrozenClass):
         if self._mat_type is not None:
             self._mat_type.parent = self
 
-    # The Magnet material
-    # Type : Material
     mat_type = property(
-        fget=_get_mat_type, fset=_set_mat_type, doc=u"""The Magnet material"""
+        fget=_get_mat_type,
+        fset=_set_mat_type,
+        doc=u"""The Magnet material
+
+        :Type: Material
+        """,
     )
 
     def _get_type_magnetization(self):
@@ -292,12 +294,15 @@ class Magnet(FrozenClass):
         check_var("type_magnetization", value, "int", Vmin=0, Vmax=5)
         self._type_magnetization = value
 
-    # Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach
-    # Type : int, min = 0, max = 5
     type_magnetization = property(
         fget=_get_type_magnetization,
         fset=_set_type_magnetization,
-        doc=u"""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach""",
+        doc=u"""Permanent magnet magnetization type: 0 for radial, 1 for parallel, 2 for Hallbach
+
+        :Type: int
+        :min: 0
+        :max: 5
+        """,
     )
 
     def _get_Lmag(self):
@@ -309,6 +314,12 @@ class Magnet(FrozenClass):
         check_var("Lmag", value, "float", Vmin=0)
         self._Lmag = value
 
-    # Magnet axial length
-    # Type : float, min = 0
-    Lmag = property(fget=_get_Lmag, fset=_set_Lmag, doc=u"""Magnet axial length""")
+    Lmag = property(
+        fget=_get_Lmag,
+        fset=_set_Lmag,
+        doc=u"""Magnet axial length
+
+        :Type: float
+        :min: 0
+        """,
+    )

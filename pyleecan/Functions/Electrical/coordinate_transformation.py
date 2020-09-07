@@ -52,7 +52,7 @@ def n2ab(Z_n, n=3):
 
     Parameters
     ----------
-    Z_n : numpy array 
+    Z_n : numpy array
         matrix (N x n) of n phase values
 
     Outputs
@@ -145,7 +145,7 @@ def n2dq(Z_n, theta, n=3):
 
     Parameters
     ----------
-    Z_n : numpy array 
+    Z_n : numpy array
         matrix (N x n) of n phase values
 
     Outputs
@@ -162,7 +162,7 @@ def dq2n(Z_dq, theta, n=3):
 
     Parameters
     ----------
-    Z_dq : numpy array 
+    Z_dq : numpy array
         matrix (N x 2) of dq phase values
 
     Outputs

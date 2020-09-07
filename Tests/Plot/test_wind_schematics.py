@@ -28,10 +28,10 @@ test_obj.winding = WindingUD(user_wind_mat=wind_mat)
 
 CURVE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
+
 @pytest.mark.PLOT
 def test_slot():
-    """Schematics for slot number
-    """
+    """Schematics for slot number"""
 
     plt.close("all")
     test_obj.plot(is_lam_only=True)
@@ -55,10 +55,10 @@ def test_slot():
     # Save
     fig.savefig(join(save_path, "test_Wind_Slot.png"))
 
+
 @pytest.mark.PLOT
 def test_rad_tan():
-    """Schematics for rad/tan layer
-    """
+    """Schematics for rad/tan layer"""
 
     plt.close("all")
     # Plot first slot on X axis

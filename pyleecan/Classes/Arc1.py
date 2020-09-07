@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Geometry/Arc1.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Geometry/Arc1.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Geometry/Arc1
 """
 
 from os import linesep
@@ -209,8 +210,7 @@ class Arc1(Arc):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -304,8 +304,7 @@ class Arc1(Arc):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Arc
         Arc1_dict = super(Arc1, self).as_dict()
@@ -337,10 +336,13 @@ class Arc1(Arc):
         check_var("begin", value, "complex")
         self._begin = value
 
-    # begin point of the arc
-    # Type : complex
     begin = property(
-        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the arc"""
+        fget=_get_begin,
+        fset=_set_begin,
+        doc=u"""begin point of the arc
+
+        :Type: complex
+        """,
     )
 
     def _get_end(self):
@@ -352,9 +354,14 @@ class Arc1(Arc):
         check_var("end", value, "complex")
         self._end = value
 
-    # end point of the arc
-    # Type : complex
-    end = property(fget=_get_end, fset=_set_end, doc=u"""end point of the arc""")
+    end = property(
+        fget=_get_end,
+        fset=_set_end,
+        doc=u"""end point of the arc
+
+        :Type: complex
+        """,
+    )
 
     def _get_radius(self):
         """getter of radius"""
@@ -365,10 +372,13 @@ class Arc1(Arc):
         check_var("radius", value, "float")
         self._radius = value
 
-    # Radius of the arc (can be + or -)
-    # Type : float
     radius = property(
-        fget=_get_radius, fset=_set_radius, doc=u"""Radius of the arc (can be + or -)"""
+        fget=_get_radius,
+        fset=_set_radius,
+        doc=u"""Radius of the arc (can be + or -)
+
+        :Type: float
+        """,
     )
 
     def _get_is_trigo_direction(self):
@@ -380,10 +390,11 @@ class Arc1(Arc):
         check_var("is_trigo_direction", value, "bool")
         self._is_trigo_direction = value
 
-    # Rotation direction of the arc
-    # Type : bool
     is_trigo_direction = property(
         fget=_get_is_trigo_direction,
         fset=_set_is_trigo_direction,
-        doc=u"""Rotation direction of the arc""",
+        doc=u"""Rotation direction of the arc
+
+        :Type: bool
+        """,
     )

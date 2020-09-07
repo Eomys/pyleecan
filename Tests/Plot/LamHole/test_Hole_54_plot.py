@@ -15,10 +15,10 @@ from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.HoleM54 import HoleM54
 from Tests import save_plot_path as save_path
 
+
 @pytest.mark.PLOT
 class Test_Hole_54_plot(object):
     """pytest for Lamination with Hole plot"""
-
 
     def test_Lam_Hole_54_plot(self):
         """Test machine plot hole 54"""
@@ -29,8 +29,12 @@ class Test_Hole_54_plot(object):
             is_internal=True, Rint=0.1, Rext=0.2, is_stator=False, L1=0.7
         )
         test_obj.rotor.hole = list()
-        test_obj.rotor.hole.append(HoleM54(Zh=8, W0=pi / 4, H0=50e-3, H1=10e-3, R1=100e-3))
-        test_obj.rotor.hole.append(HoleM54(Zh=8, W0=pi / 6, H0=25e-3, H1=10e-3, R1=100e-3))
+        test_obj.rotor.hole.append(
+            HoleM54(Zh=8, W0=pi / 4, H0=50e-3, H1=10e-3, R1=100e-3)
+        )
+        test_obj.rotor.hole.append(
+            HoleM54(Zh=8, W0=pi / 6, H0=25e-3, H1=10e-3, R1=100e-3)
+        )
 
         test_obj.rotor.plot()
         fig = plt.gcf()

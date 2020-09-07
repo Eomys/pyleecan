@@ -14,8 +14,7 @@ class WImport(Ui_WImport, QWidget):
     saveNeeded = pyqtSignal()
 
     def __init__(self, parent=None):
-        """Widget to define an ImportLinspace
-        """
+        """Widget to define an ImportLinspace"""
         QWidget.__init__(self, parent=parent)
         self.setupUi(self)
 
@@ -29,8 +28,7 @@ class WImport(Ui_WImport, QWidget):
         self.c_type_import.currentIndexChanged.connect(self.set_type_import)
 
     def update(self):
-        """Update the display of the Widget
-        """
+        """Update the display of the Widget"""
         self.in_param.setText(self.verbose_name)
         # Fill the combobox with the meaningful widgets
         self.c_type_import.blockSignals(True)
@@ -56,8 +54,7 @@ class WImport(Ui_WImport, QWidget):
         self.c_type_import.blockSignals(False)
 
     def set_type_import(self):
-        """Change the type of the import object according to the combobox
-        """
+        """Change the type of the import object according to the combobox"""
         data = self.widget_list[self.c_type_import.currentIndex()].import_type()
         data._set_None()
         setattr(self.obj, self.param_name, data)
@@ -67,11 +64,11 @@ class WImport(Ui_WImport, QWidget):
     def set_import_widget(self):
         """Update the import widget
 
-            Parameters
-            ----------
-            self : WImport
-                A WImport object
-            """
+        Parameters
+        ----------
+        self : WImport
+            A WImport object
+        """
         data = getattr(self.obj, self.param_name)
         # Regenerate the pages with the new values
         self.w_import.setParent(None)
@@ -88,12 +85,10 @@ class WImport(Ui_WImport, QWidget):
         self.main_layout.insertWidget(1, self.w_import)
 
     def update_type(self):
-        """The Import widget has changed the type of the import
-        """
+        """The Import widget has changed the type of the import"""
         setattr(self.obj, self.param_name, self.w_import.data)
         self.update()
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()

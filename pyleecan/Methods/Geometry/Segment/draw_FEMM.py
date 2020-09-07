@@ -42,7 +42,7 @@ def draw_FEMM(
     Returns
     -------
 
-    
+
     """
 
     # Get BC (if any)

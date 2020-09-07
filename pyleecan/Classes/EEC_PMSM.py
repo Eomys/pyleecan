@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/EEC_PMSM.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/EEC_PMSM.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/EEC_PMSM
 """
 
 from os import linesep
@@ -26,6 +27,11 @@ try:
     from ..Methods.Simulation.EEC_PMSM.gen_drive import gen_drive
 except ImportError as error:
     gen_drive = error
+
+try:
+    from ..Methods.Simulation.EEC_PMSM.comp_joule_losses import comp_joule_losses
+except ImportError as error:
+    comp_joule_losses = error
 
 
 from ._check import InitUnKnowClassError
@@ -69,13 +75,24 @@ class EEC_PMSM(EEC):
         )
     else:
         gen_drive = gen_drive
+    # cf Methods.Simulation.EEC_PMSM.comp_joule_losses
+    if isinstance(comp_joule_losses, ImportError):
+        comp_joule_losses = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use EEC_PMSM method comp_joule_losses: "
+                    + str(comp_joule_losses)
+                )
+            )
+        )
+    else:
+        comp_joule_losses = comp_joule_losses
     # save method is available in all object
     save = save
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -263,8 +280,7 @@ class EEC_PMSM(EEC):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from EEC
         EEC_PMSM_dict = super(EEC_PMSM, self).as_dict()
@@ -313,10 +329,13 @@ class EEC_PMSM(EEC):
         if self._indmag is not None:
             self._indmag.parent = self
 
-    # Magnetic inductance
-    # Type : IndMag
     indmag = property(
-        fget=_get_indmag, fset=_set_indmag, doc=u"""Magnetic inductance"""
+        fget=_get_indmag,
+        fset=_set_indmag,
+        doc=u"""Magnetic inductance
+
+        :Type: IndMag
+        """,
     )
 
     def _get_fluxlink(self):
@@ -331,9 +350,14 @@ class EEC_PMSM(EEC):
         if self._fluxlink is not None:
             self._fluxlink.parent = self
 
-    # Flux Linkage
-    # Type : FluxLink
-    fluxlink = property(fget=_get_fluxlink, fset=_set_fluxlink, doc=u"""Flux Linkage""")
+    fluxlink = property(
+        fget=_get_fluxlink,
+        fset=_set_fluxlink,
+        doc=u"""Flux Linkage
+
+        :Type: FluxLink
+        """,
+    )
 
     def _get_parameters(self):
         """getter of parameters"""
@@ -344,12 +368,13 @@ class EEC_PMSM(EEC):
         check_var("parameters", value, "dict")
         self._parameters = value
 
-    # Parameters of the EEC: computed if empty, or enforced
-    # Type : dict
     parameters = property(
         fget=_get_parameters,
         fset=_set_parameters,
-        doc=u"""Parameters of the EEC: computed if empty, or enforced""",
+        doc=u"""Parameters of the EEC: computed if empty, or enforced
+
+        :Type: dict
+        """,
     )
 
     def _get_freq0(self):
@@ -361,9 +386,14 @@ class EEC_PMSM(EEC):
         check_var("freq0", value, "float")
         self._freq0 = value
 
-    # Frequency
-    # Type : float
-    freq0 = property(fget=_get_freq0, fset=_set_freq0, doc=u"""Frequency""")
+    freq0 = property(
+        fget=_get_freq0,
+        fset=_set_freq0,
+        doc=u"""Frequency
+
+        :Type: float
+        """,
+    )
 
     def _get_drive(self):
         """getter of drive"""
@@ -377,6 +407,11 @@ class EEC_PMSM(EEC):
         if self._drive is not None:
             self._drive.parent = self
 
-    # Drive
-    # Type : Drive
-    drive = property(fget=_get_drive, fset=_set_drive, doc=u"""Drive""")
+    drive = property(
+        fget=_get_drive,
+        fset=_set_drive,
+        doc=u"""Drive
+
+        :Type: Drive
+        """,
+    )

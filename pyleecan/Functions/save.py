@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from .Save.save_json import save_json
 from .Save.save_hdf5 import save_hdf5
+from .Save.save_pkl import save_pkl
 
 
 class FormatError(Exception):
@@ -12,12 +13,12 @@ def save(self, save_path="", is_folder=False):
 
     Parameters
     ----------
-    self : 
+    self :
         A pyleecan object
     save_path: str
         path to the folder to save the object
     is_folder: bool
-        to split the object in different files: separate simulation machine and materials 
+        to split the object in different files: separate simulation machine and materials
     """
     # Save in the object.path if it exist and save_path is empty
     if save_path == "" and hasattr(self, "path") and getattr(self, "path") != None:
@@ -25,6 +26,7 @@ def save(self, save_path="", is_folder=False):
     if (
         not save_path.endswith("json")
         and not save_path.endswith("h5")
+        and not save_path.endswith("pkl")
         and not is_folder
     ):
         save_path += ".json"  # Default format
@@ -35,3 +37,10 @@ def save(self, save_path="", is_folder=False):
     # Save in hdf5
     elif save_path.endswith(".h5"):
         save_hdf5(self, save_path=save_path)
+    # Save in pkl
+    elif save_path.endswith(".pkl"):
+        save_pkl(self, save_path=save_path)
+    else:
+        raise FormatError(
+            "Unknown file extension: '{}'".format(save_path.rsplit(".")[-1])
+        )

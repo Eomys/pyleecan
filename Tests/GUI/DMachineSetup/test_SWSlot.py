@@ -78,10 +78,9 @@ class TestSWSlot(object):
         """Exit the app after the test"""
         cls.app.quit()
 
-
     def test_init(self):
         """Check that the Widget initialize to the correct slot"""
-        
+
         assert self.widget.si_Zs.value() == 123
         assert self.widget.c_slot_type.currentText() == "Slot Type 10"
         assert self.widget.c_slot_type.currentIndex() == 0
@@ -258,47 +257,47 @@ class TestSWSlot(object):
         self.widget.si_Zs.clear()
         value = int(uniform(1, 100))
         QTest.keyClicks(self.widget.si_Zs, str(value))
-        self.widget.si_Zs.editingFinished.emit()    # To trigger the slot
+        self.widget.si_Zs.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.stator.slot.Zs == value
 
     def test_c_slot_type(self):
         """Check that the combobox allow to update the slot type"""
-        slot_list = [    
-            SlotW10,    
-            SlotW11,    
-            SlotW12,    
-            SlotW13,    
-            SlotW14,    
-            SlotW15,    
-            SlotW16,    
-            SlotW21,    
-            SlotW22,    
-            SlotW23,    
-            SlotW24,    
-            SlotW25,    
-            SlotW26,    
-            SlotW27,    
-            SlotW28,    
-            SlotW29,    
+        slot_list = [
+            SlotW10,
+            SlotW11,
+            SlotW12,
+            SlotW13,
+            SlotW14,
+            SlotW15,
+            SlotW16,
+            SlotW21,
+            SlotW22,
+            SlotW23,
+            SlotW24,
+            SlotW25,
+            SlotW26,
+            SlotW27,
+            SlotW28,
+            SlotW29,
         ]
-        WIDGET_LIST = [    
-            PWSlot10,    
-            PWSlot11,    
-            PWSlot12,    
-            PWSlot13,    
-            PWSlot14,    
-            PWSlot15,    
-            PWSlot16,    
-            PWSlot21,    
-            PWSlot22,    
-            PWSlot23,    
-            PWSlot24,    
-            PWSlot25,    
-            PWSlot26,    
-            PWSlot27,    
-            PWSlot28,    
-            PWSlot29,    
+        WIDGET_LIST = [
+            PWSlot10,
+            PWSlot11,
+            PWSlot12,
+            PWSlot13,
+            PWSlot14,
+            PWSlot15,
+            PWSlot16,
+            PWSlot21,
+            PWSlot22,
+            PWSlot23,
+            PWSlot24,
+            PWSlot25,
+            PWSlot26,
+            PWSlot27,
+            PWSlot28,
+            PWSlot29,
         ]
         for ii in range(len(WIDGET_LIST)):
             self.widget.c_slot_type.setCurrentIndex(ii)

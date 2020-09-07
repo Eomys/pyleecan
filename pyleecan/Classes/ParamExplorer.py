@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/ParamExplorer.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/ParamExplorer.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/ParamExplorer
 """
 
 from os import linesep
@@ -45,8 +46,7 @@ class ParamExplorer(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -135,8 +135,7 @@ class ParamExplorer(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         ParamExplorer_dict = dict()
         ParamExplorer_dict["name"] = self.name
@@ -170,9 +169,14 @@ class ParamExplorer(FrozenClass):
         check_var("name", value, "str")
         self._name = value
 
-    # Parameter name
-    # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""Parameter name""")
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Parameter name
+
+        :Type: str
+        """,
+    )
 
     def _get_symbol(self):
         """getter of symbol"""
@@ -183,9 +187,14 @@ class ParamExplorer(FrozenClass):
         check_var("symbol", value, "str")
         self._symbol = value
 
-    # Parameter symbol
-    # Type : str
-    symbol = property(fget=_get_symbol, fset=_set_symbol, doc=u"""Parameter symbol""")
+    symbol = property(
+        fget=_get_symbol,
+        fset=_set_symbol,
+        doc=u"""Parameter symbol
+
+        :Type: str
+        """,
+    )
 
     def _get_unit(self):
         """getter of unit"""
@@ -196,18 +205,24 @@ class ParamExplorer(FrozenClass):
         check_var("unit", value, "str")
         self._unit = value
 
-    # Parameter unit
-    # Type : str
-    unit = property(fget=_get_unit, fset=_set_unit, doc=u"""Parameter unit""")
+    unit = property(
+        fget=_get_unit,
+        fset=_set_unit,
+        doc=u"""Parameter unit
+
+        :Type: str
+        """,
+    )
 
     def _get_setter(self):
         """getter of setter"""
         return self._setter[0]
 
-    # Function that takes a Simulation and a value in argument and modifiers the simulation
-    # Type : function
     setter = property(
         fget=_get_setter,
         fset=_set_setter,
-        doc=u"""Function that takes a Simulation and a value in argument and modifiers the simulation""",
+        doc=u"""Function that takes a Simulation and a value in argument and modifiers the simulation
+
+        :Type: function
+        """,
     )

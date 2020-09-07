@@ -14,6 +14,7 @@ from pyleecan.Classes.Material import Material
 
 import pytest
 
+
 @pytest.mark.GUI
 class TestPHoleM52(object):
     """Test that the widget PHoleM52 behave like it should"""
@@ -53,7 +54,7 @@ class TestPHoleM52(object):
         assert self.widget.lf_H2.value() == 0.12
         assert self.widget.lf_W0.value() == 0.13
         assert self.widget.lf_W3.value() == 0.17
-        #Check material
+        # Check material
         assert not self.widget.w_mat_1.isHidden()
         assert self.widget.w_mat_1.c_mat_type.currentText() == "Magnet2"
         assert self.widget.w_mat_1.c_mat_type.currentIndex() == 1
@@ -63,7 +64,7 @@ class TestPHoleM52(object):
         # Clear the field before writing the new value
         self.widget.lf_W0.clear()
         QTest.keyClicks(self.widget.lf_W0, "0.31")
-        self.widget.lf_W0.editingFinished.emit() # To trigger the slot
+        self.widget.lf_W0.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.hole.W0 == 0.31
         assert self.test_obj.hole[0].W0 == 0.31
@@ -73,7 +74,7 @@ class TestPHoleM52(object):
         # Clear the field before writing the new value
         self.widget.lf_W3.clear()
         QTest.keyClicks(self.widget.lf_W3, "0.323")
-        self.widget.lf_W3.editingFinished.emit() # To trigger the slot
+        self.widget.lf_W3.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.hole.W3 == 0.323
         assert self.test_obj.hole[0].W3 == 0.323
@@ -83,7 +84,7 @@ class TestPHoleM52(object):
         # Clear the field before writing the new value
         self.widget.lf_H0.clear()
         QTest.keyClicks(self.widget.lf_H0, "0.34")
-        self.widget.lf_H0.editingFinished.emit() # To trigger the slot
+        self.widget.lf_H0.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.hole.H0 == 0.34
         assert self.test_obj.hole[0].H0 == 0.34
@@ -103,7 +104,7 @@ class TestPHoleM52(object):
         # Clear the field before writing the new value
         self.widget.lf_H2.clear()
         QTest.keyClicks(self.widget.lf_H2, "0.36")
-        self.widget.lf_H2.editingFinished.emit() # To trigger the slot
+        self.widget.lf_H2.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.hole.H2 == 0.36
         assert self.test_obj.hole[0].H2 == 0.36

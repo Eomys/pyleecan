@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Import/ImportMatrix.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Import/ImportMatrix.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Import/ImportMatrix
 """
 
 from os import linesep
@@ -42,8 +43,7 @@ class ImportMatrix(Import):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -104,8 +104,7 @@ class ImportMatrix(Import):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Import
         ImportMatrix_dict = super(ImportMatrix, self).as_dict()
@@ -131,10 +130,11 @@ class ImportMatrix(Import):
         check_var("is_transpose", value, "bool")
         self._is_transpose = value
 
-    # 1 to transpose the Imported/Generated matrix
-    # Type : bool
     is_transpose = property(
         fget=_get_is_transpose,
         fset=_set_is_transpose,
-        doc=u"""1 to transpose the Imported/Generated matrix""",
+        doc=u"""1 to transpose the Imported/Generated matrix
+
+        :Type: bool
+        """,
     )

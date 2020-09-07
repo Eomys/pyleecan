@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/VarParam.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/VarParam.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/VarParam
 """
 
 from os import linesep
@@ -61,8 +62,7 @@ class VarParam(VarSimu):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -140,7 +140,11 @@ class VarParam(VarSimu):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in ["ParamExplorer", "ParamExplorerSet"]:
+                    if class_name not in [
+                        "ParamExplorer",
+                        "OptiDesignVar",
+                        "ParamExplorerSet",
+                    ]:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -204,8 +208,7 @@ class VarParam(VarSimu):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from VarSimu
         VarParam_dict = super(VarParam, self).as_dict()
@@ -241,10 +244,11 @@ class VarParam(VarSimu):
             if obj is not None:
                 obj.parent = self
 
-    # List containing ParamSetter to define every simulation
-    # Type : [ParamExplorer]
     paramexplorer_list = property(
         fget=_get_paramexplorer_list,
         fset=_set_paramexplorer_list,
-        doc=u"""List containing ParamSetter to define every simulation""",
+        doc=u"""List containing ParamSetter to define every simulation
+
+        :Type: [ParamExplorer]
+        """,
     )
