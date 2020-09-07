@@ -7,8 +7,7 @@ class HelpButton(QLabel):
     """A Qlabel with a ? icon, and a click event that open a link"""
 
     def __init__(self, *args, **kwargs):
-        """Same constructor as QLineEdit + config validator
-        """
+        """Same constructor as QLineEdit + config validator"""
         self.url = "https://eomys.com/"
 
         # Call the QLabel constructor

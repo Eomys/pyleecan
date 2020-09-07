@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/HoleM52.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/HoleM52.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/HoleM52
 """
 
 from os import linesep
@@ -28,11 +29,6 @@ except ImportError as error:
     comp_alpha = error
 
 try:
-    from ..Methods.Slot.HoleM52.comp_mass_magnets import comp_mass_magnets
-except ImportError as error:
-    comp_mass_magnets = error
-
-try:
     from ..Methods.Slot.HoleM52.comp_radius import comp_radius
 except ImportError as error:
     comp_radius = error
@@ -43,24 +39,14 @@ except ImportError as error:
     comp_surface = error
 
 try:
-    from ..Methods.Slot.HoleM52.comp_surface_magnets import comp_surface_magnets
-except ImportError as error:
-    comp_surface_magnets = error
-
-try:
-    from ..Methods.Slot.HoleM52.comp_volume_magnets import comp_volume_magnets
-except ImportError as error:
-    comp_volume_magnets = error
-
-try:
     from ..Methods.Slot.HoleM52.comp_W1 import comp_W1
 except ImportError as error:
     comp_W1 = error
 
 try:
-    from ..Methods.Slot.HoleM52.get_height_magnet import get_height_magnet
+    from ..Methods.Slot.HoleM52.has_magnet import has_magnet
 except ImportError as error:
-    get_height_magnet = error
+    has_magnet = error
 
 try:
     from ..Methods.Slot.HoleM52.remove_magnet import remove_magnet
@@ -68,9 +54,9 @@ except ImportError as error:
     remove_magnet = error
 
 try:
-    from ..Methods.Slot.HoleM52.has_magnet import has_magnet
+    from ..Methods.Slot.HoleM52.comp_surface_magnet_id import comp_surface_magnet_id
 except ImportError as error:
-    has_magnet = error
+    comp_surface_magnet_id = error
 
 
 from ._check import InitUnKnowClassError
@@ -114,18 +100,6 @@ class HoleM52(HoleMag):
         )
     else:
         comp_alpha = comp_alpha
-    # cf Methods.Slot.HoleM52.comp_mass_magnets
-    if isinstance(comp_mass_magnets, ImportError):
-        comp_mass_magnets = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM52 method comp_mass_magnets: "
-                    + str(comp_mass_magnets)
-                )
-            )
-        )
-    else:
-        comp_mass_magnets = comp_mass_magnets
     # cf Methods.Slot.HoleM52.comp_radius
     if isinstance(comp_radius, ImportError):
         comp_radius = property(
@@ -146,30 +120,6 @@ class HoleM52(HoleMag):
         )
     else:
         comp_surface = comp_surface
-    # cf Methods.Slot.HoleM52.comp_surface_magnets
-    if isinstance(comp_surface_magnets, ImportError):
-        comp_surface_magnets = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM52 method comp_surface_magnets: "
-                    + str(comp_surface_magnets)
-                )
-            )
-        )
-    else:
-        comp_surface_magnets = comp_surface_magnets
-    # cf Methods.Slot.HoleM52.comp_volume_magnets
-    if isinstance(comp_volume_magnets, ImportError):
-        comp_volume_magnets = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM52 method comp_volume_magnets: "
-                    + str(comp_volume_magnets)
-                )
-            )
-        )
-    else:
-        comp_volume_magnets = comp_volume_magnets
     # cf Methods.Slot.HoleM52.comp_W1
     if isinstance(comp_W1, ImportError):
         comp_W1 = property(
@@ -179,18 +129,15 @@ class HoleM52(HoleMag):
         )
     else:
         comp_W1 = comp_W1
-    # cf Methods.Slot.HoleM52.get_height_magnet
-    if isinstance(get_height_magnet, ImportError):
-        get_height_magnet = property(
+    # cf Methods.Slot.HoleM52.has_magnet
+    if isinstance(has_magnet, ImportError):
+        has_magnet = property(
             fget=lambda x: raise_(
-                ImportError(
-                    "Can't use HoleM52 method get_height_magnet: "
-                    + str(get_height_magnet)
-                )
+                ImportError("Can't use HoleM52 method has_magnet: " + str(has_magnet))
             )
         )
     else:
-        get_height_magnet = get_height_magnet
+        has_magnet = has_magnet
     # cf Methods.Slot.HoleM52.remove_magnet
     if isinstance(remove_magnet, ImportError):
         remove_magnet = property(
@@ -202,22 +149,24 @@ class HoleM52(HoleMag):
         )
     else:
         remove_magnet = remove_magnet
-    # cf Methods.Slot.HoleM52.has_magnet
-    if isinstance(has_magnet, ImportError):
-        has_magnet = property(
+    # cf Methods.Slot.HoleM52.comp_surface_magnet_id
+    if isinstance(comp_surface_magnet_id, ImportError):
+        comp_surface_magnet_id = property(
             fget=lambda x: raise_(
-                ImportError("Can't use HoleM52 method has_magnet: " + str(has_magnet))
+                ImportError(
+                    "Can't use HoleM52 method comp_surface_magnet_id: "
+                    + str(comp_surface_magnet_id)
+                )
             )
         )
     else:
-        has_magnet = has_magnet
+        comp_surface_magnet_id = comp_surface_magnet_id
     # save method is available in all object
     save = save
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -381,8 +330,7 @@ class HoleM52(HoleMag):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from HoleMag
         HoleM52_dict = super(HoleM52, self).as_dict()
@@ -422,9 +370,15 @@ class HoleM52(HoleMag):
         check_var("H0", value, "float", Vmin=0)
         self._H0 = value
 
-    # Slot depth
-    # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot depth""")
+    H0 = property(
+        fget=_get_H0,
+        fset=_set_H0,
+        doc=u"""Slot depth
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W0(self):
         """getter of W0"""
@@ -435,9 +389,15 @@ class HoleM52(HoleMag):
         check_var("W0", value, "float", Vmin=0)
         self._W0 = value
 
-    # Magnet width
-    # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Magnet width""")
+    W0 = property(
+        fget=_get_W0,
+        fset=_set_W0,
+        doc=u"""Magnet width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H1(self):
         """getter of H1"""
@@ -448,9 +408,15 @@ class HoleM52(HoleMag):
         check_var("H1", value, "float", Vmin=0)
         self._H1 = value
 
-    # Magnet height
-    # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Magnet height""")
+    H1 = property(
+        fget=_get_H1,
+        fset=_set_H1,
+        doc=u"""Magnet height
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W3(self):
         """getter of W3"""
@@ -461,9 +427,15 @@ class HoleM52(HoleMag):
         check_var("W3", value, "float", Vmin=0)
         self._W3 = value
 
-    # Tooth width
-    # Type : float, min = 0
-    W3 = property(fget=_get_W3, fset=_set_W3, doc=u"""Tooth width""")
+    W3 = property(
+        fget=_get_W3,
+        fset=_set_W3,
+        doc=u"""Tooth width
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H2(self):
         """getter of H2"""
@@ -474,10 +446,14 @@ class HoleM52(HoleMag):
         check_var("H2", value, "float", Vmin=0)
         self._H2 = value
 
-    # Additional depth for the magnet
-    # Type : float, min = 0
     H2 = property(
-        fget=_get_H2, fset=_set_H2, doc=u"""Additional depth for the magnet"""
+        fget=_get_H2,
+        fset=_set_H2,
+        doc=u"""Additional depth for the magnet
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_magnet_0(self):
@@ -492,8 +468,11 @@ class HoleM52(HoleMag):
         if self._magnet_0 is not None:
             self._magnet_0.parent = self
 
-    # Magnet of the hole
-    # Type : Magnet
     magnet_0 = property(
-        fget=_get_magnet_0, fset=_set_magnet_0, doc=u"""Magnet of the hole"""
+        fget=_get_magnet_0,
+        fset=_set_magnet_0,
+        doc=u"""Magnet of the hole
+
+        :Type: Magnet
+        """,
     )

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/MachineIPMSM.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/MachineIPMSM.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/MachineIPMSM
 """
 
 from os import linesep
@@ -78,8 +79,7 @@ class MachineIPMSM(MachineSync):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -232,8 +232,7 @@ class MachineIPMSM(MachineSync):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from MachineSync
         MachineIPMSM_dict = super(MachineIPMSM, self).as_dict()
@@ -272,9 +271,14 @@ class MachineIPMSM(MachineSync):
         if self._rotor is not None:
             self._rotor.parent = self
 
-    # Machine's Rotor
-    # Type : LamHole
-    rotor = property(fget=_get_rotor, fset=_set_rotor, doc=u"""Machine's Rotor""")
+    rotor = property(
+        fget=_get_rotor,
+        fset=_set_rotor,
+        doc=u"""Machine's Rotor
+
+        :Type: LamHole
+        """,
+    )
 
     def _get_stator(self):
         """getter of stator"""
@@ -288,6 +292,11 @@ class MachineIPMSM(MachineSync):
         if self._stator is not None:
             self._stator.parent = self
 
-    # Machine's Stator
-    # Type : LamSlotWind
-    stator = property(fget=_get_stator, fset=_set_stator, doc=u"""Machine's Stator""")
+    stator = property(
+        fget=_get_stator,
+        fset=_set_stator,
+        doc=u"""Machine's Stator
+
+        :Type: LamSlotWind
+        """,
+    )

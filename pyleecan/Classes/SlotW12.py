@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/SlotW12.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/SlotW12.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/SlotW12
 """
 
 from os import linesep
@@ -155,8 +156,7 @@ class SlotW12(SlotWind):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -243,8 +243,7 @@ class SlotW12(SlotWind):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from SlotWind
         SlotW12_dict = super(SlotW12, self).as_dict()
@@ -276,9 +275,15 @@ class SlotW12(SlotWind):
         check_var("H0", value, "float", Vmin=0)
         self._H0 = value
 
-    # Slot isthmus height.
-    # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height.""")
+    H0 = property(
+        fget=_get_H0,
+        fset=_set_H0,
+        doc=u"""Slot isthmus height.
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H1(self):
         """getter of H1"""
@@ -289,9 +294,15 @@ class SlotW12(SlotWind):
         check_var("H1", value, "float", Vmin=0)
         self._H1 = value
 
-    # Slot middle height
-    # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Slot middle height""")
+    H1 = property(
+        fget=_get_H1,
+        fset=_set_H1,
+        doc=u"""Slot middle height
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_R1(self):
         """getter of R1"""
@@ -302,9 +313,15 @@ class SlotW12(SlotWind):
         check_var("R1", value, "float", Vmin=0)
         self._R1 = value
 
-    # Wedges radius
-    # Type : float, min = 0
-    R1 = property(fget=_get_R1, fset=_set_R1, doc=u"""Wedges radius""")
+    R1 = property(
+        fget=_get_R1,
+        fset=_set_R1,
+        doc=u"""Wedges radius
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_R2(self):
         """getter of R2"""
@@ -315,6 +332,12 @@ class SlotW12(SlotWind):
         check_var("R2", value, "float", Vmin=0)
         self._R2 = value
 
-    # Slot bottom radius
-    # Type : float, min = 0
-    R2 = property(fget=_get_R2, fset=_set_R2, doc=u"""Slot bottom radius""")
+    R2 = property(
+        fget=_get_R2,
+        fset=_set_R2,
+        doc=u"""Slot bottom radius
+
+        :Type: float
+        :min: 0
+        """,
+    )

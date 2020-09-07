@@ -25,8 +25,8 @@ class DMatSetup(Gen_DMatSetup, QDialog):
         ----------
         material : Material
             material to edit
-        is_matlib : bool 
-            material already in matlib 
+        is_matlib : bool
+            material already in matlib
         """
         # Build the interface according to the .ui file
         QDialog.__init__(self)

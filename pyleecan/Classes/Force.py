@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/Force.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/Force.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/Force
 """
 
 from os import linesep
@@ -57,8 +58,7 @@ class Force(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -117,8 +117,7 @@ class Force(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         Force_dict = dict()
         Force_dict["is_comp_nodal_force"] = self.is_comp_nodal_force
@@ -140,10 +139,11 @@ class Force(FrozenClass):
         check_var("is_comp_nodal_force", value, "bool")
         self._is_comp_nodal_force = value
 
-    # 1 to compute lumped tooth forces
-    # Type : bool
     is_comp_nodal_force = property(
         fget=_get_is_comp_nodal_force,
         fset=_set_is_comp_nodal_force,
-        doc=u"""1 to compute lumped tooth forces""",
+        doc=u"""1 to compute lumped tooth forces
+
+        :Type: bool
+        """,
     )

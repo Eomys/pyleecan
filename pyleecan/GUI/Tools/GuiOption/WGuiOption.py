@@ -25,12 +25,12 @@ class WGuiOption(Ui_GUIOption, QDialog):
         WGuiOption enable to modify some option in the GUI such as:
             - units
             - material library folder
-        
+
         Parameters:
         machine_setup: DMachineSetup
             Machine widget
         matlib : MatLib
-            Material Library 
+            Material Library
         """
         QDialog.__init__(self)
         self.setupUi(self)
@@ -63,16 +63,14 @@ class WGuiOption(Ui_GUIOption, QDialog):
         self.matlib.add_machine_mat(self.machine_setup.machine)
 
     def set_unit_m(self):
-        """Update the value of unit_m
-        """
+        """Update the value of unit_m"""
         global gui_option
         gui_option.unit.unit_m = self.c_unit_m.currentIndex()
         config_dict["GUI"]["UNIT_M"] = gui_option.unit.unit_m
         save_config_dict(config_dict)
 
     def set_unit_m2(self):
-        """Update the value of unit_m2
-        """
+        """Update the value of unit_m2"""
         global gui_option
         gui_option.unit.unit_m2 = self.c_unit_m2.currentIndex()
         config_dict["GUI"]["UNIT_M2"] = gui_option.unit.unit_m2

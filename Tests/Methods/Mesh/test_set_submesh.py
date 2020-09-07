@@ -6,9 +6,11 @@ from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
+
 @pytest.mark.METHODS
 class Test_set_submesh(object):
     """unittest to get elements containing specific node(s)"""
+
     def test_ElementMat_NodeMat(self):
         # Init 1
         # Init
@@ -33,7 +35,7 @@ class Test_set_submesh(object):
         testA = np.sum(abs(solution - results))
         msg = "Wrong result: returned " + str(results) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
         # Method test 2
         mesh_grp4 = mesh.set_submesh([3, 2])
@@ -43,4 +45,4 @@ class Test_set_submesh(object):
         testA = np.sum(abs(solution - results))
         msg = "Wrong result: returned " + str(results) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg

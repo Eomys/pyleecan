@@ -7,8 +7,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM58.Ui_PHoleM58 import Ui_
 
 class Gen_PHoleM58(Ui_PHoleM58):
     def setupUi(self, PHoleM58):
-        """Abstract class to update the widget according to the csv doc
-        """
+        """Abstract class to update the widget according to the csv doc"""
         Ui_PHoleM58.setupUi(self, PHoleM58)
         # Setup of in_W0
         txt = self.tr(u"""Slot width""")

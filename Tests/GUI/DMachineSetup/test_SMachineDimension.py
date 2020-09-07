@@ -19,6 +19,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMachineDimension.SMachineDimension impor
 
 import pytest
 
+
 @pytest.mark.GUI
 class TestSMachineDimension(object):
     """Test that the widget SMachineDimension behave like it should"""
@@ -65,7 +66,7 @@ class TestSMachineDimension(object):
         assert self.widget.lf_SRext.value() == 0.22
         assert self.widget.lf_RRint.value() == 0.11
         assert self.widget.lf_RRext.value() == 0.12
-        assert round(abs(self.widget.lf_Wfra.value()-0.02), 7) == 0
+        assert round(abs(self.widget.lf_Wfra.value() - 0.02), 7) == 0
         assert self.widget.lf_Lfra.value() == 0.25
         assert self.widget.g_frame.isChecked() == True
         assert self.widget.g_shaft.isChecked() == True
@@ -75,18 +76,18 @@ class TestSMachineDimension(object):
         """Check that the Widget spinbox initialise to the lamination value"""
 
         self.test_obj.shaft = None
-        self.widget = SMachineDimension(    
-            machine=self.test_obj, matlib=self.matlib, is_stator=False    
+        self.widget = SMachineDimension(
+            machine=self.test_obj, matlib=self.matlib, is_stator=False
         )
         assert self.widget.g_shaft.isChecked() == False
         self.test_obj.shaft = Shaft(Drsh=None)
-        self.widget = SMachineDimension(    
-            machine=self.test_obj, matlib=self.matlib, is_stator=False    
+        self.widget = SMachineDimension(
+            machine=self.test_obj, matlib=self.matlib, is_stator=False
         )
         assert self.widget.g_shaft.isChecked() == False
         self.test_obj.shaft = Shaft(Drsh=0)
-        self.widget = SMachineDimension(   
-            machine=self.test_obj, matlib=self.matlib, is_stator=False    
+        self.widget = SMachineDimension(
+            machine=self.test_obj, matlib=self.matlib, is_stator=False
         )
         assert self.widget.g_shaft.isChecked() == False
 
@@ -96,7 +97,7 @@ class TestSMachineDimension(object):
         self.widget.lf_SRint.clear()
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_SRint, str(value))
-        self.widget.lf_SRint.editingFinished.emit() # To trigger the slot
+        self.widget.lf_SRint.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.stator.Rint == value
 
@@ -106,7 +107,7 @@ class TestSMachineDimension(object):
         self.widget.lf_SRext.clear()
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_SRext, str(value))
-        self.widget.lf_SRext.editingFinished.emit() # To trigger the slot
+        self.widget.lf_SRext.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.stator.Rext == value
 
@@ -126,7 +127,7 @@ class TestSMachineDimension(object):
         self.widget.lf_RRext.clear()
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_RRext, str(value))
-        self.widget.lf_RRext.editingFinished.emit() # To trigger the slot
+        self.widget.lf_RRext.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.rotor.Rext == value
 
@@ -147,6 +148,6 @@ class TestSMachineDimension(object):
         self.widget.lf_Lfra.clear()
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_Lfra, str(value))
-        self.widget.lf_Lfra.editingFinished.emit() # To trigger the slot
+        self.widget.lf_Lfra.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.frame.Lfra == value

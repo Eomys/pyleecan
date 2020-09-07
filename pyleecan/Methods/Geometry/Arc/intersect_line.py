@@ -5,7 +5,7 @@ from numpy import exp, pi, angle, abs as np_abs
 
 
 def intersect_line(self, Z1, Z2):
-    """Return a list (0, 1 or 2 complex) of coordinates of the 
+    """Return a list (0, 1 or 2 complex) of coordinates of the
     intersection of the arc with a line defined by two complex
 
     Parameters
@@ -26,7 +26,7 @@ def intersect_line(self, Z1, Z2):
     Zlist = inter_line_circle(Z1=Z1, Z2=Z2, R=R, Zc=Zc)
 
     # Keep only the points actually on the arc
-    Zlist = [Z for Z in Zlist if self.is_on_arc(Z)]
+    Zlist = [Z for Z in Zlist if self.is_on_line(Z)]
 
     # Order the intersection points (begin=>intersect1=>intersection2=>end)
     if len(Zlist) == 2:

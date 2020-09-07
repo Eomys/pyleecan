@@ -22,6 +22,7 @@ from pyleecan.Classes.HoleM50 import HoleM50
 
 import pytest
 
+
 @pytest.mark.GUI
 class TestSMachineType(object):
     """Test that the widget SMachineType behave like it should"""
@@ -61,12 +62,12 @@ class TestSMachineType(object):
 
         # DFIM
         self.test_obj = MachineDFIM(name="test_machine_dfim", type_machine=4)
-        self.test_obj.stator = LamSlotWind(    
-            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22    
+        self.test_obj.stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
         self.test_obj.stator.winding.p = 7
-        self.test_obj.rotor = LamSlotWind(    
-            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12    
+        self.test_obj.rotor = LamSlotWind(
+            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
         self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
 
@@ -78,15 +79,15 @@ class TestSMachineType(object):
 
         # SyRM
         self.test_obj = MachineSyRM(name="test_machine_syrm", type_machine=5)
-        self.test_obj.stator = LamSlotWind(    
-            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22    
+        self.test_obj.stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
         self.test_obj.stator.winding.p = 21
-        self.test_obj.rotor = LamHole(    
-            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12    
+        self.test_obj.rotor = LamHole(
+            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
         self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
-        
+
         assert self.widget.le_name.text() == "test_machine_syrm"
         assert self.widget.si_p.value() == 21
         assert self.widget.c_type.currentIndex() == 2
@@ -95,12 +96,12 @@ class TestSMachineType(object):
 
         # SPMSM
         self.test_obj = MachineSIPMSM(name="test_machine_spmsm", type_machine=6)
-        self.test_obj.stator = LamSlotWind(    
-            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22    
+        self.test_obj.stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
         self.test_obj.stator.winding.p = 8
-        self.test_obj.rotor = LamSlotMag(    
-            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12    
+        self.test_obj.rotor = LamSlotMag(
+            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
         self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
 
@@ -112,12 +113,12 @@ class TestSMachineType(object):
 
         # SIPMSM
         self.test_obj = MachineSIPMSM(name="test_machine_sipmsm", type_machine=7)
-        self.test_obj.stator = LamSlotWind(    
-            is_stator=True, is_internal=False, Rint=0.21, Rext=0.22    
+        self.test_obj.stator = LamSlotWind(
+            is_stator=True, is_internal=False, Rint=0.21, Rext=0.22
         )
         self.test_obj.stator.winding.p = 9
-        self.test_obj.rotor = LamSlotMag(    
-            is_stator=False, is_internal=True, Rint=0.11, Rext=0.12    
+        self.test_obj.rotor = LamSlotMag(
+            is_stator=False, is_internal=True, Rint=0.11, Rext=0.12
         )
         self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
 
@@ -129,12 +130,12 @@ class TestSMachineType(object):
 
         # IPMSM
         self.test_obj = MachineIPMSM(name="test_machine_ipmsm", type_machine=8)
-        self.test_obj.stator = LamSlotWind(    
-            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22    
+        self.test_obj.stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
         self.test_obj.stator.winding.p = 10
-        self.test_obj.rotor = LamHole(    
-            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12    
+        self.test_obj.rotor = LamHole(
+            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
         self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
 
@@ -146,12 +147,12 @@ class TestSMachineType(object):
 
         # WRSM
         self.test_obj = MachineWRSM(name="test_machine_wrsm", type_machine=9)
-        self.test_obj.stator = LamSlotWind(    
-            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22    
+        self.test_obj.stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
         self.test_obj.stator.winding.p = 5
-        self.test_obj.rotor = LamSlotWind(    
-            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12    
+        self.test_obj.rotor = LamSlotWind(
+            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
         self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
 
@@ -167,7 +168,7 @@ class TestSMachineType(object):
         self.widget.le_name.clear()
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.le_name, "test_" + str(value))
-        self.widget.le_name.editingFinished.emit()     # To trigger the slot   
+        self.widget.le_name.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.name == "test_" + str(value)
 
@@ -184,7 +185,7 @@ class TestSMachineType(object):
         self.widget.si_p.clear()
         value = int(uniform(3, 100))
         QTest.keyClicks(self.widget.si_p, str(value))
-        self.widget.si_p.editingFinished.emit()        # To trigger the slot   
+        self.widget.si_p.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.stator.winding.p == value
         assert self.test_obj.rotor.winding.p == value
@@ -192,11 +193,11 @@ class TestSMachineType(object):
     def test_set_p_dfim(self):
         """Check that the Widget allow to update p"""
         self.test_obj = MachineDFIM(name="test_machine_dfim", type_machine=4)
-        self.test_obj.stator = LamSlotWind(    
-            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22    
+        self.test_obj.stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.rotor = LamSlotWind(    
-            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12    
+        self.test_obj.rotor = LamSlotWind(
+            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
         self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
 
@@ -204,7 +205,7 @@ class TestSMachineType(object):
         self.widget.si_p.clear()
         value = int(uniform(3, 100))
         QTest.keyClicks(self.widget.si_p, str(value))
-        self.widget.si_p.editingFinished.emit()        # To trigger the slot   
+        self.widget.si_p.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.stator.winding.p == value
         assert self.test_obj.rotor.winding.p == value
@@ -212,11 +213,11 @@ class TestSMachineType(object):
     def test_set_p_spmsm(self):
         """Check that the Widget allow to update p"""
         self.test_obj = MachineSIPMSM(name="test_machine_spmsm", type_machine=6)
-        self.test_obj.stator = LamSlotWind(    
-            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22    
+        self.test_obj.stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.rotor = LamSlotMag(    
-            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12    
+        self.test_obj.rotor = LamSlotMag(
+            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
         self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
 
@@ -224,7 +225,7 @@ class TestSMachineType(object):
         self.widget.si_p.clear()
         value = int(uniform(3, 100))
         QTest.keyClicks(self.widget.si_p, str(value))
-        self.widget.si_p.editingFinished.emit()        # To trigger the slot   
+        self.widget.si_p.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.stator.winding.p == value
         assert self.test_obj.rotor.slot.Zs == 2 * value
@@ -232,11 +233,11 @@ class TestSMachineType(object):
     def test_set_p_sipmsm(self):
         """Check that the Widget allow to update p"""
         self.test_obj = MachineSIPMSM(name="test_machine_ipmsm", type_machine=7)
-        self.test_obj.stator = LamSlotWind(    
-            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22    
+        self.test_obj.stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.rotor = LamSlotMag(    
-            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12    
+        self.test_obj.rotor = LamSlotMag(
+            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
         self.widget = SMachineType(machine=self.test_obj, matlib=[], is_stator=False)
 
@@ -244,19 +245,19 @@ class TestSMachineType(object):
         self.widget.si_p.clear()
         value = int(uniform(3, 100))
         QTest.keyClicks(self.widget.si_p, str(value))
-        self.widget.si_p.editingFinished.emit()        # To trigger the slot   
-        
+        self.widget.si_p.editingFinished.emit()  # To trigger the slot
+
         assert self.test_obj.stator.winding.p == value
         assert self.test_obj.rotor.slot.Zs == 2 * value
 
     def test_set_p_ipmsm(self):
         """Check that the Widget allow to update p"""
         self.test_obj = MachineIPMSM(name="test_machine_ipmsm", type_machine=8)
-        self.test_obj.stator = LamSlotWind(    
-            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22   
+        self.test_obj.stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.rotor = LamHole(    
-            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12    
+        self.test_obj.rotor = LamHole(
+            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
         self.test_obj.rotor.hole = list()
         self.test_obj.rotor.hole.append(HoleM50(Zh=0))
@@ -266,18 +267,18 @@ class TestSMachineType(object):
         self.widget.si_p.clear()
         value = int(uniform(3, 100))
         QTest.keyClicks(self.widget.si_p, str(value))
-        self.widget.si_p.editingFinished.emit()     # To trigger the slot   
+        self.widget.si_p.editingFinished.emit()  # To trigger the slot
         assert self.test_obj.stator.winding.p == value
         assert self.test_obj.rotor.hole[0].Zh == 2 * value
 
     def test_set_p_syrm(self):
         """Check that the Widget allow to update p"""
         self.test_obj = MachineSyRM(name="test_machine_ipmsm", type_machine=5)
-        self.test_obj.stator = LamSlotWind(    
-            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22    
+        self.test_obj.stator = LamSlotWind(
+            is_stator=True, is_internal=True, Rint=0.21, Rext=0.22
         )
-        self.test_obj.rotor = LamHole(    
-            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12    
+        self.test_obj.rotor = LamHole(
+            is_stator=False, is_internal=False, Rint=0.11, Rext=0.12
         )
         self.test_obj.rotor.hole = list()
         self.test_obj.rotor.hole.append(HoleM50(Zh=0))
@@ -287,7 +288,7 @@ class TestSMachineType(object):
         self.widget.si_p.clear()
         value = int(uniform(3, 100))
         QTest.keyClicks(self.widget.si_p, str(value))
-        self.widget.si_p.editingFinished.emit() # To trigger the slot
+        self.widget.si_p.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.stator.winding.p == value
         assert self.test_obj.rotor.hole[0].Zh == 2 * value

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/SlotW29.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/SlotW29.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/SlotW29
 """
 
 from os import linesep
@@ -172,8 +173,7 @@ class SlotW29(SlotWind):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -283,8 +283,7 @@ class SlotW29(SlotWind):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from SlotWind
         SlotW29_dict = super(SlotW29, self).as_dict()
@@ -320,9 +319,15 @@ class SlotW29(SlotWind):
         check_var("W0", value, "float", Vmin=0)
         self._W0 = value
 
-    # Slot isthmus width.
-    # Type : float, min = 0
-    W0 = property(fget=_get_W0, fset=_set_W0, doc=u"""Slot isthmus width.""")
+    W0 = property(
+        fget=_get_W0,
+        fset=_set_W0,
+        doc=u"""Slot isthmus width.
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H0(self):
         """getter of H0"""
@@ -333,9 +338,15 @@ class SlotW29(SlotWind):
         check_var("H0", value, "float", Vmin=0)
         self._H0 = value
 
-    # Slot isthmus height.
-    # Type : float, min = 0
-    H0 = property(fget=_get_H0, fset=_set_H0, doc=u"""Slot isthmus height.""")
+    H0 = property(
+        fget=_get_H0,
+        fset=_set_H0,
+        doc=u"""Slot isthmus height.
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H1(self):
         """getter of H1"""
@@ -346,9 +357,15 @@ class SlotW29(SlotWind):
         check_var("H1", value, "float", Vmin=0)
         self._H1 = value
 
-    # Slot middle height
-    # Type : float, min = 0
-    H1 = property(fget=_get_H1, fset=_set_H1, doc=u"""Slot middle height""")
+    H1 = property(
+        fget=_get_H1,
+        fset=_set_H1,
+        doc=u"""Slot middle height
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W1(self):
         """getter of W1"""
@@ -359,9 +376,15 @@ class SlotW29(SlotWind):
         check_var("W1", value, "float", Vmin=0)
         self._W1 = value
 
-    # Slot middle width.
-    # Type : float, min = 0
-    W1 = property(fget=_get_W1, fset=_set_W1, doc=u"""Slot middle width.""")
+    W1 = property(
+        fget=_get_W1,
+        fset=_set_W1,
+        doc=u"""Slot middle width.
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_H2(self):
         """getter of H2"""
@@ -372,9 +395,15 @@ class SlotW29(SlotWind):
         check_var("H2", value, "float", Vmin=0)
         self._H2 = value
 
-    # Slot bottom height
-    # Type : float, min = 0
-    H2 = property(fget=_get_H2, fset=_set_H2, doc=u"""Slot bottom height""")
+    H2 = property(
+        fget=_get_H2,
+        fset=_set_H2,
+        doc=u"""Slot bottom height
+
+        :Type: float
+        :min: 0
+        """,
+    )
 
     def _get_W2(self):
         """getter of W2"""
@@ -385,6 +414,12 @@ class SlotW29(SlotWind):
         check_var("W2", value, "float", Vmin=0)
         self._W2 = value
 
-    # Slot bottom width.
-    # Type : float, min = 0
-    W2 = property(fget=_get_W2, fset=_set_W2, doc=u"""Slot bottom width.""")
+    W2 = property(
+        fget=_get_W2,
+        fset=_set_W2,
+        doc=u"""Slot bottom width.
+
+        :Type: float
+        :min: 0
+        """,
+    )

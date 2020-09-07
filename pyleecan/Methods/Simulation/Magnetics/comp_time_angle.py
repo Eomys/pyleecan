@@ -2,7 +2,7 @@
 
 
 def comp_time_angle(self, output):
-    """Compute the time and space discretization of the Magnetics module    
+    """Compute the time and space discretization of the Magnetics module
 
     Parameters
     ----------

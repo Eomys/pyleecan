@@ -9,7 +9,7 @@ def comp_phasor_angle(self, Zs=None):
     ----------
     self : Winding
         A: Winding object
-    Zs : int    
+    Zs : int
         Number of Slot (Integer >0)
 
     Returns
@@ -19,7 +19,7 @@ def comp_phasor_angle(self, Zs=None):
 
     Raises
     ------
-    
+
     """
     if Zs is None:
         if self.parent is None:

@@ -29,67 +29,59 @@ DELTA = 1e-4
 
 @pytest.mark.METHODS
 class Test_Magnet_Type_10_meth(object):
-    """unittest for MagnetType10 methods
-        """
+    """unittest for MagnetType10 methods"""
 
     @pytest.mark.parametrize("test_dict", Mag10_test)
-    def test_comp_surface(self,test_dict):
-        """Check that the computation of the surface is correct
-            """
+    def test_comp_surface(self, test_dict):
+        """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_surface()
 
         a = result
         b = test_dict["S_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a-0) < DELTA, msg
-        
+        assert abs((a - b) / a - 0) < DELTA, msg
+
         # Compare numerical and analytical results
         b = comp_surface(test_obj.slot.magnet[0])
         msg = "Analytical: " + str(a) + " Numerical " + str(b)
-        assert abs((a - b) / a-0) < DELTA, msg
+        assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", Mag10_test)
-    def test_comp_height(self,test_dict):
-        """Check that the computation of the height is correct
-            """
+    def test_comp_height(self, test_dict):
+        """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_height()
 
         a = result
         b = test_dict["H_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a-0) < DELTA, msg
+        assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", Mag10_test)
-    def test_comp_angle_op(self,test_dict):
-        """Check that the computation of the opening angle is correct
-            """
+    def test_comp_angle_op(self, test_dict):
+        """Check that the computation of the opening angle is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_angle_opening()
 
         a = result
         b = test_dict["Ao"]
         msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a-0) < DELTA, msg
+        assert abs((a - b) / a - 0) < DELTA, msg
 
     def test_build_geometry_in(self):
-        """check that curve_list is correct (inwards magnet)
-            """
-        lam = LamSlotMag(    
-            Rint=40e-3,    
-            Rext=1,    
-            is_internal=True,    
-            is_stator=False,    
-            L1=0.45,    
-            Nrvd=1,    
-            Wrvd=0.05,    
+        """check that curve_list is correct (inwards magnet)"""
+        lam = LamSlotMag(
+            Rint=40e-3,
+            Rext=1,
+            is_internal=True,
+            is_stator=False,
+            L1=0.45,
+            Nrvd=1,
+            Wrvd=0.05,
         )
-        lam.slot = SlotMFlat(    
-            Zs=8, 
-            W0=0.6,
-            H0=0.2, 
-            magnet=[MagnetType10(Wmag=0.6, Hmag=0.2)]    
+        lam.slot = SlotMFlat(
+            Zs=8, W0=0.6, H0=0.2, magnet=[MagnetType10(Wmag=0.6, Hmag=0.2)]
         )
         test_obj = lam.slot.magnet[0]
         alpha = lam.slot.comp_angle_opening_magnet()
@@ -110,29 +102,25 @@ class Test_Magnet_Type_10_meth(object):
         for i in range(0, len(result)):
             a = result[i].begin
             b = curve_list[i].begin
-            assert abs((a - b) / a-0) < DELTA
+            assert abs((a - b) / a - 0) < DELTA
 
             a = result[i].end
             b = curve_list[i].end
-            assert abs((a - b) / a-0) < DELTA
+            assert abs((a - b) / a - 0) < DELTA
 
     def test_build_geometry_out(self):
-        """check that curve_list is correct (outwards magnet)
-            """
-        lam = LamSlotMag(    
-            Rint=1,    
-            Rext=0.09,    
-            is_internal=False,    
-            is_stator=False,    
-            L1=0.45,    
-            Nrvd=1,    
-            Wrvd=0.05,    
+        """check that curve_list is correct (outwards magnet)"""
+        lam = LamSlotMag(
+            Rint=1,
+            Rext=0.09,
+            is_internal=False,
+            is_stator=False,
+            L1=0.45,
+            Nrvd=1,
+            Wrvd=0.05,
         )
-        lam.slot = SlotMFlat(    
-            Zs=8, 
-            W0=0.6, 
-            H0=0.2, 
-            magnet=[MagnetType10(Wmag=0.6, Hmag=0.2)]    
+        lam.slot = SlotMFlat(
+            Zs=8, W0=0.6, H0=0.2, magnet=[MagnetType10(Wmag=0.6, Hmag=0.2)]
         )
         test_obj = lam.slot.magnet[0]
         alpha = lam.slot.comp_angle_opening_magnet()
@@ -153,8 +141,8 @@ class Test_Magnet_Type_10_meth(object):
         for i in range(0, len(result)):
             a = result[i].begin
             b = curve_list[i].begin
-            assert abs((a - b) / a-0) < DELTA
+            assert abs((a - b) / a - 0) < DELTA
 
             a = result[i].end
             b = curve_list[i].end
-            assert abs((a - b) / a-0) < DELTA
+            assert abs((a - b) / a - 0) < DELTA

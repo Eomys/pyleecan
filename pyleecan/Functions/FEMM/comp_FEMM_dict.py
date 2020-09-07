@@ -42,7 +42,7 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
     -------
     FEMM_dict : dict
         Dictionnary containing the main parameters of FEMM
-    
+
     """
 
     # Recompute because machine may has been modified
@@ -118,7 +118,7 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
         FEMM_dict["meshsize_magnetR"] = Hmag / 4 / Kmesh_fineness
         FEMM_dict["elementsize_magnetR"] = Hmag / 4 / Kmesh_fineness
     elif type(machine.rotor) == LamHole:
-        Hmag = machine.rotor.hole[0].get_height_magnet()
+        Hmag = machine.rotor.hole[0].comp_height()
         FEMM_dict["meshsize_magnetR"] = Hmag / 4 / Kmesh_fineness
         FEMM_dict["elementsize_magnetR"] = Hmag / 4 / Kmesh_fineness
     else:

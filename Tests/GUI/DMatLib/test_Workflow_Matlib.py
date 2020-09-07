@@ -30,12 +30,10 @@ import pytest
 
 @pytest.mark.GUI
 class Test_Workflow_DMatLib(object):
-    """Test that the widget DMatLib behave like it should when called from a Widget
-    """
+    """Test that the widget DMatLib behave like it should when called from a Widget"""
 
     def setup_method(self, method):
-        """Run at the begining of every test to create the workspace
-        """
+        """Run at the begining of every test to create the workspace"""
         self.work_path = join(save_path, "Material Workflow")
         # Delete old test if needed
         if isdir(self.work_path):
@@ -60,8 +58,7 @@ class Test_Workflow_DMatLib(object):
         self.matlib = MatLib(self.work_path)
 
     def teardown(self):
-        """Delete the workspace at the end of the tests
-        """
+        """Delete the workspace at the end of the tests"""
         if is_clean_result:
             rmtree(self.work_path)
 
@@ -76,10 +73,8 @@ class Test_Workflow_DMatLib(object):
         """Exit the app after the test"""
         cls.app.quit()
 
-
     def test_init_empty(self):
-        """Check that the widget can open with an unknown material
-            """
+        """Check that the widget can open with an unknown material"""
         self.machine = MachineIPMSM()
         self.machine.stator = LamSlotWind()
         self.machine.rotor = LamHole()
@@ -88,38 +83,54 @@ class Test_Workflow_DMatLib(object):
         self.machine.type_machine = 8
         self.machine.rotor.hole = [HoleM50()]
         self.machine.rotor.hole[0].magnet_0.mat_type.name = "Magnet_doesnot_exist"
-        self.widget = SMHoleMag(    
-            machine=self.machine, matlib=self.matlib, is_stator=False   
+        self.widget = SMHoleMag(
+            machine=self.machine, matlib=self.matlib, is_stator=False
         )
         # Check default material
         assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.count() == 4
-        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentText() == ""
-        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentIndex() == -1
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentText() == ""
+        )
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentIndex()
+            == -1
+        )
         # Click to open matlib
         assert not hasattr(self.widget, "mat_win")
         self.widget.tab_hole.widget(0).w_hole.w_mat_1.b_matlib.clicked.emit()
         assert type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win) == DMatLib
         # Check Matlib init
-        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.nav_mat.count() == 4
-        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.nav_mat.currentItem().text() ==    "001 - Copper1"
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.nav_mat.count() == 4
+        )
+        assert (
+            self.widget.tab_hole.widget(0)
+            .w_hole.w_mat_1.mat_win.nav_mat.currentItem()
+            .text()
+            == "001 - Copper1"
+        )
 
     def test_init(self):
-        """Check that the Widget spinbox initialise to the lamination value
-            """
+        """Check that the Widget spinbox initialise to the lamination value"""
         self.machine = MachineIPMSM()
         self.machine.stator = LamSlotWind()
         self.machine.rotor = LamHole()
         self.machine._set_None()
         self.machine.stator.winding.p = 4
         self.machine.type_machine = 8
-        self.widget = SMHoleMag(    
-            machine=self.machine, matlib=self.matlib, is_stator=False    
+        self.widget = SMHoleMag(
+            machine=self.machine, matlib=self.matlib, is_stator=False
         )
 
         # Check default (hole is set to type 50)
         assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.count() == 4
-        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentText() ==    "Magnet1"
-        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentIndex() == 3
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentText()
+            == "Magnet1"
+        )
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.c_mat_type.currentIndex() == 3
+        )
 
         # Click to open matlib
         assert not hasattr(self.widget, "mat_win")
@@ -127,19 +138,45 @@ class Test_Workflow_DMatLib(object):
         assert type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win) == DMatLib
 
         # Check Matlib ini
-        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.nav_mat.count() == 4
-        assert self.widget.tab_hole.widget(0)    .w_hole.w_mat_1.mat_win.nav_mat.currentItem()    .text() ==    "004 - Magnet1"
-        assert not hasattr(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win, "mat_win")
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.nav_mat.count() == 4
+        )
+        assert (
+            self.widget.tab_hole.widget(0)
+            .w_hole.w_mat_1.mat_win.nav_mat.currentItem()
+            .text()
+            == "004 - Magnet1"
+        )
+        assert not hasattr(
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win, "mat_win"
+        )
         self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.b_duplicate.clicked.emit()
-        assert type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win) ==    DMatSetup
+        assert (
+            type(self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win)
+            == DMatSetup
+        )
 
         # Edit Magnet1 to Magnet_test
-        self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.le_name.setText(    "Magnet_test_python"    )
-        self.widget.tab_hole.widget(    0    ).w_hole.w_mat_1.mat_win.mat_win.le_name.editingFinished.emit()
-        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.mat.name ==    "Magnet_test_python"
-        self.widget.tab_hole.widget(    0    ).w_hole.w_mat_1.mat_win.mat_win.lf_rho_elec.setText("1234.56789")
-        self.widget.tab_hole.widget(    0    ).w_hole.w_mat_1.mat_win.mat_win.lf_rho_elec.editingFinished.emit()
-        assert self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.mat.elec.rho ==    1234.56789
+        self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.le_name.setText(
+            "Magnet_test_python"
+        )
+        self.widget.tab_hole.widget(
+            0
+        ).w_hole.w_mat_1.mat_win.mat_win.le_name.editingFinished.emit()
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.mat.name
+            == "Magnet_test_python"
+        )
+        self.widget.tab_hole.widget(
+            0
+        ).w_hole.w_mat_1.mat_win.mat_win.lf_rho_elec.setText("1234.56789")
+        self.widget.tab_hole.widget(
+            0
+        ).w_hole.w_mat_1.mat_win.mat_win.lf_rho_elec.editingFinished.emit()
+        assert (
+            self.widget.tab_hole.widget(0).w_hole.w_mat_1.mat_win.mat_win.mat.elec.rho
+            == 1234.56789
+        )
         # Close the Edit GUI and check Matlib modification
 
         # Doesn't Work

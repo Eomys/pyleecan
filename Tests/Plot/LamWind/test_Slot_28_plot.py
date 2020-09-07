@@ -23,13 +23,14 @@ from Tests import save_plot_path as save_path
 from Tests.Plot.LamWind import wind_mat
 
 import pytest
+
 """pytest for Lamination with winding plot"""
+
 
 @pytest.mark.PLOT
 class Test_Slot_28_plot(object):
     def test_Lam_Wind_28_wind_rad_tan(self):
-        """Test machine plot with Slot 28 and winding rad=1, tan=2 and rad=2 and tan=1
-        """
+        """Test machine plot with Slot 28 and winding rad=1, tan=2 and rad=2 and tan=1"""
         print("\nTest plot Slot 28")
         plt.close("all")
         test_obj = MachineDFIM()
@@ -61,7 +62,9 @@ class Test_Slot_28_plot(object):
             Nrvd=2,
             Wrvd=0.05,
         )
-        test_obj.stator.slot = SlotW28(Zs=18, W0=7e-3, R1=10e-3, H0=5e-3, H3=30e-3, W3=5e-3)
+        test_obj.stator.slot = SlotW28(
+            Zs=18, W0=7e-3, R1=10e-3, H0=5e-3, H3=30e-3, W3=5e-3
+        )
         test_obj.stator.winding = WindingDW2L(qs=3, p=3, Lewout=60e-3)
         test_obj.stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=0.2, Rext=0.25, Lfra=1)
@@ -84,10 +87,8 @@ class Test_Slot_28_plot(object):
         # 2 for lam, 2*Zs for wind
         assert len(fig.axes[0].patches) == 38
 
-
     def test_Lam_Wind_28_wind_22(self):
-        """Test machine plot with Slot 28 and winding rad=2, tan=2
-        """
+        """Test machine plot with Slot 28 and winding rad=2, tan=2"""
         plt.close("all")
         test_obj = MachineDFIM()
         test_obj.rotor = LamSlotWind(
@@ -102,7 +103,9 @@ class Test_Slot_28_plot(object):
         test_obj.rotor.slot = SlotW28(
             Zs=6, W0=20e-3, R1=25e-3, H0=10e-3, H3=50e-3, W3=15e-3
         )
-        test_obj.rotor.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+        test_obj.rotor.winding = WindingUD(
+            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
+        )
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 
         test_obj.stator = LamSlotWind(
@@ -120,7 +123,9 @@ class Test_Slot_28_plot(object):
         test_obj.stator.slot = SlotW28(
             Zs=6, W0=40e-3, R1=50e-3, H0=10e-3, H3=70e-3, W3=85e-3
         )
-        test_obj.stator.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+        test_obj.stator.winding = WindingUD(
+            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
+        )
 
         test_obj.plot()
         fig = plt.gcf()

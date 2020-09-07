@@ -10,8 +10,7 @@ import matplotlib.pyplot as plt
 
 
 class WImportExcel(Ui_WImportExcel, QWidget):
-    """Widget to define an ImportMatrixXls
-    """
+    """Widget to define an ImportMatrixXls"""
 
     import_name = "Import from Excel"
     import_type = ImportMatrixXls
@@ -23,7 +22,7 @@ class WImportExcel(Ui_WImportExcel, QWidget):
 
         Parameters
         ----------
-        data : ImportMatrixXls 
+        data : ImportMatrixXls
             Data import to define
         verbose_name : str
             Name of the imported data
@@ -62,15 +61,13 @@ class WImportExcel(Ui_WImportExcel, QWidget):
         self.b_convert.clicked.connect(self.s_convert)
 
     def update(self):
-        """Fill the widget with the current value of the data
-        """
+        """Fill the widget with the current value of the data"""
         self.w_file_path.update()
         self.set_sheet_list()
         self.le_range.setText(self.data.usecols)
 
     def set_sheet_list(self):
-        """Complete the combobox with the sheet name from the Excel file
-        """
+        """Complete the combobox with the sheet name from the Excel file"""
         if is_excel_file(self.data.file_path):
             # Get Sheet names
             xls_file = ExcelFile(self.data.file_path)
@@ -96,20 +93,17 @@ class WImportExcel(Ui_WImportExcel, QWidget):
             self.c_sheet.blockSignals(False)
 
     def set_sheet(self):
-        """Change the current sheet selected
-        """
+        """Change the current sheet selected"""
         self.data.sheet = self.c_sheet.currentText()
 
     def set_range(self):
-        """Change the range of data selected
-        """
+        """Change the range of data selected"""
         self.data.usecols = self.le_range.text()
         if self.data.usecols == "":
             self.data.usecols = None
 
     def s_table(self):
-        """display the data in a table
-        """
+        """display the data in a table"""
         try:
             data = self.data.get_data()
         except Exception as e:
@@ -119,8 +113,7 @@ class WImportExcel(Ui_WImportExcel, QWidget):
         return_code = tab.exec_()
 
     def s_plot(self):
-        """display the data in a plot
-        """
+        """display the data in a plot"""
         try:
             data = self.data.get_data()
         except Exception as e:
@@ -138,8 +131,7 @@ class WImportExcel(Ui_WImportExcel, QWidget):
             fig.show()
 
     def s_convert(self):
-        """Convert data to ImportMatrixVal
-        """
+        """Convert data to ImportMatrixVal"""
         try:
             data = self.data.get_data()
         except Exception as e:
@@ -150,8 +142,7 @@ class WImportExcel(Ui_WImportExcel, QWidget):
 
 
 def is_excel_file(file_path):
-    """Check if the path is correct for an excel file
-    """
+    """Check if the path is correct for an excel file"""
 
     return (
         file_path is not None

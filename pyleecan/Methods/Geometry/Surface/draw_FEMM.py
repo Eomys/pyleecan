@@ -31,7 +31,7 @@ def draw_FEMM(
     Returns
     -------
     None
-    
+
     """
     # Check if the Surface is correct
     self.check()

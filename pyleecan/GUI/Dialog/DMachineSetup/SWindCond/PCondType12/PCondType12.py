@@ -11,8 +11,7 @@ from ......GUI.Dialog.DMachineSetup.SWindCond.PCondType12.Gen_PCondType12 import
 
 
 class PCondType12(Gen_PCondType12, QWidget):
-    """Page to set the Conductor Type 12
-    """
+    """Page to set the Conductor Type 12"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()

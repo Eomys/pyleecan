@@ -26,16 +26,22 @@ from Tests.Plot.LamWind import wind_mat
 
 """pytest for Lamination with winding plot"""
 
+
 @pytest.mark.PLOT
 class Test_Slot_27_plot(object):
     def test_Lam_Wind_27_wind_22(self):
-        """Test machine plot with Slot 27 and winding rad=2, tan=2
-        """
+        """Test machine plot with Slot 27 and winding rad=2, tan=2"""
         print("\nTest plot Slot 27")
         plt.close("all")
         test_obj = MachineDFIM()
         test_obj.rotor = LamSlotWind(
-            Rint=0.2, Rext=0.5, is_internal=True, is_stator=False, L1=0.9, Nrvd=2, Wrvd=0.05
+            Rint=0.2,
+            Rext=0.5,
+            is_internal=True,
+            is_stator=False,
+            L1=0.9,
+            Nrvd=2,
+            Wrvd=0.05,
         )
         test_obj.rotor.axial_vent = [
             VentilationCirc(Zh=6, Alpha0=pi / 6, D0=60e-3, H0=0.35)
@@ -44,7 +50,9 @@ class Test_Slot_27_plot(object):
             Zs=6, H0=0.05, W0=30e-3, H1=0.125, W1=0.06, H2=0.05, W2=0.09, W3=0.04
         )
         test_obj.rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
-        test_obj.rotor.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+        test_obj.rotor.winding = WindingUD(
+            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
+        )
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 
         test_obj.stator = LamSlotWind(
@@ -91,4 +99,3 @@ class Test_Slot_27_plot(object):
         tooth.plot(color="r")
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s27_Tooth_out.png"))
-        

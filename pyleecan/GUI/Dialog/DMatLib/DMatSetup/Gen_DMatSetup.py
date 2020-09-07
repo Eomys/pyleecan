@@ -7,8 +7,7 @@ from pyleecan.GUI.Dialog.DMatLib.DMatSetup.Ui_DMatSetup import Ui_DMatSetup
 
 class Gen_DMatSetup(Ui_DMatSetup):
     def setupUi(self, DMatSetup):
-        """Abstract class to update the widget according to the csv doc
-        """
+        """Abstract class to update the widget according to the csv doc"""
         Ui_DMatSetup.setupUi(self, DMatSetup)
         # Setup of in_name
         txt = self.tr(u"""name of the material""")

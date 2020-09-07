@@ -1,9 +1,9 @@
 def run(self):
     """Run the simulation and optionnaly its multisimulation
-    
+
     Returns
     -------
-    output: Output 
+    output: Output
         Contains simulation results
     """
     # In-function import to avoid ImportError
@@ -22,6 +22,8 @@ def run(self):
                         type(self.parent).__name__
                     )
                 )
+            else:
+                results = self.parent
 
         # Compute the reference simulation
         if self.var_simu.ref_simu_index is None:

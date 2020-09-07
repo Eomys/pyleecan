@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Geometry/Arc2.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Geometry/Arc2.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Geometry/Arc2
 """
 
 from os import linesep
@@ -209,8 +210,7 @@ class Arc2(Arc):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -296,8 +296,7 @@ class Arc2(Arc):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Arc
         Arc2_dict = super(Arc2, self).as_dict()
@@ -327,10 +326,13 @@ class Arc2(Arc):
         check_var("begin", value, "complex")
         self._begin = value
 
-    # begin point of the arc
-    # Type : complex
     begin = property(
-        fget=_get_begin, fset=_set_begin, doc=u"""begin point of the arc"""
+        fget=_get_begin,
+        fset=_set_begin,
+        doc=u"""begin point of the arc
+
+        :Type: complex
+        """,
     )
 
     def _get_center(self):
@@ -342,9 +344,14 @@ class Arc2(Arc):
         check_var("center", value, "complex")
         self._center = value
 
-    # center of the arc
-    # Type : complex
-    center = property(fget=_get_center, fset=_set_center, doc=u"""center of the arc""")
+    center = property(
+        fget=_get_center,
+        fset=_set_center,
+        doc=u"""center of the arc
+
+        :Type: complex
+        """,
+    )
 
     def _get_angle(self):
         """getter of angle"""
@@ -355,8 +362,13 @@ class Arc2(Arc):
         check_var("angle", value, "float", Vmin=-6.2831853071796, Vmax=6.2831853071796)
         self._angle = value
 
-    # opening angle of the arc
-    # Type : float, min = -6.2831853071796, max = 6.2831853071796
     angle = property(
-        fget=_get_angle, fset=_set_angle, doc=u"""opening angle of the arc"""
+        fget=_get_angle,
+        fset=_set_angle,
+        doc=u"""opening angle of the arc
+
+        :Type: float
+        :min: -6.2831853071796
+        :max: 6.2831853071796
+        """,
     )

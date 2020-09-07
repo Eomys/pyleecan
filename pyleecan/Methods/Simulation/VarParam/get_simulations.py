@@ -5,11 +5,11 @@ from ....Classes.ParamExplorerSet import ParamExplorerSet
 
 def get_simulations(self):
     """Create simulations and returns them
-    
+
     Returns
     -------
     multisim_dict : dict
-        dictionary containing simulation shape, setters, parameter values and simulations generated 
+        dictionary containing simulation shape, setters, parameter values and simulations generated
     """
     # Get reference simulation
     ref_simu = self.parent

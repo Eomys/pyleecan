@@ -44,7 +44,6 @@ def get_BH_rotor(self):
 
 
 class BHShapeError(Exception):
-    """Raised when the BH curve has not the expected shape
-    """
+    """Raised when the BH curve has not the expected shape"""
 
     pass

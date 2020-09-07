@@ -13,7 +13,7 @@ def create_FEMM_circuit_material(
     circuits, label, is_eddies, lam, I, is_mmf, j_t0, materials
 ):
     """Set in FEMM circuits property
-    
+
     Parameters
     ----------
     circuits: list
@@ -35,7 +35,7 @@ def create_FEMM_circuit_material(
         time step for winding current calculation@type integer
     materials :
         list of materials already created in FEMM
-    
+
     Returns
     -------
     property, materials, circuits: tuple

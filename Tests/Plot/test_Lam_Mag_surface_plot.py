@@ -21,25 +21,27 @@ from pyleecan.Classes.SlotMFlat import SlotMFlat
 from pyleecan.Classes.SlotMPolar import SlotMPolar
 from Tests import save_plot_path as save_path
 
+
 @pytest.mark.PLOT
 class Test_Lam_Mag_surface_plot(object):
     """pytest for Lamination with surface magnet plot"""
+
     def test_Lam_Mag_10_surface(self):
         """Test machine plot with Magnet 10 surface"""
 
         plt.close("all")
-        rotor = LamSlotMag(    
-            Rint=40e-3,    
-            Rext=200e-3,    
-            is_internal=True,    
-            is_stator=False,    
-            L1=0.5,    
-            Nrvd=0,    
-            Wrvd=0.05,    
+        rotor = LamSlotMag(
+            Rint=40e-3,
+            Rext=200e-3,
+            is_internal=True,
+            is_stator=False,
+            L1=0.5,
+            Nrvd=0,
+            Wrvd=0.05,
         )
         magnet = [MagnetType10(Lmag=0.5, Hmag=0.02, Wmag=0.08)]
-        rotor.slot = SlotMFlat(    
-            Zs=8, H0=0, W0=2 * pi / 10, W0_is_rad=True, magnet=magnet    
+        rotor.slot = SlotMFlat(
+            Zs=8, H0=0, W0=2 * pi / 10, W0_is_rad=True, magnet=magnet
         )
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
@@ -58,27 +60,27 @@ class Test_Lam_Mag_surface_plot(object):
         """Test machine plot with Magnet 11 surface"""
 
         plt.close("all")
-        rotor = LamSlotMag(    
-            Rint=40e-3,    
-            Rext=90e-3,    
-            is_internal=True,    
-            is_stator=False,    
-            L1=0.45,    
-            Nrvd=1,    
-            Wrvd=0.05,    
+        rotor = LamSlotMag(
+            Rint=40e-3,
+            Rext=90e-3,
+            is_internal=True,
+            is_stator=False,
+            L1=0.45,
+            Nrvd=1,
+            Wrvd=0.05,
         )
         magnet = [MagnetType11(Lmag=0.5, Hmag=0.01, Wmag=pi / 8)]
         rotor.slot = SlotMPolar(Zs=8, W0=pi / 8, magnet=magnet)
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        stator = LamSlotMag(    
-            Rint=115e-3,    
-            Rext=200e-3,    
-            is_internal=False,    
-            is_stator=True,    
-            L1=0.45,    
-            Nrvd=1,    
-            Wrvd=0.05,    
+        stator = LamSlotMag(
+            Rint=115e-3,
+            Rext=200e-3,
+            is_internal=False,
+            is_stator=True,
+            L1=0.45,
+            Nrvd=1,
+            Wrvd=0.05,
         )
         magnet2 = [MagnetType11(Lmag=0.5, Hmag=0.01, Wmag=pi / 4)]
         stator.slot = SlotMPolar(Zs=4, W0=pi / 4, magnet=magnet2)
@@ -95,10 +97,10 @@ class Test_Lam_Mag_surface_plot(object):
         assert len(patches) == 6
         assert isinstance(patches[0], Circle)
         assert patches[0].get_radius() == 200e-3
-        assert patches[0].get_facecolor() == (0.0, 0.0, 1.0, 1.0)    
+        assert patches[0].get_facecolor() == (0.0, 0.0, 1.0, 1.0)
         for i in range(1, 6):
             assert isinstance(patches[i], Polygon)
-            if i == 1:        
+            if i == 1:
                 assert patches[i].get_facecolor() == (1.0, 1.0, 1.0, 1.0)  # White
             else:  # Magnet
                 assert patches[i].get_facecolor() == (0.75, 0.75, 0.75, 1.0)  # Gray
@@ -107,27 +109,27 @@ class Test_Lam_Mag_surface_plot(object):
     def test_Lam_Mag_12_surface(self):
         """Test machine plot with Magnet 12 surface"""
         plt.close("all")
-        rotor = LamSlotMag(    
-            Rint=40e-3,    
-            Rext=90e-3,    
-            is_internal=True,    
-            is_stator=False,    
-            L1=0.4,    
-            Nrvd=2,    
-            Wrvd=0.05,    
+        rotor = LamSlotMag(
+            Rint=40e-3,
+            Rext=90e-3,
+            is_internal=True,
+            is_stator=False,
+            L1=0.4,
+            Nrvd=2,
+            Wrvd=0.05,
         )
         magnet = [MagnetType12(Lmag=0.5, Hmag=0.02, Wmag=0.06)]
         rotor.slot = SlotMFlat(Zs=8, W0=0.06, magnet=magnet)
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        stator = Lamination(    
-            Rint=130e-3,    
-            Rext=0.2,    
-            is_internal=False,    
-            is_stator=True,    
-            L1=0.4,    
-            Nrvd=2,    
-            Wrvd=0.05,    
+        stator = Lamination(
+            Rint=130e-3,
+            Rext=0.2,
+            is_internal=False,
+            is_stator=True,
+            L1=0.4,
+            Nrvd=2,
+            Wrvd=0.05,
         )
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
@@ -145,27 +147,27 @@ class Test_Lam_Mag_surface_plot(object):
         """Test machine plot with Magnet 13 surface"""
 
         plt.close("all")
-        rotor = LamSlotMag(    
-            Rint=40e-3,    
-            Rext=90e-3,    
-            is_internal=True,    
-            is_stator=False,    
-            L1=0.35,    
-            Nrvd=3,    
-            Wrvd=0.05,    
+        rotor = LamSlotMag(
+            Rint=40e-3,
+            Rext=90e-3,
+            is_internal=True,
+            is_stator=False,
+            L1=0.35,
+            Nrvd=3,
+            Wrvd=0.05,
         )
         magnet = [MagnetType13(Lmag=0.5, Hmag=0.02, Wmag=0.08, Rtop=0.0601)]
         rotor.slot = SlotMFlat(Zs=4, W0=0.08, magnet=magnet)
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        stator = Lamination(    
-            Rint=130e-3,    
-            Rext=0.2,    
-            is_internal=False,    
-            is_stator=True,    
-            L1=0.35,    
-            Nrvd=3,    
-            Wrvd=0.05,    
+        stator = Lamination(
+            Rint=130e-3,
+            Rext=0.2,
+            is_internal=False,
+            is_stator=True,
+            L1=0.35,
+            Nrvd=3,
+            Wrvd=0.05,
         )
         stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
@@ -183,26 +185,27 @@ class Test_Lam_Mag_surface_plot(object):
         """Test machine plot with Magnet 14 surface"""
 
         plt.close("all")
-        rotor = LamSlotMag(    
-            Rint=40e-3,    Rext=90e-3,    
-            is_internal=True,    
-            is_stator=False,    
-            L1=0.42,    
-            Nrvd=4,    
-            Wrvd=0.02,    
+        rotor = LamSlotMag(
+            Rint=40e-3,
+            Rext=90e-3,
+            is_internal=True,
+            is_stator=False,
+            L1=0.42,
+            Nrvd=4,
+            Wrvd=0.02,
         )
         magnet = [MagnetType14(Lmag=0.5, Hmag=0.02, Wmag=0.628, Rtop=0.05)]
         rotor.slot = SlotMPolar(Zs=8, W0=0.628, magnet=magnet)
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
 
-        stator = LamSlotMag(    
-            Rint=150e-3,    
-            Rext=0.2,    
-            is_internal=False,    
-            is_stator=True,   
-            L1=0.42,    
-            Nrvd=4,    
-            Wrvd=0.02,    
+        stator = LamSlotMag(
+            Rint=150e-3,
+            Rext=0.2,
+            is_internal=False,
+            is_stator=True,
+            L1=0.42,
+            Nrvd=4,
+            Wrvd=0.02,
         )
         magnet = [MagnetType14(Lmag=0.5, Hmag=0.02, Wmag=0.628, Rtop=0.05)]
         stator.slot = SlotMPolar(Zs=8, W0=0.628, magnet=magnet)

@@ -12,11 +12,12 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot25.PWSlot25 import PWSlot25
 
 import pytest
 
+
 @pytest.mark.GUI
 class TestPWSlot25(object):
     """Test that the widget PWSlot25 behave like it should"""
 
-    def setup_method(self,method):
+    def setup_method(self, method):
         """Run at the begining of every test to setup the gui"""
 
         self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2)
@@ -33,7 +34,6 @@ class TestPWSlot25(object):
     def teardown_class(cls):
         """Exit the app after the test"""
         cls.app.quit()
-
 
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
@@ -54,7 +54,7 @@ class TestPWSlot25(object):
         """Check that the Widget allow to update W3"""
         self.widget.lf_W3.clear()
         QTest.keyClicks(self.widget.lf_W3, "0.32")
-        self.widget.lf_W3.editingFinished.emit() # To trigger the slot
+        self.widget.lf_W3.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.slot.W3 == 0.32
         assert self.test_obj.slot.W3 == 0.32
@@ -63,7 +63,7 @@ class TestPWSlot25(object):
         """Check that the Widget allow to update W4"""
         self.widget.lf_W4.clear()
         QTest.keyClicks(self.widget.lf_W4, "0.33")
-        self.widget.lf_W4.editingFinished.emit() # To trigger the slot
+        self.widget.lf_W4.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.slot.W4 == 0.33
         assert self.test_obj.slot.W4 == 0.33
@@ -72,7 +72,7 @@ class TestPWSlot25(object):
         """Check that the Widget allow to update H1"""
         self.widget.lf_H1.clear()
         QTest.keyClicks(self.widget.lf_H1, "0.35")
-        self.widget.lf_H1.editingFinished.emit() # To trigger the slot
+        self.widget.lf_H1.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.slot.H1 == 0.35
         assert self.test_obj.slot.H1 == 0.35
@@ -81,22 +81,21 @@ class TestPWSlot25(object):
         """Check that the Widget allow to update H2"""
         self.widget.lf_H2.clear()
         QTest.keyClicks(self.widget.lf_H2, "0.36")
-        self.widget.lf_H2.editingFinished.emit() # To trigger the slot
+        self.widget.lf_H2.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.slot.H2 == 0.36
         assert self.test_obj.slot.H2 == 0.36
 
     def test_output_txt(self):
-        """Check that the Output text is computed and correct
-            """
-        self.test_obj = LamSlotWind(    
-            Rint=0,    
-            Rext=0.5,    
-            is_internal=True,    
-            is_stator=False,    
-            L1=0.9,    
-            Nrvd=1,    
-            Wrvd=0.1,    
+        """Check that the Output text is computed and correct"""
+        self.test_obj = LamSlotWind(
+            Rint=0,
+            Rext=0.5,
+            is_internal=True,
+            is_stator=False,
+            L1=0.9,
+            Nrvd=1,
+            Wrvd=0.1,
         )
         self.test_obj.slot = SlotW25(Zs=12, W4=150e-3, W3=75e-3, H1=30e-3, H2=150e-3)
         self.widget = PWSlot25(self.test_obj)

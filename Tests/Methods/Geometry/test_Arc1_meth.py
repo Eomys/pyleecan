@@ -578,241 +578,225 @@ split_half_test.append(
     }
 )
 
+
 @pytest.mark.METHODS
 class Test_Arc1_meth(object):
     """unittest for Arc1 methods"""
 
     def test_check_Point(self):
-        """Check that you can detect a one point arc
-        """
+        """Check that you can detect a one point arc"""
         arc = Arc1(0, 0, 1)
         with pytest.raises(PointArc1Error):
             arc.check()
 
     def test_check_Radius(self):
-        """Check that you can detect null radius
-        """
+        """Check that you can detect null radius"""
         arc = Arc1(0, 1, 0)
         with pytest.raises(RadiusArc1Error):
             arc.check()
 
     @pytest.mark.parametrize("test_dict", discretize_test)
-    def test_dicretize(self,test_dict):
-        """Check that you can discretize an arc1
-        """
-        arc = Arc1(    
-            test_dict["begin"],    
-            test_dict["end"],    
-            test_dict["Radius"],    
-            is_trigo_direction=test_dict["is_trigo"],    
+    def test_dicretize(self, test_dict):
+        """Check that you can discretize an arc1"""
+        arc = Arc1(
+            test_dict["begin"],
+            test_dict["end"],
+            test_dict["Radius"],
+            is_trigo_direction=test_dict["is_trigo"],
         )
 
         # Check center
         Zc = arc.get_center()
-        msg = (    
-            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])    
+        msg = (
+            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])
         )
-        assert round(abs(abs(Zc - test_dict["center"])-0), 7) == 0, msg
+        assert round(abs(abs(Zc - test_dict["center"]) - 0), 7) == 0, msg
         # Check discretize
         result = arc.discretize(test_dict["nb_point"])
         assert result.size == test_dict["result"].size
         for ii in range(0, result.size):
             a = result[ii]
             b = test_dict["result"][ii]
-            msg = (        
-                "Wrong point["        
-                + str(ii)        
-                + "]: return "        
-                + str(a)        
-                + ", expected "        
-                + str(b)        
+            msg = (
+                "Wrong point["
+                + str(ii)
+                + "]: return "
+                + str(a)
+                + ", expected "
+                + str(b)
             )
-            assert abs((a - b) / a-0) < DELTA, msg
+            assert abs((a - b) / a - 0) < DELTA, msg
 
     def test_discretize_Point_error(self):
-        """Check that discretize detect a one point arc1
-        """
+        """Check that discretize detect a one point arc1"""
         arc = Arc1(0, 0, 2)
         with pytest.raises(PointArc1Error):
             arc.discretize(5)
 
     def test_discretize_Radius_error(self):
-        """Check that discretize detect a null radius
-        """
+        """Check that discretize detect a null radius"""
         arc = Arc1(0, 1, 0)
         with pytest.raises(RadiusArc1Error):
             arc.discretize(5)
 
     def test_discretize_Nb_error(self):
-        """Check that discretize can detect a wrong arg
-        """
+        """Check that discretize can detect a wrong arg"""
         arc = Arc1(0, 1, 1)
         with pytest.raises(NbPointArc1DError):
             arc.discretize(-1)
 
     def test_discretize_Nb_Type_error(self):
-        """Check that discretize can detect a wrong arg
-        """
+        """Check that discretize can detect a wrong arg"""
         arc = Arc1(0, 1, 1)
         with pytest.raises(NbPointArc1DError):
             arc.discretize("test")
 
     @pytest.mark.parametrize("test_dict", comp_length_test)
-    def test_comp_length(self,test_dict):
-        """Check that you the length return by comp_length is correct
-        """
-        arc = Arc1(    
-            begin=test_dict["begin"],    
-            end=test_dict["end"],    
-            radius=test_dict["Radius"],    
-            is_trigo_direction=test_dict["is_trigo"],    
+    def test_comp_length(self, test_dict):
+        """Check that you the length return by comp_length is correct"""
+        arc = Arc1(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            radius=test_dict["Radius"],
+            is_trigo_direction=test_dict["is_trigo"],
         )
 
         # Check center
         Zc = arc.get_center()
-        msg = (    
-            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])    
+        msg = (
+            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])
         )
-        assert round(abs(abs(Zc - test_dict["center"])-0), 7) == 0, msg
+        assert round(abs(abs(Zc - test_dict["center"]) - 0), 7) == 0, msg
         # Check length
         a = float(arc.comp_length())
         b = float(test_dict["length"])
         msg = "Wrong length: returned " + str(a) + ", expected " + str(b)
-        assert abs((a - b) / a-0) < DELTA, msg
+        assert abs((a - b) / a - 0) < DELTA, msg
 
     def test_comp_length_Point_error(self):
-        """Check that discretize detect a one point arc1
-        """
+        """Check that discretize detect a one point arc1"""
         arc = Arc1(0, 0, 2)
         with pytest.raises(PointArc1Error):
             arc.comp_length()
 
     def test_comp_length_Radius_error(self):
-        """Check that discretize detect a null radius arc1
-        """
+        """Check that discretize detect a null radius arc1"""
         arc = Arc1(0, 1, 0)
         with pytest.raises(RadiusArc1Error):
             arc.comp_length()
 
     def test_get_center(self):
-        """Check that the can compute the center of the arc1
-        """
+        """Check that the can compute the center of the arc1"""
         arc = Arc1(begin=1, end=1 * exp(1j * pi / 2), radius=1)
         result = arc.get_center()
         expect = 0
-        assert round(abs(abs(result - expect)-0), 7) == 0
+        assert round(abs(abs(result - expect) - 0), 7) == 0
 
         arc = Arc1(begin=2 * exp(1j * 3 * pi / 4), end=2 * exp(1j * pi / 4), radius=-2)
         result = arc.get_center()
         expect = 0
-        assert round(abs(abs(result - expect)-0), 7) == 0
+        assert round(abs(abs(result - expect) - 0), 7) == 0
 
         arc = Arc1(begin=2, end=3, radius=-0.5)
         result = arc.get_center()
         expect = 2.5
-        assert abs(abs(result - expect)-0) < 1e-3
+        assert abs(abs(result - expect) - 0) < 1e-3
 
     @pytest.mark.parametrize("test_dict", comp_mid_test)
-    def test_get_middle(self,test_dict):
-        """Check that you can compute the arc middle
-        """
-        arc = Arc1(    
-            begin=test_dict["begin"],    
-            end=test_dict["end"],    
-            radius=test_dict["radius"],    
-            is_trigo_direction=test_dict["is_trigo"],    
+    def test_get_middle(self, test_dict):
+        """Check that you can compute the arc middle"""
+        arc = Arc1(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            radius=test_dict["radius"],
+            is_trigo_direction=test_dict["is_trigo"],
         )
-        #Check center
+        # Check center
         Zc = arc.get_center()
-        msg = (    
-            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])    
+        msg = (
+            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])
         )
-        assert round(abs(abs(Zc - test_dict["center"])-0), 7) == 0, msg
+        assert round(abs(abs(Zc - test_dict["center"]) - 0), 7) == 0, msg
         # Check middle
         result = arc.get_middle()
-        msg = (    
-            "Wrong middle: return "    
-            + str(result)    
-            + ", expected "    
-            + str(test_dict["expect"])    
+        msg = (
+            "Wrong middle: return "
+            + str(result)
+            + ", expected "
+            + str(test_dict["expect"])
         )
-        assert abs(abs(result - test_dict["expect"])-0) < 1e-6, msg
+        assert abs(abs(result - test_dict["expect"]) - 0) < 1e-6, msg
 
     @pytest.mark.parametrize("test_dict", comp_rotate_test)
-    def test_rotate(self,test_dict):
-        """Check that you can rotate the arc1
-        """
-        arc = Arc1(    
-            begin=test_dict["begin"], end=test_dict["end"], radius=test_dict["radius"]    
+    def test_rotate(self, test_dict):
+        """Check that you can rotate the arc1"""
+        arc = Arc1(
+            begin=test_dict["begin"], end=test_dict["end"], radius=test_dict["radius"]
         )
         expect_radius = arc.radius
         arc.rotate(test_dict["angle"])
 
-        assert abs(abs(arc.begin - test_dict["exp_begin"])-0) < 1e-6
-        assert abs(abs(arc.end - test_dict["exp_end"])-0) < 1e-6
-        assert round(abs(abs(arc.radius - expect_radius)-0), 7) == 0
+        assert abs(abs(arc.begin - test_dict["exp_begin"]) - 0) < 1e-6
+        assert abs(abs(arc.end - test_dict["exp_end"]) - 0) < 1e-6
+        assert round(abs(abs(arc.radius - expect_radius) - 0), 7) == 0
 
     @pytest.mark.parametrize("test_dict", comp_translate_test)
-    def test_translate(self,test_dict):
-        """Check that you can translate the arc1
-        """
-        arc = Arc1(    
-            begin=test_dict["begin"], end=test_dict["end"], radius=test_dict["radius"]    
+    def test_translate(self, test_dict):
+        """Check that you can translate the arc1"""
+        arc = Arc1(
+            begin=test_dict["begin"], end=test_dict["end"], radius=test_dict["radius"]
         )
         expect_radius = arc.radius
         arc.translate(test_dict["delta"])
 
-        assert abs(abs(arc.begin - test_dict["exp_begin"])-0) < 1e-6
-        assert abs(abs(arc.end - test_dict["exp_end"])-0) < 1e-6
-        assert round(abs(abs(arc.radius - expect_radius)-0), 7) == 0
+        assert abs(abs(arc.begin - test_dict["exp_begin"]) - 0) < 1e-6
+        assert abs(abs(arc.end - test_dict["exp_end"]) - 0) < 1e-6
+        assert round(abs(abs(arc.radius - expect_radius) - 0), 7) == 0
 
     @pytest.mark.parametrize("test_dict", get_angle_test)
-    def test_get_angle(self,test_dict):
-        """Check that the arc1 computed angle is correct
-        """
-        arc = Arc1(    
-            begin=test_dict["begin"],    
-            end=test_dict["end"],    
-            radius=test_dict["radius"],    
-            is_trigo_direction=test_dict["is_trigo"],    
+    def test_get_angle(self, test_dict):
+        """Check that the arc1 computed angle is correct"""
+        arc = Arc1(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            radius=test_dict["radius"],
+            is_trigo_direction=test_dict["is_trigo"],
         )
         # Check center
         Zc = arc.get_center()
-        msg = (    
-            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])    
+        msg = (
+            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])
         )
-        assert round(abs(abs(Zc - test_dict["center"])-0), 7) == 0, msg
+        assert round(abs(abs(Zc - test_dict["center"]) - 0), 7) == 0, msg
         # Check angle
         result = arc.get_angle(test_dict["is_deg"])
-        assert round(abs(result-test_dict["exp_angle"]), 7) == 0
+        assert round(abs(result - test_dict["exp_angle"]), 7) == 0
 
     @pytest.mark.parametrize("test_dict", split_half_test)
-    def test_split_half(self,test_dict):
-        """Check that the arc1 split is correct
-        """
-        arc = Arc1(    
-            begin=test_dict["begin"],    
-            end=test_dict["end"],    
-            radius=test_dict["radius"],    
-            is_trigo_direction=test_dict["is_trigo"],    
+    def test_split_half(self, test_dict):
+        """Check that the arc1 split is correct"""
+        arc = Arc1(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            radius=test_dict["radius"],
+            is_trigo_direction=test_dict["is_trigo"],
         )
 
         # Check center
         Zc = arc.get_center()
-        msg = (    
-            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])    
+        msg = (
+            "Wrong center: return " + str(Zc) + ", expected " + str(test_dict["center"])
         )
-        assert round(abs(abs(Zc - test_dict["center"])-0), 7) == 0, msg
+        assert round(abs(abs(Zc - test_dict["center"]) - 0), 7) == 0, msg
         # Check split
         arc.split_half(is_begin=test_dict["is_begin"])
-        assert round(abs(arc.begin-test_dict["N_begin"]), 7) == 0
-        assert round(abs(arc.end-test_dict["N_end"]), 7) == 0
-        assert round(abs(arc.radius-test_dict["N_radius"]), 7) == 0
-        assert round(abs(arc.is_trigo_direction-test_dict["is_trigo"]), 7) == 0
+        assert round(abs(arc.begin - test_dict["N_begin"]), 7) == 0
+        assert round(abs(arc.end - test_dict["N_end"]), 7) == 0
+        assert round(abs(arc.radius - test_dict["N_radius"]), 7) == 0
+        assert round(abs(arc.is_trigo_direction - test_dict["is_trigo"]), 7) == 0
 
     def test_plot_schematics(self):
-        """Check that the schematics is correct
-        """
+        """Check that the schematics is correct"""
         begin = 1 + 1j
         end = 3 + 2j
         R = 2.5
@@ -845,8 +829,8 @@ class Test_Arc1_meth(object):
         plt.text(begin.real, begin.imag, "begin")
         plt.text(end.real, end.imag, "end")
         # Adding legend
-        plt.legend(    
-            ["R > 0, trigo", "R < 0, trigo", "R > 0, not trigo", "R < 0, not trigo"] 
+        plt.legend(
+            ["R > 0, trigo", "R < 0, trigo", "R > 0, not trigo", "R < 0, not trigo"]
         )
         plt.axis("equal")
 

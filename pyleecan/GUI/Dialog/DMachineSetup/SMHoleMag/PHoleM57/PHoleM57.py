@@ -12,8 +12,7 @@ from ......GUI.Dialog.DMatLib.MatLib import MatLib
 
 
 class PHoleM57(Gen_PHoleM57, QWidget):
-    """Page to set the Hole Type 57
-    """
+    """Page to set the Hole Type 57"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -253,6 +252,5 @@ class PHoleM57(Gen_PHoleM57, QWidget):
             return str(error)
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()

@@ -6,7 +6,7 @@ from numpy import linalg as LA, pi, sign, sqrt
 
 def create_FEMM_circuit(label, is_eddies, lam, I, is_mmf, j_t0, materials):
     """Set in FEMM circuits property
-    
+
     Parameters
     ----------
     label :
@@ -26,7 +26,7 @@ def create_FEMM_circuit(label, is_eddies, lam, I, is_mmf, j_t0, materials):
         time step for winding current calculation@type integer
     materials :
         list of materials already created in FEMM
-    
+
     Returns
     -------
     (str, list)

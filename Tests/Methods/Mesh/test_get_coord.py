@@ -6,9 +6,11 @@ from pyleecan.Classes.NodeMat import NodeMat
 from pyleecan.Classes.ElementMat import ElementMat
 import numpy as np
 
+
 @pytest.mark.METHODS
 class Test_get_coord(object):
     """unittest for NodeMat get_node methods"""
+
     def setup_method(self, method):
         self.mesh = Mesh()
         self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
@@ -31,7 +33,7 @@ class Test_get_coord(object):
         testA = np.sum(abs(solution - coord))
         msg = "Wrong output: returned " + str(coord) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_NodeMat_false(self):
         """unittest for a false node tag"""
@@ -44,7 +46,7 @@ class Test_get_coord(object):
 
     def test_NodeMat_None(self):
         """unittest for a None node tag"""
-        
+
         coord = self.mesh.node.get_coord(None)
         solution = None
         testA = coord is None

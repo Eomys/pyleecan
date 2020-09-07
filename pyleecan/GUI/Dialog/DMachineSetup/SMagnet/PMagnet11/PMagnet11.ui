@@ -38,7 +38,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/P_Magnet/Surface Magnet type 10.PNG</pixmap>
+      <pixmap resource="../../../../Resources/pyleecan.qrc">:/images/images/MachineSetup/P_Magnet/Surface Magnet type 11.PNG</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -182,7 +182,7 @@
  <resources>
   <include location="../../../../Resources/pyleecan.qrc"/>
   <include location="../../../../Resources/pyleecan.qrc"/>
-  <include location="../../../Resources/pyleecan.qrc"/>
+  <include location="../../../../Resources/pyleecan.qrc"/>
  </resources>
  <connections/>
 </ui>

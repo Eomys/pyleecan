@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/MagFEMM.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/MagFEMM.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/MagFEMM
 """
 
 from os import linesep
@@ -37,8 +38,14 @@ try:
 except ImportError as error:
     get_path_save_fem = error
 
+try:
+    from ..Methods.Simulation.MagFEMM.build_meshsolution import build_meshsolution
+except ImportError as error:
+    build_meshsolution = error
+
 
 from ._check import InitUnKnowClassError
+from .DXFImport import DXFImport
 
 
 class MagFEMM(Magnetics):
@@ -103,13 +110,24 @@ class MagFEMM(Magnetics):
         )
     else:
         get_path_save_fem = get_path_save_fem
+    # cf Methods.Simulation.MagFEMM.build_meshsolution
+    if isinstance(build_meshsolution, ImportError):
+        build_meshsolution = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use MagFEMM method build_meshsolution: "
+                    + str(build_meshsolution)
+                )
+            )
+        )
+    else:
+        build_meshsolution = build_meshsolution
     # save method is available in all object
     save = save
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -127,6 +145,8 @@ class MagFEMM(Magnetics):
         is_save_FEA=False,
         is_sliding_band=True,
         transform_list=[],
+        rotor_dxf=None,
+        stator_dxf=None,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_vent=False,
@@ -154,6 +174,10 @@ class MagFEMM(Magnetics):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if rotor_dxf == -1:
+            rotor_dxf = DXFImport()
+        if stator_dxf == -1:
+            stator_dxf = DXFImport()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -171,6 +195,8 @@ class MagFEMM(Magnetics):
             is_save_FEA = obj.is_save_FEA
             is_sliding_band = obj.is_sliding_band
             transform_list = obj.transform_list
+            rotor_dxf = obj.rotor_dxf
+            stator_dxf = obj.stator_dxf
             is_remove_slotS = obj.is_remove_slotS
             is_remove_slotR = obj.is_remove_slotR
             is_remove_vent = obj.is_remove_vent
@@ -207,6 +233,10 @@ class MagFEMM(Magnetics):
                 is_sliding_band = init_dict["is_sliding_band"]
             if "transform_list" in list(init_dict.keys()):
                 transform_list = init_dict["transform_list"]
+            if "rotor_dxf" in list(init_dict.keys()):
+                rotor_dxf = init_dict["rotor_dxf"]
+            if "stator_dxf" in list(init_dict.keys()):
+                stator_dxf = init_dict["stator_dxf"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -243,7 +273,27 @@ class MagFEMM(Magnetics):
         self.is_get_mesh = is_get_mesh
         self.is_save_FEA = is_save_FEA
         self.is_sliding_band = is_sliding_band
+        if transform_list == -1:
+            transform_list = []
         self.transform_list = transform_list
+        # rotor_dxf can be None, a DXFImport object or a dict
+        if isinstance(rotor_dxf, dict):
+            self.rotor_dxf = DXFImport(init_dict=rotor_dxf)
+        elif isinstance(rotor_dxf, str):
+            from ..Functions.load import load
+
+            self.rotor_dxf = load(rotor_dxf)
+        else:
+            self.rotor_dxf = rotor_dxf
+        # stator_dxf can be None, a DXFImport object or a dict
+        if isinstance(stator_dxf, dict):
+            self.stator_dxf = DXFImport(init_dict=stator_dxf)
+        elif isinstance(stator_dxf, str):
+            from ..Functions.load import load
+
+            self.stator_dxf = load(stator_dxf)
+        else:
+            self.stator_dxf = stator_dxf
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -284,6 +334,18 @@ class MagFEMM(Magnetics):
             + str(self.transform_list).replace(linesep, linesep + "\t")
             + linesep
         )
+        if self.rotor_dxf is not None:
+            tmp = self.rotor_dxf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MagFEMM_str += "rotor_dxf = " + tmp
+        else:
+            MagFEMM_str += "rotor_dxf = None" + linesep + linesep
+        if self.stator_dxf is not None:
+            tmp = (
+                self.stator_dxf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            )
+            MagFEMM_str += "stator_dxf = " + tmp
+        else:
+            MagFEMM_str += "stator_dxf = None" + linesep + linesep
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -315,11 +377,14 @@ class MagFEMM(Magnetics):
             return False
         if other.transform_list != self.transform_list:
             return False
+        if other.rotor_dxf != self.rotor_dxf:
+            return False
+        if other.stator_dxf != self.stator_dxf:
+            return False
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Magnetics
         MagFEMM_dict = super(MagFEMM, self).as_dict()
@@ -333,6 +398,14 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["is_save_FEA"] = self.is_save_FEA
         MagFEMM_dict["is_sliding_band"] = self.is_sliding_band
         MagFEMM_dict["transform_list"] = self.transform_list
+        if self.rotor_dxf is None:
+            MagFEMM_dict["rotor_dxf"] = None
+        else:
+            MagFEMM_dict["rotor_dxf"] = self.rotor_dxf.as_dict()
+        if self.stator_dxf is None:
+            MagFEMM_dict["stator_dxf"] = None
+        else:
+            MagFEMM_dict["stator_dxf"] = self.stator_dxf.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -351,6 +424,10 @@ class MagFEMM(Magnetics):
         self.is_save_FEA = None
         self.is_sliding_band = None
         self.transform_list = None
+        if self.rotor_dxf is not None:
+            self.rotor_dxf._set_None()
+        if self.stator_dxf is not None:
+            self.stator_dxf._set_None()
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -363,12 +440,13 @@ class MagFEMM(Magnetics):
         check_var("Kmesh_fineness", value, "float")
         self._Kmesh_fineness = value
 
-    # global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
-    # Type : float
     Kmesh_fineness = property(
         fget=_get_Kmesh_fineness,
         fset=_set_Kmesh_fineness,
-        doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)""",
+        doc=u"""global coefficient to adjust mesh fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
+
+        :Type: float
+        """,
     )
 
     def _get_Kgeo_fineness(self):
@@ -380,12 +458,13 @@ class MagFEMM(Magnetics):
         check_var("Kgeo_fineness", value, "float")
         self._Kgeo_fineness = value
 
-    # global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
-    # Type : float
     Kgeo_fineness = property(
         fget=_get_Kgeo_fineness,
         fset=_set_Kgeo_fineness,
-        doc=u"""global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)""",
+        doc=u"""global coefficient to adjust geometry fineness in FEMM (1 : default , > 1 : finner , < 1 : less fine)
+
+        :Type: float
+        """,
     )
 
     def _get_type_calc_leakage(self):
@@ -397,12 +476,15 @@ class MagFEMM(Magnetics):
         check_var("type_calc_leakage", value, "int", Vmin=0, Vmax=1)
         self._type_calc_leakage = value
 
-    # 0 no leakage calculation /  1 calculation using single slot
-    # Type : int, min = 0, max = 1
     type_calc_leakage = property(
         fget=_get_type_calc_leakage,
         fset=_set_type_calc_leakage,
-        doc=u"""0 no leakage calculation /  1 calculation using single slot """,
+        doc=u"""0 no leakage calculation /  1 calculation using single slot 
+
+        :Type: int
+        :min: 0
+        :max: 1
+        """,
     )
 
     def _get_file_name(self):
@@ -414,12 +496,13 @@ class MagFEMM(Magnetics):
         check_var("file_name", value, "str")
         self._file_name = value
 
-    # Name of the file to save the FEMM model
-    # Type : str
     file_name = property(
         fget=_get_file_name,
         fset=_set_file_name,
-        doc=u"""Name of the file to save the FEMM model""",
+        doc=u"""Name of the file to save the FEMM model
+
+        :Type: str
+        """,
     )
 
     def _get_FEMM_dict(self):
@@ -431,12 +514,13 @@ class MagFEMM(Magnetics):
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 
-    # To enforce user-defined values for FEMM main parameters
-    # Type : dict
     FEMM_dict = property(
         fget=_get_FEMM_dict,
         fset=_set_FEMM_dict,
-        doc=u"""To enforce user-defined values for FEMM main parameters """,
+        doc=u"""To enforce user-defined values for FEMM main parameters 
+
+        :Type: dict
+        """,
     )
 
     def _get_angle_stator(self):
@@ -448,12 +532,13 @@ class MagFEMM(Magnetics):
         check_var("angle_stator", value, "float")
         self._angle_stator = value
 
-    # Angular position shift of the stator
-    # Type : float
     angle_stator = property(
         fget=_get_angle_stator,
         fset=_set_angle_stator,
-        doc=u"""Angular position shift of the stator""",
+        doc=u"""Angular position shift of the stator
+
+        :Type: float
+        """,
     )
 
     def _get_is_get_mesh(self):
@@ -465,12 +550,13 @@ class MagFEMM(Magnetics):
         check_var("is_get_mesh", value, "bool")
         self._is_get_mesh = value
 
-    # To save FEA mesh for latter post-procesing
-    # Type : bool
     is_get_mesh = property(
         fget=_get_is_get_mesh,
         fset=_set_is_get_mesh,
-        doc=u"""To save FEA mesh for latter post-procesing """,
+        doc=u"""To save FEA mesh for latter post-procesing 
+
+        :Type: bool
+        """,
     )
 
     def _get_is_save_FEA(self):
@@ -482,12 +568,13 @@ class MagFEMM(Magnetics):
         check_var("is_save_FEA", value, "bool")
         self._is_save_FEA = value
 
-    # To save FEA mesh and solution in .dat file
-    # Type : bool
     is_save_FEA = property(
         fget=_get_is_save_FEA,
         fset=_set_is_save_FEA,
-        doc=u"""To save FEA mesh and solution in .dat file""",
+        doc=u"""To save FEA mesh and solution in .dat file
+
+        :Type: bool
+        """,
     )
 
     def _get_is_sliding_band(self):
@@ -499,12 +586,13 @@ class MagFEMM(Magnetics):
         check_var("is_sliding_band", value, "bool")
         self._is_sliding_band = value
 
-    # 0 to desactivate the sliding band
-    # Type : bool
     is_sliding_band = property(
         fget=_get_is_sliding_band,
         fset=_set_is_sliding_band,
-        doc=u"""0 to desactivate the sliding band""",
+        doc=u"""0 to desactivate the sliding band
+
+        :Type: bool
+        """,
     )
 
     def _get_transform_list(self):
@@ -516,10 +604,53 @@ class MagFEMM(Magnetics):
         check_var("transform_list", value, "list")
         self._transform_list = value
 
-    # List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
-    # Type : list
     transform_list = property(
         fget=_get_transform_list,
         fset=_set_transform_list,
-        doc=u"""List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)""",
+        doc=u"""List of dictionnary to apply transformation on the machine surfaces. Key: label (to select the surface), type (rotate or translate), value (alpha or delta)
+
+        :Type: list
+        """,
+    )
+
+    def _get_rotor_dxf(self):
+        """getter of rotor_dxf"""
+        return self._rotor_dxf
+
+    def _set_rotor_dxf(self, value):
+        """setter of rotor_dxf"""
+        check_var("rotor_dxf", value, "DXFImport")
+        self._rotor_dxf = value
+
+        if self._rotor_dxf is not None:
+            self._rotor_dxf.parent = self
+
+    rotor_dxf = property(
+        fget=_get_rotor_dxf,
+        fset=_set_rotor_dxf,
+        doc=u"""To use a dxf version of the rotor instead of build_geometry
+
+        :Type: DXFImport
+        """,
+    )
+
+    def _get_stator_dxf(self):
+        """getter of stator_dxf"""
+        return self._stator_dxf
+
+    def _set_stator_dxf(self, value):
+        """setter of stator_dxf"""
+        check_var("stator_dxf", value, "DXFImport")
+        self._stator_dxf = value
+
+        if self._stator_dxf is not None:
+            self._stator_dxf.parent = self
+
+    stator_dxf = property(
+        fget=_get_stator_dxf,
+        fset=_set_stator_dxf,
+        doc=u"""To use a dxf version of the rotor instead of build_geometry
+
+        :Type: DXFImport
+        """,
     )

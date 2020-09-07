@@ -17,6 +17,7 @@ from Tests import save_load_path as save_path, TEST_DATA_DIR
 
 import pytest
 
+
 @pytest.mark.GUI
 class TestDMatSetup(object):
     """Test that the widget DMatSetup behave like it should"""
@@ -58,8 +59,7 @@ class TestDMatSetup(object):
         self.widget = DMatSetup(material=self.test_obj)
 
     def teardown(self):
-        """Delete the workspace at the end of the tests
-        """
+        """Delete the workspace at the end of the tests"""
         rmtree(self.work_path)
 
     @classmethod
@@ -72,7 +72,6 @@ class TestDMatSetup(object):
     def teardown_class(cls):
         """Exit the app after the test"""
         cls.app.quit()
-
 
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
@@ -92,7 +91,7 @@ class TestDMatSetup(object):
         assert self.widget.lf_alpha.value() == 0.2
         assert self.widget.lf_cost_unit.value() == 0.21
 
-        #Test Raw Material
+        # Test Raw Material
         self.test_obj.mag = None
         self.widget = DMatSetup(material=self.test_obj)
 
@@ -110,7 +109,7 @@ class TestDMatSetup(object):
         assert self.widget.lf_alpha.value() == 0.2
         assert self.widget.lf_cost_unit.value() == 0.21
 
-        #Test Magnet material Non isotropic
+        # Test Magnet material Non isotropic
         self.test_obj.is_isotropic = False
         self.test_obj.mag = MatMagnetics(mur_lin=0.22, Brm20=0.23, alpha_Br=0.24)
         self.widget = DMatSetup(material=self.test_obj)
@@ -146,8 +145,7 @@ class TestDMatSetup(object):
         assert self.widget.lf_cost_unit.value() == 0.21
 
     def test_set_name(self):
-        """Check that you can change the name and the path
-            """
+        """Check that you can change the name and the path"""
         self.widget.le_name.setText("Magnet2")
         self.widget.le_name.editingFinished.emit()
         assert self.widget.mat.name == "Magnet2"
@@ -155,36 +153,36 @@ class TestDMatSetup(object):
 
     def test_set_rho_elec(self):
         """Check that the Widget allow to update rho_elec"""
-        self.widget.lf_rho_elec.clear()    # Clear the field before writing
+        self.widget.lf_rho_elec.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_rho_elec, str(value))
-        self.widget.lf_rho_elec.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_rho_elec.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.elec.rho == value
 
     def test_set_mur_lin(self):
         """Check that the Widget allow to update mur_lin"""
-        self.widget.lf_mur_lin.clear()    # Clear the field before writing
+        self.widget.lf_mur_lin.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_mur_lin, str(value))
-        self.widget.lf_mur_lin.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_mur_lin.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.mag.mur_lin == value
         self.test_obj.mag = MatMagnetics()
         self.widget = DMatSetup(material=self.test_obj)
-        self.widget.lf_mur_lin.clear()    # Clear the field before writing
+        self.widget.lf_mur_lin.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_mur_lin, str(value))
-        self.widget.lf_mur_lin.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_mur_lin.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.mag.mur_lin == value
 
     def test_set_Wlam(self):
         """Check that the Widget allow to update Wlam"""
-        self.widget.lf_Wlam.clear()    # Clear the field before writing
+        self.widget.lf_Wlam.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_Wlam, str(value))
-        self.widget.lf_Wlam.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_Wlam.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.mag.Wlam == value
 
@@ -192,10 +190,10 @@ class TestDMatSetup(object):
         """Check that the Widget allow to update Brm20"""
         self.test_obj.mag = MatMagnetics()
         self.widget = DMatSetup(material=self.test_obj)
-        self.widget.lf_Brm20.clear()    # Clear the field before writing
+        self.widget.lf_Brm20.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_Brm20, str(value))
-        self.widget.lf_Brm20.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_Brm20.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.mag.Brm20 == value
 
@@ -204,28 +202,28 @@ class TestDMatSetup(object):
         # Set Material for Magnet
         self.test_obj.mag = MatMagnetics()
         self.widget = DMatSetup(material=self.test_obj)
-        self.widget.lf_alpha_Br.clear()    # Clear the field before writing
+        self.widget.lf_alpha_Br.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_alpha_Br, str(value))
-        self.widget.lf_alpha_Br.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_alpha_Br.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.mag.alpha_Br == value
 
     def test_set_rho_meca(self):
         """Check that the Widget allow to update rho_meca"""
-        self.widget.lf_rho_meca.clear()    # Clear the field before writing
+        self.widget.lf_rho_meca.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_rho_meca, str(value))
-        self.widget.lf_rho_meca.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_rho_meca.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.rho == value
 
     def test_set_E(self):
         """Check that the Widget allow to update E"""
-        self.widget.lf_E.clear()    # Clear the field before writing
+        self.widget.lf_E.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_E, str(value))
-        self.widget.lf_E.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_E.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.Ex == value
         assert self.widget.mat.struct.Ey == value
@@ -233,37 +231,37 @@ class TestDMatSetup(object):
 
     def test_set_Ex(self):
         """Check that the Widget allow to update Ex"""
-        self.widget.lf_Ex.clear()    # Clear the field before writing
+        self.widget.lf_Ex.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_Ex, str(value))
-        self.widget.lf_Ex.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_Ex.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.Ex == value
 
     def test_set_Ey(self):
         """Check that the Widget allow to update Ey"""
-        self.widget.lf_Ey.clear()    # Clear the field before writing
+        self.widget.lf_Ey.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_Ey, str(value))
-        self.widget.lf_Ey.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_Ey.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.Ey == value
 
     def test_set_Ez(self):
         """Check that the Widget allow to update Ez"""
-        self.widget.lf_Ez.clear()    # Clear the field before writing
+        self.widget.lf_Ez.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_Ez, str(value))
-        self.widget.lf_Ez.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_Ez.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.Ez == value
 
     def test_set_nu(self):
         """Check that the Widget allow to update nu"""
-        self.widget.lf_nu.clear()    # Clear the field before writing
+        self.widget.lf_nu.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_nu, str(value))
-        self.widget.lf_nu.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_nu.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.nu_xy == value
         assert self.widget.mat.struct.nu_yz == value
@@ -271,37 +269,37 @@ class TestDMatSetup(object):
 
     def test_set_nu_xy(self):
         """Check that the Widget allow to update nu_xy"""
-        self.widget.lf_nu_xy.clear()    # Clear the field before writing
+        self.widget.lf_nu_xy.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_nu_xy, str(value))
-        self.widget.lf_nu_xy.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_nu_xy.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.nu_xy == value
 
     def test_set_nu_xz(self):
         """Check that the Widget allow to update nu_xz"""
-        self.widget.lf_nu_xz.clear()    # Clear the field before writing
+        self.widget.lf_nu_xz.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_nu_xz, str(value))
-        self.widget.lf_nu_xz.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_nu_xz.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.nu_xz == value
 
     def test_set_nu_yz(self):
         """Check that the Widget allow to update nu_yz"""
-        self.widget.lf_nu_yz.clear()    # Clear the field before writing
+        self.widget.lf_nu_yz.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_nu_yz, str(value))
-        self.widget.lf_nu_yz.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_nu_yz.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.nu_yz == value
 
     def test_set_G(self):
         """Check that the Widget allow to update G"""
-        self.widget.lf_G.clear()    # Clear the field before writing
+        self.widget.lf_G.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_G, str(value))
-        self.widget.lf_G.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_G.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.Gxy == value
         assert self.widget.mat.struct.Gyz == value
@@ -309,27 +307,27 @@ class TestDMatSetup(object):
 
     def test_set_Gxy(self):
         """Check that the Widget allow to update Gxy"""
-        self.widget.lf_Gxy.clear()    # Clear the field before writing
+        self.widget.lf_Gxy.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_Gxy, str(value))
-        self.widget.lf_Gxy.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_Gxy.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.Gxy == value
 
     def test_set_Gyz(self):
         """Check that the Widget allow to update Gyz"""
-        self.widget.lf_Gyz.clear()    # Clear the field before writing
+        self.widget.lf_Gyz.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_Gyz, str(value))
-        self.widget.lf_Gyz.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_Gyz.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.Gyz == value
 
     def test_set_Gxz(self):
         """Check that the Widget allow to update Gxz"""
-        self.widget.lf_Gxz.clear()    # Clear the field before writing
+        self.widget.lf_Gxz.clear()  # Clear the field before writing
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_Gxz, str(value))
-        self.widget.lf_Gxz.editingFinished.emit()    # To trigger the slot
+        self.widget.lf_Gxz.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.mat.struct.Gxz == value

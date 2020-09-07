@@ -6,9 +6,11 @@ from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
+
 @pytest.mark.METHODS
 class Test_get_connectivity(object):
     """unittest for Mesh and Element get_all_connectivity methods. Indirect test add_element """
+
     def setup_method(self, method):
         self.mesh = Mesh()
         self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
@@ -33,7 +35,7 @@ class Test_get_connectivity(object):
         testA = np.sum(abs(result - solution))
         msg = "Wrong output: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_ElementMat_NodeMat_1tgl(self):
         """unittest with ElementDict and NodeMat objects, with input None"""
@@ -45,9 +47,9 @@ class Test_get_connectivity(object):
 
     def test_ElementMat_NodeMat_1seg_stupid(self):
         """unittest with ElementDict and NodeMat objects, with only 1 segment"""
-        result = self.mesh.get_connectivity(    
-            -99999    
-        )    # We test what happened with stupid entry
+        result = self.mesh.get_connectivity(
+            -99999
+        )  # We test what happened with stupid entry
         # Check result
         testA = result is None
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(None)

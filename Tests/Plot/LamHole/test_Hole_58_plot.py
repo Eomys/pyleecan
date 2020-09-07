@@ -15,11 +15,11 @@ from pyleecan.Classes.Shaft import Shaft
 from pyleecan.Classes.HoleM58 import HoleM58
 from Tests import save_plot_path as save_path
 
+
 @pytest.mark.PLOT
 class Test_Hole_58_plot(object):
     def test_Lam_Hole_58_plot(self):
-        """Test machine plot hole 58
-        """
+        """Test machine plot hole 58"""
 
         plt.close("all")
         test_obj = LamHole(

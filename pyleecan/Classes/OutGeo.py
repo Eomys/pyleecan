@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Output/OutGeo.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Output/OutGeo.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/OutGeo
 """
 
 from os import linesep
@@ -24,8 +25,7 @@ class OutGeo(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -183,8 +183,7 @@ class OutGeo(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         OutGeo_dict = dict()
         if self.stator is None:
@@ -233,10 +232,13 @@ class OutGeo(FrozenClass):
         if self._stator is not None:
             self._stator.parent = self
 
-    # Geometry output of the stator
-    # Type : OutGeoLam
     stator = property(
-        fget=_get_stator, fset=_set_stator, doc=u"""Geometry output of the stator"""
+        fget=_get_stator,
+        fset=_set_stator,
+        doc=u"""Geometry output of the stator
+
+        :Type: OutGeoLam
+        """,
     )
 
     def _get_rotor(self):
@@ -251,10 +253,13 @@ class OutGeo(FrozenClass):
         if self._rotor is not None:
             self._rotor.parent = self
 
-    # Geometry output of the rotor
-    # Type : OutGeoLam
     rotor = property(
-        fget=_get_rotor, fset=_set_rotor, doc=u"""Geometry output of the rotor"""
+        fget=_get_rotor,
+        fset=_set_rotor,
+        doc=u"""Geometry output of the rotor
+
+        :Type: OutGeoLam
+        """,
     )
 
     def _get_Wgap_mec(self):
@@ -266,12 +271,13 @@ class OutGeo(FrozenClass):
         check_var("Wgap_mec", value, "float")
         self._Wgap_mec = value
 
-    # mechanical airgap width (minimal distance between the lamination including magnet)
-    # Type : float
     Wgap_mec = property(
         fget=_get_Wgap_mec,
         fset=_set_Wgap_mec,
-        doc=u"""mechanical airgap width (minimal distance between the lamination including magnet)""",
+        doc=u"""mechanical airgap width (minimal distance between the lamination including magnet)
+
+        :Type: float
+        """,
     )
 
     def _get_Wgap_mag(self):
@@ -283,12 +289,13 @@ class OutGeo(FrozenClass):
         check_var("Wgap_mag", value, "float")
         self._Wgap_mag = value
 
-    # the magnetic airgap width (distance beetween the two Laminations bore radius)
-    # Type : float
     Wgap_mag = property(
         fget=_get_Wgap_mag,
         fset=_set_Wgap_mag,
-        doc=u"""the magnetic airgap width (distance beetween the two Laminations bore radius)""",
+        doc=u"""the magnetic airgap width (distance beetween the two Laminations bore radius)
+
+        :Type: float
+        """,
     )
 
     def _get_Rgap_mec(self):
@@ -300,12 +307,13 @@ class OutGeo(FrozenClass):
         check_var("Rgap_mec", value, "float")
         self._Rgap_mec = value
 
-    # radius of the center of the mecanical airgap
-    # Type : float
     Rgap_mec = property(
         fget=_get_Rgap_mec,
         fset=_set_Rgap_mec,
-        doc=u"""radius of the center of the mecanical airgap""",
+        doc=u"""radius of the center of the mecanical airgap
+
+        :Type: float
+        """,
     )
 
     def _get_Lgap(self):
@@ -317,9 +325,14 @@ class OutGeo(FrozenClass):
         check_var("Lgap", value, "float")
         self._Lgap = value
 
-    # Airgap active length
-    # Type : float
-    Lgap = property(fget=_get_Lgap, fset=_set_Lgap, doc=u"""Airgap active length""")
+    Lgap = property(
+        fget=_get_Lgap,
+        fset=_set_Lgap,
+        doc=u"""Airgap active length
+
+        :Type: float
+        """,
+    )
 
     def _get_logger_name(self):
         """getter of logger_name"""
@@ -330,12 +343,13 @@ class OutGeo(FrozenClass):
         check_var("logger_name", value, "str")
         self._logger_name = value
 
-    # Name of the logger to use
-    # Type : str
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        doc=u"""Name of the logger to use
+
+        :Type: str
+        """,
     )
 
     def _get_angle_offset_initial(self):
@@ -347,12 +361,13 @@ class OutGeo(FrozenClass):
         check_var("angle_offset_initial", value, "float")
         self._angle_offset_initial = value
 
-    # Difference between the d axis angle of the stator and the rotor
-    # Type : float
     angle_offset_initial = property(
         fget=_get_angle_offset_initial,
         fset=_set_angle_offset_initial,
-        doc=u"""Difference between the d axis angle of the stator and the rotor""",
+        doc=u"""Difference between the d axis angle of the stator and the rotor
+
+        :Type: float
+        """,
     )
 
     def _get_rot_dir(self):
@@ -364,8 +379,13 @@ class OutGeo(FrozenClass):
         check_var("rot_dir", value, "int", Vmin=-1, Vmax=1)
         self._rot_dir = value
 
-    # Rotation direction
-    # Type : int, min = -1, max = 1
     rot_dir = property(
-        fget=_get_rot_dir, fset=_set_rot_dir, doc=u"""Rotation direction"""
+        fget=_get_rot_dir,
+        fset=_set_rot_dir,
+        doc=u"""Rotation direction
+
+        :Type: int
+        :min: -1
+        :max: 1
+        """,
     )

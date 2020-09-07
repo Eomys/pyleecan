@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Import/ImportVectorField.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Import/ImportVectorField.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Import/ImportVectorField
 """
 
 from os import linesep
@@ -43,8 +44,7 @@ class ImportVectorField(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -141,8 +141,7 @@ class ImportVectorField(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         ImportVectorField_dict = dict()
         ImportVectorField_dict["components"] = dict()
@@ -174,12 +173,13 @@ class ImportVectorField(FrozenClass):
         check_var("components", value, "{ImportData}")
         self._components = value
 
-    # Dict of components (e.g. {"radial": ImportData})
-    # Type : {ImportData}
     components = property(
         fget=_get_components,
         fset=_set_components,
-        doc=u"""Dict of components (e.g. {"radial": ImportData})""",
+        doc=u"""Dict of components (e.g. {"radial": ImportData})
+
+        :Type: {ImportData}
+        """,
     )
 
     def _get_name(self):
@@ -191,9 +191,14 @@ class ImportVectorField(FrozenClass):
         check_var("name", value, "str")
         self._name = value
 
-    # Name of the vector field
-    # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""Name of the vector field""")
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Name of the vector field
+
+        :Type: str
+        """,
+    )
 
     def _get_symbol(self):
         """getter of symbol"""
@@ -204,8 +209,11 @@ class ImportVectorField(FrozenClass):
         check_var("symbol", value, "str")
         self._symbol = value
 
-    # Symbol of the vector field
-    # Type : str
     symbol = property(
-        fget=_get_symbol, fset=_set_symbol, doc=u"""Symbol of the vector field"""
+        fget=_get_symbol,
+        fset=_set_symbol,
+        doc=u"""Symbol of the vector field
+
+        :Type: str
+        """,
     )

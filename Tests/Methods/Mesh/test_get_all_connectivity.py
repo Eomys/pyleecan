@@ -5,6 +5,7 @@ from pyleecan.Classes.Mesh import Mesh
 from pyleecan.Classes.ElementMat import ElementMat
 import numpy as np
 
+
 @pytest.mark.METHODS
 class Test_get_all_connectivity(object):
     """unittest for Mesh and Element get_all_connectivity methods"""
@@ -22,7 +23,7 @@ class Test_get_all_connectivity(object):
         testA = result.size
         msg = "Wrong output: returned " + str(result.size) + ", expected: " + str(0)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_ElementMat_1seg(self):
         """unittest with ElementMat object. Test for 1 segment."""
@@ -34,7 +35,7 @@ class Test_get_all_connectivity(object):
         testA = np.sum(abs(result - node_tags))
         msg = "Wrong output: returned " + str(result) + ", expected: " + str(node_tags)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_ElementMat_2seg(self):
         """unittest with ElementMat object. Test with 2 segment."""
@@ -46,7 +47,7 @@ class Test_get_all_connectivity(object):
         testA = np.sum(abs(result - solution))
         msg = "Wrong output: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_ElementMat_2seg_1tgl(self):
         """unittest with ElementMat object. Test with 2 segment and 1 tgl."""
@@ -59,7 +60,7 @@ class Test_get_all_connectivity(object):
         testA = np.sum(abs(result - node_tags))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(node_tags)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_ElementMat_2seg_2tgl(self):
         """unittest with ElementMat object. Test with 2 segment and 2 tgl."""
@@ -73,7 +74,7 @@ class Test_get_all_connectivity(object):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_ElementMat_3seg_2tgl_1group(self):
         """unittest with ElementMat object. Test for 1 triangle in a group."""
@@ -84,25 +85,25 @@ class Test_get_all_connectivity(object):
         self.mesh.add_element([2, 3, 0], "Triangle3")
         node_tags = np.array([2, 1, 0])
         self.mesh.add_element(node_tags, "Triangle3", group=3)
-        result, tags = self.mesh.get_all_connectivity(    
-            "Triangle3", group=np.array([3], dtype=int)    
+        result, tags = self.mesh.get_all_connectivity(
+            "Triangle3", group=np.array([3], dtype=int)
         )
         solution = node_tags
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
         result, tags = self.mesh.get_all_connectivity("Triangle3", group=3)
         solution = node_tags
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_ElementMat_3seg_2tgl_2group(self):
         """unittest with ElementMat object. Test for 2 triangle in a group."""
-        
+
         self.mesh.add_element([0, 1], "Segment2")
         self.mesh.add_element([1, 2], "Segment2")
         self.mesh.add_element([1, 2, 3], "Triangle3")
@@ -113,4 +114,4 @@ class Test_get_all_connectivity(object):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg

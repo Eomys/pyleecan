@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Geometry/Circle.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Geometry/Circle.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Geometry/Circle
 """
 
 from os import linesep
@@ -157,8 +158,7 @@ class Circle(Surface):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -248,8 +248,7 @@ class Circle(Surface):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Surface
         Circle_dict = super(Circle, self).as_dict()
@@ -279,10 +278,14 @@ class Circle(Surface):
         check_var("radius", value, "float", Vmin=0)
         self._radius = value
 
-    # Radius of the circle
-    # Type : float, min = 0
     radius = property(
-        fget=_get_radius, fset=_set_radius, doc=u"""Radius of the circle"""
+        fget=_get_radius,
+        fset=_set_radius,
+        doc=u"""Radius of the circle
+
+        :Type: float
+        :min: 0
+        """,
     )
 
     def _get_center(self):
@@ -294,10 +297,13 @@ class Circle(Surface):
         check_var("center", value, "complex")
         self._center = value
 
-    # center of the Circle
-    # Type : complex
     center = property(
-        fget=_get_center, fset=_set_center, doc=u"""center of the Circle"""
+        fget=_get_center,
+        fset=_set_center,
+        doc=u"""center of the Circle
+
+        :Type: complex
+        """,
     )
 
     def _get_line_label(self):
@@ -309,8 +315,11 @@ class Circle(Surface):
         check_var("line_label", value, "str")
         self._line_label = value
 
-    # Label to set to the lines
-    # Type : str
     line_label = property(
-        fget=_get_line_label, fset=_set_line_label, doc=u"""Label to set to the lines"""
+        fget=_get_line_label,
+        fset=_set_line_label,
+        doc=u"""Label to set to the lines
+
+        :Type: str
+        """,
     )

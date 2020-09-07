@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Import/ImportMatrixVal.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Import/ImportMatrixVal.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Import/ImportMatrixVal
 """
 
 from os import linesep
@@ -43,8 +44,7 @@ class ImportMatrixVal(ImportMatrix):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -115,8 +115,7 @@ class ImportMatrixVal(ImportMatrix):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from ImportMatrix
         ImportMatrixVal_dict = super(ImportMatrixVal, self).as_dict()
@@ -152,6 +151,11 @@ class ImportMatrixVal(ImportMatrix):
         check_var("value", value, "ndarray")
         self._value = value
 
-    # The matrix to return
-    # Type : ndarray
-    value = property(fget=_get_value, fset=_set_value, doc=u"""The matrix to return""")
+    value = property(
+        fget=_get_value,
+        fset=_set_value,
+        doc=u"""The matrix to return
+
+        :Type: ndarray
+        """,
+    )

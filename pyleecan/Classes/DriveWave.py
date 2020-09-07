@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/DriveWave.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/DriveWave.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/DriveWave
 """
 
 from os import linesep
@@ -41,8 +42,7 @@ class DriveWave(Drive):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -170,8 +170,7 @@ class DriveWave(Drive):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Drive
         DriveWave_dict = super(DriveWave, self).as_dict()
@@ -204,6 +203,11 @@ class DriveWave(Drive):
         if self._wave is not None:
             self._wave.parent = self
 
-    # Wave generator
-    # Type : Import
-    wave = property(fget=_get_wave, fset=_set_wave, doc=u"""Wave generator""")
+    wave = property(
+        fget=_get_wave,
+        fset=_set_wave,
+        doc=u"""Wave generator
+
+        :Type: Import
+        """,
+    )

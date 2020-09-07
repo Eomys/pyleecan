@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/MachineUD.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/MachineUD.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/MachineUD
 """
 
 from os import linesep
@@ -92,8 +93,7 @@ class MachineUD(Machine):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -240,8 +240,7 @@ class MachineUD(Machine):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Machine
         MachineUD_dict = super(MachineUD, self).as_dict()
@@ -279,10 +278,13 @@ class MachineUD(Machine):
             if obj is not None:
                 obj.parent = self
 
-    # List of Lamination
-    # Type : [Lamination]
     lam_list = property(
-        fget=_get_lam_list, fset=_set_lam_list, doc=u"""List of Lamination"""
+        fget=_get_lam_list,
+        fset=_set_lam_list,
+        doc=u"""List of Lamination
+
+        :Type: [Lamination]
+        """,
     )
 
     def _get_is_sync(self):
@@ -294,10 +296,11 @@ class MachineUD(Machine):
         check_var("is_sync", value, "bool")
         self._is_sync = value
 
-    # True if the machine should be handled as a Synchronous machine
-    # Type : bool
     is_sync = property(
         fget=_get_is_sync,
         fset=_set_is_sync,
-        doc=u"""True if the machine should be handled as a Synchronous machine""",
+        doc=u"""True if the machine should be handled as a Synchronous machine
+
+        :Type: bool
+        """,
     )

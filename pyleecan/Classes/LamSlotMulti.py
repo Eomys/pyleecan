@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/LamSlotMulti.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/LamSlotMulti.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/LamSlotMulti
 """
 
 from os import linesep
@@ -174,8 +175,7 @@ class LamSlotMulti(Lamination):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -373,8 +373,7 @@ class LamSlotMulti(Lamination):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Lamination
         LamSlotMulti_dict = super(LamSlotMulti, self).as_dict()
@@ -415,10 +414,13 @@ class LamSlotMulti(Lamination):
             if obj is not None:
                 obj.parent = self
 
-    # List of lamination Slot
-    # Type : [Slot]
     slot_list = property(
-        fget=_get_slot_list, fset=_set_slot_list, doc=u"""List of lamination Slot"""
+        fget=_get_slot_list,
+        fset=_set_slot_list,
+        doc=u"""List of lamination Slot
+
+        :Type: [Slot]
+        """,
     )
 
     def _get_alpha(self):
@@ -437,8 +439,11 @@ class LamSlotMulti(Lamination):
         check_var("alpha", value, "ndarray")
         self._alpha = value
 
-    # Angular position of the Slots
-    # Type : ndarray
     alpha = property(
-        fget=_get_alpha, fset=_set_alpha, doc=u"""Angular position of the Slots"""
+        fget=_get_alpha,
+        fset=_set_alpha,
+        doc=u"""Angular position of the Slots
+
+        :Type: ndarray
+        """,
     )

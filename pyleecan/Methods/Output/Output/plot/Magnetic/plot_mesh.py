@@ -39,7 +39,7 @@ VENT_EDGE = config_dict["PLOT"]["COLOR_DICT"]["VENT_EDGE"]
 def plot_mesh(
     self, j_t0=0, mesh=None, title="No title", group=None, elem_type=["Triangle3"]
 ):
-    """ Display mesh.
+    """Display mesh.
 
     Parameters
     ----------

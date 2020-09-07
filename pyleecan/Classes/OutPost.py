@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Output/OutPost.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Output/OutPost.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Output/OutPost
 """
 
 from os import linesep
@@ -23,8 +24,7 @@ class OutPost(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -90,8 +90,7 @@ class OutPost(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         OutPost_dict = dict()
         OutPost_dict["legend_name"] = self.legend_name
@@ -115,12 +114,13 @@ class OutPost(FrozenClass):
         check_var("legend_name", value, "str")
         self._legend_name = value
 
-    # Name to use in the legend in case of comparison
-    # Type : str
     legend_name = property(
         fget=_get_legend_name,
         fset=_set_legend_name,
-        doc=u"""Name to use in the legend in case of comparison""",
+        doc=u"""Name to use in the legend in case of comparison
+
+        :Type: str
+        """,
     )
 
     def _get_line_color(self):
@@ -132,10 +132,11 @@ class OutPost(FrozenClass):
         check_var("line_color", value, "str")
         self._line_color = value
 
-    # Color to use in case of comparison
-    # Type : str
     line_color = property(
         fget=_get_line_color,
         fset=_set_line_color,
-        doc=u"""Color to use in case of comparison""",
+        doc=u"""Color to use in case of comparison
+
+        :Type: str
+        """,
     )

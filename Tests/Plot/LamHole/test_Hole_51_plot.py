@@ -18,6 +18,7 @@ from Tests import save_plot_path as save_path
 
 """pytest for Lamination with Hole 51 plot"""
 
+
 @pytest.mark.PLOT
 class Test_Hole_51_plot(object):
     @pytest.fixture
@@ -53,10 +54,8 @@ class Test_Hole_51_plot(object):
         test_obj.frame = Frame(Rint=0.12, Rext=0.12, Lfra=0.7)
         return test_obj
 
-
     def test_Lam_Hole_51_012(self, machine):
-        """Test machine plot hole 51 with all magnets
-        """
+        """Test machine plot hole 51 with all magnets"""
         machine.rotor.hole[0].magnet_0 = Magnet()
         machine.rotor.hole[0].magnet_1 = Magnet()
         machine.rotor.hole[0].magnet_2 = Magnet()
@@ -73,10 +72,8 @@ class Test_Hole_51_plot(object):
         # 2 for lam + 7*8 for holes
         assert len(fig.axes[0].patches) == 58
 
-
     def test_Lam_Hole_51_N12(self, machine):
-        """Test machine plot hole 51 with no magnet_0
-        """
+        """Test machine plot hole 51 with no magnet_0"""
         machine.rotor.hole[0].magnet_0 = None
         machine.rotor.hole[0].magnet_1 = Magnet()
         machine.rotor.hole[0].magnet_2 = Magnet()
@@ -86,10 +83,8 @@ class Test_Hole_51_plot(object):
         # 2 for lam + 5*8 for holes
         assert len(fig.axes[0].patches) == 42
 
-
     def test_Lam_Hole_51_0N2(self, machine):
-        """Test machine plot hole 51 with no magnet_1
-        """
+        """Test machine plot hole 51 with no magnet_1"""
         machine.rotor.hole[0].magnet_0 = Magnet()
         machine.rotor.hole[0].magnet_1 = None
         machine.rotor.hole[0].magnet_2 = Magnet()
@@ -99,10 +94,8 @@ class Test_Hole_51_plot(object):
         # 2 for lam + 5*8 for holes
         assert len(fig.axes[0].patches) == 42
 
-
     def test_Lam_Hole_51_NN2(self, machine):
-        """Test machine plot hole 51 with no magnet_0 and no magnet_1
-        """
+        """Test machine plot hole 51 with no magnet_0 and no magnet_1"""
         machine.rotor.hole[0].magnet_0 = None
         machine.rotor.hole[0].magnet_1 = None
         machine.rotor.hole[0].magnet_2 = Magnet()
@@ -112,10 +105,8 @@ class Test_Hole_51_plot(object):
         # 2 for lam + 3*8 for holes
         assert len(fig.axes[0].patches) == 26
 
-
     def test_Lam_Hole_51_01N(self, machine):
-        """Test machine plot hole 51 with no magnet_2
-        """
+        """Test machine plot hole 51 with no magnet_2"""
         machine.rotor.hole[0].magnet_0 = Magnet()
         machine.rotor.hole[0].magnet_1 = Magnet()
         machine.rotor.hole[0].magnet_2 = None
@@ -125,10 +116,8 @@ class Test_Hole_51_plot(object):
         # 2 for lam + 5*8 for holes
         assert len(fig.axes[0].patches) == 42
 
-
     def test_Lam_Hole_51_N1N(self, machine):
-        """Test machine plot hole 51 with no magnet_0 and no magnet_2
-        """
+        """Test machine plot hole 51 with no magnet_0 and no magnet_2"""
         machine.rotor.hole[0].magnet_0 = None
         machine.rotor.hole[0].magnet_1 = Magnet()
         machine.rotor.hole[0].magnet_2 = None
@@ -138,10 +127,8 @@ class Test_Hole_51_plot(object):
         # 2 for lam + 3*8 for holes
         assert len(fig.axes[0].patches) == 26
 
-
     def test_Lam_Hole_51_0NN(self, machine):
-        """Test machine plot hole 51 with no magnet_1 and no magnet_2
-        """
+        """Test machine plot hole 51 with no magnet_1 and no magnet_2"""
         machine.rotor.hole[0].magnet_0 = Magnet()
         machine.rotor.hole[0].magnet_1 = None
         machine.rotor.hole[0].magnet_2 = None
@@ -151,10 +138,8 @@ class Test_Hole_51_plot(object):
         # 2 for lam + 3*8 for holes
         assert len(fig.axes[0].patches) == 26
 
-
     def test_Lam_Hole_51_NNN(self, machine):
-        """Test machine plot hole 51 with no magnet
-        """
+        """Test machine plot hole 51 with no magnet"""
         machine.rotor.hole[0].magnet_0 = None
         machine.rotor.hole[0].magnet_1 = None
         machine.rotor.hole[0].magnet_2 = None

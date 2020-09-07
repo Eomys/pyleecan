@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/Conductor.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/Conductor.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/Conductor
 """
 
 from os import linesep
@@ -41,8 +42,7 @@ class Conductor(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -136,8 +136,7 @@ class Conductor(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         Conductor_dict = dict()
         if self.cond_mat is None:
@@ -172,10 +171,13 @@ class Conductor(FrozenClass):
         if self._cond_mat is not None:
             self._cond_mat.parent = self
 
-    # Material of the conductor
-    # Type : Material
     cond_mat = property(
-        fget=_get_cond_mat, fset=_set_cond_mat, doc=u"""Material of the conductor"""
+        fget=_get_cond_mat,
+        fset=_set_cond_mat,
+        doc=u"""Material of the conductor
+
+        :Type: Material
+        """,
     )
 
     def _get_ins_mat(self):
@@ -190,8 +192,11 @@ class Conductor(FrozenClass):
         if self._ins_mat is not None:
             self._ins_mat.parent = self
 
-    # Material of the insulation
-    # Type : Material
     ins_mat = property(
-        fget=_get_ins_mat, fset=_set_ins_mat, doc=u"""Material of the insulation"""
+        fget=_get_ins_mat,
+        fset=_set_ins_mat,
+        doc=u"""Material of the insulation
+
+        :Type: Material
+        """,
     )

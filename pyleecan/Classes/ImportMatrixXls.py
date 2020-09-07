@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Import/ImportMatrixXls.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Import/ImportMatrixXls.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Import/ImportMatrixXls
 """
 
 from os import linesep
@@ -42,8 +43,7 @@ class ImportMatrixXls(ImportMatrix):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -137,8 +137,7 @@ class ImportMatrixXls(ImportMatrix):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from ImportMatrix
         ImportMatrixXls_dict = super(ImportMatrixXls, self).as_dict()
@@ -170,10 +169,13 @@ class ImportMatrixXls(ImportMatrix):
         check_var("file_path", value, "str")
         self._file_path = value
 
-    # Path of the file to load
-    # Type : str
     file_path = property(
-        fget=_get_file_path, fset=_set_file_path, doc=u"""Path of the file to load"""
+        fget=_get_file_path,
+        fset=_set_file_path,
+        doc=u"""Path of the file to load
+
+        :Type: str
+        """,
     )
 
     def _get_sheet(self):
@@ -185,10 +187,13 @@ class ImportMatrixXls(ImportMatrix):
         check_var("sheet", value, "str")
         self._sheet = value
 
-    # Name of the sheet to load
-    # Type : str
     sheet = property(
-        fget=_get_sheet, fset=_set_sheet, doc=u"""Name of the sheet to load"""
+        fget=_get_sheet,
+        fset=_set_sheet,
+        doc=u"""Name of the sheet to load
+
+        :Type: str
+        """,
     )
 
     def _get_skiprows(self):
@@ -200,12 +205,14 @@ class ImportMatrixXls(ImportMatrix):
         check_var("skiprows", value, "int", Vmin=0)
         self._skiprows = value
 
-    # To skip some rows in the file (header)
-    # Type : int, min = 0
     skiprows = property(
         fget=_get_skiprows,
         fset=_set_skiprows,
-        doc=u"""To skip some rows in the file (header)""",
+        doc=u"""To skip some rows in the file (header)
+
+        :Type: int
+        :min: 0
+        """,
     )
 
     def _get_usecols(self):
@@ -217,10 +224,11 @@ class ImportMatrixXls(ImportMatrix):
         check_var("usecols", value, "str")
         self._usecols = value
 
-    # To select the range of column to use
-    # Type : str
     usecols = property(
         fget=_get_usecols,
         fset=_set_usecols,
-        doc=u"""To select the range of column to use""",
+        doc=u"""To select the range of column to use
+
+        :Type: str
+        """,
     )

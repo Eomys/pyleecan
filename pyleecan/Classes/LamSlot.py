@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/LamSlot.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/LamSlot.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/LamSlot
 """
 
 from os import linesep
@@ -202,8 +203,7 @@ class LamSlot(Lamination):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -411,8 +411,7 @@ class LamSlot(Lamination):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Lamination
         LamSlot_dict = super(LamSlot, self).as_dict()
@@ -445,6 +444,11 @@ class LamSlot(Lamination):
         if self._slot is not None:
             self._slot.parent = self
 
-    # lamination Slot
-    # Type : Slot
-    slot = property(fget=_get_slot, fset=_set_slot, doc=u"""lamination Slot""")
+    slot = property(
+        fget=_get_slot,
+        fset=_set_slot,
+        doc=u"""lamination Slot
+
+        :Type: Slot
+        """,
+    )

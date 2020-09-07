@@ -2,8 +2,7 @@ from ....Methods.Import import ImportError
 
 
 def check(self):
-    """Check that the object is correctly set
-    """
+    """Check that the object is correctly set"""
     if self.start is None:
         raise ImportError("Start must not be None")
     if self.stop is None:

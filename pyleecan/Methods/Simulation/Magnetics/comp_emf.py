@@ -4,8 +4,7 @@ from ....Methods.Simulation.Input import InputError
 
 
 def comp_emf(self):
-    """Compute the Electromotive force [V]
-    """
+    """Compute the Electromotive force [V]"""
     if self.parent is None:
         raise InputError(
             "ERROR: The Magnetic object must be in a Simulation object to run"

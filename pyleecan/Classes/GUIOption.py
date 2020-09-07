@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/GUI_Option/GUIOption.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/GUI_Option/GUIOption.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/GUIOption/GUIOption
 """
 
 from os import linesep
@@ -23,8 +24,7 @@ class GUIOption(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -97,8 +97,7 @@ class GUIOption(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         GUIOption_dict = dict()
         if self.unit is None:
@@ -127,6 +126,11 @@ class GUIOption(FrozenClass):
         if self._unit is not None:
             self._unit.parent = self
 
-    # Unit options
-    # Type : Unit
-    unit = property(fget=_get_unit, fset=_set_unit, doc=u"""Unit options""")
+    unit = property(
+        fget=_get_unit,
+        fset=_set_unit,
+        doc=u"""Unit options
+
+        :Type: Unit
+        """,
+    )

@@ -55,115 +55,116 @@ slotW60_test.append(
 @pytest.mark.METHODS
 class Test_SlotW60_meth(object):
     """pytest for SlotW60 methods"""
+
     @pytest.mark.parametrize("test_dict", slotW60_test)
-    def test_comp_surface(self,test_dict):
+    def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct
 
-            Parameters
-            ----------
-            test_dict :
-                
+        Parameters
+        ----------
+        test_dict :
 
-            Returns
-            -------
 
-            """
+        Returns
+        -------
+
+        """
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_surface()
 
         a = result
         b = test_dict["S_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a-0) < DELTA, msg
+        assert abs((a - b) / a - 0) < DELTA, msg
 
         b = comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a-0) < DELTA, msg
+        assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW60_test)
-    def test_comp_surface_wind(self,test_dict):
+    def test_comp_surface_wind(self, test_dict):
         """Check that the computation of the winding surface is correct
 
-            Parameters
-            ----------
-            test_dict :
-                
+        Parameters
+        ----------
+        test_dict :
 
-            Returns
-            -------
 
-            """
+        Returns
+        -------
+
+        """
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_surface_wind()
 
         a = result
         b = test_dict["SW_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a-0) < DELTA, msg
+        assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW60_test)
-    def test_comp_height(self,test_dict):
+    def test_comp_height(self, test_dict):
         """Check that the computation of the height is correct
 
-            Parameters
-            ----------
-            test_dict :
-                
+        Parameters
+        ----------
+        test_dict :
 
-            Returns
-            -------
 
-            """
+        Returns
+        -------
+
+        """
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_height()
 
         a = result
         b = test_dict["H_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a-0) < DELTA, msg
+        assert abs((a - b) / a - 0) < DELTA, msg
 
         b = comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a-0) < DELTA, msg
+        assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW60_test)
-    def test_comp_angle_opening(self,test_dict):
+    def test_comp_angle_opening(self, test_dict):
         """Check that the computation of the average opening angle iscorrect
 
-            Parameters
-            ----------
-            test_dict :
-                
+        Parameters
+        ----------
+        test_dict :
 
-            Returns
-            -------
 
-            """
+        Returns
+        -------
+
+        """
         test_obj = test_dict["test_obj"]
         a = test_obj.slot.comp_angle_opening()
         assert a == 2 * pi / test_obj.slot.Zs
 
         b = comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a-0) < DELTA, msg
+        assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW60_test)
-    def test_comp_angle_wind_eq(self,test_dict):
+    def test_comp_angle_wind_eq(self, test_dict):
         """Check that the computation of the average angle is correct
 
-            Parameters
-            ----------
-            test_dict :
-                
+        Parameters
+        ----------
+        test_dict :
 
-            Returns
-            -------
 
-            """
+        Returns
+        -------
+
+        """
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_angle_wind_eq()
-        
+
         a = result
         b = test_dict["Aw"]
         msg = "Return " + str(a) + " expected " + str(b)
-        assert abs((a - b) / a-0) < DELTA, msg
+        assert abs((a - b) / a - 0) < DELTA, msg

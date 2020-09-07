@@ -27,7 +27,6 @@ def run_single_simu(
     is_keep_all_output: bool
         store simulation output
     """
-
     if stop_if_error:
         is_error = False
         result = simulation.run()
@@ -49,9 +48,9 @@ def run_single_simu(
         # Execute error_keeper if error
         for datakeeper in datakeeper_list:
             if datakeeper.error_keeper is None:
-                xoutput.xoutput_dict[datakeeper.symbol][index] = None
+                xoutput.xoutput_dict[datakeeper.symbol].result[index] = None
             else:
-                xoutput.xoutput_dict[datakeeper.symbol][
+                xoutput.xoutput_dict[datakeeper.symbol].result[
                     index
                 ] = datakeeper.error_keeper(simulation)
     else:
@@ -69,4 +68,6 @@ def run_single_simu(
 
         # Execute keepers
         for datakeeper in datakeeper_list:
-            xoutput.xoutput_dict[datakeeper.symbol][index] = datakeeper.keeper(result)
+            xoutput.xoutput_dict[datakeeper.symbol].result[index] = datakeeper.keeper(
+                result
+            )

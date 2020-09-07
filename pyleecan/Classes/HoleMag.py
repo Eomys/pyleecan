@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Slot/HoleMag.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Slot/HoleMag.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Slot/HoleMag
 """
 
 from os import linesep
@@ -12,6 +13,31 @@ from .Hole import Hole
 
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Slot.HoleMag.comp_mass_magnet_id import comp_mass_magnet_id
+except ImportError as error:
+    comp_mass_magnet_id = error
+
+try:
+    from ..Methods.Slot.HoleMag.comp_mass_magnets import comp_mass_magnets
+except ImportError as error:
+    comp_mass_magnets = error
+
+try:
+    from ..Methods.Slot.HoleMag.comp_surface_magnets import comp_surface_magnets
+except ImportError as error:
+    comp_surface_magnets = error
+
+try:
+    from ..Methods.Slot.HoleMag.comp_volume_magnets import comp_volume_magnets
+except ImportError as error:
+    comp_volume_magnets = error
+
+try:
+    from ..Methods.Slot.HoleMag.get_magnet_list import get_magnet_list
+except ImportError as error:
+    get_magnet_list = error
+
 try:
     from ..Methods.Slot.HoleMag.has_magnet import has_magnet
 except ImportError as error:
@@ -27,6 +53,66 @@ class HoleMag(Hole):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Slot.HoleMag.comp_mass_magnet_id
+    if isinstance(comp_mass_magnet_id, ImportError):
+        comp_mass_magnet_id = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMag method comp_mass_magnet_id: "
+                    + str(comp_mass_magnet_id)
+                )
+            )
+        )
+    else:
+        comp_mass_magnet_id = comp_mass_magnet_id
+    # cf Methods.Slot.HoleMag.comp_mass_magnets
+    if isinstance(comp_mass_magnets, ImportError):
+        comp_mass_magnets = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMag method comp_mass_magnets: "
+                    + str(comp_mass_magnets)
+                )
+            )
+        )
+    else:
+        comp_mass_magnets = comp_mass_magnets
+    # cf Methods.Slot.HoleMag.comp_surface_magnets
+    if isinstance(comp_surface_magnets, ImportError):
+        comp_surface_magnets = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMag method comp_surface_magnets: "
+                    + str(comp_surface_magnets)
+                )
+            )
+        )
+    else:
+        comp_surface_magnets = comp_surface_magnets
+    # cf Methods.Slot.HoleMag.comp_volume_magnets
+    if isinstance(comp_volume_magnets, ImportError):
+        comp_volume_magnets = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMag method comp_volume_magnets: "
+                    + str(comp_volume_magnets)
+                )
+            )
+        )
+    else:
+        comp_volume_magnets = comp_volume_magnets
+    # cf Methods.Slot.HoleMag.get_magnet_list
+    if isinstance(get_magnet_list, ImportError):
+        get_magnet_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use HoleMag method get_magnet_list: " + str(get_magnet_list)
+                )
+            )
+        )
+    else:
+        get_magnet_list = get_magnet_list
     # cf Methods.Slot.HoleMag.has_magnet
     if isinstance(has_magnet, ImportError):
         has_magnet = property(
@@ -41,8 +127,7 @@ class HoleMag(Hole):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -104,8 +189,7 @@ class HoleMag(Hole):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Hole
         HoleMag_dict = super(HoleMag, self).as_dict()

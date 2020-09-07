@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Geometry/Surface.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Geometry/Surface.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Geometry/Surface
 """
 
 from os import linesep
@@ -85,8 +86,7 @@ class Surface(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -152,8 +152,7 @@ class Surface(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         Surface_dict = dict()
         Surface_dict["point_ref"] = self.point_ref
@@ -177,10 +176,13 @@ class Surface(FrozenClass):
         check_var("point_ref", value, "complex")
         self._point_ref = value
 
-    # Center of symmetry
-    # Type : complex
     point_ref = property(
-        fget=_get_point_ref, fset=_set_point_ref, doc=u"""Center of symmetry"""
+        fget=_get_point_ref,
+        fset=_set_point_ref,
+        doc=u"""Center of symmetry
+
+        :Type: complex
+        """,
     )
 
     def _get_label(self):
@@ -192,6 +194,11 @@ class Surface(FrozenClass):
         check_var("label", value, "str")
         self._label = value
 
-    # Label of the surface
-    # Type : str
-    label = property(fget=_get_label, fset=_set_label, doc=u"""Label of the surface""")
+    label = property(
+        fget=_get_label,
+        fset=_set_label,
+        doc=u"""Label of the surface
+
+        :Type: str
+        """,
+    )

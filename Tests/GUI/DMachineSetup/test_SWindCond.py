@@ -19,8 +19,7 @@ from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib
 @pytest.mark.GUI
 class TestSWindCond(object):
     def setup_method(self, method):
-        """ setup any state specific to the execution of the given module.
-        """
+        """setup any state specific to the execution of the given module."""
         self.test_obj = MachineSCIM()
         self.test_obj.stator = LamSlotWind(is_stator=True)
         self.test_obj.stator.slot = SlotW22(H0=0.001, H2=0.01, W0=0.1, W2=0.2)
@@ -55,14 +54,14 @@ class TestSWindCond(object):
 
     @classmethod
     def setup_class(cls):
-        """ setup any state specific to the execution of the given class (which
+        """setup any state specific to the execution of the given class (which
         usually contains tests).
         """
         cls.app = QtWidgets.QApplication(sys.argv)
 
     @classmethod
     def teardown_class(cls):
-        """ teardown any state that was previously setup with a call to
+        """teardown any state that was previously setup with a call to
         setup_class.
         """
         cls.app.quit()

@@ -6,9 +6,11 @@ from pyleecan.Classes.ElementMat import ElementMat
 from pyleecan.Classes.NodeMat import NodeMat
 import numpy as np
 
+
 @pytest.mark.METHODS
 class Test_get_node2element(object):
     """unittest to get elements containing specific node(s)"""
+
     def setup_method(self, method):
         self.mesh = Mesh()
         self.mesh.element["Triangle3"] = ElementMat(nb_node_per_element=3)
@@ -23,7 +25,7 @@ class Test_get_node2element(object):
         testA = np.sum(abs(solution - elem_tag))
         msg = "Wrong output: returned " + str(elem_tag) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_ElementMat_fakenode(self):
         """unittest for one non-existing node """
@@ -32,7 +34,7 @@ class Test_get_node2element(object):
         testA = np.sum(abs(solution - elem_tag))
         msg = "Wrong output: returned " + str(elem_tag) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_ElementMat_None(self):
         """unittest for None input """
@@ -41,4 +43,4 @@ class Test_get_node2element(object):
         testA = np.sum(abs(solution - elem_tag))
         msg = "Wrong output: returned " + str(elem_tag) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg

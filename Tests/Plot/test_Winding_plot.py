@@ -19,6 +19,7 @@ from pyleecan.Classes.SlotW21 import SlotW21
 from pyleecan.Classes.SlotW22 import SlotW22
 from Tests import save_plot_path as save_path
 
+
 @pytest.mark.PLOT
 class Test_Winding_plot(object):
     """unittest for Winding connection matrix plot"""
@@ -167,8 +168,7 @@ class Test_Winding_plot(object):
         fig.savefig(join(save_path, "test_Wind_CW2LR_wind2.png"))
 
     def test_plot_mmf_unit(self):
-        """Test plot unit mmf
-        """
+        """Test plot unit mmf"""
         stator = LamSlotWind(
             Rint=0.1325,
             Rext=0.2,

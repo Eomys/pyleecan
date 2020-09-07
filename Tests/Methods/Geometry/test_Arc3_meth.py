@@ -4,7 +4,7 @@ from pyleecan.Classes.Arc3 import Arc3
 from pyleecan.Classes.Arc2 import Arc2
 from numpy import pi, exp, sqrt, linspace
 
-import pytest   
+import pytest
 
 # For AlmostEqual
 DELTA = 1e-6
@@ -204,18 +204,18 @@ split_half_test.append(
     }
 )
 
+
 @pytest.mark.METHODS
 class Test_Arc3_meth(object):
     """unittest for Arc3 methods"""
 
     @pytest.mark.parametrize("test_dict", discretize_test)
-    def test_discretize(self,test_dict):
-        """Check that you can discretize an arc3
-            """
-        arc = Arc3(    
-            begin=test_dict["begin"],    
-            end=test_dict["end"],    
-            is_trigo_direction=test_dict["direc"],    
+    def test_discretize(self, test_dict):
+        """Check that you can discretize an arc3"""
+        arc = Arc3(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            is_trigo_direction=test_dict["direc"],
         )
 
         result = arc.discretize(test_dict["nb_point"])
@@ -224,107 +224,98 @@ class Test_Arc3_meth(object):
         for i in range(0, result.size):
             a = result[i]
             b = test_dict["result"][i]
-            assert abs((a - b) / a-0) < DELTA
+            assert abs((a - b) / a - 0) < DELTA
 
     @pytest.mark.parametrize("test_dict", comp_length_test)
-    def test_comp_length(self,test_dict):
-        """Check that you can compute the lenght of an arc3
-            """
-        arc = Arc3(    
-            begin=test_dict["begin"],    
-            end=test_dict["end"],    
-            is_trigo_direction=test_dict["direc"],    
+    def test_comp_length(self, test_dict):
+        """Check that you can compute the lenght of an arc3"""
+        arc = Arc3(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            is_trigo_direction=test_dict["direc"],
         )
         result = arc.comp_length()
-        assert round(abs(abs(result - test_dict["expect"])-0), 7) == 0
+        assert round(abs(abs(result - test_dict["expect"]) - 0), 7) == 0
 
     @pytest.mark.parametrize("test_dict", comp_radius_test)
-    def test_comp_radius(self,test_dict):
-        """Check that you can compute the radius of an arc3
-            """
-        arc = Arc3(    
-            begin=test_dict["begin"],    
-            end=test_dict["end"],    
-            is_trigo_direction=test_dict["direc"],    
+    def test_comp_radius(self, test_dict):
+        """Check that you can compute the radius of an arc3"""
+        arc = Arc3(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            is_trigo_direction=test_dict["direc"],
         )
         result = arc.comp_radius()
-        assert round(abs(abs(result - test_dict["expect"])-0), 7) == 0
+        assert round(abs(abs(result - test_dict["expect"]) - 0), 7) == 0
 
     @pytest.mark.parametrize("test_dict", comp_center_test)
-    def test_get_center(self,test_dict):
-        """Check that you can compute the center
-            """
-        arc = Arc3(    
-            begin=test_dict["begin"],    
-            end=test_dict["end"],    
-            is_trigo_direction=test_dict["direc"],    
+    def test_get_center(self, test_dict):
+        """Check that you can compute the center"""
+        arc = Arc3(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            is_trigo_direction=test_dict["direc"],
         )
         result = arc.get_center()
-        assert round(abs(abs(result - test_dict["expect"])-0), 7) == 0
+        assert round(abs(abs(result - test_dict["expect"]) - 0), 7) == 0
 
     @pytest.mark.parametrize("test_dict", comp_mid_test)
-    def test_get_middle(self,test_dict):
-        """Check that you can compute the middle
-            """
-        arc = Arc3(    
-            begin=test_dict["begin"],    
-            end=test_dict["end"],    
-            is_trigo_direction=test_dict["direc"],    
+    def test_get_middle(self, test_dict):
+        """Check that you can compute the middle"""
+        arc = Arc3(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            is_trigo_direction=test_dict["direc"],
         )
         result = arc.get_middle()
-        assert round(abs(abs(result - test_dict["expect"])-0), 7) == 0
+        assert round(abs(abs(result - test_dict["expect"]) - 0), 7) == 0
 
     @pytest.mark.parametrize("test_dict", comp_rotate_test)
-    def test_rotate(self,test_dict):
-        """Check that you can rotate an arc3
-            """
-        arc = Arc3(    
-            begin=test_dict["begin"],    
-            end=test_dict["end"],    
-            is_trigo_direction=test_dict["direc"],    
+    def test_rotate(self, test_dict):
+        """Check that you can rotate an arc3"""
+        arc = Arc3(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            is_trigo_direction=test_dict["direc"],
         )
         arc.rotate(test_dict["angle"])
-        assert round(abs(abs(arc.begin - test_dict["exp_begin"])-0), 7) == 0
-        assert round(abs(abs(arc.end - test_dict["exp_end"])-0), 7) == 0
+        assert round(abs(abs(arc.begin - test_dict["exp_begin"]) - 0), 7) == 0
+        assert round(abs(abs(arc.end - test_dict["exp_end"]) - 0), 7) == 0
 
     @pytest.mark.parametrize("test_dict", comp_translate_test)
-    def test_translate(self,test_dict):
-        """Check that you can translate an arc3
-            """
-        arc = Arc3(    
-            begin=test_dict["begin"],    
-            end=test_dict["end"],    
-            is_trigo_direction=test_dict["direc"],    
+    def test_translate(self, test_dict):
+        """Check that you can translate an arc3"""
+        arc = Arc3(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            is_trigo_direction=test_dict["direc"],
         )
         arc.translate(test_dict["delta"])
-        assert round(abs(abs(arc.begin - test_dict["exp_begin"])-0), 7) == 0
-        assert round(abs(abs(arc.end - test_dict["exp_end"])-0), 7) == 0
-
+        assert round(abs(abs(arc.begin - test_dict["exp_begin"]) - 0), 7) == 0
+        assert round(abs(abs(arc.end - test_dict["exp_end"]) - 0), 7) == 0
 
     @pytest.mark.parametrize("test_dict", get_angle_test)
-    def test_get_angle(self,test_dict):
-        """Check that the arc3 computed angle is correct
-            """
-        arc = Arc3(    
-            begin=test_dict["begin"],    
-            end=test_dict["end"],    
-            is_trigo_direction=test_dict["direction"],    
+    def test_get_angle(self, test_dict):
+        """Check that the arc3 computed angle is correct"""
+        arc = Arc3(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            is_trigo_direction=test_dict["direction"],
         )
         result = arc.get_angle(test_dict["is_deg"])
-        assert round(abs(result-test_dict["exp_angle"]), 7) == 0
+        assert round(abs(result - test_dict["exp_angle"]), 7) == 0
 
     @pytest.mark.parametrize("test_dict", split_half_test)
-    def test_split_half(self,test_dict):
-        """Check that the arc3 split is correct
-            """
-        arc = Arc3(    
-            begin=test_dict["begin"],    
-            end=test_dict["end"],    
-            is_trigo_direction=test_dict["direction"],    
+    def test_split_half(self, test_dict):
+        """Check that the arc3 split is correct"""
+        arc = Arc3(
+            begin=test_dict["begin"],
+            end=test_dict["end"],
+            is_trigo_direction=test_dict["direction"],
         )
         arc.split_half(is_begin=test_dict["is_begin"])
 
         assert isinstance(arc, Arc2)
-        assert round(abs(arc.begin-test_dict["N_begin"]), 7) == 0
-        assert round(abs(arc.center-test_dict["N_center"]), 7) == 0
-        assert round(abs(arc.angle-test_dict["N_angle"]), 7) == 0
+        assert round(abs(arc.begin - test_dict["N_begin"]), 7) == 0
+        assert round(abs(arc.center - test_dict["N_center"]), 7) == 0
+        assert round(abs(arc.angle - test_dict["N_angle"]), 7) == 0

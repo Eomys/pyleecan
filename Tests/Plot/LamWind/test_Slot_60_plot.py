@@ -25,11 +25,11 @@ import pytest
 
 """pytest for Lamination with winding plot"""
 
+
 @pytest.mark.PLOT
 class Test_Slot_60_plot(object):
     def test_Lam_Wind_60(self):
-        """Test machine plot with Slot 60
-        """
+        """Test machine plot with Slot 60"""
         print("\nTest plot Slot 60")
         plt.close("all")
         test_obj = MachineDFIM()

@@ -12,6 +12,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot24.PWSlot24 import PWSlot24
 
 import pytest
 
+
 @pytest.mark.GUI
 class TestPWSlot24(object):
     """Test that the widget PWSlot24 behave like it should"""
@@ -34,7 +35,6 @@ class TestPWSlot24(object):
         """Exit the app after the test"""
         cls.app.quit()
 
-
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
 
@@ -50,7 +50,7 @@ class TestPWSlot24(object):
         """Check that the Widget allow to update W3"""
         self.widget.lf_W3.clear()
         QTest.keyClicks(self.widget.lf_W3, "0.33")
-        self.widget.lf_W3.editingFinished.emit() # To trigger the slot
+        self.widget.lf_W3.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.slot.W3 == 0.33
         assert self.test_obj.slot.W3 == 0.33
@@ -59,22 +59,21 @@ class TestPWSlot24(object):
         """Check that the Widget allow to update H2"""
         self.widget.lf_H2.clear()
         QTest.keyClicks(self.widget.lf_H2, "0.36")
-        self.widget.lf_H2.editingFinished.emit() # To trigger the slot
+        self.widget.lf_H2.editingFinished.emit()  # To trigger the slot
 
         assert self.widget.slot.H2 == 0.36
         assert self.test_obj.slot.H2 == 0.36
 
     def test_output_txt(self):
-        """Check that the Output text is computed and correct
-            """
-        self.test_obj = LamSlotWind(    
-            Rint=0.2,    
-            Rext=0.5,    
-            is_internal=True,    
-            is_stator=False,   
-            L1=0.8,    
-            Nrvd=4,    
-            Wrvd=0.05,    
+        """Check that the Output text is computed and correct"""
+        self.test_obj = LamSlotWind(
+            Rint=0.2,
+            Rext=0.5,
+            is_internal=True,
+            is_stator=False,
+            L1=0.8,
+            Nrvd=4,
+            Wrvd=0.05,
         )
         self.test_obj.slot = SlotW24(Zs=12, W3=100e-3, H2=150e-3)
         self.widget = PWSlot24(self.test_obj)

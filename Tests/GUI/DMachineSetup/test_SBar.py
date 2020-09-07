@@ -20,11 +20,12 @@ from pyleecan.GUI.Dialog.DMachineSetup.SBar.SBar import SBar
 
 import pytest
 
+
 @pytest.mark.GUI
 class TestSBar(object):
     """Test that the widget SBar behave like it should"""
 
-    def setup_method(self,method):
+    def setup_method(self, method):
         """Run at the begining of every test to setup the gui"""
         self.test_obj = MachineSCIM()
         self.test_obj.rotor = LamSquirrelCage(Hscr=0.11, Lscr=0.12)
@@ -59,8 +60,7 @@ class TestSBar(object):
         cls.app.quit()
 
     def test_init(self):
-        """Check that the Widget spinbox initialise to the lamination value
-            """
+        """Check that the Widget spinbox initialise to the lamination value"""
 
         assert self.widget.lf_Hscr.value() == 0.11
         assert self.widget.lf_Lscr.value() == 0.12
@@ -110,7 +110,7 @@ class TestSBar(object):
         self.widget.lf_Hscr.clear()
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_Hscr, str(value))
-        self.widget.lf_Hscr.editingFinished.emit() # To trigger the slot
+        self.widget.lf_Hscr.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.rotor.Hscr == value
 
@@ -120,7 +120,7 @@ class TestSBar(object):
         self.widget.lf_Lscr.clear()
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_Lscr, str(value))
-        self.widget.lf_Lscr.editingFinished.emit() # To trigger the slot
+        self.widget.lf_Lscr.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.rotor.Lscr == value
 
@@ -130,7 +130,7 @@ class TestSBar(object):
         self.widget.w_bar.lf_Hbar.clear()
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.w_bar.lf_Hbar, str(value))
-        self.widget.w_bar.lf_Hbar.editingFinished.emit() # To trigger the slot
+        self.widget.w_bar.lf_Hbar.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.rotor.winding.conductor.Hbar == value
 
@@ -140,7 +140,7 @@ class TestSBar(object):
         self.widget.w_bar.lf_Wbar.clear()
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.w_bar.lf_Wbar, str(value))
-        self.widget.w_bar.lf_Wbar.editingFinished.emit() # To trigger the slot
+        self.widget.w_bar.lf_Wbar.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.rotor.winding.conductor.Wbar == value
 
@@ -150,7 +150,7 @@ class TestSBar(object):
         self.widget.lf_Lewout.clear()
         value = round(uniform(0, 1), 4)
         QTest.keyClicks(self.widget.lf_Lewout, str(value))
-        self.widget.lf_Lewout.editingFinished.emit() # To trigger the slot
+        self.widget.lf_Lewout.editingFinished.emit()  # To trigger the slot
 
         assert self.test_obj.rotor.winding.Lewout == value
 
@@ -169,8 +169,7 @@ class TestSBar(object):
         assert self.test_obj.rotor.ring_mat.elec.rho == 0.33
 
     def test_set_cond_type(self):
-        """Check that you can change the conductor type
-            """
+        """Check that you can change the conductor type"""
         # To remember to update the test
         assert self.widget.c_bar_type.count() == 2
         # Check init position

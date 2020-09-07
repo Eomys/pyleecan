@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Machine/Machine.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Machine/Machine.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Machine/Machine
 """
 
 from os import linesep
@@ -270,8 +271,7 @@ class Machine(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -403,8 +403,7 @@ class Machine(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         Machine_dict = dict()
         if self.frame is None:
@@ -447,9 +446,14 @@ class Machine(FrozenClass):
         if self._frame is not None:
             self._frame.parent = self
 
-    # Machine's Frame
-    # Type : Frame
-    frame = property(fget=_get_frame, fset=_set_frame, doc=u"""Machine's Frame""")
+    frame = property(
+        fget=_get_frame,
+        fset=_set_frame,
+        doc=u"""Machine's Frame
+
+        :Type: Frame
+        """,
+    )
 
     def _get_shaft(self):
         """getter of shaft"""
@@ -463,9 +467,14 @@ class Machine(FrozenClass):
         if self._shaft is not None:
             self._shaft.parent = self
 
-    # Machine's Shaft
-    # Type : Shaft
-    shaft = property(fget=_get_shaft, fset=_set_shaft, doc=u"""Machine's Shaft""")
+    shaft = property(
+        fget=_get_shaft,
+        fset=_set_shaft,
+        doc=u"""Machine's Shaft
+
+        :Type: Shaft
+        """,
+    )
 
     def _get_name(self):
         """getter of name"""
@@ -476,9 +485,14 @@ class Machine(FrozenClass):
         check_var("name", value, "str")
         self._name = value
 
-    # Name of the machine
-    # Type : str
-    name = property(fget=_get_name, fset=_set_name, doc=u"""Name of the machine""")
+    name = property(
+        fget=_get_name,
+        fset=_set_name,
+        doc=u"""Name of the machine
+
+        :Type: str
+        """,
+    )
 
     def _get_desc(self):
         """getter of desc"""
@@ -489,9 +503,14 @@ class Machine(FrozenClass):
         check_var("desc", value, "str")
         self._desc = value
 
-    # Machine description
-    # Type : str
-    desc = property(fget=_get_desc, fset=_set_desc, doc=u"""Machine description""")
+    desc = property(
+        fget=_get_desc,
+        fset=_set_desc,
+        doc=u"""Machine description
+
+        :Type: str
+        """,
+    )
 
     def _get_type_machine(self):
         """getter of type_machine"""
@@ -502,12 +521,13 @@ class Machine(FrozenClass):
         check_var("type_machine", value, "int")
         self._type_machine = value
 
-    # Integer to store the machine type (for the GUI, should be replaced by a test of the object type)
-    # Type : int
     type_machine = property(
         fget=_get_type_machine,
         fset=_set_type_machine,
-        doc=u"""Integer to store the machine type (for the GUI, should be replaced by a test of the object type)""",
+        doc=u"""Integer to store the machine type (for the GUI, should be replaced by a test of the object type)
+
+        :Type: int
+        """,
     )
 
     def _get_logger_name(self):
@@ -519,10 +539,11 @@ class Machine(FrozenClass):
         check_var("logger_name", value, "str")
         self._logger_name = value
 
-    # Name of the logger to use
-    # Type : str
     logger_name = property(
         fget=_get_logger_name,
         fset=_set_logger_name,
-        doc=u"""Name of the logger to use""",
+        doc=u"""Name of the logger to use
+
+        :Type: str
+        """,
     )

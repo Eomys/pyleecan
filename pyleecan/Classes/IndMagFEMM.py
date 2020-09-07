@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-"""File generated according to Generator/ClassesRef/Simulation/IndMagFEMM.csv
-WARNING! All changes made in this file will be lost!
+# File generated according to Generator/ClassesRef/Simulation/IndMagFEMM.csv
+# WARNING! All changes made in this file will be lost!
+"""Method code available at https://github.com/Eomys/pyleecan/tree/master/pyleecan/Methods/Simulation/IndMagFEMM
 """
 
 from os import linesep
@@ -60,8 +61,7 @@ class IndMagFEMM(IndMag):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -175,8 +175,7 @@ class IndMagFEMM(IndMag):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from IndMag
         IndMagFEMM_dict = super(IndMagFEMM, self).as_dict()
@@ -214,12 +213,13 @@ class IndMagFEMM(IndMag):
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 
-    # To enforce user-defined values for FEMM main parameters
-    # Type : dict
     FEMM_dict = property(
         fget=_get_FEMM_dict,
         fset=_set_FEMM_dict,
-        doc=u"""To enforce user-defined values for FEMM main parameters """,
+        doc=u"""To enforce user-defined values for FEMM main parameters 
+
+        :Type: dict
+        """,
     )
 
     def _get_type_calc_leakage(self):
@@ -231,12 +231,15 @@ class IndMagFEMM(IndMag):
         check_var("type_calc_leakage", value, "int", Vmin=0, Vmax=1)
         self._type_calc_leakage = value
 
-    # 0 no leakage calculation /  1 calculation using single slot
-    # Type : int, min = 0, max = 1
     type_calc_leakage = property(
         fget=_get_type_calc_leakage,
         fset=_set_type_calc_leakage,
-        doc=u"""0 no leakage calculation /  1 calculation using single slot """,
+        doc=u"""0 no leakage calculation /  1 calculation using single slot 
+
+        :Type: int
+        :min: 0
+        :max: 1
+        """,
     )
 
     def _get_is_sliding_band(self):
@@ -248,12 +251,13 @@ class IndMagFEMM(IndMag):
         check_var("is_sliding_band", value, "bool")
         self._is_sliding_band = value
 
-    # 0 to desactivate the sliding band
-    # Type : bool
     is_sliding_band = property(
         fget=_get_is_sliding_band,
         fset=_set_is_sliding_band,
-        doc=u"""0 to desactivate the sliding band""",
+        doc=u"""0 to desactivate the sliding band
+
+        :Type: bool
+        """,
     )
 
     def _get_is_symmetry_a(self):
@@ -265,12 +269,13 @@ class IndMagFEMM(IndMag):
         check_var("is_symmetry_a", value, "bool")
         self._is_symmetry_a = value
 
-    # 0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a
-    # Type : bool
     is_symmetry_a = property(
         fget=_get_is_symmetry_a,
         fset=_set_is_symmetry_a,
-        doc=u"""0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a""",
+        doc=u"""0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a
+
+        :Type: bool
+        """,
     )
 
     def _get_sym_a(self):
@@ -282,12 +287,14 @@ class IndMagFEMM(IndMag):
         check_var("sym_a", value, "int", Vmin=1)
         self._sym_a = value
 
-    # Number of symmetry for the angle vector
-    # Type : int, min = 1
     sym_a = property(
         fget=_get_sym_a,
         fset=_set_sym_a,
-        doc=u"""Number of symmetry for the angle vector""",
+        doc=u"""Number of symmetry for the angle vector
+
+        :Type: int
+        :min: 1
+        """,
     )
 
     def _get_is_antiper_a(self):
@@ -299,12 +306,13 @@ class IndMagFEMM(IndMag):
         check_var("is_antiper_a", value, "bool")
         self._is_antiper_a = value
 
-    # To add an antiperiodicity to the angle vector
-    # Type : bool
     is_antiper_a = property(
         fget=_get_is_antiper_a,
         fset=_set_is_antiper_a,
-        doc=u"""To add an antiperiodicity to the angle vector""",
+        doc=u"""To add an antiperiodicity to the angle vector
+
+        :Type: bool
+        """,
     )
 
     def _get_Nt_tot(self):
@@ -316,10 +324,11 @@ class IndMagFEMM(IndMag):
         check_var("Nt_tot", value, "int")
         self._Nt_tot = value
 
-    # Number of time steps for the FEMM simulation
-    # Type : int
     Nt_tot = property(
         fget=_get_Nt_tot,
         fset=_set_Nt_tot,
-        doc=u"""Number of time steps for the FEMM simulation""",
+        doc=u"""Number of time steps for the FEMM simulation
+
+        :Type: int
+        """,
     )

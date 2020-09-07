@@ -26,16 +26,22 @@ import pytest
 
 """pytest for Lamination with winding plot"""
 
+
 @pytest.mark.PLOT
 class Test_Slot_26_plot(object):
     def test_Lam_Wind_26_wind_22(self):
-        """Test machine plot with Slot 26 and winding rad=2, tan=2
-        """
+        """Test machine plot with Slot 26 and winding rad=2, tan=2"""
         print("\nTest plot Slot 26")
         plt.close("all")
         test_obj = MachineDFIM()
         test_obj.rotor = LamSlotWind(
-            Rint=0.2, Rext=0.5, is_internal=True, is_stator=False, L1=0.9, Nrvd=2, Wrvd=0.05
+            Rint=0.2,
+            Rext=0.5,
+            is_internal=True,
+            is_stator=False,
+            L1=0.9,
+            Nrvd=2,
+            Wrvd=0.05,
         )
         test_obj.rotor.axial_vent = [
             VentilationCirc(Zh=6, Alpha0=pi / 6, D0=60e-3, H0=0.35)
@@ -43,7 +49,9 @@ class Test_Slot_26_plot(object):
         test_obj.rotor.slot = SlotW26(
             Zs=6, W0=20e-3, R1=30e-3, R2=20e-3, H0=20e-3, H1=20e-3
         )
-        test_obj.rotor.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+        test_obj.rotor.winding = WindingUD(
+            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
+        )
         test_obj.rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 

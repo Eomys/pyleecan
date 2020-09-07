@@ -26,11 +26,11 @@ import pytest
 
 """pytest for Lamination with winding plot"""
 
+
 @pytest.mark.PLOT
 class Test_Slot_29_plot(object):
     def test_Lam_Wind_29_wind_22(self):
-        """Test machine plot with Slot 29 and winding rad=2, tan=2
-        """
+        """Test machine plot with Slot 29 and winding rad=2, tan=2"""
         print("\nTest plot Slot 29")
         plt.close("all")
         test_obj = MachineDFIM()
@@ -43,7 +43,9 @@ class Test_Slot_29_plot(object):
         test_obj.rotor.slot = SlotW29(
             Zs=6, W0=0.05, H0=0.05, H1=0.1, W1=0.1, H2=0.2, W2=0.15
         )
-        test_obj.rotor.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+        test_obj.rotor.winding = WindingUD(
+            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
+        )
         test_obj.rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
         test_obj.shaft = Shaft(Drsh=test_obj.rotor.Rint * 2, Lshaft=1)
 
@@ -59,7 +61,9 @@ class Test_Slot_29_plot(object):
         test_obj.stator.slot = SlotW29(
             Zs=6, W0=0.05, H0=0.025, H1=0.04, W1=0.1, H2=0.15, W2=0.2
         )
-        test_obj.stator.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
+        test_obj.stator.winding = WindingUD(
+            user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3
+        )
         test_obj.stator.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
         test_obj.frame = Frame(Rint=0.8, Rext=0.9, Lfra=1)
 

@@ -14,7 +14,7 @@ def set_FEMM_circuit_prop(circuits, Clabel, I, is_mmf, Npcpp, j_t0):
         the label of the related surface
     q_id : int
         Index of the phase
-    I : ndarray
+    I : Data
         Lamination currents waveforms
     is_mmf: bool
         1 to compute the lamination magnetomotive
@@ -32,10 +32,12 @@ def set_FEMM_circuit_prop(circuits, Clabel, I, is_mmf, Npcpp, j_t0):
     """
 
     q_id = int(Clabel[5:])
+    if I is not None:
+        I = I.values
     if Clabel in circuits:
-        if I.size != 0 and LA.norm(I) != 0:
+        if I is not None and I.size != 0 and LA.norm(I) != 0:
             # Update existing circuit
-            femm.mi_modifycircprop(Clabel, 1, is_mmf * I[j_t0, q_id] / Npcpp)
+            femm.mi_modifycircprop(Clabel, 1, is_mmf * I[q_id, j_t0] / Npcpp)
     else:
         # Create new circuit
         femm.mi_addcircprop(Clabel, 0, 1)
