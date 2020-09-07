@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 import pytest
-from unittest import TestCase
+
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.PointMat import PointMat
 import numpy as np
 
-
+@pytest.mark.METHODS
 @pytest.mark.MeshSol
-class unittest_get_group(TestCase):
+class Test_get_group(object):
     """unittest to extract a group as a Mesh object"""
 
-    @classmethod
-    def setUp(self):
+    def setup_method(self, method):
 
         mesh = MeshMat()
         mesh.cell["triangle"] = CellMat(nb_pt_per_cell=3)
@@ -46,7 +45,7 @@ class unittest_get_group(TestCase):
         msg = (
             "Wrong output: returned " + str(result_tgl) + ", expected: " + str(solution)
         )
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=self.DELTA)
+        assert abs(testA-0) < self.DELTA, msg
 
         MS_grp = self.meshsol.get_group("rotor")
         cells_grp, nb_cell, indices = MS_grp.get_mesh().get_cell()
@@ -55,4 +54,4 @@ class unittest_get_group(TestCase):
         points = MS_grp.get_mesh().get_point(results)
         testA = np.sum(abs(solution - points))
         msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=self.DELTA)
+        assert abs(testA-0) < self.DELTA, msg

@@ -9,11 +9,11 @@ import numpy as np
 
 
 @pytest.mark.MeshSol
-class unittest_interface(TestCase):
-    """unittest for interface method"""
+@pytest.mark.METHODS
+class Test_interface(object):
+    """unittest for elements and nodes getter methods"""
 
-    @classmethod
-    def setUp(self):
+    def setup_method(self, method):
         self.mesh = MeshMat()
         self.mesh.cell["triangle"] = CellMat(nb_pt_per_cell=3)
         self.mesh.cell["line"] = CellMat(nb_pt_per_cell=2)
@@ -45,14 +45,9 @@ class unittest_interface(TestCase):
         solution = np.array([[0, 2], [4, 2]])
         resultat = new_seg_mesh.cell["line"].connectivity
         testA = np.sum(abs(resultat - solution))
-        msg = (
-            "Wrong projection: returned "
-            + str(resultat)
-            + ", expected: "
-            + str(solution)
-        )
+        msg = (    "Wrong projection: returned "    + str(resultat)    + ", expected: "    + str(solution)    )
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
 
     def test_CellMat_PointMat_corner_ext(self):
         """unittest with an external corner interface"""
@@ -80,7 +75,7 @@ class unittest_interface(TestCase):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
 
     def test_CellMat_PointMat_corner_int(self):
         """unittest with an internal corner interface"""
@@ -108,7 +103,7 @@ class unittest_interface(TestCase):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
 
     def test_CellMat_PointMat_self(self):
         """unittest with interface of a mesh on itself"""
@@ -129,4 +124,4 @@ class unittest_interface(TestCase):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA-0) < DELTA, msg
