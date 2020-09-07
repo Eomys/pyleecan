@@ -166,21 +166,21 @@ InputCurrent_Error_test.append(
     }
 )
 
+
 @pytest.mark.METHODS
 class Test_InCurrent_meth(object):
     """unittest for InputCurrent object methods"""
+
     @pytest.mark.parametrize("test_dict", InputCurrent_Error_test)
-    def test_InputCurrent_Error_test(self,test_dict):
-        """Check that the input current raises the correct errors
-            """
+    def test_InputCurrent_Error_test(self, test_dict):
+        """Check that the input current raises the correct errors"""
         output = Output(simu=test_dict["test_obj"])
         with pytest.raises(InputError) as context:
             output.simu.input.gen_input()
-            assert test_dict["exp"]== str(context.exception)
+            assert test_dict["exp"] == str(context.exception)
 
     def test_InputCurrent_Ok(self):
-        """Check that the input current can return a correct output
-            """
+        """Check that the input current can return a correct output"""
         test_obj = Simulation(machine=M3)
         output = Output(simu=test_obj)
         time = ImportGenVectLin(0, 1, 16)
@@ -188,27 +188,27 @@ class Test_InCurrent_meth(object):
         Is = ImportGenMatrixSin(is_transpose=True)
         Is.init_vector(f=[2, 2, 2], A=[2, 2, 2], Phi=[pi / 2, 0, -pi / 2], N=16, Tf=1)
         S = sqrt(2)
-        Is_exp = array(    
-            [    
-                [2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S],    
-                [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],    
-                [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],    
-            ]    
+        Is_exp = array(
+            [
+                [2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S],
+                [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],
+                [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],
+            ]
         )
 
         Ir = ImportGenMatrixSin(is_transpose=True)
         Ir.init_vector(f=[2, 2], A=[2, 2], Phi=[0, -pi / 2], N=16, Tf=1)
-        Ir_exp = array(    
-            [    
-                [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],    
-                [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],    
-            ]    
+        Ir_exp = array(
+            [
+                [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],
+                [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],
+            ]
         )
 
         angle_rotor = ImportGenVectLin(0, 2 * pi, 16)
         N0 = 10
-        test_obj.input = InputCurrent(    
-            time=time, angle=angle, Is=Is, Ir=Ir, angle_rotor=angle_rotor, N0=N0    
+        test_obj.input = InputCurrent(
+            time=time, angle=angle, Is=Is, Ir=Ir, angle_rotor=angle_rotor, N0=N0
         )
 
         test_obj.input.gen_input()
@@ -220,8 +220,7 @@ class Test_InCurrent_meth(object):
         assert_array_almost_equal(output.elec.N0, ones(16) * 10)
 
     def test_InputCurrent_DQ(self):
-        """Check that the input current can return a correct output
-            """
+        """Check that the input current can return a correct output"""
         test_obj = Simulation(machine=IPMSM_A)
         output = Output(simu=test_obj)
         time = ImportGenVectLin(0, 1, 7)
@@ -229,29 +228,29 @@ class Test_InCurrent_meth(object):
         Id_ref = 2
         Iq_ref = 0
 
-        Is_exp = array(    
-            [    
-                [2, 1, -1, -2, -1, 1, 2],    
-                [-1, -2, -1, 1, 2, 1, -1],   
-                [-1, 1, 2, 1, -1, -2, -1],    
-                ]    
+        Is_exp = array(
+            [
+                [2, 1, -1, -2, -1, 1, 2],
+                [-1, -2, -1, 1, 2, 1, -1],
+                [-1, 1, 2, 1, -1, -2, -1],
+            ]
         )
         zp = IPMSM_A.stator.get_pole_pair_number()
         angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
         angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
         N0 = 60 / zp
 
-        test_obj.input = InputCurrent(    
-            time=time,    
-            angle=angle,    
-            Is=None,    
-            Iq_ref=Iq_ref,    
-            Id_ref=Id_ref,    
-            Ir=None,    
-            angle_rotor=None,    
-            N0=N0,    
-            angle_rotor_initial=angle_rotor_initial,    
-            rot_dir=1,   
+        test_obj.input = InputCurrent(
+            time=time,
+            angle=angle,
+            Is=None,
+            Iq_ref=Iq_ref,
+            Id_ref=Id_ref,
+            Ir=None,
+            angle_rotor=None,
+            N0=N0,
+            angle_rotor_initial=angle_rotor_initial,
+            rot_dir=1,
         )
 
         test_obj.input.gen_input()
@@ -262,8 +261,7 @@ class Test_InCurrent_meth(object):
         assert_array_almost_equal(output.elec.N0, ones(7) * 60 / zp)
 
     def test_InputCurrent_I0Phi0(self):
-        """Check that the input current can return a correct output
-            """
+        """Check that the input current can return a correct output"""
         test_obj = Simulation(machine=IPMSM_A)
         output = Output(simu=test_obj)
         time = ImportGenVectLin(0, 1, 7)
@@ -271,32 +269,32 @@ class Test_InCurrent_meth(object):
         Id_ref = 2
         Iq_ref = 0
 
-        Is_exp = transpose(    
-            array(    
-                [    
-                    [2, 1, -1, -2, -1, 1, 2],    
-                    [-1, -2, -1, 1, 2, 1, -1],    
-                    [-1, 1, 2, 1, -1, -2, -1],    
-                ]   
-            )    
+        Is_exp = transpose(
+            array(
+                [
+                    [2, 1, -1, -2, -1, 1, 2],
+                    [-1, -2, -1, 1, 2, 1, -1],
+                    [-1, 1, 2, 1, -1, -2, -1],
+                ]
+            )
         )
         Is = ImportMatrixVal(value=Is_exp)
 
         zp = IPMSM_A.stator.get_pole_pair_number()
         angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
         angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
-        
+
         N0 = 60 / zp
 
-        test_obj.input = InputCurrent(    
-            time=time,    
-            angle=angle,    
-            Is=Is,    
-            Ir=None,    
-            angle_rotor=None,    
-            angle_rotor_initial=angle_rotor_initial,   
-            N0=N0,    
-            rot_dir=1,    
+        test_obj.input = InputCurrent(
+            time=time,
+            angle=angle,
+            Is=Is,
+            Ir=None,
+            angle_rotor=None,
+            angle_rotor_initial=angle_rotor_initial,
+            N0=N0,
+            rot_dir=1,
         )
 
         test_obj.input.gen_input()

@@ -7,6 +7,7 @@ from pyleecan.Classes.MeshSolution import MeshSolution
 from pyleecan.Classes.PointMat import PointMat
 import numpy as np
 
+
 @pytest.mark.METHODS
 @pytest.mark.MeshSol
 class Test_get_group(object):
@@ -45,7 +46,7 @@ class Test_get_group(object):
         msg = (
             "Wrong output: returned " + str(result_tgl) + ", expected: " + str(solution)
         )
-        assert abs(testA-0) < self.DELTA, msg
+        assert abs(testA - 0) < self.DELTA, msg
 
         MS_grp = self.meshsol.get_group("rotor")
         cells_grp, nb_cell, indices = MS_grp.get_mesh().get_cell()
@@ -54,4 +55,4 @@ class Test_get_group(object):
         points = MS_grp.get_mesh().get_point(results)
         testA = np.sum(abs(solution - points))
         msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
-        assert abs(testA-0) < self.DELTA, msg
+        assert abs(testA - 0) < self.DELTA, msg

@@ -86,7 +86,7 @@ class Test_get_cell_MeshMat(object):
         testA = np.sum(abs(result["segment2"] - solution))
         msg = "Wrong output: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
         tag_test = self.mesh.add_cell([4, 2, 1], "triangle3")
         result, nb, ind = self.mesh.get_cell(tag_test)
@@ -94,7 +94,7 @@ class Test_get_cell_MeshMat(object):
         testA = np.sum(abs(result["triangle3"] - solution))
         msg = "Wrong output: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_MeshMat_stupid(self):
         """unittest with MeshMat for wrong entry"""

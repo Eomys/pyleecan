@@ -32,4 +32,4 @@ class Test_get_point(object):
             "Wrong projection: returned " + str(points) + ", expected: " + str(solution)
         )
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg

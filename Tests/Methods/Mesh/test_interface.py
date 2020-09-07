@@ -44,9 +44,14 @@ class Test_interface(object):
         solution = np.array([[0, 2], [4, 2]])
         resultat = new_seg_mesh.cell["line"].connectivity
         testA = np.sum(abs(resultat - solution))
-        msg = (    "Wrong projection: returned "    + str(resultat)    + ", expected: "    + str(solution)    )
+        msg = (
+            "Wrong projection: returned "
+            + str(resultat)
+            + ", expected: "
+            + str(solution)
+        )
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_CellMat_PointMat_corner_ext(self):
         """unittest with an external corner interface"""
@@ -74,7 +79,7 @@ class Test_interface(object):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_CellMat_PointMat_corner_int(self):
         """unittest with an internal corner interface"""
@@ -102,7 +107,7 @@ class Test_interface(object):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
     def test_CellMat_PointMat_self(self):
         """unittest with interface of a mesh on itself"""
@@ -123,4 +128,4 @@ class Test_interface(object):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg

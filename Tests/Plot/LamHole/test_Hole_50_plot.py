@@ -50,7 +50,9 @@ class Test_Hole_50_plot(object):
             )
         )
         test_obj.rotor.axial_vent = list()
-        test_obj.rotor.axial_vent.append(VentilationCirc(Zh=8, Alpha0=0, D0=5e-3, H0=40e-3))
+        test_obj.rotor.axial_vent.append(
+            VentilationCirc(Zh=8, Alpha0=0, D0=5e-3, H0=40e-3)
+        )
         test_obj.rotor.axial_vent.append(
             VentilationCirc(Zh=8, Alpha0=pi / 8, D0=7e-3, H0=40e-3)
         )
@@ -70,10 +72,8 @@ class Test_Hole_50_plot(object):
 
         return test_obj
 
-
     def test_Lam_Hole_50_W01(self, machine):
-        """Test machine plot hole 50 with W1 > 0 and both magnets
-        """
+        """Test machine plot hole 50 with W1 > 0 and both magnets"""
         machine.plot()
         fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Hole_s50_Machine.png"))
@@ -90,10 +90,8 @@ class Test_Hole_50_plot(object):
         fig.savefig(join(save_path, "test_Lam_Hole_CircVent.png"))
         assert len(fig.axes[0].patches) == 8
 
-
     def test_Lam_Hole_50_N01(self, machine):
-        """Test machine plot hole 50 with W1 = 0 and both magnets
-        """
+        """Test machine plot hole 50 with W1 = 0 and both magnets"""
         machine.rotor.hole[0].W1 = 0
         machine.rotor.hole[0].magnet_0 = Magnet()
         machine.rotor.hole[0].magnet_1 = Magnet()
@@ -103,10 +101,8 @@ class Test_Hole_50_plot(object):
         # 2 for lam + 5*8 for holes + 16 vents
         assert len(fig.axes[0].patches) == 58
 
-
     def test_Lam_Hole_50_WN1(self, machine):
-        """Test machine plot hole 50 with W1 > 0 and only magnet_1
-        """
+        """Test machine plot hole 50 with W1 > 0 and only magnet_1"""
         machine.rotor.hole[0].W1 = 2e-3
         machine.rotor.hole[0].magnet_0 = None
         machine.rotor.hole[0].magnet_1 = Magnet()
@@ -116,10 +112,8 @@ class Test_Hole_50_plot(object):
         # 2 for lam + (1+3)*8 for holes + 16 vents
         assert len(fig.axes[0].patches) == 50
 
-
     def test_Lam_Hole_50_NN1(self, machine):
-        """Test machine plot hole 50 with W1 = 0 and no magnet_0
-        """
+        """Test machine plot hole 50 with W1 = 0 and no magnet_0"""
         machine.rotor.hole[0].W1 = 0
         machine.rotor.hole[0].magnet_0 = None
         machine.rotor.hole[0].magnet_1 = Magnet()
@@ -129,10 +123,8 @@ class Test_Hole_50_plot(object):
         # 2 for lam + 3*8 for holes + 16 vents
         assert len(fig.axes[0].patches) == 42
 
-
     def test_Lam_Hole_50_W0N(self, machine):
-        """Test machine plot hole 50 with W1 > 0 and no magnet_1
-        """
+        """Test machine plot hole 50 with W1 > 0 and no magnet_1"""
         machine.rotor.hole[0].W1 = 2e-3
         machine.rotor.hole[0].magnet_0 = Magnet()
         machine.rotor.hole[0].magnet_1 = None
@@ -142,10 +134,8 @@ class Test_Hole_50_plot(object):
         # 2 for lam + 4*8 for holes + 16 vents
         assert len(fig.axes[0].patches) == 50
 
-
     def test_Lam_Hole_50_N0N(self, machine):
-        """Test machine plot hole 50 with W1 =0 and no magnet_1
-        """
+        """Test machine plot hole 50 with W1 =0 and no magnet_1"""
         machine.rotor.hole[0].W1 = 0
         machine.rotor.hole[0].magnet_0 = Magnet()
         machine.rotor.hole[0].magnet_1 = None
@@ -155,10 +145,8 @@ class Test_Hole_50_plot(object):
         # 2 for lam + (1+2)*8 for holes + 16 vents
         assert len(fig.axes[0].patches) == 42
 
-
     def test_Lam_Hole_50_WNN(self, machine):
-        """Test machine plot hole 50 with W1 > 0 and no magnets
-        """
+        """Test machine plot hole 50 with W1 > 0 and no magnets"""
         machine.rotor.hole[0].W1 = 2e-3
         machine.rotor.hole[0].magnet_0 = None
         machine.rotor.hole[0].magnet_1 = None
@@ -168,10 +156,8 @@ class Test_Hole_50_plot(object):
         # 2 for lam + (1+1)*8 for holes + 16 vents
         assert len(fig.axes[0].patches) == 34
 
-
     def test_Lam_Hole_50_NNN(self, machine):
-        """Test machine plot hole 50 with W1 = 0 and no magnets
-        """
+        """Test machine plot hole 50 with W1 = 0 and no magnets"""
         machine.rotor.hole[0].W1 = 0
         machine.rotor.hole[0].magnet_0 = None
         machine.rotor.hole[0].magnet_1 = None

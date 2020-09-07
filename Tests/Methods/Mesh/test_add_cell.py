@@ -29,7 +29,7 @@ class Test_add_element(object):
             + ", expected: "
             + str(points_test)
         )
-        assert abs(testA-0) < self.DELTA, msg
+        assert abs(testA - 0) < self.DELTA, msg
 
         msg = (
             "Wrong result: returned "
@@ -37,7 +37,7 @@ class Test_add_element(object):
             + ", expected: "
             + str(1)
         )
-        assert abs(self.mesh.cell["segment2"].nb_cell-1) < self.DELTA, msg
+        assert abs(self.mesh.cell["segment2"].nb_cell - 1) < self.DELTA, msg
 
     def test_MeshMat_add_3cell(self):
         """unittest with MeshMat, add 3 different cells"""
@@ -58,7 +58,7 @@ class Test_add_element(object):
             + ", expected: "
             + str(solution)
         )
-        assert abs(testA-0) < self.DELTA, msg
+        assert abs(testA - 0) < self.DELTA, msg
 
         msg = (
             "Wrong result: returned "
@@ -66,7 +66,7 @@ class Test_add_element(object):
             + ", expected: "
             + str(2)
         )
-        assert abs(self.mesh.cell["segment2"].nb_cell-2) < self.DELTA, msg
+        assert abs(self.mesh.cell["segment2"].nb_cell - 2) < self.DELTA, msg
 
         solution = np.array([[0, 1, 2]])
         testA = np.sum(abs(self.mesh.cell["triangle3"].connectivity - solution))
@@ -76,7 +76,7 @@ class Test_add_element(object):
             + ", expected: "
             + str(solution)
         )
-        assert abs(testA-0) < self.DELTA, msg
+        assert abs(testA - 0) < self.DELTA, msg
 
         msg = (
             "Wrong result: returned "
@@ -84,7 +84,7 @@ class Test_add_element(object):
             + ", expected: "
             + str(1)
         )
-        assert abs(self.mesh.cell["triangle3"].nb_cell-1) < self.DELTA, msg
+        assert abs(self.mesh.cell["triangle3"].nb_cell - 1) < self.DELTA, msg
 
     def test_MeshMat_add_exist(self):
         """unittest with MeshMat, try to add an already existing cell."""
@@ -104,7 +104,7 @@ class Test_add_element(object):
             + ", expected: "
             + str(2)
         )
-        assert abs(self.mesh.cell["segment2"].nb_cell-2) < self.DELTA, msg
+        assert abs(self.mesh.cell["segment2"].nb_cell - 2) < self.DELTA, msg
 
     def test_MeshMat_add_stupid(self):
         """unittest with CellMat and 2 segment element and 1 triangle, add 1 triangle with a group number."""
@@ -122,4 +122,4 @@ class Test_add_element(object):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg

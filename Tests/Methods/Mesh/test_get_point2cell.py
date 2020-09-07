@@ -33,7 +33,7 @@ class Test_get_point2cell(object):
         solution = np.array([0, 1])
         testA = np.sum(abs(solution - ind_elem))
         msg = "Wrong output: returned " + str(ind_elem) + ", expected: " + str(solution)
-        assert abs(testA-0) < self.DELTA, msg
+        assert abs(testA - 0) < self.DELTA, msg
 
     def test_MeshMat_fakepoint(self):
         """unittest for one non-existing point """
@@ -42,9 +42,9 @@ class Test_get_point2cell(object):
         testA = np.sum(abs(solution - ind_elem))
         msg = "Wrong output: returned " + str(ind_elem) + ", expected: " + str(solution)
         DELTA = 1e-10
-        assert abs(testA-0) < DELTA, msg
+        assert abs(testA - 0) < DELTA, msg
 
         elem_tag = self.mesh.cell["triangle"].get_point2cell(None)
         testA = np.sum(abs(solution - elem_tag))
         msg = "Wrong output: returned " + str(ind_elem) + ", expected: " + str(solution)
-        assert abs(testA-0) < self.DELTA, msg
+        assert abs(testA - 0) < self.DELTA, msg

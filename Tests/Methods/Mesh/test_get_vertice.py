@@ -10,6 +10,7 @@ import numpy as np
 @pytest.mark.METHODS
 class Test_get_vertice(object):
     """unittest for Mesh and Element get_all_connectivity methods"""
+
     def setup_method(self, method):
         self.mesh = MeshMat()
         self.mesh.cell["triangle"] = CellMat(nb_pt_per_cell=3)
@@ -35,23 +36,23 @@ class Test_get_vertice(object):
         results = vert["triangle"]
         testA = np.sum(abs(solution - results))
         msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
-        assert abs(testA-0) < self.DELTA, msg
+        assert abs(testA - 0) < self.DELTA, msg
 
         solution = np.array([[3, 3], [1, 2]])
         results = vert["segment"]
         testA = np.sum(abs(solution - results))
         msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
-        assert abs(testA-0) < self.DELTA, msg
+        assert abs(testA - 0) < self.DELTA, msg
 
-        solution = np.array(    
-            [    
-                [[0, 0], [1, 0], [1, 2]],    
-                [[1, 0], [1, 2], [2, 3]],    
-                [[3, 3], [1, 2], [2, 3]],    
-            ]    
+        solution = np.array(
+            [
+                [[0, 0], [1, 0], [1, 2]],
+                [[1, 0], [1, 2], [2, 3]],
+                [[3, 3], [1, 2], [2, 3]],
+            ]
         )
         vert = self.mesh.get_vertice([0, 1, 2])
         results = vert["triangle"]
         testA = np.sum(abs(solution - results))
         msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
-        assert abs(testA-0) < self.DELTA, msg
+        assert abs(testA - 0) < self.DELTA, msg

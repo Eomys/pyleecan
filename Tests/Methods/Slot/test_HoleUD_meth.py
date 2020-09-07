@@ -28,6 +28,7 @@ if isfile(mach_path):
     IPMSM_B = IPMSM_A.copy()
     IPMSM_B.rotor.hole[0] = HUD
 
+
 @pytest.mark.METHODS
 class Test_HoleUD_meth(object):
     def test_comp_magnet_surface(self):
@@ -37,14 +38,12 @@ class Test_HoleUD_meth(object):
 
         assert exp == pytest.approx(result, rel=0.01)
 
-
     def test_comp_surface(self):
         """Check that the computation of the slot surface is correct"""
         exp = IPMSM_A.rotor.hole[0].comp_surface()
         result = IPMSM_B.rotor.hole[0].comp_surface()
 
         assert exp == pytest.approx(result, rel=0.01)
-
 
     def test_build_geometry_no_mag(self):
         """check that curve_list is correct (Remove magnet)"""
