@@ -23,11 +23,6 @@ try:
 except ImportError as error:
     get_axis = error
 
-try:
-    from ..Methods.Mesh.SolutionData.set_field import set_field
-except ImportError as error:
-    set_field = error
-
 
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
@@ -65,17 +60,6 @@ class SolutionData(Solution):
         )
     else:
         get_axis = get_axis
-    # cf Methods.Mesh.SolutionData.set_field
-    if isinstance(set_field, ImportError):
-        set_field = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SolutionData method set_field: " + str(set_field)
-                )
-            )
-        )
-    else:
-        set_field = set_field
     # save method is available in all object
     save = save
 
@@ -93,6 +77,7 @@ class SolutionData(Solution):
         field=None,
         type_cell="triangle",
         label=None,
+        dimension=2,
         init_dict=None,
         init_str=None,
     ):
@@ -117,6 +102,7 @@ class SolutionData(Solution):
             field = obj.field
             type_cell = obj.type_cell
             label = obj.label
+            dimension = obj.dimension
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -126,13 +112,17 @@ class SolutionData(Solution):
                 type_cell = init_dict["type_cell"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
+            if "dimension" in list(init_dict.keys()):
+                dimension = init_dict["dimension"]
         # Initialisation by argument
         # Check if the type DataND has been imported with success
         if isinstance(DataND, ImportError):
             raise ImportError("Unknown type DataND please install SciDataTool")
         self.field = field
         # Call Solution init
-        super(SolutionData, self).__init__(type_cell=type_cell, label=label)
+        super(SolutionData, self).__init__(
+            type_cell=type_cell, label=label, dimension=dimension
+        )
         # The class is frozen (in Solution init), for now it's impossible to
         # add new properties
 

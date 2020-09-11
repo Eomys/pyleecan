@@ -36,6 +36,7 @@ except ImportError as error:
 
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
+from .Interpolation import Interpolation
 
 
 class CellMat(FrozenClass):
@@ -103,6 +104,7 @@ class CellMat(FrozenClass):
         nb_cell=0,
         nb_pt_per_cell=0,
         indice=None,
+        interpolation=None,
         init_dict=None,
         init_str=None,
     ):
@@ -117,6 +119,8 @@ class CellMat(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
+        if interpolation == -1:
+            interpolation = Interpolation()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -128,6 +132,7 @@ class CellMat(FrozenClass):
             nb_cell = obj.nb_cell
             nb_pt_per_cell = obj.nb_pt_per_cell
             indice = obj.indice
+            interpolation = obj.interpolation
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -139,6 +144,8 @@ class CellMat(FrozenClass):
                 nb_pt_per_cell = init_dict["nb_pt_per_cell"]
             if "indice" in list(init_dict.keys()):
                 indice = init_dict["indice"]
+            if "interpolation" in list(init_dict.keys()):
+                interpolation = init_dict["interpolation"]
         # Initialisation by argument
         self.parent = None
         # connectivity can be None, a ndarray or a list
@@ -147,6 +154,15 @@ class CellMat(FrozenClass):
         self.nb_pt_per_cell = nb_pt_per_cell
         # indice can be None, a ndarray or a list
         set_array(self, "indice", indice)
+        # interpolation can be None, a Interpolation object or a dict
+        if isinstance(interpolation, dict):
+            self.interpolation = Interpolation(init_dict=interpolation)
+        elif isinstance(interpolation, str):
+            from ..Functions.load import load
+
+            self.interpolation = load(interpolation)
+        else:
+            self.interpolation = interpolation
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -175,6 +191,15 @@ class CellMat(FrozenClass):
             + linesep
             + linesep
         )
+        if self.interpolation is not None:
+            tmp = (
+                self.interpolation.__str__()
+                .replace(linesep, linesep + "\t")
+                .rstrip("\t")
+            )
+            CellMat_str += "interpolation = " + tmp
+        else:
+            CellMat_str += "interpolation = None" + linesep + linesep
         return CellMat_str
 
     def __eq__(self, other):
@@ -189,6 +214,8 @@ class CellMat(FrozenClass):
         if other.nb_pt_per_cell != self.nb_pt_per_cell:
             return False
         if not array_equal(other.indice, self.indice):
+            return False
+        if other.interpolation != self.interpolation:
             return False
         return True
 
@@ -207,6 +234,10 @@ class CellMat(FrozenClass):
             CellMat_dict["indice"] = None
         else:
             CellMat_dict["indice"] = self.indice.tolist()
+        if self.interpolation is None:
+            CellMat_dict["interpolation"] = None
+        else:
+            CellMat_dict["interpolation"] = self.interpolation.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         CellMat_dict["__class__"] = "CellMat"
         return CellMat_dict
@@ -218,6 +249,8 @@ class CellMat(FrozenClass):
         self.nb_cell = None
         self.nb_pt_per_cell = None
         self.indice = None
+        if self.interpolation is not None:
+            self.interpolation._set_None()
 
     def _get_connectivity(self):
         """getter of connectivity"""
@@ -302,5 +335,26 @@ class CellMat(FrozenClass):
         doc=u"""Element indices
 
         :Type: ndarray
+        """,
+    )
+
+    def _get_interpolation(self):
+        """getter of interpolation"""
+        return self._interpolation
+
+    def _set_interpolation(self, value):
+        """setter of interpolation"""
+        check_var("interpolation", value, "Interpolation")
+        self._interpolation = value
+
+        if self._interpolation is not None:
+            self._interpolation.parent = self
+
+    interpolation = property(
+        fget=_get_interpolation,
+        fset=_set_interpolation,
+        doc=u"""Define FEA interpolation
+
+        :Type: Interpolation
         """,
     )

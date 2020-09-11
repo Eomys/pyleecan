@@ -3,3 +3,4 @@ connectivity,,Matrix of connectivity for one element type,,ndarray,,,,,Mesh,,add
 nb_cell,,Total number of elements,,int,0,,,,,,get_connectivity,,,
 nb_pt_per_cell,,Define the number of node per element,,int,0,,,,,,get_point2cell,,,
 indice,,Element indices,,ndarray,,,,,,,is_exist,,,
+interpolation,,Define FEA interpolation,,Interpolation,None,,,,,,,,,
