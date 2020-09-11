@@ -15,6 +15,6 @@ if __name__ == "__main__":
     try:
         import black
 
-        system("{} -m black .".format(sys.executable))
+        system('"{}" -m black .'.format(sys.executable))
     except ImportError:
         print("/!\\ Please install and run black /!\\")
