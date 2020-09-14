@@ -115,7 +115,9 @@ def generate_properties(gen_dict, class_dict):
                     + "raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) \n"
                 )
 
-            elif "." in prop["type"]:  # Import from another package
+            elif "." in prop["type"] and not prop["type"].endswith(
+                "]"
+            ):  # Import from another package
                 prop_str += TAB2 + "try: # Check the type \n"
                 prop_str += TAB3 + 'check_var("' + prop["name"] + '", value, "dict")\n'
                 prop_str += TAB2 + "except CheckTypeError:\n"
@@ -140,6 +142,28 @@ def generate_properties(gen_dict, class_dict):
                 )
                 prop_str += TAB2 + "else: \n"
                 prop_str += TAB3 + "self._" + prop["name"] + "= value \n"
+
+            elif "." in prop["type"]:  # List of type from external package
+                prop_str += (
+                    TAB2
+                    + 'if isinstance(value, dict): # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)] \n'
+                )
+                prop_str += (
+                    TAB3 + "value = loads(value[\"serialized\"].encode('ISO-8859-2'))\n"
+                )
+                prop_str += TAB2 + "elif value == None:\n"
+                prop_str += TAB3 + "value = []\n"
+                prop_str += TAB2 + 'check_var("' + prop["name"] + '", value, "list")\n'
+                prop_str += TAB2 + "for i, element in enumerate(value):\n"
+                prop_str += (
+                    TAB3
+                    + 'check_var("'
+                    + prop["name"]
+                    + '[{}]".format(i), element, "'
+                    + prop["type"][1:-1]
+                    + '")\n'
+                )
+                prop_str += TAB2 + "self._" + prop["name"] + "= value \n"
 
             else:
                 prop_str += (
