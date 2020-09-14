@@ -29,9 +29,9 @@ except ImportError as error:
     grad_shape_function = error
 
 try:
-    from ..Methods.Mesh.RefTriangle3.get_real_points import get_real_points
+    from ..Methods.Mesh.RefTriangle3.get_real_point import get_real_point
 except ImportError as error:
-    get_real_points = error
+    get_real_point = error
 
 try:
     from ..Methods.Mesh.RefTriangle3.get_ref_point import get_ref_point
@@ -81,18 +81,18 @@ class RefTriangle3(RefCell):
         )
     else:
         grad_shape_function = grad_shape_function
-    # cf Methods.Mesh.RefTriangle3.get_real_points
-    if isinstance(get_real_points, ImportError):
-        get_real_points = property(
+    # cf Methods.Mesh.RefTriangle3.get_real_point
+    if isinstance(get_real_point, ImportError):
+        get_real_point = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use RefTriangle3 method get_real_points: "
-                    + str(get_real_points)
+                    "Can't use RefTriangle3 method get_real_point: "
+                    + str(get_real_point)
                 )
             )
         )
     else:
-        get_real_points = get_real_points
+        get_real_point = get_real_point
     # cf Methods.Mesh.RefTriangle3.get_ref_point
     if isinstance(get_ref_point, ImportError):
         get_ref_point = property(
