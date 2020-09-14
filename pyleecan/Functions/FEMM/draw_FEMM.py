@@ -221,7 +221,8 @@ def draw_FEMM(
         FEMM_dict["minangle"],
         FEMM_dict["acsolver"],
     )
-    femm.mi_smartmesh(FEMM_dict["smart_mesh"])
+    femm.smartmesh(FEMM_dict["smart_mesh"]) # instead of femm.mi_smartmesh 
+                                            # (see issue #9)
     femm.mi_saveas(path_save)  # Save
     # femm.mi_close()
 
