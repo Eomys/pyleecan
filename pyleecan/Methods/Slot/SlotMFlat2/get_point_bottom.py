@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import arcsin, exp
+from numpy import sin, exp
 
 
 def get_point_bottom(self):
@@ -18,14 +18,15 @@ def get_point_bottom(self):
 
     """
 
-    Rbo = self.get_Rbo()
     alpha = self.comp_angle_opening_magnet()
+    R1 = self.W1 / (2 * sin(alpha))
+    H2  = self.H0 - self.H1
 
     if self.is_outwards():
-        Z1 = Rbo * exp(-1j * alpha / 2) + self.H0 
-        Z2 = Rbo * exp(1j * alpha / 2) + self.H0
+        Z1 = R1 * exp(-1j * alpha / 2) + H2 
+        Z2 = R1 * exp(1j * alpha / 2) + H2
     else:
-        Z1 = Rbo * exp(-1j * alpha / 2) - self.H0
-        Z2 = Rbo * exp(1j * alpha / 2) - self.H0
+        Z1 = R1 * exp(-1j * alpha / 2) - H2
+        Z2 = R1 * exp(1j * alpha / 2) - H2
 
     return (Z1, Z2)

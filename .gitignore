@@ -9,4 +9,4 @@ _Internal/
 *.log
 run_GUI_internal.py
 /Tests/logtest.txt
-.vscode/*
+**/.vscode
