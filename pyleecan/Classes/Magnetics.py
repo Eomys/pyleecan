@@ -52,8 +52,7 @@ class Magnetics(FrozenClass):
         comp_time_angle = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Magnetics method comp_time_angle: "
-                    + str(comp_time_angle)
+                    "Can't use Magnetics method comp_time_angle: " + str(comp_time_angle)
                 )
             )
         )
@@ -80,24 +79,7 @@ class Magnetics(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        is_remove_slotS=False,
-        is_remove_slotR=False,
-        is_remove_vent=False,
-        is_mmfs=True,
-        is_mmfr=True,
-        type_BH_stator=0,
-        type_BH_rotor=0,
-        is_symmetry_t=False,
-        sym_t=1,
-        is_antiper_t=False,
-        is_symmetry_a=False,
-        sym_a=1,
-        is_antiper_a=False,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, is_remove_slotS=False, is_remove_slotR=False, is_remove_vent=False, is_mmfs=True, is_mmfr=True, type_BH_stator=0, type_BH_rotor=0, is_symmetry_t=False, sym_t=1, is_antiper_t=False, is_symmetry_a=False, sym_a=1, is_antiper_a=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -109,9 +91,8 @@ class Magnetics(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)

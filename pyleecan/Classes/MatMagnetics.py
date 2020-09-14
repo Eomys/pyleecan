@@ -67,17 +67,7 @@ class MatMagnetics(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        mur_lin=1,
-        Hc=0,
-        Brm20=0,
-        alpha_Br=0,
-        Wlam=0,
-        BH_curve=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, mur_lin=1, Hc=0, Brm20=0, alpha_Br=0, Wlam=0, BH_curve=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -91,9 +81,8 @@ class MatMagnetics(FrozenClass):
 
         if BH_curve == -1:
             BH_curve = ImportMatrix()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -130,43 +119,28 @@ class MatMagnetics(FrozenClass):
         if isinstance(BH_curve, dict):
             # Check that the type is correct (including daughter)
             class_name = BH_curve.get("__class__")
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
+            if class_name not in ['ImportMatrix', 'ImportGenMatrixSin', 'ImportGenToothSaw', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrixVal', 'ImportMatrixXls']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for BH_curve"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for BH_curve"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.BH_curve = class_obj(init_dict=BH_curve)
         elif isinstance(BH_curve, str):
             from ..Functions.load import load
-
             BH_curve = load(BH_curve)
             # Check that the type is correct (including daughter)
             class_name = BH_curve.__class__.__name__
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
+            if class_name not in ['ImportMatrix', 'ImportGenMatrixSin', 'ImportGenToothSaw', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrixVal', 'ImportMatrixXls']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for BH_curve"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for BH_curve"
                 )
-            self.BH_curve = BH_curve
+            self.BH_curve=BH_curve
         else:
             self.BH_curve = BH_curve
 
@@ -180,9 +154,7 @@ class MatMagnetics(FrozenClass):
         if self.parent is None:
             MatMagnetics_str += "parent = None " + linesep
         else:
-            MatMagnetics_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            MatMagnetics_str += "parent = " + str(type(self.parent)) + " object" + linesep
         MatMagnetics_str += "mur_lin = " + str(self.mur_lin) + linesep
         MatMagnetics_str += "Hc = " + str(self.Hc) + linesep
         MatMagnetics_str += "Brm20 = " + str(self.Brm20) + linesep
@@ -190,7 +162,7 @@ class MatMagnetics(FrozenClass):
         MatMagnetics_str += "Wlam = " + str(self.Wlam) + linesep
         if self.BH_curve is not None:
             tmp = self.BH_curve.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MatMagnetics_str += "BH_curve = " + tmp
+            MatMagnetics_str += "BH_curve = "+ tmp
         else:
             MatMagnetics_str += "BH_curve = None" + linesep + linesep
         return MatMagnetics_str
@@ -342,16 +314,15 @@ class MatMagnetics(FrozenClass):
 
     def _set_BH_curve(self, value):
         """setter of BH_curve"""
-        if isinstance(value, ndarray):
+        if isinstance(value,ndarray):
             value = ImportMatrixVal(value=value)
-        elif isinstance(value, list):
+        elif isinstance(value,list):
             value = ImportMatrixVal(value=array(value))
         check_var("BH_curve", value, "ImportMatrix")
         self._BH_curve = value
 
         if self._BH_curve is not None:
             self._BH_curve.parent = self
-
     BH_curve = property(
         fget=_get_BH_curve,
         fset=_set_BH_curve,

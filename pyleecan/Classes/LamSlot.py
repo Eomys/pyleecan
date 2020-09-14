@@ -150,8 +150,7 @@ class LamSlot(Lamination):
         comp_height_yoke = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlot method comp_height_yoke: "
-                    + str(comp_height_yoke)
+                    "Can't use LamSlot method comp_height_yoke: " + str(comp_height_yoke)
                 )
             )
         )
@@ -210,23 +209,7 @@ class LamSlot(Lamination):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        slot=-1,
-        L1=0.35,
-        mat_type=-1,
-        Nrvd=0,
-        Wrvd=0,
-        Kf1=0.95,
-        is_internal=True,
-        Rint=0,
-        Rext=1,
-        is_stator=True,
-        axial_vent=list(),
-        notch=list(),
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, slot=-1, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), notch=list(), init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -242,9 +225,8 @@ class LamSlot(Lamination):
             slot = Slot()
         if mat_type == -1:
             mat_type = Material()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -293,95 +275,32 @@ class LamSlot(Lamination):
         if isinstance(slot, dict):
             # Check that the type is correct (including daughter)
             class_name = slot.get("__class__")
-            if class_name not in [
-                "Slot",
-                "Slot19",
-                "SlotCirc",
-                "SlotMFlat",
-                "SlotMPolar",
-                "SlotMag",
-                "SlotUD",
-                "SlotW10",
-                "SlotW11",
-                "SlotW12",
-                "SlotW13",
-                "SlotW14",
-                "SlotW15",
-                "SlotW16",
-                "SlotW21",
-                "SlotW22",
-                "SlotW23",
-                "SlotW24",
-                "SlotW25",
-                "SlotW26",
-                "SlotW27",
-                "SlotW28",
-                "SlotW29",
-                "SlotW60",
-                "SlotW61",
-                "SlotWind",
-            ]:
+            if class_name not in ['Slot', 'Slot19', 'SlotCirc', 'SlotMFlat', 'SlotMFlat2', 'SlotMPolar', 'SlotMag', 'SlotUD', 'SlotW10', 'SlotW11', 'SlotW12', 'SlotW13', 'SlotW14', 'SlotW15', 'SlotW16', 'SlotW21', 'SlotW22', 'SlotW23', 'SlotW24', 'SlotW25', 'SlotW26', 'SlotW27', 'SlotW28', 'SlotW29', 'SlotW60', 'SlotW61', 'SlotWind']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for slot"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for slot"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.slot = class_obj(init_dict=slot)
         elif isinstance(slot, str):
             from ..Functions.load import load
-
             slot = load(slot)
             # Check that the type is correct (including daughter)
             class_name = slot.__class__.__name__
-            if class_name not in [
-                "Slot",
-                "Slot19",
-                "SlotCirc",
-                "SlotMFlat",
-                "SlotMPolar",
-                "SlotMag",
-                "SlotUD",
-                "SlotW10",
-                "SlotW11",
-                "SlotW12",
-                "SlotW13",
-                "SlotW14",
-                "SlotW15",
-                "SlotW16",
-                "SlotW21",
-                "SlotW22",
-                "SlotW23",
-                "SlotW24",
-                "SlotW25",
-                "SlotW26",
-                "SlotW27",
-                "SlotW28",
-                "SlotW29",
-                "SlotW60",
-                "SlotW61",
-                "SlotWind",
-            ]:
+            if class_name not in ['Slot', 'Slot19', 'SlotCirc', 'SlotMFlat', 'SlotMFlat2', 'SlotMPolar', 'SlotMag', 'SlotUD', 'SlotW10', 'SlotW11', 'SlotW12', 'SlotW13', 'SlotW14', 'SlotW15', 'SlotW16', 'SlotW21', 'SlotW22', 'SlotW23', 'SlotW24', 'SlotW25', 'SlotW26', 'SlotW27', 'SlotW28', 'SlotW29', 'SlotW60', 'SlotW61', 'SlotWind']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for slot"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for slot"
                 )
-            self.slot = slot
+            self.slot=slot
         else:
             self.slot = slot
         # Call Lamination init
-        super(LamSlot, self).__init__(
-            L1=L1,
-            mat_type=mat_type,
-            Nrvd=Nrvd,
-            Wrvd=Wrvd,
-            Kf1=Kf1,
-            is_internal=is_internal,
-            Rint=Rint,
-            Rext=Rext,
-            is_stator=is_stator,
-            axial_vent=axial_vent,
-            notch=notch,
-        )
+        super(LamSlot, self).__init__(L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
 
@@ -393,7 +312,7 @@ class LamSlot(Lamination):
         LamSlot_str += super(LamSlot, self).__str__()
         if self.slot is not None:
             tmp = self.slot.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            LamSlot_str += "slot = " + tmp
+            LamSlot_str += "slot = "+ tmp
         else:
             LamSlot_str += "slot = None" + linesep + linesep
         return LamSlot_str
@@ -445,7 +364,6 @@ class LamSlot(Lamination):
 
         if self._slot is not None:
             self._slot.parent = self
-
     slot = property(
         fget=_get_slot,
         fset=_set_slot,

@@ -184,9 +184,7 @@ class SurfLine(Surface):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, line_list=list(), point_ref=0, label="", init_dict=None, init_str=None
-    ):
+    def __init__(self, line_list=list(), point_ref=0, label="", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -198,9 +196,8 @@ class SurfLine(Surface):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -227,14 +224,7 @@ class SurfLine(Surface):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Line",
-                        "Arc",
-                        "Arc1",
-                        "Arc2",
-                        "Arc3",
-                        "Segment",
-                    ]:
+                    if class_name not in ['Line', 'Arc', 'Arc1', 'Arc2', 'Arc3', 'Segment']:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -266,10 +256,8 @@ class SurfLine(Surface):
         if len(self.line_list) == 0:
             SurfLine_str += "line_list = []" + linesep
         for ii in range(len(self.line_list)):
-            tmp = (
-                self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            SurfLine_str += "line_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            tmp = self.line_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            SurfLine_str += "line_list["+str(ii)+"] ="+ tmp + linesep + linesep
         return SurfLine_str
 
     def __eq__(self, other):

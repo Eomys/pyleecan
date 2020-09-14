@@ -71,21 +71,7 @@ class WindingUD(Winding):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        user_wind_mat=None,
-        is_reverse_wind=False,
-        Nslot_shift_wind=0,
-        qs=3,
-        Ntcoil=7,
-        Npcpp=2,
-        type_connection=0,
-        p=3,
-        Lewout=0.015,
-        conductor=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, user_wind_mat=None, is_reverse_wind=False, Nslot_shift_wind=0, qs=3, Ntcoil=7, Npcpp=2, type_connection=0, p=3, Lewout=0.015, conductor=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -99,9 +85,8 @@ class WindingUD(Winding):
 
         if conductor == -1:
             conductor = Conductor()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -143,17 +128,7 @@ class WindingUD(Winding):
         # user_wind_mat can be None, a ndarray or a list
         set_array(self, "user_wind_mat", user_wind_mat)
         # Call Winding init
-        super(WindingUD, self).__init__(
-            is_reverse_wind=is_reverse_wind,
-            Nslot_shift_wind=Nslot_shift_wind,
-            qs=qs,
-            Ntcoil=Ntcoil,
-            Npcpp=Npcpp,
-            type_connection=type_connection,
-            p=p,
-            Lewout=Lewout,
-            conductor=conductor,
-        )
+        super(WindingUD, self).__init__(is_reverse_wind=is_reverse_wind, Nslot_shift_wind=Nslot_shift_wind, qs=qs, Ntcoil=Ntcoil, Npcpp=Npcpp, type_connection=type_connection, p=p, Lewout=Lewout, conductor=conductor)
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties
 
@@ -163,13 +138,7 @@ class WindingUD(Winding):
         WindingUD_str = ""
         # Get the properties inherited from Winding
         WindingUD_str += super(WindingUD, self).__str__()
-        WindingUD_str += (
-            "user_wind_mat = "
-            + linesep
-            + str(self.user_wind_mat).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        WindingUD_str += "user_wind_mat = " + linesep + str(self.user_wind_mat).replace(linesep, linesep + "\t") + linesep + linesep
         return WindingUD_str
 
     def __eq__(self, other):

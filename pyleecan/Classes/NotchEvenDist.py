@@ -52,7 +52,7 @@ class NotchEvenDist(Notch):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, alpha=0, notch_shape=-1, init_dict=None, init_str=None):
+    def __init__(self, alpha=0, notch_shape=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -66,9 +66,8 @@ class NotchEvenDist(Notch):
 
         if notch_shape == -1:
             notch_shape = Slot()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -88,79 +87,28 @@ class NotchEvenDist(Notch):
         if isinstance(notch_shape, dict):
             # Check that the type is correct (including daughter)
             class_name = notch_shape.get("__class__")
-            if class_name not in [
-                "Slot",
-                "Slot19",
-                "SlotCirc",
-                "SlotMFlat",
-                "SlotMPolar",
-                "SlotMag",
-                "SlotUD",
-                "SlotW10",
-                "SlotW11",
-                "SlotW12",
-                "SlotW13",
-                "SlotW14",
-                "SlotW15",
-                "SlotW16",
-                "SlotW21",
-                "SlotW22",
-                "SlotW23",
-                "SlotW24",
-                "SlotW25",
-                "SlotW26",
-                "SlotW27",
-                "SlotW28",
-                "SlotW29",
-                "SlotW60",
-                "SlotW61",
-                "SlotWind",
-            ]:
+            if class_name not in ['Slot', 'Slot19', 'SlotCirc', 'SlotMFlat', 'SlotMFlat2', 'SlotMPolar', 'SlotMag', 'SlotUD', 'SlotW10', 'SlotW11', 'SlotW12', 'SlotW13', 'SlotW14', 'SlotW15', 'SlotW16', 'SlotW21', 'SlotW22', 'SlotW23', 'SlotW24', 'SlotW25', 'SlotW26', 'SlotW27', 'SlotW28', 'SlotW29', 'SlotW60', 'SlotW61', 'SlotWind']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for notch_shape"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for notch_shape"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.notch_shape = class_obj(init_dict=notch_shape)
         elif isinstance(notch_shape, str):
             from ..Functions.load import load
-
             notch_shape = load(notch_shape)
             # Check that the type is correct (including daughter)
             class_name = notch_shape.__class__.__name__
-            if class_name not in [
-                "Slot",
-                "Slot19",
-                "SlotCirc",
-                "SlotMFlat",
-                "SlotMPolar",
-                "SlotMag",
-                "SlotUD",
-                "SlotW10",
-                "SlotW11",
-                "SlotW12",
-                "SlotW13",
-                "SlotW14",
-                "SlotW15",
-                "SlotW16",
-                "SlotW21",
-                "SlotW22",
-                "SlotW23",
-                "SlotW24",
-                "SlotW25",
-                "SlotW26",
-                "SlotW27",
-                "SlotW28",
-                "SlotW29",
-                "SlotW60",
-                "SlotW61",
-                "SlotWind",
-            ]:
+            if class_name not in ['Slot', 'Slot19', 'SlotCirc', 'SlotMFlat', 'SlotMFlat2', 'SlotMPolar', 'SlotMag', 'SlotUD', 'SlotW10', 'SlotW11', 'SlotW12', 'SlotW13', 'SlotW14', 'SlotW15', 'SlotW16', 'SlotW21', 'SlotW22', 'SlotW23', 'SlotW24', 'SlotW25', 'SlotW26', 'SlotW27', 'SlotW28', 'SlotW29', 'SlotW60', 'SlotW61', 'SlotWind']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for notch_shape"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for notch_shape"
                 )
-            self.notch_shape = notch_shape
+            self.notch_shape=notch_shape
         else:
             self.notch_shape = notch_shape
         # Call Notch init
@@ -176,10 +124,8 @@ class NotchEvenDist(Notch):
         NotchEvenDist_str += super(NotchEvenDist, self).__str__()
         NotchEvenDist_str += "alpha = " + str(self.alpha) + linesep
         if self.notch_shape is not None:
-            tmp = (
-                self.notch_shape.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            )
-            NotchEvenDist_str += "notch_shape = " + tmp
+            tmp = self.notch_shape.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            NotchEvenDist_str += "notch_shape = "+ tmp
         else:
             NotchEvenDist_str += "notch_shape = None" + linesep + linesep
         return NotchEvenDist_str
@@ -253,7 +199,6 @@ class NotchEvenDist(Notch):
 
         if self._notch_shape is not None:
             self._notch_shape.parent = self
-
     notch_shape = property(
         fget=_get_notch_shape,
         fset=_set_notch_shape,

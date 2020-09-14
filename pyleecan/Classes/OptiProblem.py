@@ -38,16 +38,7 @@ class OptiProblem(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        output=-1,
-        design_var=list(),
-        obj_func=list(),
-        eval_func=None,
-        constraint=list(),
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, output=-1, design_var=list(), obj_func=list(), eval_func=None, constraint=list(), init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -61,9 +52,8 @@ class OptiProblem(FrozenClass):
 
         if output == -1:
             output = Output()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -92,25 +82,28 @@ class OptiProblem(FrozenClass):
         if isinstance(output, dict):
             # Check that the type is correct (including daughter)
             class_name = output.get("__class__")
-            if class_name not in ["Output", "XOutput"]:
+            if class_name not in ['Output', 'XOutput']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for output"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for output"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.output = class_obj(init_dict=output)
         elif isinstance(output, str):
             from ..Functions.load import load
-
             output = load(output)
             # Check that the type is correct (including daughter)
             class_name = output.__class__.__name__
-            if class_name not in ["Output", "XOutput"]:
+            if class_name not in ['Output', 'XOutput']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for output"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for output"
                 )
-            self.output = output
+            self.output=output
         else:
             self.output = output
         # design_var can be None or a list of OptiDesignVar object
@@ -167,39 +160,31 @@ class OptiProblem(FrozenClass):
         if self.parent is None:
             OptiProblem_str += "parent = None " + linesep
         else:
-            OptiProblem_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            OptiProblem_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.output is not None:
             tmp = self.output.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OptiProblem_str += "output = " + tmp
+            OptiProblem_str += "output = "+ tmp
         else:
             OptiProblem_str += "output = None" + linesep + linesep
         if len(self.design_var) == 0:
             OptiProblem_str += "design_var = []" + linesep
         for ii in range(len(self.design_var)):
-            tmp = (
-                self.design_var[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            OptiProblem_str += "design_var[" + str(ii) + "] =" + tmp + linesep + linesep
+            tmp = self.design_var[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            OptiProblem_str += "design_var["+str(ii)+"] ="+ tmp + linesep + linesep
         if len(self.obj_func) == 0:
             OptiProblem_str += "obj_func = []" + linesep
         for ii in range(len(self.obj_func)):
             tmp = self.obj_func[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            OptiProblem_str += "obj_func[" + str(ii) + "] =" + tmp + linesep + linesep
+            OptiProblem_str += "obj_func["+str(ii)+"] ="+ tmp + linesep + linesep
         if self._eval_func[1] is None:
             OptiProblem_str += "eval_func = " + str(self._eval_func[1])
         else:
-            OptiProblem_str += (
-                "eval_func = " + linesep + str(self._eval_func[1]) + linesep + linesep
-            )
+            OptiProblem_str += "eval_func = " + linesep + str(self._eval_func[1]) + linesep + linesep
         if len(self.constraint) == 0:
             OptiProblem_str += "constraint = []" + linesep
         for ii in range(len(self.constraint)):
-            tmp = (
-                self.constraint[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            )
-            OptiProblem_str += "constraint[" + str(ii) + "] =" + tmp + linesep + linesep
+            tmp = self.constraint[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            OptiProblem_str += "constraint["+str(ii)+"] ="+ tmp + linesep + linesep
         return OptiProblem_str
 
     def __eq__(self, other):
@@ -237,10 +222,7 @@ class OptiProblem(FrozenClass):
         if self.eval_func is None:
             OptiProblem_dict["eval_func"] = None
         else:
-            OptiProblem_dict["eval_func"] = [
-                dumps(self._eval_func[0]).decode("ISO-8859-2"),
-                self._eval_func[1],
-            ]
+            OptiProblem_dict["eval_func"] = [dumps(self._eval_func[0]).decode('ISO-8859-2'), self._eval_func[1]]
         OptiProblem_dict["constraint"] = list()
         for obj in self.constraint:
             OptiProblem_dict["constraint"].append(obj.as_dict())
@@ -272,7 +254,6 @@ class OptiProblem(FrozenClass):
 
         if self._output is not None:
             self._output.parent = self
-
     output = property(
         fget=_get_output,
         fset=_set_output,
@@ -342,17 +323,14 @@ class OptiProblem(FrozenClass):
             check_var("eval_func", value, "list")
         except CheckTypeError:
             check_var("eval_func", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._eval_func = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        if isinstance(value,list): # Load function from saved dict
+            self._eval_func = [loads(value[0].encode('ISO-8859-2')),value[1]]
         elif value is None:
-            self._eval_func = [None, None]
+            self._eval_func = [None,None]
         elif callable(value):
-            self._eval_func = [value, getsource(value)]
+            self._eval_func = [value,getsource(value)]
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
-            )
-
+            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
     eval_func = property(
         fget=_get_eval_func,
         fset=_set_eval_func,

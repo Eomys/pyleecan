@@ -53,16 +53,7 @@ class ParamExplorerSet(ParamExplorer):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        value=-1,
-        name="",
-        symbol="",
-        unit="",
-        setter=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, value=-1, name="", symbol="", unit="", setter=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -74,9 +65,8 @@ class ParamExplorerSet(ParamExplorer):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -104,9 +94,7 @@ class ParamExplorerSet(ParamExplorer):
             value = []
         self.value = value
         # Call ParamExplorer init
-        super(ParamExplorerSet, self).__init__(
-            name=name, symbol=symbol, unit=unit, setter=setter
-        )
+        super(ParamExplorerSet, self).__init__(name=name, symbol=symbol, unit=unit, setter=setter)
         # The class is frozen (in ParamExplorer init), for now it's impossible to
         # add new properties
 
@@ -116,12 +104,7 @@ class ParamExplorerSet(ParamExplorer):
         ParamExplorerSet_str = ""
         # Get the properties inherited from ParamExplorer
         ParamExplorerSet_str += super(ParamExplorerSet, self).__str__()
-        ParamExplorerSet_str += (
-            "value = "
-            + linesep
-            + str(self.value).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        ParamExplorerSet_str += "value = " + linesep + str(self.value).replace(linesep, linesep + "\t") + linesep
         return ParamExplorerSet_str
 
     def __eq__(self, other):

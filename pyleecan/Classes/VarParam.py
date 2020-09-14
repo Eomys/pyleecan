@@ -69,20 +69,7 @@ class VarParam(VarSimu):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        paramexplorer_list=list(),
-        name="",
-        desc="",
-        datakeeper_list=list(),
-        nb_proc=1,
-        is_keep_all_output=False,
-        stop_if_error=False,
-        ref_simu_index=None,
-        nb_simu=0,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, paramexplorer_list=list(), name="", desc="", datakeeper_list=list(), nb_proc=1, is_keep_all_output=False, stop_if_error=False, ref_simu_index=None, nb_simu=0, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -94,9 +81,8 @@ class VarParam(VarSimu):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -141,11 +127,7 @@ class VarParam(VarSimu):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in [
-                        "ParamExplorer",
-                        "OptiDesignVar",
-                        "ParamExplorerSet",
-                    ]:
+                    if class_name not in ['ParamExplorer', 'OptiDesignVar', 'ParamExplorerSet']:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -164,16 +146,7 @@ class VarParam(VarSimu):
         else:
             self.paramexplorer_list = paramexplorer_list
         # Call VarSimu init
-        super(VarParam, self).__init__(
-            name=name,
-            desc=desc,
-            datakeeper_list=datakeeper_list,
-            nb_proc=nb_proc,
-            is_keep_all_output=is_keep_all_output,
-            stop_if_error=stop_if_error,
-            ref_simu_index=ref_simu_index,
-            nb_simu=nb_simu,
-        )
+        super(VarParam, self).__init__(name=name, desc=desc, datakeeper_list=datakeeper_list, nb_proc=nb_proc, is_keep_all_output=is_keep_all_output, stop_if_error=stop_if_error, ref_simu_index=ref_simu_index, nb_simu=nb_simu)
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties
 
@@ -186,13 +159,8 @@ class VarParam(VarSimu):
         if len(self.paramexplorer_list) == 0:
             VarParam_str += "paramexplorer_list = []" + linesep
         for ii in range(len(self.paramexplorer_list)):
-            tmp = (
-                self.paramexplorer_list[ii].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            VarParam_str += (
-                "paramexplorer_list[" + str(ii) + "] =" + tmp + linesep + linesep
-            )
+            tmp = self.paramexplorer_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            VarParam_str += "paramexplorer_list["+str(ii)+"] ="+ tmp + linesep + linesep
         return VarParam_str
 
     def __eq__(self, other):

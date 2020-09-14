@@ -32,14 +32,7 @@ class MagnetPolar(Magnet):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        mat_type=-1,
-        type_magnetization=0,
-        Lmag=0.95,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, mat_type=-1, type_magnetization=0, Lmag=0.95, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -53,9 +46,8 @@ class MagnetPolar(Magnet):
 
         if mat_type == -1:
             mat_type = Material()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -74,9 +66,7 @@ class MagnetPolar(Magnet):
                 Lmag = init_dict["Lmag"]
         # Initialisation by argument
         # Call Magnet init
-        super(MagnetPolar, self).__init__(
-            mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag
-        )
+        super(MagnetPolar, self).__init__(mat_type=mat_type, type_magnetization=type_magnetization, Lmag=Lmag)
         # The class is frozen (in Magnet init), for now it's impossible to
         # add new properties
 

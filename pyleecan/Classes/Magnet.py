@@ -156,14 +156,7 @@ class Magnet(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        mat_type=-1,
-        type_magnetization=0,
-        Lmag=0.95,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, mat_type=-1, type_magnetization=0, Lmag=0.95, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -177,9 +170,8 @@ class Magnet(FrozenClass):
 
         if mat_type == -1:
             mat_type = Material()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -203,7 +195,6 @@ class Magnet(FrozenClass):
             self.mat_type = Material(init_dict=mat_type)
         elif isinstance(mat_type, str):
             from ..Functions.load import load
-
             self.mat_type = load(mat_type)
         else:
             self.mat_type = mat_type
@@ -223,7 +214,7 @@ class Magnet(FrozenClass):
             Magnet_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Magnet_str += "mat_type = " + tmp
+            Magnet_str += "mat_type = "+ tmp
         else:
             Magnet_str += "mat_type = None" + linesep + linesep
         Magnet_str += "type_magnetization = " + str(self.type_magnetization) + linesep
@@ -277,7 +268,6 @@ class Magnet(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
-
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,

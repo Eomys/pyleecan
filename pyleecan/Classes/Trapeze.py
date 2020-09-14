@@ -165,9 +165,7 @@ class Trapeze(Surface):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, height=1, W2=1, W1=1, point_ref=0, label="", init_dict=None, init_str=None
-    ):
+    def __init__(self, height=1, W2=1, W1=1, point_ref=0, label="", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -179,9 +177,8 @@ class Trapeze(Surface):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)

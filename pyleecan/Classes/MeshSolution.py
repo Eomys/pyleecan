@@ -44,9 +44,7 @@ except ImportError as error:
     plot_deflection = error
 
 try:
-    from ..Methods.Mesh.MeshSolution.plot_deflection_animated import (
-        plot_deflection_animated,
-    )
+    from ..Methods.Mesh.MeshSolution.plot_deflection_animated import plot_deflection_animated
 except ImportError as error:
     plot_deflection_animated = error
 
@@ -184,17 +182,7 @@ class MeshSolution(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        label=None,
-        mesh=list(),
-        is_same_mesh=True,
-        solution=list(),
-        dimension=3,
-        group=dict(),
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, label=None, mesh=list(), is_same_mesh=True, solution=list(), dimension=3, group=dict(), init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -206,9 +194,8 @@ class MeshSolution(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -246,9 +233,11 @@ class MeshSolution(FrozenClass):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in ["Mesh", "MeshMat", "MeshVTK"]:
+                    if class_name not in ['Mesh', 'MeshMat', 'MeshVTK']:
                         raise InitUnKnowClassError(
-                            "Unknow class name " + class_name + " in init_dict for mesh"
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for mesh"
                         )
                     # Dynamic import to call the correct constructor
                     module = __import__(
@@ -272,13 +261,7 @@ class MeshSolution(FrozenClass):
                 elif isinstance(obj, dict):
                     # Check that the type is correct (including daughter)
                     class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Solution",
-                        "Mode",
-                        "SolutionData",
-                        "SolutionMat",
-                        "SolutionVector",
-                    ]:
+                    if class_name not in ['Solution', 'Mode', 'SolutionData', 'SolutionMat', 'SolutionVector']:
                         raise InitUnKnowClassError(
                             "Unknow class name "
                             + class_name
@@ -309,7 +292,7 @@ class MeshSolution(FrozenClass):
         elif group is None:
             self.group = dict()
         else:
-            self.group = group  # Should raise an error
+            self.group = group# Should raise an error
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -321,28 +304,24 @@ class MeshSolution(FrozenClass):
         if self.parent is None:
             MeshSolution_str += "parent = None " + linesep
         else:
-            MeshSolution_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            MeshSolution_str += "parent = " + str(type(self.parent)) + " object" + linesep
         MeshSolution_str += 'label = "' + str(self.label) + '"' + linesep
         if len(self.mesh) == 0:
             MeshSolution_str += "mesh = []" + linesep
         for ii in range(len(self.mesh)):
             tmp = self.mesh[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            MeshSolution_str += "mesh[" + str(ii) + "] =" + tmp + linesep + linesep
+            MeshSolution_str += "mesh["+str(ii)+"] ="+ tmp + linesep + linesep
         MeshSolution_str += "is_same_mesh = " + str(self.is_same_mesh) + linesep
         if len(self.solution) == 0:
             MeshSolution_str += "solution = []" + linesep
         for ii in range(len(self.solution)):
             tmp = self.solution[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            MeshSolution_str += "solution[" + str(ii) + "] =" + tmp + linesep + linesep
+            MeshSolution_str += "solution["+str(ii)+"] ="+ tmp + linesep + linesep
         MeshSolution_str += "dimension = " + str(self.dimension) + linesep
         if len(self.group) == 0:
             MeshSolution_str += "group = dict()"
         for key, obj in self.group.items():
-            MeshSolution_str += (
-                "group[" + key + "] = " + str(self.group[key]) + linesep + linesep
-            )
+            MeshSolution_str += "group["+key+"] = "+str(self.group[key]) + linesep + linesep
         return MeshSolution_str
 
     def __eq__(self, other):
