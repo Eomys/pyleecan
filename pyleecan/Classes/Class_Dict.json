@@ -3231,9 +3231,7 @@
         "daughters": [],
         "desc": "Store shape functions",
         "is_internal": false,
-        "methods": [
-            "interpolation"
-        ],
+        "methods": [],
         "mother": "",
         "name": "Interpolation",
         "package": "Mesh",
@@ -5482,7 +5480,8 @@
             "get_vertice",
             "get_point2cell",
             "renum",
-            "find_cell"
+            "find_cell",
+            "interface"
         ],
         "mother": "Mesh",
         "name": "MeshMat",
@@ -7255,7 +7254,9 @@
         ],
         "desc": "Store shape functions definition in the reference element",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "interpolation"
+        ],
         "mother": "",
         "name": "RefCell",
         "package": "Mesh",
@@ -7287,10 +7288,7 @@
             "jacobian",
             "grad_shape_function",
             "get_real_point",
-            "interpolation",
-            "is_inside",
-            "get_ref_point",
-            "get_normal"
+            "get_ref_point"
         ],
         "mother": "RefCell",
         "name": "RefSegmentP1",
@@ -7312,7 +7310,7 @@
             "shape_function",
             "jacobian",
             "grad_shape_function",
-            "get_real_points",
+            "get_real_point",
             "get_ref_point"
         ],
         "mother": "RefCell",

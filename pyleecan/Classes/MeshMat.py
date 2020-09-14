@@ -58,6 +58,11 @@ try:
 except ImportError as error:
     find_cell = error
 
+try:
+    from ..Methods.Mesh.MeshMat.interface import interface
+except ImportError as error:
+    interface = error
+
 
 from ._check import InitUnKnowClassError
 from .CellMat import CellMat
@@ -155,6 +160,15 @@ class MeshMat(Mesh):
         )
     else:
         find_cell = find_cell
+    # cf Methods.Mesh.MeshMat.interface
+    if isinstance(interface, ImportError):
+        interface = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method interface: " + str(interface))
+            )
+        )
+    else:
+        interface = interface
     # save method is available in all object
     save = save
 

@@ -112,10 +112,10 @@ def get_group(self, group_names):
 
         elif not is_interface:  # Interface is only available for point solution.
             if "component" in axis_dct:
-                axis_dct["indice"] = len(indice_dict[type_cell_sol])
                 new_field_sol = field_sol[:, indice_dict[type_cell_sol], :]
             else:
                 new_field_sol = field_sol[:, indice_dict[type_cell_sol]]
+            axis_dct["indice"] = len(indice_dict[type_cell_sol])
             new_sol = SolutionMat(
                 label=label_sol,
                 type_cell=type_cell_sol,

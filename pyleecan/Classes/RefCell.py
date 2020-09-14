@@ -11,6 +11,14 @@ from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ._frozen import FrozenClass
 
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Mesh.RefCell.interpolation import interpolation
+except ImportError as error:
+    interpolation = error
+
+
 from ._check import InitUnKnowClassError
 
 
@@ -19,6 +27,17 @@ class RefCell(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Mesh.RefCell.interpolation
+    if isinstance(interpolation, ImportError):
+        interpolation = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use RefCell method interpolation: " + str(interpolation)
+                )
+            )
+        )
+    else:
+        interpolation = interpolation
     # save method is available in all object
     save = save
 
