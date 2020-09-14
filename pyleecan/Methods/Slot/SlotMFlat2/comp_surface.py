@@ -27,8 +27,10 @@ def comp_surface(self):
     alpha = self.comp_angle_opening()
     Sarc = (Rbo ** 2.0) / 2.0 * (alpha - sin(alpha))
 
+    S2 = (self.H0-self.H1) * self.W1
+
     # Because Slamination = S - Zs * Sslot
     if self.is_outwards():
-        return S1 - Sarc
+        return S1 + S2  - Sarc
     else:
-        return S1 + Sarc
+        return S1 + S2 + Sarc
