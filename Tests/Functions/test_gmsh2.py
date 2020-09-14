@@ -49,5 +49,6 @@ def test_gmsh_2d():
         path_save=join(save_path, "GSMH_model.msh"),
     )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     sys.exit(test_gmsh_2d())

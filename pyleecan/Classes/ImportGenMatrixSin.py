@@ -101,15 +101,23 @@ class ImportGenMatrixSin(ImportMatrix):
                 is_transpose = init_dict["is_transpose"]
         # Initialisation by argument
         # sin_list can be None or a list of ImportGenVectSin object
-        self.sin_list = list()
         if type(sin_list) is list:
+            # Check if the list is only composed of pyleecan obj
+            no_dict = True
             for obj in sin_list:
-                if obj is None:  # Default value
-                    self.sin_list.append(ImportGenVectSin())
-                elif isinstance(obj, dict):
-                    self.sin_list.append(ImportGenVectSin(init_dict=obj))
-                else:
-                    self.sin_list.append(obj)
+                if isinstance(obj, dict):
+                    no_dict = False
+                    break
+            if no_dict:  # set the list to keep pointer reference
+                self.sin_list = sin_list
+            else:
+                self.sin_list = list()
+                for obj in sin_list:
+                    if not isinstance(obj, dict):  # Default value
+                        self.sin_list.append(obj)
+                    elif isinstance(obj, dict):
+                        self.sin_list.append(ImportGenVectSin(init_dict=obj))
+
         elif sin_list is None:
             self.sin_list = list()
         else:

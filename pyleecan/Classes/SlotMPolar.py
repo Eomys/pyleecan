@@ -182,32 +182,40 @@ class SlotMPolar(SlotMag):
         self.W0 = W0
         self.H0 = H0
         # magnet can be None or a list of MagnetPolar object
-        self.magnet = list()
         if type(magnet) is list:
+            # Check if the list is only composed of pyleecan obj
+            no_dict = True
             for obj in magnet:
-                if obj is None:  # Default value
-                    self.magnet.append(MagnetPolar())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "MagnetPolar",
-                        "MagnetType11",
-                        "MagnetType14",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for magnet"
+                if isinstance(obj, dict):
+                    no_dict = False
+                    break
+            if no_dict:  # set the list to keep pointer reference
+                self.magnet = magnet
+            else:
+                self.magnet = list()
+                for obj in magnet:
+                    if not isinstance(obj, dict):  # Default value
+                        self.magnet.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in [
+                            "MagnetPolar",
+                            "MagnetType11",
+                            "MagnetType14",
+                        ]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for magnet"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.magnet.append(class_obj(init_dict=obj))
-                else:
-                    self.magnet.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.magnet.append(class_obj(init_dict=obj))
+
         elif magnet is None:
             self.magnet = list()
         else:

@@ -174,16 +174,22 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0):
             if type(lvalues) is not dict:
                 continue
             else:
-                if lvalues['tag'] == ltag:
+                if lvalues["tag"] == ltag:
                     repeated = True
 
         if not repeated:
             nline = len(d[idx]) - 2
-            d[idx].update({nline: {'tag': ltag,
-                               'n_elements': n_elements,
-                               'begin': {'tag': btag, 'coord': complex(bx, by)},
-                               'end': {'tag': etag, 'coord': complex(ex, ey)},
-                               'cent': {'tag': ctag, 'coord': complex(cx, cy)}}})
+            d[idx].update(
+                {
+                    nline: {
+                        "tag": ltag,
+                        "n_elements": n_elements,
+                        "begin": {"tag": btag, "coord": complex(bx, by)},
+                        "end": {"tag": etag, "coord": complex(ex, ey)},
+                        "cent": {"tag": ctag, "coord": complex(cx, cy)},
+                    }
+                }
+            )
 
     else:
         if len(dlines) > 0:
@@ -212,15 +218,21 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0):
             if type(lvalues) is not dict:
                 continue
             else:
-                if lvalues['tag'] == ltag:
+                if lvalues["tag"] == ltag:
                     repeated = True
 
         if not repeated:
             nline = len(d[idx]) - 2
-            d[idx].update({nline: {'tag': ltag,
-                               'n_elements': n_elements,
-                               'begin': {'tag': btag, 'coord': complex(bx, by)},
-                               'end': {'tag': etag, 'coord': complex(ex, ey)}}})
+            d[idx].update(
+                {
+                    nline: {
+                        "tag": ltag,
+                        "n_elements": n_elements,
+                        "begin": {"tag": btag, "coord": complex(bx, by)},
+                        "end": {"tag": etag, "coord": complex(ex, ey)},
+                    }
+                }
+            )
 
     return None
 
@@ -388,7 +400,9 @@ def draw_GMSH(
                         idx=nsurf,
                         mesh_size=mesh_size,
                     )
-            elif isinstance(line, Arc) and (abs(line.get_angle()*180.0/cmath.pi) <= tol):
+            elif isinstance(line, Arc) and (
+                abs(line.get_angle() * 180.0 / cmath.pi) <= tol
+            ):
                 # Don't draw anything, this is a circle and usually is repeated ?
                 pass
             else:
@@ -421,18 +435,18 @@ def draw_GMSH(
             lloop.extend([lvalues["tag"]])
         cloop = factory.addCurveLoop(lloop)
         # search for the holes to substract from rotor lam
-        if s_data['label'].find('Lamination_Rotor') != -1:
+        if s_data["label"].find("Lamination_Rotor") != -1:
             ext_lam_loop = cloop
         else:
             # MachineSIPSM does not have holes in rotor lam
             # only shaft is taken out if symmetry is one
             if isinstance(machine, MachineSIPMSM):
-                if sym == 1 and s_data['label'] == "Shaft":
+                if sym == 1 and s_data["label"] == "Shaft":
                     lam_and_holes.extend([cloop])
             else:
                 if sym == 1:
                     lam_and_holes.extend([cloop])
-                elif s_data['label'] != "Shaft":
+                elif s_data["label"] != "Shaft":
                     lam_and_holes.extend([cloop])
                 else:
                     pass
@@ -555,10 +569,10 @@ def draw_GMSH(
             lloop.extend([lvalues["tag"]])
         cloop = factory.addCurveLoop(lloop)
         # Winding surfaces are created
-        if s_data['label'].find('Lamination_Stator') != -1:
-            s_data['tag'] = factory.addPlaneSurface([cloop], tag=-1)
-            pg = model.addPhysicalGroup(2, [s_data['tag']])
-            model.setPhysicalName(2, pg, s_data['label'])
+        if s_data["label"].find("Lamination_Stator") != -1:
+            s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
+            pg = model.addPhysicalGroup(2, [s_data["tag"]])
+            model.setPhysicalName(2, pg, s_data["label"])
         else:
             # Stator lamination is built
             if not is_lam_only_S:
@@ -571,7 +585,7 @@ def draw_GMSH(
 
     # Save and close
     gmsh.write(path_save)
-    #gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
+    # gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
     gmsh.finalize()
 
     return gmsh_dict

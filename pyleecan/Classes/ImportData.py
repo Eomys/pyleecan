@@ -108,15 +108,23 @@ class ImportData(FrozenClass):
         # Initialisation by argument
         self.parent = None
         # axes can be None or a list of ImportData object
-        self.axes = list()
         if type(axes) is list:
+            # Check if the list is only composed of pyleecan obj
+            no_dict = True
             for obj in axes:
-                if obj is None:  # Default value
-                    self.axes.append(ImportData())
-                elif isinstance(obj, dict):
-                    self.axes.append(ImportData(init_dict=obj))
-                else:
-                    self.axes.append(obj)
+                if isinstance(obj, dict):
+                    no_dict = False
+                    break
+            if no_dict:  # set the list to keep pointer reference
+                self.axes = axes
+            else:
+                self.axes = list()
+                for obj in axes:
+                    if not isinstance(obj, dict):  # Default value
+                        self.axes.append(obj)
+                    elif isinstance(obj, dict):
+                        self.axes.append(ImportData(init_dict=obj))
+
         elif axes is None:
             self.axes = list()
         else:

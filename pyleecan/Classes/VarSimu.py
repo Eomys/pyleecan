@@ -112,15 +112,23 @@ class VarSimu(FrozenClass):
         self.name = name
         self.desc = desc
         # datakeeper_list can be None or a list of DataKeeper object
-        self.datakeeper_list = list()
         if type(datakeeper_list) is list:
+            # Check if the list is only composed of pyleecan obj
+            no_dict = True
             for obj in datakeeper_list:
-                if obj is None:  # Default value
-                    self.datakeeper_list.append(DataKeeper())
-                elif isinstance(obj, dict):
-                    self.datakeeper_list.append(DataKeeper(init_dict=obj))
-                else:
-                    self.datakeeper_list.append(obj)
+                if isinstance(obj, dict):
+                    no_dict = False
+                    break
+            if no_dict:  # set the list to keep pointer reference
+                self.datakeeper_list = datakeeper_list
+            else:
+                self.datakeeper_list = list()
+                for obj in datakeeper_list:
+                    if not isinstance(obj, dict):  # Default value
+                        self.datakeeper_list.append(obj)
+                    elif isinstance(obj, dict):
+                        self.datakeeper_list.append(DataKeeper(init_dict=obj))
+
         elif datakeeper_list is None:
             self.datakeeper_list = list()
         else:

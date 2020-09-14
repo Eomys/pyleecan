@@ -295,40 +295,50 @@ class LamHole(Lamination):
                 notch = init_dict["notch"]
         # Initialisation by argument
         # hole can be None or a list of Hole object
-        self.hole = list()
         if type(hole) is list:
+            # Check if the list is only composed of pyleecan obj
+            no_dict = True
             for obj in hole:
-                if obj is None:  # Default value
-                    self.hole.append(Hole())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Hole",
-                        "HoleM50",
-                        "HoleM51",
-                        "HoleM52",
-                        "HoleM53",
-                        "HoleM54",
-                        "HoleM57",
-                        "HoleM58",
-                        "HoleMag",
-                        "HoleUD",
-                        "VentilationCirc",
-                        "VentilationPolar",
-                        "VentilationTrap",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name " + class_name + " in init_dict for hole"
+                if isinstance(obj, dict):
+                    no_dict = False
+                    break
+            if no_dict:  # set the list to keep pointer reference
+                self.hole = hole
+            else:
+                self.hole = list()
+                for obj in hole:
+                    if not isinstance(obj, dict):  # Default value
+                        self.hole.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in [
+                            "Hole",
+                            "HoleM50",
+                            "HoleM51",
+                            "HoleM52",
+                            "HoleM53",
+                            "HoleM54",
+                            "HoleM57",
+                            "HoleM58",
+                            "HoleMag",
+                            "HoleUD",
+                            "VentilationCirc",
+                            "VentilationPolar",
+                            "VentilationTrap",
+                        ]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for hole"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.hole.append(class_obj(init_dict=obj))
-                else:
-                    self.hole.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.hole.append(class_obj(init_dict=obj))
+
         elif hole is None:
             self.hole = list()
         else:

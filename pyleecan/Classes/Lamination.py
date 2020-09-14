@@ -450,69 +450,85 @@ class Lamination(FrozenClass):
         self.Rext = Rext
         self.is_stator = is_stator
         # axial_vent can be None or a list of Hole object
-        self.axial_vent = list()
         if type(axial_vent) is list:
+            # Check if the list is only composed of pyleecan obj
+            no_dict = True
             for obj in axial_vent:
-                if obj is None:  # Default value
-                    self.axial_vent.append(Hole())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Hole",
-                        "HoleM50",
-                        "HoleM51",
-                        "HoleM52",
-                        "HoleM53",
-                        "HoleM54",
-                        "HoleM57",
-                        "HoleM58",
-                        "HoleMag",
-                        "HoleUD",
-                        "VentilationCirc",
-                        "VentilationPolar",
-                        "VentilationTrap",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for axial_vent"
+                if isinstance(obj, dict):
+                    no_dict = False
+                    break
+            if no_dict:  # set the list to keep pointer reference
+                self.axial_vent = axial_vent
+            else:
+                self.axial_vent = list()
+                for obj in axial_vent:
+                    if not isinstance(obj, dict):  # Default value
+                        self.axial_vent.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in [
+                            "Hole",
+                            "HoleM50",
+                            "HoleM51",
+                            "HoleM52",
+                            "HoleM53",
+                            "HoleM54",
+                            "HoleM57",
+                            "HoleM58",
+                            "HoleMag",
+                            "HoleUD",
+                            "VentilationCirc",
+                            "VentilationPolar",
+                            "VentilationTrap",
+                        ]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for axial_vent"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.axial_vent.append(class_obj(init_dict=obj))
-                else:
-                    self.axial_vent.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.axial_vent.append(class_obj(init_dict=obj))
+
         elif axial_vent is None:
             self.axial_vent = list()
         else:
             self.axial_vent = axial_vent
         # notch can be None or a list of Notch object
-        self.notch = list()
         if type(notch) is list:
+            # Check if the list is only composed of pyleecan obj
+            no_dict = True
             for obj in notch:
-                if obj is None:  # Default value
-                    self.notch.append(Notch())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in ["Notch", "NotchEvenDist"]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for notch"
+                if isinstance(obj, dict):
+                    no_dict = False
+                    break
+            if no_dict:  # set the list to keep pointer reference
+                self.notch = notch
+            else:
+                self.notch = list()
+                for obj in notch:
+                    if not isinstance(obj, dict):  # Default value
+                        self.notch.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in ["Notch", "NotchEvenDist"]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for notch"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.notch.append(class_obj(init_dict=obj))
-                else:
-                    self.notch.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.notch.append(class_obj(init_dict=obj))
+
         elif notch is None:
             self.notch = list()
         else:
