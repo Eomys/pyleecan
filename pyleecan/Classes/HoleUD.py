@@ -146,15 +146,11 @@ class HoleUD(HoleMag):
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
         # Initialisation by argument
-        # surf_list can be None or a list of Surface object
+        # surf_list can be None or a list of Surface object or a list of dict
         if type(surf_list) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in surf_list:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of Surface
+            if all(isinstance(obj, Surface) for obj in surf_list):
+                # set the list to keep pointer reference
                 self.surf_list = surf_list
             else:
                 self.surf_list = list()

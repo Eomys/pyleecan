@@ -163,15 +163,11 @@ class MachineUD(Machine):
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
         # Initialisation by argument
-        # lam_list can be None or a list of Lamination object
+        # lam_list can be None or a list of Lamination object or a list of dict
         if type(lam_list) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in lam_list:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of Lamination
+            if all(isinstance(obj, Lamination) for obj in lam_list):
+                # set the list to keep pointer reference
                 self.lam_list = lam_list
             else:
                 self.lam_list = list()

@@ -218,15 +218,11 @@ class SurfLine(Surface):
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
         # Initialisation by argument
-        # line_list can be None or a list of Line object
+        # line_list can be None or a list of Line object or a list of dict
         if type(line_list) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in line_list:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of Line
+            if all(isinstance(obj, Line) for obj in line_list):
+                # set the list to keep pointer reference
                 self.line_list = line_list
             else:
                 self.line_list = list()

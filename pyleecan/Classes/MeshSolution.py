@@ -237,15 +237,11 @@ class MeshSolution(FrozenClass):
         # Initialisation by argument
         self.parent = None
         self.label = label
-        # mesh can be None or a list of Mesh object
+        # mesh can be None or a list of Mesh object or a list of dict
         if type(mesh) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in mesh:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of Mesh
+            if all(isinstance(obj, Mesh) for obj in mesh):
+                # set the list to keep pointer reference
                 self.mesh = mesh
             else:
                 self.mesh = list()
@@ -273,15 +269,11 @@ class MeshSolution(FrozenClass):
         else:
             self.mesh = mesh
         self.is_same_mesh = is_same_mesh
-        # solution can be None or a list of Solution object
+        # solution can be None or a list of Solution object or a list of dict
         if type(solution) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in solution:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of Solution
+            if all(isinstance(obj, Solution) for obj in solution):
+                # set the list to keep pointer reference
                 self.solution = solution
             else:
                 self.solution = list()

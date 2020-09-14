@@ -449,15 +449,11 @@ class Lamination(FrozenClass):
         self.Rint = Rint
         self.Rext = Rext
         self.is_stator = is_stator
-        # axial_vent can be None or a list of Hole object
+        # axial_vent can be None or a list of Hole object or a list of dict
         if type(axial_vent) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in axial_vent:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of Hole
+            if all(isinstance(obj, Hole) for obj in axial_vent):
+                # set the list to keep pointer reference
                 self.axial_vent = axial_vent
             else:
                 self.axial_vent = list()
@@ -498,15 +494,11 @@ class Lamination(FrozenClass):
             self.axial_vent = list()
         else:
             self.axial_vent = axial_vent
-        # notch can be None or a list of Notch object
+        # notch can be None or a list of Notch object or a list of dict
         if type(notch) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in notch:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of Notch
+            if all(isinstance(obj, Notch) for obj in notch):
+                # set the list to keep pointer reference
                 self.notch = notch
             else:
                 self.notch = list()

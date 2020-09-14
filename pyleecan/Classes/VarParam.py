@@ -132,15 +132,11 @@ class VarParam(VarSimu):
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
         # Initialisation by argument
-        # paramexplorer_list can be None or a list of ParamExplorer object
+        # paramexplorer_list can be None or a list of ParamExplorer object or a list of dict
         if type(paramexplorer_list) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in paramexplorer_list:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of ParamExplorer
+            if all(isinstance(obj, ParamExplorer) for obj in paramexplorer_list):
+                # set the list to keep pointer reference
                 self.paramexplorer_list = paramexplorer_list
             else:
                 self.paramexplorer_list = list()
