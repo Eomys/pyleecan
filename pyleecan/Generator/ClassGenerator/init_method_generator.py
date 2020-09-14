@@ -171,6 +171,21 @@ def generate_init(gen_dict, class_dict):
                 + prop["name"]
                 + "# Should raise an error\n"
             )
+        elif prop["type"] == "FrozenClass":
+            # FrozenClass, Pyleecan mother class
+            init_by_var += (
+                TAB2
+                + "# "
+                + prop["name"]
+                + " can be None, a "
+                + prop["type"]
+                + " object or a dict\n"
+            )
+            init_by_var += generate_set_class_by_dict(
+                prop["name"], prop["type"], list(gen_dict.keys())
+            )
+            init_by_var += TAB2 + "else:\n"
+            init_by_var += TAB3 + "self." + prop["name"] + " = " + prop["name"] + "\n"
 
         else:  # For pyleecan Type
             init_by_var += (
