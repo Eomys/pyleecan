@@ -48,7 +48,7 @@ def plot_mesh(
         if isinstance(mesh_obj, MeshMat):
             mesh = mesh_obj.get_mesh_pv(indices=indices)
         else:
-            mesh = mesh_obj.get_mesh(indices=indices)
+            mesh = mesh_obj.get_mesh_pv(indices=indices)
 
         # Configure plot
         if is_pyvistaqt:

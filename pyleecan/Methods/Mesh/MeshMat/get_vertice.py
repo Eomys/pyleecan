@@ -8,8 +8,8 @@ def get_vertice(self, indices=None):
 
     Parameters
     ----------
-    self : Mesh
-        an Mesh object
+    self : MeshMat
+        an MeshMat object
     cell_type : str
         a key corresponding to an element type
     group : numpy.array

@@ -335,6 +335,15 @@
                 "type": "ndarray",
                 "unit": "",
                 "value": ""
+            },
+            {
+                "desc": "Define FEA interpolation",
+                "max": "",
+                "min": "",
+                "name": "interpolation",
+                "type": "Interpolation",
+                "unit": "",
+                "value": null
             }
         ]
     },
@@ -999,6 +1008,64 @@
             }
         ]
     },
+    "FPGNSeg": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Compute N gauss point for segment elements",
+        "is_internal": false,
+        "methods": [
+            "get_gauss_points"
+        ],
+        "mother": "GaussPoint",
+        "name": "FPGNSeg",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/FPGNSeg.csv",
+        "properties": [
+            {
+                "desc": "Nb of gauss point to be used",
+                "max": "",
+                "min": "",
+                "name": "nb_gauss_point",
+                "type": "int",
+                "unit": "",
+                "value": 4
+            }
+        ]
+    },
+    "FPGNTri": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store gauss point for triangle elements",
+        "is_internal": false,
+        "methods": [
+            "get_gauss_points"
+        ],
+        "mother": "GaussPoint",
+        "name": "FPGNTri",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/FPGNTri.csv",
+        "properties": [
+            {
+                "desc": "Nb of gauss point to be used",
+                "max": "",
+                "min": "",
+                "name": "nb_gauss_point",
+                "type": "int",
+                "unit": "",
+                "value": 3
+            }
+        ]
+    },
     "FluxLink": {
         "constants": [
             {
@@ -1244,6 +1311,27 @@
                 "value": ""
             }
         ]
+    },
+    "GaussPoint": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "GaussPoint",
+            "FPGNSeg",
+            "FPGNTri"
+        ],
+        "desc": "Store set of gauss points",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "GaussPoint",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/GaussPoint.csv",
+        "properties": []
     },
     "Hole": {
         "constants": [
@@ -3129,6 +3217,53 @@
                 "name": "P",
                 "type": "ImportVectorField",
                 "unit": "N.m^2",
+                "value": null
+            }
+        ]
+    },
+    "Interpolation": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store shape functions",
+        "is_internal": false,
+        "methods": [
+            "interpolation"
+        ],
+        "mother": "",
+        "name": "Interpolation",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/Interpolation.csv",
+        "properties": [
+            {
+                "desc": "",
+                "max": "",
+                "min": "",
+                "name": "ref_cell",
+                "type": "RefCell",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "",
+                "max": "",
+                "min": "",
+                "name": "gauss_point",
+                "type": "GaussPoint",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "",
+                "max": "",
+                "min": "",
+                "name": "scalar_product",
+                "type": "ScalarProduct",
+                "unit": "",
                 "value": null
             }
         ]
@@ -5135,6 +5270,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "None"
+            },
+            {
+                "desc": "Dimension of the physical problem",
+                "max": "3",
+                "min": "1",
+                "name": "dimension",
+                "type": "int",
+                "unit": "",
+                "value": 2
             }
         ]
     },
@@ -5154,10 +5298,11 @@
             "get_mesh_pv",
             "get_cell_area",
             "add_cell",
-            "interface",
             "get_vertice",
             "get_point2cell",
-            "renum"
+            "renum",
+            "find_cell",
+            "interface"
         ],
         "mother": "Mesh",
         "name": "MeshMat",
@@ -5247,15 +5392,6 @@
                 "value": []
             },
             {
-                "desc": "Dimension of the physical problem",
-                "max": "3",
-                "min": "1",
-                "name": "dimension",
-                "type": "int",
-                "unit": "",
-                "value": 3
-            },
-            {
                 "desc": "Dict sorted by groups name with cells indices. ",
                 "max": "",
                 "min": "",
@@ -5263,6 +5399,15 @@
                 "type": "{ndarray}",
                 "unit": "",
                 "value": {}
+            },
+            {
+                "desc": "Dimension of the physical problem",
+                "max": "3",
+                "min": "1",
+                "name": "dimension",
+                "type": "int",
+                "unit": "",
+                "value": 2
             }
         ]
     },
@@ -5278,11 +5423,12 @@
         "is_internal": false,
         "methods": [
             "get_mesh_pv",
-            "get_points",
-            "get_cells",
+            "get_point",
+            "get_cell",
             "get_normals",
             "get_surf",
-            "get_cell_area"
+            "get_cell_area",
+            "convert"
         ],
         "mother": "Mesh",
         "name": "MeshVTK",
@@ -5333,15 +5479,6 @@
                 "type": "str",
                 "unit": "",
                 "value": "mesh"
-            },
-            {
-                "desc": "Contain all possible group numbers",
-                "max": "",
-                "min": "",
-                "name": "group",
-                "type": "ndarray",
-                "unit": "",
-                "value": ""
             },
             {
                 "desc": "Pyvista object of the outer surface",
@@ -6867,6 +7004,125 @@
                 "value": 1
             }
         ]
+    },
+    "RefCell": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "RefCell",
+            "RefSegmentP1",
+            "RefTriangle3"
+        ],
+        "desc": "Store shape functions definition in the reference element",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "RefCell",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefCell.csv",
+        "properties": [
+            {
+                "desc": "Precision criterion",
+                "max": "",
+                "min": "0.00E+00",
+                "name": "epsilon",
+                "type": "float",
+                "unit": "-",
+                "value": 0.05
+            }
+        ]
+    },
+    "RefSegmentP1": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store triangle elements for 2D mesh",
+        "is_internal": false,
+        "methods": [
+            "shape_function",
+            "jacobian",
+            "grad_shape_function",
+            "get_real_point",
+            "interpolation",
+            "is_inside",
+            "get_ref_point",
+            "get_normal"
+        ],
+        "mother": "RefCell",
+        "name": "RefSegmentP1",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefSegmentP1.csv",
+        "properties": []
+    },
+    "RefTriangle3": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store triangle elements for 2D mesh",
+        "is_internal": false,
+        "methods": [
+            "shape_function",
+            "jacobian",
+            "grad_shape_function",
+            "get_real_points",
+            "get_ref_point"
+        ],
+        "mother": "RefCell",
+        "name": "RefTriangle3",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefTriangle3.csv",
+        "properties": []
+    },
+    "ScalarProduct": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "ScalarProduct",
+            "ScalarProductL2"
+        ],
+        "desc": "Store shape functions definition in the reference element",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "ScalarProduct",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/ScalarProduct.csv",
+        "properties": []
+    },
+    "ScalarProductL2": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Store shape functions definition in the reference element",
+        "is_internal": false,
+        "methods": [
+            "scalar_product"
+        ],
+        "mother": "ScalarProduct",
+        "name": "ScalarProductL2",
+        "package": "Mesh",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/ScalarProductL2.csv",
+        "properties": []
     },
     "Segment": {
         "constants": [
@@ -9136,6 +9392,15 @@
                 "type": "str",
                 "unit": "-",
                 "value": "None"
+            },
+            {
+                "desc": "Dimension of the physical problem",
+                "max": "3",
+                "min": "1",
+                "name": "dimension",
+                "type": "int",
+                "unit": "",
+                "value": 2
             }
         ]
     },
@@ -9151,8 +9416,7 @@
         "is_internal": false,
         "methods": [
             "get_field",
-            "get_axis",
-            "set_field"
+            "get_axis"
         ],
         "mother": "Solution",
         "name": "SolutionData",
@@ -9184,8 +9448,7 @@
         "is_internal": false,
         "methods": [
             "get_field",
-            "get_axis",
-            "set_field"
+            "get_axis"
         ],
         "mother": "Solution",
         "name": "SolutionMat",
