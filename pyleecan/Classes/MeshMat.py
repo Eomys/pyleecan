@@ -39,11 +39,6 @@ except ImportError as error:
     add_cell = error
 
 try:
-    from ..Methods.Mesh.MeshMat.interface import interface
-except ImportError as error:
-    interface = error
-
-try:
     from ..Methods.Mesh.MeshMat.get_vertice import get_vertice
 except ImportError as error:
     get_vertice = error
@@ -57,6 +52,16 @@ try:
     from ..Methods.Mesh.MeshMat.renum import renum
 except ImportError as error:
     renum = error
+
+try:
+    from ..Methods.Mesh.MeshMat.find_cell import find_cell
+except ImportError as error:
+    find_cell = error
+
+try:
+    from ..Methods.Mesh.MeshMat.interface import interface
+except ImportError as error:
+    interface = error
 
 
 from ._check import InitUnKnowClassError
@@ -117,15 +122,6 @@ class MeshMat(Mesh):
         )
     else:
         add_cell = add_cell
-    # cf Methods.Mesh.MeshMat.interface
-    if isinstance(interface, ImportError):
-        interface = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use MeshMat method interface: " + str(interface))
-            )
-        )
-    else:
-        interface = interface
     # cf Methods.Mesh.MeshMat.get_vertice
     if isinstance(get_vertice, ImportError):
         get_vertice = property(
@@ -155,6 +151,24 @@ class MeshMat(Mesh):
         )
     else:
         renum = renum
+    # cf Methods.Mesh.MeshMat.find_cell
+    if isinstance(find_cell, ImportError):
+        find_cell = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method find_cell: " + str(find_cell))
+            )
+        )
+    else:
+        find_cell = find_cell
+    # cf Methods.Mesh.MeshMat.interface
+    if isinstance(interface, ImportError):
+        interface = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshMat method interface: " + str(interface))
+            )
+        )
+    else:
+        interface = interface
     # save method is available in all object
     save = save
 
@@ -168,7 +182,13 @@ class MeshMat(Mesh):
     get_logger = get_logger
 
     def __init__(
-        self, cell=dict(), point=-1, label=None, init_dict=None, init_str=None
+        self,
+        cell=dict(),
+        point=-1,
+        label=None,
+        dimension=2,
+        init_dict=None,
+        init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -193,6 +213,7 @@ class MeshMat(Mesh):
             cell = obj.cell
             point = obj.point
             label = obj.label
+            dimension = obj.dimension
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -202,6 +223,8 @@ class MeshMat(Mesh):
                 point = init_dict["point"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
+            if "dimension" in list(init_dict.keys()):
+                dimension = init_dict["dimension"]
         # Initialisation by argument
         # cell can be None or a dict of CellMat object
         self.cell = dict()
@@ -225,7 +248,7 @@ class MeshMat(Mesh):
         else:
             self.point = point
         # Call Mesh init
-        super(MeshMat, self).__init__(label=label)
+        super(MeshMat, self).__init__(label=label, dimension=dimension)
         # The class is frozen (in Mesh init), for now it's impossible to
         # add new properties
 

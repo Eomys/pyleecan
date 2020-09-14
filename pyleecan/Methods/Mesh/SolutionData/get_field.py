@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
+
 import numpy as np
 
 
 def get_field(self, args=None):
     """Get the value of variables stored in Solution.
 
-     Parameters
-     ----------
-     self : Solution
-         an Solution object
-     field_name : str
-         name of the field to return
+    Parameters
+    ----------
+    self : SolutionData
+        an SolutionData object
 
-     Returns
-     -------
-     field: array
-         an array of field values
+    Returns
+    -------
+    field: array
+        an array of field values
 
      """
     if args is None:
@@ -24,14 +23,21 @@ def get_field(self, args=None):
     along_arg = list()
     for axis in self.field.axes:
         if axis.name in args:
-            along_arg.append(axis.name + "[" + str(args[axis.name]) + "]")
+            if isinstance(args[axis.name], int):
+                along_arg.append(axis.name + "[" + str(args[axis.name]) + "]")
+            else:
+                along_arg.append(axis.name + str(args[axis.name]))
         else:
             along_arg.append(axis.name)
 
     field = self.field.get_along(tuple(along_arg))[self.field.symbol]
 
-    ## HOTFIX: Remove for next SCIDATATOOL release
-    if self.parent.parent.Nt_tot == 1:
-        field = field[np.newaxis, :]
+    all_ax = self.get_axis()
+    pos = 0
+    for i in all_ax:
+        if all_ax[i] == 1:
+            field = field[..., np.newaxis]
+            field = np.moveaxis(field, -1, pos)
+        pos = pos + 1
 
     return field

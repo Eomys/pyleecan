@@ -50,13 +50,11 @@ def get_field(
         field
 
     """
-    if args is None:
-        args = dict()
-        args["time"] = 0
 
     # Get field
     solution = self.get_solution(label=label, index=index)
-    field = squeeze(solution.get_field(args=args))
+    field = solution.get_field(args=args)
+    field = squeeze(field)
 
     # Check dimensions
     shape = field.shape

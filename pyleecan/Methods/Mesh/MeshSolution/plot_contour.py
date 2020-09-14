@@ -87,7 +87,7 @@ def plot_contour(
 
         # Get the mesh
         mesh = self.get_mesh(label=label, index=index)
-        mesh_pv = mesh.get_mesh_pv(indices=indices)
+        mesh_pv = mesh.get_mesh_pv()
 
         # Get the field
         field = self.get_field(
@@ -103,7 +103,7 @@ def plot_contour(
         if len(field.shape) > 1:
             # Extract time index
             if field.shape[1] > 3:
-                field = field[itime, :, :]
+                field = field[itime, ...]
             # Compute norm
             if field.shape[-1] == 2 or field.shape[-1] == 3:
                 field = norm(field, axis=-1)

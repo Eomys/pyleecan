@@ -53,7 +53,6 @@ def plot_glyph(
     if group_names is not None:
         meshsol_grp = self.get_group(group_names)
         meshsol_grp.plot_glyph(
-            self,
             label,
             index,
             indices,
@@ -83,16 +82,18 @@ def plot_glyph(
 
         # Get the mesh
         mesh = self.get_mesh(label=label, index=index)
-        if isinstance(mesh, MeshMat):
-            mesh_pv = mesh.get_mesh_pv(indices=indices)
-        else:
-            mesh_pv = mesh.get_mesh(indices=indices)
+        mesh_pv = mesh.get_mesh_pv(indices=indices)
 
         # Get the vector field
-        vect_field = real(self.get_field(label=label, index=index, indices=indices))
-        if len(vect_field.shape) == 3:
-            # Third dimension is frequencies
-            vect_field = vect_field[:, :, ifreq]
+        args = dict()
+        args["freq"] = [0]
+        args["time"] = [0]
+        vect_field = real(
+            self.get_field(label=label, index=index, indices=indices, args=args)
+        )
+        # if len(vect_field.shape) == 3:
+        #     # Third dimension is frequencies
+        #     vect_field = vect_field[:, :, ifreq]
 
         # Compute factor
         if factor is None:
@@ -100,10 +101,6 @@ def plot_glyph(
 
         if self.dimension == 2:
             vect_field = np.hstack((vect_field, np.zeros((vect_field.shape[0], 1))))
-
-        # Compute factor
-        if factor is None:
-            factor = 1 / (100 * np_max(vect_field))
 
         # Add field to mesh
         if is_point_arrow:
