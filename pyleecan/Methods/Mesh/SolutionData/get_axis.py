@@ -21,6 +21,6 @@ def get_axis(self, args=None):
 
     axis_dict = dict()
     for axis in self.field.axes:
-        axis_dict[axis.name] = self.field.get_along(axis.name)[self.field.symbol]
+        axis_dict[axis.name] = self.field.get_along(axis.name)[self.field.symbol].size
 
     return axis_dict
