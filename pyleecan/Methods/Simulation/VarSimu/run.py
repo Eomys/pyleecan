@@ -23,14 +23,16 @@ def run(self):
     # Construct results
     for datakeeper in self.datakeeper_list:
         xoutput.xoutput_dict[datakeeper.symbol] = datakeeper
-        datakeeper.result = [None for _ in range(self.nb_simu)]
+        datakeeper.result = [None] * self.nb_simu
 
     # Execute the reference simulation if needed
     nb_simu = self.nb_simu
     ref_simu_index = self.ref_simu_index
     index_list = list(range(nb_simu))
 
-    if ref_simu_index != None:
+    ref_simu_in_multsim = isinstance(self.ref_simu_index, int)
+
+    if ref_simu_index:
         logger = self.get_logger()
         logger.info("Computing reference simulation")
 
@@ -47,17 +49,20 @@ def run(self):
             self.ref_simu_index,
             self.is_keep_all_output,
         )
-    # Execute the other (TODO parallelization)
-    for idx, simulation in zip(index_list, simulation_list):
-        # Skip multisimulation
+
+        # Set back the var_simu
+        simulation.var_simu = self
         print(
             "\r["
-            + "=" * ((50 * idx) // (nb_simu))
-            + " " * (50 - ((50 * idx) // (nb_simu)))
-            + "] {:3d}%".format(((100 * idx) // (nb_simu))),
+            + "=" * (50 * (1) // (nb_simu))
+            + " " * (50 - ((50) // (nb_simu)))
+            + "] {:3d}%".format(((100 * 1) // (nb_simu))),
             end="",
         )
 
+    # Execute the other (TODO parallelization)
+    nb_simu = self.nb_simu
+    for idx, [i, simulation] in zip(index_list, enumerate(simulation_list)):
         # Run the simulation handling errors
         run_single_simu(
             xoutput,
@@ -69,4 +74,10 @@ def run(self):
             self.is_keep_all_output,
         )
 
-    print("\r[" + "=" * 50 + "] 100%")
+        print(
+            "\r["
+            + "=" * (50 * (i + 1 + ref_simu_in_multsim) // (nb_simu))
+            + " " * (50 - ((50 * (i + 1 + ref_simu_in_multsim)) // (nb_simu)))
+            + "] {:3d}%".format(((100 * (i + 1 + ref_simu_in_multsim)) // (nb_simu))),
+            end="",
+        )
