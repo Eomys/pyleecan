@@ -1024,7 +1024,7 @@
         "mother": "GaussPoint",
         "name": "FPGNSeg",
         "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/FPGNSeg.csv",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/FPGNSeg.csv",
         "properties": [
             {
                 "desc": "Nb of gauss point to be used",
@@ -1053,7 +1053,7 @@
         "mother": "GaussPoint",
         "name": "FPGNTri",
         "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/FPGNTri.csv",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/FPGNTri.csv",
         "properties": [
             {
                 "desc": "Nb of gauss point to be used",
@@ -1330,7 +1330,7 @@
         "mother": "",
         "name": "GaussPoint",
         "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/GaussPoint.csv",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/GaussPoint.csv",
         "properties": []
     },
     "Hole": {
@@ -3237,7 +3237,7 @@
         "mother": "",
         "name": "Interpolation",
         "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/Interpolation.csv",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/Interpolation.csv",
         "properties": [
             {
                 "desc": "",
@@ -7023,7 +7023,7 @@
         "mother": "",
         "name": "RefCell",
         "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefCell.csv",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefCell.csv",
         "properties": [
             {
                 "desc": "Precision criterion",
@@ -7059,7 +7059,7 @@
         "mother": "RefCell",
         "name": "RefSegmentP1",
         "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefSegmentP1.csv",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefSegmentP1.csv",
         "properties": []
     },
     "RefTriangle3": {
@@ -7082,7 +7082,7 @@
         "mother": "RefCell",
         "name": "RefTriangle3",
         "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefTriangle3.csv",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefTriangle3.csv",
         "properties": []
     },
     "ScalarProduct": {
@@ -7102,7 +7102,7 @@
         "mother": "",
         "name": "ScalarProduct",
         "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/ScalarProduct.csv",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/ScalarProduct.csv",
         "properties": []
     },
     "ScalarProductL2": {
@@ -7121,7 +7121,7 @@
         "mother": "ScalarProduct",
         "name": "ScalarProductL2",
         "package": "Mesh",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Mesh/Interpolation/ScalarProductL2.csv",
+        "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/ScalarProductL2.csv",
         "properties": []
     },
     "Segment": {
@@ -9946,15 +9946,6 @@
                 "type": "[DataKeeper]",
                 "unit": "-",
                 "value": []
-            },
-            {
-                "desc": "Number of processors used to run the simulations",
-                "max": "",
-                "min": "1",
-                "name": "nb_proc",
-                "type": "int",
-                "unit": "-",
-                "value": 1
             },
             {
                 "desc": "True to store every output in a list",

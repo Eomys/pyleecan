@@ -75,7 +75,6 @@ class VarParam(VarSimu):
         name="",
         desc="",
         datakeeper_list=list(),
-        nb_proc=1,
         is_keep_all_output=False,
         stop_if_error=False,
         ref_simu_index=None,
@@ -105,7 +104,6 @@ class VarParam(VarSimu):
             name = obj.name
             desc = obj.desc
             datakeeper_list = obj.datakeeper_list
-            nb_proc = obj.nb_proc
             is_keep_all_output = obj.is_keep_all_output
             stop_if_error = obj.stop_if_error
             ref_simu_index = obj.ref_simu_index
@@ -121,8 +119,6 @@ class VarParam(VarSimu):
                 desc = init_dict["desc"]
             if "datakeeper_list" in list(init_dict.keys()):
                 datakeeper_list = init_dict["datakeeper_list"]
-            if "nb_proc" in list(init_dict.keys()):
-                nb_proc = init_dict["nb_proc"]
             if "is_keep_all_output" in list(init_dict.keys()):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
@@ -176,7 +172,6 @@ class VarParam(VarSimu):
             name=name,
             desc=desc,
             datakeeper_list=datakeeper_list,
-            nb_proc=nb_proc,
             is_keep_all_output=is_keep_all_output,
             stop_if_error=stop_if_error,
             ref_simu_index=ref_simu_index,
