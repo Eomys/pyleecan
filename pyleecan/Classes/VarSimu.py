@@ -114,7 +114,9 @@ class VarSimu(FrozenClass):
         # datakeeper_list can be None or a list of DataKeeper object or a list of dict
         if type(datakeeper_list) is list:
             # Check if the list is only composed of DataKeeper
-            if all(isinstance(obj, DataKeeper) for obj in datakeeper_list):
+            if len(datakeeper_list) > 0 and all(
+                isinstance(obj, DataKeeper) for obj in datakeeper_list
+            ):
                 # set the list to keep pointer reference
                 self.datakeeper_list = datakeeper_list
             else:

@@ -184,7 +184,7 @@ class SlotMPolar(SlotMag):
         # magnet can be None or a list of MagnetPolar object or a list of dict
         if type(magnet) is list:
             # Check if the list is only composed of MagnetPolar
-            if all(isinstance(obj, MagnetPolar) for obj in magnet):
+            if len(magnet) > 0 and all(isinstance(obj, MagnetPolar) for obj in magnet):
                 # set the list to keep pointer reference
                 self.magnet = magnet
             else:

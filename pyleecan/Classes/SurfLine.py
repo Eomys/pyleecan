@@ -221,7 +221,7 @@ class SurfLine(Surface):
         # line_list can be None or a list of Line object or a list of dict
         if type(line_list) is list:
             # Check if the list is only composed of Line
-            if all(isinstance(obj, Line) for obj in line_list):
+            if len(line_list) > 0 and all(isinstance(obj, Line) for obj in line_list):
                 # set the list to keep pointer reference
                 self.line_list = line_list
             else:

@@ -67,11 +67,7 @@ class unittest_scalar_product(TestCase):
 
         # scal_mat_ij = < w_i , w_j >
         scal_mat = c_line.interpolation.scalar_product.scalar_product(
-            func_ref,
-            func_ref,
-            detJ,
-            weights,
-            nb_gauss_points,
+            func_ref, func_ref, detJ, weights, nb_gauss_points
         )
 
         testA = np.sum(abs(scal_mat[0, :] - sol))
@@ -101,11 +97,7 @@ class unittest_scalar_product(TestCase):
 
         # scal_mat_ij = < w_i , w_j >
         scal_mat = c_line.interpolation.scalar_product.scalar_product(
-            func_ref,
-            func_ref,
-            detJ,
-            weights,
-            nb_gauss_points,
+            func_ref, func_ref, detJ, weights, nb_gauss_points
         )
 
         testA = np.sum(abs(scal_mat[0, :] - sol))

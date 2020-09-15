@@ -132,7 +132,9 @@ def generate_init(gen_dict, class_dict):
             )
             init_by_var += (
                 TAB3
-                + "if all(isinstance(obj, "
+                + "if len("
+                + prop["name"]
+                + ") > 0 and all(isinstance(obj, "
                 + prop["type"][1:-1]
                 + ") for obj in "
                 + prop["name"]

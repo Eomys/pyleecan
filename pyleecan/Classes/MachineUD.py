@@ -166,7 +166,9 @@ class MachineUD(Machine):
         # lam_list can be None or a list of Lamination object or a list of dict
         if type(lam_list) is list:
             # Check if the list is only composed of Lamination
-            if all(isinstance(obj, Lamination) for obj in lam_list):
+            if len(lam_list) > 0 and all(
+                isinstance(obj, Lamination) for obj in lam_list
+            ):
                 # set the list to keep pointer reference
                 self.lam_list = lam_list
             else:

@@ -135,7 +135,9 @@ class VarParam(VarSimu):
         # paramexplorer_list can be None or a list of ParamExplorer object or a list of dict
         if type(paramexplorer_list) is list:
             # Check if the list is only composed of ParamExplorer
-            if all(isinstance(obj, ParamExplorer) for obj in paramexplorer_list):
+            if len(paramexplorer_list) > 0 and all(
+                isinstance(obj, ParamExplorer) for obj in paramexplorer_list
+            ):
                 # set the list to keep pointer reference
                 self.paramexplorer_list = paramexplorer_list
             else:
