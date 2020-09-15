@@ -5,7 +5,7 @@ matplotlib>=3.2.1
 mock>=4.0.2
 numpy>=1.18.2
 pandas>=1.0.3
-pyfemm>=0.1.1
+pyfemm>=0.1.1;platform_system=="Windows"
 PyQt5>=5.14.1
 PyQt5-sip>=12.7.1
 pytest>=5.4.1

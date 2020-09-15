@@ -113,15 +113,13 @@ class OptiProblem(FrozenClass):
             self.output = output
         else:
             self.output = output
-        # design_var can be None or a list of OptiDesignVar object
+        # design_var can be None or a list of OptiDesignVar object or a list of dict
         if type(design_var) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in design_var:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of OptiDesignVar
+            if len(design_var) > 0 and all(
+                isinstance(obj, OptiDesignVar) for obj in design_var
+            ):
+                # set the list to keep pointer reference
                 self.design_var = design_var
             else:
                 self.design_var = list()
@@ -135,15 +133,13 @@ class OptiProblem(FrozenClass):
             self.design_var = list()
         else:
             self.design_var = design_var
-        # obj_func can be None or a list of DataKeeper object
+        # obj_func can be None or a list of DataKeeper object or a list of dict
         if type(obj_func) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in obj_func:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of DataKeeper
+            if len(obj_func) > 0 and all(
+                isinstance(obj, DataKeeper) for obj in obj_func
+            ):
+                # set the list to keep pointer reference
                 self.obj_func = obj_func
             else:
                 self.obj_func = list()
@@ -158,15 +154,13 @@ class OptiProblem(FrozenClass):
         else:
             self.obj_func = obj_func
         self.eval_func = eval_func
-        # constraint can be None or a list of OptiConstraint object
+        # constraint can be None or a list of OptiConstraint object or a list of dict
         if type(constraint) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in constraint:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of OptiConstraint
+            if len(constraint) > 0 and all(
+                isinstance(obj, OptiConstraint) for obj in constraint
+            ):
+                # set the list to keep pointer reference
                 self.constraint = constraint
             else:
                 self.constraint = list()

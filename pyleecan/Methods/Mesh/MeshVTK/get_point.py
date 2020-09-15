@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def get_points(self, indices=None):
+def get_point(self, indices=None):
     """Return the array of the points coordinates.
 
     Parameters

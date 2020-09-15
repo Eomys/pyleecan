@@ -107,15 +107,11 @@ class ImportData(FrozenClass):
                 symmetries = init_dict["symmetries"]
         # Initialisation by argument
         self.parent = None
-        # axes can be None or a list of ImportData object
+        # axes can be None or a list of ImportData object or a list of dict
         if type(axes) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in axes:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of ImportData
+            if len(axes) > 0 and all(isinstance(obj, ImportData) for obj in axes):
+                # set the list to keep pointer reference
                 self.axes = axes
             else:
                 self.axes = list()

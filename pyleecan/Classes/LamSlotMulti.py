@@ -263,15 +263,11 @@ class LamSlotMulti(Lamination):
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
         # Initialisation by argument
-        # slot_list can be None or a list of Slot object
+        # slot_list can be None or a list of Slot object or a list of dict
         if type(slot_list) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in slot_list:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of Slot
+            if len(slot_list) > 0 and all(isinstance(obj, Slot) for obj in slot_list):
+                # set the list to keep pointer reference
                 self.slot_list = slot_list
             else:
                 self.slot_list = list()

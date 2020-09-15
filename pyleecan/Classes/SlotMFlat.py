@@ -207,15 +207,11 @@ class SlotMFlat(SlotMag):
         self.H0 = H0
         self.W0 = W0
         self.W0_is_rad = W0_is_rad
-        # magnet can be None or a list of MagnetFlat object
+        # magnet can be None or a list of MagnetFlat object or a list of dict
         if type(magnet) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in magnet:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of MagnetFlat
+            if len(magnet) > 0 and all(isinstance(obj, MagnetFlat) for obj in magnet):
+                # set the list to keep pointer reference
                 self.magnet = magnet
             else:
                 self.magnet = list()

@@ -294,15 +294,11 @@ class LamHole(Lamination):
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
         # Initialisation by argument
-        # hole can be None or a list of Hole object
+        # hole can be None or a list of Hole object or a list of dict
         if type(hole) is list:
-            # Check if the list is only composed of pyleecan obj
-            no_dict = True
-            for obj in hole:
-                if isinstance(obj, dict):
-                    no_dict = False
-                    break
-            if no_dict:  # set the list to keep pointer reference
+            # Check if the list is only composed of Hole
+            if len(hole) > 0 and all(isinstance(obj, Hole) for obj in hole):
+                # set the list to keep pointer reference
                 self.hole = hole
             else:
                 self.hole = list()

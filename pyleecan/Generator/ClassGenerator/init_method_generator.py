@@ -76,7 +76,7 @@ def generate_init(gen_dict, class_dict):
             init_by_var += TAB2 + "self." + prop["name"] + " = " + prop["name"] + "\n"
 
         # List of imported type
-        elif "." in prop["type"]:
+        elif "." in prop["type"] and prop["type"].endswith("]"):
             # Add => "self.my_var = my_var\n" to init_by_var
             if (
                 prop["type"] not in ext_imported_types
@@ -121,20 +121,26 @@ def generate_init(gen_dict, class_dict):
                 + prop["name"]
                 + " can be None or a list of "
                 + prop["type"][1:-1]
-                + " object\n"
+                + " object or a list of dict\n"
             )
             init_by_var += TAB2 + "if type(" + prop["name"] + ") is list:\n"
             init_by_var += (
-                TAB3 + "# Check if the list is only composed of pyleecan obj\n"
+                TAB3
+                + "# Check if the list is only composed of "
+                + prop["type"][1:-1]
+                + "\n"
             )
-            init_by_var += TAB3 + "no_dict = True\n"
-            init_by_var += TAB3 + "for obj in " + prop["name"] + ":\n"
-            init_by_var += TAB4 + "if isinstance(obj, dict):\n"
-            init_by_var += TAB5 + "no_dict = False\n"
-            init_by_var += TAB5 + "break\n"
             init_by_var += (
-                TAB3 + "if no_dict: # set the list to keep pointer reference\n"
+                TAB3
+                + "if len("
+                + prop["name"]
+                + ") > 0 and all(isinstance(obj, "
+                + prop["type"][1:-1]
+                + ") for obj in "
+                + prop["name"]
+                + "):\n"
             )
+            init_by_var += TAB4 + "# set the list to keep pointer reference\n"
             init_by_var += TAB4 + "self." + prop["name"] + " = " + prop["name"] + "\n"
             init_by_var += TAB3 + "else:\n"
             init_by_var += TAB4 + "self." + prop["name"] + " = list()\n"

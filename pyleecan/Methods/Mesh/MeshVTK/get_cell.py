@@ -4,7 +4,7 @@ from meshio import read
 from os import remove
 
 
-def get_cells(self, indices=None):
+def get_cell(self, indices=None):
     """Return the cells (connectivities).
 
     Parameters
