@@ -129,7 +129,9 @@ def get_meshsolution(self, save_path, j_t0):
         groups["stator_windings"] = mesh.cell["triangle"].indice[
             np.where(listElem0[:, 6] == GROUP_SW)[0]
         ]
-
+        groups["rotor"] = mesh.cell["triangle"].indice[
+            np.where(listElem0[:, 6] == GROUP_RC)[0]
+        ]
         # If necessary, other groups can be defined here
 
     else:

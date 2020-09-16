@@ -14,20 +14,17 @@ def _store_solution(meshsolution, field, label=""):
     meshsolution.solution.append(solution)
 
 
-def _comp_loss_sum(meshsolution, grp, L1=1, rho=7650, sym=1):
+def _comp_loss_sum(meshsolution, L1=1, rho=7650, sym=1):
     """ 
     Compute losses sum
     """
-
-    grp_sol = meshsolution.get_group(grp)
-
-    area = grp_sol.get_mesh().get_cell_area()
-    loss_norm = grp_sol.get_field(label="LossSum")[0, :]
+    area = meshsolution.get_mesh().get_cell_area()
+    loss_norm = meshsolution.get_field(label="LossDensSum")[0, :]
 
     loss = area * loss_norm * L1 * rho * sym
 
     mass = area.sum() * L1 * rho * sym
-    print(f"{grp} mass = {mass} kg")
+    print(f"{meshsolution.label} mass = {mass} kg") # TODO for verification, remove
 
     return loss.sum()
 
@@ -60,8 +57,7 @@ def comp_loss(self, output):
     LossDens = self.comp_loss_norm(meshsolution)
     _store_solution(output.loss.meshsolutions[-1], LossDens, label="LossDens")
 
-    """
-    # --- compute sum over freqs axes ---
+    # compute sum over frequencies
     axes_list = [axis.name for axis in LossDens.axes]
     freqs_idx = [idx for idx, axis_name in enumerate(axes_list) if axis_name == "freqs"]
     if len(freqs_idx) > 1:
@@ -78,44 +74,21 @@ def comp_loss(self, output):
     loss_sum_ = DataTime(
         name="Losses sum",
         unit="W/kg",
-        symbol="LossSum",
+        symbol="LossDensSum",
         axes=[time, *axes],
         values=tile(loss_sum, (2, 1)),
         # values=loss_sum[newaxis,:], # TODO squeeze issue
     )
-    _store_solution(output.mag.meshsolution, loss_sum_, label="LossSum")
+    _store_solution(output.loss.meshsolutions[-1], loss_sum_, label="LossDensSum")
 
-    # compute FFT of induction magnitude
-    field_list = [f for f in field.components.values()]
-    Bmag_sq = None
-    for component in field_list:
-        axes_names = ["freqs" if x.name == "time" else x.name for x in component.axes]
-
-        mag_dict = component.get_magnitude_along(*axes_names)
-        symbol = component.symbol
-
-        Bmag_sq = (
-            mag_dict[symbol] ** 2
-            if Bmag_sq is None
-            else Bmag_sq + mag_dict[symbol] ** 2
-        )
-
-    Freq = Data1D(name="freqs", unit="", values=mag_dict["freqs"])
-    axes = [Freq if x.name == "time" else x for x in component.axes]
-
-    Bmag = DataFreq(
-        name="Bfft", unit="T", symbol="Bfft", axes=axes, values=Bmag_sq ** 0.5,
-    )
-    _store_solution(output.mag.meshsolution, Bmag, label="Bfft")
-
-    # store results
+    # compute overall loss sum
     sym = 1 if not output.simu.mag.is_symmetry_a else output.simu.mag.sym_a
     sym *= output.simu.mag.is_antiper_a + 1
 
     L1 = self.L1 # TODO find better solution to get the length
     rho = self.mat_type.struct.rho # TODO find better solution ...
     loss_sum = _comp_loss_sum(
-        output.mag.meshsolution, grp=self.group, L1=L1, rho=rho, sym=sym
+        output.loss.meshsolutions[-1], L1=L1, rho=rho, sym=sym
     )
 
     Time = Data1D(
@@ -130,11 +103,11 @@ def comp_loss(self, output):
     data = DataTime(
         name=self.name,
         unit="W",
-        symbol="P",
+        symbol="Loss",
         axes=[Time],
         values=loss_sum*ones_like(Time.values),
     )
 
 
     output.loss.losses.append(data)
-    """
+    

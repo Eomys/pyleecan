@@ -56,13 +56,11 @@ machine.stator.mat_type.mag.LossData = LossData
 myLoss = mySimu.loss
 myLoss.run()
 
-"""
-myResults.mag.meshsolution.plot_contour(
-    label="B", group_names="stator", itime=0, clim=[0, 1.5]
-)
-myResults.mag.meshsolution.plot_contour(
-    label="LossDens", group_names="stator", itime=7,
-)
+#myResults.mag.meshsolution.plot_contour(
+#    label="B", group_names="stator", itime=0, clim=[0, 1.5]
+#)
 
-print(f"stator loss = {myResults.loss.Plam_stator[0]} W")
-"""
+myResults.loss.meshsolutions[0].plot_contour(label="LossDens", itime=7, )
+myResults.loss.meshsolutions[0].plot_contour(label="LossDensSum", itime=0,)
+
+print(f"stator loss = {myResults.loss.losses[0].get_field([]).mean()} W")
