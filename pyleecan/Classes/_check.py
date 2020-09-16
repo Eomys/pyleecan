@@ -21,9 +21,7 @@ def set_array(obj, prop, value):
     None
 
     """
-    if value is None:  # Default value
-        value = empty(0)
-    elif isinstance(value, list):
+    if isinstance(value, list):
         value = array(value)
     setattr(obj, prop, value)
 

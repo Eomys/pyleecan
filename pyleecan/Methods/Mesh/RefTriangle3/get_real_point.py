@@ -3,7 +3,7 @@
 import numpy as np
 
 
-def get_real_points(self, vertice, ref_pt, nb_ref_pt=1):
+def get_real_point(self, vertice, ref_pt, nb_ref_pt=1):
     """ Return the coordinates in the cell of a point in the reference cell.
 
     Parameters

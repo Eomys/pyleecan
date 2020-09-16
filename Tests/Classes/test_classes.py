@@ -12,7 +12,7 @@ from pyleecan.Generator.ClassGenerator.init_method_generator import get_mother_a
 from pyleecan.definitions import DOC_DIR
 from Tests.find import find_test_value, is_type_list, is_type_dict, MissingTypeError
 from pyleecan.Generator import PYTHON_TYPE
-
+from cloudpickle import dumps
 from Tests import save_path
 from pyleecan.Classes._check import CheckMinError, CheckTypeError, CheckMaxError
 from pyleecan.Classes._check import NotADictError
@@ -174,6 +174,13 @@ def test_class_as_dict(class_dict):
                 d[prop["name"]] = prop["value"]
         elif prop["type"] in PYTHON_TYPE:  # PYTHON_TYPE and not dict or list
             d[prop["name"]] = prop["value"]
+        elif "." in prop["type"]:  # Imported type or list of imported type
+            val = eval(prop["value"])
+            d[prop["name"]] = {
+                "__class__": str(type(val)),
+                "__repr__": str(val.__repr__()),
+                "serialized": dumps(val).decode("ISO-8859-2"),
+            }
         elif is_type_list(prop["type"]):  # List of pyleecan type
             d[prop["name"]] = list()
         elif is_type_dict(prop["type"]):  # Dict of pyleecan type

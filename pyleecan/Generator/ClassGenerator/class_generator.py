@@ -146,6 +146,10 @@ def generate_class(gen_dict, class_name, path_to_gen):
                 class_file.write("from cloudpickle import dumps, loads\n")
                 class_file.write("from ._check import CheckTypeError\n")
 
+            # Remove the list if needed
+            if import_type.startswith("["):
+                import_type = import_type[1:-1]
+
             # Extract import name
             from_name = import_type[: import_type.rfind(".")]
             type_name = import_type[import_type.rfind(".") + 1 :]
@@ -164,7 +168,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
     # Import of all needed pyleecan type for empty init
     class_file.write("from ._check import InitUnKnowClassError\n")
     for pyleecan_type in import_type_list:
-        if "." not in pyleecan_type:
+        if "." not in pyleecan_type and pyleecan_type != "FrozenClass":
             class_file.write(
                 "from ." + pyleecan_type + " import " + pyleecan_type + "\n"
             )

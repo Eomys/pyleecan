@@ -237,61 +237,71 @@ class MeshSolution(FrozenClass):
         # Initialisation by argument
         self.parent = None
         self.label = label
-        # mesh can be None or a list of Mesh object
-        self.mesh = list()
+        # mesh can be None or a list of Mesh object or a list of dict
         if type(mesh) is list:
-            for obj in mesh:
-                if obj is None:  # Default value
-                    self.mesh.append(Mesh())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in ["Mesh", "MeshMat", "MeshVTK"]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name " + class_name + " in init_dict for mesh"
+            # Check if the list is only composed of Mesh
+            if len(mesh) > 0 and all(isinstance(obj, Mesh) for obj in mesh):
+                # set the list to keep pointer reference
+                self.mesh = mesh
+            else:
+                self.mesh = list()
+                for obj in mesh:
+                    if not isinstance(obj, dict):  # Default value
+                        self.mesh.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in ["Mesh", "MeshMat", "MeshVTK"]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for mesh"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.mesh.append(class_obj(init_dict=obj))
-                else:
-                    self.mesh.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.mesh.append(class_obj(init_dict=obj))
+
         elif mesh is None:
             self.mesh = list()
         else:
             self.mesh = mesh
         self.is_same_mesh = is_same_mesh
-        # solution can be None or a list of Solution object
-        self.solution = list()
+        # solution can be None or a list of Solution object or a list of dict
         if type(solution) is list:
-            for obj in solution:
-                if obj is None:  # Default value
-                    self.solution.append(Solution())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Solution",
-                        "Mode",
-                        "SolutionData",
-                        "SolutionMat",
-                        "SolutionVector",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for solution"
+            # Check if the list is only composed of Solution
+            if len(solution) > 0 and all(isinstance(obj, Solution) for obj in solution):
+                # set the list to keep pointer reference
+                self.solution = solution
+            else:
+                self.solution = list()
+                for obj in solution:
+                    if not isinstance(obj, dict):  # Default value
+                        self.solution.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in [
+                            "Solution",
+                            "Mode",
+                            "SolutionData",
+                            "SolutionMat",
+                            "SolutionVector",
+                        ]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for solution"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.solution.append(class_obj(init_dict=obj))
-                else:
-                    self.solution.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.solution.append(class_obj(init_dict=obj))
+
         elif solution is None:
             self.solution = list()
         else:
