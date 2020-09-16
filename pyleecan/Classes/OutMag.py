@@ -334,9 +334,7 @@ class OutMag(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:
@@ -359,9 +357,7 @@ class OutMag(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:
@@ -528,9 +524,7 @@ class OutMag(FrozenClass):
 
     def _set_Phi_wind_stator(self, value):
         """setter of Phi_wind_stator"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:
@@ -553,9 +547,7 @@ class OutMag(FrozenClass):
 
     def _set_emf(self, value):
         """setter of emf"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:

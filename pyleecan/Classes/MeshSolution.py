@@ -501,9 +501,7 @@ class MeshSolution(FrozenClass):
         """setter of group"""
         if type(value) is dict:
             for key, obj in value.items():
-                if obj is None:
-                    obj = array([])
-                elif type(obj) is list:
+                if type(obj) is list:
                     try:
                         obj = array(obj)
                     except:

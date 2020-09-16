@@ -100,10 +100,10 @@ class CellMat(FrozenClass):
 
     def __init__(
         self,
-        connectivity=None,
+        connectivity=[],
         nb_cell=0,
         nb_pt_per_cell=0,
-        indice=None,
+        indice=[],
         interpolation=None,
         init_dict=None,
         init_str=None,
@@ -258,9 +258,7 @@ class CellMat(FrozenClass):
 
     def _set_connectivity(self, value):
         """setter of connectivity"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:
@@ -319,9 +317,7 @@ class CellMat(FrozenClass):
 
     def _set_indice(self, value):
         """setter of indice"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:

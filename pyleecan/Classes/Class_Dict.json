@@ -307,7 +307,7 @@
                 "name": "connectivity",
                 "type": "ndarray",
                 "unit": "",
-                "value": ""
+                "value": []
             },
             {
                 "desc": "Total number of elements",
@@ -334,7 +334,7 @@
                 "name": "indice",
                 "type": "ndarray",
                 "unit": "",
-                "value": ""
+                "value": []
             },
             {
                 "desc": "Define FEA interpolation",
@@ -6926,7 +6926,7 @@
                 "name": "coordinate",
                 "type": "ndarray",
                 "unit": "",
-                "value": null
+                "value": []
             },
             {
                 "desc": "Total number of nodes",

@@ -56,9 +56,7 @@ def generate_properties(gen_dict, class_dict):
             prop_str += TAB2 + '"""setter of ' + prop["name"] + '"""\n'
             # Convert ndarray if needed
             if prop["type"] == "ndarray":
-                prop_str += TAB2 + "if value is None:\n"
-                prop_str += TAB3 + "value = array([])\n"
-                prop_str += TAB2 + "elif type(value) is list:\n"
+                prop_str += TAB2 + "if type(value) is list:\n"
                 prop_str += TAB3 + "try:\n"
                 prop_str += TAB4 + "value = array(value)\n"
                 prop_str += TAB3 + "except:\n"
@@ -66,9 +64,7 @@ def generate_properties(gen_dict, class_dict):
             elif prop["type"] == "{ndarray}":
                 prop_str += TAB2 + "if type(value) is dict:\n"
                 prop_str += TAB3 + "for key, obj in value.items():\n"
-                prop_str += TAB4 + "if obj is None:\n"
-                prop_str += TAB5 + "obj = array([])\n"
-                prop_str += TAB4 + "elif type(obj) is list:\n"
+                prop_str += TAB4 + "if type(obj) is list:\n"
                 prop_str += TAB5 + "try:\n"
                 prop_str += TAB6 + "obj = array(obj)\n"
                 prop_str += TAB5 + "except:\n"

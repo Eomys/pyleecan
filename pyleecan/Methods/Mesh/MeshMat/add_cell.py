@@ -23,7 +23,7 @@ def add_cell(self, pt_indice, cell_type, group_name=None):
     # Create the new element
     new_ind = 0
     for key in self.cell:  # There should only one solution
-        if self.cell[key].indice.size > 0:
+        if self.cell[key].indice is not None and self.cell[key].indice.size > 0:
             tmp_ind = max(self.cell[key].indice)
             new_ind = max(new_ind, tmp_ind)
             new_ind += 1
