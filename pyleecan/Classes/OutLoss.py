@@ -20,7 +20,6 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .MeshSolution import MeshSolution
 
 
 class OutLoss(FrozenClass):
@@ -52,7 +51,7 @@ class OutLoss(FrozenClass):
     def __init__(
         self,
         losses=[],
-        meshsolution=-1,
+        meshsolutions=[],
         logger_name="Pyleecan.OutLoss",
         init_dict=None,
         init_str=None,
@@ -68,8 +67,6 @@ class OutLoss(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if meshsolution == -1:
-            meshsolution = MeshSolution()
         if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
 
@@ -78,15 +75,15 @@ class OutLoss(FrozenClass):
             obj = load(init_str)
             assert type(obj) is type(self)
             losses = obj.losses
-            meshsolution = obj.meshsolution
+            meshsolutions = obj.meshsolutions
             logger_name = obj.logger_name
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "losses" in list(init_dict.keys()):
                 losses = init_dict["losses"]
-            if "meshsolution" in list(init_dict.keys()):
-                meshsolution = init_dict["meshsolution"]
+            if "meshsolutions" in list(init_dict.keys()):
+                meshsolutions = init_dict["meshsolutions"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
         # Initialisation by argument
@@ -94,15 +91,9 @@ class OutLoss(FrozenClass):
         if losses == -1:
             losses = []
         self.losses = losses
-        # meshsolution can be None, a MeshSolution object or a dict
-        if isinstance(meshsolution, dict):
-            self.meshsolution = MeshSolution(init_dict=meshsolution)
-        elif isinstance(meshsolution, str):
-            from ..Functions.load import load
-
-            self.meshsolution = load(meshsolution)
-        else:
-            self.meshsolution = meshsolution
+        if meshsolutions == -1:
+            meshsolutions = []
+        self.meshsolutions = meshsolutions
         self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
@@ -122,15 +113,12 @@ class OutLoss(FrozenClass):
             + str(self.losses).replace(linesep, linesep + "\t")
             + linesep
         )
-        if self.meshsolution is not None:
-            tmp = (
-                self.meshsolution.__str__()
-                .replace(linesep, linesep + "\t")
-                .rstrip("\t")
-            )
-            OutLoss_str += "meshsolution = " + tmp
-        else:
-            OutLoss_str += "meshsolution = None" + linesep + linesep
+        OutLoss_str += (
+            "meshsolutions = "
+            + linesep
+            + str(self.meshsolutions).replace(linesep, linesep + "\t")
+            + linesep
+        )
         OutLoss_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return OutLoss_str
 
@@ -141,7 +129,7 @@ class OutLoss(FrozenClass):
             return False
         if other.losses != self.losses:
             return False
-        if other.meshsolution != self.meshsolution:
+        if other.meshsolutions != self.meshsolutions:
             return False
         if other.logger_name != self.logger_name:
             return False
@@ -153,10 +141,7 @@ class OutLoss(FrozenClass):
 
         OutLoss_dict = dict()
         OutLoss_dict["losses"] = self.losses
-        if self.meshsolution is None:
-            OutLoss_dict["meshsolution"] = None
-        else:
-            OutLoss_dict["meshsolution"] = self.meshsolution.as_dict()
+        OutLoss_dict["meshsolutions"] = self.meshsolutions
         OutLoss_dict["logger_name"] = self.logger_name
         # The class name is added to the dict fordeserialisation purpose
         OutLoss_dict["__class__"] = "OutLoss"
@@ -166,8 +151,7 @@ class OutLoss(FrozenClass):
         """Set all the properties to None (except pyleecan object)"""
 
         self.losses = None
-        if self.meshsolution is not None:
-            self.meshsolution._set_None()
+        self.meshsolutions = None
         self.logger_name = None
 
     def _get_losses(self):
@@ -188,24 +172,21 @@ class OutLoss(FrozenClass):
         """,
     )
 
-    def _get_meshsolution(self):
-        """getter of meshsolution"""
-        return self._meshsolution
+    def _get_meshsolutions(self):
+        """getter of meshsolutions"""
+        return self._meshsolutions
 
-    def _set_meshsolution(self, value):
-        """setter of meshsolution"""
-        check_var("meshsolution", value, "MeshSolution")
-        self._meshsolution = value
+    def _set_meshsolutions(self, value):
+        """setter of meshsolutions"""
+        check_var("meshsolutions", value, "list")
+        self._meshsolutions = value
 
-        if self._meshsolution is not None:
-            self._meshsolution.parent = self
+    meshsolutions = property(
+        fget=_get_meshsolutions,
+        fset=_set_meshsolutions,
+        doc=u"""list of FEA software mesh and post processing results
 
-    meshsolution = property(
-        fget=_get_meshsolution,
-        fset=_set_meshsolution,
-        doc=u"""FEA software mesh and post processing results
-
-        :Type: MeshSolution
+        :Type: list
         """,
     )
 

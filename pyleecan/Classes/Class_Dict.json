@@ -6628,13 +6628,13 @@
                 "value": []
             },
             {
-                "desc": "FEA software mesh and post processing results",
+                "desc": "list of FEA software mesh and post processing results",
                 "max": "",
                 "min": "",
-                "name": "meshsolution",
-                "type": "MeshSolution",
+                "name": "meshsolutions",
+                "type": "list",
                 "unit": "",
-                "value": ""
+                "value": []
             },
             {
                 "desc": "Name of the logger to use",

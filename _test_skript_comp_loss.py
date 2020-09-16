@@ -53,11 +53,6 @@ LossData.usecols = None
 machine.stator.mat_type.mag.LossData = LossData
 
 # --- Run the Loss Simulation -------------------------------------------------------- #
-# mshsol = myResults.mag.meshsolution
-# mshsol.solution.pop(-1) # temp. fix for SolutionData issue (get_axis method)
-
-# grp =mshsol.get_group('stator')
-
 myLoss = mySimu.loss
 myLoss.run()
 

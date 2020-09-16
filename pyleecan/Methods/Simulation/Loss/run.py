@@ -45,9 +45,10 @@ def run(self):
         print("new names", names)
 
     # iterate through the models and compute the losses
-    # clear losses beforehand
+    # clear losses and meshsolutions beforehand
     # TODO check for OutLoss
     output.loss.losses = []
+    output.loss.meshsolutions = []
 
     for model in self.models:
         model.comp_loss(output)

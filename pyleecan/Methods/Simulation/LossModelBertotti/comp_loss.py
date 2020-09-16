@@ -48,32 +48,19 @@ def comp_loss(self, output):
         raise InputError(
             "ERROR: The LossModelBertotti object must be in an Output object to run"
         )
+    # setup meshsolution, clear solution
+    meshsolution = output.mag.meshsolution
+    output.loss.meshsolutions.append(meshsolution.get_group(self.group))
+    output.loss.meshsolutions[-1].solution = []
 
     # compute needed model parameter from material data
     self.comp_coeff_Bertotti(self.mat_type)
 
-    # calculate principle axes and transform for exponentials other than 2
-    # TODO
-
-    # --- compute loss density ---
-    # temp. hotfix for SolutionData issue (get_axis method)
-    output.mag.meshsolution.solution.pop(-1)
-
-    mshsol = output.mag.meshsolution.get_group(self.group)
-
-    sol = mshsol.get_solution(label="B")
-    field = sol.field
-    indice = sol.indice
+    # compute loss density
+    LossDens = self.comp_loss_norm(meshsolution)
+    _store_solution(output.loss.meshsolutions[-1], LossDens, label="LossDens")
 
     """
-    components = []
-    for comp in field.components.values():
-        components.append(comp)
-
-    # TODO filter machine parts
-    LossDens = self.comp_loss_norm(components)
-    _store_solution(output.mag.meshsolution, LossDens, label="LossDens")
-
     # --- compute sum over freqs axes ---
     axes_list = [axis.name for axis in LossDens.axes]
     freqs_idx = [idx for idx, axis_name in enumerate(axes_list) if axis_name == "freqs"]
