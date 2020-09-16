@@ -297,7 +297,7 @@ class LamHole(Lamination):
         # hole can be None or a list of Hole object or a list of dict
         if type(hole) is list:
             # Check if the list is only composed of Hole
-            if all(isinstance(obj, Hole) for obj in hole):
+            if len(hole) > 0 and all(isinstance(obj, Hole) for obj in hole):
                 # set the list to keep pointer reference
                 self.hole = hole
             else:

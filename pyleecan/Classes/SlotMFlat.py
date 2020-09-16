@@ -210,7 +210,7 @@ class SlotMFlat(SlotMag):
         # magnet can be None or a list of MagnetFlat object or a list of dict
         if type(magnet) is list:
             # Check if the list is only composed of MagnetFlat
-            if all(isinstance(obj, MagnetFlat) for obj in magnet):
+            if len(magnet) > 0 and all(isinstance(obj, MagnetFlat) for obj in magnet):
                 # set the list to keep pointer reference
                 self.magnet = magnet
             else:

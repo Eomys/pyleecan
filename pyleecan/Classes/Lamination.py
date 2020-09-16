@@ -452,7 +452,7 @@ class Lamination(FrozenClass):
         # axial_vent can be None or a list of Hole object or a list of dict
         if type(axial_vent) is list:
             # Check if the list is only composed of Hole
-            if all(isinstance(obj, Hole) for obj in axial_vent):
+            if len(axial_vent) > 0 and all(isinstance(obj, Hole) for obj in axial_vent):
                 # set the list to keep pointer reference
                 self.axial_vent = axial_vent
             else:
@@ -497,7 +497,7 @@ class Lamination(FrozenClass):
         # notch can be None or a list of Notch object or a list of dict
         if type(notch) is list:
             # Check if the list is only composed of Notch
-            if all(isinstance(obj, Notch) for obj in notch):
+            if len(notch) > 0 and all(isinstance(obj, Notch) for obj in notch):
                 # set the list to keep pointer reference
                 self.notch = notch
             else:

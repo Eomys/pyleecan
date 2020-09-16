@@ -110,7 +110,7 @@ class ImportData(FrozenClass):
         # axes can be None or a list of ImportData object or a list of dict
         if type(axes) is list:
             # Check if the list is only composed of ImportData
-            if all(isinstance(obj, ImportData) for obj in axes):
+            if len(axes) > 0 and all(isinstance(obj, ImportData) for obj in axes):
                 # set the list to keep pointer reference
                 self.axes = axes
             else:

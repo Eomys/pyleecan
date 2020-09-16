@@ -266,7 +266,7 @@ class LamSlotMulti(Lamination):
         # slot_list can be None or a list of Slot object or a list of dict
         if type(slot_list) is list:
             # Check if the list is only composed of Slot
-            if all(isinstance(obj, Slot) for obj in slot_list):
+            if len(slot_list) > 0 and all(isinstance(obj, Slot) for obj in slot_list):
                 # set the list to keep pointer reference
                 self.slot_list = slot_list
             else:

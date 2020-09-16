@@ -240,7 +240,7 @@ class MeshSolution(FrozenClass):
         # mesh can be None or a list of Mesh object or a list of dict
         if type(mesh) is list:
             # Check if the list is only composed of Mesh
-            if all(isinstance(obj, Mesh) for obj in mesh):
+            if len(mesh) > 0 and all(isinstance(obj, Mesh) for obj in mesh):
                 # set the list to keep pointer reference
                 self.mesh = mesh
             else:
@@ -272,7 +272,7 @@ class MeshSolution(FrozenClass):
         # solution can be None or a list of Solution object or a list of dict
         if type(solution) is list:
             # Check if the list is only composed of Solution
-            if all(isinstance(obj, Solution) for obj in solution):
+            if len(solution) > 0 and all(isinstance(obj, Solution) for obj in solution):
                 # set the list to keep pointer reference
                 self.solution = solution
             else:
