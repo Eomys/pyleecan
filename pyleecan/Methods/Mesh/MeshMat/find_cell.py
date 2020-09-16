@@ -67,7 +67,7 @@ def find_cell(self, points, nb_pt, normal_t=None):
             b = np.zeros(nb_closest_elem)
             for ielt in range(nb_closest_elem):
                 vert = self.get_vertice(closest_cells[ielt])[key]
-                (is_inside, a[ielt], b[ielt],) = cells.interpolation.ref_cell.is_inside(
+                (is_inside, a[ielt], b[ielt]) = cells.interpolation.ref_cell.is_inside(
                     vert, pt, normal_t
                 )
                 if is_inside:

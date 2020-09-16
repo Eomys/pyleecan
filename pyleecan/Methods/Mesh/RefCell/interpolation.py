@@ -8,8 +8,8 @@ def interpolation(self, point, vertice, field):
 
     Parameters
      ----------
-    self : RefCell
-         an RefCell object
+    self : Interpolation
+         an Interpolation object
     points : ndarray
         evaluation points
     nb_pt : int
@@ -26,9 +26,9 @@ def interpolation(self, point, vertice, field):
 
      """
 
-    point_ref = self.ref_cell.get_ref_point(point, vertice)
-    [values_ref, size] = self.ref_cell.shape_function(point_ref)
+    point_ref = self.get_ref_point(vertice, point)
+    [values_ref, size] = self.shape_function(point_ref, 1)
 
-    value = np.dot(values_ref, field)
+    interp_func = np.tensordot(values_ref, field, axes=([2], [0]))
 
-    return value
+    return interp_func

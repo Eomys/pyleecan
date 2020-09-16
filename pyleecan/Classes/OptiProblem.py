@@ -113,45 +113,57 @@ class OptiProblem(FrozenClass):
             self.output = output
         else:
             self.output = output
-        # design_var can be None or a list of OptiDesignVar object
-        self.design_var = list()
+        # design_var can be None or a list of OptiDesignVar object or a list of dict
         if type(design_var) is list:
-            for obj in design_var:
-                if obj is None:  # Default value
-                    self.design_var.append(OptiDesignVar())
-                elif isinstance(obj, dict):
-                    self.design_var.append(OptiDesignVar(init_dict=obj))
-                else:
-                    self.design_var.append(obj)
+            # Check if the list is only composed of OptiDesignVar
+            if all(isinstance(obj, OptiDesignVar) for obj in design_var):
+                # set the list to keep pointer reference
+                self.design_var = design_var
+            else:
+                self.design_var = list()
+                for obj in design_var:
+                    if not isinstance(obj, dict):  # Default value
+                        self.design_var.append(obj)
+                    elif isinstance(obj, dict):
+                        self.design_var.append(OptiDesignVar(init_dict=obj))
+
         elif design_var is None:
             self.design_var = list()
         else:
             self.design_var = design_var
-        # obj_func can be None or a list of DataKeeper object
-        self.obj_func = list()
+        # obj_func can be None or a list of DataKeeper object or a list of dict
         if type(obj_func) is list:
-            for obj in obj_func:
-                if obj is None:  # Default value
-                    self.obj_func.append(DataKeeper())
-                elif isinstance(obj, dict):
-                    self.obj_func.append(DataKeeper(init_dict=obj))
-                else:
-                    self.obj_func.append(obj)
+            # Check if the list is only composed of DataKeeper
+            if all(isinstance(obj, DataKeeper) for obj in obj_func):
+                # set the list to keep pointer reference
+                self.obj_func = obj_func
+            else:
+                self.obj_func = list()
+                for obj in obj_func:
+                    if not isinstance(obj, dict):  # Default value
+                        self.obj_func.append(obj)
+                    elif isinstance(obj, dict):
+                        self.obj_func.append(DataKeeper(init_dict=obj))
+
         elif obj_func is None:
             self.obj_func = list()
         else:
             self.obj_func = obj_func
         self.eval_func = eval_func
-        # constraint can be None or a list of OptiConstraint object
-        self.constraint = list()
+        # constraint can be None or a list of OptiConstraint object or a list of dict
         if type(constraint) is list:
-            for obj in constraint:
-                if obj is None:  # Default value
-                    self.constraint.append(OptiConstraint())
-                elif isinstance(obj, dict):
-                    self.constraint.append(OptiConstraint(init_dict=obj))
-                else:
-                    self.constraint.append(obj)
+            # Check if the list is only composed of OptiConstraint
+            if all(isinstance(obj, OptiConstraint) for obj in constraint):
+                # set the list to keep pointer reference
+                self.constraint = constraint
+            else:
+                self.constraint = list()
+                for obj in constraint:
+                    if not isinstance(obj, dict):  # Default value
+                        self.constraint.append(obj)
+                    elif isinstance(obj, dict):
+                        self.constraint.append(OptiConstraint(init_dict=obj))
+
         elif constraint is None:
             self.constraint = list()
         else:

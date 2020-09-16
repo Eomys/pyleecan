@@ -163,37 +163,41 @@ class MachineUD(Machine):
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
         # Initialisation by argument
-        # lam_list can be None or a list of Lamination object
-        self.lam_list = list()
+        # lam_list can be None or a list of Lamination object or a list of dict
         if type(lam_list) is list:
-            for obj in lam_list:
-                if obj is None:  # Default value
-                    self.lam_list.append(Lamination())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Lamination",
-                        "LamHole",
-                        "LamSlot",
-                        "LamSlotMag",
-                        "LamSlotMulti",
-                        "LamSlotWind",
-                        "LamSquirrelCage",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for lam_list"
+            # Check if the list is only composed of Lamination
+            if all(isinstance(obj, Lamination) for obj in lam_list):
+                # set the list to keep pointer reference
+                self.lam_list = lam_list
+            else:
+                self.lam_list = list()
+                for obj in lam_list:
+                    if not isinstance(obj, dict):  # Default value
+                        self.lam_list.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in [
+                            "Lamination",
+                            "LamHole",
+                            "LamSlot",
+                            "LamSlotMag",
+                            "LamSlotMulti",
+                            "LamSlotWind",
+                            "LamSquirrelCage",
+                        ]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for lam_list"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.lam_list.append(class_obj(init_dict=obj))
-                else:
-                    self.lam_list.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.lam_list.append(class_obj(init_dict=obj))
+
         elif lam_list is None:
             self.lam_list = list()
         else:
