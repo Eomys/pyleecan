@@ -73,7 +73,6 @@ load_switch = {
     "Lamination": Lamination,
     "Line": Line,
     "Loss": Loss,
-    "Loss1": Loss1,
     "LossModel": LossModel,
     "LossModelBertotti": LossModelBertotti,
     "Machine": Machine,

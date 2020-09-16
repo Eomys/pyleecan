@@ -6,12 +6,19 @@
 
 from os import linesep
 from logging import getLogger
-from ._check import set_array, check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from ._frozen import FrozenClass
 
-from numpy import array, array_equal
+# Import all class method
+# Try/catch to remove unnecessary dependencies in unused method
+try:
+    from ..Methods.Output.OutLoss.get_loss import get_loss
+except ImportError as error:
+    get_loss = error
+
+
 from ._check import InitUnKnowClassError
 
 
@@ -20,6 +27,15 @@ class OutLoss(FrozenClass):
 
     VERSION = 1
 
+    # cf Methods.Output.OutLoss.get_loss
+    if isinstance(get_loss, ImportError):
+        get_loss = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use OutLoss method get_loss: " + str(get_loss))
+            )
+        )
+    else:
+        get_loss = get_loss
     # save method is available in all object
     save = save
 
@@ -34,19 +50,8 @@ class OutLoss(FrozenClass):
 
     def __init__(
         self,
-        time=None,
-        Nt_tot=None,
-        Plam_stator=None,
-        Plam_rotor=None,
-        Pwind_stator=None,
-        Pwind_rotor=None,
-        Pmag_stator=None,
-        Pmag_rotor=None,
-        Pwindage=None,
-        Pbearing=None,
-        Pshaft=None,
-        Pframe=None,
-        Padd=None,
+        losses=[],
+        meshsolutions=[],
         logger_name="Pyleecan.OutLoss",
         init_dict=None,
         init_str=None,
@@ -69,78 +74,26 @@ class OutLoss(FrozenClass):
             # load the object from a file
             obj = load(init_str)
             assert type(obj) is type(self)
-            time = obj.time
-            Nt_tot = obj.Nt_tot
-            Plam_stator = obj.Plam_stator
-            Plam_rotor = obj.Plam_rotor
-            Pwind_stator = obj.Pwind_stator
-            Pwind_rotor = obj.Pwind_rotor
-            Pmag_stator = obj.Pmag_stator
-            Pmag_rotor = obj.Pmag_rotor
-            Pwindage = obj.Pwindage
-            Pbearing = obj.Pbearing
-            Pshaft = obj.Pshaft
-            Pframe = obj.Pframe
-            Padd = obj.Padd
+            losses = obj.losses
+            meshsolutions = obj.meshsolutions
             logger_name = obj.logger_name
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "time" in list(init_dict.keys()):
-                time = init_dict["time"]
-            if "Nt_tot" in list(init_dict.keys()):
-                Nt_tot = init_dict["Nt_tot"]
-            if "Plam_stator" in list(init_dict.keys()):
-                Plam_stator = init_dict["Plam_stator"]
-            if "Plam_rotor" in list(init_dict.keys()):
-                Plam_rotor = init_dict["Plam_rotor"]
-            if "Pwind_stator" in list(init_dict.keys()):
-                Pwind_stator = init_dict["Pwind_stator"]
-            if "Pwind_rotor" in list(init_dict.keys()):
-                Pwind_rotor = init_dict["Pwind_rotor"]
-            if "Pmag_stator" in list(init_dict.keys()):
-                Pmag_stator = init_dict["Pmag_stator"]
-            if "Pmag_rotor" in list(init_dict.keys()):
-                Pmag_rotor = init_dict["Pmag_rotor"]
-            if "Pwindage" in list(init_dict.keys()):
-                Pwindage = init_dict["Pwindage"]
-            if "Pbearing" in list(init_dict.keys()):
-                Pbearing = init_dict["Pbearing"]
-            if "Pshaft" in list(init_dict.keys()):
-                Pshaft = init_dict["Pshaft"]
-            if "Pframe" in list(init_dict.keys()):
-                Pframe = init_dict["Pframe"]
-            if "Padd" in list(init_dict.keys()):
-                Padd = init_dict["Padd"]
+            if "losses" in list(init_dict.keys()):
+                losses = init_dict["losses"]
+            if "meshsolutions" in list(init_dict.keys()):
+                meshsolutions = init_dict["meshsolutions"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
         # Initialisation by argument
         self.parent = None
-        # time can be None, a ndarray or a list
-        set_array(self, "time", time)
-        self.Nt_tot = Nt_tot
-        # Plam_stator can be None, a ndarray or a list
-        set_array(self, "Plam_stator", Plam_stator)
-        # Plam_rotor can be None, a ndarray or a list
-        set_array(self, "Plam_rotor", Plam_rotor)
-        # Pwind_stator can be None, a ndarray or a list
-        set_array(self, "Pwind_stator", Pwind_stator)
-        # Pwind_rotor can be None, a ndarray or a list
-        set_array(self, "Pwind_rotor", Pwind_rotor)
-        # Pmag_stator can be None, a ndarray or a list
-        set_array(self, "Pmag_stator", Pmag_stator)
-        # Pmag_rotor can be None, a ndarray or a list
-        set_array(self, "Pmag_rotor", Pmag_rotor)
-        # Pwindage can be None, a ndarray or a list
-        set_array(self, "Pwindage", Pwindage)
-        # Pbearing can be None, a ndarray or a list
-        set_array(self, "Pbearing", Pbearing)
-        # Pshaft can be None, a ndarray or a list
-        set_array(self, "Pshaft", Pshaft)
-        # Pframe can be None, a ndarray or a list
-        set_array(self, "Pframe", Pframe)
-        # Padd can be None, a ndarray or a list
-        set_array(self, "Padd", Padd)
+        if losses == -1:
+            losses = []
+        self.losses = losses
+        if meshsolutions == -1:
+            meshsolutions = []
+        self.meshsolutions = meshsolutions
         self.logger_name = logger_name
 
         # The class is frozen, for now it's impossible to add new properties
@@ -155,88 +108,15 @@ class OutLoss(FrozenClass):
         else:
             OutLoss_str += "parent = " + str(type(self.parent)) + " object" + linesep
         OutLoss_str += (
-            "time = "
+            "losses = "
             + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutLoss_str += "Nt_tot = " + str(self.Nt_tot) + linesep
-        OutLoss_str += (
-            "Plam_stator = "
-            + linesep
-            + str(self.Plam_stator).replace(linesep, linesep + "\t")
-            + linesep
+            + str(self.losses).replace(linesep, linesep + "\t")
             + linesep
         )
         OutLoss_str += (
-            "Plam_rotor = "
+            "meshsolutions = "
             + linesep
-            + str(self.Plam_rotor).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutLoss_str += (
-            "Pwind_stator = "
-            + linesep
-            + str(self.Pwind_stator).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutLoss_str += (
-            "Pwind_rotor = "
-            + linesep
-            + str(self.Pwind_rotor).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutLoss_str += (
-            "Pmag_stator = "
-            + linesep
-            + str(self.Pmag_stator).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutLoss_str += (
-            "Pmag_rotor = "
-            + linesep
-            + str(self.Pmag_rotor).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutLoss_str += (
-            "Pwindage = "
-            + linesep
-            + str(self.Pwindage).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutLoss_str += (
-            "Pbearing = "
-            + linesep
-            + str(self.Pbearing).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutLoss_str += (
-            "Pshaft = "
-            + linesep
-            + str(self.Pshaft).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutLoss_str += (
-            "Pframe = "
-            + linesep
-            + str(self.Pframe).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutLoss_str += (
-            "Padd = "
-            + linesep
-            + str(self.Padd).replace(linesep, linesep + "\t")
-            + linesep
+            + str(self.meshsolutions).replace(linesep, linesep + "\t")
             + linesep
         )
         OutLoss_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
@@ -247,31 +127,9 @@ class OutLoss(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if not array_equal(other.time, self.time):
+        if other.losses != self.losses:
             return False
-        if other.Nt_tot != self.Nt_tot:
-            return False
-        if not array_equal(other.Plam_stator, self.Plam_stator):
-            return False
-        if not array_equal(other.Plam_rotor, self.Plam_rotor):
-            return False
-        if not array_equal(other.Pwind_stator, self.Pwind_stator):
-            return False
-        if not array_equal(other.Pwind_rotor, self.Pwind_rotor):
-            return False
-        if not array_equal(other.Pmag_stator, self.Pmag_stator):
-            return False
-        if not array_equal(other.Pmag_rotor, self.Pmag_rotor):
-            return False
-        if not array_equal(other.Pwindage, self.Pwindage):
-            return False
-        if not array_equal(other.Pbearing, self.Pbearing):
-            return False
-        if not array_equal(other.Pshaft, self.Pshaft):
-            return False
-        if not array_equal(other.Pframe, self.Pframe):
-            return False
-        if not array_equal(other.Padd, self.Padd):
+        if other.meshsolutions != self.meshsolutions:
             return False
         if other.logger_name != self.logger_name:
             return False
@@ -282,55 +140,8 @@ class OutLoss(FrozenClass):
         """
 
         OutLoss_dict = dict()
-        if self.time is None:
-            OutLoss_dict["time"] = None
-        else:
-            OutLoss_dict["time"] = self.time.tolist()
-        OutLoss_dict["Nt_tot"] = self.Nt_tot
-        if self.Plam_stator is None:
-            OutLoss_dict["Plam_stator"] = None
-        else:
-            OutLoss_dict["Plam_stator"] = self.Plam_stator.tolist()
-        if self.Plam_rotor is None:
-            OutLoss_dict["Plam_rotor"] = None
-        else:
-            OutLoss_dict["Plam_rotor"] = self.Plam_rotor.tolist()
-        if self.Pwind_stator is None:
-            OutLoss_dict["Pwind_stator"] = None
-        else:
-            OutLoss_dict["Pwind_stator"] = self.Pwind_stator.tolist()
-        if self.Pwind_rotor is None:
-            OutLoss_dict["Pwind_rotor"] = None
-        else:
-            OutLoss_dict["Pwind_rotor"] = self.Pwind_rotor.tolist()
-        if self.Pmag_stator is None:
-            OutLoss_dict["Pmag_stator"] = None
-        else:
-            OutLoss_dict["Pmag_stator"] = self.Pmag_stator.tolist()
-        if self.Pmag_rotor is None:
-            OutLoss_dict["Pmag_rotor"] = None
-        else:
-            OutLoss_dict["Pmag_rotor"] = self.Pmag_rotor.tolist()
-        if self.Pwindage is None:
-            OutLoss_dict["Pwindage"] = None
-        else:
-            OutLoss_dict["Pwindage"] = self.Pwindage.tolist()
-        if self.Pbearing is None:
-            OutLoss_dict["Pbearing"] = None
-        else:
-            OutLoss_dict["Pbearing"] = self.Pbearing.tolist()
-        if self.Pshaft is None:
-            OutLoss_dict["Pshaft"] = None
-        else:
-            OutLoss_dict["Pshaft"] = self.Pshaft.tolist()
-        if self.Pframe is None:
-            OutLoss_dict["Pframe"] = None
-        else:
-            OutLoss_dict["Pframe"] = self.Pframe.tolist()
-        if self.Padd is None:
-            OutLoss_dict["Padd"] = None
-        else:
-            OutLoss_dict["Padd"] = self.Padd.tolist()
+        OutLoss_dict["losses"] = self.losses
+        OutLoss_dict["meshsolutions"] = self.meshsolutions
         OutLoss_dict["logger_name"] = self.logger_name
         # The class name is added to the dict fordeserialisation purpose
         OutLoss_dict["__class__"] = "OutLoss"
@@ -339,336 +150,43 @@ class OutLoss(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.time = None
-        self.Nt_tot = None
-        self.Plam_stator = None
-        self.Plam_rotor = None
-        self.Pwind_stator = None
-        self.Pwind_rotor = None
-        self.Pmag_stator = None
-        self.Pmag_rotor = None
-        self.Pwindage = None
-        self.Pbearing = None
-        self.Pshaft = None
-        self.Pframe = None
-        self.Padd = None
+        self.losses = None
+        self.meshsolutions = None
         self.logger_name = None
 
-    def _get_time(self):
-        """getter of time"""
-        return self._time
+    def _get_losses(self):
+        """getter of losses"""
+        return self._losses
 
-    def _set_time(self, value):
-        """setter of time"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("time", value, "ndarray")
-        self._time = value
+    def _set_losses(self, value):
+        """setter of losses"""
+        check_var("losses", value, "list")
+        self._losses = value
 
-    time = property(
-        fget=_get_time,
-        fset=_set_time,
-        doc=u"""Structural time vector (no symmetry)
+    losses = property(
+        fget=_get_losses,
+        fset=_set_losses,
+        doc=u"""List of the computed losses of SciDataTool's DataND type
 
-        :Type: ndarray
+        :Type: list
         """,
     )
 
-    def _get_Nt_tot(self):
-        """getter of Nt_tot"""
-        return self._Nt_tot
+    def _get_meshsolutions(self):
+        """getter of meshsolutions"""
+        return self._meshsolutions
 
-    def _set_Nt_tot(self, value):
-        """setter of Nt_tot"""
-        check_var("Nt_tot", value, "int")
-        self._Nt_tot = value
+    def _set_meshsolutions(self, value):
+        """setter of meshsolutions"""
+        check_var("meshsolutions", value, "list")
+        self._meshsolutions = value
 
-    Nt_tot = property(
-        fget=_get_Nt_tot,
-        fset=_set_Nt_tot,
-        doc=u"""Length of the time vector
+    meshsolutions = property(
+        fget=_get_meshsolutions,
+        fset=_set_meshsolutions,
+        doc=u"""list of FEA software mesh and post processing results
 
-        :Type: int
-        """,
-    )
-
-    def _get_Plam_stator(self):
-        """getter of Plam_stator"""
-        return self._Plam_stator
-
-    def _set_Plam_stator(self, value):
-        """setter of Plam_stator"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Plam_stator", value, "ndarray")
-        self._Plam_stator = value
-
-    Plam_stator = property(
-        fget=_get_Plam_stator,
-        fset=_set_Plam_stator,
-        doc=u"""Stator Lamination Losses
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_Plam_rotor(self):
-        """getter of Plam_rotor"""
-        return self._Plam_rotor
-
-    def _set_Plam_rotor(self, value):
-        """setter of Plam_rotor"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Plam_rotor", value, "ndarray")
-        self._Plam_rotor = value
-
-    Plam_rotor = property(
-        fget=_get_Plam_rotor,
-        fset=_set_Plam_rotor,
-        doc=u"""Rotor Lamination Losses
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_Pwind_stator(self):
-        """getter of Pwind_stator"""
-        return self._Pwind_stator
-
-    def _set_Pwind_stator(self, value):
-        """setter of Pwind_stator"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Pwind_stator", value, "ndarray")
-        self._Pwind_stator = value
-
-    Pwind_stator = property(
-        fget=_get_Pwind_stator,
-        fset=_set_Pwind_stator,
-        doc=u"""Stator Winding Losses
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_Pwind_rotor(self):
-        """getter of Pwind_rotor"""
-        return self._Pwind_rotor
-
-    def _set_Pwind_rotor(self, value):
-        """setter of Pwind_rotor"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Pwind_rotor", value, "ndarray")
-        self._Pwind_rotor = value
-
-    Pwind_rotor = property(
-        fget=_get_Pwind_rotor,
-        fset=_set_Pwind_rotor,
-        doc=u"""Rotor Winding Losses
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_Pmag_stator(self):
-        """getter of Pmag_stator"""
-        return self._Pmag_stator
-
-    def _set_Pmag_stator(self, value):
-        """setter of Pmag_stator"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Pmag_stator", value, "ndarray")
-        self._Pmag_stator = value
-
-    Pmag_stator = property(
-        fget=_get_Pmag_stator,
-        fset=_set_Pmag_stator,
-        doc=u"""Stator Magnet Losses
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_Pmag_rotor(self):
-        """getter of Pmag_rotor"""
-        return self._Pmag_rotor
-
-    def _set_Pmag_rotor(self, value):
-        """setter of Pmag_rotor"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Pmag_rotor", value, "ndarray")
-        self._Pmag_rotor = value
-
-    Pmag_rotor = property(
-        fget=_get_Pmag_rotor,
-        fset=_set_Pmag_rotor,
-        doc=u"""Rotor Magnet Losses
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_Pwindage(self):
-        """getter of Pwindage"""
-        return self._Pwindage
-
-    def _set_Pwindage(self, value):
-        """setter of Pwindage"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Pwindage", value, "ndarray")
-        self._Pwindage = value
-
-    Pwindage = property(
-        fget=_get_Pwindage,
-        fset=_set_Pwindage,
-        doc=u"""Windage Losses
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_Pbearing(self):
-        """getter of Pbearing"""
-        return self._Pbearing
-
-    def _set_Pbearing(self, value):
-        """setter of Pbearing"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Pbearing", value, "ndarray")
-        self._Pbearing = value
-
-    Pbearing = property(
-        fget=_get_Pbearing,
-        fset=_set_Pbearing,
-        doc=u"""Bearing Losses
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_Pshaft(self):
-        """getter of Pshaft"""
-        return self._Pshaft
-
-    def _set_Pshaft(self, value):
-        """setter of Pshaft"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Pshaft", value, "ndarray")
-        self._Pshaft = value
-
-    Pshaft = property(
-        fget=_get_Pshaft,
-        fset=_set_Pshaft,
-        doc=u"""Shaft Iron Losses
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_Pframe(self):
-        """getter of Pframe"""
-        return self._Pframe
-
-    def _set_Pframe(self, value):
-        """setter of Pframe"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Pframe", value, "ndarray")
-        self._Pframe = value
-
-    Pframe = property(
-        fget=_get_Pframe,
-        fset=_set_Pframe,
-        doc=u"""Frame Iron Losses
-
-        :Type: ndarray
-        """,
-    )
-
-    def _get_Padd(self):
-        """getter of Padd"""
-        return self._Padd
-
-    def _set_Padd(self, value):
-        """setter of Padd"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Padd", value, "ndarray")
-        self._Padd = value
-
-    Padd = property(
-        fget=_get_Padd,
-        fset=_set_Padd,
-        doc=u"""Additional Losses
-
-        :Type: ndarray
+        :Type: list
         """,
     )
 

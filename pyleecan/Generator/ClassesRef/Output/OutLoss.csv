@@ -1,15 +1,4 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-time,s,Structural time vector (no symmetry),Nt_tot,ndarray,None,,,,Output,,,VERSION,1,Gather the loss module outputs
-Nt_tot,-,Length of the time vector,,int,None,,,,,,,,,
-Plam_stator,W,Stator Lamination Losses,Nt_tot,ndarray,None,,,,,,,,,
-Plam_rotor,W,Rotor Lamination Losses,Nt_tot,ndarray,None,,,,,,,,,
-Pwind_stator,W,Stator Winding Losses,Nt_tot,ndarray,None,,,,,,,,,
-Pwind_rotor,W,Rotor Winding Losses,Nt_tot,ndarray,None,,,,,,,,,
-Pmag_stator,W,Stator Magnet Losses,Nt_tot,ndarray,None,,,,,,,,,
-Pmag_rotor,W,Rotor Magnet Losses,Nt_tot,ndarray,None,,,,,,,,,
-Pwindage,W,Windage Losses,Nt_tot,ndarray,None,,,,,,,,,
-Pbearing,W,Bearing Losses,Nt_tot,ndarray,None,,,,,,,,,
-Pshaft,W,Shaft Iron Losses,Nt_tot,ndarray,None,,,,,,,,,
-Pframe,W,Frame Iron Losses,Nt_tot,ndarray,None,,,,,,,,,
-Padd,W,Additional Losses,Nt_tot,ndarray,None,,,,,,,,,
+losses,,List of the computed losses of SciDataTool's DataND type,,list,[],,,,Output,,get_loss,VERSION,1,Gather the loss module outputs
+meshsolutions,,list of FEA software mesh and post processing results,,list,[],,,,,get_loss_dist,,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.OutLoss,,,,,,,,,

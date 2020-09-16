@@ -3731,135 +3731,25 @@
                 "value": "1"
             }
         ],
-        "daughters": [
-            "Loss",
-            "Loss1"
-        ],
-        "desc": "Losses module abstract object",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "Loss",
-        "package": "Simulation",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
-        "properties": []
-    },
-    "Loss1": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
         "daughters": [],
-        "desc": "Gather loss modules loss calculation models",
+        "desc": "Losses module object that containt the loss models",
         "is_internal": false,
         "methods": [
             "run"
         ],
-        "mother": "Loss",
-        "name": "Loss1",
+        "mother": "",
+        "name": "Loss",
         "package": "Simulation",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Loss1.csv",
+        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
         "properties": [
             {
-                "desc": "Stator Lamination Loss Model",
+                "desc": "List of models to compute the machines losses",
                 "max": "",
                 "min": "",
-                "name": "lam_stator",
-                "type": "LossModel",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Rotor Lamination Loss Model",
-                "max": "",
-                "min": "",
-                "name": "lam_rotor",
-                "type": "LossModel",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Stator Winding Loss Model",
-                "max": "",
-                "min": "",
-                "name": "wind_stator",
-                "type": "LossModel",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Rotor Winding Loss Model",
-                "max": "",
-                "min": "",
-                "name": "wind_rotor",
-                "type": "LossModel",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Stator Magnet Loss Model",
-                "max": "",
-                "min": "",
-                "name": "mag_stator",
-                "type": "LossModel",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Rotor Magnet Loss Model",
-                "max": "",
-                "min": "",
-                "name": "mag_rotor",
-                "type": "LossModel",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Windage Loss Model",
-                "max": "",
-                "min": "",
-                "name": "windage",
-                "type": "LossModel",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Bearing Loss Model",
-                "max": "",
-                "min": "",
-                "name": "bearing",
-                "type": "LossModel",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Shaft Loss Model",
-                "max": "",
-                "min": "",
-                "name": "shaft",
-                "type": "LossModel",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Frame Loss Model",
-                "max": "",
-                "min": "",
-                "name": "frame",
-                "type": "LossModel",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Loss moduale",
-                "max": "",
-                "min": "",
-                "name": "additional",
-                "type": "LossModel",
-                "unit": "-",
-                "value": null
+                "name": "models",
+                "type": "[LossModel]",
+                "unit": "",
+                "value": []
             }
         ]
     },
@@ -3883,7 +3773,17 @@
         "name": "LossModel",
         "package": "Simulation",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/LossModel.csv",
-        "properties": []
+        "properties": [
+            {
+                "desc": "Name of the loss simulation (has to be unique)",
+                "max": "",
+                "min": "",
+                "name": "name",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            }
+        ]
     },
     "LossModelBertotti": {
         "constants": [
@@ -3966,6 +3866,33 @@
                 "type": "float",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "Name of the coressponding mesh group",
+                "max": "",
+                "min": "",
+                "name": "group",
+                "type": "str",
+                "unit": "-",
+                "value": "None"
+            },
+            {
+                "desc": "Material to be used for the loss computation",
+                "max": "",
+                "min": "",
+                "name": "mat_type",
+                "type": "Material",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Lamination stack iron length [m]",
+                "max": "",
+                "min": "0",
+                "name": "L1",
+                "type": "float",
+                "unit": "m",
+                "value": 1
             }
         ]
     },
@@ -6683,128 +6610,31 @@
         "daughters": [],
         "desc": "Gather the loss module outputs",
         "is_internal": false,
-        "methods": [],
+        "methods": [
+            "get_loss"
+        ],
         "mother": "",
         "name": "OutLoss",
         "package": "Output",
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutLoss.csv",
         "properties": [
             {
-                "desc": "Structural time vector (no symmetry)",
+                "desc": "List of the computed losses of SciDataTool's DataND type",
                 "max": "",
                 "min": "",
-                "name": "time",
-                "type": "ndarray",
-                "unit": "s",
-                "value": null
+                "name": "losses",
+                "type": "list",
+                "unit": "",
+                "value": []
             },
             {
-                "desc": "Length of the time vector",
+                "desc": "list of FEA software mesh and post processing results",
                 "max": "",
                 "min": "",
-                "name": "Nt_tot",
-                "type": "int",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Stator Lamination Losses",
-                "max": "",
-                "min": "",
-                "name": "Plam_stator",
-                "type": "ndarray",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Rotor Lamination Losses",
-                "max": "",
-                "min": "",
-                "name": "Plam_rotor",
-                "type": "ndarray",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Stator Winding Losses",
-                "max": "",
-                "min": "",
-                "name": "Pwind_stator",
-                "type": "ndarray",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Rotor Winding Losses",
-                "max": "",
-                "min": "",
-                "name": "Pwind_rotor",
-                "type": "ndarray",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Stator Magnet Losses",
-                "max": "",
-                "min": "",
-                "name": "Pmag_stator",
-                "type": "ndarray",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Rotor Magnet Losses",
-                "max": "",
-                "min": "",
-                "name": "Pmag_rotor",
-                "type": "ndarray",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Windage Losses",
-                "max": "",
-                "min": "",
-                "name": "Pwindage",
-                "type": "ndarray",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Bearing Losses",
-                "max": "",
-                "min": "",
-                "name": "Pbearing",
-                "type": "ndarray",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Shaft Iron Losses",
-                "max": "",
-                "min": "",
-                "name": "Pshaft",
-                "type": "ndarray",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Frame Iron Losses",
-                "max": "",
-                "min": "",
-                "name": "Pframe",
-                "type": "ndarray",
-                "unit": "W",
-                "value": null
-            },
-            {
-                "desc": "Additional Losses",
-                "max": "",
-                "min": "",
-                "name": "Padd",
-                "type": "ndarray",
-                "unit": "W",
-                "value": null
+                "name": "meshsolutions",
+                "type": "list",
+                "unit": "",
+                "value": []
             },
             {
                 "desc": "Name of the logger to use",
