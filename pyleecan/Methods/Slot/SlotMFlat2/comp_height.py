@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import cos
+from numpy import sin, arctan
 
 
 def comp_height(self):
@@ -20,11 +20,13 @@ def comp_height(self):
     """
     Rbo = self.get_Rbo()
 
-    # Computation of the arc height
-    alpha = self.comp_angle_opening() / 2
-    Harc = float(Rbo * (1 - cos(alpha)))
+    # make sure W0 is in [m]
+    W0 = self.comp_W0m()
 
     if self.is_outwards():
-        return self.H0 - Harc
+        # R2 is the slot limit radius at the bottom of the slot
+        R2 = W0 /(2 * sin(arctan(W0/(2 * (Rbo+self.H1+self.H0)))))
+        return R2-Rbo
     else:
-        return self.H0 + Harc
+        R2 = W0 /(2 * sin(arctan(W0/(2 * (Rbo-self.H1-self.H0)))))
+        return Rbo-R2

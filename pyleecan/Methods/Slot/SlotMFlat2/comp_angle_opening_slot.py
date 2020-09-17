@@ -18,8 +18,8 @@ def comp_angle_opening_slot(self):
 
     """
 
-    if self.W0_is_rad:
-        return self.W0
-    else:  # Convert W0 from m to rad
+    if self.W1 > 0:
         Rbo = self.get_Rbo()
-        return float(2 * arcsin(self.W0 / (2 * Rbo)))
+        return float(2 * arcsin(self.W1 / (2 * Rbo)))
+    else: 
+        return self.comp_angle_opening()

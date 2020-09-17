@@ -30,30 +30,29 @@ def build_geometry(self):
     # Point coordinate for a slot center on Ox
     Z1 = Rbo * exp(-1j * alpha_slot / 2)
     Z8 = Rbo * exp(1j * alpha_slot / 2)
-    
-    R1 = self.W1 / (2*sin(alpha_mag))
+
+    R1 = self.W1 / (2 * sin(alpha_mag / 2))
     Z3 = R1 * exp(-1j * alpha_mag / 2)
     Z6 = R1 * exp(1j * alpha_mag / 2)
-    
-    H2 = self.H0-self.H1
+
+    H2 = self.H0 - self.H1
 
     if self.is_outwards():
-        Z2 = Z1 + self.H0
-        Z7 = Z8 + self.H0
+        Z2 = Z1 + self.H1
+        Z7 = Z8 + self.H1
         Z4 = Z3 + H2
         Z5 = Z6 + H2
     else:
-        Z2 = Z1 - self.H0
-        Z7 = Z8 - self.H0
+        Z2 = Z1 - self.H1
+        Z7 = Z8 - self.H1
         Z4 = Z3 - H2
         Z5 = Z6 - H2
-    
 
     # Curve list of a single slot
     curve_list = list()
     if self.H1 > 0:
         curve_list.append(Segment(Z1, Z2))
-        
+
     curve_list.append(Segment(Z2, Z3))
     curve_list.append(Segment(Z3, Z4))
     curve_list.append(Segment(Z4, Z5))
@@ -63,11 +62,12 @@ def build_geometry(self):
     if self.H1 > 0:
         curve_list.append(Segment(Z7, Z8))
 
+    # Copied from SlotMFlat. Probably not working for more than one Magnet
     # Complete curve list for all the slots (for one pole)
     slot_list = list()
     for ii in range(len(self.magnet)):
         # Compute angle of the middle of the slot
-        beta = -alpha / 2 + alpha_slot / 2 + ii * (self.W3 + alpha_slot)
+        beta = -alpha / 2 + alpha_mag / 2 + ii * (self.W3 + alpha_mag)
         # Duplicate and rotate the slot + bore for each slot
         for line in curve_list:
             new_line = type(line)(init_dict=line.as_dict())

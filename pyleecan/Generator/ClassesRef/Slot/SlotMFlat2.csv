@@ -1,9 +1,9 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-H1,m,Slot total height,0,float,0,0,,,Slot,SlotMag,build_geometry,VERSION,1,Flat bottomed SlotMag with adjustable slot opening
-H0,m,Slot opening height ,0,float,0,0,,,,,,,,
-W0,m/rad,Slot opening width ,0,float,1.00E-02,0,,,,,comp_angle_opening,IS_SYMMETRICAL,1,
-W0_is_rad,,"W0 unit, 0 for m, 1 for rad",0,bool,0,,,,,,,,,
-W1,m,Inner slot width (for Magnet),0,float,1.22E-02,0,,,,,,,,
+H0,m,Internal Slot height (for Magnet),0,float,0,0,,,Slot,SlotMag,build_geometry,VERSION,1,Flat bottomed SlotMag with adjustable slot opening
+H1,m,Slot opening height ,0,float,0,0,,,,,,,,
+W0,m/rad,Inner slot width (for Magnet),0,float,1.22E-02,0,,,,,comp_angle_opening,IS_SYMMETRICAL,1,
+W0_is_rad,,"W0 unit, 0 for m, 1 for rad",0,bool,0,,,,,,comp_angle_opening_slot,,,
+W1,m,Slot opening width ,0,float,1.00E-02,0,,,,,comp_angle_opening_magnet,,,
 magnet,,List of magnet,0,[MagnetFlat],,,,,,,comp_height,,,
 ,,,,,,,,,,,comp_surface,,,
 ,,,,,,,,,,,comp_W0m,,,

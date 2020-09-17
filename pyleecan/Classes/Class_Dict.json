@@ -7372,6 +7372,8 @@
         "methods": [
             "build_geometry",
             "comp_angle_opening",
+            "comp_angle_opening_slot",
+            "comp_angle_opening_magnet",
             "comp_height",
             "comp_surface",
             "comp_W0m",
@@ -7383,7 +7385,7 @@
         "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotMFlat2.csv",
         "properties": [
             {
-                "desc": "Slot total height",
+                "desc": "Internal Slot height (for Magnet)",
                 "max": "",
                 "min": "0",
                 "name": "H0",
@@ -7401,13 +7403,13 @@
                 "value": 0
             },
             {
-                "desc": "Slot opening width ",
+                "desc": "Inner slot width (for Magnet)",
                 "max": "",
                 "min": "0",
                 "name": "W0",
                 "type": "float",
                 "unit": "m/rad",
-                "value": 0.01
+                "value": 0.0122
             },
             {
                 "desc": "W0 unit, 0 for m, 1 for rad",
@@ -7419,22 +7421,13 @@
                 "value": 0
             },
             {
-                "desc": "Slot width (for Magnet) in center of H0",
+                "desc": "Slot opening width ",
                 "max": "",
                 "min": "0",
                 "name": "W1",
                 "type": "float",
-                "unit": "m/rad",
-                "value": 0.0122
-            },
-            {
-                "desc": "W0 unit, 0 for m, 1 for rad",
-                "max": "",
-                "min": "",
-                "name": "W1_is_rad",
-                "type": "bool",
-                "unit": "",
-                "value": 0
+                "unit": "m",
+                "value": 0.01
             },
             {
                 "desc": "List of magnet",

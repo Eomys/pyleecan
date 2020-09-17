@@ -3,7 +3,7 @@ from numpy import sin, exp
 
 
 def get_point_bottom(self):
-    """Used to get the bottoms points of a single SlotMFlat
+    """Used to get the bottoms points of a single SlotMFlat2
 
     Parameters
     ----------
@@ -19,14 +19,14 @@ def get_point_bottom(self):
     """
 
     alpha = self.comp_angle_opening_magnet()
-    R1 = self.W1 / (2 * sin(alpha))
-    H2  = self.H0 - self.H1
+    R1 = self.W0 / (2 * sin(alpha / 2))
+
 
     if self.is_outwards():
-        Z1 = R1 * exp(-1j * alpha / 2) + H2 
-        Z2 = R1 * exp(1j * alpha / 2) + H2
+        Z1 = R1 * exp(-1j * alpha / 2) + self.H0
+        Z2 = R1 * exp(1j * alpha / 2) + self.H0
     else:
-        Z1 = R1 * exp(-1j * alpha / 2) - H2
-        Z2 = R1 * exp(1j * alpha / 2) - H2
+        Z1 = R1 * exp(-1j * alpha / 2) - self.H0
+        Z2 = R1 * exp(1j * alpha / 2) - self.H0
 
     return (Z1, Z2)

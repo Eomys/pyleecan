@@ -24,6 +24,16 @@ except ImportError as error:
     comp_angle_opening = error
 
 try:
+    from ..Methods.Slot.SlotMFlat2.comp_angle_opening_slot import comp_angle_opening_slot
+except ImportError as error:
+    comp_angle_opening_slot = error
+
+try:
+    from ..Methods.Slot.SlotMFlat2.comp_angle_opening_magnet import comp_angle_opening_magnet
+except ImportError as error:
+    comp_angle_opening_magnet = error
+
+try:
     from ..Methods.Slot.SlotMFlat2.comp_height import comp_height
 except ImportError as error:
     comp_height = error
@@ -78,6 +88,30 @@ class SlotMFlat2(SlotMag):
         )
     else:
         comp_angle_opening = comp_angle_opening
+    # cf Methods.Slot.SlotMFlat2.comp_angle_opening_slot
+    if isinstance(comp_angle_opening_slot, ImportError):
+        comp_angle_opening_slot = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat2 method comp_angle_opening_slot: "
+                    + str(comp_angle_opening_slot)
+                )
+            )
+        )
+    else:
+        comp_angle_opening_slot = comp_angle_opening_slot
+    # cf Methods.Slot.SlotMFlat2.comp_angle_opening_magnet
+    if isinstance(comp_angle_opening_magnet, ImportError):
+        comp_angle_opening_magnet = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat2 method comp_angle_opening_magnet: "
+                    + str(comp_angle_opening_magnet)
+                )
+            )
+        )
+    else:
+        comp_angle_opening_magnet = comp_angle_opening_magnet
     # cf Methods.Slot.SlotMFlat2.comp_height
     if isinstance(comp_height, ImportError):
         comp_height = property(
@@ -133,7 +167,7 @@ class SlotMFlat2(SlotMag):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, H0=0, H1=0, W0=0.01, W0_is_rad=False, W1=0.0122, W1_is_rad=False, magnet=list(), W3=0, Zs=36, init_dict = None, init_str = None):
+    def __init__(self, H0=0, H1=0, W0=0.0122, W0_is_rad=False, W1=0.01, magnet=list(), W3=0, Zs=36, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -156,7 +190,6 @@ class SlotMFlat2(SlotMag):
             W0 = obj.W0
             W0_is_rad = obj.W0_is_rad
             W1 = obj.W1
-            W1_is_rad = obj.W1_is_rad
             magnet = obj.magnet
             W3 = obj.W3
             Zs = obj.Zs
@@ -173,8 +206,6 @@ class SlotMFlat2(SlotMag):
                 W0_is_rad = init_dict["W0_is_rad"]
             if "W1" in list(init_dict.keys()):
                 W1 = init_dict["W1"]
-            if "W1_is_rad" in list(init_dict.keys()):
-                W1_is_rad = init_dict["W1_is_rad"]
             if "magnet" in list(init_dict.keys()):
                 magnet = init_dict["magnet"]
             if "W3" in list(init_dict.keys()):
@@ -187,7 +218,6 @@ class SlotMFlat2(SlotMag):
         self.W0 = W0
         self.W0_is_rad = W0_is_rad
         self.W1 = W1
-        self.W1_is_rad = W1_is_rad
         # magnet can be None or a list of MagnetFlat object
         self.magnet = list()
         if type(magnet) is list:
@@ -231,7 +261,6 @@ class SlotMFlat2(SlotMag):
         SlotMFlat2_str += "W0 = " + str(self.W0) + linesep
         SlotMFlat2_str += "W0_is_rad = " + str(self.W0_is_rad) + linesep
         SlotMFlat2_str += "W1 = " + str(self.W1) + linesep
-        SlotMFlat2_str += "W1_is_rad = " + str(self.W1_is_rad) + linesep
         if len(self.magnet) == 0:
             SlotMFlat2_str += "magnet = []" + linesep
         for ii in range(len(self.magnet)):
@@ -258,8 +287,6 @@ class SlotMFlat2(SlotMag):
             return False
         if other.W1 != self.W1:
             return False
-        if other.W1_is_rad != self.W1_is_rad:
-            return False
         if other.magnet != self.magnet:
             return False
         return True
@@ -275,7 +302,6 @@ class SlotMFlat2(SlotMag):
         SlotMFlat2_dict["W0"] = self.W0
         SlotMFlat2_dict["W0_is_rad"] = self.W0_is_rad
         SlotMFlat2_dict["W1"] = self.W1
-        SlotMFlat2_dict["W1_is_rad"] = self.W1_is_rad
         SlotMFlat2_dict["magnet"] = list()
         for obj in self.magnet:
             SlotMFlat2_dict["magnet"].append(obj.as_dict())
@@ -292,7 +318,6 @@ class SlotMFlat2(SlotMag):
         self.W0 = None
         self.W0_is_rad = None
         self.W1 = None
-        self.W1_is_rad = None
         for obj in self.magnet:
             obj._set_None()
         # Set to None the properties inherited from SlotMag
@@ -310,7 +335,7 @@ class SlotMFlat2(SlotMag):
     H0 = property(
         fget=_get_H0,
         fset=_set_H0,
-        doc=u"""Slot total height
+        doc=u"""Internal Slot height (for Magnet)
 
         :Type: float
         :min: 0
@@ -348,7 +373,7 @@ class SlotMFlat2(SlotMag):
     W0 = property(
         fget=_get_W0,
         fset=_set_W0,
-        doc=u"""Slot opening width 
+        doc=u"""Inner slot width (for Magnet)
 
         :Type: float
         :min: 0
@@ -385,28 +410,10 @@ class SlotMFlat2(SlotMag):
     W1 = property(
         fget=_get_W1,
         fset=_set_W1,
-        doc=u"""Slot width (for Magnet) in center of H0
+        doc=u"""Slot opening width 
 
         :Type: float
         :min: 0
-        """,
-    )
-
-    def _get_W1_is_rad(self):
-        """getter of W1_is_rad"""
-        return self._W1_is_rad
-
-    def _set_W1_is_rad(self, value):
-        """setter of W1_is_rad"""
-        check_var("W1_is_rad", value, "bool")
-        self._W1_is_rad = value
-
-    W1_is_rad = property(
-        fget=_get_W1_is_rad,
-        fset=_set_W1_is_rad,
-        doc=u"""W0 unit, 0 for m, 1 for rad
-
-        :Type: bool
         """,
     )
 

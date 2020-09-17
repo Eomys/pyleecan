@@ -18,8 +18,8 @@ def comp_W0m(self):
 
     """
 
-    Rbo = self.get_Rbo()
     if self.W0_is_rad:  # Convert W0 to m
+        Rbo = self.get_Rbo()
         return 2 * Rbo * sin((self.W0 / 2))
     else:
         return self.W0

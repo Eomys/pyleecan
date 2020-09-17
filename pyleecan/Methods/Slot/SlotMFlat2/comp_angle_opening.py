@@ -16,7 +16,7 @@ def comp_angle_opening(self):
 
     """
 
-    alpha0 = self.comp_angle_opening_slot()
+    alpha0 = self.comp_angle_opening_magnet()
     alpha3 = self.W3
 
     Nmag = len(self.magnet)
