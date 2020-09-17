@@ -31,22 +31,21 @@ def build_geometry(self):
     Z1 = Rbo * exp(-1j * alpha_slot / 2)
     Z8 = Rbo * exp(1j * alpha_slot / 2)
 
-    R1 = self.W1 / (2 * sin(alpha_mag / 2))
+    R1 = self.W0 / (2 * sin(alpha_mag / 2))
     Z3 = R1 * exp(-1j * alpha_mag / 2)
     Z6 = R1 * exp(1j * alpha_mag / 2)
 
-    H2 = self.H0 - self.H1
-
+    
     if self.is_outwards():
         Z2 = Z1 + self.H1
         Z7 = Z8 + self.H1
-        Z4 = Z3 + H2
-        Z5 = Z6 + H2
+        Z4 = Z3 + self.H0
+        Z5 = Z6 + self.H0
     else:
         Z2 = Z1 - self.H1
         Z7 = Z8 - self.H1
-        Z4 = Z3 - H2
-        Z5 = Z6 - H2
+        Z4 = Z3 - self.H0
+        Z5 = Z6 - self.H0
 
     # Curve list of a single slot
     curve_list = list()

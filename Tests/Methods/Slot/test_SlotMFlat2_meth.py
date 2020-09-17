@@ -25,12 +25,12 @@ DELTA = 1e-6
 slotW10_test = list()
 
 # Internal Slot
-lam = LamSlotMag(slot=-1, L1=25*mm, Rext=16.6*mm, Rint=4*mm, is_internal=True, is_stator=False)
+lam = LamSlotMag(slot=-1, L1=25*mm, Rext=16.6*mm, Rint=5*mm, is_internal=True, is_stator=False)
 lam.slot = SlotMFlat2(
-    H1=1*mm, W0=4*mm, W0_is_rad=False, W1=4*mm, H0=10*mm, W3=0, Zs=8,
+    H1=1*mm, W1=2*mm, W0=4*mm, W0_is_rad=False, H0=10*mm, W3=0, Zs=8,
     magnet=list()
 )
-lam.slot.magnet.append(MagnetType10(Wmag=4*mm,Hmag=5*mm))
+lam.slot.magnet.append(MagnetType10(Wmag=4*mm,Hmag=10*mm))
 lam.plot()
 # Outward Slot
 # lam = LamSlotMag(slot=-1, L1=0.28, Rint=0.166, Rext=0.3, is_internal=False,)
