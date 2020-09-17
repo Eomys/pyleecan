@@ -31,7 +31,7 @@ def build_geometry(self):
     Z1 = Rbo * exp(-1j * alpha_slot / 2)
     Z8 = Rbo * exp(1j * alpha_slot / 2)
 
-    R1 = self.W0 / (2 * sin(alpha_mag / 2))
+    R1 = self.comp_W0m() / (2 * sin(alpha_mag / 2))
     Z3 = R1 * exp(-1j * alpha_mag / 2)
     Z6 = R1 * exp(1j * alpha_mag / 2)
 
