@@ -59,7 +59,7 @@ from .MagnetFlat import MagnetFlat
 
 
 class SlotMFlat2(SlotMag):
-    """Flat bottomed SlotMag with adjustable slot opening"""
+    """Flat bottomed SlotMag with adjustable slot opening (for spoke type IPMSM)"""
 
     VERSION = 1
     IS_SYMMETRICAL = 1

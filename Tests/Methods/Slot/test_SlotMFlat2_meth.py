@@ -31,6 +31,16 @@ lam.slot = SlotMFlat2(
 )
 lam.slot.magnet.append(MagnetType10(Wmag=4*mm,Hmag=10*mm))
 lam.plot()
+# W0 is rad
+lam.slot.W0_is_rad = True
+lam.slot.W0 = arcsin(4*mm/lam.slot.get_Rbo())
+lam.plot()
+# Wmag < W0
+lam.slot.magnet[0].Wmag = 2*mm
+lam.plot()
+# Hmag < H0
+lam.slot.magnet[0].Hmag = 2*mm
+lam.plot()
 #%%
 # Outward Slot
 lam = LamSlotMag(slot=-1, L1=25*mm, Rext=30*mm, Rint=16.6*mm, is_internal=False, is_stator=False)
@@ -42,7 +52,13 @@ lam.slot.magnet.append(MagnetType10(Wmag=4*mm,Hmag=10*mm))
 lam.plot()
 # W0 is rad
 lam.slot.W0_is_rad = True
-lam.slot.W0 = arcsin(2*mm/lam.slot.get_Rbo())
+lam.slot.W0 = arcsin(4*mm/lam.slot.get_Rbo())
+lam.plot()
+# Wmag < W0
+lam.slot.magnet[0].Wmag = 2*mm
+lam.plot()
+# Hmag < H0
+lam.slot.magnet[0].Hmag = 2*mm
 lam.plot()
 # %%
 

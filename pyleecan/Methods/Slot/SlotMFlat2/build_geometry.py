@@ -35,7 +35,6 @@ def build_geometry(self):
     Z3 = R1 * exp(-1j * alpha_mag / 2)
     Z6 = R1 * exp(1j * alpha_mag / 2)
 
-    
     if self.is_outwards():
         Z2 = Z1 + self.H1
         Z7 = Z8 + self.H1

@@ -7367,7 +7367,7 @@
             }
         ],
         "daughters": [],
-        "desc": "Flat bottomed SlotMag with adjustable slot opening",
+        "desc": "Flat bottomed SlotMag with adjustable slot opening (for spoke type IPMSM)",
         "is_internal": false,
         "methods": [
             "build_geometry",

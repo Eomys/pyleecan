@@ -21,5 +21,5 @@ def comp_angle_opening_slot(self):
     if self.W1 > 0:
         Rbo = self.get_Rbo()
         return float(2 * arcsin(self.W1 / (2 * Rbo)))
-    else: 
+    else:
         return self.comp_angle_opening()

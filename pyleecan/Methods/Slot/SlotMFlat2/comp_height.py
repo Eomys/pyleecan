@@ -25,8 +25,8 @@ def comp_height(self):
 
     if self.is_outwards():
         # R2 is the slot limit radius at the bottom of the slot
-        R2 = W0 /(2 * sin(arctan(W0/(2 * (Rbo+self.H1+self.H0)))))
-        return R2-Rbo
+        R2 = W0 / (2 * sin(arctan(W0 / (2 * (Rbo + self.H1 + self.H0)))))
+        return R2 - Rbo
     else:
-        R2 = W0 /(2 * sin(arctan(W0/(2 * (Rbo-self.H1-self.H0)))))
-        return Rbo-R2
+        R2 = W0 / (2 * sin(arctan(W0 / (2 * (Rbo - self.H1 - self.H0)))))
+        return Rbo - R2

@@ -21,7 +21,6 @@ def get_point_bottom(self):
     alpha = self.comp_angle_opening_magnet()
     R1 = self.comp_W0m() / (2 * sin(alpha / 2))
 
-
     if self.is_outwards():
         Z1 = R1 * exp(-1j * alpha / 2) + self.H0
         Z2 = R1 * exp(1j * alpha / 2) + self.H0
