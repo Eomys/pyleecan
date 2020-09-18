@@ -22,7 +22,7 @@ def add_point(self, coord):
     if self.is_exist(coord):
         return None
     else:
-        if self.coordinate.size > 0:
+        if self.coordinate is not None and self.coordinate.size > 0:
             self.coordinate = np.vstack((self.coordinate, coord))
             new_ind = max(self.indice) + 1
             self.indice = np.concatenate((self.indice, np.array([new_ind], dtype=int)))

@@ -96,7 +96,7 @@ def test_class_init_default(class_dict):
             if type(prop["value"]) is list:
                 expect = array(prop["value"])
             else:
-                expect = empty(0)
+                expect = None
             assert array_equal(result, expect), (
                 "Error for class "
                 + class_dict["name"]
@@ -154,10 +154,10 @@ def test_class_as_dict(class_dict):
     # Generated the expected result dict
     for prop in prop_list:
         if prop["type"] == "ndarray":
-            if type(prop["value"]) is list:
-                d[prop["name"]] = prop["value"]
+            if prop["value"] == "":
+                d[prop["name"]] = None
             else:
-                d[prop["name"]] = list()
+                d[prop["name"]] = prop["value"]
         elif prop["value"] in ["None", None]:
             d[prop["name"]] = None
         elif type(prop["value"]) is str and "()" in prop["value"]:
@@ -216,9 +216,7 @@ def test_class_set_None(class_dict):
     prop_list = get_mother_attr(gen_dict, class_dict, "properties")[0]
     for prop in prop_list:
         # ndarray set as None are set as array([])
-        if prop["type"] == "ndarray":
-            assert array_equal(test_obj.__getattribute__(prop["name"]), array([]))
-        elif prop["type"] in PYTHON_TYPE:
+        if prop["type"] in PYTHON_TYPE or prop["type"] == "ndarray":
             assert test_obj.__getattribute__(prop["name"]) == None
 
 

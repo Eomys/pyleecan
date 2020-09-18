@@ -213,9 +213,7 @@ class WindingUD(Winding):
 
     def _set_user_wind_mat(self, value):
         """setter of user_wind_mat"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:

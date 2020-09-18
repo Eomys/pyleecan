@@ -215,9 +215,7 @@ class OutGeoLam(FrozenClass):
 
     def _set_BH_curve(self, value):
         """setter of BH_curve"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:

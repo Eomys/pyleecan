@@ -285,9 +285,7 @@ class VarLoadCurrent(VarLoad):
 
     def _set_OP_matrix(self, value):
         """setter of OP_matrix"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:
