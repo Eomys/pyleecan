@@ -33,15 +33,7 @@ class OptiSolver(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        problem=-1,
-        xoutput=-1,
-        logger_name="Pyleecan.OptiSolver",
-        is_keep_all_output=False,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, problem=-1, xoutput=-1, logger_name="Pyleecan.OptiSolver", is_keep_all_output=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -57,9 +49,8 @@ class OptiSolver(FrozenClass):
             problem = OptiProblem()
         if xoutput == -1:
             xoutput = XOutput()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -86,7 +77,6 @@ class OptiSolver(FrozenClass):
             self.problem = OptiProblem(init_dict=problem)
         elif isinstance(problem, str):
             from ..Functions.load import load
-
             self.problem = load(problem)
         else:
             self.problem = problem
@@ -95,7 +85,6 @@ class OptiSolver(FrozenClass):
             self.xoutput = XOutput(init_dict=xoutput)
         elif isinstance(xoutput, str):
             from ..Functions.load import load
-
             self.xoutput = load(xoutput)
         else:
             self.xoutput = xoutput
@@ -115,18 +104,16 @@ class OptiSolver(FrozenClass):
             OptiSolver_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.problem is not None:
             tmp = self.problem.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OptiSolver_str += "problem = " + tmp
+            OptiSolver_str += "problem = "+ tmp
         else:
             OptiSolver_str += "problem = None" + linesep + linesep
         if self.xoutput is not None:
             tmp = self.xoutput.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OptiSolver_str += "xoutput = " + tmp
+            OptiSolver_str += "xoutput = "+ tmp
         else:
             OptiSolver_str += "xoutput = None" + linesep + linesep
         OptiSolver_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OptiSolver_str += (
-            "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
-        )
+        OptiSolver_str += "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
         return OptiSolver_str
 
     def __eq__(self, other):
@@ -184,7 +171,6 @@ class OptiSolver(FrozenClass):
 
         if self._problem is not None:
             self._problem.parent = self
-
     problem = property(
         fget=_get_problem,
         fset=_set_problem,
@@ -205,7 +191,6 @@ class OptiSolver(FrozenClass):
 
         if self._xoutput is not None:
             self._xoutput.parent = self
-
     xoutput = property(
         fget=_get_xoutput,
         fset=_set_xoutput,

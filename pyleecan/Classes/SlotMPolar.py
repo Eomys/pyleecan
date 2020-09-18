@@ -24,9 +24,7 @@ except ImportError as error:
     comp_angle_opening = error
 
 try:
-    from ..Methods.Slot.SlotMPolar.comp_angle_opening_magnet import (
-        comp_angle_opening_magnet,
-    )
+    from ..Methods.Slot.SlotMPolar.comp_angle_opening_magnet import comp_angle_opening_magnet
 except ImportError as error:
     comp_angle_opening_magnet = error
 
@@ -139,9 +137,7 @@ class SlotMPolar(SlotMag):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, W0=0.314, H0=0, magnet=list(), W3=0, Zs=36, init_dict=None, init_str=None
-    ):
+    def __init__(self, W0=0.314, H0=0, magnet=list(), W3=0, Zs=36, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -153,9 +149,8 @@ class SlotMPolar(SlotMag):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -181,37 +176,29 @@ class SlotMPolar(SlotMag):
         # Initialisation by argument
         self.W0 = W0
         self.H0 = H0
-        # magnet can be None or a list of MagnetPolar object or a list of dict
+        # magnet can be None or a list of MagnetPolar object
+        self.magnet = list()
         if type(magnet) is list:
-            # Check if the list is only composed of MagnetPolar
-            if len(magnet) > 0 and all(isinstance(obj, MagnetPolar) for obj in magnet):
-                # set the list to keep pointer reference
-                self.magnet = magnet
-            else:
-                self.magnet = list()
-                for obj in magnet:
-                    if not isinstance(obj, dict):  # Default value
-                        self.magnet.append(obj)
-                    elif isinstance(obj, dict):
-                        # Check that the type is correct (including daughter)
-                        class_name = obj.get("__class__")
-                        if class_name not in [
-                            "MagnetPolar",
-                            "MagnetType11",
-                            "MagnetType14",
-                        ]:
-                            raise InitUnKnowClassError(
-                                "Unknow class name "
-                                + class_name
-                                + " in init_dict for magnet"
-                            )
-                        # Dynamic import to call the correct constructor
-                        module = __import__(
-                            "pyleecan.Classes." + class_name, fromlist=[class_name]
+            for obj in magnet:
+                if obj is None:  # Default value
+                    self.magnet.append(MagnetPolar())
+                elif isinstance(obj, dict):
+                    # Check that the type is correct (including daughter)
+                    class_name = obj.get("__class__")
+                    if class_name not in ['MagnetPolar', 'MagnetType11', 'MagnetType14']:
+                        raise InitUnKnowClassError(
+                            "Unknow class name "
+                            + class_name
+                            + " in init_dict for magnet"
                         )
-                        class_obj = getattr(module, class_name)
-                        self.magnet.append(class_obj(init_dict=obj))
-
+                    # Dynamic import to call the correct constructor
+                    module = __import__(
+                        "pyleecan.Classes." + class_name, fromlist=[class_name]
+                    )
+                    class_obj = getattr(module, class_name)
+                    self.magnet.append(class_obj(init_dict=obj))
+                else:
+                    self.magnet.append(obj)
         elif magnet is None:
             self.magnet = list()
         else:
@@ -233,7 +220,7 @@ class SlotMPolar(SlotMag):
             SlotMPolar_str += "magnet = []" + linesep
         for ii in range(len(self.magnet)):
             tmp = self.magnet[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            SlotMPolar_str += "magnet[" + str(ii) + "] =" + tmp + linesep + linesep
+            SlotMPolar_str += "magnet["+str(ii)+"] ="+ tmp + linesep + linesep
         return SlotMPolar_str
 
     def __eq__(self, other):

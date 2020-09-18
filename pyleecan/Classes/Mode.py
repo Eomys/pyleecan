@@ -98,20 +98,7 @@ class Mode(SolutionMat):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        nat_freq=None,
-        order_circ=None,
-        order_long=None,
-        field=None,
-        indice=None,
-        axis=None,
-        type_cell="triangle",
-        label=None,
-        dimension=2,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, nat_freq=None, order_circ=None, order_long=None, field=None, indice=None, axis=None, type_cell="triangle", label=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -123,9 +110,8 @@ class Mode(SolutionMat):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -138,7 +124,6 @@ class Mode(SolutionMat):
             axis = obj.axis
             type_cell = obj.type_cell
             label = obj.label
-            dimension = obj.dimension
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -158,21 +143,12 @@ class Mode(SolutionMat):
                 type_cell = init_dict["type_cell"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
-            if "dimension" in list(init_dict.keys()):
-                dimension = init_dict["dimension"]
         # Initialisation by argument
         self.nat_freq = nat_freq
         self.order_circ = order_circ
         self.order_long = order_long
         # Call SolutionMat init
-        super(Mode, self).__init__(
-            field=field,
-            indice=indice,
-            axis=axis,
-            type_cell=type_cell,
-            label=label,
-            dimension=dimension,
-        )
+        super(Mode, self).__init__(field=field, indice=indice, axis=axis, type_cell=type_cell, label=label)
         # The class is frozen (in SolutionMat init), for now it's impossible to
         # add new properties
 

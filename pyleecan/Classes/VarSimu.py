@@ -49,19 +49,7 @@ class VarSimu(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        name="",
-        desc="",
-        datakeeper_list=list(),
-        nb_proc=1,
-        is_keep_all_output=False,
-        stop_if_error=False,
-        ref_simu_index=None,
-        nb_simu=0,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, name="", desc="", datakeeper_list=list(), nb_proc=1, is_keep_all_output=False, stop_if_error=False, ref_simu_index=None, nb_simu=0, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -73,9 +61,8 @@ class VarSimu(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -153,13 +140,8 @@ class VarSimu(FrozenClass):
         if len(self.datakeeper_list) == 0:
             VarSimu_str += "datakeeper_list = []" + linesep
         for ii in range(len(self.datakeeper_list)):
-            tmp = (
-                self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            VarSimu_str += (
-                "datakeeper_list[" + str(ii) + "] =" + tmp + linesep + linesep
-            )
+            tmp = self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            VarSimu_str += "datakeeper_list["+str(ii)+"] ="+ tmp + linesep + linesep
         VarSimu_str += "nb_proc = " + str(self.nb_proc) + linesep
         VarSimu_str += "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
         VarSimu_str += "stop_if_error = " + str(self.stop_if_error) + linesep

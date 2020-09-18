@@ -184,15 +184,7 @@ class SurfRing(Surface):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        out_surf=-1,
-        in_surf=-1,
-        point_ref=0,
-        label="",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, out_surf=-1, in_surf=-1, point_ref=0, label="", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -208,9 +200,8 @@ class SurfRing(Surface):
             out_surf = Surface()
         if in_surf == -1:
             in_surf = Surface()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -235,78 +226,56 @@ class SurfRing(Surface):
         if isinstance(out_surf, dict):
             # Check that the type is correct (including daughter)
             class_name = out_surf.get("__class__")
-            if class_name not in [
-                "Surface",
-                "Circle",
-                "PolarArc",
-                "SurfLine",
-                "SurfRing",
-                "Trapeze",
-            ]:
+            if class_name not in ['Surface', 'Circle', 'PolarArc', 'SurfLine', 'SurfRing', 'Trapeze']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for out_surf"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for out_surf"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.out_surf = class_obj(init_dict=out_surf)
         elif isinstance(out_surf, str):
             from ..Functions.load import load
-
             out_surf = load(out_surf)
             # Check that the type is correct (including daughter)
             class_name = out_surf.__class__.__name__
-            if class_name not in [
-                "Surface",
-                "Circle",
-                "PolarArc",
-                "SurfLine",
-                "SurfRing",
-                "Trapeze",
-            ]:
+            if class_name not in ['Surface', 'Circle', 'PolarArc', 'SurfLine', 'SurfRing', 'Trapeze']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for out_surf"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for out_surf"
                 )
-            self.out_surf = out_surf
+            self.out_surf=out_surf
         else:
             self.out_surf = out_surf
         # in_surf can be None, a Surface object or a dict
         if isinstance(in_surf, dict):
             # Check that the type is correct (including daughter)
             class_name = in_surf.get("__class__")
-            if class_name not in [
-                "Surface",
-                "Circle",
-                "PolarArc",
-                "SurfLine",
-                "SurfRing",
-                "Trapeze",
-            ]:
+            if class_name not in ['Surface', 'Circle', 'PolarArc', 'SurfLine', 'SurfRing', 'Trapeze']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for in_surf"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for in_surf"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.in_surf = class_obj(init_dict=in_surf)
         elif isinstance(in_surf, str):
             from ..Functions.load import load
-
             in_surf = load(in_surf)
             # Check that the type is correct (including daughter)
             class_name = in_surf.__class__.__name__
-            if class_name not in [
-                "Surface",
-                "Circle",
-                "PolarArc",
-                "SurfLine",
-                "SurfRing",
-                "Trapeze",
-            ]:
+            if class_name not in ['Surface', 'Circle', 'PolarArc', 'SurfLine', 'SurfRing', 'Trapeze']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for in_surf"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for in_surf"
                 )
-            self.in_surf = in_surf
+            self.in_surf=in_surf
         else:
             self.in_surf = in_surf
         # Call Surface init
@@ -322,12 +291,12 @@ class SurfRing(Surface):
         SurfRing_str += super(SurfRing, self).__str__()
         if self.out_surf is not None:
             tmp = self.out_surf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            SurfRing_str += "out_surf = " + tmp
+            SurfRing_str += "out_surf = "+ tmp
         else:
             SurfRing_str += "out_surf = None" + linesep + linesep
         if self.in_surf is not None:
             tmp = self.in_surf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            SurfRing_str += "in_surf = " + tmp
+            SurfRing_str += "in_surf = "+ tmp
         else:
             SurfRing_str += "in_surf = None" + linesep + linesep
         return SurfRing_str
@@ -387,7 +356,6 @@ class SurfRing(Surface):
 
         if self._out_surf is not None:
             self._out_surf.parent = self
-
     out_surf = property(
         fget=_get_out_surf,
         fset=_set_out_surf,
@@ -408,7 +376,6 @@ class SurfRing(Surface):
 
         if self._in_surf is not None:
             self._in_surf.parent = self
-
     in_surf = property(
         fget=_get_in_surf,
         fset=_set_in_surf,

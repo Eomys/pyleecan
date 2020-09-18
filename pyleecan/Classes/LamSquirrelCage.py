@@ -34,9 +34,7 @@ except ImportError as error:
     plot = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCage.comp_number_phase_eq import (
-        comp_number_phase_eq,
-    )
+    from ..Methods.Machine.LamSquirrelCage.comp_number_phase_eq import comp_number_phase_eq
 except ImportError as error:
     comp_number_phase_eq = error
 
@@ -137,28 +135,7 @@ class LamSquirrelCage(LamSlotWind):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        Hscr=0.03,
-        Lscr=0.015,
-        ring_mat=-1,
-        Ksfill=None,
-        winding=-1,
-        slot=-1,
-        L1=0.35,
-        mat_type=-1,
-        Nrvd=0,
-        Wrvd=0,
-        Kf1=0.95,
-        is_internal=True,
-        Rint=0,
-        Rext=1,
-        is_stator=True,
-        axial_vent=list(),
-        notch=list(),
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, Hscr=0.03, Lscr=0.015, ring_mat=-1, Ksfill=None, winding=-1, slot=-1, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), notch=list(), init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -178,9 +155,8 @@ class LamSquirrelCage(LamSlotWind):
             slot = Slot()
         if mat_type == -1:
             mat_type = Material()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -247,27 +223,11 @@ class LamSquirrelCage(LamSlotWind):
             self.ring_mat = Material(init_dict=ring_mat)
         elif isinstance(ring_mat, str):
             from ..Functions.load import load
-
             self.ring_mat = load(ring_mat)
         else:
             self.ring_mat = ring_mat
         # Call LamSlotWind init
-        super(LamSquirrelCage, self).__init__(
-            Ksfill=Ksfill,
-            winding=winding,
-            slot=slot,
-            L1=L1,
-            mat_type=mat_type,
-            Nrvd=Nrvd,
-            Wrvd=Wrvd,
-            Kf1=Kf1,
-            is_internal=is_internal,
-            Rint=Rint,
-            Rext=Rext,
-            is_stator=is_stator,
-            axial_vent=axial_vent,
-            notch=notch,
-        )
+        super(LamSquirrelCage, self).__init__(Ksfill=Ksfill, winding=winding, slot=slot, L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
         # The class is frozen (in LamSlotWind init), for now it's impossible to
         # add new properties
 
@@ -281,7 +241,7 @@ class LamSquirrelCage(LamSlotWind):
         LamSquirrelCage_str += "Lscr = " + str(self.Lscr) + linesep
         if self.ring_mat is not None:
             tmp = self.ring_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            LamSquirrelCage_str += "ring_mat = " + tmp
+            LamSquirrelCage_str += "ring_mat = "+ tmp
         else:
             LamSquirrelCage_str += "ring_mat = None" + linesep + linesep
         return LamSquirrelCage_str
@@ -379,7 +339,6 @@ class LamSquirrelCage(LamSlotWind):
 
         if self._ring_mat is not None:
             self._ring_mat.parent = self
-
     ring_mat = property(
         fget=_get_ring_mat,
         fset=_set_ring_mat,

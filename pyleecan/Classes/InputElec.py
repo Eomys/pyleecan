@@ -81,22 +81,7 @@ class InputElec(Input):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        N0=None,
-        rot_dir=-1,
-        Id_ref=None,
-        Iq_ref=None,
-        Ud_ref=None,
-        Uq_ref=None,
-        time=None,
-        angle=None,
-        Nt_tot=2048,
-        Nrev=1,
-        Na_tot=2048,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, N0=None, rot_dir=-1, Id_ref=None, Iq_ref=None, Ud_ref=None, Uq_ref=None, time=None, angle=None, Nt_tot=2048, Nrev=1, Na_tot=2048, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -112,9 +97,8 @@ class InputElec(Input):
             time = ImportMatrix()
         if angle == -1:
             angle = ImportMatrix()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -163,9 +147,7 @@ class InputElec(Input):
         self.Ud_ref = Ud_ref
         self.Uq_ref = Uq_ref
         # Call Input init
-        super(InputElec, self).__init__(
-            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
-        )
+        super(InputElec, self).__init__(time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot)
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 

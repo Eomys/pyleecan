@@ -80,9 +80,7 @@ class Shaft(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, Lshaft=0.442, mat_type=-1, Drsh=0.045, init_dict=None, init_str=None
-    ):
+    def __init__(self, Lshaft=0.442, mat_type=-1, Drsh=0.045, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -96,9 +94,8 @@ class Shaft(FrozenClass):
 
         if mat_type == -1:
             mat_type = Material()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -123,7 +120,6 @@ class Shaft(FrozenClass):
             self.mat_type = Material(init_dict=mat_type)
         elif isinstance(mat_type, str):
             from ..Functions.load import load
-
             self.mat_type = load(mat_type)
         else:
             self.mat_type = mat_type
@@ -143,7 +139,7 @@ class Shaft(FrozenClass):
         Shaft_str += "Lshaft = " + str(self.Lshaft) + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Shaft_str += "mat_type = " + tmp
+            Shaft_str += "mat_type = "+ tmp
         else:
             Shaft_str += "mat_type = None" + linesep + linesep
         Shaft_str += "Drsh = " + str(self.Drsh) + linesep
@@ -216,7 +212,6 @@ class Shaft(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
-
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,

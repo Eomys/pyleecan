@@ -31,7 +31,7 @@ class Mesh(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, label=None, dimension=2, init_dict=None, init_str=None):
+    def __init__(self, label=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -43,26 +43,21 @@ class Mesh(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
             assert type(obj) is type(self)
             label = obj.label
-            dimension = obj.dimension
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
-            if "dimension" in list(init_dict.keys()):
-                dimension = init_dict["dimension"]
         # Initialisation by argument
         self.parent = None
         self.label = label
-        self.dimension = dimension
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -76,7 +71,6 @@ class Mesh(FrozenClass):
         else:
             Mesh_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Mesh_str += 'label = "' + str(self.label) + '"' + linesep
-        Mesh_str += "dimension = " + str(self.dimension) + linesep
         return Mesh_str
 
     def __eq__(self, other):
@@ -86,8 +80,6 @@ class Mesh(FrozenClass):
             return False
         if other.label != self.label:
             return False
-        if other.dimension != self.dimension:
-            return False
         return True
 
     def as_dict(self):
@@ -96,7 +88,6 @@ class Mesh(FrozenClass):
 
         Mesh_dict = dict()
         Mesh_dict["label"] = self.label
-        Mesh_dict["dimension"] = self.dimension
         # The class name is added to the dict fordeserialisation purpose
         Mesh_dict["__class__"] = "Mesh"
         return Mesh_dict
@@ -105,7 +96,6 @@ class Mesh(FrozenClass):
         """Set all the properties to None (except pyleecan object)"""
 
         self.label = None
-        self.dimension = None
 
     def _get_label(self):
         """getter of label"""
@@ -122,25 +112,5 @@ class Mesh(FrozenClass):
         doc=u"""Description of the mesh
 
         :Type: str
-        """,
-    )
-
-    def _get_dimension(self):
-        """getter of dimension"""
-        return self._dimension
-
-    def _set_dimension(self, value):
-        """setter of dimension"""
-        check_var("dimension", value, "int", Vmin=1, Vmax=3)
-        self._dimension = value
-
-    dimension = property(
-        fget=_get_dimension,
-        fset=_set_dimension,
-        doc=u"""Dimension of the physical problem
-
-        :Type: int
-        :min: 1
-        :max: 3
         """,
     )

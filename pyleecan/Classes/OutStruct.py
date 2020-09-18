@@ -14,10 +14,9 @@ from ._frozen import FrozenClass
 from numpy import array, array_equal
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
-
-try:
+try :
     from SciDataTool.Classes.DataND import DataND
-except ImportError:
+except ImportError :
     DataND = ImportError
 from ._check import InitUnKnowClassError
 
@@ -39,19 +38,7 @@ class OutStruct(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        time=None,
-        angle=None,
-        Nt_tot=None,
-        Na_tot=None,
-        logger_name="Pyleecan.OutStruct",
-        Yr=None,
-        Vr=None,
-        Ar=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, time=None, angle=None, Nt_tot=None, Na_tot=None, logger_name="Pyleecan.OutStruct", Yr=None, Vr=None, Ar=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -63,9 +50,8 @@ class OutStruct(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -108,7 +94,7 @@ class OutStruct(FrozenClass):
         self.logger_name = logger_name
         # Check if the type DataND has been imported with success
         if isinstance(DataND, ImportError):
-            raise ImportError("Unknown type DataND please install SciDataTool")
+            raise ImportError('Unknown type DataND please install SciDataTool')
         self.Yr = Yr
         self.Vr = Vr
         self.Ar = Ar
@@ -124,26 +110,14 @@ class OutStruct(FrozenClass):
             OutStruct_str += "parent = None " + linesep
         else:
             OutStruct_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutStruct_str += (
-            "time = "
-            + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutStruct_str += (
-            "angle = "
-            + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutStruct_str += "time = " + linesep + str(self.time).replace(linesep, linesep + "\t") + linesep + linesep
+        OutStruct_str += "angle = " + linesep + str(self.angle).replace(linesep, linesep + "\t") + linesep + linesep
         OutStruct_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutStruct_str += "Na_tot = " + str(self.Na_tot) + linesep
         OutStruct_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OutStruct_str += "Yr = " + str(self.Yr) + linesep + linesep
-        OutStruct_str += "Vr = " + str(self.Vr) + linesep + linesep
-        OutStruct_str += "Ar = " + str(self.Ar) + linesep + linesep
+        OutStruct_str += "Yr = "+ str(self.Yr) + linesep + linesep
+        OutStruct_str += "Vr = "+ str(self.Vr) + linesep + linesep
+        OutStruct_str += "Ar = "+ str(self.Ar) + linesep + linesep
         return OutStruct_str
 
     def __eq__(self, other):
@@ -187,28 +161,16 @@ class OutStruct(FrozenClass):
         OutStruct_dict["logger_name"] = self.logger_name
         if self.Yr is None:
             OutStruct_dict["Yr"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutStruct_dict["Yr"] = {
-                "__class__": str(type(self._Yr)),
-                "__repr__": str(self._Yr.__repr__()),
-                "serialized": dumps(self._Yr).decode("ISO-8859-2"),
-            }
+        else: # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutStruct_dict['Yr'] ={"__class__" : str(type(self._Yr)),"__repr__":str(self._Yr.__repr__()),"serialized":dumps(self._Yr).decode('ISO-8859-2')}
         if self.Vr is None:
             OutStruct_dict["Vr"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutStruct_dict["Vr"] = {
-                "__class__": str(type(self._Vr)),
-                "__repr__": str(self._Vr.__repr__()),
-                "serialized": dumps(self._Vr).decode("ISO-8859-2"),
-            }
+        else: # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutStruct_dict['Vr'] ={"__class__" : str(type(self._Vr)),"__repr__":str(self._Vr.__repr__()),"serialized":dumps(self._Vr).decode('ISO-8859-2')}
         if self.Ar is None:
             OutStruct_dict["Ar"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutStruct_dict["Ar"] = {
-                "__class__": str(type(self._Ar)),
-                "__repr__": str(self._Ar.__repr__()),
-                "serialized": dumps(self._Ar).decode("ISO-8859-2"),
-            }
+        else: # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutStruct_dict['Ar'] ={"__class__" : str(type(self._Ar)),"__repr__":str(self._Ar.__repr__()),"serialized":dumps(self._Ar).decode('ISO-8859-2')}
         # The class name is added to the dict fordeserialisation purpose
         OutStruct_dict["__class__"] = "OutStruct"
         return OutStruct_dict
@@ -331,18 +293,15 @@ class OutStruct(FrozenClass):
 
     def _set_Yr(self, value):
         """setter of Yr"""
-        try:  # Check the type
+        try: # Check the type 
             check_var("Yr", value, "dict")
         except CheckTypeError:
             check_var("Yr", value, "SciDataTool.Classes.DataND.DataND")
             # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Yr = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Yr = value
-
+        if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Yr = loads(value["serialized"].encode('ISO-8859-2'))
+        else: 
+            self._Yr= value 
     Yr = property(
         fget=_get_Yr,
         fset=_set_Yr,
@@ -358,18 +317,15 @@ class OutStruct(FrozenClass):
 
     def _set_Vr(self, value):
         """setter of Vr"""
-        try:  # Check the type
+        try: # Check the type 
             check_var("Vr", value, "dict")
         except CheckTypeError:
             check_var("Vr", value, "SciDataTool.Classes.DataND.DataND")
             # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Vr = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Vr = value
-
+        if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Vr = loads(value["serialized"].encode('ISO-8859-2'))
+        else: 
+            self._Vr= value 
     Vr = property(
         fget=_get_Vr,
         fset=_set_Vr,
@@ -385,18 +341,15 @@ class OutStruct(FrozenClass):
 
     def _set_Ar(self, value):
         """setter of Ar"""
-        try:  # Check the type
+        try: # Check the type 
             check_var("Ar", value, "dict")
         except CheckTypeError:
             check_var("Ar", value, "SciDataTool.Classes.DataND.DataND")
             # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Ar = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Ar = value
-
+        if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Ar = loads(value["serialized"].encode('ISO-8859-2'))
+        else: 
+            self._Ar= value 
     Ar = property(
         fget=_get_Ar,
         fset=_set_Ar,
