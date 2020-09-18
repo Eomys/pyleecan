@@ -2,7 +2,7 @@
 
 import matplotlib.pyplot as plt
 from numpy import where, argmin, abs, squeeze, split
-
+from itertools import repeat
 from ...Functions.init_fig import init_subplot, init_fig
 from ...definitions import config_dict
 
@@ -14,6 +14,7 @@ def plot_A_2D(
     Ydatas,
     legend_list=[""],
     color_list=[(0, 0, 1, 0.5)],
+    linestyle_list=["-"],
     linewidth_list=[3],
     title="",
     xlabel="",
@@ -83,34 +84,40 @@ def plot_A_2D(
         (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
     fig, ax = init_subplot(fig=fig, subplot_index=subplot_index)
 
+    # Number of curves on a axe
+    ndatas = len(Ydatas)
+
     # Expend default argument
-    if len(color_list) < len(Ydatas) and len(color_list) == 1:
+    if 1 == len(color_list) < ndatas:
         # Set the same color for all curves
-        color_list = [color_list[0] for Y in Ydatas]
-    if len(linewidth_list) < len(Ydatas) and len(linewidth_list) == 1:
+        color_list = list(repeat(color_list[0], ndatas))
+    if 1 == len(linewidth_list) < ndatas:
         # Set the same color for all curves
-        linewidth_list = [linewidth_list[0] for Y in Ydatas]
-    if len(legend_list) < len(Ydatas) and len(legend_list) == 1:
+        linewidth_list = list(repeat(linewidth_list[0], ndatas))
+    if 1 == len(linestyle_list) < ndatas:
+        # Set the same linestyles for all curves
+        linestyle_list = list(repeat(linestyle_list[0], ndatas))
+    if 1 == len(legend_list) < ndatas:
         # Set no legend for all curves
-        legend_list = ["" for Y in Ydatas]
+        legend_list = list(repeat("", ndatas))
         no_legend = True
     else:
         no_legend = False
 
     # Plot
     if type == "curve":
-        for i in range(len(Ydatas)):
+        for i in range(ndatas):
             ax.plot(
                 Xdata,
                 Ydatas[i],
                 color=color_list[i],
                 label=legend_list[i],
                 linewidth=linewidth_list[i],
+                ls=linestyle_list[i],
             )
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
     elif type == "bargraph":
-        ndatas = len(Ydatas)
         positions = range(-ndatas + 1, ndatas, 2)
         for i in range(ndatas):
             width = (Xdata[1] - Xdata[0]) / ndatas
@@ -131,7 +138,7 @@ def plot_A_2D(
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
     elif type == "barchart":
-        for i in range(len(Ydatas)):
+        for i in range(ndatas):
             if i == 0:
                 ax.bar(
                     range(len(Xdata)),
@@ -152,7 +159,7 @@ def plot_A_2D(
                 )
         plt.xticks(range(len(Xdata)), [str(f) for f in Xdata], rotation=90)
     elif type == "quiver":
-        for i in range(len(Ydatas)):
+        for i in range(ndatas):
             x = [e[0] for e in Xdata]
             y = [e[1] for e in Xdata]
             vect_list = split(Ydatas[i], 2)
@@ -175,7 +182,7 @@ def plot_A_2D(
     if is_grid:
         ax.grid()
 
-    if len(Ydatas) > 1 and not no_legend:
+    if ndatas > 1 and not no_legend:
         ax.legend(prop={"family": FONT_NAME, "size": 22})
 
     plt.tight_layout()

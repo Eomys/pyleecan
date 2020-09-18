@@ -21,6 +21,7 @@ def plot_A_space(
     data_list=[],
     legend_list=[],
     color_list=[],
+    linestyle_list=[],
     save_path=None,
     y_min=None,
     y_max=None,
@@ -80,6 +81,8 @@ def plot_A_space(
     data_list2 = [data] + data_list
     if legend_list == []:
         legend_list = [d.name for d in data_list2]
+    if linestyle_list == []:
+        legend_list = ["-" for d in data_list2]
     curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
     phase_colors = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
     legends = []
@@ -165,6 +168,7 @@ def plot_A_space(
         Ydata,
         legend_list=legends,
         color_list=color_list,
+        linestyle_list=linestyle_list,
         fig=fig,
         title=title,
         xlabel=xlabel,
@@ -233,6 +237,7 @@ def plot_A_space(
             Ydata,
             legend_list=legend_list,
             color_list=color_list,
+            linestyle_list=linestyle_list,
             fig=fig,
             title=title,
             xlabel=xlabel,
