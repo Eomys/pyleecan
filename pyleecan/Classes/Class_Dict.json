@@ -4305,6 +4305,24 @@
                 "type": "DXFImport",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "To import an existing femm file",
+                "max": "",
+                "min": "",
+                "name": "import_file",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "To close femm automatically after the simulation",
+                "max": "",
+                "min": "",
+                "name": "is_close_femm",
+                "type": "bool",
+                "unit": "",
+                "value": 1
             }
         ]
     },

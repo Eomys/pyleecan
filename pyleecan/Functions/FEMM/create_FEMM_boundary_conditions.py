@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
 
-from femm import mi_addboundprop
-
-
-def create_FEMM_boundary_conditions(sym, is_antiper):
+def create_FEMM_boundary_conditions(femm, sym, is_antiper):
     """Create the boundary conditions in FEMM
 
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     sym : int
         Symmetry factor of the machine
     is_antiper : bool
@@ -29,12 +28,12 @@ def create_FEMM_boundary_conditions(sym, is_antiper):
         BdPr = 4
 
     # Dirichlet (no flux going out)
-    mi_addboundprop("bc_A0", 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    femm.mi_addboundprop("bc_A0", 0, 0, 0, 0, 0, 0, 0, 0, 0)
     # periodic and anti periodic conditions
-    mi_addboundprop("bc_ag2", 0, 0, 0, 0, 0, 0, 0, 0, BdPr + 2)
+    femm.mi_addboundprop("bc_ag2", 0, 0, 0, 0, 0, 0, 0, 0, BdPr + 2)
     if sym > 1:
-        mi_addboundprop("bc_s1", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
-        mi_addboundprop("bc_ag1", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
-        mi_addboundprop("bc_ag3", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
-        mi_addboundprop("bc_r1", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
-        mi_addboundprop("bc_r2", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
+        femm.mi_addboundprop("bc_s1", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
+        femm.mi_addboundprop("bc_ag1", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
+        femm.mi_addboundprop("bc_ag3", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
+        femm.mi_addboundprop("bc_r1", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
+        femm.mi_addboundprop("bc_r2", 0, 0, 0, 0, 0, 0, 0, 0, BdPr)
