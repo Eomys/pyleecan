@@ -5,7 +5,6 @@ from ....Functions.Simulation.VarSimu.run_single_simu import run_single_simu
 
 def run(self):
     """Run each simulation contained"""
-
     # Check var_simu parameters
     self.check_param()
 
@@ -25,19 +24,21 @@ def run(self):
         xoutput.xoutput_dict[datakeeper.symbol] = datakeeper
         datakeeper.result = [None] * self.nb_simu
 
-    # Execute the reference simulation if needed
+    # Execute the reference simulation it is included in the simulation list
+    # Otherwise, the reference simulation is already executed in the simulation.run method
     nb_simu = self.nb_simu
     ref_simu_index = self.ref_simu_index
     index_list = list(range(nb_simu))
 
     ref_simu_in_multsim = isinstance(self.ref_simu_index, int)
 
-    if ref_simu_index:
+    if ref_simu_in_multsim:
         logger = self.get_logger()
         logger.info("Computing reference simulation")
 
         simulation = simulation_list.pop(ref_simu_index)
         index_list.pop(ref_simu_index)
+        simulation.parent = xoutput
 
         # Run the simulation handling errors
         run_single_simu(
@@ -60,7 +61,7 @@ def run(self):
             end="",
         )
 
-    # Execute the other (TODO parallelization)
+    # Execute the other simulations
     nb_simu = self.nb_simu
     for idx, [i, simulation] in zip(index_list, enumerate(simulation_list)):
         # Run the simulation handling errors
