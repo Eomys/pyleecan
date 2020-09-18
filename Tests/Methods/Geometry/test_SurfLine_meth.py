@@ -12,8 +12,7 @@ class test_SurfLine_meth(TestCase):
     """Unittest for SurfLine methods"""
 
     def test_comp_length(self):
-        """Check that you can compute the length of the Surface
-        """
+        """Check that you can compute the length of the Surface"""
         line1 = Arc1(begin=1, end=1j, radius=1)
         line1.comp_length = MagicMock(return_value=1)
         line2 = Arc2(begin=1, center=0, angle=pi / 2)
@@ -29,8 +28,7 @@ class test_SurfLine_meth(TestCase):
         self.assertAlmostEqual(abs(length - 3), 0)
 
     def test_rotate(self):
-        """Check that you can rotate the surface
-        """
+        """Check that you can rotate the surface"""
         line1 = Arc1(begin=1, end=1j, radius=1)
         line2 = Arc2(begin=1, center=0, angle=pi / 2)
         line3 = Segment(begin=1j, end=0)
@@ -44,8 +42,7 @@ class test_SurfLine_meth(TestCase):
         self.assertAlmostEqual(line3.end, 0)
 
     def test_translate(self):
-        """Check that you can rotate the surface
-        """
+        """Check that you can rotate the surface"""
         line1 = Arc1(begin=1, end=1j, radius=1)
         line2 = Arc2(begin=1, center=0, angle=pi / 2)
         line3 = Segment(begin=1j, end=0)

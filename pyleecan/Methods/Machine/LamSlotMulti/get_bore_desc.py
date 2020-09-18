@@ -4,7 +4,7 @@ from numpy import exp, pi
 
 
 def get_bore_desc(self, sym=1):
-    """This method returns an ordered description of the elements 
+    """This method returns an ordered description of the elements
     that defines the bore radius of the lamination
 
     Parameters
@@ -14,7 +14,7 @@ def get_bore_desc(self, sym=1):
 
     Returns
     -------
-    bore_desc : list 
+    bore_desc : list
         list of dictionary with key: "begin_angle", "end_angle", "obj"
     """
 

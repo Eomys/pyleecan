@@ -6,7 +6,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
 
     Parameters
     ----------
-    self : 
+    self :
         LamSquirrelCage Object
     sym : int
         Symmetry factor (1= full machine, 2= half of the machine...)
@@ -21,7 +21,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0, is_simplified=False):
     -------
     surf_list: list
         list of surfaces
-    
+
     """
     surf_list = super(type(self), self).build_geometry(
         sym=sym, is_simplified=is_simplified, alpha=alpha, delta=delta

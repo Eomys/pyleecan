@@ -211,8 +211,7 @@ class test_Arc3_meth(TestCase):
 
     @data(*discretize_test)
     def test_discretize(self, test_dict):
-        """Check that you can discretize an arc3
-        """
+        """Check that you can discretize an arc3"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
@@ -229,8 +228,7 @@ class test_Arc3_meth(TestCase):
 
     @data(*comp_length_test)
     def test_comp_length(self, test_dict):
-        """Check that you can compute the lenght of an arc3
-        """
+        """Check that you can compute the lenght of an arc3"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
@@ -241,8 +239,7 @@ class test_Arc3_meth(TestCase):
 
     @data(*comp_radius_test)
     def test_comp_radius(self, test_dict):
-        """Check that you can compute the radius of an arc3
-        """
+        """Check that you can compute the radius of an arc3"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
@@ -253,8 +250,7 @@ class test_Arc3_meth(TestCase):
 
     @data(*comp_center_test)
     def test_get_center(self, test_dict):
-        """Check that you can compute the center
-        """
+        """Check that you can compute the center"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
@@ -265,8 +261,7 @@ class test_Arc3_meth(TestCase):
 
     @data(*comp_mid_test)
     def test_get_middle(self, test_dict):
-        """Check that you can compute the middle
-        """
+        """Check that you can compute the middle"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
@@ -277,8 +272,7 @@ class test_Arc3_meth(TestCase):
 
     @data(*comp_rotate_test)
     def test_rotate(self, test_dict):
-        """Check that you can rotate an arc3
-        """
+        """Check that you can rotate an arc3"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
@@ -290,8 +284,7 @@ class test_Arc3_meth(TestCase):
 
     @data(*comp_translate_test)
     def test_translate(self, test_dict):
-        """Check that you can translate an arc3
-        """
+        """Check that you can translate an arc3"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
@@ -303,8 +296,7 @@ class test_Arc3_meth(TestCase):
 
     @data(*get_angle_test)
     def test_get_angle(self, test_dict):
-        """Check that the arc3 computed angle is correct
-        """
+        """Check that the arc3 computed angle is correct"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],
@@ -315,8 +307,7 @@ class test_Arc3_meth(TestCase):
 
     @data(*split_half_test)
     def test_split_half(self, test_dict):
-        """Check that the arc3 split is correct
-        """
+        """Check that the arc3 split is correct"""
         arc = Arc3(
             begin=test_dict["begin"],
             end=test_dict["end"],

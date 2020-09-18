@@ -15,8 +15,7 @@ class unittest_HoleM50_meth(TestCase):
     """unittest for HoleM50 methods"""
 
     def test_comp_alpha(self):
-        """Check that the computation of the alpha is correct
-        """
+        """Check that the computation of the alpha is correct"""
         test_obj = LamHole(is_internal=True, Rext=0.075)
         test_obj.hole = list()
         test_obj.hole.append(
@@ -40,8 +39,7 @@ class unittest_HoleM50_meth(TestCase):
         self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
 
     def test_comp_magnet_surface(self):
-        """Check that the computation of the magnet surface
-        """
+        """Check that the computation of the magnet surface"""
         test_obj = LamHole(is_internal=True, Rext=0.075)
         test_obj.hole = list()
         test_obj.hole.append(
@@ -65,8 +63,7 @@ class unittest_HoleM50_meth(TestCase):
         self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
 
     def test_comp_surface(self):
-        """Check that the computation of the slot surface is correct
-        """
+        """Check that the computation of the slot surface is correct"""
         test_obj = LamHole(is_internal=True, Rext=0.075)
         test_obj.hole = list()
         test_obj.hole.append(
@@ -89,8 +86,7 @@ class unittest_HoleM50_meth(TestCase):
         self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
 
     def test_comp_W5(self):
-        """Check that the computation of W5 is correct
-        """
+        """Check that the computation of W5 is correct"""
         test_obj = LamHole(is_internal=True, Rext=0.075)
         test_obj.hole = list()
         test_obj.hole.append(
@@ -114,8 +110,7 @@ class unittest_HoleM50_meth(TestCase):
         self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
 
     def test_build_geometry_two_hole_no_mag(self):
-        """check that curve_list is correct (two holes no magnet)
-        """
+        """check that curve_list is correct (two holes no magnet)"""
         test_obj = LamHole(is_internal=True, Rext=0.075)
         test_obj.hole = list()
         test_obj.hole.append(
@@ -151,8 +146,7 @@ class unittest_HoleM50_meth(TestCase):
         self.assertEqual(len(result[1].line_list), 11)
 
     def test_build_geometry_one_hole_no_mag(self):
-        """check that curve_list is correct (one hole no mag)
-        """
+        """check that curve_list is correct (one hole no mag)"""
         test_obj = LamHole(is_internal=True, Rext=0.075)
         test_obj.hole = list()
         test_obj.hole.append(
@@ -183,8 +177,7 @@ class unittest_HoleM50_meth(TestCase):
         self.assertEqual(len(result[0].line_list), 16)
 
     def test_build_geometry_one_hole_with_magnet(self):
-        """check that curve_list is correct (one hole)
-        """
+        """check that curve_list is correct (one hole)"""
         test_obj = LamHole(is_internal=True, Rext=0.075)
         test_obj.hole = list()
         test_obj.hole.append(
@@ -230,8 +223,7 @@ class unittest_HoleM50_meth(TestCase):
         self.assertEqual(len(result[4].line_list), 5)
 
     def test_build_geometry_two_hole_with_magnet(self):
-        """check that curve_list is correct (one hole)
-        """
+        """check that curve_list is correct (one hole)"""
         test_obj = LamHole(is_internal=True, is_stator=False, Rext=0.075)
         test_obj.hole = list()
         test_obj.hole.append(

@@ -5,8 +5,7 @@ from ....Functions.Winding.gen_phase_list import gen_name
 
 
 def get_Is(self):
-    """Return the stator current
-    """
+    """Return the stator current"""
     if self.Is is None:
         # Generate current according to Id/Iq
         Isdq = array([self.Id_ref, self.Iq_ref])

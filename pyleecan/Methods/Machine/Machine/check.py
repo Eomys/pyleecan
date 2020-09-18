@@ -119,7 +119,7 @@ class MC_RotorDontFit(MachineCheckError):
     Raises
     ------
     stator
-        
+
 
     """
 
@@ -138,7 +138,7 @@ class MC_StatorDontFit(MachineCheckError):
     Raises
     ------
     rotor
-        
+
 
     """
 
@@ -157,7 +157,7 @@ class MC_ShaftTooBig(MachineCheckError):
     Raises
     ------
     rotor
-        
+
 
     """
 
@@ -176,7 +176,7 @@ class MC_ShaftTooSmall(MachineCheckError):
     Raises
     ------
     rotor
-        
+
 
     """
 

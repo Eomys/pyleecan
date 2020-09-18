@@ -23,8 +23,7 @@ IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
 @pytest.mark.validation
 @pytest.mark.FEMM
 def test_EM_IPMSM_FL_001():
-    """Test compute the Flux in FEMM of machine IPMSM_xxx, with and without symmetry
-    """
+    """Test compute the Flux in FEMM of machine IPMSM_xxx, with and without symmetry"""
     simu = Simu1(name="EM_IPMSM_FL_001", machine=IPMSM_xxx)
 
     # Initialization of the simulation starting point

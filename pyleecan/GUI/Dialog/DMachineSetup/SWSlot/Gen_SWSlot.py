@@ -7,8 +7,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.Ui_SWSlot import Ui_SWSlot
 
 class Gen_SWSlot(Ui_SWSlot):
     def setupUi(self, SWSlot):
-        """Abstract class to update the widget according to the csv doc
-        """
+        """Abstract class to update the widget according to the csv doc"""
         Ui_SWSlot.setupUi(self, SWSlot)
         # Setup of in_Zs
         txt = self.tr(u"""slot number""")

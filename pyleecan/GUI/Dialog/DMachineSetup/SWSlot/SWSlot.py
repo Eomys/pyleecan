@@ -50,8 +50,7 @@ SLOT_NAME = [wid.slot_name for wid in WIDGET_LIST]
 
 
 class SWSlot(Gen_SWSlot, QWidget):
-    """Step to set the slot with winding
-    """
+    """Step to set the slot with winding"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -68,7 +67,7 @@ class SWSlot(Gen_SWSlot, QWidget):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
@@ -124,8 +123,7 @@ class SWSlot(Gen_SWSlot, QWidget):
         self.b_plot.clicked.connect(self.s_plot)
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     def set_slot_type(self, index):
@@ -133,7 +131,7 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         Parameters
         ----------
-        self : SWSlot 
+        self : SWSlot
             A SWSlot object
         index : int
             Index of the selected slot type in the list
@@ -167,7 +165,7 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         Parameters
         ----------
-        self : SWSlot 
+        self : SWSlot
             A SWSlot object
         """
         value = self.si_Zs.value()
@@ -183,7 +181,7 @@ class SWSlot(Gen_SWSlot, QWidget):
 
         Parameters
         ----------
-        self : SWSlot 
+        self : SWSlot
             A SWSlot object
         Zs : int
             The current value of Zs

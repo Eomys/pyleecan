@@ -1,6 +1,5 @@
 def comp_fill_factor(self):
-    """Compute the fill factor of the winding
-    """
+    """Compute the fill factor of the winding"""
     if self.winding is None:
         return 0
     else:

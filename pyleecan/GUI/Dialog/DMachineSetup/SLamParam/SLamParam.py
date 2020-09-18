@@ -13,8 +13,7 @@ from .....GUI.Dialog.DMachineSetup.SLamParam.Gen_SLamParam import Gen_SLamParam
 
 
 class SLamParam(Gen_SLamParam, QWidget):
-    """Step to setup the main lamination parameters
-    """
+    """Step to setup the main lamination parameters"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -31,7 +30,7 @@ class SLamParam(Gen_SLamParam, QWidget):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """

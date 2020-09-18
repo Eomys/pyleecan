@@ -9,8 +9,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SBar.PCondType22.Ui_PCondType22 import (
 
 class Gen_PCondType22(Ui_PCondType22):
     def setupUi(self, PCondType22):
-        """Abstract class to update the widget according to the csv doc
-        """
+        """Abstract class to update the widget according to the csv doc"""
         Ui_PCondType22.setupUi(self, PCondType22)
         # Setup of w_mat
         txt = self.tr(u"""Material of the conductor""")

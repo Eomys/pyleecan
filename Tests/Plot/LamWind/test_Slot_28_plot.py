@@ -27,8 +27,7 @@ from Tests.Plot.LamWind import wind_mat
 
 
 def test_Lam_Wind_28_wind_rad_tan():
-    """Test machine plot with Slot 28 and winding rad=1, tan=2 and rad=2 and tan=1
-    """
+    """Test machine plot with Slot 28 and winding rad=1, tan=2 and rad=2 and tan=1"""
     print("\nTest plot Slot 28")
     plt.close("all")
     test_obj = MachineDFIM()
@@ -85,8 +84,7 @@ def test_Lam_Wind_28_wind_rad_tan():
 
 
 def test_Lam_Wind_28_wind_22():
-    """Test machine plot with Slot 28 and winding rad=2, tan=2
-    """
+    """Test machine plot with Slot 28 and winding rad=2, tan=2"""
     plt.close("all")
     test_obj = MachineDFIM()
     test_obj.rotor = LamSlotWind(

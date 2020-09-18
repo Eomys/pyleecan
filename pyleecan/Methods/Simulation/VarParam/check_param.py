@@ -14,8 +14,8 @@ class DataKeeperError(Exception):
 
 
 def check_param(self):
-    """Check VarParam parameters validity 
-    
+    """Check VarParam parameters validity
+
     Raises
     ------
     ParamExplorerError: Error in ParamExplorer setting

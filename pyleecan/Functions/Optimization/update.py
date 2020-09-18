@@ -4,7 +4,7 @@ from ...Classes.Output import Output
 
 def update(indiv):
     """Update the individual output after the mutation
-    
+
     Parameters
     ----------
         indiv : Individual

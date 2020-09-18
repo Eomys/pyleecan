@@ -64,8 +64,7 @@ class test_SWindPat(TestCase):
         )
 
     def test_init_WRSM(self):
-        """Check that the GUI is correctly initialize with a WRSM machine
-        """
+        """Check that the GUI is correctly initialize with a WRSM machine"""
         self.test_obj = MachineWRSM(type_machine=9)
 
         self.test_obj.stator = LamSlotWind()

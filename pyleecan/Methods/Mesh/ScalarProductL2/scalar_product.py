@@ -4,7 +4,7 @@ import numpy as np
 
 
 def scalar_product(self, funca, funcb, detJ, weights, nb_gauss_points):
-    """ Scalar product of shape functions with L2 gauss integration
+    """Scalar product of shape functions with L2 gauss integration
 
     Parameters
     ----------

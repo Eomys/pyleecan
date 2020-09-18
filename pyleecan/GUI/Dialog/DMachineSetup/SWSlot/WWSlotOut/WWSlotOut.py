@@ -5,12 +5,10 @@ from ......GUI import gui_option
 
 
 class WWSlotOut(QGroupBox):
-    """Setup of QGroupBox for output for Winding Slot
-    """
+    """Setup of QGroupBox for output for Winding Slot"""
 
     def __init__(self, parent=None):
-        """Initialize the widget
-        """
+        """Initialize the widget"""
 
         QWidget.__init__(self, parent)
         # Set main widget

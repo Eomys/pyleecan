@@ -98,7 +98,6 @@ class FrozenClass(object):
 
 
 class FrozenError(Exception):
-    """Throw when the class is frozen and a new property is set
-    """
+    """Throw when the class is frozen and a new property is set"""
 
     pass

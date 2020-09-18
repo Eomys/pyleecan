@@ -4,15 +4,15 @@ from ...Functions.Material.compare_material import compare_material
 
 def get_material(obj):
     """
-    Get the list of unique materials contained in a pyleecan object 
+    Get the list of unique materials contained in a pyleecan object
 
     Parameters
     ----------
-    obj : Pyleecan object 
+    obj : Pyleecan object
 
     Returns
     -------
-    materials : list of unique materials contained in the object 
+    materials : list of unique materials contained in the object
     """
     materials = []
     for key, value in obj.as_dict().items():

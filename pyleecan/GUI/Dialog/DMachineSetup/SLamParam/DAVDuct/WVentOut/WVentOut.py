@@ -7,12 +7,10 @@ from .......GUI import gui_option
 
 
 class WVentOut(QGroupBox):
-    """Setup of QGroupBox for output for Ventilation
-    """
+    """Setup of QGroupBox for output for Ventilation"""
 
     def __init__(self, parent=None):
-        """Initialize the widget
-        """
+        """Initialize the widget"""
 
         QWidget.__init__(self, parent)
         # Init the main widget

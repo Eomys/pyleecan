@@ -6,11 +6,11 @@ from ....Functions.Simulation.VarLoad.setter_simu import setter_simu
 
 def get_simulations(self):
     """Create simulations and ParamExplorer associated
-    
+
     Returns
     -------
     multisim_dict : dict
-        dictionary containing simulation shape, setters, parameter values and simulations generated 
+        dictionary containing simulation shape, setters, parameter values and simulations generated
     """
     # Get reference simulation
     ref_simu = self.parent

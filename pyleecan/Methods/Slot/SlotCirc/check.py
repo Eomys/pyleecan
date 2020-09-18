@@ -18,7 +18,6 @@ def check(self):
 
 
 class SC_WHCheckError(SlotCheckError):
-    """Raised when a SlotCirc has self.H0 < self.W0/2
-    """
+    """Raised when a SlotCirc has self.H0 < self.W0/2"""
 
     pass

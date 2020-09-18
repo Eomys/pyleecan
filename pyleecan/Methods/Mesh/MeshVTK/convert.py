@@ -15,7 +15,7 @@ from numpy import array, linspace
 
 
 def convert(self, meshtype, scale):
-    """ Convert this object to another type of Mesh object.
+    """Convert this object to another type of Mesh object.
 
     Parameters
     ----------

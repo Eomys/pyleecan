@@ -27,7 +27,7 @@ def plot_A_space(
     component_list=None,
     legend_list=[],
     color_list=[],
-    linestyle_list=[],
+    linestyle_list=["-"],
     save_path=None,
     y_min=None,
     y_max=None,

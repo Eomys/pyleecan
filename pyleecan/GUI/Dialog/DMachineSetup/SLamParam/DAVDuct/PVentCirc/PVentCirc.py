@@ -10,8 +10,7 @@ from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentCirc.Gen_PVentCirc i
 
 
 class PVentCirc(Gen_PVentCirc, QWidget):
-    """Page to setup the Ventilation Circ
-    """
+    """Page to setup the Ventilation Circ"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -114,7 +113,7 @@ class PVentCirc(Gen_PVentCirc, QWidget):
         Parameters
         ----------
         self : PVentCirc
-            A PVentCirc object    
+            A PVentCirc object
 
         Returns
         -------

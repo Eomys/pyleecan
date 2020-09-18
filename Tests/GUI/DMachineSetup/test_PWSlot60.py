@@ -51,8 +51,7 @@ class test_PWSlot60(TestCase):
         self.assertEqual(self.widget.lf_H4.value(), 0.17)
 
     def test_output(self):
-        """Check that the output are computed
-        """
+        """Check that the output are computed"""
         self.test_obj = LamSlotWind(
             Rint=0, Rext=0.1325, is_internal=True, is_stator=False, L1=0.9
         )

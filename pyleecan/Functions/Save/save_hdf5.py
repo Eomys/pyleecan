@@ -30,12 +30,12 @@ def list_to_hdf5(file, group_name, name, list_to_save):
 
     Parameters
     ----------
-    file: HDF5 file 
-        file to save the data 
+    file: HDF5 file
+        file to save the data
     group_name: str
         name of the group
     name: str
-        name to extend the group or to contain the dataset 
+        name to extend the group or to contain the dataset
     list_to_save: list
         list to save
 
@@ -69,7 +69,7 @@ def list_to_hdf5(file, group_name, name, list_to_save):
 
 def dict_to_hdf5(file, prefix, dict_to_save):
     """
-    Save a list in the hdf5 file 
+    Save a list in the hdf5 file
     """
     for key, value in dict_to_save.items():
         variable_to_hdf5(file, prefix, value, key)
@@ -115,10 +115,10 @@ def variable_to_hdf5(file, prefix, variable, name):
 def save_hdf5(obj, save_path):
     """
     Save a pyleecan obj in hdf5 format
-    
+
     Parameters
     ----------
-    obj: Pyleecan object 
+    obj: Pyleecan object
         object to save
     save_path: str
         file path

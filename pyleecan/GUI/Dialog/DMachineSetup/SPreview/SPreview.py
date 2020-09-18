@@ -9,8 +9,7 @@ from .....GUI.Dialog.DMachineSetup.SPreview.Ui_SPreview import Ui_SPreview
 
 
 class SPreview(Ui_SPreview, QWidget):
-    """Step to define the winding conductor
-    """
+    """Step to define the winding conductor"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -27,7 +26,7 @@ class SPreview(Ui_SPreview, QWidget):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """
