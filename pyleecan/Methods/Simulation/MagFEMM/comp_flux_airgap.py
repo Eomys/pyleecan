@@ -32,6 +32,7 @@ def comp_flux_airgap(self, output):
     # Instanciate a new FEMM
     femm = FEMMHandler(not self.is_close_femm)
     if not self.import_file:  # True if None or len == 0
+        self.get_logger().debug("Drawing machine in FEMM...")
         output.mag.FEMM_dict = draw_FEMM(
             femm,
             output,
@@ -55,6 +56,7 @@ def comp_flux_airgap(self, output):
             stator_dxf=self.stator_dxf,
         )
     else:
+        self.get_logger().debug("Reusing the FEMM file: " + self.import_file)
         output.mag.FEMM_dict = self.FEMM_dict
         # Open the document
         femm.openfemm()

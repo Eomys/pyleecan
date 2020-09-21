@@ -43,6 +43,7 @@ def solve_FEMM(self, femm, output, sym):
 
     # Compute the data for each time step
     for ii in range(Nt_tot):
+        self.get_logger().debug("Solving step " + str(ii + 1) + " / " + str(Nt_tot))
         # Update rotor position and currents
         update_FEMM_simulation(
             femm=femm,
@@ -166,6 +167,7 @@ def solve_FEMM(self, femm, output, sym):
         values=Tem,
     )
     output.mag.Tem_av = mean(Tem)
+    self.get_logger().debug("Average Torque: " + str(output.mag.Tem_av) + " N.m")
     output.mag.Tem_rip_pp = abs(np_max(Tem) - np_min(Tem))  # [N.m]
     if output.mag.Tem_av != 0:
         output.mag.Tem_rip_norm = output.mag.Tem_rip_pp / output.mag.Tem_av  # []
