@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import femm
 from ...Classes.Lamination import Lamination
 from ...Classes.Circle import Circle
 from ...Functions.FEMM import (
@@ -22,6 +21,7 @@ from ...Functions.FEMM.get_airgap_surface import get_airgap_surface
 
 
 def draw_FEMM(
+    femm,
     output,
     is_mmfr,
     is_mmfs,
@@ -43,9 +43,11 @@ def draw_FEMM(
     stator_dxf=None,
 ):
     """Draws and assigns the property of the machine in FEMM
-    
+
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     output : Output
         Output object
     is_mmfr : bool
@@ -170,6 +172,7 @@ def draw_FEMM(
 
     # Creation of all the materials and circuit in FEMM
     prop_dict, materials, circuits = create_FEMM_materials(
+        femm,
         machine,
         surf_list,
         Is,
@@ -183,13 +186,14 @@ def draw_FEMM(
         is_eddies,
         j_t0=0,
     )
-    create_FEMM_boundary_conditions(sym=sym, is_antiper=is_antiper)
+    create_FEMM_boundary_conditions(femm=femm, sym=sym, is_antiper=is_antiper)
 
     # Draw and assign all the surfaces of the machine
     for surf in surf_list:
         label = surf.label
         # Get the correct element size and group according to the label
         surf.draw_FEMM(
+            femm=femm,
             nodeprop="None",
             maxseg=FEMM_dict["arcspan"],  # max span of arc element in degrees
             propname="None",
@@ -197,7 +201,7 @@ def draw_FEMM(
             hide=False,
         )
         assign_FEMM_surface(
-            surf, prop_dict[label], FEMM_dict, machine.rotor, machine.stator
+            femm, surf, prop_dict[label], FEMM_dict, machine.rotor, machine.stator
         )
 
     # Apply BC for DXF import
@@ -211,7 +215,7 @@ def draw_FEMM(
                 femm.mi_setsegmentprop(BC[2], None, None, False, None)
             femm.mi_clearselected()
 
-    femm.mi_zoomnatural()  # Zoom out
+    # femm.mi_zoomnatural()  # Zoom out
     femm.mi_probdef(
         FEMM_dict["freqpb"],
         "meters",
@@ -232,5 +236,4 @@ def draw_FEMM(
 
 
 class FEMMError(Exception):
-    """Raised when FEMM is not possible to run
-    """
+    """Raised when FEMM is not possible to run"""

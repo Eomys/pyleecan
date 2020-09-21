@@ -20,8 +20,7 @@ TYPE_INDEX = [WindingCW2LT, WindingCW1L, WindingDW2L, WindingDW1L, WindingCW2LR]
 
 
 class SWindPat(Gen_SWindPat, QWidget):
-    """Step to define the winding pattern
-    """
+    """Step to define the winding pattern"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -38,7 +37,7 @@ class SWindPat(Gen_SWindPat, QWidget):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """

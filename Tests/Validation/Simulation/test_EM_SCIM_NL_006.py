@@ -32,7 +32,7 @@ SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
 def test_Magnetic_FEMM_sym():
     """Validation of the FEMM model of a polar SCIM machine
     Only one time step
-    
+
     From publication:
     K. Boughrara
     Analytical Analysis of Cage Rotor Induction Motors in Healthy, Defective and Broken Bars Conditions

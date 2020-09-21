@@ -9,8 +9,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.Ui_PVentPola
 
 class Gen_PVentPolar(Ui_PVentPolar):
     def setupUi(self, PVentPolar):
-        """Abstract class to update the widget according to the csv doc
-        """
+        """Abstract class to update the widget according to the csv doc"""
         Ui_PVentPolar.setupUi(self, PVentPolar)
         # Setup of in_Alpha0
         txt = self.tr(u"""Shift angle of the hole around circumference""")

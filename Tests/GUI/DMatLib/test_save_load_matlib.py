@@ -24,12 +24,10 @@ import pytest
 
 @pytest.mark.GUI
 class test_save_load_matlib(TestCase):
-    """Test that the widget DMachineSetup and DMatLib can save/load the MatLib (old and new)
-    """
+    """Test that the widget DMachineSetup and DMatLib can save/load the MatLib (old and new)"""
 
     def setUp(self):
-        """Run at the begining of every test to create the workspace
-        """
+        """Run at the begining of every test to create the workspace"""
         self.work_path = join(save_path, "Material")
         # Delete old test if needed
         if isdir(self.work_path):
@@ -37,8 +35,7 @@ class test_save_load_matlib(TestCase):
         mkdir(self.work_path)
 
     def teardown(self):
-        """Delete the workspace at the end of the tests
-        """
+        """Delete the workspace at the end of the tests"""
         rmtree(self.work_path)
 
     @classmethod
@@ -53,8 +50,7 @@ class test_save_load_matlib(TestCase):
         cls.app.quit()
 
     def test_load_save_several_file(self):
-        """Check that you can load/save several machine files
-        """
+        """Check that you can load/save several machine files"""
         # Copy the matlib
         mkdir(join(self.work_path, "Lamination"))
         mkdir(join(self.work_path, "Magnet"))

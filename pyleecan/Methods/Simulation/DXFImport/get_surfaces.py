@@ -2,8 +2,7 @@ from ....Classes.SurfLine import SurfLine
 
 
 def get_surfaces(self):
-    """Convert surf_dict to a list of surfaces without lines
-    """
+    """Convert surf_dict to a list of surfaces without lines"""
 
     surf_list = list()
 

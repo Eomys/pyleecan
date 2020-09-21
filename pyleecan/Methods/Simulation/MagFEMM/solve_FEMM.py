@@ -1,4 +1,3 @@
-import femm
 import numpy as np
 
 from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
@@ -12,7 +11,7 @@ from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
 from ....Classes.MeshMat import MeshMat
 
 
-def solve_FEMM(self, output, sym, FEMM_dict):
+def solve_FEMM(self, femm, output, sym):
 
     # Loading parameters for readibility
     angle = output.mag.angle
@@ -20,6 +19,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     Nt_tot = output.mag.Nt_tot  # Number of time step
     Na_tot = output.mag.Na_tot  # Number of angular step
     save_path = self.get_path_save(output)
+    FEMM_dict = output.mag.FEMM_dict
 
     if (
         hasattr(output.simu.machine.stator, "winding")
@@ -45,6 +45,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     for ii in range(Nt_tot):
         # Update rotor position and currents
         update_FEMM_simulation(
+            femm=femm,
             output=output,
             materials=FEMM_dict["materials"],
             circuits=FEMM_dict["circuits"],
@@ -77,7 +78,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
                 Bt[ii, jj] = -B[0] * np.sin(angle[jj]) + B[1] * np.cos(angle[jj])
 
         # Compute the torque
-        Tem[ii] = comp_FEMM_torque(FEMM_dict, sym=sym)
+        Tem[ii] = comp_FEMM_torque(femm, FEMM_dict, sym=sym)
 
         if (
             hasattr(output.simu.machine.stator, "winding")
@@ -85,7 +86,13 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         ):
             # Phi_wind computation
             Phi_wind_stator[ii, :] = comp_FEMM_Phi_wind(
-                qs, Npcpp, is_stator=True, Lfemm=FEMM_dict["Lfemm"], L1=L1, sym=sym
+                femm,
+                qs,
+                Npcpp,
+                is_stator=True,
+                Lfemm=FEMM_dict["Lfemm"],
+                L1=L1,
+                sym=sym,
             )
 
         # Load mesh data & solution
@@ -93,7 +100,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
             self.is_get_mesh or self.is_save_FEA
         ):
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
-                save_path, ii
+                femm, save_path, ii
             )
 
             if ii == 0:
@@ -184,3 +191,6 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         self.comp_emf()
     else:
         output.mag.emf = None
+
+    if self.is_close_femm:
+        femm.closefemm()

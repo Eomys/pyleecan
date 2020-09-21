@@ -24,8 +24,7 @@ PAGE_INDEX = [PVentCirc, PVentTrap, PVentPolar]
 
 
 class WVent(Ui_WVent, QWidget):
-    """Widget to setup a Ventilation in the list
-    """
+    """Widget to setup a Ventilation in the list"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()

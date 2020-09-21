@@ -118,8 +118,7 @@ class VarLoadCurrent(VarLoad):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -134,7 +133,6 @@ class VarLoadCurrent(VarLoad):
         name="",
         desc="",
         datakeeper_list=list(),
-        nb_proc=1,
         is_keep_all_output=False,
         stop_if_error=False,
         ref_simu_index=None,
@@ -167,7 +165,6 @@ class VarLoadCurrent(VarLoad):
             name = obj.name
             desc = obj.desc
             datakeeper_list = obj.datakeeper_list
-            nb_proc = obj.nb_proc
             is_keep_all_output = obj.is_keep_all_output
             stop_if_error = obj.stop_if_error
             ref_simu_index = obj.ref_simu_index
@@ -189,8 +186,6 @@ class VarLoadCurrent(VarLoad):
                 desc = init_dict["desc"]
             if "datakeeper_list" in list(init_dict.keys()):
                 datakeeper_list = init_dict["datakeeper_list"]
-            if "nb_proc" in list(init_dict.keys()):
-                nb_proc = init_dict["nb_proc"]
             if "is_keep_all_output" in list(init_dict.keys()):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
@@ -210,7 +205,6 @@ class VarLoadCurrent(VarLoad):
             name=name,
             desc=desc,
             datakeeper_list=datakeeper_list,
-            nb_proc=nb_proc,
             is_keep_all_output=is_keep_all_output,
             stop_if_error=stop_if_error,
             ref_simu_index=ref_simu_index,
@@ -257,8 +251,7 @@ class VarLoadCurrent(VarLoad):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from VarLoad
         VarLoadCurrent_dict = super(VarLoadCurrent, self).as_dict()

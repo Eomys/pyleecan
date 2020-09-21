@@ -31,13 +31,11 @@ DELTA = 1e-4
 
 @ddt
 class test_Magnet_Type_10_meth(TestCase):
-    """unittest for MagnetType10 methods
-    """
+    """unittest for MagnetType10 methods"""
 
     @data(*Mag10_test)
     def test_comp_surface(self, test_dict):
-        """Check that the computation of the surface is correct
-        """
+        """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_surface()
 
@@ -53,8 +51,7 @@ class test_Magnet_Type_10_meth(TestCase):
 
     @data(*Mag10_test)
     def test_comp_height(self, test_dict):
-        """Check that the computation of the height is correct
-        """
+        """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_height()
 
@@ -65,8 +62,7 @@ class test_Magnet_Type_10_meth(TestCase):
 
     @data(*Mag10_test)
     def test_comp_angle_op(self, test_dict):
-        """Check that the computation of the opening angle is correct
-        """
+        """Check that the computation of the opening angle is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_angle_opening()
 
@@ -76,8 +72,7 @@ class test_Magnet_Type_10_meth(TestCase):
         self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
 
     def test_build_geometry_in(self):
-        """check that curve_list is correct (inwards magnet)
-        """
+        """check that curve_list is correct (inwards magnet)"""
         lam = LamSlotMag(
             Rint=40e-3,
             Rext=1,
@@ -116,8 +111,7 @@ class test_Magnet_Type_10_meth(TestCase):
             self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
 
     def test_build_geometry_out(self):
-        """check that curve_list is correct (outwards magnet)
-        """
+        """check that curve_list is correct (outwards magnet)"""
 
         lam = LamSlotMag(
             Rint=1,

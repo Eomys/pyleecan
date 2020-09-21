@@ -14,15 +14,14 @@ from numpy import (
 
 
 class DimError(Exception):
-    """Raised when the dimension of the field does not match requested operation (3D vs 1D)
-    """
+    """Raised when the dimension of the field does not match requested operation (3D vs 1D)"""
 
     pass
 
 
 def xyz_to_rphiz(values):
     """Converts axis values from cartesian coordinates into cylindrical coordinates
-    
+
     Parameters
     ----------
     values: array
@@ -45,7 +44,7 @@ def xyz_to_rphiz(values):
 
 def rphiz_to_xyz(values):
     """Converts axis values from cylindrical coordinates into cartesian coordinates
-    
+
     Parameters
     ----------
     values: array
@@ -68,7 +67,7 @@ def rphiz_to_xyz(values):
 
 def xyz_to_rphiz_field(values, phi):
     """Converts field values from cartesian coordinates into cylindrical coordinates
-    
+
     Parameters
     ----------
     values: array
@@ -95,7 +94,7 @@ def xyz_to_rphiz_field(values, phi):
 
 def rphiz_to_xyz_field(values, phi):
     """Converts field values from cylindrical coordinates into cartesian coordinates
-    
+
     Parameters
     ----------
     values: array
@@ -122,7 +121,7 @@ def rphiz_to_xyz_field(values, phi):
 
 def cart2pol(values, points):
     """Converts field values from cartesian coordinates into cylindrical coordinates
-    
+
     Parameters
     ----------
     values: array
@@ -140,7 +139,7 @@ def cart2pol(values, points):
 
 def pol2cart(values, points):
     """Converts field values from cylindrical coordinates into cartesian coordinates
-    
+
     Parameters
     ----------
     values: array

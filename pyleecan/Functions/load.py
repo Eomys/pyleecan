@@ -10,7 +10,7 @@ from .Load.load_pkl import load_pkl
 
 
 def init_data(obj, file_path):
-    """ 
+    """
     Initialize pyleecan objects (by init_dict) within list and/or dict data structure.
     Non pyleecan, list or dict type data will be kept as they are.
 
@@ -21,10 +21,10 @@ def init_data(obj, file_path):
 
     file_path: str
         path of the obj loaded
-        
+
     Returns
     -------
-    data: 
+    data:
         initialized pyleecan objects within a list or dict
     """
 

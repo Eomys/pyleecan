@@ -13,8 +13,7 @@ from .....definitions import PACKAGE_NAME
 
 
 class SMachineType(Gen_SMachineType, QWidget):
-    """First Step to setup the Machine Type
-    """
+    """First Step to setup the Machine Type"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -31,7 +30,7 @@ class SMachineType(Gen_SMachineType, QWidget):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """

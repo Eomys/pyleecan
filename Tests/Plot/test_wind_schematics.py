@@ -30,8 +30,7 @@ CURVE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
 
 def test_slot():
-    """Schematics for slot number
-    """
+    """Schematics for slot number"""
 
     plt.close("all")
     test_obj.plot(is_lam_only=True)
@@ -57,8 +56,7 @@ def test_slot():
 
 
 def test_rad_tan():
-    """Schematics for rad/tan layer
-    """
+    """Schematics for rad/tan layer"""
 
     plt.close("all")
     # Plot first slot on X axis

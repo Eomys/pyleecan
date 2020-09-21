@@ -12,8 +12,7 @@ from ......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.WVent.WVent import WVent
 
 
 class DAVDuct(Ui_DAVDuct, QDialog):
-    """Dialog to setup the ventilations
-    """
+    """Dialog to setup the ventilations"""
 
     def __init__(self, lamination):
         """Initialize the widget according the current lamination
@@ -122,7 +121,7 @@ class DAVDuct(Ui_DAVDuct, QDialog):
 
     def check(self):
         """Check that all the ventilation are correctly set
-        
+
         Parameters
         ----------
         self : DAVDuct

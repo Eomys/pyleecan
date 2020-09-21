@@ -94,8 +94,7 @@ class test_DMachineSetup(TestCase):
 
     @data(*load_test)
     def test_load(self, test_dict):
-        """Check that you can load a machine
-        """
+        """Check that you can load a machine"""
 
         return_value = (
             join(join(TEST_DATA_DIR, "Load_GUI"), test_dict["name"] + ".json"),
@@ -119,8 +118,7 @@ class test_DMachineSetup(TestCase):
         self.assertEqual(self.widget.nav_step.count(), test_dict["count"])
 
     def test_set_save_machine_type(self):
-        """Check that the Widget allow to change the machine type and save
-        """
+        """Check that the Widget allow to change the machine type and save"""
         # Check that all the machine type are available
         self.assertEqual(self.widget.w_step.c_type.count(), 8)
         # DFIM
@@ -165,8 +163,7 @@ class test_DMachineSetup(TestCase):
 
 
 def save_function(self, widget, file_name):
-    """Function to save a machine from the GUI
-    """
+    """Function to save a machine from the GUI"""
     file_path = join(save_path, file_name + ".json")
 
     # Check that the file didn't already exist

@@ -1,9 +1,9 @@
 def run(self):
     """Run the simulation and optionnaly its multisimulation
-    
+
     Returns
     -------
-    output: Output 
+    output: Output
         Contains simulation results
     """
     # In-function import to avoid ImportError

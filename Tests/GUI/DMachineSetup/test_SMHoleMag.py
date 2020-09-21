@@ -287,8 +287,7 @@ class test_SMHoleMag(TestCase):
         )
 
     def test_SyRM_set_type_54_51_54(self):
-        """Set a type 54 for a SyRM then set a 51 to check how the magnets are handled
-        """
+        """Set a type 54 for a SyRM then set a 51 to check how the magnets are handled"""
         # Init a HoleM54
         self.assertEqual(self.widget2.tab_hole.widget(0).c_hole_type.currentIndex(), 4)
         self.assertEqual(

@@ -84,16 +84,14 @@ class test_Segment_meth(TestCase):
     """unittest for Segment methods"""
 
     def test_check(self):
-        """Check that you can detect a one point segment
-        """
+        """Check that you can detect a one point segment"""
         segment = Segment(0, 0)
         with self.assertRaises(PointSegmentError):
             segment.check()
 
     @data(*discretize_test)
     def test_dicretize(self, test_dict):
-        """Check that you can discretize a segment
-        """
+        """Check that you can discretize a segment"""
         segment = Segment(test_dict["begin"], test_dict["end"])
 
         result = segment.discretize(test_dict["nb_point"])
@@ -103,37 +101,32 @@ class test_Segment_meth(TestCase):
             self.assertAlmostEqual(result[i], test_dict["result"][i], delta=DELTA)
 
     def test_discretize_Point_error(self):
-        """Check that dicretize can detect a one point segment
-        """
+        """Check that dicretize can detect a one point segment"""
         segment = Segment(0, 0)
         with self.assertRaises(PointSegmentError):
             segment.discretize(5)
 
     def test_discretize_Nb_error(self):
-        """Check that you can detect a wrong argument
-        """
+        """Check that you can detect a wrong argument"""
         segment = Segment(0, 10)
         with self.assertRaises(NbPointSegmentDError):
             segment.discretize(-1)
 
     @data(*comp_length_test)
     def test_comp_length(self, test_dict):
-        """Check that you the length return by comp_length is correct
-        """
+        """Check that you the length return by comp_length is correct"""
         segment = Segment(test_dict["begin"], test_dict["end"])
 
         self.assertAlmostEqual(segment.comp_length(), test_dict["length"])
 
     def test_comp_length_Point_error(self):
-        """Check that comp_length can detect a one point segment
-        """
+        """Check that comp_length can detect a one point segment"""
         segment = Segment(0, 0)
         with self.assertRaises(PointSegmentError):
             segment.comp_length()
 
     def test_get_middle(self):
-        """Check that you can compute the middle of the segment
-        """
+        """Check that you can compute the middle of the segment"""
         segment = Segment(0, 10)
         result = segment.get_middle()
         expect = 5.0
@@ -145,8 +138,7 @@ class test_Segment_meth(TestCase):
         self.assertAlmostEqual(abs(result - expect), 0)
 
     def test_rotate(self):
-        """Check that you can rotate the segment
-        """
+        """Check that you can rotate the segment"""
         segment = Segment(0, 1)
         segment.rotate(pi / 2)
         expect_begin = 0
@@ -162,8 +154,7 @@ class test_Segment_meth(TestCase):
         self.assertAlmostEqual(abs(expect_end - segment.end), 0)
 
     def test_translate(self):
-        """Check that you can translate the segment
-        """
+        """Check that you can translate the segment"""
         segment = Segment(0, 3j)
         segment.translate(2)
         expect_begin = 2
@@ -180,8 +171,7 @@ class test_Segment_meth(TestCase):
 
     @data(*split_half_test)
     def test_split_half(self, test_dict):
-        """Check that the segment split is correct
-        """
+        """Check that the segment split is correct"""
         seg = Segment(begin=test_dict["begin"], end=test_dict["end"])
         seg.split_half(is_begin=test_dict["is_begin"])
 
@@ -190,8 +180,7 @@ class test_Segment_meth(TestCase):
 
     @data(*is_on_test)
     def test_is_on(self, test_dict):
-        """Check that the segment is_on_line method is correct
-        """
+        """Check that the segment is_on_line method is correct"""
         seg = Segment(begin=test_dict["begin"], end=test_dict["end"])
         result = seg.is_on_line(Z=test_dict["Z"])
 
@@ -199,8 +188,7 @@ class test_Segment_meth(TestCase):
 
     @data(*distance_test)
     def test_distance(self, test_dict):
-        """Check that the segment comp_distance method is correct
-        """
+        """Check that the segment comp_distance method is correct"""
         seg = Segment(begin=test_dict["begin"], end=test_dict["end"])
         result = seg.comp_distance(Z=test_dict["Z"])
 

@@ -90,7 +90,7 @@ class M3C_PError(MachineCheckError):
     Raises
     ------
     values
-        
+
 
     """
 

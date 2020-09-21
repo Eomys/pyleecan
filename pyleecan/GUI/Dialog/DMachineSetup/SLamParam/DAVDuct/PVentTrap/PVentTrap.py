@@ -10,8 +10,7 @@ from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentTrap.Gen_PVentTrap i
 
 
 class PVentTrap(Gen_PVentTrap, QWidget):
-    """Page to setup the Ventilation Trap
-    """
+    """Page to setup the Ventilation Trap"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -140,7 +139,7 @@ class PVentTrap(Gen_PVentTrap, QWidget):
         Parameters
         ----------
         self : PVentTrap
-            A PVentTrap object    
+            A PVentTrap object
 
         Returns
         -------

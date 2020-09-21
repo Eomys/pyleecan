@@ -13,12 +13,10 @@ SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 
 
 class test_get_polar_eq(TestCase):
-    """unittest to convert machine to polar and plot them
-    """
+    """unittest to convert machine to polar and plot them"""
 
     def test_get_polar_eq_SCIM(self):
-        """Test that you can create polar equivalent of SCIM machine
-        """
+        """Test that you can create polar equivalent of SCIM machine"""
         polar_eq = SCIM_001.get_polar_eq()
 
         plt.close("all")

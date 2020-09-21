@@ -34,8 +34,7 @@ class test_PolarArc_meth(TestCase):
 
     @data(*rotate_test)
     def test_rotate(self, test_dict):
-        """Check that you can rotate the polararc
-        """
+        """Check that you can rotate the polararc"""
         surface = PolarArc(
             label="test",
             point_ref=test_dict["ref"],
@@ -50,8 +49,7 @@ class test_PolarArc_meth(TestCase):
 
     @data(*translate_test)
     def test_translate(self, test_dict):
-        """Check that you can translate the polararc
-        """
+        """Check that you can translate the polararc"""
         surface = PolarArc(
             label="test",
             point_ref=test_dict["ref"],
@@ -65,8 +63,7 @@ class test_PolarArc_meth(TestCase):
         self.assertAlmostEqual(abs(surface.height - test_dict["H"]), 0)
 
     def test_get_lines(self):
-        """Check that you get the correct lines to drow the polar arc
-        """
+        """Check that you get the correct lines to drow the polar arc"""
         surface = PolarArc(label="test", point_ref=0, angle=pi / 4, height=2)
         lines = surface.get_lines()
         cpt_Arc1 = 0
@@ -81,8 +78,7 @@ class test_PolarArc_meth(TestCase):
         self.assertEqual(cpt_Segment, 2)
 
     def test_comp_length(self):
-        """Check that you can compute the length of the polar arc
-        """
+        """Check that you can compute the length of the polar arc"""
         surface = PolarArc(label="test", point_ref=1, angle=pi / 4, height=2)
         surface.get_lines = MagicMock(return_value=[Segment(begin=0, end=1)])
         length = surface.comp_length()

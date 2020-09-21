@@ -42,8 +42,7 @@ class VarSimu(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -54,7 +53,6 @@ class VarSimu(FrozenClass):
         name="",
         desc="",
         datakeeper_list=list(),
-        nb_proc=1,
         is_keep_all_output=False,
         stop_if_error=False,
         ref_simu_index=None,
@@ -83,7 +81,6 @@ class VarSimu(FrozenClass):
             name = obj.name
             desc = obj.desc
             datakeeper_list = obj.datakeeper_list
-            nb_proc = obj.nb_proc
             is_keep_all_output = obj.is_keep_all_output
             stop_if_error = obj.stop_if_error
             ref_simu_index = obj.ref_simu_index
@@ -97,8 +94,6 @@ class VarSimu(FrozenClass):
                 desc = init_dict["desc"]
             if "datakeeper_list" in list(init_dict.keys()):
                 datakeeper_list = init_dict["datakeeper_list"]
-            if "nb_proc" in list(init_dict.keys()):
-                nb_proc = init_dict["nb_proc"]
             if "is_keep_all_output" in list(init_dict.keys()):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
@@ -131,7 +126,6 @@ class VarSimu(FrozenClass):
             self.datakeeper_list = list()
         else:
             self.datakeeper_list = datakeeper_list
-        self.nb_proc = nb_proc
         self.is_keep_all_output = is_keep_all_output
         self.stop_if_error = stop_if_error
         self.ref_simu_index = ref_simu_index
@@ -160,7 +154,6 @@ class VarSimu(FrozenClass):
             VarSimu_str += (
                 "datakeeper_list[" + str(ii) + "] =" + tmp + linesep + linesep
             )
-        VarSimu_str += "nb_proc = " + str(self.nb_proc) + linesep
         VarSimu_str += "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
         VarSimu_str += "stop_if_error = " + str(self.stop_if_error) + linesep
         VarSimu_str += "ref_simu_index = " + str(self.ref_simu_index) + linesep
@@ -178,8 +171,6 @@ class VarSimu(FrozenClass):
             return False
         if other.datakeeper_list != self.datakeeper_list:
             return False
-        if other.nb_proc != self.nb_proc:
-            return False
         if other.is_keep_all_output != self.is_keep_all_output:
             return False
         if other.stop_if_error != self.stop_if_error:
@@ -191,8 +182,7 @@ class VarSimu(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         VarSimu_dict = dict()
         VarSimu_dict["name"] = self.name
@@ -200,7 +190,6 @@ class VarSimu(FrozenClass):
         VarSimu_dict["datakeeper_list"] = list()
         for obj in self.datakeeper_list:
             VarSimu_dict["datakeeper_list"].append(obj.as_dict())
-        VarSimu_dict["nb_proc"] = self.nb_proc
         VarSimu_dict["is_keep_all_output"] = self.is_keep_all_output
         VarSimu_dict["stop_if_error"] = self.stop_if_error
         VarSimu_dict["ref_simu_index"] = self.ref_simu_index
@@ -216,7 +205,6 @@ class VarSimu(FrozenClass):
         self.desc = None
         for obj in self.datakeeper_list:
             obj._set_None()
-        self.nb_proc = None
         self.is_keep_all_output = None
         self.stop_if_error = None
         self.ref_simu_index = None
@@ -280,25 +268,6 @@ class VarSimu(FrozenClass):
         doc=u"""List containing DataKeepers to extract VarSimu results 
 
         :Type: [DataKeeper]
-        """,
-    )
-
-    def _get_nb_proc(self):
-        """getter of nb_proc"""
-        return self._nb_proc
-
-    def _set_nb_proc(self, value):
-        """setter of nb_proc"""
-        check_var("nb_proc", value, "int", Vmin=1)
-        self._nb_proc = value
-
-    nb_proc = property(
-        fget=_get_nb_proc,
-        fset=_set_nb_proc,
-        doc=u"""Number of processors used to run the simulations
-
-        :Type: int
-        :min: 1
         """,
     )
 

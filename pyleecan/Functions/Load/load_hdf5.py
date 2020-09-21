@@ -10,7 +10,7 @@ def construct_dict_from_group(group):
     Parameters
     ----------
     group: h5py.Group
-        group to browse 
+        group to browse
 
     Returns
     -------

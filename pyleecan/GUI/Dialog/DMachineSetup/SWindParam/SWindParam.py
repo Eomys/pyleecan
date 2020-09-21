@@ -7,8 +7,7 @@ from .....GUI.Dialog.DMachineSetup.SWindParam.Gen_SWindParam import Gen_SWindPar
 
 
 class SWindParam(Gen_SWindParam, QWidget):
-    """Step to define the winding parameters
-    """
+    """Step to define the winding parameters"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -25,7 +24,7 @@ class SWindParam(Gen_SWindParam, QWidget):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         is_stator : bool
             To adapt the GUI to set either the stator or the rotor
         """

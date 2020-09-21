@@ -24,7 +24,7 @@ def create_setter(accessor, attribute):
 
 def solve(self):
     """Method to perform NSGA-II using DEAP tools
-    
+
     Parameters
     ----------
     self : OptiGenAlgNsga2Deap

@@ -167,8 +167,7 @@ class test_Winding_plot(TestCase):
         fig.savefig(join(save_path, "test_Wind_CW2LR_wind2.png"))
 
     def test_plot_mmf_unit(self):
-        """Test plot unit mmf
-        """
+        """Test plot unit mmf"""
         stator = LamSlotWind(
             Rint=0.1325,
             Rext=0.2,

@@ -183,15 +183,13 @@ class unittest_Import_meth(TestCase):
 
     @data(*ImportMatrix_test)
     def test_ImportMatrix(self, test_dict):
-        """Check that the import of a Matrix is correct
-        """
+        """Check that the import of a Matrix is correct"""
 
         result = test_dict["test_obj"].get_data()
         assert_array_almost_equal(test_dict["exp"], result)
 
     def test_ImportGenMatrixSin_init(self):
-        """Check that the ImportGenMatrixSin can be set by list
-        """
+        """Check that the ImportGenMatrixSin can be set by list"""
         f = [100, 100, 100]
         A = [1, 0.5, 2]
         Phi = linspace(0, 2 * pi, 3, endpoint=False)
@@ -220,8 +218,7 @@ class unittest_Import_meth(TestCase):
         self.assertEqual(test_obj.sin_list[2].Tf, 2.5)
 
     def test_ImportGenMatrixSin_Error(self):
-        """Check that the ImportGenMatrixSin can detect wrong input
-        """
+        """Check that the ImportGenMatrixSin can detect wrong input"""
         test_obj = ImportGenMatrixSin(sin_list=[], is_transpose=True)
         with self.assertRaises(GenSinEmptyError):
             test_obj.get_data()

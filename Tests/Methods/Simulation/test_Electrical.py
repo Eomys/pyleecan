@@ -14,15 +14,13 @@ IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
 
 def test_resistance():
-    """Check that resistance computation is correct
-    """
+    """Check that resistance computation is correct"""
     result = IPMSM_A.stator.comp_resistance_wind()
     assert result == pytest.approx(0.035951, abs=0.00001)
 
 
 def test_DQ_axis_rotor():
-    """Check that the DQ axis are correct for the rotor
-    """
+    """Check that the DQ axis are correct for the rotor"""
     d_axis = IPMSM_A.rotor.comp_angle_d_axis()
     assert d_axis == pytest.approx(pi / 8, abs=0.0001)
 
@@ -31,8 +29,7 @@ def test_DQ_axis_rotor():
 
 
 def test_DQ_axis_stator():
-    """Check that the DQ axis are correct for the stator
-    """
+    """Check that the DQ axis are correct for the stator"""
     d_axis = IPMSM_A.stator.comp_angle_d_axis()
     assert d_axis == pytest.approx(1.31, abs=0.001)
 
@@ -41,7 +38,6 @@ def test_DQ_axis_stator():
 
 
 def test_comp_rot_dir():
-    """Check that the computation of the rot dir is correct
-    """
+    """Check that the computation of the rot dir is correct"""
     rot_dir = IPMSM_A.stator.comp_rot_dir()
     assert rot_dir == 1
