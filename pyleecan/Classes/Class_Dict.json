@@ -9929,7 +9929,8 @@
         "desc": "Abstract class for the multi-simulation",
         "is_internal": false,
         "methods": [
-            "run"
+            "run",
+            "set_reused_data"
         ],
         "mother": "",
         "name": "VarSimu",
@@ -9998,6 +9999,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "True to reuse the femm file for each simulation (draw the machine only once, MagFEMM only)",
+                "max": "",
+                "min": "",
+                "name": "is_reuse_femm_file",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
             }
         ]
     },

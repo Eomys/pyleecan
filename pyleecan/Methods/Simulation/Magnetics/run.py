@@ -14,6 +14,7 @@ def run(self):
             "ERROR: The Simulation object must be in an Output object to run"
         )
 
+    self.get_logger().info("Starting Magnetic module")
     output = self.parent.parent
 
     self.comp_time_angle(output)
