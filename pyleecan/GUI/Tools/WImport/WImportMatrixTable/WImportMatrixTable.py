@@ -15,8 +15,7 @@ from .....GUI.Tools.WTableData.DTableData import DTableData
 
 
 class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
-    """Widget to define an ImportMatrixVal
-    """
+    """Widget to define an ImportMatrixVal"""
 
     import_name = "Defined as a Matrix"
     import_type = ImportMatrixVal
@@ -28,7 +27,7 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
 
         Parameters
         ----------
-        data : ImportMatrixVal 
+        data : ImportMatrixVal
             Data import to define
         verbose_name : str
             Name of the imported data
@@ -55,13 +54,11 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
         self.b_convert.clicked.connect(self.s_convert)
 
     def update(self):
-        """Fill the widget with the current value of the data
-        """
+        """Fill the widget with the current value of the data"""
         self.in_matrix.setText("Matrix size: " + str(self.data.get_data().shape))
 
     def s_table(self):
-        """display the data in a table
-        """
+        """display the data in a table"""
         try:
             data = self.data.get_data()
         except Exception as e:
@@ -85,8 +82,7 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
             self.update()
 
     def s_plot(self):
-        """Plot the matrix (if 2D)
-        """
+        """Plot the matrix (if 2D)"""
         try:
             data = self.data.get_data()
         except Exception as e:
@@ -111,8 +107,7 @@ class WImportMatrixTable(Ui_WImportMatrixTable, QWidget):
             return
 
     def s_convert(self):
-        """Convert the ImportMatrixVal to a ImportMatrixXls by saving the matrix in Excel
-        """
+        """Convert the ImportMatrixVal to a ImportMatrixXls by saving the matrix in Excel"""
         save_file_path = QFileDialog.getSaveFileName(
             self, self.tr("Export to excel"), USER_DIR, "Excel file (*.xls .*xlsx)"
         )[0]

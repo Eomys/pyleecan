@@ -1,11 +1,10 @@
-import femm
-
-
-def set_FEMM_wind_material(materials, cname, Jcus, Cduct=None, dwire=None):
+def set_FEMM_wind_material(femm, materials, cname, Jcus, Cduct=None, dwire=None):
     """Create or update the property of a winding material
 
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     materials: list
         list the name of all materials
     cname: str

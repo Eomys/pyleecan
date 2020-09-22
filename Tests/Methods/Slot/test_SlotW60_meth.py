@@ -64,7 +64,7 @@ class test_SlotW60_meth(TestCase):
         Parameters
         ----------
         test_dict :
-            
+
 
         Returns
         -------
@@ -89,7 +89,7 @@ class test_SlotW60_meth(TestCase):
         Parameters
         ----------
         test_dict :
-            
+
 
         Returns
         -------
@@ -110,7 +110,7 @@ class test_SlotW60_meth(TestCase):
         Parameters
         ----------
         test_dict :
-            
+
 
         Returns
         -------
@@ -135,7 +135,7 @@ class test_SlotW60_meth(TestCase):
         Parameters
         ----------
         test_dict :
-            
+
 
         Returns
         -------
@@ -156,7 +156,7 @@ class test_SlotW60_meth(TestCase):
         Parameters
         ----------
         test_dict :
-            
+
 
         Returns
         -------

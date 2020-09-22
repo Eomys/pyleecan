@@ -3,7 +3,7 @@ import os
 
 
 def short_filepath(filepath, length=40):
-    """ 
+    """
     truncate a filepath string to the specified length
     but at least returns the filename
     """

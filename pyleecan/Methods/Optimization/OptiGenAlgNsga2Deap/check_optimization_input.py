@@ -11,12 +11,12 @@ class OptimizationAttributeError(Exception):
 
 
 def check_optimization_input(self):
-    """ Check optimization parameters before solving the problem
+    """Check optimization parameters before solving the problem
 
-        Parameters 
-        ----------
-        solver : Solver
-            solver to perform the genetic algorithm with DEAP
+    Parameters
+    ----------
+    solver : Solver
+        solver to perform the genetic algorithm with DEAP
     """
 
     logger = self.get_logger()

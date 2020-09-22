@@ -5,7 +5,7 @@ from matplotlib.colors import LinearSegmentedColormap
 
 def plot_generation(self, x_symbol, y_symbol, ax=None):
     """Plot every fitness values according to the two fitness
-    
+
     Parameters
     ----------
     self : XOutput

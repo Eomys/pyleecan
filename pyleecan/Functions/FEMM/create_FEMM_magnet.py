@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-import femm
 from re import findall
 
 
-def create_FEMM_magnet(label, is_mmf, is_eddies, materials, lam):
+def create_FEMM_magnet(femm, label, is_mmf, is_eddies, materials, lam):
     """Set the material of the magnet in FEMM
 
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     label : str
         label of the magnet
     is_mmfr : bool
@@ -23,7 +24,7 @@ def create_FEMM_magnet(label, is_mmf, is_eddies, materials, lam):
     -------
     (str, list)
         property, materials
-    
+
     """
     # some if's and else's to find the correct material parameter from magnet label
     if "HoleMagnet" in label:

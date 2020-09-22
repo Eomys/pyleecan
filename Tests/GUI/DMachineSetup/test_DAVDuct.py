@@ -131,8 +131,7 @@ class test_DAVDuct(TestCase):
         self.assertEqual(self.widget.lam.axial_vent[0].Alpha0, 0.3)
 
     def test_init_polar(self):
-        """Check that the Widget initialise for polar ventilations
-        """
+        """Check that the Widget initialise for polar ventilations"""
         # Init the widget with Polar vent
         vent = list()
         vent.append(VentilationPolar(Zh=1, H0=21e-3, D0=31e-3, W1=41e-3, Alpha0=0))
@@ -192,8 +191,7 @@ class test_DAVDuct(TestCase):
         self.assertEqual(self.widget.lam.axial_vent[1].Alpha0, 0.4)
 
     def test_init_all_type(self):
-        """Check that you can combine several kind of ventilations
-        """
+        """Check that you can combine several kind of ventilations"""
         self.test_obj = Lamination(Rint=0.1, Rext=1, is_stator=True, is_internal=True)
         self.test_obj.axial_vent.append(
             VentilationCirc(Zh=8, H0=10e-3, D0=40e-3, Alpha0=0)

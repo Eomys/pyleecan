@@ -39,13 +39,11 @@ DELTA = 1e-4
 
 @ddt
 class test_Magnet_Type_11_meth(TestCase):
-    """unittest for MagnetType11 methods
-    """
+    """unittest for MagnetType11 methods"""
 
     @data(*Mag11_test)
     def test_comp_surface(self, test_dict):
-        """Check that the computation of the surface is correct
-        """
+        """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_surface()
 
@@ -61,8 +59,7 @@ class test_Magnet_Type_11_meth(TestCase):
 
     @data(*Mag11_test)
     def test_comp_height(self, test_dict):
-        """Check that the computation of the height is correct
-        """
+        """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_height()
 
@@ -73,8 +70,7 @@ class test_Magnet_Type_11_meth(TestCase):
 
     @data(*Mag11_test)
     def test_comp_angle_op(self, test_dict):
-        """Check that the computation of the opening angle is correct
-        """
+        """Check that the computation of the opening angle is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.magnet[0].comp_angle_opening()
 

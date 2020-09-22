@@ -28,12 +28,12 @@ SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
 @pytest.mark.validation
 @pytest.mark.FEMM
 def test_Magnetic_FEMM_sym():
-    """Validation of outer rotor SPMSM 
+    """Validation of outer rotor SPMSM
     Open circuit (Null Stator currents)
 
     Machine B from Vu Xuan Hung thesis
-    "Modeling of exterior rotor permanent magnet machines with concentrated windings" 
-    Hanoi university of science and technology 2012 
+    "Modeling of exterior rotor permanent magnet machines with concentrated windings"
+    Hanoi university of science and technology 2012
     Test compute the Flux in FEMM, with and without symmetry
     and with MANATEE semi-analytical subdomain model
     """

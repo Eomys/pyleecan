@@ -24,7 +24,7 @@ def build_geometry(self, sym=1, alpha=0, delta=0):
     -------
     surf_list : list
         list of surfaces needed to draw the lamination
-    
+
     """
     surf_list = list()
 

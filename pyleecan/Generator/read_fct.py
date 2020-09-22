@@ -303,14 +303,12 @@ def is_dict_pyleecan_type(type_name):
 
 
 class NotAFile(Exception):
-    """Raised when the code generator is call on a wrong path
-    """
+    """Raised when the code generator is call on a wrong path"""
 
     pass
 
 
 class InheritError(Exception):
-    """Raised when a class has a wrong mother defined
-    """
+    """Raised when a class has a wrong mother defined"""
 
     pass

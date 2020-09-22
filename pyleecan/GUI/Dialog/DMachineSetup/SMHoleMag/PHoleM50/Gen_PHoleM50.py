@@ -7,8 +7,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM50.Ui_PHoleM50 import Ui_
 
 class Gen_PHoleM50(Ui_PHoleM50):
     def setupUi(self, PHoleM50):
-        """Abstract class to update the widget according to the csv doc
-        """
+        """Abstract class to update the widget according to the csv doc"""
         Ui_PHoleM50.setupUi(self, PHoleM50)
         # Setup of in_W0
         txt = self.tr(u"""Slot opening""")

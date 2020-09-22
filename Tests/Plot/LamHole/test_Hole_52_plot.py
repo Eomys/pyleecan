@@ -41,8 +41,7 @@ def machine():
 
 
 def test_Lam_Hole_52(machine):
-    """Test machine plot hole 52 with magnet
-    """
+    """Test machine plot hole 52 with magnet"""
     machine.plot()
     fig = plt.gcf()
     # Rotor + 2 for stator + 0 for frame + 1 for shaft
@@ -57,8 +56,7 @@ def test_Lam_Hole_52(machine):
 
 
 def test_Lam_Hole_52_no_mag(machine):
-    """Test machine plot hole 52 without magnet
-    """
+    """Test machine plot hole 52 without magnet"""
     machine.rotor.hole[0].magnet_0 = None
     machine.rotor.plot()
     fig = plt.gcf()

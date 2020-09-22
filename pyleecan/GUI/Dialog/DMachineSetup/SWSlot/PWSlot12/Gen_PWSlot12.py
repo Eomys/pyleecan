@@ -7,8 +7,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWSlot.PWSlot12.Ui_PWSlot12 import Ui_PWS
 
 class Gen_PWSlot12(Ui_PWSlot12):
     def setupUi(self, PWSlot12):
-        """Abstract class to update the widget according to the csv doc
-        """
+        """Abstract class to update the widget according to the csv doc"""
         Ui_PWSlot12.setupUi(self, PWSlot12)
         # Setup of in_R1
         txt = self.tr(u"""Wedges radius""")

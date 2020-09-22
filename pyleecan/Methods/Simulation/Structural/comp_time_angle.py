@@ -2,7 +2,7 @@
 
 
 def comp_time_angle(self, output):
-    """Compute the time and space discretization of the Structural module    
+    """Compute the time and space discretization of the Structural module
 
     Parameters
     ----------

@@ -30,8 +30,7 @@ if isfile(mach_path):
 
 
 def test_comp_magnet_surface():
-    """Check that the computation of the magnet surface
-    """
+    """Check that the computation of the magnet surface"""
     exp = IPMSM_A.rotor.hole[0].comp_surface_magnets()
     result = IPMSM_B.rotor.hole[0].comp_surface_magnets()
 
@@ -39,8 +38,7 @@ def test_comp_magnet_surface():
 
 
 def test_comp_surface():
-    """Check that the computation of the slot surface is correct
-    """
+    """Check that the computation of the slot surface is correct"""
     exp = IPMSM_A.rotor.hole[0].comp_surface()
     result = IPMSM_B.rotor.hole[0].comp_surface()
 
@@ -48,8 +46,7 @@ def test_comp_surface():
 
 
 def test_build_geometry_no_mag():
-    """check that curve_list is correct (Remove magnet)
-    """
+    """check that curve_list is correct (Remove magnet)"""
     assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_0"] is not None
     assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_1"] is not None
     IPMSM_B.rotor.hole[0].remove_magnet()

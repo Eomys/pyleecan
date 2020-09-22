@@ -42,7 +42,7 @@ def comp_FEMM_dict(machine, Kgeo_fineness, Kmesh_fineness, type_calc_leakage=0):
     -------
     FEMM_dict : dict
         Dictionnary containing the main parameters of FEMM
-    
+
     """
 
     # Recompute because machine may has been modified

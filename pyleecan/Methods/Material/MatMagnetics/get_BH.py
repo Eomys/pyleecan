@@ -43,14 +43,12 @@ def get_BH(self):
 
 
 class BHShapeError(Exception):
-    """Raised when the BH curve has not the expected shape
-    """
+    """Raised when the BH curve has not the expected shape"""
 
     pass
 
 
 class BHDataMissing(Exception):
-    """Raised when there are no BH curve data
-    """
+    """Raised when there are no BH curve data"""
 
     pass

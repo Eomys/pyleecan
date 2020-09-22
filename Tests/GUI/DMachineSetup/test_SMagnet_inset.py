@@ -85,8 +85,7 @@ class test_SMagnet_inset(TestCase):
         self.assertEqual(self.widget.w_mag.w_out.out_gap.text(), "gap: 0.05 m")
 
     def test_set_material(self):
-        """Check that you can change the material
-        """
+        """Check that you can change the material"""
         self.widget.w_mat.c_mat_type.setCurrentIndex(0)
         self.assertEqual(self.test_obj.rotor.slot.magnet[0].mat_type.name, "test1")
         self.assertEqual(self.test_obj.rotor.slot.magnet[0].mat_type.elec.rho, 0.31)

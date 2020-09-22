@@ -6,9 +6,9 @@ def get_logger(obj):
 
     Parameters
     ----------
-    obj : 
+    obj :
         A pyleecan object
-    
+
     Returns
     -------
     logger : logging.Logger

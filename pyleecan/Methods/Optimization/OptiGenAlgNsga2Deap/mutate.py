@@ -4,22 +4,22 @@ from deap.tools import mutPolynomialBounded
 
 
 def mutate(self, indiv):
-    """ Mutate the individual design variables with different strategies according to the variables types :
-            - interval : Polynomial Bounded mutation or user defined
-            - set : Resampling the variable according to its initialization function
-            - pyleecan : Resampling the variable according to its initialization function
+    """Mutate the individual design variables with different strategies according to the variables types :
+        - interval : Polynomial Bounded mutation or user defined
+        - set : Resampling the variable according to its initialization function
+        - pyleecan : Resampling the variable according to its initialization function
 
-        Parameters 
-        ----------
-        solver : Solver
-            solver to perform the genetic algorithm with DEAP 
-        indiv : individual (e.g. OptiGenAlgIndivDeap)
-            individual to mutate
-            
-        Returns
-        -------
-        is_mutation : boolean
-            True if at least one mutation occured
+    Parameters
+    ----------
+    solver : Solver
+        solver to perform the genetic algorithm with DEAP
+    indiv : individual (e.g. OptiGenAlgIndivDeap)
+        individual to mutate
+
+    Returns
+    -------
+    is_mutation : boolean
+        True if at least one mutation occured
     """
     is_mutation = False
 

@@ -7,11 +7,11 @@ def get_material_list(self):
 
     Parameters
     ----------
-    obj : Pyleecan object 
+    obj : Pyleecan object
 
     Returns
     -------
-    materials : list of unique materials contained in the object 
+    materials : list of unique materials contained in the object
     """
 
     return get_material(self)

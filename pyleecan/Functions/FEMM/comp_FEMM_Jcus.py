@@ -4,8 +4,7 @@ from ...Functions.Winding.find_wind_phase_color import get_phase_id
 
 
 def comp_FEMM_Jcus(lam, cname, I, j_t0, is_mmf):
-    """Compute the current density for FEMM [A/mm2]
-    """
+    """Compute the current density for FEMM [A/mm2]"""
 
     Npcpp = lam.winding.Npcpp  # number of parallel circuits  per phase (maximum 2p)
     (Nrad, Ntan) = lam.winding.get_dim_wind()

@@ -4,7 +4,7 @@ import numpy as np
 
 
 def interpolation(self, point, vertice, field):
-    """ Return interpolated value of the field in a cell
+    """Return interpolated value of the field in a cell
 
     Parameters
      ----------
@@ -24,7 +24,7 @@ def interpolation(self, point, vertice, field):
      value: array
          interpolated field
 
-     """
+    """
 
     point_ref = self.get_ref_point(vertice, point)
     [values_ref, size] = self.shape_function(point_ref, 1)

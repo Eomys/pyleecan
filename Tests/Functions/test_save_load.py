@@ -45,8 +45,7 @@ logger.info(save_path)
 
 
 def test_save_load_machine():
-    """Check that you can save and load a machine object
-    """
+    """Check that you can save and load a machine object"""
     # SetUp
     test_obj = MachineSIPMSM(name="test", desc="test\non\nseveral lines")
     test_obj.stator = LamSlotWind(L1=0.45)
@@ -102,8 +101,7 @@ def test_save_load_machine():
 
 
 def test_save_load_folder_path():
-    """Save with a folder path
-    """
+    """Save with a folder path"""
     simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
 
     # Definition of the enforced output of the electrical module
@@ -149,8 +147,7 @@ def test_save_load_folder_path():
 
 
 def test_save_load_just_name():
-    """Save in a file and load 
-    """
+    """Save in a file and load"""
 
     test_obj = SlotW10(Zs=10)
 
@@ -168,15 +165,13 @@ def test_save_load_just_name():
 
 
 def test_load_error_missing():
-    """Test that the load function can detect missing file
-    """
+    """Test that the load function can detect missing file"""
     with pytest.raises(LoadMissingFileError):
         load(save_path)
 
 
 def test_load_error_wrong_type():
-    """Test that the load function can detect wrong type
-    """
+    """Test that the load function can detect wrong type"""
     with pytest.raises(LoadWrongTypeError):
         load(load_file_3)
     with pytest.raises(LoadWrongTypeError):
@@ -186,8 +181,7 @@ def test_load_error_wrong_type():
 
 
 def test_load_error_missing_class():
-    """Test that the load function can detect missing __class__
-    """
+    """Test that the load function can detect missing __class__"""
     with pytest.raises(
         LoadWrongDictClassError, match='Key "__class__" missing in loaded file'
     ):
@@ -195,8 +189,7 @@ def test_load_error_missing_class():
 
 
 def test_load_error_wrong_class():
-    """Test that the load function can detect wrong __class__
-    """
+    """Test that the load function can detect wrong __class__"""
     with pytest.raises(
         LoadWrongDictClassError, match="SlotDoesntExist is not a pyleecan class"
     ):
@@ -205,15 +198,13 @@ def test_load_error_wrong_class():
 
 @patch.dict("pyleecan.Functions.load_switch.load_switch", {"list": None})
 def test_load_switch():
-    """Test that the load function can detect wrong load_switch dict
-    """
+    """Test that the load function can detect wrong load_switch dict"""
     with pytest.raises(LoadSwitchError):
         load_list(load_file_3)
 
 
 def test_save_load_list():
-    """Test the save and load function of data structures
-    """
+    """Test the save and load function of data structures"""
     # SetUp
     test_obj_1 = MachineSIPMSM(name="test", desc="test\non\nseveral lines")
     test_obj_1.stator = LamSlotWind(L1=0.45)
@@ -253,8 +244,7 @@ def test_save_load_list():
 
 
 def test_save_load_dict():
-    """Test the save and load function of data structures
-        """
+    """Test the save and load function of data structures"""
     # SetUp
     test_obj_1 = MachineSIPMSM(name="test", desc="test\non\nseveral lines")
     test_obj_1.stator = LamSlotWind(L1=0.45)
@@ -297,8 +287,7 @@ def test_save_load_dict():
 @pytest.mark.FEMM
 @pytest.mark.parametrize("type_file", ["json", "h5", "pkl"])
 def test_save_load_simu(type_file):
-    """Save in hdf5 file
-    """
+    """Save in hdf5 file"""
     simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
 
     # Definition of the enforced output of the electrical module

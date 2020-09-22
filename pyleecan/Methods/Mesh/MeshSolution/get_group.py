@@ -26,7 +26,7 @@ def get_group(self, group_names):
      grp_cells: dict
          a dict sorted by cell type containing connectivity of the group
 
-     """
+    """
 
     is_same_mesh = self.is_same_mesh
     dimension = self.dimension

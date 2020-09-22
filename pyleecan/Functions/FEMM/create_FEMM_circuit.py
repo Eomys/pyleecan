@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import femm
 from numpy import linalg as LA, pi, sign, sqrt
 
 
-def create_FEMM_circuit(label, is_eddies, lam, I, is_mmf, j_t0, materials):
+def create_FEMM_circuit(femm, label, is_eddies, lam, I, is_mmf, j_t0, materials):
     """Set in FEMM circuits property
-    
+
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     label :
         label of the surface
     sym :
@@ -26,7 +27,7 @@ def create_FEMM_circuit(label, is_eddies, lam, I, is_mmf, j_t0, materials):
         time step for winding current calculation@type integer
     materials :
         list of materials already created in FEMM
-    
+
     Returns
     -------
     (str, list)

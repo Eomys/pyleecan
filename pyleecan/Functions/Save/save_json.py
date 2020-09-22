@@ -30,12 +30,12 @@ def create_folder(logger, save_path):
 def fix_file_name(save_path, obj, is_folder, logger):
     """
     Check save_path and modify it according to is_folder
-    
+
     Parameters
     ----------
     save_path: str
         File/Folder path
-    obj: 
+    obj:
         Pyleecan object to save
     is_folder: bool
         object is saved if folder mode (splitting Materials, Machine, Simulation in different files)
@@ -66,8 +66,7 @@ def is_json_serializable(obj):
 
 
 def has_as_dict(obj):
-    """Check if object has 'as_dict' method.
-    """
+    """Check if object has 'as_dict' method."""
     return hasattr(obj, "as_dict") and callable(getattr(obj, "as_dict", None))
 
 
@@ -78,9 +77,9 @@ def build_data(obj):
 
     Parameters
     ----------
-    obj : 
+    obj :
         An object to serialize
-    
+
     Returns
     -------
     data :
@@ -113,7 +112,7 @@ def build_data(obj):
 
 def save_split_obj(classes_tuple, obj, folder_path, logger):
     """
-    Scan the object attribute and save the object in a dedicated file 
+    Scan the object attribute and save the object in a dedicated file
 
     Parameters
     ----------
@@ -230,12 +229,12 @@ def save_json(obj, save_path="", is_folder=False):
 
     Parameters
     ----------
-    self : 
+    self :
         A pyleecan object
     save_path: str
         path to the folder to save the object
     is_folder: bool
-        to split the object in different files: separate simulation machine and materials 
+        to split the object in different files: separate simulation machine and materials
     """
     if isinstance(obj, FrozenClass):  # Pyleecan obj
         # Get the object logger

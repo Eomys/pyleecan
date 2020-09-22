@@ -5,12 +5,10 @@ from ......GUI import gui_option
 
 
 class WMagnetOut(QGroupBox):
-    """Setup of QGroupBox for output for Magnet
-    """
+    """Setup of QGroupBox for output for Magnet"""
 
     def __init__(self, parent=None):
-        """Initialize the widget
-        """
+        """Initialize the widget"""
 
         QWidget.__init__(self, parent)
         self.u = gui_option.unit

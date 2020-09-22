@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from os.path import join
-from os import remove, chdir
+from os.path import join, isdir
+from os import remove, chdir, listdir
 
 import pytest
 from importlib import import_module
@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from numpy import array_equal, empty, array
 from pyleecan.Generator.read_fct import read_all
 from pyleecan.Generator.ClassGenerator.init_method_generator import get_mother_attr
-from pyleecan.definitions import DOC_DIR
+from pyleecan.definitions import DOC_DIR, MAIN_DIR
 from Tests.find import find_test_value, is_type_list, is_type_dict, MissingTypeError
 from pyleecan.Generator import PYTHON_TYPE
 from cloudpickle import dumps
@@ -208,8 +208,7 @@ def test_class_as_dict(class_dict):
 
 @pytest.mark.parametrize("class_dict", class_list)
 def test_class_set_None(class_dict):
-    """Check that _set_None set to None every non pyleecantype properties
-    """
+    """Check that _set_None set to None every non pyleecantype properties"""
 
     test_obj = eval(class_dict["name"] + "()")
     test_obj._set_None()
@@ -240,7 +239,7 @@ def test_class_inherit(class_dict):
         assert eval("issubclass(" + class_dict["name"] + ", FrozenClass)") == True
 
 
-@pytest.mark.parametrize("class_dict", class_list)  # [86:87]
+@pytest.mark.parametrize("class_dict", class_list)
 def test_class_methods(class_dict):
     """Check if the class has all its methods"""
     test_obj = eval(class_dict["name"] + "()")
@@ -254,16 +253,50 @@ def test_class_methods(class_dict):
             class_dict["name"] + " has no method: " + meth
         )
 
-        # Check if the methods doesn't raise ImportError
-        try:
-            eval("test_obj." + meth + "()")
-        except ImportError as err:
-            raise err  # Raise the ImportError because the method doesn't exist
-        except:
-            pass
+        meth_obj = eval("getattr(" + class_dict["name"] + ", '" + meth + "')")
+        assert not isinstance(meth_obj, property), meth_obj.fget("")
 
-    # Some methods may generate plots
-    plt.close("all")
+
+@pytest.mark.parametrize("class_dict", class_list)
+def test_class_uncleaned_methods(class_dict):
+    """Check if all the method in the class folder is in the csv"""
+    folder_path = join(MAIN_DIR, "Methods", class_dict["package"], class_dict["name"])
+
+    meth_list = get_mother_attr(gen_dict, class_dict, "methods")[0]
+    if len(meth_list) == 0 and isdir(folder_path):
+        raise Exception(
+            class_dict["name"]
+            + " has no method in the csv but the method folder exist: "
+            + folder_path
+        )
+    elif len(meth_list) != 0 and isdir(folder_path):
+        dir_list = listdir(folder_path)
+        if "__init__.py" in dir_list:
+            dir_list.remove("__init__.py")
+        if "__pycache__" in dir_list:
+            dir_list.remove("__pycache__")
+        # Get only python file
+        file_list = [path for path in dir_list if path[-3:] == ".py"]
+        # Add subfolder
+        for path in dir_list:
+            if isdir(join(folder_path, path)):
+                file_list.extend(
+                    [
+                        path + "." + name
+                        for name in listdir(join(folder_path, path))
+                        if name[-3:] == ".py"
+                    ]
+                )
+                if path + ".__init__.py" in file_list:
+                    file_list.remove(path + ".__init__.py")
+        # Check if all files are methods
+        for file_name in file_list:
+            assert file_name[:-3] in meth_list, (
+                class_dict["name"]
+                + " method folder contains a file not referenced in the csv: "
+                + file_name
+            )
+    # else : no method and no folder => Ok
 
 
 @pytest.mark.parametrize("class_dict", class_list)
@@ -360,8 +393,7 @@ def test_class_prop_doc(class_dict):
 
 @pytest.mark.parametrize("class_dict", class_list)
 def test_class_copy(class_dict):
-    """Check if the copy method is correct
-    """
+    """Check if the copy method is correct"""
 
     test_obj = eval(class_dict["name"] + "()")
     result = test_obj.copy()

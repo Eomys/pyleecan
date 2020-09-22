@@ -335,8 +335,7 @@ def check_max(var_name, value, type_value, Vmax):
 
 
 def raise_(ex):
-    """Function to raise an exeption for the method import lambda
-    """
+    """Function to raise an exeption for the method import lambda"""
     raise ex
 
 

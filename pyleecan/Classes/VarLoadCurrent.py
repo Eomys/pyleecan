@@ -121,7 +121,23 @@ class VarLoadCurrent(VarLoad):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, OP_matrix=None, type_OP_matrix=0, is_torque=False, is_power=False, name="", desc="", datakeeper_list=list(), nb_proc=1, is_keep_all_output=False, stop_if_error=False, ref_simu_index=None, nb_simu=0, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        OP_matrix=None,
+        type_OP_matrix=0,
+        is_torque=False,
+        is_power=False,
+        name="",
+        desc="",
+        datakeeper_list=list(),
+        is_keep_all_output=False,
+        stop_if_error=False,
+        ref_simu_index=None,
+        nb_simu=0,
+        is_reuse_femm_file=True,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -146,11 +162,11 @@ class VarLoadCurrent(VarLoad):
             name = obj.name
             desc = obj.desc
             datakeeper_list = obj.datakeeper_list
-            nb_proc = obj.nb_proc
             is_keep_all_output = obj.is_keep_all_output
             stop_if_error = obj.stop_if_error
             ref_simu_index = obj.ref_simu_index
             nb_simu = obj.nb_simu
+            is_reuse_femm_file = obj.is_reuse_femm_file
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -168,8 +184,6 @@ class VarLoadCurrent(VarLoad):
                 desc = init_dict["desc"]
             if "datakeeper_list" in list(init_dict.keys()):
                 datakeeper_list = init_dict["datakeeper_list"]
-            if "nb_proc" in list(init_dict.keys()):
-                nb_proc = init_dict["nb_proc"]
             if "is_keep_all_output" in list(init_dict.keys()):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
@@ -178,6 +192,8 @@ class VarLoadCurrent(VarLoad):
                 ref_simu_index = init_dict["ref_simu_index"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
+            if "is_reuse_femm_file" in list(init_dict.keys()):
+                is_reuse_femm_file = init_dict["is_reuse_femm_file"]
         # Initialisation by argument
         # OP_matrix can be None, a ndarray or a list
         set_array(self, "OP_matrix", OP_matrix)
@@ -185,7 +201,16 @@ class VarLoadCurrent(VarLoad):
         self.is_torque = is_torque
         self.is_power = is_power
         # Call VarLoad init
-        super(VarLoadCurrent, self).__init__(name=name, desc=desc, datakeeper_list=datakeeper_list, nb_proc=nb_proc, is_keep_all_output=is_keep_all_output, stop_if_error=stop_if_error, ref_simu_index=ref_simu_index, nb_simu=nb_simu)
+        super(VarLoadCurrent, self).__init__(
+            name=name,
+            desc=desc,
+            datakeeper_list=datakeeper_list,
+            is_keep_all_output=is_keep_all_output,
+            stop_if_error=stop_if_error,
+            ref_simu_index=ref_simu_index,
+            nb_simu=nb_simu,
+            is_reuse_femm_file=is_reuse_femm_file,
+        )
         # The class is frozen (in VarLoad init), for now it's impossible to
         # add new properties
 
