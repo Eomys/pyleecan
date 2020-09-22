@@ -5845,7 +5845,8 @@
             "mutate",
             "cross",
             "create_toolbox",
-            "check_optimization_input"
+            "check_optimization_input",
+            "delete_toolbox"
         ],
         "mother": "OptiGenAlg",
         "name": "OptiGenAlgNsga2Deap",

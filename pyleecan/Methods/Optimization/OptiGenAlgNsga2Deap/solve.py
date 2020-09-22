@@ -36,6 +36,8 @@ def solve(self):
         class containing the results
     """
 
+    logger = self.get_logger()
+
     # Check input parameters
     self.check_optimization_input()
 
@@ -223,27 +225,11 @@ def solve(self):
             else:
                 pop = self.selector(pop, self.size_pop)
 
-        # Change xoutput variables in ndarray
-        paramexplorer_value = np.array(paramexplorer_value)
-
-        # Storing number of simulations
-        self.xoutput.nb_simu = shape
-
-        # Save design variable values in ParamExplorerSet
-        for i, param_explorer in enumerate(self.problem.design_var):
-            self.xoutput.paramexplorer_list.append(
-                ParamExplorerSet(
-                    name=param_explorer.name,
-                    unit=param_explorer.unit,
-                    symbol=param_explorer.symbol,
-                    setter=param_explorer.setter,
-                    value=paramexplorer_value[:, i].tolist(),
-                )
-            )
-
-        return self.xoutput
-
     except KeyboardInterrupt:
+        # Except keybord interruption to return the results already computed
+        logger.info("Interrupted by the user.")
+
+    finally:
         # Change xoutput variables in ndarray
         paramexplorer_value = np.array(paramexplorer_value)
 
@@ -262,6 +248,7 @@ def solve(self):
                 )
             )
 
-        # Except keybord interruption to return the results already computed
-        print("Interrupted by the user.")
+        # Delete toolbox so that classes created with DEAP remains after the optimization
+        self.delete_toolbox()
+
         return self.xoutput

@@ -40,6 +40,11 @@ try:
 except ImportError as error:
     check_optimization_input = error
 
+try:
+    from ..Methods.Optimization.OptiGenAlgNsga2Deap.delete_toolbox import delete_toolbox
+except ImportError as error:
+    delete_toolbox = error
+
 
 from inspect import getsource
 from cloudpickle import dumps, loads
@@ -113,6 +118,18 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         )
     else:
         check_optimization_input = check_optimization_input
+    # cf Methods.Optimization.OptiGenAlgNsga2Deap.delete_toolbox
+    if isinstance(delete_toolbox, ImportError):
+        delete_toolbox = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OptiGenAlgNsga2Deap method delete_toolbox: "
+                    + str(delete_toolbox)
+                )
+            )
+        )
+    else:
+        delete_toolbox = delete_toolbox
     # save method is available in all object
     save = save
 
