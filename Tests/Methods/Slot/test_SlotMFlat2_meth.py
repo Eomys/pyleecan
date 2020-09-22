@@ -10,8 +10,8 @@ from pyleecan.Methods.Slot.SlotMFlat2.comp_angle_opening import comp_angle_openi
 from pyleecan.Methods.Slot.SlotMFlat2.comp_angle_opening_magnet import (
     comp_angle_opening_magnet,
 )
-from pyleecan.Methods.Slot.SlotMFlat2.comp_angle_opening_slot import (
-    comp_angle_opening_slot,
+from pyleecan.Methods.Slot.SlotMFlat2.comp_angle_magnet import (
+    comp_angle_magnet
 )
 from pyleecan.Methods.Slot.SlotMFlat2.comp_height import comp_height
 from pyleecan.Methods.Slot.SlotMFlat2.comp_surface import comp_surface
@@ -29,8 +29,9 @@ lam.slot = SlotMFlat2(
     H1=1*mm, W1=2*mm, W0=4*mm, W0_is_rad=False, H0=10*mm, W3=0, Zs=8,
     magnet=list()
 )
-lam.slot.magnet.append(MagnetType10(Wmag=4*mm,Hmag=10*mm))
+lam.slot.magnet.append(MagnetType10(Wmag=4*mm,Hmag=1*mm))
 lam.plot()
+#%%
 # W0 is rad
 lam.slot.W0_is_rad = True
 lam.slot.W0 = arcsin(4*mm/lam.slot.get_Rbo())

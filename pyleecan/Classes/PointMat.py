@@ -92,7 +92,7 @@ class PointMat(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, coordinate=None, nb_pt=0, delta=1e-10, indice=None, init_dict = None, init_str = None):
+    def __init__(self, coordinate=[], nb_pt=0, delta=1e-10, indice=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -199,9 +199,7 @@ class PointMat(FrozenClass):
 
     def _set_coordinate(self, value):
         """setter of coordinate"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:
@@ -260,9 +258,7 @@ class PointMat(FrozenClass):
 
     def _set_indice(self, value):
         """setter of indice"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:

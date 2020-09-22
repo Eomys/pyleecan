@@ -2,8 +2,8 @@
 
 from numpy import exp, sin
 
-from ....Classes.Arc2 import Arc2
-from ....Classes.Segment import Segment
+from pyleecan.Classes.Arc2 import Arc2
+from pyleecan.Classes.Segment import Segment
 
 
 def build_geometry(self):
@@ -24,8 +24,8 @@ def build_geometry(self):
     """
     Rbo = self.get_Rbo()
     alpha = self.comp_angle_opening()
-    alpha_slot = self.comp_angle_opening_slot()
-    alpha_mag = self.comp_angle_opening_magnet()
+    alpha_slot = self.comp_angle_opening_magnet()
+    alpha_mag = self.comp_angle_magnet()
 
     # Point coordinate for a slot center on Ox
     Z1 = Rbo * exp(-1j * alpha_slot / 2)

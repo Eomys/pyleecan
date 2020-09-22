@@ -108,7 +108,7 @@ class ImportData(FrozenClass):
                         self.axes.append(obj)
                     elif isinstance(obj, dict):
                         self.axes.append(ImportData(init_dict=obj))
-
+    
         elif axes is None:
             self.axes = list()
         else:

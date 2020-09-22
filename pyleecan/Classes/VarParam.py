@@ -118,29 +118,33 @@ class VarParam(VarSimu):
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
         # Initialisation by argument
-        # paramexplorer_list can be None or a list of ParamExplorer object
-        self.paramexplorer_list = list()
+        # paramexplorer_list can be None or a list of ParamExplorer object or a list of dict
         if type(paramexplorer_list) is list:
-            for obj in paramexplorer_list:
-                if obj is None:  # Default value
-                    self.paramexplorer_list.append(ParamExplorer())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in ['ParamExplorer', 'OptiDesignVar', 'ParamExplorerSet']:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for paramexplorer_list"
+            # Check if the list is only composed of ParamExplorer
+            if len(paramexplorer_list) > 0 and all(isinstance(obj, ParamExplorer) for obj in paramexplorer_list):
+                # set the list to keep pointer reference
+                self.paramexplorer_list = paramexplorer_list
+            else:
+                self.paramexplorer_list = list()
+                for obj in paramexplorer_list:
+                    if not isinstance(obj, dict):  # Default value
+                        self.paramexplorer_list.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in ['ParamExplorer', 'OptiDesignVar', 'ParamExplorerSet']:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for paramexplorer_list"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.paramexplorer_list.append(class_obj(init_dict=obj))
-                else:
-                    self.paramexplorer_list.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.paramexplorer_list.append(class_obj(init_dict=obj))
+    
         elif paramexplorer_list is None:
             self.paramexplorer_list = list()
         else:

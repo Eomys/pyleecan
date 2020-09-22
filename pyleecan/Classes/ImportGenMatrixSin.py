@@ -100,9 +100,7 @@ class ImportGenMatrixSin(ImportMatrix):
         # sin_list can be None or a list of ImportGenVectSin object or a list of dict
         if type(sin_list) is list:
             # Check if the list is only composed of ImportGenVectSin
-            if len(sin_list) > 0 and all(
-                isinstance(obj, ImportGenVectSin) for obj in sin_list
-            ):
+            if len(sin_list) > 0 and all(isinstance(obj, ImportGenVectSin) for obj in sin_list):
                 # set the list to keep pointer reference
                 self.sin_list = sin_list
             else:
@@ -112,7 +110,7 @@ class ImportGenMatrixSin(ImportMatrix):
                         self.sin_list.append(obj)
                     elif isinstance(obj, dict):
                         self.sin_list.append(ImportGenVectSin(init_dict=obj))
-
+    
         elif sin_list is None:
             self.sin_list = list()
         else:

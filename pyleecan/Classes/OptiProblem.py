@@ -109,9 +109,7 @@ class OptiProblem(FrozenClass):
         # design_var can be None or a list of OptiDesignVar object or a list of dict
         if type(design_var) is list:
             # Check if the list is only composed of OptiDesignVar
-            if len(design_var) > 0 and all(
-                isinstance(obj, OptiDesignVar) for obj in design_var
-            ):
+            if len(design_var) > 0 and all(isinstance(obj, OptiDesignVar) for obj in design_var):
                 # set the list to keep pointer reference
                 self.design_var = design_var
             else:
@@ -121,7 +119,7 @@ class OptiProblem(FrozenClass):
                         self.design_var.append(obj)
                     elif isinstance(obj, dict):
                         self.design_var.append(OptiDesignVar(init_dict=obj))
-
+    
         elif design_var is None:
             self.design_var = list()
         else:
@@ -129,9 +127,7 @@ class OptiProblem(FrozenClass):
         # obj_func can be None or a list of DataKeeper object or a list of dict
         if type(obj_func) is list:
             # Check if the list is only composed of DataKeeper
-            if len(obj_func) > 0 and all(
-                isinstance(obj, DataKeeper) for obj in obj_func
-            ):
+            if len(obj_func) > 0 and all(isinstance(obj, DataKeeper) for obj in obj_func):
                 # set the list to keep pointer reference
                 self.obj_func = obj_func
             else:
@@ -141,7 +137,7 @@ class OptiProblem(FrozenClass):
                         self.obj_func.append(obj)
                     elif isinstance(obj, dict):
                         self.obj_func.append(DataKeeper(init_dict=obj))
-
+    
         elif obj_func is None:
             self.obj_func = list()
         else:
@@ -150,9 +146,7 @@ class OptiProblem(FrozenClass):
         # constraint can be None or a list of OptiConstraint object or a list of dict
         if type(constraint) is list:
             # Check if the list is only composed of OptiConstraint
-            if len(constraint) > 0 and all(
-                isinstance(obj, OptiConstraint) for obj in constraint
-            ):
+            if len(constraint) > 0 and all(isinstance(obj, OptiConstraint) for obj in constraint):
                 # set the list to keep pointer reference
                 self.constraint = constraint
             else:
@@ -162,7 +156,7 @@ class OptiProblem(FrozenClass):
                         self.constraint.append(obj)
                     elif isinstance(obj, dict):
                         self.constraint.append(OptiConstraint(init_dict=obj))
-
+    
         elif constraint is None:
             self.constraint = list()
         else:

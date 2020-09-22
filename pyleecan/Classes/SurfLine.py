@@ -215,29 +215,33 @@ class SurfLine(Surface):
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
         # Initialisation by argument
-        # line_list can be None or a list of Line object
-        self.line_list = list()
+        # line_list can be None or a list of Line object or a list of dict
         if type(line_list) is list:
-            for obj in line_list:
-                if obj is None:  # Default value
-                    self.line_list.append(Line())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in ['Line', 'Arc', 'Arc1', 'Arc2', 'Arc3', 'Segment']:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for line_list"
+            # Check if the list is only composed of Line
+            if len(line_list) > 0 and all(isinstance(obj, Line) for obj in line_list):
+                # set the list to keep pointer reference
+                self.line_list = line_list
+            else:
+                self.line_list = list()
+                for obj in line_list:
+                    if not isinstance(obj, dict):  # Default value
+                        self.line_list.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in ['Line', 'Arc', 'Arc1', 'Arc2', 'Arc3', 'Segment']:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for line_list"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.line_list.append(class_obj(init_dict=obj))
-                else:
-                    self.line_list.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.line_list.append(class_obj(init_dict=obj))
+    
         elif line_list is None:
             self.line_list = list()
         else:

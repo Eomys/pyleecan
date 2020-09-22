@@ -7625,7 +7625,7 @@
         "methods": [
             "build_geometry",
             "comp_angle_opening",
-            "comp_angle_opening_slot",
+            "comp_angle_magnet",
             "comp_angle_opening_magnet",
             "comp_height",
             "comp_surface",
@@ -7635,7 +7635,7 @@
         "mother": "SlotMag",
         "name": "SlotMFlat2",
         "package": "Slot",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Slot/SlotMFlat2.csv",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotMFlat2.csv",
         "properties": [
             {
                 "desc": "Internal Slot height (for Magnet)",
