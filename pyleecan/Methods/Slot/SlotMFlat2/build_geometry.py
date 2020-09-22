@@ -65,7 +65,7 @@ def build_geometry(self):
     slot_list = list()
     for ii in range(len(self.magnet)):
         # Compute angle of the middle of the slot
-        beta = -alpha / 2 + alpha_mag / 2 + ii * (self.W3 + alpha_mag)
+        beta = -alpha / 2 + alpha_slot / 2 + ii * (self.W3 + alpha_slot)
         # Duplicate and rotate the slot + bore for each slot
         for line in curve_list:
             new_line = type(line)(init_dict=line.as_dict())
