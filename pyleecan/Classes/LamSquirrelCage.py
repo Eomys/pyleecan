@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .LamSlotWind import LamSlotWind
 
 # Import all class method
@@ -161,47 +163,16 @@ class LamSquirrelCage(LamSlotWind):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if ring_mat == -1:
-            ring_mat = Material()
-        if winding == -1:
-            winding = Winding()
-        if slot == -1:
-            slot = Slot()
-        if mat_type == -1:
-            mat_type = Material()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            Hscr = obj.Hscr
-            Lscr = obj.Lscr
-            ring_mat = obj.ring_mat
-            Ksfill = obj.Ksfill
-            winding = obj.winding
-            slot = obj.slot
-            L1 = obj.L1
-            mat_type = obj.mat_type
-            Nrvd = obj.Nrvd
-            Wrvd = obj.Wrvd
-            Kf1 = obj.Kf1
-            is_internal = obj.is_internal
-            Rint = obj.Rint
-            Rext = obj.Rext
-            is_stator = obj.is_stator
-            axial_vent = obj.axial_vent
-            notch = obj.notch
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -239,18 +210,10 @@ class LamSquirrelCage(LamSlotWind):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.Hscr = Hscr
         self.Lscr = Lscr
-        # ring_mat can be None, a Material object or a dict
-        if isinstance(ring_mat, dict):
-            self.ring_mat = Material(init_dict=ring_mat)
-        elif isinstance(ring_mat, str):
-            from ..Functions.load import load
-
-            self.ring_mat = load(ring_mat)
-        else:
-            self.ring_mat = ring_mat
+        self.ring_mat = ring_mat
         # Call LamSlotWind init
         super(LamSquirrelCage, self).__init__(
             Ksfill=Ksfill,
@@ -374,6 +337,13 @@ class LamSquirrelCage(LamSlotWind):
 
     def _set_ring_mat(self, value):
         """setter of ring_mat"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "ring_mat"
+            )
+            value = class_obj(init_dict=value)
+        elif value == -1:  # Default constructor
+            value = Material()
         check_var("ring_mat", value, "Material")
         self._ring_mat = value
 

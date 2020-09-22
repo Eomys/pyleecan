@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -100,35 +102,16 @@ class Magnetics(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            is_remove_slotS = obj.is_remove_slotS
-            is_remove_slotR = obj.is_remove_slotR
-            is_remove_vent = obj.is_remove_vent
-            is_mmfs = obj.is_mmfs
-            is_mmfr = obj.is_mmfr
-            type_BH_stator = obj.type_BH_stator
-            type_BH_rotor = obj.type_BH_rotor
-            is_symmetry_t = obj.is_symmetry_t
-            sym_t = obj.sym_t
-            is_antiper_t = obj.is_antiper_t
-            is_symmetry_a = obj.is_symmetry_a
-            sym_a = obj.sym_a
-            is_antiper_a = obj.is_antiper_a
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -158,7 +141,7 @@ class Magnetics(FrozenClass):
                 sym_a = init_dict["sym_a"]
             if "is_antiper_a" in list(init_dict.keys()):
                 is_antiper_a = init_dict["is_antiper_a"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
         self.is_remove_slotR = is_remove_slotR

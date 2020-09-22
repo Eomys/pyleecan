@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Machine import Machine
 
 # Import all class method
@@ -115,34 +117,16 @@ class MachineUD(Machine):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if frame == -1:
-            frame = Frame()
-        if shaft == -1:
-            shaft = Shaft()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            lam_list = obj.lam_list
-            is_sync = obj.is_sync
-            frame = obj.frame
-            shaft = obj.shaft
-            name = obj.name
-            desc = obj.desc
-            type_machine = obj.type_machine
-            logger_name = obj.logger_name
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -162,48 +146,8 @@ class MachineUD(Machine):
                 type_machine = init_dict["type_machine"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
-        # Initialisation by argument
-        # lam_list can be None or a list of Lamination object or a list of dict
-        if type(lam_list) is list:
-            # Check if the list is only composed of Lamination
-            if len(lam_list) > 0 and all(
-                isinstance(obj, Lamination) for obj in lam_list
-            ):
-                # set the list to keep pointer reference
-                self.lam_list = lam_list
-            else:
-                self.lam_list = list()
-                for obj in lam_list:
-                    if not isinstance(obj, dict):  # Default value
-                        self.lam_list.append(obj)
-                    elif isinstance(obj, dict):
-                        # Check that the type is correct (including daughter)
-                        class_name = obj.get("__class__")
-                        if class_name not in [
-                            "Lamination",
-                            "LamHole",
-                            "LamSlot",
-                            "LamSlotMag",
-                            "LamSlotMulti",
-                            "LamSlotWind",
-                            "LamSquirrelCage",
-                        ]:
-                            raise InitUnKnowClassError(
-                                "Unknow class name "
-                                + class_name
-                                + " in init_dict for lam_list"
-                            )
-                        # Dynamic import to call the correct constructor
-                        module = __import__(
-                            "pyleecan.Classes." + class_name, fromlist=[class_name]
-                        )
-                        class_obj = getattr(module, class_name)
-                        self.lam_list.append(class_obj(init_dict=obj))
-
-        elif lam_list is None:
-            self.lam_list = list()
-        else:
-            self.lam_list = lam_list
+        # Set the properties (value check and convertion are done in setter)
+        self.lam_list = lam_list
         self.is_sync = is_sync
         # Call Machine init
         super(MachineUD, self).__init__(
@@ -279,6 +223,13 @@ class MachineUD(Machine):
 
     def _set_lam_list(self, value):
         """setter of lam_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "lam_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
         check_var("lam_list", value, "[Lamination]")
         self._lam_list = value
 

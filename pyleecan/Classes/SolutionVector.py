@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Solution import Solution
 
 # Import all class method
@@ -85,26 +87,16 @@ class SolutionVector(Solution):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            field = obj.field
-            type_cell = obj.type_cell
-            label = obj.label
-            dimension = obj.dimension
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -116,10 +108,7 @@ class SolutionVector(Solution):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
-        # Initialisation by argument
-        # Check if the type VectorField has been imported with success
-        if isinstance(VectorField, ImportError):
-            raise ImportError("Unknown type VectorField please install SciDataTool")
+        # Set the properties (value check and convertion are done in setter)
         self.field = field
         # Call Solution init
         super(SolutionVector, self).__init__(
@@ -158,12 +147,8 @@ class SolutionVector(Solution):
         SolutionVector_dict = super(SolutionVector, self).as_dict()
         if self.field is None:
             SolutionVector_dict["field"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            SolutionVector_dict["field"] = {
-                "__class__": str(type(self._field)),
-                "__repr__": str(self._field.__repr__()),
-                "serialized": dumps(self._field).decode("ISO-8859-2"),
-            }
+        else:
+            SolutionVector_dict["field"] = self.field.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         SolutionVector_dict["__class__"] = "SolutionVector"
@@ -182,6 +167,13 @@ class SolutionVector(Solution):
 
     def _set_field(self, value):
         """setter of field"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "field",
+            )
+            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("field", value, "dict")
         except CheckTypeError:

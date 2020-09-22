@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -111,41 +113,16 @@ class OutElec(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            time = obj.time
-            angle = obj.angle
-            Is = obj.Is
-            Ir = obj.Ir
-            angle_rotor = obj.angle_rotor
-            N0 = obj.N0
-            rot_dir = obj.rot_dir
-            angle_rotor_initial = obj.angle_rotor_initial
-            logger_name = obj.logger_name
-            mmf_unit = obj.mmf_unit
-            Tem_av_ref = obj.Tem_av_ref
-            Id_ref = obj.Id_ref
-            Iq_ref = obj.Iq_ref
-            felec = obj.felec
-            Ud_ref = obj.Ud_ref
-            Uq_ref = obj.Uq_ref
-            Pj_losses = obj.Pj_losses
-            Pem_av_ref = obj.Pem_av_ref
-            Us = obj.Us
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -187,19 +164,13 @@ class OutElec(FrozenClass):
                 Pem_av_ref = init_dict["Pem_av_ref"]
             if "Us" in list(init_dict.keys()):
                 Us = init_dict["Us"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # time can be None, a ndarray or a list
-        set_array(self, "time", time)
-        # angle can be None, a ndarray or a list
-        set_array(self, "angle", angle)
-        # Check if the type DataND has been imported with success
-        if isinstance(DataND, ImportError):
-            raise ImportError("Unknown type DataND please install SciDataTool")
+        self.time = time
+        self.angle = angle
         self.Is = Is
         self.Ir = Ir
-        # angle_rotor can be None, a ndarray or a list
-        set_array(self, "angle_rotor", angle_rotor)
+        self.angle_rotor = angle_rotor
         self.N0 = N0
         self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
@@ -327,20 +298,12 @@ class OutElec(FrozenClass):
             OutElec_dict["angle"] = self.angle.tolist()
         if self.Is is None:
             OutElec_dict["Is"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutElec_dict["Is"] = {
-                "__class__": str(type(self._Is)),
-                "__repr__": str(self._Is.__repr__()),
-                "serialized": dumps(self._Is).decode("ISO-8859-2"),
-            }
+        else:
+            OutElec_dict["Is"] = self.Is.as_dict()
         if self.Ir is None:
             OutElec_dict["Ir"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutElec_dict["Ir"] = {
-                "__class__": str(type(self._Ir)),
-                "__repr__": str(self._Ir.__repr__()),
-                "serialized": dumps(self._Ir).decode("ISO-8859-2"),
-            }
+        else:
+            OutElec_dict["Ir"] = self.Ir.as_dict()
         if self.angle_rotor is None:
             OutElec_dict["angle_rotor"] = None
         else:
@@ -351,12 +314,8 @@ class OutElec(FrozenClass):
         OutElec_dict["logger_name"] = self.logger_name
         if self.mmf_unit is None:
             OutElec_dict["mmf_unit"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutElec_dict["mmf_unit"] = {
-                "__class__": str(type(self._mmf_unit)),
-                "__repr__": str(self._mmf_unit.__repr__()),
-                "serialized": dumps(self._mmf_unit).decode("ISO-8859-2"),
-            }
+        else:
+            OutElec_dict["mmf_unit"] = self.mmf_unit.as_dict()
         OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
         OutElec_dict["Id_ref"] = self.Id_ref
         OutElec_dict["Iq_ref"] = self.Iq_ref
@@ -367,12 +326,8 @@ class OutElec(FrozenClass):
         OutElec_dict["Pem_av_ref"] = self.Pem_av_ref
         if self.Us is None:
             OutElec_dict["Us"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutElec_dict["Us"] = {
-                "__class__": str(type(self._Us)),
-                "__repr__": str(self._Us.__repr__()),
-                "serialized": dumps(self._Us).decode("ISO-8859-2"),
-            }
+        else:
+            OutElec_dict["Us"] = self.Us.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -406,7 +361,9 @@ class OutElec(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if type(value) is list:
+        if value == -1:
+            value = list()
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -429,7 +386,9 @@ class OutElec(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if type(value) is list:
+        if value == -1:
+            value = list()
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -452,6 +411,13 @@ class OutElec(FrozenClass):
 
     def _set_Is(self, value):
         """setter of Is"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "Is",
+            )
+            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("Is", value, "dict")
         except CheckTypeError:
@@ -479,6 +445,13 @@ class OutElec(FrozenClass):
 
     def _set_Ir(self, value):
         """setter of Ir"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "Ir",
+            )
+            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("Ir", value, "dict")
         except CheckTypeError:
@@ -506,7 +479,9 @@ class OutElec(FrozenClass):
 
     def _set_angle_rotor(self, value):
         """setter of angle_rotor"""
-        if type(value) is list:
+        if value == -1:
+            value = list()
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -603,6 +578,13 @@ class OutElec(FrozenClass):
 
     def _set_mmf_unit(self, value):
         """setter of mmf_unit"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "mmf_unit",
+            )
+            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("mmf_unit", value, "dict")
         except CheckTypeError:
@@ -774,6 +756,13 @@ class OutElec(FrozenClass):
 
     def _set_Us(self, value):
         """setter of Us"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "Us",
+            )
+            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("Us", value, "dict")
         except CheckTypeError:

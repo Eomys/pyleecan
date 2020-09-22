@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from numpy import array, array_equal
@@ -54,30 +56,16 @@ class OutStruct(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            time = obj.time
-            angle = obj.angle
-            Nt_tot = obj.Nt_tot
-            Na_tot = obj.Na_tot
-            logger_name = obj.logger_name
-            Yr = obj.Yr
-            Vr = obj.Vr
-            Ar = obj.Ar
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -97,18 +85,13 @@ class OutStruct(FrozenClass):
                 Vr = init_dict["Vr"]
             if "Ar" in list(init_dict.keys()):
                 Ar = init_dict["Ar"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # time can be None, a ndarray or a list
-        set_array(self, "time", time)
-        # angle can be None, a ndarray or a list
-        set_array(self, "angle", angle)
+        self.time = time
+        self.angle = angle
         self.Nt_tot = Nt_tot
         self.Na_tot = Na_tot
         self.logger_name = logger_name
-        # Check if the type DataND has been imported with success
-        if isinstance(DataND, ImportError):
-            raise ImportError("Unknown type DataND please install SciDataTool")
         self.Yr = Yr
         self.Vr = Vr
         self.Ar = Ar
@@ -187,28 +170,16 @@ class OutStruct(FrozenClass):
         OutStruct_dict["logger_name"] = self.logger_name
         if self.Yr is None:
             OutStruct_dict["Yr"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutStruct_dict["Yr"] = {
-                "__class__": str(type(self._Yr)),
-                "__repr__": str(self._Yr.__repr__()),
-                "serialized": dumps(self._Yr).decode("ISO-8859-2"),
-            }
+        else:
+            OutStruct_dict["Yr"] = self.Yr.as_dict()
         if self.Vr is None:
             OutStruct_dict["Vr"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutStruct_dict["Vr"] = {
-                "__class__": str(type(self._Vr)),
-                "__repr__": str(self._Vr.__repr__()),
-                "serialized": dumps(self._Vr).decode("ISO-8859-2"),
-            }
+        else:
+            OutStruct_dict["Vr"] = self.Vr.as_dict()
         if self.Ar is None:
             OutStruct_dict["Ar"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutStruct_dict["Ar"] = {
-                "__class__": str(type(self._Ar)),
-                "__repr__": str(self._Ar.__repr__()),
-                "serialized": dumps(self._Ar).decode("ISO-8859-2"),
-            }
+        else:
+            OutStruct_dict["Ar"] = self.Ar.as_dict()
         # The class name is added to the dict fordeserialisation purpose
         OutStruct_dict["__class__"] = "OutStruct"
         return OutStruct_dict
@@ -231,7 +202,9 @@ class OutStruct(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if type(value) is list:
+        if value == -1:
+            value = list()
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -254,7 +227,9 @@ class OutStruct(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if type(value) is list:
+        if value == -1:
+            value = list()
+        elif type(value) is list:
             try:
                 value = array(value)
             except:
@@ -331,6 +306,13 @@ class OutStruct(FrozenClass):
 
     def _set_Yr(self, value):
         """setter of Yr"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "Yr",
+            )
+            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("Yr", value, "dict")
         except CheckTypeError:
@@ -358,6 +340,13 @@ class OutStruct(FrozenClass):
 
     def _set_Vr(self, value):
         """setter of Vr"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "Vr",
+            )
+            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("Vr", value, "dict")
         except CheckTypeError:
@@ -385,6 +374,13 @@ class OutStruct(FrozenClass):
 
     def _set_Ar(self, value):
         """setter of Ar"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "Ar",
+            )
+            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("Ar", value, "dict")
         except CheckTypeError:

@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .EEC import EEC
 
 # Import all class method
@@ -111,33 +113,16 @@ class EEC_PMSM(EEC):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if indmag == -1:
-            indmag = IndMag()
-        if fluxlink == -1:
-            fluxlink = FluxLink()
-        if drive == -1:
-            drive = Drive()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            indmag = obj.indmag
-            fluxlink = obj.fluxlink
-            parameters = obj.parameters
-            freq0 = obj.freq0
-            drive = obj.drive
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -151,84 +136,12 @@ class EEC_PMSM(EEC):
                 freq0 = init_dict["freq0"]
             if "drive" in list(init_dict.keys()):
                 drive = init_dict["drive"]
-        # Initialisation by argument
-        # indmag can be None, a IndMag object or a dict
-        if isinstance(indmag, dict):
-            # Check that the type is correct (including daughter)
-            class_name = indmag.get("__class__")
-            if class_name not in ["IndMag", "IndMagFEMM"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for indmag"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.indmag = class_obj(init_dict=indmag)
-        elif isinstance(indmag, str):
-            from ..Functions.load import load
-
-            indmag = load(indmag)
-            # Check that the type is correct (including daughter)
-            class_name = indmag.__class__.__name__
-            if class_name not in ["IndMag", "IndMagFEMM"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for indmag"
-                )
-            self.indmag = indmag
-        else:
-            self.indmag = indmag
-        # fluxlink can be None, a FluxLink object or a dict
-        if isinstance(fluxlink, dict):
-            # Check that the type is correct (including daughter)
-            class_name = fluxlink.get("__class__")
-            if class_name not in ["FluxLink", "FluxLinkFEMM"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for fluxlink"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.fluxlink = class_obj(init_dict=fluxlink)
-        elif isinstance(fluxlink, str):
-            from ..Functions.load import load
-
-            fluxlink = load(fluxlink)
-            # Check that the type is correct (including daughter)
-            class_name = fluxlink.__class__.__name__
-            if class_name not in ["FluxLink", "FluxLinkFEMM"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for fluxlink"
-                )
-            self.fluxlink = fluxlink
-        else:
-            self.fluxlink = fluxlink
+        # Set the properties (value check and convertion are done in setter)
+        self.indmag = indmag
+        self.fluxlink = fluxlink
         self.parameters = parameters
         self.freq0 = freq0
-        # drive can be None, a Drive object or a dict
-        if isinstance(drive, dict):
-            # Check that the type is correct (including daughter)
-            class_name = drive.get("__class__")
-            if class_name not in ["Drive", "DriveWave"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for drive"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.drive = class_obj(init_dict=drive)
-        elif isinstance(drive, str):
-            from ..Functions.load import load
-
-            drive = load(drive)
-            # Check that the type is correct (including daughter)
-            class_name = drive.__class__.__name__
-            if class_name not in ["Drive", "DriveWave"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for drive"
-                )
-            self.drive = drive
-        else:
-            self.drive = drive
+        self.drive = drive
         # Call EEC init
         super(EEC_PMSM, self).__init__()
         # The class is frozen (in EEC init), for now it's impossible to
@@ -325,6 +238,13 @@ class EEC_PMSM(EEC):
 
     def _set_indmag(self, value):
         """setter of indmag"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "indmag"
+            )
+            value = class_obj(init_dict=value)
+        elif value == -1:  # Default constructor
+            value = IndMag()
         check_var("indmag", value, "IndMag")
         self._indmag = value
 
@@ -346,6 +266,13 @@ class EEC_PMSM(EEC):
 
     def _set_fluxlink(self, value):
         """setter of fluxlink"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "fluxlink"
+            )
+            value = class_obj(init_dict=value)
+        elif value == -1:  # Default constructor
+            value = FluxLink()
         check_var("fluxlink", value, "FluxLink")
         self._fluxlink = value
 
@@ -403,6 +330,13 @@ class EEC_PMSM(EEC):
 
     def _set_drive(self, value):
         """setter of drive"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "drive"
+            )
+            value = class_obj(init_dict=value)
+        elif value == -1:  # Default constructor
+            value = Drive()
         check_var("drive", value, "Drive")
         self._drive = value
 

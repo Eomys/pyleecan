@@ -87,6 +87,8 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Save function
     class_file.write("from ..Functions.save import save\n")
+    class_file.write("from ..Functions.load import load_init_dict\n")
+    class_file.write("from ..Functions.Load.import_class import import_class\n")
 
     # Import of the mother_class (FrozenClass by default)
     # All the classes file are in the Classes folder (regardless of their main package)

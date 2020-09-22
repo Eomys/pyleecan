@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -139,26 +141,16 @@ class Hole(FrozenClass):
     def __init__(self, Zh=36, mat_void=-1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if mat_void == -1:
-            mat_void = Material()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            Zh = obj.Zh
-            mat_void = obj.mat_void
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -166,18 +158,10 @@ class Hole(FrozenClass):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.Zh = Zh
-        # mat_void can be None, a Material object or a dict
-        if isinstance(mat_void, dict):
-            self.mat_void = Material(init_dict=mat_void)
-        elif isinstance(mat_void, str):
-            from ..Functions.load import load
-
-            self.mat_void = load(mat_void)
-        else:
-            self.mat_void = mat_void
+        self.mat_void = mat_void
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -256,6 +240,13 @@ class Hole(FrozenClass):
 
     def _set_mat_void(self, value):
         """setter of mat_void"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "mat_void"
+            )
+            value = class_obj(init_dict=value)
+        elif value == -1:  # Default constructor
+            value = Material()
         check_var("mat_void", value, "Material")
         self._mat_void = value
 

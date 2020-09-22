@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Mesh import Mesh
 
 # Import all class method
@@ -192,28 +194,16 @@ class MeshMat(Mesh):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if point == -1:
-            point = PointMat()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            cell = obj.cell
-            point = obj.point
-            label = obj.label
-            dimension = obj.dimension
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -225,28 +215,9 @@ class MeshMat(Mesh):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
-        # Initialisation by argument
-        # cell can be None or a dict of CellMat object
-        self.cell = dict()
-        if type(cell) is dict:
-            for key, obj in cell.items():
-                if isinstance(obj, dict):
-                    self.cell[key] = CellMat(init_dict=obj)
-                else:
-                    self.cell[key] = obj
-        elif cell is None:
-            self.cell = dict()
-        else:
-            self.cell = cell  # Should raise an error
-        # point can be None, a PointMat object or a dict
-        if isinstance(point, dict):
-            self.point = PointMat(init_dict=point)
-        elif isinstance(point, str):
-            from ..Functions.load import load
-
-            self.point = load(point)
-        else:
-            self.point = point
+        # Set the properties (value check and convertion are done in setter)
+        self.cell = cell
+        self.point = point
         # Call Mesh init
         super(MeshMat, self).__init__(label=label, dimension=dimension)
         # The class is frozen (in Mesh init), for now it's impossible to
@@ -322,6 +293,13 @@ class MeshMat(Mesh):
 
     def _set_cell(self, value):
         """setter of cell"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", value.get("__class__"), "cell"
+                    )
+                    value = class_obj(init_dict=value)
         check_var("cell", value, "{CellMat}")
         self._cell = value
 
@@ -340,6 +318,13 @@ class MeshMat(Mesh):
 
     def _set_point(self, value):
         """setter of point"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "point"
+            )
+            value = class_obj(init_dict=value)
+        elif value == -1:  # Default constructor
+            value = PointMat()
         check_var("point", value, "PointMat")
         self._point = value
 

@@ -68,6 +68,21 @@ def generate_as_dict(gen_dict, class_dict):
                 + prop["name"]
                 + "[1]]\n"
             )
+        elif "SciDataTool" in prop["type"]:  # SciDataTool objects has as_dict methods
+            # Add => "class_name ["var_name"] = self.var_name.as_dict()" to
+            # var_str
+            var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
+            var_str += TAB2 + "else:\n"
+            var_str += (
+                TAB3
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"] = self.'
+                + prop["name"]
+                + ".as_dict()\n"
+            )
         elif "." in prop["type"]:  # Type from external package
             var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
             var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
@@ -90,7 +105,6 @@ def generate_as_dict(gen_dict, class_dict):
                 + prop["name"]
                 + ").decode('ISO-8859-2')}\n"
             )
-
         elif is_list_pyleecan_type(prop["type"]):
             var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = list()\n'
             var_str += TAB2 + "for obj in self." + prop["name"] + ":\n"

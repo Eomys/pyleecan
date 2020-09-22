@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -149,33 +151,16 @@ class Winding(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if conductor == -1:
-            conductor = Conductor()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            is_reverse_wind = obj.is_reverse_wind
-            Nslot_shift_wind = obj.Nslot_shift_wind
-            qs = obj.qs
-            Ntcoil = obj.Ntcoil
-            Npcpp = obj.Npcpp
-            type_connection = obj.type_connection
-            p = obj.p
-            Lewout = obj.Lewout
-            conductor = obj.conductor
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -197,7 +182,7 @@ class Winding(FrozenClass):
                 Lewout = init_dict["Lewout"]
             if "conductor" in list(init_dict.keys()):
                 conductor = init_dict["conductor"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_reverse_wind = is_reverse_wind
         self.Nslot_shift_wind = Nslot_shift_wind
@@ -207,43 +192,7 @@ class Winding(FrozenClass):
         self.type_connection = type_connection
         self.p = p
         self.Lewout = Lewout
-        # conductor can be None, a Conductor object or a dict
-        if isinstance(conductor, dict):
-            # Check that the type is correct (including daughter)
-            class_name = conductor.get("__class__")
-            if class_name not in [
-                "Conductor",
-                "CondType11",
-                "CondType12",
-                "CondType21",
-                "CondType22",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for conductor"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.conductor = class_obj(init_dict=conductor)
-        elif isinstance(conductor, str):
-            from ..Functions.load import load
-
-            conductor = load(conductor)
-            # Check that the type is correct (including daughter)
-            class_name = conductor.__class__.__name__
-            if class_name not in [
-                "Conductor",
-                "CondType11",
-                "CondType12",
-                "CondType21",
-                "CondType22",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for conductor"
-                )
-            self.conductor = conductor
-        else:
-            self.conductor = conductor
+        self.conductor = conductor
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -493,6 +442,13 @@ class Winding(FrozenClass):
 
     def _set_conductor(self, value):
         """setter of conductor"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "conductor"
+            )
+            value = class_obj(init_dict=value)
+        elif value == -1:  # Default constructor
+            value = Conductor()
         check_var("conductor", value, "Conductor")
         self._conductor = value
 

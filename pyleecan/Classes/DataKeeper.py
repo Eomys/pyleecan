@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from inspect import getsource
@@ -41,34 +43,22 @@ class DataKeeper(FrozenClass):
         unit="",
         keeper=None,
         error_keeper=None,
-        result=-1,
+        result=[],
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            name = obj.name
-            symbol = obj.symbol
-            unit = obj.unit
-            keeper = obj.keeper
-            error_keeper = obj.error_keeper
-            result = obj.result
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -84,15 +74,13 @@ class DataKeeper(FrozenClass):
                 error_keeper = init_dict["error_keeper"]
             if "result" in list(init_dict.keys()):
                 result = init_dict["result"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
         self.symbol = symbol
         self.unit = unit
         self.keeper = keeper
         self.error_keeper = error_keeper
-        if result == -1:
-            result = []
         self.result = result
 
         # The class is frozen, for now it's impossible to add new properties
@@ -249,6 +237,13 @@ class DataKeeper(FrozenClass):
 
     def _set_keeper(self, value):
         """setter of keeper"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "keeper"
+            )
+            value = class_obj(init_dict=value)
+        elif value == -1:  # Default constructor
+            value = function()
         try:
             check_var("keeper", value, "list")
         except CheckTypeError:
@@ -279,6 +274,13 @@ class DataKeeper(FrozenClass):
 
     def _set_error_keeper(self, value):
         """setter of error_keeper"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "error_keeper"
+            )
+            value = class_obj(init_dict=value)
+        elif value == -1:  # Default constructor
+            value = function()
         try:
             check_var("error_keeper", value, "list")
         except CheckTypeError:

@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -81,30 +83,16 @@ class VarSimu(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            name = obj.name
-            desc = obj.desc
-            datakeeper_list = obj.datakeeper_list
-            is_keep_all_output = obj.is_keep_all_output
-            stop_if_error = obj.stop_if_error
-            ref_simu_index = obj.ref_simu_index
-            nb_simu = obj.nb_simu
-            is_reuse_femm_file = obj.is_reuse_femm_file
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -124,30 +112,11 @@ class VarSimu(FrozenClass):
                 nb_simu = init_dict["nb_simu"]
             if "is_reuse_femm_file" in list(init_dict.keys()):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
         self.desc = desc
-        # datakeeper_list can be None or a list of DataKeeper object or a list of dict
-        if type(datakeeper_list) is list:
-            # Check if the list is only composed of DataKeeper
-            if len(datakeeper_list) > 0 and all(
-                isinstance(obj, DataKeeper) for obj in datakeeper_list
-            ):
-                # set the list to keep pointer reference
-                self.datakeeper_list = datakeeper_list
-            else:
-                self.datakeeper_list = list()
-                for obj in datakeeper_list:
-                    if not isinstance(obj, dict):  # Default value
-                        self.datakeeper_list.append(obj)
-                    elif isinstance(obj, dict):
-                        self.datakeeper_list.append(DataKeeper(init_dict=obj))
-
-        elif datakeeper_list is None:
-            self.datakeeper_list = list()
-        else:
-            self.datakeeper_list = datakeeper_list
+        self.datakeeper_list = datakeeper_list
         self.is_keep_all_output = is_keep_all_output
         self.stop_if_error = stop_if_error
         self.ref_simu_index = ref_simu_index
@@ -284,6 +253,13 @@ class VarSimu(FrozenClass):
 
     def _set_datakeeper_list(self, value):
         """setter of datakeeper_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "datakeeper_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
         check_var("datakeeper_list", value, "[DataKeeper]")
         self._datakeeper_list = value
 

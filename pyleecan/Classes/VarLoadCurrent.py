@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .VarLoad import VarLoad
 
 # Import all class method
@@ -144,34 +146,16 @@ class VarLoadCurrent(VarLoad):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            OP_matrix = obj.OP_matrix
-            type_OP_matrix = obj.type_OP_matrix
-            is_torque = obj.is_torque
-            is_power = obj.is_power
-            name = obj.name
-            desc = obj.desc
-            datakeeper_list = obj.datakeeper_list
-            is_keep_all_output = obj.is_keep_all_output
-            stop_if_error = obj.stop_if_error
-            ref_simu_index = obj.ref_simu_index
-            nb_simu = obj.nb_simu
-            is_reuse_femm_file = obj.is_reuse_femm_file
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -199,9 +183,8 @@ class VarLoadCurrent(VarLoad):
                 nb_simu = init_dict["nb_simu"]
             if "is_reuse_femm_file" in list(init_dict.keys()):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
-        # Initialisation by argument
-        # OP_matrix can be None, a ndarray or a list
-        set_array(self, "OP_matrix", OP_matrix)
+        # Set the properties (value check and convertion are done in setter)
+        self.OP_matrix = OP_matrix
         self.type_OP_matrix = type_OP_matrix
         self.is_torque = is_torque
         self.is_power = is_power
@@ -290,7 +273,9 @@ class VarLoadCurrent(VarLoad):
 
     def _set_OP_matrix(self, value):
         """setter of OP_matrix"""
-        if type(value) is list:
+        if value == -1:
+            value = list()
+        elif type(value) is list:
             try:
                 value = array(value)
             except:

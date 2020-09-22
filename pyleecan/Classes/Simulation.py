@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -64,34 +66,16 @@ class Simulation(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if machine == -1:
-            machine = Machine()
-        if input == -1:
-            input = Input()
-        if var_simu == -1:
-            var_simu = VarSimu()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            name = obj.name
-            desc = obj.desc
-            machine = obj.machine
-            input = obj.input
-            logger_name = obj.logger_name
-            var_simu = obj.var_simu
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -107,122 +91,14 @@ class Simulation(FrozenClass):
                 logger_name = init_dict["logger_name"]
             if "var_simu" in list(init_dict.keys()):
                 var_simu = init_dict["var_simu"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
         self.desc = desc
-        # machine can be None, a Machine object or a dict
-        if isinstance(machine, dict):
-            # Check that the type is correct (including daughter)
-            class_name = machine.get("__class__")
-            if class_name not in [
-                "Machine",
-                "MachineAsync",
-                "MachineDFIM",
-                "MachineIPMSM",
-                "MachineSCIM",
-                "MachineSIPMSM",
-                "MachineSRM",
-                "MachineSyRM",
-                "MachineSync",
-                "MachineUD",
-                "MachineWRSM",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for machine"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.machine = class_obj(init_dict=machine)
-        elif isinstance(machine, str):
-            from ..Functions.load import load
-
-            machine = load(machine)
-            # Check that the type is correct (including daughter)
-            class_name = machine.__class__.__name__
-            if class_name not in [
-                "Machine",
-                "MachineAsync",
-                "MachineDFIM",
-                "MachineIPMSM",
-                "MachineSCIM",
-                "MachineSIPMSM",
-                "MachineSRM",
-                "MachineSyRM",
-                "MachineSync",
-                "MachineUD",
-                "MachineWRSM",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for machine"
-                )
-            self.machine = machine
-        else:
-            self.machine = machine
-        # input can be None, a Input object or a dict
-        if isinstance(input, dict):
-            # Check that the type is correct (including daughter)
-            class_name = input.get("__class__")
-            if class_name not in [
-                "Input",
-                "InputCurrent",
-                "InputElec",
-                "InputFlux",
-                "InputForce",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for input"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.input = class_obj(init_dict=input)
-        elif isinstance(input, str):
-            from ..Functions.load import load
-
-            input = load(input)
-            # Check that the type is correct (including daughter)
-            class_name = input.__class__.__name__
-            if class_name not in [
-                "Input",
-                "InputCurrent",
-                "InputElec",
-                "InputFlux",
-                "InputForce",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for input"
-                )
-            self.input = input
-        else:
-            self.input = input
+        self.machine = machine
+        self.input = input
         self.logger_name = logger_name
-        # var_simu can be None, a VarSimu object or a dict
-        if isinstance(var_simu, dict):
-            # Check that the type is correct (including daughter)
-            class_name = var_simu.get("__class__")
-            if class_name not in ["VarSimu", "VarLoad", "VarLoadCurrent", "VarParam"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for var_simu"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.var_simu = class_obj(init_dict=var_simu)
-        elif isinstance(var_simu, str):
-            from ..Functions.load import load
-
-            var_simu = load(var_simu)
-            # Check that the type is correct (including daughter)
-            class_name = var_simu.__class__.__name__
-            if class_name not in ["VarSimu", "VarLoad", "VarLoadCurrent", "VarParam"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for var_simu"
-                )
-            self.var_simu = var_simu
-        else:
-            self.var_simu = var_simu
+        self.var_simu = var_simu
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -353,6 +229,13 @@ class Simulation(FrozenClass):
 
     def _set_machine(self, value):
         """setter of machine"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "machine"
+            )
+            value = class_obj(init_dict=value)
+        elif value == -1:  # Default constructor
+            value = Machine()
         check_var("machine", value, "Machine")
         self._machine = value
 
@@ -374,6 +257,13 @@ class Simulation(FrozenClass):
 
     def _set_input(self, value):
         """setter of input"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "input"
+            )
+            value = class_obj(init_dict=value)
+        elif value == -1:  # Default constructor
+            value = Input()
         check_var("input", value, "Input")
         self._input = value
 
@@ -413,6 +303,13 @@ class Simulation(FrozenClass):
 
     def _set_var_simu(self, value):
         """setter of var_simu"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "var_simu"
+            )
+            value = class_obj(init_dict=value)
+        elif value == -1:  # Default constructor
+            value = VarSimu()
         check_var("var_simu", value, "VarSimu")
         self._var_simu = value
 

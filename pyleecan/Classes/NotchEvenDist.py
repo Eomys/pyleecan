@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Notch import Notch
 
 # Import all class method
@@ -55,26 +57,16 @@ class NotchEvenDist(Notch):
     def __init__(self, alpha=0, notch_shape=-1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if notch_shape == -1:
-            notch_shape = Slot()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            alpha = obj.alpha
-            notch_shape = obj.notch_shape
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -82,87 +74,9 @@ class NotchEvenDist(Notch):
                 alpha = init_dict["alpha"]
             if "notch_shape" in list(init_dict.keys()):
                 notch_shape = init_dict["notch_shape"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.alpha = alpha
-        # notch_shape can be None, a Slot object or a dict
-        if isinstance(notch_shape, dict):
-            # Check that the type is correct (including daughter)
-            class_name = notch_shape.get("__class__")
-            if class_name not in [
-                "Slot",
-                "Slot19",
-                "SlotCirc",
-                "SlotMFlat",
-                "SlotMPolar",
-                "SlotMag",
-                "SlotUD",
-                "SlotW10",
-                "SlotW11",
-                "SlotW12",
-                "SlotW13",
-                "SlotW14",
-                "SlotW15",
-                "SlotW16",
-                "SlotW21",
-                "SlotW22",
-                "SlotW23",
-                "SlotW24",
-                "SlotW25",
-                "SlotW26",
-                "SlotW27",
-                "SlotW28",
-                "SlotW29",
-                "SlotW60",
-                "SlotW61",
-                "SlotWind",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for notch_shape"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.notch_shape = class_obj(init_dict=notch_shape)
-        elif isinstance(notch_shape, str):
-            from ..Functions.load import load
-
-            notch_shape = load(notch_shape)
-            # Check that the type is correct (including daughter)
-            class_name = notch_shape.__class__.__name__
-            if class_name not in [
-                "Slot",
-                "Slot19",
-                "SlotCirc",
-                "SlotMFlat",
-                "SlotMPolar",
-                "SlotMag",
-                "SlotUD",
-                "SlotW10",
-                "SlotW11",
-                "SlotW12",
-                "SlotW13",
-                "SlotW14",
-                "SlotW15",
-                "SlotW16",
-                "SlotW21",
-                "SlotW22",
-                "SlotW23",
-                "SlotW24",
-                "SlotW25",
-                "SlotW26",
-                "SlotW27",
-                "SlotW28",
-                "SlotW29",
-                "SlotW60",
-                "SlotW61",
-                "SlotWind",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for notch_shape"
-                )
-            self.notch_shape = notch_shape
-        else:
-            self.notch_shape = notch_shape
+        self.notch_shape = notch_shape
         # Call Notch init
         super(NotchEvenDist, self).__init__()
         # The class is frozen (in Notch init), for now it's impossible to
@@ -248,6 +162,13 @@ class NotchEvenDist(Notch):
 
     def _set_notch_shape(self, value):
         """setter of notch_shape"""
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "notch_shape"
+            )
+            value = class_obj(init_dict=value)
+        elif value == -1:  # Default constructor
+            value = Slot()
         check_var("notch_shape", value, "Slot")
         self._notch_shape = value
 
