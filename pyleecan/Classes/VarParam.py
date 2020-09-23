@@ -69,20 +69,7 @@ class VarParam(VarSimu):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        paramexplorer_list=list(),
-        name="",
-        desc="",
-        datakeeper_list=list(),
-        is_keep_all_output=False,
-        stop_if_error=False,
-        ref_simu_index=None,
-        nb_simu=0,
-        is_reuse_femm_file=True,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, paramexplorer_list=list(), name="", desc="", datakeeper_list=list(), is_keep_all_output=False, stop_if_error=False, ref_simu_index=None, nb_simu=0, is_reuse_femm_file=True, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -163,16 +150,7 @@ class VarParam(VarSimu):
         else:
             self.paramexplorer_list = paramexplorer_list
         # Call VarSimu init
-        super(VarParam, self).__init__(
-            name=name,
-            desc=desc,
-            datakeeper_list=datakeeper_list,
-            is_keep_all_output=is_keep_all_output,
-            stop_if_error=stop_if_error,
-            ref_simu_index=ref_simu_index,
-            nb_simu=nb_simu,
-            is_reuse_femm_file=is_reuse_femm_file,
-        )
+        super(VarParam, self).__init__(name=name, desc=desc, datakeeper_list=datakeeper_list, is_keep_all_output=is_keep_all_output, stop_if_error=stop_if_error, ref_simu_index=ref_simu_index, nb_simu=nb_simu, is_reuse_femm_file=is_reuse_femm_file)
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties
 

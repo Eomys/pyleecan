@@ -7647,6 +7647,7 @@
             "comp_angle_opening_magnet",
             "comp_height",
             "comp_surface",
+            "comp_H_arc",
             "comp_W0m",
             "get_point_bottom"
         ],

@@ -121,23 +121,7 @@ class VarLoadCurrent(VarLoad):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        OP_matrix=None,
-        type_OP_matrix=0,
-        is_torque=False,
-        is_power=False,
-        name="",
-        desc="",
-        datakeeper_list=list(),
-        is_keep_all_output=False,
-        stop_if_error=False,
-        ref_simu_index=None,
-        nb_simu=0,
-        is_reuse_femm_file=True,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, OP_matrix=None, type_OP_matrix=0, is_torque=False, is_power=False, name="", desc="", datakeeper_list=list(), is_keep_all_output=False, stop_if_error=False, ref_simu_index=None, nb_simu=0, is_reuse_femm_file=True, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -201,16 +185,7 @@ class VarLoadCurrent(VarLoad):
         self.is_torque = is_torque
         self.is_power = is_power
         # Call VarLoad init
-        super(VarLoadCurrent, self).__init__(
-            name=name,
-            desc=desc,
-            datakeeper_list=datakeeper_list,
-            is_keep_all_output=is_keep_all_output,
-            stop_if_error=stop_if_error,
-            ref_simu_index=ref_simu_index,
-            nb_simu=nb_simu,
-            is_reuse_femm_file=is_reuse_femm_file,
-        )
+        super(VarLoadCurrent, self).__init__(name=name, desc=desc, datakeeper_list=datakeeper_list, is_keep_all_output=is_keep_all_output, stop_if_error=stop_if_error, ref_simu_index=ref_simu_index, nb_simu=nb_simu, is_reuse_femm_file=is_reuse_femm_file)
         # The class is frozen (in VarLoad init), for now it's impossible to
         # add new properties
 

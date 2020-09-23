@@ -66,19 +66,7 @@ class VarSimu(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        name="",
-        desc="",
-        datakeeper_list=list(),
-        is_keep_all_output=False,
-        stop_if_error=False,
-        ref_simu_index=None,
-        nb_simu=0,
-        is_reuse_femm_file=True,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, name="", desc="", datakeeper_list=list(), is_keep_all_output=False, stop_if_error=False, ref_simu_index=None, nb_simu=0, is_reuse_femm_file=True, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -167,13 +155,8 @@ class VarSimu(FrozenClass):
         if len(self.datakeeper_list) == 0:
             VarSimu_str += "datakeeper_list = []" + linesep
         for ii in range(len(self.datakeeper_list)):
-            tmp = (
-                self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            VarSimu_str += (
-                "datakeeper_list[" + str(ii) + "] =" + tmp + linesep + linesep
-            )
+            tmp = self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            VarSimu_str += "datakeeper_list["+str(ii)+"] ="+ tmp + linesep + linesep
         VarSimu_str += "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
         VarSimu_str += "stop_if_error = " + str(self.stop_if_error) + linesep
         VarSimu_str += "ref_simu_index = " + str(self.ref_simu_index) + linesep

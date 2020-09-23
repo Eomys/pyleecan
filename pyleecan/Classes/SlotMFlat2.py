@@ -44,6 +44,11 @@ except ImportError as error:
     comp_surface = error
 
 try:
+    from ..Methods.Slot.SlotMFlat2.comp_H_arc import comp_H_arc
+except ImportError as error:
+    comp_H_arc = error
+
+try:
     from ..Methods.Slot.SlotMFlat2.comp_W0m import comp_W0m
 except ImportError as error:
     comp_W0m = error
@@ -134,6 +139,17 @@ class SlotMFlat2(SlotMag):
         )
     else:
         comp_surface = comp_surface
+    # cf Methods.Slot.SlotMFlat2.comp_H_arc
+    if isinstance(comp_H_arc, ImportError):
+        comp_H_arc = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotMFlat2 method comp_H_arc: " + str(comp_H_arc)
+                )
+            )
+        )
+    else:
+        comp_H_arc = comp_H_arc
     # cf Methods.Slot.SlotMFlat2.comp_W0m
     if isinstance(comp_W0m, ImportError):
         comp_W0m = property(

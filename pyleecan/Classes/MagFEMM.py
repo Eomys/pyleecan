@@ -132,38 +132,7 @@ class MagFEMM(Magnetics):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        Kmesh_fineness=1,
-        Kgeo_fineness=1,
-        type_calc_leakage=0,
-        file_name="",
-        FEMM_dict={},
-        angle_stator=0,
-        is_get_mesh=False,
-        is_save_FEA=False,
-        is_sliding_band=True,
-        transform_list=[],
-        rotor_dxf=None,
-        stator_dxf=None,
-        import_file="",
-        is_close_femm=True,
-        is_remove_slotS=False,
-        is_remove_slotR=False,
-        is_remove_vent=False,
-        is_mmfs=True,
-        is_mmfr=True,
-        type_BH_stator=0,
-        type_BH_rotor=0,
-        is_symmetry_t=False,
-        sym_t=1,
-        is_antiper_t=False,
-        is_symmetry_a=False,
-        sym_a=1,
-        is_antiper_a=False,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, Kmesh_fineness=1, Kgeo_fineness=1, type_calc_leakage=0, file_name="", FEMM_dict={}, angle_stator=0, is_get_mesh=False, is_save_FEA=False, is_sliding_band=True, transform_list=[], rotor_dxf=None, stator_dxf=None, import_file="", is_close_femm=True, is_remove_slotS=False, is_remove_slotR=False, is_remove_vent=False, is_mmfs=True, is_mmfr=True, type_BH_stator=0, type_BH_rotor=0, is_symmetry_t=False, sym_t=1, is_antiper_t=False, is_symmetry_a=False, sym_a=1, is_antiper_a=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix

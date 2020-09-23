@@ -29,7 +29,7 @@ lam.slot = SlotMFlat2(
     H1=1*mm, W1=2*mm, W0=4*mm, W0_is_rad=False, H0=10*mm, W3=0, Zs=8,
     magnet=list()
 )
-lam.slot.magnet.append(MagnetType10(Wmag=4*mm,Hmag=1*mm))
+lam.slot.magnet.append(MagnetType10(Wmag=4*mm,Hmag=10*mm))
 lam.plot()
 #%%
 # W0 is rad
