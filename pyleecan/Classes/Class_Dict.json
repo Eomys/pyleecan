@@ -5924,6 +5924,24 @@
                 "type": "[OptiConstraint]",
                 "unit": "",
                 "value": -1
+            },
+            {
+                "desc": "Function to execute a preprocessing on the simulation right before it is run.",
+                "max": "",
+                "min": "",
+                "name": "preprocessing",
+                "type": "function",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "List of DataKeepers to run on every output",
+                "max": "",
+                "min": "",
+                "name": "datakeeper_list",
+                "type": "[DataKeeper]",
+                "unit": "",
+                "value": -1
             }
         ]
     },
