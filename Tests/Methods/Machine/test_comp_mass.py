@@ -130,8 +130,7 @@ M_test[-1]["Mmach"] = 33.38
 
 @pytest.mark.parametrize("test_dict", M_test)
 def test_comp_surface_rotor(test_dict):
-    """Check that the computation of the surface is correct
-    """
+    """Check that the computation of the surface is correct"""
     result = test_dict["test_obj"].rotor.comp_surfaces()
 
     a = result["Slam"]
@@ -153,8 +152,7 @@ def test_comp_surface_rotor(test_dict):
 
 @pytest.mark.parametrize("test_dict", M_test)
 def test_comp_surface_stator(test_dict):
-    """Check that the computation of the surface is correct
-    """
+    """Check that the computation of the surface is correct"""
     result = test_dict["test_obj"].stator.comp_surfaces()
 
     a = result["Slam"]
@@ -176,8 +174,7 @@ def test_comp_surface_stator(test_dict):
 
 @pytest.mark.parametrize("test_dict", M_test)
 def test_comp_volume_rotor(test_dict):
-    """Check that the computation of the volume is correct
-    """
+    """Check that the computation of the volume is correct"""
     result = test_dict["test_obj"].rotor.comp_volumes()
 
     a = result["Vlam"]
@@ -199,8 +196,7 @@ def test_comp_volume_rotor(test_dict):
 
 @pytest.mark.parametrize("test_dict", M_test)
 def test_comp_volume_stator(test_dict):
-    """Check that the computation of the volume is correct
-    """
+    """Check that the computation of the volume is correct"""
     result = test_dict["test_obj"].stator.comp_volumes()
 
     a = result["Vlam"]
@@ -222,8 +218,7 @@ def test_comp_volume_stator(test_dict):
 
 @pytest.mark.parametrize("test_dict", M_test)
 def test_comp_mass(test_dict):
-    """Check that the computation of the mass is correct
-    """
+    """Check that the computation of the mass is correct"""
     result = test_dict["test_obj"].comp_masses()
 
     a = result["Mfra"]

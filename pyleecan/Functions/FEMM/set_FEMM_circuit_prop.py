@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-import femm
 from numpy import linalg as LA
 
 
-def set_FEMM_circuit_prop(circuits, Clabel, I, is_mmf, Npcpp, j_t0):
+def set_FEMM_circuit_prop(femm, circuits, Clabel, I, is_mmf, Npcpp, j_t0):
     """Create or update the property of a circuit
 
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     circuits: list
         list the name of all circuits
     label: str

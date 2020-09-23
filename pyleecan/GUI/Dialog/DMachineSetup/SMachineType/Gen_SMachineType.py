@@ -9,8 +9,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SMachineType.Ui_SMachineType import (
 
 class Gen_SMachineType(Ui_SMachineType):
     def setupUi(self, SMachineType):
-        """Abstract class to update the widget according to the csv doc
-        """
+        """Abstract class to update the widget according to the csv doc"""
         Ui_SMachineType.setupUi(self, SMachineType)
         # Setup of si_p
         self.si_p.setMinimum(1)

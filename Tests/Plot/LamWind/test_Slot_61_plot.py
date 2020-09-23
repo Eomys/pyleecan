@@ -27,8 +27,7 @@ from Tests.Plot.LamWind import wind_mat
 
 
 def test_Lam_Wind_61():
-    """Test machine plot with Slot 61
-    """
+    """Test machine plot with Slot 61"""
     print("\nTest plot Slot 61")
     plt.close("all")
     test_obj = MachineDFIM()

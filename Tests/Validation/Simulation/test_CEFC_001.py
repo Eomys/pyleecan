@@ -14,8 +14,7 @@ from numpy import ones, pi, array
 @pytest.mark.validation
 @pytest.mark.FEMM
 def test_CEFC_001():
-    """Test compute the Flux in FEMM without slots and without sliding band.
-    """
+    """Test compute the Flux in FEMM without slots and without sliding band."""
     simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
 
     # Definition of the enforced output of the electrical module

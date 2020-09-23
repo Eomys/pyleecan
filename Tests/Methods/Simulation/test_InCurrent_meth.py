@@ -174,8 +174,7 @@ class unittest_InputCurrent_meth(TestCase):
 
     @data(*InputCurrent_Error_test)
     def test_InputCurrent_Error_test(self, test_dict):
-        """Check that the input current raises the correct errors
-        """
+        """Check that the input current raises the correct errors"""
         output = Output(simu=test_dict["test_obj"])
         with self.assertRaises(
             InputError, msg="Expect: " + test_dict["exp"]
@@ -184,8 +183,7 @@ class unittest_InputCurrent_meth(TestCase):
         self.assertEqual(test_dict["exp"], str(context.exception))
 
     def test_InputCurrent_Ok(self):
-        """Check that the input current can return a correct output
-        """
+        """Check that the input current can return a correct output"""
         test_obj = Simulation(machine=M3)
         output = Output(simu=test_obj)
         time = ImportGenVectLin(0, 1, 16)
@@ -225,8 +223,7 @@ class unittest_InputCurrent_meth(TestCase):
         assert_array_almost_equal(output.elec.N0, ones(16) * 10)
 
     def test_InputCurrent_DQ(self):
-        """Check that the input current can return a correct output
-        """
+        """Check that the input current can return a correct output"""
         test_obj = Simulation(machine=IPMSM_A)
         output = Output(simu=test_obj)
         time = ImportGenVectLin(0, 1, 7)
@@ -268,8 +265,7 @@ class unittest_InputCurrent_meth(TestCase):
         assert_array_almost_equal(output.elec.N0, ones(7) * 60 / zp)
 
     def test_InputCurrent_I0Phi0(self):
-        """Check that the input current can return a correct output
-        """
+        """Check that the input current can return a correct output"""
         test_obj = Simulation(machine=IPMSM_A)
         output = Output(simu=test_obj)
         time = ImportGenVectLin(0, 1, 7)

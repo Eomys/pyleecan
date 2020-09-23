@@ -5,7 +5,7 @@ from ....Classes.DataKeeper import DataKeeper
 
 def get_pareto_index(self):
     """Return index of individuals in the pareto
-    
+
     Parameters
     ----------
     self: XOutput

@@ -5,12 +5,10 @@ from ......GUI import gui_option
 
 
 class WCondOut(QGroupBox):
-    """Setup of QGroupBox for output for Winding Conductor
-    """
+    """Setup of QGroupBox for output for Winding Conductor"""
 
     def __init__(self, parent=None):
-        """Initialize the widget
-        """
+        """Initialize the widget"""
 
         QWidget.__init__(self, parent)
         # Set main widget

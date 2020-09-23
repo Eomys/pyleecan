@@ -30,12 +30,10 @@ import pytest
 
 @pytest.mark.GUI
 class test_Workflow_DMatLib(TestCase):
-    """Test that the widget DMatLib behave like it should when called from a Widget
-    """
+    """Test that the widget DMatLib behave like it should when called from a Widget"""
 
     def setUp(self):
-        """Run at the begining of every test to create the workspace
-        """
+        """Run at the begining of every test to create the workspace"""
         self.work_path = join(save_path, "Material Workflow")
         # Delete old test if needed
         if isdir(self.work_path):
@@ -60,8 +58,7 @@ class test_Workflow_DMatLib(TestCase):
         self.matlib = MatLib(self.work_path)
 
     def teardown(self):
-        """Delete the workspace at the end of the tests
-        """
+        """Delete the workspace at the end of the tests"""
         if is_clean_result:
             rmtree(self.work_path)
 
@@ -77,8 +74,7 @@ class test_Workflow_DMatLib(TestCase):
         cls.app.quit()
 
     def test_init_empty(self):
-        """Check that the widget can open with an unknown material
-        """
+        """Check that the widget can open with an unknown material"""
         self.machine = MachineIPMSM()
         self.machine.stator = LamSlotWind()
         self.machine.rotor = LamHole()
@@ -119,8 +115,7 @@ class test_Workflow_DMatLib(TestCase):
         )
 
     def test_init(self):
-        """Check that the Widget spinbox initialise to the lamination value
-        """
+        """Check that the Widget spinbox initialise to the lamination value"""
         self.machine = MachineIPMSM()
         self.machine.stator = LamSlotWind()
         self.machine.rotor = LamHole()

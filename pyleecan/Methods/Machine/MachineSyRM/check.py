@@ -90,7 +90,7 @@ class MSy_PError(MachineCheckError):
     Raises
     ------
     values
-        
+
 
     """
 

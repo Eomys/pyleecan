@@ -4,7 +4,7 @@ import numpy as np
 
 
 def get_ref_point(self, vertice, point):
-    """ Return the coordinate of the equivalent point in the ref cell
+    """Return the coordinate of the equivalent point in the ref cell
 
     Parameters
     ----------

@@ -114,8 +114,7 @@ class test_PWSlot27(TestCase):
         self.assertEqual(self.widget.slot.W3, value)
 
     def test_output_txt(self):
-        """Check that the Output text is computed and correct
-        """
+        """Check that the Output text is computed and correct"""
         self.test_obj = LamSlotWind(
             Rint=0.2,
             Rext=0.5,

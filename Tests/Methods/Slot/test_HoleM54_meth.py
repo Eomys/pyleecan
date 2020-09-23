@@ -31,8 +31,7 @@ class test_HoleM54_meth(TestCase):
 
     @data(*HoleM54_test)
     def test_comp_surface(self, test_dict):
-        """Check that the computation of the surface is correct
-        """
+        """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_surface()
 
@@ -48,8 +47,7 @@ class test_HoleM54_meth(TestCase):
 
     @data(*HoleM54_test)
     def test_comp_radius(self, test_dict):
-        """Check that the computation of the radius is correct
-        """
+        """Check that the computation of the radius is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_radius()
 
@@ -65,8 +63,7 @@ class test_HoleM54_meth(TestCase):
 
     @data(*HoleM54_test)
     def test_build_geometry(self, test_dict):
-        """Check that the surf list is correct
-        """
+        """Check that the surf list is correct"""
         test_obj = LamHole(init_dict=test_dict["test_obj"].as_dict())
         result = test_obj.hole[0].build_geometry()
 

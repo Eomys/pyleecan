@@ -5,8 +5,7 @@ from ....Functions.Winding.gen_phase_list import gen_name
 
 
 def get_Us(self):
-    """Return the stator voltage
-    """
+    """Return the stator voltage"""
     if self.Us is None:
         # Generate current according to Ud/Uq
         Usdq = array([self.Ud_ref, self.Uq_ref])

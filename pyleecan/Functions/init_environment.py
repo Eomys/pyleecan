@@ -36,8 +36,7 @@ def save_config_dict(config_dict):
 
 
 def init_user_dir():
-    """Initialize the USER DIR with the default files
-    """
+    """Initialize the USER DIR with the default files"""
     # dynamic import to avoid loop
     module = __import__(
         "pyleecan.definitions",

@@ -14,8 +14,7 @@ from pyleecan.Functions.GMSH.draw_GMSH import draw_GMSH
 @pytest.mark.long
 @pytest.mark.GMSH
 def test_gmsh_2d():
-    """Check generation of the 2D mesh with gmsh
-    """
+    """Check generation of the 2D mesh with gmsh"""
     # Import the machine from a script
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     IPMSM_A.stator.slot.H1 = 1e-3

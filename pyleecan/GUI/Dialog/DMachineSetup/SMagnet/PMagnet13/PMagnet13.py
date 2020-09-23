@@ -10,8 +10,7 @@ from ......GUI.Dialog.DMachineSetup.SMagnet.PMagnet13.Gen_PMagnet13 import Gen_P
 
 
 class PMagnet13(Gen_PMagnet13, QDialog):
-    """Page to set the Magnet Type 13
-    """
+    """Page to set the Magnet Type 13"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()

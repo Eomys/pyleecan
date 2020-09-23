@@ -57,8 +57,7 @@ class test_holeB53_meth(TestCase):
 
     @data(*HoleM53_test)
     def test_comp_surface(self, test_dict):
-        """Check that the computation of the surface is correct
-        """
+        """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_surface()
 
@@ -69,8 +68,7 @@ class test_holeB53_meth(TestCase):
 
     @data(*HoleM53_test)
     def test_comp_surface_mag(self, test_dict):
-        """Check that the computation of the magnet surface is correct
-        """
+        """Check that the computation of the magnet surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_surface_magnets()
 
@@ -81,8 +79,7 @@ class test_holeB53_meth(TestCase):
 
     @data(*HoleM53_test)
     def test_comp_radius(self, test_dict):
-        """Check that the computation of the radius is correct
-        """
+        """Check that the computation of the radius is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_radius()
 
@@ -98,8 +95,7 @@ class test_holeB53_meth(TestCase):
 
     @data(*HoleM53_test)
     def test_comp_W5(self, test_dict):
-        """Check that the computation of W5 iscorrect
-        """
+        """Check that the computation of W5 iscorrect"""
         test_obj = test_dict["test_obj"]
         a = test_obj.hole[0].comp_W5()
         b = test_dict["W5"]

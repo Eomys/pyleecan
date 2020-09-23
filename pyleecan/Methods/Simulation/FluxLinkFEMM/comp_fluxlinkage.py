@@ -2,6 +2,7 @@
 
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Functions.Electrical.coordinate_transformation import n2dq
+from ....Classes._FEMMHandler import FEMMHandler
 from numpy import zeros, linspace, pi, split, mean
 import matplotlib.pyplot as plt
 
@@ -45,9 +46,13 @@ def comp_fluxlinkage(self, output):
     angle_rotor = output.elec.angle_rotor
     output.elec.angle_rotor = rot_dir * angle
 
+    # Open FEMM
+    femm = FEMMHandler()
+
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
     FEMM_dict = draw_FEMM(
+        femm,
         output,
         is_mmfr=1,
         is_mmfs=1,
@@ -57,7 +62,7 @@ def comp_fluxlinkage(self, output):
     )
 
     # Solve for all time step and store all the results in output
-    Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
+    Phi_wind = self.solve_FEMM(femm, output, sym, FEMM_dict)
 
     # Define d axis angle for the d,q transform
     angle_offset_initial = output.get_angle_offset_initial()

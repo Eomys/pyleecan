@@ -37,8 +37,7 @@ class test_holeB52_meth(TestCase):
 
     @data(*HoleM52_test)
     def test_comp_surface(self, test_dict):
-        """Check that the computation of the surface is correct
-        """
+        """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_surface()
 
@@ -49,8 +48,7 @@ class test_holeB52_meth(TestCase):
 
     @data(*HoleM52_test)
     def test_comp_surface_mag(self, test_dict):
-        """Check that the computation of the magnet surface is correct
-        """
+        """Check that the computation of the magnet surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_surface_magnets()
 
@@ -61,8 +59,7 @@ class test_holeB52_meth(TestCase):
 
     @data(*HoleM52_test)
     def test_comp_alpha(self, test_dict):
-        """Check that the computation of the alpha is correct
-        """
+        """Check that the computation of the alpha is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_alpha()
 
@@ -73,8 +70,7 @@ class test_holeB52_meth(TestCase):
 
     @data(*HoleM52_test)
     def test_comp_W1(self, test_dict):
-        """Check that the computation of W1 is correct
-        """
+        """Check that the computation of W1 is correct"""
         test_obj = test_dict["test_obj"]
 
         a = test_obj.hole[0].comp_W1()
@@ -84,8 +80,7 @@ class test_holeB52_meth(TestCase):
 
     @data(*HoleM52_test)
     def test_comp_radius(self, test_dict):
-        """Check that the computation of the radius is correct
-        """
+        """Check that the computation of the radius is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].comp_radius()
 
@@ -101,8 +96,7 @@ class test_holeB52_meth(TestCase):
 
     @data(*HoleM52_test)
     def test_build_geometry_with_magnet(self, test_dict):
-        """Check that the surf list is correct with magnet
-        """
+        """Check that the surf list is correct with magnet"""
         test_obj = test_dict["test_obj"]
         result = test_obj.hole[0].build_geometry()
 
@@ -124,8 +118,7 @@ class test_holeB52_meth(TestCase):
 
     @data(*HoleM52_test)
     def test_build_geometry_no_magnet(self, test_dict):
-        """Check that the surf list is correct without magnet
-        """
+        """Check that the surf list is correct without magnet"""
         test_obj = LamHole(init_dict=test_dict["test_obj"].as_dict())
         test_obj.hole[0].magnet_0 = None
         result = test_obj.hole[0].build_geometry()

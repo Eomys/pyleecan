@@ -3,7 +3,7 @@
 
 def comp_power(self, output):
     """Compute the electrical average power
-              
+
     Parameters
     ----------
     self : Electrical

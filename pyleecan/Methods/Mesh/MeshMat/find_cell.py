@@ -4,7 +4,7 @@ import numpy as np
 
 
 def find_cell(self, points, nb_pt, normal_t=None):
-    """ Return the cells containing the target point(s)
+    """Return the cells containing the target point(s)
 
     Parameters
     ----------

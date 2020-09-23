@@ -13,8 +13,7 @@ translate = PyQt5.QtCore.QCoreApplication.translate
 
 
 class PWSlot29(Gen_PWSlot29, QWidget):
-    """Page to set the Slot Type 29
-    """
+    """Page to set the Slot Type 29"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()

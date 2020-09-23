@@ -8,7 +8,12 @@ TUTO_DIR = abspath(join(TEST_DIR, "..", "Tutorials"))
 
 
 @pytest.mark.tutorial
-@pytest.mark.parametrize("tuto_name", ["tuto_Machine", "tuto_Force", "tuto_Plots"])
+@pytest.mark.parametrize(
+    "tuto_name",
+    [
+        "tuto_Machine",
+    ],
+)
 def test_short_tutorial(tuto_name):
     """Execute the tutorial"""
     # Read the notebook
@@ -22,7 +27,15 @@ def test_short_tutorial(tuto_name):
 
 @pytest.mark.tutorial
 @pytest.mark.long
-@pytest.mark.parametrize("tuto_name", ["tuto_Optimization", "tuto_Simulation_FEMM"])
+@pytest.mark.parametrize(
+    "tuto_name",
+    [
+        "tuto_Simulation_FEMM",
+        "tuto_Force",
+        "tuto_Plots",
+        "tuto_Optimization",
+    ],
+)
 def test_long_tutorial(tuto_name):
     """Execute the tutorial"""
     # Read the notebook

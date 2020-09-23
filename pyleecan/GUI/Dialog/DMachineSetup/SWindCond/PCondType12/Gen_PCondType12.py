@@ -9,8 +9,7 @@ from pyleecan.GUI.Dialog.DMachineSetup.SWindCond.PCondType12.Ui_PCondType12 impo
 
 class Gen_PCondType12(Ui_PCondType12):
     def setupUi(self, PCondType12):
-        """Abstract class to update the widget according to the csv doc
-        """
+        """Abstract class to update the widget according to the csv doc"""
         Ui_PCondType12.setupUi(self, PCondType12)
         # Setup of in_Nwpc1
         txt = self.tr(

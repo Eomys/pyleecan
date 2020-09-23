@@ -14,14 +14,14 @@ from datetime import datetime
 
 def evaluate(solver, indiv):
     """Evaluate the individual according to the solver method
-    
+
     Parameters
     ----------
     solver : Solver
         optimization solver
-    indiv : individual 
+    indiv : individual
         individual to evaluate
-    
+
     Returns
     -------
     evaluation_failure : bool
