@@ -97,7 +97,7 @@ def generate_prop_setter(gen_dict, class_dict, prop):
 
     ## Convertion to correct type
     if prop["type"] == "ndarray":
-        set_str += TAB2 + "if value == -1:\n"
+        set_str += TAB2 + "if value is -1:\n"
         set_str += TAB3 + "value = list()\n"
         set_str += TAB2 + "elif type(value) is list:\n"
         set_str += TAB3 + "try:\n"
@@ -125,7 +125,7 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB3 + "value = ImportMatrixVal(value=value)\n"
         set_str += TAB2 + "elif isinstance(value,list):\n"
         set_str += TAB3 + "value = ImportMatrixVal(value=array(value))\n"
-        set_str += TAB2 + "elif value == -1:\n"
+        set_str += TAB2 + "elif value is -1:\n"
         set_str += TAB3 + "value = ImportMatrix()\n"
         set_str += TAB2 + "elif isinstance(value,dict):\n"
         set_str += (
@@ -139,33 +139,40 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB2 + "if type(value) is dict:\n"
         set_str += TAB3 + "for key, obj in value.items():\n"
         set_str += TAB4 + "if type(obj) is dict:\n"
-        set_str += (
-            TAB5
-            + "class_obj = import_class('pyleecan.Classes', value.get('__class__'), '"
-            + prop["name"]
-            + "')\n"
-        )
+        if "SciDataTool" in prop["type"]:
+            set_str += (
+                TAB5
+                + "class_obj = import_class('SciDataTool.Classes.'+value.get('__class__'), value.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
+        else:
+            set_str += (
+                TAB5
+                + "class_obj = import_class('pyleecan.Classes', value.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
         set_str += TAB5 + "value = class_obj(init_dict=value)\n"
     elif is_list_pyleecan_type(prop["type"]):
         set_str += TAB2 + "if type(value) is list:\n"
         set_str += TAB3 + "for ii, obj in enumerate(value):\n"
         set_str += TAB4 + "if type(obj) is dict:\n"
-        set_str += (
-            TAB5
-            + "class_obj = import_class('pyleecan.Classes', obj.get('__class__'), '"
-            + prop["name"]
-            + "')\n"
-        )
+        if "SciDataTool" in prop["type"]:
+            set_str += (
+                TAB5
+                + "class_obj = import_class('SciDataTool.Classes.'+value.get('__class__'), obj.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
+        else:
+            set_str += (
+                TAB5
+                + "class_obj = import_class('pyleecan.Classes', obj.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
         set_str += TAB5 + "value[ii] = class_obj(init_dict=obj)\n"
-    elif "SciDataTool" in prop["type"]:
-        set_str += TAB2 + "if isinstance(value, dict) and '__class__' in value:\n"
-        set_str += (
-            TAB3
-            + "class_obj = import_class('SciDataTool.Classes.'+value.get('__class__'), value.get('__class__'), '"
-            + prop["name"]
-            + "')\n"
-        )
-        set_str += TAB3 + "value = class_obj(init_dict=value)\n"
     elif "." not in prop["type"] and prop["type"] not in PYTHON_TYPE:  # pyleecan Type
         set_str += TAB2 + "if isinstance(value, dict) and '__class__' in value:\n"
         set_str += (
@@ -175,7 +182,7 @@ def generate_prop_setter(gen_dict, class_dict, prop):
             + "')\n"
         )
         set_str += TAB3 + "value = class_obj(init_dict=value)\n"
-        set_str += TAB2 + "elif value == -1:  # Default constructor\n"
+        set_str += TAB2 + "elif value is -1:  # Default constructor\n"
         set_str += TAB3 + "value = " + prop["type"] + "()\n"
 
     ## Add check_var("var_name",value, "var_type", min=var_min, max=var_max)

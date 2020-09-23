@@ -277,7 +277,12 @@ def is_list_pyleecan_type(type_name):
     is_list : bool
         True if the type is a list of pyleecan type
     """
-    return type_name[0] == "[" and type_name[-1] == "]" and "." not in type_name
+    return (
+        type_name[0] == "["
+        and type_name[-1] == "]"
+        and type_name != "[ndarray]"
+        and ("." not in type_name or "SciDataTool" in type_name)
+    )
 
 
 def is_dict_pyleecan_type(type_name):
@@ -298,7 +303,7 @@ def is_dict_pyleecan_type(type_name):
         type_name[0] == "{"
         and type_name[-1] == "}"
         and type_name != "{ndarray}"
-        and "." not in type_name
+        and ("." not in type_name or "SciDataTool" in type_name)
     )
 
 

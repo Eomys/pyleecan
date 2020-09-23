@@ -92,7 +92,7 @@ def load(file_path):
     """
     if file_path.endswith(".pkl"):
         return load_pkl(file_path)
-    file_path, init_dict = load_dict(file_path)
+    file_path, init_dict = load_init_dict(file_path)
 
     # Check that loaded data are of type dict
     if not isinstance(init_dict, dict):
