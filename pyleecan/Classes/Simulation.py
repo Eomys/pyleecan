@@ -23,6 +23,7 @@ from ._check import InitUnKnowClassError
 from .Machine import Machine
 from .Input import Input
 from .VarSimu import VarSimu
+from .Post import Post
 
 
 class Simulation(FrozenClass):
@@ -58,6 +59,7 @@ class Simulation(FrozenClass):
         input=-1,
         logger_name="Pyleecan.Simulation",
         var_simu=None,
+        postproc_list=list(),
         init_dict=None,
         init_str=None,
     ):
@@ -91,6 +93,7 @@ class Simulation(FrozenClass):
             input = obj.input
             logger_name = obj.logger_name
             var_simu = obj.var_simu
+            postproc_list = obj.postproc_list
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -106,6 +109,8 @@ class Simulation(FrozenClass):
                 logger_name = init_dict["logger_name"]
             if "var_simu" in list(init_dict.keys()):
                 var_simu = init_dict["var_simu"]
+            if "postproc_list" in list(init_dict.keys()):
+                postproc_list = init_dict["postproc_list"]
         # Initialisation by argument
         self.parent = None
         self.name = name
@@ -222,6 +227,39 @@ class Simulation(FrozenClass):
             self.var_simu = var_simu
         else:
             self.var_simu = var_simu
+        # postproc_list can be None or a list of Post object or a list of dict
+        if type(postproc_list) is list:
+            # Check if the list is only composed of Post
+            if len(postproc_list) > 0 and all(
+                isinstance(obj, Post) for obj in postproc_list
+            ):
+                # set the list to keep pointer reference
+                self.postproc_list = postproc_list
+            else:
+                self.postproc_list = list()
+                for obj in postproc_list:
+                    if not isinstance(obj, dict):  # Default value
+                        self.postproc_list.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in ["Post", "PostFunction", "PostMethod"]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for postproc_list"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
+                        )
+                        class_obj = getattr(module, class_name)
+                        self.postproc_list.append(class_obj(init_dict=obj))
+
+        elif postproc_list is None:
+            self.postproc_list = list()
+        else:
+            self.postproc_list = postproc_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -252,6 +290,16 @@ class Simulation(FrozenClass):
             Simulation_str += "var_simu = " + tmp
         else:
             Simulation_str += "var_simu = None" + linesep + linesep
+        if len(self.postproc_list) == 0:
+            Simulation_str += "postproc_list = []" + linesep
+        for ii in range(len(self.postproc_list)):
+            tmp = (
+                self.postproc_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            Simulation_str += (
+                "postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         return Simulation_str
 
     def __eq__(self, other):
@@ -270,6 +318,8 @@ class Simulation(FrozenClass):
         if other.logger_name != self.logger_name:
             return False
         if other.var_simu != self.var_simu:
+            return False
+        if other.postproc_list != self.postproc_list:
             return False
         return True
 
@@ -292,6 +342,9 @@ class Simulation(FrozenClass):
             Simulation_dict["var_simu"] = None
         else:
             Simulation_dict["var_simu"] = self.var_simu.as_dict()
+        Simulation_dict["postproc_list"] = list()
+        for obj in self.postproc_list:
+            Simulation_dict["postproc_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         Simulation_dict["__class__"] = "Simulation"
         return Simulation_dict
@@ -308,6 +361,8 @@ class Simulation(FrozenClass):
         self.logger_name = None
         if self.var_simu is not None:
             self.var_simu._set_None()
+        for obj in self.postproc_list:
+            obj._set_None()
 
     def _get_name(self):
         """getter of name"""
@@ -423,5 +478,30 @@ class Simulation(FrozenClass):
         doc=u"""Multi-simulation definition
 
         :Type: VarSimu
+        """,
+    )
+
+    def _get_postproc_list(self):
+        """getter of postproc_list"""
+        for obj in self._postproc_list:
+            if obj is not None:
+                obj.parent = self
+        return self._postproc_list
+
+    def _set_postproc_list(self, value):
+        """setter of postproc_list"""
+        check_var("postproc_list", value, "[Post]")
+        self._postproc_list = value
+
+        for obj in self._postproc_list:
+            if obj is not None:
+                obj.parent = self
+
+    postproc_list = property(
+        fget=_get_postproc_list,
+        fset=_set_postproc_list,
+        doc=u"""List of postprocessings to run on Output after the simulation
+
+        :Type: [Post]
         """,
     )

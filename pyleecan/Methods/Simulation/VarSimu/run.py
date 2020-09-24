@@ -38,7 +38,7 @@ def run(self):
 
         simulation = simulation_list.pop(ref_simu_index)
         index_list.pop(ref_simu_index)
-        simulation.parent = xoutput
+        xoutput.simu = simulation
 
         # Run the simulation handling errors
         run_single_simu(
@@ -82,3 +82,9 @@ def run(self):
             + "] {:3d}%".format(((100 * (i + 1 + ref_simu_in_multsim)) // (nb_simu))),
             end="",
         )
+
+    # Running postprocessings
+    if self.postproc_list:
+        logger.info("Running var_simu postprocessings...")
+        for postproc in self.postproc_list:
+            postproc.run(xoutput)

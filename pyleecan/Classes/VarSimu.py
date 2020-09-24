@@ -18,9 +18,20 @@ try:
 except ImportError as error:
     run = error
 
+try:
+    from ..Methods.Simulation.VarSimu.check_param import check_param
+except ImportError as error:
+    check_param = error
+
+try:
+    from ..Methods.Simulation.VarSimu.get_simulations import get_simulations
+except ImportError as error:
+    get_simulations = error
+
 
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
+from .Post import Post
 
 
 class VarSimu(FrozenClass):
@@ -28,6 +39,7 @@ class VarSimu(FrozenClass):
 
     VERSION = 1
 
+    # Check ImportError to remove unnecessary dependencies in unused method
     # cf Methods.Simulation.VarSimu.run
     if isinstance(run, ImportError):
         run = property(
@@ -37,6 +49,26 @@ class VarSimu(FrozenClass):
         )
     else:
         run = run
+    # cf Methods.Simulation.VarSimu.check_param
+    if isinstance(check_param, ImportError):
+        check_param = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use VarSimu method check_param: " + str(check_param))
+            )
+        )
+    else:
+        check_param = check_param
+    # cf Methods.Simulation.VarSimu.get_simulations
+    if isinstance(get_simulations, ImportError):
+        get_simulations = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method get_simulations: " + str(get_simulations)
+                )
+            )
+        )
+    else:
+        get_simulations = get_simulations
     # save method is available in all object
     save = save
 
@@ -57,6 +89,7 @@ class VarSimu(FrozenClass):
         stop_if_error=False,
         ref_simu_index=None,
         nb_simu=0,
+        postproc_list=list(),
         init_dict=None,
         init_str=None,
     ):
@@ -85,6 +118,7 @@ class VarSimu(FrozenClass):
             stop_if_error = obj.stop_if_error
             ref_simu_index = obj.ref_simu_index
             nb_simu = obj.nb_simu
+            postproc_list = obj.postproc_list
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -102,6 +136,8 @@ class VarSimu(FrozenClass):
                 ref_simu_index = init_dict["ref_simu_index"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
+            if "postproc_list" in list(init_dict.keys()):
+                postproc_list = init_dict["postproc_list"]
         # Initialisation by argument
         self.parent = None
         self.name = name
@@ -130,6 +166,39 @@ class VarSimu(FrozenClass):
         self.stop_if_error = stop_if_error
         self.ref_simu_index = ref_simu_index
         self.nb_simu = nb_simu
+        # postproc_list can be None or a list of Post object or a list of dict
+        if type(postproc_list) is list:
+            # Check if the list is only composed of Post
+            if len(postproc_list) > 0 and all(
+                isinstance(obj, Post) for obj in postproc_list
+            ):
+                # set the list to keep pointer reference
+                self.postproc_list = postproc_list
+            else:
+                self.postproc_list = list()
+                for obj in postproc_list:
+                    if not isinstance(obj, dict):  # Default value
+                        self.postproc_list.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in ["Post", "PostFunction", "PostMethod"]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for postproc_list"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
+                        )
+                        class_obj = getattr(module, class_name)
+                        self.postproc_list.append(class_obj(init_dict=obj))
+
+        elif postproc_list is None:
+            self.postproc_list = list()
+        else:
+            self.postproc_list = postproc_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -158,6 +227,14 @@ class VarSimu(FrozenClass):
         VarSimu_str += "stop_if_error = " + str(self.stop_if_error) + linesep
         VarSimu_str += "ref_simu_index = " + str(self.ref_simu_index) + linesep
         VarSimu_str += "nb_simu = " + str(self.nb_simu) + linesep
+        if len(self.postproc_list) == 0:
+            VarSimu_str += "postproc_list = []" + linesep
+        for ii in range(len(self.postproc_list)):
+            tmp = (
+                self.postproc_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            VarSimu_str += "postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
         return VarSimu_str
 
     def __eq__(self, other):
@@ -179,6 +256,8 @@ class VarSimu(FrozenClass):
             return False
         if other.nb_simu != self.nb_simu:
             return False
+        if other.postproc_list != self.postproc_list:
+            return False
         return True
 
     def as_dict(self):
@@ -194,6 +273,9 @@ class VarSimu(FrozenClass):
         VarSimu_dict["stop_if_error"] = self.stop_if_error
         VarSimu_dict["ref_simu_index"] = self.ref_simu_index
         VarSimu_dict["nb_simu"] = self.nb_simu
+        VarSimu_dict["postproc_list"] = list()
+        for obj in self.postproc_list:
+            VarSimu_dict["postproc_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         VarSimu_dict["__class__"] = "VarSimu"
         return VarSimu_dict
@@ -209,6 +291,8 @@ class VarSimu(FrozenClass):
         self.stop_if_error = None
         self.ref_simu_index = None
         self.nb_simu = None
+        for obj in self.postproc_list:
+            obj._set_None()
 
     def _get_name(self):
         """getter of name"""
@@ -341,5 +425,30 @@ class VarSimu(FrozenClass):
         doc=u"""Number of simulations
 
         :Type: int
+        """,
+    )
+
+    def _get_postproc_list(self):
+        """getter of postproc_list"""
+        for obj in self._postproc_list:
+            if obj is not None:
+                obj.parent = self
+        return self._postproc_list
+
+    def _set_postproc_list(self, value):
+        """setter of postproc_list"""
+        check_var("postproc_list", value, "[Post]")
+        self._postproc_list = value
+
+        for obj in self._postproc_list:
+            if obj is not None:
+                obj.parent = self
+
+    postproc_list = property(
+        fget=_get_postproc_list,
+        fset=_set_postproc_list,
+        doc=u"""List of post-processing to run on XOutput after the multisimulation
+
+        :Type: [Post]
         """,
     )

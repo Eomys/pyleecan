@@ -31,6 +31,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
+from .Post import Post
 
 
 class VarLoad(VarSimu):
@@ -95,6 +96,7 @@ class VarLoad(VarSimu):
         stop_if_error=False,
         ref_simu_index=None,
         nb_simu=0,
+        postproc_list=list(),
         init_dict=None,
         init_str=None,
     ):
@@ -123,6 +125,7 @@ class VarLoad(VarSimu):
             stop_if_error = obj.stop_if_error
             ref_simu_index = obj.ref_simu_index
             nb_simu = obj.nb_simu
+            postproc_list = obj.postproc_list
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -140,6 +143,8 @@ class VarLoad(VarSimu):
                 ref_simu_index = init_dict["ref_simu_index"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
+            if "postproc_list" in list(init_dict.keys()):
+                postproc_list = init_dict["postproc_list"]
         # Initialisation by argument
         # Call VarSimu init
         super(VarLoad, self).__init__(
@@ -150,6 +155,7 @@ class VarLoad(VarSimu):
             stop_if_error=stop_if_error,
             ref_simu_index=ref_simu_index,
             nb_simu=nb_simu,
+            postproc_list=postproc_list,
         )
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties
