@@ -64,7 +64,17 @@ class SolutionMat(Solution):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, field=None, indice=None, axis=None, type_cell="triangle", label=None, dimension=2, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        field=None,
+        indice=None,
+        axis=None,
+        type_cell="triangle",
+        label=None,
+        dimension=2,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -76,8 +86,9 @@ class SolutionMat(Solution):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -110,7 +121,9 @@ class SolutionMat(Solution):
         set_array(self, "indice", indice)
         self.axis = axis
         # Call Solution init
-        super(SolutionMat, self).__init__(type_cell=type_cell, label=label, dimension=dimension)
+        super(SolutionMat, self).__init__(
+            type_cell=type_cell, label=label, dimension=dimension
+        )
         # The class is frozen (in Solution init), for now it's impossible to
         # add new properties
 
@@ -120,8 +133,20 @@ class SolutionMat(Solution):
         SolutionMat_str = ""
         # Get the properties inherited from Solution
         SolutionMat_str += super(SolutionMat, self).__str__()
-        SolutionMat_str += "field = " + linesep + str(self.field).replace(linesep, linesep + "\t") + linesep + linesep
-        SolutionMat_str += "indice = " + linesep + str(self.indice).replace(linesep, linesep + "\t") + linesep + linesep
+        SolutionMat_str += (
+            "field = "
+            + linesep
+            + str(self.field).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
+        SolutionMat_str += (
+            "indice = "
+            + linesep
+            + str(self.indice).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         SolutionMat_str += "axis = " + str(self.axis) + linesep
         return SolutionMat_str
 

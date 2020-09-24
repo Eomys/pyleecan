@@ -53,7 +53,17 @@ class InputForce(Input):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, P=None, time=None, angle=None, Nt_tot=2048, Nrev=1, Na_tot=2048, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        P=None,
+        time=None,
+        angle=None,
+        Nt_tot=2048,
+        Nrev=1,
+        Na_tot=2048,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -71,8 +81,9 @@ class InputForce(Input):
             time = ImportMatrix()
         if angle == -1:
             angle = ImportMatrix()
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -104,11 +115,14 @@ class InputForce(Input):
             self.P = ImportVectorField(init_dict=P)
         elif isinstance(P, str):
             from ..Functions.load import load
+
             self.P = load(P)
         else:
             self.P = P
         # Call Input init
-        super(InputForce, self).__init__(time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot)
+        super(InputForce, self).__init__(
+            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
+        )
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 
@@ -120,7 +134,7 @@ class InputForce(Input):
         InputForce_str += super(InputForce, self).__str__()
         if self.P is not None:
             tmp = self.P.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputForce_str += "P = "+ tmp
+            InputForce_str += "P = " + tmp
         else:
             InputForce_str += "P = None" + linesep + linesep
         return InputForce_str
@@ -172,6 +186,7 @@ class InputForce(Input):
 
         if self._P is not None:
             self._P.parent = self
+
     P = property(
         fget=_get_P,
         fset=_set_P,

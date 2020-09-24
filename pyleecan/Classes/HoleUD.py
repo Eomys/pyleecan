@@ -101,7 +101,15 @@ class HoleUD(HoleMag):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, surf_list=list(), magnet_dict={}, Zh=36, mat_void=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        surf_list=list(),
+        magnet_dict={},
+        Zh=36,
+        mat_void=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -115,8 +123,9 @@ class HoleUD(HoleMag):
 
         if mat_void == -1:
             mat_void = Material()
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -140,7 +149,9 @@ class HoleUD(HoleMag):
         # surf_list can be None or a list of Surface object or a list of dict
         if type(surf_list) is list:
             # Check if the list is only composed of Surface
-            if len(surf_list) > 0 and all(isinstance(obj, Surface) for obj in surf_list):
+            if len(surf_list) > 0 and all(
+                isinstance(obj, Surface) for obj in surf_list
+            ):
                 # set the list to keep pointer reference
                 self.surf_list = surf_list
             else:
@@ -151,7 +162,14 @@ class HoleUD(HoleMag):
                     elif isinstance(obj, dict):
                         # Check that the type is correct (including daughter)
                         class_name = obj.get("__class__")
-                        if class_name not in ['Surface', 'Circle', 'PolarArc', 'SurfLine', 'SurfRing', 'Trapeze']:
+                        if class_name not in [
+                            "Surface",
+                            "Circle",
+                            "PolarArc",
+                            "SurfLine",
+                            "SurfRing",
+                            "Trapeze",
+                        ]:
                             raise InitUnKnowClassError(
                                 "Unknow class name "
                                 + class_name
@@ -163,7 +181,7 @@ class HoleUD(HoleMag):
                         )
                         class_obj = getattr(module, class_name)
                         self.surf_list.append(class_obj(init_dict=obj))
-    
+
         elif surf_list is None:
             self.surf_list = list()
         else:
@@ -183,8 +201,10 @@ class HoleUD(HoleMag):
         if len(self.surf_list) == 0:
             HoleUD_str += "surf_list = []" + linesep
         for ii in range(len(self.surf_list)):
-            tmp = self.surf_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            HoleUD_str += "surf_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.surf_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            )
+            HoleUD_str += "surf_list[" + str(ii) + "] =" + tmp + linesep + linesep
         HoleUD_str += "magnet_dict = " + str(self.magnet_dict) + linesep
         return HoleUD_str
 

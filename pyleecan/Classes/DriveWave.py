@@ -49,7 +49,15 @@ class DriveWave(Drive):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, wave=-1, Umax=800, Imax=800, is_current=False, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        wave=-1,
+        Umax=800,
+        Imax=800,
+        is_current=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -63,8 +71,9 @@ class DriveWave(Drive):
 
         if wave == -1:
             wave = Import()
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -89,28 +98,45 @@ class DriveWave(Drive):
         if isinstance(wave, dict):
             # Check that the type is correct (including daughter)
             class_name = wave.get("__class__")
-            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenToothSaw', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for wave"
+                    "Unknow class name " + class_name + " in init_dict for wave"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.wave = class_obj(init_dict=wave)
         elif isinstance(wave, str):
             from ..Functions.load import load
+
             wave = load(wave)
             # Check that the type is correct (including daughter)
             class_name = wave.__class__.__name__
-            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenToothSaw', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
+            if class_name not in [
+                "Import",
+                "ImportGenMatrixSin",
+                "ImportGenToothSaw",
+                "ImportGenVectLin",
+                "ImportGenVectSin",
+                "ImportMatlab",
+                "ImportMatrix",
+                "ImportMatrixVal",
+                "ImportMatrixXls",
+            ]:
                 raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for wave"
+                    "Unknow class name " + class_name + " in init_dict for wave"
                 )
-            self.wave=wave
+            self.wave = wave
         else:
             self.wave = wave
         # Call Drive init
@@ -126,7 +152,7 @@ class DriveWave(Drive):
         DriveWave_str += super(DriveWave, self).__str__()
         if self.wave is not None:
             tmp = self.wave.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            DriveWave_str += "wave = "+ tmp
+            DriveWave_str += "wave = " + tmp
         else:
             DriveWave_str += "wave = None" + linesep + linesep
         return DriveWave_str
@@ -178,6 +204,7 @@ class DriveWave(Drive):
 
         if self._wave is not None:
             self._wave.parent = self
+
     wave = property(
         fget=_get_wave,
         fset=_set_wave,

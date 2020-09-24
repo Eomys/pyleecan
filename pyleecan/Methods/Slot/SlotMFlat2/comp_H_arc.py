@@ -20,6 +20,6 @@ def comp_H_arc(self):
     Rbo = self.get_Rbo()
     alpha_slot = self.comp_angle_opening()
 
-    Rarc = cos (alpha_slot / 2) * Rbo
+    Rarc = cos(alpha_slot / 2) * Rbo
 
     return Rbo - Rarc

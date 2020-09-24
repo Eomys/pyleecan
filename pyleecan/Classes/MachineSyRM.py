@@ -86,7 +86,19 @@ class MachineSyRM(MachineSync):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, rotor=-1, stator=-1, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        rotor=-1,
+        stator=-1,
+        frame=-1,
+        shaft=-1,
+        name="default_machine",
+        desc="",
+        type_machine=1,
+        logger_name="Pyleecan.Machine",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -106,8 +118,9 @@ class MachineSyRM(MachineSync):
             frame = Frame()
         if shaft == -1:
             shaft = Shaft()
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -145,6 +158,7 @@ class MachineSyRM(MachineSync):
             self.rotor = LamHole(init_dict=rotor)
         elif isinstance(rotor, str):
             from ..Functions.load import load
+
             self.rotor = load(rotor)
         else:
             self.rotor = rotor
@@ -152,32 +166,36 @@ class MachineSyRM(MachineSync):
         if isinstance(stator, dict):
             # Check that the type is correct (including daughter)
             class_name = stator.get("__class__")
-            if class_name not in ['LamSlotWind', 'LamSquirrelCage']:
+            if class_name not in ["LamSlotWind", "LamSquirrelCage"]:
                 raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for stator"
+                    "Unknow class name " + class_name + " in init_dict for stator"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.stator = class_obj(init_dict=stator)
         elif isinstance(stator, str):
             from ..Functions.load import load
+
             stator = load(stator)
             # Check that the type is correct (including daughter)
             class_name = stator.__class__.__name__
-            if class_name not in ['LamSlotWind', 'LamSquirrelCage']:
+            if class_name not in ["LamSlotWind", "LamSquirrelCage"]:
                 raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for stator"
+                    "Unknow class name " + class_name + " in init_dict for stator"
                 )
-            self.stator=stator
+            self.stator = stator
         else:
             self.stator = stator
         # Call MachineSync init
-        super(MachineSyRM, self).__init__(frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine, logger_name=logger_name)
+        super(MachineSyRM, self).__init__(
+            frame=frame,
+            shaft=shaft,
+            name=name,
+            desc=desc,
+            type_machine=type_machine,
+            logger_name=logger_name,
+        )
         # The class is frozen (in MachineSync init), for now it's impossible to
         # add new properties
 
@@ -189,12 +207,12 @@ class MachineSyRM(MachineSync):
         MachineSyRM_str += super(MachineSyRM, self).__str__()
         if self.rotor is not None:
             tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MachineSyRM_str += "rotor = "+ tmp
+            MachineSyRM_str += "rotor = " + tmp
         else:
             MachineSyRM_str += "rotor = None" + linesep + linesep
         if self.stator is not None:
             tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MachineSyRM_str += "stator = "+ tmp
+            MachineSyRM_str += "stator = " + tmp
         else:
             MachineSyRM_str += "stator = None" + linesep + linesep
         return MachineSyRM_str
@@ -254,6 +272,7 @@ class MachineSyRM(MachineSync):
 
         if self._rotor is not None:
             self._rotor.parent = self
+
     rotor = property(
         fget=_get_rotor,
         fset=_set_rotor,
@@ -274,6 +293,7 @@ class MachineSyRM(MachineSync):
 
         if self._stator is not None:
             self._stator.parent = self
+
     stator = property(
         fget=_get_stator,
         fset=_set_stator,

@@ -34,7 +34,9 @@ except ImportError as error:
     create_toolbox = error
 
 try:
-    from ..Methods.Optimization.OptiGenAlgNsga2Deap.check_optimization_input import check_optimization_input
+    from ..Methods.Optimization.OptiGenAlgNsga2Deap.check_optimization_input import (
+        check_optimization_input,
+    )
 except ImportError as error:
     check_optimization_input = error
 
@@ -42,9 +44,10 @@ except ImportError as error:
 from inspect import getsource
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
-try :
+
+try:
     from deap.base import Toolbox
-except ImportError :
+except ImportError:
     Toolbox = ImportError
 from ._check import InitUnKnowClassError
 from .OptiProblem import OptiProblem
@@ -122,7 +125,23 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, toolbox=None, selector=None, crossover=None, mutator=None, p_cross=0.9, p_mutate=0.1, size_pop=40, nb_gen=100, problem=-1, xoutput=-1, logger_name="Pyleecan.OptiSolver", is_keep_all_output=False, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        toolbox=None,
+        selector=None,
+        crossover=None,
+        mutator=None,
+        p_cross=0.9,
+        p_mutate=0.1,
+        size_pop=40,
+        nb_gen=100,
+        problem=-1,
+        xoutput=-1,
+        logger_name="Pyleecan.OptiSolver",
+        is_keep_all_output=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -138,8 +157,9 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
             problem = OptiProblem()
         if xoutput == -1:
             xoutput = XOutput()
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -186,10 +206,22 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         # Initialisation by argument
         # Check if the type Toolbox has been imported with success
         if isinstance(Toolbox, ImportError):
-            raise ImportError('Unknown type Toolbox please install deap')
+            raise ImportError("Unknown type Toolbox please install deap")
         self.toolbox = toolbox
         # Call OptiGenAlg init
-        super(OptiGenAlgNsga2Deap, self).__init__(selector=selector, crossover=crossover, mutator=mutator, p_cross=p_cross, p_mutate=p_mutate, size_pop=size_pop, nb_gen=nb_gen, problem=problem, xoutput=xoutput, logger_name=logger_name, is_keep_all_output=is_keep_all_output)
+        super(OptiGenAlgNsga2Deap, self).__init__(
+            selector=selector,
+            crossover=crossover,
+            mutator=mutator,
+            p_cross=p_cross,
+            p_mutate=p_mutate,
+            size_pop=size_pop,
+            nb_gen=nb_gen,
+            problem=problem,
+            xoutput=xoutput,
+            logger_name=logger_name,
+            is_keep_all_output=is_keep_all_output,
+        )
         # The class is frozen (in OptiGenAlg init), for now it's impossible to
         # add new properties
 
@@ -199,7 +231,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         OptiGenAlgNsga2Deap_str = ""
         # Get the properties inherited from OptiGenAlg
         OptiGenAlgNsga2Deap_str += super(OptiGenAlgNsga2Deap, self).__str__()
-        OptiGenAlgNsga2Deap_str += "toolbox = "+ str(self.toolbox) + linesep + linesep
+        OptiGenAlgNsga2Deap_str += "toolbox = " + str(self.toolbox) + linesep + linesep
         return OptiGenAlgNsga2Deap_str
 
     def __eq__(self, other):
@@ -223,8 +255,12 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         OptiGenAlgNsga2Deap_dict = super(OptiGenAlgNsga2Deap, self).as_dict()
         if self.toolbox is None:
             OptiGenAlgNsga2Deap_dict["toolbox"] = None
-        else: # Store serialized data (using cloudpickle) and str to read it in json save files
-            OptiGenAlgNsga2Deap_dict['toolbox'] ={"__class__" : str(type(self._toolbox)),"__repr__":str(self._toolbox.__repr__()),"serialized":dumps(self._toolbox).decode('ISO-8859-2')}
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            OptiGenAlgNsga2Deap_dict["toolbox"] = {
+                "__class__": str(type(self._toolbox)),
+                "__repr__": str(self._toolbox.__repr__()),
+                "serialized": dumps(self._toolbox).decode("ISO-8859-2"),
+            }
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         OptiGenAlgNsga2Deap_dict["__class__"] = "OptiGenAlgNsga2Deap"
@@ -243,15 +279,18 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
 
     def _set_toolbox(self, value):
         """setter of toolbox"""
-        try: # Check the type 
+        try:  # Check the type
             check_var("toolbox", value, "dict")
         except CheckTypeError:
             check_var("toolbox", value, "deap.base.Toolbox")
             # property can be set from a list to handle loads
-        if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._toolbox = loads(value["serialized"].encode('ISO-8859-2'))
-        else: 
-            self._toolbox= value 
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._toolbox = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._toolbox = value
+
     toolbox = property(
         fget=_get_toolbox,
         fset=_set_toolbox,

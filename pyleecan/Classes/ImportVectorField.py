@@ -51,7 +51,9 @@ class ImportVectorField(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, components=dict(), name="", symbol="", init_dict = None, init_str = None):
+    def __init__(
+        self, components=dict(), name="", symbol="", init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -63,8 +65,9 @@ class ImportVectorField(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -94,7 +97,7 @@ class ImportVectorField(FrozenClass):
         elif components is None:
             self.components = dict()
         else:
-            self.components = components# Should raise an error
+            self.components = components  # Should raise an error
         self.name = name
         self.symbol = symbol
 
@@ -108,12 +111,19 @@ class ImportVectorField(FrozenClass):
         if self.parent is None:
             ImportVectorField_str += "parent = None " + linesep
         else:
-            ImportVectorField_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            ImportVectorField_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         if len(self.components) == 0:
-            ImportVectorField_str += "components = dict()"+linesep
+            ImportVectorField_str += "components = dict()" + linesep
         for key, obj in self.components.items():
-            tmp = self.components[key].__str__().replace(linesep, linesep + "\t")+ linesep 
-            ImportVectorField_str += "components["+key+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.components[key].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            ImportVectorField_str += (
+                "components[" + key + "] =" + tmp + linesep + linesep
+            )
         ImportVectorField_str += 'name = "' + str(self.name) + '"' + linesep
         ImportVectorField_str += 'symbol = "' + str(self.symbol) + '"' + linesep
         return ImportVectorField_str

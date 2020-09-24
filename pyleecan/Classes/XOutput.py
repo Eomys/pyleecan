@@ -343,7 +343,8 @@ class XOutput(Output):
         get_pareto_index = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use XOutput method get_pareto_index: " + str(get_pareto_index)
+                    "Can't use XOutput method get_pareto_index: "
+                    + str(get_pareto_index)
                 )
             )
         )
@@ -361,7 +362,24 @@ class XOutput(Output):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, paramexplorer_list=[], output_list=[], xoutput_dict={}, nb_simu=0, simu=-1, path_res="", geo=-1, elec=-1, mag=-1, struct=-1, post=-1, logger_name="Pyleecan.Output", force=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        paramexplorer_list=[],
+        output_list=[],
+        xoutput_dict={},
+        nb_simu=0,
+        simu=-1,
+        path_res="",
+        geo=-1,
+        elec=-1,
+        mag=-1,
+        struct=-1,
+        post=-1,
+        logger_name="Pyleecan.Output",
+        force=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -387,8 +405,9 @@ class XOutput(Output):
             post = OutPost()
         if force == -1:
             force = OutForce()
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -445,7 +464,17 @@ class XOutput(Output):
         self.xoutput_dict = xoutput_dict
         self.nb_simu = nb_simu
         # Call Output init
-        super(XOutput, self).__init__(simu=simu, path_res=path_res, geo=geo, elec=elec, mag=mag, struct=struct, post=post, logger_name=logger_name, force=force)
+        super(XOutput, self).__init__(
+            simu=simu,
+            path_res=path_res,
+            geo=geo,
+            elec=elec,
+            mag=mag,
+            struct=struct,
+            post=post,
+            logger_name=logger_name,
+            force=force,
+        )
         # The class is frozen (in Output init), for now it's impossible to
         # add new properties
 
@@ -455,8 +484,18 @@ class XOutput(Output):
         XOutput_str = ""
         # Get the properties inherited from Output
         XOutput_str += super(XOutput, self).__str__()
-        XOutput_str += "paramexplorer_list = " + linesep + str(self.paramexplorer_list).replace(linesep, linesep + "\t") + linesep
-        XOutput_str += "output_list = " + linesep + str(self.output_list).replace(linesep, linesep + "\t") + linesep
+        XOutput_str += (
+            "paramexplorer_list = "
+            + linesep
+            + str(self.paramexplorer_list).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        XOutput_str += (
+            "output_list = "
+            + linesep
+            + str(self.output_list).replace(linesep, linesep + "\t")
+            + linesep
+        )
         XOutput_str += "xoutput_dict = " + str(self.xoutput_dict) + linesep
         XOutput_str += "nb_simu = " + str(self.nb_simu) + linesep
         return XOutput_str

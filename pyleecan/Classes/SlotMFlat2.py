@@ -29,7 +29,9 @@ except ImportError as error:
     comp_angle_magnet = error
 
 try:
-    from ..Methods.Slot.SlotMFlat2.comp_angle_opening_magnet import comp_angle_opening_magnet
+    from ..Methods.Slot.SlotMFlat2.comp_angle_opening_magnet import (
+        comp_angle_opening_magnet,
+    )
 except ImportError as error:
     comp_angle_opening_magnet = error
 
@@ -183,7 +185,19 @@ class SlotMFlat2(SlotMag):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, H0=0, H1=0, W0=0.0122, W0_is_rad=False, W1=0.01, magnet=list(), W3=0, Zs=36, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        H0=0,
+        H1=0,
+        W0=0.0122,
+        W0_is_rad=False,
+        W1=0.01,
+        magnet=list(),
+        W3=0,
+        Zs=36,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -195,8 +209,9 @@ class SlotMFlat2(SlotMag):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -248,7 +263,12 @@ class SlotMFlat2(SlotMag):
                     elif isinstance(obj, dict):
                         # Check that the type is correct (including daughter)
                         class_name = obj.get("__class__")
-                        if class_name not in ['MagnetFlat', 'MagnetType10', 'MagnetType12', 'MagnetType13']:
+                        if class_name not in [
+                            "MagnetFlat",
+                            "MagnetType10",
+                            "MagnetType12",
+                            "MagnetType13",
+                        ]:
                             raise InitUnKnowClassError(
                                 "Unknow class name "
                                 + class_name
@@ -260,7 +280,7 @@ class SlotMFlat2(SlotMag):
                         )
                         class_obj = getattr(module, class_name)
                         self.magnet.append(class_obj(init_dict=obj))
-    
+
         elif magnet is None:
             self.magnet = list()
         else:
@@ -285,7 +305,7 @@ class SlotMFlat2(SlotMag):
             SlotMFlat2_str += "magnet = []" + linesep
         for ii in range(len(self.magnet)):
             tmp = self.magnet[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            SlotMFlat2_str += "magnet["+str(ii)+"] ="+ tmp + linesep + linesep
+            SlotMFlat2_str += "magnet[" + str(ii) + "] =" + tmp + linesep + linesep
         return SlotMFlat2_str
 
     def __eq__(self, other):

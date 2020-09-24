@@ -100,7 +100,19 @@ class MachineUD(Machine):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, lam_list=list(), is_sync=True, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        lam_list=list(),
+        is_sync=True,
+        frame=-1,
+        shaft=-1,
+        name="default_machine",
+        desc="",
+        type_machine=1,
+        logger_name="Pyleecan.Machine",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -116,8 +128,9 @@ class MachineUD(Machine):
             frame = Frame()
         if shaft == -1:
             shaft = Shaft()
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -153,7 +166,9 @@ class MachineUD(Machine):
         # lam_list can be None or a list of Lamination object or a list of dict
         if type(lam_list) is list:
             # Check if the list is only composed of Lamination
-            if len(lam_list) > 0 and all(isinstance(obj, Lamination) for obj in lam_list):
+            if len(lam_list) > 0 and all(
+                isinstance(obj, Lamination) for obj in lam_list
+            ):
                 # set the list to keep pointer reference
                 self.lam_list = lam_list
             else:
@@ -164,7 +179,15 @@ class MachineUD(Machine):
                     elif isinstance(obj, dict):
                         # Check that the type is correct (including daughter)
                         class_name = obj.get("__class__")
-                        if class_name not in ['Lamination', 'LamHole', 'LamSlot', 'LamSlotMag', 'LamSlotMulti', 'LamSlotWind', 'LamSquirrelCage']:
+                        if class_name not in [
+                            "Lamination",
+                            "LamHole",
+                            "LamSlot",
+                            "LamSlotMag",
+                            "LamSlotMulti",
+                            "LamSlotWind",
+                            "LamSquirrelCage",
+                        ]:
                             raise InitUnKnowClassError(
                                 "Unknow class name "
                                 + class_name
@@ -176,14 +199,21 @@ class MachineUD(Machine):
                         )
                         class_obj = getattr(module, class_name)
                         self.lam_list.append(class_obj(init_dict=obj))
-    
+
         elif lam_list is None:
             self.lam_list = list()
         else:
             self.lam_list = lam_list
         self.is_sync = is_sync
         # Call Machine init
-        super(MachineUD, self).__init__(frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine, logger_name=logger_name)
+        super(MachineUD, self).__init__(
+            frame=frame,
+            shaft=shaft,
+            name=name,
+            desc=desc,
+            type_machine=type_machine,
+            logger_name=logger_name,
+        )
         # The class is frozen (in Machine init), for now it's impossible to
         # add new properties
 
@@ -197,7 +227,7 @@ class MachineUD(Machine):
             MachineUD_str += "lam_list = []" + linesep
         for ii in range(len(self.lam_list)):
             tmp = self.lam_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            MachineUD_str += "lam_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            MachineUD_str += "lam_list[" + str(ii) + "] =" + tmp + linesep + linesep
         MachineUD_str += "is_sync = " + str(self.is_sync) + linesep
         return MachineUD_str
 

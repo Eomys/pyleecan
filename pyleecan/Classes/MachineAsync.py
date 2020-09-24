@@ -71,7 +71,17 @@ class MachineAsync(Machine):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        frame=-1,
+        shaft=-1,
+        name="default_machine",
+        desc="",
+        type_machine=1,
+        logger_name="Pyleecan.Machine",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -87,8 +97,9 @@ class MachineAsync(Machine):
             frame = Frame()
         if shaft == -1:
             shaft = Shaft()
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -116,7 +127,14 @@ class MachineAsync(Machine):
                 logger_name = init_dict["logger_name"]
         # Initialisation by argument
         # Call Machine init
-        super(MachineAsync, self).__init__(frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine, logger_name=logger_name)
+        super(MachineAsync, self).__init__(
+            frame=frame,
+            shaft=shaft,
+            name=name,
+            desc=desc,
+            type_machine=type_machine,
+            logger_name=logger_name,
+        )
         # The class is frozen (in Machine init), for now it's impossible to
         # add new properties
 

@@ -87,7 +87,19 @@ class VarLoad(VarSimu):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", desc="", datakeeper_list=list(), is_keep_all_output=False, stop_if_error=False, ref_simu_index=None, nb_simu=0, is_reuse_femm_file=True, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name="",
+        desc="",
+        datakeeper_list=list(),
+        is_keep_all_output=False,
+        stop_if_error=False,
+        ref_simu_index=None,
+        nb_simu=0,
+        is_reuse_femm_file=True,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -99,8 +111,9 @@ class VarLoad(VarSimu):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -134,7 +147,16 @@ class VarLoad(VarSimu):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
         # Initialisation by argument
         # Call VarSimu init
-        super(VarLoad, self).__init__(name=name, desc=desc, datakeeper_list=datakeeper_list, is_keep_all_output=is_keep_all_output, stop_if_error=stop_if_error, ref_simu_index=ref_simu_index, nb_simu=nb_simu, is_reuse_femm_file=is_reuse_femm_file)
+        super(VarLoad, self).__init__(
+            name=name,
+            desc=desc,
+            datakeeper_list=datakeeper_list,
+            is_keep_all_output=is_keep_all_output,
+            stop_if_error=stop_if_error,
+            ref_simu_index=ref_simu_index,
+            nb_simu=nb_simu,
+            is_reuse_femm_file=is_reuse_femm_file,
+        )
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties
 

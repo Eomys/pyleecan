@@ -136,7 +136,7 @@ class Hole(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Zh=36, mat_void=-1, init_dict = None, init_str = None):
+    def __init__(self, Zh=36, mat_void=-1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -150,8 +150,9 @@ class Hole(FrozenClass):
 
         if mat_void == -1:
             mat_void = Material()
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -173,6 +174,7 @@ class Hole(FrozenClass):
             self.mat_void = Material(init_dict=mat_void)
         elif isinstance(mat_void, str):
             from ..Functions.load import load
+
             self.mat_void = load(mat_void)
         else:
             self.mat_void = mat_void
@@ -191,7 +193,7 @@ class Hole(FrozenClass):
         Hole_str += "Zh = " + str(self.Zh) + linesep
         if self.mat_void is not None:
             tmp = self.mat_void.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Hole_str += "mat_void = "+ tmp
+            Hole_str += "mat_void = " + tmp
         else:
             Hole_str += "mat_void = None" + linesep + linesep
         return Hole_str
@@ -259,6 +261,7 @@ class Hole(FrozenClass):
 
         if self._mat_void is not None:
             self._mat_void.parent = self
+
     mat_void = property(
         fget=_get_mat_void,
         fset=_set_mat_void,

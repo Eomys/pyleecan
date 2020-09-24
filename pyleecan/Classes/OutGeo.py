@@ -32,7 +32,20 @@ class OutGeo(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, stator=None, rotor=None, Wgap_mec=None, Wgap_mag=None, Rgap_mec=None, Lgap=None, logger_name="Pyleecan.OutGeo", angle_offset_initial=None, rot_dir=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        stator=None,
+        rotor=None,
+        Wgap_mec=None,
+        Wgap_mag=None,
+        Rgap_mec=None,
+        Lgap=None,
+        logger_name="Pyleecan.OutGeo",
+        angle_offset_initial=None,
+        rot_dir=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -48,8 +61,9 @@ class OutGeo(FrozenClass):
             stator = OutGeoLam()
         if rotor == -1:
             rotor = OutGeoLam()
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -91,6 +105,7 @@ class OutGeo(FrozenClass):
             self.stator = OutGeoLam(init_dict=stator)
         elif isinstance(stator, str):
             from ..Functions.load import load
+
             self.stator = load(stator)
         else:
             self.stator = stator
@@ -99,6 +114,7 @@ class OutGeo(FrozenClass):
             self.rotor = OutGeoLam(init_dict=rotor)
         elif isinstance(rotor, str):
             from ..Functions.load import load
+
             self.rotor = load(rotor)
         else:
             self.rotor = rotor
@@ -123,12 +139,12 @@ class OutGeo(FrozenClass):
             OutGeo_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.stator is not None:
             tmp = self.stator.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutGeo_str += "stator = "+ tmp
+            OutGeo_str += "stator = " + tmp
         else:
             OutGeo_str += "stator = None" + linesep + linesep
         if self.rotor is not None:
             tmp = self.rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OutGeo_str += "rotor = "+ tmp
+            OutGeo_str += "rotor = " + tmp
         else:
             OutGeo_str += "rotor = None" + linesep + linesep
         OutGeo_str += "Wgap_mec = " + str(self.Wgap_mec) + linesep
@@ -136,7 +152,9 @@ class OutGeo(FrozenClass):
         OutGeo_str += "Rgap_mec = " + str(self.Rgap_mec) + linesep
         OutGeo_str += "Lgap = " + str(self.Lgap) + linesep
         OutGeo_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OutGeo_str += "angle_offset_initial = " + str(self.angle_offset_initial) + linesep
+        OutGeo_str += (
+            "angle_offset_initial = " + str(self.angle_offset_initial) + linesep
+        )
         OutGeo_str += "rot_dir = " + str(self.rot_dir) + linesep
         return OutGeo_str
 
@@ -215,6 +233,7 @@ class OutGeo(FrozenClass):
 
         if self._stator is not None:
             self._stator.parent = self
+
     stator = property(
         fget=_get_stator,
         fset=_set_stator,
@@ -235,6 +254,7 @@ class OutGeo(FrozenClass):
 
         if self._rotor is not None:
             self._rotor.parent = self
+
     rotor = property(
         fget=_get_rotor,
         fset=_set_rotor,

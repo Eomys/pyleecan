@@ -53,7 +53,9 @@ class ParamExplorer(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", symbol="", unit="", setter=None, init_dict = None, init_str = None):
+    def __init__(
+        self, name="", symbol="", unit="", setter=None, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -65,8 +67,9 @@ class ParamExplorer(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -103,14 +106,18 @@ class ParamExplorer(FrozenClass):
         if self.parent is None:
             ParamExplorer_str += "parent = None " + linesep
         else:
-            ParamExplorer_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            ParamExplorer_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         ParamExplorer_str += 'name = "' + str(self.name) + '"' + linesep
         ParamExplorer_str += 'symbol = "' + str(self.symbol) + '"' + linesep
         ParamExplorer_str += 'unit = "' + str(self.unit) + '"' + linesep
         if self._setter[1] is None:
             ParamExplorer_str += "setter = " + str(self._setter[1])
         else:
-            ParamExplorer_str += "setter = " + linesep + str(self._setter[1]) + linesep + linesep
+            ParamExplorer_str += (
+                "setter = " + linesep + str(self._setter[1]) + linesep + linesep
+            )
         return ParamExplorer_str
 
     def __eq__(self, other):
@@ -139,7 +146,10 @@ class ParamExplorer(FrozenClass):
         if self.setter is None:
             ParamExplorer_dict["setter"] = None
         else:
-            ParamExplorer_dict["setter"] = [dumps(self._setter[0]).decode('ISO-8859-2'), self._setter[1]]
+            ParamExplorer_dict["setter"] = [
+                dumps(self._setter[0]).decode("ISO-8859-2"),
+                self._setter[1],
+            ]
         # The class name is added to the dict fordeserialisation purpose
         ParamExplorer_dict["__class__"] = "ParamExplorer"
         return ParamExplorer_dict

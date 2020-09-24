@@ -69,7 +69,9 @@ except ImportError as error:
     plot_A_time_space = error
 
 try:
-    from ..Methods.Output.Output.plot.Structural.plot_force_space import plot_force_space
+    from ..Methods.Output.Output.plot.Structural.plot_force_space import (
+        plot_force_space,
+    )
 except ImportError as error:
     plot_force_space = error
 
@@ -84,7 +86,9 @@ except ImportError as error:
     get_rot_dir = error
 
 try:
-    from ..Methods.Output.Output.getter.get_angle_offset_initial import get_angle_offset_initial
+    from ..Methods.Output.Output.getter.get_angle_offset_initial import (
+        get_angle_offset_initial,
+    )
 except ImportError as error:
     get_angle_offset_initial = error
 
@@ -308,7 +312,20 @@ class Output(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, simu=-1, path_res="", geo=-1, elec=-1, mag=-1, struct=-1, post=-1, logger_name="Pyleecan.Output", force=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        simu=-1,
+        path_res="",
+        geo=-1,
+        elec=-1,
+        mag=-1,
+        struct=-1,
+        post=-1,
+        logger_name="Pyleecan.Output",
+        force=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -334,8 +351,9 @@ class Output(FrozenClass):
             post = OutPost()
         if force == -1:
             force = OutForce()
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -376,28 +394,25 @@ class Output(FrozenClass):
         if isinstance(simu, dict):
             # Check that the type is correct (including daughter)
             class_name = simu.get("__class__")
-            if class_name not in ['Simulation', 'Simu1']:
+            if class_name not in ["Simulation", "Simu1"]:
                 raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for simu"
+                    "Unknow class name " + class_name + " in init_dict for simu"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.simu = class_obj(init_dict=simu)
         elif isinstance(simu, str):
             from ..Functions.load import load
+
             simu = load(simu)
             # Check that the type is correct (including daughter)
             class_name = simu.__class__.__name__
-            if class_name not in ['Simulation', 'Simu1']:
+            if class_name not in ["Simulation", "Simu1"]:
                 raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for simu"
+                    "Unknow class name " + class_name + " in init_dict for simu"
                 )
-            self.simu=simu
+            self.simu = simu
         else:
             self.simu = simu
         self.path_res = path_res
@@ -406,6 +421,7 @@ class Output(FrozenClass):
             self.geo = OutGeo(init_dict=geo)
         elif isinstance(geo, str):
             from ..Functions.load import load
+
             self.geo = load(geo)
         else:
             self.geo = geo
@@ -414,6 +430,7 @@ class Output(FrozenClass):
             self.elec = OutElec(init_dict=elec)
         elif isinstance(elec, str):
             from ..Functions.load import load
+
             self.elec = load(elec)
         else:
             self.elec = elec
@@ -422,6 +439,7 @@ class Output(FrozenClass):
             self.mag = OutMag(init_dict=mag)
         elif isinstance(mag, str):
             from ..Functions.load import load
+
             self.mag = load(mag)
         else:
             self.mag = mag
@@ -430,6 +448,7 @@ class Output(FrozenClass):
             self.struct = OutStruct(init_dict=struct)
         elif isinstance(struct, str):
             from ..Functions.load import load
+
             self.struct = load(struct)
         else:
             self.struct = struct
@@ -438,6 +457,7 @@ class Output(FrozenClass):
             self.post = OutPost(init_dict=post)
         elif isinstance(post, str):
             from ..Functions.load import load
+
             self.post = load(post)
         else:
             self.post = post
@@ -447,6 +467,7 @@ class Output(FrozenClass):
             self.force = OutForce(init_dict=force)
         elif isinstance(force, str):
             from ..Functions.load import load
+
             self.force = load(force)
         else:
             self.force = force
@@ -464,39 +485,39 @@ class Output(FrozenClass):
             Output_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.simu is not None:
             tmp = self.simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "simu = "+ tmp
+            Output_str += "simu = " + tmp
         else:
             Output_str += "simu = None" + linesep + linesep
         Output_str += 'path_res = "' + str(self.path_res) + '"' + linesep
         if self.geo is not None:
             tmp = self.geo.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "geo = "+ tmp
+            Output_str += "geo = " + tmp
         else:
             Output_str += "geo = None" + linesep + linesep
         if self.elec is not None:
             tmp = self.elec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "elec = "+ tmp
+            Output_str += "elec = " + tmp
         else:
             Output_str += "elec = None" + linesep + linesep
         if self.mag is not None:
             tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "mag = "+ tmp
+            Output_str += "mag = " + tmp
         else:
             Output_str += "mag = None" + linesep + linesep
         if self.struct is not None:
             tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "struct = "+ tmp
+            Output_str += "struct = " + tmp
         else:
             Output_str += "struct = None" + linesep + linesep
         if self.post is not None:
             tmp = self.post.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "post = "+ tmp
+            Output_str += "post = " + tmp
         else:
             Output_str += "post = None" + linesep + linesep
         Output_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         if self.force is not None:
             tmp = self.force.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Output_str += "force = "+ tmp
+            Output_str += "force = " + tmp
         else:
             Output_str += "force = None" + linesep + linesep
         return Output_str
@@ -596,6 +617,7 @@ class Output(FrozenClass):
 
         if self._simu is not None:
             self._simu.parent = self
+
     simu = property(
         fget=_get_simu,
         fset=_set_simu,
@@ -634,6 +656,7 @@ class Output(FrozenClass):
 
         if self._geo is not None:
             self._geo.parent = self
+
     geo = property(
         fget=_get_geo,
         fset=_set_geo,
@@ -654,6 +677,7 @@ class Output(FrozenClass):
 
         if self._elec is not None:
             self._elec.parent = self
+
     elec = property(
         fget=_get_elec,
         fset=_set_elec,
@@ -674,6 +698,7 @@ class Output(FrozenClass):
 
         if self._mag is not None:
             self._mag.parent = self
+
     mag = property(
         fget=_get_mag,
         fset=_set_mag,
@@ -694,6 +719,7 @@ class Output(FrozenClass):
 
         if self._struct is not None:
             self._struct.parent = self
+
     struct = property(
         fget=_get_struct,
         fset=_set_struct,
@@ -714,6 +740,7 @@ class Output(FrozenClass):
 
         if self._post is not None:
             self._post.parent = self
+
     post = property(
         fget=_get_post,
         fset=_set_post,
@@ -752,6 +779,7 @@ class Output(FrozenClass):
 
         if self._force is not None:
             self._force.parent = self
+
     force = property(
         fget=_get_force,
         fset=_set_force,

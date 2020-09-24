@@ -99,7 +99,16 @@ class EEC_PMSM(EEC):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, indmag=None, fluxlink=None, parameters={}, freq0=None, drive=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        indmag=None,
+        fluxlink=None,
+        parameters={},
+        freq0=None,
+        drive=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -117,8 +126,9 @@ class EEC_PMSM(EEC):
             fluxlink = FluxLink()
         if drive == -1:
             drive = Drive()
-        if init_str is not None :  # Initialisation by str
+        if init_str is not None:  # Initialisation by str
             from ..Functions.load import load
+
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -146,56 +156,50 @@ class EEC_PMSM(EEC):
         if isinstance(indmag, dict):
             # Check that the type is correct (including daughter)
             class_name = indmag.get("__class__")
-            if class_name not in ['IndMag', 'IndMagFEMM']:
+            if class_name not in ["IndMag", "IndMagFEMM"]:
                 raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for indmag"
+                    "Unknow class name " + class_name + " in init_dict for indmag"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.indmag = class_obj(init_dict=indmag)
         elif isinstance(indmag, str):
             from ..Functions.load import load
+
             indmag = load(indmag)
             # Check that the type is correct (including daughter)
             class_name = indmag.__class__.__name__
-            if class_name not in ['IndMag', 'IndMagFEMM']:
+            if class_name not in ["IndMag", "IndMagFEMM"]:
                 raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for indmag"
+                    "Unknow class name " + class_name + " in init_dict for indmag"
                 )
-            self.indmag=indmag
+            self.indmag = indmag
         else:
             self.indmag = indmag
         # fluxlink can be None, a FluxLink object or a dict
         if isinstance(fluxlink, dict):
             # Check that the type is correct (including daughter)
             class_name = fluxlink.get("__class__")
-            if class_name not in ['FluxLink', 'FluxLinkFEMM']:
+            if class_name not in ["FluxLink", "FluxLinkFEMM"]:
                 raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for fluxlink"
+                    "Unknow class name " + class_name + " in init_dict for fluxlink"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.fluxlink = class_obj(init_dict=fluxlink)
         elif isinstance(fluxlink, str):
             from ..Functions.load import load
+
             fluxlink = load(fluxlink)
             # Check that the type is correct (including daughter)
             class_name = fluxlink.__class__.__name__
-            if class_name not in ['FluxLink', 'FluxLinkFEMM']:
+            if class_name not in ["FluxLink", "FluxLinkFEMM"]:
                 raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for fluxlink"
+                    "Unknow class name " + class_name + " in init_dict for fluxlink"
                 )
-            self.fluxlink=fluxlink
+            self.fluxlink = fluxlink
         else:
             self.fluxlink = fluxlink
         self.parameters = parameters
@@ -204,28 +208,25 @@ class EEC_PMSM(EEC):
         if isinstance(drive, dict):
             # Check that the type is correct (including daughter)
             class_name = drive.get("__class__")
-            if class_name not in ['Drive', 'DriveWave']:
+            if class_name not in ["Drive", "DriveWave"]:
                 raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for drive"
+                    "Unknow class name " + class_name + " in init_dict for drive"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
+            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
+            class_obj = getattr(module, class_name)
             self.drive = class_obj(init_dict=drive)
         elif isinstance(drive, str):
             from ..Functions.load import load
+
             drive = load(drive)
             # Check that the type is correct (including daughter)
             class_name = drive.__class__.__name__
-            if class_name not in ['Drive', 'DriveWave']:
+            if class_name not in ["Drive", "DriveWave"]:
                 raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for drive"
+                    "Unknow class name " + class_name + " in init_dict for drive"
                 )
-            self.drive=drive
+            self.drive = drive
         else:
             self.drive = drive
         # Call EEC init
@@ -241,19 +242,19 @@ class EEC_PMSM(EEC):
         EEC_PMSM_str += super(EEC_PMSM, self).__str__()
         if self.indmag is not None:
             tmp = self.indmag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_PMSM_str += "indmag = "+ tmp
+            EEC_PMSM_str += "indmag = " + tmp
         else:
             EEC_PMSM_str += "indmag = None" + linesep + linesep
         if self.fluxlink is not None:
             tmp = self.fluxlink.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_PMSM_str += "fluxlink = "+ tmp
+            EEC_PMSM_str += "fluxlink = " + tmp
         else:
             EEC_PMSM_str += "fluxlink = None" + linesep + linesep
         EEC_PMSM_str += "parameters = " + str(self.parameters) + linesep
         EEC_PMSM_str += "freq0 = " + str(self.freq0) + linesep
         if self.drive is not None:
             tmp = self.drive.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            EEC_PMSM_str += "drive = "+ tmp
+            EEC_PMSM_str += "drive = " + tmp
         else:
             EEC_PMSM_str += "drive = None" + linesep + linesep
         return EEC_PMSM_str
@@ -329,6 +330,7 @@ class EEC_PMSM(EEC):
 
         if self._indmag is not None:
             self._indmag.parent = self
+
     indmag = property(
         fget=_get_indmag,
         fset=_set_indmag,
@@ -349,6 +351,7 @@ class EEC_PMSM(EEC):
 
         if self._fluxlink is not None:
             self._fluxlink.parent = self
+
     fluxlink = property(
         fget=_get_fluxlink,
         fset=_set_fluxlink,
@@ -405,6 +408,7 @@ class EEC_PMSM(EEC):
 
         if self._drive is not None:
             self._drive.parent = self
+
     drive = property(
         fget=_get_drive,
         fset=_set_drive,
