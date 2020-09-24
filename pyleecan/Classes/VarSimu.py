@@ -19,14 +19,14 @@ except ImportError as error:
     run = error
 
 try:
-    from ..Methods.Simulation.VarSimu.check_param import check_param
+    from ..Methods.Simulation.VarSimu.set_reused_data import set_reused_data
 except ImportError as error:
-    check_param = error
+    set_reused_data = error
 
 try:
-    from ..Methods.Simulation.VarSimu.get_simulations import get_simulations
+    from ..Methods.Simulation.VarSimu.check_para import check_para
 except ImportError as error:
-    get_simulations = error
+    check_para = error
 
 
 from ._check import InitUnKnowClassError
@@ -49,26 +49,26 @@ class VarSimu(FrozenClass):
         )
     else:
         run = run
-    # cf Methods.Simulation.VarSimu.check_param
-    if isinstance(check_param, ImportError):
-        check_param = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use VarSimu method check_param: " + str(check_param))
-            )
-        )
-    else:
-        check_param = check_param
-    # cf Methods.Simulation.VarSimu.get_simulations
-    if isinstance(get_simulations, ImportError):
-        get_simulations = property(
+    # cf Methods.Simulation.VarSimu.set_reused_data
+    if isinstance(set_reused_data, ImportError):
+        set_reused_data = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use VarSimu method get_simulations: " + str(get_simulations)
+                    "Can't use VarSimu method set_reused_data: " + str(set_reused_data)
                 )
             )
         )
     else:
-        get_simulations = get_simulations
+        set_reused_data = set_reused_data
+    # cf Methods.Simulation.VarSimu.check_para
+    if isinstance(check_para, ImportError):
+        check_para = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use VarSimu method check_para: " + str(check_para))
+            )
+        )
+    else:
+        check_para = check_para
     # save method is available in all object
     save = save
 
@@ -89,6 +89,7 @@ class VarSimu(FrozenClass):
         stop_if_error=False,
         ref_simu_index=None,
         nb_simu=0,
+        is_reuse_femm_file=True,
         postproc_list=list(),
         init_dict=None,
         init_str=None,
@@ -118,6 +119,7 @@ class VarSimu(FrozenClass):
             stop_if_error = obj.stop_if_error
             ref_simu_index = obj.ref_simu_index
             nb_simu = obj.nb_simu
+            is_reuse_femm_file = obj.is_reuse_femm_file
             postproc_list = obj.postproc_list
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
@@ -136,6 +138,8 @@ class VarSimu(FrozenClass):
                 ref_simu_index = init_dict["ref_simu_index"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
+            if "is_reuse_femm_file" in list(init_dict.keys()):
+                is_reuse_femm_file = init_dict["is_reuse_femm_file"]
             if "postproc_list" in list(init_dict.keys()):
                 postproc_list = init_dict["postproc_list"]
         # Initialisation by argument
@@ -166,6 +170,7 @@ class VarSimu(FrozenClass):
         self.stop_if_error = stop_if_error
         self.ref_simu_index = ref_simu_index
         self.nb_simu = nb_simu
+        self.is_reuse_femm_file = is_reuse_femm_file
         # postproc_list can be None or a list of Post object or a list of dict
         if type(postproc_list) is list:
             # Check if the list is only composed of Post
@@ -227,6 +232,7 @@ class VarSimu(FrozenClass):
         VarSimu_str += "stop_if_error = " + str(self.stop_if_error) + linesep
         VarSimu_str += "ref_simu_index = " + str(self.ref_simu_index) + linesep
         VarSimu_str += "nb_simu = " + str(self.nb_simu) + linesep
+        VarSimu_str += "is_reuse_femm_file = " + str(self.is_reuse_femm_file) + linesep
         if len(self.postproc_list) == 0:
             VarSimu_str += "postproc_list = []" + linesep
         for ii in range(len(self.postproc_list)):
@@ -256,6 +262,8 @@ class VarSimu(FrozenClass):
             return False
         if other.nb_simu != self.nb_simu:
             return False
+        if other.is_reuse_femm_file != self.is_reuse_femm_file:
+            return False
         if other.postproc_list != self.postproc_list:
             return False
         return True
@@ -273,6 +281,7 @@ class VarSimu(FrozenClass):
         VarSimu_dict["stop_if_error"] = self.stop_if_error
         VarSimu_dict["ref_simu_index"] = self.ref_simu_index
         VarSimu_dict["nb_simu"] = self.nb_simu
+        VarSimu_dict["is_reuse_femm_file"] = self.is_reuse_femm_file
         VarSimu_dict["postproc_list"] = list()
         for obj in self.postproc_list:
             VarSimu_dict["postproc_list"].append(obj.as_dict())
@@ -291,6 +300,7 @@ class VarSimu(FrozenClass):
         self.stop_if_error = None
         self.ref_simu_index = None
         self.nb_simu = None
+        self.is_reuse_femm_file = None
         for obj in self.postproc_list:
             obj._set_None()
 
@@ -425,6 +435,24 @@ class VarSimu(FrozenClass):
         doc=u"""Number of simulations
 
         :Type: int
+        """,
+    )
+
+    def _get_is_reuse_femm_file(self):
+        """getter of is_reuse_femm_file"""
+        return self._is_reuse_femm_file
+
+    def _set_is_reuse_femm_file(self, value):
+        """setter of is_reuse_femm_file"""
+        check_var("is_reuse_femm_file", value, "bool")
+        self._is_reuse_femm_file = value
+
+    is_reuse_femm_file = property(
+        fget=_get_is_reuse_femm_file,
+        fset=_set_is_reuse_femm_file,
+        doc=u"""True to reuse the femm file for each simulation (draw the machine only once, MagFEMM only)
+
+        :Type: bool
         """,
     )
 

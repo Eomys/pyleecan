@@ -10005,8 +10005,8 @@
         "is_internal": false,
         "methods": [
             "run",
-            "check_param",
-            "get_simulations"
+            "set_reused_data",
+            "check_para"
         ],
         "mother": "",
         "name": "VarSimu",
@@ -10075,6 +10075,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "True to reuse the femm file for each simulation (draw the machine only once, MagFEMM only)",
+                "max": "",
+                "min": "",
+                "name": "is_reuse_femm_file",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
             },
             {
                 "desc": "List of post-processing to run on XOutput after the multisimulation",

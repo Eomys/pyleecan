@@ -61,10 +61,7 @@ def test_import_FEMM_file():
     out = simu.run()
 
     # Second simulation, importing femm file and FEMM_dict
-    simu2 = Simu1(
-        input=simu.input.copy(),
-        machine=simu.machine.copy(),
-    )
+    simu2 = Simu1(input=simu.input.copy(), machine=simu.machine.copy())
 
     simu2.mag = MagFEMM(
         type_BH_stator=2,

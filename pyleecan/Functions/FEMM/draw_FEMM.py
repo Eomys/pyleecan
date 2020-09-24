@@ -227,6 +227,7 @@ def draw_FEMM(
     )
     femm.mi_smartmesh(FEMM_dict["smart_mesh"])
     femm.mi_saveas(path_save)  # Save
+    FEMM_dict["path_save"] = path_save
     # femm.mi_close()
 
     FEMM_dict["materials"] = materials

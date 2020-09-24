@@ -61,6 +61,10 @@ def run(self):
             end="",
         )
 
+    # Reuse some intermediate results from reference simulation (if requested)
+    for simu in simulation_list:
+        self.set_reused_data(simu, xoutput)
+
     # Execute the other simulations
     nb_simu = self.nb_simu
     for idx, [i, simulation] in zip(index_list, enumerate(simulation_list)):

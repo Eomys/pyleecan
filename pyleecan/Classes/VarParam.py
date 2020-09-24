@@ -79,6 +79,7 @@ class VarParam(VarSimu):
         stop_if_error=False,
         ref_simu_index=None,
         nb_simu=0,
+        is_reuse_femm_file=True,
         postproc_list=list(),
         init_dict=None,
         init_str=None,
@@ -109,6 +110,7 @@ class VarParam(VarSimu):
             stop_if_error = obj.stop_if_error
             ref_simu_index = obj.ref_simu_index
             nb_simu = obj.nb_simu
+            is_reuse_femm_file = obj.is_reuse_femm_file
             postproc_list = obj.postproc_list
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
@@ -129,6 +131,8 @@ class VarParam(VarSimu):
                 ref_simu_index = init_dict["ref_simu_index"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
+            if "is_reuse_femm_file" in list(init_dict.keys()):
+                is_reuse_femm_file = init_dict["is_reuse_femm_file"]
             if "postproc_list" in list(init_dict.keys()):
                 postproc_list = init_dict["postproc_list"]
         # Initialisation by argument
@@ -178,6 +182,7 @@ class VarParam(VarSimu):
             stop_if_error=stop_if_error,
             ref_simu_index=ref_simu_index,
             nb_simu=nb_simu,
+            is_reuse_femm_file=is_reuse_femm_file,
             postproc_list=postproc_list,
         )
         # The class is frozen (in VarSimu init), for now it's impossible to
