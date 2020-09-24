@@ -5,15 +5,15 @@ from ....Classes.DataKeeper import DataKeeper
 
 def plot_pareto(self, x_symbol, y_symbol, ax=None, title=None):
     """Plot the pareto front for 2 objective functions
-
+    
     Parameters
     ----------
     self : XOutput
     x_symbol : str
         symbol of the first objective function
-    y_symbol: str
+    y_symbol: str 
         symbol of the second objective function
-
+    
     """
 
     # Pyleecan colors
@@ -88,8 +88,8 @@ def plot_pareto(self, x_symbol, y_symbol, ax=None, title=None):
 
     design_var_symbols = [pe.symbol for pe in self.paramexplorer_list]
 
-    for sim in design_var_values.tolist():
-        legend = ""
+    for idx, sim in enumerate(design_var_values.tolist()):
+        legend = f"Individual Nr. {idx_non_dom[idx]}\n"
         for ii, symbol in enumerate(design_var_symbols):
             legend += "{:11.10}=".format(symbol)  # sim[d_var])
             if isinstance(sim[ii], float):
