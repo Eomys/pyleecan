@@ -24,9 +24,14 @@ except ImportError as error:
     set_reused_data = error
 
 try:
-    from ..Methods.Simulation.VarSimu.check_para import check_para
+    from ..Methods.Simulation.VarSimu.check_param import check_param
 except ImportError as error:
-    check_para = error
+    check_param = error
+
+try:
+    from ..Methods.Simulation.VarSimu.get_simulations import get_simulations
+except ImportError as error:
+    get_simulations = error
 
 
 from ._check import InitUnKnowClassError
@@ -60,15 +65,26 @@ class VarSimu(FrozenClass):
         )
     else:
         set_reused_data = set_reused_data
-    # cf Methods.Simulation.VarSimu.check_para
-    if isinstance(check_para, ImportError):
-        check_para = property(
+    # cf Methods.Simulation.VarSimu.check_param
+    if isinstance(check_param, ImportError):
+        check_param = property(
             fget=lambda x: raise_(
-                ImportError("Can't use VarSimu method check_para: " + str(check_para))
+                ImportError("Can't use VarSimu method check_param: " + str(check_param))
             )
         )
     else:
-        check_para = check_para
+        check_param = check_param
+    # cf Methods.Simulation.VarSimu.get_simulations
+    if isinstance(get_simulations, ImportError):
+        get_simulations = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method get_simulations: " + str(get_simulations)
+                )
+            )
+        )
+    else:
+        get_simulations = get_simulations
     # save method is available in all object
     save = save
 
