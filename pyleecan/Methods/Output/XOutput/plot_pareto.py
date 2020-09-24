@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from ....Classes.DataKeeper import DataKeeper
 
 
-def plot_pareto(self, x_symbol, y_symbol, c_symbol=None, cmap=plt.cm.jet, ax=None, title=None):
+def plot_pareto(self, x_symbol, y_symbol, c_symbol=None, cmap=None, ax=None, title=None):
     """Plot the pareto front for 2 objective functions
     
     Parameters
@@ -119,6 +119,9 @@ def plot_pareto(self, x_symbol, y_symbol, c_symbol=None, cmap=plt.cm.jet, ax=Non
             c_data = self.get_paramexplorer(c_symbol)
             c_values = np.array(c_data.value)[indx]
         colors = c_values[idx_non_dom][:,np.newaxis]
+
+    if cmap is None:
+        cmap = plt.cm.jet
 
     # Plot Pareto front
     sc = ax.scatter(
