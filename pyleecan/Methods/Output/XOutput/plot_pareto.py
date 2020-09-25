@@ -3,21 +3,23 @@ import matplotlib.pyplot as plt
 from ....Classes.DataKeeper import DataKeeper
 
 
-def plot_pareto(self, x_symbol, y_symbol, c_symbol=None, cmap=None, ax=None, title=None):
+def plot_pareto(
+    self, x_symbol, y_symbol, c_symbol=None, cmap=None, ax=None, title=None
+):
     """Plot the pareto front for 2 objective functions
-    
+
     Parameters
     ----------
     self : XOutput
     x_symbol : str
         symbol of the first objective function
-    y_symbol: str 
+    y_symbol: str
         symbol of the second objective function
     c_symbol: str
         optional symbol to set the plot colors
     cmap: colormap
         optional colormap
-    
+
     """
 
     # Pyleecan colors
@@ -118,15 +120,15 @@ def plot_pareto(self, x_symbol, y_symbol, c_symbol=None, cmap=None, ax=None, tit
         else:  # ParamSetter
             c_data = self.get_paramexplorer(c_symbol)
             c_values = np.array(c_data.value)[indx]
-        colors = c_values[idx_non_dom][:,np.newaxis]
+        colors = c_values[idx_non_dom][:, np.newaxis]
 
     if cmap is None:
         cmap = plt.cm.jet
 
     # Plot Pareto front
     sc = ax.scatter(
-        x_values[idx_non_dom][:,np.newaxis],
-        y_values[idx_non_dom][:,np.newaxis],
+        x_values[idx_non_dom][:, np.newaxis],
+        y_values[idx_non_dom][:, np.newaxis],
         # facecolors=colors,
         c=colors,
         edgecolors=(0.35, 0.35, 0.35),
@@ -135,9 +137,7 @@ def plot_pareto(self, x_symbol, y_symbol, c_symbol=None, cmap=None, ax=None, tit
     )
     # Add legend
     if c_symbol is not None:
-        legend1 = ax.legend(
-            *sc.legend_elements(), loc="upper right", title=c_symbol
-        )
+        legend1 = ax.legend(*sc.legend_elements(), loc="upper right", title=c_symbol)
         ax.add_artist(legend1)
 
     ax.autoscale(1, 1)
@@ -145,7 +145,6 @@ def plot_pareto(self, x_symbol, y_symbol, c_symbol=None, cmap=None, ax=None, tit
     ax.set_title("Pareto Front")
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
-
 
     # Add anotations in the plot see https://stackoverflow.com/a/47166787
     annot = ax.annotate(
