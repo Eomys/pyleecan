@@ -44,14 +44,4 @@ def run_single(self):
     if self.postproc_list:
         logger.info("Running simulation postprocessings...")
         for postproc in self.postproc_list:
-            logger.info(
-                str(output.simu.machine.stator.slot.W0)
-                + " "
-                + str(output.simu.machine.stator.slot.H0)
-            )
             postproc.run(output)
-            logger.info(
-                str(output.simu.machine.stator.slot.W0)
-                + " "
-                + str(output.simu.machine.stator.slot.H0)
-            )
