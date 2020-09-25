@@ -127,7 +127,7 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
-from .ParamExplore import ParamExplore
+from .ParamExplorer import ParamExplorer
 from .Output import Output
 from .DataKeeper import DataKeeper
 from .Simulation import Simulation
@@ -552,7 +552,7 @@ class XOutput(Output):
                     value[ii] = class_obj(init_dict=obj)
         if value is -1:
             value = list()
-        check_var("paramexplorer_list", value, "[ParamExplore]")
+        check_var("paramexplorer_list", value, "[ParamExplorer]")
         self._paramexplorer_list = value
 
         for obj in self._paramexplorer_list:
@@ -564,7 +564,7 @@ class XOutput(Output):
         fset=_set_paramexplorer_list,
         doc=u"""List containing ParamExplorer
 
-        :Type: [ParamExplore]
+        :Type: [ParamExplorer]
         """,
     )
 
