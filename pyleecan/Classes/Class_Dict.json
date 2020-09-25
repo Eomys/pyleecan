@@ -10614,27 +10614,27 @@
                 "max": "",
                 "min": "",
                 "name": "paramexplorer_list",
-                "type": "list",
+                "type": "[ParamExplore]",
                 "unit": "-",
-                "value": []
+                "value": ""
             },
             {
                 "desc": "List containing Output for each simulation",
                 "max": "",
                 "min": "",
                 "name": "output_list",
-                "type": "list",
+                "type": "[Output]",
                 "unit": "-",
-                "value": []
+                "value": ""
             },
             {
                 "desc": "Dictionnary containing VarParam DataKeeper results in ndarray",
                 "max": "",
                 "min": "",
                 "name": "xoutput_dict",
-                "type": "dict",
+                "type": "{DataKeeper}",
                 "unit": "-",
-                "value": {}
+                "value": ""
             },
             {
                 "desc": "Number of simulations excluding reference simulation",

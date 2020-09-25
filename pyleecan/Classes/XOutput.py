@@ -127,6 +127,9 @@ except ImportError as error:
 
 
 from ._check import InitUnKnowClassError
+from .ParamExplore import ParamExplore
+from .Output import Output
+from .DataKeeper import DataKeeper
 from .Simulation import Simulation
 from .OutGeo import OutGeo
 from .OutElec import OutElec
@@ -449,19 +452,32 @@ class XOutput(Output):
         XOutput_str = ""
         # Get the properties inherited from Output
         XOutput_str += super(XOutput, self).__str__()
-        XOutput_str += (
-            "paramexplorer_list = "
-            + linesep
-            + str(self.paramexplorer_list).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        XOutput_str += (
-            "output_list = "
-            + linesep
-            + str(self.output_list).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        XOutput_str += "xoutput_dict = " + str(self.xoutput_dict) + linesep
+        if len(self.paramexplorer_list) == 0:
+            XOutput_str += "paramexplorer_list = []" + linesep
+        for ii in range(len(self.paramexplorer_list)):
+            tmp = (
+                self.paramexplorer_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            XOutput_str += (
+                "paramexplorer_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
+        if len(self.output_list) == 0:
+            XOutput_str += "output_list = []" + linesep
+        for ii in range(len(self.output_list)):
+            tmp = (
+                self.output_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            XOutput_str += "output_list[" + str(ii) + "] =" + tmp + linesep + linesep
+        if len(self.xoutput_dict) == 0:
+            XOutput_str += "xoutput_dict = dict()" + linesep
+        for key, obj in self.xoutput_dict.items():
+            tmp = (
+                self.xoutput_dict[key].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            XOutput_str += "xoutput_dict[" + key + "] =" + tmp + linesep + linesep
         XOutput_str += "nb_simu = " + str(self.nb_simu) + linesep
         return XOutput_str
 
@@ -490,9 +506,15 @@ class XOutput(Output):
 
         # Get the properties inherited from Output
         XOutput_dict = super(XOutput, self).as_dict()
-        XOutput_dict["paramexplorer_list"] = self.paramexplorer_list
-        XOutput_dict["output_list"] = self.output_list
-        XOutput_dict["xoutput_dict"] = self.xoutput_dict
+        XOutput_dict["paramexplorer_list"] = list()
+        for obj in self.paramexplorer_list:
+            XOutput_dict["paramexplorer_list"].append(obj.as_dict())
+        XOutput_dict["output_list"] = list()
+        for obj in self.output_list:
+            XOutput_dict["output_list"].append(obj.as_dict())
+        XOutput_dict["xoutput_dict"] = dict()
+        for key, obj in self.xoutput_dict.items():
+            XOutput_dict["xoutput_dict"][key] = obj.as_dict()
         XOutput_dict["nb_simu"] = self.nb_simu
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
@@ -502,62 +524,103 @@ class XOutput(Output):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.paramexplorer_list = None
-        self.output_list = None
-        self.xoutput_dict = None
+        for obj in self.paramexplorer_list:
+            obj._set_None()
+        for obj in self.output_list:
+            obj._set_None()
+        for key, obj in self.xoutput_dict.items():
+            obj._set_None()
         self.nb_simu = None
         # Set to None the properties inherited from Output
         super(XOutput, self)._set_None()
 
     def _get_paramexplorer_list(self):
         """getter of paramexplorer_list"""
+        for obj in self._paramexplorer_list:
+            if obj is not None:
+                obj.parent = self
         return self._paramexplorer_list
 
     def _set_paramexplorer_list(self, value):
         """setter of paramexplorer_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "paramexplorer_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
         if value is -1:
             value = list()
-        check_var("paramexplorer_list", value, "list")
+        check_var("paramexplorer_list", value, "[ParamExplore]")
         self._paramexplorer_list = value
+
+        for obj in self._paramexplorer_list:
+            if obj is not None:
+                obj.parent = self
 
     paramexplorer_list = property(
         fget=_get_paramexplorer_list,
         fset=_set_paramexplorer_list,
         doc=u"""List containing ParamExplorer
 
-        :Type: list
+        :Type: [ParamExplore]
         """,
     )
 
     def _get_output_list(self):
         """getter of output_list"""
+        for obj in self._output_list:
+            if obj is not None:
+                obj.parent = self
         return self._output_list
 
     def _set_output_list(self, value):
         """setter of output_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "output_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
         if value is -1:
             value = list()
-        check_var("output_list", value, "list")
+        check_var("output_list", value, "[Output]")
         self._output_list = value
+
+        for obj in self._output_list:
+            if obj is not None:
+                obj.parent = self
 
     output_list = property(
         fget=_get_output_list,
         fset=_set_output_list,
         doc=u"""List containing Output for each simulation
 
-        :Type: list
+        :Type: [Output]
         """,
     )
 
     def _get_xoutput_dict(self):
         """getter of xoutput_dict"""
+        for key, obj in self._xoutput_dict.items():
+            if obj is not None:
+                obj.parent = self
         return self._xoutput_dict
 
     def _set_xoutput_dict(self, value):
         """setter of xoutput_dict"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "xoutput_dict"
+                    )
+                    value[key] = class_obj(init_dict=obj)
         if value is -1:
             value = dict()
-        check_var("xoutput_dict", value, "dict")
+        check_var("xoutput_dict", value, "{DataKeeper}")
         self._xoutput_dict = value
 
     xoutput_dict = property(
@@ -565,7 +628,7 @@ class XOutput(Output):
         fset=_set_xoutput_dict,
         doc=u"""Dictionnary containing VarParam DataKeeper results in ndarray
 
-        :Type: dict
+        :Type: {DataKeeper}
         """,
     )
 
