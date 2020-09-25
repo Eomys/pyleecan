@@ -100,7 +100,7 @@ def plot_pareto(self, x_symbol, y_symbol, c_symbol=None, cmap=None, ax=None, tit
                 legend += " {:3.3e}\n".format(sim[ii])
             else:
                 legend += "{:>11.10}\n".format(str(sim[ii]))
-        legend_annot.append(legend[:-2])
+        legend_annot.append(legend[:-1])
     if ax is None:
         fig, ax = plt.subplots()
         return_ax = False
