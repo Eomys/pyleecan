@@ -20,7 +20,7 @@ def create_toolbox(self):
 
     # Create Fitness and individual
     creator.create(
-        "FitnessMin", base.Fitness, weights=[-1 for _ in self.problem.design_var]
+        "FitnessMin", base.Fitness, weights=[-1 for _ in self.problem.obj_func]
     )
     creator.create("Individual", list, typecode="d", fitness=creator.FitnessMin)
 
