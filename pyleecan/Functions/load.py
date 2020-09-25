@@ -74,7 +74,7 @@ def load_init_dict(file_path):
     """
     if file_path.endswith("hdf5") or file_path.endswith("h5"):
         return load_hdf5(file_path)
-    elif file_path.endswith("json"):
+    elif file_path.endswith("json") or isdir(file_path):
         return load_json(file_path)
     else:
         raise Exception(
