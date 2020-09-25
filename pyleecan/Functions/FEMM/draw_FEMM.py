@@ -106,7 +106,7 @@ def draw_FEMM(
 
     # The package must be initialized with the openfemm command.
     try:
-        femm.openfemm()
+        femm.openfemm(1)  # 1 == open in background, 0 == open normally
     except Exception as e:
         raise FEMMError(
             "ERROR: Unable to open FEMM, please check that FEMM is correctly installed\n"

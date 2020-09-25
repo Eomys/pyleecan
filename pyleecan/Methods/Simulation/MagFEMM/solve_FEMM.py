@@ -107,13 +107,13 @@ def solve_FEMM(self, femm, output, sym):
             if ii == 0:
                 meshFEMM = [tmpmeshFEMM]
                 groups = [tmpgroups]
-                B = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                H = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                mu = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell])
+                B_elem = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                H_elem = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                mu_elem = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell])
 
-            B[ii, :, 0:2] = tmpB
-            H[ii, :, 0:2] = tmpH
-            mu[ii, :] = tmpmu
+            B_elem[ii, :, 0:2] = tmpB
+            H_elem[ii, :, 0:2] = tmpH
+            mu_elem[ii, :] = tmpmu
 
     # Shift to take into account stator position
     roll_id = int(self.angle_stator * Na_tot / (2 * pi))
@@ -178,7 +178,7 @@ def solve_FEMM(self, femm, output, sym):
 
     if self.is_get_mesh:
         output.mag.meshsolution = self.build_meshsolution(
-            Nt_tot, meshFEMM, Time, B, H, mu, groups
+            Nt_tot, meshFEMM, Time, B_elem, H_elem, mu_elem, groups
         )
 
     if self.is_save_FEA:

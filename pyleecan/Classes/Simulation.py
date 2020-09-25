@@ -25,6 +25,7 @@ from ._check import InitUnKnowClassError
 from .Machine import Machine
 from .Input import Input
 from .VarSimu import VarSimu
+from .Post import Post
 
 
 class Simulation(FrozenClass):
@@ -61,6 +62,7 @@ class Simulation(FrozenClass):
         input=-1,
         logger_name="Pyleecan.Simulation",
         var_simu=None,
+        postproc_list=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -91,6 +93,8 @@ class Simulation(FrozenClass):
                 logger_name = init_dict["logger_name"]
             if "var_simu" in list(init_dict.keys()):
                 var_simu = init_dict["var_simu"]
+            if "postproc_list" in list(init_dict.keys()):
+                postproc_list = init_dict["postproc_list"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -99,6 +103,7 @@ class Simulation(FrozenClass):
         self.input = input
         self.logger_name = logger_name
         self.var_simu = var_simu
+        self.postproc_list = postproc_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -129,6 +134,16 @@ class Simulation(FrozenClass):
             Simulation_str += "var_simu = " + tmp
         else:
             Simulation_str += "var_simu = None" + linesep + linesep
+        if len(self.postproc_list) == 0:
+            Simulation_str += "postproc_list = []" + linesep
+        for ii in range(len(self.postproc_list)):
+            tmp = (
+                self.postproc_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            Simulation_str += (
+                "postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         return Simulation_str
 
     def __eq__(self, other):
@@ -147,6 +162,8 @@ class Simulation(FrozenClass):
         if other.logger_name != self.logger_name:
             return False
         if other.var_simu != self.var_simu:
+            return False
+        if other.postproc_list != self.postproc_list:
             return False
         return True
 
@@ -170,6 +187,9 @@ class Simulation(FrozenClass):
             Simulation_dict["var_simu"] = None
         else:
             Simulation_dict["var_simu"] = self.var_simu.as_dict()
+        Simulation_dict["postproc_list"] = list()
+        for obj in self.postproc_list:
+            Simulation_dict["postproc_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         Simulation_dict["__class__"] = "Simulation"
         return Simulation_dict
@@ -186,6 +206,8 @@ class Simulation(FrozenClass):
         self.logger_name = None
         if self.var_simu is not None:
             self.var_simu._set_None()
+        for obj in self.postproc_list:
+            obj._set_None()
 
     def _get_name(self):
         """getter of name"""
@@ -328,5 +350,39 @@ class Simulation(FrozenClass):
         doc=u"""Multi-simulation definition
 
         :Type: VarSimu
+        """,
+    )
+
+    def _get_postproc_list(self):
+        """getter of postproc_list"""
+        for obj in self._postproc_list:
+            if obj is not None:
+                obj.parent = self
+        return self._postproc_list
+
+    def _set_postproc_list(self, value):
+        """setter of postproc_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "postproc_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
+        check_var("postproc_list", value, "[Post]")
+        self._postproc_list = value
+
+        for obj in self._postproc_list:
+            if obj is not None:
+                obj.parent = self
+
+    postproc_list = property(
+        fget=_get_postproc_list,
+        fset=_set_postproc_list,
+        doc=u"""List of postprocessings to run on Output after the simulation
+
+        :Type: [Post]
         """,
     )

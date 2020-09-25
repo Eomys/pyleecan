@@ -25,9 +25,20 @@ try:
 except ImportError as error:
     set_reused_data = error
 
+try:
+    from ..Methods.Simulation.VarSimu.check_param import check_param
+except ImportError as error:
+    check_param = error
+
+try:
+    from ..Methods.Simulation.VarSimu.get_simulations import get_simulations
+except ImportError as error:
+    get_simulations = error
+
 
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
+from .Post import Post
 
 
 class VarSimu(FrozenClass):
@@ -56,6 +67,26 @@ class VarSimu(FrozenClass):
         )
     else:
         set_reused_data = set_reused_data
+    # cf Methods.Simulation.VarSimu.check_param
+    if isinstance(check_param, ImportError):
+        check_param = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use VarSimu method check_param: " + str(check_param))
+            )
+        )
+    else:
+        check_param = check_param
+    # cf Methods.Simulation.VarSimu.get_simulations
+    if isinstance(get_simulations, ImportError):
+        get_simulations = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use VarSimu method get_simulations: " + str(get_simulations)
+                )
+            )
+        )
+    else:
+        get_simulations = get_simulations
     # save method is available in all object
     save = save
 
@@ -78,6 +109,7 @@ class VarSimu(FrozenClass):
         ref_simu_index=None,
         nb_simu=0,
         is_reuse_femm_file=True,
+        postproc_list=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -112,6 +144,8 @@ class VarSimu(FrozenClass):
                 nb_simu = init_dict["nb_simu"]
             if "is_reuse_femm_file" in list(init_dict.keys()):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
+            if "postproc_list" in list(init_dict.keys()):
+                postproc_list = init_dict["postproc_list"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
@@ -122,6 +156,7 @@ class VarSimu(FrozenClass):
         self.ref_simu_index = ref_simu_index
         self.nb_simu = nb_simu
         self.is_reuse_femm_file = is_reuse_femm_file
+        self.postproc_list = postproc_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -151,6 +186,14 @@ class VarSimu(FrozenClass):
         VarSimu_str += "ref_simu_index = " + str(self.ref_simu_index) + linesep
         VarSimu_str += "nb_simu = " + str(self.nb_simu) + linesep
         VarSimu_str += "is_reuse_femm_file = " + str(self.is_reuse_femm_file) + linesep
+        if len(self.postproc_list) == 0:
+            VarSimu_str += "postproc_list = []" + linesep
+        for ii in range(len(self.postproc_list)):
+            tmp = (
+                self.postproc_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            VarSimu_str += "postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
         return VarSimu_str
 
     def __eq__(self, other):
@@ -174,6 +217,8 @@ class VarSimu(FrozenClass):
             return False
         if other.is_reuse_femm_file != self.is_reuse_femm_file:
             return False
+        if other.postproc_list != self.postproc_list:
+            return False
         return True
 
     def as_dict(self):
@@ -191,6 +236,9 @@ class VarSimu(FrozenClass):
         VarSimu_dict["ref_simu_index"] = self.ref_simu_index
         VarSimu_dict["nb_simu"] = self.nb_simu
         VarSimu_dict["is_reuse_femm_file"] = self.is_reuse_femm_file
+        VarSimu_dict["postproc_list"] = list()
+        for obj in self.postproc_list:
+            VarSimu_dict["postproc_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         VarSimu_dict["__class__"] = "VarSimu"
         return VarSimu_dict
@@ -207,6 +255,8 @@ class VarSimu(FrozenClass):
         self.ref_simu_index = None
         self.nb_simu = None
         self.is_reuse_femm_file = None
+        for obj in self.postproc_list:
+            obj._set_None()
 
     def _get_name(self):
         """getter of name"""
@@ -366,5 +416,39 @@ class VarSimu(FrozenClass):
         doc=u"""True to reuse the femm file for each simulation (draw the machine only once, MagFEMM only)
 
         :Type: bool
+        """,
+    )
+
+    def _get_postproc_list(self):
+        """getter of postproc_list"""
+        for obj in self._postproc_list:
+            if obj is not None:
+                obj.parent = self
+        return self._postproc_list
+
+    def _set_postproc_list(self, value):
+        """setter of postproc_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "postproc_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
+        check_var("postproc_list", value, "[Post]")
+        self._postproc_list = value
+
+        for obj in self._postproc_list:
+            if obj is not None:
+                obj.parent = self
+
+    postproc_list = property(
+        fget=_get_postproc_list,
+        fset=_set_postproc_list,
+        doc=u"""List of post-processing to run on XOutput after the multisimulation
+
+        :Type: [Post]
         """,
     )

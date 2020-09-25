@@ -24,8 +24,8 @@ def plot_generation(self, x_symbol, y_symbol, ax=None):
     )
 
     # Get fitness and ngen
-    is_valid = np.array(self["is_valid"])
-    ngen = np.array(self["ngen"])
+    is_valid = np.array(self["is_valid"].result)
+    ngen = np.array(self["ngen"].result)
 
     # Keep only valid values
     indx = np.where(is_valid)[0]

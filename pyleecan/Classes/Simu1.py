@@ -29,6 +29,7 @@ from .Force import Force
 from .Machine import Machine
 from .Input import Input
 from .VarSimu import VarSimu
+from .Post import Post
 
 
 class Simu1(Simulation):
@@ -69,6 +70,7 @@ class Simu1(Simulation):
         input=-1,
         logger_name="Pyleecan.Simulation",
         var_simu=None,
+        postproc_list=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -107,6 +109,8 @@ class Simu1(Simulation):
                 logger_name = init_dict["logger_name"]
             if "var_simu" in list(init_dict.keys()):
                 var_simu = init_dict["var_simu"]
+            if "postproc_list" in list(init_dict.keys()):
+                postproc_list = init_dict["postproc_list"]
         # Set the properties (value check and convertion are done in setter)
         self.elec = elec
         self.mag = mag
@@ -120,6 +124,7 @@ class Simu1(Simulation):
             input=input,
             logger_name=logger_name,
             var_simu=var_simu,
+            postproc_list=postproc_list,
         )
         # The class is frozen (in Simulation init), for now it's impossible to
         # add new properties

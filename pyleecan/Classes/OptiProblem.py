@@ -47,6 +47,8 @@ class OptiProblem(FrozenClass):
         obj_func=-1,
         eval_func=None,
         constraint=-1,
+        preprocessing=None,
+        datakeeper_list=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -75,6 +77,10 @@ class OptiProblem(FrozenClass):
                 eval_func = init_dict["eval_func"]
             if "constraint" in list(init_dict.keys()):
                 constraint = init_dict["constraint"]
+            if "preprocessing" in list(init_dict.keys()):
+                preprocessing = init_dict["preprocessing"]
+            if "datakeeper_list" in list(init_dict.keys()):
+                datakeeper_list = init_dict["datakeeper_list"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.output = output
@@ -82,6 +88,8 @@ class OptiProblem(FrozenClass):
         self.obj_func = obj_func
         self.eval_func = eval_func
         self.constraint = constraint
+        self.preprocessing = preprocessing
+        self.datakeeper_list = datakeeper_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -126,6 +134,26 @@ class OptiProblem(FrozenClass):
                 self.constraint[ii].__str__().replace(linesep, linesep + "\t") + linesep
             )
             OptiProblem_str += "constraint[" + str(ii) + "] =" + tmp + linesep + linesep
+        if self._preprocessing[1] is None:
+            OptiProblem_str += "preprocessing = " + str(self._preprocessing[1])
+        else:
+            OptiProblem_str += (
+                "preprocessing = "
+                + linesep
+                + str(self._preprocessing[1])
+                + linesep
+                + linesep
+            )
+        if len(self.datakeeper_list) == 0:
+            OptiProblem_str += "datakeeper_list = []" + linesep
+        for ii in range(len(self.datakeeper_list)):
+            tmp = (
+                self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            OptiProblem_str += (
+                "datakeeper_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         return OptiProblem_str
 
     def __eq__(self, other):
@@ -142,6 +170,10 @@ class OptiProblem(FrozenClass):
         if other.eval_func != self.eval_func:
             return False
         if other.constraint != self.constraint:
+            return False
+        if other.preprocessing != self.preprocessing:
+            return False
+        if other.datakeeper_list != self.datakeeper_list:
             return False
         return True
 
@@ -170,6 +202,16 @@ class OptiProblem(FrozenClass):
         OptiProblem_dict["constraint"] = list()
         for obj in self.constraint:
             OptiProblem_dict["constraint"].append(obj.as_dict())
+        if self.preprocessing is None:
+            OptiProblem_dict["preprocessing"] = None
+        else:
+            OptiProblem_dict["preprocessing"] = [
+                dumps(self._preprocessing[0]).decode("ISO-8859-2"),
+                self._preprocessing[1],
+            ]
+        OptiProblem_dict["datakeeper_list"] = list()
+        for obj in self.datakeeper_list:
+            OptiProblem_dict["datakeeper_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         OptiProblem_dict["__class__"] = "OptiProblem"
         return OptiProblem_dict
@@ -185,6 +227,9 @@ class OptiProblem(FrozenClass):
             obj._set_None()
         self.eval_func = None
         for obj in self.constraint:
+            obj._set_None()
+        self.preprocessing = None
+        for obj in self.datakeeper_list:
             obj._set_None()
 
     def _get_output(self):
@@ -355,5 +400,78 @@ class OptiProblem(FrozenClass):
         doc=u"""List containing the constraints 
 
         :Type: [OptiConstraint]
+        """,
+    )
+
+    def _get_preprocessing(self):
+        """getter of preprocessing"""
+        return self._preprocessing[0]
+
+    def _set_preprocessing(self, value):
+        """setter of preprocessing"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "preprocessing"
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = function()
+        try:
+            check_var("preprocessing", value, "list")
+        except CheckTypeError:
+            check_var("preprocessing", value, "function")
+        if isinstance(value, list):  # Load function from saved dict
+            self._preprocessing = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        elif value is None:
+            self._preprocessing = [None, None]
+        elif callable(value):
+            self._preprocessing = [value, getsource(value)]
+        else:
+            raise TypeError(
+                "Expected function or list from a saved file, got: " + str(type(value))
+            )
+
+    preprocessing = property(
+        fget=_get_preprocessing,
+        fset=_set_preprocessing,
+        doc=u"""Function to execute a preprocessing on the simulation right before it is run.
+
+        :Type: function
+        """,
+    )
+
+    def _get_datakeeper_list(self):
+        """getter of datakeeper_list"""
+        for obj in self._datakeeper_list:
+            if obj is not None:
+                obj.parent = self
+        return self._datakeeper_list
+
+    def _set_datakeeper_list(self, value):
+        """setter of datakeeper_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "datakeeper_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
+        check_var("datakeeper_list", value, "[DataKeeper]")
+        self._datakeeper_list = value
+
+        for obj in self._datakeeper_list:
+            if obj is not None:
+                obj.parent = self
+
+    datakeeper_list = property(
+        fget=_get_datakeeper_list,
+        fset=_set_datakeeper_list,
+        doc=u"""List of DataKeepers to run on every output
+
+        :Type: [DataKeeper]
         """,
     )
