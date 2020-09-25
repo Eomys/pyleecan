@@ -105,7 +105,7 @@ class EEC_PMSM(EEC):
         self,
         indmag=None,
         fluxlink=None,
-        parameters={},
+        parameters=-1,
         freq0=None,
         drive=None,
         init_dict=None,
@@ -238,12 +238,14 @@ class EEC_PMSM(EEC):
 
     def _set_indmag(self, value):
         """setter of indmag"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "indmag"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = IndMag()
         check_var("indmag", value, "IndMag")
         self._indmag = value
@@ -266,12 +268,14 @@ class EEC_PMSM(EEC):
 
     def _set_fluxlink(self, value):
         """setter of fluxlink"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "fluxlink"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = FluxLink()
         check_var("fluxlink", value, "FluxLink")
         self._fluxlink = value
@@ -294,6 +298,8 @@ class EEC_PMSM(EEC):
 
     def _set_parameters(self, value):
         """setter of parameters"""
+        if value is -1:
+            value = dict()
         check_var("parameters", value, "dict")
         self._parameters = value
 
@@ -330,12 +336,14 @@ class EEC_PMSM(EEC):
 
     def _set_drive(self, value):
         """setter of drive"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "drive"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Drive()
         check_var("drive", value, "Drive")
         self._drive = value

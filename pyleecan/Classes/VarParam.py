@@ -73,10 +73,10 @@ class VarParam(VarSimu):
 
     def __init__(
         self,
-        paramexplorer_list=list(),
+        paramexplorer_list=-1,
         name="",
         desc="",
-        datakeeper_list=list(),
+        datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
         ref_simu_index=None,
@@ -203,6 +203,8 @@ class VarParam(VarSimu):
                         "pyleecan.Classes", obj.get("__class__"), "paramexplorer_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("paramexplorer_list", value, "[ParamExplorer]")
         self._paramexplorer_list = value
 

@@ -202,7 +202,7 @@ class OutStruct(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -227,7 +227,7 @@ class OutStruct(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -306,13 +306,6 @@ class OutStruct(FrozenClass):
 
     def _set_Yr(self, value):
         """setter of Yr"""
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Yr",
-            )
-            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("Yr", value, "dict")
         except CheckTypeError:
@@ -340,13 +333,6 @@ class OutStruct(FrozenClass):
 
     def _set_Vr(self, value):
         """setter of Vr"""
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Vr",
-            )
-            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("Vr", value, "dict")
         except CheckTypeError:
@@ -374,13 +360,6 @@ class OutStruct(FrozenClass):
 
     def _set_Ar(self, value):
         """setter of Ar"""
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Ar",
-            )
-            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("Ar", value, "dict")
         except CheckTypeError:

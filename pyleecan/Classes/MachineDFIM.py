@@ -214,12 +214,14 @@ class MachineDFIM(MachineAsync):
 
     def _set_rotor(self, value):
         """setter of rotor"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "rotor"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = LamSlotWind()
         check_var("rotor", value, "LamSlotWind")
         self._rotor = value
@@ -242,12 +244,14 @@ class MachineDFIM(MachineAsync):
 
     def _set_stator(self, value):
         """setter of stator"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "stator"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = LamSlotWind()
         check_var("stator", value, "LamSlotWind")
         self._stator = value

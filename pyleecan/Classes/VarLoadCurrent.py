@@ -135,7 +135,7 @@ class VarLoadCurrent(VarLoad):
         is_power=False,
         name="",
         desc="",
-        datakeeper_list=list(),
+        datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
         ref_simu_index=None,
@@ -273,7 +273,7 @@ class VarLoadCurrent(VarLoad):
 
     def _set_OP_matrix(self, value):
         """setter of OP_matrix"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:

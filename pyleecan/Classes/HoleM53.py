@@ -491,12 +491,14 @@ class HoleM53(HoleMag):
 
     def _set_magnet_0(self, value):
         """setter of magnet_0"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "magnet_0"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Magnet()
         check_var("magnet_0", value, "Magnet")
         self._magnet_0 = value
@@ -519,12 +521,14 @@ class HoleM53(HoleMag):
 
     def _set_magnet_1(self, value):
         """setter of magnet_1"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "magnet_1"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Magnet()
         check_var("magnet_1", value, "Magnet")
         self._magnet_1 = value

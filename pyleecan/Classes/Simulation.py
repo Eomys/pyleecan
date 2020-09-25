@@ -229,12 +229,14 @@ class Simulation(FrozenClass):
 
     def _set_machine(self, value):
         """setter of machine"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "machine"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Machine()
         check_var("machine", value, "Machine")
         self._machine = value
@@ -257,12 +259,14 @@ class Simulation(FrozenClass):
 
     def _set_input(self, value):
         """setter of input"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "input"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Input()
         check_var("input", value, "Input")
         self._input = value
@@ -303,12 +307,14 @@ class Simulation(FrozenClass):
 
     def _set_var_simu(self, value):
         """setter of var_simu"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "var_simu"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = VarSimu()
         check_var("var_simu", value, "VarSimu")
         self._var_simu = value

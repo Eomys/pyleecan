@@ -162,12 +162,14 @@ class NotchEvenDist(Notch):
 
     def _set_notch_shape(self, value):
         """setter of notch_shape"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "notch_shape"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Slot()
         check_var("notch_shape", value, "Slot")
         self._notch_shape = value

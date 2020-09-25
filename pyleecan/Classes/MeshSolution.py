@@ -189,10 +189,10 @@ class MeshSolution(FrozenClass):
     def __init__(
         self,
         label=None,
-        mesh=list(),
+        mesh=-1,
         is_same_mesh=True,
-        solution=list(),
-        group=dict(),
+        solution=-1,
+        group=-1,
         dimension=2,
         init_dict=None,
         init_str=None,
@@ -353,6 +353,8 @@ class MeshSolution(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "mesh"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("mesh", value, "[Mesh]")
         self._mesh = value
 
@@ -403,6 +405,8 @@ class MeshSolution(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "solution"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("solution", value, "[Solution]")
         self._solution = value
 
@@ -429,9 +433,11 @@ class MeshSolution(FrozenClass):
             for key, obj in value.items():
                 if type(obj) is list:
                     try:
-                        obj = array(obj)
+                        value[key] = array(obj)
                     except:
                         pass
+        if value is -1:
+            value = dict()
         check_var("group", value, "{ndarray}")
         self._group = value
 

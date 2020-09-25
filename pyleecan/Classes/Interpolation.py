@@ -157,12 +157,14 @@ class Interpolation(FrozenClass):
 
     def _set_ref_cell(self, value):
         """setter of ref_cell"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "ref_cell"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = RefCell()
         check_var("ref_cell", value, "RefCell")
         self._ref_cell = value
@@ -185,12 +187,14 @@ class Interpolation(FrozenClass):
 
     def _set_gauss_point(self, value):
         """setter of gauss_point"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "gauss_point"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = GaussPoint()
         check_var("gauss_point", value, "GaussPoint")
         self._gauss_point = value
@@ -213,12 +217,14 @@ class Interpolation(FrozenClass):
 
     def _set_scalar_product(self, value):
         """setter of scalar_product"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "scalar_product"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = ScalarProduct()
         check_var("scalar_product", value, "ScalarProduct")
         self._scalar_product = value

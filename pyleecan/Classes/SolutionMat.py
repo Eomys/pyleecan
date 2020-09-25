@@ -190,7 +190,7 @@ class SolutionMat(Solution):
 
     def _set_field(self, value):
         """setter of field"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -215,7 +215,7 @@ class SolutionMat(Solution):
 
     def _set_indice(self, value):
         """setter of indice"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -240,6 +240,8 @@ class SolutionMat(Solution):
 
     def _set_axis(self, value):
         """setter of axis"""
+        if value is -1:
+            value = dict()
         check_var("axis", value, "dict")
         self._axis = value
 

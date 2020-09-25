@@ -158,10 +158,12 @@ class Electrical(FrozenClass):
 
     def _set_eec(self, value):
         """setter of eec"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eec")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = EEC()
         check_var("eec", value, "EEC")
         self._eec = value

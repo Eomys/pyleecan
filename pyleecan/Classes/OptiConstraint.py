@@ -205,12 +205,14 @@ class OptiConstraint(FrozenClass):
 
     def _set_get_variable(self, value):
         """setter of get_variable"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "get_variable"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = function()
         try:
             check_var("get_variable", value, "list")

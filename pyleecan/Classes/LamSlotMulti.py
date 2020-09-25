@@ -186,7 +186,7 @@ class LamSlotMulti(Lamination):
 
     def __init__(
         self,
-        slot_list=list(),
+        slot_list=-1,
         alpha=None,
         L1=0.35,
         mat_type=-1,
@@ -197,8 +197,8 @@ class LamSlotMulti(Lamination):
         Rint=0,
         Rext=1,
         is_stator=True,
-        axial_vent=list(),
-        notch=list(),
+        axial_vent=-1,
+        notch=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -343,6 +343,8 @@ class LamSlotMulti(Lamination):
                         "pyleecan.Classes", obj.get("__class__"), "slot_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("slot_list", value, "[Slot]")
         self._slot_list = value
 
@@ -365,7 +367,7 @@ class LamSlotMulti(Lamination):
 
     def _set_alpha(self, value):
         """setter of alpha"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:

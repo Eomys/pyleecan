@@ -167,13 +167,6 @@ class SolutionVector(Solution):
 
     def _set_field(self, value):
         """setter of field"""
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "field",
-            )
-            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("field", value, "dict")
         except CheckTypeError:

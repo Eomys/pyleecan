@@ -175,10 +175,12 @@ class InputFlux(Input):
 
     def _set_B(self, value):
         """setter of B"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "B")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = ImportVectorField()
         check_var("B", value, "ImportVectorField")
         self._B = value
@@ -201,10 +203,12 @@ class InputFlux(Input):
 
     def _set_OP(self, value):
         """setter of OP"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "OP")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Input()
         check_var("OP", value, "Input")
         self._OP = value

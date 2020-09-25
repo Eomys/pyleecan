@@ -412,12 +412,14 @@ class Machine(FrozenClass):
 
     def _set_frame(self, value):
         """setter of frame"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "frame"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Frame()
         check_var("frame", value, "Frame")
         self._frame = value
@@ -440,12 +442,14 @@ class Machine(FrozenClass):
 
     def _set_shaft(self, value):
         """setter of shaft"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "shaft"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Shaft()
         check_var("shaft", value, "Shaft")
         self._shaft = value

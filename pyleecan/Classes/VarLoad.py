@@ -93,7 +93,7 @@ class VarLoad(VarSimu):
         self,
         name="",
         desc="",
-        datakeeper_list=list(),
+        datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
         ref_simu_index=None,

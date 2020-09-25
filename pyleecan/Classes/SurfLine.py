@@ -187,7 +187,7 @@ class SurfLine(Surface):
     get_logger = get_logger
 
     def __init__(
-        self, line_list=list(), point_ref=0, label="", init_dict=None, init_str=None
+        self, line_list=-1, point_ref=0, label="", init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -283,6 +283,8 @@ class SurfLine(Surface):
                         "pyleecan.Classes", obj.get("__class__"), "line_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("line_list", value, "[Line]")
         self._line_list = value
 

@@ -210,7 +210,7 @@ class PointMat(FrozenClass):
 
     def _set_coordinate(self, value):
         """setter of coordinate"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -271,7 +271,7 @@ class PointMat(FrozenClass):
 
     def _set_indice(self, value):
         """setter of indice"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:

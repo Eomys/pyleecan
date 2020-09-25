@@ -107,10 +107,12 @@ class GUIOption(FrozenClass):
 
     def _set_unit(self, value):
         """setter of unit"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "unit")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Unit()
         check_var("unit", value, "Unit")
         self._unit = value

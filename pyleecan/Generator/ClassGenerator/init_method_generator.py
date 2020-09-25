@@ -60,13 +60,13 @@ def generate_init(gen_dict, class_dict):
                 arg_list += ", " + prop["name"] + "=None"
         elif is_list_pyleecan_type(prop["type"]):
             # List of pyleecan type
-            arg_list += ", " + prop["name"] + "=list()"
-        elif prop["type"] == "{ndarray}":
+            arg_list += ", " + prop["name"] + "=-1"
+        elif prop["type"] in ["{ndarray}", "[ndarray]"]:
             # Dict of ndarray
-            arg_list += ", " + prop["name"] + "=dict()"
+            arg_list += ", " + prop["name"] + "=-1"
         elif is_dict_pyleecan_type(prop["type"]):
             # Dict of pyleecan type
-            arg_list += ", " + prop["name"] + "=dict()"
+            arg_list += ", " + prop["name"] + "=-1"
         else:  # pyleecan type
             if prop["value"] == "":
                 arg_list += ", " + prop["name"] + "=-1"

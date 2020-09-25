@@ -151,12 +151,14 @@ class OptiSolver(FrozenClass):
 
     def _set_problem(self, value):
         """setter of problem"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "problem"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = OptiProblem()
         check_var("problem", value, "OptiProblem")
         self._problem = value
@@ -179,12 +181,14 @@ class OptiSolver(FrozenClass):
 
     def _set_xoutput(self, value):
         """setter of xoutput"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "xoutput"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = XOutput()
         check_var("xoutput", value, "XOutput")
         self._xoutput = value

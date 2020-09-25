@@ -284,11 +284,13 @@ class InputCurrent(Input):
 
     def _set_Is(self, value):
         """setter of Is"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
-        elif value == -1:
+        elif value is -1:
             value = ImportMatrix()
         elif isinstance(value, dict):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "Is")
@@ -314,11 +316,13 @@ class InputCurrent(Input):
 
     def _set_Ir(self, value):
         """setter of Ir"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
-        elif value == -1:
+        elif value is -1:
             value = ImportMatrix()
         elif isinstance(value, dict):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "Ir")
@@ -344,12 +348,14 @@ class InputCurrent(Input):
 
     def _set_angle_rotor(self, value):
         """setter of angle_rotor"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "angle_rotor"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Import()
         check_var("angle_rotor", value, "Import")
         self._angle_rotor = value

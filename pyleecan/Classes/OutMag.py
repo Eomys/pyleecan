@@ -288,7 +288,7 @@ class OutMag(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -313,7 +313,7 @@ class OutMag(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -374,13 +374,6 @@ class OutMag(FrozenClass):
 
     def _set_B(self, value):
         """setter of B"""
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "B",
-            )
-            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("B", value, "dict")
         except CheckTypeError:
@@ -408,13 +401,6 @@ class OutMag(FrozenClass):
 
     def _set_Tem(self, value):
         """setter of Tem"""
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Tem",
-            )
-            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("Tem", value, "dict")
         except CheckTypeError:
@@ -496,7 +482,7 @@ class OutMag(FrozenClass):
 
     def _set_Phi_wind_stator(self, value):
         """setter of Phi_wind_stator"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -521,7 +507,7 @@ class OutMag(FrozenClass):
 
     def _set_emf(self, value):
         """setter of emf"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -546,12 +532,14 @@ class OutMag(FrozenClass):
 
     def _set_meshsolution(self, value):
         """setter of meshsolution"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "meshsolution"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = MeshSolution()
         check_var("meshsolution", value, "MeshSolution")
         self._meshsolution = value
@@ -574,6 +562,8 @@ class OutMag(FrozenClass):
 
     def _set_FEMM_dict(self, value):
         """setter of FEMM_dict"""
+        if value is -1:
+            value = dict()
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 

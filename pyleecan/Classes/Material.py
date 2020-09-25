@@ -256,10 +256,12 @@ class Material(FrozenClass):
 
     def _set_elec(self, value):
         """setter of elec"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = MatElectrical()
         check_var("elec", value, "MatElectrical")
         self._elec = value
@@ -282,10 +284,12 @@ class Material(FrozenClass):
 
     def _set_mag(self, value):
         """setter of mag"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = MatMagnetics()
         check_var("mag", value, "MatMagnetics")
         self._mag = value
@@ -308,12 +312,14 @@ class Material(FrozenClass):
 
     def _set_struct(self, value):
         """setter of struct"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "struct"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = MatStructural()
         check_var("struct", value, "MatStructural")
         self._struct = value
@@ -336,10 +342,12 @@ class Material(FrozenClass):
 
     def _set_HT(self, value):
         """setter of HT"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "HT")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = MatHT()
         check_var("HT", value, "MatHT")
         self._HT = value
@@ -362,10 +370,12 @@ class Material(FrozenClass):
 
     def _set_eco(self, value):
         """setter of eco"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eco")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = MatEconomical()
         check_var("eco", value, "MatEconomical")
         self._eco = value

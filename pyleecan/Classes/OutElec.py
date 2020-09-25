@@ -361,7 +361,7 @@ class OutElec(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -386,7 +386,7 @@ class OutElec(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -411,13 +411,6 @@ class OutElec(FrozenClass):
 
     def _set_Is(self, value):
         """setter of Is"""
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Is",
-            )
-            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("Is", value, "dict")
         except CheckTypeError:
@@ -445,13 +438,6 @@ class OutElec(FrozenClass):
 
     def _set_Ir(self, value):
         """setter of Ir"""
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Ir",
-            )
-            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("Ir", value, "dict")
         except CheckTypeError:
@@ -479,7 +465,7 @@ class OutElec(FrozenClass):
 
     def _set_angle_rotor(self, value):
         """setter of angle_rotor"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -578,13 +564,6 @@ class OutElec(FrozenClass):
 
     def _set_mmf_unit(self, value):
         """setter of mmf_unit"""
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "mmf_unit",
-            )
-            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("mmf_unit", value, "dict")
         except CheckTypeError:
@@ -756,13 +735,6 @@ class OutElec(FrozenClass):
 
     def _set_Us(self, value):
         """setter of Us"""
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Us",
-            )
-            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("Us", value, "dict")
         except CheckTypeError:

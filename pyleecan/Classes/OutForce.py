@@ -178,7 +178,7 @@ class OutForce(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -203,7 +203,7 @@ class OutForce(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:
@@ -264,13 +264,6 @@ class OutForce(FrozenClass):
 
     def _set_P(self, value):
         """setter of P"""
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "P",
-            )
-            value = class_obj(init_dict=value)
         try:  # Check the type
             check_var("P", value, "dict")
         except CheckTypeError:

@@ -184,13 +184,7 @@ class MeshMat(Mesh):
     get_logger = get_logger
 
     def __init__(
-        self,
-        cell=dict(),
-        point=-1,
-        label=None,
-        dimension=2,
-        init_dict=None,
-        init_str=None,
+        self, cell=-1, point=-1, label=None, dimension=2, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -297,9 +291,11 @@ class MeshMat(Mesh):
             for key, obj in value.items():
                 if type(obj) is dict:
                     class_obj = import_class(
-                        "pyleecan.Classes", value.get("__class__"), "cell"
+                        "pyleecan.Classes", obj.get("__class__"), "cell"
                     )
-                    value = class_obj(init_dict=value)
+                    value[key] = class_obj(init_dict=obj)
+        if value is -1:
+            value = dict()
         check_var("cell", value, "{CellMat}")
         self._cell = value
 
@@ -318,12 +314,14 @@ class MeshMat(Mesh):
 
     def _set_point(self, value):
         """setter of point"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "point"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = PointMat()
         check_var("point", value, "PointMat")
         self._point = value

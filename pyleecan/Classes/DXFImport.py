@@ -53,7 +53,7 @@ class DXFImport(FrozenClass):
     get_logger = get_logger
 
     def __init__(
-        self, file_path="", surf_dict={}, BC_list=[], init_dict=None, init_str=None
+        self, file_path="", surf_dict=-1, BC_list=[], init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -159,6 +159,8 @@ class DXFImport(FrozenClass):
 
     def _set_surf_dict(self, value):
         """setter of surf_dict"""
+        if value is -1:
+            value = dict()
         check_var("surf_dict", value, "dict")
         self._surf_dict = value
 

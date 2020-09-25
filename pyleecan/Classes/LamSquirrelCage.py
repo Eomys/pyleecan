@@ -156,8 +156,8 @@ class LamSquirrelCage(LamSlotWind):
         Rint=0,
         Rext=1,
         is_stator=True,
-        axial_vent=list(),
-        notch=list(),
+        axial_vent=-1,
+        notch=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -337,12 +337,14 @@ class LamSquirrelCage(LamSlotWind):
 
     def _set_ring_mat(self, value):
         """setter of ring_mat"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "ring_mat"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Material()
         check_var("ring_mat", value, "Material")
         self._ring_mat = value

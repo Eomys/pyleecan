@@ -54,7 +54,7 @@ class ImportVectorField(FrozenClass):
     get_logger = get_logger
 
     def __init__(
-        self, components=dict(), name="", symbol="", init_dict=None, init_str=None
+        self, components=-1, name="", symbol="", init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -158,9 +158,11 @@ class ImportVectorField(FrozenClass):
             for key, obj in value.items():
                 if type(obj) is dict:
                     class_obj = import_class(
-                        "pyleecan.Classes", value.get("__class__"), "components"
+                        "pyleecan.Classes", obj.get("__class__"), "components"
                     )
-                    value = class_obj(init_dict=value)
+                    value[key] = class_obj(init_dict=obj)
+        if value is -1:
+            value = dict()
         check_var("components", value, "{ImportData}")
         self._components = value
 

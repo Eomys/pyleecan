@@ -109,9 +109,11 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB3 + "for key, obj in value.items():\n"
         set_str += TAB4 + "if type(obj) is list:\n"
         set_str += TAB5 + "try:\n"
-        set_str += TAB6 + "obj = array(obj)\n"
+        set_str += TAB6 + "value[key] = array(obj)\n"
         set_str += TAB5 + "except:\n"
         set_str += TAB6 + "pass\n"
+        set_str += TAB2 + "if value is -1:\n"
+        set_str += TAB3 + "value = dict()\n"
     elif prop["type"] == "[ndarray]":
         set_str += TAB2 + "if type(value) is list:\n"
         set_str += TAB3 + "for ii, obj in enumerate(value):\n"
@@ -120,7 +122,14 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB6 + "value[ii] = array(obj)\n"
         set_str += TAB5 + "except:\n"
         set_str += TAB6 + "pass\n"
+        set_str += TAB2 + "if value is -1:\n"
+        set_str += TAB3 + "value = list()\n"
+    elif prop["type"] == "dict":
+        set_str += TAB2 + "if value is -1:\n"
+        set_str += TAB3 + "value = dict()\n"
     elif prop["type"] == "ImportMatrix":
+        set_str += TAB2 + "if isinstance(value, str):  # Load from file\n"
+        set_str += TAB3 + "value = load_init_dict(value)[1]\n"
         set_str += TAB2 + "if isinstance(value,ndarray):\n"
         set_str += TAB3 + "value = ImportMatrixVal(value=value)\n"
         set_str += TAB2 + "elif isinstance(value,list):\n"
@@ -142,18 +151,20 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         if "SciDataTool" in prop["type"]:
             set_str += (
                 TAB5
-                + "class_obj = import_class('SciDataTool.Classes.'+value.get('__class__'), value.get('__class__'), '"
+                + "class_obj = import_class('SciDataTool.Classes.'+obj.get('__class__'), obj.get('__class__'), '"
                 + prop["name"]
                 + "')\n"
             )
         else:
             set_str += (
                 TAB5
-                + "class_obj = import_class('pyleecan.Classes', value.get('__class__'), '"
+                + "class_obj = import_class('pyleecan.Classes', obj.get('__class__'), '"
                 + prop["name"]
                 + "')\n"
             )
-        set_str += TAB5 + "value = class_obj(init_dict=value)\n"
+        set_str += TAB5 + "value[key] = class_obj(init_dict=obj)\n"
+        set_str += TAB2 + "if value is -1:\n"
+        set_str += TAB3 + "value = dict()\n"
     elif is_list_pyleecan_type(prop["type"]):
         set_str += TAB2 + "if type(value) is list:\n"
         set_str += TAB3 + "for ii, obj in enumerate(value):\n"
@@ -161,7 +172,7 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         if "SciDataTool" in prop["type"]:
             set_str += (
                 TAB5
-                + "class_obj = import_class('SciDataTool.Classes.'+value.get('__class__'), obj.get('__class__'), '"
+                + "class_obj = import_class('SciDataTool.Classes.'+obj.get('__class__'), obj.get('__class__'), '"
                 + prop["name"]
                 + "')\n"
             )
@@ -173,7 +184,11 @@ def generate_prop_setter(gen_dict, class_dict, prop):
                 + "')\n"
             )
         set_str += TAB5 + "value[ii] = class_obj(init_dict=obj)\n"
+        set_str += TAB2 + "if value is -1:\n"
+        set_str += TAB3 + "value = list()\n"
     elif "." not in prop["type"] and prop["type"] not in PYTHON_TYPE:  # pyleecan Type
+        set_str += TAB2 + "if isinstance(value, str):  # Load from file\n"
+        set_str += TAB3 + "value = load_init_dict(value)[1]\n"
         set_str += TAB2 + "if isinstance(value, dict) and '__class__' in value:\n"
         set_str += (
             TAB3

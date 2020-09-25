@@ -442,12 +442,14 @@ class Winding(FrozenClass):
 
     def _set_conductor(self, value):
         """setter of conductor"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "conductor"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Conductor()
         check_var("conductor", value, "Conductor")
         self._conductor = value

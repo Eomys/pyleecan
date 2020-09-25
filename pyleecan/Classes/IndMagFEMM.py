@@ -72,7 +72,7 @@ class IndMagFEMM(IndMag):
 
     def __init__(
         self,
-        FEMM_dict={},
+        FEMM_dict=-1,
         type_calc_leakage=0,
         is_sliding_band=True,
         is_symmetry_a=False,
@@ -201,6 +201,8 @@ class IndMagFEMM(IndMag):
 
     def _set_FEMM_dict(self, value):
         """setter of FEMM_dict"""
+        if value is -1:
+            value = dict()
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 

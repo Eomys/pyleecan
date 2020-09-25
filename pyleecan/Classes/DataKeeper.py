@@ -237,12 +237,14 @@ class DataKeeper(FrozenClass):
 
     def _set_keeper(self, value):
         """setter of keeper"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "keeper"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = function()
         try:
             check_var("keeper", value, "list")
@@ -274,12 +276,14 @@ class DataKeeper(FrozenClass):
 
     def _set_error_keeper(self, value):
         """setter of error_keeper"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "error_keeper"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = function()
         try:
             check_var("error_keeper", value, "list")

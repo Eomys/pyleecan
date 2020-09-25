@@ -145,10 +145,12 @@ class DriveWave(Drive):
 
     def _set_wave(self, value):
         """setter of wave"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "wave")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Import()
         check_var("wave", value, "Import")
         self._wave = value

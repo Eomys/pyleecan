@@ -142,7 +142,7 @@ class SlotMPolar(SlotMag):
     get_logger = get_logger
 
     def __init__(
-        self, W0=0.314, H0=0, magnet=list(), W3=0, Zs=36, init_dict=None, init_str=None
+        self, W0=0.314, H0=0, magnet=-1, W3=0, Zs=36, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -290,6 +290,8 @@ class SlotMPolar(SlotMag):
                         "pyleecan.Classes", obj.get("__class__"), "magnet"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("magnet", value, "[MagnetPolar]")
         self._magnet = value
 

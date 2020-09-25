@@ -71,9 +71,7 @@ class ImportGenMatrixSin(ImportMatrix):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, sin_list=list(), is_transpose=False, init_dict=None, init_str=None
-    ):
+    def __init__(self, sin_list=-1, is_transpose=False, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -166,6 +164,8 @@ class ImportGenMatrixSin(ImportMatrix):
                         "pyleecan.Classes", obj.get("__class__"), "sin_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("sin_list", value, "[ImportGenVectSin]")
         self._sin_list = value
 

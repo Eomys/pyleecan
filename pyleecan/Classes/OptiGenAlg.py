@@ -219,12 +219,14 @@ class OptiGenAlg(OptiSolver):
 
     def _set_selector(self, value):
         """setter of selector"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "selector"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = function()
         try:
             check_var("selector", value, "list")
@@ -256,12 +258,14 @@ class OptiGenAlg(OptiSolver):
 
     def _set_crossover(self, value):
         """setter of crossover"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "crossover"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = function()
         try:
             check_var("crossover", value, "list")
@@ -293,12 +297,14 @@ class OptiGenAlg(OptiSolver):
 
     def _set_mutator(self, value):
         """setter of mutator"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "mutator"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = function()
         try:
             check_var("mutator", value, "list")

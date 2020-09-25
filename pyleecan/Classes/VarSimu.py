@@ -72,7 +72,7 @@ class VarSimu(FrozenClass):
         self,
         name="",
         desc="",
-        datakeeper_list=list(),
+        datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
         ref_simu_index=None,
@@ -260,6 +260,8 @@ class VarSimu(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "datakeeper_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("datakeeper_list", value, "[DataKeeper]")
         self._datakeeper_list = value
 

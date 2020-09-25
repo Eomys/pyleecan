@@ -193,8 +193,8 @@ class LamSlotMag(LamSlot):
         Rint=0,
         Rext=1,
         is_stator=True,
-        axial_vent=list(),
-        notch=list(),
+        axial_vent=-1,
+        notch=-1,
         init_dict=None,
         init_str=None,
     ):

@@ -104,7 +104,7 @@ class MachineUD(Machine):
 
     def __init__(
         self,
-        lam_list=list(),
+        lam_list=-1,
         is_sync=True,
         frame=-1,
         shaft=-1,
@@ -230,6 +230,8 @@ class MachineUD(Machine):
                         "pyleecan.Classes", obj.get("__class__"), "lam_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("lam_list", value, "[Lamination]")
         self._lam_list = value
 

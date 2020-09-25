@@ -53,13 +53,13 @@ class ImportData(FrozenClass):
 
     def __init__(
         self,
-        axes=list(),
+        axes=-1,
         field=None,
         unit="SI",
         name="",
         symbol="",
-        normalizations={},
-        symmetries={},
+        normalizations=-1,
+        symmetries=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -201,6 +201,8 @@ class ImportData(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "axes"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("axes", value, "[ImportData]")
         self._axes = value
 
@@ -223,12 +225,14 @@ class ImportData(FrozenClass):
 
     def _set_field(self, value):
         """setter of field"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "field"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Import()
         check_var("field", value, "Import")
         self._field = value
@@ -305,6 +309,8 @@ class ImportData(FrozenClass):
 
     def _set_normalizations(self, value):
         """setter of normalizations"""
+        if value is -1:
+            value = dict()
         check_var("normalizations", value, "dict")
         self._normalizations = value
 
@@ -323,6 +329,8 @@ class ImportData(FrozenClass):
 
     def _set_symmetries(self, value):
         """setter of symmetries"""
+        if value is -1:
+            value = dict()
         check_var("symmetries", value, "dict")
         self._symmetries = value
 

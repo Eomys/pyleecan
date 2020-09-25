@@ -215,7 +215,7 @@ class LamHole(Lamination):
 
     def __init__(
         self,
-        hole=list(),
+        hole=-1,
         bore=None,
         L1=0.35,
         mat_type=-1,
@@ -226,8 +226,8 @@ class LamHole(Lamination):
         Rint=0,
         Rext=1,
         is_stator=True,
-        axial_vent=list(),
-        notch=list(),
+        axial_vent=-1,
+        notch=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -369,6 +369,8 @@ class LamHole(Lamination):
                         "pyleecan.Classes", obj.get("__class__"), "hole"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("hole", value, "[Hole]")
         self._hole = value
 
@@ -391,10 +393,12 @@ class LamHole(Lamination):
 
     def _set_bore(self, value):
         """setter of bore"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "bore")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Bore()
         check_var("bore", value, "Bore")
         self._bore = value

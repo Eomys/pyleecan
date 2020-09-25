@@ -136,7 +136,7 @@ class ImportMatrixVal(ImportMatrix):
 
     def _set_value(self, value):
         """setter of value"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:

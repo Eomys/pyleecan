@@ -368,7 +368,7 @@ class XOutput(Output):
         self,
         paramexplorer_list=[],
         output_list=[],
-        xoutput_dict={},
+        xoutput_dict=-1,
         nb_simu=0,
         simu=-1,
         path_res="",
@@ -551,6 +551,8 @@ class XOutput(Output):
 
     def _set_xoutput_dict(self, value):
         """setter of xoutput_dict"""
+        if value is -1:
+            value = dict()
         check_var("xoutput_dict", value, "dict")
         self._xoutput_dict = value
 

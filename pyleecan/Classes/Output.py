@@ -513,10 +513,12 @@ class Output(FrozenClass):
 
     def _set_simu(self, value):
         """setter of simu"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "simu")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Simulation()
         check_var("simu", value, "Simulation")
         self._simu = value
@@ -557,10 +559,12 @@ class Output(FrozenClass):
 
     def _set_geo(self, value):
         """setter of geo"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "geo")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = OutGeo()
         check_var("geo", value, "OutGeo")
         self._geo = value
@@ -583,10 +587,12 @@ class Output(FrozenClass):
 
     def _set_elec(self, value):
         """setter of elec"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = OutElec()
         check_var("elec", value, "OutElec")
         self._elec = value
@@ -609,10 +615,12 @@ class Output(FrozenClass):
 
     def _set_mag(self, value):
         """setter of mag"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = OutMag()
         check_var("mag", value, "OutMag")
         self._mag = value
@@ -635,12 +643,14 @@ class Output(FrozenClass):
 
     def _set_struct(self, value):
         """setter of struct"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "struct"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = OutStruct()
         check_var("struct", value, "OutStruct")
         self._struct = value
@@ -663,10 +673,12 @@ class Output(FrozenClass):
 
     def _set_post(self, value):
         """setter of post"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "post")
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = OutPost()
         check_var("post", value, "OutPost")
         self._post = value
@@ -707,12 +719,14 @@ class Output(FrozenClass):
 
     def _set_force(self, value):
         """setter of force"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "force"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = OutForce()
         check_var("force", value, "OutForce")
         self._force = value

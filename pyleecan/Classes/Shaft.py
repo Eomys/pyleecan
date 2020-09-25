@@ -194,12 +194,14 @@ class Shaft(FrozenClass):
 
     def _set_mat_type(self, value):
         """setter of mat_type"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "mat_type"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value

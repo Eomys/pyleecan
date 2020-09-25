@@ -200,7 +200,7 @@ class OutGeoLam(FrozenClass):
 
     def _set_BH_curve(self, value):
         """setter of BH_curve"""
-        if value == -1:
+        if value is -1:
             value = list()
         elif type(value) is list:
             try:

@@ -396,8 +396,8 @@ class LamSlotWind(LamSlot):
         Rint=0,
         Rext=1,
         is_stator=True,
-        axial_vent=list(),
-        notch=list(),
+        axial_vent=-1,
+        notch=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -545,12 +545,14 @@ class LamSlotWind(LamSlot):
 
     def _set_winding(self, value):
         """setter of winding"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "winding"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Winding()
         check_var("winding", value, "Winding")
         self._winding = value

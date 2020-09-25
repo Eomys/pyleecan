@@ -371,8 +371,8 @@ class Lamination(FrozenClass):
         Rint=0,
         Rext=1,
         is_stator=True,
-        axial_vent=list(),
-        notch=list(),
+        axial_vent=-1,
+        notch=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -565,12 +565,14 @@ class Lamination(FrozenClass):
 
     def _set_mat_type(self, value):
         """setter of mat_type"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
                 "pyleecan.Classes", value.get("__class__"), "mat_type"
             )
             value = class_obj(init_dict=value)
-        elif value == -1:  # Default constructor
+        elif value is -1:  # Default constructor
             value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value
@@ -735,6 +737,8 @@ class Lamination(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "axial_vent"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("axial_vent", value, "[Hole]")
         self._axial_vent = value
 
@@ -767,6 +771,8 @@ class Lamination(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "notch"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("notch", value, "[Notch]")
         self._notch = value
 

@@ -192,11 +192,13 @@ class Input(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
-        elif value == -1:
+        elif value is -1:
             value = ImportMatrix()
         elif isinstance(value, dict):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "time")
@@ -222,11 +224,13 @@ class Input(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
-        elif value == -1:
+        elif value is -1:
             value = ImportMatrix()
         elif isinstance(value, dict):
             class_obj = import_class(

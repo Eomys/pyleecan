@@ -105,8 +105,8 @@ class HoleUD(HoleMag):
 
     def __init__(
         self,
-        surf_list=list(),
-        magnet_dict={},
+        surf_list=-1,
+        magnet_dict=-1,
         Zh=36,
         mat_void=-1,
         init_dict=None,
@@ -214,6 +214,8 @@ class HoleUD(HoleMag):
                         "pyleecan.Classes", obj.get("__class__"), "surf_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("surf_list", value, "[Surface]")
         self._surf_list = value
 
@@ -236,6 +238,8 @@ class HoleUD(HoleMag):
 
     def _set_magnet_dict(self, value):
         """setter of magnet_dict"""
+        if value is -1:
+            value = dict()
         check_var("magnet_dict", value, "dict")
         self._magnet_dict = value
 
