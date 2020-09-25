@@ -374,17 +374,19 @@ class OutMag(FrozenClass):
 
     def _set_B(self, value):
         """setter of B"""
-        try:  # Check the type
-            check_var("B", value, "dict")
-        except CheckTypeError:
-            check_var("B", value, "SciDataTool.Classes.VectorField.VectorField")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._B = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._B = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "B",
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = VectorField()
+        check_var("B", value, "SciDataTool.Classes.VectorField.VectorField")
+        self._B = value
 
     B = property(
         fget=_get_B,
@@ -401,17 +403,19 @@ class OutMag(FrozenClass):
 
     def _set_Tem(self, value):
         """setter of Tem"""
-        try:  # Check the type
-            check_var("Tem", value, "dict")
-        except CheckTypeError:
-            check_var("Tem", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Tem = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Tem = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "Tem",
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = DataND()
+        check_var("Tem", value, "SciDataTool.Classes.DataND.DataND")
+        self._Tem = value
 
     Tem = property(
         fget=_get_Tem,

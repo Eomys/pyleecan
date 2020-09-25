@@ -306,17 +306,19 @@ class OutStruct(FrozenClass):
 
     def _set_Yr(self, value):
         """setter of Yr"""
-        try:  # Check the type
-            check_var("Yr", value, "dict")
-        except CheckTypeError:
-            check_var("Yr", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Yr = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Yr = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "Yr",
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = DataND()
+        check_var("Yr", value, "SciDataTool.Classes.DataND.DataND")
+        self._Yr = value
 
     Yr = property(
         fget=_get_Yr,
@@ -333,17 +335,19 @@ class OutStruct(FrozenClass):
 
     def _set_Vr(self, value):
         """setter of Vr"""
-        try:  # Check the type
-            check_var("Vr", value, "dict")
-        except CheckTypeError:
-            check_var("Vr", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Vr = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Vr = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "Vr",
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = DataND()
+        check_var("Vr", value, "SciDataTool.Classes.DataND.DataND")
+        self._Vr = value
 
     Vr = property(
         fget=_get_Vr,
@@ -360,17 +364,19 @@ class OutStruct(FrozenClass):
 
     def _set_Ar(self, value):
         """setter of Ar"""
-        try:  # Check the type
-            check_var("Ar", value, "dict")
-        except CheckTypeError:
-            check_var("Ar", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Ar = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Ar = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "Ar",
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = DataND()
+        check_var("Ar", value, "SciDataTool.Classes.DataND.DataND")
+        self._Ar = value
 
     Ar = property(
         fget=_get_Ar,

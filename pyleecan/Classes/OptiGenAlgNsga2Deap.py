@@ -273,17 +273,8 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
 
     def _set_toolbox(self, value):
         """setter of toolbox"""
-        try:  # Check the type
-            check_var("toolbox", value, "dict")
-        except CheckTypeError:
-            check_var("toolbox", value, "deap.base.Toolbox")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._toolbox = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._toolbox = value
+        check_var("toolbox", value, "deap.base.Toolbox")
+        self._toolbox = value
 
     toolbox = property(
         fget=_get_toolbox,

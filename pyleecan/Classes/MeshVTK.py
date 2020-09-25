@@ -317,17 +317,8 @@ class MeshVTK(Mesh):
 
     def _set_mesh(self, value):
         """setter of mesh"""
-        try:  # Check the type
-            check_var("mesh", value, "dict")
-        except CheckTypeError:
-            check_var("mesh", value, "pyvista.core.pointset.UnstructuredGrid")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._mesh = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._mesh = value
+        check_var("mesh", value, "pyvista.core.pointset.UnstructuredGrid")
+        self._mesh = value
 
     mesh = property(
         fget=_get_mesh,
@@ -416,17 +407,8 @@ class MeshVTK(Mesh):
 
     def _set_surf(self, value):
         """setter of surf"""
-        try:  # Check the type
-            check_var("surf", value, "dict")
-        except CheckTypeError:
-            check_var("surf", value, "pyvista.core.pointset.PolyData")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._surf = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._surf = value
+        check_var("surf", value, "pyvista.core.pointset.PolyData")
+        self._surf = value
 
     surf = property(
         fget=_get_surf,

@@ -189,19 +189,32 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB5 + "value[ii] = class_obj(init_dict=obj)\n"
         set_str += TAB2 + "if value is -1:\n"
         set_str += TAB3 + "value = list()\n"
-    elif "." not in prop["type"] and prop["type"] not in PYTHON_TYPE:  # pyleecan Type
+    elif ("." not in prop["type"] or "SciDataTool" in prop["type"]) and prop[
+        "type"
+    ] not in PYTHON_TYPE:  # pyleecan Type
         set_str += TAB2 + "if isinstance(value, str):  # Load from file\n"
         set_str += TAB3 + "value = load_init_dict(value)[1]\n"
         set_str += TAB2 + "if isinstance(value, dict) and '__class__' in value:\n"
-        set_str += (
-            TAB3
-            + "class_obj = import_class('pyleecan.Classes', value.get('__class__'), '"
-            + prop["name"]
-            + "')\n"
-        )
+        if "SciDataTool" in prop["type"]:
+            set_str += (
+                TAB3
+                + "class_obj = import_class('SciDataTool.Classes.'+value.get('__class__'), value.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
+        else:
+            set_str += (
+                TAB3
+                + "class_obj = import_class('pyleecan.Classes', value.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
         set_str += TAB3 + "value = class_obj(init_dict=value)\n"
         set_str += TAB2 + "elif value is -1:  # Default constructor\n"
-        set_str += TAB3 + "value = " + prop["type"] + "()\n"
+        if "SciDataTool" in prop["type"]:
+            set_str += TAB3 + "value = " + prop["type"].split(".")[-1] + "()\n"
+        else:
+            set_str += TAB3 + "value = " + prop["type"] + "()\n"
 
     ## Add check_var("var_name",value, "var_type", min=var_min, max=var_max)
     if prop["type"] == "function":
@@ -228,49 +241,6 @@ def generate_prop_setter(gen_dict, class_dict, prop):
             TAB3
             + "raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) \n"
         )
-
-    elif "." in prop["type"] and not prop["type"].endswith(
-        "]"
-    ):  # Import from another package
-        set_str += TAB2 + "try: # Check the type \n"
-        set_str += TAB3 + 'check_var("' + prop["name"] + '", value, "dict")\n'
-        set_str += TAB2 + "except CheckTypeError:\n"
-        set_str += (
-            TAB3 + 'check_var("' + prop["name"] + '", value, "' + prop["type"] + '")\n'
-        )
-        set_str += TAB3 + "# property can be set from a list to handle loads\n"
-        set_str += (
-            TAB2
-            + 'if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]\n'
-        )
-        set_str += (
-            TAB3
-            + "self._"
-            + prop["name"]
-            + " = loads(value[\"serialized\"].encode('ISO-8859-2'))\n"
-        )
-        set_str += TAB2 + "else: \n"
-        set_str += TAB3 + "self._" + prop["name"] + "= value \n"
-
-    elif "." in prop["type"]:  # List of type from external package
-        set_str += (
-            TAB2
-            + 'if isinstance(value, dict): # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)] \n'
-        )
-        set_str += TAB3 + "value = loads(value[\"serialized\"].encode('ISO-8859-2'))\n"
-        set_str += TAB2 + "elif value == None:\n"
-        set_str += TAB3 + "value = []\n"
-        set_str += TAB2 + 'check_var("' + prop["name"] + '", value, "list")\n'
-        set_str += TAB2 + "for i, element in enumerate(value):\n"
-        set_str += (
-            TAB3
-            + 'check_var("'
-            + prop["name"]
-            + '[{}]".format(i), element, "'
-            + prop["type"][1:-1]
-            + '")\n'
-        )
-        set_str += TAB2 + "self._" + prop["name"] + "= value \n"
     else:
         set_str += (
             TAB2 + 'check_var("' + prop["name"] + '", value, "' + prop["type"] + '"'

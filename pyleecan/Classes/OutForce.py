@@ -264,17 +264,19 @@ class OutForce(FrozenClass):
 
     def _set_P(self, value):
         """setter of P"""
-        try:  # Check the type
-            check_var("P", value, "dict")
-        except CheckTypeError:
-            check_var("P", value, "SciDataTool.Classes.VectorField.VectorField")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._P = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._P = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "P",
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = VectorField()
+        check_var("P", value, "SciDataTool.Classes.VectorField.VectorField")
+        self._P = value
 
     P = property(
         fget=_get_P,

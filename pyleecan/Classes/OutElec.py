@@ -411,17 +411,19 @@ class OutElec(FrozenClass):
 
     def _set_Is(self, value):
         """setter of Is"""
-        try:  # Check the type
-            check_var("Is", value, "dict")
-        except CheckTypeError:
-            check_var("Is", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Is = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Is = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "Is",
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = DataND()
+        check_var("Is", value, "SciDataTool.Classes.DataND.DataND")
+        self._Is = value
 
     Is = property(
         fget=_get_Is,
@@ -438,17 +440,19 @@ class OutElec(FrozenClass):
 
     def _set_Ir(self, value):
         """setter of Ir"""
-        try:  # Check the type
-            check_var("Ir", value, "dict")
-        except CheckTypeError:
-            check_var("Ir", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Ir = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Ir = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "Ir",
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = DataND()
+        check_var("Ir", value, "SciDataTool.Classes.DataND.DataND")
+        self._Ir = value
 
     Ir = property(
         fget=_get_Ir,
@@ -564,17 +568,19 @@ class OutElec(FrozenClass):
 
     def _set_mmf_unit(self, value):
         """setter of mmf_unit"""
-        try:  # Check the type
-            check_var("mmf_unit", value, "dict")
-        except CheckTypeError:
-            check_var("mmf_unit", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._mmf_unit = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._mmf_unit = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "mmf_unit",
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = DataND()
+        check_var("mmf_unit", value, "SciDataTool.Classes.DataND.DataND")
+        self._mmf_unit = value
 
     mmf_unit = property(
         fget=_get_mmf_unit,
@@ -735,17 +741,19 @@ class OutElec(FrozenClass):
 
     def _set_Us(self, value):
         """setter of Us"""
-        try:  # Check the type
-            check_var("Us", value, "dict")
-        except CheckTypeError:
-            check_var("Us", value, "SciDataTool.Classes.DataND.DataND")
-            # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Us = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Us = value
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes." + value.get("__class__"),
+                value.get("__class__"),
+                "Us",
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = DataND()
+        check_var("Us", value, "SciDataTool.Classes.DataND.DataND")
+        self._Us = value
 
     Us = property(
         fget=_get_Us,
