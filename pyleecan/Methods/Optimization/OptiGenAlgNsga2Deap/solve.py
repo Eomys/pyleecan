@@ -91,7 +91,7 @@ def solve(self):
         for i in range(0, self.size_pop):
             nb_error += evaluate(self, pop[i])
             print(
-                "\r{}  gen {:>5}: {:>5.2f}%, {:>4} errors.".format(
+                "\r{}  gen {:>5}: {:>5.2f}%, {:>4} errors.\n".format(
                     time_start_gen, 0, (i + 1) * 100 / self.size_pop, nb_error
                 ),
                 end="",
@@ -103,7 +103,7 @@ def solve(self):
             for indiv in pop:
                 nb_infeasible += check_cstr(self, indiv) == False
         print(
-            "\r{}  gen {:>5}: 100%, {:>4} errors,{:>4} infeasible.".format(
+            "\r{}  gen {:>5}: 100%, {:>4} errors,{:>4} infeasible.\n".format(
                 time_start_gen, 0, nb_error, nb_infeasible
             )
         )
@@ -178,7 +178,7 @@ def solve(self):
             for i in range(len(to_eval)):
                 nb_error += evaluate(self, to_eval[i])
                 print(
-                    "\r{}  gen {:>5}: {:>5.2f}%, {:>4} errors.".format(
+                    "\r{}  gen {:>5}: {:>5.2f}%, {:>4} errors.\n".format(
                         time_start_gen, ngen, (i + 1) * 100 / len(to_eval), nb_error
                     ),
                     end="",
@@ -190,7 +190,7 @@ def solve(self):
                 for indiv in to_eval:
                     nb_infeasible += check_cstr(self, indiv) == False
             print(
-                "\r{}  gen {:>5}: 100%, {:>4} errors,{:>4} infeasible.".format(
+                "\r{}  gen {:>5}: 100%, {:>4} errors,{:>4} infeasible.\n".format(
                     time_start_gen, ngen, nb_error, nb_infeasible
                 )
             )
