@@ -43,7 +43,7 @@ class DataKeeper(FrozenClass):
         unit="",
         keeper=None,
         error_keeper=None,
-        result=[],
+        result=-1,
         init_dict=None,
         init_str=None,
     ):
@@ -315,6 +315,8 @@ class DataKeeper(FrozenClass):
 
     def _set_result(self, value):
         """setter of result"""
+        if value is -1:
+            value = list()
         check_var("result", value, "list")
         self._result = value
 

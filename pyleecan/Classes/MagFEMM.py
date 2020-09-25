@@ -147,7 +147,7 @@ class MagFEMM(Magnetics):
         is_get_mesh=False,
         is_save_FEA=False,
         is_sliding_band=True,
-        transform_list=[],
+        transform_list=-1,
         rotor_dxf=None,
         stator_dxf=None,
         import_file="",
@@ -572,6 +572,8 @@ class MagFEMM(Magnetics):
 
     def _set_transform_list(self, value):
         """setter of transform_list"""
+        if value is -1:
+            value = list()
         check_var("transform_list", value, "list")
         self._transform_list = value
 

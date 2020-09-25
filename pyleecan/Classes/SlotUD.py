@@ -53,7 +53,7 @@ class SlotUD(Slot):
     get_logger = get_logger
 
     def __init__(
-        self, point_list=[], is_sym=False, Zs=36, init_dict=None, init_str=None
+        self, point_list=-1, is_sym=False, Zs=36, init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
@@ -141,6 +141,8 @@ class SlotUD(Slot):
 
     def _set_point_list(self, value):
         """setter of point_list"""
+        if value is -1:
+            value = list()
         check_var("point_list", value, "list")
         self._point_list = value
 

@@ -127,6 +127,9 @@ def generate_prop_setter(gen_dict, class_dict, prop):
     elif prop["type"] == "dict":
         set_str += TAB2 + "if value is -1:\n"
         set_str += TAB3 + "value = dict()\n"
+    elif prop["type"] == "list":
+        set_str += TAB2 + "if value is -1:\n"
+        set_str += TAB3 + "value = list()\n"
     elif prop["type"] == "ImportMatrix":
         set_str += TAB2 + "if isinstance(value, str):  # Load from file\n"
         set_str += TAB3 + "value = load_init_dict(value)[1]\n"

@@ -182,6 +182,8 @@ class OutGeoLam(FrozenClass):
 
     def _set_name_phase(self, value):
         """setter of name_phase"""
+        if value is -1:
+            value = list()
         check_var("name_phase", value, "list")
         self._name_phase = value
 

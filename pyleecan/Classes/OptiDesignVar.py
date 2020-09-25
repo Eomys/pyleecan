@@ -39,7 +39,7 @@ class OptiDesignVar(ParamExplorer):
     def __init__(
         self,
         type_var="interval",
-        space=[0, 1],
+        space=-1,
         get_value=None,
         name="",
         symbol="",
@@ -179,6 +179,8 @@ class OptiDesignVar(ParamExplorer):
 
     def _set_space(self, value):
         """setter of space"""
+        if value is -1:
+            value = list()
         check_var("space", value, "list")
         self._space = value
 

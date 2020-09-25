@@ -366,8 +366,8 @@ class XOutput(Output):
 
     def __init__(
         self,
-        paramexplorer_list=[],
-        output_list=[],
+        paramexplorer_list=-1,
+        output_list=-1,
         xoutput_dict=-1,
         nb_simu=0,
         simu=-1,
@@ -515,6 +515,8 @@ class XOutput(Output):
 
     def _set_paramexplorer_list(self, value):
         """setter of paramexplorer_list"""
+        if value is -1:
+            value = list()
         check_var("paramexplorer_list", value, "list")
         self._paramexplorer_list = value
 
@@ -533,6 +535,8 @@ class XOutput(Output):
 
     def _set_output_list(self, value):
         """setter of output_list"""
+        if value is -1:
+            value = list()
         check_var("output_list", value, "list")
         self._output_list = value
 

@@ -57,7 +57,7 @@ class ParamExplorerSet(ParamExplorer):
 
     def __init__(
         self,
-        value=[],
+        value=-1,
         name="",
         symbol="",
         unit="",
@@ -151,6 +151,8 @@ class ParamExplorerSet(ParamExplorer):
 
     def _set_value(self, value):
         """setter of value"""
+        if value is -1:
+            value = list()
         check_var("value", value, "list")
         self._value = value
 
