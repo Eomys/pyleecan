@@ -30,8 +30,8 @@ def plot_pareto(self, x_symbol, y_symbol, ax=None, title=None):
     fitness = np.array(data).T
 
     # Get fitness values and ngen
-    is_valid = np.array(self["is_valid"])
-    ngen = np.array(self["ngen"])
+    is_valid = np.array(self["is_valid"].result)
+    ngen = np.array(self["ngen"].result)
 
     design_var_list = [pe.value for pe in self.paramexplorer_list]
     design_var = np.array(design_var_list).T

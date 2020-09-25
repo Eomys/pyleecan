@@ -60,33 +60,41 @@ def solve(self):
         )
 
     try:
+        # Keep number of evalutation to create the shape
+        shape = self.size_pop
+
         # Create the toolbox
         self.create_toolbox()
 
         # Add the reference output to multi_output
-        self.xoutput = XOutput(init_dict=self.problem.output.as_dict())
+        xoutput = XOutput(init_dict=self.problem.output.as_dict())
+        self.xoutput = xoutput
 
         # Fitness symbol
         fitness_symbol = [of.symbol for of in self.problem.obj_func]
 
         # Set-up output data as list to be changed into ndarray at the end of the optimization
         paramexplorer_value = []
-        self.xoutput.xoutput_dict["ngen"] = []
-        self.xoutput.xoutput_dict["is_valid"] = []
+        xoutput.xoutput_dict["ngen"] = DataKeeper(
+            name="Generation number", symbol="ngen"
+        )
+        xoutput.xoutput_dict["is_valid"] = DataKeeper(
+            name="Individual validity", symbol="is_valid"
+        )
+        for dk in self.problem.datakeeper_list:
+            assert dk.symbol not in xoutput.xoutput_dict
+            xoutput.xoutput_dict[dk.symbol] = dk
 
         # Put objective functions in XOutput
         for obj_func in self.problem.obj_func:
             # obj_func is a DataKeeper instance
-            self.xoutput.xoutput_dict[obj_func.symbol] = obj_func
+            xoutput.xoutput_dict[obj_func.symbol] = obj_func
 
         # Create the first population
         pop = self.toolbox.population(self.size_pop)
 
         # Start of the evaluation of the generation
         time_start_gen = datetime.now().strftime("%H:%M:%S")
-
-        # Keep number of evalutation to create the shape
-        shape = self.size_pop
 
         # Evaluate the population
         nb_error = 0
@@ -116,20 +124,20 @@ def solve(self):
             is_valid = indiv.is_simu_valid and indiv.cstr_viol == 0
 
             if self.is_keep_all_output:
-                self.xoutput.output_list.append(indiv.output)
+                xoutput.output_list.append(indiv.output)
 
             # is_valid
-            self.xoutput.xoutput_dict["is_valid"].append(is_valid)
+            xoutput.xoutput_dict["is_valid"].result.append(is_valid)
 
             # Design variable values
             paramexplorer_value.append(list(indiv))
 
             # Add fitness values to DataKeeper
             for i, symbol in enumerate(fitness_symbol):
-                self.xoutput.xoutput_dict[symbol].result.append(indiv.fitness.values[i])
+                xoutput.xoutput_dict[symbol].result.append(indiv.fitness.values[i])
 
             # ngen
-            self.xoutput.xoutput_dict["ngen"].append(0)
+            xoutput.xoutput_dict["ngen"].result.append(0)
 
         if self.selector == None:
             pop = selNSGA2(pop, self.size_pop)
@@ -203,21 +211,19 @@ def solve(self):
                 is_valid = indiv.is_simu_valid and indiv.cstr_viol == 0
 
                 if self.is_keep_all_output:
-                    self.xoutput.output_list.append(indiv.output)
+                    xoutput.output_list.append(indiv.output)
 
                 # is_valid
-                self.xoutput.xoutput_dict["is_valid"].append(is_valid)
+                xoutput.xoutput_dict["is_valid"].result.append(is_valid)
 
                 # Design variable values
                 paramexplorer_value.append(list(indiv))
 
                 # Fitness values
                 for i, symbol in enumerate(fitness_symbol):
-                    self.xoutput.xoutput_dict[symbol].result.append(
-                        indiv.fitness.values[i]
-                    )
+                    xoutput.xoutput_dict[symbol].result.append(indiv.fitness.values[i])
                 # ngen
-                self.xoutput.xoutput_dict["ngen"].append(ngen)
+                xoutput.xoutput_dict["ngen"].result.append(ngen)
 
             # Sorting the population according to NSGA2
             if self.selector == None:
@@ -225,20 +231,15 @@ def solve(self):
             else:
                 pop = self.selector(pop, self.size_pop)
 
-    except KeyboardInterrupt:
-        # Except keybord interruption to return the results already computed
-        logger.info("Interrupted by the user.")
-
-    finally:
         # Change xoutput variables in ndarray
         paramexplorer_value = np.array(paramexplorer_value)
 
         # Storing number of simulations
-        self.xoutput.nb_simu = shape
+        xoutput.nb_simu = shape
 
         # Save design variable values in ParamExplorerSet
         for i, param_explorer in enumerate(self.problem.design_var):
-            self.xoutput.paramexplorer_list.append(
+            xoutput.paramexplorer_list.append(
                 ParamExplorerSet(
                     name=param_explorer.name,
                     unit=param_explorer.unit,
@@ -251,4 +252,34 @@ def solve(self):
         # Delete toolbox so that classes created with DEAP remains after the optimization
         self.delete_toolbox()
 
-        return self.xoutput
+        return xoutput
+
+    except KeyboardInterrupt:
+        # Except keybord interruption to return the results already computed
+        logger.info("Interrupted by the user.")
+        # Change xoutput variables in ndarray
+        paramexplorer_value = np.array(paramexplorer_value)
+
+        # Storing number of simulations
+        xoutput.nb_simu = shape
+
+        # Save design variable values in ParamExplorerSet
+        for i, param_explorer in enumerate(self.problem.design_var):
+            xoutput.paramexplorer_list.append(
+                ParamExplorerSet(
+                    name=param_explorer.name,
+                    unit=param_explorer.unit,
+                    symbol=param_explorer.symbol,
+                    setter=param_explorer.setter,
+                    value=paramexplorer_value[:, i].tolist(),
+                )
+            )
+
+        # Delete toolbox so that classes created with DEAP remains after the optimization
+        self.delete_toolbox()
+
+        return xoutput
+
+    except Exception as err:
+        logger.error("{}: {}".format(type(err).__name__, err))
+        raise err
