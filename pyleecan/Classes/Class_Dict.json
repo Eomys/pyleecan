@@ -10614,7 +10614,7 @@
                 "max": "",
                 "min": "",
                 "name": "paramexplorer_list",
-                "type": "[ParamExplore]",
+                "type": "[ParamExplorer]",
                 "unit": "-",
                 "value": ""
             },

@@ -211,8 +211,6 @@ def get_value_str(value, type_val):
         return str(int(value))
     elif type_val == "dict":
         return "-1"
-    elif type_val == "list":
-        return "-1"
     elif type_val == "bool":
         # change 1 or 0 to True and False
         return str(bool(int(value)))

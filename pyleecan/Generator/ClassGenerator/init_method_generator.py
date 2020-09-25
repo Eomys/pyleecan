@@ -38,17 +38,24 @@ def generate_init(gen_dict, class_dict):
     arg_list = ""
     for prop in all_properties:
         # For the argument with default value
-        if prop["type"] in PYTHON_TYPE:
-            # Add => ", my_var = 10" to arg_list
-            arg_list += (
-                ", " + prop["name"] + "=" + get_value_str(prop["value"], prop["type"])
-            )
-        elif prop["type"] == "ndarray":
+        if prop["type"] == "ndarray":
             if prop["value"] not in ["", None] and type(prop["value"]) is list:
                 # Default value of ndarray are list
                 arg_list += ", " + prop["name"] + "=" + str(prop["value"])
             else:
                 arg_list += ", " + prop["name"] + "=None"
+        elif prop["type"] == "list":
+            if (
+                prop["value"] not in ["", None]
+                and type(prop["value"]) is list
+                and len(prop["value"]) > 0
+            ):
+                # Default value of ndarray are list
+                arg_list += ", " + prop["name"] + "=" + str(prop["value"])
+            elif prop["value"] is None:
+                arg_list += ", " + prop["name"] + "=None"
+            else:
+                arg_list += ", " + prop["name"] + "=-1"
         elif prop["type"] == "function":
             # Callable type (function or lambda function)
             arg_list += ", " + prop["name"] + "=None"
@@ -67,6 +74,11 @@ def generate_init(gen_dict, class_dict):
         elif is_dict_pyleecan_type(prop["type"]):
             # Dict of pyleecan type
             arg_list += ", " + prop["name"] + "=-1"
+        elif prop["type"] in PYTHON_TYPE:
+            # Add => ", my_var = 10" to arg_list
+            arg_list += (
+                ", " + prop["name"] + "=" + get_value_str(prop["value"], prop["type"])
+            )
         else:  # pyleecan type
             if prop["value"] == "":
                 arg_list += ", " + prop["name"] + "=-1"

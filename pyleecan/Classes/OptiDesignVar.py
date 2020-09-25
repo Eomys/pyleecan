@@ -39,7 +39,7 @@ class OptiDesignVar(ParamExplorer):
     def __init__(
         self,
         type_var="interval",
-        space=-1,
+        space=[0, 1],
         get_value=None,
         name="",
         symbol="",
