@@ -46,6 +46,7 @@ except ImportError as error:
 from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
+from .Post import Post
 
 
 class VarLoadCurrent(VarLoad):
@@ -118,8 +119,7 @@ class VarLoadCurrent(VarLoad):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -139,6 +139,7 @@ class VarLoadCurrent(VarLoad):
         ref_simu_index=None,
         nb_simu=0,
         is_reuse_femm_file=True,
+        postproc_list=list(),
         init_dict=None,
         init_str=None,
     ):
@@ -172,6 +173,7 @@ class VarLoadCurrent(VarLoad):
             ref_simu_index = obj.ref_simu_index
             nb_simu = obj.nb_simu
             is_reuse_femm_file = obj.is_reuse_femm_file
+            postproc_list = obj.postproc_list
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -199,6 +201,8 @@ class VarLoadCurrent(VarLoad):
                 nb_simu = init_dict["nb_simu"]
             if "is_reuse_femm_file" in list(init_dict.keys()):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
+            if "postproc_list" in list(init_dict.keys()):
+                postproc_list = init_dict["postproc_list"]
         # Initialisation by argument
         # OP_matrix can be None, a ndarray or a list
         set_array(self, "OP_matrix", OP_matrix)
@@ -215,6 +219,7 @@ class VarLoadCurrent(VarLoad):
             ref_simu_index=ref_simu_index,
             nb_simu=nb_simu,
             is_reuse_femm_file=is_reuse_femm_file,
+            postproc_list=postproc_list,
         )
         # The class is frozen (in VarLoad init), for now it's impossible to
         # add new properties
@@ -257,8 +262,7 @@ class VarLoadCurrent(VarLoad):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from VarLoad
         VarLoadCurrent_dict = super(VarLoadCurrent, self).as_dict()
