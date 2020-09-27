@@ -299,9 +299,12 @@ class MeshSolution(FrozenClass):
         MeshSolution_dict["solution"] = list()
         for obj in self.solution:
             MeshSolution_dict["solution"].append(obj.as_dict())
-        MeshSolution_dict["group"] = dict()
-        for key, obj in self.group.items():
-            MeshSolution_dict["group"][key] = obj.tolist()
+        if self.group is None:
+            MeshSolution_dict["group"] = None
+        else:
+            MeshSolution_dict["group"] = dict()
+            for key, obj in self.group.items():
+                MeshSolution_dict["group"][key] = obj.to_list()
         MeshSolution_dict["dimension"] = self.dimension
         # The class name is added to the dict fordeserialisation purpose
         MeshSolution_dict["__class__"] = "MeshSolution"
