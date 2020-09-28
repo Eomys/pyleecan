@@ -38,8 +38,7 @@ myLossModel.k_ed = None
 myLossModel.alpha_ed = 2
 myLossModel.k_ex = 0
 myLossModel.alpha_ex = 1.5
-myLossModel.mat_type = machine.stator.mat_type
-myLossModel.L1 = machine.stator.L1
+myLossModel.lam = 'machine.stator'
 myLossModel.group = "stator"
 
 LossData = ImportMatrixXls()
@@ -56,11 +55,17 @@ machine.stator.mat_type.mag.LossData = LossData
 myLoss = mySimu.loss
 myLoss.run()
 
-#myResults.mag.meshsolution.plot_contour(
+# myResults.mag.meshsolution.plot_contour(
 #    label="B", group_names="stator", itime=0, clim=[0, 1.5]
-#)
+# )
 
-myResults.loss.meshsolutions[0].plot_contour(label="LossDens", itime=7, )
-myResults.loss.meshsolutions[0].plot_contour(label="LossDensSum", itime=0,)
+myResults.loss.meshsolutions[0].plot_contour(
+    label="LossDens",
+    itime=7,
+)
+myResults.loss.meshsolutions[0].plot_contour(
+    label="LossDensSum",
+    itime=0,
+)
 
 print(f"stator loss = {myResults.loss.losses[0].get_field([]).mean()} W")
