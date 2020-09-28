@@ -172,9 +172,9 @@ def generate_properties(gen_dict, class_dict):
                 )
                 # Min and max are added only if needed
                 if prop["type"] in ["float", "int", "ndarray"]:
-                    if str(prop["min"]) is not "":
+                    if str(prop["min"]):
                         prop_str += ", Vmin=" + str(prop["min"])
-                    if str(prop["max"]) is not "":
+                    if str(prop["max"]):
                         prop_str += ", Vmax=" + str(prop["max"])
                 prop_str += ")\n"
                 prop_str += TAB2 + "self._" + prop["name"] + " = value\n\n"
@@ -197,9 +197,9 @@ def generate_properties(gen_dict, class_dict):
         # For sphinx doc
         desc_str = '"""' + prop["desc"] + "\n\n"
         desc_str += TAB2 + ":Type: " + prop["type"] + "\n"
-        if str(prop["min"]) is not "":
+        if str(prop["min"]):
             desc_str += TAB2 + ":min: " + str(prop["min"]) + "\n"
-        if str(prop["max"]) is not "":
+        if str(prop["max"]):
             desc_str += TAB2 + ":max: " + str(prop["max"]) + "\n"
         desc_str += TAB2 + '"""'
         # Add "var_name = property(fget=_get_var_name, fset=_set_var_name,

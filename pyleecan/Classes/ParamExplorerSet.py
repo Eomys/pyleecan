@@ -110,7 +110,7 @@ class ParamExplorerSet(ParamExplorer):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         ParamExplorerSet_str = ""
         # Get the properties inherited from ParamExplorer
@@ -137,7 +137,7 @@ class ParamExplorerSet(ParamExplorer):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from ParamExplorer
         ParamExplorerSet_dict = super(ParamExplorerSet, self).as_dict()

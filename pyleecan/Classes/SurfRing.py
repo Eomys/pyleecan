@@ -314,7 +314,7 @@ class SurfRing(Surface):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         SurfRing_str = ""
         # Get the properties inherited from Surface
@@ -347,7 +347,7 @@ class SurfRing(Surface):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Surface
         SurfRing_dict = super(SurfRing, self).as_dict()

@@ -186,7 +186,7 @@ def generate_str(gen_dict, class_dict):
     # Code generation
     str_str += TAB + "def __str__(self):\n"
     str_str += (
-        TAB2 + '"""Convert this objet in a readeable string ' + '(for print)"""\n\n'
+        TAB2 + '"""Convert this object in a readeable string ' + '(for print)"""\n\n'
     )
     str_str += TAB2 + class_name + '_str = ""\n'
     if class_dict["mother"] != "":

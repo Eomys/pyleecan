@@ -248,7 +248,7 @@ class Slot(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Slot_str = ""
         if self.parent is None:
@@ -268,7 +268,7 @@ class Slot(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Slot_dict = dict()
         Slot_dict["Zs"] = self.Zs
