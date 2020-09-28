@@ -78,8 +78,8 @@ def plot_A_time_space(
     else:
         results = data.get_along("time", "angle", unit=unit, is_norm=is_norm)
     angle = results["angle"]
-    if is_deg and round(max(angle) / 6) % 5 == 0:
-        xticks = [i * round(max(angle) / 6) for i in range(7)]
+    if is_deg and round(np_max(angle) / 6) % 5 == 0:
+        xticks = [i * round(np_max(angle) / 6) for i in range(7)]
     else:
         xticks = None
     time = results["time"]
