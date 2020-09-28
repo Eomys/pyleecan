@@ -536,9 +536,10 @@ class XOutput(Output):
 
     def _get_paramexplorer_list(self):
         """getter of paramexplorer_list"""
-        for obj in self._paramexplorer_list:
-            if obj is not None:
-                obj.parent = self
+        if self._paramexplorer_list is not None:
+            for obj in self._paramexplorer_list:
+                if obj is not None:
+                    obj.parent = self
         return self._paramexplorer_list
 
     def _set_paramexplorer_list(self, value):
@@ -555,10 +556,6 @@ class XOutput(Output):
         check_var("paramexplorer_list", value, "[ParamExplorer]")
         self._paramexplorer_list = value
 
-        for obj in self._paramexplorer_list:
-            if obj is not None:
-                obj.parent = self
-
     paramexplorer_list = property(
         fget=_get_paramexplorer_list,
         fset=_set_paramexplorer_list,
@@ -570,9 +567,10 @@ class XOutput(Output):
 
     def _get_output_list(self):
         """getter of output_list"""
-        for obj in self._output_list:
-            if obj is not None:
-                obj.parent = self
+        if self._output_list is not None:
+            for obj in self._output_list:
+                if obj is not None:
+                    obj.parent = self
         return self._output_list
 
     def _set_output_list(self, value):
@@ -589,10 +587,6 @@ class XOutput(Output):
         check_var("output_list", value, "[Output]")
         self._output_list = value
 
-        for obj in self._output_list:
-            if obj is not None:
-                obj.parent = self
-
     output_list = property(
         fget=_get_output_list,
         fset=_set_output_list,
@@ -604,9 +598,10 @@ class XOutput(Output):
 
     def _get_xoutput_dict(self):
         """getter of xoutput_dict"""
-        for key, obj in self._xoutput_dict.items():
-            if obj is not None:
-                obj.parent = self
+        if self._xoutput_dict is not None:
+            for key, obj in self._xoutput_dict.items():
+                if obj is not None:
+                    obj.parent = self
         return self._xoutput_dict
 
     def _set_xoutput_dict(self, value):

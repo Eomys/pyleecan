@@ -304,7 +304,7 @@ class MeshSolution(FrozenClass):
         else:
             MeshSolution_dict["group"] = dict()
             for key, obj in self.group.items():
-                MeshSolution_dict["group"][key] = obj.to_list()
+                MeshSolution_dict["group"][key] = obj.tolist()
         MeshSolution_dict["dimension"] = self.dimension
         # The class name is added to the dict fordeserialisation purpose
         MeshSolution_dict["__class__"] = "MeshSolution"
@@ -342,9 +342,10 @@ class MeshSolution(FrozenClass):
 
     def _get_mesh(self):
         """getter of mesh"""
-        for obj in self._mesh:
-            if obj is not None:
-                obj.parent = self
+        if self._mesh is not None:
+            for obj in self._mesh:
+                if obj is not None:
+                    obj.parent = self
         return self._mesh
 
     def _set_mesh(self, value):
@@ -360,10 +361,6 @@ class MeshSolution(FrozenClass):
             value = list()
         check_var("mesh", value, "[Mesh]")
         self._mesh = value
-
-        for obj in self._mesh:
-            if obj is not None:
-                obj.parent = self
 
     mesh = property(
         fget=_get_mesh,
@@ -394,9 +391,10 @@ class MeshSolution(FrozenClass):
 
     def _get_solution(self):
         """getter of solution"""
-        for obj in self._solution:
-            if obj is not None:
-                obj.parent = self
+        if self._solution is not None:
+            for obj in self._solution:
+                if obj is not None:
+                    obj.parent = self
         return self._solution
 
     def _set_solution(self, value):
@@ -412,10 +410,6 @@ class MeshSolution(FrozenClass):
             value = list()
         check_var("solution", value, "[Solution]")
         self._solution = value
-
-        for obj in self._solution:
-            if obj is not None:
-                obj.parent = self
 
     solution = property(
         fget=_get_solution,

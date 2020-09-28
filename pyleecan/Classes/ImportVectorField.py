@@ -147,9 +147,10 @@ class ImportVectorField(FrozenClass):
 
     def _get_components(self):
         """getter of components"""
-        for key, obj in self._components.items():
-            if obj is not None:
-                obj.parent = self
+        if self._components is not None:
+            for key, obj in self._components.items():
+                if obj is not None:
+                    obj.parent = self
         return self._components
 
     def _set_components(self, value):

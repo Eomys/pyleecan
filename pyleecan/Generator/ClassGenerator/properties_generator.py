@@ -30,18 +30,20 @@ def generate_properties(gen_dict, class_dict):
             if is_list_pyleecan_type(prop["type"]):
                 # TODO: Update the parent should be done only in the setter but
                 # their is an issue with .append for list of pyleecan type
-                prop_str += TAB2 + "for obj in self._" + prop["name"] + ":\n"
-                prop_str += TAB3 + "if obj is not None:\n"
-                prop_str += TAB4 + "obj.parent = self\n"
+                prop_str += TAB2 + "if self._" + prop["name"] + " is not None:\n"
+                prop_str += TAB3 + "for obj in self._" + prop["name"] + ":\n"
+                prop_str += TAB4 + "if obj is not None:\n"
+                prop_str += TAB5 + "obj.parent = self\n"
                 prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
             elif is_dict_pyleecan_type(prop["type"]) and prop["type"] != "{ndarray}":
                 # TODO: Update the parent should be done only in the setter but
                 # their is an issue with .append for list of pyleecan type
+                prop_str += TAB2 + "if self._" + prop["name"] + " is not None:\n"
                 prop_str += (
-                    TAB2 + "for key, obj in self._" + prop["name"] + ".items():\n"
+                    TAB3 + "for key, obj in self._" + prop["name"] + ".items():\n"
                 )
-                prop_str += TAB3 + "if obj is not None:\n"
-                prop_str += TAB4 + "obj.parent = self\n"
+                prop_str += TAB4 + "if obj is not None:\n"
+                prop_str += TAB5 + "obj.parent = self\n"
                 prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
             elif prop["type"] == "function":
                 prop_str += TAB2 + "return self._" + prop["name"] + "[0]\n\n"
@@ -154,7 +156,7 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         if "SciDataTool" in prop["type"]:
             set_str += (
                 TAB5
-                + "class_obj = import_class('SciDataTool.Classes.'+obj.get('__class__'), obj.get('__class__'), '"
+                + "class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), '"
                 + prop["name"]
                 + "')\n"
             )
@@ -175,7 +177,7 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         if "SciDataTool" in prop["type"]:
             set_str += (
                 TAB5
-                + "class_obj = import_class('SciDataTool.Classes.'+obj.get('__class__'), obj.get('__class__'), '"
+                + "class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), '"
                 + prop["name"]
                 + "')\n"
             )
@@ -198,7 +200,7 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         if "SciDataTool" in prop["type"]:
             set_str += (
                 TAB3
-                + "class_obj = import_class('SciDataTool.Classes.'+value.get('__class__'), value.get('__class__'), '"
+                + "class_obj = import_class('SciDataTool.Classes', value.get('__class__'), '"
                 + prop["name"]
                 + "')\n"
             )
@@ -242,8 +244,14 @@ def generate_prop_setter(gen_dict, class_dict, prop):
             + "raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) \n"
         )
     else:
+        if "." in prop["type"]:
+            check_type = prop["type"].split(".")[-1]
+            if prop["type"][0] in ["{", "["]:
+                check_type = prop["type"][0] + check_type
+        else:
+            check_type = prop["type"]
         set_str += (
-            TAB2 + 'check_var("' + prop["name"] + '", value, "' + prop["type"] + '"'
+            TAB2 + 'check_var("' + prop["name"] + '", value, "' + check_type + '"'
         )
         # Min and max are added only if needed
         if prop["type"] in ["float", "int", "ndarray"]:
@@ -255,15 +263,11 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB2 + "self._" + prop["name"] + " = value\n\n"
 
     ## Update Parent
-    if is_list_pyleecan_type(prop["type"]):
-        # List of pyleecan type
-        set_str += TAB2 + "for obj in self._" + prop["name"] + ":\n"
-        set_str += TAB3 + "if obj is not None:\n"
-        set_str += TAB4 + "obj.parent = self\n\n"
-    elif (
+    if (
         prop["type"] not in PYTHON_TYPE
-        and prop["type"] not in ["ndarray", "function", "{ndarray}"]
+        and prop["type"] not in ["ndarray", "function", "{ndarray}", "[ndarray]"]
         and not is_dict_pyleecan_type(prop["type"])
+        and not is_list_pyleecan_type(prop["type"])
         and "." not in prop["type"]
     ):
         # pyleecan type

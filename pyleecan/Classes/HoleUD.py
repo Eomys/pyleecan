@@ -200,9 +200,10 @@ class HoleUD(HoleMag):
 
     def _get_surf_list(self):
         """getter of surf_list"""
-        for obj in self._surf_list:
-            if obj is not None:
-                obj.parent = self
+        if self._surf_list is not None:
+            for obj in self._surf_list:
+                if obj is not None:
+                    obj.parent = self
         return self._surf_list
 
     def _set_surf_list(self, value):
@@ -218,10 +219,6 @@ class HoleUD(HoleMag):
             value = list()
         check_var("surf_list", value, "[Surface]")
         self._surf_list = value
-
-        for obj in self._surf_list:
-            if obj is not None:
-                obj.parent = self
 
     surf_list = property(
         fget=_get_surf_list,

@@ -194,9 +194,10 @@ class VarParam(VarSimu):
 
     def _get_paramexplorer_list(self):
         """getter of paramexplorer_list"""
-        for obj in self._paramexplorer_list:
-            if obj is not None:
-                obj.parent = self
+        if self._paramexplorer_list is not None:
+            for obj in self._paramexplorer_list:
+                if obj is not None:
+                    obj.parent = self
         return self._paramexplorer_list
 
     def _set_paramexplorer_list(self, value):
@@ -212,10 +213,6 @@ class VarParam(VarSimu):
             value = list()
         check_var("paramexplorer_list", value, "[ParamExplorer]")
         self._paramexplorer_list = value
-
-        for obj in self._paramexplorer_list:
-            if obj is not None:
-                obj.parent = self
 
     paramexplorer_list = property(
         fget=_get_paramexplorer_list,

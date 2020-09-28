@@ -269,9 +269,10 @@ class SurfLine(Surface):
 
     def _get_line_list(self):
         """getter of line_list"""
-        for obj in self._line_list:
-            if obj is not None:
-                obj.parent = self
+        if self._line_list is not None:
+            for obj in self._line_list:
+                if obj is not None:
+                    obj.parent = self
         return self._line_list
 
     def _set_line_list(self, value):
@@ -287,10 +288,6 @@ class SurfLine(Surface):
             value = list()
         check_var("line_list", value, "[Line]")
         self._line_list = value
-
-        for obj in self._line_list:
-            if obj is not None:
-                obj.parent = self
 
     line_list = property(
         fget=_get_line_list,

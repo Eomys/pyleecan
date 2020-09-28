@@ -296,9 +296,10 @@ class VarSimu(FrozenClass):
 
     def _get_datakeeper_list(self):
         """getter of datakeeper_list"""
-        for obj in self._datakeeper_list:
-            if obj is not None:
-                obj.parent = self
+        if self._datakeeper_list is not None:
+            for obj in self._datakeeper_list:
+                if obj is not None:
+                    obj.parent = self
         return self._datakeeper_list
 
     def _set_datakeeper_list(self, value):
@@ -314,10 +315,6 @@ class VarSimu(FrozenClass):
             value = list()
         check_var("datakeeper_list", value, "[DataKeeper]")
         self._datakeeper_list = value
-
-        for obj in self._datakeeper_list:
-            if obj is not None:
-                obj.parent = self
 
     datakeeper_list = property(
         fget=_get_datakeeper_list,
@@ -421,9 +418,10 @@ class VarSimu(FrozenClass):
 
     def _get_postproc_list(self):
         """getter of postproc_list"""
-        for obj in self._postproc_list:
-            if obj is not None:
-                obj.parent = self
+        if self._postproc_list is not None:
+            for obj in self._postproc_list:
+                if obj is not None:
+                    obj.parent = self
         return self._postproc_list
 
     def _set_postproc_list(self, value):
@@ -439,10 +437,6 @@ class VarSimu(FrozenClass):
             value = list()
         check_var("postproc_list", value, "[Post]")
         self._postproc_list = value
-
-        for obj in self._postproc_list:
-            if obj is not None:
-                obj.parent = self
 
     postproc_list = property(
         fget=_get_postproc_list,

@@ -14,13 +14,6 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from numpy import array, array_equal
-from cloudpickle import dumps, loads
-from ._check import CheckTypeError
-
-try:
-    from SciDataTool.Classes.VectorField import VectorField
-except ImportError:
-    VectorField = ImportError
 from ._check import InitUnKnowClassError
 
 
@@ -267,15 +260,11 @@ class OutForce(FrozenClass):
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "P",
-            )
+            class_obj = import_class("SciDataTool.Classes", value.get("__class__"), "P")
             value = class_obj(init_dict=value)
         elif value is -1:  # Default constructor
             value = VectorField()
-        check_var("P", value, "SciDataTool.Classes.VectorField.VectorField")
+        check_var("P", value, "VectorField")
         self._P = value
 
     P = property(

@@ -216,9 +216,10 @@ class MachineUD(Machine):
 
     def _get_lam_list(self):
         """getter of lam_list"""
-        for obj in self._lam_list:
-            if obj is not None:
-                obj.parent = self
+        if self._lam_list is not None:
+            for obj in self._lam_list:
+                if obj is not None:
+                    obj.parent = self
         return self._lam_list
 
     def _set_lam_list(self, value):
@@ -234,10 +235,6 @@ class MachineUD(Machine):
             value = list()
         check_var("lam_list", value, "[Lamination]")
         self._lam_list = value
-
-        for obj in self._lam_list:
-            if obj is not None:
-                obj.parent = self
 
     lam_list = property(
         fget=_get_lam_list,

@@ -355,9 +355,10 @@ class LamHole(Lamination):
 
     def _get_hole(self):
         """getter of hole"""
-        for obj in self._hole:
-            if obj is not None:
-                obj.parent = self
+        if self._hole is not None:
+            for obj in self._hole:
+                if obj is not None:
+                    obj.parent = self
         return self._hole
 
     def _set_hole(self, value):
@@ -373,10 +374,6 @@ class LamHole(Lamination):
             value = list()
         check_var("hole", value, "[Hole]")
         self._hole = value
-
-        for obj in self._hole:
-            if obj is not None:
-                obj.parent = self
 
     hole = property(
         fget=_get_hole,

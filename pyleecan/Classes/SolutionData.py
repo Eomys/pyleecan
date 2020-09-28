@@ -26,13 +26,6 @@ except ImportError as error:
     get_axis = error
 
 
-from cloudpickle import dumps, loads
-from ._check import CheckTypeError
-
-try:
-    from SciDataTool.Classes.DataND import DataND
-except ImportError:
-    DataND = ImportError
 from ._check import InitUnKnowClassError
 
 
@@ -169,14 +162,12 @@ class SolutionData(Solution):
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "field",
+                "SciDataTool.Classes", value.get("__class__"), "field"
             )
             value = class_obj(init_dict=value)
         elif value is -1:  # Default constructor
             value = DataND()
-        check_var("field", value, "SciDataTool.Classes.DataND.DataND")
+        check_var("field", value, "DataND")
         self._field = value
 
     field = property(

@@ -317,7 +317,7 @@ class MeshVTK(Mesh):
 
     def _set_mesh(self, value):
         """setter of mesh"""
-        check_var("mesh", value, "pyvista.core.pointset.UnstructuredGrid")
+        check_var("mesh", value, "UnstructuredGrid")
         self._mesh = value
 
     mesh = property(
@@ -407,7 +407,7 @@ class MeshVTK(Mesh):
 
     def _set_surf(self, value):
         """setter of surf"""
-        check_var("surf", value, "pyvista.core.pointset.PolyData")
+        check_var("surf", value, "PolyData")
         self._surf = value
 
     surf = property(

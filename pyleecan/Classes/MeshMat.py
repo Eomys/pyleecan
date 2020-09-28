@@ -280,9 +280,10 @@ class MeshMat(Mesh):
 
     def _get_cell(self):
         """getter of cell"""
-        for key, obj in self._cell.items():
-            if obj is not None:
-                obj.parent = self
+        if self._cell is not None:
+            for key, obj in self._cell.items():
+                if obj is not None:
+                    obj.parent = self
         return self._cell
 
     def _set_cell(self, value):

@@ -14,17 +14,6 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from numpy import array, array_equal
-from cloudpickle import dumps, loads
-from ._check import CheckTypeError
-
-try:
-    from SciDataTool.Classes.VectorField import VectorField
-except ImportError:
-    VectorField = ImportError
-try:
-    from SciDataTool.Classes.DataND import DataND
-except ImportError:
-    DataND = ImportError
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
 
@@ -377,15 +366,11 @@ class OutMag(FrozenClass):
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "B",
-            )
+            class_obj = import_class("SciDataTool.Classes", value.get("__class__"), "B")
             value = class_obj(init_dict=value)
         elif value is -1:  # Default constructor
             value = VectorField()
-        check_var("B", value, "SciDataTool.Classes.VectorField.VectorField")
+        check_var("B", value, "VectorField")
         self._B = value
 
     B = property(
@@ -407,14 +392,12 @@ class OutMag(FrozenClass):
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Tem",
+                "SciDataTool.Classes", value.get("__class__"), "Tem"
             )
             value = class_obj(init_dict=value)
         elif value is -1:  # Default constructor
             value = DataND()
-        check_var("Tem", value, "SciDataTool.Classes.DataND.DataND")
+        check_var("Tem", value, "DataND")
         self._Tem = value
 
     Tem = property(

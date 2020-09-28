@@ -276,9 +276,10 @@ class SlotMPolar(SlotMag):
 
     def _get_magnet(self):
         """getter of magnet"""
-        for obj in self._magnet:
-            if obj is not None:
-                obj.parent = self
+        if self._magnet is not None:
+            for obj in self._magnet:
+                if obj is not None:
+                    obj.parent = self
         return self._magnet
 
     def _set_magnet(self, value):
@@ -294,10 +295,6 @@ class SlotMPolar(SlotMag):
             value = list()
         check_var("magnet", value, "[MagnetPolar]")
         self._magnet = value
-
-        for obj in self._magnet:
-            if obj is not None:
-                obj.parent = self
 
     magnet = property(
         fget=_get_magnet,

@@ -32,13 +32,6 @@ except ImportError as error:
 
 
 from numpy import array, array_equal
-from cloudpickle import dumps, loads
-from ._check import CheckTypeError
-
-try:
-    from SciDataTool.Classes.DataND import DataND
-except ImportError:
-    DataND = ImportError
 from ._check import InitUnKnowClassError
 
 
@@ -415,14 +408,12 @@ class OutElec(FrozenClass):
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Is",
+                "SciDataTool.Classes", value.get("__class__"), "Is"
             )
             value = class_obj(init_dict=value)
         elif value is -1:  # Default constructor
             value = DataND()
-        check_var("Is", value, "SciDataTool.Classes.DataND.DataND")
+        check_var("Is", value, "DataND")
         self._Is = value
 
     Is = property(
@@ -444,14 +435,12 @@ class OutElec(FrozenClass):
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Ir",
+                "SciDataTool.Classes", value.get("__class__"), "Ir"
             )
             value = class_obj(init_dict=value)
         elif value is -1:  # Default constructor
             value = DataND()
-        check_var("Ir", value, "SciDataTool.Classes.DataND.DataND")
+        check_var("Ir", value, "DataND")
         self._Ir = value
 
     Ir = property(
@@ -572,14 +561,12 @@ class OutElec(FrozenClass):
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "mmf_unit",
+                "SciDataTool.Classes", value.get("__class__"), "mmf_unit"
             )
             value = class_obj(init_dict=value)
         elif value is -1:  # Default constructor
             value = DataND()
-        check_var("mmf_unit", value, "SciDataTool.Classes.DataND.DataND")
+        check_var("mmf_unit", value, "DataND")
         self._mmf_unit = value
 
     mmf_unit = property(
@@ -745,14 +732,12 @@ class OutElec(FrozenClass):
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Us",
+                "SciDataTool.Classes", value.get("__class__"), "Us"
             )
             value = class_obj(init_dict=value)
         elif value is -1:  # Default constructor
             value = DataND()
-        check_var("Us", value, "SciDataTool.Classes.DataND.DataND")
+        check_var("Us", value, "DataND")
         self._Us = value
 
     Us = property(

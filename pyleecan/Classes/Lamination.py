@@ -723,9 +723,10 @@ class Lamination(FrozenClass):
 
     def _get_axial_vent(self):
         """getter of axial_vent"""
-        for obj in self._axial_vent:
-            if obj is not None:
-                obj.parent = self
+        if self._axial_vent is not None:
+            for obj in self._axial_vent:
+                if obj is not None:
+                    obj.parent = self
         return self._axial_vent
 
     def _set_axial_vent(self, value):
@@ -742,10 +743,6 @@ class Lamination(FrozenClass):
         check_var("axial_vent", value, "[Hole]")
         self._axial_vent = value
 
-        for obj in self._axial_vent:
-            if obj is not None:
-                obj.parent = self
-
     axial_vent = property(
         fget=_get_axial_vent,
         fset=_set_axial_vent,
@@ -757,9 +754,10 @@ class Lamination(FrozenClass):
 
     def _get_notch(self):
         """getter of notch"""
-        for obj in self._notch:
-            if obj is not None:
-                obj.parent = self
+        if self._notch is not None:
+            for obj in self._notch:
+                if obj is not None:
+                    obj.parent = self
         return self._notch
 
     def _set_notch(self, value):
@@ -775,10 +773,6 @@ class Lamination(FrozenClass):
             value = list()
         check_var("notch", value, "[Notch]")
         self._notch = value
-
-        for obj in self._notch:
-            if obj is not None:
-                obj.parent = self
 
     notch = property(
         fget=_get_notch,

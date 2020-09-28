@@ -355,9 +355,10 @@ class Simulation(FrozenClass):
 
     def _get_postproc_list(self):
         """getter of postproc_list"""
-        for obj in self._postproc_list:
-            if obj is not None:
-                obj.parent = self
+        if self._postproc_list is not None:
+            for obj in self._postproc_list:
+                if obj is not None:
+                    obj.parent = self
         return self._postproc_list
 
     def _set_postproc_list(self, value):
@@ -373,10 +374,6 @@ class Simulation(FrozenClass):
             value = list()
         check_var("postproc_list", value, "[Post]")
         self._postproc_list = value
-
-        for obj in self._postproc_list:
-            if obj is not None:
-                obj.parent = self
 
     postproc_list = property(
         fget=_get_postproc_list,

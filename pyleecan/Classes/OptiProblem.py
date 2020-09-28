@@ -264,9 +264,10 @@ class OptiProblem(FrozenClass):
 
     def _get_design_var(self):
         """getter of design_var"""
-        for obj in self._design_var:
-            if obj is not None:
-                obj.parent = self
+        if self._design_var is not None:
+            for obj in self._design_var:
+                if obj is not None:
+                    obj.parent = self
         return self._design_var
 
     def _set_design_var(self, value):
@@ -283,10 +284,6 @@ class OptiProblem(FrozenClass):
         check_var("design_var", value, "[OptiDesignVar]")
         self._design_var = value
 
-        for obj in self._design_var:
-            if obj is not None:
-                obj.parent = self
-
     design_var = property(
         fget=_get_design_var,
         fset=_set_design_var,
@@ -298,9 +295,10 @@ class OptiProblem(FrozenClass):
 
     def _get_obj_func(self):
         """getter of obj_func"""
-        for obj in self._obj_func:
-            if obj is not None:
-                obj.parent = self
+        if self._obj_func is not None:
+            for obj in self._obj_func:
+                if obj is not None:
+                    obj.parent = self
         return self._obj_func
 
     def _set_obj_func(self, value):
@@ -316,10 +314,6 @@ class OptiProblem(FrozenClass):
             value = list()
         check_var("obj_func", value, "[DataKeeper]")
         self._obj_func = value
-
-        for obj in self._obj_func:
-            if obj is not None:
-                obj.parent = self
 
     obj_func = property(
         fget=_get_obj_func,
@@ -371,9 +365,10 @@ class OptiProblem(FrozenClass):
 
     def _get_constraint(self):
         """getter of constraint"""
-        for obj in self._constraint:
-            if obj is not None:
-                obj.parent = self
+        if self._constraint is not None:
+            for obj in self._constraint:
+                if obj is not None:
+                    obj.parent = self
         return self._constraint
 
     def _set_constraint(self, value):
@@ -389,10 +384,6 @@ class OptiProblem(FrozenClass):
             value = list()
         check_var("constraint", value, "[OptiConstraint]")
         self._constraint = value
-
-        for obj in self._constraint:
-            if obj is not None:
-                obj.parent = self
 
     constraint = property(
         fget=_get_constraint,
@@ -444,9 +435,10 @@ class OptiProblem(FrozenClass):
 
     def _get_datakeeper_list(self):
         """getter of datakeeper_list"""
-        for obj in self._datakeeper_list:
-            if obj is not None:
-                obj.parent = self
+        if self._datakeeper_list is not None:
+            for obj in self._datakeeper_list:
+                if obj is not None:
+                    obj.parent = self
         return self._datakeeper_list
 
     def _set_datakeeper_list(self, value):
@@ -462,10 +454,6 @@ class OptiProblem(FrozenClass):
             value = list()
         check_var("datakeeper_list", value, "[DataKeeper]")
         self._datakeeper_list = value
-
-        for obj in self._datakeeper_list:
-            if obj is not None:
-                obj.parent = self
 
     datakeeper_list = property(
         fget=_get_datakeeper_list,

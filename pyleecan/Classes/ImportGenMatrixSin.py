@@ -150,9 +150,10 @@ class ImportGenMatrixSin(ImportMatrix):
 
     def _get_sin_list(self):
         """getter of sin_list"""
-        for obj in self._sin_list:
-            if obj is not None:
-                obj.parent = self
+        if self._sin_list is not None:
+            for obj in self._sin_list:
+                if obj is not None:
+                    obj.parent = self
         return self._sin_list
 
     def _set_sin_list(self, value):
@@ -168,10 +169,6 @@ class ImportGenMatrixSin(ImportMatrix):
             value = list()
         check_var("sin_list", value, "[ImportGenVectSin]")
         self._sin_list = value
-
-        for obj in self._sin_list:
-            if obj is not None:
-                obj.parent = self
 
     sin_list = property(
         fget=_get_sin_list,

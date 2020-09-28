@@ -329,9 +329,10 @@ class LamSlotMulti(Lamination):
 
     def _get_slot_list(self):
         """getter of slot_list"""
-        for obj in self._slot_list:
-            if obj is not None:
-                obj.parent = self
+        if self._slot_list is not None:
+            for obj in self._slot_list:
+                if obj is not None:
+                    obj.parent = self
         return self._slot_list
 
     def _set_slot_list(self, value):
@@ -347,10 +348,6 @@ class LamSlotMulti(Lamination):
             value = list()
         check_var("slot_list", value, "[Slot]")
         self._slot_list = value
-
-        for obj in self._slot_list:
-            if obj is not None:
-                obj.parent = self
 
     slot_list = property(
         fget=_get_slot_list,

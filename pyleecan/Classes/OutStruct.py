@@ -14,13 +14,6 @@ from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from numpy import array, array_equal
-from cloudpickle import dumps, loads
-from ._check import CheckTypeError
-
-try:
-    from SciDataTool.Classes.DataND import DataND
-except ImportError:
-    DataND = ImportError
 from ._check import InitUnKnowClassError
 
 
@@ -310,14 +303,12 @@ class OutStruct(FrozenClass):
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Yr",
+                "SciDataTool.Classes", value.get("__class__"), "Yr"
             )
             value = class_obj(init_dict=value)
         elif value is -1:  # Default constructor
             value = DataND()
-        check_var("Yr", value, "SciDataTool.Classes.DataND.DataND")
+        check_var("Yr", value, "DataND")
         self._Yr = value
 
     Yr = property(
@@ -339,14 +330,12 @@ class OutStruct(FrozenClass):
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Vr",
+                "SciDataTool.Classes", value.get("__class__"), "Vr"
             )
             value = class_obj(init_dict=value)
         elif value is -1:  # Default constructor
             value = DataND()
-        check_var("Vr", value, "SciDataTool.Classes.DataND.DataND")
+        check_var("Vr", value, "DataND")
         self._Vr = value
 
     Vr = property(
@@ -368,14 +357,12 @@ class OutStruct(FrozenClass):
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes." + value.get("__class__"),
-                value.get("__class__"),
-                "Ar",
+                "SciDataTool.Classes", value.get("__class__"), "Ar"
             )
             value = class_obj(init_dict=value)
         elif value is -1:  # Default constructor
             value = DataND()
-        check_var("Ar", value, "SciDataTool.Classes.DataND.DataND")
+        check_var("Ar", value, "DataND")
         self._Ar = value
 
     Ar = property(
