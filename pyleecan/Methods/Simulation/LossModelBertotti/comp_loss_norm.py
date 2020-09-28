@@ -46,7 +46,7 @@ def _get_axes_(meshsolution, indices, label):
 
 
 def comp_loss_norm(self, meshsolution):
-    """ 
+    """
     Compute the normalized (per kg) losses according to the following model equation:
         Loss = C0*f*B^C1 + C2*(f*B)^C3 + C4*(f*B)^C4
 
@@ -63,7 +63,14 @@ def comp_loss_norm(self, meshsolution):
         a DataND object of the normalized losses
     """
     Coeff = list(
-        [self.k_hy, self.alpha_hy, self.k_ed, self.alpha_ed, self.k_ex, self.alpha_ex,]
+        [
+            self.k_hy,
+            self.alpha_hy,
+            self.k_ed,
+            self.alpha_ed,
+            self.k_ex,
+            self.alpha_ex,
+        ]
     )
     print(Coeff)
 
@@ -112,7 +119,11 @@ def comp_loss_norm(self, meshsolution):
     axes = [Freq if x.name == "time" else x for x in component.axes]
 
     loss_data = DataFreq(
-        name="Loss Density", unit="T", symbol="LossDens", axes=axes, values=loss,
+        name="Loss Density",
+        unit="T",
+        symbol="LossDens",
+        axes=axes,
+        values=loss,
     )
 
     return loss_data

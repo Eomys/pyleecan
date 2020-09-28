@@ -2,7 +2,6 @@
 
 
 class LossModelError(Exception):
-    """Raised when there is a LossModel error
-    """
+    """Raised when there is a LossModel error"""
 
     pass

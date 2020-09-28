@@ -8,8 +8,7 @@ from SciDataTool import Data1D, DataTime
 
 
 def comp_loss(self, output):
-    """Compute the Losses
-    """
+    """Compute the Losses"""
     # if self.parent is None:
     #     raise InputError("ERROR: The LossModel object must be in a Loss object to run")
     # if self.parent.parent is None:

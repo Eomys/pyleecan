@@ -6,8 +6,7 @@ DEBUG = True
 
 
 def run(self):
-    """Run the Loss module
-    """
+    """Run the Loss module"""
     if self.parent is None:
         raise InputError("ERROR: The Loss object must be in a Simulation object to run")
     if self.parent.parent is None:

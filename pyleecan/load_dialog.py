@@ -18,7 +18,7 @@ def load_dialog(filetypes=(("JSON Dateien", "*.json"),)):
 
     Parameters
     ----------
-    
+
     """
     # Ask the user to select a .json file to load
     root = tk.Tk()
