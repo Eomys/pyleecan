@@ -94,7 +94,8 @@ class HoleUD(HoleMag):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -145,36 +146,42 @@ class HoleUD(HoleMag):
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
         # Initialisation by argument
-        # surf_list can be None or a list of Surface object
-        self.surf_list = list()
+        # surf_list can be None or a list of Surface object or a list of dict
         if type(surf_list) is list:
-            for obj in surf_list:
-                if obj is None:  # Default value
-                    self.surf_list.append(Surface())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Surface",
-                        "Circle",
-                        "PolarArc",
-                        "SurfLine",
-                        "SurfRing",
-                        "Trapeze",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for surf_list"
+            # Check if the list is only composed of Surface
+            if len(surf_list) > 0 and all(
+                isinstance(obj, Surface) for obj in surf_list
+            ):
+                # set the list to keep pointer reference
+                self.surf_list = surf_list
+            else:
+                self.surf_list = list()
+                for obj in surf_list:
+                    if not isinstance(obj, dict):  # Default value
+                        self.surf_list.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in [
+                            "Surface",
+                            "Circle",
+                            "PolarArc",
+                            "SurfLine",
+                            "SurfRing",
+                            "Trapeze",
+                        ]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for surf_list"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.surf_list.append(class_obj(init_dict=obj))
-                else:
-                    self.surf_list.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.surf_list.append(class_obj(init_dict=obj))
+
         elif surf_list is None:
             self.surf_list = list()
         else:
@@ -217,7 +224,8 @@ class HoleUD(HoleMag):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from HoleMag
         HoleUD_dict = super(HoleUD, self).as_dict()

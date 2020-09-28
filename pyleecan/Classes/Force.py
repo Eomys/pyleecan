@@ -58,7 +58,8 @@ class Force(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -117,7 +118,8 @@ class Force(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         Force_dict = dict()
         Force_dict["is_comp_nodal_force"] = self.is_comp_nodal_force

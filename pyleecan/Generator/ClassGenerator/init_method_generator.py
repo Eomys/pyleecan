@@ -36,6 +36,7 @@ def generate_init(gen_dict, class_dict):
         init_by_var += TAB2 + "self.parent = None\n"
 
     for prop in class_dict["properties"]:
+        # Python type of function
         if prop["type"] in PYTHON_TYPE or prop["type"] == "function":
             # Enable to set -1 to instanciate a list
             if prop["type"] == "list":
@@ -44,7 +45,9 @@ def generate_init(gen_dict, class_dict):
 
             # Add => "self.my_var = my_var\n" to init_by_var
             init_by_var += TAB2 + "self." + prop["name"] + " = " + prop["name"] + "\n"
-        elif "." in prop["type"]:
+
+        # Imported type
+        elif "." in prop["type"] and not prop["type"].endswith("]"):
             # Add => "self.my_var = my_var\n" to init_by_var
             if (
                 prop["type"] not in ext_imported_types
@@ -71,6 +74,37 @@ def generate_init(gen_dict, class_dict):
                     + "')\n"
                 )
             init_by_var += TAB2 + "self." + prop["name"] + " = " + prop["name"] + "\n"
+
+        # List of imported type
+        elif "." in prop["type"] and prop["type"].endswith("]"):
+            # Add => "self.my_var = my_var\n" to init_by_var
+            if (
+                prop["type"] not in ext_imported_types
+            ):  # Check if the type has been imported with success
+                ext_imported_types.append(prop["type"])
+                init_by_var += (
+                    TAB2
+                    + "# Check if the type "
+                    + prop["type"][prop["type"].rfind(".") + 1 : -1]
+                    + " has been imported with success\n"
+                )
+                init_by_var += (
+                    TAB2
+                    + "if isinstance("
+                    + prop["type"][prop["type"].rfind(".") + 1 : -1]
+                    + ", ImportError):\n"
+                )
+                init_by_var += (
+                    TAB3
+                    + "raise ImportError('Unknown type "
+                    + prop["type"][prop["type"].rfind(".") + 1 : -1]
+                    + " please install "
+                    + prop["type"][1 : prop["type"].find(".")]
+                    + "')\n"
+                )
+            init_by_var += TAB2 + "self." + prop["name"] + " = " + prop["name"] + "\n"
+
+        # ndarray
         elif prop["type"] == "ndarray":
             # Default value is None which should call the corresponding init
             init_by_var += (
@@ -87,27 +121,43 @@ def generate_init(gen_dict, class_dict):
                 + prop["name"]
                 + " can be None or a list of "
                 + prop["type"][1:-1]
-                + " object\n"
+                + " object or a list of dict\n"
             )
-            init_by_var += TAB2 + "self." + prop["name"] + " = list()\n"
             init_by_var += TAB2 + "if type(" + prop["name"] + ") is list:\n"
-            init_by_var += TAB3 + "for obj in " + prop["name"] + ":\n"
-            init_by_var += TAB4 + "if obj is None:  # Default value\n"
             init_by_var += (
-                TAB5
-                + "self."
-                + prop["name"]
-                + ".append("
+                TAB3
+                + "# Check if the list is only composed of "
                 + prop["type"][1:-1]
-                + "())\n"
+                + "\n"
             )
+            init_by_var += (
+                TAB3
+                + "if len("
+                + prop["name"]
+                + ") > 0 and all(isinstance(obj, "
+                + prop["type"][1:-1]
+                + ") for obj in "
+                + prop["name"]
+                + "):\n"
+            )
+            init_by_var += TAB4 + "# set the list to keep pointer reference\n"
+            init_by_var += TAB4 + "self." + prop["name"] + " = " + prop["name"] + "\n"
+            init_by_var += TAB3 + "else:\n"
+            init_by_var += TAB4 + "self." + prop["name"] + " = list()\n"
+            init_by_var += TAB4 + "for obj in " + prop["name"] + ":\n"
+            init_by_var += TAB5 + "if not isinstance(obj, dict):  # Default value\n"
+            init_by_var += TAB6 + "self." + prop["name"] + ".append(obj)\n"
             type_dict = gen_dict[prop["type"][1:-1]]
             daug_list = type_dict["daughters"]
-            init_by_var += generate_set_class_by_dict_list(
+            set_class_by_dict = generate_set_class_by_dict_list(
                 prop["name"], prop["type"][1:-1], daug_list
             )
-            init_by_var += TAB4 + "else:\n"
-            init_by_var += TAB5 + "self." + prop["name"] + ".append(obj)\n"
+            # Add a TAB
+            set_class_by_dict = "".join(
+                [TAB + line + "\n" for line in set_class_by_dict.split("\n")]
+            )
+
+            init_by_var += set_class_by_dict
             init_by_var += TAB2 + "elif " + prop["name"] + " is None:\n"
             init_by_var += TAB3 + "self." + prop["name"] + " = list()\n"
             init_by_var += TAB2 + "else:\n"
@@ -171,6 +221,21 @@ def generate_init(gen_dict, class_dict):
                 + prop["name"]
                 + "# Should raise an error\n"
             )
+        elif prop["type"] == "FrozenClass":
+            # FrozenClass, Pyleecan mother class
+            init_by_var += (
+                TAB2
+                + "# "
+                + prop["name"]
+                + " can be None, a "
+                + prop["type"]
+                + " object or a dict\n"
+            )
+            init_by_var += generate_set_class_by_dict(
+                prop["name"], prop["type"], list(gen_dict.keys())
+            )
+            init_by_var += TAB2 + "else:\n"
+            init_by_var += TAB3 + "self." + prop["name"] + " = " + prop["name"] + "\n"
 
         else:  # For pyleecan Type
             init_by_var += (

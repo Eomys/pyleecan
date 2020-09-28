@@ -351,7 +351,8 @@ class Lamination(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -448,70 +449,78 @@ class Lamination(FrozenClass):
         self.Rint = Rint
         self.Rext = Rext
         self.is_stator = is_stator
-        # axial_vent can be None or a list of Hole object
-        self.axial_vent = list()
+        # axial_vent can be None or a list of Hole object or a list of dict
         if type(axial_vent) is list:
-            for obj in axial_vent:
-                if obj is None:  # Default value
-                    self.axial_vent.append(Hole())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Hole",
-                        "HoleM50",
-                        "HoleM51",
-                        "HoleM52",
-                        "HoleM53",
-                        "HoleM54",
-                        "HoleM57",
-                        "HoleM58",
-                        "HoleMag",
-                        "HoleUD",
-                        "VentilationCirc",
-                        "VentilationPolar",
-                        "VentilationTrap",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for axial_vent"
+            # Check if the list is only composed of Hole
+            if len(axial_vent) > 0 and all(isinstance(obj, Hole) for obj in axial_vent):
+                # set the list to keep pointer reference
+                self.axial_vent = axial_vent
+            else:
+                self.axial_vent = list()
+                for obj in axial_vent:
+                    if not isinstance(obj, dict):  # Default value
+                        self.axial_vent.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in [
+                            "Hole",
+                            "HoleM50",
+                            "HoleM51",
+                            "HoleM52",
+                            "HoleM53",
+                            "HoleM54",
+                            "HoleM57",
+                            "HoleM58",
+                            "HoleMag",
+                            "HoleUD",
+                            "VentilationCirc",
+                            "VentilationPolar",
+                            "VentilationTrap",
+                        ]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for axial_vent"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.axial_vent.append(class_obj(init_dict=obj))
-                else:
-                    self.axial_vent.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.axial_vent.append(class_obj(init_dict=obj))
+
         elif axial_vent is None:
             self.axial_vent = list()
         else:
             self.axial_vent = axial_vent
-        # notch can be None or a list of Notch object
-        self.notch = list()
+        # notch can be None or a list of Notch object or a list of dict
         if type(notch) is list:
-            for obj in notch:
-                if obj is None:  # Default value
-                    self.notch.append(Notch())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in ["Notch", "NotchEvenDist"]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for notch"
+            # Check if the list is only composed of Notch
+            if len(notch) > 0 and all(isinstance(obj, Notch) for obj in notch):
+                # set the list to keep pointer reference
+                self.notch = notch
+            else:
+                self.notch = list()
+                for obj in notch:
+                    if not isinstance(obj, dict):  # Default value
+                        self.notch.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in ["Notch", "NotchEvenDist"]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for notch"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.notch.append(class_obj(init_dict=obj))
-                else:
-                    self.notch.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.notch.append(class_obj(init_dict=obj))
+
         elif notch is None:
             self.notch = list()
         else:
@@ -585,7 +594,8 @@ class Lamination(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         Lamination_dict = dict()
         Lamination_dict["L1"] = self.L1

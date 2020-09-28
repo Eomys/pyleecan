@@ -62,7 +62,8 @@ class VarParam(VarSimu):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -74,11 +75,11 @@ class VarParam(VarSimu):
         name="",
         desc="",
         datakeeper_list=list(),
-        nb_proc=1,
         is_keep_all_output=False,
         stop_if_error=False,
         ref_simu_index=None,
         nb_simu=0,
+        is_reuse_femm_file=True,
         init_dict=None,
         init_str=None,
     ):
@@ -104,11 +105,11 @@ class VarParam(VarSimu):
             name = obj.name
             desc = obj.desc
             datakeeper_list = obj.datakeeper_list
-            nb_proc = obj.nb_proc
             is_keep_all_output = obj.is_keep_all_output
             stop_if_error = obj.stop_if_error
             ref_simu_index = obj.ref_simu_index
             nb_simu = obj.nb_simu
+            is_reuse_femm_file = obj.is_reuse_femm_file
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -120,8 +121,6 @@ class VarParam(VarSimu):
                 desc = init_dict["desc"]
             if "datakeeper_list" in list(init_dict.keys()):
                 datakeeper_list = init_dict["datakeeper_list"]
-            if "nb_proc" in list(init_dict.keys()):
-                nb_proc = init_dict["nb_proc"]
             if "is_keep_all_output" in list(init_dict.keys()):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
@@ -130,34 +129,42 @@ class VarParam(VarSimu):
                 ref_simu_index = init_dict["ref_simu_index"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
+            if "is_reuse_femm_file" in list(init_dict.keys()):
+                is_reuse_femm_file = init_dict["is_reuse_femm_file"]
         # Initialisation by argument
-        # paramexplorer_list can be None or a list of ParamExplorer object
-        self.paramexplorer_list = list()
+        # paramexplorer_list can be None or a list of ParamExplorer object or a list of dict
         if type(paramexplorer_list) is list:
-            for obj in paramexplorer_list:
-                if obj is None:  # Default value
-                    self.paramexplorer_list.append(ParamExplorer())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "ParamExplorer",
-                        "OptiDesignVar",
-                        "ParamExplorerSet",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for paramexplorer_list"
+            # Check if the list is only composed of ParamExplorer
+            if len(paramexplorer_list) > 0 and all(
+                isinstance(obj, ParamExplorer) for obj in paramexplorer_list
+            ):
+                # set the list to keep pointer reference
+                self.paramexplorer_list = paramexplorer_list
+            else:
+                self.paramexplorer_list = list()
+                for obj in paramexplorer_list:
+                    if not isinstance(obj, dict):  # Default value
+                        self.paramexplorer_list.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in [
+                            "ParamExplorer",
+                            "OptiDesignVar",
+                            "ParamExplorerSet",
+                        ]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for paramexplorer_list"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.paramexplorer_list.append(class_obj(init_dict=obj))
-                else:
-                    self.paramexplorer_list.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.paramexplorer_list.append(class_obj(init_dict=obj))
+
         elif paramexplorer_list is None:
             self.paramexplorer_list = list()
         else:
@@ -167,11 +174,11 @@ class VarParam(VarSimu):
             name=name,
             desc=desc,
             datakeeper_list=datakeeper_list,
-            nb_proc=nb_proc,
             is_keep_all_output=is_keep_all_output,
             stop_if_error=stop_if_error,
             ref_simu_index=ref_simu_index,
             nb_simu=nb_simu,
+            is_reuse_femm_file=is_reuse_femm_file,
         )
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties
@@ -208,7 +215,8 @@ class VarParam(VarSimu):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from VarSimu
         VarParam_dict = super(VarParam, self).as_dict()

@@ -62,7 +62,8 @@ class ImportGenMatrixSin(ImportMatrix):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -99,16 +100,22 @@ class ImportGenMatrixSin(ImportMatrix):
             if "is_transpose" in list(init_dict.keys()):
                 is_transpose = init_dict["is_transpose"]
         # Initialisation by argument
-        # sin_list can be None or a list of ImportGenVectSin object
-        self.sin_list = list()
+        # sin_list can be None or a list of ImportGenVectSin object or a list of dict
         if type(sin_list) is list:
-            for obj in sin_list:
-                if obj is None:  # Default value
-                    self.sin_list.append(ImportGenVectSin())
-                elif isinstance(obj, dict):
-                    self.sin_list.append(ImportGenVectSin(init_dict=obj))
-                else:
-                    self.sin_list.append(obj)
+            # Check if the list is only composed of ImportGenVectSin
+            if len(sin_list) > 0 and all(
+                isinstance(obj, ImportGenVectSin) for obj in sin_list
+            ):
+                # set the list to keep pointer reference
+                self.sin_list = sin_list
+            else:
+                self.sin_list = list()
+                for obj in sin_list:
+                    if not isinstance(obj, dict):  # Default value
+                        self.sin_list.append(obj)
+                    elif isinstance(obj, dict):
+                        self.sin_list.append(ImportGenVectSin(init_dict=obj))
+
         elif sin_list is None:
             self.sin_list = list()
         else:
@@ -147,7 +154,8 @@ class ImportGenMatrixSin(ImportMatrix):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from ImportMatrix
         ImportGenMatrixSin_dict = super(ImportGenMatrixSin, self).as_dict()

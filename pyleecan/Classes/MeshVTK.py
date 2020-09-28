@@ -6,7 +6,7 @@
 
 from os import linesep
 from logging import getLogger
-from ._check import set_array, check_var, raise_
+from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
 from .Mesh import Mesh
@@ -19,14 +19,14 @@ except ImportError as error:
     get_mesh_pv = error
 
 try:
-    from ..Methods.Mesh.MeshVTK.get_points import get_points
+    from ..Methods.Mesh.MeshVTK.get_point import get_point
 except ImportError as error:
-    get_points = error
+    get_point = error
 
 try:
-    from ..Methods.Mesh.MeshVTK.get_cells import get_cells
+    from ..Methods.Mesh.MeshVTK.get_cell import get_cell
 except ImportError as error:
-    get_cells = error
+    get_cell = error
 
 try:
     from ..Methods.Mesh.MeshVTK.get_normals import get_normals
@@ -43,8 +43,12 @@ try:
 except ImportError as error:
     get_cell_area = error
 
+try:
+    from ..Methods.Mesh.MeshVTK.convert import convert
+except ImportError as error:
+    convert = error
 
-from numpy import array, array_equal
+
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
@@ -74,24 +78,24 @@ class MeshVTK(Mesh):
         )
     else:
         get_mesh_pv = get_mesh_pv
-    # cf Methods.Mesh.MeshVTK.get_points
-    if isinstance(get_points, ImportError):
-        get_points = property(
+    # cf Methods.Mesh.MeshVTK.get_point
+    if isinstance(get_point, ImportError):
+        get_point = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshVTK method get_points: " + str(get_points))
+                ImportError("Can't use MeshVTK method get_point: " + str(get_point))
             )
         )
     else:
-        get_points = get_points
-    # cf Methods.Mesh.MeshVTK.get_cells
-    if isinstance(get_cells, ImportError):
-        get_cells = property(
+        get_point = get_point
+    # cf Methods.Mesh.MeshVTK.get_cell
+    if isinstance(get_cell, ImportError):
+        get_cell = property(
             fget=lambda x: raise_(
-                ImportError("Can't use MeshVTK method get_cells: " + str(get_cells))
+                ImportError("Can't use MeshVTK method get_cell: " + str(get_cell))
             )
         )
     else:
-        get_cells = get_cells
+        get_cell = get_cell
     # cf Methods.Mesh.MeshVTK.get_normals
     if isinstance(get_normals, ImportError):
         get_normals = property(
@@ -121,12 +125,22 @@ class MeshVTK(Mesh):
         )
     else:
         get_cell_area = get_cell_area
+    # cf Methods.Mesh.MeshVTK.convert
+    if isinstance(convert, ImportError):
+        convert = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use MeshVTK method convert: " + str(convert))
+            )
+        )
+    else:
+        convert = convert
     # save method is available in all object
     save = save
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -139,12 +153,12 @@ class MeshVTK(Mesh):
         format="vtk",
         path="",
         name="mesh",
-        group=None,
         surf=None,
         is_vtk_surf=False,
         surf_path="",
         surf_name="surf",
         label=None,
+        dimension=2,
         init_dict=None,
         init_str=None,
     ):
@@ -171,12 +185,12 @@ class MeshVTK(Mesh):
             format = obj.format
             path = obj.path
             name = obj.name
-            group = obj.group
             surf = obj.surf
             is_vtk_surf = obj.is_vtk_surf
             surf_path = obj.surf_path
             surf_name = obj.surf_name
             label = obj.label
+            dimension = obj.dimension
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -190,8 +204,6 @@ class MeshVTK(Mesh):
                 path = init_dict["path"]
             if "name" in list(init_dict.keys()):
                 name = init_dict["name"]
-            if "group" in list(init_dict.keys()):
-                group = init_dict["group"]
             if "surf" in list(init_dict.keys()):
                 surf = init_dict["surf"]
             if "is_vtk_surf" in list(init_dict.keys()):
@@ -202,6 +214,8 @@ class MeshVTK(Mesh):
                 surf_name = init_dict["surf_name"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
+            if "dimension" in list(init_dict.keys()):
+                dimension = init_dict["dimension"]
         # Initialisation by argument
         # Check if the type UnstructuredGrid has been imported with success
         if isinstance(UnstructuredGrid, ImportError):
@@ -211,8 +225,6 @@ class MeshVTK(Mesh):
         self.format = format
         self.path = path
         self.name = name
-        # group can be None, a ndarray or a list
-        set_array(self, "group", group)
         # Check if the type PolyData has been imported with success
         if isinstance(PolyData, ImportError):
             raise ImportError("Unknown type PolyData please install pyvista")
@@ -221,7 +233,7 @@ class MeshVTK(Mesh):
         self.surf_path = surf_path
         self.surf_name = surf_name
         # Call Mesh init
-        super(MeshVTK, self).__init__(label=label)
+        super(MeshVTK, self).__init__(label=label, dimension=dimension)
         # The class is frozen (in Mesh init), for now it's impossible to
         # add new properties
 
@@ -236,13 +248,6 @@ class MeshVTK(Mesh):
         MeshVTK_str += 'format = "' + str(self.format) + '"' + linesep
         MeshVTK_str += 'path = "' + str(self.path) + '"' + linesep
         MeshVTK_str += 'name = "' + str(self.name) + '"' + linesep
-        MeshVTK_str += (
-            "group = "
-            + linesep
-            + str(self.group).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
         MeshVTK_str += "surf = " + str(self.surf) + linesep + linesep
         MeshVTK_str += "is_vtk_surf = " + str(self.is_vtk_surf) + linesep
         MeshVTK_str += 'surf_path = "' + str(self.surf_path) + '"' + linesep
@@ -268,8 +273,6 @@ class MeshVTK(Mesh):
             return False
         if other.name != self.name:
             return False
-        if not array_equal(other.group, self.group):
-            return False
         if other.surf != self.surf:
             return False
         if other.is_vtk_surf != self.is_vtk_surf:
@@ -281,7 +284,8 @@ class MeshVTK(Mesh):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Mesh
         MeshVTK_dict = super(MeshVTK, self).as_dict()
@@ -297,10 +301,6 @@ class MeshVTK(Mesh):
         MeshVTK_dict["format"] = self.format
         MeshVTK_dict["path"] = self.path
         MeshVTK_dict["name"] = self.name
-        if self.group is None:
-            MeshVTK_dict["group"] = None
-        else:
-            MeshVTK_dict["group"] = self.group.tolist()
         if self.surf is None:
             MeshVTK_dict["surf"] = None
         else:  # Store serialized data (using cloudpickle) and str to read it in json save files
@@ -325,7 +325,6 @@ class MeshVTK(Mesh):
         self.format = None
         self.path = None
         self.name = None
-        self.group = None
         self.surf = None
         self.is_vtk_surf = None
         self.surf_path = None
@@ -429,31 +428,6 @@ class MeshVTK(Mesh):
         doc=u"""Name of the mesh file
 
         :Type: str
-        """,
-    )
-
-    def _get_group(self):
-        """getter of group"""
-        return self._group
-
-    def _set_group(self, value):
-        """setter of group"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("group", value, "ndarray")
-        self._group = value
-
-    group = property(
-        fget=_get_group,
-        fset=_set_group,
-        doc=u"""Contain all possible group numbers
-
-        :Type: ndarray
         """,
     )
 

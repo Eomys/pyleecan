@@ -177,7 +177,8 @@ class MeshSolution(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -189,8 +190,8 @@ class MeshSolution(FrozenClass):
         mesh=list(),
         is_same_mesh=True,
         solution=list(),
-        dimension=3,
         group=dict(),
+        dimension=2,
         init_dict=None,
         init_str=None,
     ):
@@ -216,8 +217,8 @@ class MeshSolution(FrozenClass):
             mesh = obj.mesh
             is_same_mesh = obj.is_same_mesh
             solution = obj.solution
-            dimension = obj.dimension
             group = obj.group
+            dimension = obj.dimension
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -229,73 +230,82 @@ class MeshSolution(FrozenClass):
                 is_same_mesh = init_dict["is_same_mesh"]
             if "solution" in list(init_dict.keys()):
                 solution = init_dict["solution"]
-            if "dimension" in list(init_dict.keys()):
-                dimension = init_dict["dimension"]
             if "group" in list(init_dict.keys()):
                 group = init_dict["group"]
+            if "dimension" in list(init_dict.keys()):
+                dimension = init_dict["dimension"]
         # Initialisation by argument
         self.parent = None
         self.label = label
-        # mesh can be None or a list of Mesh object
-        self.mesh = list()
+        # mesh can be None or a list of Mesh object or a list of dict
         if type(mesh) is list:
-            for obj in mesh:
-                if obj is None:  # Default value
-                    self.mesh.append(Mesh())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in ["Mesh", "MeshMat", "MeshVTK"]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name " + class_name + " in init_dict for mesh"
+            # Check if the list is only composed of Mesh
+            if len(mesh) > 0 and all(isinstance(obj, Mesh) for obj in mesh):
+                # set the list to keep pointer reference
+                self.mesh = mesh
+            else:
+                self.mesh = list()
+                for obj in mesh:
+                    if not isinstance(obj, dict):  # Default value
+                        self.mesh.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in ["Mesh", "MeshMat", "MeshVTK"]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for mesh"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.mesh.append(class_obj(init_dict=obj))
-                else:
-                    self.mesh.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.mesh.append(class_obj(init_dict=obj))
+
         elif mesh is None:
             self.mesh = list()
         else:
             self.mesh = mesh
         self.is_same_mesh = is_same_mesh
-        # solution can be None or a list of Solution object
-        self.solution = list()
+        # solution can be None or a list of Solution object or a list of dict
         if type(solution) is list:
-            for obj in solution:
-                if obj is None:  # Default value
-                    self.solution.append(Solution())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Solution",
-                        "Mode",
-                        "SolutionData",
-                        "SolutionMat",
-                        "SolutionVector",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for solution"
+            # Check if the list is only composed of Solution
+            if len(solution) > 0 and all(isinstance(obj, Solution) for obj in solution):
+                # set the list to keep pointer reference
+                self.solution = solution
+            else:
+                self.solution = list()
+                for obj in solution:
+                    if not isinstance(obj, dict):  # Default value
+                        self.solution.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in [
+                            "Solution",
+                            "Mode",
+                            "SolutionData",
+                            "SolutionMat",
+                            "SolutionVector",
+                        ]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for solution"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.solution.append(class_obj(init_dict=obj))
-                else:
-                    self.solution.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.solution.append(class_obj(init_dict=obj))
+
         elif solution is None:
             self.solution = list()
         else:
             self.solution = solution
-        self.dimension = dimension
         # group can be None or a dict of ndarray
         self.group = dict()
         if type(group) is dict:
@@ -309,6 +319,7 @@ class MeshSolution(FrozenClass):
             self.group = dict()
         else:
             self.group = group  # Should raise an error
+        self.dimension = dimension
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -335,13 +346,13 @@ class MeshSolution(FrozenClass):
         for ii in range(len(self.solution)):
             tmp = self.solution[ii].__str__().replace(linesep, linesep + "\t") + linesep
             MeshSolution_str += "solution[" + str(ii) + "] =" + tmp + linesep + linesep
-        MeshSolution_str += "dimension = " + str(self.dimension) + linesep
         if len(self.group) == 0:
             MeshSolution_str += "group = dict()"
         for key, obj in self.group.items():
             MeshSolution_str += (
                 "group[" + key + "] = " + str(self.group[key]) + linesep + linesep
             )
+        MeshSolution_str += "dimension = " + str(self.dimension) + linesep
         return MeshSolution_str
 
     def __eq__(self, other):
@@ -357,14 +368,15 @@ class MeshSolution(FrozenClass):
             return False
         if other.solution != self.solution:
             return False
-        if other.dimension != self.dimension:
-            return False
         if other.group != self.group:
+            return False
+        if other.dimension != self.dimension:
             return False
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         MeshSolution_dict = dict()
         MeshSolution_dict["label"] = self.label
@@ -375,10 +387,10 @@ class MeshSolution(FrozenClass):
         MeshSolution_dict["solution"] = list()
         for obj in self.solution:
             MeshSolution_dict["solution"].append(obj.as_dict())
-        MeshSolution_dict["dimension"] = self.dimension
         MeshSolution_dict["group"] = dict()
         for key, obj in self.group.items():
             MeshSolution_dict["group"][key] = obj.tolist()
+        MeshSolution_dict["dimension"] = self.dimension
         # The class name is added to the dict fordeserialisation purpose
         MeshSolution_dict["__class__"] = "MeshSolution"
         return MeshSolution_dict
@@ -392,8 +404,8 @@ class MeshSolution(FrozenClass):
         self.is_same_mesh = None
         for obj in self.solution:
             obj._set_None()
-        self.dimension = None
         self.group = dict()
+        self.dimension = None
 
     def _get_label(self):
         """getter of label"""
@@ -481,6 +493,31 @@ class MeshSolution(FrozenClass):
         """,
     )
 
+    def _get_group(self):
+        """getter of group"""
+        return self._group
+
+    def _set_group(self, value):
+        """setter of group"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is list:
+                    try:
+                        obj = array(obj)
+                    except:
+                        pass
+        check_var("group", value, "{ndarray}")
+        self._group = value
+
+    group = property(
+        fget=_get_group,
+        fset=_set_group,
+        doc=u"""Dict sorted by groups name with cells indices. 
+
+        :Type: {ndarray}
+        """,
+    )
+
     def _get_dimension(self):
         """getter of dimension"""
         return self._dimension
@@ -498,32 +535,5 @@ class MeshSolution(FrozenClass):
         :Type: int
         :min: 1
         :max: 3
-        """,
-    )
-
-    def _get_group(self):
-        """getter of group"""
-        return self._group
-
-    def _set_group(self, value):
-        """setter of group"""
-        if type(value) is dict:
-            for key, obj in value.items():
-                if obj is None:
-                    obj = array([])
-                elif type(obj) is list:
-                    try:
-                        obj = array(obj)
-                    except:
-                        pass
-        check_var("group", value, "{ndarray}")
-        self._group = value
-
-    group = property(
-        fget=_get_group,
-        fset=_set_group,
-        doc=u"""Dict sorted by groups name with cells indices. 
-
-        :Type: {ndarray}
         """,
     )

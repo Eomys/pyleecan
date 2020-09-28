@@ -5,7 +5,6 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
 
-
 def test_desc_SCIM():
     """Check that the description of a SCIM is correct"""
     SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))

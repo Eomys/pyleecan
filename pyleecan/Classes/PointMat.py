@@ -85,7 +85,8 @@ class PointMat(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -93,7 +94,7 @@ class PointMat(FrozenClass):
 
     def __init__(
         self,
-        coordinate=None,
+        coordinate=[],
         nb_pt=0,
         delta=1e-10,
         indice=None,
@@ -187,7 +188,8 @@ class PointMat(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         PointMat_dict = dict()
         if self.coordinate is None:
@@ -218,9 +220,7 @@ class PointMat(FrozenClass):
 
     def _set_coordinate(self, value):
         """setter of coordinate"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:
@@ -279,9 +279,7 @@ class PointMat(FrozenClass):
 
     def _set_indice(self, value):
         """setter of indice"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:

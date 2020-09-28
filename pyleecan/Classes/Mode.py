@@ -91,7 +91,8 @@ class Mode(SolutionMat):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -107,6 +108,7 @@ class Mode(SolutionMat):
         axis=None,
         type_cell="triangle",
         label=None,
+        dimension=2,
         init_dict=None,
         init_str=None,
     ):
@@ -136,6 +138,7 @@ class Mode(SolutionMat):
             axis = obj.axis
             type_cell = obj.type_cell
             label = obj.label
+            dimension = obj.dimension
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -155,13 +158,20 @@ class Mode(SolutionMat):
                 type_cell = init_dict["type_cell"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
+            if "dimension" in list(init_dict.keys()):
+                dimension = init_dict["dimension"]
         # Initialisation by argument
         self.nat_freq = nat_freq
         self.order_circ = order_circ
         self.order_long = order_long
         # Call SolutionMat init
         super(Mode, self).__init__(
-            field=field, indice=indice, axis=axis, type_cell=type_cell, label=label
+            field=field,
+            indice=indice,
+            axis=axis,
+            type_cell=type_cell,
+            label=label,
+            dimension=dimension,
         )
         # The class is frozen (in SolutionMat init), for now it's impossible to
         # add new properties
@@ -195,7 +205,8 @@ class Mode(SolutionMat):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from SolutionMat
         Mode_dict = super(Mode, self).as_dict()

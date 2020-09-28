@@ -7,12 +7,14 @@ from ....Functions.FEMM.get_mesh_param import get_mesh_param
 
 
 def draw_FEMM(
-    self, nodeprop=None, maxseg=None, propname=None, FEMM_dict=None, hide=False
+    self, femm, nodeprop=None, maxseg=None, propname=None, FEMM_dict=None, hide=False
 ):
     """draw the Surface in FEMM
 
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     nodeprop :
         Nodal property
          (Default value = None)
@@ -46,6 +48,7 @@ def draw_FEMM(
             mesh_dict = get_mesh_param(line.label, FEMM_dict)
         if type(line) in [Arc1, Arc2, Arc3]:
             line.draw_FEMM(
+                femm=femm,
                 nodeprop=nodeprop,
                 maxseg=maxseg,
                 propname=propname,
@@ -54,6 +57,7 @@ def draw_FEMM(
             )
         else:
             line.draw_FEMM(
+                femm=femm,
                 nodeprop=nodeprop,
                 propname=propname,
                 element_size=mesh_dict["element_size"],

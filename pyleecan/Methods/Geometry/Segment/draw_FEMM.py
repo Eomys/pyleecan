@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import femm
-
 from ....Functions.FEMM import boundary_prop
 
 
 def draw_FEMM(
     self,
+    femm,
     nodeprop=None,
     propname=None,
     element_size=None,
@@ -18,6 +17,8 @@ def draw_FEMM(
 
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     nodeprop :
         Nodal property
          (Default value = None)

@@ -175,7 +175,8 @@ class LamSlotMulti(Lamination):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -262,56 +263,60 @@ class LamSlotMulti(Lamination):
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
         # Initialisation by argument
-        # slot_list can be None or a list of Slot object
-        self.slot_list = list()
+        # slot_list can be None or a list of Slot object or a list of dict
         if type(slot_list) is list:
-            for obj in slot_list:
-                if obj is None:  # Default value
-                    self.slot_list.append(Slot())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "Slot",
-                        "Slot19",
-                        "SlotCirc",
-                        "SlotMFlat",
-                        "SlotMPolar",
-                        "SlotMag",
-                        "SlotUD",
-                        "SlotW10",
-                        "SlotW11",
-                        "SlotW12",
-                        "SlotW13",
-                        "SlotW14",
-                        "SlotW15",
-                        "SlotW16",
-                        "SlotW21",
-                        "SlotW22",
-                        "SlotW23",
-                        "SlotW24",
-                        "SlotW25",
-                        "SlotW26",
-                        "SlotW27",
-                        "SlotW28",
-                        "SlotW29",
-                        "SlotW60",
-                        "SlotW61",
-                        "SlotWind",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for slot_list"
+            # Check if the list is only composed of Slot
+            if len(slot_list) > 0 and all(isinstance(obj, Slot) for obj in slot_list):
+                # set the list to keep pointer reference
+                self.slot_list = slot_list
+            else:
+                self.slot_list = list()
+                for obj in slot_list:
+                    if not isinstance(obj, dict):  # Default value
+                        self.slot_list.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in [
+                            "Slot",
+                            "Slot19",
+                            "SlotCirc",
+                            "SlotMFlat",
+                            "SlotMPolar",
+                            "SlotMag",
+                            "SlotUD",
+                            "SlotW10",
+                            "SlotW11",
+                            "SlotW12",
+                            "SlotW13",
+                            "SlotW14",
+                            "SlotW15",
+                            "SlotW16",
+                            "SlotW21",
+                            "SlotW22",
+                            "SlotW23",
+                            "SlotW24",
+                            "SlotW25",
+                            "SlotW26",
+                            "SlotW27",
+                            "SlotW28",
+                            "SlotW29",
+                            "SlotW60",
+                            "SlotW61",
+                            "SlotWind",
+                        ]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for slot_list"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.slot_list.append(class_obj(init_dict=obj))
-                else:
-                    self.slot_list.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.slot_list.append(class_obj(init_dict=obj))
+
         elif slot_list is None:
             self.slot_list = list()
         else:
@@ -373,7 +378,8 @@ class LamSlotMulti(Lamination):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Lamination
         LamSlotMulti_dict = super(LamSlotMulti, self).as_dict()
@@ -429,9 +435,7 @@ class LamSlotMulti(Lamination):
 
     def _set_alpha(self, value):
         """setter of alpha"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:

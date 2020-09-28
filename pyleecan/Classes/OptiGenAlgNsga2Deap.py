@@ -40,6 +40,11 @@ try:
 except ImportError as error:
     check_optimization_input = error
 
+try:
+    from ..Methods.Optimization.OptiGenAlgNsga2Deap.delete_toolbox import delete_toolbox
+except ImportError as error:
+    delete_toolbox = error
+
 
 from inspect import getsource
 from cloudpickle import dumps, loads
@@ -113,12 +118,25 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         )
     else:
         check_optimization_input = check_optimization_input
+    # cf Methods.Optimization.OptiGenAlgNsga2Deap.delete_toolbox
+    if isinstance(delete_toolbox, ImportError):
+        delete_toolbox = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use OptiGenAlgNsga2Deap method delete_toolbox: "
+                    + str(delete_toolbox)
+                )
+            )
+        )
+    else:
+        delete_toolbox = delete_toolbox
     # save method is available in all object
     save = save
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -247,7 +265,8 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from OptiGenAlg
         OptiGenAlgNsga2Deap_dict = super(OptiGenAlgNsga2Deap, self).as_dict()

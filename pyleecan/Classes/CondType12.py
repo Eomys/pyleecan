@@ -122,7 +122,8 @@ class CondType12(Conductor):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -232,7 +233,8 @@ class CondType12(Conductor):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Conductor
         CondType12_dict = super(CondType12, self).as_dict()

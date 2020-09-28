@@ -127,7 +127,8 @@ class MagFEMM(Magnetics):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -147,6 +148,8 @@ class MagFEMM(Magnetics):
         transform_list=[],
         rotor_dxf=None,
         stator_dxf=None,
+        import_file="",
+        is_close_femm=True,
         is_remove_slotS=False,
         is_remove_slotR=False,
         is_remove_vent=False,
@@ -197,6 +200,8 @@ class MagFEMM(Magnetics):
             transform_list = obj.transform_list
             rotor_dxf = obj.rotor_dxf
             stator_dxf = obj.stator_dxf
+            import_file = obj.import_file
+            is_close_femm = obj.is_close_femm
             is_remove_slotS = obj.is_remove_slotS
             is_remove_slotR = obj.is_remove_slotR
             is_remove_vent = obj.is_remove_vent
@@ -237,6 +242,10 @@ class MagFEMM(Magnetics):
                 rotor_dxf = init_dict["rotor_dxf"]
             if "stator_dxf" in list(init_dict.keys()):
                 stator_dxf = init_dict["stator_dxf"]
+            if "import_file" in list(init_dict.keys()):
+                import_file = init_dict["import_file"]
+            if "is_close_femm" in list(init_dict.keys()):
+                is_close_femm = init_dict["is_close_femm"]
             if "is_remove_slotS" in list(init_dict.keys()):
                 is_remove_slotS = init_dict["is_remove_slotS"]
             if "is_remove_slotR" in list(init_dict.keys()):
@@ -294,6 +303,8 @@ class MagFEMM(Magnetics):
             self.stator_dxf = load(stator_dxf)
         else:
             self.stator_dxf = stator_dxf
+        self.import_file = import_file
+        self.is_close_femm = is_close_femm
         # Call Magnetics init
         super(MagFEMM, self).__init__(
             is_remove_slotS=is_remove_slotS,
@@ -346,6 +357,8 @@ class MagFEMM(Magnetics):
             MagFEMM_str += "stator_dxf = " + tmp
         else:
             MagFEMM_str += "stator_dxf = None" + linesep + linesep
+        MagFEMM_str += 'import_file = "' + str(self.import_file) + '"' + linesep
+        MagFEMM_str += "is_close_femm = " + str(self.is_close_femm) + linesep
         return MagFEMM_str
 
     def __eq__(self, other):
@@ -381,10 +394,15 @@ class MagFEMM(Magnetics):
             return False
         if other.stator_dxf != self.stator_dxf:
             return False
+        if other.import_file != self.import_file:
+            return False
+        if other.is_close_femm != self.is_close_femm:
+            return False
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Magnetics
         MagFEMM_dict = super(MagFEMM, self).as_dict()
@@ -406,6 +424,8 @@ class MagFEMM(Magnetics):
             MagFEMM_dict["stator_dxf"] = None
         else:
             MagFEMM_dict["stator_dxf"] = self.stator_dxf.as_dict()
+        MagFEMM_dict["import_file"] = self.import_file
+        MagFEMM_dict["is_close_femm"] = self.is_close_femm
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
@@ -428,6 +448,8 @@ class MagFEMM(Magnetics):
             self.rotor_dxf._set_None()
         if self.stator_dxf is not None:
             self.stator_dxf._set_None()
+        self.import_file = None
+        self.is_close_femm = None
         # Set to None the properties inherited from Magnetics
         super(MagFEMM, self)._set_None()
 
@@ -652,5 +674,41 @@ class MagFEMM(Magnetics):
         doc=u"""To use a dxf version of the rotor instead of build_geometry
 
         :Type: DXFImport
+        """,
+    )
+
+    def _get_import_file(self):
+        """getter of import_file"""
+        return self._import_file
+
+    def _set_import_file(self, value):
+        """setter of import_file"""
+        check_var("import_file", value, "str")
+        self._import_file = value
+
+    import_file = property(
+        fget=_get_import_file,
+        fset=_set_import_file,
+        doc=u"""To import an existing femm file
+
+        :Type: str
+        """,
+    )
+
+    def _get_is_close_femm(self):
+        """getter of is_close_femm"""
+        return self._is_close_femm
+
+    def _set_is_close_femm(self, value):
+        """setter of is_close_femm"""
+        check_var("is_close_femm", value, "bool")
+        self._is_close_femm = value
+
+    is_close_femm = property(
+        fget=_get_is_close_femm,
+        fset=_set_is_close_femm,
+        doc=u"""To close femm automatically after the simulation
+
+        :Type: bool
         """,
     )

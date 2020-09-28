@@ -98,7 +98,6 @@ def test_CEFC_002(CEFC_Lam):
 
 @pytest.mark.skip
 def test_CEFC_002_load():
-    save_path = "C:\\Users\\Raphael\\Desktop\\Git\\pyleecan_tests\\pyleecan\\Results\\SM_CEFC_002_save_mag"
     load_path = join(save_path, "Output.json")
     # Test to load the Meshsolution object (inside the output):
     with open(load_path) as json_file:
@@ -124,4 +123,4 @@ def test_CEFC_002_load():
         save_path=join(save_path, "CEFC_002_H_stator_load.png"),
     )
 
-    FEMM.mag.meshsolution.plot_contour(label="H", group_names=["stator", "/", "airgap"])
+    FEMM.mag.meshsolution.plot_contour(label="H", group_names=["stator", "airgap"])

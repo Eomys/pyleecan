@@ -146,7 +146,8 @@ class SlotMFlat(SlotMag):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -206,34 +207,38 @@ class SlotMFlat(SlotMag):
         self.H0 = H0
         self.W0 = W0
         self.W0_is_rad = W0_is_rad
-        # magnet can be None or a list of MagnetFlat object
-        self.magnet = list()
+        # magnet can be None or a list of MagnetFlat object or a list of dict
         if type(magnet) is list:
-            for obj in magnet:
-                if obj is None:  # Default value
-                    self.magnet.append(MagnetFlat())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in [
-                        "MagnetFlat",
-                        "MagnetType10",
-                        "MagnetType12",
-                        "MagnetType13",
-                    ]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for magnet"
+            # Check if the list is only composed of MagnetFlat
+            if len(magnet) > 0 and all(isinstance(obj, MagnetFlat) for obj in magnet):
+                # set the list to keep pointer reference
+                self.magnet = magnet
+            else:
+                self.magnet = list()
+                for obj in magnet:
+                    if not isinstance(obj, dict):  # Default value
+                        self.magnet.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in [
+                            "MagnetFlat",
+                            "MagnetType10",
+                            "MagnetType12",
+                            "MagnetType13",
+                        ]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for magnet"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.magnet.append(class_obj(init_dict=obj))
-                else:
-                    self.magnet.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.magnet.append(class_obj(init_dict=obj))
+
         elif magnet is None:
             self.magnet = list()
         else:
@@ -279,7 +284,8 @@ class SlotMFlat(SlotMag):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from SlotMag
         SlotMFlat_dict = super(SlotMFlat, self).as_dict()

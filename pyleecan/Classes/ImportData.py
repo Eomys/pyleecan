@@ -42,7 +42,8 @@ class ImportData(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -106,16 +107,20 @@ class ImportData(FrozenClass):
                 symmetries = init_dict["symmetries"]
         # Initialisation by argument
         self.parent = None
-        # axes can be None or a list of ImportData object
-        self.axes = list()
+        # axes can be None or a list of ImportData object or a list of dict
         if type(axes) is list:
-            for obj in axes:
-                if obj is None:  # Default value
-                    self.axes.append(ImportData())
-                elif isinstance(obj, dict):
-                    self.axes.append(ImportData(init_dict=obj))
-                else:
-                    self.axes.append(obj)
+            # Check if the list is only composed of ImportData
+            if len(axes) > 0 and all(isinstance(obj, ImportData) for obj in axes):
+                # set the list to keep pointer reference
+                self.axes = axes
+            else:
+                self.axes = list()
+                for obj in axes:
+                    if not isinstance(obj, dict):  # Default value
+                        self.axes.append(obj)
+                    elif isinstance(obj, dict):
+                        self.axes.append(ImportData(init_dict=obj))
+
         elif axes is None:
             self.axes = list()
         else:
@@ -221,7 +226,8 @@ class ImportData(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         ImportData_dict = dict()
         ImportData_dict["axes"] = list()

@@ -67,7 +67,8 @@ class SolutionVector(Solution):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -78,6 +79,7 @@ class SolutionVector(Solution):
         field=None,
         type_cell="triangle",
         label=None,
+        dimension=2,
         init_dict=None,
         init_str=None,
     ):
@@ -102,6 +104,7 @@ class SolutionVector(Solution):
             field = obj.field
             type_cell = obj.type_cell
             label = obj.label
+            dimension = obj.dimension
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -111,13 +114,17 @@ class SolutionVector(Solution):
                 type_cell = init_dict["type_cell"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
+            if "dimension" in list(init_dict.keys()):
+                dimension = init_dict["dimension"]
         # Initialisation by argument
         # Check if the type VectorField has been imported with success
         if isinstance(VectorField, ImportError):
             raise ImportError("Unknown type VectorField please install SciDataTool")
         self.field = field
         # Call Solution init
-        super(SolutionVector, self).__init__(type_cell=type_cell, label=label)
+        super(SolutionVector, self).__init__(
+            type_cell=type_cell, label=label, dimension=dimension
+        )
         # The class is frozen (in Solution init), for now it's impossible to
         # add new properties
 
@@ -144,7 +151,8 @@ class SolutionVector(Solution):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Solution
         SolutionVector_dict = super(SolutionVector, self).as_dict()

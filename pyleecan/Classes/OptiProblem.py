@@ -31,7 +31,8 @@ class OptiProblem(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -44,6 +45,8 @@ class OptiProblem(FrozenClass):
         obj_func=list(),
         eval_func=None,
         constraint=list(),
+        preprocessing=None,
+        datakeeper_list=list(),
         init_dict=None,
         init_str=None,
     ):
@@ -72,6 +75,8 @@ class OptiProblem(FrozenClass):
             obj_func = obj.obj_func
             eval_func = obj.eval_func
             constraint = obj.constraint
+            preprocessing = obj.preprocessing
+            datakeeper_list = obj.datakeeper_list
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -85,6 +90,10 @@ class OptiProblem(FrozenClass):
                 eval_func = init_dict["eval_func"]
             if "constraint" in list(init_dict.keys()):
                 constraint = init_dict["constraint"]
+            if "preprocessing" in list(init_dict.keys()):
+                preprocessing = init_dict["preprocessing"]
+            if "datakeeper_list" in list(init_dict.keys()):
+                datakeeper_list = init_dict["datakeeper_list"]
         # Initialisation by argument
         self.parent = None
         # output can be None, a Output object or a dict
@@ -112,49 +121,88 @@ class OptiProblem(FrozenClass):
             self.output = output
         else:
             self.output = output
-        # design_var can be None or a list of OptiDesignVar object
-        self.design_var = list()
+        # design_var can be None or a list of OptiDesignVar object or a list of dict
         if type(design_var) is list:
-            for obj in design_var:
-                if obj is None:  # Default value
-                    self.design_var.append(OptiDesignVar())
-                elif isinstance(obj, dict):
-                    self.design_var.append(OptiDesignVar(init_dict=obj))
-                else:
-                    self.design_var.append(obj)
+            # Check if the list is only composed of OptiDesignVar
+            if len(design_var) > 0 and all(
+                isinstance(obj, OptiDesignVar) for obj in design_var
+            ):
+                # set the list to keep pointer reference
+                self.design_var = design_var
+            else:
+                self.design_var = list()
+                for obj in design_var:
+                    if not isinstance(obj, dict):  # Default value
+                        self.design_var.append(obj)
+                    elif isinstance(obj, dict):
+                        self.design_var.append(OptiDesignVar(init_dict=obj))
+
         elif design_var is None:
             self.design_var = list()
         else:
             self.design_var = design_var
-        # obj_func can be None or a list of DataKeeper object
-        self.obj_func = list()
+        # obj_func can be None or a list of DataKeeper object or a list of dict
         if type(obj_func) is list:
-            for obj in obj_func:
-                if obj is None:  # Default value
-                    self.obj_func.append(DataKeeper())
-                elif isinstance(obj, dict):
-                    self.obj_func.append(DataKeeper(init_dict=obj))
-                else:
-                    self.obj_func.append(obj)
+            # Check if the list is only composed of DataKeeper
+            if len(obj_func) > 0 and all(
+                isinstance(obj, DataKeeper) for obj in obj_func
+            ):
+                # set the list to keep pointer reference
+                self.obj_func = obj_func
+            else:
+                self.obj_func = list()
+                for obj in obj_func:
+                    if not isinstance(obj, dict):  # Default value
+                        self.obj_func.append(obj)
+                    elif isinstance(obj, dict):
+                        self.obj_func.append(DataKeeper(init_dict=obj))
+
         elif obj_func is None:
             self.obj_func = list()
         else:
             self.obj_func = obj_func
         self.eval_func = eval_func
-        # constraint can be None or a list of OptiConstraint object
-        self.constraint = list()
+        # constraint can be None or a list of OptiConstraint object or a list of dict
         if type(constraint) is list:
-            for obj in constraint:
-                if obj is None:  # Default value
-                    self.constraint.append(OptiConstraint())
-                elif isinstance(obj, dict):
-                    self.constraint.append(OptiConstraint(init_dict=obj))
-                else:
-                    self.constraint.append(obj)
+            # Check if the list is only composed of OptiConstraint
+            if len(constraint) > 0 and all(
+                isinstance(obj, OptiConstraint) for obj in constraint
+            ):
+                # set the list to keep pointer reference
+                self.constraint = constraint
+            else:
+                self.constraint = list()
+                for obj in constraint:
+                    if not isinstance(obj, dict):  # Default value
+                        self.constraint.append(obj)
+                    elif isinstance(obj, dict):
+                        self.constraint.append(OptiConstraint(init_dict=obj))
+
         elif constraint is None:
             self.constraint = list()
         else:
             self.constraint = constraint
+        self.preprocessing = preprocessing
+        # datakeeper_list can be None or a list of DataKeeper object or a list of dict
+        if type(datakeeper_list) is list:
+            # Check if the list is only composed of DataKeeper
+            if len(datakeeper_list) > 0 and all(
+                isinstance(obj, DataKeeper) for obj in datakeeper_list
+            ):
+                # set the list to keep pointer reference
+                self.datakeeper_list = datakeeper_list
+            else:
+                self.datakeeper_list = list()
+                for obj in datakeeper_list:
+                    if not isinstance(obj, dict):  # Default value
+                        self.datakeeper_list.append(obj)
+                    elif isinstance(obj, dict):
+                        self.datakeeper_list.append(DataKeeper(init_dict=obj))
+
+        elif datakeeper_list is None:
+            self.datakeeper_list = list()
+        else:
+            self.datakeeper_list = datakeeper_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -199,6 +247,26 @@ class OptiProblem(FrozenClass):
                 self.constraint[ii].__str__().replace(linesep, linesep + "\t") + linesep
             )
             OptiProblem_str += "constraint[" + str(ii) + "] =" + tmp + linesep + linesep
+        if self._preprocessing[1] is None:
+            OptiProblem_str += "preprocessing = " + str(self._preprocessing[1])
+        else:
+            OptiProblem_str += (
+                "preprocessing = "
+                + linesep
+                + str(self._preprocessing[1])
+                + linesep
+                + linesep
+            )
+        if len(self.datakeeper_list) == 0:
+            OptiProblem_str += "datakeeper_list = []" + linesep
+        for ii in range(len(self.datakeeper_list)):
+            tmp = (
+                self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            OptiProblem_str += (
+                "datakeeper_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         return OptiProblem_str
 
     def __eq__(self, other):
@@ -216,10 +284,15 @@ class OptiProblem(FrozenClass):
             return False
         if other.constraint != self.constraint:
             return False
+        if other.preprocessing != self.preprocessing:
+            return False
+        if other.datakeeper_list != self.datakeeper_list:
+            return False
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         OptiProblem_dict = dict()
         if self.output is None:
@@ -242,6 +315,16 @@ class OptiProblem(FrozenClass):
         OptiProblem_dict["constraint"] = list()
         for obj in self.constraint:
             OptiProblem_dict["constraint"].append(obj.as_dict())
+        if self.preprocessing is None:
+            OptiProblem_dict["preprocessing"] = None
+        else:
+            OptiProblem_dict["preprocessing"] = [
+                dumps(self._preprocessing[0]).decode("ISO-8859-2"),
+                self._preprocessing[1],
+            ]
+        OptiProblem_dict["datakeeper_list"] = list()
+        for obj in self.datakeeper_list:
+            OptiProblem_dict["datakeeper_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         OptiProblem_dict["__class__"] = "OptiProblem"
         return OptiProblem_dict
@@ -257,6 +340,9 @@ class OptiProblem(FrozenClass):
             obj._set_None()
         self.eval_func = None
         for obj in self.constraint:
+            obj._set_None()
+        self.preprocessing = None
+        for obj in self.datakeeper_list:
             obj._set_None()
 
     def _get_output(self):
@@ -382,5 +468,60 @@ class OptiProblem(FrozenClass):
         doc=u"""List containing the constraints 
 
         :Type: [OptiConstraint]
+        """,
+    )
+
+    def _get_preprocessing(self):
+        """getter of preprocessing"""
+        return self._preprocessing[0]
+
+    def _set_preprocessing(self, value):
+        """setter of preprocessing"""
+        try:
+            check_var("preprocessing", value, "list")
+        except CheckTypeError:
+            check_var("preprocessing", value, "function")
+        if isinstance(value, list):  # Load function from saved dict
+            self._preprocessing = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        elif value is None:
+            self._preprocessing = [None, None]
+        elif callable(value):
+            self._preprocessing = [value, getsource(value)]
+        else:
+            raise TypeError(
+                "Expected function or list from a saved file, got: " + str(type(value))
+            )
+
+    preprocessing = property(
+        fget=_get_preprocessing,
+        fset=_set_preprocessing,
+        doc=u"""Function to execute a preprocessing on the simulation right before it is run.
+
+        :Type: function
+        """,
+    )
+
+    def _get_datakeeper_list(self):
+        """getter of datakeeper_list"""
+        for obj in self._datakeeper_list:
+            if obj is not None:
+                obj.parent = self
+        return self._datakeeper_list
+
+    def _set_datakeeper_list(self, value):
+        """setter of datakeeper_list"""
+        check_var("datakeeper_list", value, "[DataKeeper]")
+        self._datakeeper_list = value
+
+        for obj in self._datakeeper_list:
+            if obj is not None:
+                obj.parent = self
+
+    datakeeper_list = property(
+        fget=_get_datakeeper_list,
+        fset=_set_datakeeper_list,
+        doc=u"""List of DataKeepers to run on every output
+
+        :Type: [DataKeeper]
         """,
     )

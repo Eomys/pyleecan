@@ -20,25 +20,9 @@ def get_axis(self, args=None):
     """
 
     axis_dict = dict()
-
-    along_arg = list()
     comp = self.field.components["x"]
-
     for axis in comp.axes:
-        along_arg.append(axis.name)
-
-    field = comp.get_along(tuple(along_arg))[comp.symbol]
-
-    ## HOTFIX: Remove for next SCIDATATOOL release
-    if self.parent.parent.Nt_tot == 1:
-        field = field[np.newaxis, :]
-
-    size_field = field.shape
-
-    k = 0
-    for ax in along_arg:
-        axis_dict[ax] = size_field[k]
-        k = k + 1
+        axis_dict[axis.name] = comp.get_along(axis.name)[comp.symbol].size
 
     axis_dict["component"] = len(self.field.components)
 

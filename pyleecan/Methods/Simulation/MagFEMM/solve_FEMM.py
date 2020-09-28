@@ -1,4 +1,3 @@
-import femm
 import numpy as np
 
 from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
@@ -12,7 +11,7 @@ from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
 from ....Classes.MeshMat import MeshMat
 
 
-def solve_FEMM(self, output, sym, FEMM_dict):
+def solve_FEMM(self, femm, output, sym):
 
     # Loading parameters for readibility
     angle = output.mag.angle
@@ -20,6 +19,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
     Nt_tot = output.mag.Nt_tot  # Number of time step
     Na_tot = output.mag.Na_tot  # Number of angular step
     save_path = self.get_path_save(output)
+    FEMM_dict = output.mag.FEMM_dict
 
     if (
         hasattr(output.simu.machine.stator, "winding")
@@ -43,8 +43,10 @@ def solve_FEMM(self, output, sym, FEMM_dict):
 
     # Compute the data for each time step
     for ii in range(Nt_tot):
+        self.get_logger().debug("Solving step " + str(ii + 1) + " / " + str(Nt_tot))
         # Update rotor position and currents
         update_FEMM_simulation(
+            femm=femm,
             output=output,
             materials=FEMM_dict["materials"],
             circuits=FEMM_dict["circuits"],
@@ -77,7 +79,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
                 Bt[ii, jj] = -B[0] * np.sin(angle[jj]) + B[1] * np.cos(angle[jj])
 
         # Compute the torque
-        Tem[ii] = comp_FEMM_torque(FEMM_dict, sym=sym)
+        Tem[ii] = comp_FEMM_torque(femm, FEMM_dict, sym=sym)
 
         if (
             hasattr(output.simu.machine.stator, "winding")
@@ -85,7 +87,13 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         ):
             # Phi_wind computation
             Phi_wind_stator[ii, :] = comp_FEMM_Phi_wind(
-                qs, Npcpp, is_stator=True, Lfemm=FEMM_dict["Lfemm"], L1=L1, sym=sym
+                femm,
+                qs,
+                Npcpp,
+                is_stator=True,
+                Lfemm=FEMM_dict["Lfemm"],
+                L1=L1,
+                sym=sym,
             )
 
         # Load mesh data & solution
@@ -93,19 +101,19 @@ def solve_FEMM(self, output, sym, FEMM_dict):
             self.is_get_mesh or self.is_save_FEA
         ):
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
-                save_path, ii
+                femm, save_path, ii
             )
 
             if ii == 0:
                 meshFEMM = [tmpmeshFEMM]
                 groups = [tmpgroups]
-                B = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                H = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                mu = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell])
+                B_elem = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                H_elem = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                mu_elem = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell])
 
-            B[ii, :, 0:2] = tmpB
-            H[ii, :, 0:2] = tmpH
-            mu[ii, :] = tmpmu
+            B_elem[ii, :, 0:2] = tmpB
+            H_elem[ii, :, 0:2] = tmpH
+            mu_elem[ii, :] = tmpmu
 
     # Shift to take into account stator position
     roll_id = int(self.angle_stator * Na_tot / (2 * pi))
@@ -159,6 +167,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         values=Tem,
     )
     output.mag.Tem_av = mean(Tem)
+    self.get_logger().debug("Average Torque: " + str(output.mag.Tem_av) + " N.m")
     output.mag.Tem_rip_pp = abs(np_max(Tem) - np_min(Tem))  # [N.m]
     if output.mag.Tem_av != 0:
         output.mag.Tem_rip_norm = output.mag.Tem_rip_pp / output.mag.Tem_av  # []
@@ -169,7 +178,7 @@ def solve_FEMM(self, output, sym, FEMM_dict):
 
     if self.is_get_mesh:
         output.mag.meshsolution = self.build_meshsolution(
-            Nt_tot, meshFEMM, Time, B, H, mu, groups
+            Nt_tot, meshFEMM, Time, B_elem, H_elem, mu_elem, groups
         )
 
     if self.is_save_FEA:
@@ -184,3 +193,6 @@ def solve_FEMM(self, output, sym, FEMM_dict):
         self.comp_emf()
     else:
         output.mag.emf = None
+
+    if self.is_close_femm:
+        femm.closefemm()
