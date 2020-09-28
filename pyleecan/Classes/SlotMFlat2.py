@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .SlotMag import SlotMag
 
 # Import all class method
@@ -192,7 +194,7 @@ class SlotMFlat2(SlotMag):
         W0=0.0122,
         W0_is_rad=False,
         W1=0.01,
-        magnet=list(),
+        magnet=-1,
         W3=0,
         Zs=36,
         init_dict=None,
@@ -200,30 +202,16 @@ class SlotMFlat2(SlotMag):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            H0 = obj.H0
-            H1 = obj.H1
-            W0 = obj.W0
-            W0_is_rad = obj.W0_is_rad
-            W1 = obj.W1
-            magnet = obj.magnet
-            W3 = obj.W3
-            Zs = obj.Zs
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -243,55 +231,20 @@ class SlotMFlat2(SlotMag):
                 W3 = init_dict["W3"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.H0 = H0
         self.H1 = H1
         self.W0 = W0
         self.W0_is_rad = W0_is_rad
         self.W1 = W1
-        # magnet can be None or a list of MagnetFlat object or a list of dict
-        if type(magnet) is list:
-            # Check if the list is only composed of MagnetFlat
-            if len(magnet) > 0 and all(isinstance(obj, MagnetFlat) for obj in magnet):
-                # set the list to keep pointer reference
-                self.magnet = magnet
-            else:
-                self.magnet = list()
-                for obj in magnet:
-                    if not isinstance(obj, dict):  # Default value
-                        self.magnet.append(obj)
-                    elif isinstance(obj, dict):
-                        # Check that the type is correct (including daughter)
-                        class_name = obj.get("__class__")
-                        if class_name not in [
-                            "MagnetFlat",
-                            "MagnetType10",
-                            "MagnetType12",
-                            "MagnetType13",
-                        ]:
-                            raise InitUnKnowClassError(
-                                "Unknow class name "
-                                + class_name
-                                + " in init_dict for magnet"
-                            )
-                        # Dynamic import to call the correct constructor
-                        module = __import__(
-                            "pyleecan.Classes." + class_name, fromlist=[class_name]
-                        )
-                        class_obj = getattr(module, class_name)
-                        self.magnet.append(class_obj(init_dict=obj))
-
-        elif magnet is None:
-            self.magnet = list()
-        else:
-            self.magnet = magnet
+        self.magnet = magnet
         # Call SlotMag init
         super(SlotMFlat2, self).__init__(W3=W3, Zs=Zs)
         # The class is frozen (in SlotMag init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         SlotMFlat2_str = ""
         # Get the properties inherited from SlotMag
@@ -332,7 +285,7 @@ class SlotMFlat2(SlotMag):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+        """Convert this object in a json seriable dict (can be use in __init__)
         """
 
         # Get the properties inherited from SlotMag
@@ -459,19 +412,25 @@ class SlotMFlat2(SlotMag):
 
     def _get_magnet(self):
         """getter of magnet"""
-        for obj in self._magnet:
-            if obj is not None:
-                obj.parent = self
+        if self._magnet is not None:
+            for obj in self._magnet:
+                if obj is not None:
+                    obj.parent = self
         return self._magnet
 
     def _set_magnet(self, value):
         """setter of magnet"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "magnet"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("magnet", value, "[MagnetFlat]")
         self._magnet = value
-
-        for obj in self._magnet:
-            if obj is not None:
-                obj.parent = self
 
     magnet = property(
         fget=_get_magnet,

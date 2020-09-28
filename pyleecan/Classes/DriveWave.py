@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Drive import Drive
 
 # Import all class method
@@ -42,7 +44,8 @@ class DriveWave(Drive):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -59,28 +62,16 @@ class DriveWave(Drive):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if wave == -1:
-            wave = Import()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            wave = obj.wave
-            Umax = obj.Umax
-            Imax = obj.Imax
-            is_current = obj.is_current
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -92,52 +83,8 @@ class DriveWave(Drive):
                 Imax = init_dict["Imax"]
             if "is_current" in list(init_dict.keys()):
                 is_current = init_dict["is_current"]
-        # Initialisation by argument
-        # wave can be None, a Import object or a dict
-        if isinstance(wave, dict):
-            # Check that the type is correct (including daughter)
-            class_name = wave.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for wave"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.wave = class_obj(init_dict=wave)
-        elif isinstance(wave, str):
-            from ..Functions.load import load
-
-            wave = load(wave)
-            # Check that the type is correct (including daughter)
-            class_name = wave.__class__.__name__
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for wave"
-                )
-            self.wave = wave
-        else:
-            self.wave = wave
+        # Set the properties (value check and convertion are done in setter)
+        self.wave = wave
         # Call Drive init
         super(DriveWave, self).__init__(Umax=Umax, Imax=Imax, is_current=is_current)
         # The class is frozen (in Drive init), for now it's impossible to
@@ -170,7 +117,8 @@ class DriveWave(Drive):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Drive
         DriveWave_dict = super(DriveWave, self).as_dict()
@@ -197,6 +145,13 @@ class DriveWave(Drive):
 
     def _set_wave(self, value):
         """setter of wave"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "wave")
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = Import()
         check_var("wave", value, "Import")
         self._wave = value
 

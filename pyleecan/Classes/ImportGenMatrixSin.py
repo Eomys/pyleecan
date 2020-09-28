@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .ImportMatrix import ImportMatrix
 
 # Import all class method
@@ -62,35 +64,26 @@ class ImportGenMatrixSin(ImportMatrix):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, sin_list=list(), is_transpose=False, init_dict=None, init_str=None
-    ):
+    def __init__(self, sin_list=-1, is_transpose=False, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            sin_list = obj.sin_list
-            is_transpose = obj.is_transpose
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -98,27 +91,8 @@ class ImportGenMatrixSin(ImportMatrix):
                 sin_list = init_dict["sin_list"]
             if "is_transpose" in list(init_dict.keys()):
                 is_transpose = init_dict["is_transpose"]
-        # Initialisation by argument
-        # sin_list can be None or a list of ImportGenVectSin object or a list of dict
-        if type(sin_list) is list:
-            # Check if the list is only composed of ImportGenVectSin
-            if len(sin_list) > 0 and all(
-                isinstance(obj, ImportGenVectSin) for obj in sin_list
-            ):
-                # set the list to keep pointer reference
-                self.sin_list = sin_list
-            else:
-                self.sin_list = list()
-                for obj in sin_list:
-                    if not isinstance(obj, dict):  # Default value
-                        self.sin_list.append(obj)
-                    elif isinstance(obj, dict):
-                        self.sin_list.append(ImportGenVectSin(init_dict=obj))
-
-        elif sin_list is None:
-            self.sin_list = list()
-        else:
-            self.sin_list = sin_list
+        # Set the properties (value check and convertion are done in setter)
+        self.sin_list = sin_list
         # Call ImportMatrix init
         super(ImportGenMatrixSin, self).__init__(is_transpose=is_transpose)
         # The class is frozen (in ImportMatrix init), for now it's impossible to
@@ -153,7 +127,8 @@ class ImportGenMatrixSin(ImportMatrix):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from ImportMatrix
         ImportGenMatrixSin_dict = super(ImportGenMatrixSin, self).as_dict()
@@ -175,19 +150,25 @@ class ImportGenMatrixSin(ImportMatrix):
 
     def _get_sin_list(self):
         """getter of sin_list"""
-        for obj in self._sin_list:
-            if obj is not None:
-                obj.parent = self
+        if self._sin_list is not None:
+            for obj in self._sin_list:
+                if obj is not None:
+                    obj.parent = self
         return self._sin_list
 
     def _set_sin_list(self, value):
         """setter of sin_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "sin_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("sin_list", value, "[ImportGenVectSin]")
         self._sin_list = value
-
-        for obj in self._sin_list:
-            if obj is not None:
-                obj.parent = self
 
     sin_list = property(
         fget=_get_sin_list,

@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -44,36 +46,28 @@ class ImportVectorField(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
-        self, components=dict(), name="", symbol="", init_dict=None, init_str=None
+        self, components=-1, name="", symbol="", init_dict=None, init_str=None
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            components = obj.components
-            name = obj.name
-            symbol = obj.symbol
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -83,20 +77,9 @@ class ImportVectorField(FrozenClass):
                 name = init_dict["name"]
             if "symbol" in list(init_dict.keys()):
                 symbol = init_dict["symbol"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # components can be None or a dict of ImportData object
-        self.components = dict()
-        if type(components) is dict:
-            for key, obj in components.items():
-                if isinstance(obj, dict):
-                    self.components[key] = ImportData(init_dict=obj)
-                else:
-                    self.components[key] = obj
-        elif components is None:
-            self.components = dict()
-        else:
-            self.components = components  # Should raise an error
+        self.components = components
         self.name = name
         self.symbol = symbol
 
@@ -141,7 +124,8 @@ class ImportVectorField(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         ImportVectorField_dict = dict()
         ImportVectorField_dict["components"] = dict()
@@ -163,13 +147,23 @@ class ImportVectorField(FrozenClass):
 
     def _get_components(self):
         """getter of components"""
-        for key, obj in self._components.items():
-            if obj is not None:
-                obj.parent = self
+        if self._components is not None:
+            for key, obj in self._components.items():
+                if obj is not None:
+                    obj.parent = self
         return self._components
 
     def _set_components(self, value):
         """setter of components"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "components"
+                    )
+                    value[key] = class_obj(init_dict=obj)
+        if value is -1:
+            value = dict()
         check_var("components", value, "{ImportData}")
         self._components = value
 

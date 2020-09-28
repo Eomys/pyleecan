@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -60,7 +62,8 @@ class MatMagnetics(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -79,30 +82,16 @@ class MatMagnetics(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if BH_curve == -1:
-            BH_curve = ImportMatrix()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            mur_lin = obj.mur_lin
-            Hc = obj.Hc
-            Brm20 = obj.Brm20
-            alpha_Br = obj.alpha_Br
-            Wlam = obj.Wlam
-            BH_curve = obj.BH_curve
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -118,56 +107,14 @@ class MatMagnetics(FrozenClass):
                 Wlam = init_dict["Wlam"]
             if "BH_curve" in list(init_dict.keys()):
                 BH_curve = init_dict["BH_curve"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.mur_lin = mur_lin
         self.Hc = Hc
         self.Brm20 = Brm20
         self.alpha_Br = alpha_Br
         self.Wlam = Wlam
-        # BH_curve can be None, a ImportMatrix object or a dict
-        if isinstance(BH_curve, dict):
-            # Check that the type is correct (including daughter)
-            class_name = BH_curve.get("__class__")
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for BH_curve"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.BH_curve = class_obj(init_dict=BH_curve)
-        elif isinstance(BH_curve, str):
-            from ..Functions.load import load
-
-            BH_curve = load(BH_curve)
-            # Check that the type is correct (including daughter)
-            class_name = BH_curve.__class__.__name__
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for BH_curve"
-                )
-            self.BH_curve = BH_curve
-        else:
-            self.BH_curve = BH_curve
+        self.BH_curve = BH_curve
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -214,7 +161,8 @@ class MatMagnetics(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         MatMagnetics_dict = dict()
         MatMagnetics_dict["mur_lin"] = self.mur_lin
@@ -340,10 +288,19 @@ class MatMagnetics(FrozenClass):
 
     def _set_BH_curve(self, value):
         """setter of BH_curve"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
         if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
+        elif value is -1:
+            value = ImportMatrix()
+        elif isinstance(value, dict):
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "BH_curve"
+            )
+            value = class_obj(init_dict=value)
         check_var("BH_curve", value, "ImportMatrix")
         self._BH_curve = value
 

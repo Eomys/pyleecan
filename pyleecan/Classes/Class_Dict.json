@@ -220,7 +220,6 @@
             }
         ],
         "daughters": [
-            "Bore",
             "BoreFlower"
         ],
         "desc": "Abstract class for Bore shape",
@@ -657,7 +656,6 @@
             }
         ],
         "daughters": [
-            "Conductor",
             "CondType11",
             "CondType12",
             "CondType21",
@@ -808,7 +806,7 @@
                 "name": "result",
                 "type": "list",
                 "unit": "-",
-                "value": -1
+                "value": []
             }
         ]
     },
@@ -820,7 +818,6 @@
             }
         ],
         "daughters": [
-            "Drive",
             "DriveWave"
         ],
         "desc": "Abstract Drive class",
@@ -897,7 +894,6 @@
             }
         ],
         "daughters": [
-            "EEC",
             "EEC_PMSM"
         ],
         "desc": "Electric module: Equivalent Electrical Circuit abstract class",
@@ -1074,7 +1070,6 @@
             }
         ],
         "daughters": [
-            "FluxLink",
             "FluxLinkFEMM"
         ],
         "desc": "Electric module: Flux Linkage",
@@ -1178,7 +1173,6 @@
             }
         ],
         "daughters": [
-            "Force",
             "ForceMT"
         ],
         "desc": "Forces module abstract object",
@@ -1320,7 +1314,6 @@
             }
         ],
         "daughters": [
-            "GaussPoint",
             "FPGNSeg",
             "FPGNTri"
         ],
@@ -1341,7 +1334,6 @@
             }
         ],
         "daughters": [
-            "Hole",
             "HoleM50",
             "HoleM51",
             "HoleM52",
@@ -2262,7 +2254,6 @@
             }
         ],
         "daughters": [
-            "Import",
             "ImportGenMatrixSin",
             "ImportGenToothSaw",
             "ImportGenVectLin",
@@ -2637,7 +2628,6 @@
             }
         ],
         "daughters": [
-            "ImportMatrix",
             "ImportGenMatrixSin",
             "ImportGenToothSaw",
             "ImportGenVectLin",
@@ -2807,7 +2797,6 @@
             }
         ],
         "daughters": [
-            "IndMag",
             "IndMagFEMM"
         ],
         "desc": "Electric module: Magnetic Inductance",
@@ -2911,7 +2900,6 @@
             }
         ],
         "daughters": [
-            "Input",
             "InputCurrent",
             "InputElec",
             "InputFlux",
@@ -3322,7 +3310,6 @@
             }
         ],
         "daughters": [
-            "LamSlot",
             "LamSlotMag",
             "LamSlotWind",
             "LamSquirrelCage"
@@ -3439,7 +3426,6 @@
             }
         ],
         "daughters": [
-            "LamSlotWind",
             "LamSquirrelCage"
         ],
         "desc": "Lamination with Slot filled with winding",
@@ -3552,7 +3538,6 @@
             }
         ],
         "daughters": [
-            "Lamination",
             "LamHole",
             "LamSlot",
             "LamSlotMag",
@@ -3698,7 +3683,6 @@
             }
         ],
         "daughters": [
-            "Line",
             "Arc",
             "Arc1",
             "Arc2",
@@ -3732,7 +3716,6 @@
             }
         ],
         "daughters": [
-            "Machine",
             "MachineAsync",
             "MachineDFIM",
             "MachineIPMSM",
@@ -4334,7 +4317,6 @@
             }
         ],
         "daughters": [
-            "Magnet",
             "MagnetFlat",
             "MagnetPolar",
             "MagnetType10",
@@ -4397,7 +4379,6 @@
             }
         ],
         "daughters": [
-            "MagnetFlat",
             "MagnetType10",
             "MagnetType12",
             "MagnetType13"
@@ -4419,7 +4400,6 @@
             }
         ],
         "daughters": [
-            "MagnetPolar",
             "MagnetType11",
             "MagnetType14"
         ],
@@ -4698,7 +4678,6 @@
             }
         ],
         "daughters": [
-            "Magnetics",
             "MagFEMM"
         ],
         "desc": "Magnetic module abstract object",
@@ -5266,7 +5245,6 @@
             }
         ],
         "daughters": [
-            "Mesh",
             "MeshMat",
             "MeshVTK"
         ],
@@ -5592,7 +5570,6 @@
             }
         ],
         "daughters": [
-            "Notch",
             "NotchEvenDist"
         ],
         "desc": "Abstract class for notches",
@@ -6734,7 +6711,6 @@
             }
         ],
         "daughters": [
-            "Output",
             "XOutput"
         ],
         "desc": "Main Output object: gather all the outputs of all the modules",
@@ -6854,7 +6830,6 @@
             }
         ],
         "daughters": [
-            "ParamExplorer",
             "OptiDesignVar",
             "ParamExplorerSet"
         ],
@@ -6931,7 +6906,7 @@
                 "name": "value",
                 "type": "list",
                 "unit": "-",
-                "value": -1
+                "value": []
             }
         ]
     },
@@ -7048,7 +7023,6 @@
             }
         ],
         "daughters": [
-            "Post",
             "PostFunction",
             "PostMethod"
         ],
@@ -7115,7 +7089,6 @@
             }
         ],
         "daughters": [
-            "RefCell",
             "RefSegmentP1",
             "RefTriangle3"
         ],
@@ -7194,7 +7167,6 @@
             }
         ],
         "daughters": [
-            "ScalarProduct",
             "ScalarProductL2"
         ],
         "desc": "Store shape functions definition in the reference element",
@@ -7390,7 +7362,6 @@
             }
         ],
         "daughters": [
-            "Simulation",
             "Simu1"
         ],
         "desc": "Abstract class for the simulation",
@@ -7476,7 +7447,6 @@
             }
         ],
         "daughters": [
-            "Slot",
             "Slot19",
             "SlotCirc",
             "SlotMFlat",
@@ -9559,7 +9529,6 @@
             }
         ],
         "daughters": [
-            "Solution",
             "Mode",
             "SolutionData",
             "SolutionMat",
@@ -9835,7 +9804,6 @@
             }
         ],
         "daughters": [
-            "Surface",
             "Circle",
             "PolarArc",
             "SurfLine",
@@ -10103,7 +10071,6 @@
             }
         ],
         "daughters": [
-            "VarSimu",
             "VarLoad",
             "VarLoadCurrent",
             "VarParam"
@@ -10396,7 +10363,6 @@
             }
         ],
         "daughters": [
-            "Winding",
             "WindingCW1L",
             "WindingCW2LR",
             "WindingCW2LT",
@@ -10736,27 +10702,27 @@
                 "max": "",
                 "min": "",
                 "name": "paramexplorer_list",
-                "type": "list",
+                "type": "[ParamExplorer]",
                 "unit": "-",
-                "value": []
+                "value": ""
             },
             {
                 "desc": "List containing Output for each simulation",
                 "max": "",
                 "min": "",
                 "name": "output_list",
-                "type": "list",
+                "type": "[Output]",
                 "unit": "-",
-                "value": []
+                "value": ""
             },
             {
                 "desc": "Dictionnary containing VarParam DataKeeper results in ndarray",
                 "max": "",
                 "min": "",
                 "name": "xoutput_dict",
-                "type": "dict",
+                "type": "{DataKeeper}",
                 "unit": "-",
-                "value": {}
+                "value": ""
             },
             {
                 "desc": "Number of simulations excluding reference simulation",

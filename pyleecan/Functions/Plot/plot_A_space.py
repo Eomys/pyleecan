@@ -3,7 +3,7 @@
 from ..init_fig import init_fig
 from .plot_A_2D import plot_A_2D
 from ...definitions import config_dict
-from numpy import squeeze, split
+from numpy import squeeze, split, max as np_max
 from itertools import repeat
 
 
@@ -150,8 +150,8 @@ def plot_A_space(
             a_str, t_str, data_list=data_list, unit=unit, is_norm=is_norm
         )
     angle = results["angle"]
-    if is_deg and round(max(angle) / 6) % 5 == 0:
-        xticks = [i * round(max(angle) / 6) for i in range(7)]
+    if is_deg and round(np_max(angle) / 6) % 5 == 0:
+        xticks = [i * round(np_max(angle) / 6) for i in range(7)]
     else:
         xticks = None
     Ydatas = [results[data.symbol]] + [

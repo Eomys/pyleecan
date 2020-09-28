@@ -21,10 +21,16 @@ mm = 1e-3
 # For AlmostEqual
 DELTA = 1e-6
 
+
 def test_SlotMFlat2_plot():
     # Internal Slot
     lam = LamSlotMag(
-        slot=-1, L1=25 * mm, Rext=16.6 * mm, Rint=5 * mm, is_internal=True, is_stator=False
+        slot=-1,
+        L1=25 * mm,
+        Rext=16.6 * mm,
+        Rint=5 * mm,
+        is_internal=True,
+        is_stator=False,
     )
     lam.slot = SlotMFlat2(
         H1=1 * mm,
