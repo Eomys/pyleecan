@@ -9,8 +9,6 @@ from Tests import save_plot_path as save_path
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
-
 
 @pytest.mark.METHODS
 class Test_get_polar_eq(object):
@@ -18,6 +16,7 @@ class Test_get_polar_eq(object):
 
     def test_get_polar_eq_SCIM(self):
         """Test that you can create polar equivalent of SCIM machine"""
+        SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
         polar_eq = SCIM_001.get_polar_eq()
 
         plt.close("all")

@@ -13,7 +13,7 @@ from numpy import ones, pi, array
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
-def test_CEFC_001():
+def test_CEFC_001(CEFC_Lam):
     """Test compute the Flux in FEMM without slots and without sliding band."""
     simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
 

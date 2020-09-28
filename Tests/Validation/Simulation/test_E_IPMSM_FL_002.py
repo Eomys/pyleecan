@@ -16,8 +16,6 @@ import pytest
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-
 
 @pytest.mark.long
 @pytest.mark.validation
@@ -25,6 +23,7 @@ IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 def test_E_IPMSM_FL_002():
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine"""
 
+    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     simu = Simu1(name="E_IPMSM_FL_002", machine=IPMSM_A)
 
     # Definition of the input

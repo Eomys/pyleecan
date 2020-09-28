@@ -4,12 +4,11 @@ from os.path import join
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
-IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
 
 def test_desc_SCIM():
     """Check that the description of a SCIM is correct"""
+    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
     desc_dict = SCIM_001.comp_desc_dict()
     assert len(desc_dict) == 9
     assert desc_dict[0]["name"] == "Type"
@@ -42,6 +41,7 @@ def test_desc_SCIM():
 
 def test_desc_IPMSM():
     """Check that the description of an IPMSM is correct"""
+    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     desc_dict = IPMSM_A.comp_desc_dict()
     assert len(desc_dict) == 8
     assert desc_dict[0]["name"] == "Type"

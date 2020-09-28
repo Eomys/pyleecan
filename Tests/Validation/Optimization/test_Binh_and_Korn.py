@@ -31,8 +31,6 @@ from Tests import save_validation_path as save_path
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR, TEST_DIR
 
-SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
-
 
 @pytest.mark.validation
 @pytest.mark.long
@@ -40,6 +38,7 @@ SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 def test_Binh_and_Korn():
     # Defining reference Output
     # Definition of the enforced output of the electrical module
+    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
     Nt = 2
     N0 = 3000
     Is = ImportMatrixVal(

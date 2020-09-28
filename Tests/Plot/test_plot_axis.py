@@ -20,15 +20,15 @@ from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.init_fig import init_subplot
 
-IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
-SynRM_001 = load(join(DATA_DIR, "Machine", "SynRM_001.json"))
-SIPMSM_001 = load(join(DATA_DIR, "Machine", "SIPMSM_001.json"))
-CURVE_COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
+
+@pytest.fixture(scope="module")
+def CURVE_COLORS():
+    return config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
 
-def test_axis_LamSlotMag():
+def test_axis_LamSlotMag(CURVE_COLORS):
     """Axis convention for LamSlot with magnet"""
+    SIPMSM_001 = load(join(DATA_DIR, "Machine", "SIPMSM_001.json"))
     SIPMSM_001.rotor.plot()
     R1 = SIPMSM_001.rotor.Rext * 1.1
     R2 = SIPMSM_001.rotor.Rext * 1.2
@@ -72,8 +72,9 @@ def test_axis_LamSlotMag():
     assert Q_axis == pi / 2
 
 
-def test_axis_LamHoleMag():
+def test_axis_LamHoleMag(CURVE_COLORS):
     """Axis convention for LamHole with magnet"""
+    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     IPMSM_A.rotor.plot()
     R1 = IPMSM_A.rotor.Rext * 1.1
     R2 = IPMSM_A.rotor.Rext * 1.2
@@ -117,8 +118,9 @@ def test_axis_LamHoleMag():
     assert Q_axis == pi / 4
 
 
-def test_axis_LamHole():
+def test_axis_LamHole(CURVE_COLORS):
     """Axis convention for LamHole"""
+    SynRM_001 = load(join(DATA_DIR, "Machine", "SynRM_001.json"))
     SynRM_001.rotor.plot()
     R1 = SynRM_001.rotor.Rext * 1.1
     R2 = SynRM_001.rotor.Rext * 1.2
@@ -165,8 +167,9 @@ def test_axis_LamHole():
 
 @pytest.mark.FEMM
 @pytest.mark.long
-def test_axis_LamWind():
+def test_axis_LamWind(CURVE_COLORS):
     """Axis convention for LamWind"""
+    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
     SCIM_001.stator.plot()
     R1 = SCIM_001.stator.Rext * 1.1
     R2 = SCIM_001.stator.Rext * 1.2
