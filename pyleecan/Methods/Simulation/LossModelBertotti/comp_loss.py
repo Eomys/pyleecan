@@ -5,6 +5,7 @@ from SciDataTool import DataTime, DataFreq, Data1D
 
 from ....Classes.SolutionData import SolutionData
 from ....Methods.Simulation.Input import InputError
+from ....Functions.getattr_recursive import getattr_recursive
 
 
 def _store_solution(meshsolution, field, label=""):
@@ -15,7 +16,7 @@ def _store_solution(meshsolution, field, label=""):
 
 
 def _comp_loss_sum(meshsolution, L1=1, rho=7650, sym=1):
-    """ 
+    """
     Compute losses sum
     """
     area = meshsolution.get_mesh().get_cell_area()
@@ -24,14 +25,13 @@ def _comp_loss_sum(meshsolution, L1=1, rho=7650, sym=1):
     loss = area * loss_norm * L1 * rho * sym
 
     mass = area.sum() * L1 * rho * sym
-    print(f"{meshsolution.label} mass = {mass} kg") # TODO for verification, remove
+    print(f"{meshsolution.label} mass = {mass} kg")  # TODO for verification, remove
 
     return loss.sum()
 
 
 def comp_loss(self, output):
-    """Compute the Losses
-    """
+    """Compute the Losses"""
     if self.parent is None:
         raise InputError(
             "ERROR: The LossModelBertotti object must be in a Loss object to run"
@@ -50,8 +50,22 @@ def comp_loss(self, output):
     output.loss.meshsolutions.append(meshsolution.get_group(self.group))
     output.loss.meshsolutions[-1].solution = []
 
+    # get length and material
+    simu = self.parent.parent
+    
+    if not self.lam.startswith("machine"):
+        raise Exception("Lam string must start with 'machine'")
+
+    _, *attr_list = self.lam.split(".")
+
+    lam = getattr_recursive(simu.machine, attr_list)
+
+    L1 = lam.L1  
+    mat_type = lam.mat_type
+    rho = mat_type.struct.rho 
+
     # compute needed model parameter from material data
-    self.comp_coeff_Bertotti(self.mat_type)
+    self.comp_coeff_Bertotti(mat_type)
 
     # compute loss density
     LossDens = self.comp_loss_norm(meshsolution)
@@ -67,7 +81,11 @@ def comp_loss(self, output):
 
     loss_sum = LossDens.get_along(*axes_list)["LossDens"].sum(axis=freqs_idx[0])
 
-    time = Data1D(name="time", unit="", values=array([0, 1]),)
+    time = Data1D(
+        name="time",
+        unit="",
+        values=array([0, 1]),
+    )
     # time = Data1D(name="time", unit="", values=array([0]), ) # TODO squeeze issue
     axes = [axis for axis in LossDens.axes if axis.name not in ["time", "freqs"]]
 
@@ -85,11 +103,7 @@ def comp_loss(self, output):
     sym = 1 if not output.simu.mag.is_symmetry_a else output.simu.mag.sym_a
     sym *= output.simu.mag.is_antiper_a + 1
 
-    L1 = self.L1 # TODO find better solution to get the length
-    rho = self.mat_type.struct.rho # TODO find better solution ...
-    loss_sum = _comp_loss_sum(
-        output.loss.meshsolutions[-1], L1=L1, rho=rho, sym=sym
-    )
+    loss_sum = _comp_loss_sum(output.loss.meshsolutions[-1], L1=L1, rho=rho, sym=sym)
 
     Time = Data1D(
         name="time",
@@ -105,9 +119,7 @@ def comp_loss(self, output):
         unit="W",
         symbol="Loss",
         axes=[Time],
-        values=loss_sum*ones_like(Time.values),
+        values=loss_sum * ones_like(Time.values),
     )
 
-
     output.loss.losses.append(data)
-    
