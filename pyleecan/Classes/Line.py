@@ -59,7 +59,7 @@ class Line(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Line_str = ""
         if self.parent is None:
@@ -79,7 +79,7 @@ class Line(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+        """Convert this object in a json seriable dict (can be use in __init__)
         """
 
         Line_dict = dict()

@@ -159,7 +159,7 @@ def generate_as_dict(gen_dict, class_dict):
     # Code generation
     dict_str += TAB + "def as_dict(self):\n"
     dict_str += (
-        TAB2 + '"""Convert this objet in a json seriable dict (can '
+        TAB2 + '"""Convert this object in a json seriable dict (can '
         "be use in __init__)\n" + TAB2 + '"""\n\n'
     )
     if class_dict["mother"] != "":

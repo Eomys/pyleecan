@@ -377,7 +377,7 @@ class Output(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Output_str = ""
         if self.parent is None:
@@ -449,7 +449,7 @@ class Output(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+        """Convert this object in a json seriable dict (can be use in __init__)
         """
 
         Output_dict = dict()

@@ -110,7 +110,7 @@ class Electrical(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Electrical_str = ""
         if self.parent is None:
@@ -134,7 +134,7 @@ class Electrical(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
+        """Convert this object in a json seriable dict (can be use in __init__)
         """
 
         Electrical_dict = dict()
