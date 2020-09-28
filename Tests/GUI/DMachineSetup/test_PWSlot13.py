@@ -152,8 +152,7 @@ class test_PWSlot13(TestCase):
         self.assertTrue(self.test_obj.slot.H1_is_rad)
 
     def test_output_txt(self):
-        """Check that the Output text is computed and correct
-        """
+        """Check that the Output text is computed and correct"""
         self.test_obj.slot = SlotW13(
             H0=0.005,
             H1=0.01,

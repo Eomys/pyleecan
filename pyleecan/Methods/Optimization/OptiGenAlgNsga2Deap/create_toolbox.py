@@ -12,7 +12,7 @@ def create_toolbox(self):
     Returns
     -------
     self : OptiGenAlgNsga2Deap
-        OptiGenAlgNsga2Deap with toolbox created 
+        OptiGenAlgNsga2Deap with toolbox created
     """
 
     # Create toolbox
@@ -20,7 +20,7 @@ def create_toolbox(self):
 
     # Create Fitness and individual
     creator.create(
-        "FitnessMin", base.Fitness, weights=[-1 for _ in self.problem.design_var]
+        "FitnessMin", base.Fitness, weights=[-1 for _ in self.problem.obj_func]
     )
     creator.create("Individual", list, typecode="d", fitness=creator.FitnessMin)
 
@@ -40,7 +40,7 @@ def create_toolbox(self):
 
 def create_indiv(create, output, design_var_list):
     """Create individual using DEAP tools
-    
+
     Parameters
     ----------
     creator : function
@@ -48,12 +48,12 @@ def create_indiv(create, output, design_var_list):
     output : ....Classes.Output
         output of the individual
     design_var_list : list
-        Design variables  
-        
+        Design variables
+
     Returns:
     --------
     indiv : list
-        individual 
+        individual
     """
 
     # Extract design variables

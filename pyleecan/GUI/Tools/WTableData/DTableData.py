@@ -19,7 +19,7 @@ class DTableData(Ui_DTableData, QDialog):
 
         Parameters
         ----------
-        data : ndarray 
+        data : ndarray
             Data to display/edit
         Vmin : float
             Minimum value of the data
@@ -46,8 +46,7 @@ class DTableData(Ui_DTableData, QDialog):
         self.si_col.valueChanged.connect(self.set_Ncol)
 
     def update(self):
-        """Update the Widget according to the current data
-        """
+        """Update the Widget according to the current data"""
         self.si_row.setValue(self.data.shape[0])
         self.si_col.setValue(self.data.shape[1])
 
@@ -92,8 +91,7 @@ class DTableData(Ui_DTableData, QDialog):
         self.update_tab()
 
     def update_tab(self):
-        """Update the Table to display the current data + setup edit
-        """
+        """Update the Table to display the current data + setup edit"""
         self.w_tab.clear()
         self.w_tab.setRowCount(self.data.shape[0])
         self.w_tab.setColumnCount(self.data.shape[1])
@@ -109,8 +107,7 @@ class DTableData(Ui_DTableData, QDialog):
                 # self.w_tab.cellWidget(ii, jj).editingFinished.connect(self.set_data)
 
     def set_Nrow(self):
-        """Change the number of row
-        """
+        """Change the number of row"""
         Nrow_1 = self.data.shape[0]
         Nrow_2 = self.si_row.value()
 
@@ -127,8 +124,7 @@ class DTableData(Ui_DTableData, QDialog):
         # Else do nothing
 
     def set_Ncol(self):
-        """Change the number of column
-        """
+        """Change the number of column"""
         Ncol_1 = self.data.shape[1]
         Ncol_2 = self.si_col.value()
 
@@ -145,8 +141,7 @@ class DTableData(Ui_DTableData, QDialog):
         # Else do nothing
 
     def accept(self):
-        """Update the data before closing
-        """
+        """Update the data before closing"""
         self.data = zeros((self.si_row.value(), self.si_col.value()))
         for ii in range(self.si_row.value()):
             for jj in range(self.si_col.value()):

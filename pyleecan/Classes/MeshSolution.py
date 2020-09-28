@@ -177,8 +177,7 @@ class MeshSolution(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -375,8 +374,7 @@ class MeshSolution(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         MeshSolution_dict = dict()
         MeshSolution_dict["label"] = self.label
@@ -501,9 +499,7 @@ class MeshSolution(FrozenClass):
         """setter of group"""
         if type(value) is dict:
             for key, obj in value.items():
-                if obj is None:
-                    obj = array([])
-                elif type(obj) is list:
+                if type(obj) is list:
                     try:
                         obj = array(obj)
                     except:

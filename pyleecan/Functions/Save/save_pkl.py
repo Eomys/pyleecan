@@ -3,7 +3,7 @@ from cloudpickle import dump
 
 def save_pkl(obj, save_path):
     """Save a Pyleecan object in a pkl file using cloudpickle
-    
+
     Parameters
     ----------
     obj: Pyleecan object

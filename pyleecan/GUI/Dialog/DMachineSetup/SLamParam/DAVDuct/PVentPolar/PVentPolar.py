@@ -10,8 +10,7 @@ from .......GUI.Dialog.DMachineSetup.SLamParam.DAVDuct.PVentPolar.Gen_PVentPolar
 
 
 class PVentPolar(Gen_PVentPolar, QWidget):
-    """Page to setup the Ventilation Polar
-    """
+    """Page to setup the Ventilation Polar"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -125,7 +124,7 @@ class PVentPolar(Gen_PVentPolar, QWidget):
         Parameters
         ----------
         self : PVentPolar
-            A PVentPolar object    
+            A PVentPolar object
 
         Returns
         -------

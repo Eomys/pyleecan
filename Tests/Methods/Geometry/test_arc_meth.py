@@ -801,8 +801,7 @@ split_test.append(
 
 @pytest.mark.parametrize("test_dict", split_test)
 def test_split_line(test_dict):
-    """Check that the intersection and the split_line is computed correctly
-    """
+    """Check that the intersection and the split_line is computed correctly"""
     arc_obj = test_dict["arc"]
 
     # Check center
@@ -1027,8 +1026,7 @@ D_test.append(
 
 @pytest.mark.parametrize("test_dict", D_test)
 def test_distance(test_dict):
-    """Check the comp_distance method
-    """
+    """Check the comp_distance method"""
     arc_obj = test_dict["arc"]
 
     # Check center

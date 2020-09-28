@@ -357,8 +357,7 @@ class test_Arc2_meth(TestCase):
 
     @data(*discretize_test)
     def test_dicretize(self, test_dict):
-        """Check that you can discretize an arc2
-        """
+        """Check that you can discretize an arc2"""
         arc = Arc2(test_dict["begin"], test_dict["center"], test_dict["angle"])
 
         result = arc.discretize(test_dict["nb_point"])
@@ -370,37 +369,32 @@ class test_Arc2_meth(TestCase):
             self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
 
     def test_discretize_Point_error(self):
-        """Check that dicretize can detect a one point arc2
-        """
+        """Check that dicretize can detect a one point arc2"""
         arc = Arc2(0, 0, 2)
         with self.assertRaises(PointArc2Error):
             arc.discretize(5)
 
     def test_discretize_Angle_error(self):
-        """Check that discretize can detect a null angle arc2
-        """
+        """Check that discretize can detect a null angle arc2"""
         arc = Arc2(0, 1, 0)
         with self.assertRaises(AngleArc2Error):
             arc.discretize(5)
 
     def test_discretize_Nb_error(self):
-        """Check that discretize can detect a wrong arg
-        """
+        """Check that discretize can detect a wrong arg"""
         arc = Arc2(0, 1, 1)
         with self.assertRaises(NbPointArc2DError):
             arc.discretize(-1)
 
     def test_discretize_Nb_Type_error(self):
-        """Check that discretize can detect a wrong arg
-        """
+        """Check that discretize can detect a wrong arg"""
         arc = Arc2(0, 1, 1)
         with self.assertRaises(NbPointArc2DError):
             arc.discretize("test")
 
     @data(*comp_length_test)
     def test_comp_length(self, test_dict):
-        """Check that you the length return by comp_length is correct
-        """
+        """Check that you the length return by comp_length is correct"""
         arc = Arc2(test_dict["begin"], test_dict["center"], test_dict["angle"])
 
         a = float(arc.comp_length())
@@ -408,22 +402,19 @@ class test_Arc2_meth(TestCase):
         self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
 
     def test_comp_length_Point_error(self):
-        """Check that comp_length can detect a one point arc2
-        """
+        """Check that comp_length can detect a one point arc2"""
         arc = Arc2(0, 0, 2)
         with self.assertRaises(PointArc2Error):
             arc.comp_length()
 
     def test_comp_length_angle_error(self):
-        """Check that comp_length can detect a null angle arc2
-        """
+        """Check that comp_length can detect a null angle arc2"""
         arc = Arc2(0, 1, 0)
         with self.assertRaises(AngleArc2Error):
             arc.comp_length()
 
     def test_comp_radius(self):
-        """Check that the radius is correct
-        """
+        """Check that the radius is correct"""
         test_obj = Arc2(1, 0, pi / 2)
         result = test_obj.comp_radius()
 
@@ -435,15 +426,13 @@ class test_Arc2_meth(TestCase):
         self.assertAlmostEqual(result, 2)
 
     def test_get_center(self):
-        """Check that the center is returned correctly
-        """
+        """Check that the center is returned correctly"""
         test_obj = Arc2(1, 1 + 1j, pi)
         result = test_obj.get_center()
         self.assertEqual(result, 1 + 1j)
 
     def test_get_end(self):
-        """Check that the end is correct
-        """
+        """Check that the end is correct"""
         test_obj = Arc2(1, 0, pi / 2)
         result = test_obj.get_end()
 
@@ -462,8 +451,7 @@ class test_Arc2_meth(TestCase):
 
     @data(*comp_mid_test)
     def test_get_middle(self, test_dict):
-        """Check that the middle is computed correctly
-        """
+        """Check that the middle is computed correctly"""
         arc = Arc2(
             begin=test_dict["begin"],
             center=test_dict["center"],
@@ -474,8 +462,7 @@ class test_Arc2_meth(TestCase):
 
     @data(*comp_rotate_test)
     def test_rotate(self, test_dict):
-        """Check that you can rotate the arc2
-        """
+        """Check that you can rotate the arc2"""
         arc = Arc2(
             begin=test_dict["begin"],
             center=test_dict["center"],
@@ -490,8 +477,7 @@ class test_Arc2_meth(TestCase):
 
     @data(*comp_translate_test)
     def test_translate(self, test_dict):
-        """Check that you can translate the arc2
-        """
+        """Check that you can translate the arc2"""
         arc = Arc2(
             begin=test_dict["begin"],
             center=test_dict["center"],
@@ -506,8 +492,7 @@ class test_Arc2_meth(TestCase):
 
     @data(*get_angle_test)
     def test_get_angle(self, test_dict):
-        """Check that the arc2 computed angle is correct
-        """
+        """Check that the arc2 computed angle is correct"""
         arc = Arc2(
             begin=test_dict["begin"],
             center=test_dict["center"],
@@ -518,8 +503,7 @@ class test_Arc2_meth(TestCase):
 
     @data(*split_half_test)
     def test_split_half(self, test_dict):
-        """Check that the arc2 split is correct
-        """
+        """Check that the arc2 split is correct"""
         arc = Arc2(
             begin=test_dict["begin"],
             center=test_dict["center"],

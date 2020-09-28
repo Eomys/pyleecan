@@ -26,14 +26,13 @@ import random
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR, TEST_DIR
 
-SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
-
 
 @pytest.mark.validation
 @pytest.mark.long
 @pytest.mark.DEAP
 def test_zdt3():
     # ### Defining reference Output
+    SCIM_001 = load(join(DATA_DIR, "Machine", "SCIM_001.json"))
 
     # Definition of the enforced output of the electrical module
     Nt = 2

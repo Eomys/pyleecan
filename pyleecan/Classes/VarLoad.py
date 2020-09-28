@@ -31,6 +31,7 @@ except ImportError as error:
 
 from ._check import InitUnKnowClassError
 from .DataKeeper import DataKeeper
+from .Post import Post
 
 
 class VarLoad(VarSimu):
@@ -80,8 +81,7 @@ class VarLoad(VarSimu):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -92,11 +92,12 @@ class VarLoad(VarSimu):
         name="",
         desc="",
         datakeeper_list=list(),
-        nb_proc=1,
         is_keep_all_output=False,
         stop_if_error=False,
         ref_simu_index=None,
         nb_simu=0,
+        is_reuse_femm_file=True,
+        postproc_list=list(),
         init_dict=None,
         init_str=None,
     ):
@@ -121,11 +122,12 @@ class VarLoad(VarSimu):
             name = obj.name
             desc = obj.desc
             datakeeper_list = obj.datakeeper_list
-            nb_proc = obj.nb_proc
             is_keep_all_output = obj.is_keep_all_output
             stop_if_error = obj.stop_if_error
             ref_simu_index = obj.ref_simu_index
             nb_simu = obj.nb_simu
+            is_reuse_femm_file = obj.is_reuse_femm_file
+            postproc_list = obj.postproc_list
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -135,8 +137,6 @@ class VarLoad(VarSimu):
                 desc = init_dict["desc"]
             if "datakeeper_list" in list(init_dict.keys()):
                 datakeeper_list = init_dict["datakeeper_list"]
-            if "nb_proc" in list(init_dict.keys()):
-                nb_proc = init_dict["nb_proc"]
             if "is_keep_all_output" in list(init_dict.keys()):
                 is_keep_all_output = init_dict["is_keep_all_output"]
             if "stop_if_error" in list(init_dict.keys()):
@@ -145,17 +145,22 @@ class VarLoad(VarSimu):
                 ref_simu_index = init_dict["ref_simu_index"]
             if "nb_simu" in list(init_dict.keys()):
                 nb_simu = init_dict["nb_simu"]
+            if "is_reuse_femm_file" in list(init_dict.keys()):
+                is_reuse_femm_file = init_dict["is_reuse_femm_file"]
+            if "postproc_list" in list(init_dict.keys()):
+                postproc_list = init_dict["postproc_list"]
         # Initialisation by argument
         # Call VarSimu init
         super(VarLoad, self).__init__(
             name=name,
             desc=desc,
             datakeeper_list=datakeeper_list,
-            nb_proc=nb_proc,
             is_keep_all_output=is_keep_all_output,
             stop_if_error=stop_if_error,
             ref_simu_index=ref_simu_index,
             nb_simu=nb_simu,
+            is_reuse_femm_file=is_reuse_femm_file,
+            postproc_list=postproc_list,
         )
         # The class is frozen (in VarSimu init), for now it's impossible to
         # add new properties
@@ -180,8 +185,7 @@ class VarLoad(VarSimu):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from VarSimu
         VarLoad_dict = super(VarLoad, self).as_dict()

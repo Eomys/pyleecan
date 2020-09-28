@@ -84,9 +84,9 @@ class SidebarWindow(QtWidgets.QMainWindow):
         self.io_stack.addWidget(widget)
 
     def eventFilter(self, obj, event):
-        """ 
-        Event Filter to disable 'Esc'-Key in a Widgets. 
-        To install eventFilter on a Widget: 
+        """
+        Event Filter to disable 'Esc'-Key in a Widgets.
+        To install eventFilter on a Widget:
             widget.installEventFilter(instance_of_main_window)
         """
         if event.type() == QtCore.QEvent.KeyPress:

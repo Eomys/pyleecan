@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import femm
 from numpy import angle, pi, floor_divide
 from ...Classes.HoleM50 import HoleM50
 from ...Classes.HoleM51 import HoleM51
@@ -9,10 +8,12 @@ from ...Methods import NotImplementedYetError
 from ...Functions.FEMM.get_mesh_param import get_mesh_param
 
 
-def assign_FEMM_surface(surf, prop, FEMM_dict, rotor, stator):
+def assign_FEMM_surface(femm, surf, prop, FEMM_dict, rotor, stator):
     """Assign the property given in parameter to surface having the label given
     Parameters
     ----------
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     surf : Surface
         the surface to assign
     prop : str

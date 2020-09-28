@@ -4,7 +4,7 @@ import numpy as np
 
 
 def shape_function(self, g_point, nb_gpt):
-    """ Return the values of linear shape functions in reference 2 node segment for a given point
+    """Return the values of linear shape functions in reference 2 node segment for a given point
 
     Parameters
      ----------
@@ -18,7 +18,7 @@ def shape_function(self, g_point, nb_gpt):
      value: array
          interpolated field
 
-     """
+    """
 
     nb_func = 2
     values = np.zeros(

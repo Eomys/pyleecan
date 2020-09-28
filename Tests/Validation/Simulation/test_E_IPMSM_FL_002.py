@@ -23,8 +23,7 @@ IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 @pytest.mark.validation
 @pytest.mark.FEMM
 def test_E_IPMSM_FL_002():
-    """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine
-    """
+    """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine"""
 
     simu = Simu1(name="E_IPMSM_FL_002", machine=IPMSM_A)
 

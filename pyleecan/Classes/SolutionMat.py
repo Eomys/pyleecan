@@ -57,8 +57,7 @@ class SolutionMat(Solution):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -168,8 +167,7 @@ class SolutionMat(Solution):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Solution
         SolutionMat_dict = super(SolutionMat, self).as_dict()
@@ -202,9 +200,7 @@ class SolutionMat(Solution):
 
     def _set_field(self, value):
         """setter of field"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:
@@ -227,9 +223,7 @@ class SolutionMat(Solution):
 
     def _set_indice(self, value):
         """setter of indice"""
-        if value is None:
-            value = array([])
-        elif type(value) is list:
+        if type(value) is list:
             try:
                 value = array(value)
             except:

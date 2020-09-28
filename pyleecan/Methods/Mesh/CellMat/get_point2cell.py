@@ -24,7 +24,9 @@ def get_point2cell(self, pt_indice):
     connect = self.connectivity
     ind = self.indice
 
-    if len(connect.shape) > 1:  # If there is more than 1 element
+    if (
+        connect is not None and len(connect.shape) > 1
+    ):  # If there is more than 1 element
         Ielem = np.where(connect == pt_indice)[0]
         pt_to_cell = ind[Ielem]
     else:

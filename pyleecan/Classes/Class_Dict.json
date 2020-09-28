@@ -307,7 +307,7 @@
                 "name": "connectivity",
                 "type": "ndarray",
                 "unit": "",
-                "value": ""
+                "value": []
             },
             {
                 "desc": "Total number of elements",
@@ -334,7 +334,7 @@
                 "name": "indice",
                 "type": "ndarray",
                 "unit": "",
-                "value": ""
+                "value": []
             },
             {
                 "desc": "Define FEA interpolation",
@@ -4477,6 +4477,24 @@
                 "type": "DXFImport",
                 "unit": "",
                 "value": null
+            },
+            {
+                "desc": "To import an existing femm file",
+                "max": "",
+                "min": "",
+                "name": "import_file",
+                "type": "str",
+                "unit": "",
+                "value": ""
+            },
+            {
+                "desc": "To close femm automatically after the simulation",
+                "max": "",
+                "min": "",
+                "name": "is_close_femm",
+                "type": "bool",
+                "unit": "",
+                "value": 1
             }
         ]
     },
@@ -6008,7 +6026,8 @@
             "mutate",
             "cross",
             "create_toolbox",
-            "check_optimization_input"
+            "check_optimization_input",
+            "delete_toolbox"
         ],
         "mother": "OptiGenAlg",
         "name": "OptiGenAlgNsga2Deap",
@@ -6084,6 +6103,24 @@
                 "min": "",
                 "name": "constraint",
                 "type": "[OptiConstraint]",
+                "unit": "",
+                "value": -1
+            },
+            {
+                "desc": "Function to execute a preprocessing on the simulation right before it is run.",
+                "max": "",
+                "min": "",
+                "name": "preprocessing",
+                "type": "function",
+                "unit": "",
+                "value": null
+            },
+            {
+                "desc": "List of DataKeepers to run on every output",
+                "max": "",
+                "min": "",
+                "name": "datakeeper_list",
+                "type": "[DataKeeper]",
                 "unit": "",
                 "value": -1
             }
@@ -7163,7 +7200,7 @@
                 "name": "coordinate",
                 "type": "ndarray",
                 "unit": "",
-                "value": null
+                "value": []
             },
             {
                 "desc": "Total number of nodes",
@@ -7239,6 +7276,73 @@
                 "value": 1
             }
         ]
+    },
+    "Post": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [
+            "Post",
+            "PostFunction",
+            "PostMethod"
+        ],
+        "desc": "Abstract class for postprocessing",
+        "is_internal": false,
+        "methods": [],
+        "mother": "",
+        "name": "Post",
+        "package": "Post",
+        "path": "pyleecan/Generator/ClassesRef/Post/Post.csv",
+        "properties": []
+    },
+    "PostFunction": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Post-processing from a user-defined function",
+        "is_internal": false,
+        "methods": [],
+        "mother": "Post",
+        "name": "PostFunction",
+        "package": "Post",
+        "path": "pyleecan/Generator/ClassesRef/Post/PostFunction.csv",
+        "properties": [
+            {
+                "desc": "Post-processing that takes an output in argument",
+                "max": "",
+                "min": "",
+                "name": "run",
+                "type": "function",
+                "unit": "",
+                "value": null
+            }
+        ]
+    },
+    "PostMethod": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Abstract class for post-processing defined in the method run",
+        "is_internal": false,
+        "methods": [
+            "run"
+        ],
+        "mother": "Post",
+        "name": "PostMethod",
+        "package": "Post",
+        "path": "pyleecan/Generator/ClassesRef/Post/PostMethod.csv",
+        "properties": []
     },
     "RefCell": {
         "constants": [
@@ -7598,6 +7702,15 @@
                 "type": "VarSimu",
                 "unit": "-",
                 "value": null
+            },
+            {
+                "desc": "List of postprocessings to run on Output after the simulation",
+                "max": "",
+                "min": "",
+                "name": "postproc_list",
+                "type": "[Post]",
+                "unit": "-",
+                "value": []
             }
         ]
     },
@@ -10156,7 +10269,10 @@
         "desc": "Abstract class for the multi-simulation",
         "is_internal": false,
         "methods": [
-            "run"
+            "run",
+            "set_reused_data",
+            "check_param",
+            "get_simulations"
         ],
         "mother": "",
         "name": "VarSimu",
@@ -10189,15 +10305,6 @@
                 "type": "[DataKeeper]",
                 "unit": "-",
                 "value": []
-            },
-            {
-                "desc": "Number of processors used to run the simulations",
-                "max": "",
-                "min": "1",
-                "name": "nb_proc",
-                "type": "int",
-                "unit": "-",
-                "value": 1
             },
             {
                 "desc": "True to store every output in a list",
@@ -10234,6 +10341,24 @@
                 "type": "int",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "True to reuse the femm file for each simulation (draw the machine only once, MagFEMM only)",
+                "max": "",
+                "min": "",
+                "name": "is_reuse_femm_file",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "List of post-processing to run on XOutput after the multisimulation",
+                "max": "",
+                "min": "",
+                "name": "postproc_list",
+                "type": "[Post]",
+                "unit": "-",
+                "value": []
             }
         ]
     },

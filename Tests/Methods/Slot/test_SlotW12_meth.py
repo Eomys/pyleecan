@@ -52,8 +52,7 @@ class test_SlotW12_meth(TestCase):
 
     @data(*slotW12_test)
     def test_comp_surface(self, test_dict):
-        """Check that the computation of the surface is correct
-        """
+        """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_surface()
 
@@ -68,8 +67,7 @@ class test_SlotW12_meth(TestCase):
 
     @data(*slotW12_test)
     def test_comp_surface_wind(self, test_dict):
-        """Check that the computation of the winding surface is correct
-        """
+        """Check that the computation of the winding surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_surface_wind()
 
@@ -84,8 +82,7 @@ class test_SlotW12_meth(TestCase):
 
     @data(*slotW12_test)
     def test_comp_height(self, test_dict):
-        """Check that the computation of the height is correct
-        """
+        """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_height()
 
@@ -100,8 +97,7 @@ class test_SlotW12_meth(TestCase):
 
     @data(*slotW12_test)
     def test_comp_angle_opening(self, test_dict):
-        """Check that the computation of the average opening angle iscorrect
-        """
+        """Check that the computation of the average opening angle iscorrect"""
         test_obj = test_dict["test_obj"]
         a = test_obj.slot.comp_angle_opening()
         self.assertEqual(a, 2 * arcsin(2 * test_obj.slot.R2 / (2 * 0.1325)))
@@ -112,8 +108,7 @@ class test_SlotW12_meth(TestCase):
 
     @data(*slotW12_test)
     def test_comp_angle_wind_eq(self, test_dict):
-        """Check that the computation of the average angle is correct
-        """
+        """Check that the computation of the average angle is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_angle_wind_eq()
 
@@ -123,8 +118,7 @@ class test_SlotW12_meth(TestCase):
         self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
 
     def test_build_geometry(self):
-        """Check if the build_geometry of the slot is correct
-        """
+        """Check if the build_geometry of the slot is correct"""
         test_obj = SlotW12(H0=1e-3, H1=6e-3, R1=0.5e-3, R2=2e-3)
         lam = LamSlot(is_internal=True, slot=test_obj, Rext=1)
 
@@ -161,8 +155,7 @@ class test_SlotW12_meth(TestCase):
             self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
 
     def test_build_geometry_wind(self):
-        """Check if the build_geometry_wind works correctly
-        """
+        """Check if the build_geometry_wind works correctly"""
 
         test_obj = SlotW12(H0=1e-3, H1=6e-3, R1=0.5e-3, R2=2e-3)
         lam = LamSlot(is_internal=True, slot=test_obj, Rext=1)

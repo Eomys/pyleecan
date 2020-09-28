@@ -5,7 +5,6 @@ from ....definitions import MAIN_DIR
 from ....Classes.MeshMat import MeshMat
 from ....Classes.CellMat import CellMat
 from ....Classes.PointMat import PointMat
-from femm import callfemm
 from os.path import join
 
 from ....Functions.FEMM import (
@@ -28,13 +27,15 @@ from ....Functions.FEMM import (
 )
 
 
-def get_meshsolution(self, save_path, j_t0):
+def get_meshsolution(self, femm, save_path, j_t0):
     """Load the mesh data and solution data. FEMM must be working and a simulation must have been solved.
 
     Parameters
     ----------
     self : MagFEMM
         a MagFEMM object
+    femm : FEMMHandler
+        client to send command to a FEMM instance
     is_get_mesh : bool
         1 to load the mesh and solution into the simulation
     is_save_FEA : bool
@@ -71,7 +72,7 @@ def get_meshsolution(self, save_path, j_t0):
     # Run the LUA externally using FEMM LUA console and store the data in the
     # temporary text files
     path_lua_out2 = path_lua_out.replace("\\", "/")
-    callfemm('dofile("' + path_lua_out2 + '")')
+    femm.callfemm('dofile("' + path_lua_out2 + '")')
 
     # Delete the LUA script
     os.remove(path_lua_out)

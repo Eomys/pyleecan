@@ -2,6 +2,7 @@
 
 from ....Functions.FEMM.draw_FEMM import draw_FEMM
 from ....Functions.Electrical.coordinate_transformation import n2dq
+from ....Classes._FEMMHandler import FEMMHandler
 from numpy import pi, split, mean
 
 
@@ -30,10 +31,13 @@ def comp_inductance(self, output):
     else:
         sym = 1
 
+    # Open FEMM
+    femm = FEMMHandler()
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
     FEMM_dict = draw_FEMM(
-        output,
+        femm=femm,
+        output=output,
         is_mmfr=1,
         is_mmfs=1,
         sym=sym,
@@ -43,7 +47,7 @@ def comp_inductance(self, output):
     )
 
     # Solve for all time step and store all the results in output
-    Phi_wind = self.solve_FEMM(output, sym, FEMM_dict)
+    Phi_wind = self.solve_FEMM(femm, output, sym, FEMM_dict)
 
     # D/Q transform
     time = output.elec.time

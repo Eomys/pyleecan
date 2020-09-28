@@ -53,8 +53,7 @@ load_preview_test = [SCIM_dict, IPMSM_dict]
 @pytest.mark.GUI
 class TestSPreview(object):
     def setup_method(self, method):
-        """ setup any state specific to the execution of the given module.
-        """
+        """setup any state specific to the execution of the given module."""
         # MatLib widget
         matlib = MatLib(matlib_path)
         dmatlib = DMatLib(matlib=matlib)
@@ -62,22 +61,21 @@ class TestSPreview(object):
 
     @classmethod
     def setup_class(cls):
-        """ setup any state specific to the execution of the given class (which
+        """setup any state specific to the execution of the given class (which
         usually contains tests).
         """
         cls.app = QtWidgets.QApplication(sys.argv)
 
     @classmethod
     def teardown_class(cls):
-        """ teardown any state that was previously setup with a call to
+        """teardown any state that was previously setup with a call to
         setup_class.
         """
         cls.app.quit()
 
     @pytest.mark.parametrize("test_dict", load_preview_test)
     def test_load(self, test_dict):
-        """Check that you can load a machine
-        """
+        """Check that you can load a machine"""
         assert isfile(test_dict["file_path"])
 
         return_value = (test_dict["file_path"], "Json (*.json)")
