@@ -62,7 +62,7 @@ def generate_as_dict(gen_dict, class_dict):
                 + class_name
                 + '_dict["'
                 + prop["name"]
-                + '"].append(obj.to_list())\n'
+                + '"].append(obj.tolist())\n'
             )
         elif prop["type"] == "{ndarray}":
             # Add => "class_name ["var_name"] = self.var_name.tolist()" to
@@ -77,7 +77,7 @@ def generate_as_dict(gen_dict, class_dict):
                 + class_name
                 + '_dict["'
                 + prop["name"]
-                + '"][key] = obj.to_list()\n'
+                + '"][key] = obj.tolist()\n'
             )
         elif is_list_pyleecan_type(prop["type"]):
             var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = list()\n'
