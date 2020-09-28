@@ -55,16 +55,6 @@ class Test_HoleUD_meth(object):
 
         surf_list = IPMSM_B.rotor.hole[0].build_geometry()
 
-    def test_build_geometry_no_mag():
-        """check that curve_list is correct (Remove magnet)"""
-        assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_0"] is not None
-        assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_1"] is not None
-        IPMSM_B.rotor.hole[0].remove_magnet()
-        assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_0"] is None
-        assert IPMSM_B.rotor.hole[0].magnet_dict["magnet_1"] is None
-
-        surf_list = IPMSM_B.rotor.hole[0].build_geometry()
-
         assert len(surf_list) == 5
         for ii, surf in enumerate(surf_list):
             assert type(surf) is SurfLine
