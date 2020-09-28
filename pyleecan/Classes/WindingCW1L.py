@@ -150,7 +150,7 @@ class WindingCW1L(Winding):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         WindingCW1L_str = ""
         # Get the properties inherited from Winding
@@ -169,7 +169,7 @@ class WindingCW1L(Winding):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Winding
         WindingCW1L_dict = super(WindingCW1L, self).as_dict()

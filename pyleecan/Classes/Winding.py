@@ -248,7 +248,7 @@ class Winding(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Winding_str = ""
         if self.parent is None:
@@ -296,7 +296,7 @@ class Winding(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Winding_dict = dict()
         Winding_dict["is_reverse_wind"] = self.is_reverse_wind

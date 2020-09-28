@@ -78,7 +78,7 @@ class Solution(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Solution_str = ""
         if self.parent is None:
@@ -104,7 +104,7 @@ class Solution(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Solution_dict = dict()
         Solution_dict["type_cell"] = self.type_cell

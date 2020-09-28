@@ -135,7 +135,7 @@ class IndMagFEMM(IndMag):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         IndMagFEMM_str = ""
         # Get the properties inherited from IndMag
@@ -175,7 +175,7 @@ class IndMagFEMM(IndMag):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from IndMag
         IndMagFEMM_dict = super(IndMagFEMM, self).as_dict()

@@ -134,7 +134,7 @@ class MagnetType14(MagnetPolar):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         MagnetType14_str = ""
         # Get the properties inherited from MagnetPolar
@@ -162,7 +162,7 @@ class MagnetType14(MagnetPolar):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from MagnetPolar
         MagnetType14_dict = super(MagnetType14, self).as_dict()

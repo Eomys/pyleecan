@@ -94,7 +94,7 @@ class DXFImport(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         DXFImport_str = ""
         if self.parent is None:
@@ -125,7 +125,7 @@ class DXFImport(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         DXFImport_dict = dict()
         DXFImport_dict["file_path"] = self.file_path

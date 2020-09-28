@@ -116,7 +116,7 @@ class OutStruct(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         OutStruct_str = ""
         if self.parent is None:
@@ -169,7 +169,7 @@ class OutStruct(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutStruct_dict = dict()
         if self.time is None:
