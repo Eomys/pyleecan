@@ -281,6 +281,7 @@ class LamSlotMulti(Lamination):
                             "Slot19",
                             "SlotCirc",
                             "SlotMFlat",
+                            "SlotMFlat2",
                             "SlotMPolar",
                             "SlotMag",
                             "SlotUD",

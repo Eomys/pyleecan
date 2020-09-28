@@ -7480,6 +7480,7 @@
             "Slot19",
             "SlotCirc",
             "SlotMFlat",
+            "SlotMFlat2",
             "SlotMPolar",
             "SlotMag",
             "SlotUD",
@@ -7720,6 +7721,92 @@
             }
         ]
     },
+    "SlotMFlat2": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            },
+            {
+                "name": "IS_SYMMETRICAL",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Flat bottomed SlotMag with adjustable slot opening (for spoke type IPMSM)",
+        "is_internal": false,
+        "methods": [
+            "build_geometry",
+            "comp_angle_opening",
+            "comp_angle_magnet",
+            "comp_angle_opening_magnet",
+            "comp_height",
+            "comp_surface",
+            "comp_H_arc",
+            "comp_W0m",
+            "get_point_bottom"
+        ],
+        "mother": "SlotMag",
+        "name": "SlotMFlat2",
+        "package": "Slot",
+        "path": "pyleecan/Generator/ClassesRef/Slot/SlotMFlat2.csv",
+        "properties": [
+            {
+                "desc": "Internal Slot height (for Magnet)",
+                "max": "",
+                "min": "0",
+                "name": "H0",
+                "type": "float",
+                "unit": "m",
+                "value": 0
+            },
+            {
+                "desc": "Slot opening height ",
+                "max": "",
+                "min": "0",
+                "name": "H1",
+                "type": "float",
+                "unit": "m",
+                "value": 0
+            },
+            {
+                "desc": "Inner slot width (for Magnet)",
+                "max": "",
+                "min": "0",
+                "name": "W0",
+                "type": "float",
+                "unit": "m/rad",
+                "value": 0.0122
+            },
+            {
+                "desc": "W0 unit, 0 for m, 1 for rad",
+                "max": "",
+                "min": "",
+                "name": "W0_is_rad",
+                "type": "bool",
+                "unit": "",
+                "value": 0
+            },
+            {
+                "desc": "Slot opening width ",
+                "max": "",
+                "min": "0",
+                "name": "W1",
+                "type": "float",
+                "unit": "m",
+                "value": 0.01
+            },
+            {
+                "desc": "List of magnet",
+                "max": "",
+                "min": "",
+                "name": "magnet",
+                "type": "[MagnetFlat]",
+                "unit": "",
+                "value": ""
+            }
+        ]
+    },
     "SlotMPolar": {
         "constants": [
             {
@@ -7789,6 +7876,7 @@
         ],
         "daughters": [
             "SlotMFlat",
+            "SlotMFlat2",
             "SlotMPolar"
         ],
         "desc": "Slot for inset and surface magnet (abstract)",
