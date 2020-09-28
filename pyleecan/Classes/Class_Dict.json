@@ -3740,7 +3740,7 @@
         "mother": "",
         "name": "Loss",
         "package": "Simulation",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/Loss.csv",
         "properties": [
             {
                 "desc": "List of models to compute the machines losses",
@@ -3772,7 +3772,7 @@
         "mother": "",
         "name": "LossModel",
         "package": "Simulation",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/LossModel.csv",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModel.csv",
         "properties": [
             {
                 "desc": "Name of the loss simulation (has to be unique)",
@@ -3811,7 +3811,7 @@
         "mother": "LossModel",
         "name": "LossModelBertotti",
         "package": "Simulation",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Simulation/LossModelBertotti.csv",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelBertotti.csv",
         "properties": [
             {
                 "desc": "Hysteresis loss coefficient",
@@ -3877,22 +3877,13 @@
                 "value": "None"
             },
             {
-                "desc": "Material to be used for the loss computation",
+                "desc": "Name of machine's part to get lenght and material data, e.g. 'machine.stator'",
                 "max": "",
                 "min": "",
-                "name": "mat_type",
-                "type": "Material",
+                "name": "lam",
+                "type": "str",
                 "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Lamination stack iron length [m]",
-                "max": "",
-                "min": "0",
-                "name": "L1",
-                "type": "float",
-                "unit": "m",
-                "value": 1
+                "value": "None"
             }
         ]
     },
@@ -6653,7 +6644,7 @@
         "mother": "",
         "name": "OutLoss",
         "package": "Output",
-        "path": "pyleecan/pyleecan/Generator/ClassesRef/Output/OutLoss.csv",
+        "path": "pyleecan/Generator/ClassesRef/Output/OutLoss.csv",
         "properties": [
             {
                 "desc": "List of the computed losses of SciDataTool's DataND type",

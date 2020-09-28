@@ -40,8 +40,7 @@ class Loss(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -74,29 +73,33 @@ class Loss(FrozenClass):
                 models = init_dict["models"]
         # Initialisation by argument
         self.parent = None
-        # models can be None or a list of LossModel object
-        self.models = list()
+        # models can be None or a list of LossModel object or a list of dict
         if type(models) is list:
-            for obj in models:
-                if obj is None:  # Default value
-                    self.models.append(LossModel())
-                elif isinstance(obj, dict):
-                    # Check that the type is correct (including daughter)
-                    class_name = obj.get("__class__")
-                    if class_name not in ["LossModel", "LossModelBertotti"]:
-                        raise InitUnKnowClassError(
-                            "Unknow class name "
-                            + class_name
-                            + " in init_dict for models"
+            # Check if the list is only composed of LossModel
+            if len(models) > 0 and all(isinstance(obj, LossModel) for obj in models):
+                # set the list to keep pointer reference
+                self.models = models
+            else:
+                self.models = list()
+                for obj in models:
+                    if not isinstance(obj, dict):  # Default value
+                        self.models.append(obj)
+                    elif isinstance(obj, dict):
+                        # Check that the type is correct (including daughter)
+                        class_name = obj.get("__class__")
+                        if class_name not in ["LossModel", "LossModelBertotti"]:
+                            raise InitUnKnowClassError(
+                                "Unknow class name "
+                                + class_name
+                                + " in init_dict for models"
+                            )
+                        # Dynamic import to call the correct constructor
+                        module = __import__(
+                            "pyleecan.Classes." + class_name, fromlist=[class_name]
                         )
-                    # Dynamic import to call the correct constructor
-                    module = __import__(
-                        "pyleecan.Classes." + class_name, fromlist=[class_name]
-                    )
-                    class_obj = getattr(module, class_name)
-                    self.models.append(class_obj(init_dict=obj))
-                else:
-                    self.models.append(obj)
+                        class_obj = getattr(module, class_name)
+                        self.models.append(class_obj(init_dict=obj))
+
         elif models is None:
             self.models = list()
         else:
@@ -130,8 +133,7 @@ class Loss(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         Loss_dict = dict()
         Loss_dict["models"] = list()
