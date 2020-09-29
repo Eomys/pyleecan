@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
@@ -23,14 +24,9 @@ class OptiSolver(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -156,7 +152,7 @@ class OptiSolver(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "problem"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = OptiProblem()
         check_var("problem", value, "OptiProblem")
         self._problem = value
@@ -186,7 +182,7 @@ class OptiSolver(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "xoutput"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = XOutput()
         check_var("xoutput", value, "XOutput")
         self._xoutput = value

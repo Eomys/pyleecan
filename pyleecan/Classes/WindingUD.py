@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .Winding import Winding
@@ -61,14 +62,9 @@ class WindingUD(Winding):
         )
     else:
         get_dim_wind = get_dim_wind
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -194,8 +190,8 @@ class WindingUD(Winding):
 
     def _set_user_wind_mat(self, value):
         """setter of user_wind_mat"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)

@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
@@ -57,14 +58,9 @@ class Input(FrozenClass):
         )
     else:
         comp_time = comp_time
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -196,7 +192,7 @@ class Input(FrozenClass):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
-        elif value is -1:
+        elif value == -1:
             value = ImportMatrix()
         elif isinstance(value, dict):
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "time")
@@ -228,7 +224,7 @@ class Input(FrozenClass):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
-        elif value is -1:
+        elif value == -1:
             value = ImportMatrix()
         elif isinstance(value, dict):
             class_obj = import_class(

@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .LamSlotWind import LamSlotWind
@@ -127,14 +128,9 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_sym = comp_sym
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -342,7 +338,7 @@ class LamSquirrelCage(LamSlotWind):
                 "pyleecan.Classes", value.get("__class__"), "ring_mat"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Material()
         check_var("ring_mat", value, "Material")
         self._ring_mat = value

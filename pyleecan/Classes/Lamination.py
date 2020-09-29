@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
@@ -348,14 +349,9 @@ class Lamination(FrozenClass):
         )
     else:
         comp_radius_mid_yoke = comp_radius_mid_yoke
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -576,7 +572,7 @@ class Lamination(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "mat_type"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value
@@ -742,7 +738,7 @@ class Lamination(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "axial_vent"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("axial_vent", value, "[Hole]")
         self._axial_vent = value
@@ -773,7 +769,7 @@ class Lamination(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "notch"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("notch", value, "[Notch]")
         self._notch = value

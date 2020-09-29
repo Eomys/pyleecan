@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
@@ -23,14 +24,9 @@ class OutMag(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -275,8 +271,8 @@ class OutMag(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)
@@ -300,8 +296,8 @@ class OutMag(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)
@@ -366,7 +362,7 @@ class OutMag(FrozenClass):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("SciDataTool.Classes", value.get("__class__"), "B")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = VectorField()
         check_var("B", value, "VectorField")
         self._B = value
@@ -393,7 +389,7 @@ class OutMag(FrozenClass):
                 "SciDataTool.Classes", value.get("__class__"), "Tem"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
         check_var("Tem", value, "DataND")
         self._Tem = value
@@ -467,8 +463,8 @@ class OutMag(FrozenClass):
 
     def _set_Phi_wind_stator(self, value):
         """setter of Phi_wind_stator"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)
@@ -492,8 +488,8 @@ class OutMag(FrozenClass):
 
     def _set_emf(self, value):
         """setter of emf"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)
@@ -524,7 +520,7 @@ class OutMag(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "meshsolution"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = MeshSolution()
         check_var("meshsolution", value, "MeshSolution")
         self._meshsolution = value
@@ -547,7 +543,7 @@ class OutMag(FrozenClass):
 
     def _set_FEMM_dict(self, value):
         """setter of FEMM_dict"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value

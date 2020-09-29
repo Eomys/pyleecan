@@ -99,8 +99,8 @@ def generate_prop_setter(gen_dict, class_dict, prop):
 
     ## Convertion to correct type
     if prop["type"] == "ndarray":
-        set_str += TAB2 + "if value is -1:\n"
-        set_str += TAB3 + "value = list()\n"
+        set_str += TAB2 + "if type(value) is int and value == -1:\n"
+        set_str += TAB3 + "value = array([])\n"
         set_str += TAB2 + "elif type(value) is list:\n"
         set_str += TAB3 + "try:\n"
         set_str += TAB4 + "value = array(value)\n"
@@ -114,7 +114,7 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB6 + "value[key] = array(obj)\n"
         set_str += TAB5 + "except:\n"
         set_str += TAB6 + "pass\n"
-        set_str += TAB2 + "if value is -1:\n"
+        set_str += TAB2 + "elif type(value) is int and value == -1:\n"
         set_str += TAB3 + "value = dict()\n"
     elif prop["type"] == "[ndarray]":
         set_str += TAB2 + "if type(value) is list:\n"
@@ -124,13 +124,13 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB6 + "value[ii] = array(obj)\n"
         set_str += TAB5 + "except:\n"
         set_str += TAB6 + "pass\n"
-        set_str += TAB2 + "if value is -1:\n"
-        set_str += TAB3 + "value = list()\n"
+        set_str += TAB2 + "elif type(value) is int and value == -1:\n"
+        set_str += TAB3 + "value = array([])\n"
     elif prop["type"] == "dict":
-        set_str += TAB2 + "if value is -1:\n"
+        set_str += TAB2 + "if type(value) is int and value == -1:\n"
         set_str += TAB3 + "value = dict()\n"
     elif prop["type"] == "list":
-        set_str += TAB2 + "if value is -1:\n"
+        set_str += TAB2 + "if type(value) is int and value == -1:\n"
         set_str += TAB3 + "value = list()\n"
     elif prop["type"] == "ImportMatrix":
         set_str += TAB2 + "if isinstance(value, str):  # Load from file\n"
@@ -139,7 +139,7 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB3 + "value = ImportMatrixVal(value=value)\n"
         set_str += TAB2 + "elif isinstance(value,list):\n"
         set_str += TAB3 + "value = ImportMatrixVal(value=array(value))\n"
-        set_str += TAB2 + "elif value is -1:\n"
+        set_str += TAB2 + "elif value == -1:\n"
         set_str += TAB3 + "value = ImportMatrix()\n"
         set_str += TAB2 + "elif isinstance(value,dict):\n"
         set_str += (
@@ -168,7 +168,7 @@ def generate_prop_setter(gen_dict, class_dict, prop):
                 + "')\n"
             )
         set_str += TAB5 + "value[key] = class_obj(init_dict=obj)\n"
-        set_str += TAB2 + "if value is -1:\n"
+        set_str += TAB2 + "if type(value) is int and value == -1:\n"
         set_str += TAB3 + "value = dict()\n"
     elif is_list_pyleecan_type(prop["type"]):
         set_str += TAB2 + "if type(value) is list:\n"
@@ -189,7 +189,7 @@ def generate_prop_setter(gen_dict, class_dict, prop):
                 + "')\n"
             )
         set_str += TAB5 + "value[ii] = class_obj(init_dict=obj)\n"
-        set_str += TAB2 + "if value is -1:\n"
+        set_str += TAB2 + "if value == -1:\n"
         set_str += TAB3 + "value = list()\n"
     elif ("." not in prop["type"] or "SciDataTool" in prop["type"]) and prop[
         "type"
@@ -212,7 +212,9 @@ def generate_prop_setter(gen_dict, class_dict, prop):
                 + "')\n"
             )
         set_str += TAB3 + "value = class_obj(init_dict=value)\n"
-        set_str += TAB2 + "elif value is -1:  # Default constructor\n"
+        set_str += (
+            TAB2 + "elif type(value) is int and value == -1:  # Default constructor\n"
+        )
         if "SciDataTool" in prop["type"]:
             set_str += TAB3 + "value = " + prop["type"].split(".")[-1] + "()\n"
         else:

@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .Drive import Drive
@@ -39,14 +40,9 @@ class DriveWave(Drive):
         )
     else:
         get_wave = get_wave
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -148,7 +144,7 @@ class DriveWave(Drive):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "wave")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Import()
         check_var("wave", value, "Import")
         self._wave = value

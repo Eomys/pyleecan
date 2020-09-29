@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .Simulation import Simulation
@@ -47,14 +48,9 @@ class Simu1(Simulation):
         )
     else:
         run_single = run_single
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -244,7 +240,7 @@ class Simu1(Simulation):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Electrical()
         check_var("elec", value, "Electrical")
         self._elec = value
@@ -272,7 +268,7 @@ class Simu1(Simulation):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Magnetics()
         check_var("mag", value, "Magnetics")
         self._mag = value
@@ -302,7 +298,7 @@ class Simu1(Simulation):
                 "pyleecan.Classes", value.get("__class__"), "struct"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Structural()
         check_var("struct", value, "Structural")
         self._struct = value
@@ -332,7 +328,7 @@ class Simu1(Simulation):
                 "pyleecan.Classes", value.get("__class__"), "force"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Force()
         check_var("force", value, "Force")
         self._force = value
@@ -360,7 +356,7 @@ class Simu1(Simulation):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "loss")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Loss()
         check_var("loss", value, "Loss")
         self._loss = value

@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
@@ -174,14 +175,9 @@ class MeshSolution(FrozenClass):
         )
     else:
         get_group = get_group
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -369,7 +365,7 @@ class MeshSolution(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "mesh"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("mesh", value, "[Mesh]")
         self._mesh = value
@@ -418,7 +414,7 @@ class MeshSolution(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "solution"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("solution", value, "[Solution]")
         self._solution = value
@@ -445,7 +441,7 @@ class MeshSolution(FrozenClass):
                         value[key] = array(obj)
                     except:
                         pass
-        if value is -1:
+        elif type(value) is int and value == -1:
             value = dict()
         check_var("group", value, "{ndarray}")
         self._group = value

@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .EEC import EEC
@@ -89,14 +90,9 @@ class EEC_PMSM(EEC):
         )
     else:
         comp_joule_losses = comp_joule_losses
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -243,7 +239,7 @@ class EEC_PMSM(EEC):
                 "pyleecan.Classes", value.get("__class__"), "indmag"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = IndMag()
         check_var("indmag", value, "IndMag")
         self._indmag = value
@@ -273,7 +269,7 @@ class EEC_PMSM(EEC):
                 "pyleecan.Classes", value.get("__class__"), "fluxlink"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = FluxLink()
         check_var("fluxlink", value, "FluxLink")
         self._fluxlink = value
@@ -296,7 +292,7 @@ class EEC_PMSM(EEC):
 
     def _set_parameters(self, value):
         """setter of parameters"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("parameters", value, "dict")
         self._parameters = value
@@ -341,7 +337,7 @@ class EEC_PMSM(EEC):
                 "pyleecan.Classes", value.get("__class__"), "drive"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Drive()
         check_var("drive", value, "Drive")
         self._drive = value

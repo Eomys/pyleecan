@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .MachineAsync import MachineAsync
@@ -75,14 +76,9 @@ class MachineDFIM(MachineAsync):
         )
     else:
         get_lam_list = get_lam_list
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -219,7 +215,7 @@ class MachineDFIM(MachineAsync):
                 "pyleecan.Classes", value.get("__class__"), "rotor"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = LamSlotWind()
         check_var("rotor", value, "LamSlotWind")
         self._rotor = value
@@ -249,7 +245,7 @@ class MachineDFIM(MachineAsync):
                 "pyleecan.Classes", value.get("__class__"), "stator"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = LamSlotWind()
         check_var("stator", value, "LamSlotWind")
         self._stator = value

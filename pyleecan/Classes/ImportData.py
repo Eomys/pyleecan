@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
@@ -39,14 +40,9 @@ class ImportData(FrozenClass):
         )
     else:
         get_data = get_data
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -203,7 +199,7 @@ class ImportData(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "axes"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("axes", value, "[ImportData]")
         self._axes = value
@@ -230,7 +226,7 @@ class ImportData(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "field"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Import()
         check_var("field", value, "Import")
         self._field = value
@@ -307,7 +303,7 @@ class ImportData(FrozenClass):
 
     def _set_normalizations(self, value):
         """setter of normalizations"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("normalizations", value, "dict")
         self._normalizations = value
@@ -327,7 +323,7 @@ class ImportData(FrozenClass):
 
     def _set_symmetries(self, value):
         """setter of symmetries"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("symmetries", value, "dict")
         self._symmetries = value

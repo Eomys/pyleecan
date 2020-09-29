@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .HoleMag import HoleMag
@@ -91,14 +92,9 @@ class HoleUD(HoleMag):
         )
     else:
         remove_magnet = remove_magnet
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -216,7 +212,7 @@ class HoleUD(HoleMag):
                         "pyleecan.Classes", obj.get("__class__"), "surf_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("surf_list", value, "[Surface]")
         self._surf_list = value
@@ -236,7 +232,7 @@ class HoleUD(HoleMag):
 
     def _set_magnet_dict(self, value):
         """setter of magnet_dict"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("magnet_dict", value, "dict")
         self._magnet_dict = value

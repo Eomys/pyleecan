@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
@@ -68,14 +69,9 @@ class OutElec(FrozenClass):
         )
     else:
         get_Us = get_Us
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -352,8 +348,8 @@ class OutElec(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)
@@ -377,8 +373,8 @@ class OutElec(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)
@@ -409,7 +405,7 @@ class OutElec(FrozenClass):
                 "SciDataTool.Classes", value.get("__class__"), "Is"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
         check_var("Is", value, "DataND")
         self._Is = value
@@ -436,7 +432,7 @@ class OutElec(FrozenClass):
                 "SciDataTool.Classes", value.get("__class__"), "Ir"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
         check_var("Ir", value, "DataND")
         self._Ir = value
@@ -456,8 +452,8 @@ class OutElec(FrozenClass):
 
     def _set_angle_rotor(self, value):
         """setter of angle_rotor"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)
@@ -562,7 +558,7 @@ class OutElec(FrozenClass):
                 "SciDataTool.Classes", value.get("__class__"), "mmf_unit"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
         check_var("mmf_unit", value, "DataND")
         self._mmf_unit = value
@@ -733,7 +729,7 @@ class OutElec(FrozenClass):
                 "SciDataTool.Classes", value.get("__class__"), "Us"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
         check_var("Us", value, "DataND")
         self._Us = value

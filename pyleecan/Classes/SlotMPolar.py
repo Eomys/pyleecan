@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .SlotMag import SlotMag
@@ -129,14 +130,9 @@ class SlotMPolar(SlotMag):
         )
     else:
         get_point_bottom = get_point_bottom
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -292,7 +288,7 @@ class SlotMPolar(SlotMag):
                         "pyleecan.Classes", obj.get("__class__"), "magnet"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("magnet", value, "[MagnetPolar]")
         self._magnet = value

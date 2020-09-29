@@ -9,6 +9,7 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
 from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .IndMag import IndMag
@@ -58,14 +59,9 @@ class IndMagFEMM(IndMag):
         )
     else:
         solve_FEMM = solve_FEMM
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -199,7 +195,7 @@ class IndMagFEMM(IndMag):
 
     def _set_FEMM_dict(self, value):
         """setter of FEMM_dict"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
