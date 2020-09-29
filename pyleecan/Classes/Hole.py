@@ -189,8 +189,7 @@ class Hole(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Hole_dict = dict()
         Hole_dict["Zh"] = self.Zh
@@ -242,7 +241,7 @@ class Hole(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "mat_void"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Material()
         check_var("mat_void", value, "Material")
         self._mat_void = value

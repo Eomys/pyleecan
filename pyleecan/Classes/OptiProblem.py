@@ -173,8 +173,7 @@ class OptiProblem(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OptiProblem_dict = dict()
         if self.output is None:
@@ -252,7 +251,7 @@ class OptiProblem(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "output"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Output()
         check_var("output", value, "Output")
         self._output = value
@@ -286,7 +285,7 @@ class OptiProblem(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "design_var"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("design_var", value, "[OptiDesignVar]")
         self._design_var = value
@@ -317,7 +316,7 @@ class OptiProblem(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "obj_func"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("obj_func", value, "[DataKeeper]")
         self._obj_func = value
@@ -344,7 +343,7 @@ class OptiProblem(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "eval_func"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = function()
         try:
             check_var("eval_func", value, "list")
@@ -387,7 +386,7 @@ class OptiProblem(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "constraint"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("constraint", value, "[OptiConstraint]")
         self._constraint = value
@@ -414,7 +413,7 @@ class OptiProblem(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "preprocessing"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = function()
         try:
             check_var("preprocessing", value, "list")
@@ -457,7 +456,7 @@ class OptiProblem(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "datakeeper_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("datakeeper_list", value, "[DataKeeper]")
         self._datakeeper_list = value

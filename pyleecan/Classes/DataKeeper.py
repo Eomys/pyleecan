@@ -136,8 +136,7 @@ class DataKeeper(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         DataKeeper_dict = dict()
         DataKeeper_dict["name"] = self.name
@@ -239,7 +238,7 @@ class DataKeeper(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "keeper"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = function()
         try:
             check_var("keeper", value, "list")
@@ -278,7 +277,7 @@ class DataKeeper(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "error_keeper"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = function()
         try:
             check_var("error_keeper", value, "list")
@@ -310,7 +309,7 @@ class DataKeeper(FrozenClass):
 
     def _set_result(self, value):
         """setter of result"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = list()
         check_var("result", value, "list")
         self._result = value

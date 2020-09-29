@@ -114,8 +114,7 @@ class Structural(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Structural_dict = dict()
         if self.force is None:
@@ -145,7 +144,7 @@ class Structural(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "force"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Force()
         check_var("force", value, "Force")
         self._force = value

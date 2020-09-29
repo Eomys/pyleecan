@@ -234,8 +234,7 @@ class SlotMFlat(SlotMag):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from SlotMag
         SlotMFlat_dict = super(SlotMFlat, self).as_dict()
@@ -337,7 +336,7 @@ class SlotMFlat(SlotMag):
                         "pyleecan.Classes", obj.get("__class__"), "magnet"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("magnet", value, "[MagnetFlat]")
         self._magnet = value

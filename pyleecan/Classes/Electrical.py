@@ -129,8 +129,7 @@ class Electrical(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Electrical_dict = dict()
         if self.eec is None:
@@ -158,7 +157,7 @@ class Electrical(FrozenClass):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eec")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = EEC()
         check_var("eec", value, "EEC")
         self._eec = value

@@ -166,8 +166,7 @@ class VarParam(VarSimu):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from VarSimu
         VarParam_dict = super(VarParam, self).as_dict()
@@ -207,7 +206,7 @@ class VarParam(VarSimu):
                         "pyleecan.Classes", obj.get("__class__"), "paramexplorer_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("paramexplorer_list", value, "[ParamExplorer]")
         self._paramexplorer_list = value

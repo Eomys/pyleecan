@@ -255,8 +255,7 @@ class SurfRing(Surface):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Surface
         SurfRing_dict = super(SurfRing, self).as_dict()
@@ -296,7 +295,7 @@ class SurfRing(Surface):
                 "pyleecan.Classes", value.get("__class__"), "out_surf"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Surface()
         check_var("out_surf", value, "Surface")
         self._out_surf = value
@@ -326,7 +325,7 @@ class SurfRing(Surface):
                 "pyleecan.Classes", value.get("__class__"), "in_surf"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Surface()
         check_var("in_surf", value, "Surface")
         self._in_surf = value

@@ -496,8 +496,7 @@ class XOutput(Output):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Output
         XOutput_dict = super(XOutput, self).as_dict()
@@ -555,7 +554,7 @@ class XOutput(Output):
                         "pyleecan.Classes", obj.get("__class__"), "paramexplorer_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("paramexplorer_list", value, "[ParamExplorer]")
         self._paramexplorer_list = value
@@ -586,7 +585,7 @@ class XOutput(Output):
                         "pyleecan.Classes", obj.get("__class__"), "output_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("output_list", value, "[Output]")
         self._output_list = value
@@ -617,7 +616,7 @@ class XOutput(Output):
                         "pyleecan.Classes", obj.get("__class__"), "xoutput_dict"
                     )
                     value[key] = class_obj(init_dict=obj)
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("xoutput_dict", value, "{DataKeeper}")
         self._xoutput_dict = value

@@ -156,8 +156,7 @@ class MatMagnetics(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         MatMagnetics_dict = dict()
         MatMagnetics_dict["mur_lin"] = self.mur_lin
@@ -289,7 +288,7 @@ class MatMagnetics(FrozenClass):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
-        elif value is -1:
+        elif value == -1:
             value = ImportMatrix()
         elif isinstance(value, dict):
             class_obj = import_class(

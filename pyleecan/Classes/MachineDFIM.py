@@ -175,8 +175,7 @@ class MachineDFIM(MachineAsync):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from MachineAsync
         MachineDFIM_dict = super(MachineDFIM, self).as_dict()
@@ -216,7 +215,7 @@ class MachineDFIM(MachineAsync):
                 "pyleecan.Classes", value.get("__class__"), "rotor"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = LamSlotWind()
         check_var("rotor", value, "LamSlotWind")
         self._rotor = value
@@ -246,7 +245,7 @@ class MachineDFIM(MachineAsync):
                 "pyleecan.Classes", value.get("__class__"), "stator"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = LamSlotWind()
         check_var("stator", value, "LamSlotWind")
         self._stator = value

@@ -170,8 +170,7 @@ class HoleUD(HoleMag):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from HoleMag
         HoleUD_dict = super(HoleUD, self).as_dict()
@@ -213,7 +212,7 @@ class HoleUD(HoleMag):
                         "pyleecan.Classes", obj.get("__class__"), "surf_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("surf_list", value, "[Surface]")
         self._surf_list = value
@@ -233,7 +232,7 @@ class HoleUD(HoleMag):
 
     def _set_magnet_dict(self, value):
         """setter of magnet_dict"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("magnet_dict", value, "dict")
         self._magnet_dict = value

@@ -172,8 +172,7 @@ class Simu1(Simulation):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Simulation
         Simu1_dict = super(Simu1, self).as_dict()
@@ -223,7 +222,7 @@ class Simu1(Simulation):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Electrical()
         check_var("elec", value, "Electrical")
         self._elec = value
@@ -251,7 +250,7 @@ class Simu1(Simulation):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Magnetics()
         check_var("mag", value, "Magnetics")
         self._mag = value
@@ -281,7 +280,7 @@ class Simu1(Simulation):
                 "pyleecan.Classes", value.get("__class__"), "struct"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Structural()
         check_var("struct", value, "Structural")
         self._struct = value
@@ -311,7 +310,7 @@ class Simu1(Simulation):
                 "pyleecan.Classes", value.get("__class__"), "force"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Force()
         check_var("force", value, "Force")
         self._force = value

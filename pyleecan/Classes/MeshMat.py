@@ -246,8 +246,7 @@ class MeshMat(Mesh):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Mesh
         MeshMat_dict = super(MeshMat, self).as_dict()
@@ -293,7 +292,7 @@ class MeshMat(Mesh):
                         "pyleecan.Classes", obj.get("__class__"), "cell"
                     )
                     value[key] = class_obj(init_dict=obj)
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("cell", value, "{CellMat}")
         self._cell = value
@@ -320,7 +319,7 @@ class MeshMat(Mesh):
                 "pyleecan.Classes", value.get("__class__"), "point"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = PointMat()
         check_var("point", value, "PointMat")
         self._point = value

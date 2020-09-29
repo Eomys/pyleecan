@@ -316,8 +316,7 @@ class HoleM51(HoleMag):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from HoleMag
         HoleM51_dict = super(HoleM51, self).as_dict()
@@ -594,7 +593,7 @@ class HoleM51(HoleMag):
                 "pyleecan.Classes", value.get("__class__"), "magnet_0"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Magnet()
         check_var("magnet_0", value, "Magnet")
         self._magnet_0 = value
@@ -624,7 +623,7 @@ class HoleM51(HoleMag):
                 "pyleecan.Classes", value.get("__class__"), "magnet_1"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Magnet()
         check_var("magnet_1", value, "Magnet")
         self._magnet_1 = value
@@ -654,7 +653,7 @@ class HoleM51(HoleMag):
                 "pyleecan.Classes", value.get("__class__"), "magnet_2"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Magnet()
         check_var("magnet_2", value, "Magnet")
         self._magnet_2 = value

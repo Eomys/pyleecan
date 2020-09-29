@@ -146,8 +146,7 @@ class OutGeo(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutGeo_dict = dict()
         if self.stator is None:
@@ -197,7 +196,7 @@ class OutGeo(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "stator"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = OutGeoLam()
         check_var("stator", value, "OutGeoLam")
         self._stator = value
@@ -227,7 +226,7 @@ class OutGeo(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "rotor"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = OutGeoLam()
         check_var("rotor", value, "OutGeoLam")
         self._rotor = value

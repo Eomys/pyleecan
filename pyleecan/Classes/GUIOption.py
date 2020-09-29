@@ -78,8 +78,7 @@ class GUIOption(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         GUIOption_dict = dict()
         if self.unit is None:
@@ -107,7 +106,7 @@ class GUIOption(FrozenClass):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "unit")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Unit()
         check_var("unit", value, "Unit")
         self._unit = value

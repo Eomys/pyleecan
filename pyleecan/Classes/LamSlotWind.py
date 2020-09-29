@@ -490,8 +490,7 @@ class LamSlotWind(LamSlot):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from LamSlot
         LamSlotWind_dict = super(LamSlotWind, self).as_dict()
@@ -547,7 +546,7 @@ class LamSlotWind(LamSlot):
                 "pyleecan.Classes", value.get("__class__"), "winding"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Winding()
         check_var("winding", value, "Winding")
         self._winding = value

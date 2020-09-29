@@ -122,8 +122,7 @@ class OptiDesignVar(ParamExplorer):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from ParamExplorer
         OptiDesignVar_dict = super(OptiDesignVar, self).as_dict()
@@ -174,7 +173,7 @@ class OptiDesignVar(ParamExplorer):
 
     def _set_space(self, value):
         """setter of space"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = list()
         check_var("space", value, "list")
         self._space = value
@@ -201,7 +200,7 @@ class OptiDesignVar(ParamExplorer):
                 "pyleecan.Classes", value.get("__class__"), "get_value"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = function()
         try:
             check_var("get_value", value, "list")

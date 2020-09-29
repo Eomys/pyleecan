@@ -173,8 +173,7 @@ class PointMat(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         PointMat_dict = dict()
         if self.coordinate is None:
@@ -205,8 +204,8 @@ class PointMat(FrozenClass):
 
     def _set_coordinate(self, value):
         """setter of coordinate"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)
@@ -266,8 +265,8 @@ class PointMat(FrozenClass):
 
     def _set_indice(self, value):
         """setter of indice"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)

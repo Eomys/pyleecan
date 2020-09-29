@@ -122,8 +122,7 @@ class ParamExplorerSet(ParamExplorer):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from ParamExplorer
         ParamExplorerSet_dict = super(ParamExplorerSet, self).as_dict()
@@ -146,7 +145,7 @@ class ParamExplorerSet(ParamExplorer):
 
     def _set_value(self, value):
         """setter of value"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = list()
         check_var("value", value, "list")
         self._value = value

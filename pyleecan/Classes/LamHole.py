@@ -321,8 +321,7 @@ class LamHole(Lamination):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Lamination
         LamHole_dict = super(LamHole, self).as_dict()
@@ -368,7 +367,7 @@ class LamHole(Lamination):
                         "pyleecan.Classes", obj.get("__class__"), "hole"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("hole", value, "[Hole]")
         self._hole = value
@@ -393,7 +392,7 @@ class LamHole(Lamination):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "bore")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Bore()
         check_var("bore", value, "Bore")
         self._bore = value

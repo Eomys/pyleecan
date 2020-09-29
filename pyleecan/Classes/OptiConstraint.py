@@ -114,8 +114,7 @@ class OptiConstraint(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OptiConstraint_dict = dict()
         OptiConstraint_dict["name"] = self.name
@@ -207,7 +206,7 @@ class OptiConstraint(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "get_variable"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = function()
         try:
             check_var("get_variable", value, "list")

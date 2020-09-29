@@ -262,8 +262,7 @@ class LamSquirrelCage(LamSlotWind):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from LamSlotWind
         LamSquirrelCage_dict = super(LamSquirrelCage, self).as_dict()
@@ -339,7 +338,7 @@ class LamSquirrelCage(LamSlotWind):
                 "pyleecan.Classes", value.get("__class__"), "ring_mat"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Material()
         check_var("ring_mat", value, "Material")
         self._ring_mat = value

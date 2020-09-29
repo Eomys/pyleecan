@@ -116,8 +116,7 @@ class Interpolation(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Interpolation_dict = dict()
         if self.ref_cell is None:
@@ -159,7 +158,7 @@ class Interpolation(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "ref_cell"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = RefCell()
         check_var("ref_cell", value, "RefCell")
         self._ref_cell = value
@@ -189,7 +188,7 @@ class Interpolation(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "gauss_point"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = GaussPoint()
         check_var("gauss_point", value, "GaussPoint")
         self._gauss_point = value
@@ -219,7 +218,7 @@ class Interpolation(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "scalar_product"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = ScalarProduct()
         check_var("scalar_product", value, "ScalarProduct")
         self._scalar_product = value

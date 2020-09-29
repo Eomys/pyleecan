@@ -162,8 +162,7 @@ class MagnetType13(MagnetFlat):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from MagnetFlat
         MagnetType13_dict = super(MagnetType13, self).as_dict()

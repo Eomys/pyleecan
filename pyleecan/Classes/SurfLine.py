@@ -241,8 +241,7 @@ class SurfLine(Surface):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Surface
         SurfLine_dict = super(SurfLine, self).as_dict()
@@ -282,7 +281,7 @@ class SurfLine(Surface):
                         "pyleecan.Classes", obj.get("__class__"), "line_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("line_list", value, "[Line]")
         self._line_list = value

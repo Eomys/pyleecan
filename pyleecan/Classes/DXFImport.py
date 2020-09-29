@@ -112,8 +112,7 @@ class DXFImport(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         DXFImport_dict = dict()
         DXFImport_dict["file_path"] = self.file_path
@@ -154,7 +153,7 @@ class DXFImport(FrozenClass):
 
     def _set_surf_dict(self, value):
         """setter of surf_dict"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("surf_dict", value, "dict")
         self._surf_dict = value
@@ -174,7 +173,7 @@ class DXFImport(FrozenClass):
 
     def _set_BC_list(self, value):
         """setter of BC_list"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = list()
         check_var("BC_list", value, "list")
         self._BC_list = value

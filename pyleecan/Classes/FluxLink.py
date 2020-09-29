@@ -64,8 +64,7 @@ class FluxLink(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         FluxLink_dict = dict()
         # The class name is added to the dict fordeserialisation purpose

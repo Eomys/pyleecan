@@ -157,8 +157,7 @@ class RefTriangle3(RefCell):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from RefCell
         RefTriangle3_dict = super(RefTriangle3, self).as_dict()

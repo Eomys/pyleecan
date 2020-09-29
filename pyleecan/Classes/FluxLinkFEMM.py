@@ -162,8 +162,7 @@ class FluxLinkFEMM(FluxLink):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from FluxLink
         FluxLinkFEMM_dict = super(FluxLinkFEMM, self).as_dict()
@@ -198,7 +197,7 @@ class FluxLinkFEMM(FluxLink):
 
     def _set_FEMM_dict(self, value):
         """setter of FEMM_dict"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value

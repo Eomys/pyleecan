@@ -217,8 +217,7 @@ class VarSimu(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         VarSimu_dict = dict()
         VarSimu_dict["name"] = self.name
@@ -312,7 +311,7 @@ class VarSimu(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "datakeeper_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("datakeeper_list", value, "[DataKeeper]")
         self._datakeeper_list = value
@@ -434,7 +433,7 @@ class VarSimu(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "postproc_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("postproc_list", value, "[Post]")
         self._postproc_list = value

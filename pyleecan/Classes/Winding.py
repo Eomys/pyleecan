@@ -241,8 +241,7 @@ class Winding(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Winding_dict = dict()
         Winding_dict["is_reverse_wind"] = self.is_reverse_wind
@@ -444,7 +443,7 @@ class Winding(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "conductor"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Conductor()
         check_var("conductor", value, "Conductor")
         self._conductor = value

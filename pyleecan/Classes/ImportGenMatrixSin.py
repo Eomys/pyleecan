@@ -122,8 +122,7 @@ class ImportGenMatrixSin(ImportMatrix):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from ImportMatrix
         ImportGenMatrixSin_dict = super(ImportGenMatrixSin, self).as_dict()
@@ -163,7 +162,7 @@ class ImportGenMatrixSin(ImportMatrix):
                         "pyleecan.Classes", obj.get("__class__"), "sin_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("sin_list", value, "[ImportGenVectSin]")
         self._sin_list = value

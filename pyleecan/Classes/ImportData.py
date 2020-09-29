@@ -147,8 +147,7 @@ class ImportData(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         ImportData_dict = dict()
         if self.axes is None:
@@ -200,7 +199,7 @@ class ImportData(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "axes"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("axes", value, "[ImportData]")
         self._axes = value
@@ -227,7 +226,7 @@ class ImportData(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "field"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Import()
         check_var("field", value, "Import")
         self._field = value
@@ -304,7 +303,7 @@ class ImportData(FrozenClass):
 
     def _set_normalizations(self, value):
         """setter of normalizations"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("normalizations", value, "dict")
         self._normalizations = value
@@ -324,7 +323,7 @@ class ImportData(FrozenClass):
 
     def _set_symmetries(self, value):
         """setter of symmetries"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("symmetries", value, "dict")
         self._symmetries = value

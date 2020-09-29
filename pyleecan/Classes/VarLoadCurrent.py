@@ -240,8 +240,7 @@ class VarLoadCurrent(VarLoad):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from VarLoad
         VarLoadCurrent_dict = super(VarLoadCurrent, self).as_dict()
@@ -273,8 +272,8 @@ class VarLoadCurrent(VarLoad):
 
     def _set_OP_matrix(self, value):
         """setter of OP_matrix"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)

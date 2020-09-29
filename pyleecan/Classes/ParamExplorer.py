@@ -123,8 +123,7 @@ class ParamExplorer(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         ParamExplorer_dict = dict()
         ParamExplorer_dict["name"] = self.name

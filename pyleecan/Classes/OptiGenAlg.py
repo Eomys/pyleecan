@@ -160,8 +160,7 @@ class OptiGenAlg(OptiSolver):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from OptiSolver
         OptiGenAlg_dict = super(OptiGenAlg, self).as_dict()
@@ -221,7 +220,7 @@ class OptiGenAlg(OptiSolver):
                 "pyleecan.Classes", value.get("__class__"), "selector"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = function()
         try:
             check_var("selector", value, "list")
@@ -260,7 +259,7 @@ class OptiGenAlg(OptiSolver):
                 "pyleecan.Classes", value.get("__class__"), "crossover"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = function()
         try:
             check_var("crossover", value, "list")
@@ -299,7 +298,7 @@ class OptiGenAlg(OptiSolver):
                 "pyleecan.Classes", value.get("__class__"), "mutator"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = function()
         try:
             check_var("mutator", value, "list")

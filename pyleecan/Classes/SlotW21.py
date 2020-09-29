@@ -276,8 +276,7 @@ class SlotW21(SlotWind):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from SlotWind
         SlotW21_dict = super(SlotW21, self).as_dict()

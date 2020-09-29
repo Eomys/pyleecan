@@ -110,8 +110,7 @@ class SlotUD(Slot):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Slot
         SlotUD_dict = super(SlotUD, self).as_dict()
@@ -136,7 +135,7 @@ class SlotUD(Slot):
 
     def _set_point_list(self, value):
         """setter of point_list"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = list()
         check_var("point_list", value, "list")
         self._point_list = value
