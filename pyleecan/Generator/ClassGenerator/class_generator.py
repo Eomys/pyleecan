@@ -91,6 +91,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Save function
     class_file.write("from ..Functions.save import save\n")
+    class_file.write("from ..Functions.copy import copy\n")
     class_file.write("from ..Functions.load import load_init_dict\n")
     class_file.write("from ..Functions.Load.import_class import import_class\n")
 
@@ -254,12 +255,9 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write(TAB2 + ")\n")
         class_file.write(TAB + "else:\n")
         class_file.write(TAB2 + meth_name + " = " + meth_name + "\n")
-    class_file.write(TAB + "# save method is available in all object\n")
-    class_file.write(TAB + "save = save\n\n")
-    class_file.write(TAB + "# generic copy method\n")
-    class_file.write(TAB + "def copy(self):\n")
-    class_file.write(TAB2 + '"""Return a copy of the class\n' + TAB2 + '"""\n')
-    class_file.write(TAB2 + "return type(self)(init_dict=self.as_dict())\n\n")
+    class_file.write(TAB + "# save and copy methods are available in all object\n")
+    class_file.write(TAB + "save = save\n")
+    class_file.write(TAB + "copy = copy\n")
 
     if IS_LOGGER:
         class_file.write(TAB + "# get_logger method is available in all object\n")
