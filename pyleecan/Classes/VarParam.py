@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .VarSimu import VarSimu
 
 # Import all class method
@@ -63,7 +65,8 @@ class VarParam(VarSimu):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -71,47 +74,31 @@ class VarParam(VarSimu):
 
     def __init__(
         self,
-        paramexplorer_list=list(),
+        paramexplorer_list=-1,
         name="",
         desc="",
-        datakeeper_list=list(),
+        datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
         ref_simu_index=None,
         nb_simu=0,
         is_reuse_femm_file=True,
-        postproc_list=list(),
+        postproc_list=-1,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            paramexplorer_list = obj.paramexplorer_list
-            name = obj.name
-            desc = obj.desc
-            datakeeper_list = obj.datakeeper_list
-            is_keep_all_output = obj.is_keep_all_output
-            stop_if_error = obj.stop_if_error
-            ref_simu_index = obj.ref_simu_index
-            nb_simu = obj.nb_simu
-            is_reuse_femm_file = obj.is_reuse_femm_file
-            postproc_list = obj.postproc_list
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -135,44 +122,8 @@ class VarParam(VarSimu):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
             if "postproc_list" in list(init_dict.keys()):
                 postproc_list = init_dict["postproc_list"]
-        # Initialisation by argument
-        # paramexplorer_list can be None or a list of ParamExplorer object or a list of dict
-        if type(paramexplorer_list) is list:
-            # Check if the list is only composed of ParamExplorer
-            if len(paramexplorer_list) > 0 and all(
-                isinstance(obj, ParamExplorer) for obj in paramexplorer_list
-            ):
-                # set the list to keep pointer reference
-                self.paramexplorer_list = paramexplorer_list
-            else:
-                self.paramexplorer_list = list()
-                for obj in paramexplorer_list:
-                    if not isinstance(obj, dict):  # Default value
-                        self.paramexplorer_list.append(obj)
-                    elif isinstance(obj, dict):
-                        # Check that the type is correct (including daughter)
-                        class_name = obj.get("__class__")
-                        if class_name not in [
-                            "ParamExplorer",
-                            "OptiDesignVar",
-                            "ParamExplorerSet",
-                        ]:
-                            raise InitUnKnowClassError(
-                                "Unknow class name "
-                                + class_name
-                                + " in init_dict for paramexplorer_list"
-                            )
-                        # Dynamic import to call the correct constructor
-                        module = __import__(
-                            "pyleecan.Classes." + class_name, fromlist=[class_name]
-                        )
-                        class_obj = getattr(module, class_name)
-                        self.paramexplorer_list.append(class_obj(init_dict=obj))
-
-        elif paramexplorer_list is None:
-            self.paramexplorer_list = list()
-        else:
-            self.paramexplorer_list = paramexplorer_list
+        # Set the properties (value check and convertion are done in setter)
+        self.paramexplorer_list = paramexplorer_list
         # Call VarSimu init
         super(VarParam, self).__init__(
             name=name,
@@ -189,7 +140,7 @@ class VarParam(VarSimu):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         VarParam_str = ""
         # Get the properties inherited from VarSimu
@@ -220,13 +171,17 @@ class VarParam(VarSimu):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from VarSimu
         VarParam_dict = super(VarParam, self).as_dict()
-        VarParam_dict["paramexplorer_list"] = list()
-        for obj in self.paramexplorer_list:
-            VarParam_dict["paramexplorer_list"].append(obj.as_dict())
+        if self.paramexplorer_list is None:
+            VarParam_dict["paramexplorer_list"] = None
+        else:
+            VarParam_dict["paramexplorer_list"] = list()
+            for obj in self.paramexplorer_list:
+                VarParam_dict["paramexplorer_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         VarParam_dict["__class__"] = "VarParam"
@@ -242,19 +197,25 @@ class VarParam(VarSimu):
 
     def _get_paramexplorer_list(self):
         """getter of paramexplorer_list"""
-        for obj in self._paramexplorer_list:
-            if obj is not None:
-                obj.parent = self
+        if self._paramexplorer_list is not None:
+            for obj in self._paramexplorer_list:
+                if obj is not None:
+                    obj.parent = self
         return self._paramexplorer_list
 
     def _set_paramexplorer_list(self, value):
         """setter of paramexplorer_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "paramexplorer_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("paramexplorer_list", value, "[ParamExplorer]")
         self._paramexplorer_list = value
-
-        for obj in self._paramexplorer_list:
-            if obj is not None:
-                obj.parent = self
 
     paramexplorer_list = property(
         fget=_get_paramexplorer_list,

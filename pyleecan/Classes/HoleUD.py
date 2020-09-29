@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .HoleMag import HoleMag
 
 # Import all class method
@@ -94,7 +96,8 @@ class HoleUD(HoleMag):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -102,8 +105,8 @@ class HoleUD(HoleMag):
 
     def __init__(
         self,
-        surf_list=list(),
-        magnet_dict={},
+        surf_list=-1,
+        magnet_dict=-1,
         Zh=36,
         mat_void=-1,
         init_dict=None,
@@ -111,28 +114,16 @@ class HoleUD(HoleMag):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if mat_void == -1:
-            mat_void = Material()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            surf_list = obj.surf_list
-            magnet_dict = obj.magnet_dict
-            Zh = obj.Zh
-            mat_void = obj.mat_void
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -144,47 +135,8 @@ class HoleUD(HoleMag):
                 Zh = init_dict["Zh"]
             if "mat_void" in list(init_dict.keys()):
                 mat_void = init_dict["mat_void"]
-        # Initialisation by argument
-        # surf_list can be None or a list of Surface object or a list of dict
-        if type(surf_list) is list:
-            # Check if the list is only composed of Surface
-            if len(surf_list) > 0 and all(
-                isinstance(obj, Surface) for obj in surf_list
-            ):
-                # set the list to keep pointer reference
-                self.surf_list = surf_list
-            else:
-                self.surf_list = list()
-                for obj in surf_list:
-                    if not isinstance(obj, dict):  # Default value
-                        self.surf_list.append(obj)
-                    elif isinstance(obj, dict):
-                        # Check that the type is correct (including daughter)
-                        class_name = obj.get("__class__")
-                        if class_name not in [
-                            "Surface",
-                            "Circle",
-                            "PolarArc",
-                            "SurfLine",
-                            "SurfRing",
-                            "Trapeze",
-                        ]:
-                            raise InitUnKnowClassError(
-                                "Unknow class name "
-                                + class_name
-                                + " in init_dict for surf_list"
-                            )
-                        # Dynamic import to call the correct constructor
-                        module = __import__(
-                            "pyleecan.Classes." + class_name, fromlist=[class_name]
-                        )
-                        class_obj = getattr(module, class_name)
-                        self.surf_list.append(class_obj(init_dict=obj))
-
-        elif surf_list is None:
-            self.surf_list = list()
-        else:
-            self.surf_list = surf_list
+        # Set the properties (value check and convertion are done in setter)
+        self.surf_list = surf_list
         self.magnet_dict = magnet_dict
         # Call HoleMag init
         super(HoleUD, self).__init__(Zh=Zh, mat_void=mat_void)
@@ -192,7 +144,7 @@ class HoleUD(HoleMag):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         HoleUD_str = ""
         # Get the properties inherited from HoleMag
@@ -223,13 +175,17 @@ class HoleUD(HoleMag):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from HoleMag
         HoleUD_dict = super(HoleUD, self).as_dict()
-        HoleUD_dict["surf_list"] = list()
-        for obj in self.surf_list:
-            HoleUD_dict["surf_list"].append(obj.as_dict())
+        if self.surf_list is None:
+            HoleUD_dict["surf_list"] = None
+        else:
+            HoleUD_dict["surf_list"] = list()
+            for obj in self.surf_list:
+                HoleUD_dict["surf_list"].append(obj.as_dict())
         HoleUD_dict["magnet_dict"] = self.magnet_dict
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
@@ -247,19 +203,25 @@ class HoleUD(HoleMag):
 
     def _get_surf_list(self):
         """getter of surf_list"""
-        for obj in self._surf_list:
-            if obj is not None:
-                obj.parent = self
+        if self._surf_list is not None:
+            for obj in self._surf_list:
+                if obj is not None:
+                    obj.parent = self
         return self._surf_list
 
     def _set_surf_list(self, value):
         """setter of surf_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "surf_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("surf_list", value, "[Surface]")
         self._surf_list = value
-
-        for obj in self._surf_list:
-            if obj is not None:
-                obj.parent = self
 
     surf_list = property(
         fget=_get_surf_list,
@@ -276,6 +238,8 @@ class HoleUD(HoleMag):
 
     def _set_magnet_dict(self, value):
         """setter of magnet_dict"""
+        if value is -1:
+            value = dict()
         check_var("magnet_dict", value, "dict")
         self._magnet_dict = value
 

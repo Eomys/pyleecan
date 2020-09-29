@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Input import Input
 
 # Import all class method
@@ -74,7 +76,8 @@ class InputElec(Input):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -98,37 +101,16 @@ class InputElec(Input):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if time == -1:
-            time = ImportMatrix()
-        if angle == -1:
-            angle = ImportMatrix()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            N0 = obj.N0
-            rot_dir = obj.rot_dir
-            Id_ref = obj.Id_ref
-            Iq_ref = obj.Iq_ref
-            Ud_ref = obj.Ud_ref
-            Uq_ref = obj.Uq_ref
-            time = obj.time
-            angle = obj.angle
-            Nt_tot = obj.Nt_tot
-            Nrev = obj.Nrev
-            Na_tot = obj.Na_tot
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -154,7 +136,7 @@ class InputElec(Input):
                 Nrev = init_dict["Nrev"]
             if "Na_tot" in list(init_dict.keys()):
                 Na_tot = init_dict["Na_tot"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.N0 = N0
         self.rot_dir = rot_dir
         self.Id_ref = Id_ref
@@ -169,7 +151,7 @@ class InputElec(Input):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         InputElec_str = ""
         # Get the properties inherited from Input
@@ -206,7 +188,8 @@ class InputElec(Input):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Input
         InputElec_dict = super(InputElec, self).as_dict()

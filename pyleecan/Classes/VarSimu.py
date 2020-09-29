@@ -9,6 +9,8 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -90,7 +92,8 @@ class VarSimu(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -100,43 +103,28 @@ class VarSimu(FrozenClass):
         self,
         name="",
         desc="",
-        datakeeper_list=list(),
+        datakeeper_list=-1,
         is_keep_all_output=False,
         stop_if_error=False,
         ref_simu_index=None,
         nb_simu=0,
         is_reuse_femm_file=True,
-        postproc_list=list(),
+        postproc_list=-1,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            name = obj.name
-            desc = obj.desc
-            datakeeper_list = obj.datakeeper_list
-            is_keep_all_output = obj.is_keep_all_output
-            stop_if_error = obj.stop_if_error
-            ref_simu_index = obj.ref_simu_index
-            nb_simu = obj.nb_simu
-            is_reuse_femm_file = obj.is_reuse_femm_file
-            postproc_list = obj.postproc_list
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -158,74 +146,23 @@ class VarSimu(FrozenClass):
                 is_reuse_femm_file = init_dict["is_reuse_femm_file"]
             if "postproc_list" in list(init_dict.keys()):
                 postproc_list = init_dict["postproc_list"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
         self.desc = desc
-        # datakeeper_list can be None or a list of DataKeeper object or a list of dict
-        if type(datakeeper_list) is list:
-            # Check if the list is only composed of DataKeeper
-            if len(datakeeper_list) > 0 and all(
-                isinstance(obj, DataKeeper) for obj in datakeeper_list
-            ):
-                # set the list to keep pointer reference
-                self.datakeeper_list = datakeeper_list
-            else:
-                self.datakeeper_list = list()
-                for obj in datakeeper_list:
-                    if not isinstance(obj, dict):  # Default value
-                        self.datakeeper_list.append(obj)
-                    elif isinstance(obj, dict):
-                        self.datakeeper_list.append(DataKeeper(init_dict=obj))
-
-        elif datakeeper_list is None:
-            self.datakeeper_list = list()
-        else:
-            self.datakeeper_list = datakeeper_list
+        self.datakeeper_list = datakeeper_list
         self.is_keep_all_output = is_keep_all_output
         self.stop_if_error = stop_if_error
         self.ref_simu_index = ref_simu_index
         self.nb_simu = nb_simu
         self.is_reuse_femm_file = is_reuse_femm_file
-        # postproc_list can be None or a list of Post object or a list of dict
-        if type(postproc_list) is list:
-            # Check if the list is only composed of Post
-            if len(postproc_list) > 0 and all(
-                isinstance(obj, Post) for obj in postproc_list
-            ):
-                # set the list to keep pointer reference
-                self.postproc_list = postproc_list
-            else:
-                self.postproc_list = list()
-                for obj in postproc_list:
-                    if not isinstance(obj, dict):  # Default value
-                        self.postproc_list.append(obj)
-                    elif isinstance(obj, dict):
-                        # Check that the type is correct (including daughter)
-                        class_name = obj.get("__class__")
-                        if class_name not in ["Post", "PostFunction", "PostMethod"]:
-                            raise InitUnKnowClassError(
-                                "Unknow class name "
-                                + class_name
-                                + " in init_dict for postproc_list"
-                            )
-                        # Dynamic import to call the correct constructor
-                        module = __import__(
-                            "pyleecan.Classes." + class_name, fromlist=[class_name]
-                        )
-                        class_obj = getattr(module, class_name)
-                        self.postproc_list.append(class_obj(init_dict=obj))
-
-        elif postproc_list is None:
-            self.postproc_list = list()
-        else:
-            self.postproc_list = postproc_list
+        self.postproc_list = postproc_list
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         VarSimu_str = ""
         if self.parent is None:
@@ -285,22 +222,29 @@ class VarSimu(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         VarSimu_dict = dict()
         VarSimu_dict["name"] = self.name
         VarSimu_dict["desc"] = self.desc
-        VarSimu_dict["datakeeper_list"] = list()
-        for obj in self.datakeeper_list:
-            VarSimu_dict["datakeeper_list"].append(obj.as_dict())
+        if self.datakeeper_list is None:
+            VarSimu_dict["datakeeper_list"] = None
+        else:
+            VarSimu_dict["datakeeper_list"] = list()
+            for obj in self.datakeeper_list:
+                VarSimu_dict["datakeeper_list"].append(obj.as_dict())
         VarSimu_dict["is_keep_all_output"] = self.is_keep_all_output
         VarSimu_dict["stop_if_error"] = self.stop_if_error
         VarSimu_dict["ref_simu_index"] = self.ref_simu_index
         VarSimu_dict["nb_simu"] = self.nb_simu
         VarSimu_dict["is_reuse_femm_file"] = self.is_reuse_femm_file
-        VarSimu_dict["postproc_list"] = list()
-        for obj in self.postproc_list:
-            VarSimu_dict["postproc_list"].append(obj.as_dict())
+        if self.postproc_list is None:
+            VarSimu_dict["postproc_list"] = None
+        else:
+            VarSimu_dict["postproc_list"] = list()
+            for obj in self.postproc_list:
+                VarSimu_dict["postproc_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         VarSimu_dict["__class__"] = "VarSimu"
         return VarSimu_dict
@@ -358,19 +302,25 @@ class VarSimu(FrozenClass):
 
     def _get_datakeeper_list(self):
         """getter of datakeeper_list"""
-        for obj in self._datakeeper_list:
-            if obj is not None:
-                obj.parent = self
+        if self._datakeeper_list is not None:
+            for obj in self._datakeeper_list:
+                if obj is not None:
+                    obj.parent = self
         return self._datakeeper_list
 
     def _set_datakeeper_list(self, value):
         """setter of datakeeper_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "datakeeper_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("datakeeper_list", value, "[DataKeeper]")
         self._datakeeper_list = value
-
-        for obj in self._datakeeper_list:
-            if obj is not None:
-                obj.parent = self
 
     datakeeper_list = property(
         fget=_get_datakeeper_list,
@@ -474,19 +424,25 @@ class VarSimu(FrozenClass):
 
     def _get_postproc_list(self):
         """getter of postproc_list"""
-        for obj in self._postproc_list:
-            if obj is not None:
-                obj.parent = self
+        if self._postproc_list is not None:
+            for obj in self._postproc_list:
+                if obj is not None:
+                    obj.parent = self
         return self._postproc_list
 
     def _set_postproc_list(self, value):
         """setter of postproc_list"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "postproc_list"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value is -1:
+            value = list()
         check_var("postproc_list", value, "[Post]")
         self._postproc_list = value
-
-        for obj in self._postproc_list:
-            if obj is not None:
-                obj.parent = self
 
     postproc_list = property(
         fget=_get_postproc_list,

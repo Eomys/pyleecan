@@ -17,6 +17,8 @@ from ...Generator.ClassGenerator.init_void_method_generator import generate_init
 from ...Generator.ClassGenerator.eq_method_generator import generate_eq
 from ...Generator.ClassGenerator.set_None_method_generator import generate_set_None
 
+IS_LOGGER = True  # False to remove logger related code
+
 
 def generate_class(gen_dict, class_name, path_to_gen):
     """generate the corresponding class file (erase the previous code)
@@ -71,7 +73,8 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Import
     class_file.write("from os import linesep\n")
-    class_file.write("from logging import getLogger\n")
+    if IS_LOGGER:
+        class_file.write("from logging import getLogger\n")
 
     if "ndarray" in import_type_list:
         class_file.write("from ._check import set_array, " + "check_var, raise_\n")
@@ -79,7 +82,8 @@ def generate_class(gen_dict, class_name, path_to_gen):
         class_file.write("from ._check import check_var, raise_\n")
 
     # Get logger function
-    class_file.write("from ..Functions.get_logger import get_logger\n")
+    if IS_LOGGER:
+        class_file.write("from ..Functions.get_logger import get_logger\n")
 
     #
     # if len(class_dict["properties"]) == 0 and class_dict["mother"] == "":
@@ -87,6 +91,8 @@ def generate_class(gen_dict, class_name, path_to_gen):
 
     # Save function
     class_file.write("from ..Functions.save import save\n")
+    class_file.write("from ..Functions.load import load_init_dict\n")
+    class_file.write("from ..Functions.Load.import_class import import_class\n")
 
     # Import of the mother_class (FrozenClass by default)
     # All the classes file are in the Classes folder (regardless of their main package)
@@ -116,17 +122,18 @@ def generate_class(gen_dict, class_name, path_to_gen):
         if "ndarray" not in import_type_list and "{ndarray}" not in import_type_list:
             import_type_list.append("ndarray")
     # Import Array from numpy
-    if "{ndarray}" in import_type_list and "ndarray" in import_type_list:
-        class_file.write("from numpy import array, empty, array_equal\n")
-        import_type_list.remove("{ndarray}")
-        import_type_list.remove("ndarray")
-    elif "ndarray" in import_type_list:
+    if (
+        "{ndarray}" in import_type_list
+        or "[ndarray]" in import_type_list
+        or "ndarray" in import_type_list
+    ):
         class_file.write("from numpy import array, array_equal\n")
-        import_type_list.remove("ndarray")
-    # For Matrix and Vector (numpy) property
-    elif "{ndarray}" in import_type_list:
-        class_file.write("from numpy import array, empty\n")
+    if "{ndarray}" in import_type_list:
         import_type_list.remove("{ndarray}")
+    if "[ndarray]" in import_type_list:
+        import_type_list.remove("[ndarray]")
+    if "ndarray" in import_type_list:
+        import_type_list.remove("ndarray")
 
     # For function type
     cloudpickle_imported = False  # Only import cloudpickle once
@@ -140,7 +147,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
     # Import types from other package
     types_imported = []
     for import_type in import_type_list:
-        if "." in import_type:
+        if "." in import_type and "SciDataTool" not in import_type:
             if cloudpickle_imported == False:
                 cloudpickle_imported = True
                 class_file.write("from cloudpickle import dumps, loads\n")
@@ -199,9 +206,19 @@ def generate_class(gen_dict, class_name, path_to_gen):
         )
     for meth in class_dict["methods"]:
         meth_name = meth.split(".")[-1]
-        class_file.write(
-            TAB + "# cf Methods." + class_pack + "." + class_name + "." + meth + "\n"
-        )
+        if class_pack not in ["", None]:
+            class_file.write(
+                TAB
+                + "# cf Methods."
+                + class_pack
+                + "."
+                + class_name
+                + "."
+                + meth
+                + "\n"
+            )
+        else:
+            class_file.write(TAB + "# cf Methods." + class_name + "." + meth + "\n")
         class_file.write(TAB + "if isinstance(" + meth_name + ", ImportError):\n")
         class_file.write(TAB2 + meth_name + " = property(\n")
         class_file.write(TAB3 + "fget=lambda x: raise_(\n")
@@ -244,8 +261,9 @@ def generate_class(gen_dict, class_name, path_to_gen):
     class_file.write(TAB2 + '"""Return a copy of the class\n' + TAB2 + '"""\n')
     class_file.write(TAB2 + "return type(self)(init_dict=self.as_dict())\n\n")
 
-    class_file.write(TAB + "# get_logger method is available in all object\n")
-    class_file.write(TAB + "get_logger = get_logger\n\n")
+    if IS_LOGGER:
+        class_file.write(TAB + "# get_logger method is available in all object\n")
+        class_file.write(TAB + "get_logger = get_logger\n\n")
 
     # Add the __init__ method
     if len(class_dict["properties"]) == 0 and class_dict["mother"] == "":
