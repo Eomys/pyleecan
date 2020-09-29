@@ -306,9 +306,12 @@ class LamSlotMulti(Lamination):
 
         # Get the properties inherited from Lamination
         LamSlotMulti_dict = super(LamSlotMulti, self).as_dict()
-        LamSlotMulti_dict["slot_list"] = list()
-        for obj in self.slot_list:
-            LamSlotMulti_dict["slot_list"].append(obj.as_dict())
+        if self.slot_list is None:
+            LamSlotMulti_dict["slot_list"] = None
+        else:
+            LamSlotMulti_dict["slot_list"] = list()
+            for obj in self.slot_list:
+                LamSlotMulti_dict["slot_list"].append(obj.as_dict())
         if self.alpha is None:
             LamSlotMulti_dict["alpha"] = None
         else:

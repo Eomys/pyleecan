@@ -228,17 +228,23 @@ class VarSimu(FrozenClass):
         VarSimu_dict = dict()
         VarSimu_dict["name"] = self.name
         VarSimu_dict["desc"] = self.desc
-        VarSimu_dict["datakeeper_list"] = list()
-        for obj in self.datakeeper_list:
-            VarSimu_dict["datakeeper_list"].append(obj.as_dict())
+        if self.datakeeper_list is None:
+            VarSimu_dict["datakeeper_list"] = None
+        else:
+            VarSimu_dict["datakeeper_list"] = list()
+            for obj in self.datakeeper_list:
+                VarSimu_dict["datakeeper_list"].append(obj.as_dict())
         VarSimu_dict["is_keep_all_output"] = self.is_keep_all_output
         VarSimu_dict["stop_if_error"] = self.stop_if_error
         VarSimu_dict["ref_simu_index"] = self.ref_simu_index
         VarSimu_dict["nb_simu"] = self.nb_simu
         VarSimu_dict["is_reuse_femm_file"] = self.is_reuse_femm_file
-        VarSimu_dict["postproc_list"] = list()
-        for obj in self.postproc_list:
-            VarSimu_dict["postproc_list"].append(obj.as_dict())
+        if self.postproc_list is None:
+            VarSimu_dict["postproc_list"] = None
+        else:
+            VarSimu_dict["postproc_list"] = list()
+            for obj in self.postproc_list:
+                VarSimu_dict["postproc_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         VarSimu_dict["__class__"] = "VarSimu"
         return VarSimu_dict

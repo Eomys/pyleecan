@@ -187,9 +187,12 @@ class Simulation(FrozenClass):
             Simulation_dict["var_simu"] = None
         else:
             Simulation_dict["var_simu"] = self.var_simu.as_dict()
-        Simulation_dict["postproc_list"] = list()
-        for obj in self.postproc_list:
-            Simulation_dict["postproc_list"].append(obj.as_dict())
+        if self.postproc_list is None:
+            Simulation_dict["postproc_list"] = None
+        else:
+            Simulation_dict["postproc_list"] = list()
+            for obj in self.postproc_list:
+                Simulation_dict["postproc_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         Simulation_dict["__class__"] = "Simulation"
         return Simulation_dict

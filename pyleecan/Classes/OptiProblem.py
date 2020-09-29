@@ -186,12 +186,18 @@ class OptiProblem(FrozenClass):
             OptiProblem_dict["output"] = None
         else:
             OptiProblem_dict["output"] = self.output.as_dict()
-        OptiProblem_dict["design_var"] = list()
-        for obj in self.design_var:
-            OptiProblem_dict["design_var"].append(obj.as_dict())
-        OptiProblem_dict["obj_func"] = list()
-        for obj in self.obj_func:
-            OptiProblem_dict["obj_func"].append(obj.as_dict())
+        if self.design_var is None:
+            OptiProblem_dict["design_var"] = None
+        else:
+            OptiProblem_dict["design_var"] = list()
+            for obj in self.design_var:
+                OptiProblem_dict["design_var"].append(obj.as_dict())
+        if self.obj_func is None:
+            OptiProblem_dict["obj_func"] = None
+        else:
+            OptiProblem_dict["obj_func"] = list()
+            for obj in self.obj_func:
+                OptiProblem_dict["obj_func"].append(obj.as_dict())
         if self.eval_func is None:
             OptiProblem_dict["eval_func"] = None
         else:
@@ -199,9 +205,12 @@ class OptiProblem(FrozenClass):
                 dumps(self._eval_func[0]).decode("ISO-8859-2"),
                 self._eval_func[1],
             ]
-        OptiProblem_dict["constraint"] = list()
-        for obj in self.constraint:
-            OptiProblem_dict["constraint"].append(obj.as_dict())
+        if self.constraint is None:
+            OptiProblem_dict["constraint"] = None
+        else:
+            OptiProblem_dict["constraint"] = list()
+            for obj in self.constraint:
+                OptiProblem_dict["constraint"].append(obj.as_dict())
         if self.preprocessing is None:
             OptiProblem_dict["preprocessing"] = None
         else:
@@ -209,9 +218,12 @@ class OptiProblem(FrozenClass):
                 dumps(self._preprocessing[0]).decode("ISO-8859-2"),
                 self._preprocessing[1],
             ]
-        OptiProblem_dict["datakeeper_list"] = list()
-        for obj in self.datakeeper_list:
-            OptiProblem_dict["datakeeper_list"].append(obj.as_dict())
+        if self.datakeeper_list is None:
+            OptiProblem_dict["datakeeper_list"] = None
+        else:
+            OptiProblem_dict["datakeeper_list"] = list()
+            for obj in self.datakeeper_list:
+                OptiProblem_dict["datakeeper_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         OptiProblem_dict["__class__"] = "OptiProblem"
         return OptiProblem_dict

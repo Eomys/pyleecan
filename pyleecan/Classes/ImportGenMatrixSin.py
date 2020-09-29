@@ -132,9 +132,12 @@ class ImportGenMatrixSin(ImportMatrix):
 
         # Get the properties inherited from ImportMatrix
         ImportGenMatrixSin_dict = super(ImportGenMatrixSin, self).as_dict()
-        ImportGenMatrixSin_dict["sin_list"] = list()
-        for obj in self.sin_list:
-            ImportGenMatrixSin_dict["sin_list"].append(obj.as_dict())
+        if self.sin_list is None:
+            ImportGenMatrixSin_dict["sin_list"] = None
+        else:
+            ImportGenMatrixSin_dict["sin_list"] = list()
+            for obj in self.sin_list:
+                ImportGenMatrixSin_dict["sin_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         ImportGenMatrixSin_dict["__class__"] = "ImportGenMatrixSin"

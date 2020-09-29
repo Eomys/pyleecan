@@ -292,13 +292,19 @@ class MeshSolution(FrozenClass):
 
         MeshSolution_dict = dict()
         MeshSolution_dict["label"] = self.label
-        MeshSolution_dict["mesh"] = list()
-        for obj in self.mesh:
-            MeshSolution_dict["mesh"].append(obj.as_dict())
+        if self.mesh is None:
+            MeshSolution_dict["mesh"] = None
+        else:
+            MeshSolution_dict["mesh"] = list()
+            for obj in self.mesh:
+                MeshSolution_dict["mesh"].append(obj.as_dict())
         MeshSolution_dict["is_same_mesh"] = self.is_same_mesh
-        MeshSolution_dict["solution"] = list()
-        for obj in self.solution:
-            MeshSolution_dict["solution"].append(obj.as_dict())
+        if self.solution is None:
+            MeshSolution_dict["solution"] = None
+        else:
+            MeshSolution_dict["solution"] = list()
+            for obj in self.solution:
+                MeshSolution_dict["solution"].append(obj.as_dict())
         if self.group is None:
             MeshSolution_dict["group"] = None
         else:

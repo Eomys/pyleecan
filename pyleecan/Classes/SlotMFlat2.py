@@ -295,9 +295,12 @@ class SlotMFlat2(SlotMag):
         SlotMFlat2_dict["W0"] = self.W0
         SlotMFlat2_dict["W0_is_rad"] = self.W0_is_rad
         SlotMFlat2_dict["W1"] = self.W1
-        SlotMFlat2_dict["magnet"] = list()
-        for obj in self.magnet:
-            SlotMFlat2_dict["magnet"].append(obj.as_dict())
+        if self.magnet is None:
+            SlotMFlat2_dict["magnet"] = None
+        else:
+            SlotMFlat2_dict["magnet"] = list()
+            for obj in self.magnet:
+                SlotMFlat2_dict["magnet"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         SlotMFlat2_dict["__class__"] = "SlotMFlat2"

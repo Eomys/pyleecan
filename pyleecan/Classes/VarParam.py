@@ -176,9 +176,12 @@ class VarParam(VarSimu):
 
         # Get the properties inherited from VarSimu
         VarParam_dict = super(VarParam, self).as_dict()
-        VarParam_dict["paramexplorer_list"] = list()
-        for obj in self.paramexplorer_list:
-            VarParam_dict["paramexplorer_list"].append(obj.as_dict())
+        if self.paramexplorer_list is None:
+            VarParam_dict["paramexplorer_list"] = None
+        else:
+            VarParam_dict["paramexplorer_list"] = list()
+            for obj in self.paramexplorer_list:
+                VarParam_dict["paramexplorer_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         VarParam_dict["__class__"] = "VarParam"

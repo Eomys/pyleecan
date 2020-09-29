@@ -256,9 +256,12 @@ class MeshMat(Mesh):
 
         # Get the properties inherited from Mesh
         MeshMat_dict = super(MeshMat, self).as_dict()
-        MeshMat_dict["cell"] = dict()
-        for key, obj in self.cell.items():
-            MeshMat_dict["cell"][key] = obj.as_dict()
+        if self.cell is None:
+            MeshMat_dict["cell"] = None
+        else:
+            MeshMat_dict["cell"] = dict()
+            for key, obj in self.cell.items():
+                MeshMat_dict["cell"][key] = obj.as_dict()
         if self.point is None:
             MeshMat_dict["point"] = None
         else:

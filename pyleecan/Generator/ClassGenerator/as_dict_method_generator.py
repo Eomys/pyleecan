@@ -80,20 +80,26 @@ def generate_as_dict(gen_dict, class_dict):
                 + '"][key] = obj.tolist()\n'
             )
         elif is_list_pyleecan_type(prop["type"]):
-            var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = list()\n'
-            var_str += TAB2 + "for obj in self." + prop["name"] + ":\n"
+            var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
+            var_str += TAB2 + "else:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = list()\n'
+            var_str += TAB3 + "for obj in self." + prop["name"] + ":\n"
             var_str += (
-                TAB3
+                TAB4
                 + class_name
                 + '_dict["'
                 + prop["name"]
                 + '"].append(obj.as_dict())\n'
             )
         elif is_dict_pyleecan_type(prop["type"]):
-            var_str += TAB2 + class_name + '_dict["' + prop["name"] + '"] = dict()\n'
-            var_str += TAB2 + "for key, obj in self." + prop["name"] + ".items():\n"
+            var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
+            var_str += TAB2 + "else:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = dict()\n'
+            var_str += TAB3 + "for key, obj in self." + prop["name"] + ".items():\n"
             var_str += (
-                TAB3
+                TAB4
                 + class_name
                 + '_dict["'
                 + prop["name"]

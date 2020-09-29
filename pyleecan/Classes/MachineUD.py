@@ -196,9 +196,12 @@ class MachineUD(Machine):
 
         # Get the properties inherited from Machine
         MachineUD_dict = super(MachineUD, self).as_dict()
-        MachineUD_dict["lam_list"] = list()
-        for obj in self.lam_list:
-            MachineUD_dict["lam_list"].append(obj.as_dict())
+        if self.lam_list is None:
+            MachineUD_dict["lam_list"] = None
+        else:
+            MachineUD_dict["lam_list"] = list()
+            for obj in self.lam_list:
+                MachineUD_dict["lam_list"].append(obj.as_dict())
         MachineUD_dict["is_sync"] = self.is_sync
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
