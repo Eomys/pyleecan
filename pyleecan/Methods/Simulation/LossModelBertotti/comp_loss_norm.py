@@ -72,7 +72,6 @@ def comp_loss_norm(self, meshsolution):
             self.alpha_ex,
         ]
     )
-    print(Coeff)
 
     F_REF = self.F_REF
     B_REF = self.B_REF
@@ -102,6 +101,7 @@ def comp_loss_norm(self, meshsolution):
         # TODO assumption is that direction is 3rd axis
         # TODO better data check (axis size, ...) and data handling
         # TODO Calculate principle axes and transform for exponentials other than 2
+        # TODO Use rad. and tan. comp. as intermediate solution
 
         f_norm = abs(mag_dict["freqs"][:, newaxis] / F_REF)
         B_norm = (

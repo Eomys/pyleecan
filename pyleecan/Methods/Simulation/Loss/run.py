@@ -12,12 +12,15 @@ def run(self):
     if self.parent.parent is None:
         raise InputError("ERROR: The Loss object must be in an Output object to run")
 
+    # get logger
+    logger = self.get_logger()
+
+    # get output
     output = self.parent.parent
-    # machine = self.parent.machine
 
     names = [mdl.name if mdl.name else "model" for mdl in self.models]
-    if DEBUG:
-        print("org. names", names)
+    
+    logger.debug("org. names", names)
 
     # rename model if there are duplicates
     # TODO: better algorithym to respect order of duplicates
@@ -33,19 +36,15 @@ def run(self):
                 cnt += 1
             model.name = name + "_" + str(cnt)
 
-            if DEBUG:
-                print(f"duplicate name found: {name}")
-            if DEBUG:
-                print(f"duplicate name changed to: {model.name}")
+            logger.debug(f"duplicate name found: {name}")
+            logger.debug(f"duplicate name changed to: {model.name}")
 
-    if DEBUG:
-        names = [mdl.name if mdl.name else "model" for mdl in self.models]
-    if DEBUG:
-        print("new names", names)
+
+    names = [mdl.name if mdl.name else "model" for mdl in self.models]
+    logger.debug("new names", names)
 
     # iterate through the models and compute the losses
     # clear losses and meshsolutions beforehand
-    # TODO check for OutLoss
     output.loss.losses = []
     output.loss.meshsolutions = []
 

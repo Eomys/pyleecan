@@ -6,7 +6,7 @@ from scipy import optimize
 
 from ....Methods.Simulation.LossModel import LossModelError
 
-# define loss calculation function
+# TODO: define one loss calculation function
 def _comp_loss(self, C, Cx, f, B):
     f_norm = f / self.F_REF
     B_norm = B / self.B_REF
@@ -39,7 +39,17 @@ def comp_coeff_Bertotti(self, mat):
 
     mat : Material
         A Material object
+
+    Return
+    ------
+    success : bool
+        Return 'True' if parameter fitting was successful.
+
     """
+    # Get logger
+    logger = self.get_logger()
+
+    
     # store loss model parameter
     C = []
     C.append(self.k_hy)
@@ -52,7 +62,7 @@ def comp_coeff_Bertotti(self, mat):
     # check if parameters have to been estimated
     n_est = sum(x is None for x in C)
     if n_est == 0:
-        return
+        return True
 
     data = mat.mag.LossData.get_data()
     f = data[:, 1]
@@ -66,38 +76,26 @@ def comp_coeff_Bertotti(self, mat):
 
     C1 = result.x
     success = result.success
-    message = result.message
 
     if success is None:
-        raise LossModelError("ERROR: LossModel parameter fitting failed.")
+        logger.info(f"'{self.name}' LossModel: Parameter fitting failed.")
+        return False
+    else:
+        ii = 0
+        for idx, c in enumerate(C):
+            if c is None:
+                C[idx] = C1[ii]
+                ii += 1
 
-    ii = 0
-    for idx, c in enumerate(C):
-        if c is None:
-            C[idx] = C1[ii]
-            ii += 1
+        # set the estimated fitting parameters
+        self.k_hy = C[0]
+        self.alpha_hy = C[1]
+        self.k_ed = C[2]
+        self.alpha_ed = C[3]
+        self.k_ex = C[4]
+        self.alpha_ex = C[5]
 
-    # set the estimated fitting parameters
-    self.k_hy = C[0]
-    self.alpha_hy = C[1]
-    self.k_ed = C[2]
-    self.alpha_ed = C[3]
-    self.k_ex = C[4]
-    self.alpha_ex = C[5]
+        logger.debug(f"'{self.name}' LossModel: Parameters estimated coefficiants:")
+        logger.debug(C)
 
-    if False:
-        print()
-
-        L_ = _comp_loss(self, C, None, f, B)
-        E = _comp_err(None)
-
-        for x1, x2, x3, x4, x5 in zip(
-            f, B, Loss, np.round(L_, 2), np.round(Loss - L_, 2)
-        ):
-            print([x1, x2, x3, x4, x5])
-
-        print()
-        print(C)
-        print(success)
-        print(message)
-        print()
+        return True
