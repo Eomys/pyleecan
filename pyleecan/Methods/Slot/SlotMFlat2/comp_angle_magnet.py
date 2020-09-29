@@ -4,7 +4,7 @@ from numpy import arctan
 
 
 def comp_angle_magnet(self):
-    """Compute the angle at the top of the magnet-slot in the slot 
+    """Compute the angle at the top of the magnet-slot in the slot
         (underneath the slot opening)
 
     Parameters

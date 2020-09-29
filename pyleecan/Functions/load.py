@@ -70,8 +70,7 @@ def init_data(obj, file_path):
 
 
 def load_init_dict(file_path):
-    """load the init_dict from a h5 or json file
-    """
+    """load the init_dict from a h5 or json file"""
     if file_path.endswith("hdf5") or file_path.endswith("h5"):
         return load_hdf5(file_path)
     elif file_path.endswith("json") or isdir(file_path):
