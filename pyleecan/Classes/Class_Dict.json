@@ -5365,7 +5365,7 @@
                 "name": "mesh",
                 "type": "[Mesh]",
                 "unit": "",
-                "value": []
+                "value": ""
             },
             {
                 "desc": "1 if the mesh is the same at each step (time, mode etc.)",
@@ -5383,7 +5383,7 @@
                 "name": "solution",
                 "type": "[Solution]",
                 "unit": "",
-                "value": []
+                "value": ""
             },
             {
                 "desc": "Dict sorted by groups name with cells indices. ",
@@ -5392,7 +5392,7 @@
                 "name": "group",
                 "type": "{ndarray}",
                 "unit": "",
-                "value": {}
+                "value": ""
             },
             {
                 "desc": "Dimension of the physical problem",

@@ -63,7 +63,7 @@ except ImportError as error:
     get_group = error
 
 
-from numpy import array, empty
+from numpy import array, array_equal
 from ._check import InitUnKnowClassError
 from .Mesh import Mesh
 from .Solution import Solution
@@ -280,8 +280,16 @@ class MeshSolution(FrozenClass):
             return False
         if other.solution != self.solution:
             return False
-        if other.group != self.group:
+        if other.group is None and self.group is not None:
             return False
+        elif len(other.group) != len(self.group):
+            return False
+        else:
+            for key in other.group:
+                if key not in self.group or not array_equal(
+                    other.group[key], self.group[key]
+                ):
+                    return False
         if other.dimension != self.dimension:
             return False
         return True
@@ -325,7 +333,7 @@ class MeshSolution(FrozenClass):
         self.is_same_mesh = None
         for obj in self.solution:
             obj._set_None()
-        self.group = dict()
+        self.group = None
         self.dimension = None
 
     def _get_label(self):

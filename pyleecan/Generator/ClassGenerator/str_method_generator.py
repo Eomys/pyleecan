@@ -134,6 +134,17 @@ def generate_str(gen_dict, class_dict):
                 + prop["name"]
                 + "[key])"
             )
+        elif prop["type"] == "[ndarray]":
+            var_str += TAB2 + "if len(self." + prop["name"] + ") == 0:\n"
+            var_str += TAB3 + class_name + '_str += "' + prop["name"] + ' = list()"\n'
+            var_str += TAB2 + "for ii, value in enumerate(self." + prop["name"] + "):\n"
+            var_str += (
+                TAB3
+                + class_name
+                + '_str += "'
+                + prop["name"]
+                + '["+str(ii)+"] = "+str(value)'
+            )
         elif is_dict_pyleecan_type(prop["type"]):
             var_str += TAB2 + "if len(self." + prop["name"] + ") == 0:\n"
             var_str += (

@@ -122,17 +122,18 @@ def generate_class(gen_dict, class_name, path_to_gen):
         if "ndarray" not in import_type_list and "{ndarray}" not in import_type_list:
             import_type_list.append("ndarray")
     # Import Array from numpy
-    if "{ndarray}" in import_type_list and "ndarray" in import_type_list:
-        class_file.write("from numpy import array, empty, array_equal\n")
-        import_type_list.remove("{ndarray}")
-        import_type_list.remove("ndarray")
-    elif "ndarray" in import_type_list:
+    if (
+        "{ndarray}" in import_type_list
+        or "[ndarray]" in import_type_list
+        or "ndarray" in import_type_list
+    ):
         class_file.write("from numpy import array, array_equal\n")
-        import_type_list.remove("ndarray")
-    # For Matrix and Vector (numpy) property
-    elif "{ndarray}" in import_type_list:
-        class_file.write("from numpy import array, empty\n")
+    if "{ndarray}" in import_type_list:
         import_type_list.remove("{ndarray}")
+    if "[ndarray]" in import_type_list:
+        import_type_list.remove("[ndarray]")
+    if "ndarray" in import_type_list:
+        import_type_list.remove("ndarray")
 
     # For function type
     cloudpickle_imported = False  # Only import cloudpickle once
