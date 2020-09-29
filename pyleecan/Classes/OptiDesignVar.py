@@ -29,8 +29,7 @@ class OptiDesignVar(ParamExplorer):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -127,8 +126,7 @@ class OptiDesignVar(ParamExplorer):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from ParamExplorer
         OptiDesignVar_dict = super(OptiDesignVar, self).as_dict()

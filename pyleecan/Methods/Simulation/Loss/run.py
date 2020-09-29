@@ -19,7 +19,7 @@ def run(self):
     output = self.parent.parent
 
     names = [mdl.name if mdl.name else "model" for mdl in self.models]
-    
+
     logger.debug("org. names", names)
 
     # rename model if there are duplicates
@@ -38,7 +38,6 @@ def run(self):
 
             logger.debug(f"duplicate name found: {name}")
             logger.debug(f"duplicate name changed to: {model.name}")
-
 
     names = [mdl.name if mdl.name else "model" for mdl in self.models]
     logger.debug("new names", names)

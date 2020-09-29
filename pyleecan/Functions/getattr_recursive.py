@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
+
 def getattr_recursive(obj, attr_list):
     """
     Function to recursively get an attribute.
-    
+
     Parameters
     ----------
     obj : object
-        An object 
+        An object
 
     attr_list: list
         A list of strings that is the attribute 'tree'

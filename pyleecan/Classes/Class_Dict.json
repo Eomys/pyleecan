@@ -3745,7 +3745,6 @@
             }
         ],
         "daughters": [
-            "LossModel",
             "LossModelBertotti"
         ],
         "desc": "Abstract Loss Model Class",

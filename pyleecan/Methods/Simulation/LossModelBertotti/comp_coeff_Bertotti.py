@@ -49,7 +49,6 @@ def comp_coeff_Bertotti(self, mat):
     # Get logger
     logger = self.get_logger()
 
-    
     # store loss model parameter
     C = []
     C.append(self.k_hy)

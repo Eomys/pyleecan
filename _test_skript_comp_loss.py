@@ -38,7 +38,7 @@ myLossModel.k_ed = None
 myLossModel.alpha_ed = 2
 myLossModel.k_ex = 0
 myLossModel.alpha_ex = 1.5
-myLossModel.lam = 'machine.stator'
+myLossModel.lam = "machine.stator"
 myLossModel.group = "stator"
 
 LossData = ImportMatrixXls()
