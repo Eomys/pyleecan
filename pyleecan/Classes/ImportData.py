@@ -156,9 +156,12 @@ class ImportData(FrozenClass):
         """
 
         ImportData_dict = dict()
-        ImportData_dict["axes"] = list()
-        for obj in self.axes:
-            ImportData_dict["axes"].append(obj.as_dict())
+        if self.axes is None:
+            ImportData_dict["axes"] = None
+        else:
+            ImportData_dict["axes"] = list()
+            for obj in self.axes:
+                ImportData_dict["axes"].append(obj.as_dict())
         if self.field is None:
             ImportData_dict["field"] = None
         else:

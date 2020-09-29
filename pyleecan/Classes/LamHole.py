@@ -331,9 +331,12 @@ class LamHole(Lamination):
 
         # Get the properties inherited from Lamination
         LamHole_dict = super(LamHole, self).as_dict()
-        LamHole_dict["hole"] = list()
-        for obj in self.hole:
-            LamHole_dict["hole"].append(obj.as_dict())
+        if self.hole is None:
+            LamHole_dict["hole"] = None
+        else:
+            LamHole_dict["hole"] = list()
+            for obj in self.hole:
+                LamHole_dict["hole"].append(obj.as_dict())
         if self.bore is None:
             LamHole_dict["bore"] = None
         else:

@@ -218,9 +218,12 @@ class SlotMPolar(SlotMag):
         SlotMPolar_dict = super(SlotMPolar, self).as_dict()
         SlotMPolar_dict["W0"] = self.W0
         SlotMPolar_dict["H0"] = self.H0
-        SlotMPolar_dict["magnet"] = list()
-        for obj in self.magnet:
-            SlotMPolar_dict["magnet"].append(obj.as_dict())
+        if self.magnet is None:
+            SlotMPolar_dict["magnet"] = None
+        else:
+            SlotMPolar_dict["magnet"] = list()
+            for obj in self.magnet:
+                SlotMPolar_dict["magnet"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         SlotMPolar_dict["__class__"] = "SlotMPolar"

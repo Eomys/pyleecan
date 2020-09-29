@@ -180,9 +180,12 @@ class HoleUD(HoleMag):
 
         # Get the properties inherited from HoleMag
         HoleUD_dict = super(HoleUD, self).as_dict()
-        HoleUD_dict["surf_list"] = list()
-        for obj in self.surf_list:
-            HoleUD_dict["surf_list"].append(obj.as_dict())
+        if self.surf_list is None:
+            HoleUD_dict["surf_list"] = None
+        else:
+            HoleUD_dict["surf_list"] = list()
+            for obj in self.surf_list:
+                HoleUD_dict["surf_list"].append(obj.as_dict())
         HoleUD_dict["magnet_dict"] = self.magnet_dict
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name

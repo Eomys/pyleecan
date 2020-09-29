@@ -251,9 +251,12 @@ class SurfLine(Surface):
 
         # Get the properties inherited from Surface
         SurfLine_dict = super(SurfLine, self).as_dict()
-        SurfLine_dict["line_list"] = list()
-        for obj in self.line_list:
-            SurfLine_dict["line_list"].append(obj.as_dict())
+        if self.line_list is None:
+            SurfLine_dict["line_list"] = None
+        else:
+            SurfLine_dict["line_list"] = list()
+            for obj in self.line_list:
+                SurfLine_dict["line_list"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         SurfLine_dict["__class__"] = "SurfLine"

@@ -128,9 +128,12 @@ class ImportVectorField(FrozenClass):
         """
 
         ImportVectorField_dict = dict()
-        ImportVectorField_dict["components"] = dict()
-        for key, obj in self.components.items():
-            ImportVectorField_dict["components"][key] = obj.as_dict()
+        if self.components is None:
+            ImportVectorField_dict["components"] = None
+        else:
+            ImportVectorField_dict["components"] = dict()
+            for key, obj in self.components.items():
+                ImportVectorField_dict["components"][key] = obj.as_dict()
         ImportVectorField_dict["name"] = self.name
         ImportVectorField_dict["symbol"] = self.symbol
         # The class name is added to the dict fordeserialisation purpose
