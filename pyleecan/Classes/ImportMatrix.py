@@ -100,7 +100,7 @@ class ImportMatrix(Import):
         # Get the properties inherited from Import
         ImportMatrix_dict = super(ImportMatrix, self).as_dict()
         ImportMatrix_dict["is_transpose"] = self.is_transpose
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportMatrix_dict["__class__"] = "ImportMatrix"
         return ImportMatrix_dict

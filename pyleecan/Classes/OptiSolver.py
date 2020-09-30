@@ -125,7 +125,7 @@ class OptiSolver(FrozenClass):
             OptiSolver_dict["xoutput"] = self.xoutput.as_dict()
         OptiSolver_dict["logger_name"] = self.logger_name
         OptiSolver_dict["is_keep_all_output"] = self.is_keep_all_output
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         OptiSolver_dict["__class__"] = "OptiSolver"
         return OptiSolver_dict
 

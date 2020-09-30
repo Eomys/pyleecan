@@ -148,7 +148,7 @@ class InputFlux(Input):
             InputFlux_dict["OP"] = None
         else:
             InputFlux_dict["OP"] = self.OP.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputFlux_dict["__class__"] = "InputFlux"
         return InputFlux_dict

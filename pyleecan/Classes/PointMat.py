@@ -186,7 +186,7 @@ class PointMat(FrozenClass):
             PointMat_dict["indice"] = None
         else:
             PointMat_dict["indice"] = self.indice.tolist()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         PointMat_dict["__class__"] = "PointMat"
         return PointMat_dict
 

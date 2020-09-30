@@ -477,7 +477,7 @@ class Output(FrozenClass):
             Output_dict["force"] = None
         else:
             Output_dict["force"] = self.force.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Output_dict["__class__"] = "Output"
         return Output_dict
 

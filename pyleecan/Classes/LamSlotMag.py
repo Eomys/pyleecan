@@ -275,7 +275,7 @@ class LamSlotMag(LamSlot):
 
         # Get the properties inherited from LamSlot
         LamSlotMag_dict = super(LamSlotMag, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotMag_dict["__class__"] = "LamSlotMag"
         return LamSlotMag_dict

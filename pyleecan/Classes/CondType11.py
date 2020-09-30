@@ -234,7 +234,7 @@ class CondType11(Conductor):
         CondType11_dict["Wins_coil"] = self.Wins_coil
         CondType11_dict["type_winding_shape"] = self.type_winding_shape
         CondType11_dict["alpha_ew"] = self.alpha_ew
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         CondType11_dict["__class__"] = "CondType11"
         return CondType11_dict

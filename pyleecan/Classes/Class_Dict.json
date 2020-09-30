@@ -10059,7 +10059,7 @@
                 "name": "paramexplorer_list",
                 "type": "[ParamExplorer]",
                 "unit": "-",
-                "value": []
+                "value": ""
             }
         ]
     },
@@ -10113,7 +10113,7 @@
                 "name": "datakeeper_list",
                 "type": "[DataKeeper]",
                 "unit": "-",
-                "value": []
+                "value": ""
             },
             {
                 "desc": "True to store every output in a list",
@@ -10167,7 +10167,7 @@
                 "name": "postproc_list",
                 "type": "[Post]",
                 "unit": "-",
-                "value": []
+                "value": ""
             }
         ]
     },

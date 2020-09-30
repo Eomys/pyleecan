@@ -154,7 +154,7 @@ class OutGeoLam(FrozenClass):
         OutGeoLam_dict["S_wind_act"] = self.S_wind_act
         OutGeoLam_dict["sym"] = self.sym
         OutGeoLam_dict["is_asym_wind"] = self.is_asym_wind
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         OutGeoLam_dict["__class__"] = "OutGeoLam"
         return OutGeoLam_dict
 

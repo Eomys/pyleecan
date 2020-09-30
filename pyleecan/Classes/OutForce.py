@@ -145,7 +145,7 @@ class OutForce(FrozenClass):
         else:
             OutForce_dict["P"] = self.P.as_dict()
         OutForce_dict["logger_name"] = self.logger_name
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         OutForce_dict["__class__"] = "OutForce"
         return OutForce_dict
 

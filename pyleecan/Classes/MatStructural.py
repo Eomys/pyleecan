@@ -157,7 +157,7 @@ class MatStructural(FrozenClass):
         MatStructural_dict["Gxz"] = self.Gxz
         MatStructural_dict["Gxy"] = self.Gxy
         MatStructural_dict["Gyz"] = self.Gyz
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         MatStructural_dict["__class__"] = "MatStructural"
         return MatStructural_dict
 

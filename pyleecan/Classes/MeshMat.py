@@ -260,7 +260,7 @@ class MeshMat(Mesh):
             MeshMat_dict["point"] = None
         else:
             MeshMat_dict["point"] = self.point.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MeshMat_dict["__class__"] = "MeshMat"
         return MeshMat_dict

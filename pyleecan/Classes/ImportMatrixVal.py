@@ -112,7 +112,7 @@ class ImportMatrixVal(ImportMatrix):
             ImportMatrixVal_dict["value"] = None
         else:
             ImportMatrixVal_dict["value"] = self.value.tolist()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportMatrixVal_dict["__class__"] = "ImportMatrixVal"
         return ImportMatrixVal_dict

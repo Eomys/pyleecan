@@ -1,36 +1,37 @@
-from os import linesep
-from logging import getLogger
-from ....Classes._check import check_var, raise_
-
-from inspect import getsource
-from cloudpickle import dumps, loads
+from os.path import isfile
+from importlib import import_module
 from ....Classes._check import CheckTypeError
-from ....Classes._check import InitUnKnowClassError
 
 
 def _set_setter(self, value):
     """setter of setter"""
     # Create the function if setter is defined as a string (e.g. simu.machine.rotor.slot.W0)
-    if isinstance(value, str):
-        if not value.startswith("simu"):
-            raise Exception("Setter string must start with 'simu'")
-
-        *objs, attr = value.split(".")
-
-        accessor = ".".join(objs)
-        value = lambda simu, val: setattr(eval(accessor), attr, val)
-
-    try:
-        check_var("func", value, "list")
-    except CheckTypeError:
-        check_var("func", value, "function")
-    if isinstance(value, list):  # Load function from saved dict
-        self._setter = [loads(value[0].encode("ISO-8859-2")), value[1]]
-    elif value is None:
-        self._setter = [None, None]
+    if isinstance(value, str) and value[:4] == "simu":
+        value_split = value.split(".")
+        value = (
+            "lambda simu, val: setattr(eval('"
+            + ".".join(value_split[:-1])
+            + "'), '"
+            + value_split[-1]
+            + "', val"
+            + ")"
+        )
+    if value is None:
+        self._setter_str = None
+        self._setter_func = None
+    elif isinstance(value, str) and "lambda" in value:
+        self._setter_str = value
+        self._setter_func = eval(value)
+    elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+        self._setter_str = value
+        path, name = value.rsplit(".", 1)
+        mod = import_module(path)
+        self._setter_func = getattr(mod, name)
     elif callable(value):
-        self._setter = [value, getsource(value)]
+        self._setter_str = None
+        self._setter_func = value
     else:
-        raise TypeError(
-            "Expected function or list from a saved file, got: " + str(type(value))
+        raise CheckTypeError(
+            "For property keeper Expected function or str (path to python file or lambda), got: "
+            + str(type(value))
         )

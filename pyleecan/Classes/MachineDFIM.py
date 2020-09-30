@@ -187,7 +187,7 @@ class MachineDFIM(MachineAsync):
             MachineDFIM_dict["stator"] = None
         else:
             MachineDFIM_dict["stator"] = self.stator.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineDFIM_dict["__class__"] = "MachineDFIM"
         return MachineDFIM_dict

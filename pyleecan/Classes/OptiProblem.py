@@ -14,8 +14,8 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
-from inspect import getsource
-from cloudpickle import dumps, loads
+from importlib import import_module
+from os.path import isfile
 from ._check import CheckTypeError
 from ._check import InitUnKnowClassError
 from .Output import Output
@@ -116,12 +116,12 @@ class OptiProblem(FrozenClass):
         for ii in range(len(self.obj_func)):
             tmp = self.obj_func[ii].__str__().replace(linesep, linesep + "\t") + linesep
             OptiProblem_str += "obj_func[" + str(ii) + "] =" + tmp + linesep + linesep
-        if self._eval_func[1] is None:
-            OptiProblem_str += "eval_func = " + str(self._eval_func[1])
+        if self._eval_func_str is not None:
+            OptiProblem_str += "eval_func = " + self._eval_func_str + linesep
+        elif self._eval_func_func is not None:
+            OptiProblem_str += "eval_func = " + str(self._eval_func_func) + linesep
         else:
-            OptiProblem_str += (
-                "eval_func = " + linesep + str(self._eval_func[1]) + linesep + linesep
-            )
+            OptiProblem_str += "eval_func = None" + linesep + linesep
         if len(self.constraint) == 0:
             OptiProblem_str += "constraint = []" + linesep
         for ii in range(len(self.constraint)):
@@ -129,16 +129,14 @@ class OptiProblem(FrozenClass):
                 self.constraint[ii].__str__().replace(linesep, linesep + "\t") + linesep
             )
             OptiProblem_str += "constraint[" + str(ii) + "] =" + tmp + linesep + linesep
-        if self._preprocessing[1] is None:
-            OptiProblem_str += "preprocessing = " + str(self._preprocessing[1])
-        else:
+        if self._preprocessing_str is not None:
+            OptiProblem_str += "preprocessing = " + self._preprocessing_str + linesep
+        elif self._preprocessing_func is not None:
             OptiProblem_str += (
-                "preprocessing = "
-                + linesep
-                + str(self._preprocessing[1])
-                + linesep
-                + linesep
+                "preprocessing = " + str(self._preprocessing_func) + linesep
             )
+        else:
+            OptiProblem_str += "preprocessing = None" + linesep + linesep
         if len(self.datakeeper_list) == 0:
             OptiProblem_str += "datakeeper_list = []" + linesep
         for ii in range(len(self.datakeeper_list)):
@@ -162,11 +160,11 @@ class OptiProblem(FrozenClass):
             return False
         if other.obj_func != self.obj_func:
             return False
-        if other.eval_func != self.eval_func:
+        if other._eval_func_str != self._eval_func_str:
             return False
         if other.constraint != self.constraint:
             return False
-        if other.preprocessing != self.preprocessing:
+        if other._preprocessing_str != self._preprocessing_str:
             return False
         if other.datakeeper_list != self.datakeeper_list:
             return False
@@ -192,33 +190,27 @@ class OptiProblem(FrozenClass):
             OptiProblem_dict["obj_func"] = list()
             for obj in self.obj_func:
                 OptiProblem_dict["obj_func"].append(obj.as_dict())
-        if self.eval_func is None:
-            OptiProblem_dict["eval_func"] = None
+        if self._eval_func_str is not None:
+            OptiProblem_dict["eval_func"] = self._eval_func_str
         else:
-            OptiProblem_dict["eval_func"] = [
-                dumps(self._eval_func[0]).decode("ISO-8859-2"),
-                self._eval_func[1],
-            ]
+            OptiProblem_dict["eval_func"] = None
         if self.constraint is None:
             OptiProblem_dict["constraint"] = None
         else:
             OptiProblem_dict["constraint"] = list()
             for obj in self.constraint:
                 OptiProblem_dict["constraint"].append(obj.as_dict())
-        if self.preprocessing is None:
-            OptiProblem_dict["preprocessing"] = None
+        if self._preprocessing_str is not None:
+            OptiProblem_dict["preprocessing"] = self._preprocessing_str
         else:
-            OptiProblem_dict["preprocessing"] = [
-                dumps(self._preprocessing[0]).decode("ISO-8859-2"),
-                self._preprocessing[1],
-            ]
+            OptiProblem_dict["preprocessing"] = None
         if self.datakeeper_list is None:
             OptiProblem_dict["datakeeper_list"] = None
         else:
             OptiProblem_dict["datakeeper_list"] = list()
             for obj in self.datakeeper_list:
                 OptiProblem_dict["datakeeper_list"].append(obj.as_dict())
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         OptiProblem_dict["__class__"] = "OptiProblem"
         return OptiProblem_dict
 
@@ -332,32 +324,28 @@ class OptiProblem(FrozenClass):
 
     def _get_eval_func(self):
         """getter of eval_func"""
-        return self._eval_func[0]
+        return self._eval_func_func
 
     def _set_eval_func(self, value):
         """setter of eval_func"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "eval_func"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = function()
-        try:
-            check_var("eval_func", value, "list")
-        except CheckTypeError:
-            check_var("eval_func", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._eval_func = [loads(value[0].encode("ISO-8859-2")), value[1]]
-        elif value is None:
-            self._eval_func = [None, None]
+        if value is None:
+            self._eval_func_str = None
+            self._eval_func_func = None
+        elif isinstance(value, str) and "lambda" in value:
+            self._eval_func_str = value
+            self._eval_func_func = eval(value)
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+            self._eval_func_str = value
+            path, name = value.rsplit(".", 1)
+            mod = import_module(path)
+            self._eval_func_func = getattr(mod, name)
         elif callable(value):
-            self._eval_func = [value, getsource(value)]
+            self._eval_func_str = None
+            self._eval_func_func = value
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
+            raise CheckTypeError(
+                "For property eval_func Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
             )
 
     eval_func = property(
@@ -402,32 +390,28 @@ class OptiProblem(FrozenClass):
 
     def _get_preprocessing(self):
         """getter of preprocessing"""
-        return self._preprocessing[0]
+        return self._preprocessing_func
 
     def _set_preprocessing(self, value):
         """setter of preprocessing"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "preprocessing"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = function()
-        try:
-            check_var("preprocessing", value, "list")
-        except CheckTypeError:
-            check_var("preprocessing", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._preprocessing = [loads(value[0].encode("ISO-8859-2")), value[1]]
-        elif value is None:
-            self._preprocessing = [None, None]
+        if value is None:
+            self._preprocessing_str = None
+            self._preprocessing_func = None
+        elif isinstance(value, str) and "lambda" in value:
+            self._preprocessing_str = value
+            self._preprocessing_func = eval(value)
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+            self._preprocessing_str = value
+            path, name = value.rsplit(".", 1)
+            mod = import_module(path)
+            self._preprocessing_func = getattr(mod, name)
         elif callable(value):
-            self._preprocessing = [value, getsource(value)]
+            self._preprocessing_str = None
+            self._preprocessing_func = value
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
+            raise CheckTypeError(
+                "For property preprocessing Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
             )
 
     preprocessing = property(

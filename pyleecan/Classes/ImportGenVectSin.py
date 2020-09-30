@@ -140,7 +140,7 @@ class ImportGenVectSin(ImportMatrix):
         ImportGenVectSin_dict["Phi"] = self.Phi
         ImportGenVectSin_dict["N"] = self.N
         ImportGenVectSin_dict["Tf"] = self.Tf
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportGenVectSin_dict["__class__"] = "ImportGenVectSin"
         return ImportGenVectSin_dict

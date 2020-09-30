@@ -192,7 +192,7 @@ class CondType21(Conductor):
         CondType21_dict["Hbar"] = self.Hbar
         CondType21_dict["Wbar"] = self.Wbar
         CondType21_dict["Wins"] = self.Wins
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         CondType21_dict["__class__"] = "CondType21"
         return CondType21_dict

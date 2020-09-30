@@ -251,7 +251,7 @@ class VarLoadCurrent(VarLoad):
         VarLoadCurrent_dict["type_OP_matrix"] = self.type_OP_matrix
         VarLoadCurrent_dict["is_torque"] = self.is_torque
         VarLoadCurrent_dict["is_power"] = self.is_power
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VarLoadCurrent_dict["__class__"] = "VarLoadCurrent"
         return VarLoadCurrent_dict

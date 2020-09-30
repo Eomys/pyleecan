@@ -154,7 +154,7 @@ class WindingCW2LT(Winding):
 
         # Get the properties inherited from Winding
         WindingCW2LT_dict = super(WindingCW2LT, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         WindingCW2LT_dict["__class__"] = "WindingCW2LT"
         return WindingCW2LT_dict

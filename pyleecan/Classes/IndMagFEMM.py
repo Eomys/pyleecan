@@ -171,7 +171,7 @@ class IndMagFEMM(IndMag):
         IndMagFEMM_dict["sym_a"] = self.sym_a
         IndMagFEMM_dict["is_antiper_a"] = self.is_antiper_a
         IndMagFEMM_dict["Nt_tot"] = self.Nt_tot
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         IndMagFEMM_dict["__class__"] = "IndMagFEMM"
         return IndMagFEMM_dict

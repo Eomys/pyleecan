@@ -114,7 +114,7 @@ class ImportMatlab(ImportMatrix):
         ImportMatlab_dict = super(ImportMatlab, self).as_dict()
         ImportMatlab_dict["file_path"] = self.file_path
         ImportMatlab_dict["var_name"] = self.var_name
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportMatlab_dict["__class__"] = "ImportMatlab"
         return ImportMatlab_dict

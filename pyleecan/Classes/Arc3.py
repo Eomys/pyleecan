@@ -291,7 +291,7 @@ class Arc3(Arc):
         Arc3_dict["begin"] = self.begin
         Arc3_dict["end"] = self.end
         Arc3_dict["is_trigo_direction"] = self.is_trigo_direction
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Arc3_dict["__class__"] = "Arc3"
         return Arc3_dict

@@ -367,7 +367,7 @@ class MagFEMM(Magnetics):
             MagFEMM_dict["stator_dxf"] = self.stator_dxf.as_dict()
         MagFEMM_dict["import_file"] = self.import_file
         MagFEMM_dict["is_close_femm"] = self.is_close_femm
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
         return MagFEMM_dict

@@ -1,6 +1,16 @@
 import pytest
 from os.path import join
 
+# -*- coding: utf-8 -*-
+import sys
+from os.path import dirname, abspath, normpath, join, realpath
+from os import listdir, remove, system
+import json
+
+
+# Add the directory to the python path
+sys.path.append(normpath(abspath(join(dirname(__file__), "../.."))))
+
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Classes.PostFunction import PostFunction
@@ -54,7 +64,7 @@ def test_post_var_simu():
         name="Stator slot width",
         unit="m",
         symbol="D_S_s_w",
-        keeper=lambda output: output.simu.machine.stator.slot.W0,
+        keeper="lambda output: output.simu.machine.stator.slot.W0",
     )
 
     simu1.var_simu = VarParam(
@@ -67,17 +77,9 @@ def test_post_var_simu():
     # simu2, postprocessing 1 PostFunction, 1 PostMethod
     simu2 = simu1.copy()
 
-    def example_post(xoutput):
-        """var_simu post_proc"""
-        xoutput.simu.machine.stator.slot.H0 += 1
-
-    def example_post2(xoutput):
-        """var_simu post_proc"""
-        xoutput.simu.machine.stator.slot.W0 += 2
-
     # Create the postprocessings and add it
-    post1 = PostFunction(run=example_post2)  # ExamplePostMethod()
-    post2 = PostFunction(run=example_post)
+    post1 = PostFunction(run=join(dirname(__file__), "example_post.py"))
+    post2 = PostFunction(run=join(dirname(__file__), "example_post2.py"))
     print(
         id(simu1.var_simu.datakeeper_list[0].result),
         id(simu2.var_simu.datakeeper_list[0].result),
@@ -85,6 +87,8 @@ def test_post_var_simu():
     simu2.postproc_list = [post1]
     simu2.var_simu.postproc_list = [post2]
 
+    print(simu1.var_simu.datakeeper_list[0])
+    print(simu2.var_simu.datakeeper_list[0])
     # First simulation without postprocessings
     out1 = simu1.run()
 

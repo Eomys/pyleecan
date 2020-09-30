@@ -101,7 +101,7 @@ class FPGNTri(GaussPoint):
         # Get the properties inherited from GaussPoint
         FPGNTri_dict = super(FPGNTri, self).as_dict()
         FPGNTri_dict["nb_gauss_point"] = self.nb_gauss_point
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         FPGNTri_dict["__class__"] = "FPGNTri"
         return FPGNTri_dict

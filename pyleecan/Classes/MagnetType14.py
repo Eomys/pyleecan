@@ -153,7 +153,7 @@ class MagnetType14(MagnetPolar):
         MagnetType14_dict["Wmag"] = self.Wmag
         MagnetType14_dict["Hmag"] = self.Hmag
         MagnetType14_dict["Rtop"] = self.Rtop
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagnetType14_dict["__class__"] = "MagnetType14"
         return MagnetType14_dict

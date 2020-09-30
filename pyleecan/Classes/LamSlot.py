@@ -317,7 +317,7 @@ class LamSlot(Lamination):
             LamSlot_dict["slot"] = None
         else:
             LamSlot_dict["slot"] = self.slot.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlot_dict["__class__"] = "LamSlot"
         return LamSlot_dict

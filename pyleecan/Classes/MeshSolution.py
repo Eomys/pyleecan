@@ -314,7 +314,7 @@ class MeshSolution(FrozenClass):
             for key, obj in self.group.items():
                 MeshSolution_dict["group"][key] = obj.tolist()
         MeshSolution_dict["dimension"] = self.dimension
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         MeshSolution_dict["__class__"] = "MeshSolution"
         return MeshSolution_dict
 

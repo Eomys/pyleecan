@@ -22,8 +22,8 @@ except ImportError as error:
     _set_setter = error
 
 
-from inspect import getsource
-from cloudpickle import dumps, loads
+from importlib import import_module
+from os.path import isfile
 from ._check import CheckTypeError
 from ._check import InitUnKnowClassError
 
@@ -99,12 +99,12 @@ class ParamExplorer(FrozenClass):
         ParamExplorer_str += 'name = "' + str(self.name) + '"' + linesep
         ParamExplorer_str += 'symbol = "' + str(self.symbol) + '"' + linesep
         ParamExplorer_str += 'unit = "' + str(self.unit) + '"' + linesep
-        if self._setter[1] is None:
-            ParamExplorer_str += "setter = " + str(self._setter[1])
+        if self._setter_str is not None:
+            ParamExplorer_str += "setter = " + self._setter_str + linesep
+        elif self._setter_func is not None:
+            ParamExplorer_str += "setter = " + str(self._setter_func) + linesep
         else:
-            ParamExplorer_str += (
-                "setter = " + linesep + str(self._setter[1]) + linesep + linesep
-            )
+            ParamExplorer_str += "setter = None" + linesep + linesep
         return ParamExplorer_str
 
     def __eq__(self, other):
@@ -118,7 +118,7 @@ class ParamExplorer(FrozenClass):
             return False
         if other.unit != self.unit:
             return False
-        if other.setter != self.setter:
+        if other._setter_str != self._setter_str:
             return False
         return True
 
@@ -129,14 +129,11 @@ class ParamExplorer(FrozenClass):
         ParamExplorer_dict["name"] = self.name
         ParamExplorer_dict["symbol"] = self.symbol
         ParamExplorer_dict["unit"] = self.unit
-        if self.setter is None:
-            ParamExplorer_dict["setter"] = None
+        if self._setter_str is not None:
+            ParamExplorer_dict["setter"] = self._setter_str
         else:
-            ParamExplorer_dict["setter"] = [
-                dumps(self._setter[0]).decode("ISO-8859-2"),
-                self._setter[1],
-            ]
-        # The class name is added to the dict fordeserialisation purpose
+            ParamExplorer_dict["setter"] = None
+        # The class name is added to the dict for deserialisation purpose
         ParamExplorer_dict["__class__"] = "ParamExplorer"
         return ParamExplorer_dict
 
@@ -204,7 +201,7 @@ class ParamExplorer(FrozenClass):
 
     def _get_setter(self):
         """getter of setter"""
-        return self._setter[0]
+        return self._setter_func
 
     setter = property(
         fget=_get_setter,

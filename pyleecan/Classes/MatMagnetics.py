@@ -168,7 +168,7 @@ class MatMagnetics(FrozenClass):
             MatMagnetics_dict["BH_curve"] = None
         else:
             MatMagnetics_dict["BH_curve"] = self.BH_curve.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         MatMagnetics_dict["__class__"] = "MatMagnetics"
         return MatMagnetics_dict
 

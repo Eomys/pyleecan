@@ -299,7 +299,7 @@ class Arc1(Arc):
         Arc1_dict["end"] = self.end
         Arc1_dict["radius"] = self.radius
         Arc1_dict["is_trigo_direction"] = self.is_trigo_direction
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Arc1_dict["__class__"] = "Arc1"
         return Arc1_dict

@@ -46,7 +46,7 @@ def generate_properties(gen_dict, class_dict):
                 prop_str += TAB5 + "obj.parent = self\n"
                 prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
             elif prop["type"] == "function":
-                prop_str += TAB2 + "return self._" + prop["name"] + "[0]\n\n"
+                prop_str += TAB2 + "return self._" + prop["name"] + "_func\n\n"
             else:
                 prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
 
@@ -191,9 +191,11 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB5 + "value[ii] = class_obj(init_dict=obj)\n"
         set_str += TAB2 + "if value == -1:\n"
         set_str += TAB3 + "value = list()\n"
-    elif ("." not in prop["type"] or "SciDataTool" in prop["type"]) and prop[
-        "type"
-    ] not in PYTHON_TYPE:  # pyleecan Type
+    elif (
+        ("." not in prop["type"] or "SciDataTool" in prop["type"])
+        and prop["type"] not in PYTHON_TYPE
+        and prop["type"] != "function"
+    ):  # pyleecan Type
         set_str += TAB2 + "if isinstance(value, str):  # Load from file\n"
         set_str += TAB3 + "value = load_init_dict(value)[1]\n"
         set_str += TAB2 + "if isinstance(value, dict) and '__class__' in value:\n"
@@ -222,28 +224,30 @@ def generate_prop_setter(gen_dict, class_dict, prop):
 
     ## Add check_var("var_name",value, "var_type", min=var_min, max=var_max)
     if prop["type"] == "function":
-        # A function can be defined by a callable or a list containing the serialized callable and its sourcecode
-        set_str += TAB2 + "try:\n"
-        set_str += TAB3 + 'check_var("' + prop["name"] + '", value, "list")\n'
-        set_str += TAB2 + "except CheckTypeError:\n"
+        # A function can be defined by a callable or a string containing a lambda or a path to a python file
+        set_str += TAB2 + "if value is None:\n"
+        set_str += TAB3 + "self._" + prop["name"] + "_str = None\n"
+        set_str += TAB3 + "self._" + prop["name"] + "_func = None\n"
+        set_str += TAB2 + "elif isinstance(value,str) and 'lambda' in value:\n"
+        set_str += TAB3 + "self._" + prop["name"] + "_str = value\n"
+        set_str += TAB3 + "self._" + prop["name"] + "_func = eval(value)\n"
         set_str += (
-            TAB3 + 'check_var("' + prop["name"] + '", value, "' + prop["type"] + '")\n'
+            TAB2
+            + "elif isinstance(value,str) and isfile(value) and value[-3:]=='.py':\n"
         )
-        set_str += TAB2 + "if isinstance(value,list): # Load function from saved dict\n"
-        set_str += (
-            TAB3
-            + "self._"
-            + prop["name"]
-            + " = [loads(value[0].encode('ISO-8859-2')),value[1]]\n"
-        )
-        set_str += TAB2 + "elif value is None:\n"
-        set_str += TAB3 + "self._" + prop["name"] + " = [None,None]\n"
+        set_str += TAB3 + "self._" + prop["name"] + "_str = value\n"
+        set_str += TAB3 + "path, name = value.rsplit('.', 1)\n"
+        set_str += TAB3 + "mod = import_module(path)\n"
+        set_str += TAB3 + "self._" + prop["name"] + "_func = getattr(mod, name)\n"
         set_str += TAB2 + "elif callable(value):\n"
-        set_str += TAB3 + "self._" + prop["name"] + " = [value,getsource(value)]\n"
+        set_str += TAB3 + "self._" + prop["name"] + "_str = None\n"
+        set_str += TAB3 + "self._" + prop["name"] + "_func = value\n"
         set_str += TAB2 + "else:\n"
         set_str += (
             TAB3
-            + "raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) \n"
+            + "raise CheckTypeError('For property "
+            + prop["name"]
+            + " Expected function or str (path to python file or lambda), got: '+str(type(value))) \n"
         )
     else:
         if "." in prop["type"]:

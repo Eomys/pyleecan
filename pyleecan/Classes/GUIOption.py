@@ -85,7 +85,7 @@ class GUIOption(FrozenClass):
             GUIOption_dict["unit"] = None
         else:
             GUIOption_dict["unit"] = self.unit.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         GUIOption_dict["__class__"] = "GUIOption"
         return GUIOption_dict
 

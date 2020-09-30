@@ -225,7 +225,7 @@ class SlotCirc(SlotWind):
         SlotCirc_dict = super(SlotCirc, self).as_dict()
         SlotCirc_dict["W0"] = self.W0
         SlotCirc_dict["H0"] = self.H0
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotCirc_dict["__class__"] = "SlotCirc"
         return SlotCirc_dict

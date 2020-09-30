@@ -99,7 +99,7 @@ class Solution(FrozenClass):
         Solution_dict["type_cell"] = self.type_cell
         Solution_dict["label"] = self.label
         Solution_dict["dimension"] = self.dimension
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Solution_dict["__class__"] = "Solution"
         return Solution_dict
 

@@ -78,7 +78,7 @@ class Line(FrozenClass):
 
         Line_dict = dict()
         Line_dict["label"] = self.label
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Line_dict["__class__"] = "Line"
         return Line_dict
 

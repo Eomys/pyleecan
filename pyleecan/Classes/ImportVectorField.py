@@ -130,7 +130,7 @@ class ImportVectorField(FrozenClass):
                 ImportVectorField_dict["components"][key] = obj.as_dict()
         ImportVectorField_dict["name"] = self.name
         ImportVectorField_dict["symbol"] = self.symbol
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         ImportVectorField_dict["__class__"] = "ImportVectorField"
         return ImportVectorField_dict
 

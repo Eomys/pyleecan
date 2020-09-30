@@ -148,7 +148,7 @@ class ImportGenToothSaw(ImportMatrix):
         ImportGenToothSaw_dict["N"] = self.N
         ImportGenToothSaw_dict["Tf"] = self.Tf
         ImportGenToothSaw_dict["Dt"] = self.Dt
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportGenToothSaw_dict["__class__"] = "ImportGenToothSaw"
         return ImportGenToothSaw_dict

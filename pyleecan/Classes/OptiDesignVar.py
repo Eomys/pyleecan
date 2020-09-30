@@ -14,8 +14,8 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .ParamExplorer import ParamExplorer
 
-from inspect import getsource
-from cloudpickle import dumps, loads
+from importlib import import_module
+from os.path import isfile
 from ._check import CheckTypeError
 from ._check import InitUnKnowClassError
 
@@ -96,12 +96,12 @@ class OptiDesignVar(ParamExplorer):
             + str(self.space).replace(linesep, linesep + "\t")
             + linesep
         )
-        if self._get_value[1] is None:
-            OptiDesignVar_str += "get_value = " + str(self._get_value[1])
+        if self._get_value_str is not None:
+            OptiDesignVar_str += "get_value = " + self._get_value_str + linesep
+        elif self._get_value_func is not None:
+            OptiDesignVar_str += "get_value = " + str(self._get_value_func) + linesep
         else:
-            OptiDesignVar_str += (
-                "get_value = " + linesep + str(self._get_value[1]) + linesep + linesep
-            )
+            OptiDesignVar_str += "get_value = None" + linesep + linesep
         return OptiDesignVar_str
 
     def __eq__(self, other):
@@ -117,7 +117,7 @@ class OptiDesignVar(ParamExplorer):
             return False
         if other.space != self.space:
             return False
-        if other.get_value != self.get_value:
+        if other._get_value_str != self._get_value_str:
             return False
         return True
 
@@ -128,14 +128,11 @@ class OptiDesignVar(ParamExplorer):
         OptiDesignVar_dict = super(OptiDesignVar, self).as_dict()
         OptiDesignVar_dict["type_var"] = self.type_var
         OptiDesignVar_dict["space"] = self.space
-        if self.get_value is None:
-            OptiDesignVar_dict["get_value"] = None
+        if self._get_value_str is not None:
+            OptiDesignVar_dict["get_value"] = self._get_value_str
         else:
-            OptiDesignVar_dict["get_value"] = [
-                dumps(self._get_value[0]).decode("ISO-8859-2"),
-                self._get_value[1],
-            ]
-        # The class name is added to the dict fordeserialisation purpose
+            OptiDesignVar_dict["get_value"] = None
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OptiDesignVar_dict["__class__"] = "OptiDesignVar"
         return OptiDesignVar_dict
@@ -189,32 +186,28 @@ class OptiDesignVar(ParamExplorer):
 
     def _get_get_value(self):
         """getter of get_value"""
-        return self._get_value[0]
+        return self._get_value_func
 
     def _set_get_value(self, value):
         """setter of get_value"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "get_value"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = function()
-        try:
-            check_var("get_value", value, "list")
-        except CheckTypeError:
-            check_var("get_value", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._get_value = [loads(value[0].encode("ISO-8859-2")), value[1]]
-        elif value is None:
-            self._get_value = [None, None]
+        if value is None:
+            self._get_value_str = None
+            self._get_value_func = None
+        elif isinstance(value, str) and "lambda" in value:
+            self._get_value_str = value
+            self._get_value_func = eval(value)
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+            self._get_value_str = value
+            path, name = value.rsplit(".", 1)
+            mod = import_module(path)
+            self._get_value_func = getattr(mod, name)
         elif callable(value):
-            self._get_value = [value, getsource(value)]
+            self._get_value_str = None
+            self._get_value_func = value
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
+            raise CheckTypeError(
+                "For property get_value Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
             )
 
     get_value = property(
