@@ -234,7 +234,7 @@ class Test_InCurrent_meth(object):
                 [-1, -2, -1, 1, 2, 1, -1],
                 [-1, 1, 2, 1, -1, -2, -1],
             ]
-        )
+        ) * sqrt(2)
         zp = IPMSM_A.stator.get_pole_pair_number()
         angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
         angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
@@ -277,7 +277,7 @@ class Test_InCurrent_meth(object):
                     [-1, 1, 2, 1, -1, -2, -1],
                 ]
             )
-        )
+        ) * sqrt(2)
         Is = ImportMatrixVal(value=Is_exp)
 
         zp = IPMSM_A.stator.get_pole_pair_number()
