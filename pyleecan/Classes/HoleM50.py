@@ -548,7 +548,7 @@ class HoleM50(HoleMag):
                 "pyleecan.Classes", value.get("__class__"), "magnet_0"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Magnet()
         check_var("magnet_0", value, "Magnet")
         self._magnet_0 = value
@@ -578,7 +578,7 @@ class HoleM50(HoleMag):
                 "pyleecan.Classes", value.get("__class__"), "magnet_1"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Magnet()
         check_var("magnet_1", value, "Magnet")
         self._magnet_1 = value

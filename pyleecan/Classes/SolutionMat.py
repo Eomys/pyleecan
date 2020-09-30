@@ -184,8 +184,8 @@ class SolutionMat(Solution):
 
     def _set_field(self, value):
         """setter of field"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)
@@ -209,8 +209,8 @@ class SolutionMat(Solution):
 
     def _set_indice(self, value):
         """setter of indice"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)
@@ -234,7 +234,7 @@ class SolutionMat(Solution):
 
     def _set_axis(self, value):
         """setter of axis"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("axis", value, "dict")
         self._axis = value

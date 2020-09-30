@@ -156,7 +156,7 @@ class InputForce(Input):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "P")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = ImportVectorField()
         check_var("P", value, "ImportVectorField")
         self._P = value

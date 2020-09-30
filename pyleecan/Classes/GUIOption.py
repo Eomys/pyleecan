@@ -106,7 +106,7 @@ class GUIOption(FrozenClass):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "unit")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Unit()
         check_var("unit", value, "Unit")
         self._unit = value

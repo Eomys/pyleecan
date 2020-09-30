@@ -255,7 +255,7 @@ class Material(FrozenClass):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = MatElectrical()
         check_var("elec", value, "MatElectrical")
         self._elec = value
@@ -283,7 +283,7 @@ class Material(FrozenClass):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = MatMagnetics()
         check_var("mag", value, "MatMagnetics")
         self._mag = value
@@ -313,7 +313,7 @@ class Material(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "struct"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = MatStructural()
         check_var("struct", value, "MatStructural")
         self._struct = value
@@ -341,7 +341,7 @@ class Material(FrozenClass):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "HT")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = MatHT()
         check_var("HT", value, "MatHT")
         self._HT = value
@@ -369,7 +369,7 @@ class Material(FrozenClass):
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eco")
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = MatEconomical()
         check_var("eco", value, "MatEconomical")
         self._eco = value

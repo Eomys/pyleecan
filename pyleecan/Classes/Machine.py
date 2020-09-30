@@ -413,7 +413,7 @@ class Machine(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "frame"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Frame()
         check_var("frame", value, "Frame")
         self._frame = value
@@ -443,7 +443,7 @@ class Machine(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "shaft"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Shaft()
         check_var("shaft", value, "Shaft")
         self._shaft = value

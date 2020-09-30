@@ -135,7 +135,7 @@ class SlotUD(Slot):
 
     def _set_point_list(self, value):
         """setter of point_list"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = list()
         check_var("point_list", value, "list")
         self._point_list = value

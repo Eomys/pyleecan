@@ -152,7 +152,7 @@ class OptiSolver(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "problem"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = OptiProblem()
         check_var("problem", value, "OptiProblem")
         self._problem = value
@@ -182,7 +182,7 @@ class OptiSolver(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "xoutput"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = XOutput()
         check_var("xoutput", value, "XOutput")
         self._xoutput = value

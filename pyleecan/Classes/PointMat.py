@@ -204,8 +204,8 @@ class PointMat(FrozenClass):
 
     def _set_coordinate(self, value):
         """setter of coordinate"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)
@@ -265,8 +265,8 @@ class PointMat(FrozenClass):
 
     def _set_indice(self, value):
         """setter of indice"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)

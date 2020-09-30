@@ -365,7 +365,7 @@ class MeshSolution(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "mesh"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("mesh", value, "[Mesh]")
         self._mesh = value
@@ -414,7 +414,7 @@ class MeshSolution(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "solution"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("solution", value, "[Solution]")
         self._solution = value
@@ -441,7 +441,7 @@ class MeshSolution(FrozenClass):
                         value[key] = array(obj)
                     except:
                         pass
-        if value is -1:
+        elif type(value) is int and value == -1:
             value = dict()
         check_var("group", value, "{ndarray}")
         self._group = value

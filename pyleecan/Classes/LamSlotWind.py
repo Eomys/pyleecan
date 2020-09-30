@@ -546,7 +546,7 @@ class LamSlotWind(LamSlot):
                 "pyleecan.Classes", value.get("__class__"), "winding"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Winding()
         check_var("winding", value, "Winding")
         self._winding = value

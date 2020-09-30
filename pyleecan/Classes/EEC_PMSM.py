@@ -239,7 +239,7 @@ class EEC_PMSM(EEC):
                 "pyleecan.Classes", value.get("__class__"), "indmag"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = IndMag()
         check_var("indmag", value, "IndMag")
         self._indmag = value
@@ -269,7 +269,7 @@ class EEC_PMSM(EEC):
                 "pyleecan.Classes", value.get("__class__"), "fluxlink"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = FluxLink()
         check_var("fluxlink", value, "FluxLink")
         self._fluxlink = value
@@ -292,7 +292,7 @@ class EEC_PMSM(EEC):
 
     def _set_parameters(self, value):
         """setter of parameters"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("parameters", value, "dict")
         self._parameters = value
@@ -337,7 +337,7 @@ class EEC_PMSM(EEC):
                 "pyleecan.Classes", value.get("__class__"), "drive"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Drive()
         check_var("drive", value, "Drive")
         self._drive = value

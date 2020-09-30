@@ -161,7 +161,7 @@ class SolutionVector(Solution):
                 "SciDataTool.Classes", value.get("__class__"), "field"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = VectorField()
         check_var("field", value, "VectorField")
         self._field = value

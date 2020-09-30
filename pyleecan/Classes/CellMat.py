@@ -231,8 +231,8 @@ class CellMat(FrozenClass):
 
     def _set_connectivity(self, value):
         """setter of connectivity"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)
@@ -292,8 +292,8 @@ class CellMat(FrozenClass):
 
     def _set_indice(self, value):
         """setter of indice"""
-        if value is -1:
-            value = list()
+        if type(value) is int and value == -1:
+            value = array([])
         elif type(value) is list:
             try:
                 value = array(value)
@@ -324,7 +324,7 @@ class CellMat(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "interpolation"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Interpolation()
         check_var("interpolation", value, "Interpolation")
         self._interpolation = value

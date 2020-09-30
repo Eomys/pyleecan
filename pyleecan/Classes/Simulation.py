@@ -255,7 +255,7 @@ class Simulation(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "machine"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Machine()
         check_var("machine", value, "Machine")
         self._machine = value
@@ -285,7 +285,7 @@ class Simulation(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "input"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Input()
         check_var("input", value, "Input")
         self._input = value
@@ -333,7 +333,7 @@ class Simulation(FrozenClass):
                 "pyleecan.Classes", value.get("__class__"), "var_simu"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = VarSimu()
         check_var("var_simu", value, "VarSimu")
         self._var_simu = value
@@ -367,7 +367,7 @@ class Simulation(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "postproc_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("postproc_list", value, "[Post]")
         self._postproc_list = value

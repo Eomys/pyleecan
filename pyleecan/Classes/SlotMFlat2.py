@@ -424,7 +424,7 @@ class SlotMFlat2(SlotMag):
                         "pyleecan.Classes", obj.get("__class__"), "magnet"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("magnet", value, "[MagnetFlat]")
         self._magnet = value

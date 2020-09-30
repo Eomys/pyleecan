@@ -338,7 +338,7 @@ class LamSquirrelCage(LamSlotWind):
                 "pyleecan.Classes", value.get("__class__"), "ring_mat"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = Material()
         check_var("ring_mat", value, "Material")
         self._ring_mat = value

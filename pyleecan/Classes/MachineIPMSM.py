@@ -216,7 +216,7 @@ class MachineIPMSM(MachineSync):
                 "pyleecan.Classes", value.get("__class__"), "rotor"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = LamHole()
         check_var("rotor", value, "LamHole")
         self._rotor = value
@@ -246,7 +246,7 @@ class MachineIPMSM(MachineSync):
                 "pyleecan.Classes", value.get("__class__"), "stator"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = LamSlotWind()
         check_var("stator", value, "LamSlotWind")
         self._stator = value

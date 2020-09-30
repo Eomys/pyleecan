@@ -159,7 +159,7 @@ class SolutionData(Solution):
                 "SciDataTool.Classes", value.get("__class__"), "field"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
         check_var("field", value, "DataND")
         self._field = value

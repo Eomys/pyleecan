@@ -288,7 +288,7 @@ class MatMagnetics(FrozenClass):
             value = ImportMatrixVal(value=value)
         elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
-        elif value is -1:
+        elif value == -1:
             value = ImportMatrix()
         elif isinstance(value, dict):
             class_obj = import_class(

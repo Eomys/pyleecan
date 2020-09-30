@@ -474,7 +474,7 @@ class MagFEMM(Magnetics):
 
     def _set_FEMM_dict(self, value):
         """setter of FEMM_dict"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
@@ -566,7 +566,7 @@ class MagFEMM(Magnetics):
 
     def _set_transform_list(self, value):
         """setter of transform_list"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = list()
         check_var("transform_list", value, "list")
         self._transform_list = value
@@ -593,7 +593,7 @@ class MagFEMM(Magnetics):
                 "pyleecan.Classes", value.get("__class__"), "rotor_dxf"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = DXFImport()
         check_var("rotor_dxf", value, "DXFImport")
         self._rotor_dxf = value
@@ -623,7 +623,7 @@ class MagFEMM(Magnetics):
                 "pyleecan.Classes", value.get("__class__"), "stator_dxf"
             )
             value = class_obj(init_dict=value)
-        elif value is -1:  # Default constructor
+        elif type(value) is int and value == -1:  # Default constructor
             value = DXFImport()
         check_var("stator_dxf", value, "DXFImport")
         self._stator_dxf = value

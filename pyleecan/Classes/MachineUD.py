@@ -228,7 +228,7 @@ class MachineUD(Machine):
                         "pyleecan.Classes", obj.get("__class__"), "lam_list"
                     )
                     value[ii] = class_obj(init_dict=obj)
-        if value is -1:
+        if value == -1:
             value = list()
         check_var("lam_list", value, "[Lamination]")
         self._lam_list = value

@@ -145,7 +145,7 @@ class ParamExplorerSet(ParamExplorer):
 
     def _set_value(self, value):
         """setter of value"""
-        if value is -1:
+        if type(value) is int and value == -1:
             value = list()
         check_var("value", value, "list")
         self._value = value

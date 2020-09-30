@@ -159,7 +159,7 @@ class ImportVectorField(FrozenClass):
                         "pyleecan.Classes", obj.get("__class__"), "components"
                     )
                     value[key] = class_obj(init_dict=obj)
-        if value is -1:
+        if type(value) is int and value == -1:
             value = dict()
         check_var("components", value, "{ImportData}")
         self._components = value
