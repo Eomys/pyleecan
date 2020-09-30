@@ -25,10 +25,6 @@ def comp_angle_d_axis(self):
     results1 = MMF.get_along("angle")
     angle_rotor = results1["angle"]
 
-    import matplotlib.pyplot as plt
-
-    plt.plot(angle_rotor, results1["Magnitude"])
-
     results = MMF.get_along("wavenumber")
     wavenumber = results["wavenumber"]
     mmf_ft = results[MMF.symbol]
