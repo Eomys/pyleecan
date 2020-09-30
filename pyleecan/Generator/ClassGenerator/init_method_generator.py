@@ -27,269 +27,35 @@ def generate_init(gen_dict, class_dict):
     """
 
     class_name = class_dict["name"]
-    ext_imported_types = []  # Contains the external imported types names
-    init_str = ""  # This string is for the generated code
-
-    init_by_var = ""  # For the initialisation with the argument
-    # Add the parent property only in the top mother classes
-    if class_dict["mother"] == "":
-        init_by_var += TAB2 + "self.parent = None\n"
-
-    for prop in class_dict["properties"]:
-        # Python type of function
-        if prop["type"] in PYTHON_TYPE or prop["type"] == "function":
-            # Enable to set -1 to instanciate a list
-            if prop["type"] == "list":
-                init_by_var += TAB2 + "if " + prop["name"] + " == -1:\n"
-                init_by_var += TAB3 + prop["name"] + " = []\n"
-
-            # Add => "self.my_var = my_var\n" to init_by_var
-            init_by_var += TAB2 + "self." + prop["name"] + " = " + prop["name"] + "\n"
-
-        # Imported type
-        elif "." in prop["type"] and not prop["type"].endswith("]"):
-            # Add => "self.my_var = my_var\n" to init_by_var
-            if (
-                prop["type"] not in ext_imported_types
-            ):  # Check if the type has been imported with success
-                ext_imported_types.append(prop["type"])
-                init_by_var += (
-                    TAB2
-                    + "# Check if the type "
-                    + prop["type"][prop["type"].rfind(".") + 1 :]
-                    + " has been imported with success\n"
-                )
-                init_by_var += (
-                    TAB2
-                    + "if isinstance("
-                    + prop["type"][prop["type"].rfind(".") + 1 :]
-                    + ", ImportError):\n"
-                )
-                init_by_var += (
-                    TAB3
-                    + "raise ImportError('Unknown type "
-                    + prop["type"][prop["type"].rfind(".") + 1 :]
-                    + " please install "
-                    + prop["type"][: prop["type"].find(".")]
-                    + "')\n"
-                )
-            init_by_var += TAB2 + "self." + prop["name"] + " = " + prop["name"] + "\n"
-
-        # List of imported type
-        elif "." in prop["type"] and prop["type"].endswith("]"):
-            # Add => "self.my_var = my_var\n" to init_by_var
-            if (
-                prop["type"] not in ext_imported_types
-            ):  # Check if the type has been imported with success
-                ext_imported_types.append(prop["type"])
-                init_by_var += (
-                    TAB2
-                    + "# Check if the type "
-                    + prop["type"][prop["type"].rfind(".") + 1 : -1]
-                    + " has been imported with success\n"
-                )
-                init_by_var += (
-                    TAB2
-                    + "if isinstance("
-                    + prop["type"][prop["type"].rfind(".") + 1 : -1]
-                    + ", ImportError):\n"
-                )
-                init_by_var += (
-                    TAB3
-                    + "raise ImportError('Unknown type "
-                    + prop["type"][prop["type"].rfind(".") + 1 : -1]
-                    + " please install "
-                    + prop["type"][1 : prop["type"].find(".")]
-                    + "')\n"
-                )
-            init_by_var += TAB2 + "self." + prop["name"] + " = " + prop["name"] + "\n"
-
-        # ndarray
-        elif prop["type"] == "ndarray":
-            # Default value is None which should call the corresponding init
-            init_by_var += (
-                TAB2 + "# " + prop["name"] + " can be None, a ndarray or a list\n"
-            )
-            init_by_var += (
-                TAB2 + 'set_array(self, "' + prop["name"] + '", ' + prop["name"] + ")\n"
-            )
-        elif is_list_pyleecan_type(prop["type"]):
-            # List of pyleecan type
-            init_by_var += (
-                TAB2
-                + "# "
-                + prop["name"]
-                + " can be None or a list of "
-                + prop["type"][1:-1]
-                + " object or a list of dict\n"
-            )
-            init_by_var += TAB2 + "if type(" + prop["name"] + ") is list:\n"
-            init_by_var += (
-                TAB3
-                + "# Check if the list is only composed of "
-                + prop["type"][1:-1]
-                + "\n"
-            )
-            init_by_var += (
-                TAB3
-                + "if len("
-                + prop["name"]
-                + ") > 0 and all(isinstance(obj, "
-                + prop["type"][1:-1]
-                + ") for obj in "
-                + prop["name"]
-                + "):\n"
-            )
-            init_by_var += TAB4 + "# set the list to keep pointer reference\n"
-            init_by_var += TAB4 + "self." + prop["name"] + " = " + prop["name"] + "\n"
-            init_by_var += TAB3 + "else:\n"
-            init_by_var += TAB4 + "self." + prop["name"] + " = list()\n"
-            init_by_var += TAB4 + "for obj in " + prop["name"] + ":\n"
-            init_by_var += TAB5 + "if not isinstance(obj, dict):  # Default value\n"
-            init_by_var += TAB6 + "self." + prop["name"] + ".append(obj)\n"
-            type_dict = gen_dict[prop["type"][1:-1]]
-            daug_list = type_dict["daughters"]
-            set_class_by_dict = generate_set_class_by_dict_list(
-                prop["name"], prop["type"][1:-1], daug_list
-            )
-            # Add a TAB
-            set_class_by_dict = "".join(
-                [TAB + line + "\n" for line in set_class_by_dict.split("\n")]
-            )
-
-            init_by_var += set_class_by_dict
-            init_by_var += TAB2 + "elif " + prop["name"] + " is None:\n"
-            init_by_var += TAB3 + "self." + prop["name"] + " = list()\n"
-            init_by_var += TAB2 + "else:\n"
-            init_by_var += TAB3 + "self." + prop["name"] + " = " + prop["name"] + "\n"
-
-        elif prop["type"] == "{ndarray}":
-            # List of ndarray
-            init_by_var += (
-                TAB2 + "# " + prop["name"] + " can be None or a dict of ndarray\n"
-            )
-            init_by_var += TAB2 + "self." + prop["name"] + " = dict()\n"
-            init_by_var += TAB2 + "if type(" + prop["name"] + ") is dict:\n"
-            init_by_var += TAB3 + "for key, obj in " + prop["name"] + ".items():\n"
-
-            init_by_var += TAB4 + "if obj is None:  # Default value\n"
-            init_by_var += TAB5 + "value = empty(0)\n"
-            init_by_var += TAB4 + "elif isinstance(obj, list):\n"
-            init_by_var += TAB5 + "value = array(obj)\n"
-            init_by_var += TAB4 + "self." + prop["name"] + "[key] = value\n"
-
-            init_by_var += TAB2 + "elif " + prop["name"] + " is None:\n"
-            init_by_var += TAB3 + "self." + prop["name"] + " = dict()\n"
-            init_by_var += TAB2 + "else:\n"
-            init_by_var += (
-                TAB3
-                + "self."
-                + prop["name"]
-                + " = "
-                + prop["name"]
-                + "# Should raise an error\n"
-            )
-
-        elif is_dict_pyleecan_type(prop["type"]):
-            # List of pyleecan type
-            init_by_var += (
-                TAB2
-                + "# "
-                + prop["name"]
-                + " can be None or a dict of "
-                + prop["type"][1:-1]
-                + " object\n"
-            )
-            init_by_var += TAB2 + "self." + prop["name"] + " = dict()\n"
-            init_by_var += TAB2 + "if type(" + prop["name"] + ") is dict:\n"
-            init_by_var += TAB3 + "for key, obj in " + prop["name"] + ".items():\n"
-            type_dict = gen_dict[prop["type"][1:-1]]
-            daug_list = type_dict["daughters"]
-            init_by_var += generate_set_class_by_dict_dict(
-                prop["name"], prop["type"][1:-1], daug_list
-            )
-            init_by_var += TAB4 + "else:\n"
-            init_by_var += TAB5 + "self." + prop["name"] + "[key] = obj\n"
-            init_by_var += TAB2 + "elif " + prop["name"] + " is None:\n"
-            init_by_var += TAB3 + "self." + prop["name"] + " = dict()\n"
-            init_by_var += TAB2 + "else:\n"
-            init_by_var += (
-                TAB3
-                + "self."
-                + prop["name"]
-                + " = "
-                + prop["name"]
-                + "# Should raise an error\n"
-            )
-        elif prop["type"] == "FrozenClass":
-            # FrozenClass, Pyleecan mother class
-            init_by_var += (
-                TAB2
-                + "# "
-                + prop["name"]
-                + " can be None, a "
-                + prop["type"]
-                + " object or a dict\n"
-            )
-            init_by_var += generate_set_class_by_dict(
-                prop["name"], prop["type"], list(gen_dict.keys())
-            )
-            init_by_var += TAB2 + "else:\n"
-            init_by_var += TAB3 + "self." + prop["name"] + " = " + prop["name"] + "\n"
-
-        else:  # For pyleecan Type
-            init_by_var += (
-                TAB2
-                + "# "
-                + prop["name"]
-                + " can be None, a "
-                + prop["type"]
-                + " object or a dict\n"
-            )
-            type_dict = gen_dict[prop["type"]]
-            daug_list = type_dict["daughters"]
-            init_by_var += generate_set_class_by_dict(
-                prop["name"], prop["type"], daug_list
-            )
-            init_by_var += TAB2 + "else:\n"
-            init_by_var += TAB3 + "self." + prop["name"] + " = " + prop["name"] + "\n"
 
     # Load all the properties including mother ones
     (all_properties, mother_prop_list) = get_mother_attr(
         gen_dict, class_dict, "properties"
     )
 
-    mother_arg_list = ""  # For the call of super init
-    for prop in mother_prop_list:
-        if mother_arg_list != "":  # Avoid the first coma
-            # Add => ", my_var = my_var" to mother_arg_list
-            mother_arg_list += ", " + prop["name"] + "=" + prop["name"]
-        else:
-            # Add => "my_var = my_var" to mother_arg_list
-            mother_arg_list += prop["name"] + "=" + prop["name"]
-
-    check_dict = ""  # list of all the property expectable in the init_dict
-    init_by_dict = ""  # To overwrite the parameter from init_dict
-    init_by_str = ""  # To load the object from a file
-    arg_list = ""  # For the argument with default value
-    init_P_Type = ""  # To initialize the pyleecan Type default (-1)
+    ################
+    # Generate the __init__ argument with default value (all prop)
+    arg_list = ""
     for prop in all_properties:
-        # To overwrite the parameter from init_dict
-        init_by_str += TAB3 + prop["name"] + " = obj." + prop["name"] + "\n"
-        init_by_dict += TAB3 + 'if "' + prop["name"] + '" in list(init_dict.keys()):\n'
-        init_by_dict += TAB4 + prop["name"] + ' = init_dict["' + prop["name"] + '"]\n'
         # For the argument with default value
-        if prop["type"] in PYTHON_TYPE:
-            # Add => ", my_var = 10" to arg_list
-            arg_list += (
-                ", " + prop["name"] + "=" + get_value_str(prop["value"], prop["type"])
-            )
-        elif prop["type"] == "ndarray":
+        if prop["type"] == "ndarray":
             if prop["value"] not in ["", None] and type(prop["value"]) is list:
                 # Default value of ndarray are list
                 arg_list += ", " + prop["name"] + "=" + str(prop["value"])
             else:
                 arg_list += ", " + prop["name"] + "=None"
+        elif prop["type"] == "list":
+            if (
+                prop["value"] not in ["", None]
+                and type(prop["value"]) is list
+                and len(prop["value"]) > 0
+            ):
+                # Default value of ndarray are list
+                arg_list += ", " + prop["name"] + "=" + str(prop["value"])
+            elif prop["value"] is None:
+                arg_list += ", " + prop["name"] + "=None"
+            else:
+                arg_list += ", " + prop["name"] + "=-1"
         elif prop["type"] == "function":
             # Callable type (function or lambda function)
             arg_list += ", " + prop["name"] + "=None"
@@ -301,13 +67,18 @@ def generate_init(gen_dict, class_dict):
                 arg_list += ", " + prop["name"] + "=None"
         elif is_list_pyleecan_type(prop["type"]):
             # List of pyleecan type
-            arg_list += ", " + prop["name"] + "=list()"
-        elif prop["type"] == "{ndarray}":
+            arg_list += ", " + prop["name"] + "=-1"
+        elif prop["type"] in ["{ndarray}", "[ndarray]"]:
             # Dict of ndarray
-            arg_list += ", " + prop["name"] + "=dict()"
+            arg_list += ", " + prop["name"] + "=-1"
         elif is_dict_pyleecan_type(prop["type"]):
             # Dict of pyleecan type
-            arg_list += ", " + prop["name"] + "=dict()"
+            arg_list += ", " + prop["name"] + "=-1"
+        elif prop["type"] in PYTHON_TYPE:
+            # Add => ", my_var = 10" to arg_list
+            arg_list += (
+                ", " + prop["name"] + "=" + get_value_str(prop["value"], prop["type"])
+            )
         else:  # pyleecan type
             if prop["value"] == "":
                 arg_list += ", " + prop["name"] + "=-1"
@@ -321,50 +92,72 @@ def generate_init(gen_dict, class_dict):
                     + "="
                     + get_value_str(prop["value"], prop["type"])
                 )
-            # To initialize the pyleecan Type default (-1)
-            init_P_Type += TAB2 + "if " + prop["name"] + " == -1:\n"
-            if type(prop["value"]) is str and "()" in prop["value"]:
-                init_P_Type += TAB3 + prop["name"] + " = " + prop["value"] + "\n"
-            else:
-                init_P_Type += TAB3 + prop["name"] + " = " + prop["type"] + "()\n"
 
-    # Code generation in init_str
+    ################
+    # To overwrite the parameter from init_dict (all prop)
+    init_by_dict = ""
+    for prop in all_properties:
+        # To overwrite the parameter from init_dict
+        init_by_dict += TAB3 + 'if "' + prop["name"] + '" in list(init_dict.keys()):\n'
+        init_by_dict += TAB4 + prop["name"] + ' = init_dict["' + prop["name"] + '"]\n'
+
+    ################
+    # Generate the setter part (self.a = a) (class prop only)
+    setter_str = ""
+    # Add the parent property only in the top mother classes
+    if class_dict["mother"] == "":
+        setter_str += TAB2 + "self.parent = None\n"
+    for prop in class_dict["properties"]:
+        # Add => "self.my_var = my_var\n" to setter_str
+        setter_str += TAB2 + "self." + prop["name"] + " = " + prop["name"] + "\n"
+
+    ##################
+    # For the call to super __init__ (mother prop only)
+    mother_arg_list = ""
+    for prop in mother_prop_list:
+        if mother_arg_list != "":  # Avoid the first coma
+            # Add => ", my_var = my_var" to mother_arg_list
+            mother_arg_list += ", " + prop["name"] + "=" + prop["name"]
+        else:
+            # Add => "my_var = my_var" to mother_arg_list
+            mother_arg_list += prop["name"] + "=" + prop["name"]
+
+    ###############
+    # Code generation of init method
+    init_str = ""
+    ## def
     init_str += (
         TAB + "def __init__(self" + arg_list + ", init_dict = None, init_str = None):\n"
     )
+    ## Docstring
     init_str += TAB2 + '"""Constructor of the class. Can be use in three ways ' ":\n"
     init_str += (
         TAB2 + "- __init__ (arg1 = 1, arg3 = 5) every parameters "
         "have name and default values\n"
     )
-    init_str += (
-        TAB3 + "for Matrix, None will initialise the property with " "an empty Matrix\n"
-    )
-    init_str += TAB3 + "for pyleecan type, None will call the default " "constructor\n"
+    init_str += TAB3 + "for pyleecan type, -1 will call the default " "constructor\n"
     init_str += (
         TAB2 + "- __init__ (init_dict = d) d must be a dictionnary "
-        "with every properties as keys\n"
+        "with property names as keys\n"
     )
     init_str += TAB2 + "- __init__ (init_str = s) s must be a string\n"
     init_str += TAB2 + "s is the file path to load\n\n"
     init_str += TAB2 + "ndarray or list can be given for Vector and Matrix\n"
     init_str += TAB2 + 'object or dict can be given for pyleecan Object"""\n\n'
-
-    init_str += init_P_Type
-    init_str += TAB2 + "if init_str is not None :  # Initialisation by str\n"
-    init_str += TAB3 + "from ..Functions.load import load\n"
-    init_str += TAB3 + "assert type(init_str) is str\n"
-    init_str += TAB3 + "# load the object from a file\n"
-    init_str += TAB3 + "obj = load(init_str)\n"
-    init_str += TAB3 + "assert type(obj) is type(self)\n"
-    init_str += init_by_str
+    ## init_str
+    init_str += TAB2 + "if init_str is not None:  # Load from a file\n"
+    init_str += TAB3 + "init_dict = load_init_dict(init_str)[1]\n"
+    ## init_dict
     init_str += TAB2 + "if init_dict is not None:  # Initialisation by dict\n"
     init_str += TAB3 + "assert type(init_dict) is dict\n"
     init_str += TAB3 + "# Overwrite default value with init_dict content\n"
     init_str += init_by_dict
-    init_str += TAB2 + "# Initialisation by argument\n"
-    init_str += init_by_var
-    # Add the call to super __init__ if needed
+    ## Setter part
+    init_str += (
+        TAB2 + "# Set the properties (value check and convertion are done in setter)\n"
+    )
+    init_str += setter_str
+    ## Add the call to super __init__ if needed
     if class_dict["mother"] != "":
         init_str += TAB2 + "# Call " + class_dict["mother"] + " init\n"
         init_str += (

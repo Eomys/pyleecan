@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
@@ -22,15 +25,9 @@ class Interpolation(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -44,31 +41,16 @@ class Interpolation(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if ref_cell == -1:
-            ref_cell = RefCell()
-        if gauss_point == -1:
-            gauss_point = GaussPoint()
-        if scalar_product == -1:
-            scalar_product = ScalarProduct()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            ref_cell = obj.ref_cell
-            gauss_point = obj.gauss_point
-            scalar_product = obj.scalar_product
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -78,93 +60,17 @@ class Interpolation(FrozenClass):
                 gauss_point = init_dict["gauss_point"]
             if "scalar_product" in list(init_dict.keys()):
                 scalar_product = init_dict["scalar_product"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # ref_cell can be None, a RefCell object or a dict
-        if isinstance(ref_cell, dict):
-            # Check that the type is correct (including daughter)
-            class_name = ref_cell.get("__class__")
-            if class_name not in ["RefCell", "RefSegmentP1", "RefTriangle3"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for ref_cell"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.ref_cell = class_obj(init_dict=ref_cell)
-        elif isinstance(ref_cell, str):
-            from ..Functions.load import load
-
-            ref_cell = load(ref_cell)
-            # Check that the type is correct (including daughter)
-            class_name = ref_cell.__class__.__name__
-            if class_name not in ["RefCell", "RefSegmentP1", "RefTriangle3"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for ref_cell"
-                )
-            self.ref_cell = ref_cell
-        else:
-            self.ref_cell = ref_cell
-        # gauss_point can be None, a GaussPoint object or a dict
-        if isinstance(gauss_point, dict):
-            # Check that the type is correct (including daughter)
-            class_name = gauss_point.get("__class__")
-            if class_name not in ["GaussPoint", "FPGNSeg", "FPGNTri"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for gauss_point"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.gauss_point = class_obj(init_dict=gauss_point)
-        elif isinstance(gauss_point, str):
-            from ..Functions.load import load
-
-            gauss_point = load(gauss_point)
-            # Check that the type is correct (including daughter)
-            class_name = gauss_point.__class__.__name__
-            if class_name not in ["GaussPoint", "FPGNSeg", "FPGNTri"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for gauss_point"
-                )
-            self.gauss_point = gauss_point
-        else:
-            self.gauss_point = gauss_point
-        # scalar_product can be None, a ScalarProduct object or a dict
-        if isinstance(scalar_product, dict):
-            # Check that the type is correct (including daughter)
-            class_name = scalar_product.get("__class__")
-            if class_name not in ["ScalarProduct", "ScalarProductL2"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for scalar_product"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.scalar_product = class_obj(init_dict=scalar_product)
-        elif isinstance(scalar_product, str):
-            from ..Functions.load import load
-
-            scalar_product = load(scalar_product)
-            # Check that the type is correct (including daughter)
-            class_name = scalar_product.__class__.__name__
-            if class_name not in ["ScalarProduct", "ScalarProductL2"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for scalar_product"
-                )
-            self.scalar_product = scalar_product
-        else:
-            self.scalar_product = scalar_product
+        self.ref_cell = ref_cell
+        self.gauss_point = gauss_point
+        self.scalar_product = scalar_product
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Interpolation_str = ""
         if self.parent is None:
@@ -210,8 +116,7 @@ class Interpolation(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Interpolation_dict = dict()
         if self.ref_cell is None:
@@ -246,6 +151,15 @@ class Interpolation(FrozenClass):
 
     def _set_ref_cell(self, value):
         """setter of ref_cell"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "ref_cell"
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = RefCell()
         check_var("ref_cell", value, "RefCell")
         self._ref_cell = value
 
@@ -267,6 +181,15 @@ class Interpolation(FrozenClass):
 
     def _set_gauss_point(self, value):
         """setter of gauss_point"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "gauss_point"
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = GaussPoint()
         check_var("gauss_point", value, "GaussPoint")
         self._gauss_point = value
 
@@ -288,6 +211,15 @@ class Interpolation(FrozenClass):
 
     def _set_scalar_product(self, value):
         """setter of scalar_product"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "scalar_product"
+            )
+            value = class_obj(init_dict=value)
+        elif value is -1:  # Default constructor
+            value = ScalarProduct()
         check_var("scalar_product", value, "ScalarProduct")
         self._scalar_product = value
 
