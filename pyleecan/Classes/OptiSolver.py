@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
@@ -21,14 +24,9 @@ class OptiSolver(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -43,30 +41,16 @@ class OptiSolver(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if problem == -1:
-            problem = OptiProblem()
-        if xoutput == -1:
-            xoutput = XOutput()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            problem = obj.problem
-            xoutput = obj.xoutput
-            logger_name = obj.logger_name
-            is_keep_all_output = obj.is_keep_all_output
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -78,26 +62,10 @@ class OptiSolver(FrozenClass):
                 logger_name = init_dict["logger_name"]
             if "is_keep_all_output" in list(init_dict.keys()):
                 is_keep_all_output = init_dict["is_keep_all_output"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # problem can be None, a OptiProblem object or a dict
-        if isinstance(problem, dict):
-            self.problem = OptiProblem(init_dict=problem)
-        elif isinstance(problem, str):
-            from ..Functions.load import load
-
-            self.problem = load(problem)
-        else:
-            self.problem = problem
-        # xoutput can be None, a XOutput object or a dict
-        if isinstance(xoutput, dict):
-            self.xoutput = XOutput(init_dict=xoutput)
-        elif isinstance(xoutput, str):
-            from ..Functions.load import load
-
-            self.xoutput = load(xoutput)
-        else:
-            self.xoutput = xoutput
+        self.problem = problem
+        self.xoutput = xoutput
         self.logger_name = logger_name
         self.is_keep_all_output = is_keep_all_output
 
@@ -105,7 +73,7 @@ class OptiSolver(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         OptiSolver_str = ""
         if self.parent is None:
@@ -144,7 +112,7 @@ class OptiSolver(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OptiSolver_dict = dict()
         if self.problem is None:
@@ -177,6 +145,15 @@ class OptiSolver(FrozenClass):
 
     def _set_problem(self, value):
         """setter of problem"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "problem"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OptiProblem()
         check_var("problem", value, "OptiProblem")
         self._problem = value
 
@@ -198,6 +175,15 @@ class OptiSolver(FrozenClass):
 
     def _set_xoutput(self, value):
         """setter of xoutput"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "xoutput"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = XOutput()
         check_var("xoutput", value, "XOutput")
         self._xoutput = value
 

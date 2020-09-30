@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Magnetics import Magnetics
 
 # Import all class method
@@ -122,14 +125,9 @@ class MagFEMM(Magnetics):
         )
     else:
         build_meshsolution = build_meshsolution
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -139,12 +137,12 @@ class MagFEMM(Magnetics):
         Kgeo_fineness=1,
         type_calc_leakage=0,
         file_name="",
-        FEMM_dict={},
+        FEMM_dict=-1,
         angle_stator=0,
         is_get_mesh=False,
         is_save_FEA=False,
         is_sliding_band=True,
-        transform_list=[],
+        transform_list=-1,
         rotor_dxf=None,
         stator_dxf=None,
         import_file="",
@@ -167,53 +165,16 @@ class MagFEMM(Magnetics):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if rotor_dxf == -1:
-            rotor_dxf = DXFImport()
-        if stator_dxf == -1:
-            stator_dxf = DXFImport()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            Kmesh_fineness = obj.Kmesh_fineness
-            Kgeo_fineness = obj.Kgeo_fineness
-            type_calc_leakage = obj.type_calc_leakage
-            file_name = obj.file_name
-            FEMM_dict = obj.FEMM_dict
-            angle_stator = obj.angle_stator
-            is_get_mesh = obj.is_get_mesh
-            is_save_FEA = obj.is_save_FEA
-            is_sliding_band = obj.is_sliding_band
-            transform_list = obj.transform_list
-            rotor_dxf = obj.rotor_dxf
-            stator_dxf = obj.stator_dxf
-            import_file = obj.import_file
-            is_close_femm = obj.is_close_femm
-            is_remove_slotS = obj.is_remove_slotS
-            is_remove_slotR = obj.is_remove_slotR
-            is_remove_vent = obj.is_remove_vent
-            is_mmfs = obj.is_mmfs
-            is_mmfr = obj.is_mmfr
-            type_BH_stator = obj.type_BH_stator
-            type_BH_rotor = obj.type_BH_rotor
-            is_symmetry_t = obj.is_symmetry_t
-            sym_t = obj.sym_t
-            is_antiper_t = obj.is_antiper_t
-            is_symmetry_a = obj.is_symmetry_a
-            sym_a = obj.sym_a
-            is_antiper_a = obj.is_antiper_a
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -271,7 +232,7 @@ class MagFEMM(Magnetics):
                 sym_a = init_dict["sym_a"]
             if "is_antiper_a" in list(init_dict.keys()):
                 is_antiper_a = init_dict["is_antiper_a"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
         self.type_calc_leakage = type_calc_leakage
@@ -281,27 +242,9 @@ class MagFEMM(Magnetics):
         self.is_get_mesh = is_get_mesh
         self.is_save_FEA = is_save_FEA
         self.is_sliding_band = is_sliding_band
-        if transform_list == -1:
-            transform_list = []
         self.transform_list = transform_list
-        # rotor_dxf can be None, a DXFImport object or a dict
-        if isinstance(rotor_dxf, dict):
-            self.rotor_dxf = DXFImport(init_dict=rotor_dxf)
-        elif isinstance(rotor_dxf, str):
-            from ..Functions.load import load
-
-            self.rotor_dxf = load(rotor_dxf)
-        else:
-            self.rotor_dxf = rotor_dxf
-        # stator_dxf can be None, a DXFImport object or a dict
-        if isinstance(stator_dxf, dict):
-            self.stator_dxf = DXFImport(init_dict=stator_dxf)
-        elif isinstance(stator_dxf, str):
-            from ..Functions.load import load
-
-            self.stator_dxf = load(stator_dxf)
-        else:
-            self.stator_dxf = stator_dxf
+        self.rotor_dxf = rotor_dxf
+        self.stator_dxf = stator_dxf
         self.import_file = import_file
         self.is_close_femm = is_close_femm
         # Call Magnetics init
@@ -324,7 +267,7 @@ class MagFEMM(Magnetics):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         MagFEMM_str = ""
         # Get the properties inherited from Magnetics
@@ -400,7 +343,7 @@ class MagFEMM(Magnetics):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Magnetics
         MagFEMM_dict = super(MagFEMM, self).as_dict()
@@ -531,6 +474,8 @@ class MagFEMM(Magnetics):
 
     def _set_FEMM_dict(self, value):
         """setter of FEMM_dict"""
+        if type(value) is int and value == -1:
+            value = dict()
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 
@@ -621,6 +566,8 @@ class MagFEMM(Magnetics):
 
     def _set_transform_list(self, value):
         """setter of transform_list"""
+        if type(value) is int and value == -1:
+            value = list()
         check_var("transform_list", value, "list")
         self._transform_list = value
 
@@ -639,6 +586,15 @@ class MagFEMM(Magnetics):
 
     def _set_rotor_dxf(self, value):
         """setter of rotor_dxf"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "rotor_dxf"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DXFImport()
         check_var("rotor_dxf", value, "DXFImport")
         self._rotor_dxf = value
 
@@ -660,6 +616,15 @@ class MagFEMM(Magnetics):
 
     def _set_stator_dxf(self, value):
         """setter of stator_dxf"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "stator_dxf"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DXFImport()
         check_var("stator_dxf", value, "DXFImport")
         self._stator_dxf = value
 

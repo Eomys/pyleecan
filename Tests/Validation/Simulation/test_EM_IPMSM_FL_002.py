@@ -16,8 +16,6 @@ import pytest
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-
 
 @pytest.mark.long
 @pytest.mark.validation
@@ -32,6 +30,7 @@ def test_EM_IPMSM_FL_002():
     Electric Machines & Drives Conference (IEMDC), 2013 IEEE International, Chicago, IL, 2013, pp. 295-302.
     Test compute the Flux in FEMM, with and without symmetry
     """
+    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     simu = Simu1(name="EM_IPMSM_FL_002", machine=IPMSM_A)
 
     # Definition of the enforced output of the electrical module

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from os.path import join
-from unittest import TestCase
+import pytest
 
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, Polygon
@@ -22,8 +22,9 @@ from pyleecan.Classes.SlotMPolar import SlotMPolar
 from Tests import save_plot_path as save_path
 
 
-class test_Lam_Mag_surface_plot(TestCase):
-    """unittest for Lamination with surface magnet plot"""
+@pytest.mark.PLOT
+class Test_Lam_Mag_surface_plot(object):
+    """pytest for Lamination with surface magnet plot"""
 
     def test_Lam_Mag_10_surface(self):
         """Test machine plot with Magnet 10 surface"""
@@ -46,7 +47,7 @@ class test_Lam_Mag_surface_plot(TestCase):
 
         rotor.plot()
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 10)
+        assert len(fig.axes[0].patches) == 10
         fig.savefig(join(save_path, "test_Lam_Mag_10s_2-Rotor.png"))
 
         magnet2 = [MagnetType10(Lmag=0.5, Hmag=0.02, Wmag=0.04)]
@@ -87,31 +88,26 @@ class test_Lam_Mag_surface_plot(TestCase):
 
         rotor.plot()
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 10)
+        assert len(fig.axes[0].patches) == 10
         fig.savefig(join(save_path, "test_Lam_Mag_11s_2-Rotor.png"))
 
         stator.plot()
         fig = plt.gcf()
         patches = fig.axes[0].patches
-        self.assertEqual(len(patches), 6)
-        self.assertTrue(isinstance(patches[0], Circle))
-        self.assertEqual(patches[0].get_radius(), 200e-3)
-        self.assertEqual(patches[0].get_facecolor(), (0.0, 0.0, 1.0, 1.0))  # Blue
+        assert len(patches) == 6
+        assert isinstance(patches[0], Circle)
+        assert patches[0].get_radius() == 200e-3
+        assert patches[0].get_facecolor() == (0.0, 0.0, 1.0, 1.0)
         for i in range(1, 6):
-            self.assertTrue(isinstance(patches[i], Polygon))
-            if i == 1:  # Lamination inner
-                self.assertEqual(
-                    patches[i].get_facecolor(), (1.0, 1.0, 1.0, 1.0)
-                )  # White
+            assert isinstance(patches[i], Polygon)
+            if i == 1:
+                assert patches[i].get_facecolor() == (1.0, 1.0, 1.0, 1.0)  # White
             else:  # Magnet
-                self.assertEqual(
-                    patches[i].get_facecolor(), (0.75, 0.75, 0.75, 1.0)
-                )  # Gray
+                assert patches[i].get_facecolor() == (0.75, 0.75, 0.75, 1.0)  # Gray
         fig.savefig(join(save_path, "test_Lam_Mag_11s_3-Stator.png"))
 
     def test_Lam_Mag_12_surface(self):
         """Test machine plot with Magnet 12 surface"""
-
         plt.close("all")
         rotor = LamSlotMag(
             Rint=40e-3,
@@ -122,7 +118,6 @@ class test_Lam_Mag_surface_plot(TestCase):
             Nrvd=2,
             Wrvd=0.05,
         )
-
         magnet = [MagnetType12(Lmag=0.5, Hmag=0.02, Wmag=0.06)]
         rotor.slot = SlotMFlat(Zs=8, W0=0.06, magnet=magnet)
         rotor.mat_type.mag = MatMagnetics(Wlam=0.5e-3)
@@ -140,12 +135,12 @@ class test_Lam_Mag_surface_plot(TestCase):
 
         rotor.plot()
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 10)
+        assert len(fig.axes[0].patches) == 10
         fig.savefig(join(save_path, "test_Lam_Mag_12s_2-Rotor.png"))
 
         stator.plot()
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 2)
+        assert len(fig.axes[0].patches) == 2
         fig.savefig(join(save_path, "test_Lam_Mag_12s_3-Stator.png"))
 
     def test_Lam_Mag_13_surface(self):
@@ -178,12 +173,12 @@ class test_Lam_Mag_surface_plot(TestCase):
 
         rotor.plot()
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 6)
+        assert len(fig.axes[0].patches) == 6
         fig.savefig(join(save_path, "test_Lam_Mag_13s_2-Rotor.png"))
 
         stator.plot()
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 2)
+        assert len(fig.axes[0].patches) == 2
         fig.savefig(join(save_path, "test_Lam_Mag_13s_3-Stator.png"))
 
     def test_Lam_Mag_14_surface(self):
@@ -218,10 +213,10 @@ class test_Lam_Mag_surface_plot(TestCase):
 
         rotor.plot()
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 10)
+        assert len(fig.axes[0].patches) == 10
         fig.savefig(join(save_path, "test_Lam_Mag_14s_2-Rotor.png"))
 
         stator.plot()
         fig = plt.gcf()
-        self.assertEqual(len(fig.axes[0].patches), 10)
+        assert len(fig.axes[0].patches) == 10
         fig.savefig(join(save_path, "test_Lam_Mag_14s_3-Stator.png"))

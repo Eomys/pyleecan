@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from unittest import TestCase
-from ddt import ddt, data
+import pytest
 
 from pyleecan.Classes.Segment import Segment
 from pyleecan.Classes.SurfLine import SurfLine
@@ -64,11 +63,11 @@ slotW10_test.append(
 )
 
 
-@ddt
-class test_SlotW10_meth(TestCase):
-    """unittest for SlotW10 methods"""
+@pytest.mark.METHODS
+class Test_SloyW10_meth(object):
+    """pytest for SlotW10 methods"""
 
-    @data(*slotW10_test)
+    @pytest.mark.parametrize("test_dict", slotW10_test)
     def test_comp_surface(self, test_dict):
         """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
@@ -77,14 +76,14 @@ class test_SlotW10_meth(TestCase):
         a = result
         b = test_dict["S_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
         b = comp_surface(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*slotW10_test)
+    @pytest.mark.parametrize("test_dict", slotW10_test)
     def test_comp_surface_wind(self, test_dict):
         """Check that the computation of the winding surface is correct"""
         test_obj = test_dict["test_obj"]
@@ -93,14 +92,14 @@ class test_SlotW10_meth(TestCase):
         a = result
         b = test_dict["SW_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
         b = comp_surface_wind(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*slotW10_test)
+    @pytest.mark.parametrize("test_dict", slotW10_test)
     def test_comp_height(self, test_dict):
         """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
@@ -109,32 +108,32 @@ class test_SlotW10_meth(TestCase):
         a = result
         b = test_dict["H_exp"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
         # Check that the analytical method returns the same result as the numerical one
         b = comp_height(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*slotW10_test)
+    @pytest.mark.parametrize("test_dict", slotW10_test)
     def test_comp_angle_opening(self, test_dict):
         """Check that the computation of the average opening angle is correct"""
         test_obj = test_dict["test_obj"]
         a = test_obj.slot.comp_angle_opening()
-        self.assertEqual(a, 2 * arcsin(test_obj.slot.W0 / (2 * 0.1325)))
+        assert a == 2 * arcsin(test_obj.slot.W0 / (2 * 0.1325))
         # Check that the analytical method returns the same result as the numerical one
         b = comp_angle_opening(test_obj.slot)
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
-    @data(*slotW10_test)
+    @pytest.mark.parametrize("test_dict", slotW10_test)
     def test_comp_width_opening(self, test_dict):
         """Check that the computation of the average opening width is correct"""
         test_obj = test_dict["test_obj"]
         a = test_obj.slot.comp_width_opening()
-        self.assertEqual(a, test_obj.slot.W0)
+        assert a == test_obj.slot.W0
 
-    @data(*slotW10_test)
+    @pytest.mark.parametrize("test_dict", slotW10_test)
     def test_comp_angle_wind_eq(self, test_dict):
         """Check that the computation of the average angle is correct"""
         test_obj = test_dict["test_obj"]
@@ -143,7 +142,7 @@ class test_SlotW10_meth(TestCase):
         a = result
         b = test_dict["Aw"]
         msg = "Return " + str(a) + " expected " + str(b)
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA, msg=msg)
+        assert abs((a - b) / a - 0) < DELTA, msg
 
     def test_build_geometry(self):
         """check that curve_list is correct"""
@@ -177,15 +176,15 @@ class test_SlotW10_meth(TestCase):
         curve_list.append(Segment(Z9, Z10))
 
         result = test_obj.build_geometry()
-        self.assertEqual(len(result), len(curve_list))
+        assert len(result) == len(curve_list)
         for i in range(0, len(result)):
             a = result[i].begin
             b = curve_list[i].begin
-            self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+            assert abs((a - b) / a - 0) < DELTA
 
             a = result[i].end
             b = curve_list[i].end
-            self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+            assert abs((a - b) / a - 0) < DELTA
 
     def test_build_geometry_wind(self):
         """Check if the surface of winding surface is correct"""
@@ -193,9 +192,9 @@ class test_SlotW10_meth(TestCase):
             W0=0.2, H0=0.1, W1=0.4, H1=0.1, H1_is_rad=False, H2=0.1, W2=0.6
         )
         lam = LamSlot(is_internal=False, slot=test_obj, Rint=1)
+        Z1 = exp(1j * float(arcsin(0.1)))
 
         # Rbo=1
-        Z1 = exp(1j * float(arcsin(0.1)))
         Z2 = Z1 + 0.1
         Z3 = Z1 + 0.1j + 0.2
         Z4 = Z1 + 0.2
@@ -235,16 +234,15 @@ class test_SlotW10_meth(TestCase):
         expected.append(surface)
 
         result = test_obj.build_geometry_wind(Nrad=1, Ntan=2)
-        self.assertEqual(len(result), len(expected))
+        assert len(result) == len(expected)
         for i in range(0, len(result)):
-            self.assertEqual(len(result[i].line_list), len(expected[i].line_list))
+            assert len(result[i].line_list) == len(expected[i].line_list)
             for jj in range(len(result[i].line_list)):
                 a = result[i].line_list[jj].begin
                 b = expected[i].line_list[jj].begin
-                self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
-
+                assert abs((a - b) / a - 0) < DELTA
                 a = result[i].line_list[jj].end
                 b = expected[i].line_list[jj].end
-                self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+                assert abs((a - b) / a - 0) < DELTA
 
-            self.assertTrue(result[i].label == expected[i].label)
+            assert result[i].label == expected[i].label

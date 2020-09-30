@@ -3,9 +3,10 @@
 import pyvista as pv
 import meshio
 import os
+from pyleecan.definitions import RESULT_DIR
 
 
-def get_mesh_pv(self, path="temp.vtk", indices=None):
+def get_mesh_pv(self, path=RESULT_DIR + "/temp.vtk", indices=None):
     """Return the pyvista mesh object (or submesh).
 
     Parameters

@@ -24,9 +24,9 @@ def get_cell(self, indices=None):
         # Extract submesh
         mesh = self.get_mesh(indices=indices)
         # Write submesh in .vtk file
-        mesh.save("temp.vtk")
+        mesh.save(self.path + "/temp.vtk")
         # Read mesh file with meshio (pyvista does not provide the correct cell format)
-        mesh = read("temp.vtk")
+        mesh = read(self.path + "/temp.vtk")
 
     else:
         # Read mesh file with meshio (pyvista does not provide the correct cell format)
@@ -35,6 +35,6 @@ def get_cell(self, indices=None):
     cells = mesh.cells
 
     if indices is not None:
-        remove("temp.vtk")
+        remove(self.path + "/temp.vtk")
 
     return cells

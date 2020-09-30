@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -300,14 +303,9 @@ class Output(FrozenClass):
         )
     else:
         plot_A_fft_time = plot_A_fft_time
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -327,45 +325,16 @@ class Output(FrozenClass):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if simu == -1:
-            simu = Simulation()
-        if geo == -1:
-            geo = OutGeo()
-        if elec == -1:
-            elec = OutElec()
-        if mag == -1:
-            mag = OutMag()
-        if struct == -1:
-            struct = OutStruct()
-        if post == -1:
-            post = OutPost()
-        if force == -1:
-            force = OutForce()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            simu = obj.simu
-            path_res = obj.path_res
-            geo = obj.geo
-            elec = obj.elec
-            mag = obj.mag
-            struct = obj.struct
-            post = obj.post
-            logger_name = obj.logger_name
-            force = obj.force
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -387,95 +356,23 @@ class Output(FrozenClass):
                 logger_name = init_dict["logger_name"]
             if "force" in list(init_dict.keys()):
                 force = init_dict["force"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # simu can be None, a Simulation object or a dict
-        if isinstance(simu, dict):
-            # Check that the type is correct (including daughter)
-            class_name = simu.get("__class__")
-            if class_name not in ["Simulation", "Simu1"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for simu"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.simu = class_obj(init_dict=simu)
-        elif isinstance(simu, str):
-            from ..Functions.load import load
-
-            simu = load(simu)
-            # Check that the type is correct (including daughter)
-            class_name = simu.__class__.__name__
-            if class_name not in ["Simulation", "Simu1"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for simu"
-                )
-            self.simu = simu
-        else:
-            self.simu = simu
+        self.simu = simu
         self.path_res = path_res
-        # geo can be None, a OutGeo object or a dict
-        if isinstance(geo, dict):
-            self.geo = OutGeo(init_dict=geo)
-        elif isinstance(geo, str):
-            from ..Functions.load import load
-
-            self.geo = load(geo)
-        else:
-            self.geo = geo
-        # elec can be None, a OutElec object or a dict
-        if isinstance(elec, dict):
-            self.elec = OutElec(init_dict=elec)
-        elif isinstance(elec, str):
-            from ..Functions.load import load
-
-            self.elec = load(elec)
-        else:
-            self.elec = elec
-        # mag can be None, a OutMag object or a dict
-        if isinstance(mag, dict):
-            self.mag = OutMag(init_dict=mag)
-        elif isinstance(mag, str):
-            from ..Functions.load import load
-
-            self.mag = load(mag)
-        else:
-            self.mag = mag
-        # struct can be None, a OutStruct object or a dict
-        if isinstance(struct, dict):
-            self.struct = OutStruct(init_dict=struct)
-        elif isinstance(struct, str):
-            from ..Functions.load import load
-
-            self.struct = load(struct)
-        else:
-            self.struct = struct
-        # post can be None, a OutPost object or a dict
-        if isinstance(post, dict):
-            self.post = OutPost(init_dict=post)
-        elif isinstance(post, str):
-            from ..Functions.load import load
-
-            self.post = load(post)
-        else:
-            self.post = post
+        self.geo = geo
+        self.elec = elec
+        self.mag = mag
+        self.struct = struct
+        self.post = post
         self.logger_name = logger_name
-        # force can be None, a OutForce object or a dict
-        if isinstance(force, dict):
-            self.force = OutForce(init_dict=force)
-        elif isinstance(force, str):
-            from ..Functions.load import load
-
-            self.force = load(force)
-        else:
-            self.force = force
+        self.force = force
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Output_str = ""
         if self.parent is None:
@@ -547,7 +444,7 @@ class Output(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Output_dict = dict()
         if self.simu is None:
@@ -610,6 +507,13 @@ class Output(FrozenClass):
 
     def _set_simu(self, value):
         """setter of simu"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "simu")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Simulation()
         check_var("simu", value, "Simulation")
         self._simu = value
 
@@ -649,6 +553,13 @@ class Output(FrozenClass):
 
     def _set_geo(self, value):
         """setter of geo"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "geo")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OutGeo()
         check_var("geo", value, "OutGeo")
         self._geo = value
 
@@ -670,6 +581,13 @@ class Output(FrozenClass):
 
     def _set_elec(self, value):
         """setter of elec"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OutElec()
         check_var("elec", value, "OutElec")
         self._elec = value
 
@@ -691,6 +609,13 @@ class Output(FrozenClass):
 
     def _set_mag(self, value):
         """setter of mag"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OutMag()
         check_var("mag", value, "OutMag")
         self._mag = value
 
@@ -712,6 +637,15 @@ class Output(FrozenClass):
 
     def _set_struct(self, value):
         """setter of struct"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "struct"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OutStruct()
         check_var("struct", value, "OutStruct")
         self._struct = value
 
@@ -733,6 +667,13 @@ class Output(FrozenClass):
 
     def _set_post(self, value):
         """setter of post"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "post")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OutPost()
         check_var("post", value, "OutPost")
         self._post = value
 
@@ -772,6 +713,15 @@ class Output(FrozenClass):
 
     def _set_force(self, value):
         """setter of force"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "force"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = OutForce()
         check_var("force", value, "OutForce")
         self._force = value
 

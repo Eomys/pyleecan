@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .IndMag import IndMag
 
 # Import all class method
@@ -56,20 +59,15 @@ class IndMagFEMM(IndMag):
         )
     else:
         solve_FEMM = solve_FEMM
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
     def __init__(
         self,
-        FEMM_dict={},
+        FEMM_dict=-1,
         type_calc_leakage=0,
         is_sliding_band=True,
         is_symmetry_a=False,
@@ -81,29 +79,16 @@ class IndMagFEMM(IndMag):
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            FEMM_dict = obj.FEMM_dict
-            type_calc_leakage = obj.type_calc_leakage
-            is_sliding_band = obj.is_sliding_band
-            is_symmetry_a = obj.is_symmetry_a
-            sym_a = obj.sym_a
-            is_antiper_a = obj.is_antiper_a
-            Nt_tot = obj.Nt_tot
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -121,7 +106,7 @@ class IndMagFEMM(IndMag):
                 is_antiper_a = init_dict["is_antiper_a"]
             if "Nt_tot" in list(init_dict.keys()):
                 Nt_tot = init_dict["Nt_tot"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.FEMM_dict = FEMM_dict
         self.type_calc_leakage = type_calc_leakage
         self.is_sliding_band = is_sliding_band
@@ -135,7 +120,7 @@ class IndMagFEMM(IndMag):
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         IndMagFEMM_str = ""
         # Get the properties inherited from IndMag
@@ -175,7 +160,7 @@ class IndMagFEMM(IndMag):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from IndMag
         IndMagFEMM_dict = super(IndMagFEMM, self).as_dict()
@@ -210,6 +195,8 @@ class IndMagFEMM(IndMag):
 
     def _set_FEMM_dict(self, value):
         """setter of FEMM_dict"""
+        if type(value) is int and value == -1:
+            value = dict()
         check_var("FEMM_dict", value, "dict")
         self._FEMM_dict = value
 

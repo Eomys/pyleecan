@@ -22,7 +22,7 @@ def generate_properties(gen_dict, class_dict):
     prop_str = ""  # This string is for the generated code
 
     for prop in class_dict["properties"]:
-        # Getter
+        ## Getter
         # Write the getter only if it is not user defined
         if "_get_" + prop["name"] not in class_dict["methods"]:
             prop_str += TAB + "def _get_" + prop["name"] + "(self):\n"
@@ -30,178 +30,40 @@ def generate_properties(gen_dict, class_dict):
             if is_list_pyleecan_type(prop["type"]):
                 # TODO: Update the parent should be done only in the setter but
                 # their is an issue with .append for list of pyleecan type
-                prop_str += TAB2 + "for obj in self._" + prop["name"] + ":\n"
-                prop_str += TAB3 + "if obj is not None:\n"
-                prop_str += TAB4 + "obj.parent = self\n"
+                prop_str += TAB2 + "if self._" + prop["name"] + " is not None:\n"
+                prop_str += TAB3 + "for obj in self._" + prop["name"] + ":\n"
+                prop_str += TAB4 + "if obj is not None:\n"
+                prop_str += TAB5 + "obj.parent = self\n"
                 prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
-
             elif is_dict_pyleecan_type(prop["type"]) and prop["type"] != "{ndarray}":
                 # TODO: Update the parent should be done only in the setter but
                 # their is an issue with .append for list of pyleecan type
+                prop_str += TAB2 + "if self._" + prop["name"] + " is not None:\n"
                 prop_str += (
-                    TAB2 + "for key, obj in self._" + prop["name"] + ".items():\n"
+                    TAB3 + "for key, obj in self._" + prop["name"] + ".items():\n"
                 )
-                prop_str += TAB3 + "if obj is not None:\n"
-                prop_str += TAB4 + "obj.parent = self\n"
+                prop_str += TAB4 + "if obj is not None:\n"
+                prop_str += TAB5 + "obj.parent = self\n"
                 prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
             elif prop["type"] == "function":
                 prop_str += TAB2 + "return self._" + prop["name"] + "[0]\n\n"
             else:
                 prop_str += TAB2 + "return self._" + prop["name"] + "\n\n"
 
-        # Setter
+        ## Setter
         # Write the setter only if it is not user defined
         if "_set_" + prop["name"] not in class_dict["methods"]:
-            prop_str += TAB + "def _set_" + prop["name"] + "(self, value):\n"
-            prop_str += TAB2 + '"""setter of ' + prop["name"] + '"""\n'
-            # Convert ndarray if needed
-            if prop["type"] == "ndarray":
-                prop_str += TAB2 + "if type(value) is list:\n"
-                prop_str += TAB3 + "try:\n"
-                prop_str += TAB4 + "value = array(value)\n"
-                prop_str += TAB3 + "except:\n"
-                prop_str += TAB4 + "pass\n"
-            elif prop["type"] == "{ndarray}":
-                prop_str += TAB2 + "if type(value) is dict:\n"
-                prop_str += TAB3 + "for key, obj in value.items():\n"
-                prop_str += TAB4 + "if type(obj) is list:\n"
-                prop_str += TAB5 + "try:\n"
-                prop_str += TAB6 + "obj = array(obj)\n"
-                prop_str += TAB5 + "except:\n"
-                prop_str += TAB6 + "pass\n"
-            elif prop["type"] == "ImportMatrix":
-                prop_str += TAB2 + "if isinstance(value,ndarray):\n"
-                prop_str += TAB3 + "value = ImportMatrixVal(value=value)\n"
-                prop_str += TAB2 + "elif isinstance(value,list):\n"
-                prop_str += TAB3 + "value = ImportMatrixVal(value=array(value))\n"
+            prop_str += generate_prop_setter(gen_dict, class_dict, prop)
 
-            # Add check_var("var_name",value, "var_type", min=var_min, max=var_max)
-            if prop["type"] == "function":
-                # A function can be defined by a callable or a list containing the serialized callable and its sourcecode
-                prop_str += TAB2 + "try:\n"
-                prop_str += TAB3 + 'check_var("' + prop["name"] + '", value, "list")\n'
-                prop_str += TAB2 + "except CheckTypeError:\n"
-                prop_str += (
-                    TAB3
-                    + 'check_var("'
-                    + prop["name"]
-                    + '", value, "'
-                    + prop["type"]
-                    + '")\n'
-                )
-                prop_str += (
-                    TAB2
-                    + "if isinstance(value,list): # Load function from saved dict\n"
-                )
-                prop_str += (
-                    TAB3
-                    + "self._"
-                    + prop["name"]
-                    + " = [loads(value[0].encode('ISO-8859-2')),value[1]]\n"
-                )
-                prop_str += TAB2 + "elif value is None:\n"
-                prop_str += TAB3 + "self._" + prop["name"] + " = [None,None]\n"
-                prop_str += TAB2 + "elif callable(value):\n"
-                prop_str += (
-                    TAB3 + "self._" + prop["name"] + " = [value,getsource(value)]\n"
-                )
-                prop_str += TAB2 + "else:\n"
-                prop_str += (
-                    TAB3
-                    + "raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) \n"
-                )
-
-            elif "." in prop["type"] and not prop["type"].endswith(
-                "]"
-            ):  # Import from another package
-                prop_str += TAB2 + "try: # Check the type \n"
-                prop_str += TAB3 + 'check_var("' + prop["name"] + '", value, "dict")\n'
-                prop_str += TAB2 + "except CheckTypeError:\n"
-                prop_str += (
-                    TAB3
-                    + 'check_var("'
-                    + prop["name"]
-                    + '", value, "'
-                    + prop["type"]
-                    + '")\n'
-                )
-                prop_str += TAB3 + "# property can be set from a list to handle loads\n"
-                prop_str += (
-                    TAB2
-                    + 'if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]\n'
-                )
-                prop_str += (
-                    TAB3
-                    + "self._"
-                    + prop["name"]
-                    + " = loads(value[\"serialized\"].encode('ISO-8859-2'))\n"
-                )
-                prop_str += TAB2 + "else: \n"
-                prop_str += TAB3 + "self._" + prop["name"] + "= value \n"
-
-            elif "." in prop["type"]:  # List of type from external package
-                prop_str += (
-                    TAB2
-                    + 'if isinstance(value, dict): # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)] \n'
-                )
-                prop_str += (
-                    TAB3 + "value = loads(value[\"serialized\"].encode('ISO-8859-2'))\n"
-                )
-                prop_str += TAB2 + "elif value == None:\n"
-                prop_str += TAB3 + "value = []\n"
-                prop_str += TAB2 + 'check_var("' + prop["name"] + '", value, "list")\n'
-                prop_str += TAB2 + "for i, element in enumerate(value):\n"
-                prop_str += (
-                    TAB3
-                    + 'check_var("'
-                    + prop["name"]
-                    + '[{}]".format(i), element, "'
-                    + prop["type"][1:-1]
-                    + '")\n'
-                )
-                prop_str += TAB2 + "self._" + prop["name"] + "= value \n"
-
-            else:
-                prop_str += (
-                    TAB2
-                    + 'check_var("'
-                    + prop["name"]
-                    + '", value, "'
-                    + prop["type"]
-                    + '"'
-                )
-                # Min and max are added only if needed
-                if prop["type"] in ["float", "int", "ndarray"]:
-                    if str(prop["min"]) is not "":
-                        prop_str += ", Vmin=" + str(prop["min"])
-                    if str(prop["max"]) is not "":
-                        prop_str += ", Vmax=" + str(prop["max"])
-                prop_str += ")\n"
-                prop_str += TAB2 + "self._" + prop["name"] + " = value\n\n"
-
-            if is_list_pyleecan_type(prop["type"]):
-                # List of pyleecan type
-                prop_str += TAB2 + "for obj in self._" + prop["name"] + ":\n"
-                prop_str += TAB3 + "if obj is not None:\n"
-                prop_str += TAB4 + "obj.parent = self\n\n"
-            elif (
-                prop["type"] not in PYTHON_TYPE
-                and prop["type"] not in ["ndarray", "function", "{ndarray}"]
-                and not is_dict_pyleecan_type(prop["type"])
-                and "." not in prop["type"]
-            ):
-                # pyleecan type
-                prop_str += TAB2 + "if self._" + prop["name"] + " is not None:\n"
-                prop_str += TAB3 + "self._" + prop["name"] + ".parent = self\n"
-
-        # For sphinx doc
+        ## For sphinx doc
         desc_str = '"""' + prop["desc"] + "\n\n"
         desc_str += TAB2 + ":Type: " + prop["type"] + "\n"
-        if str(prop["min"]) is not "":
+        if str(prop["min"]):
             desc_str += TAB2 + ":min: " + str(prop["min"]) + "\n"
-        if str(prop["max"]) is not "":
+        if str(prop["max"]):
             desc_str += TAB2 + ":max: " + str(prop["max"]) + "\n"
         desc_str += TAB2 + '"""'
+
         # Add "var_name = property(fget=_get_var_name, fset=_set_var_name,
         # doc = "this is doc")"
         # Three lines definition
@@ -212,3 +74,206 @@ def generate_properties(gen_dict, class_dict):
         prop_str += TAB + ")\n\n"
 
     return prop_str[:-2]  # Remove last \n\n
+
+
+def generate_prop_setter(gen_dict, class_dict, prop):
+    """Generate the code for the getter and setter of the properties of the class
+
+    Parameters
+    ----------
+    gen_dict : dict
+        Dict with key = class name and value = class dict (name, package, properties, methods...)
+    class_dict : dict
+        Dictionnary of the class to generate (keys are name, package, properties, methods...)
+    prop_dict: dict
+        Dictionnary of the property to generate the setter
+
+    Returns
+    -------
+    set_str : str
+        String containing the code for the setter of the property of the class
+    """
+    set_str = ""
+    set_str += TAB + "def _set_" + prop["name"] + "(self, value):\n"
+    set_str += TAB2 + '"""setter of ' + prop["name"] + '"""\n'
+
+    ## Convertion to correct type
+    if prop["type"] == "ndarray":
+        set_str += TAB2 + "if type(value) is int and value == -1:\n"
+        set_str += TAB3 + "value = array([])\n"
+        set_str += TAB2 + "elif type(value) is list:\n"
+        set_str += TAB3 + "try:\n"
+        set_str += TAB4 + "value = array(value)\n"
+        set_str += TAB3 + "except:\n"
+        set_str += TAB4 + "pass\n"
+    elif prop["type"] == "{ndarray}":
+        set_str += TAB2 + "if type(value) is dict:\n"
+        set_str += TAB3 + "for key, obj in value.items():\n"
+        set_str += TAB4 + "if type(obj) is list:\n"
+        set_str += TAB5 + "try:\n"
+        set_str += TAB6 + "value[key] = array(obj)\n"
+        set_str += TAB5 + "except:\n"
+        set_str += TAB6 + "pass\n"
+        set_str += TAB2 + "elif type(value) is int and value == -1:\n"
+        set_str += TAB3 + "value = dict()\n"
+    elif prop["type"] == "[ndarray]":
+        set_str += TAB2 + "if type(value) is list:\n"
+        set_str += TAB3 + "for ii, obj in enumerate(value):\n"
+        set_str += TAB4 + "if type(obj) is list:\n"
+        set_str += TAB5 + "try:\n"
+        set_str += TAB6 + "value[ii] = array(obj)\n"
+        set_str += TAB5 + "except:\n"
+        set_str += TAB6 + "pass\n"
+        set_str += TAB2 + "elif type(value) is int and value == -1:\n"
+        set_str += TAB3 + "value = array([])\n"
+    elif prop["type"] == "dict":
+        set_str += TAB2 + "if type(value) is int and value == -1:\n"
+        set_str += TAB3 + "value = dict()\n"
+    elif prop["type"] == "list":
+        set_str += TAB2 + "if type(value) is int and value == -1:\n"
+        set_str += TAB3 + "value = list()\n"
+    elif prop["type"] == "ImportMatrix":
+        set_str += TAB2 + "if isinstance(value, str):  # Load from file\n"
+        set_str += TAB3 + "value = load_init_dict(value)[1]\n"
+        set_str += TAB2 + "if isinstance(value,ndarray):\n"
+        set_str += TAB3 + "value = ImportMatrixVal(value=value)\n"
+        set_str += TAB2 + "elif isinstance(value,list):\n"
+        set_str += TAB3 + "value = ImportMatrixVal(value=array(value))\n"
+        set_str += TAB2 + "elif value == -1:\n"
+        set_str += TAB3 + "value = ImportMatrix()\n"
+        set_str += TAB2 + "elif isinstance(value,dict):\n"
+        set_str += (
+            TAB3
+            + "class_obj = import_class('pyleecan.Classes', value.get('__class__'), '"
+            + prop["name"]
+            + "')\n"
+        )
+        set_str += TAB3 + "value = class_obj(init_dict=value)\n"
+    elif is_dict_pyleecan_type(prop["type"]):
+        set_str += TAB2 + "if type(value) is dict:\n"
+        set_str += TAB3 + "for key, obj in value.items():\n"
+        set_str += TAB4 + "if type(obj) is dict:\n"
+        if "SciDataTool" in prop["type"]:
+            set_str += (
+                TAB5
+                + "class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
+        else:
+            set_str += (
+                TAB5
+                + "class_obj = import_class('pyleecan.Classes', obj.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
+        set_str += TAB5 + "value[key] = class_obj(init_dict=obj)\n"
+        set_str += TAB2 + "if type(value) is int and value == -1:\n"
+        set_str += TAB3 + "value = dict()\n"
+    elif is_list_pyleecan_type(prop["type"]):
+        set_str += TAB2 + "if type(value) is list:\n"
+        set_str += TAB3 + "for ii, obj in enumerate(value):\n"
+        set_str += TAB4 + "if type(obj) is dict:\n"
+        if "SciDataTool" in prop["type"]:
+            set_str += (
+                TAB5
+                + "class_obj = import_class('SciDataTool.Classes', obj.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
+        else:
+            set_str += (
+                TAB5
+                + "class_obj = import_class('pyleecan.Classes', obj.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
+        set_str += TAB5 + "value[ii] = class_obj(init_dict=obj)\n"
+        set_str += TAB2 + "if value == -1:\n"
+        set_str += TAB3 + "value = list()\n"
+    elif ("." not in prop["type"] or "SciDataTool" in prop["type"]) and prop[
+        "type"
+    ] not in PYTHON_TYPE:  # pyleecan Type
+        set_str += TAB2 + "if isinstance(value, str):  # Load from file\n"
+        set_str += TAB3 + "value = load_init_dict(value)[1]\n"
+        set_str += TAB2 + "if isinstance(value, dict) and '__class__' in value:\n"
+        if "SciDataTool" in prop["type"]:
+            set_str += (
+                TAB3
+                + "class_obj = import_class('SciDataTool.Classes', value.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
+        else:
+            set_str += (
+                TAB3
+                + "class_obj = import_class('pyleecan.Classes', value.get('__class__'), '"
+                + prop["name"]
+                + "')\n"
+            )
+        set_str += TAB3 + "value = class_obj(init_dict=value)\n"
+        set_str += (
+            TAB2 + "elif type(value) is int and value == -1:  # Default constructor\n"
+        )
+        if "SciDataTool" in prop["type"]:
+            set_str += TAB3 + "value = " + prop["type"].split(".")[-1] + "()\n"
+        else:
+            set_str += TAB3 + "value = " + prop["type"] + "()\n"
+
+    ## Add check_var("var_name",value, "var_type", min=var_min, max=var_max)
+    if prop["type"] == "function":
+        # A function can be defined by a callable or a list containing the serialized callable and its sourcecode
+        set_str += TAB2 + "try:\n"
+        set_str += TAB3 + 'check_var("' + prop["name"] + '", value, "list")\n'
+        set_str += TAB2 + "except CheckTypeError:\n"
+        set_str += (
+            TAB3 + 'check_var("' + prop["name"] + '", value, "' + prop["type"] + '")\n'
+        )
+        set_str += TAB2 + "if isinstance(value,list): # Load function from saved dict\n"
+        set_str += (
+            TAB3
+            + "self._"
+            + prop["name"]
+            + " = [loads(value[0].encode('ISO-8859-2')),value[1]]\n"
+        )
+        set_str += TAB2 + "elif value is None:\n"
+        set_str += TAB3 + "self._" + prop["name"] + " = [None,None]\n"
+        set_str += TAB2 + "elif callable(value):\n"
+        set_str += TAB3 + "self._" + prop["name"] + " = [value,getsource(value)]\n"
+        set_str += TAB2 + "else:\n"
+        set_str += (
+            TAB3
+            + "raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) \n"
+        )
+    else:
+        if "." in prop["type"]:
+            check_type = prop["type"].split(".")[-1]
+            if prop["type"][0] in ["{", "["]:
+                check_type = prop["type"][0] + check_type
+        else:
+            check_type = prop["type"]
+        set_str += (
+            TAB2 + 'check_var("' + prop["name"] + '", value, "' + check_type + '"'
+        )
+        # Min and max are added only if needed
+        if prop["type"] in ["float", "int", "ndarray"]:
+            if str(prop["min"]):
+                set_str += ", Vmin=" + str(prop["min"])
+            if str(prop["max"]):
+                set_str += ", Vmax=" + str(prop["max"])
+        set_str += ")\n"
+        set_str += TAB2 + "self._" + prop["name"] + " = value\n\n"
+
+    ## Update Parent
+    if (
+        prop["type"] not in PYTHON_TYPE
+        and prop["type"] not in ["ndarray", "function", "{ndarray}", "[ndarray]"]
+        and not is_dict_pyleecan_type(prop["type"])
+        and not is_list_pyleecan_type(prop["type"])
+        and "." not in prop["type"]
+    ):
+        # pyleecan type
+        set_str += TAB2 + "if self._" + prop["name"] + " is not None:\n"
+        set_str += TAB3 + "self._" + prop["name"] + ".parent = self\n"
+
+    return set_str

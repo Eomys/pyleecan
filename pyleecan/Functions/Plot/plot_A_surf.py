@@ -75,8 +75,8 @@ def plot_A_surf(
     time = results["time"]
     Ydata = results[data.symbol]
 
-    if is_deg and round(max(angle) / 6) % 5 == 0:
-        yticks = [i * round(max(angle) / 6) for i in range(7)]
+    if is_deg and round(np_max(angle) / 6) % 5 == 0:
+        yticks = [i * round(np_max(angle) / 6) for i in range(7)]
     else:
         yticks = None
 

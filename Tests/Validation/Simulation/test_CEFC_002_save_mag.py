@@ -22,7 +22,7 @@ import pytest
 @pytest.mark.validation
 @pytest.mark.FEMM
 @pytest.mark.MeshSol
-def test_CEFC_002():
+def test_CEFC_002(CEFC_Lam):
     """Validation of the TOYOTA Prius 2004 interior magnet (V shape) with distributed winding
     50 kW peak, 400 Nm peak at 1500 rpm from publication
 

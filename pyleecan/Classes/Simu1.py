@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Simulation import Simulation
 
 # Import all class method
@@ -27,6 +30,7 @@ from .Force import Force
 from .Machine import Machine
 from .Input import Input
 from .VarSimu import VarSimu
+from .Post import Post
 
 
 class Simu1(Simulation):
@@ -43,14 +47,9 @@ class Simu1(Simulation):
         )
     else:
         run_single = run_single
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class"""
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
@@ -66,51 +65,22 @@ class Simu1(Simulation):
         input=-1,
         logger_name="Pyleecan.Simulation",
         var_simu=None,
+        postproc_list=-1,
         init_dict=None,
         init_str=None,
     ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if elec == -1:
-            elec = Electrical()
-        if mag == -1:
-            mag = Magnetics()
-        if struct == -1:
-            struct = Structural()
-        if force == -1:
-            force = Force()
-        if machine == -1:
-            machine = Machine()
-        if input == -1:
-            input = Input()
-        if var_simu == -1:
-            var_simu = VarSimu()
-        if init_str is not None:  # Initialisation by str
-            from ..Functions.load import load
-
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            elec = obj.elec
-            mag = obj.mag
-            struct = obj.struct
-            force = obj.force
-            name = obj.name
-            desc = obj.desc
-            machine = obj.machine
-            input = obj.input
-            logger_name = obj.logger_name
-            var_simu = obj.var_simu
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -134,75 +104,13 @@ class Simu1(Simulation):
                 logger_name = init_dict["logger_name"]
             if "var_simu" in list(init_dict.keys()):
                 var_simu = init_dict["var_simu"]
-        # Initialisation by argument
-        # elec can be None, a Electrical object or a dict
-        if isinstance(elec, dict):
-            self.elec = Electrical(init_dict=elec)
-        elif isinstance(elec, str):
-            from ..Functions.load import load
-
-            self.elec = load(elec)
-        else:
-            self.elec = elec
-        # mag can be None, a Magnetics object or a dict
-        if isinstance(mag, dict):
-            # Check that the type is correct (including daughter)
-            class_name = mag.get("__class__")
-            if class_name not in ["Magnetics", "MagFEMM"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for mag"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.mag = class_obj(init_dict=mag)
-        elif isinstance(mag, str):
-            from ..Functions.load import load
-
-            mag = load(mag)
-            # Check that the type is correct (including daughter)
-            class_name = mag.__class__.__name__
-            if class_name not in ["Magnetics", "MagFEMM"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for mag"
-                )
-            self.mag = mag
-        else:
-            self.mag = mag
-        # struct can be None, a Structural object or a dict
-        if isinstance(struct, dict):
-            self.struct = Structural(init_dict=struct)
-        elif isinstance(struct, str):
-            from ..Functions.load import load
-
-            self.struct = load(struct)
-        else:
-            self.struct = struct
-        # force can be None, a Force object or a dict
-        if isinstance(force, dict):
-            # Check that the type is correct (including daughter)
-            class_name = force.get("__class__")
-            if class_name not in ["Force", "ForceMT"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for force"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
-            self.force = class_obj(init_dict=force)
-        elif isinstance(force, str):
-            from ..Functions.load import load
-
-            force = load(force)
-            # Check that the type is correct (including daughter)
-            class_name = force.__class__.__name__
-            if class_name not in ["Force", "ForceMT"]:
-                raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for force"
-                )
-            self.force = force
-        else:
-            self.force = force
+            if "postproc_list" in list(init_dict.keys()):
+                postproc_list = init_dict["postproc_list"]
+        # Set the properties (value check and convertion are done in setter)
+        self.elec = elec
+        self.mag = mag
+        self.struct = struct
+        self.force = force
         # Call Simulation init
         super(Simu1, self).__init__(
             name=name,
@@ -211,12 +119,13 @@ class Simu1(Simulation):
             input=input,
             logger_name=logger_name,
             var_simu=var_simu,
+            postproc_list=postproc_list,
         )
         # The class is frozen (in Simulation init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Simu1_str = ""
         # Get the properties inherited from Simulation
@@ -263,7 +172,7 @@ class Simu1(Simulation):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Simulation
         Simu1_dict = super(Simu1, self).as_dict()
@@ -308,6 +217,13 @@ class Simu1(Simulation):
 
     def _set_elec(self, value):
         """setter of elec"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Electrical()
         check_var("elec", value, "Electrical")
         self._elec = value
 
@@ -329,6 +245,13 @@ class Simu1(Simulation):
 
     def _set_mag(self, value):
         """setter of mag"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Magnetics()
         check_var("mag", value, "Magnetics")
         self._mag = value
 
@@ -350,6 +273,15 @@ class Simu1(Simulation):
 
     def _set_struct(self, value):
         """setter of struct"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "struct"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Structural()
         check_var("struct", value, "Structural")
         self._struct = value
 
@@ -371,6 +303,15 @@ class Simu1(Simulation):
 
     def _set_force(self, value):
         """setter of force"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "force"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Force()
         check_var("force", value, "Force")
         self._force = value
 

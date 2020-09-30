@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
-
-from ddt import data, ddt
 from numpy import array, array_equal, linspace, pi, sqrt, transpose
 from numpy.random import uniform
 from numpy.testing import assert_array_almost_equal
@@ -18,6 +15,7 @@ from pyleecan.Methods.Import.ImportGenMatrixSin import (
     GenSinTransposeError,
 )
 from Tests.Methods.Import import test_file
+import pytest
 
 ImportMatrix_test = list()
 mat = uniform(0, 1, (4, 4))
@@ -177,11 +175,11 @@ ImportMatrix_test.append(
 )
 
 
-@ddt
-class unittest_Import_meth(TestCase):
+@pytest.mark.METHODS
+class Test_Import_test(object):
     """unittest for Import object methods"""
 
-    @data(*ImportMatrix_test)
+    @pytest.mark.parametrize("test_dict", ImportMatrix_test)
     def test_ImportMatrix(self, test_dict):
         """Check that the import of a Matrix is correct"""
 
@@ -196,31 +194,31 @@ class unittest_Import_meth(TestCase):
         test_obj = ImportGenMatrixSin(sin_list=[], is_transpose=True)
         test_obj.init_vector(f=f, A=A, Phi=Phi, N=1024, Tf=2.5)
 
-        self.assertEqual(len(test_obj.sin_list), 3)
-        self.assertEqual(test_obj.sin_list[0].f, 100)
-        self.assertEqual(test_obj.sin_list[1].f, 100)
-        self.assertEqual(test_obj.sin_list[2].f, 100)
+        assert len(test_obj.sin_list) == 3
+        assert test_obj.sin_list[0].f == 100
+        assert test_obj.sin_list[1].f == 100
+        assert test_obj.sin_list[2].f == 100
 
-        self.assertEqual(test_obj.sin_list[0].A, 1)
-        self.assertEqual(test_obj.sin_list[1].A, 0.5)
-        self.assertEqual(test_obj.sin_list[2].A, 2)
+        assert test_obj.sin_list[0].A == 1
+        assert test_obj.sin_list[1].A == 0.5
+        assert test_obj.sin_list[2].A == 2
 
-        self.assertEqual(test_obj.sin_list[0].Phi, 0)
-        self.assertEqual(test_obj.sin_list[1].Phi, 2 * pi / 3)
-        self.assertEqual(test_obj.sin_list[2].Phi, 4 * pi / 3)
+        assert test_obj.sin_list[0].Phi == 0
+        assert test_obj.sin_list[1].Phi == 2 * pi / 3
+        assert test_obj.sin_list[2].Phi == 4 * pi / 3
 
-        self.assertEqual(test_obj.sin_list[0].N, 1024)
-        self.assertEqual(test_obj.sin_list[1].N, 1024)
-        self.assertEqual(test_obj.sin_list[2].N, 1024)
+        assert test_obj.sin_list[0].N == 1024
+        assert test_obj.sin_list[1].N == 1024
+        assert test_obj.sin_list[2].N == 1024
 
-        self.assertEqual(test_obj.sin_list[0].Tf, 2.5)
-        self.assertEqual(test_obj.sin_list[1].Tf, 2.5)
-        self.assertEqual(test_obj.sin_list[2].Tf, 2.5)
+        assert test_obj.sin_list[0].Tf == 2.5
+        assert test_obj.sin_list[1].Tf == 2.5
+        assert test_obj.sin_list[2].Tf == 2.5
 
     def test_ImportGenMatrixSin_Error(self):
         """Check that the ImportGenMatrixSin can detect wrong input"""
         test_obj = ImportGenMatrixSin(sin_list=[], is_transpose=True)
-        with self.assertRaises(GenSinEmptyError):
+        with pytest.raises(GenSinEmptyError):
             test_obj.get_data()
 
         sin_list = list()
@@ -234,7 +232,7 @@ class unittest_Import_meth(TestCase):
             ImportGenVectSin(A=2, f=2, Phi=-pi / 2, N=16, Tf=1, is_transpose=False)
         )
         test_obj = ImportGenMatrixSin(sin_list=sin_list, is_transpose=True)
-        with self.assertRaises(GenSinDimError):
+        with pytest.raises(GenSinDimError):
             test_obj.get_data()
 
         sin_list = list()
@@ -248,5 +246,5 @@ class unittest_Import_meth(TestCase):
             ImportGenVectSin(A=2, f=2, Phi=-pi / 2, N=16, Tf=1, is_transpose=True)
         )
         test_obj = ImportGenMatrixSin(sin_list=sin_list, is_transpose=True)
-        with self.assertRaises(GenSinTransposeError):
+        with pytest.raises(GenSinTransposeError):
             test_obj.get_data()
