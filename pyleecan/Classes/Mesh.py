@@ -80,8 +80,7 @@ class Mesh(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Mesh_dict = dict()
         Mesh_dict["label"] = self.label

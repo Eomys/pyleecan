@@ -93,8 +93,7 @@ class Solution(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Solution_dict = dict()
         Solution_dict["type_cell"] = self.type_cell

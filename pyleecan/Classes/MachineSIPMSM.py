@@ -176,8 +176,7 @@ class MachineSIPMSM(MachineSync):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from MachineSync
         MachineSIPMSM_dict = super(MachineSIPMSM, self).as_dict()

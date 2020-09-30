@@ -116,8 +116,7 @@ class Interpolation(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Interpolation_dict = dict()
         if self.ref_cell is None:

@@ -160,8 +160,7 @@ class OptiGenAlg(OptiSolver):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from OptiSolver
         OptiGenAlg_dict = super(OptiGenAlg, self).as_dict()

@@ -82,8 +82,7 @@ class MatEconomical(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         MatEconomical_dict = dict()
         MatEconomical_dict["cost_unit"] = self.cost_unit

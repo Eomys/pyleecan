@@ -140,8 +140,7 @@ class OutGeoLam(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutGeoLam_dict = dict()
         OutGeoLam_dict["name_phase"] = self.name_phase

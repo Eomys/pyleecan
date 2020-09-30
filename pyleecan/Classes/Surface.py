@@ -142,8 +142,7 @@ class Surface(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Surface_dict = dict()
         Surface_dict["point_ref"] = self.point_ref

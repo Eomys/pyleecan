@@ -112,8 +112,7 @@ class DriveWave(Drive):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Drive
         DriveWave_dict = super(DriveWave, self).as_dict()

@@ -96,8 +96,7 @@ class FPGNSeg(GaussPoint):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from GaussPoint
         FPGNSeg_dict = super(FPGNSeg, self).as_dict()

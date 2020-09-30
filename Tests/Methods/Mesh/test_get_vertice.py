@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import pytest
-from unittest import TestCase
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.PointMat import PointMat
@@ -8,11 +7,11 @@ import numpy as np
 
 
 @pytest.mark.MeshSol
-class unittest_get_vertice(TestCase):
+@pytest.mark.METHODS
+class Test_get_vertice(object):
     """unittest for Mesh and Element get_all_connectivity methods"""
 
-    @classmethod
-    def setUp(self):
+    def setup_method(self, method):
         self.mesh = MeshMat()
         self.mesh.cell["triangle"] = CellMat(nb_pt_per_cell=3)
         self.mesh.cell["segment"] = CellMat(nb_pt_per_cell=2)
@@ -27,7 +26,6 @@ class unittest_get_vertice(TestCase):
         self.mesh.add_cell(np.array([1, 2, 3]), "triangle", group_name="stator")
         self.mesh.add_cell(np.array([4, 2, 3]), "triangle", group_name="rotor")
         self.mesh.add_cell(np.array([4, 2]), "segment")
-
         self.DELTA = 1e-10
 
     def test_MeshMat(self):
@@ -38,13 +36,13 @@ class unittest_get_vertice(TestCase):
         results = vert["triangle"]
         testA = np.sum(abs(solution - results))
         msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=self.DELTA)
+        assert abs(testA - 0) < self.DELTA, msg
 
         solution = np.array([[3, 3], [1, 2]])
         results = vert["segment"]
         testA = np.sum(abs(solution - results))
         msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=self.DELTA)
+        assert abs(testA - 0) < self.DELTA, msg
 
         solution = np.array(
             [
@@ -57,4 +55,4 @@ class unittest_get_vertice(TestCase):
         results = vert["triangle"]
         testA = np.sum(abs(solution - results))
         msg = "Wrong output: returned " + str(results) + ", expected: " + str(solution)
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=self.DELTA)
+        assert abs(testA - 0) < self.DELTA, msg

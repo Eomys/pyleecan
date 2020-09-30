@@ -144,8 +144,7 @@ class MatStructural(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         MatStructural_dict = dict()
         MatStructural_dict["rho"] = self.rho

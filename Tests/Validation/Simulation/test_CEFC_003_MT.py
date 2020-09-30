@@ -22,7 +22,7 @@ import pytest
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
-def test_CEFC_003_t0():
+def test_CEFC_003_t0(CEFC_Lam):
     """Validation of magnetic air-gap surface force calculation based on Maxwell Tensor with an academic slotless machine.
 
     from publication

@@ -23,8 +23,6 @@ import pytest
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
-
 
 @pytest.mark.long
 @pytest.mark.validation
@@ -41,6 +39,7 @@ def test_Magnetic_FEMM_sym():
     and with MANATEE MMF analytical model
     """
 
+    SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
     simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
 
     # Definition of the enforced output of the electrical module

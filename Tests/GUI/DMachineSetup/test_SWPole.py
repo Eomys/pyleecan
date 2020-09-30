@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from unittest import TestCase
 
 from PyQt5 import QtWidgets
 
@@ -18,10 +17,10 @@ import pytest
 
 
 @pytest.mark.GUI
-class test_SWPole(TestCase):
+class TestSWPole(object):
     """Test that the widget SWPole behave like it should"""
 
-    def setUp(self):
+    def setup_method(self, method):
         """Run at the begining of every test to setup the gui"""
 
         self.test_obj = MachineWRSM()
@@ -34,22 +33,21 @@ class test_SWPole(TestCase):
         self.widget = SWPole(self.test_obj, matlib=[], is_stator=False)
 
     @classmethod
-    def setUpClass(cls):
+    def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test SWPole")
         cls.app = QtWidgets.QApplication(sys.argv)
 
     @classmethod
-    def tearDownClass(cls):
+    def teardown_class(cls):
         """Exit the app after the test"""
         cls.app.quit()
 
     def test_init(self):
         """Check that the Widget initialize to the correct slot"""
-
-        self.assertEqual(self.widget.in_Zs.text(), "Zs = 2*p = 8")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 0)
-        self.assertEqual(type(self.widget.w_slot), PWSlot60)
+        assert self.widget.in_Zs.text() == "Zs = 2*p = 8"
+        assert self.widget.c_slot_type.currentIndex() == 0
+        assert type(self.widget.w_slot) == PWSlot60
 
     def test_init_61(self):
         """Check that the Widget initialize to the correct slot"""
@@ -69,19 +67,19 @@ class test_SWPole(TestCase):
 
         self.widget = SWPole(self.test_obj, matlib=[], is_stator=False)
 
-        self.assertEqual(self.widget.in_Zs.text(), "Zs = 2*p = 16")
-        self.assertEqual(self.widget.c_slot_type.currentIndex(), 1)
-        self.assertEqual(type(self.widget.w_slot), PWSlot61)
+        assert self.widget.in_Zs.text() == "Zs = 2*p = 16"
+        assert self.widget.c_slot_type.currentIndex() == 1
+        assert type(self.widget.w_slot) == PWSlot61
 
     def test_c_slot_type(self):
         """Check that the combobox allow to update the slot type"""
 
         self.widget.c_slot_type.setCurrentIndex(1)
-        self.assertEqual(type(self.test_obj.rotor.slot), SlotW61)
-        self.assertEqual(self.test_obj.rotor.slot.Zs, 8)
-        self.assertEqual(type(self.widget.w_slot), PWSlot61)
+        assert type(self.test_obj.rotor.slot) == SlotW61
+        assert self.test_obj.rotor.slot.Zs == 8
+        assert type(self.widget.w_slot) == PWSlot61
 
         self.widget.c_slot_type.setCurrentIndex(0)
-        self.assertEqual(type(self.test_obj.rotor.slot), SlotW60)
-        self.assertEqual(self.test_obj.rotor.slot.Zs, 8)
-        self.assertEqual(type(self.widget.w_slot), PWSlot60)
+        assert type(self.test_obj.rotor.slot) == SlotW60
+        assert self.test_obj.rotor.slot.Zs == 8
+        assert type(self.widget.w_slot) == PWSlot60

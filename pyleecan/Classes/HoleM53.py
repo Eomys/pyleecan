@@ -284,8 +284,7 @@ class HoleM53(HoleMag):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from HoleMag
         HoleM53_dict = super(HoleM53, self).as_dict()

@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from unittest import TestCase
-
-from ddt import ddt, data
-
 from pyleecan.Classes.Arc2 import Arc2
 
 from pyleecan.Methods.Geometry.Arc2.check import PointArc2Error, AngleArc2Error
 from pyleecan.Methods.Geometry.Arc2.discretize import NbPointArc2DError
 from numpy import pi, array, sqrt, exp, angle
+import pytest
 
 
 # For AlmostEqual
@@ -339,78 +336,78 @@ split_half_test.append(
 )
 
 
-@ddt
-class test_Arc2_meth(TestCase):
+@pytest.mark.METHODS
+class Test_Arc2_meth(object):
     """unittest for Arc2 methods"""
 
     def test_check_Point(self):
         """Check that you can detect a one point arc"""
         arc = Arc2(0, 0, 1)
-        with self.assertRaises(PointArc2Error):
+        with pytest.raises(PointArc2Error):
             arc.check()
 
     def test_check_Angle(self):
         """Check that you can detect null angle"""
         arc = Arc2(0, 1, 0)
-        with self.assertRaises(AngleArc2Error):
+        with pytest.raises(AngleArc2Error):
             arc.check()
 
-    @data(*discretize_test)
+    @pytest.mark.parametrize("test_dict", discretize_test)
     def test_dicretize(self, test_dict):
         """Check that you can discretize an arc2"""
         arc = Arc2(test_dict["begin"], test_dict["center"], test_dict["angle"])
 
         result = arc.discretize(test_dict["nb_point"])
 
-        self.assertEqual(result.size, test_dict["result"].size)
+        assert result.size == test_dict["result"].size
         for i in range(0, result.size):
             a = result[i]
             b = test_dict["result"][i]
-            self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+            assert abs((a - b) / a - 0) < DELTA
 
     def test_discretize_Point_error(self):
         """Check that dicretize can detect a one point arc2"""
         arc = Arc2(0, 0, 2)
-        with self.assertRaises(PointArc2Error):
+        with pytest.raises(PointArc2Error):
             arc.discretize(5)
 
     def test_discretize_Angle_error(self):
         """Check that discretize can detect a null angle arc2"""
         arc = Arc2(0, 1, 0)
-        with self.assertRaises(AngleArc2Error):
+        with pytest.raises(AngleArc2Error):
             arc.discretize(5)
 
     def test_discretize_Nb_error(self):
         """Check that discretize can detect a wrong arg"""
         arc = Arc2(0, 1, 1)
-        with self.assertRaises(NbPointArc2DError):
+        with pytest.raises(NbPointArc2DError):
             arc.discretize(-1)
 
     def test_discretize_Nb_Type_error(self):
         """Check that discretize can detect a wrong arg"""
         arc = Arc2(0, 1, 1)
-        with self.assertRaises(NbPointArc2DError):
+        with pytest.raises(NbPointArc2DError):
             arc.discretize("test")
 
-    @data(*comp_length_test)
+    @pytest.mark.parametrize("test_dict", comp_length_test)
     def test_comp_length(self, test_dict):
         """Check that you the length return by comp_length is correct"""
         arc = Arc2(test_dict["begin"], test_dict["center"], test_dict["angle"])
 
         a = float(arc.comp_length())
         b = float(test_dict["length"])
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+        assert abs((a - b) / a - 0) < DELTA
 
     def test_comp_length_Point_error(self):
         """Check that comp_length can detect a one point arc2"""
         arc = Arc2(0, 0, 2)
-        with self.assertRaises(PointArc2Error):
+        with pytest.raises(PointArc2Error):
             arc.comp_length()
 
     def test_comp_length_angle_error(self):
         """Check that comp_length can detect a null angle arc2"""
         arc = Arc2(0, 1, 0)
-        with self.assertRaises(AngleArc2Error):
+        with pytest.raises(AngleArc2Error):
             arc.comp_length()
 
     def test_comp_radius(self):
@@ -418,38 +415,39 @@ class test_Arc2_meth(TestCase):
         test_obj = Arc2(1, 0, pi / 2)
         result = test_obj.comp_radius()
 
-        self.assertAlmostEqual(result, 1)
+        assert round(abs(result - 1), 7) == 0
 
         test_obj = Arc2(2 * exp(1j * 3 * pi / 4), 0, -pi / 2)
         result = test_obj.comp_radius()
 
-        self.assertAlmostEqual(result, 2)
+        assert round(abs(result - 2), 7) == 0
 
     def test_get_center(self):
         """Check that the center is returned correctly"""
         test_obj = Arc2(1, 1 + 1j, pi)
         result = test_obj.get_center()
-        self.assertEqual(result, 1 + 1j)
+        assert result == 1 + 1j
 
     def test_get_end(self):
         """Check that the end is correct"""
         test_obj = Arc2(1, 0, pi / 2)
         result = test_obj.get_end()
 
-        self.assertEqual(result, 1 * exp(1j * pi / 2))
+        assert result == 1 * exp(1j * pi / 2)
 
         test_obj = Arc2(0, 1, -pi / 2)
         result = test_obj.get_end()
 
         a = abs(result)
         b = 1.414213
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+
+        assert abs((a - b) / a - 0) < DELTA
 
         a = angle(result)
         b = pi / 4
-        self.assertAlmostEqual((a - b) / a, 0, delta=DELTA)
+        assert abs((a - b) / a - 0) < DELTA
 
-    @data(*comp_mid_test)
+    @pytest.mark.parametrize("test_dict", comp_mid_test)
     def test_get_middle(self, test_dict):
         """Check that the middle is computed correctly"""
         arc = Arc2(
@@ -458,9 +456,9 @@ class test_Arc2_meth(TestCase):
             angle=test_dict["angle"],
         )
         result = arc.get_middle()
-        self.assertAlmostEqual(abs(result - test_dict["expect"]), 0, delta=1e-3)
+        assert abs(abs(result - test_dict["expect"]) - 0) < 1e-3
 
-    @data(*comp_rotate_test)
+    @pytest.mark.parametrize("test_dict", comp_rotate_test)
     def test_rotate(self, test_dict):
         """Check that you can rotate the arc2"""
         arc = Arc2(
@@ -471,11 +469,11 @@ class test_Arc2_meth(TestCase):
         expect_angle = arc.angle
         arc.rotate(test_dict["alpha"])
 
-        self.assertAlmostEqual(abs(test_dict["exp_begin"] - arc.begin), 0)
-        self.assertAlmostEqual(abs(expect_angle - arc.angle), 0)
-        self.assertAlmostEqual(abs(test_dict["exp_center"] - arc.center), 0)
+        assert round(abs(abs(test_dict["exp_begin"] - arc.begin) - 0), 7) == 0
+        assert round(abs(abs(expect_angle - arc.angle) - 0), 7) == 0
+        assert round(abs(abs(test_dict["exp_center"] - arc.center) - 0), 7) == 0
 
-    @data(*comp_translate_test)
+    @pytest.mark.parametrize("test_dict", comp_translate_test)
     def test_translate(self, test_dict):
         """Check that you can translate the arc2"""
         arc = Arc2(
@@ -486,11 +484,11 @@ class test_Arc2_meth(TestCase):
         expect_angle = arc.angle
         arc.translate(test_dict["delta"])
 
-        self.assertAlmostEqual(abs(test_dict["exp_begin"] - arc.begin), 0)
-        self.assertAlmostEqual(abs(expect_angle - arc.angle), 0)
-        self.assertAlmostEqual(abs(test_dict["exp_center"] - arc.center), 0)
+        assert round(abs(abs(test_dict["exp_begin"] - arc.begin) - 0), 7) == 0
+        assert round(abs(abs(expect_angle - arc.angle) - 0), 7) == 0
+        assert round(abs(abs(test_dict["exp_center"] - arc.center) - 0), 7) == 0
 
-    @data(*get_angle_test)
+    @pytest.mark.parametrize("test_dict", get_angle_test)
     def test_get_angle(self, test_dict):
         """Check that the arc2 computed angle is correct"""
         arc = Arc2(
@@ -499,9 +497,9 @@ class test_Arc2_meth(TestCase):
             angle=test_dict["angle"],
         )
         result = arc.get_angle(test_dict["is_deg"])
-        self.assertAlmostEqual(result, test_dict["exp_angle"])
+        assert round(abs(result - test_dict["exp_angle"]), 7) == 0
 
-    @data(*split_half_test)
+    @pytest.mark.parametrize("test_dict", split_half_test)
     def test_split_half(self, test_dict):
         """Check that the arc2 split is correct"""
         arc = Arc2(
@@ -510,6 +508,6 @@ class test_Arc2_meth(TestCase):
             angle=test_dict["angle"],
         )
         arc.split_half(is_begin=test_dict["is_begin"])
-        self.assertAlmostEqual(arc.begin, test_dict["N_begin"])
-        self.assertAlmostEqual(arc.center, test_dict["N_center"])
-        self.assertAlmostEqual(arc.angle, test_dict["N_angle"])
+        assert round(abs(arc.begin - test_dict["N_begin"]), 7) == 0
+        assert round(abs(arc.center - test_dict["N_center"]), 7) == 0
+        assert round(abs(arc.angle - test_dict["N_angle"]), 7) == 0

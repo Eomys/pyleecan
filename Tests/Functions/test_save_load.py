@@ -100,7 +100,7 @@ def test_save_load_machine():
     assert result.frame == None
 
 
-def test_save_load_folder_path():
+def test_save_load_folder_path(CEFC_Lam):
     """Save with a folder path"""
     simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
 
@@ -277,7 +277,7 @@ def test_save_load_dict():
 @pytest.mark.long
 @pytest.mark.FEMM
 @pytest.mark.parametrize("type_file", ["json", "h5", "pkl"])
-def test_save_load_simu(type_file):
+def test_save_load_simu(type_file, CEFC_Lam):
     """Save in hdf5 file"""
     simu = Simu1(name="SM_CEFC_001", machine=CEFC_Lam, struct=None)
 

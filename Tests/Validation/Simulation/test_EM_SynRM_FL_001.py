@@ -19,8 +19,6 @@ import pytest
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-SynRM_001 = load(join(DATA_DIR, "Machine", "SynRM_001.json"))
-
 
 @pytest.mark.long
 @pytest.mark.validation
@@ -33,6 +31,7 @@ def test_Magnetic_Phi0():
     """
     # The aim of this validation test is to compute the torque as a function of Phi0
     # As (for now) there is no electrical model, we will compute the current for each Phi0 here
+    SynRM_001 = load(join(DATA_DIR, "Machine", "SynRM_001.json"))
     freq0 = 50  # supply frequency [Hz]
     qs = 3  # Number of phases
     p = 2  # Number of pole pairs

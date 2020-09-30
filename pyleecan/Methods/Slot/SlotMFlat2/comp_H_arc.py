@@ -5,7 +5,7 @@ from numpy import cos
 
 def comp_H_arc(self):
     """Compute the arc between bore radius an slot opening line.
-    
+
     Parameters
     ----------
     self : SlotMFlat2

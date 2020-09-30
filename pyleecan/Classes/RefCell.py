@@ -93,8 +93,7 @@ class RefCell(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         RefCell_dict = dict()
         RefCell_dict["epsilon"] = self.epsilon

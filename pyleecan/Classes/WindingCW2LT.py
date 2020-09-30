@@ -150,8 +150,7 @@ class WindingCW2LT(Winding):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Winding
         WindingCW2LT_dict = super(WindingCW2LT, self).as_dict()
