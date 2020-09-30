@@ -2,7 +2,6 @@
 
 from numpy import exp, pi
 
-from ...Functions.FEMM import GROUP_FM
 from ...Functions.FEMM.create_FEMM_bar import create_FEMM_bar
 from ...Functions.FEMM.create_FEMM_circuit_material import create_FEMM_circuit_material
 from ...Functions.FEMM.create_FEMM_magnet import create_FEMM_magnet

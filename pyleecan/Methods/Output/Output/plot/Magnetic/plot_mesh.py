@@ -5,24 +5,7 @@ import numpy as np
 
 from ......definitions import config_dict
 
-from ......Functions.FEMM import (
-    GROUP_SC,
-    GROUP_AG,
-    GROUP_RC,
-    GROUP_SW,
-    GROUP_RW,
-    GROUP_AGM,
-    GROUP_IN,
-    GROUP_FM,
-    GROUP_SV,
-    GROUP_RV,
-    GROUP_SSI,
-    GROUP_RSI,
-    GROUP_SN,
-    GROUP_RN,
-    GROUP_SH,
-    GROUP_RH,
-)
+from ......Functions.FEMM import FEMM_GROUPS
 
 STATOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["STATOR_COLOR"]
 ROTOR_COLOR = config_dict["PLOT"]["COLOR_DICT"]["ROTOR_COLOR"]
@@ -97,15 +80,17 @@ def plot_mesh(
 
     colors = list()
     for grp in group:
-        if grp == GROUP_SC:
+        if grp == FEMM_GROUPS["GROUP_SC"]["ID"]:
             color = STATOR_COLOR
-        elif grp == GROUP_RC:
+        elif grp == FEMM_GROUPS["GROUP_RC"]["ID"]:
             color = ROTOR_COLOR
-        elif grp == GROUP_IN:
+        elif grp == FEMM_GROUPS["GROUP_IN"]["ID"]:
             color = SHAFT_COLOR
-        elif grp == GROUP_RW:
+        elif grp == FEMM_GROUPS["GROUP_RW"]["ID"]:
             color = "r"
-        elif grp == GROUP_SV or grp == GROUP_RV:
+        elif (
+            grp == FEMM_GROUPS["GROUP_SV"]["ID"] or grp == FEMM_GROUPS["GROUP_RV"]["ID"]
+        ):
             color = VENT_COLOR
         else:
             color = "w"

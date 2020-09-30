@@ -39,7 +39,7 @@ myLossModel.alpha_ed = 2
 myLossModel.k_ex = 0
 myLossModel.alpha_ex = 1.5
 myLossModel.lam = "machine.stator"
-myLossModel.group = "stator"
+myLossModel.group = "stator core"
 
 LossData = ImportMatrixXls()
 # LossData.file_path = "pyleecan\\pyleecan\\Data\\Material\\M400-50A.xlsx"

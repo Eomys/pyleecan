@@ -14,7 +14,6 @@ from os.path import join
 import matplotlib.pyplot as plt
 import json
 import numpy as np
-from pyleecan.Functions.FEMM import GROUP_SC
 import pytest
 
 
