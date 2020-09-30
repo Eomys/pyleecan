@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from unittest import TestCase
 
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
@@ -30,10 +29,10 @@ import pytest
 
 
 @pytest.mark.GUI
-class test_SMagnet_inset(TestCase):
+class TestSMagnet_inset(object):
     """Test that the widget SMagnet behave like it should (for SPMSM)"""
 
-    def setUp(self):
+    def setup_method(self, method):
         """Run at the begining of every test to setup the gui"""
 
         self.test_obj = MachineSIPMSM(type_machine=7)  # IPMSM
@@ -59,236 +58,232 @@ class test_SMagnet_inset(TestCase):
         )
 
     @classmethod
-    def setUpClass(cls):
+    def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test SMagnet_inset")
         cls.app = QtWidgets.QApplication(sys.argv)
 
     @classmethod
-    def tearDownClass(cls):
+    def teardown_class(cls):
         """Exit the app after the test"""
         cls.app.quit()
 
     def test_init(self):
         """Check that the GUI initialize correctly"""
-        self.assertEqual(self.widget.c_type.currentIndex(), 1)
+        assert self.widget.c_type.currentIndex() == 1
 
-        self.assertEqual(self.widget.w_mag.unit_Wmag.text(), "rad")
-        self.assertEqual(self.widget.w_mag.lf_Wmag.text(), "0.13089969")
-        self.assertEqual(self.widget.w_mag.lf_Hmag.text(), "0.003")
-        self.assertEqual(self.widget.w_mag.lf_H0.text(), "0.005")
-        self.assertEqual(self.widget.w_mat.in_mat_type.text(), "mat_mag:")
-        self.assertEqual(self.widget.w_mat.c_mat_type.currentIndex(), 2)
-        self.assertEqual(
-            self.widget.w_mag.w_out.out_Smag.text(), "Magnet surface: 0.0003521 m²"
-        )
-        self.assertEqual(self.widget.w_mag.w_out.out_gap.text(), "gap: 0.05 m")
+        assert self.widget.w_mag.unit_Wmag.text() == "rad"
+        assert self.widget.w_mag.lf_Wmag.text() == "0.13089969"
+        assert self.widget.w_mag.lf_Hmag.text() == "0.003"
+        assert self.widget.w_mag.lf_H0.text() == "0.005"
+        assert self.widget.w_mat.in_mat_type.text() == "mat_mag:"
+        assert self.widget.w_mat.c_mat_type.currentIndex() == 2
+        assert self.widget.w_mag.w_out.out_Smag.text() == "Magnet surface: 0.0003521 m²"
+        assert self.widget.w_mag.w_out.out_gap.text() == "gap: 0.05 m"
 
     def test_set_material(self):
         """Check that you can change the material"""
         self.widget.w_mat.c_mat_type.setCurrentIndex(0)
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].mat_type.name, "test1")
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].mat_type.elec.rho, 0.31)
-        self.assertEqual(type(self.widget.w_mag), PMagnet11)
+        assert self.test_obj.rotor.slot.magnet[0].mat_type.name == "test1"
+        assert self.test_obj.rotor.slot.magnet[0].mat_type.elec.rho == 0.31
+        assert type(self.widget.w_mag) == PMagnet11
 
     def test_Magnet_Type_10_inset(self):
         """Check that the Widget is able to set inset Magnet type 10"""
 
         self.widget.c_type.setCurrentIndex(0)  # Index 0 is 10
-        self.assertEqual(type(self.widget.w_mag), PMagnet10)
-        self.assertEqual(
-            self.widget.c_type.currentText(), "Rectangular"
-        )  # Index 0 is 10
+        assert type(self.widget.w_mag) == PMagnet10
+        assert self.widget.c_type.currentText() == "Rectangular"  # Index 0 is 10
 
-        self.assertEqual(type(self.test_obj.rotor.slot.magnet[0]), MagnetType10)
+        assert type(self.test_obj.rotor.slot.magnet[0]) == MagnetType10
         # Wmag set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_Wmag.clear()
         QTest.keyClicks(self.widget.w_mag.lf_Wmag, "0.41")
         self.widget.w_mag.lf_Wmag.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].Wmag, 0.41)
+        assert self.test_obj.rotor.slot.magnet[0].Wmag == 0.41
         # Hmag set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_Hmag.clear()
         QTest.keyClicks(self.widget.w_mag.lf_Hmag, "0.42")
         self.widget.w_mag.lf_Hmag.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].Hmag, 0.42)
+        assert self.test_obj.rotor.slot.magnet[0].Hmag == 0.42
         # H0 set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_H0.clear()
         QTest.keyClicks(self.widget.w_mag.lf_H0, "0.415")
         self.widget.w_mag.lf_H0.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.H0, 0.415)
+        assert self.test_obj.rotor.slot.H0 == 0.415
         # type_magnetization set test
         self.widget.c_type_magnetization.setCurrentIndex(2)
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].type_magnetization, 2)
+        assert self.test_obj.rotor.slot.magnet[0].type_magnetization == 2
         # Test change machine type
-        self.assertEqual(self.test_obj.type_machine, 7)
+        assert self.test_obj.type_machine == 7
         self.widget.w_mag.lf_H0.clear()
         QTest.keyClicks(self.widget.w_mag.lf_H0, "0")
         self.widget.w_mag.lf_H0.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.H0, 0)
-        self.assertEqual(self.test_obj.type_machine, 6)
+        assert self.test_obj.rotor.slot.H0 == 0
+        assert self.test_obj.type_machine == 6
 
     def test_Magnet_Type_11_inset(self):
         """Check that the Widget is able to set inset Magnet type 11"""
 
         self.widget.c_type.setCurrentIndex(1)  # Index 1 is 11
-        self.assertEqual(type(self.widget.w_mag), PMagnet11)
-        self.assertEqual(self.widget.c_type.currentText(), "Polar")  # Index 2 is 11
+        assert type(self.widget.w_mag) == PMagnet11
+        assert self.widget.c_type.currentText() == "Polar"  # Index 2 is 11
 
-        self.assertEqual(type(self.test_obj.rotor.slot.magnet[0]), MagnetType11)
+        assert type(self.test_obj.rotor.slot.magnet[0]) == MagnetType11
         # Wmag set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_Wmag.clear()
         QTest.keyClicks(self.widget.w_mag.lf_Wmag, "0.123")
         self.widget.w_mag.lf_Wmag.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].Wmag, 0.123)
+        assert self.test_obj.rotor.slot.magnet[0].Wmag == 0.123
         # Hmag set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_Hmag.clear()
         QTest.keyClicks(self.widget.w_mag.lf_Hmag, "0.44")
         self.widget.w_mag.lf_Hmag.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].Hmag, 0.44)
+        assert self.test_obj.rotor.slot.magnet[0].Hmag == 0.44
         # H0 set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_H0.clear()
         QTest.keyClicks(self.widget.w_mag.lf_H0, "0.425")
         self.widget.w_mag.lf_H0.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.H0, 0.425)
+        assert self.test_obj.rotor.slot.H0 == 0.425
         # type_magnetization set test
         self.widget.c_type_magnetization.setCurrentIndex(1)
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].type_magnetization, 1)
+        assert self.test_obj.rotor.slot.magnet[0].type_magnetization == 1
         # Test change machine type
-        self.assertEqual(self.test_obj.type_machine, 7)
+        assert self.test_obj.type_machine == 7
         self.widget.w_mag.lf_H0.clear()
         QTest.keyClicks(self.widget.w_mag.lf_H0, "0")
         self.widget.w_mag.lf_H0.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.H0, 0)
-        self.assertEqual(self.test_obj.type_machine, 6)
+        assert self.test_obj.rotor.slot.H0 == 0
+        assert self.test_obj.type_machine == 6
 
     def test_Magnet_Type_12_inset(self):
         """Check that the Widget is able to set inset Magnet type 12"""
 
         self.widget.c_type.setCurrentIndex(2)  # Index 2 is 12
-        self.assertEqual(type(self.widget.w_mag), PMagnet12)
-        self.assertEqual(
-            self.widget.c_type.currentText(), "Flat bottom, polar top"
+        assert type(self.widget.w_mag) == PMagnet12
+        assert (
+            self.widget.c_type.currentText() == "Flat bottom, polar top"
         )  # Index 2 is 12
 
-        self.assertEqual(type(self.test_obj.rotor.slot.magnet[0]), MagnetType12)
+        assert type(self.test_obj.rotor.slot.magnet[0]) == MagnetType12
         # Wmag set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_Wmag.clear()
         QTest.keyClicks(self.widget.w_mag.lf_Wmag, "0.45")
         self.widget.w_mag.lf_Wmag.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].Wmag, 0.45)
+        assert self.test_obj.rotor.slot.magnet[0].Wmag == 0.45
         # Hmag set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_Hmag.clear()
         QTest.keyClicks(self.widget.w_mag.lf_Hmag, "0.46")
         self.widget.w_mag.lf_Hmag.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].Hmag, 0.46)
+        assert self.test_obj.rotor.slot.magnet[0].Hmag == 0.46
         # H0 set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_H0.clear()
         QTest.keyClicks(self.widget.w_mag.lf_H0, "0.435")
         self.widget.w_mag.lf_H0.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.H0, 0.435)
+        assert self.test_obj.rotor.slot.H0 == 0.435
         # type_magnetization set test
         self.widget.c_type_magnetization.setCurrentIndex(1)
         # 0 is the default index
         self.widget.c_type_magnetization.setCurrentIndex(0)
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].type_magnetization, 0)
+        assert self.test_obj.rotor.slot.magnet[0].type_magnetization == 0
         # Test change machine type
-        self.assertEqual(self.test_obj.type_machine, 7)
+        assert self.test_obj.type_machine == 7
         self.widget.w_mag.lf_H0.clear()
         QTest.keyClicks(self.widget.w_mag.lf_H0, "0")
         self.widget.w_mag.lf_H0.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.H0, 0)
-        self.assertEqual(self.test_obj.type_machine, 6)
+        assert self.test_obj.rotor.slot.H0 == 0
+        assert self.test_obj.type_machine == 6
 
     def test_Magnet_Type_13_inset(self):
         """Check that the Widget is able to set inset Magnet type 13"""
 
         self.widget.c_type.setCurrentIndex(3)  # Index 3 is 13
-        self.assertEqual(type(self.widget.w_mag), PMagnet13)
-        self.assertEqual(self.widget.c_type.currentText(), "Flat bottom, curved top")
+        assert type(self.widget.w_mag) == PMagnet13
+        assert self.widget.c_type.currentText() == "Flat bottom, curved top"
 
-        self.assertEqual(type(self.test_obj.rotor.slot.magnet[0]), MagnetType13)
+        assert type(self.test_obj.rotor.slot.magnet[0]) == MagnetType13
         # Wmag set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_Wmag.clear()
         QTest.keyClicks(self.widget.w_mag.lf_Wmag, "0.47")
         self.widget.w_mag.lf_Wmag.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].Wmag, 0.47)
+        assert self.test_obj.rotor.slot.magnet[0].Wmag == 0.47
 
         # Hmag set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_Hmag.clear()
         QTest.keyClicks(self.widget.w_mag.lf_Hmag, "0.48")
         self.widget.w_mag.lf_Hmag.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].Hmag, 0.48)
+        assert self.test_obj.rotor.slot.magnet[0].Hmag == 0.48
 
         # Rtopm set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_Rtopm.clear()
         QTest.keyClicks(self.widget.w_mag.lf_Rtopm, "0.481")
         self.widget.w_mag.lf_Rtopm.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].Rtop, 0.481)
+        assert self.test_obj.rotor.slot.magnet[0].Rtop == 0.481
 
         # H0 set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_H0.clear()
         QTest.keyClicks(self.widget.w_mag.lf_H0, "0.445")
         self.widget.w_mag.lf_H0.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.H0, 0.445)
+        assert self.test_obj.rotor.slot.H0 == 0.445
         # Test change machine type
-        self.assertEqual(self.test_obj.type_machine, 7)
+        assert self.test_obj.type_machine == 7
         self.widget.w_mag.lf_H0.clear()
         QTest.keyClicks(self.widget.w_mag.lf_H0, "0")
         self.widget.w_mag.lf_H0.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.H0, 0)
-        self.assertEqual(self.test_obj.type_machine, 6)
+        assert self.test_obj.rotor.slot.H0 == 0
+        assert self.test_obj.type_machine == 6
 
     def test_Magnet_Type_14_inset(self):
         """Check that the Widget is able to set inset Magnet type 14"""
 
         self.widget.c_type.setCurrentIndex(4)  # Index 4 is 14
-        self.assertEqual(type(self.widget.w_mag), PMagnet14)
-        self.assertEqual(
-            self.widget.c_type.currentText(), "Polar bottom, curved top"
+        assert type(self.widget.w_mag) == PMagnet14
+        assert (
+            self.widget.c_type.currentText() == "Polar bottom, curved top"
         )  # Index 4 is 14
 
-        self.assertEqual(type(self.test_obj.rotor.slot.magnet[0]), MagnetType14)
+        assert type(self.test_obj.rotor.slot.magnet[0]) == MagnetType14
         # Wmag set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_Wmag.clear()
         QTest.keyClicks(self.widget.w_mag.lf_Wmag, "0.0491")
         self.widget.w_mag.lf_Wmag.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].Wmag, 0.0491)
+        assert self.test_obj.rotor.slot.magnet[0].Wmag == 0.0491
         # Hmag set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_Hmag.clear()
         QTest.keyClicks(self.widget.w_mag.lf_Hmag, "0.492")
         self.widget.w_mag.lf_Hmag.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].Hmag, 0.492)
+        assert self.test_obj.rotor.slot.magnet[0].Hmag == 0.492
         # Rtopm set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_Rtopm.clear()
         QTest.keyClicks(self.widget.w_mag.lf_Rtopm, "0.493")
         self.widget.w_mag.lf_Rtopm.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.magnet[0].Rtop, 0.493)
+        assert self.test_obj.rotor.slot.magnet[0].Rtop == 0.493
         # H0 set test
         # Clear the field before writing the new value
         self.widget.w_mag.lf_H0.clear()
         QTest.keyClicks(self.widget.w_mag.lf_H0, "0.455")
         self.widget.w_mag.lf_H0.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.H0, 0.455)
+        assert self.test_obj.rotor.slot.H0 == 0.455
         # Test change machine type
-        self.assertEqual(self.test_obj.type_machine, 7)
+        assert self.test_obj.type_machine == 7
         self.widget.w_mag.lf_H0.clear()
         QTest.keyClicks(self.widget.w_mag.lf_H0, "0")
         self.widget.w_mag.lf_H0.editingFinished.emit()  # To trigger the slot
-        self.assertEqual(self.test_obj.rotor.slot.H0, 0)
-        self.assertEqual(self.test_obj.type_machine, 6)
+        assert self.test_obj.rotor.slot.H0 == 0
+        assert self.test_obj.type_machine == 6

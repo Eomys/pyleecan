@@ -21,8 +21,6 @@ import pytest
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
-
 
 @pytest.mark.long
 @pytest.mark.validation
@@ -38,6 +36,7 @@ def test_Magnetic_FEMM_sym():
     Test compute the Flux in FEMM, with and without symmetry
     and with MANATEE semi-analytical subdomain model
     """
+    SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
     simu = Simu1(name="EM_SPMSM_FL_001", machine=SPMSM_003)
 
     # Definition of the enforced output of the electrical module

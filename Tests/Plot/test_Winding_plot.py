@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+import pytest
 
 from os.path import join
-from unittest import TestCase
 
 import matplotlib.pyplot as plt
 from numpy import pi, linspace
@@ -20,7 +20,8 @@ from pyleecan.Classes.SlotW22 import SlotW22
 from Tests import save_plot_path as save_path
 
 
-class test_Winding_plot(TestCase):
+@pytest.mark.PLOT
+class Test_Winding_plot(object):
     """unittest for Winding connection matrix plot"""
 
     def test_type_wind_CW2LT(self):

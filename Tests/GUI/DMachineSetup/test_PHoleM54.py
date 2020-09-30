@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from unittest import TestCase
 
 from PyQt5 import QtWidgets
 from PyQt5.QtTest import QTest
@@ -17,10 +16,10 @@ import pytest
 
 
 @pytest.mark.GUI
-class test_PHoleM54(TestCase):
+class TestPHoleM54(object):
     """Test that the widget PHoleM54 behave like it should"""
 
-    def setUp(self):
+    def setup_method(self, method):
         """Run at the begining of every test to setup the gui"""
         self.test_obj = LamHole(Rint=0.1, Rext=0.2)
         self.test_obj.hole = list()
@@ -35,23 +34,23 @@ class test_PHoleM54(TestCase):
         self.widget = PHoleM54(self.test_obj.hole[0], matlib=self.matlib)
 
     @classmethod
-    def setUpClass(cls):
+    def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test PHoleM54")
         cls.app = QtWidgets.QApplication(sys.argv)
 
     @classmethod
-    def tearDownClass(cls):
+    def teardown_class(cls):
         """Exit the app after the test"""
         cls.app.quit()
 
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
 
-        self.assertEqual(self.widget.lf_H0.value(), 0.10)
-        self.assertEqual(self.widget.lf_H1.value(), 0.11)
-        self.assertEqual(self.widget.lf_W0.value(), 0.12)
-        self.assertEqual(self.widget.lf_R1.value(), 0.13)
+        assert self.widget.lf_H0.value() == 0.10
+        assert self.widget.lf_H1.value() == 0.11
+        assert self.widget.lf_W0.value() == 0.12
+        assert self.widget.lf_R1.value() == 0.13
 
     def test_set_W0(self):
         """Check that the Widget allow to update W0"""
@@ -60,8 +59,8 @@ class test_PHoleM54(TestCase):
         QTest.keyClicks(self.widget.lf_W0, "0.31")
         self.widget.lf_W0.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.widget.hole.W0, 0.31)
-        self.assertEqual(self.test_obj.hole[0].W0, 0.31)
+        assert self.widget.hole.W0 == 0.31
+        assert self.test_obj.hole[0].W0 == 0.31
 
     def test_set_H0(self):
         """Check that the Widget allow to update H0"""
@@ -69,8 +68,8 @@ class test_PHoleM54(TestCase):
         QTest.keyClicks(self.widget.lf_H0, "0.34")
         self.widget.lf_H0.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.widget.hole.H0, 0.34)
-        self.assertEqual(self.test_obj.hole[0].H0, 0.34)
+        assert self.widget.hole.H0 == 0.34
+        assert self.test_obj.hole[0].H0 == 0.34
 
     def test_set_H1(self):
         """Check that the Widget allow to update H1"""
@@ -78,8 +77,8 @@ class test_PHoleM54(TestCase):
         QTest.keyClicks(self.widget.lf_H1, "0.35")
         self.widget.lf_H1.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.widget.hole.H1, 0.35)
-        self.assertEqual(self.test_obj.hole[0].H1, 0.35)
+        assert self.widget.hole.H1 == 0.35
+        assert self.test_obj.hole[0].H1 == 0.35
 
     def test_set_R1(self):
         """Check that the Widget allow to update R1"""
@@ -87,5 +86,5 @@ class test_PHoleM54(TestCase):
         QTest.keyClicks(self.widget.lf_R1, "0.36")
         self.widget.lf_R1.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.widget.hole.R1, 0.36)
-        self.assertEqual(self.test_obj.hole[0].R1, 0.36)
+        assert self.widget.hole.R1 == 0.36
+        assert self.test_obj.hole[0].R1 == 0.36

@@ -27,8 +27,7 @@ class ExamplePostMethod(PostMethod):
         return copy(self)
 
 
-@pytest.mark.post
-@pytest.mark.skip  # Skip it until class generator is not fixed (definition of attribute as empty dict get the same reference)
+# @pytest.mark.skip  # Skip it until class generator is not fixed (definition of attribute as empty dict get the same reference)
 def test_post_var_simu():
     """Test the simulation.var_simu.post_list"""
 
@@ -91,8 +90,6 @@ def test_post_var_simu():
 
     # Second simulation with postprocessing
     out2 = simu2.run()
-    print(out1["D_S_s_w"].result, out2["D_S_s_w"].result)
-    print(id(out1["D_S_s_w"].result), id(out2["D_S_s_w"].result))
     assert (
         list(map(lambda val: val + 2, out1["D_S_s_w"].result)) == out2["D_S_s_w"].result
     )

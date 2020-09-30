@@ -17,8 +17,6 @@ import pytest
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-
 
 @pytest.mark.long
 @pytest.mark.validation

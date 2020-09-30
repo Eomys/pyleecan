@@ -2,7 +2,6 @@
 
 import sys
 from random import uniform
-from unittest import TestCase
 
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
@@ -23,11 +22,14 @@ from pyleecan.Classes.MachineWRSM import MachineWRSM
 from pyleecan.Classes.SlotW22 import SlotW22
 from pyleecan.GUI.Dialog.DMachineSetup.SWindPat.SWindPat import SWindPat
 
+import pytest
 
-class test_SWindPat(TestCase):
+
+@pytest.mark.GUI
+class TestSWindPat(object):
     """Test that the widget SWindPat behave like it should"""
 
-    def setUp(self):
+    def setup_method(self, method):
         """Run at the begining of every test to setup the gui"""
         self.test_obj = MachineSCIM()
         self.test_obj.stator = LamSlotWind()
@@ -41,27 +43,25 @@ class test_SWindPat(TestCase):
         self.widget = SWindPat(machine=self.test_obj, matlib=[], is_stator=True)
 
     @classmethod
-    def setUpClass(cls):
+    def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test SWindPat")
         cls.app = QtWidgets.QApplication(sys.argv)
 
     @classmethod
-    def tearDownClass(cls):
+    def teardown_class(cls):
         """Exit the app after the test"""
         cls.app.quit()
 
     def test_init(self):
         """Check that the Widget spinbox initialise to the lamination value"""
 
-        self.assertEqual(self.widget.si_qs.value(), 6)
-        self.assertEqual(self.widget.si_coil_pitch.value(), 8)
-        self.assertEqual(self.widget.si_Nslot.value(), 10)
-        self.assertEqual(self.widget.c_wind_type.currentIndex(), 2)
-        self.assertEqual(self.widget.is_reverse.checkState(), Qt.Checked)
-        self.assertEqual(
-            self.widget.out_shape.text(), "Winding Matrix shape: [2, 1, 36, 6]"
-        )
+        assert self.widget.si_qs.value() == 6
+        assert self.widget.si_coil_pitch.value() == 8
+        assert self.widget.si_Nslot.value() == 10
+        assert self.widget.c_wind_type.currentIndex() == 2
+        assert self.widget.is_reverse.checkState() == Qt.Checked
+        assert self.widget.out_shape.text() == "Winding Matrix shape: [2, 1, 36, 6]"
 
     def test_init_WRSM(self):
         """Check that the GUI is correctly initialize with a WRSM machine"""
@@ -79,68 +79,53 @@ class test_SWindPat(TestCase):
         self.widget2 = SWindPat(machine=self.test_obj, matlib=[], is_stator=False)
 
         # Check result stator
-        self.assertEqual(type(self.test_obj.stator.winding), WindingDW2L)
-        self.assertEqual(self.test_obj.stator.winding.p, 8)
-        self.assertEqual(self.test_obj.stator.winding.qs, 4)
-        self.assertEqual(self.widget.si_qs.isEnabled(), True)
-        self.assertEqual(self.widget.si_coil_pitch.isHidden(), False)
-        self.assertEqual(self.widget.si_Nslot.value(), 0)
-        self.assertEqual(self.widget.c_wind_type.currentIndex(), 2)
-        self.assertEqual(
-            self.widget.c_wind_type.currentText(), "Double Layer Distributed"
+        assert type(self.test_obj.stator.winding) == WindingDW2L
+        assert self.test_obj.stator.winding.p == 8
+        assert self.test_obj.stator.winding.qs == 4
+        assert self.widget.si_qs.isEnabled() == True
+        assert self.widget.si_coil_pitch.isHidden() == False
+        assert self.widget.si_Nslot.value() == 0
+        assert self.widget.c_wind_type.currentIndex() == 2
+        assert self.widget.c_wind_type.currentText() == "Double Layer Distributed"
+        assert self.widget.is_reverse.checkState() == Qt.Unchecked
+        assert self.widget.out_shape.text() == "Winding Matrix shape: [2, 1, 36, 4]"
+        # check result rotor
+        assert type(self.test_obj.rotor.winding) == WindingCW2LT
+        assert self.test_obj.rotor.winding.p == 8
+        assert self.test_obj.rotor.winding.qs == 1
+        assert self.widget2.si_qs.value() == 1
+        assert self.widget2.si_qs.isEnabled() == False
+        assert self.widget2.si_coil_pitch.isHidden() == True
+        assert self.widget2.si_Nslot.value() == 0
+        assert self.widget2.c_wind_type.currentIndex() == 0
+        assert (
+            self.widget2.c_wind_type.currentText()
+            == "DC wound winding for salient pole"
         )
-        self.assertEqual(self.widget.is_reverse.checkState(), Qt.Unchecked)
-        self.assertEqual(
-            self.widget.out_shape.text(), "Winding Matrix shape: [2, 1, 36, 4]"
-        )
-        # Check result rotor
-        self.assertEqual(type(self.test_obj.rotor.winding), WindingCW2LT)
-        self.assertEqual(self.test_obj.rotor.winding.p, 8)
-        self.assertEqual(self.test_obj.rotor.winding.qs, 1)
-        self.assertEqual(self.widget2.si_qs.value(), 1)
-        self.assertEqual(self.widget2.si_qs.isEnabled(), False)
-        self.assertEqual(self.widget2.si_coil_pitch.isHidden(), True)
-        self.assertEqual(self.widget2.si_Nslot.value(), 0)
-        self.assertEqual(self.widget2.c_wind_type.currentIndex(), 0)
-        self.assertEqual(
-            self.widget2.c_wind_type.currentText(), "DC wound winding for salient pole"
-        )
-        self.assertEqual(self.widget2.is_reverse.checkState(), Qt.Unchecked)
-        self.assertEqual(
-            self.widget2.out_shape.text(), "Winding Matrix shape: [1, 2, 36, 1]"
-        )
+        assert self.widget2.is_reverse.checkState() == Qt.Unchecked
+        assert self.widget2.out_shape.text() == "Winding Matrix shape: [1, 2, 36, 1]"
 
     def test_set_wind_type(self):
         """Check that the Widget allow to update type_winding"""
         self.widget.c_wind_type.setCurrentIndex(0)
-        self.assertEqual(type(self.test_obj.stator.winding), WindingCW2LT)
-        self.assertEqual(
-            self.widget.out_shape.text(), "Winding Matrix shape: [1, 2, 36, 6]"
-        )
+        assert type(self.test_obj.stator.winding) == WindingCW2LT
+        assert self.widget.out_shape.text() == "Winding Matrix shape: [1, 2, 36, 6]"
 
         self.widget.c_wind_type.setCurrentIndex(1)
-        self.assertEqual(type(self.test_obj.stator.winding), WindingCW1L)
-        self.assertEqual(
-            self.widget.out_shape.text(), "Winding Matrix shape: [1, 1, 36, 6]"
-        )
+        assert type(self.test_obj.stator.winding) == WindingCW1L
+        assert self.widget.out_shape.text() == "Winding Matrix shape: [1, 1, 36, 6]"
 
         self.widget.c_wind_type.setCurrentIndex(2)
-        self.assertEqual(type(self.test_obj.stator.winding), WindingDW2L)
-        self.assertEqual(
-            self.widget.out_shape.text(), "Winding Matrix shape: [2, 1, 36, 6]"
-        )
+        assert type(self.test_obj.stator.winding) == WindingDW2L
+        assert self.widget.out_shape.text() == "Winding Matrix shape: [2, 1, 36, 6]"
 
         self.widget.c_wind_type.setCurrentIndex(3)
-        self.assertEqual(type(self.test_obj.stator.winding), WindingDW1L)
-        self.assertEqual(
-            self.widget.out_shape.text(), "Winding Matrix shape: [1, 1, 36, 6]"
-        )
+        assert type(self.test_obj.stator.winding) == WindingDW1L
+        assert self.widget.out_shape.text() == "Winding Matrix shape: [1, 1, 36, 6]"
 
         self.widget.c_wind_type.setCurrentIndex(4)
-        self.assertEqual(type(self.test_obj.stator.winding), WindingCW2LR)
-        self.assertEqual(
-            self.widget.out_shape.text(), "Winding Matrix shape: [2, 1, 36, 6]"
-        )
+        assert type(self.test_obj.stator.winding) == WindingCW2LR
+        assert self.widget.out_shape.text() == "Winding Matrix shape: [2, 1, 36, 6]"
 
     def test_set_qs(self):
         """Check that the Widget allow to update qs"""
@@ -149,18 +134,18 @@ class test_SWindPat(TestCase):
         QTest.keyClicks(self.widget.si_qs, str(value))
         self.widget.si_qs.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.test_obj.stator.winding.qs, value)
-        self.assertEqual(
-            self.widget.out_shape.text(),
-            "Winding Matrix shape: [2, 1, 36, " + str(value) + "]",
+        assert self.test_obj.stator.winding.qs == value
+        assert (
+            self.widget.out_shape.text()
+            == "Winding Matrix shape: [2, 1, 36, " + str(value) + "]"
         )
 
     def test_set_is_reverse(self):
         """Check that the Widget allow to update is_reverse_wind"""
         self.widget.is_reverse.setCheckState(Qt.Unchecked)
-        self.assertFalse(self.test_obj.stator.winding.is_reverse_wind)
+        assert not self.test_obj.stator.winding.is_reverse_wind
         self.widget.is_reverse.setCheckState(Qt.Checked)
-        self.assertTrue(self.test_obj.stator.winding.is_reverse_wind)
+        assert self.test_obj.stator.winding.is_reverse_wind
 
     def test_set_coil_pitch(self):
         """Check that the Widget allow to update coil_pitch"""
@@ -169,7 +154,7 @@ class test_SWindPat(TestCase):
         QTest.keyClicks(self.widget.si_coil_pitch, str(value))
         self.widget.si_coil_pitch.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.test_obj.stator.winding.coil_pitch, value)
+        assert self.test_obj.stator.winding.coil_pitch == value
 
     def test_set_Nslot(self):
         """Check that the Widget allow to update Nslot"""
@@ -178,4 +163,4 @@ class test_SWindPat(TestCase):
         QTest.keyClicks(self.widget.si_Nslot, str(value))
         self.widget.si_Nslot.editingFinished.emit()  # To trigger the slot
 
-        self.assertEqual(self.test_obj.stator.winding.Nslot_shift_wind, value)
+        assert self.test_obj.stator.winding.Nslot_shift_wind == value

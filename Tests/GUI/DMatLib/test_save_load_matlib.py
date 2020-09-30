@@ -4,7 +4,6 @@ import sys
 from os import listdir, mkdir, remove
 from os.path import abspath, basename, isdir, isfile, join
 from shutil import copyfile, rmtree
-from unittest import TestCase
 
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
@@ -23,10 +22,10 @@ import pytest
 
 
 @pytest.mark.GUI
-class test_save_load_matlib(TestCase):
+class Testsave_load_matlib(object):
     """Test that the widget DMachineSetup and DMatLib can save/load the MatLib (old and new)"""
 
-    def setUp(self):
+    def setup_method(self, method):
         """Run at the begining of every test to create the workspace"""
         self.work_path = join(save_path, "Material")
         # Delete old test if needed
@@ -39,13 +38,13 @@ class test_save_load_matlib(TestCase):
         rmtree(self.work_path)
 
     @classmethod
-    def setUpClass(cls):
+    def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test Save/Load MatLib")
         cls.app = QtWidgets.QApplication(sys.argv)
 
     @classmethod
-    def tearDownClass(cls):
+    def teardown_class(cls):
         """Exit the app after the test"""
         cls.app.quit()
 
@@ -66,7 +65,6 @@ class test_save_load_matlib(TestCase):
         )
         lam_path = join(self.work_path, "Lamination", "M400-50A.json")
         copyfile(join(TEST_DATA_DIR, "Material", "M400-50A.json"), lam_path)
-        # Check initial state
         nb_file = len(
             [
                 name
@@ -74,7 +72,7 @@ class test_save_load_matlib(TestCase):
                 if isfile(join(self.work_path, name)) and name[-5:] == ".json"
             ]
         )
-        self.assertEqual(nb_file, 2)
+        assert nb_file == 2
 
         # Start the GUI
         self.matlib = MatLib(self.work_path)
@@ -83,25 +81,23 @@ class test_save_load_matlib(TestCase):
             dmatlib=self.mat_widget, machine=None, machine_path=self.work_path
         )
         # Check load of the matlib
-        self.assertEqual(len(self.matlib.dict_mat["RefMatLib"]), 4)
-        self.assertEqual(
-            ["Copper1", "Insulator1", "M400-50A", "Magnet1"],
-            [mat.name for mat in self.matlib.dict_mat["RefMatLib"]],
-        )
-        self.assertEqual(self.matlib.dict_mat["RefMatLib"][0].elec.rho, 1.73e-8)
-        self.assertEqual(self.matlib.dict_mat["RefMatLib"][0].HT.alpha, 0.00393)
-        self.assertEqual(
-            self.matlib.dict_mat["RefMatLib"][0].path,
-            join(self.work_path, "Copper1.json").replace("\\", "/"),
-        )
+        assert len(self.matlib.dict_mat["RefMatLib"]) == 4
+        assert ["Copper1", "Insulator1", "M400-50A", "Magnet1"] == [
+            mat.name for mat in self.matlib.dict_mat["RefMatLib"]
+        ]
 
-        self.assertEqual(self.matlib.dict_mat["RefMatLib"][2].mag.mur_lin, 2500)
-        self.assertEqual(self.matlib.dict_mat["RefMatLib"][2].struct.rho, 7650)
-        self.assertEqual(self.matlib.dict_mat["RefMatLib"][2].struct.Ex, 215000000000)
-        self.assertEqual(
-            self.matlib.dict_mat["RefMatLib"][2].path,
-            join(self.work_path, "Lamination", "M400-50A.json").replace("\\", "/"),
-        )
+        assert self.matlib.dict_mat["RefMatLib"][0].elec.rho == 1.73e-8
+        assert self.matlib.dict_mat["RefMatLib"][0].HT.alpha == 0.00393
+        assert self.matlib.dict_mat["RefMatLib"][0].path == join(
+            self.work_path, "Copper1.json"
+        ).replace("\\", "/")
+
+        assert self.matlib.dict_mat["RefMatLib"][2].mag.mur_lin == 2500
+        assert self.matlib.dict_mat["RefMatLib"][2].struct.rho == 7650
+        assert self.matlib.dict_mat["RefMatLib"][2].struct.Ex == 215000000000
+        assert self.matlib.dict_mat["RefMatLib"][2].path == join(
+            self.work_path, "Lamination", "M400-50A.json"
+        ).replace("\\", "/")
         # Change value of materials
         self.matlib.dict_mat["RefMatLib"][0].elec.rho = 1.74e-8
         self.matlib.dict_mat["RefMatLib"][0].HT.alpha = 0.00555
@@ -111,7 +107,7 @@ class test_save_load_matlib(TestCase):
         for mat in self.matlib.dict_mat["RefMatLib"]:
             mat.save(mat.path)
             mat2 = load(mat.path)
-            self.assertEqual(mat.as_dict(), mat2.as_dict())
+            assert mat.as_dict() == mat2.as_dict()
 
 
 def compare_file(file_path1, file_path2):

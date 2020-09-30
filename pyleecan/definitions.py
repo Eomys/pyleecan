@@ -28,6 +28,7 @@ PACKAGE_NAME = MAIN_DIR[len(ROOT_DIR) + 1 :]  # To allow to change pyleecan dire
 GEN_DIR = join(MAIN_DIR, "Generator").replace("\\", "/")
 DOC_DIR = join(GEN_DIR, "ClassesRef").replace("\\", "/")
 DATA_DIR = join(MAIN_DIR, "Data").replace("\\", "/")
+RESULT_DIR = join(MAIN_DIR, "Results").replace("\\", "/")
 # Absolute path to  internal classes ref. dir
 INT_DIR = join(GEN_DIR, "Internal").replace("\\", "/")
 

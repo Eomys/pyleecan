@@ -1,5 +1,5 @@
 from os.path import join
-from unittest import TestCase
+import pytest
 
 import matplotlib.pyplot as plt
 from numpy import pi
@@ -7,7 +7,8 @@ from pyleecan.Classes.Circle import Circle
 from Tests import save_plot_path as save_path
 
 
-class test_split_line(TestCase):
+@pytest.mark.PLOT
+class Test_split_line(object):
     """unittest for splitting surface with lines"""
 
     def test_splitting_circle(self):
