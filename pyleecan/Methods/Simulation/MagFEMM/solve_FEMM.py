@@ -2,13 +2,13 @@ import numpy as np
 
 from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
 from os.path import basename, splitext
-from SciDataTool import DataLinspace, DataTime, VectorField
+from SciDataTool import DataLinspace, DataTime, VectorField, Data1D
 from os.path import join
 
 from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from ....Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
-from ....Classes.MeshMat import MeshMat
+from ....Functions.Winding.gen_phase_list import gen_name
 
 
 def solve_FEMM(self, femm, output, sym):
@@ -173,7 +173,25 @@ def solve_FEMM(self, femm, output, sym):
         output.mag.Tem_rip_norm = output.mag.Tem_rip_pp / output.mag.Tem_av  # []
     else:
         output.mag.Tem_rip_norm = None
-    output.mag.Phi_wind_stator = Phi_wind_stator
+
+    if (
+        hasattr(output.simu.machine.stator, "winding")
+        and output.simu.machine.stator.winding is not None
+    ):
+        Phase = Data1D(
+            name="phase",
+            unit="",
+            values=gen_name(qs, is_add_phase=True),
+            is_components=True,
+        )
+        output.mag.Phi_wind_stator = DataTime(
+            name="Stator Winding Flux",
+            unit="Wb",
+            symbol="Phi_{wind}",
+            axes=[Time, Phase],
+            values=Phi_wind_stator,
+        )
+
     output.mag.FEMM_dict = FEMM_dict
 
     if self.is_get_mesh:

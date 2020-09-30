@@ -3038,7 +3038,7 @@
                 "name": "rot_dir",
                 "type": "float",
                 "unit": "-",
-                "value": -1
+                "value": null
             },
             {
                 "desc": "Initial angular position of the rotor at t=0",
@@ -6558,9 +6558,9 @@
                 "max": "",
                 "min": "",
                 "name": "Phi_wind_stator",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataTime.DataTime",
                 "unit": "Wb",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Electromotive force",

@@ -15,13 +15,20 @@ def comp_angle_d_axis(self):
     d_angle : float
         angle between the X axis and the first d+ axis
     """
-
-    MMF = self.comp_mmf_unit()
     p = self.get_pole_pair_number()
 
+    MMF = self.comp_mmf_unit(Nt=1, Na=400 * p)
+
+    MMF.values = MMF.values[None, :]  # TODO: correct bug in SciDataTool
+
     # Get the unit mmf FFT and angle values
-    results = MMF.get_along("angle")
-    angle_rotor = results["angle"]
+    results1 = MMF.get_along("angle")
+    angle_rotor = results1["angle"]
+
+    import matplotlib.pyplot as plt
+
+    plt.plot(angle_rotor, results1["Magnitude"])
+
     results = MMF.get_along("wavenumber")
     wavenumber = results["wavenumber"]
     mmf_ft = results[MMF.symbol]
@@ -36,4 +43,5 @@ def comp_angle_d_axis(self):
 
     # Get the first angle according to symmetry
     (sym, _) = self.comp_sym()
+
     return d_angle % (2 * pi / sym)

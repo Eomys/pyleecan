@@ -6,7 +6,7 @@ from ....Functions.Plot.plot_A_space import plot_A_space
 from ....definitions import config_dict
 
 
-def plot_mmf_unit(self, Na=2048, fig=None):
+def plot_mmf_unit(self, fig=None):
     """Plot the winding unit mmf as a function of space
     Parameters
     ----------
@@ -19,9 +19,12 @@ def plot_mmf_unit(self, Na=2048, fig=None):
     """
 
     # Compute the winding function and mmf
-    wf = self.comp_wind_function(Na=Na)
+    wf = self.comp_wind_function()
     qs = self.winding.qs
-    mmf_u = self.comp_mmf_unit(Na=Na)
+    mmf_u = self.comp_mmf_unit(Nt=1, Na=wf.shape[1])
+
+    if len(mmf_u.values.shape) == 1:
+        mmf_u.values = mmf_u.values[None, :]  # TODO: correct bug in SciDataTool
 
     # Create a Data object
     Phase = Data1D(
@@ -36,7 +39,7 @@ def plot_mmf_unit(self, Na=2048, fig=None):
         symmetries={},
         initial=0,
         final=2 * pi,
-        number=Na,
+        number=mmf_u.values.shape[1],
         include_endpoint=False,
     )
     Br = DataTime(

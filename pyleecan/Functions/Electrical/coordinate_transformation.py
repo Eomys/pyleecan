@@ -16,10 +16,11 @@ from numpy import (
 )
 
 EPS = int(floor(-log10(finfo(float).eps)))
-SQRT3 = sqrt(3)
+
+# TODO: add homopolar component
 
 
-def ab2n(Z_ab, n=3):
+def ab2n(Z_ab, n=3, rot_dir=-1):
     """
     2 phase equivalent to n phase coordinate transformation, i.e. Clarke transformation
 
@@ -37,7 +38,7 @@ def ab2n(Z_ab, n=3):
 
     """
     ii = linspace(0, n - 1, n)
-    alpha = 2 * ii * pi / n
+    alpha = rot_dir * 2 * ii * pi / n
 
     # Transformation matrix
     ab_2_n = vstack((cos(alpha).round(decimals=EPS), -sin(alpha).round(decimals=EPS)))
@@ -47,7 +48,7 @@ def ab2n(Z_ab, n=3):
     return Z_n
 
 
-def n2ab(Z_n, n=3):
+def n2ab(Z_n, n=3, rot_dir=-1):
     """n phase to 2 phase equivalent coordinate transformation, i.e. Clarke transformation
 
     Parameters
@@ -62,11 +63,13 @@ def n2ab(Z_n, n=3):
 
     """
     ii = linspace(0, n - 1, n)
-    alpha = 2 * ii * pi / n
+    alpha = rot_dir * 2 * ii * pi / n
 
     # Transformation matrix
     n_2_ab = (
-        2
+        sqrt(
+            2
+        )  # Multiply by sqrt(2)/n instead of 2/3 to go from I_n in amplitude to (Id_rms, Iq_rms)
         / n
         * column_stack(
             (cos(alpha).round(decimals=EPS), -sin(alpha).round(decimals=EPS))
@@ -134,13 +137,14 @@ def dq2ab(Z_dq, theta):
     sin_theta = sin(theta).round(decimals=EPS)
     cos_theta = cos(theta).round(decimals=EPS)
 
-    Z_a = Z_dq[:, 0] * cos_theta - Z_dq[:, 1] * sin_theta
-    Z_b = Z_dq[:, 0] * sin_theta + Z_dq[:, 1] * cos_theta
+    # Multiply by sqrt(2) to go from (Id_rms, Iq_rms) in to I_ab in amplitude
+    Z_a = sqrt(2) * (Z_dq[:, 0] * cos_theta - Z_dq[:, 1] * sin_theta)
+    Z_b = sqrt(2) * (Z_dq[:, 0] * sin_theta + Z_dq[:, 1] * cos_theta)
 
     return reshape([Z_a, Z_b], (2, -1)).transpose()
 
 
-def n2dq(Z_n, theta, n=3):
+def n2dq(Z_n, theta, n=3, rot_dir=-1):
     """n phase to dq equivalent coordinate transformation
 
     Parameters
@@ -154,10 +158,11 @@ def n2dq(Z_n, theta, n=3):
         transformed matrix (N x 2) of dq equivalent values
 
     """
-    return ab2dq(n2ab(Z_n, n=n), theta)
+
+    return ab2dq(n2ab(Z_n, n=n, rot_dir=rot_dir), theta)
 
 
-def dq2n(Z_dq, theta, n=3):
+def dq2n(Z_dq, theta, n=3, rot_dir=-1):
     """n phase to dq equivalent coordinate transformation
 
     Parameters
@@ -171,4 +176,4 @@ def dq2n(Z_dq, theta, n=3):
         transformed matrix (N x n) of n phase values
 
     """
-    return ab2n(dq2ab(Z_dq, theta), n=n)
+    return ab2n(dq2ab(Z_dq, theta), n=n, rot_dir=rot_dir)

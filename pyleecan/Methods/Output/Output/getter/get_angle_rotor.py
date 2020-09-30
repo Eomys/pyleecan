@@ -24,14 +24,12 @@ def get_angle_rotor(self):
         return self.elec.angle_rotor
     else:  # Compute according to the speed
         Nr = self.elec.get_Nr()
-        if self.elec.rot_dir is None or self.elec.rot_dir not in [-1, 1]:
-            rot_dir = -1
-        else:
-            rot_dir = self.elec.rot_dir
-        if self.elec.angle_rotor_initial is None:
-            A0 = 0
-        else:
-            A0 = self.elec.angle_rotor_initial
+
+        # Get rotor rotating direction
+        rot_dir = self.elec.rot_dir
+
+        # Compute rotor initial angle (for synchronous machines, to align rotor d-axis and stator alpha-axis)
+        A0 = self.get_angle_offset_initial()
 
         if self.elec.time.size == 1:
             # Only one time step, no need to compute the position

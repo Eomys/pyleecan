@@ -18,4 +18,8 @@ def run(self):
     output = self.parent.parent
 
     self.comp_time_angle(output)
+
+    if output.elec.rot_dir is None:
+        output.elec.rot_dir = output.simu.machine.stator.comp_rot_dir()
+
     self.comp_flux_airgap(output)

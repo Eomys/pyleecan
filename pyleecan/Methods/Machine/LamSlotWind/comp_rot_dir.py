@@ -1,4 +1,4 @@
-from numpy import take, sign, argmax, cos, abs as np_abs, angle as np_angle
+from numpy import sign
 
 
 def comp_rot_dir(self):
@@ -14,12 +14,21 @@ def comp_rot_dir(self):
     rot_dir : int
         -1 or +1
     """
-
-    MMF = self.comp_mmf_unit()
     p = self.get_pole_pair_number()
 
-    # Compute rotation direction from unit mmf
-    results = MMF.get_harmonics(1, "freqs", "wavenumber")
-    H1 = results[MMF.symbol]
+    # Compute unit mmf
+    MMF = self.comp_mmf_unit(
+        Nt=20 * p, Na=20 * p
+    )  # 20 points per pole over time and space is enough to capture rotating direction of fundamental mmf
 
-    return sign(H1[0])
+    # Extract fundamental from unit mmf
+    results = MMF.get_harmonics(1, "freqs", "wavenumber")
+
+    # Get frequency and wavenumber of fundamental
+    f = results["freqs"][0]
+    r = results["wavenumber"][0]
+
+    # Rotating direction is the sign of the mechanical speed, i.e frequency over wavenumber
+    rot_dir = int(sign(f / r))
+
+    return rot_dir

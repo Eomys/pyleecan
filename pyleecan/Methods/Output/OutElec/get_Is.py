@@ -1,5 +1,5 @@
-from ....Functions.Electrical.coordinate_transformation import dq2n
-from numpy import pi, array, transpose
+from ....Functions.Electrical.coordinate_transformation import dq2n, n2dq
+from numpy import pi, array, transpose, sqrt
 from SciDataTool import Data1D, DataTime
 from ....Functions.Winding.gen_phase_list import gen_name
 
@@ -13,8 +13,9 @@ def get_Is(self):
         qs = self.parent.simu.machine.stator.winding.qs
         felec = self.felec
 
-        # add stator current
-        Is = dq2n(Isdq, 2 * pi * felec * time, n=qs)
+        # Get stator current function of time
+        Is = dq2n(Isdq, 2 * pi * felec * time, n=qs, rot_dir=self.rot_dir)
+
         Time = Data1D(name="time", unit="s", values=time)
         Phase = Data1D(
             name="phase",

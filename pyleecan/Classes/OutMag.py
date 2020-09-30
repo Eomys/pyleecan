@@ -23,6 +23,10 @@ try:
     from SciDataTool.Classes.DataND import DataND
 except ImportError:
     DataND = ImportError
+try:
+    from SciDataTool.Classes.DataTime import DataTime
+except ImportError:
+    DataTime = ImportError
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
 
@@ -146,8 +150,10 @@ class OutMag(FrozenClass):
         self.Tem_av = Tem_av
         self.Tem_rip_norm = Tem_rip_norm
         self.Tem_rip_pp = Tem_rip_pp
-        # Phi_wind_stator can be None, a ndarray or a list
-        set_array(self, "Phi_wind_stator", Phi_wind_stator)
+        # Check if the type DataTime has been imported with success
+        if isinstance(DataTime, ImportError):
+            raise ImportError("Unknown type DataTime please install SciDataTool")
+        self.Phi_wind_stator = Phi_wind_stator
         # emf can be None, a ndarray or a list
         set_array(self, "emf", emf)
         # meshsolution can be None, a MeshSolution object or a dict
@@ -195,11 +201,7 @@ class OutMag(FrozenClass):
         OutMag_str += "Tem_rip_norm = " + str(self.Tem_rip_norm) + linesep
         OutMag_str += "Tem_rip_pp = " + str(self.Tem_rip_pp) + linesep
         OutMag_str += (
-            "Phi_wind_stator = "
-            + linesep
-            + str(self.Phi_wind_stator).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
+            "Phi_wind_stator = " + str(self.Phi_wind_stator) + linesep + linesep
         )
         OutMag_str += (
             "emf = "
@@ -244,7 +246,7 @@ class OutMag(FrozenClass):
             return False
         if other.Tem_rip_pp != self.Tem_rip_pp:
             return False
-        if not array_equal(other.Phi_wind_stator, self.Phi_wind_stator):
+        if other.Phi_wind_stator != self.Phi_wind_stator:
             return False
         if not array_equal(other.emf, self.emf):
             return False
@@ -291,8 +293,12 @@ class OutMag(FrozenClass):
         OutMag_dict["Tem_rip_pp"] = self.Tem_rip_pp
         if self.Phi_wind_stator is None:
             OutMag_dict["Phi_wind_stator"] = None
-        else:
-            OutMag_dict["Phi_wind_stator"] = self.Phi_wind_stator.tolist()
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutMag_dict["Phi_wind_stator"] = {
+                "__class__": str(type(self._Phi_wind_stator)),
+                "__repr__": str(self._Phi_wind_stator.__repr__()),
+                "serialized": dumps(self._Phi_wind_stator).decode("ISO-8859-2"),
+            }
         if self.emf is None:
             OutMag_dict["emf"] = None
         else:
@@ -522,20 +528,24 @@ class OutMag(FrozenClass):
 
     def _set_Phi_wind_stator(self, value):
         """setter of Phi_wind_stator"""
-        if type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Phi_wind_stator", value, "ndarray")
-        self._Phi_wind_stator = value
+        try:  # Check the type
+            check_var("Phi_wind_stator", value, "dict")
+        except CheckTypeError:
+            check_var("Phi_wind_stator", value, "SciDataTool.Classes.DataTime.DataTime")
+            # property can be set from a list to handle loads
+        if (
+            type(value) == dict
+        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Phi_wind_stator = loads(value["serialized"].encode("ISO-8859-2"))
+        else:
+            self._Phi_wind_stator = value
 
     Phi_wind_stator = property(
         fget=_get_Phi_wind_stator,
         fset=_set_Phi_wind_stator,
         doc=u"""Stator winding flux
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataTime.DataTime
         """,
     )
 
