@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -39,7 +42,9 @@ except ImportError as error:
     comp_radius_mec = error
 
 try:
-    from ..Methods.Machine.Lamination.comp_surface_axial_vent import comp_surface_axial_vent
+    from ..Methods.Machine.Lamination.comp_surface_axial_vent import (
+        comp_surface_axial_vent,
+    )
 except ImportError as error:
     comp_surface_axial_vent = error
 
@@ -344,49 +349,40 @@ class Lamination(FrozenClass):
         )
     else:
         comp_radius_mid_yoke = comp_radius_mid_yoke
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), notch=list(), init_dict = None, init_str = None):
+    def __init__(
+        self,
+        L1=0.35,
+        mat_type=-1,
+        Nrvd=0,
+        Wrvd=0,
+        Kf1=0.95,
+        is_internal=True,
+        Rint=0,
+        Rext=1,
+        is_stator=True,
+        axial_vent=-1,
+        notch=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if mat_type == -1:
-            mat_type = Material()
-        if init_str is not None :  # Initialisation by str
-            from ..Functions.load import load
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            L1 = obj.L1
-            mat_type = obj.mat_type
-            Nrvd = obj.Nrvd
-            Wrvd = obj.Wrvd
-            Kf1 = obj.Kf1
-            is_internal = obj.is_internal
-            Rint = obj.Rint
-            Rext = obj.Rext
-            is_stator = obj.is_stator
-            axial_vent = obj.axial_vent
-            notch = obj.notch
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -412,17 +408,10 @@ class Lamination(FrozenClass):
                 axial_vent = init_dict["axial_vent"]
             if "notch" in list(init_dict.keys()):
                 notch = init_dict["notch"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.L1 = L1
-        # mat_type can be None, a Material object or a dict
-        if isinstance(mat_type, dict):
-            self.mat_type = Material(init_dict=mat_type)
-        elif isinstance(mat_type, str):
-            from ..Functions.load import load
-            self.mat_type = load(mat_type)
-        else:
-            self.mat_type = mat_type
+        self.mat_type = mat_type
         self.Nrvd = Nrvd
         self.Wrvd = Wrvd
         self.Kf1 = Kf1
@@ -430,74 +419,14 @@ class Lamination(FrozenClass):
         self.Rint = Rint
         self.Rext = Rext
         self.is_stator = is_stator
-        # axial_vent can be None or a list of Hole object or a list of dict
-        if type(axial_vent) is list:
-            # Check if the list is only composed of Hole
-            if len(axial_vent) > 0 and all(isinstance(obj, Hole) for obj in axial_vent):
-                # set the list to keep pointer reference
-                self.axial_vent = axial_vent
-            else:
-                self.axial_vent = list()
-                for obj in axial_vent:
-                    if not isinstance(obj, dict):  # Default value
-                        self.axial_vent.append(obj)
-                    elif isinstance(obj, dict):
-                        # Check that the type is correct (including daughter)
-                        class_name = obj.get("__class__")
-                        if class_name not in ['Hole', 'HoleM50', 'HoleM51', 'HoleM52', 'HoleM53', 'HoleM54', 'HoleM57', 'HoleM58', 'HoleMag', 'HoleUD', 'VentilationCirc', 'VentilationPolar', 'VentilationTrap']:
-                            raise InitUnKnowClassError(
-                                "Unknow class name "
-                                + class_name
-                                + " in init_dict for axial_vent"
-                            )
-                        # Dynamic import to call the correct constructor
-                        module = __import__(
-                            "pyleecan.Classes." + class_name, fromlist=[class_name]
-                        )
-                        class_obj = getattr(module, class_name)
-                        self.axial_vent.append(class_obj(init_dict=obj))
-    
-        elif axial_vent is None:
-            self.axial_vent = list()
-        else:
-            self.axial_vent = axial_vent
-        # notch can be None or a list of Notch object or a list of dict
-        if type(notch) is list:
-            # Check if the list is only composed of Notch
-            if len(notch) > 0 and all(isinstance(obj, Notch) for obj in notch):
-                # set the list to keep pointer reference
-                self.notch = notch
-            else:
-                self.notch = list()
-                for obj in notch:
-                    if not isinstance(obj, dict):  # Default value
-                        self.notch.append(obj)
-                    elif isinstance(obj, dict):
-                        # Check that the type is correct (including daughter)
-                        class_name = obj.get("__class__")
-                        if class_name not in ['Notch', 'NotchEvenDist']:
-                            raise InitUnKnowClassError(
-                                "Unknow class name "
-                                + class_name
-                                + " in init_dict for notch"
-                            )
-                        # Dynamic import to call the correct constructor
-                        module = __import__(
-                            "pyleecan.Classes." + class_name, fromlist=[class_name]
-                        )
-                        class_obj = getattr(module, class_name)
-                        self.notch.append(class_obj(init_dict=obj))
-    
-        elif notch is None:
-            self.notch = list()
-        else:
-            self.notch = notch
+        self.axial_vent = axial_vent
+        self.notch = notch
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Lamination_str = ""
         if self.parent is None:
@@ -507,7 +436,7 @@ class Lamination(FrozenClass):
         Lamination_str += "L1 = " + str(self.L1) + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Lamination_str += "mat_type = "+ tmp
+            Lamination_str += "mat_type = " + tmp
         else:
             Lamination_str += "mat_type = None" + linesep + linesep
         Lamination_str += "Nrvd = " + str(self.Nrvd) + linesep
@@ -520,13 +449,15 @@ class Lamination(FrozenClass):
         if len(self.axial_vent) == 0:
             Lamination_str += "axial_vent = []" + linesep
         for ii in range(len(self.axial_vent)):
-            tmp = self.axial_vent[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            Lamination_str += "axial_vent["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.axial_vent[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            )
+            Lamination_str += "axial_vent[" + str(ii) + "] =" + tmp + linesep + linesep
         if len(self.notch) == 0:
             Lamination_str += "notch = []" + linesep
         for ii in range(len(self.notch)):
             tmp = self.notch[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            Lamination_str += "notch["+str(ii)+"] ="+ tmp + linesep + linesep
+            Lamination_str += "notch[" + str(ii) + "] =" + tmp + linesep + linesep
         return Lamination_str
 
     def __eq__(self, other):
@@ -559,8 +490,7 @@ class Lamination(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Lamination_dict = dict()
         Lamination_dict["L1"] = self.L1
@@ -575,12 +505,18 @@ class Lamination(FrozenClass):
         Lamination_dict["Rint"] = self.Rint
         Lamination_dict["Rext"] = self.Rext
         Lamination_dict["is_stator"] = self.is_stator
-        Lamination_dict["axial_vent"] = list()
-        for obj in self.axial_vent:
-            Lamination_dict["axial_vent"].append(obj.as_dict())
-        Lamination_dict["notch"] = list()
-        for obj in self.notch:
-            Lamination_dict["notch"].append(obj.as_dict())
+        if self.axial_vent is None:
+            Lamination_dict["axial_vent"] = None
+        else:
+            Lamination_dict["axial_vent"] = list()
+            for obj in self.axial_vent:
+                Lamination_dict["axial_vent"].append(obj.as_dict())
+        if self.notch is None:
+            Lamination_dict["notch"] = None
+        else:
+            Lamination_dict["notch"] = list()
+            for obj in self.notch:
+                Lamination_dict["notch"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         Lamination_dict["__class__"] = "Lamination"
         return Lamination_dict
@@ -629,11 +565,21 @@ class Lamination(FrozenClass):
 
     def _set_mat_type(self, value):
         """setter of mat_type"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "mat_type"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Material()
         check_var("mat_type", value, "Material")
         self._mat_type = value
 
         if self._mat_type is not None:
             self._mat_type.parent = self
+
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,
@@ -777,19 +723,25 @@ class Lamination(FrozenClass):
 
     def _get_axial_vent(self):
         """getter of axial_vent"""
-        for obj in self._axial_vent:
-            if obj is not None:
-                obj.parent = self
+        if self._axial_vent is not None:
+            for obj in self._axial_vent:
+                if obj is not None:
+                    obj.parent = self
         return self._axial_vent
 
     def _set_axial_vent(self, value):
         """setter of axial_vent"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "axial_vent"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
         check_var("axial_vent", value, "[Hole]")
         self._axial_vent = value
-
-        for obj in self._axial_vent:
-            if obj is not None:
-                obj.parent = self
 
     axial_vent = property(
         fget=_get_axial_vent,
@@ -802,19 +754,25 @@ class Lamination(FrozenClass):
 
     def _get_notch(self):
         """getter of notch"""
-        for obj in self._notch:
-            if obj is not None:
-                obj.parent = self
+        if self._notch is not None:
+            for obj in self._notch:
+                if obj is not None:
+                    obj.parent = self
         return self._notch
 
     def _set_notch(self, value):
         """setter of notch"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "notch"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
         check_var("notch", value, "[Notch]")
         self._notch = value
-
-        for obj in self._notch:
-            if obj is not None:
-                obj.parent = self
 
     notch = property(
         fget=_get_notch,

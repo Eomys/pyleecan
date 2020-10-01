@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Surface import Surface
 
 # Import all class method
@@ -172,44 +175,33 @@ class SurfRing(Surface):
         )
     else:
         comp_point_ref = comp_point_ref
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, out_surf=-1, in_surf=-1, point_ref=0, label="", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        out_surf=-1,
+        in_surf=-1,
+        point_ref=0,
+        label="",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if out_surf == -1:
-            out_surf = Surface()
-        if in_surf == -1:
-            in_surf = Surface()
-        if init_str is not None :  # Initialisation by str
-            from ..Functions.load import load
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            out_surf = obj.out_surf
-            in_surf = obj.in_surf
-            point_ref = obj.point_ref
-            label = obj.label
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -221,82 +213,28 @@ class SurfRing(Surface):
                 point_ref = init_dict["point_ref"]
             if "label" in list(init_dict.keys()):
                 label = init_dict["label"]
-        # Initialisation by argument
-        # out_surf can be None, a Surface object or a dict
-        if isinstance(out_surf, dict):
-            # Check that the type is correct (including daughter)
-            class_name = out_surf.get("__class__")
-            if class_name not in ['Surface', 'Circle', 'PolarArc', 'SurfLine', 'SurfRing', 'Trapeze']:
-                raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for out_surf"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
-            self.out_surf = class_obj(init_dict=out_surf)
-        elif isinstance(out_surf, str):
-            from ..Functions.load import load
-            out_surf = load(out_surf)
-            # Check that the type is correct (including daughter)
-            class_name = out_surf.__class__.__name__
-            if class_name not in ['Surface', 'Circle', 'PolarArc', 'SurfLine', 'SurfRing', 'Trapeze']:
-                raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for out_surf"
-                )
-            self.out_surf=out_surf
-        else:
-            self.out_surf = out_surf
-        # in_surf can be None, a Surface object or a dict
-        if isinstance(in_surf, dict):
-            # Check that the type is correct (including daughter)
-            class_name = in_surf.get("__class__")
-            if class_name not in ['Surface', 'Circle', 'PolarArc', 'SurfLine', 'SurfRing', 'Trapeze']:
-                raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for in_surf"
-                )
-            # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
-            class_obj = getattr(module,class_name)
-            self.in_surf = class_obj(init_dict=in_surf)
-        elif isinstance(in_surf, str):
-            from ..Functions.load import load
-            in_surf = load(in_surf)
-            # Check that the type is correct (including daughter)
-            class_name = in_surf.__class__.__name__
-            if class_name not in ['Surface', 'Circle', 'PolarArc', 'SurfLine', 'SurfRing', 'Trapeze']:
-                raise InitUnKnowClassError(
-                    "Unknow class name "
-                    + class_name
-                    + " in init_dict for in_surf"
-                )
-            self.in_surf=in_surf
-        else:
-            self.in_surf = in_surf
+        # Set the properties (value check and convertion are done in setter)
+        self.out_surf = out_surf
+        self.in_surf = in_surf
         # Call Surface init
         super(SurfRing, self).__init__(point_ref=point_ref, label=label)
         # The class is frozen (in Surface init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         SurfRing_str = ""
         # Get the properties inherited from Surface
         SurfRing_str += super(SurfRing, self).__str__()
         if self.out_surf is not None:
             tmp = self.out_surf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            SurfRing_str += "out_surf = "+ tmp
+            SurfRing_str += "out_surf = " + tmp
         else:
             SurfRing_str += "out_surf = None" + linesep + linesep
         if self.in_surf is not None:
             tmp = self.in_surf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            SurfRing_str += "in_surf = "+ tmp
+            SurfRing_str += "in_surf = " + tmp
         else:
             SurfRing_str += "in_surf = None" + linesep + linesep
         return SurfRing_str
@@ -317,8 +255,7 @@ class SurfRing(Surface):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Surface
         SurfRing_dict = super(SurfRing, self).as_dict()
@@ -351,11 +288,21 @@ class SurfRing(Surface):
 
     def _set_out_surf(self, value):
         """setter of out_surf"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "out_surf"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Surface()
         check_var("out_surf", value, "Surface")
         self._out_surf = value
 
         if self._out_surf is not None:
             self._out_surf.parent = self
+
     out_surf = property(
         fget=_get_out_surf,
         fset=_set_out_surf,
@@ -371,11 +318,21 @@ class SurfRing(Surface):
 
     def _set_in_surf(self, value):
         """setter of in_surf"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "in_surf"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Surface()
         check_var("in_surf", value, "Surface")
         self._in_surf = value
 
         if self._in_surf is not None:
             self._in_surf.parent = self
+
     in_surf = property(
         fget=_get_in_surf,
         fset=_set_in_surf,

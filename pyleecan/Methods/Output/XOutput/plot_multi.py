@@ -74,9 +74,9 @@ def plot_multi(
     # Plot in new figure
     if ax is None:
         fig, ax = plt.subplots()
-        if plot_type is "scatter":
+        if plot_type == "scatter":
             ax.scatter(x_values, y_values, c=COLORS[0])
-        elif plot_type is "plot":
+        elif plot_type == "plot":
             sort_index = np.argsort(x_values)
             ax.plot(x_values[sort_index], y_values[sort_index])
 
@@ -87,9 +87,9 @@ def plot_multi(
 
     # Plot in ax
     else:
-        if plot_type is "scatter":
+        if plot_type == "scatter":
             ax.scatter(x_values, y_values)
-        elif plot_type is "plot":
+        elif plot_type == "plot":
             sort_index = np.argsort(x_values)
             ax.plot(x_values[sort_index], y_values[sort_index])
 

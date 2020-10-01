@@ -64,7 +64,7 @@ def test_opti_datakeeper_list():
             symbol="R_s_w0",
             unit="m",
             keeper=lambda output: output.simu.machine.rotor.slot.W0,
-        ),
+        )
     ]
 
     datakeeper_list = [
@@ -73,7 +73,7 @@ def test_opti_datakeeper_list():
             symbol="R_s_w0_bis",
             unit="m",
             keeper=lambda output: output.simu.machine.rotor.slot.W0,
-        ),
+        )
     ]
 
     def evaluate(output):

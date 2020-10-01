@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import set_array, check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from numpy import array, array_equal
@@ -20,44 +23,37 @@ class OutGeoLam(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name_phase=None, BH_curve=None, Ksfill=None, S_slot=None, S_slot_wind=None, S_wind_act=None, sym=None, is_asym_wind=None, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name_phase=None,
+        BH_curve=None,
+        Ksfill=None,
+        S_slot=None,
+        S_slot_wind=None,
+        S_wind_act=None,
+        sym=None,
+        is_asym_wind=None,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None :  # Initialisation by str
-            from ..Functions.load import load
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            name_phase = obj.name_phase
-            BH_curve = obj.BH_curve
-            Ksfill = obj.Ksfill
-            S_slot = obj.S_slot
-            S_slot_wind = obj.S_slot_wind
-            S_wind_act = obj.S_wind_act
-            sym = obj.sym
-            is_asym_wind = obj.is_asym_wind
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -77,13 +73,10 @@ class OutGeoLam(FrozenClass):
                 sym = init_dict["sym"]
             if "is_asym_wind" in list(init_dict.keys()):
                 is_asym_wind = init_dict["is_asym_wind"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        if name_phase == -1:
-            name_phase = []
         self.name_phase = name_phase
-        # BH_curve can be None, a ndarray or a list
-        set_array(self, "BH_curve", BH_curve)
+        self.BH_curve = BH_curve
         self.Ksfill = Ksfill
         self.S_slot = S_slot
         self.S_slot_wind = S_slot_wind
@@ -95,15 +88,26 @@ class OutGeoLam(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         OutGeoLam_str = ""
         if self.parent is None:
             OutGeoLam_str += "parent = None " + linesep
         else:
             OutGeoLam_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutGeoLam_str += "name_phase = " + linesep + str(self.name_phase).replace(linesep, linesep + "\t") + linesep
-        OutGeoLam_str += "BH_curve = " + linesep + str(self.BH_curve).replace(linesep, linesep + "\t") + linesep + linesep
+        OutGeoLam_str += (
+            "name_phase = "
+            + linesep
+            + str(self.name_phase).replace(linesep, linesep + "\t")
+            + linesep
+        )
+        OutGeoLam_str += (
+            "BH_curve = "
+            + linesep
+            + str(self.BH_curve).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         OutGeoLam_str += "Ksfill = " + str(self.Ksfill) + linesep
         OutGeoLam_str += "S_slot = " + str(self.S_slot) + linesep
         OutGeoLam_str += "S_slot_wind = " + str(self.S_slot_wind) + linesep
@@ -136,8 +140,7 @@ class OutGeoLam(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutGeoLam_dict = dict()
         OutGeoLam_dict["name_phase"] = self.name_phase
@@ -173,6 +176,8 @@ class OutGeoLam(FrozenClass):
 
     def _set_name_phase(self, value):
         """setter of name_phase"""
+        if type(value) is int and value == -1:
+            value = list()
         check_var("name_phase", value, "list")
         self._name_phase = value
 
@@ -191,7 +196,9 @@ class OutGeoLam(FrozenClass):
 
     def _set_BH_curve(self, value):
         """setter of BH_curve"""
-        if type(value) is list:
+        if type(value) is int and value == -1:
+            value = array([])
+        elif type(value) is list:
             try:
                 value = array(value)
             except:

@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 # Import all class method
@@ -37,42 +40,25 @@ class Conductor(FrozenClass):
         )
     else:
         check = check
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, cond_mat=-1, ins_mat=-1, init_dict = None, init_str = None):
+    def __init__(self, cond_mat=-1, ins_mat=-1, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if cond_mat == -1:
-            cond_mat = Material()
-        if ins_mat == -1:
-            ins_mat = Material()
-        if init_str is not None :  # Initialisation by str
-            from ..Functions.load import load
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            cond_mat = obj.cond_mat
-            ins_mat = obj.ins_mat
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -80,30 +66,16 @@ class Conductor(FrozenClass):
                 cond_mat = init_dict["cond_mat"]
             if "ins_mat" in list(init_dict.keys()):
                 ins_mat = init_dict["ins_mat"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        # cond_mat can be None, a Material object or a dict
-        if isinstance(cond_mat, dict):
-            self.cond_mat = Material(init_dict=cond_mat)
-        elif isinstance(cond_mat, str):
-            from ..Functions.load import load
-            self.cond_mat = load(cond_mat)
-        else:
-            self.cond_mat = cond_mat
-        # ins_mat can be None, a Material object or a dict
-        if isinstance(ins_mat, dict):
-            self.ins_mat = Material(init_dict=ins_mat)
-        elif isinstance(ins_mat, str):
-            from ..Functions.load import load
-            self.ins_mat = load(ins_mat)
-        else:
-            self.ins_mat = ins_mat
+        self.cond_mat = cond_mat
+        self.ins_mat = ins_mat
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Conductor_str = ""
         if self.parent is None:
@@ -112,12 +84,12 @@ class Conductor(FrozenClass):
             Conductor_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.cond_mat is not None:
             tmp = self.cond_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Conductor_str += "cond_mat = "+ tmp
+            Conductor_str += "cond_mat = " + tmp
         else:
             Conductor_str += "cond_mat = None" + linesep + linesep
         if self.ins_mat is not None:
             tmp = self.ins_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Conductor_str += "ins_mat = "+ tmp
+            Conductor_str += "ins_mat = " + tmp
         else:
             Conductor_str += "ins_mat = None" + linesep + linesep
         return Conductor_str
@@ -134,8 +106,7 @@ class Conductor(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Conductor_dict = dict()
         if self.cond_mat is None:
@@ -164,11 +135,21 @@ class Conductor(FrozenClass):
 
     def _set_cond_mat(self, value):
         """setter of cond_mat"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "cond_mat"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Material()
         check_var("cond_mat", value, "Material")
         self._cond_mat = value
 
         if self._cond_mat is not None:
             self._cond_mat.parent = self
+
     cond_mat = property(
         fget=_get_cond_mat,
         fset=_set_cond_mat,
@@ -184,11 +165,21 @@ class Conductor(FrozenClass):
 
     def _set_ins_mat(self, value):
         """setter of ins_mat"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "ins_mat"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Material()
         check_var("ins_mat", value, "Material")
         self._ins_mat = value
 
         if self._ins_mat is not None:
             self._ins_mat.parent = self
+
     ins_mat = property(
         fget=_get_ins_mat,
         fset=_set_ins_mat,

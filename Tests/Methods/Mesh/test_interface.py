@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from unittest import TestCase
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.PointMat import PointMat
 from pyleecan.Classes.CellMat import CellMat
@@ -9,11 +8,11 @@ import numpy as np
 
 
 @pytest.mark.MeshSol
-class unittest_interface(TestCase):
-    """unittest for interface method"""
+@pytest.mark.METHODS
+class Test_interface(object):
+    """unittest for elements and nodes getter methods"""
 
-    @classmethod
-    def setUp(self):
+    def setup_method(self, method):
         self.mesh = MeshMat()
         self.mesh.cell["triangle"] = CellMat(nb_pt_per_cell=3)
         self.mesh.cell["line"] = CellMat(nb_pt_per_cell=2)
@@ -52,7 +51,7 @@ class unittest_interface(TestCase):
             + str(solution)
         )
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA - 0) < DELTA, msg
 
     def test_CellMat_PointMat_corner_ext(self):
         """unittest with an external corner interface"""
@@ -80,7 +79,7 @@ class unittest_interface(TestCase):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA - 0) < DELTA, msg
 
     def test_CellMat_PointMat_corner_int(self):
         """unittest with an internal corner interface"""
@@ -108,7 +107,7 @@ class unittest_interface(TestCase):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA - 0) < DELTA, msg
 
     def test_CellMat_PointMat_self(self):
         """unittest with interface of a mesh on itself"""
@@ -129,4 +128,4 @@ class unittest_interface(TestCase):
         testA = np.sum(abs(result - solution))
         msg = "Wrong result: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA - 0) < DELTA, msg

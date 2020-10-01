@@ -4,9 +4,7 @@ from os import chdir
 chdir("../../..")
 
 from os.path import join
-from unittest import TestCase
 
-from ddt import data, ddt
 from numpy import array, linspace, ones, pi, sqrt, transpose, zeros
 from numpy.testing import assert_array_almost_equal
 
@@ -22,6 +20,7 @@ from pyleecan.Classes.Simulation import Simulation
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from pyleecan.Methods.Simulation.Input import InputError
+import pytest
 
 IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 InputCurrent_Error_test = list()
@@ -168,19 +167,17 @@ InputCurrent_Error_test.append(
 )
 
 
-@ddt
-class unittest_InputCurrent_meth(TestCase):
+@pytest.mark.METHODS
+class Test_InCurrent_meth(object):
     """unittest for InputCurrent object methods"""
 
-    @data(*InputCurrent_Error_test)
+    @pytest.mark.parametrize("test_dict", InputCurrent_Error_test)
     def test_InputCurrent_Error_test(self, test_dict):
         """Check that the input current raises the correct errors"""
         output = Output(simu=test_dict["test_obj"])
-        with self.assertRaises(
-            InputError, msg="Expect: " + test_dict["exp"]
-        ) as context:
+        with pytest.raises(InputError) as context:
             output.simu.input.gen_input()
-        self.assertEqual(test_dict["exp"], str(context.exception))
+            assert test_dict["exp"] == str(context.exception)
 
     def test_InputCurrent_Ok(self):
         """Check that the input current can return a correct output"""
@@ -237,13 +234,12 @@ class unittest_InputCurrent_meth(TestCase):
                 [-1, -2, -1, 1, 2, 1, -1],
                 [-1, 1, 2, 1, -1, -2, -1],
             ]
-        )
-
+        ) * sqrt(2)
         zp = IPMSM_A.stator.get_pole_pair_number()
         angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
         angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
-
         N0 = 60 / zp
+
         test_obj.input = InputCurrent(
             time=time,
             angle=angle,
@@ -281,7 +277,7 @@ class unittest_InputCurrent_meth(TestCase):
                     [-1, 1, 2, 1, -1, -2, -1],
                 ]
             )
-        )
+        ) * sqrt(2)
         Is = ImportMatrixVal(value=Is_exp)
 
         zp = IPMSM_A.stator.get_pole_pair_number()

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from unittest import TestCase
 from pyleecan.Classes.MeshMat import MeshMat
 from pyleecan.Classes.CellMat import CellMat
 from pyleecan.Classes.PointMat import PointMat
@@ -9,11 +8,11 @@ import numpy as np
 
 
 @pytest.mark.MeshSol
-class unittest_get_cell_MeshMat(TestCase):
+@pytest.mark.METHODS
+class Test_get_cell_MeshMat(object):
     """unittest for Mesh get_cell methods. Indirect test add_element """
 
-    @classmethod
-    def setUp(self):
+    def setup_method(self, method):
         self.mesh = MeshMat()
         self.mesh.cell["triangle3"] = CellMat(nb_pt_per_cell=3)
         self.mesh.cell["segment2"] = CellMat(nb_pt_per_cell=2)
@@ -44,7 +43,7 @@ class unittest_get_cell_MeshMat(TestCase):
                 + ", expected: "
                 + str(solution[key])
             )
-            self.assertTrue(testA, msg=msg)
+            assert testA, msg
 
     def test_MeshMat_1seg2tri(self):
         """unittest MeshMat return 1 segment """
@@ -63,7 +62,7 @@ class unittest_get_cell_MeshMat(TestCase):
                 + ", expected: "
                 + str(solution[key])
             )
-            self.assertTrue(testA, msg=msg)
+            assert testA, msg
 
         solution["triangle3"] = np.array([2, 1, 0]), np.array([1, 2, 3])
         solution["segment2"] = np.array([0, 1])
@@ -77,7 +76,7 @@ class unittest_get_cell_MeshMat(TestCase):
                 + ", expected: "
                 + str(solution[key])
             )
-            self.assertTrue(testA, msg=msg)
+            assert testA, msg
 
     def test_MeshMat_add(self):
         """unittest with MeshMat, add and get_cell for 1 cell"""
@@ -87,7 +86,7 @@ class unittest_get_cell_MeshMat(TestCase):
         testA = np.sum(abs(result["segment2"] - solution))
         msg = "Wrong output: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA - 0) < DELTA, msg
 
         tag_test = self.mesh.add_cell([4, 2, 1], "triangle3")
         result, nb, ind = self.mesh.get_cell(tag_test)
@@ -95,7 +94,7 @@ class unittest_get_cell_MeshMat(TestCase):
         testA = np.sum(abs(result["triangle3"] - solution))
         msg = "Wrong output: returned " + str(result) + ", expected: " + str(solution)
         DELTA = 1e-10
-        self.assertAlmostEqual(testA, 0, msg=msg, delta=DELTA)
+        assert abs(testA - 0) < DELTA, msg
 
     def test_MeshMat_stupid(self):
         """unittest with MeshMat for wrong entry"""
@@ -116,4 +115,4 @@ class unittest_get_cell_MeshMat(TestCase):
                 + ", expected: "
                 + str(solution[key])
             )
-            self.assertTrue(testA, msg=msg)
+            assert testA, msg

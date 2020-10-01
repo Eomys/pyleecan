@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from ._check import InitUnKnowClassError
@@ -23,55 +26,38 @@ class Material(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="Material", is_isotropic=False, elec=-1, mag=-1, struct=-1, HT=-1, eco=-1, desc="Material description", path="", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name="Material",
+        is_isotropic=False,
+        elec=-1,
+        mag=-1,
+        struct=-1,
+        HT=-1,
+        eco=-1,
+        desc="Material description",
+        path="",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if elec == -1:
-            elec = MatElectrical()
-        if mag == -1:
-            mag = MatMagnetics()
-        if struct == -1:
-            struct = MatStructural()
-        if HT == -1:
-            HT = MatHT()
-        if eco == -1:
-            eco = MatEconomical()
-        if init_str is not None :  # Initialisation by str
-            from ..Functions.load import load
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            name = obj.name
-            is_isotropic = obj.is_isotropic
-            elec = obj.elec
-            mag = obj.mag
-            struct = obj.struct
-            HT = obj.HT
-            eco = obj.eco
-            desc = obj.desc
-            path = obj.path
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -93,50 +79,15 @@ class Material(FrozenClass):
                 desc = init_dict["desc"]
             if "path" in list(init_dict.keys()):
                 path = init_dict["path"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
         self.is_isotropic = is_isotropic
-        # elec can be None, a MatElectrical object or a dict
-        if isinstance(elec, dict):
-            self.elec = MatElectrical(init_dict=elec)
-        elif isinstance(elec, str):
-            from ..Functions.load import load
-            self.elec = load(elec)
-        else:
-            self.elec = elec
-        # mag can be None, a MatMagnetics object or a dict
-        if isinstance(mag, dict):
-            self.mag = MatMagnetics(init_dict=mag)
-        elif isinstance(mag, str):
-            from ..Functions.load import load
-            self.mag = load(mag)
-        else:
-            self.mag = mag
-        # struct can be None, a MatStructural object or a dict
-        if isinstance(struct, dict):
-            self.struct = MatStructural(init_dict=struct)
-        elif isinstance(struct, str):
-            from ..Functions.load import load
-            self.struct = load(struct)
-        else:
-            self.struct = struct
-        # HT can be None, a MatHT object or a dict
-        if isinstance(HT, dict):
-            self.HT = MatHT(init_dict=HT)
-        elif isinstance(HT, str):
-            from ..Functions.load import load
-            self.HT = load(HT)
-        else:
-            self.HT = HT
-        # eco can be None, a MatEconomical object or a dict
-        if isinstance(eco, dict):
-            self.eco = MatEconomical(init_dict=eco)
-        elif isinstance(eco, str):
-            from ..Functions.load import load
-            self.eco = load(eco)
-        else:
-            self.eco = eco
+        self.elec = elec
+        self.mag = mag
+        self.struct = struct
+        self.HT = HT
+        self.eco = eco
         self.desc = desc
         self.path = path
 
@@ -144,7 +95,7 @@ class Material(FrozenClass):
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         Material_str = ""
         if self.parent is None:
@@ -155,27 +106,27 @@ class Material(FrozenClass):
         Material_str += "is_isotropic = " + str(self.is_isotropic) + linesep
         if self.elec is not None:
             tmp = self.elec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "elec = "+ tmp
+            Material_str += "elec = " + tmp
         else:
             Material_str += "elec = None" + linesep + linesep
         if self.mag is not None:
             tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "mag = "+ tmp
+            Material_str += "mag = " + tmp
         else:
             Material_str += "mag = None" + linesep + linesep
         if self.struct is not None:
             tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "struct = "+ tmp
+            Material_str += "struct = " + tmp
         else:
             Material_str += "struct = None" + linesep + linesep
         if self.HT is not None:
             tmp = self.HT.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "HT = "+ tmp
+            Material_str += "HT = " + tmp
         else:
             Material_str += "HT = None" + linesep + linesep
         if self.eco is not None:
             tmp = self.eco.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "eco = "+ tmp
+            Material_str += "eco = " + tmp
         else:
             Material_str += "eco = None" + linesep + linesep
         Material_str += 'desc = "' + str(self.desc) + '"' + linesep
@@ -208,8 +159,7 @@ class Material(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Material_dict = dict()
         Material_dict["name"] = self.name
@@ -300,11 +250,19 @@ class Material(FrozenClass):
 
     def _set_elec(self, value):
         """setter of elec"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = MatElectrical()
         check_var("elec", value, "MatElectrical")
         self._elec = value
 
         if self._elec is not None:
             self._elec.parent = self
+
     elec = property(
         fget=_get_elec,
         fset=_set_elec,
@@ -320,11 +278,19 @@ class Material(FrozenClass):
 
     def _set_mag(self, value):
         """setter of mag"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = MatMagnetics()
         check_var("mag", value, "MatMagnetics")
         self._mag = value
 
         if self._mag is not None:
             self._mag.parent = self
+
     mag = property(
         fget=_get_mag,
         fset=_set_mag,
@@ -340,11 +306,21 @@ class Material(FrozenClass):
 
     def _set_struct(self, value):
         """setter of struct"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "struct"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = MatStructural()
         check_var("struct", value, "MatStructural")
         self._struct = value
 
         if self._struct is not None:
             self._struct.parent = self
+
     struct = property(
         fget=_get_struct,
         fset=_set_struct,
@@ -360,11 +336,19 @@ class Material(FrozenClass):
 
     def _set_HT(self, value):
         """setter of HT"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "HT")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = MatHT()
         check_var("HT", value, "MatHT")
         self._HT = value
 
         if self._HT is not None:
             self._HT.parent = self
+
     HT = property(
         fget=_get_HT,
         fset=_set_HT,
@@ -380,11 +364,19 @@ class Material(FrozenClass):
 
     def _set_eco(self, value):
         """setter of eco"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eco")
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = MatEconomical()
         check_var("eco", value, "MatEconomical")
         self._eco = value
 
         if self._eco is not None:
             self._eco.parent = self
+
     eco = property(
         fget=_get_eco,
         fset=_set_eco,

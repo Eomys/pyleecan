@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .Mesh import Mesh
 
 # Import all class method
@@ -169,42 +172,27 @@ class MeshMat(Mesh):
         )
     else:
         interface = interface
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, cell=dict(), point=-1, label=None, dimension=2, init_dict = None, init_str = None):
+    def __init__(
+        self, cell=-1, point=-1, label=None, dimension=2, init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if point == -1:
-            point = PointMat()
-        if init_str is not None :  # Initialisation by str
-            from ..Functions.load import load
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            cell = obj.cell
-            point = obj.point
-            label = obj.label
-            dimension = obj.dimension
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -216,46 +204,28 @@ class MeshMat(Mesh):
                 label = init_dict["label"]
             if "dimension" in list(init_dict.keys()):
                 dimension = init_dict["dimension"]
-        # Initialisation by argument
-        # cell can be None or a dict of CellMat object
-        self.cell = dict()
-        if type(cell) is dict:
-            for key, obj in cell.items():
-                if isinstance(obj, dict):
-                    self.cell[key] = CellMat(init_dict=obj)
-                else:
-                    self.cell[key] = obj
-        elif cell is None:
-            self.cell = dict()
-        else:
-            self.cell = cell# Should raise an error
-        # point can be None, a PointMat object or a dict
-        if isinstance(point, dict):
-            self.point = PointMat(init_dict=point)
-        elif isinstance(point, str):
-            from ..Functions.load import load
-            self.point = load(point)
-        else:
-            self.point = point
+        # Set the properties (value check and convertion are done in setter)
+        self.cell = cell
+        self.point = point
         # Call Mesh init
         super(MeshMat, self).__init__(label=label, dimension=dimension)
         # The class is frozen (in Mesh init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         MeshMat_str = ""
         # Get the properties inherited from Mesh
         MeshMat_str += super(MeshMat, self).__str__()
         if len(self.cell) == 0:
-            MeshMat_str += "cell = dict()"+linesep
+            MeshMat_str += "cell = dict()" + linesep
         for key, obj in self.cell.items():
-            tmp = self.cell[key].__str__().replace(linesep, linesep + "\t")+ linesep 
-            MeshMat_str += "cell["+key+"] ="+ tmp + linesep + linesep
+            tmp = self.cell[key].__str__().replace(linesep, linesep + "\t") + linesep
+            MeshMat_str += "cell[" + key + "] =" + tmp + linesep + linesep
         if self.point is not None:
             tmp = self.point.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MeshMat_str += "point = "+ tmp
+            MeshMat_str += "point = " + tmp
         else:
             MeshMat_str += "point = None" + linesep + linesep
         return MeshMat_str
@@ -276,14 +246,16 @@ class MeshMat(Mesh):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Mesh
         MeshMat_dict = super(MeshMat, self).as_dict()
-        MeshMat_dict["cell"] = dict()
-        for key, obj in self.cell.items():
-            MeshMat_dict["cell"][key] = obj.as_dict()
+        if self.cell is None:
+            MeshMat_dict["cell"] = None
+        else:
+            MeshMat_dict["cell"] = dict()
+            for key, obj in self.cell.items():
+                MeshMat_dict["cell"][key] = obj.as_dict()
         if self.point is None:
             MeshMat_dict["point"] = None
         else:
@@ -305,13 +277,23 @@ class MeshMat(Mesh):
 
     def _get_cell(self):
         """getter of cell"""
-        for key, obj in self._cell.items():
-            if obj is not None:
-                obj.parent = self
+        if self._cell is not None:
+            for key, obj in self._cell.items():
+                if obj is not None:
+                    obj.parent = self
         return self._cell
 
     def _set_cell(self, value):
         """setter of cell"""
+        if type(value) is dict:
+            for key, obj in value.items():
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "cell"
+                    )
+                    value[key] = class_obj(init_dict=obj)
+        if type(value) is int and value == -1:
+            value = dict()
         check_var("cell", value, "{CellMat}")
         self._cell = value
 
@@ -330,11 +312,21 @@ class MeshMat(Mesh):
 
     def _set_point(self, value):
         """setter of point"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "point"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = PointMat()
         check_var("point", value, "PointMat")
         self._point = value
 
         if self._point is not None:
             self._point.parent = self
+
     point = property(
         fget=_get_point,
         fset=_set_point,

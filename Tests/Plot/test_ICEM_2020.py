@@ -27,10 +27,6 @@ import random
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 
-
-SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
-SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
-
 # Gather results in the same folder
 save_path = join(save_plot_path, "ICEM_2020")
 makedirs(save_path)
@@ -48,6 +44,7 @@ def test_FEMM_sym():
     """Figure 9: Check that the FEMM can handle symmetry
     From pyleecan/Tests/Validation/Simulation/test_EM_SCIM_NL_006.py
     """
+    SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
     simu = Simu1(name="ICEM_2020", machine=SCIM_006)
     simu.machine.name = "fig_09_FEMM_sym"
 
@@ -434,6 +431,7 @@ def test_BoreFlower():
 @pytest.mark.long
 def test_ecc_FEMM():
     """Figure 19: transfrom_list in FEMM for eccentricities"""
+    SPMSM_015 = load(join(DATA_DIR, "Machine", "SPMSM_015.json"))
     simu = Simu1(name="ICEM_2020", machine=SPMSM_015)
     simu.machine.name = "fig_19_Transform_list"
 

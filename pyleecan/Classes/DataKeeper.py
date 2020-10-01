@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
 from inspect import getsource
@@ -22,42 +25,35 @@ class DataKeeper(FrozenClass):
 
     VERSION = 1
 
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", symbol="", unit="", keeper=None, error_keeper=None, result=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name="",
+        symbol="",
+        unit="",
+        keeper=None,
+        error_keeper=None,
+        result=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None :  # Initialisation by str
-            from ..Functions.load import load
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            name = obj.name
-            symbol = obj.symbol
-            unit = obj.unit
-            keeper = obj.keeper
-            error_keeper = obj.error_keeper
-            result = obj.result
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -73,22 +69,20 @@ class DataKeeper(FrozenClass):
                 error_keeper = init_dict["error_keeper"]
             if "result" in list(init_dict.keys()):
                 result = init_dict["result"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.name = name
         self.symbol = symbol
         self.unit = unit
         self.keeper = keeper
         self.error_keeper = error_keeper
-        if result == -1:
-            result = []
         self.result = result
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         DataKeeper_str = ""
         if self.parent is None:
@@ -101,12 +95,25 @@ class DataKeeper(FrozenClass):
         if self._keeper[1] is None:
             DataKeeper_str += "keeper = " + str(self._keeper[1])
         else:
-            DataKeeper_str += "keeper = " + linesep + str(self._keeper[1]) + linesep + linesep
+            DataKeeper_str += (
+                "keeper = " + linesep + str(self._keeper[1]) + linesep + linesep
+            )
         if self._error_keeper[1] is None:
             DataKeeper_str += "error_keeper = " + str(self._error_keeper[1])
         else:
-            DataKeeper_str += "error_keeper = " + linesep + str(self._error_keeper[1]) + linesep + linesep
-        DataKeeper_str += "result = " + linesep + str(self.result).replace(linesep, linesep + "\t") + linesep
+            DataKeeper_str += (
+                "error_keeper = "
+                + linesep
+                + str(self._error_keeper[1])
+                + linesep
+                + linesep
+            )
+        DataKeeper_str += (
+            "result = "
+            + linesep
+            + str(self.result).replace(linesep, linesep + "\t")
+            + linesep
+        )
         return DataKeeper_str
 
     def __eq__(self, other):
@@ -129,8 +136,7 @@ class DataKeeper(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         DataKeeper_dict = dict()
         DataKeeper_dict["name"] = self.name
@@ -139,11 +145,17 @@ class DataKeeper(FrozenClass):
         if self.keeper is None:
             DataKeeper_dict["keeper"] = None
         else:
-            DataKeeper_dict["keeper"] = [dumps(self._keeper[0]).decode('ISO-8859-2'), self._keeper[1]]
+            DataKeeper_dict["keeper"] = [
+                dumps(self._keeper[0]).decode("ISO-8859-2"),
+                self._keeper[1],
+            ]
         if self.error_keeper is None:
             DataKeeper_dict["error_keeper"] = None
         else:
-            DataKeeper_dict["error_keeper"] = [dumps(self._error_keeper[0]).decode('ISO-8859-2'), self._error_keeper[1]]
+            DataKeeper_dict["error_keeper"] = [
+                dumps(self._error_keeper[0]).decode("ISO-8859-2"),
+                self._error_keeper[1],
+            ]
         DataKeeper_dict["result"] = self.result
         # The class name is added to the dict fordeserialisation purpose
         DataKeeper_dict["__class__"] = "DataKeeper"
@@ -219,18 +231,30 @@ class DataKeeper(FrozenClass):
 
     def _set_keeper(self, value):
         """setter of keeper"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "keeper"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = function()
         try:
             check_var("keeper", value, "list")
         except CheckTypeError:
             check_var("keeper", value, "function")
-        if isinstance(value,list): # Load function from saved dict
-            self._keeper = [loads(value[0].encode('ISO-8859-2')),value[1]]
+        if isinstance(value, list):  # Load function from saved dict
+            self._keeper = [loads(value[0].encode("ISO-8859-2")), value[1]]
         elif value is None:
-            self._keeper = [None,None]
+            self._keeper = [None, None]
         elif callable(value):
-            self._keeper = [value,getsource(value)]
+            self._keeper = [value, getsource(value)]
         else:
-            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
+            raise TypeError(
+                "Expected function or list from a saved file, got: " + str(type(value))
+            )
+
     keeper = property(
         fget=_get_keeper,
         fset=_set_keeper,
@@ -246,18 +270,30 @@ class DataKeeper(FrozenClass):
 
     def _set_error_keeper(self, value):
         """setter of error_keeper"""
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "error_keeper"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = function()
         try:
             check_var("error_keeper", value, "list")
         except CheckTypeError:
             check_var("error_keeper", value, "function")
-        if isinstance(value,list): # Load function from saved dict
-            self._error_keeper = [loads(value[0].encode('ISO-8859-2')),value[1]]
+        if isinstance(value, list):  # Load function from saved dict
+            self._error_keeper = [loads(value[0].encode("ISO-8859-2")), value[1]]
         elif value is None:
-            self._error_keeper = [None,None]
+            self._error_keeper = [None, None]
         elif callable(value):
-            self._error_keeper = [value,getsource(value)]
+            self._error_keeper = [value, getsource(value)]
         else:
-            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
+            raise TypeError(
+                "Expected function or list from a saved file, got: " + str(type(value))
+            )
+
     error_keeper = property(
         fget=_get_error_keeper,
         fset=_set_error_keeper,
@@ -273,6 +309,8 @@ class DataKeeper(FrozenClass):
 
     def _set_result(self, value):
         """setter of result"""
+        if type(value) is int and value == -1:
+            value = list()
         check_var("result", value, "list")
         self._result = value
 

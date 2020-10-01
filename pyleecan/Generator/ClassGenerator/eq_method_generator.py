@@ -1,4 +1,4 @@
-from ...Generator import TAB, TAB2, TAB3
+from ...Generator import TAB, TAB2, TAB3, TAB4, TAB5
 
 
 def generate_eq(gen_dict, class_dict):
@@ -50,6 +50,68 @@ def generate_eq(gen_dict, class_dict):
                 + "):\n"
             )
             eq_str += TAB3 + "return False\n"
+        elif prop["type"] == "[ndarray]":
+            eq_str += (
+                TAB2
+                + "if other."
+                + prop["name"]
+                + " is None and self."
+                + prop["name"]
+                + " is not None:\n"
+            )
+            eq_str += TAB3 + "return False\n"
+            eq_str += (
+                TAB2
+                + "elif len(other."
+                + prop["name"]
+                + ") != len(self."
+                + prop["name"]
+                + "):\n"
+            )
+            eq_str += TAB3 + "return False\n"
+            eq_str += TAB2 + "else:\n"
+            eq_str += TAB3 + "for ii in range(len(other." + prop["name"] + ")):\n"
+            eq_str += (
+                TAB4
+                + "if not array_equal(other."
+                + prop["name"]
+                + "[ii], self."
+                + prop["name"]
+                + "[ii]):\n"
+            )
+            eq_str += TAB5 + "return False\n"
+        elif prop["type"] == "{ndarray}":
+            eq_str += (
+                TAB2
+                + "if other."
+                + prop["name"]
+                + " is None and self."
+                + prop["name"]
+                + " is not None:\n"
+            )
+            eq_str += TAB3 + "return False\n"
+            eq_str += (
+                TAB2
+                + "elif len(other."
+                + prop["name"]
+                + ") != len(self."
+                + prop["name"]
+                + "):\n"
+            )
+            eq_str += TAB3 + "return False\n"
+            eq_str += TAB2 + "else:\n"
+            eq_str += TAB3 + "for key in other." + prop["name"] + ":\n"
+            eq_str += (
+                TAB4
+                + "if key not in self."
+                + prop["name"]
+                + " or not array_equal(other."
+                + prop["name"]
+                + "[key], self."
+                + prop["name"]
+                + "[key]):\n"
+            )
+            eq_str += TAB5 + "return False\n"
         else:
             eq_str += (
                 TAB2 + "if other." + prop["name"] + " != self." + prop["name"] + ":\n"

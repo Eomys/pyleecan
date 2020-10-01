@@ -9,6 +9,9 @@ from logging import getLogger
 from ._check import check_var, raise_
 from ..Functions.get_logger import get_logger
 from ..Functions.save import save
+from ..Functions.copy import copy
+from ..Functions.load import load_init_dict
+from ..Functions.Load.import_class import import_class
 from .SlotMag import SlotMag
 
 # Import all class method
@@ -24,7 +27,9 @@ except ImportError as error:
     comp_angle_opening = error
 
 try:
-    from ..Methods.Slot.SlotMFlat.comp_angle_opening_magnet import comp_angle_opening_magnet
+    from ..Methods.Slot.SlotMFlat.comp_angle_opening_magnet import (
+        comp_angle_opening_magnet,
+    )
 except ImportError as error:
     comp_angle_opening_magnet = error
 
@@ -139,42 +144,35 @@ class SlotMFlat(SlotMag):
         )
     else:
         get_point_bottom = get_point_bottom
-    # save method is available in all object
+    # save and copy methods are available in all object
     save = save
-
-    # generic copy method
-    def copy(self):
-        """Return a copy of the class
-        """
-        return type(self)(init_dict=self.as_dict())
-
+    copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, H0=0, W0=0.0122, W0_is_rad=False, magnet=list(), W3=0, Zs=36, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        H0=0,
+        W0=0.0122,
+        W0_is_rad=False,
+        magnet=-1,
+        W3=0,
+        Zs=36,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
-            for Matrix, None will initialise the property with an empty Matrix
-            for pyleecan type, None will call the default constructor
-        - __init__ (init_dict = d) d must be a dictionnary with every properties as keys
+            for pyleecan type, -1 will call the default constructor
+        - __init__ (init_dict = d) d must be a dictionnary with property names as keys
         - __init__ (init_str = s) s must be a string
         s is the file path to load
 
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None :  # Initialisation by str
-            from ..Functions.load import load
-            assert type(init_str) is str
-            # load the object from a file
-            obj = load(init_str)
-            assert type(obj) is type(self)
-            H0 = obj.H0
-            W0 = obj.W0
-            W0_is_rad = obj.W0_is_rad
-            magnet = obj.magnet
-            W3 = obj.W3
-            Zs = obj.Zs
+        if init_str is not None:  # Load from a file
+            init_dict = load_init_dict(init_str)[1]
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
@@ -190,48 +188,18 @@ class SlotMFlat(SlotMag):
                 W3 = init_dict["W3"]
             if "Zs" in list(init_dict.keys()):
                 Zs = init_dict["Zs"]
-        # Initialisation by argument
+        # Set the properties (value check and convertion are done in setter)
         self.H0 = H0
         self.W0 = W0
         self.W0_is_rad = W0_is_rad
-        # magnet can be None or a list of MagnetFlat object or a list of dict
-        if type(magnet) is list:
-            # Check if the list is only composed of MagnetFlat
-            if len(magnet) > 0 and all(isinstance(obj, MagnetFlat) for obj in magnet):
-                # set the list to keep pointer reference
-                self.magnet = magnet
-            else:
-                self.magnet = list()
-                for obj in magnet:
-                    if not isinstance(obj, dict):  # Default value
-                        self.magnet.append(obj)
-                    elif isinstance(obj, dict):
-                        # Check that the type is correct (including daughter)
-                        class_name = obj.get("__class__")
-                        if class_name not in ['MagnetFlat', 'MagnetType10', 'MagnetType12', 'MagnetType13']:
-                            raise InitUnKnowClassError(
-                                "Unknow class name "
-                                + class_name
-                                + " in init_dict for magnet"
-                            )
-                        # Dynamic import to call the correct constructor
-                        module = __import__(
-                            "pyleecan.Classes." + class_name, fromlist=[class_name]
-                        )
-                        class_obj = getattr(module, class_name)
-                        self.magnet.append(class_obj(init_dict=obj))
-    
-        elif magnet is None:
-            self.magnet = list()
-        else:
-            self.magnet = magnet
+        self.magnet = magnet
         # Call SlotMag init
         super(SlotMFlat, self).__init__(W3=W3, Zs=Zs)
         # The class is frozen (in SlotMag init), for now it's impossible to
         # add new properties
 
     def __str__(self):
-        """Convert this objet in a readeable string (for print)"""
+        """Convert this object in a readeable string (for print)"""
 
         SlotMFlat_str = ""
         # Get the properties inherited from SlotMag
@@ -243,7 +211,7 @@ class SlotMFlat(SlotMag):
             SlotMFlat_str += "magnet = []" + linesep
         for ii in range(len(self.magnet)):
             tmp = self.magnet[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            SlotMFlat_str += "magnet["+str(ii)+"] ="+ tmp + linesep + linesep
+            SlotMFlat_str += "magnet[" + str(ii) + "] =" + tmp + linesep + linesep
         return SlotMFlat_str
 
     def __eq__(self, other):
@@ -266,17 +234,19 @@ class SlotMFlat(SlotMag):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from SlotMag
         SlotMFlat_dict = super(SlotMFlat, self).as_dict()
         SlotMFlat_dict["H0"] = self.H0
         SlotMFlat_dict["W0"] = self.W0
         SlotMFlat_dict["W0_is_rad"] = self.W0_is_rad
-        SlotMFlat_dict["magnet"] = list()
-        for obj in self.magnet:
-            SlotMFlat_dict["magnet"].append(obj.as_dict())
+        if self.magnet is None:
+            SlotMFlat_dict["magnet"] = None
+        else:
+            SlotMFlat_dict["magnet"] = list()
+            for obj in self.magnet:
+                SlotMFlat_dict["magnet"].append(obj.as_dict())
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         SlotMFlat_dict["__class__"] = "SlotMFlat"
@@ -351,19 +321,25 @@ class SlotMFlat(SlotMag):
 
     def _get_magnet(self):
         """getter of magnet"""
-        for obj in self._magnet:
-            if obj is not None:
-                obj.parent = self
+        if self._magnet is not None:
+            for obj in self._magnet:
+                if obj is not None:
+                    obj.parent = self
         return self._magnet
 
     def _set_magnet(self, value):
         """setter of magnet"""
+        if type(value) is list:
+            for ii, obj in enumerate(value):
+                if type(obj) is dict:
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "magnet"
+                    )
+                    value[ii] = class_obj(init_dict=obj)
+        if value == -1:
+            value = list()
         check_var("magnet", value, "[MagnetFlat]")
         self._magnet = value
-
-        for obj in self._magnet:
-            if obj is not None:
-                obj.parent = self
 
     magnet = property(
         fget=_get_magnet,
