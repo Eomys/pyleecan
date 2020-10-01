@@ -136,8 +136,7 @@ class SlotW16(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW16 method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotW16 method comp_height_wind: " + str(comp_height_wind)
                 )
             )
         )
@@ -160,17 +159,7 @@ class SlotW16(SlotWind):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        W0=0.0122,
-        W3=0.0122,
-        H0=0.001,
-        H2=0.0122,
-        R1=0.001,
-        Zs=36,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, W0=0.0122, W3=0.0122, H0=0.001, H2=0.0122, R1=0.001, Zs=36, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -244,7 +233,8 @@ class SlotW16(SlotWind):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from SlotWind
         SlotW16_dict = super(SlotW16, self).as_dict()

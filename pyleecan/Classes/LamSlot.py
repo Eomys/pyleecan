@@ -153,8 +153,7 @@ class LamSlot(Lamination):
         comp_height_yoke = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlot method comp_height_yoke: "
-                    + str(comp_height_yoke)
+                    "Can't use LamSlot method comp_height_yoke: " + str(comp_height_yoke)
                 )
             )
         )
@@ -207,23 +206,7 @@ class LamSlot(Lamination):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        slot=-1,
-        L1=0.35,
-        mat_type=-1,
-        Nrvd=0,
-        Wrvd=0,
-        Kf1=0.95,
-        is_internal=True,
-        Rint=0,
-        Rext=1,
-        is_stator=True,
-        axial_vent=-1,
-        notch=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, slot=-1, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=-1, notch=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -266,19 +249,7 @@ class LamSlot(Lamination):
         # Set the properties (value check and convertion are done in setter)
         self.slot = slot
         # Call Lamination init
-        super(LamSlot, self).__init__(
-            L1=L1,
-            mat_type=mat_type,
-            Nrvd=Nrvd,
-            Wrvd=Wrvd,
-            Kf1=Kf1,
-            is_internal=is_internal,
-            Rint=Rint,
-            Rext=Rext,
-            is_stator=is_stator,
-            axial_vent=axial_vent,
-            notch=notch,
-        )
+        super(LamSlot, self).__init__(L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
 
@@ -290,7 +261,7 @@ class LamSlot(Lamination):
         LamSlot_str += super(LamSlot, self).__str__()
         if self.slot is not None:
             tmp = self.slot.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            LamSlot_str += "slot = " + tmp
+            LamSlot_str += "slot = "+ tmp
         else:
             LamSlot_str += "slot = None" + linesep + linesep
         return LamSlot_str
@@ -309,7 +280,8 @@ class LamSlot(Lamination):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Lamination
         LamSlot_dict = super(LamSlot, self).as_dict()
@@ -338,8 +310,8 @@ class LamSlot(Lamination):
         """setter of slot"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "slot")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'slot')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Slot()
@@ -348,7 +320,6 @@ class LamSlot(Lamination):
 
         if self._slot is not None:
             self._slot.parent = self
-
     slot = property(
         fget=_get_slot,
         fset=_set_slot,

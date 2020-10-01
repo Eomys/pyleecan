@@ -28,7 +28,7 @@ class MatEconomical(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, cost_unit=0.127, unit_name="$", init_dict=None, init_str=None):
+    def __init__(self, cost_unit=0.127, unit_name="$", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -63,9 +63,7 @@ class MatEconomical(FrozenClass):
         if self.parent is None:
             MatEconomical_str += "parent = None " + linesep
         else:
-            MatEconomical_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            MatEconomical_str += "parent = " + str(type(self.parent)) + " object" + linesep
         MatEconomical_str += "cost_unit = " + str(self.cost_unit) + linesep
         MatEconomical_str += 'unit_name = "' + str(self.unit_name) + '"' + linesep
         return MatEconomical_str
@@ -82,7 +80,8 @@ class MatEconomical(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         MatEconomical_dict = dict()
         MatEconomical_dict["cost_unit"] = self.cost_unit

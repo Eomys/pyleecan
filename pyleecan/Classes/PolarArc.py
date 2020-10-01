@@ -166,9 +166,7 @@ class PolarArc(Surface):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, angle=1, height=1, point_ref=0, label="", init_dict=None, init_str=None
-    ):
+    def __init__(self, angle=1, height=1, point_ref=0, label="", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -226,7 +224,8 @@ class PolarArc(Surface):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Surface
         PolarArc_dict = super(PolarArc, self).as_dict()

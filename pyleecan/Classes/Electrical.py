@@ -79,7 +79,7 @@ class Electrical(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, eec=None, init_dict=None, init_str=None):
+    def __init__(self, eec=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -114,7 +114,7 @@ class Electrical(FrozenClass):
             Electrical_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.eec is not None:
             tmp = self.eec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Electrical_str += "eec = " + tmp
+            Electrical_str += "eec = "+ tmp
         else:
             Electrical_str += "eec = None" + linesep + linesep
         return Electrical_str
@@ -129,7 +129,8 @@ class Electrical(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         Electrical_dict = dict()
         if self.eec is None:
@@ -154,8 +155,8 @@ class Electrical(FrozenClass):
         """setter of eec"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "eec")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'eec')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = EEC()
@@ -164,7 +165,6 @@ class Electrical(FrozenClass):
 
         if self._eec is not None:
             self._eec.parent = self
-
     eec = property(
         fget=_get_eec,
         fset=_set_eec,

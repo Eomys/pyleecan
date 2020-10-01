@@ -85,25 +85,7 @@ class InputCurrent(Input):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        Is=None,
-        Ir=None,
-        angle_rotor=None,
-        N0=None,
-        rot_dir=None,
-        angle_rotor_initial=0,
-        Tem_av_ref=None,
-        Id_ref=None,
-        Iq_ref=None,
-        time=None,
-        angle=None,
-        Nt_tot=2048,
-        Nrev=1,
-        Na_tot=2048,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, Is=None, Ir=None, angle_rotor=None, N0=None, rot_dir=None, angle_rotor_initial=0, Tem_av_ref=None, Id_ref=None, Iq_ref=None, time=None, angle=None, Nt_tot=2048, Nrev=1, Na_tot=2048, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -158,9 +140,7 @@ class InputCurrent(Input):
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
         # Call Input init
-        super(InputCurrent, self).__init__(
-            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
-        )
+        super(InputCurrent, self).__init__(time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot)
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 
@@ -172,26 +152,22 @@ class InputCurrent(Input):
         InputCurrent_str += super(InputCurrent, self).__str__()
         if self.Is is not None:
             tmp = self.Is.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputCurrent_str += "Is = " + tmp
+            InputCurrent_str += "Is = "+ tmp
         else:
             InputCurrent_str += "Is = None" + linesep + linesep
         if self.Ir is not None:
             tmp = self.Ir.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputCurrent_str += "Ir = " + tmp
+            InputCurrent_str += "Ir = "+ tmp
         else:
             InputCurrent_str += "Ir = None" + linesep + linesep
         if self.angle_rotor is not None:
-            tmp = (
-                self.angle_rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            )
-            InputCurrent_str += "angle_rotor = " + tmp
+            tmp = self.angle_rotor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            InputCurrent_str += "angle_rotor = "+ tmp
         else:
             InputCurrent_str += "angle_rotor = None" + linesep + linesep
         InputCurrent_str += "N0 = " + str(self.N0) + linesep
         InputCurrent_str += "rot_dir = " + str(self.rot_dir) + linesep
-        InputCurrent_str += (
-            "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
-        )
+        InputCurrent_str += "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         InputCurrent_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         InputCurrent_str += "Id_ref = " + str(self.Id_ref) + linesep
         InputCurrent_str += "Iq_ref = " + str(self.Iq_ref) + linesep
@@ -227,7 +203,8 @@ class InputCurrent(Input):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Input
         InputCurrent_dict = super(InputCurrent, self).as_dict()
@@ -280,21 +257,20 @@ class InputCurrent(Input):
         """setter of Is"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, ndarray):
+        if isinstance(value,ndarray):
             value = ImportMatrixVal(value=value)
-        elif isinstance(value, list):
+        elif isinstance(value,list):
             value = ImportMatrixVal(value=array(value))
         elif value == -1:
             value = ImportMatrix()
-        elif isinstance(value, dict):
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "Is")
+        elif isinstance(value,dict):
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'Is')
             value = class_obj(init_dict=value)
         check_var("Is", value, "ImportMatrix")
         self._Is = value
 
         if self._Is is not None:
             self._Is.parent = self
-
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
@@ -312,21 +288,20 @@ class InputCurrent(Input):
         """setter of Ir"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, ndarray):
+        if isinstance(value,ndarray):
             value = ImportMatrixVal(value=value)
-        elif isinstance(value, list):
+        elif isinstance(value,list):
             value = ImportMatrixVal(value=array(value))
         elif value == -1:
             value = ImportMatrix()
-        elif isinstance(value, dict):
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "Ir")
+        elif isinstance(value,dict):
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'Ir')
             value = class_obj(init_dict=value)
         check_var("Ir", value, "ImportMatrix")
         self._Ir = value
 
         if self._Ir is not None:
             self._Ir.parent = self
-
     Ir = property(
         fget=_get_Ir,
         fset=_set_Ir,
@@ -344,10 +319,8 @@ class InputCurrent(Input):
         """setter of angle_rotor"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "angle_rotor"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'angle_rotor')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Import()
@@ -356,7 +329,6 @@ class InputCurrent(Input):
 
         if self._angle_rotor is not None:
             self._angle_rotor.parent = self
-
     angle_rotor = property(
         fget=_get_angle_rotor,
         fset=_set_angle_rotor,

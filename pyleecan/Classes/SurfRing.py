@@ -181,15 +181,7 @@ class SurfRing(Surface):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        out_surf=-1,
-        in_surf=-1,
-        point_ref=0,
-        label="",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, out_surf=-1, in_surf=-1, point_ref=0, label="", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -229,12 +221,12 @@ class SurfRing(Surface):
         SurfRing_str += super(SurfRing, self).__str__()
         if self.out_surf is not None:
             tmp = self.out_surf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            SurfRing_str += "out_surf = " + tmp
+            SurfRing_str += "out_surf = "+ tmp
         else:
             SurfRing_str += "out_surf = None" + linesep + linesep
         if self.in_surf is not None:
             tmp = self.in_surf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            SurfRing_str += "in_surf = " + tmp
+            SurfRing_str += "in_surf = "+ tmp
         else:
             SurfRing_str += "in_surf = None" + linesep + linesep
         return SurfRing_str
@@ -255,7 +247,8 @@ class SurfRing(Surface):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Surface
         SurfRing_dict = super(SurfRing, self).as_dict()
@@ -290,10 +283,8 @@ class SurfRing(Surface):
         """setter of out_surf"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "out_surf"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'out_surf')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Surface()
@@ -302,7 +293,6 @@ class SurfRing(Surface):
 
         if self._out_surf is not None:
             self._out_surf.parent = self
-
     out_surf = property(
         fget=_get_out_surf,
         fset=_set_out_surf,
@@ -320,10 +310,8 @@ class SurfRing(Surface):
         """setter of in_surf"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "in_surf"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'in_surf')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Surface()
@@ -332,7 +320,6 @@ class SurfRing(Surface):
 
         if self._in_surf is not None:
             self._in_surf.parent = self
-
     in_surf = property(
         fget=_get_in_surf,
         fset=_set_in_surf,

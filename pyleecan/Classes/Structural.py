@@ -64,7 +64,7 @@ class Structural(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, force=-1, init_dict=None, init_str=None):
+    def __init__(self, force=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -99,7 +99,7 @@ class Structural(FrozenClass):
             Structural_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.force is not None:
             tmp = self.force.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Structural_str += "force = " + tmp
+            Structural_str += "force = "+ tmp
         else:
             Structural_str += "force = None" + linesep + linesep
         return Structural_str
@@ -114,7 +114,8 @@ class Structural(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         Structural_dict = dict()
         if self.force is None:
@@ -139,10 +140,8 @@ class Structural(FrozenClass):
         """setter of force"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "force"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'force')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Force()
@@ -151,7 +150,6 @@ class Structural(FrozenClass):
 
         if self._force is not None:
             self._force.parent = self
-
     force = property(
         fget=_get_force,
         fset=_set_force,

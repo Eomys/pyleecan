@@ -51,18 +51,7 @@ class InputFlux(Input):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        B=None,
-        OP=None,
-        time=None,
-        angle=None,
-        Nt_tot=2048,
-        Nrev=1,
-        Na_tot=2048,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, B=None, OP=None, time=None, angle=None, Nt_tot=2048, Nrev=1, Na_tot=2048, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -96,9 +85,7 @@ class InputFlux(Input):
         self.B = B
         self.OP = OP
         # Call Input init
-        super(InputFlux, self).__init__(
-            time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
-        )
+        super(InputFlux, self).__init__(time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot)
         # The class is frozen (in Input init), for now it's impossible to
         # add new properties
 
@@ -110,12 +97,12 @@ class InputFlux(Input):
         InputFlux_str += super(InputFlux, self).__str__()
         if self.B is not None:
             tmp = self.B.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputFlux_str += "B = " + tmp
+            InputFlux_str += "B = "+ tmp
         else:
             InputFlux_str += "B = None" + linesep + linesep
         if self.OP is not None:
             tmp = self.OP.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            InputFlux_str += "OP = " + tmp
+            InputFlux_str += "OP = "+ tmp
         else:
             InputFlux_str += "OP = None" + linesep + linesep
         return InputFlux_str
@@ -136,7 +123,8 @@ class InputFlux(Input):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Input
         InputFlux_dict = super(InputFlux, self).as_dict()
@@ -171,8 +159,8 @@ class InputFlux(Input):
         """setter of B"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "B")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'B')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = ImportVectorField()
@@ -181,7 +169,6 @@ class InputFlux(Input):
 
         if self._B is not None:
             self._B.parent = self
-
     B = property(
         fget=_get_B,
         fset=_set_B,
@@ -199,8 +186,8 @@ class InputFlux(Input):
         """setter of OP"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "OP")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'OP')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Input()
@@ -209,7 +196,6 @@ class InputFlux(Input):
 
         if self._OP is not None:
             self._OP.parent = self
-
     OP = property(
         fget=_get_OP,
         fset=_set_OP,

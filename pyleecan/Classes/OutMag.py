@@ -30,25 +30,7 @@ class OutMag(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        time=None,
-        angle=None,
-        Nt_tot=None,
-        Na_tot=None,
-        B=None,
-        Tem=None,
-        Tem_av=None,
-        Tem_rip_norm=None,
-        Tem_rip_pp=None,
-        Phi_wind_stator=None,
-        emf=None,
-        meshsolution=-1,
-        FEMM_dict=None,
-        logger_name="Pyleecan.OutMag",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, time=None, angle=None, Nt_tot=None, Na_tot=None, B=None, Tem=None, Tem_av=None, Tem_rip_norm=None, Tem_rip_pp=None, Phi_wind_stator=None, emf=None, meshsolution=-1, FEMM_dict=None, logger_name="Pyleecan.OutMag", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -120,44 +102,20 @@ class OutMag(FrozenClass):
             OutMag_str += "parent = None " + linesep
         else:
             OutMag_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutMag_str += (
-            "time = "
-            + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutMag_str += (
-            "angle = "
-            + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutMag_str += "time = " + linesep + str(self.time).replace(linesep, linesep + "\t") + linesep + linesep
+        OutMag_str += "angle = " + linesep + str(self.angle).replace(linesep, linesep + "\t") + linesep + linesep
         OutMag_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutMag_str += "Na_tot = " + str(self.Na_tot) + linesep
-        OutMag_str += "B = " + str(self.B) + linesep + linesep
-        OutMag_str += "Tem = " + str(self.Tem) + linesep + linesep
+        OutMag_str += "B = "+ str(self.B) + linesep + linesep
+        OutMag_str += "Tem = "+ str(self.Tem) + linesep + linesep
         OutMag_str += "Tem_av = " + str(self.Tem_av) + linesep
         OutMag_str += "Tem_rip_norm = " + str(self.Tem_rip_norm) + linesep
         OutMag_str += "Tem_rip_pp = " + str(self.Tem_rip_pp) + linesep
-        OutMag_str += (
-            "Phi_wind_stator = " + str(self.Phi_wind_stator) + linesep + linesep
-        )
-        OutMag_str += (
-            "emf = "
-            + linesep
-            + str(self.emf).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutMag_str += "Phi_wind_stator = "+ str(self.Phi_wind_stator) + linesep + linesep
+        OutMag_str += "emf = " + linesep + str(self.emf).replace(linesep, linesep + "\t") + linesep + linesep
         if self.meshsolution is not None:
-            tmp = (
-                self.meshsolution.__str__()
-                .replace(linesep, linesep + "\t")
-                .rstrip("\t")
-            )
-            OutMag_str += "meshsolution = " + tmp
+            tmp = self.meshsolution.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            OutMag_str += "meshsolution = "+ tmp
         else:
             OutMag_str += "meshsolution = None" + linesep + linesep
         OutMag_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
@@ -200,7 +158,8 @@ class OutMag(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         OutMag_dict = dict()
         if self.time is None:
@@ -355,8 +314,8 @@ class OutMag(FrozenClass):
         """setter of B"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("SciDataTool.Classes", value.get("__class__"), "B")
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'B')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = VectorField()
@@ -380,10 +339,8 @@ class OutMag(FrozenClass):
         """setter of Tem"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Tem"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Tem')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -461,10 +418,8 @@ class OutMag(FrozenClass):
         """setter of Phi_wind_stator"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Phi_wind_stator"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Phi_wind_stator')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataTime()
@@ -513,10 +468,8 @@ class OutMag(FrozenClass):
         """setter of meshsolution"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "meshsolution"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'meshsolution')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = MeshSolution()
@@ -525,7 +478,6 @@ class OutMag(FrozenClass):
 
         if self._meshsolution is not None:
             self._meshsolution.parent = self
-
     meshsolution = property(
         fget=_get_meshsolution,
         fset=_set_meshsolution,

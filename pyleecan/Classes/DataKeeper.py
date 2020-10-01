@@ -31,17 +31,7 @@ class DataKeeper(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        name="",
-        symbol="",
-        unit="",
-        keeper=None,
-        error_keeper=None,
-        result=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, name="", symbol="", unit="", keeper=None, error_keeper=None, result=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -95,25 +85,12 @@ class DataKeeper(FrozenClass):
         if self._keeper[1] is None:
             DataKeeper_str += "keeper = " + str(self._keeper[1])
         else:
-            DataKeeper_str += (
-                "keeper = " + linesep + str(self._keeper[1]) + linesep + linesep
-            )
+            DataKeeper_str += "keeper = " + linesep + str(self._keeper[1]) + linesep + linesep
         if self._error_keeper[1] is None:
             DataKeeper_str += "error_keeper = " + str(self._error_keeper[1])
         else:
-            DataKeeper_str += (
-                "error_keeper = "
-                + linesep
-                + str(self._error_keeper[1])
-                + linesep
-                + linesep
-            )
-        DataKeeper_str += (
-            "result = "
-            + linesep
-            + str(self.result).replace(linesep, linesep + "\t")
-            + linesep
-        )
+            DataKeeper_str += "error_keeper = " + linesep + str(self._error_keeper[1]) + linesep + linesep
+        DataKeeper_str += "result = " + linesep + str(self.result).replace(linesep, linesep + "\t") + linesep
         return DataKeeper_str
 
     def __eq__(self, other):
@@ -136,7 +113,8 @@ class DataKeeper(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         DataKeeper_dict = dict()
         DataKeeper_dict["name"] = self.name
@@ -145,17 +123,11 @@ class DataKeeper(FrozenClass):
         if self.keeper is None:
             DataKeeper_dict["keeper"] = None
         else:
-            DataKeeper_dict["keeper"] = [
-                dumps(self._keeper[0]).decode("ISO-8859-2"),
-                self._keeper[1],
-            ]
+            DataKeeper_dict["keeper"] = [dumps(self._keeper[0]).decode('ISO-8859-2'), self._keeper[1]]
         if self.error_keeper is None:
             DataKeeper_dict["error_keeper"] = None
         else:
-            DataKeeper_dict["error_keeper"] = [
-                dumps(self._error_keeper[0]).decode("ISO-8859-2"),
-                self._error_keeper[1],
-            ]
+            DataKeeper_dict["error_keeper"] = [dumps(self._error_keeper[0]).decode('ISO-8859-2'), self._error_keeper[1]]
         DataKeeper_dict["result"] = self.result
         # The class name is added to the dict fordeserialisation purpose
         DataKeeper_dict["__class__"] = "DataKeeper"
@@ -233,10 +205,8 @@ class DataKeeper(FrozenClass):
         """setter of keeper"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "keeper"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'keeper')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = function()
@@ -244,17 +214,14 @@ class DataKeeper(FrozenClass):
             check_var("keeper", value, "list")
         except CheckTypeError:
             check_var("keeper", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._keeper = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        if isinstance(value,list): # Load function from saved dict
+            self._keeper = [loads(value[0].encode('ISO-8859-2')),value[1]]
         elif value is None:
-            self._keeper = [None, None]
+            self._keeper = [None,None]
         elif callable(value):
-            self._keeper = [value, getsource(value)]
+            self._keeper = [value,getsource(value)]
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
-            )
-
+            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
     keeper = property(
         fget=_get_keeper,
         fset=_set_keeper,
@@ -272,10 +239,8 @@ class DataKeeper(FrozenClass):
         """setter of error_keeper"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "pyleecan.Classes", value.get("__class__"), "error_keeper"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'error_keeper')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = function()
@@ -283,17 +248,14 @@ class DataKeeper(FrozenClass):
             check_var("error_keeper", value, "list")
         except CheckTypeError:
             check_var("error_keeper", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._error_keeper = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        if isinstance(value,list): # Load function from saved dict
+            self._error_keeper = [loads(value[0].encode('ISO-8859-2')),value[1]]
         elif value is None:
-            self._error_keeper = [None, None]
+            self._error_keeper = [None,None]
         elif callable(value):
-            self._error_keeper = [value, getsource(value)]
+            self._error_keeper = [value,getsource(value)]
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
-            )
-
+            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
     error_keeper = property(
         fget=_get_error_keeper,
         fset=_set_error_keeper,

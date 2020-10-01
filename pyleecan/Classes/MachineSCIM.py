@@ -66,19 +66,7 @@ class MachineSCIM(MachineDFIM):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        rotor=-1,
-        stator=-1,
-        frame=-1,
-        shaft=-1,
-        name="default_machine",
-        desc="",
-        type_machine=1,
-        logger_name="Pyleecan.Machine",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, rotor=-1, stator=-1, frame=-1, shaft=-1, name="default_machine", desc="", type_machine=1, logger_name="Pyleecan.Machine", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -112,16 +100,7 @@ class MachineSCIM(MachineDFIM):
                 logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
         # Call MachineDFIM init
-        super(MachineSCIM, self).__init__(
-            rotor=rotor,
-            stator=stator,
-            frame=frame,
-            shaft=shaft,
-            name=name,
-            desc=desc,
-            type_machine=type_machine,
-            logger_name=logger_name,
-        )
+        super(MachineSCIM, self).__init__(rotor=rotor, stator=stator, frame=frame, shaft=shaft, name=name, desc=desc, type_machine=type_machine, logger_name=logger_name)
         # The class is frozen (in MachineDFIM init), for now it's impossible to
         # add new properties
 
@@ -145,7 +124,8 @@ class MachineSCIM(MachineDFIM):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from MachineDFIM
         MachineSCIM_dict = super(MachineSCIM, self).as_dict()

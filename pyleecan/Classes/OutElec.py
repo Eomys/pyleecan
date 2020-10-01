@@ -75,30 +75,7 @@ class OutElec(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        time=None,
-        angle=None,
-        Is=None,
-        Ir=None,
-        angle_rotor=None,
-        N0=None,
-        rot_dir=-1,
-        angle_rotor_initial=0,
-        logger_name="Pyleecan.OutElec",
-        mmf_unit=None,
-        Tem_av_ref=None,
-        Id_ref=None,
-        Iq_ref=None,
-        felec=None,
-        Ud_ref=None,
-        Uq_ref=None,
-        Pj_losses=None,
-        Pem_av_ref=None,
-        Us=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, time=None, angle=None, Is=None, Ir=None, angle_rotor=None, N0=None, rot_dir=-1, angle_rotor_initial=0, logger_name="Pyleecan.OutElec", mmf_unit=None, Tem_av_ref=None, Id_ref=None, Iq_ref=None, felec=None, Ud_ref=None, Uq_ref=None, Pj_losses=None, Pem_av_ref=None, Us=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -185,36 +162,16 @@ class OutElec(FrozenClass):
             OutElec_str += "parent = None " + linesep
         else:
             OutElec_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutElec_str += (
-            "time = "
-            + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutElec_str += (
-            "angle = "
-            + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutElec_str += "Is = " + str(self.Is) + linesep + linesep
-        OutElec_str += "Ir = " + str(self.Ir) + linesep + linesep
-        OutElec_str += (
-            "angle_rotor = "
-            + linesep
-            + str(self.angle_rotor).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutElec_str += "time = " + linesep + str(self.time).replace(linesep, linesep + "\t") + linesep + linesep
+        OutElec_str += "angle = " + linesep + str(self.angle).replace(linesep, linesep + "\t") + linesep + linesep
+        OutElec_str += "Is = "+ str(self.Is) + linesep + linesep
+        OutElec_str += "Ir = "+ str(self.Ir) + linesep + linesep
+        OutElec_str += "angle_rotor = " + linesep + str(self.angle_rotor).replace(linesep, linesep + "\t") + linesep + linesep
         OutElec_str += "N0 = " + str(self.N0) + linesep
         OutElec_str += "rot_dir = " + str(self.rot_dir) + linesep
-        OutElec_str += (
-            "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
-        )
+        OutElec_str += "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OutElec_str += "mmf_unit = " + str(self.mmf_unit) + linesep + linesep
+        OutElec_str += "mmf_unit = "+ str(self.mmf_unit) + linesep + linesep
         OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         OutElec_str += "Id_ref = " + str(self.Id_ref) + linesep
         OutElec_str += "Iq_ref = " + str(self.Iq_ref) + linesep
@@ -223,7 +180,7 @@ class OutElec(FrozenClass):
         OutElec_str += "Uq_ref = " + str(self.Uq_ref) + linesep
         OutElec_str += "Pj_losses = " + str(self.Pj_losses) + linesep
         OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
-        OutElec_str += "Us = " + str(self.Us) + linesep + linesep
+        OutElec_str += "Us = "+ str(self.Us) + linesep + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -272,7 +229,8 @@ class OutElec(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         OutElec_dict = dict()
         if self.time is None:
@@ -400,10 +358,8 @@ class OutElec(FrozenClass):
         """setter of Is"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Is"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Is')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -427,10 +383,8 @@ class OutElec(FrozenClass):
         """setter of Ir"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Ir"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Ir')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -553,10 +507,8 @@ class OutElec(FrozenClass):
         """setter of mmf_unit"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "mmf_unit"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'mmf_unit')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()
@@ -724,10 +676,8 @@ class OutElec(FrozenClass):
         """setter of Us"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "Us"
-            )
+        if isinstance(value, dict) and '__class__' in value:
+            class_obj = import_class('SciDataTool.Classes', value.get('__class__'), 'Us')
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = DataND()

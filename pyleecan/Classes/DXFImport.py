@@ -47,9 +47,7 @@ class DXFImport(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, file_path="", surf_dict=-1, BC_list=-1, init_dict=None, init_str=None
-    ):
+    def __init__(self, file_path="", surf_dict=-1, BC_list=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -90,12 +88,7 @@ class DXFImport(FrozenClass):
             DXFImport_str += "parent = " + str(type(self.parent)) + " object" + linesep
         DXFImport_str += 'file_path = "' + str(self.file_path) + '"' + linesep
         DXFImport_str += "surf_dict = " + str(self.surf_dict) + linesep
-        DXFImport_str += (
-            "BC_list = "
-            + linesep
-            + str(self.BC_list).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        DXFImport_str += "BC_list = " + linesep + str(self.BC_list).replace(linesep, linesep + "\t") + linesep
         return DXFImport_str
 
     def __eq__(self, other):
@@ -112,7 +105,8 @@ class DXFImport(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)"""
+        """Convert this object in a json seriable dict (can be use in __init__)
+        """
 
         DXFImport_dict = dict()
         DXFImport_dict["file_path"] = self.file_path
