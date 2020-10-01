@@ -16,6 +16,7 @@ from pyleecan.Classes.VarParam import VarParam
 from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
 from pyleecan.Classes.DataKeeper import DataKeeper
 from copy import copy
+from Tests import TEST_DATA_DIR
 
 
 class ExamplePostMethod(PostMethod):
@@ -73,10 +74,10 @@ def test_post_var_simu():
 
     # Create the postprocessings and add it
     # xoutput.simu.machine.stator.slot.H0 += 1
-    post1 = PostFunction(run=join(dirname(__file__), "example_post.py"))
+    post1 = PostFunction(run=join(TEST_DATA_DIR, "example_post.py"))
 
     # xoutput.simu.machine.stator.slot.W0 += 2
-    post2 = PostFunction(run=join(dirname(__file__), "example_post2.py"))
+    post2 = PostFunction(run=join(TEST_DATA_DIR, "example_post2.py"))
 
     post3 = ExamplePostMethod()
 
