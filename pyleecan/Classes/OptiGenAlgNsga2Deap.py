@@ -49,7 +49,7 @@ except ImportError as error:
     delete_toolbox = error
 
 
-from importlib import import_module
+from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
 from cloudpickle import dumps, loads

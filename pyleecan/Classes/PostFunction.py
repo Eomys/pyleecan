@@ -14,7 +14,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .Post import Post
 
-from importlib import import_module
+from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
 from ._check import InitUnKnowClassError
@@ -118,9 +118,9 @@ class PostFunction(Post):
             self._run_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._run_str = value
-            path, name = value.rsplit(".", 1)
-            mod = import_module(path)
-            self._run_func = getattr(mod, name)
+            f = open(value, "r")
+            exec(f.read(), globals())
+            self._run_func = eval(basename(value[:-3]))
         elif callable(value):
             self._run_str = None
             self._run_func = value

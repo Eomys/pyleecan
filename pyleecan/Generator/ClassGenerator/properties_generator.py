@@ -236,9 +236,11 @@ def generate_prop_setter(gen_dict, class_dict, prop):
             + "elif isinstance(value,str) and isfile(value) and value[-3:]=='.py':\n"
         )
         set_str += TAB3 + "self._" + prop["name"] + "_str = value\n"
-        set_str += TAB3 + "path, name = value.rsplit('.', 1)\n"
-        set_str += TAB3 + "mod = import_module(path)\n"
-        set_str += TAB3 + "self._" + prop["name"] + "_func = getattr(mod, name)\n"
+        set_str += TAB3 + "f = open(value, 'r')\n"
+        set_str += TAB3 + "exec(f.read(),globals())\n"
+        set_str += (
+            TAB3 + "self._" + prop["name"] + "_func = eval(basename(value[:-3]))\n"
+        )
         set_str += TAB2 + "elif callable(value):\n"
         set_str += TAB3 + "self._" + prop["name"] + "_str = None\n"
         set_str += TAB3 + "self._" + prop["name"] + "_func = value\n"

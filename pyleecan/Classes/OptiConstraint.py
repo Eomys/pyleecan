@@ -14,7 +14,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from ._frozen import FrozenClass
 
-from importlib import import_module
+from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
 from ._check import InitUnKnowClassError
@@ -202,9 +202,9 @@ class OptiConstraint(FrozenClass):
             self._get_variable_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._get_variable_str = value
-            path, name = value.rsplit(".", 1)
-            mod = import_module(path)
-            self._get_variable_func = getattr(mod, name)
+            f = open(value, "r")
+            exec(f.read(), globals())
+            self._get_variable_func = eval(basename(value[:-3]))
         elif callable(value):
             self._get_variable_str = None
             self._get_variable_func = value

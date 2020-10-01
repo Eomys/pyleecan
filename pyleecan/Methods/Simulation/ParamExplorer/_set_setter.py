@@ -1,6 +1,7 @@
 from os.path import isfile
 from importlib import import_module
 from ....Classes._check import CheckTypeError
+from ntpath import basename
 
 
 def _set_setter(self, value):
@@ -24,9 +25,9 @@ def _set_setter(self, value):
         self._setter_func = eval(value)
     elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
         self._setter_str = value
-        path, name = value.rsplit(".", 1)
-        mod = import_module(path)
-        self._setter_func = getattr(mod, name)
+        f = open(value, "r")
+        exec(f.read(), globals())
+        self._setter_func = eval(basename(value[:-3]))
     elif callable(value):
         self._setter_str = None
         self._setter_func = value

@@ -22,7 +22,7 @@ except ImportError as error:
     get_value = error
 
 
-from importlib import import_module
+from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
 from ._check import InitUnKnowClassError

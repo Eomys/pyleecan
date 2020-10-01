@@ -31,7 +31,7 @@ from ._check import InitUnKnowClassError
 
 
 class ForceMT(Force):
-    """Force Maxwell tensor model"""
+    """Force Maxwell tensor model for radial flux machines"""
 
     VERSION = 1
 

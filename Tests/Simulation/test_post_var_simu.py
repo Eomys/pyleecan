@@ -1,15 +1,10 @@
 import pytest
 from os.path import join
 
-# -*- coding: utf-8 -*-
 import sys
 from os.path import dirname, abspath, normpath, join, realpath
 from os import listdir, remove, system
 import json
-
-
-# Add the directory to the python path
-sys.path.append(normpath(abspath(join(dirname(__file__), "../.."))))
 
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
@@ -28,7 +23,7 @@ class ExamplePostMethod(PostMethod):
         PostMethod.__init__(self)
 
     def run(self, output):
-        output.simu.machine.stator.slot.W0 += 2
+        output.simu.machine.stator.slot.W0 += 10
 
     def copy(self):
         return copy(self)
@@ -37,7 +32,6 @@ class ExamplePostMethod(PostMethod):
         return copy(self)
 
 
-# @pytest.mark.skip  # Skip it until class generator is not fixed (definition of attribute as empty dict get the same reference)
 def test_post_var_simu():
     """Test the simulation.var_simu.post_list"""
 
@@ -78,26 +72,28 @@ def test_post_var_simu():
     simu2 = simu1.copy()
 
     # Create the postprocessings and add it
+    # xoutput.simu.machine.stator.slot.H0 += 1
     post1 = PostFunction(run=join(dirname(__file__), "example_post.py"))
-    post2 = PostFunction(run=join(dirname(__file__), "example_post2.py"))
-    print(
-        id(simu1.var_simu.datakeeper_list[0].result),
-        id(simu2.var_simu.datakeeper_list[0].result),
-    )
-    simu2.postproc_list = [post1]
-    simu2.var_simu.postproc_list = [post2]
 
-    print(simu1.var_simu.datakeeper_list[0])
-    print(simu2.var_simu.datakeeper_list[0])
+    # xoutput.simu.machine.stator.slot.W0 += 2
+    post2 = PostFunction(run=join(dirname(__file__), "example_post2.py"))
+
+    post3 = ExamplePostMethod()
+
+    simu2.postproc_list = [post2, post3]
+    simu2.var_simu.postproc_list = [post1]
+    simu2.var_simu.is_keep_all_output = True
+
     # First simulation without postprocessings
     out1 = simu1.run()
 
     # Second simulation with postprocessing
     out2 = simu2.run()
-    assert (
-        list(map(lambda val: val + 2, out1["D_S_s_w"].result)) == out2["D_S_s_w"].result
+    assert out1["D_S_s_w"].result == [1, 2, 3]
+    assert [output.simu.machine.stator.slot.W0 for output in out2] == [13, 14, 15]
+    assert out1.simu.machine.stator.slot.H0 + 1 == pytest.approx(
+        out2.simu.machine.stator.slot.H0, 0.001
     )
-    assert out1.simu.machine.stator.slot.H0 + 1 == out2.simu.machine.stator.slot.H0
 
 
 if __name__ == "__main__":

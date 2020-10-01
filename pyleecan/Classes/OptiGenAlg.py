@@ -14,7 +14,7 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .OptiSolver import OptiSolver
 
-from importlib import import_module
+from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
 from ._check import InitUnKnowClassError
@@ -212,9 +212,9 @@ class OptiGenAlg(OptiSolver):
             self._selector_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._selector_str = value
-            path, name = value.rsplit(".", 1)
-            mod = import_module(path)
-            self._selector_func = getattr(mod, name)
+            f = open(value, "r")
+            exec(f.read(), globals())
+            self._selector_func = eval(basename(value[:-3]))
         elif callable(value):
             self._selector_str = None
             self._selector_func = value
@@ -247,9 +247,9 @@ class OptiGenAlg(OptiSolver):
             self._crossover_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._crossover_str = value
-            path, name = value.rsplit(".", 1)
-            mod = import_module(path)
-            self._crossover_func = getattr(mod, name)
+            f = open(value, "r")
+            exec(f.read(), globals())
+            self._crossover_func = eval(basename(value[:-3]))
         elif callable(value):
             self._crossover_str = None
             self._crossover_func = value
@@ -282,9 +282,9 @@ class OptiGenAlg(OptiSolver):
             self._mutator_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._mutator_str = value
-            path, name = value.rsplit(".", 1)
-            mod = import_module(path)
-            self._mutator_func = getattr(mod, name)
+            f = open(value, "r")
+            exec(f.read(), globals())
+            self._mutator_func = eval(basename(value[:-3]))
         elif callable(value):
             self._mutator_str = None
             self._mutator_func = value

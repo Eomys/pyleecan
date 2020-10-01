@@ -137,7 +137,7 @@ def generate_class(gen_dict, class_name, path_to_gen):
         import_type_list.remove("ndarray")
 
     if "function" in import_type_list:
-        class_file.write("from importlib import import_module\n")
+        class_file.write("from ntpath import basename\n")
         class_file.write("from os.path import isfile\n")
         class_file.write("from ._check import CheckTypeError\n")
         import_type_list.remove("function")

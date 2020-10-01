@@ -1205,7 +1205,7 @@
             }
         ],
         "daughters": [],
-        "desc": "Force Maxwell tensor model",
+        "desc": "Force Maxwell tensor model for radial flux machines",
         "is_internal": false,
         "methods": [
             "comp_force",
