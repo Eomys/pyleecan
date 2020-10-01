@@ -20,6 +20,6 @@ def run(self):
     self.comp_time_angle(output)
 
     if output.elec.rot_dir is None:
-        output.elec.rot_dir = output.simu.machine.stator.comp_rot_dir()
+        output.elec.rot_dir = output.simu.machine.stator.comp_rot_dir() #TODO: create comp_rot_dir() in machine object
 
     self.comp_flux_airgap(output)

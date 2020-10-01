@@ -48,27 +48,14 @@ class Simu1(Simulation):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        elec=None,
-        mag=None,
-        struct=None,
-        force=None,
-        name="",
-        desc="",
-        machine=-1,
-        input=-1,
-        logger_name="Pyleecan.Simulation",
-        var_simu=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, elec=None, mag=None, struct=None, force=None, name="", desc="", machine=-1, input=-1, logger_name="Pyleecan.Simulation", var_simu=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -94,9 +81,8 @@ class Simu1(Simulation):
             input = Input()
         if var_simu == -1:
             var_simu = VarSimu()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -140,7 +126,6 @@ class Simu1(Simulation):
             self.elec = Electrical(init_dict=elec)
         elif isinstance(elec, str):
             from ..Functions.load import load
-
             self.elec = load(elec)
         else:
             self.elec = elec
@@ -148,25 +133,28 @@ class Simu1(Simulation):
         if isinstance(mag, dict):
             # Check that the type is correct (including daughter)
             class_name = mag.get("__class__")
-            if class_name not in ["Magnetics", "MagFEMM"]:
+            if class_name not in ['Magnetics', 'MagFEMM']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for mag"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for mag"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.mag = class_obj(init_dict=mag)
         elif isinstance(mag, str):
             from ..Functions.load import load
-
             mag = load(mag)
             # Check that the type is correct (including daughter)
             class_name = mag.__class__.__name__
-            if class_name not in ["Magnetics", "MagFEMM"]:
+            if class_name not in ['Magnetics', 'MagFEMM']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for mag"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for mag"
                 )
-            self.mag = mag
+            self.mag=mag
         else:
             self.mag = mag
         # struct can be None, a Structural object or a dict
@@ -174,7 +162,6 @@ class Simu1(Simulation):
             self.struct = Structural(init_dict=struct)
         elif isinstance(struct, str):
             from ..Functions.load import load
-
             self.struct = load(struct)
         else:
             self.struct = struct
@@ -182,36 +169,32 @@ class Simu1(Simulation):
         if isinstance(force, dict):
             # Check that the type is correct (including daughter)
             class_name = force.get("__class__")
-            if class_name not in ["Force", "ForceMT"]:
+            if class_name not in ['Force', 'ForceMT']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for force"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for force"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.force = class_obj(init_dict=force)
         elif isinstance(force, str):
             from ..Functions.load import load
-
             force = load(force)
             # Check that the type is correct (including daughter)
             class_name = force.__class__.__name__
-            if class_name not in ["Force", "ForceMT"]:
+            if class_name not in ['Force', 'ForceMT']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for force"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for force"
                 )
-            self.force = force
+            self.force=force
         else:
             self.force = force
         # Call Simulation init
-        super(Simu1, self).__init__(
-            name=name,
-            desc=desc,
-            machine=machine,
-            input=input,
-            logger_name=logger_name,
-            var_simu=var_simu,
-        )
+        super(Simu1, self).__init__(name=name, desc=desc, machine=machine, input=input, logger_name=logger_name, var_simu=var_simu)
         # The class is frozen (in Simulation init), for now it's impossible to
         # add new properties
 
@@ -223,22 +206,22 @@ class Simu1(Simulation):
         Simu1_str += super(Simu1, self).__str__()
         if self.elec is not None:
             tmp = self.elec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "elec = " + tmp
+            Simu1_str += "elec = "+ tmp
         else:
             Simu1_str += "elec = None" + linesep + linesep
         if self.mag is not None:
             tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "mag = " + tmp
+            Simu1_str += "mag = "+ tmp
         else:
             Simu1_str += "mag = None" + linesep + linesep
         if self.struct is not None:
             tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "struct = " + tmp
+            Simu1_str += "struct = "+ tmp
         else:
             Simu1_str += "struct = None" + linesep + linesep
         if self.force is not None:
             tmp = self.force.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "force = " + tmp
+            Simu1_str += "force = "+ tmp
         else:
             Simu1_str += "force = None" + linesep + linesep
         return Simu1_str
@@ -263,7 +246,8 @@ class Simu1(Simulation):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Simulation
         Simu1_dict = super(Simu1, self).as_dict()
@@ -313,7 +297,6 @@ class Simu1(Simulation):
 
         if self._elec is not None:
             self._elec.parent = self
-
     elec = property(
         fget=_get_elec,
         fset=_set_elec,
@@ -334,7 +317,6 @@ class Simu1(Simulation):
 
         if self._mag is not None:
             self._mag.parent = self
-
     mag = property(
         fget=_get_mag,
         fset=_set_mag,
@@ -355,7 +337,6 @@ class Simu1(Simulation):
 
         if self._struct is not None:
             self._struct.parent = self
-
     struct = property(
         fget=_get_struct,
         fset=_set_struct,
@@ -376,7 +357,6 @@ class Simu1(Simulation):
 
         if self._force is not None:
             self._force.parent = self
-
     force = property(
         fget=_get_force,
         fset=_set_force,

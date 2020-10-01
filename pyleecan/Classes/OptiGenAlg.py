@@ -29,28 +29,14 @@ class OptiGenAlg(OptiSolver):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        selector=None,
-        crossover=None,
-        mutator=None,
-        p_cross=0.9,
-        p_mutate=0.1,
-        size_pop=40,
-        nb_gen=100,
-        problem=-1,
-        xoutput=-1,
-        logger_name="Pyleecan.OptiSolver",
-        is_keep_all_output=False,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, selector=None, crossover=None, mutator=None, p_cross=0.9, p_mutate=0.1, size_pop=40, nb_gen=100, problem=-1, xoutput=-1, logger_name="Pyleecan.OptiSolver", is_keep_all_output=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -66,9 +52,8 @@ class OptiGenAlg(OptiSolver):
             problem = OptiProblem()
         if xoutput == -1:
             xoutput = XOutput()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -118,12 +103,7 @@ class OptiGenAlg(OptiSolver):
         self.size_pop = size_pop
         self.nb_gen = nb_gen
         # Call OptiSolver init
-        super(OptiGenAlg, self).__init__(
-            problem=problem,
-            xoutput=xoutput,
-            logger_name=logger_name,
-            is_keep_all_output=is_keep_all_output,
-        )
+        super(OptiGenAlg, self).__init__(problem=problem, xoutput=xoutput, logger_name=logger_name, is_keep_all_output=is_keep_all_output)
         # The class is frozen (in OptiSolver init), for now it's impossible to
         # add new properties
 
@@ -136,21 +116,15 @@ class OptiGenAlg(OptiSolver):
         if self._selector[1] is None:
             OptiGenAlg_str += "selector = " + str(self._selector[1])
         else:
-            OptiGenAlg_str += (
-                "selector = " + linesep + str(self._selector[1]) + linesep + linesep
-            )
+            OptiGenAlg_str += "selector = " + linesep + str(self._selector[1]) + linesep + linesep
         if self._crossover[1] is None:
             OptiGenAlg_str += "crossover = " + str(self._crossover[1])
         else:
-            OptiGenAlg_str += (
-                "crossover = " + linesep + str(self._crossover[1]) + linesep + linesep
-            )
+            OptiGenAlg_str += "crossover = " + linesep + str(self._crossover[1]) + linesep + linesep
         if self._mutator[1] is None:
             OptiGenAlg_str += "mutator = " + str(self._mutator[1])
         else:
-            OptiGenAlg_str += (
-                "mutator = " + linesep + str(self._mutator[1]) + linesep + linesep
-            )
+            OptiGenAlg_str += "mutator = " + linesep + str(self._mutator[1]) + linesep + linesep
         OptiGenAlg_str += "p_cross = " + str(self.p_cross) + linesep
         OptiGenAlg_str += "p_mutate = " + str(self.p_mutate) + linesep
         OptiGenAlg_str += "size_pop = " + str(self.size_pop) + linesep
@@ -183,31 +157,23 @@ class OptiGenAlg(OptiSolver):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from OptiSolver
         OptiGenAlg_dict = super(OptiGenAlg, self).as_dict()
         if self.selector is None:
             OptiGenAlg_dict["selector"] = None
         else:
-            OptiGenAlg_dict["selector"] = [
-                dumps(self._selector[0]).decode("ISO-8859-2"),
-                self._selector[1],
-            ]
+            OptiGenAlg_dict["selector"] = [dumps(self._selector[0]).decode('ISO-8859-2'), self._selector[1]]
         if self.crossover is None:
             OptiGenAlg_dict["crossover"] = None
         else:
-            OptiGenAlg_dict["crossover"] = [
-                dumps(self._crossover[0]).decode("ISO-8859-2"),
-                self._crossover[1],
-            ]
+            OptiGenAlg_dict["crossover"] = [dumps(self._crossover[0]).decode('ISO-8859-2'), self._crossover[1]]
         if self.mutator is None:
             OptiGenAlg_dict["mutator"] = None
         else:
-            OptiGenAlg_dict["mutator"] = [
-                dumps(self._mutator[0]).decode("ISO-8859-2"),
-                self._mutator[1],
-            ]
+            OptiGenAlg_dict["mutator"] = [dumps(self._mutator[0]).decode('ISO-8859-2'), self._mutator[1]]
         OptiGenAlg_dict["p_cross"] = self.p_cross
         OptiGenAlg_dict["p_mutate"] = self.p_mutate
         OptiGenAlg_dict["size_pop"] = self.size_pop
@@ -240,17 +206,14 @@ class OptiGenAlg(OptiSolver):
             check_var("selector", value, "list")
         except CheckTypeError:
             check_var("selector", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._selector = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        if isinstance(value,list): # Load function from saved dict
+            self._selector = [loads(value[0].encode('ISO-8859-2')),value[1]]
         elif value is None:
-            self._selector = [None, None]
+            self._selector = [None,None]
         elif callable(value):
-            self._selector = [value, getsource(value)]
+            self._selector = [value,getsource(value)]
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
-            )
-
+            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
     selector = property(
         fget=_get_selector,
         fset=_set_selector,
@@ -270,17 +233,14 @@ class OptiGenAlg(OptiSolver):
             check_var("crossover", value, "list")
         except CheckTypeError:
             check_var("crossover", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._crossover = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        if isinstance(value,list): # Load function from saved dict
+            self._crossover = [loads(value[0].encode('ISO-8859-2')),value[1]]
         elif value is None:
-            self._crossover = [None, None]
+            self._crossover = [None,None]
         elif callable(value):
-            self._crossover = [value, getsource(value)]
+            self._crossover = [value,getsource(value)]
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
-            )
-
+            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
     crossover = property(
         fget=_get_crossover,
         fset=_set_crossover,
@@ -300,17 +260,14 @@ class OptiGenAlg(OptiSolver):
             check_var("mutator", value, "list")
         except CheckTypeError:
             check_var("mutator", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._mutator = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        if isinstance(value,list): # Load function from saved dict
+            self._mutator = [loads(value[0].encode('ISO-8859-2')),value[1]]
         elif value is None:
-            self._mutator = [None, None]
+            self._mutator = [None,None]
         elif callable(value):
-            self._mutator = [value, getsource(value)]
+            self._mutator = [value,getsource(value)]
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
-            )
-
+            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
     mutator = property(
         fget=_get_mutator,
         fset=_set_mutator,

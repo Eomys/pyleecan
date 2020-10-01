@@ -122,24 +122,14 @@ class CondType12(Conductor):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        Wwire=0.015,
-        Wins_cond=0.015,
-        Nwppc=1,
-        Wins_wire=0,
-        Kwoh=0.5,
-        cond_mat=-1,
-        ins_mat=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, Wwire=0.015, Wins_cond=0.015, Nwppc=1, Wins_wire=0, Kwoh=0.5, cond_mat=-1, ins_mat=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -155,9 +145,8 @@ class CondType12(Conductor):
             cond_mat = Material()
         if ins_mat == -1:
             ins_mat = Material()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -232,7 +221,8 @@ class CondType12(Conductor):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Conductor
         CondType12_dict = super(CondType12, self).as_dict()

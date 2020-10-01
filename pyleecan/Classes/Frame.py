@@ -131,15 +131,14 @@ class Frame(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, Lfra=0.35, Rint=0.2, Rext=0.2, mat_type=-1, init_dict=None, init_str=None
-    ):
+    def __init__(self, Lfra=0.35, Rint=0.2, Rext=0.2, mat_type=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -153,9 +152,8 @@ class Frame(FrozenClass):
 
         if mat_type == -1:
             mat_type = Material()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -185,7 +183,6 @@ class Frame(FrozenClass):
             self.mat_type = Material(init_dict=mat_type)
         elif isinstance(mat_type, str):
             from ..Functions.load import load
-
             self.mat_type = load(mat_type)
         else:
             self.mat_type = mat_type
@@ -206,7 +203,7 @@ class Frame(FrozenClass):
         Frame_str += "Rext = " + str(self.Rext) + linesep
         if self.mat_type is not None:
             tmp = self.mat_type.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Frame_str += "mat_type = " + tmp
+            Frame_str += "mat_type = "+ tmp
         else:
             Frame_str += "mat_type = None" + linesep + linesep
         return Frame_str
@@ -227,7 +224,8 @@ class Frame(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         Frame_dict = dict()
         Frame_dict["Lfra"] = self.Lfra
@@ -318,7 +316,6 @@ class Frame(FrozenClass):
 
         if self._mat_type is not None:
             self._mat_type.parent = self
-
     mat_type = property(
         fget=_get_mat_type,
         fset=_set_mat_type,

@@ -25,25 +25,14 @@ class OutGeoLam(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        name_phase=None,
-        BH_curve=None,
-        Ksfill=None,
-        S_slot=None,
-        S_slot_wind=None,
-        S_wind_act=None,
-        sym=None,
-        is_asym_wind=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, name_phase=None, BH_curve=None, Ksfill=None, S_slot=None, S_slot_wind=None, S_wind_act=None, sym=None, is_asym_wind=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -55,9 +44,8 @@ class OutGeoLam(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -114,19 +102,8 @@ class OutGeoLam(FrozenClass):
             OutGeoLam_str += "parent = None " + linesep
         else:
             OutGeoLam_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutGeoLam_str += (
-            "name_phase = "
-            + linesep
-            + str(self.name_phase).replace(linesep, linesep + "\t")
-            + linesep
-        )
-        OutGeoLam_str += (
-            "BH_curve = "
-            + linesep
-            + str(self.BH_curve).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutGeoLam_str += "name_phase = " + linesep + str(self.name_phase).replace(linesep, linesep + "\t") + linesep
+        OutGeoLam_str += "BH_curve = " + linesep + str(self.BH_curve).replace(linesep, linesep + "\t") + linesep + linesep
         OutGeoLam_str += "Ksfill = " + str(self.Ksfill) + linesep
         OutGeoLam_str += "S_slot = " + str(self.S_slot) + linesep
         OutGeoLam_str += "S_slot_wind = " + str(self.S_slot_wind) + linesep
@@ -159,7 +136,8 @@ class OutGeoLam(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         OutGeoLam_dict = dict()
         OutGeoLam_dict["name_phase"] = self.name_phase

@@ -59,8 +59,7 @@ class CellMat(FrozenClass):
         get_connectivity = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use CellMat method get_connectivity: "
-                    + str(get_connectivity)
+                    "Can't use CellMat method get_connectivity: " + str(get_connectivity)
                 )
             )
         )
@@ -91,22 +90,14 @@ class CellMat(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        connectivity=[],
-        nb_cell=0,
-        nb_pt_per_cell=0,
-        indice=[],
-        interpolation=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, connectivity=[], nb_cell=0, nb_pt_per_cell=0, indice=[], interpolation=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -120,9 +111,8 @@ class CellMat(FrozenClass):
 
         if interpolation == -1:
             interpolation = Interpolation()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -158,7 +148,6 @@ class CellMat(FrozenClass):
             self.interpolation = Interpolation(init_dict=interpolation)
         elif isinstance(interpolation, str):
             from ..Functions.load import load
-
             self.interpolation = load(interpolation)
         else:
             self.interpolation = interpolation
@@ -174,29 +163,13 @@ class CellMat(FrozenClass):
             CellMat_str += "parent = None " + linesep
         else:
             CellMat_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        CellMat_str += (
-            "connectivity = "
-            + linesep
-            + str(self.connectivity).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        CellMat_str += "connectivity = " + linesep + str(self.connectivity).replace(linesep, linesep + "\t") + linesep + linesep
         CellMat_str += "nb_cell = " + str(self.nb_cell) + linesep
         CellMat_str += "nb_pt_per_cell = " + str(self.nb_pt_per_cell) + linesep
-        CellMat_str += (
-            "indice = "
-            + linesep
-            + str(self.indice).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        CellMat_str += "indice = " + linesep + str(self.indice).replace(linesep, linesep + "\t") + linesep + linesep
         if self.interpolation is not None:
-            tmp = (
-                self.interpolation.__str__()
-                .replace(linesep, linesep + "\t")
-                .rstrip("\t")
-            )
-            CellMat_str += "interpolation = " + tmp
+            tmp = self.interpolation.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            CellMat_str += "interpolation = "+ tmp
         else:
             CellMat_str += "interpolation = None" + linesep + linesep
         return CellMat_str
@@ -219,7 +192,8 @@ class CellMat(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         CellMat_dict = dict()
         if self.connectivity is None:
@@ -343,7 +317,6 @@ class CellMat(FrozenClass):
 
         if self._interpolation is not None:
             self._interpolation.parent = self
-
     interpolation = property(
         fget=_get_interpolation,
         fset=_set_interpolation,

@@ -32,10 +32,9 @@ except ImportError as error:
 from numpy import array, array_equal
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
-
-try:
+try :
     from SciDataTool.Classes.DataND import DataND
-except ImportError:
+except ImportError :
     DataND = ImportError
 from ._check import InitUnKnowClassError
 
@@ -78,36 +77,14 @@ class OutElec(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        time=None,
-        angle=None,
-        Is=None,
-        Ir=None,
-        angle_rotor=None,
-        N0=None,
-        rot_dir=-1,
-        angle_rotor_initial=0,
-        logger_name="Pyleecan.OutElec",
-        mmf_unit=None,
-        Tem_av_ref=None,
-        Id_ref=None,
-        Iq_ref=None,
-        felec=None,
-        Ud_ref=None,
-        Uq_ref=None,
-        Pj_losses=None,
-        Pem_av_ref=None,
-        Us=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, time=None, angle=None, Is=None, Ir=None, angle_rotor=None, N0=None, rot_dir=-1, angle_rotor_initial=0, logger_name="Pyleecan.OutElec", mmf_unit=None, Tem_av_ref=None, Id_ref=None, Iq_ref=None, felec=None, Ud_ref=None, Uq_ref=None, Pj_losses=None, Pem_av_ref=None, Us=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -119,9 +96,8 @@ class OutElec(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -194,7 +170,7 @@ class OutElec(FrozenClass):
         set_array(self, "angle", angle)
         # Check if the type DataND has been imported with success
         if isinstance(DataND, ImportError):
-            raise ImportError("Unknown type DataND please install SciDataTool")
+            raise ImportError('Unknown type DataND please install SciDataTool')
         self.Is = Is
         self.Ir = Ir
         # angle_rotor can be None, a ndarray or a list
@@ -225,36 +201,16 @@ class OutElec(FrozenClass):
             OutElec_str += "parent = None " + linesep
         else:
             OutElec_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutElec_str += (
-            "time = "
-            + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutElec_str += (
-            "angle = "
-            + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutElec_str += "Is = " + str(self.Is) + linesep + linesep
-        OutElec_str += "Ir = " + str(self.Ir) + linesep + linesep
-        OutElec_str += (
-            "angle_rotor = "
-            + linesep
-            + str(self.angle_rotor).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutElec_str += "time = " + linesep + str(self.time).replace(linesep, linesep + "\t") + linesep + linesep
+        OutElec_str += "angle = " + linesep + str(self.angle).replace(linesep, linesep + "\t") + linesep + linesep
+        OutElec_str += "Is = "+ str(self.Is) + linesep + linesep
+        OutElec_str += "Ir = "+ str(self.Ir) + linesep + linesep
+        OutElec_str += "angle_rotor = " + linesep + str(self.angle_rotor).replace(linesep, linesep + "\t") + linesep + linesep
         OutElec_str += "N0 = " + str(self.N0) + linesep
         OutElec_str += "rot_dir = " + str(self.rot_dir) + linesep
-        OutElec_str += (
-            "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
-        )
+        OutElec_str += "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OutElec_str += "mmf_unit = " + str(self.mmf_unit) + linesep + linesep
+        OutElec_str += "mmf_unit = "+ str(self.mmf_unit) + linesep + linesep
         OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         OutElec_str += "Id_ref = " + str(self.Id_ref) + linesep
         OutElec_str += "Iq_ref = " + str(self.Iq_ref) + linesep
@@ -263,7 +219,7 @@ class OutElec(FrozenClass):
         OutElec_str += "Uq_ref = " + str(self.Uq_ref) + linesep
         OutElec_str += "Pj_losses = " + str(self.Pj_losses) + linesep
         OutElec_str += "Pem_av_ref = " + str(self.Pem_av_ref) + linesep
-        OutElec_str += "Us = " + str(self.Us) + linesep + linesep
+        OutElec_str += "Us = "+ str(self.Us) + linesep + linesep
         return OutElec_str
 
     def __eq__(self, other):
@@ -312,7 +268,8 @@ class OutElec(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         OutElec_dict = dict()
         if self.time is None:
@@ -325,20 +282,12 @@ class OutElec(FrozenClass):
             OutElec_dict["angle"] = self.angle.tolist()
         if self.Is is None:
             OutElec_dict["Is"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutElec_dict["Is"] = {
-                "__class__": str(type(self._Is)),
-                "__repr__": str(self._Is.__repr__()),
-                "serialized": dumps(self._Is).decode("ISO-8859-2"),
-            }
+        else: # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutElec_dict['Is'] ={"__class__" : str(type(self._Is)),"__repr__":str(self._Is.__repr__()),"serialized":dumps(self._Is).decode('ISO-8859-2')}
         if self.Ir is None:
             OutElec_dict["Ir"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutElec_dict["Ir"] = {
-                "__class__": str(type(self._Ir)),
-                "__repr__": str(self._Ir.__repr__()),
-                "serialized": dumps(self._Ir).decode("ISO-8859-2"),
-            }
+        else: # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutElec_dict['Ir'] ={"__class__" : str(type(self._Ir)),"__repr__":str(self._Ir.__repr__()),"serialized":dumps(self._Ir).decode('ISO-8859-2')}
         if self.angle_rotor is None:
             OutElec_dict["angle_rotor"] = None
         else:
@@ -349,12 +298,8 @@ class OutElec(FrozenClass):
         OutElec_dict["logger_name"] = self.logger_name
         if self.mmf_unit is None:
             OutElec_dict["mmf_unit"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutElec_dict["mmf_unit"] = {
-                "__class__": str(type(self._mmf_unit)),
-                "__repr__": str(self._mmf_unit.__repr__()),
-                "serialized": dumps(self._mmf_unit).decode("ISO-8859-2"),
-            }
+        else: # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutElec_dict['mmf_unit'] ={"__class__" : str(type(self._mmf_unit)),"__repr__":str(self._mmf_unit.__repr__()),"serialized":dumps(self._mmf_unit).decode('ISO-8859-2')}
         OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
         OutElec_dict["Id_ref"] = self.Id_ref
         OutElec_dict["Iq_ref"] = self.Iq_ref
@@ -365,12 +310,8 @@ class OutElec(FrozenClass):
         OutElec_dict["Pem_av_ref"] = self.Pem_av_ref
         if self.Us is None:
             OutElec_dict["Us"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutElec_dict["Us"] = {
-                "__class__": str(type(self._Us)),
-                "__repr__": str(self._Us.__repr__()),
-                "serialized": dumps(self._Us).decode("ISO-8859-2"),
-            }
+        else: # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutElec_dict['Us'] ={"__class__" : str(type(self._Us)),"__repr__":str(self._Us.__repr__()),"serialized":dumps(self._Us).decode('ISO-8859-2')}
         # The class name is added to the dict fordeserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
@@ -450,18 +391,15 @@ class OutElec(FrozenClass):
 
     def _set_Is(self, value):
         """setter of Is"""
-        try:  # Check the type
+        try: # Check the type 
             check_var("Is", value, "dict")
         except CheckTypeError:
             check_var("Is", value, "SciDataTool.Classes.DataND.DataND")
             # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Is = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Is = value
-
+        if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Is = loads(value["serialized"].encode('ISO-8859-2'))
+        else: 
+            self._Is= value 
     Is = property(
         fget=_get_Is,
         fset=_set_Is,
@@ -477,18 +415,15 @@ class OutElec(FrozenClass):
 
     def _set_Ir(self, value):
         """setter of Ir"""
-        try:  # Check the type
+        try: # Check the type 
             check_var("Ir", value, "dict")
         except CheckTypeError:
             check_var("Ir", value, "SciDataTool.Classes.DataND.DataND")
             # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Ir = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Ir = value
-
+        if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Ir = loads(value["serialized"].encode('ISO-8859-2'))
+        else: 
+            self._Ir= value 
     Ir = property(
         fget=_get_Ir,
         fset=_set_Ir,
@@ -601,18 +536,15 @@ class OutElec(FrozenClass):
 
     def _set_mmf_unit(self, value):
         """setter of mmf_unit"""
-        try:  # Check the type
+        try: # Check the type 
             check_var("mmf_unit", value, "dict")
         except CheckTypeError:
             check_var("mmf_unit", value, "SciDataTool.Classes.DataND.DataND")
             # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._mmf_unit = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._mmf_unit = value
-
+        if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._mmf_unit = loads(value["serialized"].encode('ISO-8859-2'))
+        else: 
+            self._mmf_unit= value 
     mmf_unit = property(
         fget=_get_mmf_unit,
         fset=_set_mmf_unit,
@@ -772,18 +704,15 @@ class OutElec(FrozenClass):
 
     def _set_Us(self, value):
         """setter of Us"""
-        try:  # Check the type
+        try: # Check the type 
             check_var("Us", value, "dict")
         except CheckTypeError:
             check_var("Us", value, "SciDataTool.Classes.DataND.DataND")
             # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Us = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Us = value
-
+        if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Us = loads(value["serialized"].encode('ISO-8859-2'))
+        else: 
+            self._Us= value 
     Us = property(
         fget=_get_Us,
         fset=_set_Us,

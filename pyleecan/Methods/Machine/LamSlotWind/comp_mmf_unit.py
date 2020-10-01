@@ -30,6 +30,9 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
 
     # Get stator winding number of phases
     qs = self.winding.qs
+    
+    # Get spatial symmetry
+    per_a, _ = self.parent.comp_sym()
 
     # Check if the result is already available and that requested size is the same as stored data
     if (
@@ -47,7 +50,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
         angle = self.parent.parent.parent.elec.angle
         Na = angle.size
     else:
-        angle = linspace(0, 2 * pi, Na, endpoint=False)
+        angle = linspace(0, 2 * pi/per_a, Na, endpoint=False)
 
     # Define the time dicretization
     if Nt is None and is_out and self.parent.parent.parent.elec.time is not None:
@@ -74,9 +77,9 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
     Angle = DataLinspace(
         name="angle",
         unit="rad",
-        symmetries={},
+        symmetries={"angle": {"period":per_a}},
         initial=0,
-        final=2 * pi,
+        final=2 * pi/per_a,
         number=Na,
         include_endpoint=False,
     )

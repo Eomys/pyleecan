@@ -126,26 +126,14 @@ class Winding(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        is_reverse_wind=False,
-        Nslot_shift_wind=0,
-        qs=3,
-        Ntcoil=7,
-        Npcpp=2,
-        type_connection=0,
-        p=3,
-        Lewout=0.015,
-        conductor=-1,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, is_reverse_wind=False, Nslot_shift_wind=0, qs=3, Ntcoil=7, Npcpp=2, type_connection=0, p=3, Lewout=0.015, conductor=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -159,9 +147,8 @@ class Winding(FrozenClass):
 
         if conductor == -1:
             conductor = Conductor()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -210,37 +197,28 @@ class Winding(FrozenClass):
         if isinstance(conductor, dict):
             # Check that the type is correct (including daughter)
             class_name = conductor.get("__class__")
-            if class_name not in [
-                "Conductor",
-                "CondType11",
-                "CondType12",
-                "CondType21",
-                "CondType22",
-            ]:
+            if class_name not in ['Conductor', 'CondType11', 'CondType12', 'CondType21', 'CondType22']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for conductor"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for conductor"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.conductor = class_obj(init_dict=conductor)
         elif isinstance(conductor, str):
             from ..Functions.load import load
-
             conductor = load(conductor)
             # Check that the type is correct (including daughter)
             class_name = conductor.__class__.__name__
-            if class_name not in [
-                "Conductor",
-                "CondType11",
-                "CondType12",
-                "CondType21",
-                "CondType22",
-            ]:
+            if class_name not in ['Conductor', 'CondType11', 'CondType12', 'CondType21', 'CondType22']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for conductor"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for conductor"
                 )
-            self.conductor = conductor
+            self.conductor=conductor
         else:
             self.conductor = conductor
 
@@ -265,7 +243,7 @@ class Winding(FrozenClass):
         Winding_str += "Lewout = " + str(self.Lewout) + linesep
         if self.conductor is not None:
             tmp = self.conductor.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Winding_str += "conductor = " + tmp
+            Winding_str += "conductor = "+ tmp
         else:
             Winding_str += "conductor = None" + linesep + linesep
         return Winding_str
@@ -296,7 +274,8 @@ class Winding(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         Winding_dict = dict()
         Winding_dict["is_reverse_wind"] = self.is_reverse_wind
@@ -496,7 +475,6 @@ class Winding(FrozenClass):
 
         if self._conductor is not None:
             self._conductor.parent = self
-
     conductor = property(
         fget=_get_conductor,
         fset=_set_conductor,

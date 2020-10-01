@@ -59,8 +59,7 @@ class MagFEMM(Magnetics):
         comp_flux_airgap = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MagFEMM method comp_flux_airgap: "
-                    + str(comp_flux_airgap)
+                    "Can't use MagFEMM method comp_flux_airgap: " + str(comp_flux_airgap)
                 )
             )
         )
@@ -91,8 +90,7 @@ class MagFEMM(Magnetics):
         get_meshsolution = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use MagFEMM method get_meshsolution: "
-                    + str(get_meshsolution)
+                    "Can't use MagFEMM method get_meshsolution: " + str(get_meshsolution)
                 )
             )
         )
@@ -127,44 +125,14 @@ class MagFEMM(Magnetics):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        Kmesh_fineness=1,
-        Kgeo_fineness=1,
-        type_calc_leakage=0,
-        file_name="",
-        FEMM_dict={},
-        angle_stator=0,
-        is_get_mesh=False,
-        is_save_FEA=False,
-        is_sliding_band=True,
-        transform_list=[],
-        rotor_dxf=None,
-        stator_dxf=None,
-        import_file="",
-        is_close_femm=True,
-        is_remove_slotS=False,
-        is_remove_slotR=False,
-        is_remove_vent=False,
-        is_mmfs=True,
-        is_mmfr=True,
-        type_BH_stator=0,
-        type_BH_rotor=0,
-        is_symmetry_t=False,
-        sym_t=1,
-        is_antiper_t=False,
-        is_symmetry_a=False,
-        sym_a=1,
-        is_antiper_a=False,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, Kmesh_fineness=1, Kgeo_fineness=1, type_calc_leakage=0, file_name="", FEMM_dict={}, angle_stator=0, is_get_mesh=False, is_save_FEA=False, is_sliding_band=True, transform_list=[], rotor_dxf=None, stator_dxf=None, import_file="", is_close_femm=True, is_remove_slotS=False, is_remove_slotR=False, is_remove_vent=False, is_mmfs=True, is_mmfr=True, type_BH_stator=0, type_BH_rotor=0, is_symmetry_t=False, sym_t=1, is_antiper_t=False, is_symmetry_a=False, sym_a=1, is_antiper_a=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -180,9 +148,8 @@ class MagFEMM(Magnetics):
             rotor_dxf = DXFImport()
         if stator_dxf == -1:
             stator_dxf = DXFImport()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -289,7 +256,6 @@ class MagFEMM(Magnetics):
             self.rotor_dxf = DXFImport(init_dict=rotor_dxf)
         elif isinstance(rotor_dxf, str):
             from ..Functions.load import load
-
             self.rotor_dxf = load(rotor_dxf)
         else:
             self.rotor_dxf = rotor_dxf
@@ -298,28 +264,13 @@ class MagFEMM(Magnetics):
             self.stator_dxf = DXFImport(init_dict=stator_dxf)
         elif isinstance(stator_dxf, str):
             from ..Functions.load import load
-
             self.stator_dxf = load(stator_dxf)
         else:
             self.stator_dxf = stator_dxf
         self.import_file = import_file
         self.is_close_femm = is_close_femm
         # Call Magnetics init
-        super(MagFEMM, self).__init__(
-            is_remove_slotS=is_remove_slotS,
-            is_remove_slotR=is_remove_slotR,
-            is_remove_vent=is_remove_vent,
-            is_mmfs=is_mmfs,
-            is_mmfr=is_mmfr,
-            type_BH_stator=type_BH_stator,
-            type_BH_rotor=type_BH_rotor,
-            is_symmetry_t=is_symmetry_t,
-            sym_t=sym_t,
-            is_antiper_t=is_antiper_t,
-            is_symmetry_a=is_symmetry_a,
-            sym_a=sym_a,
-            is_antiper_a=is_antiper_a,
-        )
+        super(MagFEMM, self).__init__(is_remove_slotS=is_remove_slotS, is_remove_slotR=is_remove_slotR, is_remove_vent=is_remove_vent, is_mmfs=is_mmfs, is_mmfr=is_mmfr, type_BH_stator=type_BH_stator, type_BH_rotor=type_BH_rotor, is_symmetry_t=is_symmetry_t, sym_t=sym_t, is_antiper_t=is_antiper_t, is_symmetry_a=is_symmetry_a, sym_a=sym_a, is_antiper_a=is_antiper_a)
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
 
@@ -338,22 +289,15 @@ class MagFEMM(Magnetics):
         MagFEMM_str += "is_get_mesh = " + str(self.is_get_mesh) + linesep
         MagFEMM_str += "is_save_FEA = " + str(self.is_save_FEA) + linesep
         MagFEMM_str += "is_sliding_band = " + str(self.is_sliding_band) + linesep
-        MagFEMM_str += (
-            "transform_list = "
-            + linesep
-            + str(self.transform_list).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        MagFEMM_str += "transform_list = " + linesep + str(self.transform_list).replace(linesep, linesep + "\t") + linesep
         if self.rotor_dxf is not None:
             tmp = self.rotor_dxf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            MagFEMM_str += "rotor_dxf = " + tmp
+            MagFEMM_str += "rotor_dxf = "+ tmp
         else:
             MagFEMM_str += "rotor_dxf = None" + linesep + linesep
         if self.stator_dxf is not None:
-            tmp = (
-                self.stator_dxf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            )
-            MagFEMM_str += "stator_dxf = " + tmp
+            tmp = self.stator_dxf.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            MagFEMM_str += "stator_dxf = "+ tmp
         else:
             MagFEMM_str += "stator_dxf = None" + linesep + linesep
         MagFEMM_str += 'import_file = "' + str(self.import_file) + '"' + linesep
@@ -400,7 +344,8 @@ class MagFEMM(Magnetics):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from Magnetics
         MagFEMM_dict = super(MagFEMM, self).as_dict()
@@ -644,7 +589,6 @@ class MagFEMM(Magnetics):
 
         if self._rotor_dxf is not None:
             self._rotor_dxf.parent = self
-
     rotor_dxf = property(
         fget=_get_rotor_dxf,
         fset=_set_rotor_dxf,
@@ -665,7 +609,6 @@ class MagFEMM(Magnetics):
 
         if self._stator_dxf is not None:
             self._stator_dxf.parent = self
-
     stator_dxf = property(
         fget=_get_stator_dxf,
         fset=_set_stator_dxf,

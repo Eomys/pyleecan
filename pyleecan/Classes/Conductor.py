@@ -42,13 +42,14 @@ class Conductor(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, cond_mat=-1, ins_mat=-1, init_dict=None, init_str=None):
+    def __init__(self, cond_mat=-1, ins_mat=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -64,9 +65,8 @@ class Conductor(FrozenClass):
             cond_mat = Material()
         if ins_mat == -1:
             ins_mat = Material()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -87,7 +87,6 @@ class Conductor(FrozenClass):
             self.cond_mat = Material(init_dict=cond_mat)
         elif isinstance(cond_mat, str):
             from ..Functions.load import load
-
             self.cond_mat = load(cond_mat)
         else:
             self.cond_mat = cond_mat
@@ -96,7 +95,6 @@ class Conductor(FrozenClass):
             self.ins_mat = Material(init_dict=ins_mat)
         elif isinstance(ins_mat, str):
             from ..Functions.load import load
-
             self.ins_mat = load(ins_mat)
         else:
             self.ins_mat = ins_mat
@@ -114,12 +112,12 @@ class Conductor(FrozenClass):
             Conductor_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.cond_mat is not None:
             tmp = self.cond_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Conductor_str += "cond_mat = " + tmp
+            Conductor_str += "cond_mat = "+ tmp
         else:
             Conductor_str += "cond_mat = None" + linesep + linesep
         if self.ins_mat is not None:
             tmp = self.ins_mat.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Conductor_str += "ins_mat = " + tmp
+            Conductor_str += "ins_mat = "+ tmp
         else:
             Conductor_str += "ins_mat = None" + linesep + linesep
         return Conductor_str
@@ -136,7 +134,8 @@ class Conductor(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         Conductor_dict = dict()
         if self.cond_mat is None:
@@ -170,7 +169,6 @@ class Conductor(FrozenClass):
 
         if self._cond_mat is not None:
             self._cond_mat.parent = self
-
     cond_mat = property(
         fget=_get_cond_mat,
         fset=_set_cond_mat,
@@ -191,7 +189,6 @@ class Conductor(FrozenClass):
 
         if self._ins_mat is not None:
             self._ins_mat.parent = self
-
     ins_mat = property(
         fget=_get_ins_mat,
         fset=_set_ins_mat,

@@ -24,9 +24,7 @@ except ImportError as error:
     get_simulations = error
 
 try:
-    from ..Methods.Simulation.VarLoadCurrent.gen_datakeeper_list import (
-        gen_datakeeper_list,
-    )
+    from ..Methods.Simulation.VarLoadCurrent.gen_datakeeper_list import gen_datakeeper_list
 except ImportError as error:
     gen_datakeeper_list = error
 
@@ -36,9 +34,7 @@ except ImportError as error:
     check_param = error
 
 try:
-    from ..Methods.Simulation.VarLoadCurrent.get_elec_datakeeper import (
-        get_elec_datakeeper,
-    )
+    from ..Methods.Simulation.VarLoadCurrent.get_elec_datakeeper import get_elec_datakeeper
 except ImportError as error:
     get_elec_datakeeper = error
 
@@ -118,29 +114,14 @@ class VarLoadCurrent(VarLoad):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        OP_matrix=None,
-        type_OP_matrix=0,
-        is_torque=False,
-        is_power=False,
-        name="",
-        desc="",
-        datakeeper_list=list(),
-        is_keep_all_output=False,
-        stop_if_error=False,
-        ref_simu_index=None,
-        nb_simu=0,
-        is_reuse_femm_file=True,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, OP_matrix=None, type_OP_matrix=0, is_torque=False, is_power=False, name="", desc="", datakeeper_list=list(), is_keep_all_output=False, stop_if_error=False, ref_simu_index=None, nb_simu=0, is_reuse_femm_file=True, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -152,9 +133,8 @@ class VarLoadCurrent(VarLoad):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -205,16 +185,7 @@ class VarLoadCurrent(VarLoad):
         self.is_torque = is_torque
         self.is_power = is_power
         # Call VarLoad init
-        super(VarLoadCurrent, self).__init__(
-            name=name,
-            desc=desc,
-            datakeeper_list=datakeeper_list,
-            is_keep_all_output=is_keep_all_output,
-            stop_if_error=stop_if_error,
-            ref_simu_index=ref_simu_index,
-            nb_simu=nb_simu,
-            is_reuse_femm_file=is_reuse_femm_file,
-        )
+        super(VarLoadCurrent, self).__init__(name=name, desc=desc, datakeeper_list=datakeeper_list, is_keep_all_output=is_keep_all_output, stop_if_error=stop_if_error, ref_simu_index=ref_simu_index, nb_simu=nb_simu, is_reuse_femm_file=is_reuse_femm_file)
         # The class is frozen (in VarLoad init), for now it's impossible to
         # add new properties
 
@@ -224,13 +195,7 @@ class VarLoadCurrent(VarLoad):
         VarLoadCurrent_str = ""
         # Get the properties inherited from VarLoad
         VarLoadCurrent_str += super(VarLoadCurrent, self).__str__()
-        VarLoadCurrent_str += (
-            "OP_matrix = "
-            + linesep
-            + str(self.OP_matrix).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        VarLoadCurrent_str += "OP_matrix = " + linesep + str(self.OP_matrix).replace(linesep, linesep + "\t") + linesep + linesep
         VarLoadCurrent_str += "type_OP_matrix = " + str(self.type_OP_matrix) + linesep
         VarLoadCurrent_str += "is_torque = " + str(self.is_torque) + linesep
         VarLoadCurrent_str += "is_power = " + str(self.is_power) + linesep
@@ -256,7 +221,8 @@ class VarLoadCurrent(VarLoad):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from VarLoad
         VarLoadCurrent_dict = super(VarLoadCurrent, self).as_dict()

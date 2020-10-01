@@ -24,27 +24,14 @@ class MatStructural(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        rho=7650,
-        Ex=215000000000.0,
-        Ey=215000000000.0,
-        Ez=80000000000,
-        nu_xy=0.3,
-        nu_xz=0.03,
-        nu_yz=0.03,
-        Gxz=2000000000,
-        Gxy=0,
-        Gyz=2000000000,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, rho=7650, Ex=215000000000.0, Ey=215000000000.0, Ez=80000000000, nu_xy=0.3, nu_xz=0.03, nu_yz=0.03, Gxz=2000000000, Gxy=0, Gyz=2000000000, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -56,9 +43,8 @@ class MatStructural(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -119,9 +105,7 @@ class MatStructural(FrozenClass):
         if self.parent is None:
             MatStructural_str += "parent = None " + linesep
         else:
-            MatStructural_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            MatStructural_str += "parent = " + str(type(self.parent)) + " object" + linesep
         MatStructural_str += "rho = " + str(self.rho) + linesep
         MatStructural_str += "Ex = " + str(self.Ex) + linesep
         MatStructural_str += "Ey = " + str(self.Ey) + linesep
@@ -162,7 +146,8 @@ class MatStructural(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         MatStructural_dict = dict()
         MatStructural_dict["rho"] = self.rho

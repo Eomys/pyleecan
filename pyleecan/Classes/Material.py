@@ -28,26 +28,14 @@ class Material(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        name="Material",
-        is_isotropic=False,
-        elec=-1,
-        mag=-1,
-        struct=-1,
-        HT=-1,
-        eco=-1,
-        desc="Material description",
-        path="",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, name="Material", is_isotropic=False, elec=-1, mag=-1, struct=-1, HT=-1, eco=-1, desc="Material description", path="", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -69,9 +57,8 @@ class Material(FrozenClass):
             HT = MatHT()
         if eco == -1:
             eco = MatEconomical()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -115,7 +102,6 @@ class Material(FrozenClass):
             self.elec = MatElectrical(init_dict=elec)
         elif isinstance(elec, str):
             from ..Functions.load import load
-
             self.elec = load(elec)
         else:
             self.elec = elec
@@ -124,7 +110,6 @@ class Material(FrozenClass):
             self.mag = MatMagnetics(init_dict=mag)
         elif isinstance(mag, str):
             from ..Functions.load import load
-
             self.mag = load(mag)
         else:
             self.mag = mag
@@ -133,7 +118,6 @@ class Material(FrozenClass):
             self.struct = MatStructural(init_dict=struct)
         elif isinstance(struct, str):
             from ..Functions.load import load
-
             self.struct = load(struct)
         else:
             self.struct = struct
@@ -142,7 +126,6 @@ class Material(FrozenClass):
             self.HT = MatHT(init_dict=HT)
         elif isinstance(HT, str):
             from ..Functions.load import load
-
             self.HT = load(HT)
         else:
             self.HT = HT
@@ -151,7 +134,6 @@ class Material(FrozenClass):
             self.eco = MatEconomical(init_dict=eco)
         elif isinstance(eco, str):
             from ..Functions.load import load
-
             self.eco = load(eco)
         else:
             self.eco = eco
@@ -173,27 +155,27 @@ class Material(FrozenClass):
         Material_str += "is_isotropic = " + str(self.is_isotropic) + linesep
         if self.elec is not None:
             tmp = self.elec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "elec = " + tmp
+            Material_str += "elec = "+ tmp
         else:
             Material_str += "elec = None" + linesep + linesep
         if self.mag is not None:
             tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "mag = " + tmp
+            Material_str += "mag = "+ tmp
         else:
             Material_str += "mag = None" + linesep + linesep
         if self.struct is not None:
             tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "struct = " + tmp
+            Material_str += "struct = "+ tmp
         else:
             Material_str += "struct = None" + linesep + linesep
         if self.HT is not None:
             tmp = self.HT.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "HT = " + tmp
+            Material_str += "HT = "+ tmp
         else:
             Material_str += "HT = None" + linesep + linesep
         if self.eco is not None:
             tmp = self.eco.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Material_str += "eco = " + tmp
+            Material_str += "eco = "+ tmp
         else:
             Material_str += "eco = None" + linesep + linesep
         Material_str += 'desc = "' + str(self.desc) + '"' + linesep
@@ -226,7 +208,8 @@ class Material(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         Material_dict = dict()
         Material_dict["name"] = self.name
@@ -322,7 +305,6 @@ class Material(FrozenClass):
 
         if self._elec is not None:
             self._elec.parent = self
-
     elec = property(
         fget=_get_elec,
         fset=_set_elec,
@@ -343,7 +325,6 @@ class Material(FrozenClass):
 
         if self._mag is not None:
             self._mag.parent = self
-
     mag = property(
         fget=_get_mag,
         fset=_set_mag,
@@ -364,7 +345,6 @@ class Material(FrozenClass):
 
         if self._struct is not None:
             self._struct.parent = self
-
     struct = property(
         fget=_get_struct,
         fset=_set_struct,
@@ -385,7 +365,6 @@ class Material(FrozenClass):
 
         if self._HT is not None:
             self._HT.parent = self
-
     HT = property(
         fget=_get_HT,
         fset=_set_HT,
@@ -406,7 +385,6 @@ class Material(FrozenClass):
 
         if self._eco is not None:
             self._eco.parent = self
-
     eco = property(
         fget=_get_eco,
         fset=_set_eco,

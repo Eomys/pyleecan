@@ -138,8 +138,7 @@ class SlotW61(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW61 method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotW61 method comp_height_wind: " + str(comp_height_wind)
                 )
             )
         )
@@ -173,27 +172,14 @@ class SlotW61(SlotWind):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        W0=0.314,
-        W1=0.02,
-        W2=0.03,
-        H0=0.003,
-        H1=0.05,
-        H2=0.15,
-        H3=0,
-        H4=0,
-        W3=0,
-        Zs=36,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, W0=0.314, W1=0.02, W2=0.03, H0=0.003, H1=0.05, H2=0.15, H3=0, H4=0, W3=0, Zs=36, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -205,9 +191,8 @@ class SlotW61(SlotWind):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -307,7 +292,8 @@ class SlotW61(SlotWind):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from SlotWind
         SlotW61_dict = super(SlotW61, self).as_dict()

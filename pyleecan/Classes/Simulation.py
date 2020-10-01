@@ -44,23 +44,14 @@ class Simulation(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        name="",
-        desc="",
-        machine=-1,
-        input=-1,
-        logger_name="Pyleecan.Simulation",
-        var_simu=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, name="", desc="", machine=-1, input=-1, logger_name="Pyleecan.Simulation", var_simu=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -78,9 +69,8 @@ class Simulation(FrozenClass):
             input = Input()
         if var_simu == -1:
             var_simu = VarSimu()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -114,86 +104,56 @@ class Simulation(FrozenClass):
         if isinstance(machine, dict):
             # Check that the type is correct (including daughter)
             class_name = machine.get("__class__")
-            if class_name not in [
-                "Machine",
-                "MachineAsync",
-                "MachineDFIM",
-                "MachineIPMSM",
-                "MachineSCIM",
-                "MachineSIPMSM",
-                "MachineSRM",
-                "MachineSyRM",
-                "MachineSync",
-                "MachineUD",
-                "MachineWRSM",
-            ]:
+            if class_name not in ['Machine', 'MachineAsync', 'MachineDFIM', 'MachineIPMSM', 'MachineSCIM', 'MachineSIPMSM', 'MachineSRM', 'MachineSyRM', 'MachineSync', 'MachineUD', 'MachineWRSM']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for machine"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for machine"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.machine = class_obj(init_dict=machine)
         elif isinstance(machine, str):
             from ..Functions.load import load
-
             machine = load(machine)
             # Check that the type is correct (including daughter)
             class_name = machine.__class__.__name__
-            if class_name not in [
-                "Machine",
-                "MachineAsync",
-                "MachineDFIM",
-                "MachineIPMSM",
-                "MachineSCIM",
-                "MachineSIPMSM",
-                "MachineSRM",
-                "MachineSyRM",
-                "MachineSync",
-                "MachineUD",
-                "MachineWRSM",
-            ]:
+            if class_name not in ['Machine', 'MachineAsync', 'MachineDFIM', 'MachineIPMSM', 'MachineSCIM', 'MachineSIPMSM', 'MachineSRM', 'MachineSyRM', 'MachineSync', 'MachineUD', 'MachineWRSM']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for machine"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for machine"
                 )
-            self.machine = machine
+            self.machine=machine
         else:
             self.machine = machine
         # input can be None, a Input object or a dict
         if isinstance(input, dict):
             # Check that the type is correct (including daughter)
             class_name = input.get("__class__")
-            if class_name not in [
-                "Input",
-                "InputCurrent",
-                "InputElec",
-                "InputFlux",
-                "InputForce",
-            ]:
+            if class_name not in ['Input', 'InputCurrent', 'InputElec', 'InputFlux', 'InputForce']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for input"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for input"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.input = class_obj(init_dict=input)
         elif isinstance(input, str):
             from ..Functions.load import load
-
             input = load(input)
             # Check that the type is correct (including daughter)
             class_name = input.__class__.__name__
-            if class_name not in [
-                "Input",
-                "InputCurrent",
-                "InputElec",
-                "InputFlux",
-                "InputForce",
-            ]:
+            if class_name not in ['Input', 'InputCurrent', 'InputElec', 'InputFlux', 'InputForce']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for input"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for input"
                 )
-            self.input = input
+            self.input=input
         else:
             self.input = input
         self.logger_name = logger_name
@@ -201,25 +161,28 @@ class Simulation(FrozenClass):
         if isinstance(var_simu, dict):
             # Check that the type is correct (including daughter)
             class_name = var_simu.get("__class__")
-            if class_name not in ["VarSimu", "VarLoad", "VarLoadCurrent", "VarParam"]:
+            if class_name not in ['VarSimu', 'VarLoad', 'VarLoadCurrent', 'VarParam']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for var_simu"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for var_simu"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.var_simu = class_obj(init_dict=var_simu)
         elif isinstance(var_simu, str):
             from ..Functions.load import load
-
             var_simu = load(var_simu)
             # Check that the type is correct (including daughter)
             class_name = var_simu.__class__.__name__
-            if class_name not in ["VarSimu", "VarLoad", "VarLoadCurrent", "VarParam"]:
+            if class_name not in ['VarSimu', 'VarLoad', 'VarLoadCurrent', 'VarParam']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for var_simu"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for var_simu"
                 )
-            self.var_simu = var_simu
+            self.var_simu=var_simu
         else:
             self.var_simu = var_simu
 
@@ -238,18 +201,18 @@ class Simulation(FrozenClass):
         Simulation_str += 'desc = "' + str(self.desc) + '"' + linesep
         if self.machine is not None:
             tmp = self.machine.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "machine = " + tmp
+            Simulation_str += "machine = "+ tmp
         else:
             Simulation_str += "machine = None" + linesep + linesep
         if self.input is not None:
             tmp = self.input.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "input = " + tmp
+            Simulation_str += "input = "+ tmp
         else:
             Simulation_str += "input = None" + linesep + linesep
         Simulation_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         if self.var_simu is not None:
             tmp = self.var_simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "var_simu = " + tmp
+            Simulation_str += "var_simu = "+ tmp
         else:
             Simulation_str += "var_simu = None" + linesep + linesep
         return Simulation_str
@@ -274,7 +237,8 @@ class Simulation(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         Simulation_dict = dict()
         Simulation_dict["name"] = self.name
@@ -356,7 +320,6 @@ class Simulation(FrozenClass):
 
         if self._machine is not None:
             self._machine.parent = self
-
     machine = property(
         fget=_get_machine,
         fset=_set_machine,
@@ -377,7 +340,6 @@ class Simulation(FrozenClass):
 
         if self._input is not None:
             self._input.parent = self
-
     input = property(
         fget=_get_input,
         fset=_set_input,
@@ -416,7 +378,6 @@ class Simulation(FrozenClass):
 
         if self._var_simu is not None:
             self._var_simu.parent = self
-
     var_simu = property(
         fget=_get_var_simu,
         fset=_set_var_simu,

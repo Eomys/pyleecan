@@ -14,18 +14,17 @@ from ._frozen import FrozenClass
 from numpy import array, array_equal
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
-
-try:
+try :
     from SciDataTool.Classes.VectorField import VectorField
-except ImportError:
+except ImportError :
     VectorField = ImportError
-try:
+try :
     from SciDataTool.Classes.DataND import DataND
-except ImportError:
+except ImportError :
     DataND = ImportError
-try:
+try :
     from SciDataTool.Classes.DataTime import DataTime
-except ImportError:
+except ImportError :
     DataTime = ImportError
 from ._check import InitUnKnowClassError
 from .MeshSolution import MeshSolution
@@ -41,31 +40,14 @@ class OutMag(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        time=None,
-        angle=None,
-        Nt_tot=None,
-        Na_tot=None,
-        B=None,
-        Tem=None,
-        Tem_av=None,
-        Tem_rip_norm=None,
-        Tem_rip_pp=None,
-        Phi_wind_stator=None,
-        emf=None,
-        meshsolution=-1,
-        FEMM_dict=None,
-        logger_name="Pyleecan.OutMag",
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, time=None, angle=None, Nt_tot=None, Na_tot=None, B=None, Tem=None, Tem_av=None, Tem_rip_norm=None, Tem_rip_pp=None, Phi_wind_stator=None, emf=None, meshsolution=-1, FEMM_dict=None, logger_name="Pyleecan.OutMag", init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -79,9 +61,8 @@ class OutMag(FrozenClass):
 
         if meshsolution == -1:
             meshsolution = MeshSolution()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -141,18 +122,18 @@ class OutMag(FrozenClass):
         self.Na_tot = Na_tot
         # Check if the type VectorField has been imported with success
         if isinstance(VectorField, ImportError):
-            raise ImportError("Unknown type VectorField please install SciDataTool")
+            raise ImportError('Unknown type VectorField please install SciDataTool')
         self.B = B
         # Check if the type DataND has been imported with success
         if isinstance(DataND, ImportError):
-            raise ImportError("Unknown type DataND please install SciDataTool")
+            raise ImportError('Unknown type DataND please install SciDataTool')
         self.Tem = Tem
         self.Tem_av = Tem_av
         self.Tem_rip_norm = Tem_rip_norm
         self.Tem_rip_pp = Tem_rip_pp
         # Check if the type DataTime has been imported with success
         if isinstance(DataTime, ImportError):
-            raise ImportError("Unknown type DataTime please install SciDataTool")
+            raise ImportError('Unknown type DataTime please install SciDataTool')
         self.Phi_wind_stator = Phi_wind_stator
         # emf can be None, a ndarray or a list
         set_array(self, "emf", emf)
@@ -161,7 +142,6 @@ class OutMag(FrozenClass):
             self.meshsolution = MeshSolution(init_dict=meshsolution)
         elif isinstance(meshsolution, str):
             from ..Functions.load import load
-
             self.meshsolution = load(meshsolution)
         else:
             self.meshsolution = meshsolution
@@ -179,44 +159,20 @@ class OutMag(FrozenClass):
             OutMag_str += "parent = None " + linesep
         else:
             OutMag_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutMag_str += (
-            "time = "
-            + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutMag_str += (
-            "angle = "
-            + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutMag_str += "time = " + linesep + str(self.time).replace(linesep, linesep + "\t") + linesep + linesep
+        OutMag_str += "angle = " + linesep + str(self.angle).replace(linesep, linesep + "\t") + linesep + linesep
         OutMag_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutMag_str += "Na_tot = " + str(self.Na_tot) + linesep
-        OutMag_str += "B = " + str(self.B) + linesep + linesep
-        OutMag_str += "Tem = " + str(self.Tem) + linesep + linesep
+        OutMag_str += "B = "+ str(self.B) + linesep + linesep
+        OutMag_str += "Tem = "+ str(self.Tem) + linesep + linesep
         OutMag_str += "Tem_av = " + str(self.Tem_av) + linesep
         OutMag_str += "Tem_rip_norm = " + str(self.Tem_rip_norm) + linesep
         OutMag_str += "Tem_rip_pp = " + str(self.Tem_rip_pp) + linesep
-        OutMag_str += (
-            "Phi_wind_stator = " + str(self.Phi_wind_stator) + linesep + linesep
-        )
-        OutMag_str += (
-            "emf = "
-            + linesep
-            + str(self.emf).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutMag_str += "Phi_wind_stator = "+ str(self.Phi_wind_stator) + linesep + linesep
+        OutMag_str += "emf = " + linesep + str(self.emf).replace(linesep, linesep + "\t") + linesep + linesep
         if self.meshsolution is not None:
-            tmp = (
-                self.meshsolution.__str__()
-                .replace(linesep, linesep + "\t")
-                .rstrip("\t")
-            )
-            OutMag_str += "meshsolution = " + tmp
+            tmp = self.meshsolution.__str__().replace(linesep, linesep + "\t").rstrip("\t")
+            OutMag_str += "meshsolution = "+ tmp
         else:
             OutMag_str += "meshsolution = None" + linesep + linesep
         OutMag_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
@@ -259,7 +215,8 @@ class OutMag(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         OutMag_dict = dict()
         if self.time is None:
@@ -274,31 +231,19 @@ class OutMag(FrozenClass):
         OutMag_dict["Na_tot"] = self.Na_tot
         if self.B is None:
             OutMag_dict["B"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutMag_dict["B"] = {
-                "__class__": str(type(self._B)),
-                "__repr__": str(self._B.__repr__()),
-                "serialized": dumps(self._B).decode("ISO-8859-2"),
-            }
+        else: # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutMag_dict['B'] ={"__class__" : str(type(self._B)),"__repr__":str(self._B.__repr__()),"serialized":dumps(self._B).decode('ISO-8859-2')}
         if self.Tem is None:
             OutMag_dict["Tem"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutMag_dict["Tem"] = {
-                "__class__": str(type(self._Tem)),
-                "__repr__": str(self._Tem.__repr__()),
-                "serialized": dumps(self._Tem).decode("ISO-8859-2"),
-            }
+        else: # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutMag_dict['Tem'] ={"__class__" : str(type(self._Tem)),"__repr__":str(self._Tem.__repr__()),"serialized":dumps(self._Tem).decode('ISO-8859-2')}
         OutMag_dict["Tem_av"] = self.Tem_av
         OutMag_dict["Tem_rip_norm"] = self.Tem_rip_norm
         OutMag_dict["Tem_rip_pp"] = self.Tem_rip_pp
         if self.Phi_wind_stator is None:
             OutMag_dict["Phi_wind_stator"] = None
-        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
-            OutMag_dict["Phi_wind_stator"] = {
-                "__class__": str(type(self._Phi_wind_stator)),
-                "__repr__": str(self._Phi_wind_stator.__repr__()),
-                "serialized": dumps(self._Phi_wind_stator).decode("ISO-8859-2"),
-            }
+        else: # Store serialized data (using cloudpickle) and str to read it in json save files
+            OutMag_dict['Phi_wind_stator'] ={"__class__" : str(type(self._Phi_wind_stator)),"__repr__":str(self._Phi_wind_stator.__repr__()),"serialized":dumps(self._Phi_wind_stator).decode('ISO-8859-2')}
         if self.emf is None:
             OutMag_dict["emf"] = None
         else:
@@ -420,18 +365,15 @@ class OutMag(FrozenClass):
 
     def _set_B(self, value):
         """setter of B"""
-        try:  # Check the type
+        try: # Check the type 
             check_var("B", value, "dict")
         except CheckTypeError:
             check_var("B", value, "SciDataTool.Classes.VectorField.VectorField")
             # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._B = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._B = value
-
+        if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._B = loads(value["serialized"].encode('ISO-8859-2'))
+        else: 
+            self._B= value 
     B = property(
         fget=_get_B,
         fset=_set_B,
@@ -447,18 +389,15 @@ class OutMag(FrozenClass):
 
     def _set_Tem(self, value):
         """setter of Tem"""
-        try:  # Check the type
+        try: # Check the type 
             check_var("Tem", value, "dict")
         except CheckTypeError:
             check_var("Tem", value, "SciDataTool.Classes.DataND.DataND")
             # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Tem = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Tem = value
-
+        if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Tem = loads(value["serialized"].encode('ISO-8859-2'))
+        else: 
+            self._Tem= value 
     Tem = property(
         fget=_get_Tem,
         fset=_set_Tem,
@@ -528,18 +467,15 @@ class OutMag(FrozenClass):
 
     def _set_Phi_wind_stator(self, value):
         """setter of Phi_wind_stator"""
-        try:  # Check the type
+        try: # Check the type 
             check_var("Phi_wind_stator", value, "dict")
         except CheckTypeError:
             check_var("Phi_wind_stator", value, "SciDataTool.Classes.DataTime.DataTime")
             # property can be set from a list to handle loads
-        if (
-            type(value) == dict
-        ):  # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
-            self._Phi_wind_stator = loads(value["serialized"].encode("ISO-8859-2"))
-        else:
-            self._Phi_wind_stator = value
-
+        if type(value) == dict: # Load type from saved dict {"type":type(value),"str": str(value),"serialized": serialized(value)]
+            self._Phi_wind_stator = loads(value["serialized"].encode('ISO-8859-2'))
+        else: 
+            self._Phi_wind_stator= value 
     Phi_wind_stator = property(
         fget=_get_Phi_wind_stator,
         fset=_set_Phi_wind_stator,
@@ -583,7 +519,6 @@ class OutMag(FrozenClass):
 
         if self._meshsolution is not None:
             self._meshsolution.parent = self
-
     meshsolution = property(
         fget=_get_meshsolution,
         fset=_set_meshsolution,

@@ -62,15 +62,14 @@ class ImportGenMatrixSin(ImportMatrix):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self, sin_list=list(), is_transpose=False, init_dict=None, init_str=None
-    ):
+    def __init__(self, sin_list=list(), is_transpose=False, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -82,9 +81,8 @@ class ImportGenMatrixSin(ImportMatrix):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -102,9 +100,7 @@ class ImportGenMatrixSin(ImportMatrix):
         # sin_list can be None or a list of ImportGenVectSin object or a list of dict
         if type(sin_list) is list:
             # Check if the list is only composed of ImportGenVectSin
-            if len(sin_list) > 0 and all(
-                isinstance(obj, ImportGenVectSin) for obj in sin_list
-            ):
+            if len(sin_list) > 0 and all(isinstance(obj, ImportGenVectSin) for obj in sin_list):
                 # set the list to keep pointer reference
                 self.sin_list = sin_list
             else:
@@ -114,7 +110,7 @@ class ImportGenMatrixSin(ImportMatrix):
                         self.sin_list.append(obj)
                     elif isinstance(obj, dict):
                         self.sin_list.append(ImportGenVectSin(init_dict=obj))
-
+    
         elif sin_list is None:
             self.sin_list = list()
         else:
@@ -134,9 +130,7 @@ class ImportGenMatrixSin(ImportMatrix):
             ImportGenMatrixSin_str += "sin_list = []" + linesep
         for ii in range(len(self.sin_list)):
             tmp = self.sin_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            ImportGenMatrixSin_str += (
-                "sin_list[" + str(ii) + "] =" + tmp + linesep + linesep
-            )
+            ImportGenMatrixSin_str += "sin_list["+str(ii)+"] ="+ tmp + linesep + linesep
         return ImportGenMatrixSin_str
 
     def __eq__(self, other):
@@ -153,7 +147,8 @@ class ImportGenMatrixSin(ImportMatrix):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from ImportMatrix
         ImportGenMatrixSin_dict = super(ImportGenMatrixSin, self).as_dict()

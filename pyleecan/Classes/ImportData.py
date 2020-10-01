@@ -42,24 +42,14 @@ class ImportData(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        axes=list(),
-        field=None,
-        unit="SI",
-        name="",
-        symbol="",
-        normalizations={},
-        symmetries={},
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, axes=list(), field=None, unit="SI", name="", symbol="", normalizations={}, symmetries={}, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -73,9 +63,8 @@ class ImportData(FrozenClass):
 
         if field == -1:
             field = Import()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -119,7 +108,7 @@ class ImportData(FrozenClass):
                         self.axes.append(obj)
                     elif isinstance(obj, dict):
                         self.axes.append(ImportData(init_dict=obj))
-
+    
         elif axes is None:
             self.axes = list()
         else:
@@ -128,45 +117,28 @@ class ImportData(FrozenClass):
         if isinstance(field, dict):
             # Check that the type is correct (including daughter)
             class_name = field.get("__class__")
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
+            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenToothSaw', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for field"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for field"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.field = class_obj(init_dict=field)
         elif isinstance(field, str):
             from ..Functions.load import load
-
             field = load(field)
             # Check that the type is correct (including daughter)
             class_name = field.__class__.__name__
-            if class_name not in [
-                "Import",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrix",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
+            if class_name not in ['Import', 'ImportGenMatrixSin', 'ImportGenToothSaw', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrix', 'ImportMatrixVal', 'ImportMatrixXls']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for field"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for field"
                 )
-            self.field = field
+            self.field=field
         else:
             self.field = field
         self.unit = unit
@@ -190,10 +162,10 @@ class ImportData(FrozenClass):
             ImportData_str += "axes = []" + linesep
         for ii in range(len(self.axes)):
             tmp = self.axes[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            ImportData_str += "axes[" + str(ii) + "] =" + tmp + linesep + linesep
+            ImportData_str += "axes["+str(ii)+"] ="+ tmp + linesep + linesep
         if self.field is not None:
             tmp = self.field.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            ImportData_str += "field = " + tmp
+            ImportData_str += "field = "+ tmp
         else:
             ImportData_str += "field = None" + linesep + linesep
         ImportData_str += 'unit = "' + str(self.unit) + '"' + linesep
@@ -225,7 +197,8 @@ class ImportData(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         ImportData_dict = dict()
         ImportData_dict["axes"] = list()
@@ -293,7 +266,6 @@ class ImportData(FrozenClass):
 
         if self._field is not None:
             self._field.parent = self
-
     field = property(
         fget=_get_field,
         fset=_set_field,

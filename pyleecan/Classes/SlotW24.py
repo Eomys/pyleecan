@@ -152,8 +152,7 @@ class SlotW24(SlotWind):
         comp_height_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW24 method comp_height_wind: "
-                    + str(comp_height_wind)
+                    "Can't use SlotW24 method comp_height_wind: " + str(comp_height_wind)
                 )
             )
         )
@@ -187,13 +186,14 @@ class SlotW24(SlotWind):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, W3=0.003, H2=0.003, Zs=36, init_dict=None, init_str=None):
+    def __init__(self, W3=0.003, H2=0.003, Zs=36, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -205,9 +205,8 @@ class SlotW24(SlotWind):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -258,7 +257,8 @@ class SlotW24(SlotWind):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from SlotWind
         SlotW24_dict = super(SlotW24, self).as_dict()

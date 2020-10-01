@@ -75,13 +75,14 @@ class Electrical(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, eec=None, init_dict=None, init_str=None):
+    def __init__(self, eec=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -95,9 +96,8 @@ class Electrical(FrozenClass):
 
         if eec == -1:
             eec = EEC()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -114,25 +114,28 @@ class Electrical(FrozenClass):
         if isinstance(eec, dict):
             # Check that the type is correct (including daughter)
             class_name = eec.get("__class__")
-            if class_name not in ["EEC", "EEC_PMSM"]:
+            if class_name not in ['EEC', 'EEC_PMSM']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for eec"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for eec"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.eec = class_obj(init_dict=eec)
         elif isinstance(eec, str):
             from ..Functions.load import load
-
             eec = load(eec)
             # Check that the type is correct (including daughter)
             class_name = eec.__class__.__name__
-            if class_name not in ["EEC", "EEC_PMSM"]:
+            if class_name not in ['EEC', 'EEC_PMSM']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for eec"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for eec"
                 )
-            self.eec = eec
+            self.eec=eec
         else:
             self.eec = eec
 
@@ -149,7 +152,7 @@ class Electrical(FrozenClass):
             Electrical_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.eec is not None:
             tmp = self.eec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Electrical_str += "eec = " + tmp
+            Electrical_str += "eec = "+ tmp
         else:
             Electrical_str += "eec = None" + linesep + linesep
         return Electrical_str
@@ -164,7 +167,8 @@ class Electrical(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         Electrical_dict = dict()
         if self.eec is None:
@@ -192,7 +196,6 @@ class Electrical(FrozenClass):
 
         if self._eec is not None:
             self._eec.parent = self
-
     eec = property(
         fget=_get_eec,
         fset=_set_eec,

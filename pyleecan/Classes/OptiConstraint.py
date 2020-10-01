@@ -27,21 +27,14 @@ class OptiConstraint(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        name="",
-        type_const="<=",
-        value=0,
-        get_variable=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, name="", type_const="<=", value=0, get_variable=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -53,9 +46,8 @@ class OptiConstraint(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -92,22 +84,14 @@ class OptiConstraint(FrozenClass):
         if self.parent is None:
             OptiConstraint_str += "parent = None " + linesep
         else:
-            OptiConstraint_str += (
-                "parent = " + str(type(self.parent)) + " object" + linesep
-            )
+            OptiConstraint_str += "parent = " + str(type(self.parent)) + " object" + linesep
         OptiConstraint_str += 'name = "' + str(self.name) + '"' + linesep
         OptiConstraint_str += 'type_const = "' + str(self.type_const) + '"' + linesep
         OptiConstraint_str += "value = " + str(self.value) + linesep
         if self._get_variable[1] is None:
             OptiConstraint_str += "get_variable = " + str(self._get_variable[1])
         else:
-            OptiConstraint_str += (
-                "get_variable = "
-                + linesep
-                + str(self._get_variable[1])
-                + linesep
-                + linesep
-            )
+            OptiConstraint_str += "get_variable = " + linesep + str(self._get_variable[1]) + linesep + linesep
         return OptiConstraint_str
 
     def __eq__(self, other):
@@ -126,7 +110,8 @@ class OptiConstraint(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         OptiConstraint_dict = dict()
         OptiConstraint_dict["name"] = self.name
@@ -135,10 +120,7 @@ class OptiConstraint(FrozenClass):
         if self.get_variable is None:
             OptiConstraint_dict["get_variable"] = None
         else:
-            OptiConstraint_dict["get_variable"] = [
-                dumps(self._get_variable[0]).decode("ISO-8859-2"),
-                self._get_variable[1],
-            ]
+            OptiConstraint_dict["get_variable"] = [dumps(self._get_variable[0]).decode('ISO-8859-2'), self._get_variable[1]]
         # The class name is added to the dict fordeserialisation purpose
         OptiConstraint_dict["__class__"] = "OptiConstraint"
         return OptiConstraint_dict
@@ -215,17 +197,14 @@ class OptiConstraint(FrozenClass):
             check_var("get_variable", value, "list")
         except CheckTypeError:
             check_var("get_variable", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._get_variable = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        if isinstance(value,list): # Load function from saved dict
+            self._get_variable = [loads(value[0].encode('ISO-8859-2')),value[1]]
         elif value is None:
-            self._get_variable = [None, None]
+            self._get_variable = [None,None]
         elif callable(value):
-            self._get_variable = [value, getsource(value)]
+            self._get_variable = [value,getsource(value)]
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
-            )
-
+            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
     get_variable = property(
         fget=_get_get_variable,
         fset=_set_get_variable,

@@ -27,24 +27,14 @@ class OptiDesignVar(ParamExplorer):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        type_var="interval",
-        space=[0, 1],
-        get_value=None,
-        name="",
-        symbol="",
-        unit="",
-        setter=None,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, type_var="interval", space=[0, 1], get_value=None, name="", symbol="", unit="", setter=None, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -56,9 +46,8 @@ class OptiDesignVar(ParamExplorer):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -94,9 +83,7 @@ class OptiDesignVar(ParamExplorer):
         self.space = space
         self.get_value = get_value
         # Call ParamExplorer init
-        super(OptiDesignVar, self).__init__(
-            name=name, symbol=symbol, unit=unit, setter=setter
-        )
+        super(OptiDesignVar, self).__init__(name=name, symbol=symbol, unit=unit, setter=setter)
         # The class is frozen (in ParamExplorer init), for now it's impossible to
         # add new properties
 
@@ -107,18 +94,11 @@ class OptiDesignVar(ParamExplorer):
         # Get the properties inherited from ParamExplorer
         OptiDesignVar_str += super(OptiDesignVar, self).__str__()
         OptiDesignVar_str += 'type_var = "' + str(self.type_var) + '"' + linesep
-        OptiDesignVar_str += (
-            "space = "
-            + linesep
-            + str(self.space).replace(linesep, linesep + "\t")
-            + linesep
-        )
+        OptiDesignVar_str += "space = " + linesep + str(self.space).replace(linesep, linesep + "\t") + linesep
         if self._get_value[1] is None:
             OptiDesignVar_str += "get_value = " + str(self._get_value[1])
         else:
-            OptiDesignVar_str += (
-                "get_value = " + linesep + str(self._get_value[1]) + linesep + linesep
-            )
+            OptiDesignVar_str += "get_value = " + linesep + str(self._get_value[1]) + linesep + linesep
         return OptiDesignVar_str
 
     def __eq__(self, other):
@@ -139,7 +119,8 @@ class OptiDesignVar(ParamExplorer):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from ParamExplorer
         OptiDesignVar_dict = super(OptiDesignVar, self).as_dict()
@@ -148,10 +129,7 @@ class OptiDesignVar(ParamExplorer):
         if self.get_value is None:
             OptiDesignVar_dict["get_value"] = None
         else:
-            OptiDesignVar_dict["get_value"] = [
-                dumps(self._get_value[0]).decode("ISO-8859-2"),
-                self._get_value[1],
-            ]
+            OptiDesignVar_dict["get_value"] = [dumps(self._get_value[0]).decode('ISO-8859-2'), self._get_value[1]]
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         OptiDesignVar_dict["__class__"] = "OptiDesignVar"
@@ -212,17 +190,14 @@ class OptiDesignVar(ParamExplorer):
             check_var("get_value", value, "list")
         except CheckTypeError:
             check_var("get_value", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._get_value = [loads(value[0].encode("ISO-8859-2")), value[1]]
+        if isinstance(value,list): # Load function from saved dict
+            self._get_value = [loads(value[0].encode('ISO-8859-2')),value[1]]
         elif value is None:
-            self._get_value = [None, None]
+            self._get_value = [None,None]
         elif callable(value):
-            self._get_value = [value, getsource(value)]
+            self._get_value = [value,getsource(value)]
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
-            )
-
+            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
     get_value = property(
         fget=_get_get_value,
         fset=_set_get_value,

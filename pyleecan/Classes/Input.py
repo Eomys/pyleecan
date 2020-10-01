@@ -60,22 +60,14 @@ class Input(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        time=None,
-        angle=None,
-        Nt_tot=2048,
-        Nrev=1,
-        Na_tot=2048,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, time=None, angle=None, Nt_tot=2048, Nrev=1, Na_tot=2048, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -91,9 +83,8 @@ class Input(FrozenClass):
             time = ImportMatrix()
         if angle == -1:
             angle = ImportMatrix()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -122,86 +113,56 @@ class Input(FrozenClass):
         if isinstance(time, dict):
             # Check that the type is correct (including daughter)
             class_name = time.get("__class__")
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
+            if class_name not in ['ImportMatrix', 'ImportGenMatrixSin', 'ImportGenToothSaw', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrixVal', 'ImportMatrixXls']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for time"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for time"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.time = class_obj(init_dict=time)
         elif isinstance(time, str):
             from ..Functions.load import load
-
             time = load(time)
             # Check that the type is correct (including daughter)
             class_name = time.__class__.__name__
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
+            if class_name not in ['ImportMatrix', 'ImportGenMatrixSin', 'ImportGenToothSaw', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrixVal', 'ImportMatrixXls']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for time"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for time"
                 )
-            self.time = time
+            self.time=time
         else:
             self.time = time
         # angle can be None, a ImportMatrix object or a dict
         if isinstance(angle, dict):
             # Check that the type is correct (including daughter)
             class_name = angle.get("__class__")
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
+            if class_name not in ['ImportMatrix', 'ImportGenMatrixSin', 'ImportGenToothSaw', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrixVal', 'ImportMatrixXls']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for angle"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for angle"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.angle = class_obj(init_dict=angle)
         elif isinstance(angle, str):
             from ..Functions.load import load
-
             angle = load(angle)
             # Check that the type is correct (including daughter)
             class_name = angle.__class__.__name__
-            if class_name not in [
-                "ImportMatrix",
-                "ImportGenMatrixSin",
-                "ImportGenToothSaw",
-                "ImportGenVectLin",
-                "ImportGenVectSin",
-                "ImportMatlab",
-                "ImportMatrixVal",
-                "ImportMatrixXls",
-            ]:
+            if class_name not in ['ImportMatrix', 'ImportGenMatrixSin', 'ImportGenToothSaw', 'ImportGenVectLin', 'ImportGenVectSin', 'ImportMatlab', 'ImportMatrixVal', 'ImportMatrixXls']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for angle"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for angle"
                 )
-            self.angle = angle
+            self.angle=angle
         else:
             self.angle = angle
         self.Nt_tot = Nt_tot
@@ -221,12 +182,12 @@ class Input(FrozenClass):
             Input_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.time is not None:
             tmp = self.time.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Input_str += "time = " + tmp
+            Input_str += "time = "+ tmp
         else:
             Input_str += "time = None" + linesep + linesep
         if self.angle is not None:
             tmp = self.angle.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Input_str += "angle = " + tmp
+            Input_str += "angle = "+ tmp
         else:
             Input_str += "angle = None" + linesep + linesep
         Input_str += "Nt_tot = " + str(self.Nt_tot) + linesep
@@ -252,7 +213,8 @@ class Input(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         Input_dict = dict()
         if self.time is None:
@@ -287,16 +249,15 @@ class Input(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if isinstance(value, ndarray):
+        if isinstance(value,ndarray):
             value = ImportMatrixVal(value=value)
-        elif isinstance(value, list):
+        elif isinstance(value,list):
             value = ImportMatrixVal(value=array(value))
         check_var("time", value, "ImportMatrix")
         self._time = value
 
         if self._time is not None:
             self._time.parent = self
-
     time = property(
         fget=_get_time,
         fset=_set_time,
@@ -312,16 +273,15 @@ class Input(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if isinstance(value, ndarray):
+        if isinstance(value,ndarray):
             value = ImportMatrixVal(value=value)
-        elif isinstance(value, list):
+        elif isinstance(value,list):
             value = ImportMatrixVal(value=array(value))
         check_var("angle", value, "ImportMatrix")
         self._angle = value
 
         if self._angle is not None:
             self._angle.parent = self
-
     angle = property(
         fget=_get_angle,
         fset=_set_angle,

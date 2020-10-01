@@ -59,25 +59,14 @@ class VarSimu(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        name="",
-        desc="",
-        datakeeper_list=list(),
-        is_keep_all_output=False,
-        stop_if_error=False,
-        ref_simu_index=None,
-        nb_simu=0,
-        is_reuse_femm_file=True,
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, name="", desc="", datakeeper_list=list(), is_keep_all_output=False, stop_if_error=False, ref_simu_index=None, nb_simu=0, is_reuse_femm_file=True, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -89,9 +78,8 @@ class VarSimu(FrozenClass):
         ndarray or list can be given for Vector and Matrix
         object or dict can be given for pyleecan Object"""
 
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -130,9 +118,7 @@ class VarSimu(FrozenClass):
         # datakeeper_list can be None or a list of DataKeeper object or a list of dict
         if type(datakeeper_list) is list:
             # Check if the list is only composed of DataKeeper
-            if len(datakeeper_list) > 0 and all(
-                isinstance(obj, DataKeeper) for obj in datakeeper_list
-            ):
+            if len(datakeeper_list) > 0 and all(isinstance(obj, DataKeeper) for obj in datakeeper_list):
                 # set the list to keep pointer reference
                 self.datakeeper_list = datakeeper_list
             else:
@@ -142,7 +128,7 @@ class VarSimu(FrozenClass):
                         self.datakeeper_list.append(obj)
                     elif isinstance(obj, dict):
                         self.datakeeper_list.append(DataKeeper(init_dict=obj))
-
+    
         elif datakeeper_list is None:
             self.datakeeper_list = list()
         else:
@@ -169,13 +155,8 @@ class VarSimu(FrozenClass):
         if len(self.datakeeper_list) == 0:
             VarSimu_str += "datakeeper_list = []" + linesep
         for ii in range(len(self.datakeeper_list)):
-            tmp = (
-                self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t")
-                + linesep
-            )
-            VarSimu_str += (
-                "datakeeper_list[" + str(ii) + "] =" + tmp + linesep + linesep
-            )
+            tmp = self.datakeeper_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            VarSimu_str += "datakeeper_list["+str(ii)+"] ="+ tmp + linesep + linesep
         VarSimu_str += "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
         VarSimu_str += "stop_if_error = " + str(self.stop_if_error) + linesep
         VarSimu_str += "ref_simu_index = " + str(self.ref_simu_index) + linesep
@@ -207,7 +188,8 @@ class VarSimu(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         VarSimu_dict = dict()
         VarSimu_dict["name"] = self.name

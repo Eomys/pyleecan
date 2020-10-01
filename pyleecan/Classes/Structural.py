@@ -60,13 +60,14 @@ class Structural(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, force=-1, init_dict=None, init_str=None):
+    def __init__(self, force=-1, init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -80,9 +81,8 @@ class Structural(FrozenClass):
 
         if force == -1:
             force = Force()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -99,25 +99,28 @@ class Structural(FrozenClass):
         if isinstance(force, dict):
             # Check that the type is correct (including daughter)
             class_name = force.get("__class__")
-            if class_name not in ["Force", "ForceMT"]:
+            if class_name not in ['Force', 'ForceMT']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for force"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for force"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.force = class_obj(init_dict=force)
         elif isinstance(force, str):
             from ..Functions.load import load
-
             force = load(force)
             # Check that the type is correct (including daughter)
             class_name = force.__class__.__name__
-            if class_name not in ["Force", "ForceMT"]:
+            if class_name not in ['Force', 'ForceMT']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for force"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for force"
                 )
-            self.force = force
+            self.force=force
         else:
             self.force = force
 
@@ -134,7 +137,7 @@ class Structural(FrozenClass):
             Structural_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.force is not None:
             tmp = self.force.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Structural_str += "force = " + tmp
+            Structural_str += "force = "+ tmp
         else:
             Structural_str += "force = None" + linesep + linesep
         return Structural_str
@@ -149,7 +152,8 @@ class Structural(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         Structural_dict = dict()
         if self.force is None:
@@ -177,7 +181,6 @@ class Structural(FrozenClass):
 
         if self._force is not None:
             self._force.parent = self
-
     force = property(
         fget=_get_force,
         fset=_set_force,

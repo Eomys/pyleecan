@@ -138,8 +138,7 @@ class LamSlotWind(LamSlot):
         build_geometry = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotWind method build_geometry: "
-                    + str(build_geometry)
+                    "Can't use LamSlotWind method build_geometry: " + str(build_geometry)
                 )
             )
         )
@@ -204,8 +203,7 @@ class LamSlotWind(LamSlot):
         get_name_phase = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotWind method get_name_phase: "
-                    + str(get_name_phase)
+                    "Can't use LamSlotWind method get_name_phase: " + str(get_name_phase)
                 )
             )
         )
@@ -373,31 +371,14 @@ class LamSlotWind(LamSlot):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class"""
+        """Return a copy of the class
+        """
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(
-        self,
-        Ksfill=None,
-        winding=-1,
-        slot=-1,
-        L1=0.35,
-        mat_type=-1,
-        Nrvd=0,
-        Wrvd=0,
-        Kf1=0.95,
-        is_internal=True,
-        Rint=0,
-        Rext=1,
-        is_stator=True,
-        axial_vent=list(),
-        notch=list(),
-        init_dict=None,
-        init_str=None,
-    ):
+    def __init__(self, Ksfill=None, winding=-1, slot=-1, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=list(), notch=list(), init_dict = None, init_str = None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -415,9 +396,8 @@ class LamSlotWind(LamSlot):
             slot = Slot()
         if mat_type == -1:
             mat_type = Material()
-        if init_str is not None:  # Initialisation by str
+        if init_str is not None :  # Initialisation by str
             from ..Functions.load import load
-
             assert type(init_str) is str
             # load the object from a file
             obj = load(init_str)
@@ -473,60 +453,32 @@ class LamSlotWind(LamSlot):
         if isinstance(winding, dict):
             # Check that the type is correct (including daughter)
             class_name = winding.get("__class__")
-            if class_name not in [
-                "Winding",
-                "WindingCW1L",
-                "WindingCW2LR",
-                "WindingCW2LT",
-                "WindingDW1L",
-                "WindingDW2L",
-                "WindingSC",
-                "WindingUD",
-            ]:
+            if class_name not in ['Winding', 'WindingCW1L', 'WindingCW2LR', 'WindingCW2LT', 'WindingDW1L', 'WindingDW2L', 'WindingSC', 'WindingUD']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for winding"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for winding"
                 )
             # Dynamic import to call the correct constructor
-            module = __import__("pyleecan.Classes." + class_name, fromlist=[class_name])
-            class_obj = getattr(module, class_name)
+            module = __import__("pyleecan.Classes."+class_name, fromlist=[class_name])
+            class_obj = getattr(module,class_name)
             self.winding = class_obj(init_dict=winding)
         elif isinstance(winding, str):
             from ..Functions.load import load
-
             winding = load(winding)
             # Check that the type is correct (including daughter)
             class_name = winding.__class__.__name__
-            if class_name not in [
-                "Winding",
-                "WindingCW1L",
-                "WindingCW2LR",
-                "WindingCW2LT",
-                "WindingDW1L",
-                "WindingDW2L",
-                "WindingSC",
-                "WindingUD",
-            ]:
+            if class_name not in ['Winding', 'WindingCW1L', 'WindingCW2LR', 'WindingCW2LT', 'WindingDW1L', 'WindingDW2L', 'WindingSC', 'WindingUD']:
                 raise InitUnKnowClassError(
-                    "Unknow class name " + class_name + " in init_dict for winding"
+                    "Unknow class name "
+                    + class_name
+                    + " in init_dict for winding"
                 )
-            self.winding = winding
+            self.winding=winding
         else:
             self.winding = winding
         # Call LamSlot init
-        super(LamSlotWind, self).__init__(
-            slot=slot,
-            L1=L1,
-            mat_type=mat_type,
-            Nrvd=Nrvd,
-            Wrvd=Wrvd,
-            Kf1=Kf1,
-            is_internal=is_internal,
-            Rint=Rint,
-            Rext=Rext,
-            is_stator=is_stator,
-            axial_vent=axial_vent,
-            notch=notch,
-        )
+        super(LamSlotWind, self).__init__(slot=slot, L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
         # The class is frozen (in LamSlot init), for now it's impossible to
         # add new properties
 
@@ -539,7 +491,7 @@ class LamSlotWind(LamSlot):
         LamSlotWind_str += "Ksfill = " + str(self.Ksfill) + linesep
         if self.winding is not None:
             tmp = self.winding.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            LamSlotWind_str += "winding = " + tmp
+            LamSlotWind_str += "winding = "+ tmp
         else:
             LamSlotWind_str += "winding = None" + linesep + linesep
         return LamSlotWind_str
@@ -560,7 +512,8 @@ class LamSlotWind(LamSlot):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)"""
+        """Convert this objet in a json seriable dict (can be use in __init__)
+        """
 
         # Get the properties inherited from LamSlot
         LamSlotWind_dict = super(LamSlotWind, self).as_dict()
@@ -614,7 +567,6 @@ class LamSlotWind(LamSlot):
 
         if self._winding is not None:
             self._winding.parent = self
-
     winding = property(
         fget=_get_winding,
         fset=_set_winding,
