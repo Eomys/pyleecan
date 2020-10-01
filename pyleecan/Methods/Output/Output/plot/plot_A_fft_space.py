@@ -70,7 +70,10 @@ def plot_A_fft_space(
     phys = getattr(self, Data_str.split(".")[0])
     data = getattr(phys, Data_str.split(".")[1])
 
-    (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+    # Set figure
+    is_show_fig = True if fig is None else False
+    if fig is None:
+        (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
 
     # Call the plot function
     # Call the plot function
@@ -112,3 +115,6 @@ def plot_A_fft_space(
             is_auto_ticks=is_auto_ticks,
             fig=fig,
         )
+
+    if is_show_fig:
+        fig.show()
