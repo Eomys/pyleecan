@@ -75,6 +75,7 @@ load_switch = {
     "Loss": Loss,
     "LossModel": LossModel,
     "LossModelBertotti": LossModelBertotti,
+    "LossModelWinding": LossModelWinding,
     "Machine": Machine,
     "MachineAsync": MachineAsync,
     "MachineDFIM": MachineDFIM,

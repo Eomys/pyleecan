@@ -3745,7 +3745,8 @@
             }
         ],
         "daughters": [
-            "LossModelBertotti"
+            "LossModelBertotti",
+            "LossModelWinding"
         ],
         "desc": "Abstract Loss Model Class",
         "is_internal": false,
@@ -3867,6 +3868,44 @@
                 "type": "str",
                 "unit": "-",
                 "value": "None"
+            }
+        ]
+    },
+    "LossModelWinding": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Winding loss model",
+        "is_internal": false,
+        "methods": [
+            "comp_loss"
+        ],
+        "mother": "LossModel",
+        "name": "LossModelWinding",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/LossModelWinding.csv",
+        "properties": [
+            {
+                "desc": "Winding temperature",
+                "max": "",
+                "min": "",
+                "name": "temperature",
+                "type": "float",
+                "unit": "\u00c2\u00b0C",
+                "value": 20
+            },
+            {
+                "desc": "Name of machine's laminaton that contains the winding, e.g. 'machine.stator'",
+                "max": "",
+                "min": "",
+                "name": "lam",
+                "type": "str",
+                "unit": "-",
+                "value": "'machine.stator'"
             }
         ]
     },

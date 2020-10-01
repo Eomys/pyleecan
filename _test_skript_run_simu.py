@@ -46,8 +46,9 @@ mySimu.input.angle.value = linspace(
 mySimu.input.N0 = rotor_speed
 
 # Stator currents [A]
-mySimu.input.Id_ref = 0
+mySimu.input.Id_ref = -100
 mySimu.input.Iq_ref = 0
+mySimu.input.rot_dir = 1
 
 from pyleecan.Classes.MagFEMM import MagFEMM
 

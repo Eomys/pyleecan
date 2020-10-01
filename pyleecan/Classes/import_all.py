@@ -73,6 +73,7 @@ from ..Classes.Line import Line
 from ..Classes.Loss import Loss
 from ..Classes.LossModel import LossModel
 from ..Classes.LossModelBertotti import LossModelBertotti
+from ..Classes.LossModelWinding import LossModelWinding
 from ..Classes.Machine import Machine
 from ..Classes.MachineAsync import MachineAsync
 from ..Classes.MachineDFIM import MachineDFIM
