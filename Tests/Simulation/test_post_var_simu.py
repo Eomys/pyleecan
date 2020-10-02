@@ -17,6 +17,9 @@ from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
 from pyleecan.Classes.DataKeeper import DataKeeper
 from copy import copy
 from Tests import TEST_DATA_DIR
+from pyleecan.Classes.HoleM51 import HoleM51
+from pyleecan.Classes.HoleM52 import HoleM52
+from pyleecan.Classes.HoleM53 import HoleM53
 
 
 class ExamplePostMethod(PostMethod):
@@ -33,6 +36,7 @@ class ExamplePostMethod(PostMethod):
         return copy(self)
 
 
+@pytest.mark.only
 def test_post_var_simu():
     """Test the simulation.var_simu.post_list"""
 
@@ -79,9 +83,10 @@ def test_post_var_simu():
     # xoutput.simu.machine.stator.slot.W0 += 2
     post2 = PostFunction(run=join(TEST_DATA_DIR, "example_post2.py"))
 
-    post3 = ExamplePostMethod()
+    post3 = PostFunction(run=join(TEST_DATA_DIR, "example_post3.py"))
+    post4 = ExamplePostMethod()
 
-    simu2.postproc_list = [post2, post3]
+    simu2.postproc_list = [post2, post3, post4]
     simu2.var_simu.postproc_list = [post1]
     simu2.var_simu.is_keep_all_output = True
 
@@ -90,11 +95,18 @@ def test_post_var_simu():
 
     # Second simulation with postprocessing
     out2 = simu2.run()
+    # Check ref simu
     assert out1["D_S_s_w"].result == [1, 2, 3]
+    # Check post 2 + 4
     assert [output.simu.machine.stator.slot.W0 for output in out2] == [13, 14, 15]
+    # Check post 1
     assert out1.simu.machine.stator.slot.H0 + 1 == pytest.approx(
         out2.simu.machine.stator.slot.H0, 0.001
     )
+    # Check post 3 with import + using result of post2
+    assert type(out2[0].simu.machine.rotor.hole[0]) is HoleM51
+    assert type(out2[1].simu.machine.rotor.hole[0]) is HoleM52
+    assert type(out2[2].simu.machine.rotor.hole[0]) is HoleM53
 
 
 if __name__ == "__main__":
