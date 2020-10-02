@@ -35,10 +35,10 @@ class Test_Electrical(object):
     def test_DQ_axis_stator(self, IPMSM_A):
         """Check that the DQ axis are correct for the stator"""
         d_axis = IPMSM_A.stator.comp_angle_d_axis()
-        assert d_axis == pytest.approx(1.307, abs=0.001)
+        assert d_axis == pytest.approx(1.3086, abs=0.001)
 
         q_axis = IPMSM_A.stator.comp_angle_q_axis()
-        assert q_axis == pytest.approx(1.307 + pi / 8, abs=0.0001)
+        assert q_axis == pytest.approx(1.3086 + pi / 8, abs=0.0001)
 
     def test_comp_rot_dir(self, IPMSM_A):
         """Check that the computation of the rot dir is correct"""

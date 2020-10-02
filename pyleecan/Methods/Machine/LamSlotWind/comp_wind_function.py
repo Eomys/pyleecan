@@ -24,13 +24,13 @@ def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0):
     wf: ndarray
         Winding function Matrix (qs,Na)
     """
-    
+
     # Set the symmetry factor
-    per_a, _ = self.parent.comp_sym()
+    per_a, _ = self.comp_sym()
 
     # Space discretization
     if angle is None:
-        angle = linspace(0, pi * 2/per_a, Na, endpoint=False)
+        angle = linspace(0, pi * 2 / per_a, Na, endpoint=False)
     else:
         Na = angle.size
 
@@ -38,18 +38,18 @@ def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0):
     # Number of point on rad and tan direction
     Nrad, Ntan = self.winding.get_dim_wind()
     Zs = self.slot.Zs  # Number of slot
-    Zs0 = int(Zs/per_a) 
-    
+    Zs0 = int(Zs / per_a)
+
     slot_angle = self.slot.comp_angle_wind_eq()
     slot_opening = self.slot.comp_angle_opening()
-    
+
     wind_mat = self.winding.comp_connection_mat(Zs)
     # sum wind_mat along Nlay_rad axis
     wind_mat = np_sum(wind_mat, axis=0)
 
     # angle of the center of the slots
     # By convention a tooth is centered on the X axis
-    alpha_slot = linspace(0, 2 * pi/per_a, Zs0, endpoint=False) + pi / Zs
+    alpha_slot = linspace(0, 2 * pi / per_a, Zs0, endpoint=False) + pi / Zs
 
     # angle of the lay in a slot (Nlay point, end and begin excluded)
     alpha_lay = linspace(-slot_angle / 2, slot_angle / 2, Ntan + 1, endpoint=False)[1:]
@@ -72,8 +72,8 @@ def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0):
         for q in range(qs):
             # winding function of qth phase (sum over layers) [qs, Na]
             wf[q, :] += np_sum(Xwind[:, :, q] * Xwf, axis=1)
-    
-    if per_a >1:        
-        wf = wf - mean(wf, axis=1)[:,None]
+
+    if per_a > 1:
+        wf = wf - mean(wf, axis=1)[:, None]
 
     return wf
