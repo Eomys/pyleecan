@@ -894,7 +894,8 @@
             }
         ],
         "daughters": [
-            "EEC_PMSM"
+            "EEC_PMSM",
+            "EEC_SCIM"
         ],
         "desc": "Electric module: Equivalent Electrical Circuit abstract class",
         "is_internal": false,
@@ -941,6 +942,65 @@
                 "min": "",
                 "name": "fluxlink",
                 "type": "FluxLink",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Parameters of the EEC: computed if empty, or enforced",
+                "max": "",
+                "min": "",
+                "name": "parameters",
+                "type": "dict",
+                "unit": "-",
+                "value": {}
+            },
+            {
+                "desc": "Frequency",
+                "max": "",
+                "min": "",
+                "name": "freq0",
+                "type": "float",
+                "unit": "Hz",
+                "value": null
+            },
+            {
+                "desc": "Drive",
+                "max": "",
+                "min": "",
+                "name": "drive",
+                "type": "Drive",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
+    "EEC_SCIM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module: Electrical Equivalent Circuit for Squirrel Cage Induction Machine",
+        "is_internal": false,
+        "methods": [
+            "comp_parameters",
+            "solve_EEC",
+            "gen_drive",
+            "comp_joule_losses"
+        ],
+        "mother": "EEC",
+        "name": "EEC_SCIM",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_SCIM.csv",
+        "properties": [
+            {
+                "desc": "Magnetic inductance",
+                "max": "",
+                "min": "",
+                "name": "indmag",
+                "type": "IndMag",
                 "unit": "-",
                 "value": null
             },
