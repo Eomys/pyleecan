@@ -21,7 +21,6 @@ def comp_fluxlinkage(self, output):
     qs = output.simu.machine.stator.winding.qs
     zp = output.simu.machine.stator.get_pole_pair_number()
     Nt_tot = self.Nt_tot
-    angle_offset_initial = output.get_angle_offset_initial()
     rot_dir = output.get_rot_dir()
 
     # Set currents at 0A for the FEMM simulation
