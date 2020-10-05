@@ -10377,7 +10377,6 @@
             "comp_Ncspc",
             "comp_Ntspc",
             "comp_phasor_angle",
-            "comp_resistance_norm",
             "comp_winding_factor",
             "comp_length_endwinding"
         ],
