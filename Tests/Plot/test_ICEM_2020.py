@@ -7,7 +7,10 @@ import matplotlib.pyplot as plt
 from numpy import array, linspace, ones, pi, zeros
 
 from pyleecan.Classes.import_all import *
-from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
+try:
+    from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
+except:
+    gen_3D_mesh = ImportError
 from Tests import save_plot_path
 from Tests.Plot.LamWind import wind_mat
 from pyleecan.Functions.load import load
@@ -96,6 +99,9 @@ def test_gmsh_mesh_dict():
     """Figure 10: Generate a 3D mesh with Gmsh by setting the
     number of element on each lines
     """
+    if isinstance(gen_3D_mesh, ImportError):
+        raise ImportError("Fail to import gen_3D_mesh (gmsh package missing)")
+        
     # Stator definition
     stator = LamSlotWind(
         Rint=0.1325,

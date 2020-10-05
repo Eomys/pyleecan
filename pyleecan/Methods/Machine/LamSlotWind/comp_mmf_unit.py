@@ -67,7 +67,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
     # Compute unit current function of time applying constant Id=1 Arms, Iq=0
     Idq = zeros((Nt, 2))
     Idq[:, 0] = ones(Nt)
-    I = dq2n(Idq, 2 * pi * freq * time, n=qs)
+    I = dq2n(Idq, 2 * pi * freq * time, n=qs, is_n_rms=False)
 
     # Compute unit mmf
     mmf_u = squeeze(dot(I, wf))
