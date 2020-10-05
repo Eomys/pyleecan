@@ -86,6 +86,7 @@ class InputElec(Input):
         Iq_ref=None,
         Ud_ref=None,
         Uq_ref=None,
+        felec=None,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -121,6 +122,8 @@ class InputElec(Input):
                 Ud_ref = init_dict["Ud_ref"]
             if "Uq_ref" in list(init_dict.keys()):
                 Uq_ref = init_dict["Uq_ref"]
+            if "felec" in list(init_dict.keys()):
+                felec = init_dict["felec"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -138,6 +141,7 @@ class InputElec(Input):
         self.Iq_ref = Iq_ref
         self.Ud_ref = Ud_ref
         self.Uq_ref = Uq_ref
+        self.felec = felec
         # Call Input init
         super(InputElec, self).__init__(
             time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
@@ -157,6 +161,7 @@ class InputElec(Input):
         InputElec_str += "Iq_ref = " + str(self.Iq_ref) + linesep
         InputElec_str += "Ud_ref = " + str(self.Ud_ref) + linesep
         InputElec_str += "Uq_ref = " + str(self.Uq_ref) + linesep
+        InputElec_str += "felec = " + str(self.felec) + linesep
         return InputElec_str
 
     def __eq__(self, other):
@@ -180,6 +185,8 @@ class InputElec(Input):
             return False
         if other.Uq_ref != self.Uq_ref:
             return False
+        if other.felec != self.felec:
+            return False
         return True
 
     def as_dict(self):
@@ -193,6 +200,7 @@ class InputElec(Input):
         InputElec_dict["Iq_ref"] = self.Iq_ref
         InputElec_dict["Ud_ref"] = self.Ud_ref
         InputElec_dict["Uq_ref"] = self.Uq_ref
+        InputElec_dict["felec"] = self.felec
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         InputElec_dict["__class__"] = "InputElec"
@@ -207,6 +215,7 @@ class InputElec(Input):
         self.Iq_ref = None
         self.Ud_ref = None
         self.Uq_ref = None
+        self.felec = None
         # Set to None the properties inherited from Input
         super(InputElec, self)._set_None()
 
@@ -315,6 +324,24 @@ class InputElec(Input):
         fget=_get_Uq_ref,
         fset=_set_Uq_ref,
         doc=u"""q-axis voltage magnitude
+
+        :Type: float
+        """,
+    )
+
+    def _get_felec(self):
+        """getter of felec"""
+        return self._felec
+
+    def _set_felec(self, value):
+        """setter of felec"""
+        check_var("felec", value, "float")
+        self._felec = value
+
+    felec = property(
+        fget=_get_felec,
+        fset=_set_felec,
+        doc=u"""electrical frequency
 
         :Type: float
         """,

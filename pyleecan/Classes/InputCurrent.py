@@ -96,6 +96,7 @@ class InputCurrent(Input):
         Tem_av_ref=None,
         Id_ref=None,
         Iq_ref=None,
+        felec=None,
         time=None,
         angle=None,
         Nt_tot=2048,
@@ -137,6 +138,8 @@ class InputCurrent(Input):
                 Id_ref = init_dict["Id_ref"]
             if "Iq_ref" in list(init_dict.keys()):
                 Iq_ref = init_dict["Iq_ref"]
+            if "felec" in list(init_dict.keys()):
+                felec = init_dict["felec"]
             if "time" in list(init_dict.keys()):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
@@ -157,6 +160,7 @@ class InputCurrent(Input):
         self.Tem_av_ref = Tem_av_ref
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
+        self.felec = felec
         # Call Input init
         super(InputCurrent, self).__init__(
             time=time, angle=angle, Nt_tot=Nt_tot, Nrev=Nrev, Na_tot=Na_tot
@@ -195,6 +199,7 @@ class InputCurrent(Input):
         InputCurrent_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         InputCurrent_str += "Id_ref = " + str(self.Id_ref) + linesep
         InputCurrent_str += "Iq_ref = " + str(self.Iq_ref) + linesep
+        InputCurrent_str += "felec = " + str(self.felec) + linesep
         return InputCurrent_str
 
     def __eq__(self, other):
@@ -224,6 +229,8 @@ class InputCurrent(Input):
             return False
         if other.Iq_ref != self.Iq_ref:
             return False
+        if other.felec != self.felec:
+            return False
         return True
 
     def as_dict(self):
@@ -249,6 +256,7 @@ class InputCurrent(Input):
         InputCurrent_dict["Tem_av_ref"] = self.Tem_av_ref
         InputCurrent_dict["Id_ref"] = self.Id_ref
         InputCurrent_dict["Iq_ref"] = self.Iq_ref
+        InputCurrent_dict["felec"] = self.felec
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         InputCurrent_dict["__class__"] = "InputCurrent"
@@ -269,6 +277,7 @@ class InputCurrent(Input):
         self.Tem_av_ref = None
         self.Id_ref = None
         self.Iq_ref = None
+        self.felec = None
         # Set to None the properties inherited from Input
         super(InputCurrent, self)._set_None()
 
@@ -471,6 +480,24 @@ class InputCurrent(Input):
         fget=_get_Iq_ref,
         fset=_set_Iq_ref,
         doc=u"""q-axis current magnitude
+
+        :Type: float
+        """,
+    )
+
+    def _get_felec(self):
+        """getter of felec"""
+        return self._felec
+
+    def _set_felec(self, value):
+        """setter of felec"""
+        check_var("felec", value, "float")
+        self._felec = value
+
+    felec = property(
+        fget=_get_felec,
+        fset=_set_felec,
+        doc=u"""electrical frequency
 
         :Type: float
         """,

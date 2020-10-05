@@ -11,14 +11,13 @@ def comp_parameters(self, output):
     output : Output
         an Output object
     """
-    # for now do nothing, only direct user input
+    # for now do nothing, only direct user input except 'Rs'
 
-    pass
+    # Parameters to compute only once
+    if "Rs" not in self.parameters:
+        self.parameters["Rs"] = output.simu.machine.stator.comp_resistance_wind()
 
     """
-    # Parameters to compute only once
-    if "R20" not in self.parameters:
-        self.parameters["R20"] = output.simu.machine.stator.comp_resistance_wind()
     if "phi" not in self.parameters:
         self.parameters["phi"] = self.fluxlink.comp_fluxlinkage(output)
 

@@ -3123,6 +3123,15 @@
                 "type": "float",
                 "unit": "A",
                 "value": null
+            },
+            {
+                "desc": "electrical frequency",
+                "max": "",
+                "min": "",
+                "name": "felec",
+                "type": "float",
+                "unit": "Hz",
+                "value": null
             }
         ]
     },
@@ -3198,6 +3207,15 @@
                 "name": "Uq_ref",
                 "type": "float",
                 "unit": "V",
+                "value": null
+            },
+            {
+                "desc": "electrical frequency",
+                "max": "",
+                "min": "",
+                "name": "felec",
+                "type": "float",
+                "unit": "Hz",
                 "value": null
             }
         ]
