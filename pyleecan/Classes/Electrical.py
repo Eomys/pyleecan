@@ -37,7 +37,7 @@ from .EEC import EEC
 
 
 class Electrical(FrozenClass):
-    """Electric module abstract object"""
+    """Electric module object for electrical equivalent circuit simulation"""
 
     VERSION = 1
 

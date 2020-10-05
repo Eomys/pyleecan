@@ -5,7 +5,9 @@ from numpy import pi, cumsum, roll, size, ones
 
 
 def get_angle_rotor(self):
-    """Return the angular position of the rotor as a function of time
+    """
+    Return the angular position of the rotor as a function of time
+    and set the Output.elec.angle_rotor attribute if it is None
 
     Parameters
     ----------

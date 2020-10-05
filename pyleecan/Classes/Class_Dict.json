@@ -981,7 +981,7 @@
             }
         ],
         "daughters": [],
-        "desc": "Electric module abstract object",
+        "desc": "Electric module object for electrical equivalent circuit simulation",
         "is_internal": false,
         "methods": [
             "run",
