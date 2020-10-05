@@ -31,7 +31,7 @@ class PostFunction(Post):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, run=None, init_dict = None, init_str = None):
+    def __init__(self, run=None, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -65,7 +65,9 @@ class PostFunction(Post):
         if self._run[1] is None:
             PostFunction_str += "run = " + str(self._run[1])
         else:
-            PostFunction_str += "run = " + linesep + str(self._run[1]) + linesep + linesep
+            PostFunction_str += (
+                "run = " + linesep + str(self._run[1]) + linesep + linesep
+            )
         return PostFunction_str
 
     def __eq__(self, other):
@@ -82,15 +84,17 @@ class PostFunction(Post):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Post
         PostFunction_dict = super(PostFunction, self).as_dict()
         if self.run is None:
             PostFunction_dict["run"] = None
         else:
-            PostFunction_dict["run"] = [dumps(self._run[0]).decode('ISO-8859-2'), self._run[1]]
+            PostFunction_dict["run"] = [
+                dumps(self._run[0]).decode("ISO-8859-2"),
+                self._run[1],
+            ]
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         PostFunction_dict["__class__"] = "PostFunction"
@@ -111,8 +115,8 @@ class PostFunction(Post):
         """setter of run"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'run')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "run")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = function()
@@ -120,14 +124,17 @@ class PostFunction(Post):
             check_var("run", value, "list")
         except CheckTypeError:
             check_var("run", value, "function")
-        if isinstance(value,list): # Load function from saved dict
-            self._run = [loads(value[0].encode('ISO-8859-2')),value[1]]
+        if isinstance(value, list):  # Load function from saved dict
+            self._run = [loads(value[0].encode("ISO-8859-2")), value[1]]
         elif value is None:
-            self._run = [None,None]
+            self._run = [None, None]
         elif callable(value):
-            self._run = [value,getsource(value)]
+            self._run = [value, getsource(value)]
         else:
-            raise TypeError('Expected function or list from a saved file, got: '+str(type(value))) 
+            raise TypeError(
+                "Expected function or list from a saved file, got: " + str(type(value))
+            )
+
     run = property(
         fget=_get_run,
         fset=_set_run,

@@ -53,7 +53,22 @@ class Simu1(Simulation):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, elec=None, mag=None, struct=None, force=None, name="", desc="", machine=-1, input=-1, logger_name="Pyleecan.Simulation", var_simu=None, postproc_list=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        elec=None,
+        mag=None,
+        struct=None,
+        force=None,
+        name="",
+        desc="",
+        machine=-1,
+        input=-1,
+        logger_name="Pyleecan.Simulation",
+        var_simu=None,
+        postproc_list=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -97,7 +112,15 @@ class Simu1(Simulation):
         self.struct = struct
         self.force = force
         # Call Simulation init
-        super(Simu1, self).__init__(name=name, desc=desc, machine=machine, input=input, logger_name=logger_name, var_simu=var_simu, postproc_list=postproc_list)
+        super(Simu1, self).__init__(
+            name=name,
+            desc=desc,
+            machine=machine,
+            input=input,
+            logger_name=logger_name,
+            var_simu=var_simu,
+            postproc_list=postproc_list,
+        )
         # The class is frozen (in Simulation init), for now it's impossible to
         # add new properties
 
@@ -109,22 +132,22 @@ class Simu1(Simulation):
         Simu1_str += super(Simu1, self).__str__()
         if self.elec is not None:
             tmp = self.elec.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "elec = "+ tmp
+            Simu1_str += "elec = " + tmp
         else:
             Simu1_str += "elec = None" + linesep + linesep
         if self.mag is not None:
             tmp = self.mag.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "mag = "+ tmp
+            Simu1_str += "mag = " + tmp
         else:
             Simu1_str += "mag = None" + linesep + linesep
         if self.struct is not None:
             tmp = self.struct.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "struct = "+ tmp
+            Simu1_str += "struct = " + tmp
         else:
             Simu1_str += "struct = None" + linesep + linesep
         if self.force is not None:
             tmp = self.force.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simu1_str += "force = "+ tmp
+            Simu1_str += "force = " + tmp
         else:
             Simu1_str += "force = None" + linesep + linesep
         return Simu1_str
@@ -149,8 +172,7 @@ class Simu1(Simulation):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Simulation
         Simu1_dict = super(Simu1, self).as_dict()
@@ -197,8 +219,8 @@ class Simu1(Simulation):
         """setter of elec"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'elec')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "elec")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Electrical()
@@ -207,6 +229,7 @@ class Simu1(Simulation):
 
         if self._elec is not None:
             self._elec.parent = self
+
     elec = property(
         fget=_get_elec,
         fset=_set_elec,
@@ -224,8 +247,8 @@ class Simu1(Simulation):
         """setter of mag"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'mag')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "mag")
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Magnetics()
@@ -234,6 +257,7 @@ class Simu1(Simulation):
 
         if self._mag is not None:
             self._mag.parent = self
+
     mag = property(
         fget=_get_mag,
         fset=_set_mag,
@@ -251,8 +275,10 @@ class Simu1(Simulation):
         """setter of struct"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'struct')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "struct"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Structural()
@@ -261,6 +287,7 @@ class Simu1(Simulation):
 
         if self._struct is not None:
             self._struct.parent = self
+
     struct = property(
         fget=_get_struct,
         fset=_set_struct,
@@ -278,8 +305,10 @@ class Simu1(Simulation):
         """setter of force"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'force')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "force"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Force()
@@ -288,6 +317,7 @@ class Simu1(Simulation):
 
         if self._force is not None:
             self._force.parent = self
+
     force = property(
         fget=_get_force,
         fset=_set_force,

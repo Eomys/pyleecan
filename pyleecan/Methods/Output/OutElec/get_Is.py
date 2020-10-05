@@ -14,7 +14,9 @@ def get_Is(self):
         felec = self.felec
 
         # Get stator current function of time
-        Is = dq2n(Isdq, 2 * pi * felec * time, n=qs, rot_dir=self.rot_dir, is_n_rms=False)
+        Is = dq2n(
+            Isdq, 2 * pi * felec * time, n=qs, rot_dir=self.rot_dir, is_n_rms=False
+        )
 
         Time = Data1D(name="time", unit="s", values=time)
         Phase = Data1D(

@@ -46,7 +46,18 @@ class ImportData(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, axes=-1, field=None, unit="SI", name="", symbol="", normalizations=-1, symmetries=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        axes=-1,
+        field=None,
+        unit="SI",
+        name="",
+        symbol="",
+        normalizations=-1,
+        symmetries=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -101,10 +112,10 @@ class ImportData(FrozenClass):
             ImportData_str += "axes = []" + linesep
         for ii in range(len(self.axes)):
             tmp = self.axes[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            ImportData_str += "axes["+str(ii)+"] ="+ tmp + linesep + linesep
+            ImportData_str += "axes[" + str(ii) + "] =" + tmp + linesep + linesep
         if self.field is not None:
             tmp = self.field.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            ImportData_str += "field = "+ tmp
+            ImportData_str += "field = " + tmp
         else:
             ImportData_str += "field = None" + linesep + linesep
         ImportData_str += 'unit = "' + str(self.unit) + '"' + linesep
@@ -136,8 +147,7 @@ class ImportData(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         ImportData_dict = dict()
         if self.axes is None:
@@ -185,7 +195,9 @@ class ImportData(FrozenClass):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'axes')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "axes"
+                    )
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()
@@ -209,8 +221,10 @@ class ImportData(FrozenClass):
         """setter of field"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'field')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "field"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Import()
@@ -219,6 +233,7 @@ class ImportData(FrozenClass):
 
         if self._field is not None:
             self._field.parent = self
+
     field = property(
         fget=_get_field,
         fset=_set_field,

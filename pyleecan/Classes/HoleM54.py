@@ -94,7 +94,17 @@ class HoleM54(Hole):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, H0=0.003, H1=0, W0=0.013, R1=0.02, Zh=36, mat_void=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        H0=0.003,
+        H1=0,
+        W0=0.013,
+        R1=0.02,
+        Zh=36,
+        mat_void=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -164,8 +174,7 @@ class HoleM54(Hole):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Hole
         HoleM54_dict = super(HoleM54, self).as_dict()

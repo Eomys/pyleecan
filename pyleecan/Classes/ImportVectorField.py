@@ -48,7 +48,9 @@ class ImportVectorField(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, components=-1, name="", symbol="", init_dict = None, init_str = None):
+    def __init__(
+        self, components=-1, name="", symbol="", init_dict=None, init_str=None
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -86,12 +88,19 @@ class ImportVectorField(FrozenClass):
         if self.parent is None:
             ImportVectorField_str += "parent = None " + linesep
         else:
-            ImportVectorField_str += "parent = " + str(type(self.parent)) + " object" + linesep
+            ImportVectorField_str += (
+                "parent = " + str(type(self.parent)) + " object" + linesep
+            )
         if len(self.components) == 0:
-            ImportVectorField_str += "components = dict()"+linesep
+            ImportVectorField_str += "components = dict()" + linesep
         for key, obj in self.components.items():
-            tmp = self.components[key].__str__().replace(linesep, linesep + "\t")+ linesep 
-            ImportVectorField_str += "components["+key+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.components[key].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            ImportVectorField_str += (
+                "components[" + key + "] =" + tmp + linesep + linesep
+            )
         ImportVectorField_str += 'name = "' + str(self.name) + '"' + linesep
         ImportVectorField_str += 'symbol = "' + str(self.symbol) + '"' + linesep
         return ImportVectorField_str
@@ -110,8 +119,7 @@ class ImportVectorField(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         ImportVectorField_dict = dict()
         if self.components is None:
@@ -147,7 +155,9 @@ class ImportVectorField(FrozenClass):
         if type(value) is dict:
             for key, obj in value.items():
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'components')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "components"
+                    )
                     value[key] = class_obj(init_dict=obj)
         if type(value) is int and value == -1:
             value = dict()

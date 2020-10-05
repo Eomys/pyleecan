@@ -49,7 +49,18 @@ class Simulation(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, name="", desc="", machine=-1, input=-1, logger_name="Pyleecan.Simulation", var_simu=None, postproc_list=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        name="",
+        desc="",
+        machine=-1,
+        input=-1,
+        logger_name="Pyleecan.Simulation",
+        var_simu=None,
+        postproc_list=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -104,25 +115,30 @@ class Simulation(FrozenClass):
         Simulation_str += 'desc = "' + str(self.desc) + '"' + linesep
         if self.machine is not None:
             tmp = self.machine.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "machine = "+ tmp
+            Simulation_str += "machine = " + tmp
         else:
             Simulation_str += "machine = None" + linesep + linesep
         if self.input is not None:
             tmp = self.input.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "input = "+ tmp
+            Simulation_str += "input = " + tmp
         else:
             Simulation_str += "input = None" + linesep + linesep
         Simulation_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         if self.var_simu is not None:
             tmp = self.var_simu.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Simulation_str += "var_simu = "+ tmp
+            Simulation_str += "var_simu = " + tmp
         else:
             Simulation_str += "var_simu = None" + linesep + linesep
         if len(self.postproc_list) == 0:
             Simulation_str += "postproc_list = []" + linesep
         for ii in range(len(self.postproc_list)):
-            tmp = self.postproc_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            Simulation_str += "postproc_list["+str(ii)+"] ="+ tmp + linesep + linesep
+            tmp = (
+                self.postproc_list[ii].__str__().replace(linesep, linesep + "\t")
+                + linesep
+            )
+            Simulation_str += (
+                "postproc_list[" + str(ii) + "] =" + tmp + linesep + linesep
+            )
         return Simulation_str
 
     def __eq__(self, other):
@@ -147,8 +163,7 @@ class Simulation(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Simulation_dict = dict()
         Simulation_dict["name"] = self.name
@@ -235,8 +250,10 @@ class Simulation(FrozenClass):
         """setter of machine"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'machine')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "machine"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Machine()
@@ -245,6 +262,7 @@ class Simulation(FrozenClass):
 
         if self._machine is not None:
             self._machine.parent = self
+
     machine = property(
         fget=_get_machine,
         fset=_set_machine,
@@ -262,8 +280,10 @@ class Simulation(FrozenClass):
         """setter of input"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'input')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "input"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Input()
@@ -272,6 +292,7 @@ class Simulation(FrozenClass):
 
         if self._input is not None:
             self._input.parent = self
+
     input = property(
         fget=_get_input,
         fset=_set_input,
@@ -307,8 +328,10 @@ class Simulation(FrozenClass):
         """setter of var_simu"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'var_simu')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "var_simu"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = VarSimu()
@@ -317,6 +340,7 @@ class Simulation(FrozenClass):
 
         if self._var_simu is not None:
             self._var_simu.parent = self
+
     var_simu = property(
         fget=_get_var_simu,
         fset=_set_var_simu,
@@ -339,7 +363,9 @@ class Simulation(FrozenClass):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'postproc_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "postproc_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()

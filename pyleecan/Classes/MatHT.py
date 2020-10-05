@@ -28,7 +28,16 @@ class MatHT(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, lambda_x=1, lambda_y=1, lambda_z=1, Cp=1, alpha=0.00393, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        lambda_x=1,
+        lambda_y=1,
+        lambda_z=1,
+        Cp=1,
+        alpha=0.00393,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -98,8 +107,7 @@ class MatHT(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         MatHT_dict = dict()
         MatHT_dict["lambda_x"] = self.lambda_x

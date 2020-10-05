@@ -16,8 +16,7 @@ def comp_flux_airgap(self, output):
     """
 
     # Set the symmetry factor
-    per_a, is_antiper_a = output.simu.machine.comp_sym()
-
+    per_a, is_antiper_a = output.simu.machine.comp_periodicity()
     if is_antiper_a:
         sym = 2 * per_a
     else:

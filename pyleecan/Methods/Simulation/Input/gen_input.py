@@ -15,31 +15,7 @@ def gen_input(self):
     """
 
     output = OutElec()
-    # Load and check time
-    if self.time is None:
-        raise InputError("ERROR: Input.time missing")
-    output.time = self.time.get_data()
-
-    if not isinstance(output.time, ndarray) or len(output.time.shape) != 1:
-        # time should be a vector
-        raise InputError(
-            "ERROR: Input.time should be a vector, "
-            + str(output.time.shape)
-            + " shape found"
-        )
-    Nt_tot = len(output.time)
-
-    # Load and check angle
-    if self.angle is None:
-        raise InputError("ERROR: Input.angle missing")
-    output.angle = self.angle.get_data()
-    if not isinstance(output.angle, ndarray) or len(output.angle.shape) != 1:
-        # angle should be a vector
-        raise InputError(
-            "ERROR: Input.angle should be a vector, "
-            + str(output.angle.shape)
-            + " shape found"
-        )
+    self.comp_axes(machine=output.simu.machine, N0=self.N0)
 
     # Get the phase number for verifications
     if self.parent is None:

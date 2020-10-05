@@ -40,7 +40,9 @@ def ab2n(Z_ab, n=3, rot_dir=-1):
 
     """
     ii = linspace(0, n - 1, n)
-    alpha = rot_dir * 2 * ii * pi / n # Phasor depending on fundamental field rotation direction
+    alpha = (
+        rot_dir * 2 * ii * pi / n
+    )  # Phasor depending on fundamental field rotation direction
 
     # Transformation matrix
     ab_2_n = vstack((cos(alpha).round(decimals=EPS), -sin(alpha).round(decimals=EPS)))
@@ -68,12 +70,15 @@ def n2ab(Z_n, n=3, rot_dir=-1):
         transformed matrix (N x 2) of 2 phase equivalent values
 
     """
-    ii = linspace(0, n - 1, n) 
-    alpha = rot_dir * 2 * ii * pi / n # Phasor depending on fundamental field rotation direction
+    ii = linspace(0, n - 1, n)
+    alpha = (
+        rot_dir * 2 * ii * pi / n
+    )  # Phasor depending on fundamental field rotation direction
 
     # Transformation matrix
     n_2_ab = (
-        2/ n
+        2
+        / n
         * column_stack(
             (cos(alpha).round(decimals=EPS), -sin(alpha).round(decimals=EPS))
         )
@@ -139,8 +144,8 @@ def dq2ab(Z_dq, theta):
     cos_theta = cos(theta).round(decimals=EPS)
 
     # Multiply by sqrt(2) to go from (Id_rms, Iq_rms) in to I_ab in amplitude
-    Z_a = (Z_dq[:, 0] * cos_theta - Z_dq[:, 1] * sin_theta)
-    Z_b = (Z_dq[:, 0] * sin_theta + Z_dq[:, 1] * cos_theta)
+    Z_a = Z_dq[:, 0] * cos_theta - Z_dq[:, 1] * sin_theta
+    Z_b = Z_dq[:, 0] * sin_theta + Z_dq[:, 1] * cos_theta
 
     return reshape([Z_a, Z_b], (2, -1)).transpose()
 
@@ -165,12 +170,12 @@ def n2dq(Z_n, theta, n=3, rot_dir=-1, is_dq_rms=True):
         transformed matrix (N x 2) of dq equivalent values
 
     """
-    
+
     Z_dq = ab2dq(n2ab(Z_n, n=n, rot_dir=rot_dir), theta)
-    
+
     if is_dq_rms == True:
         # Divide by sqrt(2) to go from (Id_peak, Iq_peak) to (Id_rms, Iq_rms)
-        Z_dq = Z_dq/sqrt(2)                
+        Z_dq = Z_dq / sqrt(2)
 
     return Z_dq
 
@@ -195,11 +200,11 @@ def dq2n(Z_dq, theta, n=3, rot_dir=-1, is_n_rms=False):
         transformed matrix (N x n) of n phase values
 
     """
-    
+
     Z_n = ab2n(dq2ab(Z_dq, theta), n=n, rot_dir=rot_dir)
-    
+
     if is_n_rms == False:
         # Multiply by sqrt(2) to from (I_n_rms) to (I_n_peak)
-        Z_n = Z_n*sqrt(2)  
-    
+        Z_n = Z_n * sqrt(2)
+
     return Z_n

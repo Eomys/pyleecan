@@ -67,7 +67,21 @@ class WindingDW1L(Winding):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, coil_pitch=5, is_reverse_wind=False, Nslot_shift_wind=0, qs=3, Ntcoil=7, Npcpp=2, type_connection=0, p=3, Lewout=0.015, conductor=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        coil_pitch=5,
+        is_reverse_wind=False,
+        Nslot_shift_wind=0,
+        qs=3,
+        Ntcoil=7,
+        Npcpp=2,
+        type_connection=0,
+        p=3,
+        Lewout=0.015,
+        conductor=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -106,7 +120,17 @@ class WindingDW1L(Winding):
         # Set the properties (value check and convertion are done in setter)
         self.coil_pitch = coil_pitch
         # Call Winding init
-        super(WindingDW1L, self).__init__(is_reverse_wind=is_reverse_wind, Nslot_shift_wind=Nslot_shift_wind, qs=qs, Ntcoil=Ntcoil, Npcpp=Npcpp, type_connection=type_connection, p=p, Lewout=Lewout, conductor=conductor)
+        super(WindingDW1L, self).__init__(
+            is_reverse_wind=is_reverse_wind,
+            Nslot_shift_wind=Nslot_shift_wind,
+            qs=qs,
+            Ntcoil=Ntcoil,
+            Npcpp=Npcpp,
+            type_connection=type_connection,
+            p=p,
+            Lewout=Lewout,
+            conductor=conductor,
+        )
         # The class is frozen (in Winding init), for now it's impossible to
         # add new properties
 
@@ -133,8 +157,7 @@ class WindingDW1L(Winding):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Winding
         WindingDW1L_dict = super(WindingDW1L, self).as_dict()

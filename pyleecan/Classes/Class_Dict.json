@@ -2909,7 +2909,7 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "comp_time"
+            "comp_axes"
         ],
         "mother": "",
         "name": "Input",
@@ -3275,7 +3275,7 @@
             "comp_radius_mid_yoke",
             "has_magnet",
             "comp_angle_d_axis",
-            "comp_sym"
+            "comp_periodicity"
         ],
         "mother": "Lamination",
         "name": "LamHole",
@@ -3327,7 +3327,7 @@
             "get_Zs",
             "get_bore_desc",
             "comp_radius_mid_yoke",
-            "comp_sym"
+            "comp_periodicity"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -3364,7 +3364,7 @@
             "comp_volumes",
             "plot",
             "comp_angle_d_axis",
-            "comp_sym"
+            "comp_periodicity"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",
@@ -3451,7 +3451,7 @@
             "comp_rot_dir",
             "comp_lengths_winding",
             "comp_number_phase_eq",
-            "comp_sym"
+            "comp_periodicity"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
@@ -3494,7 +3494,7 @@
             "comp_length_ring",
             "plot",
             "comp_number_phase_eq",
-            "comp_sym"
+            "comp_periodicity"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
@@ -3738,7 +3738,7 @@
             "comp_masses",
             "comp_output_geo",
             "comp_Rgap_mec",
-            "comp_sym",
+            "comp_periodicity",
             "comp_width_airgap_mag",
             "comp_width_airgap_mec",
             "get_material_list",

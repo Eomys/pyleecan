@@ -50,7 +50,8 @@ class ForceMT(Force):
         comp_force_nodal = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use ForceMT method comp_force_nodal: " + str(comp_force_nodal)
+                    "Can't use ForceMT method comp_force_nodal: "
+                    + str(comp_force_nodal)
                 )
             )
         )
@@ -62,7 +63,7 @@ class ForceMT(Force):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, is_comp_nodal_force=False, init_dict = None, init_str = None):
+    def __init__(self, is_comp_nodal_force=False, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -106,8 +107,7 @@ class ForceMT(Force):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Force
         ForceMT_dict = super(ForceMT, self).as_dict()

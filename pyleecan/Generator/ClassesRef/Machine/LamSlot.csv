@@ -9,4 +9,4 @@ slot,,lamination Slot,,Slot,,,,,Machine,Lamination,build_geometry,VERSION,1,Lami
 ,,,,,,,,,,,get_Zs,,,
 ,,,,,,,,,,,get_bore_desc,,,
 ,,,,,,,,,,,comp_radius_mid_yoke,,,
-,,,,,,,,,,,comp_sym,,,
+,,,,,,,,,,,comp_periodicity,,,

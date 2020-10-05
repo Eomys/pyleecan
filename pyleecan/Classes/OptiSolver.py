@@ -30,7 +30,15 @@ class OptiSolver(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, problem=-1, xoutput=-1, logger_name="Pyleecan.OptiSolver", is_keep_all_output=False, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        problem=-1,
+        xoutput=-1,
+        logger_name="Pyleecan.OptiSolver",
+        is_keep_all_output=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -74,16 +82,18 @@ class OptiSolver(FrozenClass):
             OptiSolver_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.problem is not None:
             tmp = self.problem.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OptiSolver_str += "problem = "+ tmp
+            OptiSolver_str += "problem = " + tmp
         else:
             OptiSolver_str += "problem = None" + linesep + linesep
         if self.xoutput is not None:
             tmp = self.xoutput.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            OptiSolver_str += "xoutput = "+ tmp
+            OptiSolver_str += "xoutput = " + tmp
         else:
             OptiSolver_str += "xoutput = None" + linesep + linesep
         OptiSolver_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OptiSolver_str += "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
+        OptiSolver_str += (
+            "is_keep_all_output = " + str(self.is_keep_all_output) + linesep
+        )
         return OptiSolver_str
 
     def __eq__(self, other):
@@ -102,8 +112,7 @@ class OptiSolver(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OptiSolver_dict = dict()
         if self.problem is None:
@@ -138,8 +147,10 @@ class OptiSolver(FrozenClass):
         """setter of problem"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'problem')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "problem"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = OptiProblem()
@@ -148,6 +159,7 @@ class OptiSolver(FrozenClass):
 
         if self._problem is not None:
             self._problem.parent = self
+
     problem = property(
         fget=_get_problem,
         fset=_set_problem,
@@ -165,8 +177,10 @@ class OptiSolver(FrozenClass):
         """setter of xoutput"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'xoutput')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "xoutput"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = XOutput()
@@ -175,6 +189,7 @@ class OptiSolver(FrozenClass):
 
         if self._xoutput is not None:
             self._xoutput.parent = self
+
     xoutput = property(
         fget=_get_xoutput,
         fset=_set_xoutput,

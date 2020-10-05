@@ -170,7 +170,19 @@ class HoleM52(HoleMag):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, H0=0.003, W0=0.003, H1=0, W3=0.013, H2=0.02, magnet_0=-1, Zh=36, mat_void=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        H0=0.003,
+        W0=0.003,
+        H1=0,
+        W3=0.013,
+        H2=0.02,
+        magnet_0=-1,
+        Zh=36,
+        mat_void=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -227,7 +239,7 @@ class HoleM52(HoleMag):
         HoleM52_str += "H2 = " + str(self.H2) + linesep
         if self.magnet_0 is not None:
             tmp = self.magnet_0.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            HoleM52_str += "magnet_0 = "+ tmp
+            HoleM52_str += "magnet_0 = " + tmp
         else:
             HoleM52_str += "magnet_0 = None" + linesep + linesep
         return HoleM52_str
@@ -256,8 +268,7 @@ class HoleM52(HoleMag):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from HoleMag
         HoleM52_dict = super(HoleM52, self).as_dict()
@@ -391,8 +402,10 @@ class HoleM52(HoleMag):
         """setter of magnet_0"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'magnet_0')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "magnet_0"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Magnet()
@@ -401,6 +414,7 @@ class HoleM52(HoleMag):
 
         if self._magnet_0 is not None:
             self._magnet_0.parent = self
+
     magnet_0 = property(
         fget=_get_magnet_0,
         fset=_set_magnet_0,

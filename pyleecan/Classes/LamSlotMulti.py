@@ -179,7 +179,24 @@ class LamSlotMulti(Lamination):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, slot_list=-1, alpha=None, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=-1, notch=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        slot_list=-1,
+        alpha=None,
+        L1=0.35,
+        mat_type=-1,
+        Nrvd=0,
+        Wrvd=0,
+        Kf1=0.95,
+        is_internal=True,
+        Rint=0,
+        Rext=1,
+        is_stator=True,
+        axial_vent=-1,
+        notch=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -225,7 +242,19 @@ class LamSlotMulti(Lamination):
         self.slot_list = slot_list
         self.alpha = alpha
         # Call Lamination init
-        super(LamSlotMulti, self).__init__(L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
+        super(LamSlotMulti, self).__init__(
+            L1=L1,
+            mat_type=mat_type,
+            Nrvd=Nrvd,
+            Wrvd=Wrvd,
+            Kf1=Kf1,
+            is_internal=is_internal,
+            Rint=Rint,
+            Rext=Rext,
+            is_stator=is_stator,
+            axial_vent=axial_vent,
+            notch=notch,
+        )
         # The class is frozen (in Lamination init), for now it's impossible to
         # add new properties
 
@@ -238,9 +267,17 @@ class LamSlotMulti(Lamination):
         if len(self.slot_list) == 0:
             LamSlotMulti_str += "slot_list = []" + linesep
         for ii in range(len(self.slot_list)):
-            tmp = self.slot_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
-            LamSlotMulti_str += "slot_list["+str(ii)+"] ="+ tmp + linesep + linesep
-        LamSlotMulti_str += "alpha = " + linesep + str(self.alpha).replace(linesep, linesep + "\t") + linesep + linesep
+            tmp = (
+                self.slot_list[ii].__str__().replace(linesep, linesep + "\t") + linesep
+            )
+            LamSlotMulti_str += "slot_list[" + str(ii) + "] =" + tmp + linesep + linesep
+        LamSlotMulti_str += (
+            "alpha = "
+            + linesep
+            + str(self.alpha).replace(linesep, linesep + "\t")
+            + linesep
+            + linesep
+        )
         return LamSlotMulti_str
 
     def __eq__(self, other):
@@ -259,8 +296,7 @@ class LamSlotMulti(Lamination):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Lamination
         LamSlotMulti_dict = super(LamSlotMulti, self).as_dict()
@@ -301,7 +337,9 @@ class LamSlotMulti(Lamination):
         if type(value) is list:
             for ii, obj in enumerate(value):
                 if type(obj) is dict:
-                    class_obj = import_class('pyleecan.Classes', obj.get('__class__'), 'slot_list')
+                    class_obj = import_class(
+                        "pyleecan.Classes", obj.get("__class__"), "slot_list"
+                    )
                     value[ii] = class_obj(init_dict=obj)
         if value == -1:
             value = list()

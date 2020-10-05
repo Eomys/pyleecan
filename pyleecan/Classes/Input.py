@@ -22,9 +22,9 @@ except ImportError as error:
     gen_input = error
 
 try:
-    from ..Methods.Simulation.Input.comp_time import comp_time
+    from ..Methods.Simulation.Input.comp_axes import comp_axes
 except ImportError as error:
-    comp_time = error
+    comp_axes = error
 
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
@@ -49,22 +49,31 @@ class Input(FrozenClass):
         )
     else:
         gen_input = gen_input
-    # cf Methods.Simulation.Input.comp_time
-    if isinstance(comp_time, ImportError):
-        comp_time = property(
+    # cf Methods.Simulation.Input.comp_axes
+    if isinstance(comp_axes, ImportError):
+        comp_axes = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Input method comp_time: " + str(comp_time))
+                ImportError("Can't use Input method comp_axes: " + str(comp_axes))
             )
         )
     else:
-        comp_time = comp_time
+        comp_axes = comp_axes
     # save and copy methods are available in all object
     save = save
     copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, time=None, angle=None, Nt_tot=2048, Nrev=1, Na_tot=2048, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        time=None,
+        angle=None,
+        Nt_tot=2048,
+        Nrev=1,
+        Na_tot=2048,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -111,12 +120,12 @@ class Input(FrozenClass):
             Input_str += "parent = " + str(type(self.parent)) + " object" + linesep
         if self.time is not None:
             tmp = self.time.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Input_str += "time = "+ tmp
+            Input_str += "time = " + tmp
         else:
             Input_str += "time = None" + linesep + linesep
         if self.angle is not None:
             tmp = self.angle.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            Input_str += "angle = "+ tmp
+            Input_str += "angle = " + tmp
         else:
             Input_str += "angle = None" + linesep + linesep
         Input_str += "Nt_tot = " + str(self.Nt_tot) + linesep
@@ -142,8 +151,7 @@ class Input(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Input_dict = dict()
         if self.time is None:
@@ -180,20 +188,21 @@ class Input(FrozenClass):
         """setter of time"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value,ndarray):
+        if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
-        elif isinstance(value,list):
+        elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
         elif value == -1:
             value = ImportMatrix()
-        elif isinstance(value,dict):
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'time')
+        elif isinstance(value, dict):
+            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "time")
             value = class_obj(init_dict=value)
         check_var("time", value, "ImportMatrix")
         self._time = value
 
         if self._time is not None:
             self._time.parent = self
+
     time = property(
         fget=_get_time,
         fset=_set_time,
@@ -211,20 +220,23 @@ class Input(FrozenClass):
         """setter of angle"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value,ndarray):
+        if isinstance(value, ndarray):
             value = ImportMatrixVal(value=value)
-        elif isinstance(value,list):
+        elif isinstance(value, list):
             value = ImportMatrixVal(value=array(value))
         elif value == -1:
             value = ImportMatrix()
-        elif isinstance(value,dict):
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'angle')
+        elif isinstance(value, dict):
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "angle"
+            )
             value = class_obj(init_dict=value)
         check_var("angle", value, "ImportMatrix")
         self._angle = value
 
         if self._angle is not None:
             self._angle.parent = self
+
     angle = property(
         fget=_get_angle,
         fset=_set_angle,

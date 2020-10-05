@@ -28,7 +28,7 @@ class Bore(FrozenClass):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, init_dict = None, init_str = None):
+    def __init__(self, init_dict=None, init_str=None):
         """Constructor of the class. Can be use in two ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for Matrix, None will initialise the property with an empty Matrix
@@ -39,7 +39,7 @@ class Bore(FrozenClass):
         object or dict can be given for pyleecan Object"""
 
         if init_dict is not None:  # Initialisation by dict
-            assert init_dict == {'__class__' : 'Bore'}
+            assert init_dict == {"__class__": "Bore"}
         if init_str is not None:  # Initialisation by str
             assert type(init_str) is str
         # The class is frozen, for now it's impossible to add new properties
@@ -64,8 +64,7 @@ class Bore(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         Bore_dict = dict()
         # The class name is added to the dict fordeserialisation purpose
@@ -74,4 +73,3 @@ class Bore(FrozenClass):
 
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
-

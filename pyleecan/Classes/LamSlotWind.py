@@ -117,9 +117,9 @@ except ImportError as error:
     comp_number_phase_eq = error
 
 try:
-    from ..Methods.Machine.LamSlotWind.comp_sym import comp_sym
+    from ..Methods.Machine.LamSlotWind.comp_periodicity import comp_periodicity
 except ImportError as error:
-    comp_sym = error
+    comp_periodicity = error
 
 
 from ._check import InitUnKnowClassError
@@ -141,7 +141,8 @@ class LamSlotWind(LamSlot):
         build_geometry = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotWind method build_geometry: " + str(build_geometry)
+                    "Can't use LamSlotWind method build_geometry: "
+                    + str(build_geometry)
                 )
             )
         )
@@ -206,7 +207,8 @@ class LamSlotWind(LamSlot):
         get_name_phase = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSlotWind method get_name_phase: " + str(get_name_phase)
+                    "Can't use LamSlotWind method get_name_phase: "
+                    + str(get_name_phase)
                 )
             )
         )
@@ -360,22 +362,43 @@ class LamSlotWind(LamSlot):
         )
     else:
         comp_number_phase_eq = comp_number_phase_eq
-    # cf Methods.Machine.LamSlotWind.comp_sym
-    if isinstance(comp_sym, ImportError):
-        comp_sym = property(
+    # cf Methods.Machine.LamSlotWind.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
             fget=lambda x: raise_(
-                ImportError("Can't use LamSlotWind method comp_sym: " + str(comp_sym))
+                ImportError(
+                    "Can't use LamSlotWind method comp_periodicity: "
+                    + str(comp_periodicity)
+                )
             )
         )
     else:
-        comp_sym = comp_sym
+        comp_periodicity = comp_periodicity
     # save and copy methods are available in all object
     save = save
     copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, Ksfill=None, winding=-1, slot=-1, L1=0.35, mat_type=-1, Nrvd=0, Wrvd=0, Kf1=0.95, is_internal=True, Rint=0, Rext=1, is_stator=True, axial_vent=-1, notch=-1, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        Ksfill=None,
+        winding=-1,
+        slot=-1,
+        L1=0.35,
+        mat_type=-1,
+        Nrvd=0,
+        Wrvd=0,
+        Kf1=0.95,
+        is_internal=True,
+        Rint=0,
+        Rext=1,
+        is_stator=True,
+        axial_vent=-1,
+        notch=-1,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -423,7 +446,20 @@ class LamSlotWind(LamSlot):
         self.Ksfill = Ksfill
         self.winding = winding
         # Call LamSlot init
-        super(LamSlotWind, self).__init__(slot=slot, L1=L1, mat_type=mat_type, Nrvd=Nrvd, Wrvd=Wrvd, Kf1=Kf1, is_internal=is_internal, Rint=Rint, Rext=Rext, is_stator=is_stator, axial_vent=axial_vent, notch=notch)
+        super(LamSlotWind, self).__init__(
+            slot=slot,
+            L1=L1,
+            mat_type=mat_type,
+            Nrvd=Nrvd,
+            Wrvd=Wrvd,
+            Kf1=Kf1,
+            is_internal=is_internal,
+            Rint=Rint,
+            Rext=Rext,
+            is_stator=is_stator,
+            axial_vent=axial_vent,
+            notch=notch,
+        )
         # The class is frozen (in LamSlot init), for now it's impossible to
         # add new properties
 
@@ -436,7 +472,7 @@ class LamSlotWind(LamSlot):
         LamSlotWind_str += "Ksfill = " + str(self.Ksfill) + linesep
         if self.winding is not None:
             tmp = self.winding.__str__().replace(linesep, linesep + "\t").rstrip("\t")
-            LamSlotWind_str += "winding = "+ tmp
+            LamSlotWind_str += "winding = " + tmp
         else:
             LamSlotWind_str += "winding = None" + linesep + linesep
         return LamSlotWind_str
@@ -457,8 +493,7 @@ class LamSlotWind(LamSlot):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from LamSlot
         LamSlotWind_dict = super(LamSlotWind, self).as_dict()
@@ -509,8 +544,10 @@ class LamSlotWind(LamSlot):
         """setter of winding"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
-        if isinstance(value, dict) and '__class__' in value:
-            class_obj = import_class('pyleecan.Classes', value.get('__class__'), 'winding')
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "pyleecan.Classes", value.get("__class__"), "winding"
+            )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Winding()
@@ -519,6 +556,7 @@ class LamSlotWind(LamSlot):
 
         if self._winding is not None:
             self._winding.parent = self
+
     winding = property(
         fget=_get_winding,
         fset=_set_winding,

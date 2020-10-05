@@ -26,7 +26,7 @@ def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0):
     """
 
     # Set the symmetry factor
-    per_a, _ = self.comp_sym()
+    per_a, _ = self.comp_periodicity()
 
     # Space discretization
     if angle is None:

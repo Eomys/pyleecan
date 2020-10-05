@@ -214,7 +214,15 @@ class Arc3(Arc):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, begin=0, end=0, is_trigo_direction=False, label="", init_dict = None, init_str = None):
+    def __init__(
+        self,
+        begin=0,
+        end=0,
+        is_trigo_direction=False,
+        label="",
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -276,8 +284,7 @@ class Arc3(Arc):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Arc
         Arc3_dict = super(Arc3, self).as_dict()

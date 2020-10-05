@@ -54,13 +54,14 @@ except ImportError as error:
 
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
-try :
+
+try:
     from pyvista.core.pointset import UnstructuredGrid
-except ImportError :
+except ImportError:
     UnstructuredGrid = ImportError
-try :
+try:
     from pyvista.core.pointset import PolyData
-except ImportError :
+except ImportError:
     PolyData = ImportError
 from ._check import InitUnKnowClassError
 
@@ -142,7 +143,22 @@ class MeshVTK(Mesh):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, mesh=None, is_pyvista_mesh=False, format="vtk", path="", name="mesh", surf=None, is_vtk_surf=False, surf_path="", surf_name="surf", label=None, dimension=2, init_dict = None, init_str = None):
+    def __init__(
+        self,
+        mesh=None,
+        is_pyvista_mesh=False,
+        format="vtk",
+        path="",
+        name="mesh",
+        surf=None,
+        is_vtk_surf=False,
+        surf_path="",
+        surf_name="surf",
+        label=None,
+        dimension=2,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -201,12 +217,12 @@ class MeshVTK(Mesh):
         MeshVTK_str = ""
         # Get the properties inherited from Mesh
         MeshVTK_str += super(MeshVTK, self).__str__()
-        MeshVTK_str += "mesh = "+ str(self.mesh) + linesep + linesep
+        MeshVTK_str += "mesh = " + str(self.mesh) + linesep + linesep
         MeshVTK_str += "is_pyvista_mesh = " + str(self.is_pyvista_mesh) + linesep
         MeshVTK_str += 'format = "' + str(self.format) + '"' + linesep
         MeshVTK_str += 'path = "' + str(self.path) + '"' + linesep
         MeshVTK_str += 'name = "' + str(self.name) + '"' + linesep
-        MeshVTK_str += "surf = "+ str(self.surf) + linesep + linesep
+        MeshVTK_str += "surf = " + str(self.surf) + linesep + linesep
         MeshVTK_str += "is_vtk_surf = " + str(self.is_vtk_surf) + linesep
         MeshVTK_str += 'surf_path = "' + str(self.surf_path) + '"' + linesep
         MeshVTK_str += 'surf_name = "' + str(self.surf_name) + '"' + linesep
@@ -242,23 +258,30 @@ class MeshVTK(Mesh):
         return True
 
     def as_dict(self):
-        """Convert this object in a json seriable dict (can be use in __init__)
-        """
+        """Convert this object in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from Mesh
         MeshVTK_dict = super(MeshVTK, self).as_dict()
         if self.mesh is None:
             MeshVTK_dict["mesh"] = None
-        else: # Store serialized data (using cloudpickle) and str to read it in json save files
-            MeshVTK_dict['mesh'] ={"__class__" : str(type(self._mesh)),"__repr__":str(self._mesh.__repr__()),"serialized":dumps(self._mesh).decode('ISO-8859-2')}
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            MeshVTK_dict["mesh"] = {
+                "__class__": str(type(self._mesh)),
+                "__repr__": str(self._mesh.__repr__()),
+                "serialized": dumps(self._mesh).decode("ISO-8859-2"),
+            }
         MeshVTK_dict["is_pyvista_mesh"] = self.is_pyvista_mesh
         MeshVTK_dict["format"] = self.format
         MeshVTK_dict["path"] = self.path
         MeshVTK_dict["name"] = self.name
         if self.surf is None:
             MeshVTK_dict["surf"] = None
-        else: # Store serialized data (using cloudpickle) and str to read it in json save files
-            MeshVTK_dict['surf'] ={"__class__" : str(type(self._surf)),"__repr__":str(self._surf.__repr__()),"serialized":dumps(self._surf).decode('ISO-8859-2')}
+        else:  # Store serialized data (using cloudpickle) and str to read it in json save files
+            MeshVTK_dict["surf"] = {
+                "__class__": str(type(self._surf)),
+                "__repr__": str(self._surf.__repr__()),
+                "serialized": dumps(self._surf).decode("ISO-8859-2"),
+            }
         MeshVTK_dict["is_vtk_surf"] = self.is_vtk_surf
         MeshVTK_dict["surf_path"] = self.surf_path
         MeshVTK_dict["surf_name"] = self.surf_name
