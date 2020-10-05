@@ -12,12 +12,12 @@ def comp_joule_losses(self, output):
         an Output object
     """
     # TODO include rotor losses
-    # TODO uso of output Id Iq may be wrong ???
+    # TODO use of output Id Iq may be wrong ???
 
     qs = output.simu.machine.stator.winding.qs
     Id = output.elec.Id_ref
     Iq = output.elec.Iq_ref
-    R = self.parameters["R20"]
+    R = self.parameters["Rs"]
 
     Pj_losses = qs * R * (Id ** 2 + Iq ** 2) / 2
 

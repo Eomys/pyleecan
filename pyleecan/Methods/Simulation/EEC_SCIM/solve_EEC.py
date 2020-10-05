@@ -6,9 +6,9 @@ from scipy.linalg import solve
 
 def solve_EEC(self, output):
     """Compute the parameters dict for the equivalent electrical circuit
-    TODO find ref. to cite, maybe wikipedia?
-    cf "Advanced Electrical Drives, analysis, modeling, control"
-    Rik de doncker, Duco W.J. Pulle, Andre Veltman, Springer edition
+    TODO find ref. to cite
+    cf "Title"
+    Autor, Publisher
 
                   --->                     ---->
      -----Rs------XsIs---- --- -----Rr'----Xr'Ir'----
@@ -34,7 +34,7 @@ def solve_EEC(self, output):
     Lr = self.parameters["Lr"]
     Lm = self.parameters["Lm"]
 
-    s = self.parameter["s"]
+    s = self.parameters["s"]
 
     felec = output.elec.felec
     ws = 2 * pi * felec
@@ -48,39 +48,54 @@ def solve_EEC(self, output):
     # Prepare linear system
 
     # Solve system
-    if "Us" in self.parameters:
-        Us = self.parameters["Us"]
+    if "Ud" in self.parameters:
+        Us = self.parameters["Ud"] + 1j * self.parameters["Uq"]
         # input vector
         b = array([real(Us), imag(Us), 0, 0, 0, 0, 0, 0, 0, 0])
         # system matrix (unknowns order: Um, Is, Im, Ir', Ife each real and imagine parts)
         # TODO simplify system for less unknows (only calculate them afterwards, e.g. Um, Im, Ife)
         # fmt: off
-        A = array([ 
-            # sum of (real and imagine) voltages equals the input voltage Us
-            [1, 0, Rs, -Xs, 0, 0, 0, 0, 0, 0, 0, 0], 
-            [0, 1, Xs, +Rs, 0, 0, 0, 0, 0, 0, 0, 0], 
-            # sum of (real and imagine) currents are zeros
-            [0, 0, -1, 0, 1, 0, 1, 0, 1, 0 ], 
-            [0, 0, 0, -1, 0, 1, 0, 1, 0, 1 ], 
-            # j*Xm*Im = Um
-            [-1, 0, 0, 0, 0, -Xm, 0, 0, 0, 0,], 
-            [0, -1, 0, 0, +Xm, 0, 0, 0, 0, 0],
-            # (Rr'/s + j*Xr')*Ir' = Um
-            [-1, 0, 0, 0, 0, 0, Rr_s, -Xr, 0, 0], 
-            [0, -1, 0, 0, 0, 0, +Xm, Rr_s, 0, 0],
-            # Rfe*Ife = Um
-            [-1, 0, 0, 0, 0, 0, 0, 0, Rfe, 0], 
-            [0, +1, 0, 0, 0, 0, 0, 0, 0, Rfe],
-        ]) 
+        A = array(
+            [ 
+                # sum of (real and imagine) voltages equals the input voltage Us
+                [ 1,  0, Rs, -Xs,  0,   0,    0,    0,   0,   0, ], 
+                [ 0,  1, Xs,  Rs,  0,   0,    0,    0,   0,   0, ], 
+                # sum of (real and imagine) currents are zeros
+                [ 0,  0, -1,   0,  1,   0,    1,    0,   1,   0, ], 
+                [ 0,  0,  0,  -1,  0,   1,    0,    1,   0,   1, ], 
+                # j*Xm*Im = Um
+                [-1,  0,  0,   0,  0, -Xm,    0,    0,   0,   0, ], 
+                [ 0, -1,  0,   0, Xm,   0,    0,    0,   0,   0, ],
+                # (Rr'/s + j*Xr')*Ir' = Um
+                [-1,  0,  0,   0,  0,   0, Rr_s,  -Xr,   0,   0, ], 
+                [ 0, -1,  0,   0,  0,   0,   Xr, Rr_s,   0,   0, ],
+                # Rfe*Ife = Um
+                [-1,  0,  0,   0,  0,   0,    0,    0, Rfe,   0, ], 
+                [ 0, -1,  0,   0,  0,   0,    0,    0,   0, Rfe, ],
+            ]
+        ) 
         # fmt: on
-        # TODO delete last row and column if Rfe is None
+        # delete last row and column if Rfe is None
+        if Rfe is None:
+            A = A[:-2, :-2]
+            b = b[:-2]
 
-        X = solve(A, b)
+        # print(b)
+        # print(A)
+        X = solve(A.astype(float), b.astype(float))
 
-        Um = X[0] + j * X[1]
-        Is = X[2] + j * X[3]
-        Ir_ = X[6] + j * X[7]
-        Ife = X[8] + j * x[9]
+        Is = X[2] + 1j * X[3]
+
+        """
+        Um = X[0] + 1j * X[1]
+        Ir_ = X[6] + 1j * X[7]
+        print(Um)
+        print(Is)
+        print(Ir_)
+        if Rfe is not None:
+            Ife = X[8] + 1j * X[9]
+            print(Ife)
+        """
         # TODO use logger for output of some quantities
 
         output.elec.Id_ref = real(Is)  # use Id_ref / Iq_ref for now
@@ -90,9 +105,9 @@ def solve_EEC(self, output):
         # TODO
 
     # Compute currents
-    # output.elec.Is = None
-    # output.elec.Is = output.elec.get_Is()
+    output.elec.Is = None
+    output.elec.Is = output.elec.get_Is()
 
     # Compute voltage
-    # output.elec.Us = None
-    # output.elec.Us = output.elec.get_Us()
+    output.elec.Us = None
+    output.elec.Us = output.elec.get_Us()

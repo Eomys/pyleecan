@@ -11,11 +11,18 @@ def comp_parameters(self, output):
     output : Output
         an Output object
     """
-    # for now do nothing, only direct user input except 'Rs'
+    # for now do nothing, only direct user input except 'Rs' and slip calc.
 
     # Parameters to compute only once
     if "Rs" not in self.parameters:
         self.parameters["Rs"] = output.simu.machine.stator.comp_resistance_wind()
+
+    if "s" not in self.parameters:
+        zp = output.simu.machine.stator.get_pole_pair_number()
+        Nr = output.elec.N0
+        Ns = output.elec.felec / zp * 60
+        self.parameters["s"] = (Ns - Nr) / Ns
+        # print(f"slip = {(Ns - Nr) / Ns}")
 
     """
     if "phi" not in self.parameters:
