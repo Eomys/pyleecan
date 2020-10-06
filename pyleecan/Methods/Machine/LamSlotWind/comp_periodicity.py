@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from ....Functions.Winding.comp_wind_periodicity import comp_wind_periodicity
+from ....Classes.Winding import Winding
 
 
 def comp_periodicity(self):
@@ -22,7 +23,10 @@ def comp_periodicity(self):
         True if an time anti-periodicity is possible after the periodicities
     """
 
-    sym_a, is_antisym_a = comp_wind_periodicity(self.winding.comp_connection_mat())
+    if self.winding is not None and type(self.winding) is not Winding:
+        sym_a, is_antisym_a = comp_wind_periodicity(self.winding.comp_connection_mat())
+    else:
+        sym_a, is_antisym_a = 1, False
 
     if is_antisym_a:
         sym_a /= 2
