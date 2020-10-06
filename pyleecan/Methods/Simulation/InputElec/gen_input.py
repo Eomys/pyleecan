@@ -17,55 +17,23 @@ def gen_input(self):
 
     output = OutElec()
 
-    # Get the phase number for verifications
-    if self.parent is None:
-        raise InputError(
-            "ERROR: InputCurrent object should be inside a Simulation object"
-        )
     # get the simulation
     if isinstance(self.parent, Simulation):
         simu = self.parent
     elif isinstance(self.parent.parent, Simulation):
         simu = self.parent.parent
     else:
-        raise InputError("Cannot find InputElec simulation.")
+        raise InputError(
+            "ERROR: InputCurrent object should be inside a Simulation object"
+        )
 
     output.N0 = self.N0
     output.felec = self.comp_felec()
 
-    # Load/define time
-    if self.time is None:
-        if self.Nrev is None or self.Nt_tot is None or self.N0 is None:
-            raise InputError("ERROR: InputCurrent.time missing")
-        output.time = self.comp_time(self.N0)
-    else:  # Enfore time vector
-        output.time = self.time.get_data()
-    # Check time
-    if not isinstance(output.time, ndarray) or len(output.time.shape) != 1:
-        # time should be a vector
-        raise InputError(
-            "ERROR: InputCurrent.time should be a vector, "
-            + str(output.time.shape)
-            + " shape found"
-        )
-    self.Nt_tot = len(output.time)
-
-    # Load/define angle
-    if self.angle is None:
-        if self.Na_tot is None:
-            raise InputError("ERROR: InputCurrent.angle missing")
-        output.angle = linspace(0, 2 * pi, self.Na_tot)
-    else:  # Enfore angle vector
-        output.angle = self.angle.get_data()
-    # Check angle
-    if not isinstance(output.angle, ndarray) or len(output.angle.shape) != 1:
-        # angle should be a vector
-        raise InputError(
-            "ERROR: InputCurrent.angle should be a vector, "
-            + str(output.angle.shape)
-            + " shape found"
-        )
-    self.Na_tot = len(output.angle)
+    # Set discretization
+    Time, Angle = self.comp_axes(simu.machine, self.N0)
+    output.time = Time
+    output.angle = Angle
 
     # Initialize output at None
     output.Id_ref = None

@@ -120,20 +120,8 @@ class OutMag(FrozenClass):
             OutMag_str += "parent = None " + linesep
         else:
             OutMag_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutMag_str += (
-            "time = "
-            + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutMag_str += (
-            "angle = "
-            + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutMag_str += "time = " + str(self.time) + linesep + linesep
+        OutMag_str += "angle = " + str(self.angle) + linesep + linesep
         OutMag_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutMag_str += "Na_tot = " + str(self.Na_tot) + linesep
         OutMag_str += "B = " + str(self.B) + linesep + linesep
@@ -169,9 +157,9 @@ class OutMag(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if not array_equal(other.time, self.time):
+        if other.time != self.time:
             return False
-        if not array_equal(other.angle, self.angle):
+        if other.angle != self.angle:
             return False
         if other.Nt_tot != self.Nt_tot:
             return False
@@ -206,11 +194,11 @@ class OutMag(FrozenClass):
         if self.time is None:
             OutMag_dict["time"] = None
         else:
-            OutMag_dict["time"] = self.time.tolist()
+            OutMag_dict["time"] = self.time.as_dict()
         if self.angle is None:
             OutMag_dict["angle"] = None
         else:
-            OutMag_dict["angle"] = self.angle.tolist()
+            OutMag_dict["angle"] = self.angle.as_dict()
         OutMag_dict["Nt_tot"] = self.Nt_tot
         OutMag_dict["Na_tot"] = self.Na_tot
         if self.B is None:
@@ -267,14 +255,16 @@ class OutMag(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("time", value, "ndarray")
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "time"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("time", value, "Data")
         self._time = value
 
     time = property(
@@ -282,7 +272,7 @@ class OutMag(FrozenClass):
         fset=_set_time,
         doc=u"""Magnetic time vector (no symmetry)
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
@@ -292,14 +282,16 @@ class OutMag(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("angle", value, "ndarray")
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "angle"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("angle", value, "Data")
         self._angle = value
 
     angle = property(
@@ -307,7 +299,7 @@ class OutMag(FrozenClass):
         fset=_set_angle,
         doc=u"""Magnetic position vector (no symmetry)
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 

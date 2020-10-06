@@ -6004,18 +6004,18 @@
                 "max": "",
                 "min": "",
                 "name": "time",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "s",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Electrical position vector (no symmetry)",
                 "max": "",
                 "min": "",
                 "name": "angle",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "rad",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Stator currents as a function of time (each column correspond to one phase)",
@@ -6454,18 +6454,18 @@
                 "max": "",
                 "min": "",
                 "name": "time",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "s",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Magnetic position vector (no symmetry)",
                 "max": "",
                 "min": "",
                 "name": "angle",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "rad",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Length of the time vector",

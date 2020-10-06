@@ -16,10 +16,14 @@ def solve_FEMM(self, femm, output, sym):
     # Loading parameters for readibility
     angle = output.mag.angle
     L1 = output.simu.machine.stator.comp_length()
-    Nt_tot = output.mag.Nt_tot  # Number of time step
-    Na_tot = output.mag.Na_tot  # Number of angular step
+
     save_path = self.get_path_save(output)
     FEMM_dict = output.mag.FEMM_dict
+
+    # Get dimensions including periodicity
+    # TODO call the SciDataTool method (when it exist)
+    Nt_per = output.mag.Nt_tot  # Number of time step
+    Na_per = output.mag.Na_tot  # Number of angular step
 
     if (
         hasattr(output.simu.machine.stator, "winding")
@@ -27,7 +31,7 @@ def solve_FEMM(self, femm, output, sym):
     ):
         qs = output.simu.machine.stator.winding.qs  # Winding phase number
         Npcpp = output.simu.machine.stator.winding.Npcpp
-        Phi_wind_stator = zeros((Nt_tot, qs))
+        Phi_wind_stator = zeros((Nt_per, qs))
     else:
         Phi_wind_stator = None
 
@@ -35,15 +39,15 @@ def solve_FEMM(self, femm, output, sym):
     femm.mi_createmesh()
 
     # Initialize results matrix
-    Br = zeros((Nt_tot, Na_tot))
-    Bt = zeros((Nt_tot, Na_tot))
-    Tem = zeros((Nt_tot))
+    Br = zeros((Nt_per, Na_per))
+    Bt = zeros((Nt_per, Na_per))
+    Tem = zeros((Nt_per))
 
     Rag = output.simu.machine.comp_Rgap_mec()
 
     # Compute the data for each time step
-    for ii in range(Nt_tot):
-        self.get_logger().debug("Solving step " + str(ii + 1) + " / " + str(Nt_tot))
+    for ii in range(Nt_per):
+        self.get_logger().debug("Solving step " + str(ii + 1) + " / " + str(Nt_per))
         # Update rotor position and currents
         update_FEMM_simulation(
             femm=femm,
@@ -70,10 +74,10 @@ def solve_FEMM(self, femm, output, sym):
 
         # Get the flux result
         if self.is_sliding_band:
-            for jj in range(Na_tot):
+            for jj in range(Na_per):
                 Br[ii, jj], Bt[ii, jj] = femm.mo_getgapb("bc_ag2", angle[jj] * 180 / pi)
         else:
-            for jj in range(Na_tot):
+            for jj in range(Na_per):
                 B = femm.mo_getb(Rag * np.cos(angle[jj]), Rag * np.sin(angle[jj]))
                 Br[ii, jj] = B[0] * np.cos(angle[jj]) + B[1] * np.sin(angle[jj])
                 Bt[ii, jj] = -B[0] * np.sin(angle[jj]) + B[1] * np.cos(angle[jj])
@@ -97,7 +101,7 @@ def solve_FEMM(self, femm, output, sym):
             )
 
         # Load mesh data & solution
-        if (self.is_sliding_band or Nt_tot == 1) and (
+        if (self.is_sliding_band or Nt_per == 1) and (
             self.is_get_mesh or self.is_save_FEA
         ):
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
@@ -107,38 +111,22 @@ def solve_FEMM(self, femm, output, sym):
             if ii == 0:
                 meshFEMM = [tmpmeshFEMM]
                 groups = [tmpgroups]
-                B_elem = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                H_elem = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                mu_elem = np.zeros([Nt_tot, meshFEMM[ii].cell["triangle"].nb_cell])
+                B_elem = np.zeros([Nt_per, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                H_elem = np.zeros([Nt_per, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                mu_elem = np.zeros([Nt_per, meshFEMM[ii].cell["triangle"].nb_cell])
 
             B_elem[ii, :, 0:2] = tmpB
             H_elem[ii, :, 0:2] = tmpH
             mu_elem[ii, :] = tmpmu
 
     # Shift to take into account stator position
-    roll_id = int(self.angle_stator * Na_tot / (2 * pi))
+    roll_id = int(self.angle_stator * Na_per / (2 * pi))
     Br = roll(Br, roll_id, axis=1)
     Bt = roll(Bt, roll_id, axis=1)
 
     # Store the results
-    Time = DataLinspace(
-        name="time",
-        unit="s",
-        symmetries={},
-        initial=output.mag.time[0],
-        final=output.mag.time[-1],
-        number=Nt_tot,
-        include_endpoint=True,
-    )
-    Angle = DataLinspace(
-        name="angle",
-        unit="rad",
-        symmetries={},
-        initial=angle[0],
-        final=angle[-1],
-        number=Na_tot,
-        include_endpoint=True,
-    )
+    Time = output.mag.Time  # Same symmetry as input
+    Angle = output.mag.Angle  # Same symmetry as input
     Br_data = DataTime(
         name="Airgap radial flux density",
         unit="T",
@@ -196,7 +184,7 @@ def solve_FEMM(self, femm, output, sym):
 
     if self.is_get_mesh:
         output.mag.meshsolution = self.build_meshsolution(
-            Nt_tot, meshFEMM, Time, B_elem, H_elem, mu_elem, groups
+            Nt_per, meshFEMM, Time, B_elem, H_elem, mu_elem, groups
         )
 
     if self.is_save_FEA:

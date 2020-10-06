@@ -185,20 +185,8 @@ class OutElec(FrozenClass):
             OutElec_str += "parent = None " + linesep
         else:
             OutElec_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutElec_str += (
-            "time = "
-            + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutElec_str += (
-            "angle = "
-            + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutElec_str += "time = " + str(self.time) + linesep + linesep
+        OutElec_str += "angle = " + str(self.angle) + linesep + linesep
         OutElec_str += "Is = " + str(self.Is) + linesep + linesep
         OutElec_str += "Ir = " + str(self.Ir) + linesep + linesep
         OutElec_str += (
@@ -231,9 +219,9 @@ class OutElec(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if not array_equal(other.time, self.time):
+        if other.time != self.time:
             return False
-        if not array_equal(other.angle, self.angle):
+        if other.angle != self.angle:
             return False
         if other.Is != self.Is:
             return False
@@ -278,11 +266,11 @@ class OutElec(FrozenClass):
         if self.time is None:
             OutElec_dict["time"] = None
         else:
-            OutElec_dict["time"] = self.time.tolist()
+            OutElec_dict["time"] = self.time.as_dict()
         if self.angle is None:
             OutElec_dict["angle"] = None
         else:
-            OutElec_dict["angle"] = self.angle.tolist()
+            OutElec_dict["angle"] = self.angle.as_dict()
         if self.Is is None:
             OutElec_dict["Is"] = None
         else:
@@ -348,14 +336,16 @@ class OutElec(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("time", value, "ndarray")
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "time"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("time", value, "Data")
         self._time = value
 
     time = property(
@@ -363,7 +353,7 @@ class OutElec(FrozenClass):
         fset=_set_time,
         doc=u"""Electrical time vector (no symmetry)
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
@@ -373,14 +363,16 @@ class OutElec(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("angle", value, "ndarray")
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "angle"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("angle", value, "Data")
         self._angle = value
 
     angle = property(
@@ -388,7 +380,7 @@ class OutElec(FrozenClass):
         fset=_set_angle,
         doc=u"""Electrical position vector (no symmetry)
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
