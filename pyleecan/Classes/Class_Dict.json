@@ -4756,10 +4756,19 @@
                 "value": 0
             },
             {
-                "desc": "True to compute only on one time and angle periodicity (use periodicities defined in output.mag.time and output.mag.angle)",
+                "desc": "True to compute only on one time periodicity (use periodicities defined in output.mag.time)",
                 "max": "",
                 "min": "",
-                "name": "is_periodicity",
+                "name": "is_periodicity_t",
+                "type": "bool",
+                "unit": "-",
+                "value": 1
+            },
+            {
+                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.angle)",
+                "max": "",
+                "min": "",
+                "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "-",
                 "value": 1

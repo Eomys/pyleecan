@@ -18,7 +18,7 @@ def comp_flux_airgap(self, output):
     # Set the symmetry factor from angle axe
     sym = 1
     is_antiper_a = False
-    if "angle" in output.mag.angle.symmetries and self.is_periodicity:
+    if "angle" in output.mag.angle.symmetries and self.is_periodicity_a:
         if "antiperiod" in output.mag.angle.symmetries["angle"]:
             is_antiper_a = True
             sym = output.mag.angle.symmetries["angle"]

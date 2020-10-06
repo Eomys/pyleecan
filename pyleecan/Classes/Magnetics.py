@@ -86,7 +86,8 @@ class Magnetics(FrozenClass):
         is_mmfr=True,
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_periodicity=True,
+        is_periodicity_t=True,
+        is_periodicity_a=True,
         init_dict=None,
         init_str=None,
     ):
@@ -119,8 +120,10 @@ class Magnetics(FrozenClass):
                 type_BH_stator = init_dict["type_BH_stator"]
             if "type_BH_rotor" in list(init_dict.keys()):
                 type_BH_rotor = init_dict["type_BH_rotor"]
-            if "is_periodicity" in list(init_dict.keys()):
-                is_periodicity = init_dict["is_periodicity"]
+            if "is_periodicity_t" in list(init_dict.keys()):
+                is_periodicity_t = init_dict["is_periodicity_t"]
+            if "is_periodicity_a" in list(init_dict.keys()):
+                is_periodicity_a = init_dict["is_periodicity_a"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_remove_slotS = is_remove_slotS
@@ -130,7 +133,8 @@ class Magnetics(FrozenClass):
         self.is_mmfr = is_mmfr
         self.type_BH_stator = type_BH_stator
         self.type_BH_rotor = type_BH_rotor
-        self.is_periodicity = is_periodicity
+        self.is_periodicity_t = is_periodicity_t
+        self.is_periodicity_a = is_periodicity_a
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -150,7 +154,8 @@ class Magnetics(FrozenClass):
         Magnetics_str += "is_mmfr = " + str(self.is_mmfr) + linesep
         Magnetics_str += "type_BH_stator = " + str(self.type_BH_stator) + linesep
         Magnetics_str += "type_BH_rotor = " + str(self.type_BH_rotor) + linesep
-        Magnetics_str += "is_periodicity = " + str(self.is_periodicity) + linesep
+        Magnetics_str += "is_periodicity_t = " + str(self.is_periodicity_t) + linesep
+        Magnetics_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
         return Magnetics_str
 
     def __eq__(self, other):
@@ -172,7 +177,9 @@ class Magnetics(FrozenClass):
             return False
         if other.type_BH_rotor != self.type_BH_rotor:
             return False
-        if other.is_periodicity != self.is_periodicity:
+        if other.is_periodicity_t != self.is_periodicity_t:
+            return False
+        if other.is_periodicity_a != self.is_periodicity_a:
             return False
         return True
 
@@ -187,7 +194,8 @@ class Magnetics(FrozenClass):
         Magnetics_dict["is_mmfr"] = self.is_mmfr
         Magnetics_dict["type_BH_stator"] = self.type_BH_stator
         Magnetics_dict["type_BH_rotor"] = self.type_BH_rotor
-        Magnetics_dict["is_periodicity"] = self.is_periodicity
+        Magnetics_dict["is_periodicity_t"] = self.is_periodicity_t
+        Magnetics_dict["is_periodicity_a"] = self.is_periodicity_a
         # The class name is added to the dict fordeserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
@@ -202,7 +210,8 @@ class Magnetics(FrozenClass):
         self.is_mmfr = None
         self.type_BH_stator = None
         self.type_BH_rotor = None
-        self.is_periodicity = None
+        self.is_periodicity_t = None
+        self.is_periodicity_a = None
 
     def _get_is_remove_slotS(self):
         """getter of is_remove_slotS"""
@@ -334,19 +343,37 @@ class Magnetics(FrozenClass):
         """,
     )
 
-    def _get_is_periodicity(self):
-        """getter of is_periodicity"""
-        return self._is_periodicity
+    def _get_is_periodicity_t(self):
+        """getter of is_periodicity_t"""
+        return self._is_periodicity_t
 
-    def _set_is_periodicity(self, value):
-        """setter of is_periodicity"""
-        check_var("is_periodicity", value, "bool")
-        self._is_periodicity = value
+    def _set_is_periodicity_t(self, value):
+        """setter of is_periodicity_t"""
+        check_var("is_periodicity_t", value, "bool")
+        self._is_periodicity_t = value
 
-    is_periodicity = property(
-        fget=_get_is_periodicity,
-        fset=_set_is_periodicity,
-        doc=u"""True to compute only on one time and angle periodicity (use periodicities defined in output.mag.time and output.mag.angle)
+    is_periodicity_t = property(
+        fget=_get_is_periodicity_t,
+        fset=_set_is_periodicity_t,
+        doc=u"""True to compute only on one time periodicity (use periodicities defined in output.mag.time)
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_periodicity_a(self):
+        """getter of is_periodicity_a"""
+        return self._is_periodicity_a
+
+    def _set_is_periodicity_a(self, value):
+        """setter of is_periodicity_a"""
+        check_var("is_periodicity_a", value, "bool")
+        self._is_periodicity_a = value
+
+    is_periodicity_a = property(
+        fget=_get_is_periodicity_a,
+        fset=_set_is_periodicity_a,
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.mag.angle)
 
         :Type: bool
         """,

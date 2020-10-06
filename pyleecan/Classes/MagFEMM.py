@@ -154,7 +154,8 @@ class MagFEMM(Magnetics):
         is_mmfr=True,
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_periodicity=True,
+        is_periodicity_t=True,
+        is_periodicity_a=True,
         init_dict=None,
         init_str=None,
     ):
@@ -215,8 +216,10 @@ class MagFEMM(Magnetics):
                 type_BH_stator = init_dict["type_BH_stator"]
             if "type_BH_rotor" in list(init_dict.keys()):
                 type_BH_rotor = init_dict["type_BH_rotor"]
-            if "is_periodicity" in list(init_dict.keys()):
-                is_periodicity = init_dict["is_periodicity"]
+            if "is_periodicity_t" in list(init_dict.keys()):
+                is_periodicity_t = init_dict["is_periodicity_t"]
+            if "is_periodicity_a" in list(init_dict.keys()):
+                is_periodicity_a = init_dict["is_periodicity_a"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -241,7 +244,8 @@ class MagFEMM(Magnetics):
             is_mmfr=is_mmfr,
             type_BH_stator=type_BH_stator,
             type_BH_rotor=type_BH_rotor,
-            is_periodicity=is_periodicity,
+            is_periodicity_t=is_periodicity_t,
+            is_periodicity_a=is_periodicity_a,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties

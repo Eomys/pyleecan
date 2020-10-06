@@ -22,8 +22,15 @@ def solve_FEMM(self, femm, output, sym):
 
     # Get dimensions including periodicity
     # TODO call the SciDataTool method (when it exist)
-    Nt_per = output.mag.Nt_tot  # Number of time step
-    Na_per = output.mag.Na_tot  # Number of angular step
+    if self.is_periodicity_t:
+        Nt_comp = output.mag.Nt_tot  # One periodicity only
+    else:
+        Nt_comp = output.mag.Nt_tot  # Full angular step
+
+    if self.is_periodicity_a:
+        Na_comp = output.mag.Na_tot  # One periodicity only
+    else:
+        Na_comp = output.mag.Na_tot  # Full angular step
 
     if (
         hasattr(output.simu.machine.stator, "winding")
@@ -31,7 +38,7 @@ def solve_FEMM(self, femm, output, sym):
     ):
         qs = output.simu.machine.stator.winding.qs  # Winding phase number
         Npcpp = output.simu.machine.stator.winding.Npcpp
-        Phi_wind_stator = zeros((Nt_per, qs))
+        Phi_wind_stator = zeros((Nt_comp, qs))
     else:
         Phi_wind_stator = None
 
@@ -39,15 +46,15 @@ def solve_FEMM(self, femm, output, sym):
     femm.mi_createmesh()
 
     # Initialize results matrix
-    Br = zeros((Nt_per, Na_per))
-    Bt = zeros((Nt_per, Na_per))
-    Tem = zeros((Nt_per))
+    Br = zeros((Nt_comp, Na_comp))
+    Bt = zeros((Nt_comp, Na_comp))
+    Tem = zeros((Nt_comp))
 
     Rag = output.simu.machine.comp_Rgap_mec()
 
     # Compute the data for each time step
-    for ii in range(Nt_per):
-        self.get_logger().debug("Solving step " + str(ii + 1) + " / " + str(Nt_per))
+    for ii in range(Nt_comp):
+        self.get_logger().debug("Solving step " + str(ii + 1) + " / " + str(Nt_comp))
         # Update rotor position and currents
         update_FEMM_simulation(
             femm=femm,
@@ -74,10 +81,10 @@ def solve_FEMM(self, femm, output, sym):
 
         # Get the flux result
         if self.is_sliding_band:
-            for jj in range(Na_per):
+            for jj in range(Na_comp):
                 Br[ii, jj], Bt[ii, jj] = femm.mo_getgapb("bc_ag2", angle[jj] * 180 / pi)
         else:
-            for jj in range(Na_per):
+            for jj in range(Na_comp):
                 B = femm.mo_getb(Rag * np.cos(angle[jj]), Rag * np.sin(angle[jj]))
                 Br[ii, jj] = B[0] * np.cos(angle[jj]) + B[1] * np.sin(angle[jj])
                 Bt[ii, jj] = -B[0] * np.sin(angle[jj]) + B[1] * np.cos(angle[jj])
@@ -101,7 +108,7 @@ def solve_FEMM(self, femm, output, sym):
             )
 
         # Load mesh data & solution
-        if (self.is_sliding_band or Nt_per == 1) and (
+        if (self.is_sliding_band or Nt_comp == 1) and (
             self.is_get_mesh or self.is_save_FEA
         ):
             tmpmeshFEMM, tmpB, tmpH, tmpmu, tmpgroups = self.get_meshsolution(
@@ -111,16 +118,16 @@ def solve_FEMM(self, femm, output, sym):
             if ii == 0:
                 meshFEMM = [tmpmeshFEMM]
                 groups = [tmpgroups]
-                B_elem = np.zeros([Nt_per, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                H_elem = np.zeros([Nt_per, meshFEMM[ii].cell["triangle"].nb_cell, 3])
-                mu_elem = np.zeros([Nt_per, meshFEMM[ii].cell["triangle"].nb_cell])
+                B_elem = np.zeros([Nt_comp, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                H_elem = np.zeros([Nt_comp, meshFEMM[ii].cell["triangle"].nb_cell, 3])
+                mu_elem = np.zeros([Nt_comp, meshFEMM[ii].cell["triangle"].nb_cell])
 
             B_elem[ii, :, 0:2] = tmpB
             H_elem[ii, :, 0:2] = tmpH
             mu_elem[ii, :] = tmpmu
 
     # Shift to take into account stator position
-    roll_id = int(self.angle_stator * Na_per / (2 * pi))
+    roll_id = int(self.angle_stator * Na_comp / (2 * pi))
     Br = roll(Br, roll_id, axis=1)
     Bt = roll(Bt, roll_id, axis=1)
 
@@ -184,7 +191,7 @@ def solve_FEMM(self, femm, output, sym):
 
     if self.is_get_mesh:
         output.mag.meshsolution = self.build_meshsolution(
-            Nt_per, meshFEMM, Time, B_elem, H_elem, mu_elem, groups
+            Nt_comp, meshFEMM, Time, B_elem, H_elem, mu_elem, groups
         )
 
     if self.is_save_FEA:
