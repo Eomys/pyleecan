@@ -68,7 +68,6 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
     surf_list = list()
     X_list = linspace(Ztan1, Ztan2, Ntan + 1, True).tolist()[1:-1]
     for ii in range(Nrad):
-        print("plop")
         surf = rad_list[ii]
         if Ntan > 1:
             for jj in range(Ntan - 1):

@@ -41,11 +41,6 @@ try:
 except ImportError as error:
     plot_wind = error
 
-try:
-    from ..Methods.Slot.SlotWind.build_geometry_wind import build_geometry_wind
-except ImportError as error:
-    build_geometry_wind = error
-
 
 from ._check import InitUnKnowClassError
 
@@ -113,18 +108,6 @@ class SlotWind(Slot):
         )
     else:
         plot_wind = plot_wind
-    # cf Methods.Slot.SlotWind.build_geometry_wind
-    if isinstance(build_geometry_wind, ImportError):
-        build_geometry_wind = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotWind method build_geometry_wind: "
-                    + str(build_geometry_wind)
-                )
-            )
-        )
-    else:
-        build_geometry_wind = build_geometry_wind
     # save and copy methods are available in all object
     save = save
     copy = copy

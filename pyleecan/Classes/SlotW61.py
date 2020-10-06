@@ -27,9 +27,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotW61.build_geometry_wind import build_geometry_wind
+    from ..Methods.Slot.SlotW61.get_surface_wind import get_surface_wind
 except ImportError as error:
-    build_geometry_wind = error
+    get_surface_wind = error
 
 try:
     from ..Methods.Slot.SlotW61.check import check
@@ -60,6 +60,11 @@ try:
     from ..Methods.Slot.SlotW61.comp_surface_wind import comp_surface_wind
 except ImportError as error:
     comp_surface_wind = error
+
+try:
+    from ..Methods.Slot.SlotW61.get_surface_wind import get_surface_wind
+except ImportError as error:
+    get_surface_wind = error
 
 
 from ._check import InitUnKnowClassError
@@ -94,18 +99,18 @@ class SlotW61(SlotWind):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW61.build_geometry_wind
-    if isinstance(build_geometry_wind, ImportError):
-        build_geometry_wind = property(
+    # cf Methods.Slot.SlotW61.get_surface_wind
+    if isinstance(get_surface_wind, ImportError):
+        get_surface_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW61 method build_geometry_wind: "
-                    + str(build_geometry_wind)
+                    "Can't use SlotW61 method get_surface_wind: "
+                    + str(get_surface_wind)
                 )
             )
         )
     else:
-        build_geometry_wind = build_geometry_wind
+        get_surface_wind = get_surface_wind
     # cf Methods.Slot.SlotW61.check
     if isinstance(check, ImportError):
         check = property(
@@ -171,6 +176,18 @@ class SlotW61(SlotWind):
         )
     else:
         comp_surface_wind = comp_surface_wind
+    # cf Methods.Slot.SlotW61.get_surface_wind
+    if isinstance(get_surface_wind, ImportError):
+        get_surface_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW61 method get_surface_wind: "
+                    + str(get_surface_wind)
+                )
+            )
+        )
+    else:
+        get_surface_wind = get_surface_wind
     # save and copy methods are available in all object
     save = save
     copy = copy

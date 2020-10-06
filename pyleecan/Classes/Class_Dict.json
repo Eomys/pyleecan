@@ -738,123 +738,6 @@
             }
         ]
     },
-    "Data": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "Data1D",
-            "DataFreq",
-            "DataLinspace",
-            "DataND",
-            "DataTime"
-        ],
-        "desc": "Abstract class for all kinds of data",
-        "is_internal": false,
-        "methods": [],
-        "mother": "",
-        "name": "Data",
-        "package": "",
-        "path": "pyleecan/Generator/ClassesRef/Data/Data.csv",
-        "properties": [
-            {
-                "desc": "Symbol of the variable (in latex syntax)",
-                "max": "",
-                "min": "",
-                "name": "symbol",
-                "type": "str",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Name of the physical quantity (to be used in plots)",
-                "max": "",
-                "min": "",
-                "name": "name",
-                "type": "str",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Unit of the physical quantity (to be used in plots)",
-                "max": "",
-                "min": "",
-                "name": "unit",
-                "type": "str",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Dictionary of the symmetries along each axis, used to reduce storage",
-                "max": "",
-                "min": "",
-                "name": "symmetries",
-                "type": "dict",
-                "unit": "",
-                "value": {}
-            }
-        ]
-    },
-    "Data1D": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Class for axes defined as vectors",
-        "is_internal": false,
-        "methods": [
-            "get_values"
-        ],
-        "mother": "Data",
-        "name": "Data1D",
-        "package": "",
-        "path": "pyleecan/Generator/ClassesRef/Data/Data1D.csv",
-        "properties": [
-            {
-                "desc": "List or ndarray of the axis values",
-                "max": "",
-                "min": "",
-                "name": "values",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Boolean inidcating if the axis is components",
-                "max": "",
-                "min": "",
-                "name": "is_components",
-                "type": "bool",
-                "unit": "",
-                "value": false
-            }
-        ]
-    },
-    "DataFreq": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Class for fields defined in Fourier space",
-        "is_internal": false,
-        "methods": [
-            "freq_to_time"
-        ],
-        "mother": "DataND",
-        "name": "DataFreq",
-        "package": "",
-        "path": "pyleecan/Generator/ClassesRef/Data/DataFreq.csv",
-        "properties": []
-    },
     "DataKeeper": {
         "constants": [
             {
@@ -926,174 +809,6 @@
                 "value": []
             }
         ]
-    },
-    "DataLinspace": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Class for axes defined as linspaces",
-        "is_internal": false,
-        "methods": [
-            "get_values"
-        ],
-        "mother": "Data",
-        "name": "DataLinspace",
-        "package": "",
-        "path": "pyleecan/Generator/ClassesRef/Data/DataLinspace.csv",
-        "properties": [
-            {
-                "desc": "First value",
-                "max": "",
-                "min": "",
-                "name": "initial",
-                "type": "float",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Last value",
-                "max": "",
-                "min": "",
-                "name": "final",
-                "type": "float",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Step",
-                "max": "",
-                "min": "",
-                "name": "step",
-                "type": "float",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Number of steps",
-                "max": "",
-                "min": "",
-                "name": "number",
-                "type": "int",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Boolean indicating if the endpoint must be included",
-                "max": "",
-                "min": "",
-                "name": "include_endpoint",
-                "type": "bool",
-                "unit": "",
-                "value": true
-            },
-            {
-                "desc": "Boolean inidcating if the axis is components",
-                "max": "",
-                "min": "",
-                "name": "is_components",
-                "type": "bool",
-                "unit": "",
-                "value": false
-            }
-        ]
-    },
-    "DataND": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [
-            "DataFreq",
-            "DataTime"
-        ],
-        "desc": "Abstract class for fields (time or frequency domain)",
-        "is_internal": false,
-        "methods": [
-            "compare_along",
-            "compare_magnitude_along",
-            "compare_phase_along",
-            "compress",
-            "set_Ftparameters",
-            "comp_axes",
-            "convert",
-            "extract_slices",
-            "extract_slices_fft",
-            "get_field",
-            "rebuild_symmetries",
-            "interpolate",
-            "get_along",
-            "get_magnitude_along",
-            "get_phase_along",
-            "get_harmonics",
-            "_set_values"
-        ],
-        "mother": "Data",
-        "name": "DataND",
-        "package": "",
-        "path": "pyleecan/Generator/ClassesRef/Data/DataND.csv",
-        "properties": [
-            {
-                "desc": "List of the Data1D objects corresponding to the axes",
-                "max": "",
-                "min": "",
-                "name": "axes",
-                "type": "[SciDataTool.Classes.Data]",
-                "unit": "",
-                "value": "None"
-            },
-            {
-                "desc": "Normalizations available for the field and its axes",
-                "max": "",
-                "min": "",
-                "name": "normalizations",
-                "type": "dict",
-                "unit": "",
-                "value": {}
-            },
-            {
-                "desc": "Tunable parameters for the Fourier Transforms",
-                "max": "",
-                "min": "",
-                "name": "FTparameters",
-                "type": "dict",
-                "unit": "",
-                "value": {}
-            },
-            {
-                "desc": "Values of the field",
-                "max": "",
-                "min": "",
-                "name": "values",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            }
-        ]
-    },
-    "DataTime": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Class for fields defined in time space",
-        "is_internal": false,
-        "methods": [
-            "time_to_freq"
-        ],
-        "mother": "DataND",
-        "name": "DataTime",
-        "package": "",
-        "path": "pyleecan/Generator/ClassesRef/Data/DataTime.csv",
-        "properties": []
     },
     "Drive": {
         "constants": [
@@ -7444,125 +7159,6 @@
         "path": "pyleecan/Generator/ClassesRef/Mesh/Interpolation/RefTriangle3.csv",
         "properties": []
     },
-    "RequestedAxis": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Class to handle requested axes during get_along methods",
-        "is_internal": false,
-        "methods": [
-            "get_axis"
-        ],
-        "mother": "",
-        "name": "RequestedAxis",
-        "package": "",
-        "path": "pyleecan/Generator/ClassesRef/Data/RequestedAxis.csv",
-        "properties": [
-            {
-                "desc": "Name requested in get_along command",
-                "max": "",
-                "min": "",
-                "name": "name",
-                "type": "str",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Corresponding axis if a transform is required",
-                "max": "",
-                "min": "",
-                "name": "corr_name",
-                "type": "str",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Unit requested in get_along command",
-                "max": "",
-                "min": "",
-                "name": "unit",
-                "type": "str",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Corresponding unit if a transform is required",
-                "max": "",
-                "min": "",
-                "name": "corr_unit",
-                "type": "str",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Extension of the requested axis (single or interval)",
-                "max": "",
-                "min": "",
-                "name": "extension",
-                "type": "str",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Values of the axis",
-                "max": "",
-                "min": "",
-                "name": "values",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Indices of the axis",
-                "max": "",
-                "min": "",
-                "name": "indices",
-                "type": "list",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Input data to interpolate on",
-                "max": "",
-                "min": "",
-                "name": "input_data",
-                "type": "ndarray",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Operation to perform on the axis (coordinate change, etc)",
-                "max": "",
-                "min": "",
-                "name": "operation",
-                "type": "str",
-                "unit": "",
-                "value": "None"
-            },
-            {
-                "desc": "Index of the axis in the axes list",
-                "max": "",
-                "min": "",
-                "name": "index",
-                "type": "int",
-                "unit": "",
-                "value": null
-            },
-            {
-                "desc": "Transform to perform on the axis (fft, ifft)",
-                "max": "",
-                "min": "",
-                "name": "transform",
-                "type": "str",
-                "unit": "",
-                "value": "None"
-            }
-        ]
-    },
     "ScalarProduct": {
         "constants": [
             {
@@ -8327,13 +7923,14 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "get_surface_wind",
+            "build_geometry_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW10",
@@ -8422,7 +8019,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -8525,7 +8122,7 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -8593,7 +8190,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -8697,7 +8294,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -8774,7 +8371,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -8868,7 +8465,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -8944,13 +8541,14 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "build_geometry_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW21",
@@ -9038,13 +8636,14 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "build_geometry_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW22",
@@ -9113,7 +8712,8 @@
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW23",
@@ -9227,7 +8827,8 @@
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW24",
@@ -9277,7 +8878,8 @@
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW25",
@@ -9339,7 +8941,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -9416,7 +9018,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -9520,7 +9122,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -9602,7 +9204,8 @@
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW29",
@@ -9682,13 +9285,14 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW60",
@@ -9786,13 +9390,14 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW61",
@@ -9917,8 +9522,7 @@
             "comp_height_wind",
             "comp_radius_mid_wind",
             "comp_surface_wind",
-            "plot_wind",
-            "build_geometry_wind"
+            "plot_wind"
         ],
         "mother": "Slot",
         "name": "SlotWind",
@@ -10573,64 +10177,6 @@
                 "type": "[Post]",
                 "unit": "-",
                 "value": []
-            }
-        ]
-    },
-    "VectorField": {
-        "constants": [
-            {
-                "name": "VERSION",
-                "value": "1"
-            }
-        ],
-        "daughters": [],
-        "desc": "Class for 2D or 3D vector fields (time or frequency domain)",
-        "is_internal": false,
-        "methods": [
-            "get_rad_along",
-            "get_tan_along",
-            "get_ax_along",
-            "get_rphiz_along",
-            "get_mag_rad_along",
-            "get_mag_tan_along",
-            "get_mag_ax_along",
-            "get_mag_rphiz_along",
-            "get_harm_rad_along",
-            "get_harm_tan_along",
-            "get_harm_ax_along",
-            "get_harm_rphiz_along"
-        ],
-        "mother": "",
-        "name": "VectorField",
-        "package": "",
-        "path": "pyleecan/Generator/ClassesRef/Data/VectorField.csv",
-        "properties": [
-            {
-                "desc": "Name of the vector field",
-                "max": "",
-                "min": "",
-                "name": "name",
-                "type": "str",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Symbol of the vector field",
-                "max": "",
-                "min": "",
-                "name": "symbol",
-                "type": "str",
-                "unit": "",
-                "value": ""
-            },
-            {
-                "desc": "Dict of the components",
-                "max": "",
-                "min": "",
-                "name": "components",
-                "type": "{SciDataTool.Classes.DataND}",
-                "unit": "",
-                "value": "{}"
             }
         ]
     },
