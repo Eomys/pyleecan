@@ -154,12 +154,7 @@ class MagFEMM(Magnetics):
         is_mmfr=True,
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_symmetry_t=False,
-        sym_t=1,
-        is_antiper_t=False,
-        is_symmetry_a=False,
-        sym_a=1,
-        is_antiper_a=False,
+        is_periodicity=True,
         init_dict=None,
         init_str=None,
     ):
@@ -220,18 +215,8 @@ class MagFEMM(Magnetics):
                 type_BH_stator = init_dict["type_BH_stator"]
             if "type_BH_rotor" in list(init_dict.keys()):
                 type_BH_rotor = init_dict["type_BH_rotor"]
-            if "is_symmetry_t" in list(init_dict.keys()):
-                is_symmetry_t = init_dict["is_symmetry_t"]
-            if "sym_t" in list(init_dict.keys()):
-                sym_t = init_dict["sym_t"]
-            if "is_antiper_t" in list(init_dict.keys()):
-                is_antiper_t = init_dict["is_antiper_t"]
-            if "is_symmetry_a" in list(init_dict.keys()):
-                is_symmetry_a = init_dict["is_symmetry_a"]
-            if "sym_a" in list(init_dict.keys()):
-                sym_a = init_dict["sym_a"]
-            if "is_antiper_a" in list(init_dict.keys()):
-                is_antiper_a = init_dict["is_antiper_a"]
+            if "is_periodicity" in list(init_dict.keys()):
+                is_periodicity = init_dict["is_periodicity"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -256,12 +241,7 @@ class MagFEMM(Magnetics):
             is_mmfr=is_mmfr,
             type_BH_stator=type_BH_stator,
             type_BH_rotor=type_BH_rotor,
-            is_symmetry_t=is_symmetry_t,
-            sym_t=sym_t,
-            is_antiper_t=is_antiper_t,
-            is_symmetry_a=is_symmetry_a,
-            sym_a=sym_a,
-            is_antiper_a=is_antiper_a,
+            is_periodicity=is_periodicity,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties

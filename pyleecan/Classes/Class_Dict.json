@@ -4756,58 +4756,13 @@
                 "value": 0
             },
             {
-                "desc": "0 Compute on the complete time vector, 1 compute according to sym_t and is_antiper_t",
+                "desc": "True to compute only on one time and angle periodicity (use periodicities defined in output.mag.time and output.mag.angle)",
                 "max": "",
                 "min": "",
-                "name": "is_symmetry_t",
+                "name": "is_periodicity",
                 "type": "bool",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "desc": "Number of symmetry for the time vector",
-                "max": "",
-                "min": "1",
-                "name": "sym_t",
-                "type": "int",
                 "unit": "-",
                 "value": 1
-            },
-            {
-                "desc": "To add an antiperiodicity to the time vector",
-                "max": "",
-                "min": "",
-                "name": "is_antiper_t",
-                "type": "bool",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "desc": "0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a",
-                "max": "",
-                "min": "",
-                "name": "is_symmetry_a",
-                "type": "bool",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Number of symmetry for the angle vector",
-                "max": "",
-                "min": "1",
-                "name": "sym_a",
-                "type": "int",
-                "unit": "-",
-                "value": 1
-            },
-            {
-                "desc": "To add an antiperiodicity to the angle vector",
-                "max": "",
-                "min": "",
-                "name": "is_antiper_a",
-                "type": "bool",
-                "unit": "-",
-                "value": 0
             }
         ]
     },
