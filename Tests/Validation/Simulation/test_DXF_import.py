@@ -39,9 +39,7 @@ def test_():
     simu.mag = MagFEMM(
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_symmetry_a=True,
-        sym_a=4,
-        is_antiper_a=True,
+        is_periodicity_a=True,
         Kgeo_fineness=0.75,
     )
     # Run only Magnetic module

@@ -49,7 +49,7 @@ def test_Magnetic_AGSF():
     # Definition of the main simulation
     simu = Simu1(name="FM_SynRM_FL_001", machine=SynRM_001)
     time_obj = ImportMatrixVal(value=time)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=2016, endpoint=False)
+    Na_tot = 2016
     alpha_rotor = ImportGenVectLin(start=0, stop=2 * pi, num=Nt_tot, endpoint=False)
 
     simu.input = InputCurrent(
@@ -58,7 +58,7 @@ def test_Magnetic_AGSF():
         N0=None,
         angle_rotor=alpha_rotor,
         time=time_obj,
-        angle=angle,
+        Na_tot=Na_tot,
         angle_rotor_initial=0,
     )
 
@@ -66,9 +66,7 @@ def test_Magnetic_AGSF():
     simu.mag = MagFEMM(
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_symmetry_a=True,
-        is_antiper_a=True,
-        sym_a=2,
+        is_periodicity_a=True,
     )
 
     # Definition of the magnetic simulation (no symmetry)

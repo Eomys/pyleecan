@@ -45,7 +45,7 @@ def test_slot_scale():
     Is_mat[0, :] = np.array([0, 12.2474, -12.2474])
     Is = ImportMatrixVal(value=Is_mat)
     time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=False)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=2048, endpoint=False)
+    Na_tot = 2048
 
     ref_simu.input = InputCurrent(
         Is=Is,
@@ -53,7 +53,7 @@ def test_slot_scale():
         N0=2504,
         angle_rotor=None,  # Will be computed
         time=time,
-        angle=angle,
+        Na_tot=Na_tot,
         angle_rotor_initial=0.86,
     )
 
@@ -61,9 +61,7 @@ def test_slot_scale():
     ref_simu.mag = MagFEMM(
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_symmetry_a=True,
-        is_antiper_a=True,
-        sym_a=4,
+        is_periodicity_a=True,
         Kgeo_fineness=0.2,
         Kmesh_fineness=0.2,
     )

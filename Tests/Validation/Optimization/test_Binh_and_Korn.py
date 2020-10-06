@@ -54,9 +54,7 @@ def test_Binh_and_Korn():
     )
     Ir = ImportMatrixVal(value=np.zeros(30))
     time = ImportGenVectLin(start=0, stop=0.015, num=Nt, endpoint=True)
-    angle = ImportGenVectLin(
-        start=0, stop=2 * np.pi, num=64, endpoint=False
-    )  # num=1024
+    Na_tot = 64
 
     # Definition of the simulation
     simu = Simu1(name="Test_machine", machine=SCIM_001)
@@ -67,17 +65,14 @@ def test_Binh_and_Korn():
         N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
-        angle=angle,
+        Na_tot=Na_tot,
         angle_rotor_initial=0.5216 + np.pi,
     )
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(
-        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=True, is_antiper_a=False
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True)
     simu.mag.Kmesh_fineness = 0.01
     # simu.mag.Kgeo_fineness=0.02
-    simu.mag.sym_a = 4
     simu.struct = None
 
     output = Output(simu=simu)

@@ -75,7 +75,7 @@ def test_Magnetic_Phi0():
     # Definition of the main simulation
     simu = Simu1(name="EM_SynRM_FL_001", machine=SynRM_001)
     time_obj = ImportMatrixVal(value=time)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=2016, endpoint=False)
+    Na_tot = 2016
     alpha_rotor = ImportMatrixVal(value=array([0, pi / 9, 2 * pi / 9]) + 2.6180)
 
     simu.input = InputCurrent(
@@ -84,18 +84,16 @@ def test_Magnetic_Phi0():
         N0=None,
         angle_rotor=alpha_rotor,
         time=time_obj,
-        angle=angle,
+        Na_tot=Na_tot,
         angle_rotor_initial=0,
     )
 
     # Definition of the magnetic simulation (1/2 symmetry)
-    assert SynRM_001.comp_sym() == (2, True)
+    assert SynRM_001.comp_periodicity() == (2, True, 2, True)
     simu.mag = MagFEMM(
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_symmetry_a=True,
-        is_antiper_a=True,
-        sym_a=2,
+        is_periodicity_a=True,
     )
     simu.force = None
     simu.struct = None

@@ -45,25 +45,25 @@ def test_Magnetic_FEMM_sym():
         value=array([[14.1421, -7.0711, -7.0711], [-14.1421, 7.0711, 7.0711]])
     )
     time = ImportGenVectLin(start=0, stop=0.1, num=2, endpoint=True)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
+    Na_tot = 1024
 
     Ar = ImportMatrixVal(value=array([2.5219, 0.9511]) + pi / 6)
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
-        N0=None,
+        N0=N0,
         angle_rotor=Ar,  # Will be computed
         time=time,
-        angle=angle,
+        Na_tot=Na_tot,
         angle_rotor_initial=0,
     )
 
     # Definition of the magnetic simulation (is_mmfr=False => no flux from the magnets)
-    assert SIPMSM_001.comp_sym() == (1, False)
+    assert SIPMSM_001.comp_periodicity() == (1, False, 1, False)
     simu.mag = MagFEMM(
         type_BH_stator=2,
         type_BH_rotor=2,
-        is_symmetry_a=False,
+        is_periodicity_a=False,
         is_mmfr=False,
         angle_stator=-pi / 6,
     )
@@ -76,7 +76,12 @@ def test_Magnetic_FEMM_sym():
     Br = ImportMatlab(file_path=mat_file, var_name="XBr")
     Bt = ImportMatlab(file_path=mat_file, var_name="XBt")
     Time = ImportData(field=time, unit="s", name="time")
-    Angle = ImportData(field=angle, unit="rad", name="angle")
+
+    Angle = ImportData(
+        field=ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False),
+        unit="rad",
+        name="angle",
+    )
     Br_data = ImportData(
         axes=[Time, Angle],
         field=Br,
@@ -92,7 +97,7 @@ def test_Magnetic_FEMM_sym():
         symbol="B_t",
     )
     B = ImportVectorField(components={"radial": Br_data, "tangential": Bt_data})
-    simu_load.input = InputFlux(time=time, angle=angle, B=B)
+    simu_load.input = InputFlux(time=time, Na_tot=Na_tot, B=B)
 
     out = Output(simu=simu)
     simu.run()

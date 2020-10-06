@@ -38,16 +38,16 @@ def test_EM_IPMSM_FL_002():
     Is_mat = zeros((1, 3))
     Is_mat[0, :] = array([0, 12.2474, -12.2474])
     Is = ImportMatrixVal(value=Is_mat)
-    time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=False)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=2048, endpoint=False)
+    Nt_tot = 1
+    Na_tot = 2048
 
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
         N0=N0,
         angle_rotor=None,  # Will be computed
-        time=time,
-        angle=angle,
+        Nt_tot=Nt_tot,
+        Na_tot=Na_tot,
         angle_rotor_initial=0.86,
     )
 
@@ -55,19 +55,16 @@ def test_EM_IPMSM_FL_002():
     simu.mag = MagFEMM(
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_symmetry_a=False,
-        is_antiper_a=True,
+        is_periodicity_a=False,
         Kgeo_fineness=0.75,
     )
     simu.force = None
     simu.struct = None
     # simu.struct.force = ForceMT()
     # Copy the simu and activate the symmetry
-    assert IPMSM_A.comp_sym() == (4, True)
+    assert IPMSM_A.comp_periodicity() == (4, True, 4, True)
     simu_sym = Simu1(init_dict=simu.as_dict())
-    simu_sym.mag.is_symmetry_a = True
-    simu_sym.mag.sym_a = 4
-    simu_sym.mag.is_antiper_a = True
+    simu_sym.mag.is_periodicity_a = True
 
     out = Output(simu=simu)
     simu.run()

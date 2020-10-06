@@ -34,22 +34,23 @@ def test_CEFC_003_t0(CEFC_Lam):
     # Definition of the enforced output of the electrical module
     N0 = 3000
     Is = ImportMatrixVal(value=array([[2.25353053e02, 2.25353053e02, 2.25353053e02]]))
-    time = ImportGenVectLin(start=0, stop=1, num=1, endpoint=True)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
+    Nt_tot = 1
+    Na_tot = 1024
 
     simu.input = InputCurrent(
         Is=Is,
         Ir=None,  # No winding on the rotor
         N0=N0,
         angle_rotor=None,  # Will be computed
-        time=time,
-        angle=angle,
+        Nt_tot=Nt_tot,
+        Na_tot=Na_tot,
     )
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
         type_BH_stator=2,
         type_BH_rotor=2,
+        is_periodicity_a=False,
         is_get_mesh=True,
         is_save_FEA=True,
         is_sliding_band=False,

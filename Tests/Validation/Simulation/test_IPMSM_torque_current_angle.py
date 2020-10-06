@@ -26,7 +26,10 @@ def test_OP():
     simu = Simu1(name="tuto_Id_Iq", machine=IPMSM_A)
 
     # Definition of the magnetic simulation (FEMM with symmetry and sliding band)
-    simu.mag = MagFEMM(is_symmetry_a=True, Kgeo_fineness=1,)
+    simu.mag = MagFEMM(
+        is_periodicity_a=True,
+        Kgeo_fineness=1,
+    )
     # Run only Magnetic module
     simu.elec = None
     simu.force = None
