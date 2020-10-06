@@ -27,9 +27,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotW60.get_surface_wind import get_surface_wind
+    from ..Methods.Slot.SlotW60.build_geomtry_wind import build_geomtry_wind
 except ImportError as error:
-    get_surface_wind = error
+    build_geomtry_wind = error
 
 try:
     from ..Methods.Slot.SlotW60.check import check
@@ -99,18 +99,18 @@ class SlotW60(SlotWind):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW60.get_surface_wind
-    if isinstance(get_surface_wind, ImportError):
-        get_surface_wind = property(
+    # cf Methods.Slot.SlotW60.build_geomtry_wind
+    if isinstance(build_geomtry_wind, ImportError):
+        build_geomtry_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW60 method get_surface_wind: "
-                    + str(get_surface_wind)
+                    "Can't use SlotW60 method build_geomtry_wind: "
+                    + str(build_geomtry_wind)
                 )
             )
         )
     else:
-        get_surface_wind = get_surface_wind
+        build_geomtry_wind = build_geomtry_wind
     # cf Methods.Slot.SlotW60.check
     if isinstance(check, ImportError):
         check = property(

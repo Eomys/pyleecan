@@ -14,7 +14,7 @@ def build_geometry(self):
     Parameters
     ----------
     self : SlotW12
-        A SlotW12	object
+        A SlotW12 object
 
     Returns
     -------

@@ -35,7 +35,9 @@ def get_surface_wind(self, alpha=0, delta=0):
 
     # Create the surface
     surf_wind = SurfLine(
-        line_list=curve_list, label="Winding_Area", point_ref=(Z4 + Z5 + Z6 + Z7) / 4,
+        line_list=curve_list,
+        label="Winding_Area",
+        point_ref=(Z4 + Z5 + Z6 + Z7) / 4,
     )
 
     # Apply transformation
