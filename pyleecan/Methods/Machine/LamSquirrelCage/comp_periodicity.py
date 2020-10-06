@@ -21,4 +21,4 @@ def comp_periodicity(self):
         True if an time anti-periodicity is possible after the periodicities
     """
 
-    return self.slot.Zs, self.Zs % 2 == 0, self.slot.Zs, False
+    return self.slot.Zs, self.slot.Zs % 2 == 0, self.slot.Zs, False
