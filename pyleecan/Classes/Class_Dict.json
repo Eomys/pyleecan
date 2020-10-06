@@ -9286,7 +9286,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geomtry_wind",
+            "build_geometry_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
