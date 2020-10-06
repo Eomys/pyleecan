@@ -1,8 +1,9 @@
 from numpy import pi
 from SciDataTool import Data1D, DataLinspace
+from ....Methods.Simulation.Input import InputError
 
 
-def comp_axes(self, machine, N0):
+def comp_axes(self, machine, N0=None):
     """Compute simulation axes, i.e. space DataObject including (anti)-periodicity
     and time DataObject including (anti)-periodicity and accounting for rotating speed
     and number of revolutions
@@ -30,7 +31,8 @@ def comp_axes(self, machine, N0):
 
     # Time axis
     if self.time is None:
-        # Create time vector as a linspace
+        if N0 is None:
+            raise InputError("ERROR: time and N0 can't be both None")
 
         # Time axis including (anti)-periodicity and accounting for rotating speed and number of revolutions
         if is_aper_t:

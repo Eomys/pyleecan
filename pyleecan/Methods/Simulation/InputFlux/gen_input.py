@@ -28,7 +28,11 @@ def gen_input(self):
         )
 
     # Set discretization
-    Time, Angle = self.comp_axes(simu.machine, self.N0)
+    if self.OP is None:
+        N0 = None  # N0 can be None if time isn't
+    else:
+        N0 = self.OP.N0
+    Time, Angle = self.comp_axes(simu.machine, N0)
     output.time = Time
     output.angle = Angle
 
