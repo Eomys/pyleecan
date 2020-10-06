@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.Frame import Frame
 from .....GUI import gui_option
@@ -16,7 +16,7 @@ class SMachineDimension(Ui_SMachineDimension, QWidget):
     """Step to setup the Machine dimension"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for the DMachineSetup nav
     step_name = "Machine Dimensions"
 

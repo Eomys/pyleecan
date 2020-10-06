@@ -5,7 +5,7 @@ from os import remove
 import sys
 
 import mock  # for unittest of raw_input
-from PyQt5 import QtWidgets
+from PySide2 import QtWidgets
 
 from pyleecan.Classes.MachineSyRM import MachineSyRM
 from pyleecan.Classes.MachineIPMSM import MachineIPMSM
@@ -54,7 +54,7 @@ load_test.append(  # 7
 load_test.append(  # 8
     {"type": "SRM", "index": 7, "name": "SRM_test_load", "p": 10, "count": 10}
 )
-from PyQt5.QtCore import Qt
+from PySide2.QtCore import Qt
 
 ENABLE_ITEM = Qt.ItemIsSelectable | Qt.ItemIsEnabled
 

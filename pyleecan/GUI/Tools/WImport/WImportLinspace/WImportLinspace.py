@@ -1,16 +1,16 @@
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtWidgets import QWidget
 
 from .....Classes.ImportGenVectLin import ImportGenVectLin
 from .....GUI.Tools.WImport.WImportLinspace.Ui_WImportLinspace import Ui_WImportLinspace
-from PyQt5.QtCore import Qt
-from PyQt5.QtCore import pyqtSignal
+from PySide2.QtCore import Qt
+from PySide2.QtCore import Signal
 
 
 class WImportLinspace(Ui_WImportLinspace, QWidget):
     import_name = "Define as Linspace"
     import_type = ImportGenVectLin
-    saveNeeded = pyqtSignal()
-    dataTypeChanged = pyqtSignal()
+    saveNeeded = Signal()
+    dataTypeChanged = Signal()
 
     def __init__(self, parent=None, data=None, verbose_name="", expected_shape=None):
         """Initialization of the widget

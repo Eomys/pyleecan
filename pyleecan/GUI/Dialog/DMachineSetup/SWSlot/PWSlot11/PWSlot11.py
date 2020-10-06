@@ -2,8 +2,8 @@
 
 import PyQt5.QtCore
 from numpy import pi
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
 
 from ......Classes.SlotW11 import SlotW11
 from ......GUI import gui_option
@@ -17,7 +17,7 @@ class PWSlot11(Gen_PWSlot11, QWidget):
     """Page to set the Slot Type 11"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for Slot combobox
     slot_name = "Slot Type 11"
     slot_type = SlotW11

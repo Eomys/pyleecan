@@ -3,9 +3,9 @@ import sys
 from os.path import dirname, join, isfile
 from sys import argv, exit
 
-from PyQt5.QtCore import QTranslator
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtGui import QIcon
+from PySide2.QtCore import QTranslator
+from PySide2.QtWidgets import QApplication
+from PySide2.QtGui import QIcon
 
 try:  # Import if pyleecan is installed with pip
     from .definitions import ROOT_DIR, PACKAGE_NAME, config_dict

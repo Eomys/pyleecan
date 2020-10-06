@@ -2,7 +2,7 @@
 
 import sys
 
-from PyQt5 import QtWidgets
+from PySide2 import QtWidgets
 
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material

@@ -2,8 +2,8 @@ import sys
 from random import uniform
 
 import pytest
-from PyQt5 import QtWidgets
-from PyQt5.QtTest import QTest
+from PySide2 import QtWidgets
+from PySide2.QtTest import QTest
 
 from pyleecan.Classes.CondType11 import CondType11
 from pyleecan.Classes.CondType12 import CondType12

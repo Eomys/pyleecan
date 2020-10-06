@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
 
 from ......Classes.CondType12 import CondType12
 from ......GUI import gui_option
@@ -14,7 +14,7 @@ class PCondType12(Gen_PCondType12, QWidget):
     """Page to set the Conductor Type 12"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for SWindCond combobox
     cond_type = CondType12
     cond_name = "Random Round Wire"

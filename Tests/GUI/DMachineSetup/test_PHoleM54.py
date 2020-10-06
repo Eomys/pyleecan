@@ -2,8 +2,8 @@
 
 import sys
 
-from PyQt5 import QtWidgets
-from PyQt5.QtTest import QTest
+from PySide2 import QtWidgets
+from PySide2.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.GUI.Dialog.DMatLib.MatLib import MatLib

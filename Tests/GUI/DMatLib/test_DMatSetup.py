@@ -6,9 +6,9 @@ from os.path import join, isdir
 from shutil import rmtree, copyfile
 from random import uniform
 
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtTest import QTest
+from PySide2 import QtWidgets
+from PySide2.QtCore import Qt
+from PySide2.QtTest import QTest
 
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material

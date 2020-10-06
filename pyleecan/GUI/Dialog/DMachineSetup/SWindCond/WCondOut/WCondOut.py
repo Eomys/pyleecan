@@ -1,5 +1,5 @@
-from PyQt5.QtCore import QSize
-from PyQt5.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QWidget
+from PySide2.QtCore import QSize
+from PySide2.QtWidgets import QGroupBox, QLabel, QVBoxLayout, QWidget
 
 from ......GUI import gui_option
 

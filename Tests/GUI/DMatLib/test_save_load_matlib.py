@@ -5,10 +5,10 @@ from os import listdir, mkdir, remove
 from os.path import abspath, basename, isdir, isfile, join
 from shutil import copyfile, rmtree
 
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtTest import QTest
-from PyQt5.QtWidgets import QDialogButtonBox
+from PySide2 import QtWidgets
+from PySide2.QtCore import Qt
+from PySide2.QtTest import QTest
+from PySide2.QtWidgets import QDialogButtonBox
 
 from pyleecan.Functions.load import load
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup

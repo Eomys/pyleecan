@@ -2,7 +2,7 @@ from os import getcwd, rename, remove
 from os.path import join, dirname, abspath, split
 from re import match
 
-from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox
+from PySide2.QtWidgets import QDialog, QFileDialog, QMessageBox
 
 from ....Functions.load import load_matlib
 from ....Functions.Material.compare_material import compare_material
