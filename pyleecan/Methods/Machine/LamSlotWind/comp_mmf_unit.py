@@ -32,7 +32,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
     qs = self.winding.qs
 
     # Get spatial symmetry
-    per_a, _, _, _ = self.comp_periodicty()
+    per_a, _, _, _ = self.comp_periodicity()
 
     # Check if the result is already available and that requested size is the same as stored data
     if (
