@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-def comp_sym(self):
+def comp_periodicity(self):
     """Compute the periodicity factor of the lamination
 
     Parameters
@@ -21,4 +21,4 @@ def comp_sym(self):
         True if an time anti-periodicity is possible after the periodicities
     """
 
-    return self.slot.Zs, False, self.slot.Zs, False
+    return self.slot.Zs, self.Zs % 2 == 0, self.slot.Zs, False
