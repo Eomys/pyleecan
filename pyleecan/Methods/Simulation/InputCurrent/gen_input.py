@@ -71,7 +71,7 @@ def gen_input(self):
     qr = len(simu.machine.rotor.get_name_phase())
 
     output.N0 = self.N0
-    output.felec = self.comp_felec()
+    output.felec = self.comp_felec()  # TODO introduce set_felec(slip)
 
     # Load and check Is
     if qs > 0:
