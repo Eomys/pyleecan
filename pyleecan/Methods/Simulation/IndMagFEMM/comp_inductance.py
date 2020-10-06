@@ -16,6 +16,9 @@ def comp_inductance(self, output):
     output : Output
         an Output object
     """
+    # TODO maybe set currents to small value if it's 0 to compute inductance
+    # TODO rename method to comp_fluxlinkage
+    # TODO compare with comp_flux method
 
     qs = output.simu.machine.stator.winding.qs
 
