@@ -15,7 +15,6 @@ except:
     draw_GMSH = ImportError
 
 
-
 @pytest.mark.long
 @pytest.mark.GMSH
 def test_gmsh_2d():

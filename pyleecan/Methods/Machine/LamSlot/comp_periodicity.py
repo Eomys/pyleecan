@@ -19,7 +19,7 @@ def comp_periodicity(self):
         Number of time periodicities of the lamination
     is_antiper_t : bool
         True if an time anti-periodicity is possible after the periodicities
-        
+
     """
 
     return self.get_Zs(), False, self.get_Zs(), False
