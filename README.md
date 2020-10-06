@@ -25,15 +25,26 @@ On a longer term, PYLEECAN should also include the following five physics with d
 * Structural Mechanics
 * Acoustics
 
-## Origin and status of the project
+## Origin and status of the project (06th October 2020)
 EOMYS initiated in 2018 the open-source project named PYLEECAN (Python Library for Electrical Engineering Computational Analysis) under Apache license by releasing a part of [MANATEE](https://eomys.com/produits/manatee/article/logiciel-manatee?lang=en) commercial software scripts. These initial scripts included a fully **object-oriented modelling** of main radial flux electrical machines, with parameterized geometry. However, PYLEECAN is not an EOMYS-only project, the initial maintainers includes other companies and universities and all contributors are welcome.
 
+Main Features:
 * PYLEECAN is fully coupled to [FEMM](http://www.femm.info) to carry **non-linear magnetostatic** analysis including sliding band and symmetries. For now this coupling is available only on Windows.
+* PYLEECAN includes an electrical model to solve the equivalent circuit of PMSM machine by using the FEMM coupling
 * PYLEECAN includes a **Graphical User Interface** to define main 2D radial flux topologies parametrized geometries (PMSM, IM, SRM, SyRM) including material library.
 * PYLEECAN is coupled to [Gmsh](http://gmsh.info/) **2D/3D finite element mesh generator** to run third-party multiphysic solvers. 
 * PYLEECAN is coupled to a **multiobjective optimization** library to carry design optimization of electrical machines.
 
 If you are interested by a topology or a specific model, you can [open an issue](https://github.com/Eomys/pyleecan/issues) on this Github repository to talk about it. We will gladly explain how to add it yourself or we will add it to the development list for further release.
+
+## Webinar
+Three public and free webinars will be organized by [Green Forge Coop](https://www.linkedin.com/company/greenforgecoop/about/) and UNICAS University:
+
+- Friday 16th October 15h-17h (GMT+2): How to use pyleecan (basics)? Pyleecan basics, call of FEMM, use of the GUI
+- Friday 30th October 15h-17h (GMT+1): How to use pyleecan (advanced)? Optimization tools, meshing, plot commands
+- Friday 6th November 15h-17h (GMT+1): How to contribute to pyleecan? Github projects, Object Oriented Programming
+
+The webinar will be based on the tutorials. [The registration form is available here](https://us02web.zoom.us/meeting/register/tZYsc-mppz8pE9UYGaTYWe6m8117qgi44EKi)
 
 ## Documentation / Website
 For now all the information on the project are available on [www.pyleecan.org](http://www.pyleecan.org). At this link, you will find the ICEM 2018 publication and the architecture documentation.
