@@ -23,61 +23,30 @@ def get_surface_wind(self, alpha=0, delta=0):
     surf_wind: Surface
         Surface corresponding to the Winding Area
     """
-    if self.get_is_stator():  # check if the slot is on the stator
+
+    # check if the slot is on the stator
+    if self.get_is_stator():
         st = "S"
     else:
         st = "R"
-    [Z10, Z9, Z8, Z7, Z6, Z5, Z4, Z3, Z2, Z1] = self._comp_point_coordinate()
 
-    X = linspace(Z7, Z6, Nrad + 1)
+    # Create curve list
+    curve_list = self.build_geometry()[3:-3]
+    curve_list.append(
+        Segment(begin=curve_list[-1].get_end(), end=curve_list[0].get_begin())
+    )
 
-    # Nrad+1 and Ntan+1 because 3 points => 2 zones
-    Z = zeros((Nrad + 1, Ntan + 1), dtype=complex)
-    for ii in range(Nrad + 1):
-        Z[ii][:] = linspace(X[ii], X[ii].conjugate(), Ntan + 1)
+    # Create surface
+    if self.is_outwards():
+        Zmid = self.get_Rbo() + self.H0 + self.H1 + self.H2 / 2
+    else:
+        Zmid = self.get_Rbo() - self.H0 - self.H1 - self.H2 / 2
+    surface = SurfLine(
+        line_list=curve_list, label="Wind" + st + "_R0_T0_S0", point_ref=Zmid
+    )
 
-    assert Z[0][0] == Z7
-    assert Z[Nrad][0] == Z6
-    assert Z[0][Ntan] == Z4
-    assert Z[Nrad][Ntan] == Z5
+    # Apply transformation
+    surface.rotate(alpha)
+    surface.translate(delta)
 
-    # We go thought the surface by Rad then Tan, starting by (0,0)
-    surf_list = list()
-    for jj in range(Ntan):  # jj from 0 to Ntan-1
-        for ii in range(Nrad):  # ii from 0 to Nrad-1
-            point_ref = (
-                Z[ii][jj] + Z[ii][jj + 1] + Z[ii + 1][jj + 1] + Z[ii + 1][jj]
-            ) / 4  # tre reference point of the surface
-            # With one zone the order would be [Z7,Z4,Z5,Z6]
-            if is_simplified:  # No doubling Line allowed
-                curve_list = list()
-                if ii == 0:
-                    curve_list.append(Segment(Z[ii][jj], Z[ii][jj + 1]))
-                if jj != Ntan - 1:
-                    curve_list.append(Segment(Z[ii][jj + 1], Z[ii + 1][jj + 1]))
-                if ii != Nrad - 1:
-                    curve_list.append(Segment(Z[ii + 1][jj + 1], Z[ii + 1][jj]))
-                surface = SurfLine(
-                    line_list=curve_list,
-                    label="Wind" + st + "_R" + str(ii) + "_T" + str(jj) + "_S0",
-                    point_ref=point_ref,
-                )  # surface in the winding area
-                surf_list.append(surface)
-            else:
-                curve_list = list()
-                curve_list.append(Segment(Z[ii][jj], Z[ii][jj + 1]))
-                curve_list.append(Segment(Z[ii][jj + 1], Z[ii + 1][jj + 1]))
-                curve_list.append(Segment(Z[ii + 1][jj + 1], Z[ii + 1][jj]))
-                curve_list.append(Segment(Z[ii + 1][jj], Z[ii][jj]))
-                surface = SurfLine(
-                    line_list=curve_list,
-                    label="Wind" + st + "_R" + str(ii) + "_T" + str(jj) + "_S0",
-                    point_ref=point_ref,
-                )  # surface in the winding area
-                surf_list.append(surface)
-
-    for surf in surf_list:
-        surf.rotate(alpha)  # rotation of each surface
-        surf.translate(delta)  # translation of each surface
-
-    return surf_list
+    return surface
