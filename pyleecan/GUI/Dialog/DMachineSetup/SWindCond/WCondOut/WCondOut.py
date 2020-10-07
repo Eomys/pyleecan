@@ -10,7 +10,7 @@ class WCondOut(QGroupBox):
     def __init__(self, parent=None):
         """Initialize the widget"""
 
-        QWidget.__init__(self, parent)
+        QGroupBox.__init__(self, parent)
         # Set main widget
         self.u = gui_option.unit
         self.setTitle(self.tr("Output"))

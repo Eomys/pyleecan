@@ -8,7 +8,7 @@ from ..definitions import config_dict
 from os.path import abspath, dirname, join, normpath
 
 # Set Matplotlib backend
-use("Qt5Agg")  # Use PyQt5 backend
+use("Qt5Agg")  # Use PySide2 backend
 
 
 class StreamToLogger(object):

@@ -10,7 +10,7 @@ class WWSlotOut(QGroupBox):
     def __init__(self, parent=None):
         """Initialize the widget"""
 
-        QWidget.__init__(self, parent)
+        QGroupBox.__init__(self, parent)
         # Set main widget
         self.setTitle(self.tr("Output"))
         self.setMinimumSize(QSize(200, 0))

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import PyQt5.QtCore
+import PySide2.QtCore
 from numpy import pi
 from PySide2.QtCore import Signal
 from PySide2.QtWidgets import QWidget
@@ -11,7 +11,7 @@ from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SWSlot.PWSlot21.Gen_PWSlot21 import Gen_PWSlot21
 from ......Methods.Slot.Slot.check import SlotCheckError
 
-translate = PyQt5.QtCore.QCoreApplication.translate
+translate = PySide2.QtCore.QCoreApplication.translate
 
 
 class PWSlot21(Gen_PWSlot21, QWidget):

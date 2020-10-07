@@ -65,7 +65,10 @@ class TestSMHoleMag(object):
     def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test SWSlot")
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
     def teardown_class(cls):
@@ -290,14 +293,14 @@ class TestSMHoleMag(object):
         assert len(self.test_obj.rotor.hole) == 1
         assert self.widget.tab_hole.count() == 1
 
-        self.widget.b_add.clicked.emit(True)
+        self.widget.b_add.clicked.emit()
 
         assert len(self.test_obj.rotor.hole) == 2
         assert type(self.test_obj.rotor.hole[1]) == HoleM50
         assert self.test_obj.rotor.hole[1].Zh == 8
         assert self.widget.tab_hole.count() == 2
 
-        self.widget.b_add.clicked.emit(True)
+        self.widget.b_add.clicked.emit()
 
         assert len(self.test_obj.rotor.hole) == 3
         assert type(self.test_obj.rotor.hole[2]) == HoleM50
@@ -307,17 +310,17 @@ class TestSMHoleMag(object):
         assert self.widget.tab_hole.tabText(1) == "Slot 2"
         assert self.widget.tab_hole.tabText(2) == "Slot 3"
 
-        self.widget.b_remove.clicked.emit(True)
+        self.widget.b_remove.clicked.emit()
         assert len(self.test_obj.rotor.hole) == 2
         assert type(self.test_obj.rotor.hole[1]) == HoleM50
         assert self.widget.tab_hole.count() == 2
 
-        self.widget.b_remove.clicked.emit(True)
+        self.widget.b_remove.clicked.emit()
         assert len(self.test_obj.rotor.hole) == 1
         assert self.widget.tab_hole.count() == 1
 
         # There is always at least 1 hole
-        self.widget.b_remove.clicked.emit(True)
+        self.widget.b_remove.clicked.emit()
         assert len(self.test_obj.rotor.hole) == 1
         assert self.widget.tab_hole.count() == 1
 
@@ -325,7 +328,7 @@ class TestSMHoleMag(object):
         assert len(self.test_obj2.rotor.hole) == 1
         assert self.widget2.tab_hole.count() == 1
 
-        self.widget2.b_add.clicked.emit(True)
+        self.widget2.b_add.clicked.emit()
 
         assert len(self.test_obj2.rotor.hole) == 2
         assert type(self.test_obj2.rotor.hole[1]) == HoleM50
@@ -333,11 +336,11 @@ class TestSMHoleMag(object):
         assert self.test_obj2.rotor.hole[1].magnet_0 == None
         assert self.widget2.tab_hole.count() == 2
 
-        self.widget2.b_remove.clicked.emit(True)
+        self.widget2.b_remove.clicked.emit()
         assert len(self.test_obj2.rotor.hole) == 1
         assert self.widget2.tab_hole.count() == 1
 
         # There is always at least 1 hole
-        self.widget2.b_remove.clicked.emit(True)
+        self.widget2.b_remove.clicked.emit()
         assert len(self.test_obj2.rotor.hole) == 1
         assert self.widget2.tab_hole.count() == 1

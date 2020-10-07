@@ -82,7 +82,10 @@ class TestDMachineSetup(object):
     def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test DMachineSetup")
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
     def teardown_class(cls):
@@ -98,10 +101,10 @@ class TestDMachineSetup(object):
             "Json (*.json)",
         )
         with mock.patch(
-            "PyQt5.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
+            "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
-            self.widget.b_load.clicked.emit(True)
+            self.widget.b_load.clicked.emit()
         self.widget.nav_step.setCurrentRow(0)
         # To remember to update when adding a new machine type
         assert self.widget.w_step.c_type.count() == 8
@@ -170,10 +173,10 @@ def save_function(widget, file_name):
 
     return_value = (file_path, "Json (*.json)")
     with mock.patch(
-        "PyQt5.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
+        "PySide2.QtWidgets.QFileDialog.getSaveFileName", return_value=return_value
     ):
         # To trigger the slot
-        widget.b_save.clicked.emit(True)
+        widget.b_save.clicked.emit()
 
     # Check that the file now exist => delete for next test
     assert isfile(file_path)

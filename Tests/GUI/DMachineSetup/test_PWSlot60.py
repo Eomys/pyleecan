@@ -30,7 +30,10 @@ class TestPWSlot60(object):
     def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test PWSlot60")
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
     def teardown_class(cls):

@@ -42,7 +42,10 @@ class TestDAVDuct(object):
     def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test DAVDuct")
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
     def teardown_class(cls):
@@ -224,7 +227,7 @@ class TestDAVDuct(object):
 
     def test_add_circ(self):
         """Test that you can add circ ventilation"""
-        self.widget.b_new.clicked.emit(True)
+        self.widget.b_new.clicked.emit()
 
         assert self.widget.tab_vent.count() == 3
         assert self.widget.tab_vent.currentIndex() == 0
@@ -255,7 +258,7 @@ class TestDAVDuct(object):
 
     def test_remove_circ(self):
         """Test that you can remove circ ventilation"""
-        self.widget.b_remove.clicked.emit(True)
+        self.widget.b_remove.clicked.emit()
         assert self.widget.tab_vent.count() == 1
         assert self.widget.tab_vent.currentIndex() == 0
 

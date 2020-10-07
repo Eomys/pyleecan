@@ -11,6 +11,7 @@ except ImportError:  # Install setuptools if needed
 
 import platform
 
+
 # /!\ Increase the number before a release
 # See https://www.python.org/dev/peps/pep-0440/
 # Examples :
@@ -35,8 +36,7 @@ install_requires = [
     "matplotlib>=3.2.1",
     "numpy>=1.18.2",
     "pandas>=1.0.3",
-    "PyQt5>=5.14.1",
-    "PyQt5-sip>=12.7.1",
+    "PySide2>=5.15.1",
     "scipy>=1.4.1",
     "xlrd>=1.2.0",
     "deap>=1.3.1",

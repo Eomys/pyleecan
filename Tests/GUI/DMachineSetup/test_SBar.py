@@ -52,7 +52,10 @@ class TestSBar(object):
         """Start the app for the test"""
         print("\nStart Test SBar")
         # gui_option.unit.unit_m =0 #m
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
     def teardown_class(cls):
