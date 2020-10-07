@@ -43,6 +43,9 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
     inter_list = list()
     for line in surf_wind.get_lines():
         inter_list.extend(line.intersect_line(0, 100))
+    # When the two lines at the bottom cross on X axis (ex SlotW14)
+    if len(inter_list) == 3 and abs(inter_list[0] - inter_list[1]) < 1e-6:
+        inter_list.pop()
     assert len(inter_list) == 2
 
     if abs(inter_list[0]) < abs(inter_list[1]):
