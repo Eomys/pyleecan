@@ -21,16 +21,13 @@ def solve_FEMM(self, femm, output, sym):
     FEMM_dict = output.mag.FEMM_dict
 
     # Get dimensions including periodicity
-    # TODO call the SciDataTool method (when it exist)
+    Nt_comp = output.mag.time.get_length(is_oneperiod=self.is_periodicity_t)
+    Na_comp = output.mag.angle.get_length(is_oneperiod=self.is_periodicity_a)
+    sym_dict = dict()
     if self.is_periodicity_t:
-        Nt_comp = output.mag.Nt_tot  # One periodicity only
-    else:
-        Nt_comp = output.mag.Nt_tot  # Full angular step
-
+        sym_dict.update(output.time.symmetries)
     if self.is_periodicity_a:
-        Na_comp = output.mag.Na_tot  # One periodicity only
-    else:
-        Na_comp = output.mag.Na_tot  # Full angular step
+        sym_dict.update(output.angle.symmetries)
 
     if (
         hasattr(output.simu.machine.stator, "winding")
@@ -132,13 +129,14 @@ def solve_FEMM(self, femm, output, sym):
     Bt = roll(Bt, roll_id, axis=1)
 
     # Store the results
-    Time = output.mag.Time  # Same symmetry as input
-    Angle = output.mag.Angle  # Same symmetry as input
+    Time = output.mag.time  # Same symmetry as input
+    Angle = output.mag.angle  # Same symmetry as input
     Br_data = DataTime(
         name="Airgap radial flux density",
         unit="T",
         symbol="B_r",
         axes=[Time, Angle],
+        symmetries=sym_dict,
         values=Br,
     )
     Bt_data = DataTime(
@@ -146,6 +144,7 @@ def solve_FEMM(self, femm, output, sym):
         unit="T",
         symbol="B_t",
         axes=[Time, Angle],
+        symmetries=sym_dict,
         values=Bt,
     )
     output.mag.B = VectorField(
@@ -159,6 +158,7 @@ def solve_FEMM(self, femm, output, sym):
         unit="Nm",
         symbol="T_{em}",
         axes=[Time],
+        symmetries=sym_dict,
         values=Tem,
     )
     output.mag.Tem_av = mean(Tem)
@@ -184,6 +184,7 @@ def solve_FEMM(self, femm, output, sym):
             unit="Wb",
             symbol="Phi_{wind}",
             axes=[Time, Phase],
+            symmetries=sym_dict,
             values=Phi_wind_stator,
         )
 
