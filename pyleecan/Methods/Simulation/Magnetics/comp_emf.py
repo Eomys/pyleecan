@@ -17,8 +17,8 @@ def comp_emf(self):
     output = self.parent.parent
     Phi_wind_symb = output.mag.Phi_wind_stator.symbol
     Phi_wind = output.mag.Phi_wind_stator.get_along("time", "phase")[Phi_wind_symb]
-    time = output.mag.time
-    Nt_tot = output.mag.Nt_tot
+    time = output.mag.time.get_values(is_oneperiod=False)
+    Nt_tot = time.size
     qs = output.simu.machine.stator.winding.qs
 
     if Nt_tot > 1:

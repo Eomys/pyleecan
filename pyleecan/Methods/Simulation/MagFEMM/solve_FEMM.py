@@ -14,7 +14,7 @@ from ....Functions.Winding.gen_phase_list import gen_name
 def solve_FEMM(self, femm, output, sym):
 
     # Loading parameters for readibility
-    angle = output.mag.angle
+    angle = output.mag.angle.get_values(is_oneperiod=self.is_periodicity_a)
     L1 = output.simu.machine.stator.comp_length()
 
     save_path = self.get_path_save(output)
@@ -25,9 +25,9 @@ def solve_FEMM(self, femm, output, sym):
     Na_comp = output.mag.angle.get_length(is_oneperiod=self.is_periodicity_a)
     sym_dict = dict()
     if self.is_periodicity_t:
-        sym_dict.update(output.time.symmetries)
+        sym_dict.update(output.mag.time.symmetries)
     if self.is_periodicity_a:
-        sym_dict.update(output.angle.symmetries)
+        sym_dict.update(output.mag.angle.symmetries)
 
     if (
         hasattr(output.simu.machine.stator, "winding")

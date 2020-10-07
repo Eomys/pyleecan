@@ -6432,24 +6432,6 @@
                 "value": "None"
             },
             {
-                "desc": "Length of the time vector",
-                "max": "",
-                "min": "",
-                "name": "Nt_tot",
-                "type": "int",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Length of the angle vector",
-                "max": "",
-                "min": "",
-                "name": "Na_tot",
-                "type": "int",
-                "unit": "-",
-                "value": null
-            },
-            {
                 "desc": "Airgap flux density components",
                 "max": "",
                 "min": "",

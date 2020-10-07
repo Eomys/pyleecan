@@ -9,13 +9,12 @@ def get_Us(self):
     if self.Us is None:
         # Generate current according to Ud/Uq
         Usdq = array([self.Ud_ref, self.Uq_ref])
-        time = self.time
+        time = self.time.get_values(one_period=True)
         qs = self.parent.simu.machine.stator.winding.qs
         felec = self.felec
 
         # add stator current
         Us = dq2n(Usdq, 2 * pi * felec * time, n=qs)
-        Time = Data1D(name="time", unit="s", values=time)
         Phase = Data1D(
             name="phase",
             unit="",
@@ -26,7 +25,8 @@ def get_Us(self):
             name="Stator voltage",
             unit="V",
             symbol="Us",
-            axes=[Phase, Time],
+            axes=[Phase, self.time],
+            symmetries=self.time.symmetries,
             values=transpose(Us),
         )
     return self.Us

@@ -132,7 +132,7 @@ def gen_input(self):
                 "ERROR: InputCurrent.angle_rotor should be a vector of the same length as time, "
                 + str(output.angle_rotor.shape)
                 + " shape found, "
-                + str(output.time.shape)
+                + str(self.Nt_tot)
                 + " expected"
             )
 

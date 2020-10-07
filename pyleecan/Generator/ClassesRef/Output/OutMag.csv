@@ -1,8 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
 time,s,Magnetic time vector (no symmetry),Nt_tot,SciDataTool.Classes.DataND.Data,None,,,,Output,,,VERSION,1,Gather the magnetic module outputs
 angle,rad,Magnetic position vector (no symmetry),Na_tot,SciDataTool.Classes.DataND.Data,None,,,,,,,,,
-Nt_tot,-,Length of the time vector,,int,None,,,,,,,,,
-Na_tot,-,Length of the angle vector,,int,None,,,,,,,,,
 B,H,Airgap flux density components,"(Nt_tot,Na_tot)",SciDataTool.Classes.VectorField.VectorField,None,,,,,,,,,
 Tem,N.m,Electromagnetic torque,Nt_tot,SciDataTool.Classes.DataND.DataND,None,,,,,,,,,
 Tem_av,N.m,Average Electromagnetic torque,,float,None,,,,,,,,,

@@ -212,8 +212,12 @@ class Test_InCurrent_meth(object):
         )
 
         test_obj.input.gen_input()
-        assert_array_almost_equal(output.elec.time, linspace(0, 1, 16))
-        assert_array_almost_equal(output.elec.angle, linspace(0, 2 * pi, 20))
+        assert_array_almost_equal(
+            output.elec.time.get_values(is_oneperiod=False), linspace(0, 1, 16)
+        )
+        assert_array_almost_equal(
+            output.elec.angle.get_values(is_oneperiod=False), linspace(0, 2 * pi, 20)
+        )
         assert_array_almost_equal(output.elec.Is.values, Is_exp)
         assert_array_almost_equal(output.elec.Ir.values, Ir_exp)
         assert_array_almost_equal(output.elec.Id_ref, 2)
@@ -230,16 +234,13 @@ class Test_InCurrent_meth(object):
         Id_ref = 2
         Iq_ref = 0
 
-        Is_exp = (
-            array(
-                [
-                    [2, 1, -1, -2, -1, 1, 2],
-                    [-1, -2, -1, 1, 2, 1, -1],
-                    [-1, 1, 2, 1, -1, -2, -1],
-                ]
-            )
-            * sqrt(2)
-        )
+        Is_exp = array(
+            [
+                [2, 1, -1, -2, -1, 1, 2],
+                [-1, -2, -1, 1, 2, 1, -1],
+                [-1, 1, 2, 1, -1, -2, -1],
+            ]
+        ) * sqrt(2)
         zp = IPMSM_A.stator.get_pole_pair_number()
         angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
         angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
@@ -259,8 +260,12 @@ class Test_InCurrent_meth(object):
         )
 
         test_obj.input.gen_input()
-        assert_array_almost_equal(output.elec.time, linspace(0, 1, 7))
-        assert_array_almost_equal(output.elec.angle, linspace(0, 2 * pi, 20))
+        assert_array_almost_equal(
+            output.elec.time.get_values(is_oneperiod=False), linspace(0, 1, 7)
+        )
+        assert_array_almost_equal(
+            output.elec.angle.get_values(is_oneperiod=False), linspace(0, 2 * pi, 20)
+        )
         assert_array_almost_equal(output.elec.get_Is().values, Is_exp)
         assert_array_almost_equal(output.get_angle_rotor(), angle_rotor_exp)
         assert_array_almost_equal(output.elec.N0, ones(7) * 60 / zp)

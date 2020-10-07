@@ -34,8 +34,6 @@ class OutMag(FrozenClass):
         self,
         time=None,
         angle=None,
-        Nt_tot=None,
-        Na_tot=None,
         B=None,
         Tem=None,
         Tem_av=None,
@@ -68,10 +66,6 @@ class OutMag(FrozenClass):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
                 angle = init_dict["angle"]
-            if "Nt_tot" in list(init_dict.keys()):
-                Nt_tot = init_dict["Nt_tot"]
-            if "Na_tot" in list(init_dict.keys()):
-                Na_tot = init_dict["Na_tot"]
             if "B" in list(init_dict.keys()):
                 B = init_dict["B"]
             if "Tem" in list(init_dict.keys()):
@@ -96,8 +90,6 @@ class OutMag(FrozenClass):
         self.parent = None
         self.time = time
         self.angle = angle
-        self.Nt_tot = Nt_tot
-        self.Na_tot = Na_tot
         self.B = B
         self.Tem = Tem
         self.Tem_av = Tem_av
@@ -122,8 +114,6 @@ class OutMag(FrozenClass):
             OutMag_str += "parent = " + str(type(self.parent)) + " object" + linesep
         OutMag_str += "time = " + str(self.time) + linesep + linesep
         OutMag_str += "angle = " + str(self.angle) + linesep + linesep
-        OutMag_str += "Nt_tot = " + str(self.Nt_tot) + linesep
-        OutMag_str += "Na_tot = " + str(self.Na_tot) + linesep
         OutMag_str += "B = " + str(self.B) + linesep + linesep
         OutMag_str += "Tem = " + str(self.Tem) + linesep + linesep
         OutMag_str += "Tem_av = " + str(self.Tem_av) + linesep
@@ -161,10 +151,6 @@ class OutMag(FrozenClass):
             return False
         if other.angle != self.angle:
             return False
-        if other.Nt_tot != self.Nt_tot:
-            return False
-        if other.Na_tot != self.Na_tot:
-            return False
         if other.B != self.B:
             return False
         if other.Tem != self.Tem:
@@ -199,8 +185,6 @@ class OutMag(FrozenClass):
             OutMag_dict["angle"] = None
         else:
             OutMag_dict["angle"] = self.angle.as_dict()
-        OutMag_dict["Nt_tot"] = self.Nt_tot
-        OutMag_dict["Na_tot"] = self.Na_tot
         if self.B is None:
             OutMag_dict["B"] = None
         else:
@@ -235,8 +219,6 @@ class OutMag(FrozenClass):
 
         self.time = None
         self.angle = None
-        self.Nt_tot = None
-        self.Na_tot = None
         self.B = None
         self.Tem = None
         self.Tem_av = None
@@ -300,42 +282,6 @@ class OutMag(FrozenClass):
         doc=u"""Magnetic position vector (no symmetry)
 
         :Type: SciDataTool.Classes.DataND.Data
-        """,
-    )
-
-    def _get_Nt_tot(self):
-        """getter of Nt_tot"""
-        return self._Nt_tot
-
-    def _set_Nt_tot(self, value):
-        """setter of Nt_tot"""
-        check_var("Nt_tot", value, "int")
-        self._Nt_tot = value
-
-    Nt_tot = property(
-        fget=_get_Nt_tot,
-        fset=_set_Nt_tot,
-        doc=u"""Length of the time vector
-
-        :Type: int
-        """,
-    )
-
-    def _get_Na_tot(self):
-        """getter of Na_tot"""
-        return self._Na_tot
-
-    def _set_Na_tot(self, value):
-        """setter of Na_tot"""
-        check_var("Na_tot", value, "int")
-        self._Na_tot = value
-
-    Na_tot = property(
-        fget=_get_Na_tot,
-        fset=_set_Na_tot,
-        doc=u"""Length of the angle vector
-
-        :Type: int
         """,
     )
 

@@ -31,11 +31,12 @@ def get_angle_rotor(self):
         # Compute rotor initial angle (for synchronous machines, to align rotor d-axis and stator alpha-axis)
         A0 = self.get_angle_offset_initial()
 
-        if self.elec.time.size == 1:
+        time = self.elec.time.get_values(is_oneperiod=False)
+        if time.size == 1:
             # Only one time step, no need to compute the position
             return ones(1) * A0
         else:
-            deltaT = self.elec.time[1] - self.elec.time[0]
+            deltaT = time[1] - time[0]
             # Convert Nr from [rpm] to [rad/s] (time in [s] and angle_rotor in [rad])
             Ar = cumsum(rot_dir * deltaT * Nr * 2 * pi / 60)
             # Enforce first position to 0
