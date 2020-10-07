@@ -111,8 +111,8 @@ def gen_input(self):
             )
             # Compute corresponding Id/Iq reference
             Idq = n2dq(transpose(output.Is.values), 2 * pi * output.felec * output.time)
-            output.Id_ref = mean(Idq[:, 0])  # TODO check if this is always valid
-            output.Iq_ref = mean(Idq[:, 1])  # TODO check if this is always valid
+            output.Id_ref = mean(Idq[:, 0])
+            output.Iq_ref = mean(Idq[:, 1])  # TODO use of mean has to be documented
 
     # Load and check Ir is needed
     if qr > 0:
