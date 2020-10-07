@@ -36,7 +36,10 @@ def get_surface_wind(self, alpha=0, delta=0):
     else:
         Zmid = self.get_Rbo() - self.H0 - 2 * self.R1 - self.H1
 
-    line_list = self.build_geometry()[2:-2]
+    if self.R1 > 0:
+        line_list = self.build_geometry()[2:-2]
+    else:
+        line_list = self.build_geometry()[1:-1]
     line_list.append(
         Segment(begin=line_list[-1].get_end(), end=line_list[0].get_begin())
     )
