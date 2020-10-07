@@ -49,3 +49,5 @@ def get_surface_wind(self, alpha=0, delta=0):
     # Apply transformation
     surface.rotate(alpha)
     surface.translate(delta)
+
+    return surface

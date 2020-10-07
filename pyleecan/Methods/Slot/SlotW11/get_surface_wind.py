@@ -34,7 +34,7 @@ def get_surface_wind(self, alpha=0, delta=0):
         st = "R"
 
     # Create curve list
-    curve_list = self.build_geometry()[1:-1]
+    curve_list = self.build_geometry()[2:-2]
     curve_list.append(
         Segment(begin=curve_list[-1].get_end(), end=curve_list[0].get_begin())
     )
