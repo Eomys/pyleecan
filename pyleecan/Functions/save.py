@@ -31,6 +31,8 @@ def save(self, save_path="", is_folder=False):
     ):
         save_path += ".json"  # Default format
 
+    # Avoid errors like "\t" in path
+    save_path = save_path.replace("\\", "/")
     # Save in json
     if save_path.endswith(".json") or is_folder:
         save_json(self, save_path=save_path, is_folder=is_folder)

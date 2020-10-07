@@ -100,3 +100,5 @@ def plot_A_surf(
             save_path=save_path,
             fig=fig,
         )
+
+    fig.show()

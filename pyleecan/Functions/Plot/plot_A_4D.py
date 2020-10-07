@@ -75,7 +75,7 @@ def plot_A_4D(
     xticks : list
         list of ticks to use for the x-axis
     fig : Matplotlib.figure.Figure
-        existing figure to use if is_newfig=False
+        existing figure to use if None create a new one
     subplot_index : int
         index of subplot in which to plot
     is_logscale_x : bool
@@ -91,6 +91,7 @@ def plot_A_4D(
     """
 
     # Set figure/subplot
+    is_show_fig = True if fig is None else False
     is_3d = False
     if type != "scatter":
         is_3d = True
@@ -154,3 +155,6 @@ def plot_A_4D(
     if save_path is not None:
         fig.savefig(save_path)
         plt.close()
+
+    if is_show_fig:
+        fig.show()

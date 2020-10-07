@@ -41,7 +41,7 @@ def gen_input(self):
     qr = len(simu.machine.rotor.get_name_phase())
 
     output.N0 = self.N0
-    output.felec = self.comp_felec()
+    output.felec = self.comp_felec()  # TODO introduce set_felec(slip)
 
     # Load and check Is
     if qs > 0:
@@ -84,7 +84,7 @@ def gen_input(self):
                 2 * pi * output.felec * output.time.get_values(is_oneperiod=False),
             )
             output.Id_ref = mean(Idq[:, 0])
-            output.Iq_ref = mean(Idq[:, 1])
+            output.Iq_ref = mean(Idq[:, 1])  # TODO use of mean has to be documented
 
     # Load and check Ir is needed
     if qr > 0:

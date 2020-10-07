@@ -25,6 +25,7 @@ load_switch = {
     "DriveWave": DriveWave,
     "EEC": EEC,
     "EEC_PMSM": EEC_PMSM,
+    "EEC_SCIM": EEC_SCIM,
     "Electrical": Electrical,
     "FPGNSeg": FPGNSeg,
     "FPGNTri": FPGNTri,

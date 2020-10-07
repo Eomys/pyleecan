@@ -104,3 +104,5 @@ def plot_A_cfft2(
             save_path=save_path,
             fig=fig,
         )
+
+    fig.show()

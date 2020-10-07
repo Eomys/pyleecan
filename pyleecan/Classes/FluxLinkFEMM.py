@@ -74,6 +74,7 @@ class FluxLinkFEMM(FluxLink):
         sym_a=1,
         is_antiper_a=False,
         Nt_tot=5,
+        Kgeo_fineness=0.5,
         init_dict=None,
         init_str=None,
     ):
@@ -106,6 +107,8 @@ class FluxLinkFEMM(FluxLink):
                 is_antiper_a = init_dict["is_antiper_a"]
             if "Nt_tot" in list(init_dict.keys()):
                 Nt_tot = init_dict["Nt_tot"]
+            if "Kgeo_fineness" in list(init_dict.keys()):
+                Kgeo_fineness = init_dict["Kgeo_fineness"]
         # Set the properties (value check and convertion are done in setter)
         self.FEMM_dict = FEMM_dict
         self.type_calc_leakage = type_calc_leakage
@@ -114,6 +117,7 @@ class FluxLinkFEMM(FluxLink):
         self.sym_a = sym_a
         self.is_antiper_a = is_antiper_a
         self.Nt_tot = Nt_tot
+        self.Kgeo_fineness = Kgeo_fineness
         # Call FluxLink init
         super(FluxLinkFEMM, self).__init__()
         # The class is frozen (in FluxLink init), for now it's impossible to
@@ -134,6 +138,7 @@ class FluxLinkFEMM(FluxLink):
         FluxLinkFEMM_str += "sym_a = " + str(self.sym_a) + linesep
         FluxLinkFEMM_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
         FluxLinkFEMM_str += "Nt_tot = " + str(self.Nt_tot) + linesep
+        FluxLinkFEMM_str += "Kgeo_fineness = " + str(self.Kgeo_fineness) + linesep
         return FluxLinkFEMM_str
 
     def __eq__(self, other):
@@ -159,6 +164,8 @@ class FluxLinkFEMM(FluxLink):
             return False
         if other.Nt_tot != self.Nt_tot:
             return False
+        if other.Kgeo_fineness != self.Kgeo_fineness:
+            return False
         return True
 
     def as_dict(self):
@@ -173,6 +180,7 @@ class FluxLinkFEMM(FluxLink):
         FluxLinkFEMM_dict["sym_a"] = self.sym_a
         FluxLinkFEMM_dict["is_antiper_a"] = self.is_antiper_a
         FluxLinkFEMM_dict["Nt_tot"] = self.Nt_tot
+        FluxLinkFEMM_dict["Kgeo_fineness"] = self.Kgeo_fineness
         # The class name is added to the dict fordeserialisation purpose
         # Overwrite the mother class name
         FluxLinkFEMM_dict["__class__"] = "FluxLinkFEMM"
@@ -188,6 +196,7 @@ class FluxLinkFEMM(FluxLink):
         self.sym_a = None
         self.is_antiper_a = None
         self.Nt_tot = None
+        self.Kgeo_fineness = None
         # Set to None the properties inherited from FluxLink
         super(FluxLinkFEMM, self)._set_None()
 
@@ -319,5 +328,23 @@ class FluxLinkFEMM(FluxLink):
         doc=u"""Number of time steps for the FEMM simulation
 
         :Type: int
+        """,
+    )
+
+    def _get_Kgeo_fineness(self):
+        """getter of Kgeo_fineness"""
+        return self._Kgeo_fineness
+
+    def _set_Kgeo_fineness(self, value):
+        """setter of Kgeo_fineness"""
+        check_var("Kgeo_fineness", value, "float")
+        self._Kgeo_fineness = value
+
+    Kgeo_fineness = property(
+        fget=_get_Kgeo_fineness,
+        fset=_set_Kgeo_fineness,
+        doc=u"""global coefficient to adjust geometry fineness in FEMM (0.5 : default , > 1 : finner , < 1 : less fine)
+
+        :Type: float
         """,
     )

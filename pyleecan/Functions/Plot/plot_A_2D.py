@@ -54,7 +54,7 @@ def plot_A_2D(
     ylabel : str
         label for the y-axis
     fig : Matplotlib.figure.Figure
-        existing figure to use if is_newfig=False
+        existing figure to use if None create a new one
     subplot_index : int
         index of subplot in which to plot
     is_logscale_x : bool
@@ -80,8 +80,10 @@ def plot_A_2D(
     """
 
     # Set figure/subplot
+    is_show_fig = True if fig is None else False
     if fig is None:
         (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+
     fig, ax = init_subplot(fig=fig, subplot_index=subplot_index)
 
     # Number of curves on a axe
@@ -197,5 +199,8 @@ def plot_A_2D(
     if save_path is not None:
         fig.savefig(save_path)
         plt.close()
+
+    if is_show_fig:
+        fig.show()
 
     return ax

@@ -894,7 +894,8 @@
             }
         ],
         "daughters": [
-            "EEC_PMSM"
+            "EEC_PMSM",
+            "EEC_SCIM"
         ],
         "desc": "Electric module: Equivalent Electrical Circuit abstract class",
         "is_internal": false,
@@ -973,6 +974,65 @@
             }
         ]
     },
+    "EEC_SCIM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module: Electrical Equivalent Circuit for Squirrel Cage Induction Machine",
+        "is_internal": false,
+        "methods": [
+            "comp_parameters",
+            "solve_EEC",
+            "gen_drive",
+            "comp_joule_losses"
+        ],
+        "mother": "EEC",
+        "name": "EEC_SCIM",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_SCIM.csv",
+        "properties": [
+            {
+                "desc": "Magnetic inductance",
+                "max": "",
+                "min": "",
+                "name": "indmag",
+                "type": "IndMag",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Parameters of the EEC: computed if empty, or enforced",
+                "max": "",
+                "min": "",
+                "name": "parameters",
+                "type": "dict",
+                "unit": "-",
+                "value": {}
+            },
+            {
+                "desc": "Frequency",
+                "max": "",
+                "min": "",
+                "name": "freq0",
+                "type": "float",
+                "unit": "Hz",
+                "value": null
+            },
+            {
+                "desc": "Drive",
+                "max": "",
+                "min": "",
+                "name": "drive",
+                "type": "Drive",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
     "Electrical": {
         "constants": [
             {
@@ -981,7 +1041,7 @@
             }
         ],
         "daughters": [],
-        "desc": "Electric module abstract object",
+        "desc": "Electric module object for electrical equivalent circuit simulation",
         "is_internal": false,
         "methods": [
             "run",
@@ -1162,6 +1222,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": 5
+            },
+            {
+                "desc": "global coefficient to adjust geometry fineness in FEMM (0.5 : default , > 1 : finner , < 1 : less fine)",
+                "max": "",
+                "min": "",
+                "name": "Kgeo_fineness",
+                "type": "float",
+                "unit": "",
+                "value": 0.5
             }
         ]
     },
@@ -2889,6 +2958,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": 5
+            },
+            {
+                "desc": "global coefficient to adjust geometry fineness in FEMM (0.5 : default , > 1 : finner , < 1 : less fine)",
+                "max": "",
+                "min": "",
+                "name": "Kgeo_fineness",
+                "type": "float",
+                "unit": "",
+                "value": 0.5
             }
         ]
     },
@@ -3063,6 +3141,15 @@
                 "type": "float",
                 "unit": "A",
                 "value": null
+            },
+            {
+                "desc": "electrical frequency",
+                "max": "",
+                "min": "",
+                "name": "felec",
+                "type": "float",
+                "unit": "Hz",
+                "value": null
             }
         ]
     },
@@ -3138,6 +3225,15 @@
                 "name": "Uq_ref",
                 "type": "float",
                 "unit": "V",
+                "value": null
+            },
+            {
+                "desc": "electrical frequency",
+                "max": "",
+                "min": "",
+                "name": "felec",
+                "type": "float",
+                "unit": "Hz",
                 "value": null
             }
         ]
@@ -10378,7 +10474,6 @@
             "comp_Ncspc",
             "comp_Ntspc",
             "comp_phasor_angle",
-            "comp_resistance_norm",
             "comp_winding_factor",
             "comp_length_endwinding"
         ],
