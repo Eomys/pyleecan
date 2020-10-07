@@ -32,7 +32,7 @@ def get_surface_wind(self, alpha=0, delta=0):
         Arc1(
             begin=curve_list[-1].get_end(),
             end=curve_list[0].get_begin(),
-            radius=abs(curve_list[-1].get_end()),
+            radius=-abs(curve_list[-1].get_end()),
             is_trigo_direction=False,
         )
     )
