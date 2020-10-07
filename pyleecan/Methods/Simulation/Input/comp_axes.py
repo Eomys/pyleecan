@@ -26,28 +26,18 @@ def comp_axes(self, machine, N0=None):
         Angle axis including (anti)-periodicity
 
     """
-    # Compute machine (anti)-periodicities in time and space domains
-    per_a, is_aper_a, per_t, is_aper_t = machine.comp_periodicity()
 
     # Time axis
     if self.time is None:
         if N0 is None:
             raise InputError("ERROR: time and N0 can't be both None")
 
-        # Time axis including (anti)-periodicity and accounting for rotating speed and number of revolutions
-        if is_aper_t:
-            per_t = 2 * per_t
-            dict_per_t = {"antiperiod": per_t}
-        else:
-            dict_per_t = {"period": per_t}
-
         Time = DataLinspace(
             name="time",
             unit="s",
-            symmetries={"time": dict_per_t},
             initial=0,
-            final=60 / N0 * self.Nrev / per_t,
-            number=round(self.Nt_tot / per_t),
+            final=60 / N0 * self.Nrev,
+            number=self.Nt_tot,
             include_endpoint=False,
         )
     else:
@@ -59,21 +49,12 @@ def comp_axes(self, machine, N0=None):
     # Angle axis
     if self.angle is None:
         # Create angle vector as a linspace
-
-        # Angle axis including (anti)-periodicity
-        if is_aper_a:
-            per_a = 2 * per_a
-            dict_per_a = {"antiperiod": per_a}
-        else:
-            dict_per_a = {"period": per_a}
-
         Angle = DataLinspace(
             name="angle",
             unit="rad",
-            symmetries={"angle": dict_per_a},
             initial=0,
-            final=2 * pi / per_a,
-            number=round(self.Na_tot / per_a),
+            final=2 * pi,
+            number=self.Na_tot,
             include_endpoint=False,
         )
     else:

@@ -17,6 +17,13 @@ from ._frozen import FrozenClass
 # Import all class method
 # Try/catch to remove unnecessary dependencies in unused method
 try:
+    from ..Methods.Output.Output.getter.get_angle_offset_initial import (
+        get_angle_offset_initial,
+    )
+except ImportError as error:
+    get_angle_offset_initial = error
+
+try:
     from ..Methods.Output.Output.getter.get_angle_rotor import get_angle_rotor
 except ImportError as error:
     get_angle_rotor = error
@@ -37,6 +44,18 @@ except ImportError as error:
     get_path_result = error
 
 try:
+    from ..Methods.Output.Output.getter.get_machine_periodicity import (
+        get_machine_periodicity,
+    )
+except ImportError as error:
+    get_machine_periodicity = error
+
+try:
+    from ..Methods.Output.Output.getter.get_rot_dir import get_rot_dir
+except ImportError as error:
+    get_rot_dir = error
+
+try:
     from ..Methods.Output.Output.plot.Magnetic.plot_B_space import plot_B_space
 except ImportError as error:
     plot_B_space = error
@@ -47,9 +66,24 @@ except ImportError as error:
     plot_A_cfft2 = error
 
 try:
+    from ..Methods.Output.Output.plot.plot_A_fft_space import plot_A_fft_space
+except ImportError as error:
+    plot_A_fft_space = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_fft_time import plot_A_fft_time
+except ImportError as error:
+    plot_A_fft_time = error
+
+try:
     from ..Methods.Output.Output.plot.plot_A_fft2 import plot_A_fft2
 except ImportError as error:
     plot_A_fft2 = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_quiver_2D import plot_A_quiver_2D
+except ImportError as error:
+    plot_A_quiver_2D = error
 
 try:
     from ..Methods.Output.Output.plot.plot_A_space import plot_A_space
@@ -78,33 +112,6 @@ try:
 except ImportError as error:
     plot_force_space = error
 
-try:
-    from ..Methods.Output.Output.plot.plot_A_quiver_2D import plot_A_quiver_2D
-except ImportError as error:
-    plot_A_quiver_2D = error
-
-try:
-    from ..Methods.Output.Output.getter.get_rot_dir import get_rot_dir
-except ImportError as error:
-    get_rot_dir = error
-
-try:
-    from ..Methods.Output.Output.getter.get_angle_offset_initial import (
-        get_angle_offset_initial,
-    )
-except ImportError as error:
-    get_angle_offset_initial = error
-
-try:
-    from ..Methods.Output.Output.plot.plot_A_fft_space import plot_A_fft_space
-except ImportError as error:
-    plot_A_fft_space = error
-
-try:
-    from ..Methods.Output.Output.plot.plot_A_fft_time import plot_A_fft_time
-except ImportError as error:
-    plot_A_fft_time = error
-
 
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
@@ -122,6 +129,18 @@ class Output(FrozenClass):
     VERSION = 1
 
     # Check ImportError to remove unnecessary dependencies in unused method
+    # cf Methods.Output.Output.getter.get_angle_offset_initial
+    if isinstance(get_angle_offset_initial, ImportError):
+        get_angle_offset_initial = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method get_angle_offset_initial: "
+                    + str(get_angle_offset_initial)
+                )
+            )
+        )
+    else:
+        get_angle_offset_initial = get_angle_offset_initial
     # cf Methods.Output.Output.getter.get_angle_rotor
     if isinstance(get_angle_rotor, ImportError):
         get_angle_rotor = property(
@@ -166,6 +185,27 @@ class Output(FrozenClass):
         )
     else:
         get_path_result = get_path_result
+    # cf Methods.Output.Output.getter.get_machine_periodicity
+    if isinstance(get_machine_periodicity, ImportError):
+        get_machine_periodicity = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method get_machine_periodicity: "
+                    + str(get_machine_periodicity)
+                )
+            )
+        )
+    else:
+        get_machine_periodicity = get_machine_periodicity
+    # cf Methods.Output.Output.getter.get_rot_dir
+    if isinstance(get_rot_dir, ImportError):
+        get_rot_dir = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method get_rot_dir: " + str(get_rot_dir))
+            )
+        )
+    else:
+        get_rot_dir = get_rot_dir
     # cf Methods.Output.Output.plot.Magnetic.plot_B_space
     if isinstance(plot_B_space, ImportError):
         plot_B_space = property(
@@ -188,6 +228,28 @@ class Output(FrozenClass):
         )
     else:
         plot_A_cfft2 = plot_A_cfft2
+    # cf Methods.Output.Output.plot.plot_A_fft_space
+    if isinstance(plot_A_fft_space, ImportError):
+        plot_A_fft_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_fft_space: " + str(plot_A_fft_space)
+                )
+            )
+        )
+    else:
+        plot_A_fft_space = plot_A_fft_space
+    # cf Methods.Output.Output.plot.plot_A_fft_time
+    if isinstance(plot_A_fft_time, ImportError):
+        plot_A_fft_time = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_fft_time: " + str(plot_A_fft_time)
+                )
+            )
+        )
+    else:
+        plot_A_fft_time = plot_A_fft_time
     # cf Methods.Output.Output.plot.plot_A_fft2
     if isinstance(plot_A_fft2, ImportError):
         plot_A_fft2 = property(
@@ -197,6 +259,17 @@ class Output(FrozenClass):
         )
     else:
         plot_A_fft2 = plot_A_fft2
+    # cf Methods.Output.Output.plot.plot_A_quiver_2D
+    if isinstance(plot_A_quiver_2D, ImportError):
+        plot_A_quiver_2D = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_quiver_2D: " + str(plot_A_quiver_2D)
+                )
+            )
+        )
+    else:
+        plot_A_quiver_2D = plot_A_quiver_2D
     # cf Methods.Output.Output.plot.plot_A_space
     if isinstance(plot_A_space, ImportError):
         plot_A_space = property(
@@ -249,60 +322,6 @@ class Output(FrozenClass):
         )
     else:
         plot_force_space = plot_force_space
-    # cf Methods.Output.Output.plot.plot_A_quiver_2D
-    if isinstance(plot_A_quiver_2D, ImportError):
-        plot_A_quiver_2D = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_A_quiver_2D: " + str(plot_A_quiver_2D)
-                )
-            )
-        )
-    else:
-        plot_A_quiver_2D = plot_A_quiver_2D
-    # cf Methods.Output.Output.getter.get_rot_dir
-    if isinstance(get_rot_dir, ImportError):
-        get_rot_dir = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Output method get_rot_dir: " + str(get_rot_dir))
-            )
-        )
-    else:
-        get_rot_dir = get_rot_dir
-    # cf Methods.Output.Output.getter.get_angle_offset_initial
-    if isinstance(get_angle_offset_initial, ImportError):
-        get_angle_offset_initial = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method get_angle_offset_initial: "
-                    + str(get_angle_offset_initial)
-                )
-            )
-        )
-    else:
-        get_angle_offset_initial = get_angle_offset_initial
-    # cf Methods.Output.Output.plot.plot_A_fft_space
-    if isinstance(plot_A_fft_space, ImportError):
-        plot_A_fft_space = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_A_fft_space: " + str(plot_A_fft_space)
-                )
-            )
-        )
-    else:
-        plot_A_fft_space = plot_A_fft_space
-    # cf Methods.Output.Output.plot.plot_A_fft_time
-    if isinstance(plot_A_fft_time, ImportError):
-        plot_A_fft_time = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Output method plot_A_fft_time: " + str(plot_A_fft_time)
-                )
-            )
-        )
-    else:
-        plot_A_fft_time = plot_A_fft_time
     # save and copy methods are available in all object
     save = save
     copy = copy

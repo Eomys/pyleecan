@@ -13,21 +13,33 @@ from ....Functions.Winding.gen_phase_list import gen_name
 
 def solve_FEMM(self, femm, output, sym):
 
-    # Loading parameters for readibility
-    angle = output.mag.angle.get_values(is_oneperiod=self.is_periodicity_a)
-    L1 = output.simu.machine.stator.comp_length()
+    # Periodicity optimization
+    (
+        per_a,
+        is_antiper_a,
+        per_t,
+        is_antiper_t,
+    ) = self.parent.parent.get_machine_periodicity()
 
+    # Getting the computation axes (with or without periodicity)
+    if self.is_periodicity_a:
+        Angle_comp = output.mag.angle.get_axis_periodic(per_a, is_antiper_a)
+    else:
+        Angle_comp = output.mag.angle
+    angle = Angle_comp.get_values(is_oneperiod=self.is_periodicity_a)
+    Na_comp = angle.size
+
+    if self.is_periodicity_t:
+        Time_comp = output.mag.time.get_axis_periodic(per_t, is_antiper_t)
+    else:
+        Time_comp = output.mag.time
+    time = Time_comp.get_values(is_oneperiod=self.is_periodicity_t)
+    Nt_comp = time.size
+
+    # Loading parameters for readibility
+    L1 = output.simu.machine.stator.comp_length()
     save_path = self.get_path_save(output)
     FEMM_dict = output.mag.FEMM_dict
-
-    # Get dimensions including periodicity
-    Nt_comp = output.mag.time.get_length(is_oneperiod=self.is_periodicity_t)
-    Na_comp = output.mag.angle.get_length(is_oneperiod=self.is_periodicity_a)
-    sym_dict = dict()
-    if self.is_periodicity_t:
-        sym_dict.update(output.mag.time.symmetries)
-    if self.is_periodicity_a:
-        sym_dict.update(output.mag.angle.symmetries)
 
     if (
         hasattr(output.simu.machine.stator, "winding")
@@ -129,13 +141,17 @@ def solve_FEMM(self, femm, output, sym):
     Bt = roll(Bt, roll_id, axis=1)
 
     # Store the results
-    Time = output.mag.time  # Same symmetry as input
-    Angle = output.mag.angle  # Same symmetry as input
+    sym_dict = dict()  # Define the periodicity
+    if self.is_periodicity_t:
+        sym_dict.update(Time_comp.symmetries)
+    if self.is_periodicity_a:
+        sym_dict.update(Angle_comp.symmetries)
+
     Br_data = DataTime(
         name="Airgap radial flux density",
         unit="T",
         symbol="B_r",
-        axes=[Time, Angle],
+        axes=[Time_comp, Angle_comp],
         symmetries=sym_dict,
         values=Br,
     )
@@ -143,7 +159,7 @@ def solve_FEMM(self, femm, output, sym):
         name="Airgap tangential flux density",
         unit="T",
         symbol="B_t",
-        axes=[Time, Angle],
+        axes=[Time_comp, Angle_comp],
         symmetries=sym_dict,
         values=Bt,
     )
@@ -157,7 +173,7 @@ def solve_FEMM(self, femm, output, sym):
         name="Electromagnetic torque",
         unit="Nm",
         symbol="T_{em}",
-        axes=[Time],
+        axes=[Time_comp],
         symmetries=sym_dict,
         values=Tem,
     )
@@ -183,7 +199,7 @@ def solve_FEMM(self, femm, output, sym):
             name="Stator Winding Flux",
             unit="Wb",
             symbol="Phi_{wind}",
-            axes=[Time, Phase],
+            axes=[Time_comp, Phase],
             symmetries=sym_dict,
             values=Phi_wind_stator,
         )
@@ -192,7 +208,7 @@ def solve_FEMM(self, femm, output, sym):
 
     if self.is_get_mesh:
         output.mag.meshsolution = self.build_meshsolution(
-            Nt_comp, meshFEMM, Time, B_elem, H_elem, mu_elem, groups
+            Nt_comp, meshFEMM, Time_comp, B_elem, H_elem, mu_elem, groups
         )
 
     if self.is_save_FEA:

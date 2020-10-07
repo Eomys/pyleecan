@@ -15,20 +15,14 @@ def comp_flux_airgap(self, output):
         an Output object
     """
 
-    # Set the symmetry factor from angle axe
-    sym = 1
-    is_antiper_a = False
-    if "angle" in output.mag.angle.symmetries and self.is_periodicity_a:
-        if "antiperiod" in output.mag.angle.symmetries["angle"]:
-            is_antiper_a = True
-            sym = output.mag.angle.symmetries["angle"]["antiperiod"]
-        elif "period" in output.mag.angle.symmetries["angle"]:
-            sym = output.mag.angle.symmetries["angle"]["period"]
-        else:
-            self.get_logger().warning(
-                "WARNING: Unknow symmetries key for output.mag.angle: "
-                + str(output.mag.angle.symmetries["angle"])
-            )
+    # Set the symmetry factor according to the machine
+    if self.is_periodicity_a:
+        (sym, is_antiper_a, _, _) = self.parent.parent.get_machine_periodicity()
+        if is_antiper_a:
+            sym = sym * 2
+    else:
+        sym = 1
+        is_antiper_a = False
 
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
