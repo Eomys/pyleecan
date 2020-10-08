@@ -16,6 +16,8 @@ def comp_angle_d_axis(self):
         angle between the X axis and the first d+ axis
     """
 
+    if self.winding is None:
+        return 0
     (per_a, _, _, _) = self.comp_periodicity()
 
     p = self.get_pole_pair_number()
