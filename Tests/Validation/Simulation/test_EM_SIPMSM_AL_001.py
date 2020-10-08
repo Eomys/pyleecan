@@ -59,11 +59,12 @@ def test_Magnetic_FEMM_sym():
     )
 
     # Definition of the magnetic simulation (is_mmfr=False => no flux from the magnets)
-    assert SIPMSM_001.comp_periodicity() == (1, False, 1, False)
+    assert SIPMSM_001.comp_periodicity() == (1, False, 2, True)
     simu.mag = MagFEMM(
         type_BH_stator=2,
         type_BH_rotor=2,
         is_periodicity_a=False,
+        is_periodicity_t=False,
         is_mmfr=False,
         angle_stator=-pi / 6,
     )

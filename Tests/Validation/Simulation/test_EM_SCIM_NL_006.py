@@ -60,11 +60,16 @@ def test_Magnetic_FEMM_sym():
     )
 
     # Definition of the magnetic simulation (no symmetry)
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=False)
+    simu.mag = MagFEMM(
+        type_BH_stator=2,
+        type_BH_rotor=2,
+        is_periodicity_a=False,
+        is_periodicity_t=False,
+    )
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
-    assert SCIM_006.comp_periodicity() == (2, False, 2, False)
+    assert SCIM_006.comp_periodicity() == (2, True, 28, False)
     simu_sym = Simu1(init_dict=simu.as_dict())
     simu_sym.mag.is_periodicity_a = True
 

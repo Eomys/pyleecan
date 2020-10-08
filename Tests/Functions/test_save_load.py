@@ -117,6 +117,7 @@ def test_save_load_folder_path(CEFC_Lam):
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
+        rot_dir=-1,
     )
 
     # Definition of the magnetic simulation (no symmetry)
@@ -294,6 +295,7 @@ def test_save_load_simu(type_file, CEFC_Lam):
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
+        rot_dir=-1,
     )
 
     # Definition of the magnetic simulation (no symmetry)

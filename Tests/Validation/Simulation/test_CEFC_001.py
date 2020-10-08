@@ -30,6 +30,7 @@ def test_CEFC_001(CEFC_Lam):
         angle_rotor=None,  # Will be computed
         Nt_tot=Nt_tot,
         Na_tot=Na_tot,
+        rot_dir=-1,
     )
 
     # Definition of the magnetic simulation (no symmetry)

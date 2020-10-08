@@ -48,11 +48,7 @@ def test_import_FEMM_file():
     simu.input.angle_rotor_initial = 0.5216 + pi  # Rotor position at t=0 [rad]
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(
-        type_BH_stator=2,
-        type_BH_rotor=2,
-        is_periodicity_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
     out = simu.run()
 
     # Second simulation, importing femm file and FEMM_dict
@@ -61,7 +57,8 @@ def test_import_FEMM_file():
     simu2.mag = MagFEMM(
         type_BH_stator=2,
         type_BH_rotor=2,
-        is_periodicity=True,
+        is_periodicity_a=True,
+        is_periodicity_t=False,
         import_file=out.simu.mag.get_path_save_fem(out),
         FEMM_dict=out.mag.FEMM_dict,
     )
