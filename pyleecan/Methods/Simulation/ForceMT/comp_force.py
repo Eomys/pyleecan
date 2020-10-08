@@ -17,7 +17,9 @@ def comp_force(self, output):
     mu_0 = 4 * pi * 1e-7
 
     # Load magnetic flux
-    Brphiz = output.mag.B.get_rphiz_along("time", "angle")
+    Brphiz = output.mag.B.get_rphiz_along(
+        "time[smallestperiod]", "angle[smallestperiod]"
+    )
     Br = Brphiz["radial"]
     Bt = Brphiz["tangential"]
     Bz = Brphiz["axial"]
@@ -35,6 +37,7 @@ def comp_force(self, output):
             unit="N/m2",
             symbol="P_r",
             axes=list(output.mag.B.components.values())[0].axes,
+            symmetries=output.mag.B.symmetries,
             values=Prad,
         )
         components["radial"] = Prad_data
@@ -43,6 +46,7 @@ def comp_force(self, output):
             name="Airgap tangential surface force",
             unit="N/m2",
             symbol="P_t",
+            symmetries=output.mag.B.symmetries,
             axes=list(output.mag.B.components.values())[0].axes,
             values=Ptan,
         )
@@ -52,6 +56,7 @@ def comp_force(self, output):
             name="Airgap axial surface force",
             unit="N/m2",
             symbol="P_z",
+            symmetries=output.mag.B.symmetries,
             axes=list(output.mag.B.components.values())[0].axes,
             values=Pz,
         )

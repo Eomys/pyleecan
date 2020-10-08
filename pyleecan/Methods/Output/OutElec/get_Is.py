@@ -12,11 +12,9 @@ def get_Is(self):
         time = self.time.get_values(is_oneperiod=True)
         qs = self.parent.simu.machine.stator.winding.qs
         felec = self.felec
-
+        rot_dir = self.parent.get_rot_dir()
         # Get stator current function of time
-        Is = dq2n(
-            Isdq, 2 * pi * felec * time, n=qs, rot_dir=self.rot_dir, is_n_rms=False
-        )
+        Is = dq2n(Isdq, 2 * pi * felec * time, n=qs, rot_dir=rot_dir, is_n_rms=False)
 
         Time = self.time
         Phase = Data1D(

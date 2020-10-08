@@ -83,7 +83,6 @@ class OutElec(FrozenClass):
         Ir=None,
         angle_rotor=None,
         N0=None,
-        rot_dir=-1,
         angle_rotor_initial=0,
         logger_name="Pyleecan.OutElec",
         mmf_unit=None,
@@ -126,8 +125,6 @@ class OutElec(FrozenClass):
                 angle_rotor = init_dict["angle_rotor"]
             if "N0" in list(init_dict.keys()):
                 N0 = init_dict["N0"]
-            if "rot_dir" in list(init_dict.keys()):
-                rot_dir = init_dict["rot_dir"]
             if "angle_rotor_initial" in list(init_dict.keys()):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
             if "logger_name" in list(init_dict.keys()):
@@ -160,7 +157,6 @@ class OutElec(FrozenClass):
         self.Ir = Ir
         self.angle_rotor = angle_rotor
         self.N0 = N0
-        self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
         self.logger_name = logger_name
         self.mmf_unit = mmf_unit
@@ -197,7 +193,6 @@ class OutElec(FrozenClass):
             + linesep
         )
         OutElec_str += "N0 = " + str(self.N0) + linesep
-        OutElec_str += "rot_dir = " + str(self.rot_dir) + linesep
         OutElec_str += (
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         )
@@ -230,8 +225,6 @@ class OutElec(FrozenClass):
         if not array_equal(other.angle_rotor, self.angle_rotor):
             return False
         if other.N0 != self.N0:
-            return False
-        if other.rot_dir != self.rot_dir:
             return False
         if other.angle_rotor_initial != self.angle_rotor_initial:
             return False
@@ -284,7 +277,6 @@ class OutElec(FrozenClass):
         else:
             OutElec_dict["angle_rotor"] = self.angle_rotor.tolist()
         OutElec_dict["N0"] = self.N0
-        OutElec_dict["rot_dir"] = self.rot_dir
         OutElec_dict["angle_rotor_initial"] = self.angle_rotor_initial
         OutElec_dict["logger_name"] = self.logger_name
         if self.mmf_unit is None:
@@ -316,7 +308,6 @@ class OutElec(FrozenClass):
         self.Ir = None
         self.angle_rotor = None
         self.N0 = None
-        self.rot_dir = None
         self.angle_rotor_initial = None
         self.logger_name = None
         self.mmf_unit = None
@@ -478,26 +469,6 @@ class OutElec(FrozenClass):
         doc=u"""Rotor speed
 
         :Type: float
-        """,
-    )
-
-    def _get_rot_dir(self):
-        """getter of rot_dir"""
-        return self._rot_dir
-
-    def _set_rot_dir(self, value):
-        """setter of rot_dir"""
-        check_var("rot_dir", value, "float", Vmin=-1, Vmax=1)
-        self._rot_dir = value
-
-    rot_dir = property(
-        fget=_get_rot_dir,
-        fset=_set_rot_dir,
-        doc=u"""Rotation direction of the rotor 1 trigo, -1 clockwise
-
-        :Type: float
-        :min: -1
-        :max: 1
         """,
     )
 

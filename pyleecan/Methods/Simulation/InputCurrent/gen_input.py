@@ -138,9 +138,9 @@ def gen_input(self):
 
     if self.rot_dir is None or self.rot_dir not in [-1, 1]:
         # Enforce default rotation direction
-        output.rot_dir = None
+        simu.parent.geo.rot_dir = None
     else:
-        output.rot_dir = self.rot_dir
+        simu.parent.geo.rot_dir = self.rot_dir
 
     if self.angle_rotor_initial is None:
         # Enforce default initial position

@@ -11,13 +11,13 @@ def get_rot_dir(self):
 
     Returns
     -------
-    alpha_rotor: numpy.ndarray
-        angular position of the rotor as a function of time (vector) [rad]
+    rot_dir: int
+        Rotation direction
 
     """
 
     # Already available => Return
-    if self.geo.rot_dir is not None and self.geo.rot_dir.size > 0:
+    if self.geo.rot_dir is not None:
         return self.geo.rot_dir
     else:  # Compute
         rot_dir = self.simu.machine.stator.comp_rot_dir()

@@ -6114,15 +6114,6 @@
                 "value": null
             },
             {
-                "desc": "Rotation direction of the rotor 1 trigo, -1 clockwise",
-                "max": "1",
-                "min": "-1",
-                "name": "rot_dir",
-                "type": "float",
-                "unit": "-",
-                "value": -1
-            },
-            {
                 "desc": "Initial angular position of the rotor at t=0",
                 "max": "",
                 "min": "",
