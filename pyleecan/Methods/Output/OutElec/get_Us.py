@@ -9,7 +9,7 @@ def get_Us(self):
     if self.Us is None:
         # Generate current according to Ud/Uq
         Usdq = array([self.Ud_ref, self.Uq_ref])
-        time = self.time.get_values(one_period=True)
+        time = self.time.get_values(is_oneperiod=True)
         qs = self.parent.simu.machine.stator.winding.qs
         felec = self.felec
 
