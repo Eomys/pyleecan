@@ -41,3 +41,5 @@ def plot_A_quiver_2D(data, t=None, t_index=0, is_norm=False, unit="SI"):
     plot_A_2D(
         xy, [Ydata], fig=fig, title=title, xlabel=xlabel, ylabel=ylabel, type="quiver"
     )
+
+    fig.show()

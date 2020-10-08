@@ -53,8 +53,6 @@ def plot_A_fft2(
         path and name of the png file to save
     component_list : list
         list of component names to plot in separate figures
-    fig : Matplotlib.figure.Figure
-        existing figure to use if None create a new one
     """
 
     # Get Data object names
@@ -102,3 +100,5 @@ def plot_A_fft2(
             save_path=save_path,
             fig=fig,
         )
+
+    fig.show()
