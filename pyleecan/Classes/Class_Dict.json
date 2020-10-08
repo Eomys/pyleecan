@@ -4858,7 +4858,7 @@
                 "name": "is_periodicity_t",
                 "type": "bool",
                 "unit": "-",
-                "value": 1
+                "value": 0
             },
             {
                 "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.angle)",
@@ -4867,7 +4867,7 @@
                 "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "-",
-                "value": 1
+                "value": 0
             }
         ]
     },
@@ -6253,18 +6253,18 @@
                 "max": "",
                 "min": "",
                 "name": "time",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "s",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Structural position vector (no symmetry)",
                 "max": "",
                 "min": "",
                 "name": "angle",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "rad",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Length of the time vector",

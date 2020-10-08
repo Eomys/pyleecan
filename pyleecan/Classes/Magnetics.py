@@ -86,8 +86,8 @@ class Magnetics(FrozenClass):
         is_mmfr=True,
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_periodicity_t=True,
-        is_periodicity_a=True,
+        is_periodicity_t=False,
+        is_periodicity_a=False,
         init_dict=None,
         init_str=None,
     ):
