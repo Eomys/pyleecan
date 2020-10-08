@@ -161,7 +161,7 @@ class RefTriangle3(RefCell):
 
         # Get the properties inherited from RefCell
         RefTriangle3_dict = super(RefTriangle3, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         RefTriangle3_dict["__class__"] = "RefTriangle3"
         return RefTriangle3_dict

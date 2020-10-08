@@ -499,7 +499,7 @@ class LamSlotWind(LamSlot):
             LamSlotWind_dict["winding"] = None
         else:
             LamSlotWind_dict["winding"] = self.winding.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotWind_dict["__class__"] = "LamSlotWind"
         return LamSlotWind_dict

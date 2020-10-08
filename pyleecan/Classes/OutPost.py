@@ -85,7 +85,7 @@ class OutPost(FrozenClass):
         OutPost_dict = dict()
         OutPost_dict["legend_name"] = self.legend_name
         OutPost_dict["line_color"] = self.line_color
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         OutPost_dict["__class__"] = "OutPost"
         return OutPost_dict
 

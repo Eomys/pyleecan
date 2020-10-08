@@ -228,7 +228,7 @@ class Magnetics(FrozenClass):
         Magnetics_dict["is_symmetry_a"] = self.is_symmetry_a
         Magnetics_dict["sym_a"] = self.sym_a
         Magnetics_dict["is_antiper_a"] = self.is_antiper_a
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
 

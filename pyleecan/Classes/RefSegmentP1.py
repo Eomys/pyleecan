@@ -161,7 +161,7 @@ class RefSegmentP1(RefCell):
 
         # Get the properties inherited from RefCell
         RefSegmentP1_dict = super(RefSegmentP1, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         RefSegmentP1_dict["__class__"] = "RefSegmentP1"
         return RefSegmentP1_dict

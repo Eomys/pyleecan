@@ -162,7 +162,7 @@ class SlotWind(Slot):
 
         # Get the properties inherited from Slot
         SlotWind_dict = super(SlotWind, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotWind_dict["__class__"] = "SlotWind"
         return SlotWind_dict

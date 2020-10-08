@@ -94,7 +94,7 @@ class MatElectrical(FrozenClass):
         MatElectrical_dict["rho"] = self.rho
         MatElectrical_dict["epsr"] = self.epsr
         MatElectrical_dict["alpha"] = self.alpha
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         MatElectrical_dict["__class__"] = "MatElectrical"
         return MatElectrical_dict
 

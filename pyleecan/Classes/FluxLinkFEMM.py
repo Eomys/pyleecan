@@ -181,7 +181,7 @@ class FluxLinkFEMM(FluxLink):
         FluxLinkFEMM_dict["is_antiper_a"] = self.is_antiper_a
         FluxLinkFEMM_dict["Nt_tot"] = self.Nt_tot
         FluxLinkFEMM_dict["Kgeo_fineness"] = self.Kgeo_fineness
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         FluxLinkFEMM_dict["__class__"] = "FluxLinkFEMM"
         return FluxLinkFEMM_dict

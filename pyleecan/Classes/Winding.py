@@ -239,7 +239,7 @@ class Winding(FrozenClass):
             Winding_dict["conductor"] = None
         else:
             Winding_dict["conductor"] = self.conductor.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Winding_dict["__class__"] = "Winding"
         return Winding_dict
 

@@ -118,7 +118,7 @@ class DXFImport(FrozenClass):
         DXFImport_dict["file_path"] = self.file_path
         DXFImport_dict["surf_dict"] = self.surf_dict
         DXFImport_dict["BC_list"] = self.BC_list
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         DXFImport_dict["__class__"] = "DXFImport"
         return DXFImport_dict
 

@@ -1,6 +1,11 @@
 import pytest
 from os.path import join
 
+import sys
+from os.path import dirname, abspath, normpath, join, realpath
+from os import listdir, remove, system
+import json
+
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Classes.PostFunction import PostFunction
@@ -11,6 +16,10 @@ from pyleecan.Classes.VarParam import VarParam
 from pyleecan.Classes.ParamExplorerSet import ParamExplorerSet
 from pyleecan.Classes.DataKeeper import DataKeeper
 from copy import copy
+from Tests import TEST_DATA_DIR
+from pyleecan.Classes.HoleM51 import HoleM51
+from pyleecan.Classes.HoleM52 import HoleM52
+from pyleecan.Classes.HoleM53 import HoleM53
 
 
 class ExamplePostMethod(PostMethod):
@@ -18,7 +27,7 @@ class ExamplePostMethod(PostMethod):
         PostMethod.__init__(self)
 
     def run(self, output):
-        output.simu.machine.stator.slot.W0 += 2
+        output.simu.machine.stator.slot.W0 += 10
 
     def copy(self):
         return copy(self)
@@ -27,7 +36,7 @@ class ExamplePostMethod(PostMethod):
         return copy(self)
 
 
-# @pytest.mark.skip  # Skip it until class generator is not fixed (definition of attribute as empty dict get the same reference)
+@pytest.mark.only
 def test_post_var_simu():
     """Test the simulation.var_simu.post_list"""
 
@@ -54,7 +63,7 @@ def test_post_var_simu():
         name="Stator slot width",
         unit="m",
         symbol="D_S_s_w",
-        keeper=lambda output: output.simu.machine.stator.slot.W0,
+        keeper="lambda output: output.simu.machine.stator.slot.W0",
     )
 
     simu1.var_simu = VarParam(
@@ -67,33 +76,37 @@ def test_post_var_simu():
     # simu2, postprocessing 1 PostFunction, 1 PostMethod
     simu2 = simu1.copy()
 
-    def example_post(xoutput):
-        """var_simu post_proc"""
-        xoutput.simu.machine.stator.slot.H0 += 1
-
-    def example_post2(xoutput):
-        """var_simu post_proc"""
-        xoutput.simu.machine.stator.slot.W0 += 2
-
     # Create the postprocessings and add it
-    post1 = PostFunction(run=example_post2)  # ExamplePostMethod()
-    post2 = PostFunction(run=example_post)
-    print(
-        id(simu1.var_simu.datakeeper_list[0].result),
-        id(simu2.var_simu.datakeeper_list[0].result),
-    )
-    simu2.postproc_list = [post1]
-    simu2.var_simu.postproc_list = [post2]
+    # xoutput.simu.machine.stator.slot.H0 += 1
+    post1 = PostFunction(run=join(TEST_DATA_DIR, "example_post.py"))
+
+    # xoutput.simu.machine.stator.slot.W0 += 2
+    post2 = PostFunction(run=join(TEST_DATA_DIR, "example_post2.py"))
+
+    post3 = PostFunction(run=join(TEST_DATA_DIR, "example_post3.py"))
+    post4 = ExamplePostMethod()
+
+    simu2.postproc_list = [post2, post3, post4]
+    simu2.var_simu.postproc_list = [post1]
+    simu2.var_simu.is_keep_all_output = True
 
     # First simulation without postprocessings
     out1 = simu1.run()
 
     # Second simulation with postprocessing
     out2 = simu2.run()
-    assert (
-        list(map(lambda val: val + 2, out1["D_S_s_w"].result)) == out2["D_S_s_w"].result
+    # Check ref simu
+    assert out1["D_S_s_w"].result == [1, 2, 3]
+    # Check post 2 + 4
+    assert [output.simu.machine.stator.slot.W0 for output in out2] == [13, 14, 15]
+    # Check post 1
+    assert out1.simu.machine.stator.slot.H0 + 1 == pytest.approx(
+        out2.simu.machine.stator.slot.H0, 0.001
     )
-    assert out1.simu.machine.stator.slot.H0 + 1 == out2.simu.machine.stator.slot.H0
+    # Check post 3 with import + using result of post2
+    assert type(out2[0].simu.machine.rotor.hole[0]) is HoleM51
+    assert type(out2[1].simu.machine.rotor.hole[0]) is HoleM52
+    assert type(out2[2].simu.machine.rotor.hole[0]) is HoleM53
 
 
 if __name__ == "__main__":

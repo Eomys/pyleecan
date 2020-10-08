@@ -310,7 +310,7 @@ class LamSlotMulti(Lamination):
             LamSlotMulti_dict["alpha"] = None
         else:
             LamSlotMulti_dict["alpha"] = self.alpha.tolist()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSlotMulti_dict["__class__"] = "LamSlotMulti"
         return LamSlotMulti_dict

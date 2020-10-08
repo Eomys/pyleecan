@@ -165,7 +165,7 @@ class Input(FrozenClass):
         Input_dict["Nt_tot"] = self.Nt_tot
         Input_dict["Nrev"] = self.Nrev
         Input_dict["Na_tot"] = self.Na_tot
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Input_dict["__class__"] = "Input"
         return Input_dict
 

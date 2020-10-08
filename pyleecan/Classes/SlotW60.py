@@ -294,7 +294,7 @@ class SlotW60(SlotWind):
         SlotW60_dict["H3"] = self.H3
         SlotW60_dict["H4"] = self.H4
         SlotW60_dict["W3"] = self.W3
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotW60_dict["__class__"] = "SlotW60"
         return SlotW60_dict

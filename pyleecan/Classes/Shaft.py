@@ -150,7 +150,7 @@ class Shaft(FrozenClass):
         else:
             Shaft_dict["mat_type"] = self.mat_type.as_dict()
         Shaft_dict["Drsh"] = self.Drsh
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Shaft_dict["__class__"] = "Shaft"
         return Shaft_dict
 

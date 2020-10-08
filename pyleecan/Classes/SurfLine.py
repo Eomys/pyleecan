@@ -251,7 +251,7 @@ class SurfLine(Surface):
             SurfLine_dict["line_list"] = list()
             for obj in self.line_list:
                 SurfLine_dict["line_list"].append(obj.as_dict())
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SurfLine_dict["__class__"] = "SurfLine"
         return SurfLine_dict

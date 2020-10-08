@@ -191,7 +191,7 @@ class EEC_SCIM(EEC):
             EEC_SCIM_dict["drive"] = None
         else:
             EEC_SCIM_dict["drive"] = self.drive.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         EEC_SCIM_dict["__class__"] = "EEC_SCIM"
         return EEC_SCIM_dict

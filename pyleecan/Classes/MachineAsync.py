@@ -143,7 +143,7 @@ class MachineAsync(Machine):
 
         # Get the properties inherited from Machine
         MachineAsync_dict = super(MachineAsync, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineAsync_dict["__class__"] = "MachineAsync"
         return MachineAsync_dict

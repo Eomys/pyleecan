@@ -517,7 +517,7 @@ class Lamination(FrozenClass):
             Lamination_dict["notch"] = list()
             for obj in self.notch:
                 Lamination_dict["notch"].append(obj.as_dict())
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Lamination_dict["__class__"] = "Lamination"
         return Lamination_dict
 

@@ -186,7 +186,7 @@ class VentilationCirc(Hole):
         VentilationCirc_dict["Alpha0"] = self.Alpha0
         VentilationCirc_dict["D0"] = self.D0
         VentilationCirc_dict["H0"] = self.H0
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VentilationCirc_dict["__class__"] = "VentilationCirc"
         return VentilationCirc_dict

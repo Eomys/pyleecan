@@ -136,7 +136,7 @@ class SolutionVector(Solution):
             SolutionVector_dict["field"] = None
         else:
             SolutionVector_dict["field"] = self.field.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SolutionVector_dict["__class__"] = "SolutionVector"
         return SolutionVector_dict

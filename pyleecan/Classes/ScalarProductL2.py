@@ -94,7 +94,7 @@ class ScalarProductL2(ScalarProduct):
 
         # Get the properties inherited from ScalarProduct
         ScalarProductL2_dict = super(ScalarProductL2, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ScalarProductL2_dict["__class__"] = "ScalarProductL2"
         return ScalarProductL2_dict

@@ -253,7 +253,7 @@ class SlotW24(SlotWind):
         SlotW24_dict = super(SlotW24, self).as_dict()
         SlotW24_dict["W3"] = self.W3
         SlotW24_dict["H2"] = self.H2
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotW24_dict["__class__"] = "SlotW24"
         return SlotW24_dict

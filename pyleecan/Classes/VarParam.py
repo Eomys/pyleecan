@@ -176,7 +176,7 @@ class VarParam(VarSimu):
             VarParam_dict["paramexplorer_list"] = list()
             for obj in self.paramexplorer_list:
                 VarParam_dict["paramexplorer_list"].append(obj.as_dict())
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VarParam_dict["__class__"] = "VarParam"
         return VarParam_dict

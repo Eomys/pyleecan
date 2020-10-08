@@ -187,7 +187,7 @@ class Simulation(FrozenClass):
             Simulation_dict["postproc_list"] = list()
             for obj in self.postproc_list:
                 Simulation_dict["postproc_list"].append(obj.as_dict())
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Simulation_dict["__class__"] = "Simulation"
         return Simulation_dict
 

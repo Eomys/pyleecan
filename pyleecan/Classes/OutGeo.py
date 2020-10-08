@@ -164,7 +164,7 @@ class OutGeo(FrozenClass):
         OutGeo_dict["logger_name"] = self.logger_name
         OutGeo_dict["angle_offset_initial"] = self.angle_offset_initial
         OutGeo_dict["rot_dir"] = self.rot_dir
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         OutGeo_dict["__class__"] = "OutGeo"
         return OutGeo_dict
 

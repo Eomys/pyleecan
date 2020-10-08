@@ -147,7 +147,7 @@ class Surface(FrozenClass):
         Surface_dict = dict()
         Surface_dict["point_ref"] = self.point_ref
         Surface_dict["label"] = self.label
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Surface_dict["__class__"] = "Surface"
         return Surface_dict
 

@@ -215,7 +215,7 @@ class Frame(FrozenClass):
             Frame_dict["mat_type"] = None
         else:
             Frame_dict["mat_type"] = self.mat_type.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Frame_dict["__class__"] = "Frame"
         return Frame_dict
 

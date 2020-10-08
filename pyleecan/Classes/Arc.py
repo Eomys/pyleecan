@@ -152,7 +152,7 @@ class Arc(Line):
 
         # Get the properties inherited from Line
         Arc_dict = super(Arc, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Arc_dict["__class__"] = "Arc"
         return Arc_dict

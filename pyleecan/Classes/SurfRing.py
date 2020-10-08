@@ -267,7 +267,7 @@ class SurfRing(Surface):
             SurfRing_dict["in_surf"] = None
         else:
             SurfRing_dict["in_surf"] = self.in_surf.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SurfRing_dict["__class__"] = "SurfRing"
         return SurfRing_dict

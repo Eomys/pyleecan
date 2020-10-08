@@ -201,7 +201,7 @@ class InputElec(Input):
         InputElec_dict["Ud_ref"] = self.Ud_ref
         InputElec_dict["Uq_ref"] = self.Uq_ref
         InputElec_dict["felec"] = self.felec
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputElec_dict["__class__"] = "InputElec"
         return InputElec_dict
