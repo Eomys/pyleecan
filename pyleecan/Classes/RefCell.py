@@ -97,7 +97,7 @@ class RefCell(FrozenClass):
 
         RefCell_dict = dict()
         RefCell_dict["epsilon"] = self.epsilon
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         RefCell_dict["__class__"] = "RefCell"
         return RefCell_dict
 

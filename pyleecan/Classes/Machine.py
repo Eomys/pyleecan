@@ -387,7 +387,7 @@ class Machine(FrozenClass):
         Machine_dict["desc"] = self.desc
         Machine_dict["type_machine"] = self.type_machine
         Machine_dict["logger_name"] = self.logger_name
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Machine_dict["__class__"] = "Machine"
         return Machine_dict
 

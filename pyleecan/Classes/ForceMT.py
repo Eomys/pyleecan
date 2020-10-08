@@ -31,7 +31,7 @@ from ._check import InitUnKnowClassError
 
 
 class ForceMT(Force):
-    """Force Maxwell tensor model"""
+    """Force Maxwell tensor model for radial flux machines"""
 
     VERSION = 1
 
@@ -111,7 +111,7 @@ class ForceMT(Force):
 
         # Get the properties inherited from Force
         ForceMT_dict = super(ForceMT, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ForceMT_dict["__class__"] = "ForceMT"
         return ForceMT_dict

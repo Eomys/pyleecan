@@ -257,7 +257,7 @@ class InputCurrent(Input):
         InputCurrent_dict["Id_ref"] = self.Id_ref
         InputCurrent_dict["Iq_ref"] = self.Iq_ref
         InputCurrent_dict["felec"] = self.felec
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputCurrent_dict["__class__"] = "InputCurrent"
         return InputCurrent_dict

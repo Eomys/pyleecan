@@ -136,12 +136,9 @@ def generate_class(gen_dict, class_name, path_to_gen):
     if "ndarray" in import_type_list:
         import_type_list.remove("ndarray")
 
-    # For function type
-    cloudpickle_imported = False  # Only import cloudpickle once
     if "function" in import_type_list:
-        cloudpickle_imported = True
-        class_file.write("from inspect import getsource\n")
-        class_file.write("from cloudpickle import dumps, loads\n")
+        class_file.write("from ntpath import basename\n")
+        class_file.write("from os.path import isfile\n")
         class_file.write("from ._check import CheckTypeError\n")
         import_type_list.remove("function")
 
@@ -149,10 +146,8 @@ def generate_class(gen_dict, class_name, path_to_gen):
     types_imported = []
     for import_type in import_type_list:
         if "." in import_type and "SciDataTool" not in import_type:
-            if cloudpickle_imported == False:
-                cloudpickle_imported = True
-                class_file.write("from cloudpickle import dumps, loads\n")
-                class_file.write("from ._check import CheckTypeError\n")
+            class_file.write("from cloudpickle import dumps, loads\n")
+            class_file.write("from ._check import CheckTypeError\n")
 
             # Remove the list if needed
             if import_type.startswith("["):

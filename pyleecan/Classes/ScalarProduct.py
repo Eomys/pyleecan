@@ -69,7 +69,7 @@ class ScalarProduct(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         ScalarProduct_dict = dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         ScalarProduct_dict["__class__"] = "ScalarProduct"
         return ScalarProduct_dict
 

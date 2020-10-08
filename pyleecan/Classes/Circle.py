@@ -242,7 +242,7 @@ class Circle(Surface):
         Circle_dict["radius"] = self.radius
         Circle_dict["center"] = self.center
         Circle_dict["line_label"] = self.line_label
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Circle_dict["__class__"] = "Circle"
         return Circle_dict

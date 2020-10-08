@@ -170,7 +170,7 @@ class OutGeoLam(FrozenClass):
         OutGeoLam_dict["is_antiper_a"] = self.is_antiper_a
         OutGeoLam_dict["per_t"] = self.per_t
         OutGeoLam_dict["is_antiper_t"] = self.is_antiper_t
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         OutGeoLam_dict["__class__"] = "OutGeoLam"
         return OutGeoLam_dict
 

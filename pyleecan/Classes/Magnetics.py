@@ -196,7 +196,7 @@ class Magnetics(FrozenClass):
         Magnetics_dict["type_BH_rotor"] = self.type_BH_rotor
         Magnetics_dict["is_periodicity_t"] = self.is_periodicity_t
         Magnetics_dict["is_periodicity_a"] = self.is_periodicity_a
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Magnetics_dict["__class__"] = "Magnetics"
         return Magnetics_dict
 

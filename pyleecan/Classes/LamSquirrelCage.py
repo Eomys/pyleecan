@@ -273,7 +273,7 @@ class LamSquirrelCage(LamSlotWind):
             LamSquirrelCage_dict["ring_mat"] = None
         else:
             LamSquirrelCage_dict["ring_mat"] = self.ring_mat.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSquirrelCage_dict["__class__"] = "LamSquirrelCage"
         return LamSquirrelCage_dict

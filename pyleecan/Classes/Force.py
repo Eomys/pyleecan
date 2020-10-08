@@ -112,7 +112,7 @@ class Force(FrozenClass):
 
         Force_dict = dict()
         Force_dict["is_comp_nodal_force"] = self.is_comp_nodal_force
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Force_dict["__class__"] = "Force"
         return Force_dict
 

@@ -338,7 +338,7 @@ class LamHole(Lamination):
             LamHole_dict["bore"] = None
         else:
             LamHole_dict["bore"] = self.bore.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamHole_dict["__class__"] = "LamHole"
         return LamHole_dict

@@ -163,7 +163,7 @@ class ImportGenVectLin(ImportMatrix):
         ImportGenVectLin_dict["stop"] = self.stop
         ImportGenVectLin_dict["num"] = self.num
         ImportGenVectLin_dict["endpoint"] = self.endpoint
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportGenVectLin_dict["__class__"] = "ImportGenVectLin"
         return ImportGenVectLin_dict

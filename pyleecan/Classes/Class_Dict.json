@@ -1274,7 +1274,7 @@
             }
         ],
         "daughters": [],
-        "desc": "Force Maxwell tensor model",
+        "desc": "Force Maxwell tensor model for radial flux machines",
         "is_internal": false,
         "methods": [
             "comp_force",
@@ -10147,7 +10147,7 @@
                 "name": "paramexplorer_list",
                 "type": "[ParamExplorer]",
                 "unit": "-",
-                "value": []
+                "value": ""
             }
         ]
     },
@@ -10201,7 +10201,7 @@
                 "name": "datakeeper_list",
                 "type": "[DataKeeper]",
                 "unit": "-",
-                "value": []
+                "value": ""
             },
             {
                 "desc": "True to store every output in a list",
@@ -10255,7 +10255,7 @@
                 "name": "postproc_list",
                 "type": "[Post]",
                 "unit": "-",
-                "value": []
+                "value": ""
             }
         ]
     },

@@ -20,7 +20,7 @@ from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
 from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
-
+from pyleecan.Classes.PostFunction import PostFunction
 from pyleecan.Classes.Simu1 import Simu1
 from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
 
@@ -125,6 +125,10 @@ def test_save_load_folder_path(CEFC_Lam):
     simu.force = None
     simu.struct = None
 
+    post1 = PostFunction(run="lambda x:x+2")
+    post2 = PostFunction(run=join(TEST_DATA_DIR, "example_post.py"))
+    simu.postproc_list = [post1, post2]
+
     test_obj = Output(simu=simu)
     test_obj.post.legend_name = "Slotless lamination"
 
@@ -145,6 +149,8 @@ def test_save_load_folder_path(CEFC_Lam):
     assert isfile(join(loc_save_path, "SM_CEFC_001.json"))
     test_obj2 = load(loc_save_path)
     assert test_obj == test_obj2
+    assert callable(test_obj.simu.postproc_list[0]._run_func)
+    assert callable(test_obj.simu.postproc_list[1]._run_func)
 
 
 def test_save_load_just_name():

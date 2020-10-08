@@ -165,7 +165,7 @@ class ImportData(FrozenClass):
         ImportData_dict["symbol"] = self.symbol
         ImportData_dict["normalizations"] = self.normalizations
         ImportData_dict["symmetries"] = self.symmetries
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         ImportData_dict["__class__"] = "ImportData"
         return ImportData_dict
 

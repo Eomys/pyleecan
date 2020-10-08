@@ -161,7 +161,7 @@ class MagnetType10(MagnetFlat):
         MagnetType10_dict = super(MagnetType10, self).as_dict()
         MagnetType10_dict["Wmag"] = self.Wmag
         MagnetType10_dict["Hmag"] = self.Hmag
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagnetType10_dict["__class__"] = "MagnetType10"
         return MagnetType10_dict

@@ -211,7 +211,7 @@ class CellMat(FrozenClass):
             CellMat_dict["interpolation"] = None
         else:
             CellMat_dict["interpolation"] = self.interpolation.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         CellMat_dict["__class__"] = "CellMat"
         return CellMat_dict
 

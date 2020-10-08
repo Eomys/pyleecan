@@ -291,7 +291,7 @@ class Arc2(Arc):
         Arc2_dict["begin"] = self.begin
         Arc2_dict["center"] = self.center
         Arc2_dict["angle"] = self.angle
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Arc2_dict["__class__"] = "Arc2"
         return Arc2_dict

@@ -210,7 +210,7 @@ class OutMag(FrozenClass):
             OutMag_dict["meshsolution"] = self.meshsolution.as_dict()
         OutMag_dict["FEMM_dict"] = self.FEMM_dict
         OutMag_dict["logger_name"] = self.logger_name
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
         return OutMag_dict
 

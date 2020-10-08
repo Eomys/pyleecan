@@ -115,7 +115,7 @@ class MatHT(FrozenClass):
         MatHT_dict["lambda_z"] = self.lambda_z
         MatHT_dict["Cp"] = self.Cp
         MatHT_dict["alpha"] = self.alpha
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         MatHT_dict["__class__"] = "MatHT"
         return MatHT_dict
 

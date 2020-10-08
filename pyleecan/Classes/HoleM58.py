@@ -261,7 +261,7 @@ class HoleM58(HoleMag):
             HoleM58_dict["magnet_0"] = None
         else:
             HoleM58_dict["magnet_0"] = self.magnet_0.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         HoleM58_dict["__class__"] = "HoleM58"
         return HoleM58_dict

@@ -132,7 +132,7 @@ class ImportMatrixXls(ImportMatrix):
         ImportMatrixXls_dict["sheet"] = self.sheet
         ImportMatrixXls_dict["skiprows"] = self.skiprows
         ImportMatrixXls_dict["usecols"] = self.usecols
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportMatrixXls_dict["__class__"] = "ImportMatrixXls"
         return ImportMatrixXls_dict

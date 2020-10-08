@@ -120,7 +120,7 @@ class DriveWave(Drive):
             DriveWave_dict["wave"] = None
         else:
             DriveWave_dict["wave"] = self.wave.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         DriveWave_dict["__class__"] = "DriveWave"
         return DriveWave_dict

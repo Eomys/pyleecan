@@ -118,7 +118,7 @@ class NotchEvenDist(Notch):
             NotchEvenDist_dict["notch_shape"] = None
         else:
             NotchEvenDist_dict["notch_shape"] = self.notch_shape.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         NotchEvenDist_dict["__class__"] = "NotchEvenDist"
         return NotchEvenDist_dict

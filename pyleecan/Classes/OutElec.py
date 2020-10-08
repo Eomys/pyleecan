@@ -295,7 +295,7 @@ class OutElec(FrozenClass):
             OutElec_dict["Us"] = None
         else:
             OutElec_dict["Us"] = self.Us.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
 

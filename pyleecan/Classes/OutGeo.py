@@ -196,7 +196,7 @@ class OutGeo(FrozenClass):
         OutGeo_dict["is_antiper_a"] = self.is_antiper_a
         OutGeo_dict["per_t"] = self.per_t
         OutGeo_dict["is_antiper_t"] = self.is_antiper_t
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         OutGeo_dict["__class__"] = "OutGeo"
         return OutGeo_dict
 

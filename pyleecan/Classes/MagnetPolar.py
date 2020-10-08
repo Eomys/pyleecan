@@ -90,7 +90,7 @@ class MagnetPolar(Magnet):
 
         # Get the properties inherited from Magnet
         MagnetPolar_dict = super(MagnetPolar, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagnetPolar_dict["__class__"] = "MagnetPolar"
         return MagnetPolar_dict

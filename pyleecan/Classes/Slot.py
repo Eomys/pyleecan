@@ -263,7 +263,7 @@ class Slot(FrozenClass):
 
         Slot_dict = dict()
         Slot_dict["Zs"] = self.Zs
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Slot_dict["__class__"] = "Slot"
         return Slot_dict
 

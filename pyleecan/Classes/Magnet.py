@@ -231,7 +231,7 @@ class Magnet(FrozenClass):
             Magnet_dict["mat_type"] = self.mat_type.as_dict()
         Magnet_dict["type_magnetization"] = self.type_magnetization
         Magnet_dict["Lmag"] = self.Lmag
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Magnet_dict["__class__"] = "Magnet"
         return Magnet_dict
 

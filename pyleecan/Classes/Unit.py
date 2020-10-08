@@ -179,7 +179,7 @@ class Unit(FrozenClass):
         Unit_dict["unit_m"] = self.unit_m
         Unit_dict["unit_rad"] = self.unit_rad
         Unit_dict["unit_m2"] = self.unit_m2
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Unit_dict["__class__"] = "Unit"
         return Unit_dict
 

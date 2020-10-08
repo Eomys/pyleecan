@@ -112,6 +112,16 @@ def generate_eq(gen_dict, class_dict):
                 + "[key]):\n"
             )
             eq_str += TAB5 + "return False\n"
+        elif prop["type"] == "function":
+            eq_str += (
+                TAB2
+                + "if other._"
+                + prop["name"]
+                + "_str != self._"
+                + prop["name"]
+                + "_str:\n"
+            )
+            eq_str += TAB3 + "return False\n"
         else:
             eq_str += (
                 TAB2 + "if other." + prop["name"] + " != self." + prop["name"] + ":\n"

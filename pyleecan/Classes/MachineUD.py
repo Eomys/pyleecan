@@ -197,7 +197,7 @@ class MachineUD(Machine):
             for obj in self.lam_list:
                 MachineUD_dict["lam_list"].append(obj.as_dict())
         MachineUD_dict["is_sync"] = self.is_sync
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineUD_dict["__class__"] = "MachineUD"
         return MachineUD_dict
