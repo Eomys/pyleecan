@@ -37,7 +37,7 @@ def comp_force(self, output):
             unit="N/m2",
             symbol="P_r",
             axes=output.mag.B.get_axes(),
-            symmetries=output.mag.B.symmetries,
+            symmetries=output.mag.B.get_symmetries(),
             values=Prad,
         )
         components["radial"] = Prad_data
@@ -46,7 +46,7 @@ def comp_force(self, output):
             name="Airgap tangential surface force",
             unit="N/m2",
             symbol="P_t",
-            symmetries=output.mag.B.symmetries,
+            symmetries=output.mag.B.get_symmetries(),
             axes=output.mag.B.get_axes(),
             values=Ptan,
         )
@@ -56,7 +56,7 @@ def comp_force(self, output):
             name="Airgap axial surface force",
             unit="N/m2",
             symbol="P_z",
-            symmetries=output.mag.B.symmetries,
+            symmetries=output.mag.B.get_symmetries(),
             axes=output.mag.B.get_axes(),
             values=Pz,
         )
