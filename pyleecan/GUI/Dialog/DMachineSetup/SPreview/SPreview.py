@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 
 from .....GUI.Dialog.DMachineSetup.SPreview.Ui_SPreview import Ui_SPreview
@@ -12,7 +12,7 @@ class SPreview(Ui_SPreview, QWidget):
     """Step to define the winding conductor"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup nav
     step_name = "Machine Summary"
 

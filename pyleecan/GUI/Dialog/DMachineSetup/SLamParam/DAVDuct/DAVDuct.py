@@ -1,9 +1,9 @@
 ﻿# -*- coding: utf-8 -*-
 
 
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QDialog, QMessageBox, QSpinBox, QTableWidgetItem
+from PySide2.QtCore import QSize
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QDialog, QMessageBox, QSpinBox, QTableWidgetItem
 
 from ......Classes.Lamination import Lamination
 from ......Classes.VentilationCirc import VentilationCirc

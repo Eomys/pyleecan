@@ -10,11 +10,11 @@ from ....Functions.Material.replace_material_pyleecan_obj import (
 from ....definitions import config_dict
 from ....GUI import GUI_logger
 
-from PyQt5.QtCore import QObject, pyqtSignal
+from PySide2.QtCore import QObject, Signal
 
 
 class MatLib(QObject):
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
 
     def __init__(self, path=None):
         """MatLib contains the material library and the specific machine materials."""

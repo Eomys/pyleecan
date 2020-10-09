@@ -3,8 +3,8 @@
 from os import getcwd, rename
 from os.path import basename, join, isfile, dirname
 
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QWidget
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtWidgets import QFileDialog, QMessageBox, QWidget
 
 from ....Functions.Material.compare_material import compare_material
 from ....Functions.load import load, load_matlib
@@ -25,8 +25,8 @@ class DMachineSetup(Ui_DMachineSetup, QWidget):
     """Main windows of the Machine Setup Tools"""
 
     # Signal to update the simulation
-    machineChanged = pyqtSignal()
-    rejected = pyqtSignal()
+    machineChanged = Signal()
+    rejected = Signal()
 
     def __init__(self, machine=None, dmatlib=None, machine_path=""):
         """Initialize the GUI according to machine type

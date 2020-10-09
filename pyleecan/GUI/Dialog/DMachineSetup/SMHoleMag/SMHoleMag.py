@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget, QSizePolicy
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget, QSizePolicy
 
 from .....Classes.HoleM50 import HoleM50
 from .....Classes.Material import Material
@@ -15,7 +15,7 @@ class SMHoleMag(Ui_SMHoleMag, QWidget):
     """Step to set several Holes"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup
     step_name = "Slot"
 

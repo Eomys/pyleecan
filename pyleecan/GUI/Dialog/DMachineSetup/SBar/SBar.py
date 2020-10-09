@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
 
 from .....GUI import gui_option
 from .....GUI.Dialog.DMachineSetup.SBar.Gen_SBar import Gen_SBar
@@ -19,7 +19,7 @@ class SBar(Gen_SBar, QWidget):
     """Step to setup the Rotor Bar for SCIM machine"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for the DMachineSetup nav
     step_name = "Bar"
 

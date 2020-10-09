@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from numpy import pi
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QWidget
 from ......Classes.HoleM57 import HoleM57
 from ......GUI import gui_option
 from ......GUI.Dialog.DMachineSetup.SMHoleMag.PHoleM57.Gen_PHoleM57 import Gen_PHoleM57
@@ -15,7 +15,7 @@ class PHoleM57(Gen_PHoleM57, QWidget):
     """Page to set the Hole Type 57"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for WHoleMag
     hole_name = "Slot Type 57"
     hole_type = HoleM57

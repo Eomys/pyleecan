@@ -2,7 +2,7 @@
 
 import sys
 
-from PyQt5 import QtWidgets
+from PySide2 import QtWidgets
 
 from pyleecan.Classes.MatMagnetics import MatMagnetics
 from pyleecan.Classes.Material import Material
@@ -73,7 +73,10 @@ class TestDMatLib(object):
     def setUpClass(cls):
         """Start the app for the test"""
         print("\nStart Test DMatLib")
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
     def tearDownClass(cls):

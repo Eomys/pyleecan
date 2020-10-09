@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from os.path import join, dirname, split
-from PyQt5.QtWidgets import QDialog, QMessageBox, QFileDialog
-from PyQt5.QtCore import Qt
+from PySide2.QtWidgets import QDialog, QMessageBox, QFileDialog
+from PySide2.QtCore import Qt
 
 from .....GUI.Dialog.DMatLib.DMatSetup.Gen_DMatSetup import Gen_DMatSetup
 from .....GUI.Tools.MPLCanvas import MPLCanvas

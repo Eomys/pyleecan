@@ -1,5 +1,5 @@
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QWidget, QMessageBox, QDialog
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtWidgets import QWidget, QMessageBox, QDialog
 from pandas import read_excel, ExcelFile
 from .....Classes.ImportMatrixXls import ImportMatrixXls
 from .....Classes.ImportMatrixVal import ImportMatrixVal
@@ -14,8 +14,8 @@ class WImportExcel(Ui_WImportExcel, QWidget):
 
     import_name = "Import from Excel"
     import_type = ImportMatrixXls
-    saveNeeded = pyqtSignal()
-    dataTypeChanged = pyqtSignal()
+    saveNeeded = Signal()
+    dataTypeChanged = Signal()
 
     def __init__(self, parent=None, data=None, verbose_name="", expected_shape=None):
         """Initialization of the widget

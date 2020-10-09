@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtGui, QtWidgets
 
 # === TreeView ========================================================================
 class TreeView(QtWidgets.QTreeView):
     def __init__(self):
-        super(QtWidgets.QTreeView, self).__init__()
+        super(TreeView, self).__init__()
 
         # self.__typeWidgets = {}
         # self.__typeWrappers = {}
