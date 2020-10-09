@@ -10,7 +10,7 @@ from matplotlib import use
 
 sys.path.append("..")
 
-use("Qt5Agg")  # Use PyQt5 backend
+use("Qt5Agg")  # Use PySide2 backend
 TEST_DATA_DIR = join(TEST_DIR, "Data")
 LOG_DIR = join(TEST_DIR, "logtest.txt")
 

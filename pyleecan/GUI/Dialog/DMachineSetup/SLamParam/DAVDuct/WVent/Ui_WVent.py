@@ -2,45 +2,70 @@
 
 # File generated according to WVent.ui
 # WARNING! All changes made in this file will be lost!
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
 
 
 class Ui_WVent(object):
     def setupUi(self, WVent):
-        WVent.setObjectName("WVent")
+        if not WVent.objectName():
+            WVent.setObjectName(u"WVent")
         WVent.resize(630, 470)
-        WVent.setMinimumSize(QtCore.QSize(630, 470))
-        self.main_layout = QtWidgets.QVBoxLayout(WVent)
-        self.main_layout.setObjectName("main_layout")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.in_vent_type = QtWidgets.QLabel(WVent)
-        self.in_vent_type.setObjectName("in_vent_type")
+        WVent.setMinimumSize(QSize(630, 470))
+        self.main_layout = QVBoxLayout(WVent)
+        self.main_layout.setObjectName(u"main_layout")
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.in_vent_type = QLabel(WVent)
+        self.in_vent_type.setObjectName(u"in_vent_type")
+
         self.horizontalLayout.addWidget(self.in_vent_type)
-        self.c_vent_type = QtWidgets.QComboBox(WVent)
-        self.c_vent_type.setObjectName("c_vent_type")
+
+        self.c_vent_type = QComboBox(WVent)
         self.c_vent_type.addItem("")
         self.c_vent_type.addItem("")
         self.c_vent_type.addItem("")
+        self.c_vent_type.setObjectName(u"c_vent_type")
+
         self.horizontalLayout.addWidget(self.c_vent_type)
-        spacerItem = QtWidgets.QSpacerItem(
-            40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+
+        self.horizontalSpacer = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
         )
-        self.horizontalLayout.addItem(spacerItem)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer)
+
         self.main_layout.addLayout(self.horizontalLayout)
-        self.w_vent = QtWidgets.QWidget(WVent)
-        self.w_vent.setMinimumSize(QtCore.QSize(640, 480))
-        self.w_vent.setObjectName("w_vent")
+
+        self.w_vent = QWidget(WVent)
+        self.w_vent.setObjectName(u"w_vent")
+        self.w_vent.setMinimumSize(QSize(640, 480))
+
         self.main_layout.addWidget(self.w_vent)
 
         self.retranslateUi(WVent)
-        QtCore.QMetaObject.connectSlotsByName(WVent)
+
+        QMetaObject.connectSlotsByName(WVent)
+
+    # setupUi
 
     def retranslateUi(self, WVent):
-        _translate = QtCore.QCoreApplication.translate
-        WVent.setWindowTitle(_translate("WVent", "Form"))
-        self.in_vent_type.setText(_translate("WVent", "Ventilation Shape:"))
-        self.c_vent_type.setItemText(0, _translate("WVent", "Circular"))
-        self.c_vent_type.setItemText(1, _translate("WVent", "Polar"))
-        self.c_vent_type.setItemText(2, _translate("WVent", "Trapeze"))
+        WVent.setWindowTitle(QCoreApplication.translate("WVent", u"Form", None))
+        self.in_vent_type.setText(
+            QCoreApplication.translate("WVent", u"Ventilation Shape:", None)
+        )
+        self.c_vent_type.setItemText(
+            0, QCoreApplication.translate("WVent", u"Circular", None)
+        )
+        self.c_vent_type.setItemText(
+            1, QCoreApplication.translate("WVent", u"Polar", None)
+        )
+        self.c_vent_type.setItemText(
+            2, QCoreApplication.translate("WVent", u"Trapeze", None)
+        )
+
+    # retranslateUi

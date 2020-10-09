@@ -1,5 +1,5 @@
 from numpy import hstack, vstack, zeros
-from PyQt5.QtWidgets import QDialog
+from PySide2.QtWidgets import QDialog
 
 from ....GUI.Tools.FloatEdit import FloatEdit
 from ....GUI.Tools.WTableData.Ui_DTableData import Ui_DTableData

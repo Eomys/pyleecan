@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from matplotlib.pyplot import gcf
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QDialog, QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QDialog, QMessageBox, QWidget
 
 from .....Classes.LamHole import LamHole
 from .....Classes.Lamination import Lamination
@@ -16,7 +16,7 @@ class SLamParam(Gen_SLamParam, QWidget):
     """Step to setup the main lamination parameters"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for the DMachineSetup nav
     step_name = "Lamination"
 

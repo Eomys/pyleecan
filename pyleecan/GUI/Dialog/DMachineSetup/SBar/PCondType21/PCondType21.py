@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QWidget
 
 from ......Classes.CondType21 import CondType21
 from ......GUI import gui_option
@@ -14,7 +14,7 @@ class PCondType21(Gen_PCondType21, QWidget):
     """Page to setup Conductor Type 21"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for SBar combobox
     cond_name = "Rectangular bar"
     cond_type = CondType21

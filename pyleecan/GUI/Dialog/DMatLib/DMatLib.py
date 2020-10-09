@@ -4,8 +4,8 @@ from os import getcwd, remove, rename
 from os.path import abspath, dirname, join, split
 from re import match
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QDialog, QFileDialog, QListWidget, QMessageBox
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QDialog, QFileDialog, QListWidget, QMessageBox
 
 from ....Classes.ImportMatrixVal import ImportMatrixVal
 from ....Classes.ImportMatrixXls import ImportMatrixXls
@@ -20,7 +20,7 @@ class DMatLib(Gen_DMatLib, QDialog):
     """Material Library Dialog to view and modify material data."""
 
     # Signal to W_MachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
 
     def __init__(self, matlib, key="RefMatLib", selected=0):
         """Init the Matlib GUI
