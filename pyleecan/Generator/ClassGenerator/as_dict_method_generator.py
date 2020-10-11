@@ -194,7 +194,9 @@ def generate_as_dict(gen_dict, class_dict):
 
     dict_str += var_str
     dict_str += (
-        TAB2 + "# The class name is added to the dict for" + "deserialisation purpose\n"
+        TAB2
+        + "# The class name is added to the dict for "
+        + "deserialisation purpose\n"
     )
     if class_dict["mother"] != "":
         dict_str += TAB2 + "# Overwrite the mother class name\n"
