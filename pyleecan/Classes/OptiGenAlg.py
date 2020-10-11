@@ -164,18 +164,27 @@ class OptiGenAlg(OptiSolver):
 
         # Get the properties inherited from OptiSolver
         OptiGenAlg_dict = super(OptiGenAlg, self).as_dict()
-        if self._selector_str is not None:
-            OptiGenAlg_dict["selector"] = self._selector_str
-        else:
+        if self.selector is None:
             OptiGenAlg_dict["selector"] = None
-        if self._crossover_str is not None:
-            OptiGenAlg_dict["crossover"] = self._crossover_str
         else:
+            OptiGenAlg_dict["selector"] = [
+                dumps(self._selector[0]).decode("ISO-8859-2"),
+                self._selector[1],
+            ]
+        if self.crossover is None:
             OptiGenAlg_dict["crossover"] = None
-        if self._mutator_str is not None:
-            OptiGenAlg_dict["mutator"] = self._mutator_str
         else:
+            OptiGenAlg_dict["crossover"] = [
+                dumps(self._crossover[0]).decode("ISO-8859-2"),
+                self._crossover[1],
+            ]
+        if self.mutator is None:
             OptiGenAlg_dict["mutator"] = None
+        else:
+            OptiGenAlg_dict["mutator"] = [
+                dumps(self._mutator[0]).decode("ISO-8859-2"),
+                self._mutator[1],
+            ]
         OptiGenAlg_dict["p_cross"] = self.p_cross
         OptiGenAlg_dict["p_mutate"] = self.p_mutate
         OptiGenAlg_dict["size_pop"] = self.size_pop

@@ -118,10 +118,13 @@ class OptiConstraint(FrozenClass):
         OptiConstraint_dict["name"] = self.name
         OptiConstraint_dict["type_const"] = self.type_const
         OptiConstraint_dict["value"] = self.value
-        if self._get_variable_str is not None:
-            OptiConstraint_dict["get_variable"] = self._get_variable_str
-        else:
+        if self.get_variable is None:
             OptiConstraint_dict["get_variable"] = None
+        else:
+            OptiConstraint_dict["get_variable"] = [
+                dumps(self._get_variable[0]).decode("ISO-8859-2"),
+                self._get_variable[1],
+            ]
         # The class name is added to the dict for deserialisation purpose
         OptiConstraint_dict["__class__"] = "OptiConstraint"
         return OptiConstraint_dict

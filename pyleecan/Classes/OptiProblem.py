@@ -190,20 +190,26 @@ class OptiProblem(FrozenClass):
             OptiProblem_dict["obj_func"] = list()
             for obj in self.obj_func:
                 OptiProblem_dict["obj_func"].append(obj.as_dict())
-        if self._eval_func_str is not None:
-            OptiProblem_dict["eval_func"] = self._eval_func_str
-        else:
+        if self.eval_func is None:
             OptiProblem_dict["eval_func"] = None
+        else:
+            OptiProblem_dict["eval_func"] = [
+                dumps(self._eval_func[0]).decode("ISO-8859-2"),
+                self._eval_func[1],
+            ]
         if self.constraint is None:
             OptiProblem_dict["constraint"] = None
         else:
             OptiProblem_dict["constraint"] = list()
             for obj in self.constraint:
                 OptiProblem_dict["constraint"].append(obj.as_dict())
-        if self._preprocessing_str is not None:
-            OptiProblem_dict["preprocessing"] = self._preprocessing_str
-        else:
+        if self.preprocessing is None:
             OptiProblem_dict["preprocessing"] = None
+        else:
+            OptiProblem_dict["preprocessing"] = [
+                dumps(self._preprocessing[0]).decode("ISO-8859-2"),
+                self._preprocessing[1],
+            ]
         if self.datakeeper_list is None:
             OptiProblem_dict["datakeeper_list"] = None
         else:

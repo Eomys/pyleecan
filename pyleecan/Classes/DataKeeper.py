@@ -138,14 +138,20 @@ class DataKeeper(FrozenClass):
         DataKeeper_dict["name"] = self.name
         DataKeeper_dict["symbol"] = self.symbol
         DataKeeper_dict["unit"] = self.unit
-        if self._keeper_str is not None:
-            DataKeeper_dict["keeper"] = self._keeper_str
-        else:
+        if self.keeper is None:
             DataKeeper_dict["keeper"] = None
-        if self._error_keeper_str is not None:
-            DataKeeper_dict["error_keeper"] = self._error_keeper_str
         else:
+            DataKeeper_dict["keeper"] = [
+                dumps(self._keeper[0]).decode("ISO-8859-2"),
+                self._keeper[1],
+            ]
+        if self.error_keeper is None:
             DataKeeper_dict["error_keeper"] = None
+        else:
+            DataKeeper_dict["error_keeper"] = [
+                dumps(self._error_keeper[0]).decode("ISO-8859-2"),
+                self._error_keeper[1],
+            ]
         DataKeeper_dict["result"] = self.result
         # The class name is added to the dict for deserialisation purpose
         DataKeeper_dict["__class__"] = "DataKeeper"

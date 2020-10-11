@@ -180,7 +180,9 @@ class HoleUD(HoleMag):
             HoleUD_dict["surf_list"] = list()
             for obj in self.surf_list:
                 HoleUD_dict["surf_list"].append(obj.as_dict())
-        HoleUD_dict["magnet_dict"] = self.magnet_dict
+        HoleUD_dict["magnet_dict"] = (
+            self.magnet_dict.copy() if self.magnet_dict is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         HoleUD_dict["__class__"] = "HoleUD"
