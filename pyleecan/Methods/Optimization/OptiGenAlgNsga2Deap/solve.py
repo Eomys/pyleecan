@@ -5,7 +5,6 @@ from copy import deepcopy
 from datetime import datetime
 import numpy as np
 
-from ....Classes.Output import Output
 from ....Classes.XOutput import XOutput
 from ....Classes.DataKeeper import DataKeeper
 from ....Classes.ParamExplorerSet import ParamExplorerSet
