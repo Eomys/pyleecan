@@ -63,7 +63,7 @@ def test_opti_preprocessing():
             name="Minimization of the rotor slot width",
             symbol="R_s_w0",
             unit="m",
-            keeper=lambda output: output.simu.machine.rotor.slot.W0,
+            keeper="lambda output: output.simu.machine.rotor.slot.W0",
         )
     ]
 
