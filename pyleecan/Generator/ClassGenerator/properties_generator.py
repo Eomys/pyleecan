@@ -230,10 +230,10 @@ def generate_prop_setter(gen_dict, class_dict, prop):
         set_str += TAB3 + "self._" + prop["name"] + "_func = None\n"
         set_str += TAB2 + "elif isinstance(value,str) and 'lambda' in value:\n"
         set_str += TAB3 + "self._" + prop["name"] + "_str = value\n"
-        set_str += TAB3 + "if ' np.' in value:"
-        set_str += TAB4 + "import numpy as np"
-        set_str += TAB3 + "if ' random.' in value:"
-        set_str += TAB4 + "import random"
+        set_str += TAB3 + "if ' np.' in value:\n"
+        set_str += TAB4 + "import numpy as np\n"
+        set_str += TAB3 + "if ' random.' in value:\n"
+        set_str += TAB4 + "import random\n"
         set_str += TAB3 + "self._" + prop["name"] + "_func = eval(value)\n"
         set_str += (
             TAB2
