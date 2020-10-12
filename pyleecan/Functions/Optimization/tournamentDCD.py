@@ -3,15 +3,15 @@ from random import sample, choice
 
 def choseDCD(indiv_1, indiv_2):
     """Chose between two individuals
-    
-        Parameters
-        ----------
-        indiv_1 : individual 
-        indiv_2 : individual 
 
-        Returns
-        -------
-        individual selected
+    Parameters
+    ----------
+    indiv_1 : individual
+    indiv_2 : individual
+
+    Returns
+    -------
+    individual selected
 
     """
     if indiv_1.cstr_viol == 0 and indiv_2.cstr_viol > 0:  # only indiv_1 feasible
@@ -44,20 +44,20 @@ def choseDCD(indiv_1, indiv_2):
 
 def tournamentDCD(pop, size):
     """Select individuals from the population with a tournament based on the domination and the crowding distance
-        This function is inspired by DEAP selTournamentDCD function at https://github.com/DEAP/deap/blob/master/deap/tools/emo.py
+    This function is inspired by DEAP selTournamentDCD function at https://github.com/DEAP/deap/blob/master/deap/tools/emo.py
 
-        Parameters
-        ----------
-        pop : list
-            list of individuals created with the DEAP toolbox
+    Parameters
+    ----------
+    pop : list
+        list of individuals created with the DEAP toolbox
 
-        size : int 
-            number of individual to select
+    size : int
+        number of individual to select
 
-        Returns
-        -------
-        selection : list
-            list of individuals selected
+    Returns
+    -------
+    selection : list
+        list of individuals selected
     """
 
     if len(pop) % 4 != 0:

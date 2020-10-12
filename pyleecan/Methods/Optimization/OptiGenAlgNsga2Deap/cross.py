@@ -8,15 +8,15 @@ import random
 
 def cross(self, indiv1, indiv2):
     """Perform the crossover (One crossover by default)
-    
+
     Parameters
     ----------
     self : OptiGenNsga2Deap
         Optimization solver
 
-    indiv1 : individual 
+    indiv1 : individual
         first individual to modify
-    indiv2 : individual 
+    indiv2 : individual
         second individual to modify
 
     Returns

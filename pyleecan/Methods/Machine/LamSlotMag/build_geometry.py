@@ -5,7 +5,7 @@ from ....Methods.Machine.LamSlot.build_geometry import build_geometry as build_g
 
 
 def build_geometry(self, is_magnet=True, sym=1, alpha=0, delta=0, is_simplified=False):
-    """ Build the geometry of the LamSlotMag
+    """Build the geometry of the LamSlotMag
 
     Parameters
     ----------

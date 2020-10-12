@@ -33,31 +33,6 @@ try:
 except ImportError as error:
     check = error
 
-try:
-    from ..Methods.Slot.SlotWLSRPM.comp_angle_opening import comp_angle_opening
-except ImportError as error:
-    comp_angle_opening = error
-
-try:
-    from ..Methods.Slot.SlotWLSRPM.comp_height import comp_height
-except ImportError as error:
-    comp_height = error
-
-try:
-    from ..Methods.Slot.SlotWLSRPM.comp_height_wind import comp_height_wind
-except ImportError as error:
-    comp_height_wind = error
-
-try:
-    from ..Methods.Slot.SlotWLSRPM.comp_surface import comp_surface
-except ImportError as error:
-    comp_surface = error
-
-try:
-    from ..Methods.Slot.SlotWLSRPM.comp_surface_wind import comp_surface_wind
-except ImportError as error:
-    comp_surface_wind = error
-
 
 from ._check import InitUnKnowClassError
 
@@ -113,71 +88,12 @@ class SlotWLSRPM(SlotWind):
         )
     else:
         check = check
-    # cf Methods.Slot.SlotWLSRPM.comp_angle_opening
-    if isinstance(comp_angle_opening, ImportError):
-        comp_angle_opening = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotWLSRPM method comp_angle_opening: "
-                    + str(comp_angle_opening)
-                )
-            )
-        )
-    else:
-        comp_angle_opening = comp_angle_opening
-    # cf Methods.Slot.SlotWLSRPM.comp_height
-    if isinstance(comp_height, ImportError):
-        comp_height = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotWLSRPM method comp_height: " + str(comp_height)
-                )
-            )
-        )
-    else:
-        comp_height = comp_height
-    # cf Methods.Slot.SlotWLSRPM.comp_height_wind
-    if isinstance(comp_height_wind, ImportError):
-        comp_height_wind = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotWLSRPM method comp_height_wind: "
-                    + str(comp_height_wind)
-                )
-            )
-        )
-    else:
-        comp_height_wind = comp_height_wind
-    # cf Methods.Slot.SlotWLSRPM.comp_surface
-    if isinstance(comp_surface, ImportError):
-        comp_surface = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotWLSRPM method comp_surface: " + str(comp_surface)
-                )
-            )
-        )
-    else:
-        comp_surface = comp_surface
-    # cf Methods.Slot.SlotWLSRPM.comp_surface_wind
-    if isinstance(comp_surface_wind, ImportError):
-        comp_surface_wind = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use SlotWLSRPM method comp_surface_wind: "
-                    + str(comp_surface_wind)
-                )
-            )
-        )
-    else:
-        comp_surface_wind = comp_surface_wind
     # save method is available in all object
     save = save
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -187,7 +103,6 @@ class SlotWLSRPM(SlotWind):
         self,
         W1=0.008,
         W3=0.0116,
-        H0=0.007,
         H2=0.0148,
         R1=0.00075,
         Zs=36,
@@ -214,7 +129,6 @@ class SlotWLSRPM(SlotWind):
             assert type(obj) is type(self)
             W1 = obj.W1
             W3 = obj.W3
-            H0 = obj.H0
             H2 = obj.H2
             R1 = obj.R1
             Zs = obj.Zs
@@ -225,8 +139,6 @@ class SlotWLSRPM(SlotWind):
                 W1 = init_dict["W1"]
             if "W3" in list(init_dict.keys()):
                 W3 = init_dict["W3"]
-            if "H0" in list(init_dict.keys()):
-                H0 = init_dict["H0"]
             if "H2" in list(init_dict.keys()):
                 H2 = init_dict["H2"]
             if "R1" in list(init_dict.keys()):
@@ -236,7 +148,6 @@ class SlotWLSRPM(SlotWind):
         # Initialisation by argument
         self.W1 = W1
         self.W3 = W3
-        self.H0 = H0
         self.H2 = H2
         self.R1 = R1
         # Call SlotWind init
@@ -252,7 +163,6 @@ class SlotWLSRPM(SlotWind):
         SlotWLSRPM_str += super(SlotWLSRPM, self).__str__()
         SlotWLSRPM_str += "W1 = " + str(self.W1) + linesep
         SlotWLSRPM_str += "W3 = " + str(self.W3) + linesep
-        SlotWLSRPM_str += "H0 = " + str(self.H0) + linesep
         SlotWLSRPM_str += "H2 = " + str(self.H2) + linesep
         SlotWLSRPM_str += "R1 = " + str(self.R1) + linesep
         return SlotWLSRPM_str
@@ -270,8 +180,6 @@ class SlotWLSRPM(SlotWind):
             return False
         if other.W3 != self.W3:
             return False
-        if other.H0 != self.H0:
-            return False
         if other.H2 != self.H2:
             return False
         if other.R1 != self.R1:
@@ -279,14 +187,12 @@ class SlotWLSRPM(SlotWind):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         # Get the properties inherited from SlotWind
         SlotWLSRPM_dict = super(SlotWLSRPM, self).as_dict()
         SlotWLSRPM_dict["W1"] = self.W1
         SlotWLSRPM_dict["W3"] = self.W3
-        SlotWLSRPM_dict["H0"] = self.H0
         SlotWLSRPM_dict["H2"] = self.H2
         SlotWLSRPM_dict["R1"] = self.R1
         # The class name is added to the dict fordeserialisation purpose
@@ -299,7 +205,6 @@ class SlotWLSRPM(SlotWind):
 
         self.W1 = None
         self.W3 = None
-        self.H0 = None
         self.H2 = None
         self.R1 = None
         # Set to None the properties inherited from SlotWind
@@ -343,25 +248,6 @@ class SlotWLSRPM(SlotWind):
         """,
     )
 
-    def _get_H0(self):
-        """getter of H0"""
-        return self._H0
-
-    def _set_H0(self, value):
-        """setter of H0"""
-        check_var("H0", value, "float", Vmin=0)
-        self._H0 = value
-
-    H0 = property(
-        fget=_get_H0,
-        fset=_set_H0,
-        doc=u"""Slot yoke height
-
-        :Type: float
-        :min: 0
-        """,
-    )
-
     def _get_H2(self):
         """getter of H2"""
         return self._H2
@@ -387,7 +273,7 @@ class SlotWLSRPM(SlotWind):
 
     def _set_R1(self, value):
         """setter of R1"""
-        check_var("R1", value, "float")
+        check_var("R1", value, "float", Vmin=0)
         self._R1 = value
 
     R1 = property(
@@ -396,5 +282,6 @@ class SlotWLSRPM(SlotWind):
         doc=u"""Top radius
 
         :Type: float
+        :min: 0
         """,
     )

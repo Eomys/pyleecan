@@ -17,7 +17,7 @@ def plot_lines(self, fig=None):
     fig :
         if None, open a new fig and plot, else add to the
         current one (Default value = None)
-   
+
     Returns
     -------
     None

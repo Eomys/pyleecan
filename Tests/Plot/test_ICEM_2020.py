@@ -204,8 +204,7 @@ def test_SlotMulti_sym():
 
 
 def test_MachineUD():
-    """Figure 12: Check that you can plot a machine with 4 laminations
-    """
+    """Figure 12: Check that you can plot a machine with 4 laminations"""
     machine = MachineUD()
     machine.name = "Machine with 4 laminations"
 
@@ -258,8 +257,7 @@ def test_MachineUD():
 
 
 def test_SlotMulti():
-    """Figure 13: Check that you can plot a LamSlotMulti (two slots kind + notches)
-    """
+    """Figure 13: Check that you can plot a LamSlotMulti (two slots kind + notches)"""
     plt.close("all")
     # Lamination main dimensions definition
     rotor = LamSlotMulti(Rint=0.2, Rext=0.7, is_internal=True, is_stator=False)
@@ -297,8 +295,7 @@ def test_SlotMulti():
 
 
 def test_SlotUD():
-    """Figure 14: User Defined slot "snowflake"
-    """
+    """Figure 14: User Defined slot "snowflake" """
 
     plt.close("all")
     # Enfore first point on rotor bore
@@ -436,8 +433,7 @@ def test_BoreFlower():
 @pytest.mark.FEMM
 @pytest.mark.long
 def test_ecc_FEMM():
-    """Figure 19: transfrom_list in FEMM for eccentricities
-    """
+    """Figure 19: transfrom_list in FEMM for eccentricities"""
     simu = Simu1(name="ICEM_2020", machine=SPMSM_015)
     simu.machine.name = "fig_19_Transform_list"
 
@@ -511,10 +507,10 @@ def test_Optimization_problem():
     Figure20: Individuals in the fitness space
     Figure21: Pareto Front in the fitness space
     Figure22: Topology to maximize first torque harmonic
-    Figure22: Topology to minimize second torque harmonic  
+    Figure22: Topology to minimize second torque harmonic
 
     WARNING: The computation takes 6 hours on a single 3GHz CPU core.
-    The algorithm uses randomization at different steps so 
+    The algorithm uses randomization at different steps so
     the results won't be exactly the same as the one in the publication
     """
     # ------------------ #
@@ -738,8 +734,10 @@ def test_Optimization_problem():
     simu2.machine.plot()
     fig = plt.gcf()
     fig.savefig(
-        join(save_path, "fig_21_Topology_to_minimize_torque_ripple.png"), format="png",
+        join(save_path, "fig_21_Topology_to_minimize_torque_ripple.png"),
+        format="png",
     )
     fig.savefig(
-        join(save_path, "fig_21_Topology_to_minimize_torque_ripple.svg"), format="svg",
+        join(save_path, "fig_21_Topology_to_minimize_torque_ripple.svg"),
+        format="svg",
     )

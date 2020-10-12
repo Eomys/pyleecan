@@ -3,7 +3,7 @@
 
 def comp_joule_losses(self, output):
     """Compute the electrical Joule losses
-              
+
     Parameters
     ----------
     self : Electrical

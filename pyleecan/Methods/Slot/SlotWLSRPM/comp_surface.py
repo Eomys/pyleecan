@@ -17,8 +17,6 @@ def comp_surface(self):
 
     """
 
-
     Swind = self.comp_surface_wind()
-
 
     return Swind

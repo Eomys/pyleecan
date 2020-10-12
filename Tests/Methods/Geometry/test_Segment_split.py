@@ -121,8 +121,7 @@ class test_Segment_split_meth(TestCase):
 
     @data(*split_list)
     def test_intersect(self, test_dict):
-        """Check that the intersection is computed correctly
-        """
+        """Check that the intersection is computed correctly"""
         seg = Segment(test_dict["begin"], test_dict["end"])
 
         # Check intersection

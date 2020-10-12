@@ -5,7 +5,7 @@ from numpy import pi
 
 def comp_torque(self, output):
     """Compute the electrical average torque
-              
+
     Parameters
     ----------
     self : Electrical

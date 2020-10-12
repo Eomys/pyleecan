@@ -71,8 +71,7 @@ class test_SlotW61_meth(TestCase):
 
     @data(*SlotW61_test)
     def test_comp_surface(self, test_dict):
-        """Check that the computation of the surface is correct
-        """
+        """Check that the computation of the surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_surface()
 
@@ -87,8 +86,7 @@ class test_SlotW61_meth(TestCase):
 
     @data(*SlotW61_test)
     def test_comp_surface_wind(self, test_dict):
-        """Check that the computation of the winding surface is correct
-        """
+        """Check that the computation of the winding surface is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_surface_wind()
 
@@ -99,8 +97,7 @@ class test_SlotW61_meth(TestCase):
 
     @data(*SlotW61_test)
     def test_comp_height(self, test_dict):
-        """Check that the computation of the height is correct
-        """
+        """Check that the computation of the height is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_height()
 
@@ -115,8 +112,7 @@ class test_SlotW61_meth(TestCase):
 
     @data(*SlotW61_test)
     def test_comp_angle_opening(self, test_dict):
-        """Check that the computation of the average opening angle iscorrect
-        """
+        """Check that the computation of the average opening angle iscorrect"""
         test_obj = test_dict["test_obj"]
         a = test_obj.slot.comp_angle_opening()
         b = test_dict["Ao"]
@@ -129,8 +125,7 @@ class test_SlotW61_meth(TestCase):
 
     @data(*SlotW61_test)
     def test_comp_angle_wind_eq(self, test_dict):
-        """Check that the computation of the average angle is correct
-        """
+        """Check that the computation of the average angle is correct"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_angle_wind_eq()
 

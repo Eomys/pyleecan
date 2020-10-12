@@ -12,8 +12,8 @@ def update_FEMM_simulation(
 ):
     """Update the simulation by changing the rotor position and
     updating the currents
-    
-    
+
+
     Parameters
     ----------
     output :

@@ -16,8 +16,8 @@ class LevelFilter(Filter):
     def __init__(self, level):
         """
         LevelFilter constructor
-        
-        Parameters: 
+
+        Parameters:
             level : int
                 log level to keep
         """

@@ -22,8 +22,7 @@ from pyleecan.Functions.Electrical.coordinate_transformation import (
 
 
 def test_coordinate_transformation_Ok():
-    """Check that the coordinate transformations can return a correct output
-    """
+    """Check that the coordinate transformations can return a correct output"""
 
     X_uvw = array([[1, -0.5, -0.5], [-1, 0.5, 0.5]])
     X_ab = array([[1, 0], [0, 1]])

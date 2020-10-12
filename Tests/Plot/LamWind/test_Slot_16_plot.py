@@ -47,8 +47,7 @@ def machine():
 
 
 def test_Lam_Wind_16_wind_22(machine):
-    """Test machine plot with Slot 16 and winding rad=2, tan=2
-    """
+    """Test machine plot with Slot 16 and winding rad=2, tan=2"""
     print("\nTest plot Slot 16")
     machine.winding = WindingUD(user_wind_mat=wind_mat, qs=4, p=4, Lewout=60e-3)
     machine.plot()
@@ -59,8 +58,7 @@ def test_Lam_Wind_16_wind_22(machine):
 
 
 def test_Lam_Wind_16_wind_tan(machine):
-    """Test machine plot with Slot 16 and winding rad=1, tan=2
-    """
+    """Test machine plot with Slot 16 and winding rad=1, tan=2"""
     machine.winding = WindingCW2LT(qs=3, p=3, Lewout=60e-3)
     machine.plot()
     fig = plt.gcf()
@@ -70,8 +68,7 @@ def test_Lam_Wind_16_wind_tan(machine):
 
 
 def test_Lam_Wind_16_wind_rad(machine):
-    """Test machine plot with Slot 16 and winding rad=2, tan=1
-    """
+    """Test machine plot with Slot 16 and winding rad=2, tan=1"""
     machine.winding = WindingUD(user_wind_mat=wind_mat2, qs=3, p=3, Lewout=60e-3)
     machine.plot()
     fig = plt.gcf()
@@ -81,8 +78,7 @@ def test_Lam_Wind_16_wind_rad(machine):
 
 
 def test_Lam_Wind_16_tooth(machine):
-    """Test the Slot 16 tooth plot
-    """
+    """Test the Slot 16 tooth plot"""
     tooth = machine.slot.get_surface_tooth()
     tooth.plot(color="r")
     fig = plt.gcf()

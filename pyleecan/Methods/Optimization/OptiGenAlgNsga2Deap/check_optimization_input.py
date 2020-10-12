@@ -11,12 +11,12 @@ class OptimizationAttributeError(Exception):
 
 
 def check_optimization_input(self):
-    """ Check optimization parameters before solving the problem
+    """Check optimization parameters before solving the problem
 
-        Parameters 
-        ----------
-        solver : Solver
-            solver to perform the genetic algorithm with DEAP
+    Parameters
+    ----------
+    solver : Solver
+        solver to perform the genetic algorithm with DEAP
     """
 
     logger = self.get_logger()
@@ -97,7 +97,9 @@ def check_optimization_input(self):
                 raise OptimizationAttributeError(mess)
             # Check getter
             elif not callable(cstr.get_variable):
-                mess = "The constraint '{}' function get_variable is not callable.".format(
-                    cstr.name
+                mess = (
+                    "The constraint '{}' function get_variable is not callable.".format(
+                        cstr.name
+                    )
                 )
                 raise OptimizationAttributeError(mess)

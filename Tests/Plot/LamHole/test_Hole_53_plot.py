@@ -48,8 +48,7 @@ def machine():
 
 
 def test_Lam_Hole_53_W01(machine):
-    """Test machine plot hole 53 with W1 > 0 and both magnets
-    """
+    """Test machine plot hole 53 with W1 > 0 and both magnets"""
     machine.rotor.plot()
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_Lam_Hole_s53_Rotor_W01.png"))
@@ -58,8 +57,7 @@ def test_Lam_Hole_53_W01(machine):
 
 
 def test_Lam_Hole_53_N01(machine):
-    """Test machine plot hole 53 with W1 = 0 and both magnets
-    """
+    """Test machine plot hole 53 with W1 = 0 and both magnets"""
     machine.rotor.hole[0].W1 = 0
     machine.rotor.hole[0].magnet_0 = Magnet()
     machine.rotor.hole[0].magnet_1 = Magnet()
@@ -71,8 +69,7 @@ def test_Lam_Hole_53_N01(machine):
 
 
 def test_Lam_Hole_53_WN1(machine):
-    """Test machine plot hole 53 with W1 > 0 and only magnet_1
-    """
+    """Test machine plot hole 53 with W1 > 0 and only magnet_1"""
     machine.rotor.hole[0].W1 = 2e-3
     machine.rotor.hole[0].magnet_0 = None
     machine.rotor.hole[0].magnet_1 = Magnet()
@@ -84,8 +81,7 @@ def test_Lam_Hole_53_WN1(machine):
 
 
 def test_Lam_Hole_53_NN1(machine):
-    """Test machine plot hole 53 with W1 = 0 and no magnet_0
-    """
+    """Test machine plot hole 53 with W1 = 0 and no magnet_0"""
     machine.rotor.hole[0].W1 = 0
     machine.rotor.hole[0].magnet_0 = None
     machine.rotor.hole[0].magnet_1 = Magnet()
@@ -97,8 +93,7 @@ def test_Lam_Hole_53_NN1(machine):
 
 
 def test_Lam_Hole_53_W0N(machine):
-    """Test machine plot hole 53 with W1 > 0 and no magnet_1
-    """
+    """Test machine plot hole 53 with W1 > 0 and no magnet_1"""
     machine.rotor.hole[0].W1 = 2e-3
     machine.rotor.hole[0].magnet_0 = Magnet()
     machine.rotor.hole[0].magnet_1 = None
@@ -110,8 +105,7 @@ def test_Lam_Hole_53_W0N(machine):
 
 
 def test_Lam_Hole_53_N0N(machine):
-    """Test machine plot hole 53 with W1 =0 and no magnet_1
-    """
+    """Test machine plot hole 53 with W1 =0 and no magnet_1"""
     machine.rotor.hole[0].W1 = 0
     machine.rotor.hole[0].magnet_0 = Magnet()
     machine.rotor.hole[0].magnet_1 = None
@@ -123,8 +117,7 @@ def test_Lam_Hole_53_N0N(machine):
 
 
 def test_Lam_Hole_53_WNN(machine):
-    """Test machine plot hole 53 with W1 > 0 and no magnets
-    """
+    """Test machine plot hole 53 with W1 > 0 and no magnets"""
     machine.rotor.hole[0].W1 = 2e-3
     machine.rotor.hole[0].magnet_0 = None
     machine.rotor.hole[0].magnet_1 = None
@@ -136,8 +129,7 @@ def test_Lam_Hole_53_WNN(machine):
 
 
 def test_Lam_Hole_53_NNN(machine):
-    """Test machine plot hole 53 with W1 = 0 and no magnets
-    """
+    """Test machine plot hole 53 with W1 = 0 and no magnets"""
     machine.rotor.hole[0].W1 = 0
     machine.rotor.hole[0].magnet_0 = None
     machine.rotor.hole[0].magnet_1 = None

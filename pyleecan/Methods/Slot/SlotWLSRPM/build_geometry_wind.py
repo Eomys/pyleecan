@@ -85,7 +85,10 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
         # Add a line to close the winding area
         lines = [
             Arc1(
-                curve_list[-1].end, curve_list[0].begin, -Rbo, is_trigo_direction=False,
+                curve_list[-1].end,
+                curve_list[0].begin,
+                -Rbo,
+                is_trigo_direction=False,
             )
         ]
         lines.extend(curve_list)

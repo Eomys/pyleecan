@@ -5,7 +5,7 @@ from numpy import abs as np_abs
 
 
 def intersect_line(self, Z1, Z2):
-    """Return a list (0, 1 or 2 complex) of coordinates of the 
+    """Return a list (0, 1 or 2 complex) of coordinates of the
     intersection of the segment with a line defined by two complex
 
     Parameters

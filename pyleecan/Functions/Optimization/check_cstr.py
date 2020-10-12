@@ -3,18 +3,18 @@
 
 def check_cstr(solver, indiv):
     """Check the number of constraints violations of the individual
-    
-        Parameters
-        ----------
-        solver : Solver
-            Global optimization problem solver
-        indiv : individual
-            Individual of the population
 
-        Returns
-        -------
-        is_feasible : bool
-            Individual feasibility     
+    Parameters
+    ----------
+    solver : Solver
+        Global optimization problem solver
+    indiv : individual
+        Individual of the population
+
+    Returns
+    -------
+    is_feasible : bool
+        Individual feasibility
     """
 
     # Non valid simulation violate every constraints

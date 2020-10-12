@@ -16,7 +16,7 @@ def set_field(self, field_value, field_name, field_type):
 
      Returns
      -------
-     """
+    """
 
     if field_type is "nodal":
         self.nodal[field_name] = field_value

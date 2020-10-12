@@ -351,8 +351,7 @@ class Lamination(FrozenClass):
 
     # generic copy method
     def copy(self):
-        """Return a copy of the class
-        """
+        """Return a copy of the class"""
         return type(self)(init_dict=self.as_dict())
 
     # get_logger method is available in all object
@@ -467,6 +466,7 @@ class Lamination(FrozenClass):
                         "HoleM54",
                         "HoleM57",
                         "HoleM58",
+                        "HoleMLSRPM",
                         "HoleMag",
                         "VentilationCirc",
                         "VentilationPolar",
@@ -585,8 +585,7 @@ class Lamination(FrozenClass):
         return True
 
     def as_dict(self):
-        """Convert this objet in a json seriable dict (can be use in __init__)
-        """
+        """Convert this objet in a json seriable dict (can be use in __init__)"""
 
         Lamination_dict = dict()
         Lamination_dict["L1"] = self.L1

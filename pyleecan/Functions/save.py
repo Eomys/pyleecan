@@ -13,12 +13,12 @@ def save(self, save_path="", is_folder=False):
 
     Parameters
     ----------
-    self : 
+    self :
         A pyleecan object
     save_path: str
         path to the folder to save the object
     is_folder: bool
-        to split the object in different files: separate simulation machine and materials 
+        to split the object in different files: separate simulation machine and materials
     """
     # Save in the object.path if it exist and save_path is empty
     if save_path == "" and hasattr(self, "path") and getattr(self, "path") != None:

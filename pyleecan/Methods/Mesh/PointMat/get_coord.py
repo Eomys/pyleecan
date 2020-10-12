@@ -6,19 +6,19 @@ import numpy as np
 def get_coord(self, node_tags):
     """Return the coordinates of node(s).
 
-     Parameters
-     ----------
-     self : PointMat
-         an PointMat object
-     node_tags : np.array
-         an array of node tags
+    Parameters
+    ----------
+    self : PointMat
+        an PointMat object
+    node_tags : np.array
+        an array of node tags
 
-     Returns
-     -------
-     coord: np.array
-         an array of node coordinates
+    Returns
+    -------
+    coord: np.array
+        an array of node coordinates
 
-     """
+    """
 
     nd_case = np.size(node_tags)
     coord = np.zeros((nd_case, 2))

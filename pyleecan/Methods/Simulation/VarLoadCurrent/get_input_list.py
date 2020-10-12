@@ -3,8 +3,7 @@ from ....Classes.InputCurrent import InputCurrent
 
 
 def get_input_list(self):
-    """Return a list of InputCurrent to set the Operating point
-    """
+    """Return a list of InputCurrent to set the Operating point"""
 
     # Check that the object has the correct type
     assert isinstance(self.parent, Simulation)

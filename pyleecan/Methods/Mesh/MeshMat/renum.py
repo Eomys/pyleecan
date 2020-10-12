@@ -7,7 +7,7 @@ from pyleecan.Classes.PointMat import PointMat
 
 
 def renum(self):
-    """ Remove non-used points, restart point indices from 0, and update connectivity. Indices of cells stay the same.
+    """Remove non-used points, restart point indices from 0, and update connectivity. Indices of cells stay the same.
 
     Parameters
     ----------

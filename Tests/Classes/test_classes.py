@@ -201,8 +201,7 @@ def test_class_as_dict(class_dict):
 
 @pytest.mark.parametrize("class_dict", class_list)
 def test_class_set_None(class_dict):
-    """Check that _set_None set to None every non pyleecantype properties
-    """
+    """Check that _set_None set to None every non pyleecantype properties"""
 
     test_obj = eval(class_dict["name"] + "()")
     test_obj._set_None()
@@ -355,8 +354,7 @@ def test_class_prop_doc(class_dict):
 
 @pytest.mark.parametrize("class_dict", class_list)
 def test_class_copy(class_dict):
-    """Check if the copy method is correct
-    """
+    """Check if the copy method is correct"""
 
     test_obj = eval(class_dict["name"] + "()")
     result = test_obj.copy()

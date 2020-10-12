@@ -17,7 +17,6 @@ def _comp_point_coordinate(self):
     """
 
     Rbo = self.get_Rbo()
- 
 
     hsp = pi / self.Zs  # Half slot pitch
 
@@ -56,7 +55,7 @@ def _comp_point_coordinate(self):
     Z4 = Z4t * exp(-1j * hsp)
     # Z3
     x3t = x4t
-    y3t = y4t-self.W1
+    y3t = y4t - self.W1 + self.R1
     Z3t = x3t + 1j * y3t
     Z3 = Z3t * exp(-1j * hsp)
     # Z2

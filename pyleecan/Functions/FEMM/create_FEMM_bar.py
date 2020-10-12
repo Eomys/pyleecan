@@ -19,7 +19,7 @@ def create_FEMM_bar(is_mmfr, rho, materials):
     -------
     (str, list)
         material name "Rotor Bar", updated materials
-    
+
     """
 
     if is_mmfr:

@@ -7,7 +7,7 @@ def comp_FEMM_Phi_wind(qs, Npcpp, is_stator, Lfemm, L1, sym, is_rescale_flux=Tru
 
     Parameters
     ----------
-    qs : int 
+    qs : int
         number of phases
     Npcpp : int
         number of parallel circuits per phase (maximum 2p)
@@ -16,7 +16,7 @@ def comp_FEMM_Phi_wind(qs, Npcpp, is_stator, Lfemm, L1, sym, is_rescale_flux=Tru
     Lfemm : float
         lenght of FEMM model
     L1 : float
-        actual lenght for rescaling fluxlinkage 
+        actual lenght for rescaling fluxlinkage
     sym : int
         symmetry factor (ie. 1 = full machine, 2 = half machine ...)
     is_rescale_flux : bool

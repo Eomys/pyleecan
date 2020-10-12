@@ -68,7 +68,9 @@ def test_CEFC_002():
     load_path = join(save_path, "Output.json")
     out.save(save_path=load_path)
 
-    out.mag.meshsolution.plot_mesh(save_path=join(save_path, "CEFC_002_mesh_save.png"),)
+    out.mag.meshsolution.plot_mesh(
+        save_path=join(save_path, "CEFC_002_mesh_save.png"),
+    )
 
     out.mag.meshsolution.plot_mesh(
         save_path=join(save_path, "CEFC_002_mesh_interface_save.png"),
@@ -76,13 +78,16 @@ def test_CEFC_002():
     )
 
     out.mag.meshsolution.plot_contour(
-        label="\mu", save_path=join(save_path, "CEFC_002_mu_save.png"),
+        label="\mu",
+        save_path=join(save_path, "CEFC_002_mu_save.png"),
     )
     out.mag.meshsolution.plot_contour(
-        label="B", save_path=join(save_path, "CEFC_002_B_save.png"),
+        label="B",
+        save_path=join(save_path, "CEFC_002_B_save.png"),
     )
     out.mag.meshsolution.plot_contour(
-        label="H", save_path=join(save_path, "CEFC_002_H_save.png"),
+        label="H",
+        save_path=join(save_path, "CEFC_002_H_save.png"),
     )
     out.mag.meshsolution.plot_contour(
         label="H",
@@ -116,7 +121,8 @@ def test_CEFC_002_load():
         save_path=join(save_path, "CEFC_002_mu_stator_airgap_load.png"),
     )
     FEMM.mag.meshsolution.plot_contour(
-        label="B", save_path=join(save_path, "CEFC_002_B_load.png"),
+        label="B",
+        save_path=join(save_path, "CEFC_002_B_load.png"),
     )
     FEMM.mag.meshsolution.plot_contour(
         label="H",
@@ -125,5 +131,6 @@ def test_CEFC_002_load():
     )
 
     FEMM.mag.meshsolution.plot_contour(
-        label="H", group_names=["stator", "/", "airgap"],
+        label="H",
+        group_names=["stator", "/", "airgap"],
     )

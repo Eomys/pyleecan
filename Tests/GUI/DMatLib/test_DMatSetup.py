@@ -57,8 +57,7 @@ class test_DMatSetup(TestCase):
         self.widget = DMatSetup(material=self.test_obj)
 
     def teardown(self):
-        """Delete the workspace at the end of the tests
-        """
+        """Delete the workspace at the end of the tests"""
         rmtree(self.work_path)
 
     @classmethod
@@ -144,8 +143,7 @@ class test_DMatSetup(TestCase):
         self.assertEqual(self.widget.lf_cost_unit.value(), 0.21)
 
     def test_set_name(self):
-        """Check that you can change the name and the path
-        """
+        """Check that you can change the name and the path"""
         self.widget.le_name.setText("Magnet2")
         self.widget.le_name.editingFinished.emit()
         self.assertEqual(self.widget.mat.name, "Magnet2")

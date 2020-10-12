@@ -11,8 +11,7 @@ from ......GUI.Dialog.DMachineSetup.SBar.PCondType22.Gen_PCondType22 import (
 
 
 class PCondType22(Gen_PCondType22, QWidget):
-    """Page to setup Conductor Type 22
-    """
+    """Page to setup Conductor Type 22"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -30,7 +29,7 @@ class PCondType22(Gen_PCondType22, QWidget):
         machine : Machine
             current machine to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         """
 
         # Build the interface according to the .ui file
@@ -64,6 +63,5 @@ class PCondType22(Gen_PCondType22, QWidget):
         self.w_mat.saveNeeded.connect(self.emit_save)
 
     def emit_save(self):
-        """Emit the saveNeeded signal
-        """
+        """Emit the saveNeeded signal"""
         self.saveNeeded.emit()

@@ -61,8 +61,7 @@ class test_SBar(TestCase):
         cls.app.quit()
 
     def test_init(self):
-        """Check that the Widget spinbox initialise to the lamination value
-        """
+        """Check that the Widget spinbox initialise to the lamination value"""
 
         self.assertEqual(self.widget.lf_Hscr.value(), 0.11)
         self.assertEqual(self.widget.lf_Lscr.value(), 0.12)
@@ -172,8 +171,7 @@ class test_SBar(TestCase):
         self.assertEqual(self.test_obj.rotor.ring_mat.elec.rho, 0.33)
 
     def test_set_cond_type(self):
-        """Check that you can change the conductor type
-        """
+        """Check that you can change the conductor type"""
         # To remember to update the test
         self.assertEqual(self.widget.c_bar_type.count(), 2)
         # Check init position

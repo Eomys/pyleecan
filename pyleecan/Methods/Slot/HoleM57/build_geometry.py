@@ -229,7 +229,7 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
 
 def set_name_line(hole_lines, name):
-    """ Define the  label of each line of the hole
+    """Define the  label of each line of the hole
 
     Parameters
     ----------

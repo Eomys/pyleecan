@@ -6,7 +6,7 @@ import numpy as np
 
 
 def build_meshsolution(self, Nt_tot, meshFEMM, Time, B, H, mu, groups):
-    """ Build the MeshSolution objets from FEMM outputs.
+    """Build the MeshSolution objets from FEMM outputs.
 
     Parameters
     ----------

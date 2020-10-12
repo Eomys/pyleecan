@@ -13,8 +13,7 @@ from ......Methods.Slot.Slot.check import SlotCheckError
 
 
 class PHoleM51(Gen_PHoleM51, QWidget):
-    """Page to set the Hole Type 51
-    """
+    """Page to set the Hole Type 51"""
 
     # Signal to DMachineSetup to know that the save popup is needed
     saveNeeded = pyqtSignal()
@@ -32,7 +31,7 @@ class PHoleM51(Gen_PHoleM51, QWidget):
         hole : HoleM51
             current hole to edit
         matlib : MatLib
-            Material Library 
+            Material Library
         """
         # Build the interface according to the .ui file
         QWidget.__init__(self)
@@ -145,8 +144,7 @@ class PHoleM51(Gen_PHoleM51, QWidget):
         self.w_mat_3.saveNeeded.connect(self.emit_save)
 
     def emit_save(self):
-        """Send a saveNeeded signal to the DMachineSetup
-        """
+        """Send a saveNeeded signal to the DMachineSetup"""
         self.saveNeeded.emit()
 
     def set_W0(self):

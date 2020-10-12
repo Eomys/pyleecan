@@ -43,7 +43,7 @@ def draw_FEMM(
     stator_dxf=None,
 ):
     """Draws and assigns the property of the machine in FEMM
-    
+
     Parameters
     ----------
     output : Output
@@ -232,5 +232,4 @@ def draw_FEMM(
 
 
 class FEMMError(Exception):
-    """Raised when FEMM is not possible to run
-    """
+    """Raised when FEMM is not possible to run"""

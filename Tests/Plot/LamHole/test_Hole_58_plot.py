@@ -15,8 +15,7 @@ from Tests import save_plot_path as save_path
 
 
 def test_Lam_Hole_58_plot():
-    """Test machine plot hole 58
-    """
+    """Test machine plot hole 58"""
 
     plt.close("all")
     test_obj = LamHole(

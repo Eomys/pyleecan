@@ -39,25 +39,16 @@ def machine():
         Nrvd=0,
         Wrvd=0,
     )
-    test_obj.slot = SlotWLSRPM(
-        Zs=12, W1=8e-3,W3=11.6e-3, H2=14.8e-3, R1=0.75e-3
-    )
+    test_obj.slot = SlotWLSRPM(Zs=12, W1=8e-3, W3=11.6e-3, H2=14.8e-3, R1=0.75e-3)
 
     return test_obj
 
 
-
-
-
 def test_Lam_Wind_LSRPM_wind_tan(machine):
-    """Test machine plot with Slot LSRPM and winding rad=1, tan=2
-    """
+    """Test machine plot with Slot LSRPM and winding rad=1, tan=2"""
     machine.winding = WindingCW2LT(qs=3, p=4, Lewout=0)
     machine.plot()
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_Lam_Wind_sLSRPM_2-tan-wind.png"))
     # 2 for lam + Zs*2 for wind
     assert len(fig.axes[0].patches) == 26
-
-
- 

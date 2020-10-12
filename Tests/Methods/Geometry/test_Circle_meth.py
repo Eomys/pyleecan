@@ -81,8 +81,7 @@ class test_Circle_meth(TestCase):
 
     @data(*comp_length_test)
     def test_comp_length(self, test_dict):
-        """Check that you can compute the circle length
-        """
+        """Check that you can compute the circle length"""
         circle = Circle(
             center=test_dict["center"],
             point_ref=test_dict["ref"],
@@ -92,16 +91,14 @@ class test_Circle_meth(TestCase):
         self.assertAlmostEqual(abs(result - test_dict["expect"]), 0)
 
     def test_rotate_fail(self):
-        """Check that the rotate method can detect a wrong arg
-        """
+        """Check that the rotate method can detect a wrong arg"""
         circle = Circle(point_ref=1j, radius=1)
         with self.assertRaises(AngleRotationCircleError):
             circle.rotate("")
 
     @data(*rotate_test)
     def test_rotate(self, test_dict):
-        """Check that you can rotate a circle
-        """
+        """Check that you can rotate a circle"""
         circle = Circle(
             center=test_dict["center"],
             point_ref=test_dict["ref"],
@@ -113,16 +110,14 @@ class test_Circle_meth(TestCase):
         self.assertAlmostEqual(abs(test_dict["exp_center"] - circle.center), 0)
 
     def test_translate_fail(self):
-        """Check that the translate method can detect a wrong arg
-        """
+        """Check that the translate method can detect a wrong arg"""
         circle = Circle(point_ref=1j, radius=1)
         with self.assertRaises(PointTranslateCircleError):
             circle.translate("")
 
     @data(*translate_test)
     def test_translate(self, test_dict):
-        """Check that you can translate a circle
-        """
+        """Check that you can translate a circle"""
         circle = Circle(
             center=test_dict["center"],
             point_ref=test_dict["ref"],
@@ -135,8 +130,7 @@ class test_Circle_meth(TestCase):
 
     @data(*lines_test)
     def test_get_lines(self, test_dict):
-        """Check that you get the correct lines to draw the circle
-        """
+        """Check that you get the correct lines to draw the circle"""
         circle = Circle(
             center=test_dict["center"],
             point_ref=test_dict["ref"],
@@ -148,8 +142,7 @@ class test_Circle_meth(TestCase):
 
     @data(*disc_test)
     def test_discretize(self, test_dict):
-        """Check that you can discretize the circle
-        """
+        """Check that you can discretize the circle"""
         circle = Circle(
             center=test_dict["center"],
             point_ref=test_dict["ref"],

@@ -28,8 +28,7 @@ from Tests.Plot.LamWind import wind_mat
 
 
 def test_Lam_evenly_dist():
-    """Test machine plot with evenly distributed notches (sym and no sym)
-    """
+    """Test machine plot with evenly distributed notches (sym and no sym)"""
     print("\nTest plot Notch")
     plt.close("all")
     test_obj = MachineDFIM()
