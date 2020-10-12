@@ -20,7 +20,7 @@ def plot_generation(self, x_symbol, y_symbol, ax=None):
     cm = LinearSegmentedColormap.from_list(
         "colormap",
         [(35 / 255, 89 / 255, 133 / 255), (250 / 255, 202 / 255, 56 / 255)],
-        N=max(self["ngen"]) + 1,
+        N=max(self["ngen"].result) + 1,
     )
 
     # Get fitness and ngen

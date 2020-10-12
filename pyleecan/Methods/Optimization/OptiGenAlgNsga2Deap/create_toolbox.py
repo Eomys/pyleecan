@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from ....Classes.Output import Output
 from deap import base, creator, tools
 
 
@@ -83,6 +82,6 @@ def create_indiv(create, output, design_var_list):
     ind.cstr_viol = 0
 
     # Output with the design variables set
-    ind.output = Output(simu=output.simu.as_dict())
+    ind.output = type(output)(simu=output.simu.as_dict())
 
     return ind
