@@ -1,41 +1,41 @@
 # -*- coding: utf-8 -*-
 
-from os import remove, getcwd
+from os import getcwd, remove
 from os.path import isfile, join
-import pytest
 from unittest.mock import patch  # for unittest of input
 
-from numpy import ones, pi, array
-
+import pytest
+from numpy import array, ones, pi
+from pyleecan.Classes._check import InitUnKnowClassError
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
+from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.MagnetType11 import MagnetType11
+from pyleecan.Classes.Output import Output
+from pyleecan.Classes.PostFunction import PostFunction
+from pyleecan.Classes.Shaft import Shaft
+from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.SlotMPolar import SlotMPolar
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.WindingDW1L import WindingDW1L
-from pyleecan.Classes.Shaft import Shaft
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.Output import Output
-from pyleecan.Classes.PostFunction import PostFunction
-from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
-
-from Tests import TEST_DATA_DIR, save_load_path as save_path, x as logger
 from pyleecan.Functions.load import (
-    load,
-    load_list,
-    load_dict,
+    LoadSwitchError,
     LoadWrongDictClassError,
     LoadWrongTypeError,
-    LoadSwitchError,
+    load,
+    load_dict,
+    load_list,
 )
-from pyleecan.Functions.Save.save_json import save_json
 from pyleecan.Functions.Load.load_json import LoadMissingFileError
-from pyleecan.Classes._check import InitUnKnowClassError
+from pyleecan.Functions.Save.save_json import save_json
+from Tests import TEST_DATA_DIR
+from Tests import save_load_path as save_path
+from Tests import x as logger
+from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
 
 load_file_1 = join(TEST_DATA_DIR, "test_wrong_slot_load_1.json")
 load_file_2 = join(TEST_DATA_DIR, "test_wrong_slot_load_2.json")
