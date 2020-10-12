@@ -129,13 +129,10 @@ class ParamExplorer(FrozenClass):
         ParamExplorer_dict["name"] = self.name
         ParamExplorer_dict["symbol"] = self.symbol
         ParamExplorer_dict["unit"] = self.unit
-        if self.setter is None:
-            ParamExplorer_dict["setter"] = None
+        if self._setter_str is not None:
+            ParamExplorer_dict["setter"] = self._setter_str
         else:
-            ParamExplorer_dict["setter"] = [
-                dumps(self._setter[0]).decode("ISO-8859-2"),
-                self._setter[1],
-            ]
+            ParamExplorer_dict["setter"] = None
         # The class name is added to the dict for deserialisation purpose
         ParamExplorer_dict["__class__"] = "ParamExplorer"
         return ParamExplorer_dict

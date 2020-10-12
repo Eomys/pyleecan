@@ -121,20 +121,18 @@ def generate_as_dict(gen_dict, class_dict):
         elif prop["type"] == "function":
             # Add => "class_name ["var_name"] = self._var_name" to
             # var_str
-            var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
-            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
-            var_str += TAB2 + "else:\n"
+            var_str += TAB2 + "if self._" + prop["name"] + "_str is not None:\n"
             var_str += (
                 TAB3
                 + class_name
                 + '_dict["'
                 + prop["name"]
-                + '"] = [dumps(self._'
+                + '"] = self._'
                 + prop["name"]
-                + "[0]).decode('ISO-8859-2'), self._"
-                + prop["name"]
-                + "[1]]\n"
+                + "_str\n"
             )
+            var_str += TAB2 + "else:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
         elif (
             "." in prop["type"] and not "SciDataTool" in prop["type"]
         ):  # Type from external package
@@ -194,9 +192,7 @@ def generate_as_dict(gen_dict, class_dict):
 
     dict_str += var_str
     dict_str += (
-        TAB2
-        + "# The class name is added to the dict for "
-        + "deserialisation purpose\n"
+        TAB2 + "# The class name is added to the dict for deserialisation purpose\n"
     )
     if class_dict["mother"] != "":
         dict_str += TAB2 + "# Overwrite the mother class name\n"

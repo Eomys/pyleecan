@@ -128,13 +128,10 @@ class OptiDesignVar(ParamExplorer):
         OptiDesignVar_dict = super(OptiDesignVar, self).as_dict()
         OptiDesignVar_dict["type_var"] = self.type_var
         OptiDesignVar_dict["space"] = self.space
-        if self.get_value is None:
-            OptiDesignVar_dict["get_value"] = None
+        if self._get_value_str is not None:
+            OptiDesignVar_dict["get_value"] = self._get_value_str
         else:
-            OptiDesignVar_dict["get_value"] = [
-                dumps(self._get_value[0]).decode("ISO-8859-2"),
-                self._get_value[1],
-            ]
+            OptiDesignVar_dict["get_value"] = None
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OptiDesignVar_dict["__class__"] = "OptiDesignVar"

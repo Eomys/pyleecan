@@ -88,13 +88,10 @@ class PostFunction(Post):
 
         # Get the properties inherited from Post
         PostFunction_dict = super(PostFunction, self).as_dict()
-        if self.run is None:
-            PostFunction_dict["run"] = None
+        if self._run_str is not None:
+            PostFunction_dict["run"] = self._run_str
         else:
-            PostFunction_dict["run"] = [
-                dumps(self._run[0]).decode("ISO-8859-2"),
-                self._run[1],
-            ]
+            PostFunction_dict["run"] = None
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         PostFunction_dict["__class__"] = "PostFunction"
