@@ -33,22 +33,14 @@ def plot_mmf_unit(self, fig=None):
         values=gen_name(qs, is_add_phase=True),
         is_components=True,
     )
-    Angle = DataLinspace(
-        name="angle",
-        unit="rad",
-        symmetries={},
-        initial=0,
-        final=2 * pi,
-        number=mmf_u.values.shape[1],
-        include_endpoint=False,
-    )
-    Br = DataTime(
-        name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf
+    Angle = mmf_u.axes[1]
+    WF = DataTime(
+        name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf, symmetries=mmf_u.symmetries
     )
 
     color_list = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][: qs + 1]
     plot_A_space(
-        Br,
+        WF,
         is_fft=True,
         index_list=[0, 1, 2],
         data_list=[mmf_u],
