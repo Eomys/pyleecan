@@ -106,7 +106,7 @@ def test_slot_scale():
 
     multisim.paramexplorer_list = paramexplorer_list
 
-    error_keeper_mag_flux = "lambda simu: np.nan * np.zeros(len(simu.mag.B.time.value), len(simu.mag.B.angle.value))"
+    error_keeper_mag_flux = "lambda simu, np=np: np.nan * np.zeros(len(simu.mag.B.time.value), len(simu.mag.B.angle.value))"
 
     # List of DataKeeper to store results
     datakeeper_list = [
@@ -115,7 +115,7 @@ def test_slot_scale():
             unit="N.m",
             symbol="Tem_av",
             keeper="lambda output: output.mag.Tem_av",
-            error_keeper="lambda simu: np.nan",
+            error_keeper="lambda simu, np=np: np.nan",
         ),
         DataKeeper(
             name="Airgap flux density components",
