@@ -106,7 +106,7 @@ def test_slot_scale():
 
     multisim.paramexplorer_list = paramexplorer_list
 
-    error_keeper_mag_flux ="lambda simu: np.nan * np.zeros(len(simu.mag.B.time.value), len(simu.mag.B.angle.value))"
+    error_keeper_mag_flux = "lambda simu: np.nan * np.zeros(len(simu.mag.B.time.value), len(simu.mag.B.angle.value))"
 
     # List of DataKeeper to store results
     datakeeper_list = [

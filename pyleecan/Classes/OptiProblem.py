@@ -333,6 +333,10 @@ class OptiProblem(FrozenClass):
             self._eval_func_func = None
         elif isinstance(value, str) and "lambda" in value:
             self._eval_func_str = value
+            if " np." in value:
+                import numpy as np
+            if " random." in value:
+                import random
             self._eval_func_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._eval_func_str = value
@@ -399,6 +403,10 @@ class OptiProblem(FrozenClass):
             self._preprocessing_func = None
         elif isinstance(value, str) and "lambda" in value:
             self._preprocessing_str = value
+            if " np." in value:
+                import numpy as np
+            if " random." in value:
+                import random
             self._preprocessing_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._preprocessing_str = value
