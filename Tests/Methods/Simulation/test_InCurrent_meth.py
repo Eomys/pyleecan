@@ -5,9 +5,20 @@ chdir("../../..")
 
 from os.path import join
 
-from numpy import array, linspace, ones, pi, sqrt, transpose, zeros
+from numpy import (
+    array,
+    linspace,
+    ones,
+    pi,
+    sqrt,
+    cos,
+    transpose,
+    zeros,
+    abs as np_abs,
+    angle as np_angle,
+)
 from numpy.testing import assert_array_almost_equal
-
+import matplotlib.pyplot as plt
 from pyleecan.Classes.ImportGenMatrixSin import ImportGenMatrixSin
 from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
 from pyleecan.Classes.ImportGenVectSin import ImportGenVectSin
@@ -21,6 +32,7 @@ from pyleecan.definitions import DATA_DIR
 from pyleecan.Functions.load import load
 from pyleecan.Methods.Simulation.Input import InputError
 import pytest
+from Tests import save_plot_path as save_path
 
 IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 InputCurrent_Error_test = list()
@@ -166,6 +178,11 @@ InputCurrent_Error_test.append(
     }
 )
 
+idq_test = list()
+idq_test.append({"Id": 2, "Iq": 0})
+idq_test.append({"Id": 0, "Iq": 2})
+idq_test.append({"Id": sqrt(2), "Iq": sqrt(2)})
+
 
 @pytest.mark.METHODS
 class Test_InCurrent_meth(object):
@@ -179,93 +196,105 @@ class Test_InCurrent_meth(object):
             output.simu.input.gen_input()
             assert test_dict["exp"] == str(context.exception)
 
-    def test_InputCurrent_Ok(self):
-        """Check that the input current can return a correct output"""
-        test_obj = Simulation(machine=M3)
-        output = Output(simu=test_obj)
-        time = ImportGenVectLin(0, 1, 16)
-        angle = ImportGenVectLin(0, 2 * pi, 20)
-        Is = ImportGenMatrixSin(is_transpose=True)
-        Is.init_vector(f=[2, 2, 2], A=[2, 2, 2], Phi=[pi / 2, 0, -pi / 2], N=16, Tf=1)
-        S = sqrt(2)
-        Is_exp = array(
-            [
-                [2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S],
-                [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],
-                [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],
-            ]
-        )
-
-        Ir = ImportGenMatrixSin(is_transpose=True)
-        Ir.init_vector(f=[2, 2], A=[2, 2], Phi=[0, -pi / 2], N=16, Tf=1)
-        Ir_exp = array(
-            [
-                [0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S, -2, -S],
-                [-2, -S, 0, S, 2, S, 0, -S, -2, -S, 0, S, 2, S, 0, -S],
-            ]
-        )
-
-        angle_rotor = ImportGenVectLin(0, 2 * pi, 16)
-        N0 = 10
-        test_obj.input = InputCurrent(
-            time=time, angle=angle, Is=Is, Ir=Ir, angle_rotor=angle_rotor, N0=N0
-        )
-
-        test_obj.input.gen_input()
-        assert_array_almost_equal(
-            output.elec.time.get_values(is_oneperiod=False), linspace(0, 1, 16)
-        )
-        assert_array_almost_equal(
-            output.elec.angle.get_values(is_oneperiod=False), linspace(0, 2 * pi, 20)
-        )
-        assert_array_almost_equal(output.elec.Is.values, Is_exp)
-        assert_array_almost_equal(output.elec.Ir.values, Ir_exp)
-        assert_array_almost_equal(output.elec.Id_ref, 2)
-        assert_array_almost_equal(output.elec.Iq_ref, 0)
-        assert_array_almost_equal(output.elec.angle_rotor, linspace(0, 2 * pi, 16))
-        assert_array_almost_equal(output.elec.N0, ones(16) * 10)
-
-    def test_InputCurrent_DQ(self):
-        """Check that the input current can return a correct output"""
+    @pytest.mark.parametrize("test_dict", idq_test)
+    def test_InputCurrent_DQ(self, test_dict):
+        """Enforce Id/Iq, check Is then enforce Is, check Id/Iq"""
         test_obj = Simulation(machine=IPMSM_A)
         output = Output(simu=test_obj)
-        time = ImportGenVectLin(0, 1, 7)
-        angle = ImportGenVectLin(0, 2 * pi, 20)
-        Id_ref = 2
-        Iq_ref = 0
+        Nt_tot = 70
+        Na_tot = 20
+        N0 = 2000
 
-        Is_exp = array(
-            [
-                [2, 1, -1, -2, -1, 1, 2],
-                [-1, -2, -1, 1, 2, 1, -1],
-                [-1, 1, 2, 1, -1, -2, -1],
-            ]
-        ) * sqrt(2)
-        zp = IPMSM_A.stator.get_pole_pair_number()
+        # In RMS cf .csv conventions
+        Id_ref = test_dict["Id"]
+        Iq_ref = test_dict["Iq"]
+
+        # Compute expected current
+        A_rms = np_abs(Id_ref + 1j * Iq_ref)
+        Phi0 = np_angle(Id_ref + 1j * Iq_ref)
+        qs = IPMSM_A.stator.winding.qs
+        p = IPMSM_A.stator.get_pole_pair_number()
+        time_exp = linspace(0, 60 / N0, Nt_tot, endpoint=False)
+        felec = p * N0 / 60
+        rot_dir = IPMSM_A.stator.comp_rot_dir()
+        Ia = (
+            A_rms
+            * sqrt(2)
+            * cos(2 * pi * felec * time_exp + 0 * rot_dir * 2 * pi / qs + Phi0)
+        )
+        Ib = (
+            A_rms
+            * sqrt(2)
+            * cos(2 * pi * felec * time_exp + 1 * rot_dir * 2 * pi / qs + Phi0)
+        )
+        Ic = (
+            A_rms
+            * sqrt(2)
+            * cos(2 * pi * felec * time_exp + 2 * rot_dir * 2 * pi / qs + Phi0)
+        )
+        Is_exp = array([Ia, Ib, Ic])
+
+        # Compute expected rotor position
         angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
-        angle_rotor_exp = linspace(0, 2 * pi / zp, 7) + angle_rotor_initial
-        N0 = 60 / zp
+        angle_rotor_exp = (
+            linspace(0, rot_dir * 2 * pi, Nt_tot, endpoint=False) + angle_rotor_initial
+        )
 
         test_obj.input = InputCurrent(
-            time=time,
-            angle=angle,
+            Nt_tot=Nt_tot,
+            Na_tot=Na_tot,
             Is=None,
             Iq_ref=Iq_ref,
             Id_ref=Id_ref,
             Ir=None,
-            angle_rotor=None,
+            angle_rotor=None,  # Will be computed according to N0 and rot_dir
             N0=N0,
-            angle_rotor_initial=angle_rotor_initial,
-            rot_dir=1,
+            rot_dir=None,
         )
 
+        # Generate Is according to Id/Iq
         test_obj.input.gen_input()
         assert_array_almost_equal(
-            output.elec.time.get_values(is_oneperiod=False), linspace(0, 1, 7)
+            output.elec.time.get_values(is_oneperiod=False), time_exp,
         )
         assert_array_almost_equal(
-            output.elec.angle.get_values(is_oneperiod=False), linspace(0, 2 * pi, 20)
+            output.elec.angle.get_values(is_oneperiod=False),
+            linspace(0, 2 * pi, Na_tot, endpoint=False),
         )
         assert_array_almost_equal(output.elec.get_Is().values, Is_exp)
         assert_array_almost_equal(output.get_angle_rotor(), angle_rotor_exp)
-        assert_array_almost_equal(output.elec.N0, ones(7) * 60 / zp)
+        assert_array_almost_equal(output.elec.N0, N0)
+        assert_array_almost_equal(output.geo.rot_dir, rot_dir)
+
+        # Check Id/Iq by enforcing Is
+        test_obj.input = InputCurrent(
+            Nt_tot=Nt_tot,
+            Na_tot=Na_tot,
+            Is=Is_exp.transpose(),
+            Iq_ref=None,
+            Id_ref=None,
+            Ir=None,
+            angle_rotor=None,  # Will be computed according to N0 and rot_dir
+            N0=N0,
+            rot_dir=None,
+        )
+        out = Output(simu=test_obj)
+        test_obj.input.gen_input()
+        assert out.elec.Id_ref == pytest.approx(test_dict["Id"], abs=0.01)
+        assert out.elec.Iq_ref == pytest.approx(test_dict["Iq"], abs=0.01)
+
+        out.plot_A_time("elec.Is", index_list=[0, 1, 2])
+        title = "Id=" + str(test_dict["Id"]) + " Iq=" + str(test_dict["Iq"])
+        fig = plt.gcf()
+        plt.title(title)
+        fig.savefig(
+            join(
+                save_path,
+                "test_InCurrent_Id="
+                + str(test_dict["Id"])
+                + "_Iq="
+                + str(test_dict["Iq"])
+                + ".png",
+            )
+        )
+        plt.close("all")

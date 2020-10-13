@@ -89,6 +89,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
         symbol="Magnitude",
         axes=[Time, Angle],
         values=mmf_u,
+        symmetries={"angle": {"period": per_a}},
     )
 
     if is_out:  # Store the result if the Output is available

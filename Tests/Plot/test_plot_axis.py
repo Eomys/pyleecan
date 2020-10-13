@@ -120,53 +120,6 @@ def test_axis_LamHoleMag(CURVE_COLORS):
     plt.close("all")
 
 
-def test_axis_IPMSM_A_wind(CURVE_COLORS):
-    """Axis convention for LamHole with magnet"""
-    IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    IPMSM_A.stator.plot()
-    R1 = IPMSM_A.stator.Rext * 1.1
-    R2 = IPMSM_A.stator.Rext * 1.2
-    R3 = IPMSM_A.stator.Rext * 1.4
-    axes = plt.gca()
-
-    # X axis
-    Zx = R1
-    plt.arrow(0, 0, Zx.real, Zx.imag, color=CURVE_COLORS[0])
-    Zlx = R2
-    axes.text(Zlx.real, Zlx.imag, "X axis")
-
-    # Y axis
-    Zy = R1 * exp(1j * pi / 2)
-    plt.arrow(0, 0, Zy.real, Zy.imag, color=CURVE_COLORS[0])
-    Zly = R2 * exp(1j * pi / 2)
-    axes.text(Zly.real, Zly.imag, "Y axis")
-
-    # D axis
-    D_axis = IPMSM_A.stator.comp_angle_d_axis()
-    Zd = R1 * exp(1j * D_axis)
-    plt.arrow(0, 0, Zd.real, Zd.imag, color=CURVE_COLORS[1])
-    Zld = R2 * exp(1j * D_axis)
-    axes.text(Zld.real, Zld.imag, "D axis")
-
-    # Q axis
-    Q_axis = IPMSM_A.stator.comp_angle_q_axis()
-    Zq = R1 * exp(1j * Q_axis)
-    plt.arrow(0, 0, Zq.real, Zq.imag, color=CURVE_COLORS[1])
-    Zlq = R2 * exp(1j * Q_axis)
-    axes.text(Zlq.real, Zlq.imag, "Q axis")
-
-    axes.get_legend().remove()
-    axes.set_xlim(-0.1, R3)
-    axes.set_ylim(-0.1, R3)
-
-    # Save and check
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_axis_IPMSM_A_wind.png"))
-    assert D_axis == pi / 8
-    assert Q_axis == pi / 4
-    plt.close("all")
-
-
 def test_axis_LamHole(CURVE_COLORS):
     """Axis convention for LamHole"""
     SynRM_001 = load(join(DATA_DIR, "Machine", "SynRM_001.json"))

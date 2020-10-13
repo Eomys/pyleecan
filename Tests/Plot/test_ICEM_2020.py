@@ -56,27 +56,21 @@ def test_FEMM_sym():
     N0 = 1500
     Is = ImportMatrixVal(value=array([[20, -10, -10]]))
     Ir = ImportMatrixVal(value=zeros((1, 28)))
-    time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=False)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=4096, endpoint=False)
+    Nt_tot = 1
+    Na_tot = 4096
     simu.input = InputCurrent(
         Is=Is,
         Ir=Ir,  # zero current for the rotor
         N0=N0,
         angle_rotor=None,  # Will be computed
-        time=time,
-        angle=angle,
+        Nt_tot=Nt_tot,
+        Na_tot=Na_tot,
         angle_rotor_initial=0.2244,
     )
 
     # Definition of the magnetic simulation
     # 2 sym + antiperiodicity = 1/4 Lamination
-    simu.mag = MagFEMM(
-        type_BH_stator=2,
-        type_BH_rotor=2,
-        is_symmetry_a=True,
-        sym_a=2,
-        is_antiper_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True)
     # Stop after magnetic computation
     simu.force = None
     simu.struct = None
@@ -466,11 +460,10 @@ def test_ecc_FEMM():
         type_BH_stator=0,
         type_BH_rotor=0,
         is_sliding_band=False,  # Ecc => No sliding band
-        is_symmetry_a=False,  # No sym
+        is_periodicity_a=False,
         is_mmfs=False,
         is_get_mesh=True,
         is_save_FEA=True,
-        sym_a=1,
     )
     simu.force = None
     simu.struct = None
@@ -529,8 +522,8 @@ def test_Optimization_problem():
     SPMSM_001 = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
 
     # Definition of the enforced output of the electrical module
-    Na = 1024  # Angular steps
-    Nt = 32  # Time step
+    Na_tot = 1024  # Angular steps
+    Nt_tot = 32  # Time step
     Is = ImportMatrixVal(
         value=np.array(
             [
@@ -571,8 +564,6 @@ def test_Optimization_problem():
     )
     N0 = 400
     Ir = ImportMatrixVal(value=np.zeros((Nt, 28)))
-    time = ImportGenVectLin(start=0, stop=1 / (400 / 60) / 24, num=Nt, endpoint=False)
-    angle = ImportGenVectLin(start=0, stop=2 * np.pi, num=Na, endpoint=False)
 
     SPMSM_001.name = (
         "Default SPMSM machine"  # Rename the machine to have the good plot title
@@ -586,17 +577,14 @@ def test_Optimization_problem():
         Ir=Ir,  # zero current for the rotor
         N0=N0,
         angle_rotor=None,  # Will be computed
-        time=time,
-        angle=angle,
+        Nt_tot=Nt_tot,
+        Na_tot=Na_tot,
         angle_rotor_initial=0.39,
     )
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(
-        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=True, is_antiper_a=False
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
 
-    simu.mag.sym_a = 4
     simu.struct = None
 
     # Default Output
