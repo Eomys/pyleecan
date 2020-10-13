@@ -4,3 +4,5 @@ prune Tutorials
 graft pyleecan
 prune pyleecan/Results
 global-exclude *.py[cod]
+global-exclude *.ui
+global-exclude *.csv
