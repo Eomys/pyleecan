@@ -83,7 +83,7 @@ def test_OP():
     curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
     plot_A_2D(
-        [x * 180 / pi for x in Xout.xoutput_dict["Phi0"].result],
+        [[x * 180 / pi for x in Xout.xoutput_dict["Phi0"].result]],
         [Xout.xoutput_dict["Tem_av"].result, Xout.xoutput_dict["Tem_av_ref"].result],
         color_list=curve_colors,
         legend_list=["Pyleecan", "Yang et al, 2013"],
