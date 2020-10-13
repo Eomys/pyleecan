@@ -92,11 +92,11 @@ def plot_A_2D(
 
     # Number of curves on a axe
     ndatas = len(Ydatas)
-    
+
     # Retrocompatibility
     if isinstance(Xdatas, ndarray):
         Xdatas = [Xdatas]
-        
+
     if len(Xdatas) == 1:
         i_Xdatas = [0 for i in range(ndatas)]
     else:
