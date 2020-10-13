@@ -2,7 +2,8 @@
 
 
 def get_rot_dir(self):
-    """Return the rotation direction
+    """Return the rotation direction of the magnetic field fundamental
+    WARNING: rot_dir = -1 to have positive rotor rotating direction, i.e. rotor position moves towards positive angle
 
     Parameters
     ----------
@@ -12,7 +13,7 @@ def get_rot_dir(self):
     Returns
     -------
     rot_dir: int
-        Rotation direction
+        Rotation direction of magnetic field fundamental
 
     """
 
