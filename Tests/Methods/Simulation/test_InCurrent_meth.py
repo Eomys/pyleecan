@@ -236,8 +236,11 @@ class Test_InCurrent_meth(object):
 
         # Compute expected rotor position
         angle_rotor_initial = IPMSM_A.comp_angle_offset_initial()
+        # rot_dir is the rotation direction of the fundamental magnetic field
+        # Then rotor position is -1 * rot_dir
         angle_rotor_exp = (
-            linspace(0, rot_dir * 2 * pi, Nt_tot, endpoint=False) + angle_rotor_initial
+            linspace(0, -1 * rot_dir * 2 * pi, Nt_tot, endpoint=False)
+            + angle_rotor_initial
         )
 
         test_obj.input = InputCurrent(
