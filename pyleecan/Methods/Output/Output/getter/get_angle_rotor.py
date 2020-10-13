@@ -28,7 +28,9 @@ def get_angle_rotor(self):
         Nr = self.elec.get_Nr()
 
         # Get rotor rotating direction
-        rot_dir = -self.get_rot_dir() # rotor rotating is the opposite of rot_dir which is fundamental field rotation direction so that rotor moves in positive angles
+        rot_dir = (
+            -self.get_rot_dir()
+        )  # rotor rotating is the opposite of rot_dir which is fundamental field rotation direction so that rotor moves in positive angles
 
         # Compute rotor initial angle (for synchronous machines, to align rotor d-axis and stator alpha-axis)
         A0 = self.get_angle_offset_initial()

@@ -26,10 +26,7 @@ def test_OP():
     simu = Simu1(name="tuto_Id_Iq", machine=IPMSM_A)
 
     # Definition of the magnetic simulation (FEMM with symmetry and sliding band)
-    simu.mag = MagFEMM(
-        is_periodicity_a=True,
-        Kgeo_fineness=1,
-    )
+    simu.mag = MagFEMM(is_periodicity_a=True, Kgeo_fineness=1,)
     # Run only Magnetic module
     simu.elec = None
     simu.force = None
@@ -45,7 +42,7 @@ def test_OP():
     simu.input.N0 = 2000  # Rotor speed [rpm]
 
     varload = VarLoadCurrent(is_torque=True)
-    varload.type_OP_matrix = 0  # Matrix N0, I0, Phi0
+    varload.type_OP_matrix = 0  # Matrix N0, I0, Phi0, Tem_ref
 
     N_simu = 13
     # creating the Operating point matrix
@@ -83,13 +80,13 @@ def test_OP():
     curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
     plot_A_2D(
-            array([x * 180 / pi for x in Xout.xoutput_dict["Phi0"].result]),
-            [Xout.xoutput_dict["Tem_av"].result, Xout.xoutput_dict["Tem_av_ref"].result],
-            color_list=curve_colors,
-            legend_list=["Pyleecan", "Yang et al, 2013"],
-            xlabel="Current angle [°]",
-            ylabel="Electrical torque [N.m]",
-            title="Electrical torque vs current angle",
+        array([x * 180 / pi for x in Xout.xoutput_dict["Phi0"].result]),
+        [Xout.xoutput_dict["Tem_av"].result, Xout.xoutput_dict["Tem_av_ref"].result],
+        color_list=curve_colors,
+        legend_list=["Pyleecan", "Yang et al, 2013"],
+        xlabel="Current angle [°]",
+        ylabel="Electrical torque [N.m]",
+        title="Electrical torque vs current angle",
     )
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_IPMSM_torque_validation.png"))

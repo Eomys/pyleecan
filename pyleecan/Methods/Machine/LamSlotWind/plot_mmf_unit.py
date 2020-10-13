@@ -35,7 +35,12 @@ def plot_mmf_unit(self, fig=None):
     )
     Angle = mmf_u.axes[1]
     WF = DataTime(
-        name="WF", unit="p.u.", symbol="Magnitude", axes=[Phase, Angle], values=wf, symmetries=mmf_u.symmetries
+        name="WF",
+        unit="p.u.",
+        symbol="Magnitude",
+        axes=[Phase, Angle],
+        values=wf,
+        symmetries=mmf_u.symmetries,
     )
 
     color_list = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][: qs + 1]

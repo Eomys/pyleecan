@@ -6384,7 +6384,7 @@
                 "value": null
             },
             {
-                "desc": "Rotation direction",
+                "desc": "rotation direction of the magnetic field fundamental !! WARNING: rot_dir = -1 to have positive rotor rotating direction, i.e. rotor position moves towards positive angle",
                 "max": "1",
                 "min": "-1",
                 "name": "rot_dir",

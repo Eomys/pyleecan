@@ -15,7 +15,7 @@ def get_Is(self):
 
         # Get rotation direction of the fundamental magnetic field created by the winding
         rot_dir = self.parent.get_rot_dir()
-        
+
         # Get stator current function of time
         Is = dq2n(Isdq, 2 * pi * felec * time, n=qs, rot_dir=rot_dir, is_n_rms=False)
 

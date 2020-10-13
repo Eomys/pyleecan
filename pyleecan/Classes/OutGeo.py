@@ -399,7 +399,7 @@ class OutGeo(FrozenClass):
     rot_dir = property(
         fget=_get_rot_dir,
         fset=_set_rot_dir,
-        doc=u"""Rotation direction
+        doc=u"""rotation direction of the magnetic field fundamental !! WARNING: rot_dir = -1 to have positive rotor rotating direction, i.e. rotor position moves towards positive angle
 
         :Type: int
         :min: -1

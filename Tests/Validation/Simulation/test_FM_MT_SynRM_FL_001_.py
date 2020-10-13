@@ -60,14 +60,11 @@ def test_Magnetic_AGSF():
         time=time_obj,
         Na_tot=Na_tot,
         angle_rotor_initial=0,
+        felec=freq0,
     )
 
     # Definition of the magnetic simulation (1/2 symmetry)
-    simu.mag = MagFEMM(
-        type_BH_stator=0,
-        type_BH_rotor=0,
-        is_periodicity_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=0, type_BH_rotor=0, is_periodicity_a=True,)
 
     # Definition of the magnetic simulation (no symmetry)
     simu.force = ForceMT()
