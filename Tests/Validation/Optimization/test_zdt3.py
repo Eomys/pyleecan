@@ -103,12 +103,12 @@ def test_zdt3():
         DataKeeper(
             symbol="obj1",
             name="Maximization of the torque average",
-            keeper=lambda output: output.mag.Tem_av,
+            keeper="lambda output: output.mag.Tem_av",
         ),
         DataKeeper(
             symbol="obj2",
             name="Minimization of the torque ripple",
-            keeper=lambda output: output.mag.Tem_rip_norm,
+            keeper="lambda output: output.mag.Tem_rip_norm",
         ),
     ]
 

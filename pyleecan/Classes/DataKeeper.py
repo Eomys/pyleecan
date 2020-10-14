@@ -226,6 +226,10 @@ class DataKeeper(FrozenClass):
             self._keeper_func = None
         elif isinstance(value, str) and "lambda" in value:
             self._keeper_str = value
+            if " np." in value:
+                import numpy as np
+            if " random." in value:
+                import random
             self._keeper_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._keeper_str = value
@@ -261,6 +265,10 @@ class DataKeeper(FrozenClass):
             self._error_keeper_func = None
         elif isinstance(value, str) and "lambda" in value:
             self._error_keeper_str = value
+            if " np." in value:
+                import numpy as np
+            if " random." in value:
+                import random
             self._error_keeper_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._error_keeper_str = value
