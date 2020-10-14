@@ -36,7 +36,6 @@ class ExamplePostMethod(PostMethod):
         return copy(self)
 
 
-@pytest.mark.only
 def test_post_var_simu():
     """Test the simulation.var_simu.post_list"""
 
