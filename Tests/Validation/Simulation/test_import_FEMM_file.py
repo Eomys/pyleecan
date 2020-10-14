@@ -45,7 +45,6 @@ def test_import_FEMM_file():
     )
     simu.input.Ir = None  # SPMSM machine => no rotor currents to define
     simu.input.N0 = 3000  # Rotor speed [rpm]
-    simu.input.angle_rotor_initial = 0.5216 + pi  # Rotor position at t=0 [rad]
 
     # Definition of the magnetic simulation
     simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
