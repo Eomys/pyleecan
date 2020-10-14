@@ -335,12 +335,16 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["Kgeo_fineness"] = self.Kgeo_fineness
         MagFEMM_dict["type_calc_leakage"] = self.type_calc_leakage
         MagFEMM_dict["file_name"] = self.file_name
-        MagFEMM_dict["FEMM_dict"] = self.FEMM_dict
+        MagFEMM_dict["FEMM_dict"] = (
+            self.FEMM_dict.copy() if self.FEMM_dict is not None else None
+        )
         MagFEMM_dict["angle_stator"] = self.angle_stator
         MagFEMM_dict["is_get_mesh"] = self.is_get_mesh
         MagFEMM_dict["is_save_FEA"] = self.is_save_FEA
         MagFEMM_dict["is_sliding_band"] = self.is_sliding_band
-        MagFEMM_dict["transform_list"] = self.transform_list
+        MagFEMM_dict["transform_list"] = (
+            self.transform_list.copy() if self.transform_list is not None else None
+        )
         if self.rotor_dxf is None:
             MagFEMM_dict["rotor_dxf"] = None
         else:

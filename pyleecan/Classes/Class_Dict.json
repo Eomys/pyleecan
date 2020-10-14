@@ -1188,30 +1188,12 @@
                 "value": 1
             },
             {
-                "desc": "0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a",
+                "desc": "True to take into account the spatial periodicity of the machine",
                 "max": "",
                 "min": "",
-                "name": "is_symmetry_a",
+                "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Number of symmetry for the angle vector",
-                "max": "",
-                "min": "1",
-                "name": "sym_a",
-                "type": "int",
-                "unit": "-",
-                "value": 1
-            },
-            {
-                "desc": "To add an antiperiodicity to the angle vector",
-                "max": "",
-                "min": "",
-                "name": "is_antiper_a",
-                "type": "bool",
-                "unit": "-",
                 "value": 0
             },
             {
@@ -2943,30 +2925,12 @@
                 "value": 1
             },
             {
-                "desc": "0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a",
+                "desc": "True to take into account the spatial periodicity of the machine",
                 "max": "",
                 "min": "",
-                "name": "is_symmetry_a",
+                "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Number of symmetry for the angle vector",
-                "max": "",
-                "min": "1",
-                "name": "sym_a",
-                "type": "int",
-                "unit": "-",
-                "value": 1
-            },
-            {
-                "desc": "To add an antiperiodicity to the angle vector",
-                "max": "",
-                "min": "",
-                "name": "is_antiper_a",
-                "type": "bool",
-                "unit": "-",
                 "value": 0
             },
             {
@@ -3144,7 +3108,7 @@
                 "value": null
             },
             {
-                "desc": "d-axis current magnitude",
+                "desc": "d-axis current RMS magnitude",
                 "max": "",
                 "min": "",
                 "name": "Id_ref",
@@ -3153,7 +3117,7 @@
                 "value": null
             },
             {
-                "desc": "q-axis current magnitude",
+                "desc": "q-axis current RMS magnitude",
                 "max": "",
                 "min": "",
                 "name": "Iq_ref",

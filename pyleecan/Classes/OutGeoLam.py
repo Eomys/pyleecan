@@ -157,7 +157,9 @@ class OutGeoLam(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutGeoLam_dict = dict()
-        OutGeoLam_dict["name_phase"] = self.name_phase
+        OutGeoLam_dict["name_phase"] = (
+            self.name_phase.copy() if self.name_phase is not None else None
+        )
         if self.BH_curve is None:
             OutGeoLam_dict["BH_curve"] = None
         else:

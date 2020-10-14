@@ -5,7 +5,7 @@ import sys
 from os.path import dirname, abspath, normpath, join, realpath
 from os import listdir, remove, system
 import json
-
+from numpy import sqrt
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
 from pyleecan.Classes.PostFunction import PostFunction
@@ -36,7 +36,6 @@ class ExamplePostMethod(PostMethod):
         return copy(self)
 
 
-@pytest.mark.only
 def test_post_var_simu():
     """Test the simulation.var_simu.post_list"""
 
@@ -63,7 +62,7 @@ def test_post_var_simu():
         name="Stator slot width",
         unit="m",
         symbol="D_S_s_w",
-        keeper="lambda output: output.simu.machine.stator.slot.W0",
+        keeper="lambda output: np.sqrt(output.simu.machine.stator.slot.W0)",
     )
 
     simu1.var_simu = VarParam(
@@ -96,7 +95,7 @@ def test_post_var_simu():
     # Second simulation with postprocessing
     out2 = simu2.run()
     # Check ref simu
-    assert out1["D_S_s_w"].result == [1, 2, 3]
+    assert out1["D_S_s_w"].result == [1, sqrt(2), sqrt(3)]
     # Check post 2 + 4
     assert [output.simu.machine.stator.slot.W0 for output in out2] == [13, 14, 15]
     # Check post 1

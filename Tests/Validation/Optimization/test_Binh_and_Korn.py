@@ -84,7 +84,7 @@ def test_Binh_and_Korn():
             symbol="RH0",
             type_var="interval",
             space=[0, 5],  # May generate error in FEMM
-            get_value=lambda space: random.uniform(*space),
+            get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.rotor.slot.H0",
         ),
         OptiDesignVar(
@@ -92,7 +92,7 @@ def test_Binh_and_Korn():
             symbol="SH0",
             type_var="interval",
             space=[0, 3],  # May generate error in FEMM
-            get_value=lambda space: random.uniform(*space),
+            get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.stator.slot.H0",
         ),
     ]
@@ -101,15 +101,13 @@ def test_Binh_and_Korn():
     cstrs = [
         OptiConstraint(
             name="first",
-            get_variable=lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2
-            + output.simu.machine.stator.slot.H0 ** 2,
+            get_variable="lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2 + output.simu.machine.stator.slot.H0 ** 2",
             type_const="<=",
             value=25,
         ),
         OptiConstraint(
             name="second",
-            get_variable=lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2
-            + (output.simu.machine.stator.slot.H0 + 3) ** 2,
+            get_variable="lambda output: (output.simu.machine.rotor.slot.H0 - 5) ** 2 + (output.simu.machine.stator.slot.H0 + 3) ** 2",
             type_const=">=",
             value=7.7,
         ),
@@ -121,13 +119,13 @@ def test_Binh_and_Korn():
             name="Maximization of the torque average",
             symbol="obj1",
             unit="N.m",
-            keeper=lambda output: output.mag.Tem_av,
+            keeper="lambda output: output.mag.Tem_av",
         ),
         DataKeeper(
             name="Minimization of the torque ripple",
             symbol="obj2",
             unit="N.m",
-            keeper=lambda output: output.mag.Tem_rip_norm,
+            keeper="lambda output: output.mag.Tem_rip_norm",
         ),
     ]
 
@@ -167,5 +165,9 @@ def test_Binh_and_Korn():
     except (TypeError, ValueError):
         print("Pillow is needed to import jpg files")
 
-    res.plot_pareto("obj1", "obj2", axs[0])
+    res.plot_pareto(x_symbol="obj1", y_symbol="obj2", ax=axs[0])
     fig.savefig(join(save_path, "test_Binh_and_Korn.png"))
+
+
+if __name__ == "__main__":
+    test_Binh_and_Korn()

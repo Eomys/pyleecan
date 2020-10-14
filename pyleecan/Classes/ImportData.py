@@ -163,8 +163,12 @@ class ImportData(FrozenClass):
         ImportData_dict["unit"] = self.unit
         ImportData_dict["name"] = self.name
         ImportData_dict["symbol"] = self.symbol
-        ImportData_dict["normalizations"] = self.normalizations
-        ImportData_dict["symmetries"] = self.symmetries
+        ImportData_dict["normalizations"] = (
+            self.normalizations.copy() if self.normalizations is not None else None
+        )
+        ImportData_dict["symmetries"] = (
+            self.symmetries.copy() if self.symmetries is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         ImportData_dict["__class__"] = "ImportData"
         return ImportData_dict

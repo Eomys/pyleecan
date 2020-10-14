@@ -17,6 +17,8 @@ from ._frozen import FrozenClass
 from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
+import numpy as np
+import random
 from ._check import InitUnKnowClassError
 
 
@@ -146,7 +148,9 @@ class DataKeeper(FrozenClass):
             DataKeeper_dict["error_keeper"] = self._error_keeper_str
         else:
             DataKeeper_dict["error_keeper"] = None
-        DataKeeper_dict["result"] = self.result
+        DataKeeper_dict["result"] = (
+            self.result.copy() if self.result is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         DataKeeper_dict["__class__"] = "DataKeeper"
         return DataKeeper_dict

@@ -2,7 +2,7 @@ from numpy import ones, pi, array, linspace
 from os.path import join
 import matplotlib.pyplot as plt
 from Tests import save_validation_path as save_path
-
+from numpy.testing import assert_array_almost_equal
 from pyleecan.Classes.Simu1 import Simu1
 
 from pyleecan.Classes.InputCurrent import InputCurrent
@@ -45,14 +45,9 @@ def test_import_FEMM_file():
     )
     simu.input.Ir = None  # SPMSM machine => no rotor currents to define
     simu.input.N0 = 3000  # Rotor speed [rpm]
-    simu.input.angle_rotor_initial = 0.5216 + pi  # Rotor position at t=0 [rad]
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(
-        type_BH_stator=2,
-        type_BH_rotor=2,
-        is_periodicity_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
     out = simu.run()
 
     # Second simulation, importing femm file and FEMM_dict
@@ -82,13 +77,14 @@ def test_import_FEMM_file():
     fig = plt.gcf()
     fig.savefig(join(save_path, "test_import_FEMM_file.png"))
 
-    assert (
-        out.mag.B.components["tangential"].values
-        - out2.mag.B.components["tangential"].values
-        < 1e-8
-    ).all()
-    assert (
-        out.mag.B.components["radial"].values - out2.mag.B.components["radial"].values
-        < 1e-8
-    ).all()
-    assert (out.mag.Tem.values - out2.mag.Tem.values < 1e-8).all()
+    assert_array_almost_equal(
+        out.mag.B.components["tangential"].values,
+        out2.mag.B.components["tangential"].values,
+        decimal=3,
+    )
+    assert_array_almost_equal(
+        out.mag.B.components["radial"].values,
+        out2.mag.B.components["radial"].values,
+        decimal=3,
+    )
+    assert_array_almost_equal(out.mag.Tem.values, out2.mag.Tem.values, decimal=3)
