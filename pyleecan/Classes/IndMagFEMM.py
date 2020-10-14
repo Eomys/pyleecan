@@ -171,7 +171,9 @@ class IndMagFEMM(IndMag):
 
         # Get the properties inherited from IndMag
         IndMagFEMM_dict = super(IndMagFEMM, self).as_dict()
-        IndMagFEMM_dict["FEMM_dict"] = self.FEMM_dict
+        IndMagFEMM_dict["FEMM_dict"] = (
+            self.FEMM_dict.copy() if self.FEMM_dict is not None else None
+        )
         IndMagFEMM_dict["type_calc_leakage"] = self.type_calc_leakage
         IndMagFEMM_dict["is_sliding_band"] = self.is_sliding_band
         IndMagFEMM_dict["is_symmetry_a"] = self.is_symmetry_a

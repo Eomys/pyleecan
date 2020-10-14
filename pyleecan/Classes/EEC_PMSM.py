@@ -201,7 +201,9 @@ class EEC_PMSM(EEC):
             EEC_PMSM_dict["fluxlink"] = None
         else:
             EEC_PMSM_dict["fluxlink"] = self.fluxlink.as_dict()
-        EEC_PMSM_dict["parameters"] = self.parameters
+        EEC_PMSM_dict["parameters"] = (
+            self.parameters.copy() if self.parameters is not None else None
+        )
         EEC_PMSM_dict["freq0"] = self.freq0
         if self.drive is None:
             EEC_PMSM_dict["drive"] = None
