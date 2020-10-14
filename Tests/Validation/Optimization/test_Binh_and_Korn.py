@@ -167,5 +167,9 @@ def test_Binh_and_Korn():
     except (TypeError, ValueError):
         print("Pillow is needed to import jpg files")
 
-    res.plot_pareto("obj1", "obj2", axs[0])
+    res.plot_pareto(x_symbol="obj1", y_symbol="obj2", ax=axs[0])
     fig.savefig(join(save_path, "test_Binh_and_Korn.png"))
+
+
+if __name__ == "__main__":
+    test_Binh_and_Korn()
