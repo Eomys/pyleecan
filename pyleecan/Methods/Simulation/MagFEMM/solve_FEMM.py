@@ -2,72 +2,42 @@ import numpy as np
 
 from numpy import zeros, pi, roll, mean, max as np_max, min as np_min
 from os.path import basename, splitext
-from SciDataTool import DataLinspace, DataTime, VectorField, Data1D
+from SciDataTool import DataTime, VectorField, Data1D
 from os.path import join
 
 from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from ....Functions.FEMM.comp_FEMM_torque import comp_FEMM_torque
 from ....Functions.FEMM.comp_FEMM_Phi_wind import comp_FEMM_Phi_wind
 from ....Functions.Winding.gen_phase_list import gen_name
-from SciDataTool.Functions import AxisError
 
 
 def solve_FEMM(self, femm, output, sym):
 
-    # Periodicity optimization
-    (
-        per_a,
-        is_antiper_a,
-        per_t,
-        is_antiper_t,
-    ) = self.parent.parent.get_machine_periodicity()
+    # Get time and angular axes
+    Angle_comp, Time_comp = self.get_axes(output)
 
-    # Getting the computation axes (with or without periodicity)
-    if self.is_periodicity_a:
-        try:
-            per_a = per_a * 2 if is_antiper_a else per_a
-            Angle_comp = output.mag.angle.get_axis_periodic(per_a, is_antiper_a)
-        except AxisError:
-            Angle_comp = output.mag.angle
-            self.is_periodicity_a = False
-            Na_tot = Angle_comp.get_length(is_oneperiod=False)
-            self.get_logger().warning(
-                "WARNING: In Magnetic model, Na_tot="
-                + str(Na_tot)
-                + " is not divisible by the machine angular periodicity ("
-                + str(per_a)
-                + "). Angular periodicity removed"
-            )
-    else:
-        Angle_comp = output.mag.angle
+    # Check if the angular axis is anti-periodic
+    _, is_antiper_a = Angle_comp.get_periodicity()
+
+    # Import angular vector from Data object
     angle = Angle_comp.get_values(
         is_oneperiod=self.is_periodicity_a,
         is_antiperiod=is_antiper_a and self.is_periodicity_a,
     )
+
+    # Number of angular steps
     Na_comp = angle.size
 
-    if self.is_periodicity_t:
-        try:
-            per_t = per_t * 2 if is_antiper_t else per_t
-            Time_comp = output.mag.time.get_axis_periodic(per_t, is_antiper_t)
-        except AxisError:
-            # Disable periodicity
-            Time_comp = output.mag.time
-            self.is_periodicity_t = False
-            Nt_tot = Time_comp.get_length(is_oneperiod=False)
-            self.get_logger().warning(
-                "WARNING: In Magnetic model, Nt_tot="
-                + str(Nt_tot)
-                + " is not divisible by the machine time periodicity ("
-                + str(per_t)
-                + "). Time periodicity removed"
-            )
-    else:
-        Time_comp = output.mag.time
+    # Check if the time axis is anti-periodic
+    _, is_antiper_t = Time_comp.get_periodicity()
+
+    # Import time vector from Data object
     time = Time_comp.get_values(
         is_oneperiod=self.is_periodicity_t,
         is_antiperiod=is_antiper_t and self.is_periodicity_t,
     )
+
+    # Number of time steps
     Nt_comp = time.size
 
     # Loading parameters for readibility

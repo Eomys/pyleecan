@@ -16,6 +16,8 @@ def comp_fluxlinkage(self, output):
         an Output object
     """
 
+    self.get_logger().info("INFO: Compute flux linkage with FEMM")
+
     # store orignal currents
     Is = output.elec.Is
     Id_ref = output.elec.Id_ref

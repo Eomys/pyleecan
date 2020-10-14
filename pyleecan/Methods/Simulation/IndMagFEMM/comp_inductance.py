@@ -15,6 +15,8 @@ def comp_inductance(self, output):
         an Output object
     """
 
+    self.get_logger().info("INFO: Compute dq inductances with FEMM")
+
     # compute the fluxlinkage
     fluxdq = comp_flx(self, output)
 

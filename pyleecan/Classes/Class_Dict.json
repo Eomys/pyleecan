@@ -4781,7 +4781,8 @@
         "methods": [
             "run",
             "comp_time_angle",
-            "comp_emf"
+            "comp_emf",
+            "get_axes"
         ],
         "mother": "",
         "name": "Magnetics",
