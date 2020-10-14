@@ -31,6 +31,11 @@ try:
 except ImportError as error:
     comp_emf = error
 
+try:
+    from ..Methods.Simulation.Magnetics.get_axes import get_axes
+except ImportError as error:
+    get_axes = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -71,6 +76,15 @@ class Magnetics(FrozenClass):
         )
     else:
         comp_emf = comp_emf
+    # cf Methods.Simulation.Magnetics.get_axes
+    if isinstance(get_axes, ImportError):
+        get_axes = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Magnetics method get_axes: " + str(get_axes))
+            )
+        )
+    else:
+        get_axes = get_axes
     # save and copy methods are available in all object
     save = save
     copy = copy

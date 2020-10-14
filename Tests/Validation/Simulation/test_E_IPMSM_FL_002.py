@@ -11,6 +11,7 @@ from pyleecan.Classes.Electrical import Electrical
 from pyleecan.Classes.EEC_PMSM import EEC_PMSM
 from pyleecan.Classes.FluxLinkFEMM import FluxLinkFEMM
 from pyleecan.Classes.IndMagFEMM import IndMagFEMM
+from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.Output import Output
 import pytest
 from pyleecan.Functions.load import load
@@ -32,6 +33,9 @@ def test_E_IPMSM_FL_002():
     simu.input = InputElec(N0=2000, Nt_tot=10, Na_tot=2048)
     simu.input.set_Id_Iq(I0=250 / sqrt(2), Phi0=60 * pi / 180)
 
+    # Define second simu for FEMM comparison
+    simu2 = simu.copy()
+
     # Definition of the electrical simulation (FEMM)
     simu.elec = Electrical()
     simu.elec.eec = EEC_PMSM(
@@ -48,10 +52,29 @@ def test_E_IPMSM_FL_002():
     out = Output(simu=simu)
     simu.run()
 
+    # Definition of the magnetic simulation (FEMM)
+    simu2.mag = MagFEMM(
+        type_BH_stator=0,
+        type_BH_rotor=0,
+        is_periodicity_a=True,
+    )
+
+    out2 = Output(simu=simu2)
+    simu2.run()
+
     out.plot_A_time(
         "elec.Is",
         index_list=[0, 1, 2],
         save_path=join(save_path, "test_E_IPMSM_FL_002_currents.png"),
     )
+
     # from Yang et al, 2013
-    assert_almost_equal(out.elec.Tem_av_ref, 79, decimal=1)
+    assert_almost_equal(out.elec.Tem_av_ref, 64.82, decimal=1)
+    assert_almost_equal(out2.mag.Tem_av, 64.52, decimal=1)
+
+    return out, out2
+
+
+# To run it without pytest
+if __name__ == "__main__":
+    out, out2 = test_E_IPMSM_FL_002()

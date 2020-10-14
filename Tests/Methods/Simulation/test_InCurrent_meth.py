@@ -258,7 +258,8 @@ class Test_InCurrent_meth(object):
         # Generate Is according to Id/Iq
         test_obj.input.gen_input()
         assert_array_almost_equal(
-            output.elec.time.get_values(is_oneperiod=False), time_exp,
+            output.elec.time.get_values(is_oneperiod=False),
+            time_exp,
         )
         assert_array_almost_equal(
             output.elec.angle.get_values(is_oneperiod=False),
