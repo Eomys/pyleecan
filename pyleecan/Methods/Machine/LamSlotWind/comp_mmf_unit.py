@@ -62,7 +62,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
         time = linspace(0, 1 / freq, Nt, endpoint=False)
 
     # Compute the winding function and mmf
-    wf = self.comp_wind_function(angle=angle)
+    wf = self.comp_wind_function(angle=angle, per_a=per_a)
 
     # Compute unit current function of time applying constant Id=1 Arms, Iq=0
     Idq = zeros((Nt, 2))

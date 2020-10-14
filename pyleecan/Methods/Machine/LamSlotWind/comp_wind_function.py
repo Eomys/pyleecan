@@ -4,7 +4,7 @@ from numpy import linspace, meshgrid, pi, repeat, sum as np_sum, zeros, mean
 from ....Functions.Winding.comp_cond_function import comp_cond_function
 
 
-def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0):
+def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0, per_a=1):
     """Computation of the winding function for the lamination.
     By convention a tooth is centered on the X axis
 
@@ -18,15 +18,14 @@ def comp_wind_function(self, angle=None, Na=2048, alpha_mmf0=0):
         Number of angular points for the winding function (not used if angle is set)
     alpha_mmf0 : float
         Angle to shift the winding function (Default value = 0)
+    per_a : int
+        Spatial periodicity factor
 
     Returns
     -------
     wf: ndarray
         Winding function Matrix (qs,Na)
     """
-
-    # Set the symmetry factor
-    per_a, _, _, _ = self.comp_periodicity()
 
     # Space discretization
     if angle is None:
