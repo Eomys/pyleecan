@@ -8,7 +8,10 @@ def gen_datakeeper_list(self):
     # Save speed
     datakeeper_list.append(
         DataKeeper(
-            name="Speed", symbol="N0", unit="rpm", keeper=lambda output: output.elec.N0
+            name="Speed",
+            symbol="N0",
+            unit="rpm",
+            keeper="lambda output: output.elec.N0",
         )
     )
 

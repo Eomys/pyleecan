@@ -195,6 +195,10 @@ class OptiDesignVar(ParamExplorer):
             self._get_value_func = None
         elif isinstance(value, str) and "lambda" in value:
             self._get_value_str = value
+            if " np." in value:
+                import numpy as np
+            if " random." in value:
+                import random
             self._get_value_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._get_value_str = value

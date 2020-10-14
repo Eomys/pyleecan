@@ -115,6 +115,10 @@ class PostFunction(Post):
             self._run_func = None
         elif isinstance(value, str) and "lambda" in value:
             self._run_str = value
+            if " np." in value:
+                import numpy as np
+            if " random." in value:
+                import random
             self._run_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._run_str = value

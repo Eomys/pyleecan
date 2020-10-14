@@ -185,7 +185,9 @@ class EEC_SCIM(EEC):
             EEC_SCIM_dict["indmag"] = None
         else:
             EEC_SCIM_dict["indmag"] = self.indmag.as_dict()
-        EEC_SCIM_dict["parameters"] = self.parameters
+        EEC_SCIM_dict["parameters"] = (
+            self.parameters.copy() if self.parameters is not None else None
+        )
         EEC_SCIM_dict["freq0"] = self.freq0
         if self.drive is None:
             EEC_SCIM_dict["drive"] = None

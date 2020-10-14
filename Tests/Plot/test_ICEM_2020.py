@@ -611,13 +611,11 @@ def test_Optimization_problem():
     # -------------------- #
 
     # Objective functions
-    def tem_av(output):
-        """Return the average torque opposite (opposite to be maximized)"""
-        return -abs(output.mag.Tem_av)
+    """Return the average torque opposite (opposite to be maximized)"""
+    tem_av = "lambda output: -abs(output.mag.Tem_av)"
 
-    def Tem_rip_pp(output):
-        """Return the torque ripple """
-        return abs(output.mag.Tem_rip_pp)
+    """Return the torque ripple """
+    Tem_rip_pp = "lambda output: abs(output.mag.Tem_rip_pp)"
 
     my_objs = [
         DataKeeper(
@@ -645,7 +643,7 @@ def test_Optimization_problem():
                 0.2 * output.simu.machine.stator.slot.W2,
                 output.simu.machine.stator.slot.W2,
             ],
-            get_value=lambda space: random.uniform(*space),
+            get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.stator.slot.W0",
         ),
         OptiDesignVar(
@@ -657,7 +655,7 @@ def test_Optimization_problem():
                 0.5 * output.simu.machine.rotor.slot.W0,
                 0.99 * output.simu.machine.rotor.slot.W0,
             ],  # May generate error in FEMM
-            get_value=lambda space: random.uniform(*space),
+            get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.rotor.slot.magnet[0].Wmag",
         ),
     ]

@@ -1,5 +1,4 @@
 from ....Classes.DataKeeper import DataKeeper
-from math import nan
 
 
 def get_mag_datakeeper(self):
@@ -15,13 +14,13 @@ def get_mag_datakeeper(self):
     dk_list: list
         list of DataKeeper
     """
-    error_nan = lambda simu: nan
+    error_nan = "lambda simu: float(nan)"
     # Average torque Datakeeper
     T_d = DataKeeper(
         name="Average Torque",
         symbol="Tem_av",
         unit="N.m",
-        keeper=lambda out: out.mag.Tem_av,
+        keeper="lambda out: out.mag.Tem_av",
         error_keeper=error_nan,
     )
     # Peak to Peak Torque ripple
@@ -29,7 +28,7 @@ def get_mag_datakeeper(self):
         name="Peak to Peak Torque ripple",
         symbol="Tem_rip_pp",
         unit="N.m",
-        keeper=lambda out: out.mag.Tem_rip_pp,
+        keeper="lambda out: out.mag.Tem_rip_pp",
         error_keeper=error_nan,
     )
     # Peak to Peak Torque ripple normalized
@@ -37,7 +36,7 @@ def get_mag_datakeeper(self):
         name="Peak to Peak Torque ripple normalized",
         symbol="Tem_rip_norm",
         unit="N.m",
-        keeper=lambda out: out.mag.Tem_rip_norm,
+        keeper="lambda out: out.mag.Tem_rip_norm",
         error_keeper=error_nan,
     )
 

@@ -208,7 +208,9 @@ class OutMag(FrozenClass):
             OutMag_dict["meshsolution"] = None
         else:
             OutMag_dict["meshsolution"] = self.meshsolution.as_dict()
-        OutMag_dict["FEMM_dict"] = self.FEMM_dict
+        OutMag_dict["FEMM_dict"] = (
+            self.FEMM_dict.copy() if self.FEMM_dict is not None else None
+        )
         OutMag_dict["logger_name"] = self.logger_name
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"

@@ -58,7 +58,7 @@ def evaluate(solver, indiv):
             # Except error and try to compute the error_keeper
             except Exception as err:
                 logger.warning(
-                    "Objectif computation " + obj_func.name + " failed:" + err
+                    "Objectiv computation " + obj_func.name + " failed:" + err
                 )
                 if obj_func.error_keeper is None:  # Set fitness value as infinity
                     fitness.append(float("inf"))
@@ -71,7 +71,7 @@ def evaluate(solver, indiv):
                     # Set the fitness value as infinity
                     except Exception as err:
                         logger.warning(
-                            "Objectif error computation "
+                            "Objectiv error computation "
                             + obj_func.name
                             + " failed:"
                             + err
