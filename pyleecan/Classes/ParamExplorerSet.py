@@ -128,7 +128,9 @@ class ParamExplorerSet(ParamExplorer):
 
         # Get the properties inherited from ParamExplorer
         ParamExplorerSet_dict = super(ParamExplorerSet, self).as_dict()
-        ParamExplorerSet_dict["value"] = self.value
+        ParamExplorerSet_dict["value"] = (
+            self.value.copy() if self.value is not None else None
+        )
         # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ParamExplorerSet_dict["__class__"] = "ParamExplorerSet"

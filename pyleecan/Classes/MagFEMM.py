@@ -342,7 +342,9 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["is_get_mesh"] = self.is_get_mesh
         MagFEMM_dict["is_save_FEA"] = self.is_save_FEA
         MagFEMM_dict["is_sliding_band"] = self.is_sliding_band
-        MagFEMM_dict["transform_list"] = self.transform_list
+        MagFEMM_dict["transform_list"] = (
+            self.transform_list.copy() if self.transform_list is not None else None
+        )
         if self.rotor_dxf is None:
             MagFEMM_dict["rotor_dxf"] = None
         else:
