@@ -44,9 +44,9 @@ def comp_fluxlinkage(obj, output):
     # Set rotor angle for the FEMM simulation
     angle_offset_initial = output.get_angle_offset_initial()
     angle_rotor = (
-        linspace(0, 2 * pi / sym, Nt_tot, endpoint=False) + angle_offset_initial
+        linspace(0, -1 * rot_dir * 2 * pi / sym, Nt_tot, endpoint=False)
+        + angle_offset_initial
     )
-    output.elec.angle_rotor = rot_dir * angle_rotor
 
     # modify some quantities
     output.elec.time = Data1D(

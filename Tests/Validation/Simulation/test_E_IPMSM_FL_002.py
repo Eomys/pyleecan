@@ -2,7 +2,7 @@ from os.path import join
 from numpy.testing import assert_almost_equal
 
 from Tests import save_validation_path as save_path
-
+from numpy import sqrt, pi
 from pyleecan.Classes.Simu1 import Simu1
 
 
@@ -21,15 +21,16 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.validation
 @pytest.mark.FEMM
 def test_E_IPMSM_FL_002():
-    """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine"""
+    """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine
+    Compute Torque from EEC results and compare with Yang et al, 2013
+    """
 
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     simu = Simu1(name="E_IPMSM_FL_002", machine=IPMSM_A)
 
     # Definition of the input
-    simu.input = InputElec(
-        N0=2000, Id_ref=-100, Iq_ref=200, Nt_tot=10, Na_tot=2048, rot_dir=1
-    )
+    simu.input = InputElec(N0=2000, Nt_tot=10, Na_tot=2048)
+    simu.input.set_Id_Iq(I0=250 / sqrt(2), Phi0=60 * pi / 180)
 
     # Definition of the electrical simulation (FEMM)
     simu.elec = Electrical()
@@ -47,10 +48,10 @@ def test_E_IPMSM_FL_002():
     out = Output(simu=simu)
     simu.run()
 
-    assert_almost_equal(out.elec.Tem_av_ref, -7, decimal=1)
-
     out.plot_A_time(
         "elec.Is",
         index_list=[0, 1, 2],
         save_path=join(save_path, "test_E_IPMSM_FL_002_currents.png"),
     )
+    # from Yang et al, 2013
+    assert_almost_equal(out.elec.Tem_av_ref, 79, decimal=1)
