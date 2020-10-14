@@ -3089,7 +3089,7 @@
                 "value": null
             },
             {
-                "desc": "d-axis current magnitude",
+                "desc": "d-axis current RMS magnitude",
                 "max": "",
                 "min": "",
                 "name": "Id_ref",
@@ -3098,7 +3098,7 @@
                 "value": null
             },
             {
-                "desc": "q-axis current magnitude",
+                "desc": "q-axis current RMS magnitude",
                 "max": "",
                 "min": "",
                 "name": "Iq_ref",
