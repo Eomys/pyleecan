@@ -89,7 +89,7 @@ def test_Binh_and_Korn():
             symbol="RH0",
             type_var="interval",
             space=[0, 5],  # May generate error in FEMM
-            get_value="lambda space, random=random: random.uniform(*space)",
+            get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.rotor.slot.H0",
         ),
         OptiDesignVar(
@@ -97,7 +97,7 @@ def test_Binh_and_Korn():
             symbol="SH0",
             type_var="interval",
             space=[0, 3],  # May generate error in FEMM
-            get_value="lambda space, random=random: random.uniform(*space)",
+            get_value="lambda space: random.uniform(*space)",
             setter="simu.machine.stator.slot.H0",
         ),
     ]
