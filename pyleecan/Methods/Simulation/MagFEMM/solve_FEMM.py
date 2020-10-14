@@ -26,19 +26,10 @@ def solve_FEMM(self, femm, output, sym):
     )
 
     # Number of angular steps
-    Na_comp = angle.size
-
-    # Check if the time axis is anti-periodic
-    _, is_antiper_t = Time_comp.get_periodicity()
-
-    # Import time vector from Data object
-    time = Time_comp.get_values(
-        is_oneperiod=self.is_periodicity_t,
-        is_antiperiod=is_antiper_t and self.is_periodicity_t,
-    )
+    Na_comp = angle.size   
 
     # Number of time steps
-    Nt_comp = time.size
+    Nt_comp = Time_comp.get_length()    
 
     # Loading parameters for readibility
     L1 = output.simu.machine.stator.comp_length()
