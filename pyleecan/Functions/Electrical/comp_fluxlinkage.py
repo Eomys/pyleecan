@@ -25,17 +25,19 @@ def comp_fluxlinkage(obj, output):
     Nt_tot = obj.Nt_tot
     rot_dir = output.get_rot_dir()
 
-    # Set the symmetry factor if needed
-    if obj.is_symmetry_a:
-        sym = obj.sym_a
-        if obj.is_antiper_a:
-            sym *= 2
-        if obj.is_sliding_band:
-            obj.is_sliding_band = (
-                True  # When there is a symmetry, there must be a sliding band.
-            )
+    # Set the symmetry factor according to the machine
+    if obj.is_periodicity_a:
+        (
+            sym,
+            is_antiper_a,
+            _,
+            _,
+        ) = obj.parent.parent.parent.parent.get_machine_periodicity()
+        if is_antiper_a:
+            sym = sym * 2
     else:
         sym = 1
+        is_antiper_a = False
 
     # store orignal elec and make a copy to do temp. modifications
     elec = output.elec
@@ -68,7 +70,7 @@ def comp_fluxlinkage(obj, output):
         is_mmfr=1,
         is_mmfs=1,
         sym=sym,
-        is_antiper=obj.is_antiper_a,
+        is_antiper=is_antiper_a,
         type_calc_leakage=obj.type_calc_leakage,
         kgeo_fineness=obj.Kgeo_fineness,  # TODO fix inconsistent lower/upper case
     )
