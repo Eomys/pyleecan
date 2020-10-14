@@ -10,6 +10,7 @@ else:
 
 from os import stat, remove
 from datetime import datetime
+from numpy import nan
 
 
 def evaluate(solver, indiv):
@@ -105,9 +106,9 @@ def evaluate(solver, indiv):
                             + ".error_keeper execution failed:"
                             + err
                         )
-                        datakeeper.result.append(float("NaN"))
+                        datakeeper.result.append(nan)
                 else:
-                    datakeeper.result.append(float("NaN"))
+                    datakeeper.result.append(nan)
 
         indiv.is_simu_valid = True
 
@@ -147,9 +148,9 @@ def evaluate(solver, indiv):
                         + ".error_keeper execution failed:"
                         + err
                     )
-                    datakeeper.result.append(float("NaN"))
+                    datakeeper.result.append(nan)
             else:
-                datakeeper.result.append(float("NaN"))
+                datakeeper.result.append(nan)
 
         # Reset standard output and error
         evaluation_failure = True  # Evaluation failed

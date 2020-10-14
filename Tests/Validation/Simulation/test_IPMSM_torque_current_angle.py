@@ -26,10 +26,7 @@ def test_OP():
     simu = Simu1(name="tuto_Id_Iq", machine=IPMSM_A)
 
     # Definition of the magnetic simulation (FEMM with symmetry and sliding band)
-    simu.mag = MagFEMM(
-        is_periodicity_a=True,
-        Kgeo_fineness=1,
-    )
+    simu.mag = MagFEMM(is_periodicity_a=True, Kgeo_fineness=1,)
     # Run only Magnetic module
     simu.elec = None
     simu.force = None
@@ -44,7 +41,7 @@ def test_OP():
     simu.input.Na_tot = 2048  # Spatial discretization
     simu.input.N0 = 2000  # Rotor speed [rpm]
 
-    varload = VarLoadCurrent(is_torque=True)
+    varload = VarLoadCurrent(is_torque=True, ref_simu_index=0)
     varload.type_OP_matrix = 0  # Matrix N0, I0, Phi0, Tem_ref
 
     N_simu = 13
