@@ -13,7 +13,4 @@ def comp_time_angle(self, output):
     """
 
     output.mag.time = output.elec.time
-    output.mag.Nt_tot = len(output.mag.time)
-
     output.mag.angle = output.elec.angle
-    output.mag.Na_tot = len(output.mag.angle)

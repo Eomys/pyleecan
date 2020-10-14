@@ -91,7 +91,7 @@ class InputCurrent(Input):
         Ir=None,
         angle_rotor=None,
         N0=None,
-        rot_dir=-1,
+        rot_dir=None,
         angle_rotor_initial=0,
         Tem_av_ref=None,
         Id_ref=None,

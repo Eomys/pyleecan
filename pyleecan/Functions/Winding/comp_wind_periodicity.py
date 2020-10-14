@@ -4,12 +4,12 @@ from numpy import array_equal, roll, squeeze, sum as np_sum
 from numpy.linalg import norm
 
 
-def comp_wind_sym(wind_mat):
+def comp_wind_periodicity(wind_mat):
     """Computes the winding pattern periodicity and symmetries
 
     Parameters
     ----------
-    wind_mat : numpy.ndarray
+    wind_mat : ndarray
         Matrix of the Winding
 
     Returns
@@ -32,11 +32,11 @@ def comp_wind_sym(wind_mat):
     # Looking for the periodicity of each phase
     for q in range(0, qs):
         k = 1
-        is_sym = False
-        while k <= Zs and not is_sym:
+        is_per = False
+        while k <= Zs and not is_per:
             # We shift the array arround the slot and check if it's the same
             if array_equal(wind_mat2[:, q], roll(wind_mat2[:, q], shift=k)):
-                is_sym = True
+                is_per = True
             else:
                 k += 1
         # least common multiple to find common periodicity between different phase
@@ -58,12 +58,12 @@ def comp_wind_sym(wind_mat):
         )
         == 0
     ):
-        is_asym_wind = True
+        is_aper_wind = True
         Nperw = Nperw * 2
     else:
-        is_asym_wind = False
+        is_aper_wind = False
 
-    return int(Nperw), is_asym_wind
+    return int(Nperw), is_aper_wind
 
 
 def gcd(a, b):

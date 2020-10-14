@@ -10,7 +10,7 @@ from .....Classes.WindingCW2LR import WindingCW2LR
 from .....Classes.WindingCW2LT import WindingCW2LT
 from .....Classes.WindingDW1L import WindingDW1L
 from .....Classes.WindingDW2L import WindingDW2L
-from .....Functions.Winding.comp_wind_sym import comp_wind_sym
+from .....Functions.Winding.comp_wind_periodicity import comp_wind_periodicity
 from .....GUI.Dialog.DMachineSetup.SWindPat.Gen_SWindPat import Gen_SWindPat
 from .....GUI.Resources import pixmap_dict
 from .....Methods.Machine.Winding import WindingError
@@ -269,7 +269,7 @@ class SWindPat(Gen_SWindPat, QWidget):
 
         try:
             wind_mat = wind.comp_connection_mat(self.obj.slot.Zs)
-            Nperw = str(comp_wind_sym(wind_mat)[0])
+            Nperw = str(comp_wind_periodicity(wind_mat)[0])
         except Exception:  # Unable to compution the connection matrix
             Nperw = "?"
 

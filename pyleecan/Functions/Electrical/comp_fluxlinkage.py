@@ -2,6 +2,7 @@ from ...Functions.FEMM.draw_FEMM import draw_FEMM
 from ...Functions.Electrical.coordinate_transformation import n2dq
 from ...Classes._FEMMHandler import FEMMHandler
 from numpy import zeros, linspace, pi, split, mean
+from SciDataTool.Classes.Data1D import Data1D
 
 
 def comp_fluxlinkage(obj, output):
@@ -24,17 +25,19 @@ def comp_fluxlinkage(obj, output):
     Nt_tot = obj.Nt_tot
     rot_dir = output.get_rot_dir()
 
-    # Set the symmetry factor if needed
-    if obj.is_symmetry_a:
-        sym = obj.sym_a
-        if obj.is_antiper_a:
-            sym *= 2
-        if obj.is_sliding_band:
-            obj.is_sliding_band = (
-                True  # When there is a symmetry, there must be a sliding band.
-            )
+    # Set the symmetry factor according to the machine
+    if obj.is_periodicity_a:
+        (
+            sym,
+            is_antiper_a,
+            _,
+            _,
+        ) = obj.parent.parent.parent.parent.get_machine_periodicity()
+        if is_antiper_a:
+            sym = sym * 2
     else:
         sym = 1
+        is_antiper_a = False
 
     # store orignal elec and make a copy to do temp. modifications
     elec = output.elec
@@ -42,11 +45,17 @@ def comp_fluxlinkage(obj, output):
 
     # Set rotor angle for the FEMM simulation
     angle_offset_initial = output.get_angle_offset_initial()
-    angle = linspace(0, 2 * pi / sym, Nt_tot, endpoint=False) + angle_offset_initial
-    output.elec.angle_rotor = rot_dir * angle
+    angle_rotor = (
+        linspace(0, -1 * rot_dir * 2 * pi / sym, Nt_tot, endpoint=False)
+        + angle_offset_initial
+    )
 
     # modify some quantities
-    output.elec.time = (angle - angle[0]) / (2 * pi * output.elec.N0 / 60)
+    output.elec.time = Data1D(
+        name="time",
+        unit="s",
+        values=(angle_rotor - angle_rotor[0]) / (2 * pi * output.elec.N0 / 60),
+    )
     output.elec.Is = None  # to compute Is from Id_ref and Iq_ref (that are mean val.)
     output.elec.Is = output.elec.get_Is()  # TODO get_Is disregards initial rotor angle
 
@@ -61,7 +70,7 @@ def comp_fluxlinkage(obj, output):
         is_mmfr=1,
         is_mmfs=1,
         sym=sym,
-        is_antiper=obj.is_antiper_a,
+        is_antiper=is_antiper_a,
         type_calc_leakage=obj.type_calc_leakage,
         kgeo_fineness=obj.Kgeo_fineness,  # TODO fix inconsistent lower/upper case
     )
@@ -70,7 +79,7 @@ def comp_fluxlinkage(obj, output):
     Phi_wind = obj.solve_FEMM(femm, output, sym, FEMM_dict)
 
     # Define d axis angle for the d,q transform
-    d_angle = (angle - angle_offset_initial) * zp
+    d_angle = (angle_rotor - angle_offset_initial) * zp
     fluxdq = split(n2dq(Phi_wind, d_angle, n=qs), 2, axis=1)
 
     # restore the original elec

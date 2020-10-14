@@ -26,10 +26,9 @@ precision = 1e-8  # solver precision (default: 1e-8)
 is_eddies = 0  # 1 to calculate eddy currents
 hidebc = 0  # 1 to hide BC properties
 type_yokeS = 0  # 0 for circular stator yoke, 1 for squared yoke
-minangle = 30  # finite element mesh min angle
-# 1 to draw an arc in the middle of the airgap for torque calculations(
+minangle = 15  # finite element mesh min angle
+is_middleag = 0  # 1 to draw an arc in the middle of the airgap for torque calculations(
 # not necessary)
-is_middleag = 0
 acsolver = 0  # AC solver type 0 for successive approx, 1 for Newton
 
 # dictionary matching boundary condition with line in FEMM

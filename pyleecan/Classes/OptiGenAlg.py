@@ -17,6 +17,8 @@ from .OptiSolver import OptiSolver
 from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
+import numpy as np
+import random
 from ._check import InitUnKnowClassError
 from .OptiProblem import OptiProblem
 from .XOutput import XOutput
@@ -209,10 +211,6 @@ class OptiGenAlg(OptiSolver):
             self._selector_func = None
         elif isinstance(value, str) and "lambda" in value:
             self._selector_str = value
-            if " np." in value:
-                import numpy as np
-            if " random." in value:
-                import random
             self._selector_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._selector_str = value
@@ -248,10 +246,6 @@ class OptiGenAlg(OptiSolver):
             self._crossover_func = None
         elif isinstance(value, str) and "lambda" in value:
             self._crossover_str = value
-            if " np." in value:
-                import numpy as np
-            if " random." in value:
-                import random
             self._crossover_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._crossover_str = value
@@ -287,10 +281,6 @@ class OptiGenAlg(OptiSolver):
             self._mutator_func = None
         elif isinstance(value, str) and "lambda" in value:
             self._mutator_str = value
-            if " np." in value:
-                import numpy as np
-            if " random." in value:
-                import random
             self._mutator_func = eval(value)
         elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
             self._mutator_str = value

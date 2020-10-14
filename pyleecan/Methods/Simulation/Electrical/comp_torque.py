@@ -19,6 +19,7 @@ def comp_torque(self, output):
 
     P = output.elec.Pem_av_ref
     losses = output.elec.Pj_losses  # TODO update since there may also be other losses
+
     Tem_av_ref = (P - losses) / omega
 
     output.elec.Tem_av_ref = Tem_av_ref

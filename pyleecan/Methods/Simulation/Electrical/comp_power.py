@@ -18,6 +18,7 @@ def comp_power(self, output):
     Ud = output.elec.Ud_ref
     Uq = output.elec.Uq_ref
 
-    Pem_av_ref = qs * (Ud * Id + Uq * Iq) / 2
+    # All quantities are in RMS
+    Pem_av_ref = qs * (Ud * Id + Uq * Iq)
 
     output.elec.Pem_av_ref = Pem_av_ref

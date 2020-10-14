@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from numpy import pi
 
 
 def comp_angle_offset_initial(self):

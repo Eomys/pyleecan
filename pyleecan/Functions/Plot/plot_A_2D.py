@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import matplotlib.pyplot as plt
-from numpy import where, argmin, abs, squeeze, split
 from itertools import repeat
+
+import matplotlib.pyplot as plt
+from numpy import where, argmin, abs, squeeze, split, ndarray
+
 from ...Functions.init_fig import init_subplot, init_fig
 from ...definitions import config_dict
 
@@ -10,7 +12,7 @@ FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 
 
 def plot_A_2D(
-    Xdata,
+    Xdatas,
     Ydatas,
     legend_list=[""],
     color_list=[(0, 0, 1, 0.5)],
@@ -28,6 +30,8 @@ def plot_A_2D(
     type="curve",
     is_fund=False,
     fund_harm=None,
+    x_min=None,
+    x_max=None,
     y_min=None,
     y_max=None,
     xticks=None,
@@ -89,6 +93,15 @@ def plot_A_2D(
     # Number of curves on a axe
     ndatas = len(Ydatas)
 
+    # Retrocompatibility
+    if isinstance(Xdatas, ndarray):
+        Xdatas = [Xdatas]
+
+    if len(Xdatas) == 1:
+        i_Xdatas = [0 for i in range(ndatas)]
+    else:
+        i_Xdatas = range(ndatas)
+
     # Expend default argument
     if 1 == len(color_list) < ndatas:
         # Set the same color for all curves
@@ -110,7 +123,7 @@ def plot_A_2D(
     if type == "curve":
         for i in range(ndatas):
             ax.plot(
-                Xdata,
+                Xdatas[i_Xdatas[i]],
                 Ydatas[i],
                 color=color_list[i],
                 label=legend_list[i],
@@ -122,9 +135,10 @@ def plot_A_2D(
     elif type == "bargraph":
         positions = range(-ndatas + 1, ndatas, 2)
         for i in range(ndatas):
-            width = (Xdata[1] - Xdata[0]) / ndatas
+            # width = (Xdatas[i_Xdatas[i]][1] - Xdatas[i_Xdatas[i]][0]) / ndatas
+            width = Xdatas[i_Xdatas[i]][-1] / 100
             barlist = ax.bar(
-                Xdata + positions[i] * width / (2 * ndatas),
+                Xdatas[i_Xdatas[i]] + positions[i] * width / (2 * ndatas),
                 Ydatas[i],
                 color=color_list[i],
                 width=width,
@@ -135,7 +149,7 @@ def plot_A_2D(
                     mag_max = max(Ydatas[i])
                     imax = int(where(Ydatas[i] == mag_max)[0])
                 else:
-                    imax = argmin(abs(Xdata - fund_harm))
+                    imax = argmin(abs(Xdatas[i] - fund_harm))
                 barlist[imax].set_edgecolor("k")
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
@@ -143,7 +157,7 @@ def plot_A_2D(
         for i in range(ndatas):
             if i == 0:
                 ax.bar(
-                    range(len(Xdata)),
+                    range(len(Xdatas[i_Xdatas[i]])),
                     Ydatas[i],
                     color=color_list[i],
                     width=0.5,
@@ -151,7 +165,7 @@ def plot_A_2D(
                 )
             else:
                 ax.bar(
-                    range(len(Xdata)),
+                    range(len(Xdatas[i_Xdatas[i]])),
                     Ydatas[i],
                     edgecolor=color_list[i],
                     width=0.5,
@@ -159,24 +173,29 @@ def plot_A_2D(
                     lw=1,
                     label=legend_list[i],
                 )
-        plt.xticks(range(len(Xdata)), [str(f) for f in Xdata], rotation=90)
+        plt.xticks(
+            range(len(Xdatas[i_Xdatas[i]])),
+            [str(f) for f in Xdatas[i_Xdatas[i]]],
+            rotation=90,
+        )
     elif type == "quiver":
         for i in range(ndatas):
-            x = [e[0] for e in Xdata]
-            y = [e[1] for e in Xdata]
+            x = [e[0] for e in Xdatas[i_Xdatas[i]]]
+            y = [e[1] for e in Xdatas[i_Xdatas[i]]]
             vect_list = split(Ydatas[i], 2)
             ax.quiver(x, y, squeeze(vect_list[0]), squeeze(vect_list[1]))
             ax.axis("equal")
 
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
+    ax.set_xlim([x_min, x_max])
     ax.set_ylim([y_min, y_max])
 
     if is_logscale_x:
-        ax.xscale("log")
+        ax.set_xscale("log")
 
     if is_logscale_y:
-        ax.yscale("log")
+        ax.set_yscale("log")
 
     if is_disp_title:
         ax.set_title(title)

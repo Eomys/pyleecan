@@ -52,7 +52,7 @@ def test_Magnetic_FEMM_sym():
         )
     )
     time = ImportGenVectLin(start=0, stop=0.015, num=4, endpoint=True)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False)
+    Na_tot = 1024
 
     simu.input = InputCurrent(
         Is=Is,
@@ -60,20 +60,18 @@ def test_Magnetic_FEMM_sym():
         N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
-        angle=angle,
+        Na_tot=Na_tot,
         angle_rotor_initial=0.5216 + pi,
     )
 
     # Definition of the magnetic simulation (no symmetry)
-    simu.mag = MagFEMM(
-        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=False, is_antiper_a=True
-    )
+    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=False)
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
-    assert SPMSM_003.comp_sym() == (1, True)
+    assert SPMSM_003.comp_periodicity() == (1, True, 1, True)
     simu_sym = Simu1(init_dict=simu.as_dict())
-    simu_sym.mag.is_symmetry_a = True
+    simu_sym.mag.is_periodicity_a = True
 
     # Just load the Output and ends (we could also have directly filled the Output object)
     simu_load = Simu1(init_dict=simu.as_dict())
@@ -82,7 +80,11 @@ def test_Magnetic_FEMM_sym():
     Br = ImportMatlab(file_path=mat_file, var_name="XBr")
     Bt = ImportMatlab(file_path=mat_file, var_name="XBt")
     Time = ImportData(field=time, unit="s", name="time")
-    Angle = ImportData(field=angle, unit="rad", name="angle")
+    Angle = ImportData(
+        field=ImportGenVectLin(start=0, stop=2 * pi, num=1024, endpoint=False),
+        unit="rad",
+        name="angle",
+    )
     Br_data = ImportData(
         axes=[Time, Angle],
         field=Br,
@@ -98,7 +100,7 @@ def test_Magnetic_FEMM_sym():
         symbol="B_t",
     )
     B = ImportVectorField(components={"radial": Br_data, "tangential": Bt_data})
-    simu_load.input = InputFlux(time=time, angle=angle, B=B)
+    simu_load.input = InputFlux(time=time, Na_tot=Na_tot, B=B)
     out = Output(simu=simu)
     simu.run()
 

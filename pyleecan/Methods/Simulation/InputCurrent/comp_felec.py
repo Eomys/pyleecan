@@ -32,4 +32,4 @@ def comp_felec(self):
 
         return self.N0 * zp / 60
     else:
-        return 50
+        raise InputError("ERROR: InputCurrent object can't have felec and N0 at None")
