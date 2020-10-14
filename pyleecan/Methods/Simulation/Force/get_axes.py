@@ -5,8 +5,8 @@ def get_axes(self, output, is_remove_apera=False, is_remove_apert=False):
     """
     Parameters
     ----------
-    self : Magnetic
-        a Magnetic object
+    self : Force
+        a Force object
     output: Output
         an Output object
     is_remove_apera: bool
@@ -45,7 +45,7 @@ def get_axes(self, output, is_remove_apera=False, is_remove_apert=False):
             self.is_periodicity_a = False
             Na_tot = Angle_comp.get_length(is_oneperiod=False)
             self.get_logger().warning(
-                "WARNING: In Magnetic model, Na_tot="
+                "WARNING: In Force model, Na_tot="
                 + str(Na_tot)
                 + " is not divisible by the machine angular periodicity ("
                 + str(per_a)
@@ -69,7 +69,7 @@ def get_axes(self, output, is_remove_apera=False, is_remove_apert=False):
             self.is_periodicity_t = False
             Nt_tot = Time_comp.get_length(is_oneperiod=False)
             self.get_logger().warning(
-                "WARNING: In Magnetic model, Nt_tot="
+                "WARNING: In Force model, Nt_tot="
                 + str(Nt_tot)
                 + " is not divisible by the machine time periodicity ("
                 + str(per_t)

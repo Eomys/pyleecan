@@ -63,7 +63,14 @@ class ForceMT(Force):
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, is_comp_nodal_force=False, init_dict=None, init_str=None):
+    def __init__(
+        self,
+        is_comp_nodal_force=False,
+        is_periodicity_t=False,
+        is_periodicity_a=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -81,9 +88,17 @@ class ForceMT(Force):
             # Overwrite default value with init_dict content
             if "is_comp_nodal_force" in list(init_dict.keys()):
                 is_comp_nodal_force = init_dict["is_comp_nodal_force"]
+            if "is_periodicity_t" in list(init_dict.keys()):
+                is_periodicity_t = init_dict["is_periodicity_t"]
+            if "is_periodicity_a" in list(init_dict.keys()):
+                is_periodicity_a = init_dict["is_periodicity_a"]
         # Set the properties (value check and convertion are done in setter)
         # Call Force init
-        super(ForceMT, self).__init__(is_comp_nodal_force=is_comp_nodal_force)
+        super(ForceMT, self).__init__(
+            is_comp_nodal_force=is_comp_nodal_force,
+            is_periodicity_t=is_periodicity_t,
+            is_periodicity_a=is_periodicity_a,
+        )
         # The class is frozen (in Force init), for now it's impossible to
         # add new properties
 
