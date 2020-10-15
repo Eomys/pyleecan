@@ -1,4 +1,5 @@
 from ....Classes.DataKeeper import DataKeeper
+from ....Classes.InputCurrent import InputCurrent
 
 
 def gen_datakeeper_list(self):
@@ -17,7 +18,7 @@ def gen_datakeeper_list(self):
     )
 
     # Get default datakeeper
-    if simu and simu.elec:
+    if simu and (simu.elec or isinstance(simu.input, InputCurrent)):
         datakeeper_list.extend(self.get_elec_datakeeper())
     if simu and simu.mag:
         datakeeper_list.extend(self.get_mag_datakeeper())
