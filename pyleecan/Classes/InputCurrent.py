@@ -461,7 +461,7 @@ class InputCurrent(Input):
     Id_ref = property(
         fget=_get_Id_ref,
         fset=_set_Id_ref,
-        doc=u"""d-axis current magnitude
+        doc=u"""d-axis current RMS magnitude
 
         :Type: float
         """,
@@ -479,7 +479,7 @@ class InputCurrent(Input):
     Iq_ref = property(
         fget=_get_Iq_ref,
         fset=_set_Iq_ref,
-        doc=u"""q-axis current magnitude
+        doc=u"""q-axis current RMS magnitude
 
         :Type: float
         """,

@@ -26,6 +26,11 @@ try:
 except ImportError as error:
     run = error
 
+try:
+    from ..Methods.Simulation.Force.get_axes import get_axes
+except ImportError as error:
+    get_axes = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -56,13 +61,29 @@ class Force(FrozenClass):
         )
     else:
         run = run
+    # cf Methods.Simulation.Force.get_axes
+    if isinstance(get_axes, ImportError):
+        get_axes = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Force method get_axes: " + str(get_axes))
+            )
+        )
+    else:
+        get_axes = get_axes
     # save and copy methods are available in all object
     save = save
     copy = copy
     # get_logger method is available in all object
     get_logger = get_logger
 
-    def __init__(self, is_comp_nodal_force=False, init_dict=None, init_str=None):
+    def __init__(
+        self,
+        is_comp_nodal_force=False,
+        is_periodicity_t=False,
+        is_periodicity_a=False,
+        init_dict=None,
+        init_str=None,
+    ):
         """Constructor of the class. Can be use in three ways :
         - __init__ (arg1 = 1, arg3 = 5) every parameters have name and default values
             for pyleecan type, -1 will call the default constructor
@@ -80,9 +101,15 @@ class Force(FrozenClass):
             # Overwrite default value with init_dict content
             if "is_comp_nodal_force" in list(init_dict.keys()):
                 is_comp_nodal_force = init_dict["is_comp_nodal_force"]
+            if "is_periodicity_t" in list(init_dict.keys()):
+                is_periodicity_t = init_dict["is_periodicity_t"]
+            if "is_periodicity_a" in list(init_dict.keys()):
+                is_periodicity_a = init_dict["is_periodicity_a"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
         self.is_comp_nodal_force = is_comp_nodal_force
+        self.is_periodicity_t = is_periodicity_t
+        self.is_periodicity_a = is_periodicity_a
 
         # The class is frozen, for now it's impossible to add new properties
         self._freeze()
@@ -96,6 +123,8 @@ class Force(FrozenClass):
         else:
             Force_str += "parent = " + str(type(self.parent)) + " object" + linesep
         Force_str += "is_comp_nodal_force = " + str(self.is_comp_nodal_force) + linesep
+        Force_str += "is_periodicity_t = " + str(self.is_periodicity_t) + linesep
+        Force_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
         return Force_str
 
     def __eq__(self, other):
@@ -105,6 +134,10 @@ class Force(FrozenClass):
             return False
         if other.is_comp_nodal_force != self.is_comp_nodal_force:
             return False
+        if other.is_periodicity_t != self.is_periodicity_t:
+            return False
+        if other.is_periodicity_a != self.is_periodicity_a:
+            return False
         return True
 
     def as_dict(self):
@@ -112,6 +145,8 @@ class Force(FrozenClass):
 
         Force_dict = dict()
         Force_dict["is_comp_nodal_force"] = self.is_comp_nodal_force
+        Force_dict["is_periodicity_t"] = self.is_periodicity_t
+        Force_dict["is_periodicity_a"] = self.is_periodicity_a
         # The class name is added to the dict for deserialisation purpose
         Force_dict["__class__"] = "Force"
         return Force_dict
@@ -120,6 +155,8 @@ class Force(FrozenClass):
         """Set all the properties to None (except pyleecan object)"""
 
         self.is_comp_nodal_force = None
+        self.is_periodicity_t = None
+        self.is_periodicity_a = None
 
     def _get_is_comp_nodal_force(self):
         """getter of is_comp_nodal_force"""
@@ -134,6 +171,42 @@ class Force(FrozenClass):
         fget=_get_is_comp_nodal_force,
         fset=_set_is_comp_nodal_force,
         doc=u"""1 to compute lumped tooth forces
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_periodicity_t(self):
+        """getter of is_periodicity_t"""
+        return self._is_periodicity_t
+
+    def _set_is_periodicity_t(self, value):
+        """setter of is_periodicity_t"""
+        check_var("is_periodicity_t", value, "bool")
+        self._is_periodicity_t = value
+
+    is_periodicity_t = property(
+        fget=_get_is_periodicity_t,
+        fset=_set_is_periodicity_t,
+        doc=u"""True to compute only on one time periodicity (use periodicities defined in output.mag.time)
+
+        :Type: bool
+        """,
+    )
+
+    def _get_is_periodicity_a(self):
+        """getter of is_periodicity_a"""
+        return self._is_periodicity_a
+
+    def _set_is_periodicity_a(self, value):
+        """setter of is_periodicity_a"""
+        check_var("is_periodicity_a", value, "bool")
+        self._is_periodicity_a = value
+
+    is_periodicity_a = property(
+        fget=_get_is_periodicity_a,
+        fset=_set_is_periodicity_a,
+        doc=u"""True to compute only on one angle periodicity (use periodicities defined in output.mag.angle)
 
         :Type: bool
         """,

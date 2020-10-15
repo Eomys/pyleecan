@@ -1,7 +1,7 @@
 from SciDataTool.Functions import AxisError
 
 
-def get_axes(self, output):
+def get_axes(self, output, is_remove_apera=False, is_remove_apert=False):
     """
     Parameters
     ----------
@@ -9,6 +9,10 @@ def get_axes(self, output):
         a Magnetic object
     output: Output
         an Output object
+    is_remove_apera: bool
+        True to remove anti-periodicity from angular axis if any
+    is_remove_apert: bool
+        True to remove anti-periodicity from time axis if any
 
     Returns
     -------
@@ -32,7 +36,9 @@ def get_axes(self, output):
         try:
             # Reduce angle axis to the machine periodicity
             per_a = per_a * 2 if is_antiper_a else per_a
-            Angle_comp = output.mag.angle.get_axis_periodic(per_a, is_antiper_a)
+            Angle_comp = output.mag.angle.get_axis_periodic(
+                per_a, is_antiper_a and not is_remove_apera
+            )
 
         except AxisError:
             Angle_comp = output.mag.angle
@@ -53,7 +59,9 @@ def get_axes(self, output):
         try:
             # Reduce time axis to the machine periodicity
             per_t = per_t * 2 if is_antiper_t else per_t
-            Time_comp = output.mag.time.get_axis_periodic(per_t, is_antiper_t)
+            Time_comp = output.mag.time.get_axis_periodic(
+                per_t, is_antiper_t and not is_remove_apert
+            )
 
         except AxisError:
             # Disable periodicity

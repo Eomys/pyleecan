@@ -14,7 +14,7 @@ def get_mag_datakeeper(self):
     dk_list: list
         list of DataKeeper
     """
-    error_nan = "lambda simu: float(nan)"
+    error_nan = "lambda simu: np.nan"
     # Average torque Datakeeper
     T_d = DataKeeper(
         name="Average Torque",

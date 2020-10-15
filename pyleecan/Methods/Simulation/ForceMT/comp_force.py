@@ -14,15 +14,51 @@ def comp_force(self, output):
         an Output object (to update)
     """
 
-    mu_0 = 4 * pi * 1e-7
+    # Get time and angular axes without anti-periodicity in axes
+    Angle_comp, Time_comp = self.get_axes(
+        output, is_remove_apera=True, is_remove_apert=True
+    )
+    # Check if the angular axis is anti-periodic
+    _, is_antiper_a = Angle_comp.get_periodicity()
+
+    # Import angular vector from Data object
+    angle = Angle_comp.get_values(
+        is_oneperiod=self.is_periodicity_a,
+        is_antiperiod=is_antiper_a and self.is_periodicity_a,
+    )
+
+    # Check if the angular axis is anti-periodic
+    _, is_antiper_t = Time_comp.get_periodicity()
+
+    time = Time_comp.get_values(
+        is_oneperiod=self.is_periodicity_t,
+        is_antiperiod=is_antiper_t and self.is_periodicity_t,
+    )
+
+    # Initialize list of axes and symmetry dict for VectorField P
+    axes_list = list(output.mag.B.get_axes())
+    sym_dict = dict()
+
+    # Update axes and symmetry lists by removing anti-periodicity
+    for ii, axe in enumerate(axes_list):
+        if axe.name == Angle_comp.name:
+            axes_list[ii] = Angle_comp
+        if axe.name == Time_comp.name:
+            axes_list[ii] = Time_comp
+
+        if axes_list[ii].symmetries:
+            sym_dict.update(axes_list[ii].symmetries)
 
     # Load magnetic flux
     Brphiz = output.mag.B.get_rphiz_along(
-        "time[smallestperiod]", "angle[smallestperiod]"
+        "time=axis_data1", "angle=axis_data2", axis_data=[time, angle],
     )
     Br = Brphiz["radial"]
     Bt = Brphiz["tangential"]
     Bz = Brphiz["axial"]
+
+    # Magnetic void permeability
+    mu_0 = 4 * pi * 1e-7
 
     # Compute AGSF with MT formula
     Prad = (Br * Br - Bt * Bt - Bz * Bz) / (2 * mu_0)
@@ -36,8 +72,8 @@ def comp_force(self, output):
             name="Airgap radial surface force",
             unit="N/m2",
             symbol="P_r",
-            axes=output.mag.B.get_axes(),
-            symmetries=output.mag.B.get_symmetries(),
+            axes=axes_list,
+            symmetries=sym_dict,
             values=Prad,
         )
         components["radial"] = Prad_data
@@ -46,8 +82,8 @@ def comp_force(self, output):
             name="Airgap tangential surface force",
             unit="N/m2",
             symbol="P_t",
-            symmetries=output.mag.B.get_symmetries(),
-            axes=output.mag.B.get_axes(),
+            axes=axes_list,
+            symmetries=sym_dict,
             values=Ptan,
         )
         components["tangential"] = Ptan_data
@@ -56,8 +92,8 @@ def comp_force(self, output):
             name="Airgap axial surface force",
             unit="N/m2",
             symbol="P_z",
-            symmetries=output.mag.B.get_symmetries(),
-            axes=output.mag.B.get_axes(),
+            axes=axes_list,
+            symmetries=sym_dict,
             values=Pz,
         )
         components["axial"] = Pz_data

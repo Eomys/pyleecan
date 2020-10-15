@@ -1230,7 +1230,8 @@
         "is_internal": false,
         "methods": [
             "comp_time_angle",
-            "run"
+            "run",
+            "get_axes"
         ],
         "mother": "",
         "name": "Force",
@@ -1242,6 +1243,24 @@
                 "max": "",
                 "min": "",
                 "name": "is_comp_nodal_force",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "True to compute only on one time periodicity (use periodicities defined in output.mag.time)",
+                "max": "",
+                "min": "",
+                "name": "is_periodicity_t",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.angle)",
+                "max": "",
+                "min": "",
+                "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "-",
                 "value": 0
@@ -3089,7 +3108,7 @@
                 "value": null
             },
             {
-                "desc": "d-axis current magnitude",
+                "desc": "d-axis current RMS magnitude",
                 "max": "",
                 "min": "",
                 "name": "Id_ref",
@@ -3098,7 +3117,7 @@
                 "value": null
             },
             {
-                "desc": "q-axis current magnitude",
+                "desc": "q-axis current RMS magnitude",
                 "max": "",
                 "min": "",
                 "name": "Iq_ref",
