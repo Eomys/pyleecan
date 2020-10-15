@@ -21,7 +21,7 @@ import platform
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.0.0"
+PYLEECAN_VERSION = "1.0.1"
 
 
 with open("README.md", "r") as fh:
@@ -40,11 +40,11 @@ install_requires = [
     "scipy>=1.4.1",
     "xlrd>=1.2.0",
     "deap>=1.3.1",
-    "SciDataTool>=1.1.1",
+    "SciDataTool>=1.1.4",
     "pyvista>=0.25.3",
     "meshio>=4.0.15",
     "h5py>=2.10.0",
-    'pyfemm >= 0.1.0;platform_system=="Windows"',
+    'pyfemm >= 0.1.1;platform_system=="Windows"',
 ]
 
 
