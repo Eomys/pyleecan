@@ -15,6 +15,7 @@ def solve_FEMM(self, femm, output, sym):
 
     # Get time and angular axes
     Angle_comp, Time_comp = self.get_axes(output)
+    _, Time_comp_Tem = self.get_axes(output, is_remove_apert=True)
 
     # Check if the angular axis is anti-periodic
     _, is_antiper_a = Angle_comp.get_periodicity()
@@ -33,8 +34,7 @@ def solve_FEMM(self, femm, output, sym):
 
     # Number of time steps
     Nt_comp = Time_comp.get_length(
-        is_oneperiod=True,
-        is_antiperiod=is_antiper_t and self.is_periodicity_t,
+        is_oneperiod=True, is_antiperiod=is_antiper_t and self.is_periodicity_t,
     )
 
     # Loading parameters for readibility
@@ -148,6 +148,10 @@ def solve_FEMM(self, femm, output, sym):
     if self.is_periodicity_a:
         sym_dict.update(Angle_comp.symmetries)
 
+    sym_dict_Tem = dict()
+    if self.is_periodicity_t:
+        sym_dict_Tem.update(Time_comp_Tem.symmetries)
+
     Br_data = DataTime(
         name="Airgap radial flux density",
         unit="T",
@@ -174,8 +178,8 @@ def solve_FEMM(self, femm, output, sym):
         name="Electromagnetic torque",
         unit="Nm",
         symbol="T_{em}",
-        axes=[Time_comp],
-        symmetries=sym_dict,
+        axes=[Time_comp_Tem],
+        symmetries=sym_dict_Tem,
         values=Tem,
     )
     output.mag.Tem_av = mean(Tem)
