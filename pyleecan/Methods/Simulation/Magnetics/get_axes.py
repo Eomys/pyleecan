@@ -79,4 +79,4 @@ def get_axes(self, output, is_remove_apera=False, is_remove_apert=False):
         # Return full axis
         Time_comp = output.mag.time
 
-        return Angle_comp, Time_comp
+    return Angle_comp, Time_comp

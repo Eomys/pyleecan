@@ -21,7 +21,7 @@ import platform
 # Release 1.1.0 : 1.1.0
 # First post release of the release 1.1.0 : 1.1.0.post1
 
-PYLEECAN_VERSION = "1.0.1"
+PYLEECAN_VERSION = "1.0.1.post1"
 
 
 with open("README.md", "r") as fh:
@@ -59,7 +59,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Eomys/pyleecan",
-    download_url="https://github.com/Eomys/pyleecan/SciDataTool/archive/"
+    download_url="https://github.com/Eomys/pyleecan/archive/"
     + PYLEECAN_VERSION
     + ".tar.gz",
     packages=setuptools.find_packages(exclude=["Tests*", "Tutorials*"]),
