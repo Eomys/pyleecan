@@ -64,14 +64,10 @@ def test_Magnetic_AGSF():
     )
 
     # Definition of the magnetic simulation (1/2 symmetry)
-    simu.mag = MagFEMM(
-        type_BH_stator=0,
-        type_BH_rotor=0,
-        is_periodicity_a=True,
-    )
+    simu.mag = MagFEMM(type_BH_stator=0, type_BH_rotor=0, is_periodicity_a=True,)
 
     # Definition of the magnetic simulation (no symmetry)
-    simu.force = ForceMT()
+    simu.force = ForceMT(is_periodicity_a=True)
 
     simu.struct = None
 
@@ -159,4 +155,5 @@ def test_Magnetic_AGSF():
         r_max=r_max,
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_flux_time_space"),
     )
+
     # ------------------------------------------------------

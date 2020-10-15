@@ -18,6 +18,22 @@ def comp_force(self, output):
     Angle_comp, Time_comp = self.get_axes(
         output, is_remove_apera=True, is_remove_apert=True
     )
+    # Check if the angular axis is anti-periodic
+    _, is_antiper_a = Angle_comp.get_periodicity()
+
+    # Import angular vector from Data object
+    angle = Angle_comp.get_values(
+        is_oneperiod=self.is_periodicity_a,
+        is_antiperiod=is_antiper_a and self.is_periodicity_a,
+    )
+
+    # Check if the angular axis is anti-periodic
+    _, is_antiper_t = Time_comp.get_periodicity()
+
+    time = Time_comp.get_values(
+        is_oneperiod=self.is_periodicity_t,
+        is_antiperiod=is_antiper_t and self.is_periodicity_t,
+    )
 
     # Initialize list of axes and symmetry dict for VectorField P
     axes_list = list(output.mag.B.get_axes())
@@ -35,7 +51,7 @@ def comp_force(self, output):
 
     # Load magnetic flux
     Brphiz = output.mag.B.get_rphiz_along(
-        "time[smallestperiod]", "angle[smallestperiod]"
+        "time=axis_data1", "angle=axis_data2", axis_data=[time, angle],
     )
     Br = Brphiz["radial"]
     Bt = Brphiz["tangential"]
