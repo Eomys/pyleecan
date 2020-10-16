@@ -15,17 +15,14 @@ def comp_flux_airgap(self, output):
         an Output object
     """
 
-    # Set the symmetry factor if needed
-    if self.is_symmetry_a:
-        sym = self.sym_a
-        if self.is_antiper_a:
-            sym *= 2
-        if self.is_sliding_band:
-            self.is_sliding_band = (
-                True  # When there is a symmetry, there must be a sliding band.
-            )
+    # Set the symmetry factor according to the machine
+    if self.is_periodicity_a:
+        (sym, is_antiper_a, _, _) = self.parent.parent.get_machine_periodicity()
+        if is_antiper_a:
+            sym = sym * 2
     else:
         sym = 1
+        is_antiper_a = False
 
     # Setup the FEMM simulation
     # Geometry building and assigning property in FEMM
@@ -39,7 +36,7 @@ def comp_flux_airgap(self, output):
             is_mmfr=self.is_mmfr,
             is_mmfs=self.is_mmfs,
             sym=sym,
-            is_antiper=self.is_antiper_a,
+            is_antiper=is_antiper_a,
             type_calc_leakage=self.type_calc_leakage,
             is_remove_vent=self.is_remove_vent,
             is_remove_slotS=self.is_remove_slotS,

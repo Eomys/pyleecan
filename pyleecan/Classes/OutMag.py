@@ -34,8 +34,6 @@ class OutMag(FrozenClass):
         self,
         time=None,
         angle=None,
-        Nt_tot=None,
-        Na_tot=None,
         B=None,
         Tem=None,
         Tem_av=None,
@@ -68,10 +66,6 @@ class OutMag(FrozenClass):
                 time = init_dict["time"]
             if "angle" in list(init_dict.keys()):
                 angle = init_dict["angle"]
-            if "Nt_tot" in list(init_dict.keys()):
-                Nt_tot = init_dict["Nt_tot"]
-            if "Na_tot" in list(init_dict.keys()):
-                Na_tot = init_dict["Na_tot"]
             if "B" in list(init_dict.keys()):
                 B = init_dict["B"]
             if "Tem" in list(init_dict.keys()):
@@ -96,8 +90,6 @@ class OutMag(FrozenClass):
         self.parent = None
         self.time = time
         self.angle = angle
-        self.Nt_tot = Nt_tot
-        self.Na_tot = Na_tot
         self.B = B
         self.Tem = Tem
         self.Tem_av = Tem_av
@@ -120,33 +112,15 @@ class OutMag(FrozenClass):
             OutMag_str += "parent = None " + linesep
         else:
             OutMag_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutMag_str += (
-            "time = "
-            + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutMag_str += (
-            "angle = "
-            + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutMag_str += "Nt_tot = " + str(self.Nt_tot) + linesep
-        OutMag_str += "Na_tot = " + str(self.Na_tot) + linesep
+        OutMag_str += "time = " + str(self.time) + linesep + linesep
+        OutMag_str += "angle = " + str(self.angle) + linesep + linesep
         OutMag_str += "B = " + str(self.B) + linesep + linesep
         OutMag_str += "Tem = " + str(self.Tem) + linesep + linesep
         OutMag_str += "Tem_av = " + str(self.Tem_av) + linesep
         OutMag_str += "Tem_rip_norm = " + str(self.Tem_rip_norm) + linesep
         OutMag_str += "Tem_rip_pp = " + str(self.Tem_rip_pp) + linesep
         OutMag_str += (
-            "Phi_wind_stator = "
-            + linesep
-            + str(self.Phi_wind_stator).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
+            "Phi_wind_stator = " + str(self.Phi_wind_stator) + linesep + linesep
         )
         OutMag_str += (
             "emf = "
@@ -173,13 +147,9 @@ class OutMag(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if not array_equal(other.time, self.time):
+        if other.time != self.time:
             return False
-        if not array_equal(other.angle, self.angle):
-            return False
-        if other.Nt_tot != self.Nt_tot:
-            return False
-        if other.Na_tot != self.Na_tot:
+        if other.angle != self.angle:
             return False
         if other.B != self.B:
             return False
@@ -191,7 +161,7 @@ class OutMag(FrozenClass):
             return False
         if other.Tem_rip_pp != self.Tem_rip_pp:
             return False
-        if not array_equal(other.Phi_wind_stator, self.Phi_wind_stator):
+        if other.Phi_wind_stator != self.Phi_wind_stator:
             return False
         if not array_equal(other.emf, self.emf):
             return False
@@ -210,13 +180,11 @@ class OutMag(FrozenClass):
         if self.time is None:
             OutMag_dict["time"] = None
         else:
-            OutMag_dict["time"] = self.time.tolist()
+            OutMag_dict["time"] = self.time.as_dict()
         if self.angle is None:
             OutMag_dict["angle"] = None
         else:
-            OutMag_dict["angle"] = self.angle.tolist()
-        OutMag_dict["Nt_tot"] = self.Nt_tot
-        OutMag_dict["Na_tot"] = self.Na_tot
+            OutMag_dict["angle"] = self.angle.as_dict()
         if self.B is None:
             OutMag_dict["B"] = None
         else:
@@ -231,7 +199,7 @@ class OutMag(FrozenClass):
         if self.Phi_wind_stator is None:
             OutMag_dict["Phi_wind_stator"] = None
         else:
-            OutMag_dict["Phi_wind_stator"] = self.Phi_wind_stator.tolist()
+            OutMag_dict["Phi_wind_stator"] = self.Phi_wind_stator.as_dict()
         if self.emf is None:
             OutMag_dict["emf"] = None
         else:
@@ -240,7 +208,9 @@ class OutMag(FrozenClass):
             OutMag_dict["meshsolution"] = None
         else:
             OutMag_dict["meshsolution"] = self.meshsolution.as_dict()
-        OutMag_dict["FEMM_dict"] = self.FEMM_dict
+        OutMag_dict["FEMM_dict"] = (
+            self.FEMM_dict.copy() if self.FEMM_dict is not None else None
+        )
         OutMag_dict["logger_name"] = self.logger_name
         # The class name is added to the dict for deserialisation purpose
         OutMag_dict["__class__"] = "OutMag"
@@ -251,8 +221,6 @@ class OutMag(FrozenClass):
 
         self.time = None
         self.angle = None
-        self.Nt_tot = None
-        self.Na_tot = None
         self.B = None
         self.Tem = None
         self.Tem_av = None
@@ -271,14 +239,16 @@ class OutMag(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("time", value, "ndarray")
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "time"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("time", value, "Data")
         self._time = value
 
     time = property(
@@ -286,7 +256,7 @@ class OutMag(FrozenClass):
         fset=_set_time,
         doc=u"""Magnetic time vector (no symmetry)
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
@@ -296,14 +266,16 @@ class OutMag(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("angle", value, "ndarray")
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "angle"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("angle", value, "Data")
         self._angle = value
 
     angle = property(
@@ -311,43 +283,7 @@ class OutMag(FrozenClass):
         fset=_set_angle,
         doc=u"""Magnetic position vector (no symmetry)
 
-        :Type: ndarray
-        """,
-    )
-
-    def _get_Nt_tot(self):
-        """getter of Nt_tot"""
-        return self._Nt_tot
-
-    def _set_Nt_tot(self, value):
-        """setter of Nt_tot"""
-        check_var("Nt_tot", value, "int")
-        self._Nt_tot = value
-
-    Nt_tot = property(
-        fget=_get_Nt_tot,
-        fset=_set_Nt_tot,
-        doc=u"""Length of the time vector
-
-        :Type: int
-        """,
-    )
-
-    def _get_Na_tot(self):
-        """getter of Na_tot"""
-        return self._Na_tot
-
-    def _set_Na_tot(self, value):
-        """setter of Na_tot"""
-        check_var("Na_tot", value, "int")
-        self._Na_tot = value
-
-    Na_tot = property(
-        fget=_get_Na_tot,
-        fset=_set_Na_tot,
-        doc=u"""Length of the angle vector
-
-        :Type: int
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
@@ -463,14 +399,16 @@ class OutMag(FrozenClass):
 
     def _set_Phi_wind_stator(self, value):
         """setter of Phi_wind_stator"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("Phi_wind_stator", value, "ndarray")
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "Phi_wind_stator"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = DataTime()
+        check_var("Phi_wind_stator", value, "DataTime")
         self._Phi_wind_stator = value
 
     Phi_wind_stator = property(
@@ -478,7 +416,7 @@ class OutMag(FrozenClass):
         fset=_set_Phi_wind_stator,
         doc=u"""Stator winding flux
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataTime.DataTime
         """,
     )
 

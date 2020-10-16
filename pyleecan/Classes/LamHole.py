@@ -67,9 +67,9 @@ except ImportError as error:
     comp_angle_d_axis = error
 
 try:
-    from ..Methods.Machine.LamHole.comp_sym import comp_sym
+    from ..Methods.Machine.LamHole.comp_periodicity import comp_periodicity
 except ImportError as error:
-    comp_sym = error
+    comp_periodicity = error
 
 
 from ._check import InitUnKnowClassError
@@ -193,15 +193,18 @@ class LamHole(Lamination):
         )
     else:
         comp_angle_d_axis = comp_angle_d_axis
-    # cf Methods.Machine.LamHole.comp_sym
-    if isinstance(comp_sym, ImportError):
-        comp_sym = property(
+    # cf Methods.Machine.LamHole.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
             fget=lambda x: raise_(
-                ImportError("Can't use LamHole method comp_sym: " + str(comp_sym))
+                ImportError(
+                    "Can't use LamHole method comp_periodicity: "
+                    + str(comp_periodicity)
+                )
             )
         )
     else:
-        comp_sym = comp_sym
+        comp_periodicity = comp_periodicity
     # save and copy methods are available in all object
     save = save
     copy = copy

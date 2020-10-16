@@ -57,8 +57,7 @@ def run(self):
             "\r["
             + "=" * (50 * (1) // (nb_simu))
             + " " * (50 - ((50) // (nb_simu)))
-            + "] {:3d}%".format(((100 * 1) // (nb_simu))),
-            end="",
+            + "] {:3d}%".format(((100 * 1) // (nb_simu)))
         )
 
     # Reuse some intermediate results from reference simulation (if requested)

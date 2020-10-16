@@ -91,7 +91,7 @@ class InputCurrent(Input):
         Ir=None,
         angle_rotor=None,
         N0=None,
-        rot_dir=-1,
+        rot_dir=None,
         angle_rotor_initial=0,
         Tem_av_ref=None,
         Id_ref=None,
@@ -461,7 +461,7 @@ class InputCurrent(Input):
     Id_ref = property(
         fget=_get_Id_ref,
         fset=_set_Id_ref,
-        doc=u"""d-axis current magnitude
+        doc=u"""d-axis current RMS magnitude
 
         :Type: float
         """,
@@ -479,7 +479,7 @@ class InputCurrent(Input):
     Iq_ref = property(
         fget=_get_Iq_ref,
         fset=_set_Iq_ref,
-        doc=u"""q-axis current magnitude
+        doc=u"""q-axis current RMS magnitude
 
         :Type: float
         """,

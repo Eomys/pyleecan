@@ -17,6 +17,8 @@ from .OptiSolver import OptiSolver
 from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
+import numpy as np
+import random
 from ._check import InitUnKnowClassError
 from .OptiProblem import OptiProblem
 from .XOutput import XOutput

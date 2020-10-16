@@ -4,7 +4,7 @@ from matplotlib.lines import Line2D
 from matplotlib.pyplot import axis, legend, plot, subplots, title
 from numpy import array, linspace, meshgrid
 
-from ....Functions.Winding.comp_wind_sym import comp_wind_sym
+from ....Functions.Winding.comp_wind_periodicity import comp_wind_periodicity
 from ....Functions.Winding.gen_phase_list import gen_color, gen_name
 
 
@@ -37,7 +37,7 @@ def plot_winding(self, wind_mat=None, all_slot=False):
     if all_slot:  # Every Slot
         Nplot = Zs
     else:  # Only the needed one (sym)
-        Nperw = comp_wind_sym(wind_mat)[0]  # Symmetry of the winding
+        Nperw = comp_wind_periodicity(wind_mat)[0]  # Symmetry of the winding
         Nplot = Zs // Nperw
 
     qs = wind_mat.shape[3]  # Number of phase

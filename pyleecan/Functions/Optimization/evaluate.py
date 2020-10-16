@@ -10,6 +10,7 @@ else:
 
 from os import stat, remove
 from datetime import datetime
+from numpy import nan
 
 
 def evaluate(solver, indiv):
@@ -58,7 +59,7 @@ def evaluate(solver, indiv):
             # Except error and try to compute the error_keeper
             except Exception as err:
                 logger.warning(
-                    "Objectif computation " + obj_func.name + " failed:" + err
+                    "Objectiv computation " + obj_func.name + " failed:" + err
                 )
                 if obj_func.error_keeper is None:  # Set fitness value as infinity
                     fitness.append(float("inf"))
@@ -71,7 +72,7 @@ def evaluate(solver, indiv):
                     # Set the fitness value as infinity
                     except Exception as err:
                         logger.warning(
-                            "Objectif error computation "
+                            "Objectiv error computation "
                             + obj_func.name
                             + " failed:"
                             + err
@@ -105,9 +106,9 @@ def evaluate(solver, indiv):
                             + ".error_keeper execution failed:"
                             + err
                         )
-                        datakeeper.result.append(float("NaN"))
+                        datakeeper.result.append(nan)
                 else:
-                    datakeeper.result.append(float("NaN"))
+                    datakeeper.result.append(nan)
 
         indiv.is_simu_valid = True
 
@@ -147,9 +148,9 @@ def evaluate(solver, indiv):
                         + ".error_keeper execution failed:"
                         + err
                     )
-                    datakeeper.result.append(float("NaN"))
+                    datakeeper.result.append(nan)
             else:
-                datakeeper.result.append(float("NaN"))
+                datakeeper.result.append(nan)
 
         # Reset standard output and error
         evaluation_failure = True  # Evaluation failed

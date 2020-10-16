@@ -101,7 +101,7 @@ def plot_A_space(
                         for j in index_list
                     ]
                     colors += [phase_colors[i * n_phase + j] for j in range(n_phase)]
-                    linestyles += list(repeat("-", len(n_phase)))
+                    linestyles += list(repeat("-", n_phase))
                     list_str = axis.name
             except:
                 is_components = False

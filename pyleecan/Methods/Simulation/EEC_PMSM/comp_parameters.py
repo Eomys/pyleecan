@@ -37,7 +37,7 @@ def comp_parameters(self, output):
         PAR["Iq"] = output.elec.Iq_ref
         is_comp_ind = True
 
-    # compute inductance if nessessary
+    # compute inductance if necessary
     if is_comp_ind:
         (phid, phiq) = self.indmag.comp_inductance(output)
         if PAR["Id"] != 0:

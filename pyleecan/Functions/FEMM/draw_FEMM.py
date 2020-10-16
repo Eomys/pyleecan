@@ -2,14 +2,7 @@
 
 from ...Classes.Lamination import Lamination
 from ...Classes.Circle import Circle
-from ...Functions.FEMM import (
-    hidebc,
-    is_eddies,
-    is_middleag,
-    pbtype,
-    precision,
-    type_yokeS,
-)
+from ...Functions.FEMM import is_eddies
 from ...Functions.FEMM.assign_FEMM_surface import assign_FEMM_surface
 from ...Functions.FEMM.comp_FEMM_dict import comp_FEMM_dict
 from ...Functions.FEMM.create_FEMM_boundary_conditions import (
@@ -163,12 +156,12 @@ def draw_FEMM(
         surf_list.extend(machine.stator.build_geometry(sym=sym))
 
     # Applying user defined modifications
-    for transfrom in transform_list:
+    for transform in transform_list:
         for surf in surf_list:
-            if transfrom["label"] in surf.label and transfrom["type"] == "rotate":
-                surf.rotate(transfrom["value"])
-            elif transfrom["label"] in surf.label and transfrom["type"] == "translate":
-                surf.translate(transfrom["value"])
+            if transform["label"] in surf.label and transform["type"] == "rotate":
+                surf.rotate(transform["value"])
+            elif transform["label"] in surf.label and transform["type"] == "translate":
+                surf.translate(transform["value"])
 
     # Creation of all the materials and circuit in FEMM
     prop_dict, materials, circuits = create_FEMM_materials(

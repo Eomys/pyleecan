@@ -8,13 +8,19 @@ from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.Output import Output
 from pyleecan.definitions import DATA_DIR
 from Tests import save_plot_path
-from pyleecan.Functions.GMSH.draw_GMSH import draw_GMSH
+
+try:
+    from pyleecan.Functions.GMSH.draw_GMSH import draw_GMSH
+except:
+    draw_GMSH = ImportError
 
 
 @pytest.mark.long
 @pytest.mark.GMSH
 def test_gmsh_2d():
     """Check generation of the 2D mesh with gmsh"""
+    if isinstance(draw_GMSH, ImportError):
+        raise ImportError("Fail to import draw_GMSH (gmsh package missing)")
     # Import the machine from a script
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
     IPMSM_A.stator.slot.H1 = 1e-3

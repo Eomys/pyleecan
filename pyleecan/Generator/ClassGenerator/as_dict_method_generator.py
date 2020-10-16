@@ -25,7 +25,7 @@ def generate_as_dict(gen_dict, class_dict):
     var_str = ""  # For the creation of the return dict (in as_dict)
 
     for prop in class_dict["properties"]:
-        if prop["type"] in PYTHON_TYPE:
+        if prop["type"] in PYTHON_TYPE and prop["type"] not in ["dict", "list"]:
             # Add => "class_name ["var_name"] = self.var_name" to var_str
             var_str += (
                 TAB2
@@ -35,6 +35,19 @@ def generate_as_dict(gen_dict, class_dict):
                 + '"] = self.'
                 + prop["name"]
                 + "\n"
+            )
+        elif prop["type"] in ["dict", "list"]:
+            # Add => "class_name_dict["var_name"] = self.var_name.copy()" to var_str
+            var_str += (
+                TAB2
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"] = self.'
+                + prop["name"]
+                + ".copy() if self."
+                + prop["name"]
+                + " is not None else None\n"
             )
         elif prop["type"] == "ndarray":
             # Add => "class_name ["var_name"] = self.var_name.tolist()" to

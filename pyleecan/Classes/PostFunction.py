@@ -17,6 +17,8 @@ from .Post import Post
 from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
+import numpy as np
+import random
 from ._check import InitUnKnowClassError
 
 

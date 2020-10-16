@@ -17,6 +17,8 @@ from .ParamExplorer import ParamExplorer
 from ntpath import basename
 from os.path import isfile
 from ._check import CheckTypeError
+import numpy as np
+import random
 from ._check import InitUnKnowClassError
 
 
@@ -127,7 +129,9 @@ class OptiDesignVar(ParamExplorer):
         # Get the properties inherited from ParamExplorer
         OptiDesignVar_dict = super(OptiDesignVar, self).as_dict()
         OptiDesignVar_dict["type_var"] = self.type_var
-        OptiDesignVar_dict["space"] = self.space
+        OptiDesignVar_dict["space"] = (
+            self.space.copy() if self.space is not None else None
+        )
         if self._get_value_str is not None:
             OptiDesignVar_dict["get_value"] = self._get_value_str
         else:
