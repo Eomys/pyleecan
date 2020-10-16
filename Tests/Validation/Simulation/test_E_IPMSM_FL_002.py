@@ -51,7 +51,11 @@ def test_E_IPMSM_FL_002():
     simu.run()
 
     # Definition of the magnetic simulation (FEMM)
-    simu2.mag = MagFEMM(type_BH_stator=0, type_BH_rotor=0, is_periodicity_a=True,)
+    simu2.mag = MagFEMM(
+        type_BH_stator=0,
+        type_BH_rotor=0,
+        is_periodicity_a=True,
+    )
 
     out2 = Output(simu=simu2)
     simu2.run()
