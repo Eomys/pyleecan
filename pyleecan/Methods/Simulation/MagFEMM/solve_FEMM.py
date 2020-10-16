@@ -29,7 +29,7 @@ def solve_FEMM(self, femm, output, sym):
     # Number of angular steps
     Na_comp = angle.size
 
-    # Check if the angular axis is anti-periodic
+    # Check if the time axis is anti-periodic
     _, is_antiper_t = Time_comp.get_periodicity()
 
     # Number of time steps
