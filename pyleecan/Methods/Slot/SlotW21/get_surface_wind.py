@@ -29,17 +29,19 @@ def get_surface_wind(self, alpha=0, delta=0):
     # Create curve list
     curve_list = self.build_geometry()[2:-2]
     curve_list.append(
-        Segment(
-            begin=curve_list[-1].get_end(),
-            end=curve_list[0].get_begin(),
-        )
+        Segment(begin=curve_list[-1].get_end(), end=curve_list[0].get_begin(),)
     )
 
     # Create surface
+    if self.H1_is_rad:  # H1 in rad
+        H1 = (self.W1 - self.W0) / 2.0 * tan(self.H1)  # convertion to m
+    else:  # H1 in m
+        H1 = self.H1
+
     if self.is_outwards():
-        Zmid = self.get_Rbo() + self.H0 + self.H1 + self.H2 / 2
+        Zmid = self.get_Rbo() + self.H0 + H1 + self.H2 / 2
     else:
-        Zmid = self.get_Rbo() - self.H0 - self.H1 - self.H2 / 2
+        Zmid = self.get_Rbo() - self.H0 - H1 - self.H2 / 2
     surface = SurfLine(
         line_list=curve_list, label="Wind" + st + "_R0_T0_S0", point_ref=Zmid
     )

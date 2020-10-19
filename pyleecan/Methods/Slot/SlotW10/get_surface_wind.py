@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from numpy import linspace, zeros
+from numpy import linspace, zeros, tan
 
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
@@ -24,24 +24,34 @@ def get_surface_wind(self, alpha=0, delta=0):
         Surface corresponding to the Winding Area
     """
 
-    # Get the edges lines
-    [Z10, Z9, Z8, Z7, Z6, Z5, Z4, Z3, Z2, Z1] = self._comp_point_coordinate()
+    # check if the slot is on the stator
+    if self.get_is_stator():
+        st = "S"
+    else:
+        st = "R"
 
-    curve_list = list()
-    curve_list.append(Segment(Z4, Z5))
-    curve_list.append(Segment(Z5, Z6))
-    curve_list.append(Segment(Z6, Z7))
-    curve_list.append(Segment(Z7, Z4))
+    # Create curve list
+    curve_list = self.build_geometry()[3:-3]
+    curve_list.append(
+        Segment(begin=curve_list[-1].get_end(), end=curve_list[0].get_begin())
+    )
 
-    # Create the surface
-    surf_wind = SurfLine(
-        line_list=curve_list,
-        label="Winding_Area",
-        point_ref=(Z4 + Z5 + Z6 + Z7) / 4,
+    # Create surface
+    if self.H1_is_rad:  # H1 in rad
+        H1 = ((self.W1 - self.W0) / 2.0) * tan(self.H1)  # convertion to m
+    else:  # H1 in m
+        H1 = self.H1
+
+    if self.is_outwards():
+        Zmid = self.get_Rbo() + self.H0 + H1 + self.H2 / 2
+    else:
+        Zmid = self.get_Rbo() - self.H0 - H1 - self.H2 / 2
+    surface = SurfLine(
+        line_list=curve_list, label="Wind" + st + "_R0_T0_S0", point_ref=Zmid
     )
 
     # Apply transformation
-    surf_wind.rotate(alpha)
-    surf_wind.translate(delta)
+    surface.rotate(alpha)
+    surface.translate(delta)
 
-    return surf_wind
+    return surface

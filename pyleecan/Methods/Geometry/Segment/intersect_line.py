@@ -33,6 +33,9 @@ def intersect_line(self, Z1, Z2):
         Seg_len = self.comp_length()
         if np_abs(Z_int - Z3) <= Seg_len and np_abs(Z_int - Z4) <= Seg_len:
             return [Z_int]
+        elif np_abs(Z_int - Z3) <= 1e-6 or np_abs(Z_int - Z4) <= 1e-6:
+            # Zint is begin or end
+            return [Z_int]
         else:
             return []
     elif len(Z_list) == 2:
