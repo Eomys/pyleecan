@@ -19,9 +19,9 @@ def comp_height_wind(self, Ndisc=200):
 
     """
 
-    surf = self.build_geometry_wind(Nrad=1, Ntan=1)
+    surf = self.get_surface_wind()
 
-    point_list = surf[0].discretize(Ndisc)
+    point_list = surf.discretize(Ndisc)
     point_list = abs(array(point_list))
 
     return max(point_list) - min(point_list)

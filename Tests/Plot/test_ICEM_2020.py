@@ -10,8 +10,8 @@ from pyleecan.Classes.import_all import *
 
 try:
     from pyleecan.Functions.GMSH.gen_3D_mesh import gen_3D_mesh
-except:
-    gen_3D_mesh = ImportError
+except ImportError as error:
+    gen_3D_mesh = error
 from Tests import save_plot_path
 from Tests.Plot.LamWind import wind_mat
 from pyleecan.Functions.load import load
@@ -153,6 +153,9 @@ def test_SlotMulti_sym():
     """Figure 11: Generate a 3D mesh with GMSH for a lamination
     with several slot types and notches
     """
+
+    if isinstance(gen_3D_mesh, ImportError):
+        raise ImportError("Fail to import gen_3D_mesh (gmsh package missing)")
 
     plt.close("all")
     # Rotor definition
