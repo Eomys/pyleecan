@@ -23,6 +23,7 @@ def plot_A_time(
     component_list=None,
     legend_list=[],
     color_list=[],
+    linestyle_list=["-"],
     save_path=None,
     y_min=None,
     y_max=None,
@@ -61,6 +62,8 @@ def plot_A_time(
         list of legends to use for each Data object (including reference one) instead of data.name
     color_list : list
         list of colors to use for each Data object
+    linestyle_list : list
+        list of linestyle to use for each Data object (ex: "-", "dotted")
     save_path : str
         path and name of the png file to save
     y_min : float
@@ -95,6 +98,7 @@ def plot_A_time(
                     data_list=[dat.components[comp] for dat in data_list],
                     legend_list=legend_list,
                     color_list=color_list,
+                    linestyle_list=linestyle_list,
                     save_path=save_path,
                     y_min=y_min,
                     y_max=y_max,
@@ -131,6 +135,7 @@ def plot_A_time(
                     data_list=[dat.components[comp] for dat in data_list],
                     legend_list=legend_list,
                     color_list=color_list,
+                    linestyle_list=linestyle_list,
                     save_path=save_path,
                     y_min=y_min,
                     y_max=y_max,
@@ -153,6 +158,7 @@ def plot_A_time(
             unit=unit,
             data_list=data_list,
             legend_list=legend_list,
+            linestyle_list=linestyle_list,
             color_list=color_list,
             save_path=save_path,
             y_min=y_min,
