@@ -30,7 +30,8 @@ def test_FEMM_periodicity():
         Id_ref=200,
         Iq_ref=-100,
         Na_tot=252 * 8,
-        Nt_tot=2*8,
+        Nt_tot=1,
+        # Nt_tot=2*8,
         N0=1000,
     )
 
@@ -60,15 +61,15 @@ def test_FEMM_periodicity():
     #     linestyle_list=["-", "dotted"],
     # )
     
-    # out.plot_A_space(
-    #     "mag.B",
-    #     t_index=0,
-    #     is_fft=True,
-    #     data_list=[out2.mag.B],
-    #     legend_list=["Periodic", "Full"],
-    #     save_path=join(save_path, "test_FEMM_periodicity_B_space.png"),
-    #     linestyle_list=["-", "dotted"],
-    # )
+    out.plot_A_space(
+        "mag.B",
+        t_index=0,
+        is_fft=True,
+        data_list=[out2.mag.B],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "test_FEMM_periodicity_B_space.png"),
+        linestyle_list=["-", "dotted"],
+    )
     
     # out.plot_A_space(
     #     "force.P",
@@ -89,36 +90,40 @@ def test_FEMM_periodicity():
     #     linestyle_list=["-", "dotted"],
     # )    
     
-    return out, out2
-
-# To run it without pytest
-if __name__ == "__main__":
-    out, out2 = test_FEMM_periodicity()
-    
-    # out.plot_A_time(
-    #     "mag.B",
-    #     is_fft=False,
-    #     # data_list=[out2.mag.B],
-    #     # legend_list=["Periodic", "Full"],
-    #     save_path=join(save_path, "test_FEMM_periodicity_B_time.png"),
-    #     linestyle_list=["dotted"],
-    # )
-
     # out.plot_A_time(
     #     "mag.Tem",
     #     is_fft=False,
-    #     # data_list=[out2.mag.Tem],
-    #     # legend_list=["Periodic", "Full"],
+    #     data_list=[out2.mag.Tem],
+    #     legend_list=["Periodic", "Full"],
     #     save_path=join(save_path, "test_FEMM_periodicity_Tem_time.png"),
-    #     # linestyle_list=["-", "dotted"],
+    #     linestyle_list=["-", "dotted"],
     #     )  
 
     # out.plot_A_time(
     #     "mag.Phi_wind_stator",
     #     is_fft=False,
     #     index_list=[0],
-    #     # data_list=[out2.mag.Tem],
-    #     # legend_list=["Periodic", "Full"],
+    #     data_list=[out2.mag.Phi_wind_stator],
+    #     legend_list=["Periodic", "Full"],
     #     save_path=join(save_path, "test_FEMM_periodicity_Phi_wind_stator_time.png"),
-    #     # linestyle_list=["-", "dotted"],
+    #     linestyle_list=["-", "dotted"],
     #     )
+    
+    return out, out2
+
+# To run it without pytest
+if __name__ == "__main__":
+    out, out2 = test_FEMM_periodicity()
+    
+    
+    
+    # #%%
+    # out.plot_A_space(
+    #     "force.P",
+    #     t_index=0,
+    #     is_fft=True,
+    #     data_list=[out2.force.P],
+    #     legend_list=["Periodic", "Full"],
+    #     # save_path=join(save_path, "test_FEMM_periodicity_P_space.png"),
+    #     linestyle_list=["-", "dotted"],
+    # )
