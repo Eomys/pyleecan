@@ -222,11 +222,11 @@ def plot_A_space(
             ylabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
         legend_list = [legend_list[0]] + [legend_list[-1]]
 
+        Xdatas = []
+        Ydatas = []
         if is_spaceorder:
             order_max = r_max / data.normalizations.get("space_order")
             xlabel = "Space order []"
-            Xdatas = []
-            Ydatas = []
             for d in data_list2:
                 results = d.get_magnitude_along(
                     "wavenumber=[0," + str(order_max) + "]{space_order}",
@@ -241,7 +241,7 @@ def plot_A_space(
             xlabel = "Wavenumber []"
             for d in data_list2:
                 results = d.get_magnitude_along(
-                    "wavenumber=[0," + str(order_max) + "]",
+                    "wavenumber=[0," + str(r_max) + "]",
                     t_str,
                     unit=unit,
                     is_norm=False,
@@ -252,11 +252,7 @@ def plot_A_space(
         wavenumber = Xdatas[0]
 
         if is_auto_ticks:
-            indices = [0]
-            for i in range(len(Ydata)):
-                indices += list(
-                    set([ind for ind, y in enumerate(Ydatas[i]) if abs(y) > abs(0.01 * np_max(y))])
-                )
+            indices = [ind for ind, y in enumerate(Ydatas[0]) if abs(y) > abs(0.01 * np_max(y))]
             xticks = wavenumber[indices]
         else:
             xticks = None
