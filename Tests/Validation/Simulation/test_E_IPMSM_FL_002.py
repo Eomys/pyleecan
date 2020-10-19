@@ -63,8 +63,8 @@ def test_E_IPMSM_FL_002():
     )
 
     # from Yang et al, 2013
-    assert_almost_equal(out.elec.Tem_av_ref, 64.82, decimal=1)
-    assert_almost_equal(out2.mag.Tem_av, 64.52, decimal=1)
+    assert_almost_equal(out.elec.Tem_av_ref, 81.98, decimal=1)
+    assert_almost_equal(out2.mag.Tem_av, 81.91, decimal=1)
 
     return out, out2
 

@@ -27,7 +27,7 @@ def test_IPMSM_torque_current_angle():
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
     # Initialization of the Simulation
-    simu = Simu1(name="tuto_Id_Iq", machine=IPMSM_A)
+    simu = Simu1(name="test_IPMSM_torque_current_angle", machine=IPMSM_A)
 
     # Definition of the magnetic simulation (FEMM with symmetry and sliding band)
     simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True,)
