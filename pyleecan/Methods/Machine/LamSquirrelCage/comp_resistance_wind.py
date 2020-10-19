@@ -21,7 +21,7 @@ def comp_resistance_wind(self):
     # calculate resistance ring
     Sring = self.comp_surface_ring()
     lring = self.comp_length_ring()
-    rho = self.ring_mat.struc.rho
+    rho = self.ring_mat.struct.rho
     Zs = self.get_Zs(self)
     P = self.get_pole_pair_number(self)
 
