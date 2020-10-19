@@ -125,7 +125,7 @@ class MachineSync(Machine):
 
         # Get the properties inherited from Machine
         MachineSync_dict = super(MachineSync, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineSync_dict["__class__"] = "MachineSync"
         return MachineSync_dict

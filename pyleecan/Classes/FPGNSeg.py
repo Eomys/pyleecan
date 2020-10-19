@@ -101,7 +101,7 @@ class FPGNSeg(GaussPoint):
         # Get the properties inherited from GaussPoint
         FPGNSeg_dict = super(FPGNSeg, self).as_dict()
         FPGNSeg_dict["nb_gauss_point"] = self.nb_gauss_point
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         FPGNSeg_dict["__class__"] = "FPGNSeg"
         return FPGNSeg_dict

@@ -59,6 +59,9 @@ try:
     from pyvista.core.pointset import UnstructuredGrid
 except ImportError:
     UnstructuredGrid = ImportError
+from cloudpickle import dumps, loads
+from ._check import CheckTypeError
+
 try:
     from pyvista.core.pointset import PolyData
 except ImportError:
@@ -285,7 +288,7 @@ class MeshVTK(Mesh):
         MeshVTK_dict["is_vtk_surf"] = self.is_vtk_surf
         MeshVTK_dict["surf_path"] = self.surf_path
         MeshVTK_dict["surf_name"] = self.surf_name
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MeshVTK_dict["__class__"] = "MeshVTK"
         return MeshVTK_dict

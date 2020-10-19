@@ -59,6 +59,7 @@ def plot_A_fft_space(
     """
 
     # Set plot
+    is_show_fig = True if fig is None else False
     (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     data_list2 = [data] + data_list
     if legend_list == []:
@@ -142,3 +143,6 @@ def plot_A_fft_space(
         save_path=save_path,
         subplot_index=subplot_index,
     )
+
+    if is_show_fig:
+        fig.show()

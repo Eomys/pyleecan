@@ -8,8 +8,8 @@ from ....Classes.Segment import Segment
 
 def build_geometry(self):
     """Compute the curve (Line) needed to plot the object.
-    The ending point of a curve is the starting point of the next curve in
-    the list
+    The ending point of a curve is the starting point of the next curve
+    in the list
 
     Parameters
     ----------

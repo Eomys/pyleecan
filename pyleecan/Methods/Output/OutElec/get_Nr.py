@@ -25,5 +25,5 @@ def get_Nr(self):
         raise OutElecError('You must define "N0" before calling get_Nr.')
 
     # Same speed for every timestep
-    Nr = self.N0 * ones(self.time.shape[0])
+    Nr = self.N0 * ones(self.time.get_length(is_oneperiod=False))
     return Nr

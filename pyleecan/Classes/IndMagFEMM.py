@@ -70,10 +70,9 @@ class IndMagFEMM(IndMag):
         FEMM_dict=-1,
         type_calc_leakage=0,
         is_sliding_band=True,
-        is_symmetry_a=False,
-        sym_a=1,
-        is_antiper_a=False,
+        is_periodicity_a=False,
         Nt_tot=5,
+        Kgeo_fineness=0.5,
         init_dict=None,
         init_str=None,
     ):
@@ -98,22 +97,19 @@ class IndMagFEMM(IndMag):
                 type_calc_leakage = init_dict["type_calc_leakage"]
             if "is_sliding_band" in list(init_dict.keys()):
                 is_sliding_band = init_dict["is_sliding_band"]
-            if "is_symmetry_a" in list(init_dict.keys()):
-                is_symmetry_a = init_dict["is_symmetry_a"]
-            if "sym_a" in list(init_dict.keys()):
-                sym_a = init_dict["sym_a"]
-            if "is_antiper_a" in list(init_dict.keys()):
-                is_antiper_a = init_dict["is_antiper_a"]
+            if "is_periodicity_a" in list(init_dict.keys()):
+                is_periodicity_a = init_dict["is_periodicity_a"]
             if "Nt_tot" in list(init_dict.keys()):
                 Nt_tot = init_dict["Nt_tot"]
+            if "Kgeo_fineness" in list(init_dict.keys()):
+                Kgeo_fineness = init_dict["Kgeo_fineness"]
         # Set the properties (value check and convertion are done in setter)
         self.FEMM_dict = FEMM_dict
         self.type_calc_leakage = type_calc_leakage
         self.is_sliding_band = is_sliding_band
-        self.is_symmetry_a = is_symmetry_a
-        self.sym_a = sym_a
-        self.is_antiper_a = is_antiper_a
+        self.is_periodicity_a = is_periodicity_a
         self.Nt_tot = Nt_tot
+        self.Kgeo_fineness = Kgeo_fineness
         # Call IndMag init
         super(IndMagFEMM, self).__init__()
         # The class is frozen (in IndMag init), for now it's impossible to
@@ -128,10 +124,9 @@ class IndMagFEMM(IndMag):
         IndMagFEMM_str += "FEMM_dict = " + str(self.FEMM_dict) + linesep
         IndMagFEMM_str += "type_calc_leakage = " + str(self.type_calc_leakage) + linesep
         IndMagFEMM_str += "is_sliding_band = " + str(self.is_sliding_band) + linesep
-        IndMagFEMM_str += "is_symmetry_a = " + str(self.is_symmetry_a) + linesep
-        IndMagFEMM_str += "sym_a = " + str(self.sym_a) + linesep
-        IndMagFEMM_str += "is_antiper_a = " + str(self.is_antiper_a) + linesep
+        IndMagFEMM_str += "is_periodicity_a = " + str(self.is_periodicity_a) + linesep
         IndMagFEMM_str += "Nt_tot = " + str(self.Nt_tot) + linesep
+        IndMagFEMM_str += "Kgeo_fineness = " + str(self.Kgeo_fineness) + linesep
         return IndMagFEMM_str
 
     def __eq__(self, other):
@@ -149,13 +144,11 @@ class IndMagFEMM(IndMag):
             return False
         if other.is_sliding_band != self.is_sliding_band:
             return False
-        if other.is_symmetry_a != self.is_symmetry_a:
-            return False
-        if other.sym_a != self.sym_a:
-            return False
-        if other.is_antiper_a != self.is_antiper_a:
+        if other.is_periodicity_a != self.is_periodicity_a:
             return False
         if other.Nt_tot != self.Nt_tot:
+            return False
+        if other.Kgeo_fineness != self.Kgeo_fineness:
             return False
         return True
 
@@ -164,14 +157,15 @@ class IndMagFEMM(IndMag):
 
         # Get the properties inherited from IndMag
         IndMagFEMM_dict = super(IndMagFEMM, self).as_dict()
-        IndMagFEMM_dict["FEMM_dict"] = self.FEMM_dict
+        IndMagFEMM_dict["FEMM_dict"] = (
+            self.FEMM_dict.copy() if self.FEMM_dict is not None else None
+        )
         IndMagFEMM_dict["type_calc_leakage"] = self.type_calc_leakage
         IndMagFEMM_dict["is_sliding_band"] = self.is_sliding_band
-        IndMagFEMM_dict["is_symmetry_a"] = self.is_symmetry_a
-        IndMagFEMM_dict["sym_a"] = self.sym_a
-        IndMagFEMM_dict["is_antiper_a"] = self.is_antiper_a
+        IndMagFEMM_dict["is_periodicity_a"] = self.is_periodicity_a
         IndMagFEMM_dict["Nt_tot"] = self.Nt_tot
-        # The class name is added to the dict fordeserialisation purpose
+        IndMagFEMM_dict["Kgeo_fineness"] = self.Kgeo_fineness
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         IndMagFEMM_dict["__class__"] = "IndMagFEMM"
         return IndMagFEMM_dict
@@ -182,10 +176,9 @@ class IndMagFEMM(IndMag):
         self.FEMM_dict = None
         self.type_calc_leakage = None
         self.is_sliding_band = None
-        self.is_symmetry_a = None
-        self.sym_a = None
-        self.is_antiper_a = None
+        self.is_periodicity_a = None
         self.Nt_tot = None
+        self.Kgeo_fineness = None
         # Set to None the properties inherited from IndMag
         super(IndMagFEMM, self)._set_None()
 
@@ -247,56 +240,19 @@ class IndMagFEMM(IndMag):
         """,
     )
 
-    def _get_is_symmetry_a(self):
-        """getter of is_symmetry_a"""
-        return self._is_symmetry_a
+    def _get_is_periodicity_a(self):
+        """getter of is_periodicity_a"""
+        return self._is_periodicity_a
 
-    def _set_is_symmetry_a(self, value):
-        """setter of is_symmetry_a"""
-        check_var("is_symmetry_a", value, "bool")
-        self._is_symmetry_a = value
+    def _set_is_periodicity_a(self, value):
+        """setter of is_periodicity_a"""
+        check_var("is_periodicity_a", value, "bool")
+        self._is_periodicity_a = value
 
-    is_symmetry_a = property(
-        fget=_get_is_symmetry_a,
-        fset=_set_is_symmetry_a,
-        doc=u"""0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a
-
-        :Type: bool
-        """,
-    )
-
-    def _get_sym_a(self):
-        """getter of sym_a"""
-        return self._sym_a
-
-    def _set_sym_a(self, value):
-        """setter of sym_a"""
-        check_var("sym_a", value, "int", Vmin=1)
-        self._sym_a = value
-
-    sym_a = property(
-        fget=_get_sym_a,
-        fset=_set_sym_a,
-        doc=u"""Number of symmetry for the angle vector
-
-        :Type: int
-        :min: 1
-        """,
-    )
-
-    def _get_is_antiper_a(self):
-        """getter of is_antiper_a"""
-        return self._is_antiper_a
-
-    def _set_is_antiper_a(self, value):
-        """setter of is_antiper_a"""
-        check_var("is_antiper_a", value, "bool")
-        self._is_antiper_a = value
-
-    is_antiper_a = property(
-        fget=_get_is_antiper_a,
-        fset=_set_is_antiper_a,
-        doc=u"""To add an antiperiodicity to the angle vector
+    is_periodicity_a = property(
+        fget=_get_is_periodicity_a,
+        fset=_set_is_periodicity_a,
+        doc=u"""True to take into account the spatial periodicity of the machine
 
         :Type: bool
         """,
@@ -317,5 +273,23 @@ class IndMagFEMM(IndMag):
         doc=u"""Number of time steps for the FEMM simulation
 
         :Type: int
+        """,
+    )
+
+    def _get_Kgeo_fineness(self):
+        """getter of Kgeo_fineness"""
+        return self._Kgeo_fineness
+
+    def _set_Kgeo_fineness(self, value):
+        """setter of Kgeo_fineness"""
+        check_var("Kgeo_fineness", value, "float")
+        self._Kgeo_fineness = value
+
+    Kgeo_fineness = property(
+        fget=_get_Kgeo_fineness,
+        fset=_set_Kgeo_fineness,
+        doc=u"""global coefficient to adjust geometry fineness in FEMM (0.5 : default , > 1 : finner , < 1 : less fine)
+
+        :Type: float
         """,
     )

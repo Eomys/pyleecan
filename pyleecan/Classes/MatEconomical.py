@@ -87,7 +87,7 @@ class MatEconomical(FrozenClass):
         MatEconomical_dict = dict()
         MatEconomical_dict["cost_unit"] = self.cost_unit
         MatEconomical_dict["unit_name"] = self.unit_name
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         MatEconomical_dict["__class__"] = "MatEconomical"
         return MatEconomical_dict
 

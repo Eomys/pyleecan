@@ -3,8 +3,8 @@
 import sys
 from random import uniform
 
-from PyQt5 import QtWidgets
-from PyQt5.QtTest import QTest
+from PySide2 import QtWidgets
+from PySide2.QtTest import QTest
 
 from pyleecan.Classes.CondType21 import CondType21
 from pyleecan.Classes.CondType22 import CondType22
@@ -52,7 +52,10 @@ class TestSBar(object):
         """Start the app for the test"""
         print("\nStart Test SBar")
         # gui_option.unit.unit_m =0 #m
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
     def teardown_class(cls):

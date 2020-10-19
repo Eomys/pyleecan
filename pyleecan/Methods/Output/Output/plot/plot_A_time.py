@@ -161,3 +161,5 @@ def plot_A_time(
             is_auto_ticks=is_auto_ticks,
             fig=fig,
         )
+
+    fig.show()

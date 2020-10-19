@@ -2,176 +2,245 @@
 
 # File generated according to PHoleM57.ui
 # WARNING! All changes made in this file will be lost!
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
+
+from pyleecan.GUI.Tools.FloatEdit import FloatEdit
+from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
+
+from pyleecan.GUI.Resources import pyleecan_rc
 
 
 class Ui_PHoleM57(object):
     def setupUi(self, PHoleM57):
-        PHoleM57.setObjectName("PHoleM57")
+        if not PHoleM57.objectName():
+            PHoleM57.setObjectName(u"PHoleM57")
         PHoleM57.resize(700, 470)
-        PHoleM57.setMinimumSize(QtCore.QSize(700, 470))
-        PHoleM57.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.horizontalLayout = QtWidgets.QHBoxLayout(PHoleM57)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.img_slot = QtWidgets.QLabel(PHoleM57)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
-        )
+        PHoleM57.setMinimumSize(QSize(700, 470))
+        PHoleM57.setMaximumSize(QSize(16777215, 16777215))
+        self.horizontalLayout = QHBoxLayout(PHoleM57)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.verticalLayout_3 = QVBoxLayout()
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.img_slot = QLabel(PHoleM57)
+        self.img_slot.setObjectName(u"img_slot")
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.img_slot.sizePolicy().hasHeightForWidth())
         self.img_slot.setSizePolicy(sizePolicy)
-        self.img_slot.setMinimumSize(QtCore.QSize(450, 120))
-        self.img_slot.setMaximumSize(QtCore.QSize(450, 120))
-        self.img_slot.setText("")
+        self.img_slot.setMinimumSize(QSize(450, 120))
+        self.img_slot.setMaximumSize(QSize(450, 120))
         self.img_slot.setPixmap(
-            QtGui.QPixmap(":/images/images/MachineSetup/WSlot/Slot_57.PNG")
+            QPixmap(u":/images/images/MachineSetup/WSlot/Slot_57.PNG")
         )
         self.img_slot.setScaledContents(True)
-        self.img_slot.setObjectName("img_slot")
+
         self.verticalLayout_3.addWidget(self.img_slot)
-        spacerItem = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+
+        self.verticalSpacer = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
-        self.verticalLayout_3.addItem(spacerItem)
+
+        self.verticalLayout_3.addItem(self.verticalSpacer)
+
         self.horizontalLayout.addLayout(self.verticalLayout_3)
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.gridLayout = QtWidgets.QGridLayout()
-        self.gridLayout.setObjectName("gridLayout")
+
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.gridLayout = QGridLayout()
+        self.gridLayout.setObjectName(u"gridLayout")
         self.lf_W3 = FloatEdit(PHoleM57)
-        self.lf_W3.setObjectName("lf_W3")
+        self.lf_W3.setObjectName(u"lf_W3")
+
         self.gridLayout.addWidget(self.lf_W3, 5, 1, 1, 1)
+
         self.lf_W0 = FloatEdit(PHoleM57)
-        self.lf_W0.setObjectName("lf_W0")
+        self.lf_W0.setObjectName(u"lf_W0")
+
         self.gridLayout.addWidget(self.lf_W0, 2, 1, 1, 1)
-        self.in_W1 = QtWidgets.QLabel(PHoleM57)
-        self.in_W1.setObjectName("in_W1")
+
+        self.in_W1 = QLabel(PHoleM57)
+        self.in_W1.setObjectName(u"in_W1")
+
         self.gridLayout.addWidget(self.in_W1, 3, 0, 1, 1)
+
         self.lf_H2 = FloatEdit(PHoleM57)
-        self.lf_H2.setObjectName("lf_H2")
+        self.lf_H2.setObjectName(u"lf_H2")
+
         self.gridLayout.addWidget(self.lf_H2, 1, 1, 1, 1)
-        self.unit_W1 = QtWidgets.QLabel(PHoleM57)
-        self.unit_W1.setObjectName("unit_W1")
+
+        self.unit_W1 = QLabel(PHoleM57)
+        self.unit_W1.setObjectName(u"unit_W1")
+
         self.gridLayout.addWidget(self.unit_W1, 3, 2, 1, 1)
+
         self.lf_H1 = FloatEdit(PHoleM57)
-        self.lf_H1.setObjectName("lf_H1")
+        self.lf_H1.setObjectName(u"lf_H1")
+
         self.gridLayout.addWidget(self.lf_H1, 0, 1, 1, 1)
-        self.unit_W2 = QtWidgets.QLabel(PHoleM57)
-        self.unit_W2.setObjectName("unit_W2")
+
+        self.unit_W2 = QLabel(PHoleM57)
+        self.unit_W2.setObjectName(u"unit_W2")
+
         self.gridLayout.addWidget(self.unit_W2, 4, 2, 1, 1)
-        self.in_W3 = QtWidgets.QLabel(PHoleM57)
-        self.in_W3.setObjectName("in_W3")
+
+        self.in_W3 = QLabel(PHoleM57)
+        self.in_W3.setObjectName(u"in_W3")
+
         self.gridLayout.addWidget(self.in_W3, 5, 0, 1, 1)
-        self.unit_W4 = QtWidgets.QLabel(PHoleM57)
-        self.unit_W4.setObjectName("unit_W4")
+
+        self.unit_W4 = QLabel(PHoleM57)
+        self.unit_W4.setObjectName(u"unit_W4")
+
         self.gridLayout.addWidget(self.unit_W4, 6, 2, 1, 1)
+
         self.lf_W4 = FloatEdit(PHoleM57)
-        self.lf_W4.setText("")
-        self.lf_W4.setObjectName("lf_W4")
+        self.lf_W4.setObjectName(u"lf_W4")
+
         self.gridLayout.addWidget(self.lf_W4, 6, 1, 1, 1)
-        self.unit_W0 = QtWidgets.QLabel(PHoleM57)
-        self.unit_W0.setObjectName("unit_W0")
+
+        self.unit_W0 = QLabel(PHoleM57)
+        self.unit_W0.setObjectName(u"unit_W0")
+
         self.gridLayout.addWidget(self.unit_W0, 2, 2, 1, 1)
-        self.in_W2 = QtWidgets.QLabel(PHoleM57)
-        self.in_W2.setObjectName("in_W2")
+
+        self.in_W2 = QLabel(PHoleM57)
+        self.in_W2.setObjectName(u"in_W2")
+
         self.gridLayout.addWidget(self.in_W2, 4, 0, 1, 1)
-        self.in_W0 = QtWidgets.QLabel(PHoleM57)
-        self.in_W0.setObjectName("in_W0")
+
+        self.in_W0 = QLabel(PHoleM57)
+        self.in_W0.setObjectName(u"in_W0")
+
         self.gridLayout.addWidget(self.in_W0, 2, 0, 1, 1)
-        self.in_W4 = QtWidgets.QLabel(PHoleM57)
-        self.in_W4.setObjectName("in_W4")
+
+        self.in_W4 = QLabel(PHoleM57)
+        self.in_W4.setObjectName(u"in_W4")
+
         self.gridLayout.addWidget(self.in_W4, 6, 0, 1, 1)
-        self.unit_H1 = QtWidgets.QLabel(PHoleM57)
-        self.unit_H1.setObjectName("unit_H1")
+
+        self.unit_H1 = QLabel(PHoleM57)
+        self.unit_H1.setObjectName(u"unit_H1")
+
         self.gridLayout.addWidget(self.unit_H1, 0, 2, 1, 1)
-        self.in_H2 = QtWidgets.QLabel(PHoleM57)
-        self.in_H2.setObjectName("in_H2")
+
+        self.in_H2 = QLabel(PHoleM57)
+        self.in_H2.setObjectName(u"in_H2")
+
         self.gridLayout.addWidget(self.in_H2, 1, 0, 1, 1)
+
         self.lf_W2 = FloatEdit(PHoleM57)
-        self.lf_W2.setObjectName("lf_W2")
+        self.lf_W2.setObjectName(u"lf_W2")
+
         self.gridLayout.addWidget(self.lf_W2, 4, 1, 1, 1)
-        self.in_H1 = QtWidgets.QLabel(PHoleM57)
-        self.in_H1.setObjectName("in_H1")
+
+        self.in_H1 = QLabel(PHoleM57)
+        self.in_H1.setObjectName(u"in_H1")
+
         self.gridLayout.addWidget(self.in_H1, 0, 0, 1, 1)
-        self.unit_W3 = QtWidgets.QLabel(PHoleM57)
-        self.unit_W3.setObjectName("unit_W3")
+
+        self.unit_W3 = QLabel(PHoleM57)
+        self.unit_W3.setObjectName(u"unit_W3")
+
         self.gridLayout.addWidget(self.unit_W3, 5, 2, 1, 1)
+
         self.lf_W1 = FloatEdit(PHoleM57)
-        self.lf_W1.setObjectName("lf_W1")
+        self.lf_W1.setObjectName(u"lf_W1")
+
         self.gridLayout.addWidget(self.lf_W1, 3, 1, 1, 1)
-        self.unit_H2 = QtWidgets.QLabel(PHoleM57)
-        self.unit_H2.setObjectName("unit_H2")
+
+        self.unit_H2 = QLabel(PHoleM57)
+        self.unit_H2.setObjectName(u"unit_H2")
+
         self.gridLayout.addWidget(self.unit_H2, 1, 2, 1, 1)
+
         self.verticalLayout_2.addLayout(self.gridLayout)
+
         self.w_mat_0 = WMatSelect(PHoleM57)
-        self.w_mat_0.setMinimumSize(QtCore.QSize(100, 0))
-        self.w_mat_0.setObjectName("w_mat_0")
+        self.w_mat_0.setObjectName(u"w_mat_0")
+        self.w_mat_0.setMinimumSize(QSize(100, 0))
+
         self.verticalLayout_2.addWidget(self.w_mat_0)
+
         self.w_mat_1 = WMatSelect(PHoleM57)
-        self.w_mat_1.setMinimumSize(QtCore.QSize(100, 0))
-        self.w_mat_1.setObjectName("w_mat_1")
+        self.w_mat_1.setObjectName(u"w_mat_1")
+        self.w_mat_1.setMinimumSize(QSize(100, 0))
+
         self.verticalLayout_2.addWidget(self.w_mat_1)
+
         self.w_mat_2 = WMatSelect(PHoleM57)
-        self.w_mat_2.setMinimumSize(QtCore.QSize(100, 0))
-        self.w_mat_2.setObjectName("w_mat_2")
+        self.w_mat_2.setObjectName(u"w_mat_2")
+        self.w_mat_2.setMinimumSize(QSize(100, 0))
+
         self.verticalLayout_2.addWidget(self.w_mat_2)
-        self.g_output = QtWidgets.QGroupBox(PHoleM57)
-        self.g_output.setMinimumSize(QtCore.QSize(200, 0))
-        self.g_output.setObjectName("g_output")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.g_output)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.out_slot_surface = QtWidgets.QLabel(self.g_output)
-        self.out_slot_surface.setObjectName("out_slot_surface")
+
+        self.g_output = QGroupBox(PHoleM57)
+        self.g_output.setObjectName(u"g_output")
+        self.g_output.setMinimumSize(QSize(200, 0))
+        self.verticalLayout = QVBoxLayout(self.g_output)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.out_slot_surface = QLabel(self.g_output)
+        self.out_slot_surface.setObjectName(u"out_slot_surface")
+
         self.verticalLayout.addWidget(self.out_slot_surface)
-        self.out_magnet_surface = QtWidgets.QLabel(self.g_output)
-        self.out_magnet_surface.setObjectName("out_magnet_surface")
+
+        self.out_magnet_surface = QLabel(self.g_output)
+        self.out_magnet_surface.setObjectName(u"out_magnet_surface")
+
         self.verticalLayout.addWidget(self.out_magnet_surface)
-        spacerItem1 = QtWidgets.QSpacerItem(
-            20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+
+        self.verticalSpacer_2 = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
         )
-        self.verticalLayout.addItem(spacerItem1)
+
+        self.verticalLayout.addItem(self.verticalSpacer_2)
+
         self.verticalLayout_2.addWidget(self.g_output)
+
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
+        QWidget.setTabOrder(self.lf_H1, self.lf_H2)
+        QWidget.setTabOrder(self.lf_H2, self.lf_W0)
+        QWidget.setTabOrder(self.lf_W0, self.lf_W1)
+        QWidget.setTabOrder(self.lf_W1, self.lf_W2)
+        QWidget.setTabOrder(self.lf_W2, self.lf_W3)
+        QWidget.setTabOrder(self.lf_W3, self.lf_W4)
+
         self.retranslateUi(PHoleM57)
-        QtCore.QMetaObject.connectSlotsByName(PHoleM57)
-        PHoleM57.setTabOrder(self.lf_H1, self.lf_H2)
-        PHoleM57.setTabOrder(self.lf_H2, self.lf_W0)
-        PHoleM57.setTabOrder(self.lf_W0, self.lf_W1)
-        PHoleM57.setTabOrder(self.lf_W1, self.lf_W2)
-        PHoleM57.setTabOrder(self.lf_W2, self.lf_W3)
-        PHoleM57.setTabOrder(self.lf_W3, self.lf_W4)
+
+        QMetaObject.connectSlotsByName(PHoleM57)
+
+    # setupUi
 
     def retranslateUi(self, PHoleM57):
-        _translate = QtCore.QCoreApplication.translate
-        PHoleM57.setWindowTitle(_translate("PHoleM57", "Form"))
-        self.in_W1.setText(_translate("PHoleM57", "W1 :"))
-        self.unit_W1.setText(_translate("PHoleM57", "m"))
-        self.unit_W2.setText(_translate("PHoleM57", "m"))
-        self.in_W3.setText(_translate("PHoleM57", "W3 :"))
-        self.unit_W4.setText(_translate("PHoleM57", "m"))
-        self.unit_W0.setText(_translate("PHoleM57", "rad"))
-        self.in_W2.setText(_translate("PHoleM57", "W2 :"))
-        self.in_W0.setText(_translate("PHoleM57", "W0 :"))
-        self.in_W4.setText(_translate("PHoleM57", "W4 :"))
-        self.unit_H1.setText(_translate("PHoleM57", "m"))
-        self.in_H2.setText(_translate("PHoleM57", "H2 :"))
-        self.in_H1.setText(_translate("PHoleM57", "H1 :"))
-        self.unit_W3.setText(_translate("PHoleM57", "m"))
-        self.unit_H2.setText(_translate("PHoleM57", "m"))
-        self.g_output.setTitle(_translate("PHoleM57", "Output"))
+        PHoleM57.setWindowTitle(QCoreApplication.translate("PHoleM57", u"Form", None))
+        self.img_slot.setText("")
+        self.in_W1.setText(QCoreApplication.translate("PHoleM57", u"W1 :", None))
+        self.unit_W1.setText(QCoreApplication.translate("PHoleM57", u"m", None))
+        self.unit_W2.setText(QCoreApplication.translate("PHoleM57", u"m", None))
+        self.in_W3.setText(QCoreApplication.translate("PHoleM57", u"W3 :", None))
+        self.unit_W4.setText(QCoreApplication.translate("PHoleM57", u"m", None))
+        self.lf_W4.setText("")
+        self.unit_W0.setText(QCoreApplication.translate("PHoleM57", u"rad", None))
+        self.in_W2.setText(QCoreApplication.translate("PHoleM57", u"W2 :", None))
+        self.in_W0.setText(QCoreApplication.translate("PHoleM57", u"W0 :", None))
+        self.in_W4.setText(QCoreApplication.translate("PHoleM57", u"W4 :", None))
+        self.unit_H1.setText(QCoreApplication.translate("PHoleM57", u"m", None))
+        self.in_H2.setText(QCoreApplication.translate("PHoleM57", u"H2 :", None))
+        self.in_H1.setText(QCoreApplication.translate("PHoleM57", u"H1 :", None))
+        self.unit_W3.setText(QCoreApplication.translate("PHoleM57", u"m", None))
+        self.unit_H2.setText(QCoreApplication.translate("PHoleM57", u"m", None))
+        self.g_output.setTitle(QCoreApplication.translate("PHoleM57", u"Output", None))
         self.out_slot_surface.setText(
-            _translate("PHoleM57", "Slot suface (2 part) : ?")
+            QCoreApplication.translate("PHoleM57", u"Slot suface (2 part) : ?", None)
         )
         self.out_magnet_surface.setText(
-            _translate("PHoleM57", "Single Magnet surface : ?")
+            QCoreApplication.translate("PHoleM57", u"Single Magnet surface : ?", None)
         )
 
-
-from pyleecan.GUI.Dialog.DMatLib.WMatSelect.WMatSelect import WMatSelect
-from pyleecan.GUI.Tools.FloatEdit import FloatEdit
-from pyleecan.GUI.Resources import pyleecan_rc
+    # retranslateUi

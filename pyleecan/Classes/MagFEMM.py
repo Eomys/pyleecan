@@ -154,12 +154,8 @@ class MagFEMM(Magnetics):
         is_mmfr=True,
         type_BH_stator=0,
         type_BH_rotor=0,
-        is_symmetry_t=False,
-        sym_t=1,
-        is_antiper_t=False,
-        is_symmetry_a=False,
-        sym_a=1,
-        is_antiper_a=False,
+        is_periodicity_t=False,
+        is_periodicity_a=False,
         init_dict=None,
         init_str=None,
     ):
@@ -220,18 +216,10 @@ class MagFEMM(Magnetics):
                 type_BH_stator = init_dict["type_BH_stator"]
             if "type_BH_rotor" in list(init_dict.keys()):
                 type_BH_rotor = init_dict["type_BH_rotor"]
-            if "is_symmetry_t" in list(init_dict.keys()):
-                is_symmetry_t = init_dict["is_symmetry_t"]
-            if "sym_t" in list(init_dict.keys()):
-                sym_t = init_dict["sym_t"]
-            if "is_antiper_t" in list(init_dict.keys()):
-                is_antiper_t = init_dict["is_antiper_t"]
-            if "is_symmetry_a" in list(init_dict.keys()):
-                is_symmetry_a = init_dict["is_symmetry_a"]
-            if "sym_a" in list(init_dict.keys()):
-                sym_a = init_dict["sym_a"]
-            if "is_antiper_a" in list(init_dict.keys()):
-                is_antiper_a = init_dict["is_antiper_a"]
+            if "is_periodicity_t" in list(init_dict.keys()):
+                is_periodicity_t = init_dict["is_periodicity_t"]
+            if "is_periodicity_a" in list(init_dict.keys()):
+                is_periodicity_a = init_dict["is_periodicity_a"]
         # Set the properties (value check and convertion are done in setter)
         self.Kmesh_fineness = Kmesh_fineness
         self.Kgeo_fineness = Kgeo_fineness
@@ -256,12 +244,8 @@ class MagFEMM(Magnetics):
             is_mmfr=is_mmfr,
             type_BH_stator=type_BH_stator,
             type_BH_rotor=type_BH_rotor,
-            is_symmetry_t=is_symmetry_t,
-            sym_t=sym_t,
-            is_antiper_t=is_antiper_t,
-            is_symmetry_a=is_symmetry_a,
-            sym_a=sym_a,
-            is_antiper_a=is_antiper_a,
+            is_periodicity_t=is_periodicity_t,
+            is_periodicity_a=is_periodicity_a,
         )
         # The class is frozen (in Magnetics init), for now it's impossible to
         # add new properties
@@ -351,12 +335,16 @@ class MagFEMM(Magnetics):
         MagFEMM_dict["Kgeo_fineness"] = self.Kgeo_fineness
         MagFEMM_dict["type_calc_leakage"] = self.type_calc_leakage
         MagFEMM_dict["file_name"] = self.file_name
-        MagFEMM_dict["FEMM_dict"] = self.FEMM_dict
+        MagFEMM_dict["FEMM_dict"] = (
+            self.FEMM_dict.copy() if self.FEMM_dict is not None else None
+        )
         MagFEMM_dict["angle_stator"] = self.angle_stator
         MagFEMM_dict["is_get_mesh"] = self.is_get_mesh
         MagFEMM_dict["is_save_FEA"] = self.is_save_FEA
         MagFEMM_dict["is_sliding_band"] = self.is_sliding_band
-        MagFEMM_dict["transform_list"] = self.transform_list
+        MagFEMM_dict["transform_list"] = (
+            self.transform_list.copy() if self.transform_list is not None else None
+        )
         if self.rotor_dxf is None:
             MagFEMM_dict["rotor_dxf"] = None
         else:
@@ -367,7 +355,7 @@ class MagFEMM(Magnetics):
             MagFEMM_dict["stator_dxf"] = self.stator_dxf.as_dict()
         MagFEMM_dict["import_file"] = self.import_file
         MagFEMM_dict["is_close_femm"] = self.is_close_femm
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MagFEMM_dict["__class__"] = "MagFEMM"
         return MagFEMM_dict

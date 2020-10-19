@@ -85,7 +85,7 @@ class Mesh(FrozenClass):
         Mesh_dict = dict()
         Mesh_dict["label"] = self.label
         Mesh_dict["dimension"] = self.dimension
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Mesh_dict["__class__"] = "Mesh"
         return Mesh_dict
 

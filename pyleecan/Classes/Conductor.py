@@ -117,7 +117,7 @@ class Conductor(FrozenClass):
             Conductor_dict["ins_mat"] = None
         else:
             Conductor_dict["ins_mat"] = self.ins_mat.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Conductor_dict["__class__"] = "Conductor"
         return Conductor_dict
 

@@ -222,7 +222,7 @@ class CondType12(Conductor):
         CondType12_dict["Nwppc"] = self.Nwppc
         CondType12_dict["Wins_wire"] = self.Wins_wire
         CondType12_dict["Kwoh"] = self.Kwoh
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         CondType12_dict["__class__"] = "CondType12"
         return CondType12_dict

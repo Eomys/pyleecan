@@ -2,7 +2,7 @@
 
 import sys
 
-from PyQt5 import QtWidgets
+from PySide2 import QtWidgets
 
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineWRSM import MachineWRSM
@@ -36,7 +36,10 @@ class TestSWPole(object):
     def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test SWPole")
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
     def teardown_class(cls):

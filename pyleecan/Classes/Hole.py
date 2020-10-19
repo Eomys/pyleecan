@@ -197,7 +197,7 @@ class Hole(FrozenClass):
             Hole_dict["mat_void"] = None
         else:
             Hole_dict["mat_void"] = self.mat_void.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Hole_dict["__class__"] = "Hole"
         return Hole_dict
 

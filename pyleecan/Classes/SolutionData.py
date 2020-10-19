@@ -134,7 +134,7 @@ class SolutionData(Solution):
             SolutionData_dict["field"] = None
         else:
             SolutionData_dict["field"] = self.field.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SolutionData_dict["__class__"] = "SolutionData"
         return SolutionData_dict

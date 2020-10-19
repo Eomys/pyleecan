@@ -201,13 +201,15 @@ class EEC_PMSM(EEC):
             EEC_PMSM_dict["fluxlink"] = None
         else:
             EEC_PMSM_dict["fluxlink"] = self.fluxlink.as_dict()
-        EEC_PMSM_dict["parameters"] = self.parameters
+        EEC_PMSM_dict["parameters"] = (
+            self.parameters.copy() if self.parameters is not None else None
+        )
         EEC_PMSM_dict["freq0"] = self.freq0
         if self.drive is None:
             EEC_PMSM_dict["drive"] = None
         else:
             EEC_PMSM_dict["drive"] = self.drive.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         EEC_PMSM_dict["__class__"] = "EEC_PMSM"
         return EEC_PMSM_dict

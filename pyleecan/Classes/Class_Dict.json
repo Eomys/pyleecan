@@ -894,7 +894,8 @@
             }
         ],
         "daughters": [
-            "EEC_PMSM"
+            "EEC_PMSM",
+            "EEC_SCIM"
         ],
         "desc": "Electric module: Equivalent Electrical Circuit abstract class",
         "is_internal": false,
@@ -973,6 +974,65 @@
             }
         ]
     },
+    "EEC_SCIM": {
+        "constants": [
+            {
+                "name": "VERSION",
+                "value": "1"
+            }
+        ],
+        "daughters": [],
+        "desc": "Electric module: Electrical Equivalent Circuit for Squirrel Cage Induction Machine",
+        "is_internal": false,
+        "methods": [
+            "comp_parameters",
+            "solve_EEC",
+            "gen_drive",
+            "comp_joule_losses"
+        ],
+        "mother": "EEC",
+        "name": "EEC_SCIM",
+        "package": "Simulation",
+        "path": "pyleecan/Generator/ClassesRef/Simulation/EEC_SCIM.csv",
+        "properties": [
+            {
+                "desc": "Magnetic inductance",
+                "max": "",
+                "min": "",
+                "name": "indmag",
+                "type": "IndMag",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Parameters of the EEC: computed if empty, or enforced",
+                "max": "",
+                "min": "",
+                "name": "parameters",
+                "type": "dict",
+                "unit": "-",
+                "value": {}
+            },
+            {
+                "desc": "Frequency",
+                "max": "",
+                "min": "",
+                "name": "freq0",
+                "type": "float",
+                "unit": "Hz",
+                "value": null
+            },
+            {
+                "desc": "Drive",
+                "max": "",
+                "min": "",
+                "name": "drive",
+                "type": "Drive",
+                "unit": "-",
+                "value": null
+            }
+        ]
+    },
     "Electrical": {
         "constants": [
             {
@@ -981,7 +1041,7 @@
             }
         ],
         "daughters": [],
-        "desc": "Electric module abstract object",
+        "desc": "Electric module object for electrical equivalent circuit simulation",
         "is_internal": false,
         "methods": [
             "run",
@@ -1128,30 +1188,12 @@
                 "value": 1
             },
             {
-                "desc": "0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a",
+                "desc": "True to take into account the spatial periodicity of the machine",
                 "max": "",
                 "min": "",
-                "name": "is_symmetry_a",
+                "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Number of symmetry for the angle vector",
-                "max": "",
-                "min": "1",
-                "name": "sym_a",
-                "type": "int",
-                "unit": "-",
-                "value": 1
-            },
-            {
-                "desc": "To add an antiperiodicity to the angle vector",
-                "max": "",
-                "min": "",
-                "name": "is_antiper_a",
-                "type": "bool",
-                "unit": "-",
                 "value": 0
             },
             {
@@ -1162,6 +1204,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": 5
+            },
+            {
+                "desc": "global coefficient to adjust geometry fineness in FEMM (0.5 : default , > 1 : finner , < 1 : less fine)",
+                "max": "",
+                "min": "",
+                "name": "Kgeo_fineness",
+                "type": "float",
+                "unit": "",
+                "value": 0.5
             }
         ]
     },
@@ -1179,7 +1230,8 @@
         "is_internal": false,
         "methods": [
             "comp_time_angle",
-            "run"
+            "run",
+            "get_axes"
         ],
         "mother": "",
         "name": "Force",
@@ -1194,6 +1246,24 @@
                 "type": "bool",
                 "unit": "-",
                 "value": 0
+            },
+            {
+                "desc": "True to compute only on one time periodicity (use periodicities defined in output.mag.time)",
+                "max": "",
+                "min": "",
+                "name": "is_periodicity_t",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
+            },
+            {
+                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.angle)",
+                "max": "",
+                "min": "",
+                "name": "is_periodicity_a",
+                "type": "bool",
+                "unit": "-",
+                "value": 0
             }
         ]
     },
@@ -1205,7 +1275,7 @@
             }
         ],
         "daughters": [],
-        "desc": "Force Maxwell tensor model",
+        "desc": "Force Maxwell tensor model for radial flux machines",
         "is_internal": false,
         "methods": [
             "comp_force",
@@ -2855,30 +2925,12 @@
                 "value": 1
             },
             {
-                "desc": "0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a",
+                "desc": "True to take into account the spatial periodicity of the machine",
                 "max": "",
                 "min": "",
-                "name": "is_symmetry_a",
+                "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Number of symmetry for the angle vector",
-                "max": "",
-                "min": "1",
-                "name": "sym_a",
-                "type": "int",
-                "unit": "-",
-                "value": 1
-            },
-            {
-                "desc": "To add an antiperiodicity to the angle vector",
-                "max": "",
-                "min": "",
-                "name": "is_antiper_a",
-                "type": "bool",
-                "unit": "-",
                 "value": 0
             },
             {
@@ -2889,6 +2941,15 @@
                 "type": "int",
                 "unit": "-",
                 "value": 5
+            },
+            {
+                "desc": "global coefficient to adjust geometry fineness in FEMM (0.5 : default , > 1 : finner , < 1 : less fine)",
+                "max": "",
+                "min": "",
+                "name": "Kgeo_fineness",
+                "type": "float",
+                "unit": "",
+                "value": 0.5
             }
         ]
     },
@@ -2909,7 +2970,7 @@
         "is_internal": false,
         "methods": [
             "gen_input",
-            "comp_time"
+            "comp_axes"
         ],
         "mother": "",
         "name": "Input",
@@ -3026,7 +3087,7 @@
                 "name": "rot_dir",
                 "type": "float",
                 "unit": "-",
-                "value": -1
+                "value": null
             },
             {
                 "desc": "Initial angular position of the rotor at t=0",
@@ -3047,7 +3108,7 @@
                 "value": null
             },
             {
-                "desc": "d-axis current magnitude",
+                "desc": "d-axis current RMS magnitude",
                 "max": "",
                 "min": "",
                 "name": "Id_ref",
@@ -3056,12 +3117,21 @@
                 "value": null
             },
             {
-                "desc": "q-axis current magnitude",
+                "desc": "q-axis current RMS magnitude",
                 "max": "",
                 "min": "",
                 "name": "Iq_ref",
                 "type": "float",
                 "unit": "A",
+                "value": null
+            },
+            {
+                "desc": "electrical frequency",
+                "max": "",
+                "min": "",
+                "name": "felec",
+                "type": "float",
+                "unit": "Hz",
                 "value": null
             }
         ]
@@ -3138,6 +3208,15 @@
                 "name": "Uq_ref",
                 "type": "float",
                 "unit": "V",
+                "value": null
+            },
+            {
+                "desc": "electrical frequency",
+                "max": "",
+                "min": "",
+                "name": "felec",
+                "type": "float",
+                "unit": "Hz",
                 "value": null
             }
         ]
@@ -3275,7 +3354,7 @@
             "comp_radius_mid_yoke",
             "has_magnet",
             "comp_angle_d_axis",
-            "comp_sym"
+            "comp_periodicity"
         ],
         "mother": "Lamination",
         "name": "LamHole",
@@ -3327,7 +3406,7 @@
             "get_Zs",
             "get_bore_desc",
             "comp_radius_mid_yoke",
-            "comp_sym"
+            "comp_periodicity"
         ],
         "mother": "Lamination",
         "name": "LamSlot",
@@ -3364,7 +3443,7 @@
             "comp_volumes",
             "plot",
             "comp_angle_d_axis",
-            "comp_sym"
+            "comp_periodicity"
         ],
         "mother": "LamSlot",
         "name": "LamSlotMag",
@@ -3451,7 +3530,7 @@
             "comp_rot_dir",
             "comp_lengths_winding",
             "comp_number_phase_eq",
-            "comp_sym"
+            "comp_periodicity"
         ],
         "mother": "LamSlot",
         "name": "LamSlotWind",
@@ -3494,7 +3573,7 @@
             "comp_length_ring",
             "plot",
             "comp_number_phase_eq",
-            "comp_sym"
+            "comp_periodicity"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
@@ -3738,7 +3817,7 @@
             "comp_masses",
             "comp_output_geo",
             "comp_Rgap_mec",
-            "comp_sym",
+            "comp_periodicity",
             "comp_width_airgap_mag",
             "comp_width_airgap_mec",
             "get_material_list",
@@ -4685,7 +4764,8 @@
         "methods": [
             "run",
             "comp_time_angle",
-            "comp_emf"
+            "comp_emf",
+            "get_axes"
         ],
         "mother": "",
         "name": "Magnetics",
@@ -4756,55 +4836,19 @@
                 "value": 0
             },
             {
-                "desc": "0 Compute on the complete time vector, 1 compute according to sym_t and is_antiper_t",
+                "desc": "True to compute only on one time periodicity (use periodicities defined in output.mag.time)",
                 "max": "",
                 "min": "",
-                "name": "is_symmetry_t",
+                "name": "is_periodicity_t",
                 "type": "bool",
                 "unit": "-",
                 "value": 0
             },
             {
-                "desc": "Number of symmetry for the time vector",
-                "max": "",
-                "min": "1",
-                "name": "sym_t",
-                "type": "int",
-                "unit": "-",
-                "value": 1
-            },
-            {
-                "desc": "To add an antiperiodicity to the time vector",
+                "desc": "True to compute only on one angle periodicity (use periodicities defined in output.mag.angle)",
                 "max": "",
                 "min": "",
-                "name": "is_antiper_t",
-                "type": "bool",
-                "unit": "-",
-                "value": 0
-            },
-            {
-                "desc": "0 Compute on the complete machine, 1 compute according to sym_a and is_antiper_a",
-                "max": "",
-                "min": "",
-                "name": "is_symmetry_a",
-                "type": "bool",
-                "unit": "",
-                "value": 0
-            },
-            {
-                "desc": "Number of symmetry for the angle vector",
-                "max": "",
-                "min": "1",
-                "name": "sym_a",
-                "type": "int",
-                "unit": "-",
-                "value": 1
-            },
-            {
-                "desc": "To add an antiperiodicity to the angle vector",
-                "max": "",
-                "min": "",
-                "name": "is_antiper_a",
+                "name": "is_periodicity_a",
                 "type": "bool",
                 "unit": "-",
                 "value": 0
@@ -6004,18 +6048,18 @@
                 "max": "",
                 "min": "",
                 "name": "time",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "s",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Electrical position vector (no symmetry)",
                 "max": "",
                 "min": "",
                 "name": "angle",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "rad",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Stator currents as a function of time (each column correspond to one phase)",
@@ -6052,15 +6096,6 @@
                 "type": "float",
                 "unit": "rpm",
                 "value": null
-            },
-            {
-                "desc": "Rotation direction of the rotor 1 trigo, -1 clockwise",
-                "max": "1",
-                "min": "-1",
-                "name": "rot_dir",
-                "type": "float",
-                "unit": "-",
-                "value": -1
             },
             {
                 "desc": "Initial angular position of the rotor at t=0",
@@ -6193,18 +6228,18 @@
                 "max": "",
                 "min": "",
                 "name": "time",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "s",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Structural position vector (no symmetry)",
                 "max": "",
                 "min": "",
                 "name": "angle",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "rad",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Length of the time vector",
@@ -6333,11 +6368,47 @@
                 "value": null
             },
             {
-                "desc": "Rotation direction",
+                "desc": "rotation direction of the magnetic field fundamental !! WARNING: rot_dir = -1 to have positive rotor rotating direction, i.e. rotor position moves towards positive angle",
                 "max": "1",
                 "min": "-1",
                 "name": "rot_dir",
                 "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Number of spatial periodicities of the machine",
+                "max": "",
+                "min": "",
+                "name": "per_a",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "True if an spatial anti-periodicity is possible after the periodicities",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_a",
+                "type": "bool",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Number of time periodicities of the machine",
+                "max": "",
+                "min": "",
+                "name": "per_t",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "True if an time anti-periodicity is possible after the periodicities",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_t",
+                "type": "bool",
                 "unit": "-",
                 "value": null
             }
@@ -6414,21 +6485,39 @@
                 "value": null
             },
             {
-                "desc": "Symmetry factor of the lamination (1=full machine; 2 = half;...)",
+                "desc": "Number of spatial periodicities of the lamination",
                 "max": "",
                 "min": "",
-                "name": "sym",
+                "name": "per_a",
                 "type": "int",
                 "unit": "-",
                 "value": null
             },
             {
-                "desc": "True if the winding has a asymmetry",
+                "desc": "True if an spatial anti-periodicity is possible after the periodicities",
                 "max": "",
                 "min": "",
-                "name": "is_asym_wind",
+                "name": "is_antiper_a",
                 "type": "bool",
-                "unit": "",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "Number of time periodicities of the lamination",
+                "max": "",
+                "min": "",
+                "name": "per_t",
+                "type": "int",
+                "unit": "-",
+                "value": null
+            },
+            {
+                "desc": "True if an time anti-periodicity is possible after the periodicities",
+                "max": "",
+                "min": "",
+                "name": "is_antiper_t",
+                "type": "bool",
+                "unit": "-",
                 "value": null
             }
         ]
@@ -6454,36 +6543,18 @@
                 "max": "",
                 "min": "",
                 "name": "time",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "s",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Magnetic position vector (no symmetry)",
                 "max": "",
                 "min": "",
                 "name": "angle",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "rad",
-                "value": null
-            },
-            {
-                "desc": "Length of the time vector",
-                "max": "",
-                "min": "",
-                "name": "Nt_tot",
-                "type": "int",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Length of the angle vector",
-                "max": "",
-                "min": "",
-                "name": "Na_tot",
-                "type": "int",
-                "unit": "-",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Airgap flux density components",
@@ -6535,9 +6606,9 @@
                 "max": "",
                 "min": "",
                 "name": "Phi_wind_stator",
-                "type": "ndarray",
+                "type": "SciDataTool.Classes.DataTime.DataTime",
                 "unit": "Wb",
-                "value": null
+                "value": "None"
             },
             {
                 "desc": "Electromotive force",
@@ -6716,23 +6787,24 @@
         "desc": "Main Output object: gather all the outputs of all the modules",
         "is_internal": false,
         "methods": [
+            "getter.get_angle_offset_initial",
             "getter.get_angle_rotor",
             "getter.get_BH_rotor",
             "getter.get_BH_stator",
             "getter.get_path_result",
+            "getter.get_machine_periodicity",
+            "getter.get_rot_dir",
             "plot.Magnetic.plot_B_space",
             "plot.plot_A_cfft2",
+            "plot.plot_A_fft_space",
+            "plot.plot_A_fft_time",
             "plot.plot_A_fft2",
+            "plot.plot_A_quiver_2D",
             "plot.plot_A_space",
             "plot.plot_A_surf",
             "plot.plot_A_time",
             "plot.plot_A_time_space",
-            "plot.Structural.plot_force_space",
-            "plot.plot_A_quiver_2D",
-            "getter.get_rot_dir",
-            "getter.get_angle_offset_initial",
-            "plot.plot_A_fft_space",
-            "plot.plot_A_fft_time"
+            "plot.Structural.plot_force_space"
         ],
         "mother": "",
         "name": "Output",
@@ -10070,7 +10142,7 @@
                 "name": "paramexplorer_list",
                 "type": "[ParamExplorer]",
                 "unit": "-",
-                "value": []
+                "value": ""
             }
         ]
     },
@@ -10124,7 +10196,7 @@
                 "name": "datakeeper_list",
                 "type": "[DataKeeper]",
                 "unit": "-",
-                "value": []
+                "value": ""
             },
             {
                 "desc": "True to store every output in a list",
@@ -10178,7 +10250,7 @@
                 "name": "postproc_list",
                 "type": "[Post]",
                 "unit": "-",
-                "value": []
+                "value": ""
             }
         ]
     },
@@ -10388,7 +10460,6 @@
             "comp_Ncspc",
             "comp_Ntspc",
             "comp_phasor_angle",
-            "comp_resistance_norm",
             "comp_winding_factor",
             "comp_length_endwinding"
         ],

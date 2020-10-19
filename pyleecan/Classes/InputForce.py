@@ -132,7 +132,7 @@ class InputForce(Input):
             InputForce_dict["P"] = None
         else:
             InputForce_dict["P"] = self.P.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         InputForce_dict["__class__"] = "InputForce"
         return InputForce_dict

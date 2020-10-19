@@ -167,7 +167,7 @@ class OutStruct(FrozenClass):
             OutStruct_dict["Ar"] = None
         else:
             OutStruct_dict["Ar"] = self.Ar.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         OutStruct_dict["__class__"] = "OutStruct"
         return OutStruct_dict
 

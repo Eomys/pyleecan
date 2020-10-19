@@ -14,9 +14,11 @@ from ..Functions.load import load_init_dict
 from ..Functions.Load.import_class import import_class
 from .Post import Post
 
-from inspect import getsource
-from cloudpickle import dumps, loads
+from ntpath import basename
+from os.path import isfile
 from ._check import CheckTypeError
+import numpy as np
+import random
 from ._check import InitUnKnowClassError
 
 
@@ -62,12 +64,12 @@ class PostFunction(Post):
         PostFunction_str = ""
         # Get the properties inherited from Post
         PostFunction_str += super(PostFunction, self).__str__()
-        if self._run[1] is None:
-            PostFunction_str += "run = " + str(self._run[1])
+        if self._run_str is not None:
+            PostFunction_str += "run = " + self._run_str + linesep
+        elif self._run_func is not None:
+            PostFunction_str += "run = " + str(self._run_func) + linesep
         else:
-            PostFunction_str += (
-                "run = " + linesep + str(self._run[1]) + linesep + linesep
-            )
+            PostFunction_str += "run = None" + linesep + linesep
         return PostFunction_str
 
     def __eq__(self, other):
@@ -79,7 +81,7 @@ class PostFunction(Post):
         # Check the properties inherited from Post
         if not super(PostFunction, self).__eq__(other):
             return False
-        if other.run != self.run:
+        if other._run_str != self._run_str:
             return False
         return True
 
@@ -88,14 +90,11 @@ class PostFunction(Post):
 
         # Get the properties inherited from Post
         PostFunction_dict = super(PostFunction, self).as_dict()
-        if self.run is None:
-            PostFunction_dict["run"] = None
+        if self._run_str is not None:
+            PostFunction_dict["run"] = self._run_str
         else:
-            PostFunction_dict["run"] = [
-                dumps(self._run[0]).decode("ISO-8859-2"),
-                self._run[1],
-            ]
-        # The class name is added to the dict fordeserialisation purpose
+            PostFunction_dict["run"] = None
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         PostFunction_dict["__class__"] = "PostFunction"
         return PostFunction_dict
@@ -109,30 +108,28 @@ class PostFunction(Post):
 
     def _get_run(self):
         """getter of run"""
-        return self._run[0]
+        return self._run_func
 
     def _set_run(self, value):
         """setter of run"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class("pyleecan.Classes", value.get("__class__"), "run")
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = function()
-        try:
-            check_var("run", value, "list")
-        except CheckTypeError:
-            check_var("run", value, "function")
-        if isinstance(value, list):  # Load function from saved dict
-            self._run = [loads(value[0].encode("ISO-8859-2")), value[1]]
-        elif value is None:
-            self._run = [None, None]
+        if value is None:
+            self._run_str = None
+            self._run_func = None
+        elif isinstance(value, str) and "lambda" in value:
+            self._run_str = value
+            self._run_func = eval(value)
+        elif isinstance(value, str) and isfile(value) and value[-3:] == ".py":
+            self._run_str = value
+            f = open(value, "r")
+            exec(f.read(), globals())
+            self._run_func = eval(basename(value[:-3]))
         elif callable(value):
-            self._run = [value, getsource(value)]
+            self._run_str = None
+            self._run_func = value
         else:
-            raise TypeError(
-                "Expected function or list from a saved file, got: " + str(type(value))
+            raise CheckTypeError(
+                "For property run Expected function or str (path to python file or lambda), got: "
+                + str(type(value))
             )
 
     run = property(

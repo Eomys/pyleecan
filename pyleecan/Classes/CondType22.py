@@ -125,7 +125,7 @@ class CondType22(Conductor):
         # Get the properties inherited from Conductor
         CondType22_dict = super(CondType22, self).as_dict()
         CondType22_dict["Sbar"] = self.Sbar
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         CondType22_dict["__class__"] = "CondType22"
         return CondType22_dict

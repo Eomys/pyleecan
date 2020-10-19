@@ -4,8 +4,8 @@ from os.path import join, isfile
 import mock
 
 import pytest
-from PyQt5 import QtWidgets
-from PyQt5.QtTest import QTest
+from PySide2 import QtWidgets
+from PySide2.QtTest import QTest
 
 
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
@@ -64,7 +64,10 @@ class TestSPreview(object):
         """setup any state specific to the execution of the given class (which
         usually contains tests).
         """
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
     def teardown_class(cls):
@@ -80,10 +83,10 @@ class TestSPreview(object):
 
         return_value = (test_dict["file_path"], "Json (*.json)")
         with mock.patch(
-            "PyQt5.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
+            "PySide2.QtWidgets.QFileDialog.getOpenFileName", return_value=return_value
         ):
             # To trigger the slot
-            self.widget.b_load.clicked.emit(True)
+            self.widget.b_load.clicked.emit()
 
         # Check load MachineType
         assert type(self.widget.w_step) is SPreview

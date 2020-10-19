@@ -6,13 +6,12 @@ mock>=4.0.2
 numpy>=1.18.2
 pandas>=1.0.3
 pyfemm>=0.1.1;platform_system=="Windows"
-PyQt5>=5.14.1
-PyQt5-sip>=12.7.1
+PySide2>=5.15.1
 pytest>=5.4.1
 scipy>=1.4.1
 xlrd>=1.2.0
 deap>=1.3.1
-SciDataTool>=1.1.3
+SciDataTool>=1.1.4
 pyvista>=0.25.3
 meshio>=4.0.15
 h5py>=2.10.0

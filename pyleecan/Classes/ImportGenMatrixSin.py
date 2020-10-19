@@ -132,7 +132,7 @@ class ImportGenMatrixSin(ImportMatrix):
             ImportGenMatrixSin_dict["sin_list"] = list()
             for obj in self.sin_list:
                 ImportGenMatrixSin_dict["sin_list"].append(obj.as_dict())
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ImportGenMatrixSin_dict["__class__"] = "ImportGenMatrixSin"
         return ImportGenMatrixSin_dict

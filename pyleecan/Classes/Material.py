@@ -186,7 +186,7 @@ class Material(FrozenClass):
             Material_dict["eco"] = self.eco.as_dict()
         Material_dict["desc"] = self.desc
         Material_dict["path"] = self.path
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Material_dict["__class__"] = "Material"
         return Material_dict
 

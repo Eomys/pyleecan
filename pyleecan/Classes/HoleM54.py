@@ -182,7 +182,7 @@ class HoleM54(Hole):
         HoleM54_dict["H1"] = self.H1
         HoleM54_dict["W0"] = self.W0
         HoleM54_dict["R1"] = self.R1
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         HoleM54_dict["__class__"] = "HoleM54"
         return HoleM54_dict

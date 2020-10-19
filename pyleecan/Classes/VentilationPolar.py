@@ -201,7 +201,7 @@ class VentilationPolar(Hole):
         VentilationPolar_dict["D0"] = self.D0
         VentilationPolar_dict["H0"] = self.H0
         VentilationPolar_dict["W1"] = self.W1
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VentilationPolar_dict["__class__"] = "VentilationPolar"
         return VentilationPolar_dict

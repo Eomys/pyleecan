@@ -2,8 +2,8 @@
 
 import sys
 
-from PyQt5 import QtWidgets
-from PyQt5.QtTest import QTest
+from PySide2 import QtWidgets
+from PySide2.QtTest import QTest
 
 from pyleecan.Classes.LamHole import LamHole
 from pyleecan.Classes.HoleM53 import HoleM53
@@ -43,7 +43,10 @@ class TestPHoleM53(object):
     def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test PHoleM53")
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
     def teardown_class(cls):

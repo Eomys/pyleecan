@@ -312,7 +312,7 @@ class SlotW13(SlotWind):
         SlotW13_dict["W2"] = self.W2
         SlotW13_dict["W3"] = self.W3
         SlotW13_dict["H1_is_rad"] = self.H1_is_rad
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotW13_dict["__class__"] = "SlotW13"
         return SlotW13_dict

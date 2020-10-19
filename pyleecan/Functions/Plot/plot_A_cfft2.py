@@ -51,6 +51,7 @@ def plot_A_cfft2(
     """
 
     # Set plot
+    is_show_fig = True if fig is None else False
     (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     title = "Complex FFT2 of " + data.name
     if is_elecorder:
@@ -122,3 +123,6 @@ def plot_A_cfft2(
         save_path=save_path,
         subplot_index=subplot_index,
     )
+
+    if is_show_fig:
+        fig.show()

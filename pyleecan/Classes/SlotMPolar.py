@@ -218,7 +218,7 @@ class SlotMPolar(SlotMag):
             SlotMPolar_dict["magnet"] = list()
             for obj in self.magnet:
                 SlotMPolar_dict["magnet"].append(obj.as_dict())
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotMPolar_dict["__class__"] = "SlotMPolar"
         return SlotMPolar_dict

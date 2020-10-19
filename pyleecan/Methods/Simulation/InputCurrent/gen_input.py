@@ -18,60 +18,30 @@ def gen_input(self):
         An InputCurrent object
     """
 
-    output = OutElec()
-    # Load/define time
-    if self.time is None:
-        if self.Nrev is None or self.Nt_tot is None or self.N0 is None:
-            raise InputError("ERROR: InputCurrent.time missing")
-        output.time = self.comp_time(self.N0)
-    else:  # Enfore time vector
-        output.time = self.time.get_data()
-    # Check time
-    if not isinstance(output.time, ndarray) or len(output.time.shape) != 1:
-        # time should be a vector
-        raise InputError(
-            "ERROR: InputCurrent.time should be a vector, "
-            + str(output.time.shape)
-            + " shape found"
-        )
-    self.Nt_tot = len(output.time)
-
-    # Load/define angle
-    if self.angle is None:
-        if self.Na_tot is None:
-            raise InputError("ERROR: InputCurrent.angle missing")
-        output.angle = linspace(0, 2 * pi, self.Na_tot)
-    else:  # Enfore angle vector
-        output.angle = self.angle.get_data()
-    # Check angle
-    if not isinstance(output.angle, ndarray) or len(output.angle.shape) != 1:
-        # angle should be a vector
-        raise InputError(
-            "ERROR: InputCurrent.angle should be a vector, "
-            + str(output.angle.shape)
-            + " shape found"
-        )
-    self.Na_tot = len(output.angle)
-
-    # Get the phase number for verifications
-    if self.parent is None:
-        raise InputError(
-            "ERROR: InputCurrent object should be inside a Simulation object"
-        )
-    # get the simulation
+    # Get the simulation
     if isinstance(self.parent, Simulation):
         simu = self.parent
     elif isinstance(self.parent.parent, Simulation):
         simu = self.parent.parent
     else:
-        raise InputError("Cannot find InputCurrent simulation.")
+        raise InputError(
+            "ERROR: InputCurrent object should be inside a Simulation object"
+        )
+
+    # Create the correct Output object
+    output = OutElec()
+
+    # Set discretization
+    Time, Angle = self.comp_axes(simu.machine, self.N0)
+    output.time = Time
+    output.angle = Angle
 
     # Number of winding phases for stator/rotor
     qs = len(simu.machine.stator.get_name_phase())
     qr = len(simu.machine.rotor.get_name_phase())
 
     output.N0 = self.N0
-    output.felec = self.comp_felec()
+    output.felec = self.comp_felec()  # TODO introduce set_felec(slip)
 
     # Load and check Is
     if qs > 0:
@@ -95,7 +65,6 @@ def gen_input(self):
                     + " returned"
                 )
             # Creating the data object
-            Time = Data1D(name="time", unit="s", values=output.time)
             Phase = Data1D(
                 name="phase",
                 unit="",
@@ -110,9 +79,13 @@ def gen_input(self):
                 values=transpose(Is),
             )
             # Compute corresponding Id/Iq reference
-            Idq = n2dq(transpose(output.Is.values), 2 * pi * output.felec * output.time)
+            Idq = n2dq(
+                transpose(output.Is.values),
+                2 * pi * output.felec * output.time.get_values(is_oneperiod=False),
+                is_dq_rms=True,
+            )
             output.Id_ref = mean(Idq[:, 0])
-            output.Iq_ref = mean(Idq[:, 1])
+            output.Iq_ref = mean(Idq[:, 1])  # TODO use of mean has to be documented
 
     # Load and check Ir is needed
     if qr > 0:
@@ -129,7 +102,6 @@ def gen_input(self):
                     + " returned"
                 )
             # Creating the data object
-            Time = Data1D(name="time", unit="s", values=output.time)
             Phase = Data1D(
                 name="phase",
                 unit="",
@@ -161,15 +133,15 @@ def gen_input(self):
                 "ERROR: InputCurrent.angle_rotor should be a vector of the same length as time, "
                 + str(output.angle_rotor.shape)
                 + " shape found, "
-                + str(output.time.shape)
+                + str(self.Nt_tot)
                 + " expected"
             )
 
     if self.rot_dir is None or self.rot_dir not in [-1, 1]:
         # Enforce default rotation direction
-        output.rot_dir = -1
+        simu.parent.geo.rot_dir = None
     else:
-        output.rot_dir = self.rot_dir
+        simu.parent.geo.rot_dir = self.rot_dir
 
     if self.angle_rotor_initial is None:
         # Enforce default initial position

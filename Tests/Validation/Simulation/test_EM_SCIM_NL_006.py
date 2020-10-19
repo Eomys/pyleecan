@@ -47,7 +47,7 @@ def test_Magnetic_FEMM_sym():
     Is = ImportMatrixVal(value=array([[20, -10, -10]]))
     Ir = ImportMatrixVal(value=zeros((1, 28)))
     time = ImportGenVectLin(start=0, stop=0, num=1, endpoint=False)
-    angle = ImportGenVectLin(start=0, stop=2 * pi, num=4096, endpoint=False)
+    Na_tot = 4096
 
     simu.input = InputCurrent(
         Is=Is,
@@ -55,21 +55,23 @@ def test_Magnetic_FEMM_sym():
         N0=N0,
         angle_rotor=None,  # Will be computed
         time=time,
-        angle=angle,
+        Na_tot=Na_tot,
         angle_rotor_initial=0.2244,
     )
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(
-        type_BH_stator=2, type_BH_rotor=2, is_symmetry_a=False, is_antiper_a=False
+        type_BH_stator=2,
+        type_BH_rotor=2,
+        is_periodicity_a=False,
+        is_periodicity_t=False,
     )
     simu.force = None
     simu.struct = None
     # Copy the simu and activate the symmetry
-    assert SCIM_006.comp_sym() == (2, False)
+    assert SCIM_006.comp_periodicity() == (2, True, 28, False)
     simu_sym = Simu1(init_dict=simu.as_dict())
-    simu_sym.mag.is_symmetry_a = True
-    simu_sym.mag.sym_a = 2
+    simu_sym.mag.is_periodicity_a = True
 
     # Just load the Output and ends (we could also have directly filled the Output object)
     simu_load = Simu1(init_dict=simu.as_dict())

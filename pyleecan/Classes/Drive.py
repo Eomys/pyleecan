@@ -94,7 +94,7 @@ class Drive(FrozenClass):
         Drive_dict["Umax"] = self.Umax
         Drive_dict["Imax"] = self.Imax
         Drive_dict["is_current"] = self.is_current
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Drive_dict["__class__"] = "Drive"
         return Drive_dict
 

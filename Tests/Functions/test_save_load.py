@@ -1,41 +1,41 @@
 # -*- coding: utf-8 -*-
 
-from os import remove, getcwd
+from os import getcwd, remove
 from os.path import isfile, join
-import pytest
 from unittest.mock import patch  # for unittest of input
 
-from numpy import ones, pi, array
-
+import pytest
+from numpy import array, ones, pi
+from pyleecan.Classes._check import InitUnKnowClassError
+from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
+from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
+from pyleecan.Classes.InputCurrent import InputCurrent
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.LamSlotWind import LamSlotWind
 from pyleecan.Classes.MachineSIPMSM import MachineSIPMSM
+from pyleecan.Classes.MagFEMM import MagFEMM
 from pyleecan.Classes.MagnetType11 import MagnetType11
+from pyleecan.Classes.Output import Output
+from pyleecan.Classes.PostFunction import PostFunction
+from pyleecan.Classes.Shaft import Shaft
+from pyleecan.Classes.Simu1 import Simu1
 from pyleecan.Classes.SlotMPolar import SlotMPolar
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.WindingDW1L import WindingDW1L
-from pyleecan.Classes.Shaft import Shaft
-from pyleecan.Classes.InputCurrent import InputCurrent
-from pyleecan.Classes.ImportGenVectLin import ImportGenVectLin
-from pyleecan.Classes.ImportMatrixVal import ImportMatrixVal
-from pyleecan.Classes.MagFEMM import MagFEMM
-from pyleecan.Classes.Output import Output
-
-from pyleecan.Classes.Simu1 import Simu1
-from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
-
-from Tests import TEST_DATA_DIR, save_load_path as save_path, x as logger
 from pyleecan.Functions.load import (
-    load,
-    load_list,
-    load_dict,
+    LoadSwitchError,
     LoadWrongDictClassError,
     LoadWrongTypeError,
-    LoadSwitchError,
+    load,
+    load_dict,
+    load_list,
 )
-from pyleecan.Functions.Save.save_json import save_json
 from pyleecan.Functions.Load.load_json import LoadMissingFileError
-from pyleecan.Classes._check import InitUnKnowClassError
+from pyleecan.Functions.Save.save_json import save_json
+from Tests import TEST_DATA_DIR
+from Tests import save_load_path as save_path
+from Tests import x as logger
+from Tests.Validation.Simulation.CEFC_Lam import CEFC_Lam
 
 load_file_1 = join(TEST_DATA_DIR, "test_wrong_slot_load_1.json")
 load_file_2 = join(TEST_DATA_DIR, "test_wrong_slot_load_2.json")
@@ -117,12 +117,17 @@ def test_save_load_folder_path(CEFC_Lam):
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
+        rot_dir=-1,
     )
 
     # Definition of the magnetic simulation (no symmetry)
     simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=0, is_sliding_band=False)
     simu.force = None
     simu.struct = None
+
+    post1 = PostFunction(run="lambda x:x+2")
+    post2 = PostFunction(run=join(TEST_DATA_DIR, "example_post.py"))
+    simu.postproc_list = [post1, post2]
 
     test_obj = Output(simu=simu)
     test_obj.post.legend_name = "Slotless lamination"
@@ -144,6 +149,8 @@ def test_save_load_folder_path(CEFC_Lam):
     assert isfile(join(loc_save_path, "SM_CEFC_001.json"))
     test_obj2 = load(loc_save_path)
     assert test_obj == test_obj2
+    assert callable(test_obj.simu.postproc_list[0]._run_func)
+    assert callable(test_obj.simu.postproc_list[1]._run_func)
 
 
 def test_save_load_just_name():
@@ -294,6 +301,7 @@ def test_save_load_simu(type_file, CEFC_Lam):
         angle_rotor=None,  # Will be computed
         time=time,
         angle=angle,
+        rot_dir=-1,
     )
 
     # Definition of the magnetic simulation (no symmetry)

@@ -22,9 +22,11 @@ except ImportError as error:
     get_value = error
 
 
-from inspect import getsource
-from cloudpickle import dumps, loads
+from ntpath import basename
+from os.path import isfile
 from ._check import CheckTypeError
+import numpy as np
+import random
 from ._check import InitUnKnowClassError
 
 
@@ -126,8 +128,10 @@ class ParamExplorerSet(ParamExplorer):
 
         # Get the properties inherited from ParamExplorer
         ParamExplorerSet_dict = super(ParamExplorerSet, self).as_dict()
-        ParamExplorerSet_dict["value"] = self.value
-        # The class name is added to the dict fordeserialisation purpose
+        ParamExplorerSet_dict["value"] = (
+            self.value.copy() if self.value is not None else None
+        )
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         ParamExplorerSet_dict["__class__"] = "ParamExplorerSet"
         return ParamExplorerSet_dict

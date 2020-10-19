@@ -3,6 +3,7 @@
 from scipy.io import loadmat
 from ....Methods.Import.ImportMatlab import MatFileError
 from os.path import isfile
+from numpy import squeeze
 
 
 def get_data(self):
@@ -33,4 +34,4 @@ def get_data(self):
             + self.file_path
         )
 
-    return data_dict[self.var_name]
+    return squeeze(data_dict[self.var_name])

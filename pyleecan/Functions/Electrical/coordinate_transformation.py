@@ -16,28 +16,33 @@ from numpy import (
 )
 
 EPS = int(floor(-log10(finfo(float).eps)))
-SQRT3 = sqrt(3)
+
+# TODO: add homopolar component
 
 
-def ab2n(Z_ab, n=3):
+def ab2n(Z_ab, n=3, rot_dir=-1):
     """
     2 phase equivalent to n phase coordinate transformation, i.e. Clarke transformation
 
     Parameters
     ----------
-    Z_ab : numpy array
+    Z_ab : ndarray
         matrix (N x 2) of 2 phase equivalent values
-    n : int
+    n : integer
         number of phases
+    rot_dir : integer
+        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
 
-    Outputs
+    Returns
     -------
-    Z_n : numpy array
+    Z_n : ndarray
         transformed matrix (N x n) of n phase values
 
     """
     ii = linspace(0, n - 1, n)
-    alpha = 2 * ii * pi / n
+    alpha = (
+        rot_dir * 2 * ii * pi / n
+    )  # Phasor depending on fundamental field rotation direction
 
     # Transformation matrix
     ab_2_n = vstack((cos(alpha).round(decimals=EPS), -sin(alpha).round(decimals=EPS)))
@@ -47,22 +52,28 @@ def ab2n(Z_ab, n=3):
     return Z_n
 
 
-def n2ab(Z_n, n=3):
+def n2ab(Z_n, n=3, rot_dir=-1):
     """n phase to 2 phase equivalent coordinate transformation, i.e. Clarke transformation
 
     Parameters
     ----------
-    Z_n : numpy array
+    Z_n : ndarray
         matrix (N x n) of n phase values
+    n : integer
+        number of phases
+    rot_dir : integer
+        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
 
-    Outputs
+    Returns
     -------
-    Z_ab : numpy array
+    Z_ab : ndarray
         transformed matrix (N x 2) of 2 phase equivalent values
 
     """
     ii = linspace(0, n - 1, n)
-    alpha = 2 * ii * pi / n
+    alpha = (
+        rot_dir * 2 * ii * pi / n
+    )  # Phasor depending on fundamental field rotation direction
 
     # Transformation matrix
     n_2_ab = (
@@ -85,15 +96,14 @@ def ab2dq(Z_ab, theta):
 
     Parameters
     ----------
-    Z_ab : numpy array
+    Z_ab : ndarray
         matrix (N x 2) of alpha-beta - reference frame values
-
-    theta : numpy array
+    theta : ndarray
         angle of the rotor coordinate system
 
-    Outputs
+    Returns
     -------
-    Z_dq : numpy array
+    Z_dq : ndarray
         transformed (dq) values
 
     """
@@ -116,15 +126,14 @@ def dq2ab(Z_dq, theta):
 
     Parameters
     ----------
-    Z_dq : numpy array
+    Z_dq : ndarray
         matrix (N x 2) of dq - reference frame values
-
-    theta : numpy array
+    theta : ndarray
         angle of the rotor coordinate system
 
-    Outputs
+    Returns
     -------
-    Z_ab : numpy array
+    Z_ab : ndarray
         transformed array
 
     """
@@ -134,41 +143,68 @@ def dq2ab(Z_dq, theta):
     sin_theta = sin(theta).round(decimals=EPS)
     cos_theta = cos(theta).round(decimals=EPS)
 
+    # Multiply by sqrt(2) to go from (Id_rms, Iq_rms) in to I_ab in amplitude
     Z_a = Z_dq[:, 0] * cos_theta - Z_dq[:, 1] * sin_theta
     Z_b = Z_dq[:, 0] * sin_theta + Z_dq[:, 1] * cos_theta
 
     return reshape([Z_a, Z_b], (2, -1)).transpose()
 
 
-def n2dq(Z_n, theta, n=3):
+def n2dq(Z_n, theta, n=3, rot_dir=-1, is_dq_rms=True):
     """n phase to dq equivalent coordinate transformation
 
     Parameters
     ----------
-    Z_n : numpy array
+    Z_n : ndarray
         matrix (N x n) of n phase values
+    n : integer
+        number of phases
+    rot_dir : integer
+        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
+    is_dq_rms : boolean
+        True to return dq currents in rms value (Pyleecan convention), False to return peak values
 
-    Outputs
+    Returns
     -------
-    Z_dq : numpy array
+    Z_dq : ndarray
         transformed matrix (N x 2) of dq equivalent values
 
     """
-    return ab2dq(n2ab(Z_n, n=n), theta)
+
+    Z_dq = ab2dq(n2ab(Z_n, n=n, rot_dir=rot_dir), theta)
+
+    if is_dq_rms == True:
+        # Divide by sqrt(2) to go from (Id_peak, Iq_peak) to (Id_rms, Iq_rms)
+        Z_dq = Z_dq / sqrt(2)
+
+    return Z_dq
 
 
-def dq2n(Z_dq, theta, n=3):
+def dq2n(Z_dq, theta, n=3, rot_dir=-1, is_n_rms=False):
     """n phase to dq equivalent coordinate transformation
 
     Parameters
     ----------
-    Z_dq : numpy array
+    Z_dq : ndarray
         matrix (N x 2) of dq phase values
+    n : integer
+        number of phases
+    rot_dir : integer
+        rotation direction of the fundamental of magnetic field (rot_dir = +/- 1)
+    is_n_rms : boolean
+        True to return n currents in rms value, False to return peak values (Pyleecan convention)
 
-    Outputs
+    Returns
     -------
-    Z_n : numpy array
+    Z_n : ndarray
         transformed matrix (N x n) of n phase values
 
     """
-    return ab2n(dq2ab(Z_dq, theta), n=n)
+
+    Z_n = ab2n(dq2ab(Z_dq, theta), n=n, rot_dir=rot_dir)
+
+    if is_n_rms == False:
+        # Multiply by sqrt(2) to from (I_n_rms) to (I_n_peak)
+        Z_n = Z_n * sqrt(2)
+
+    return Z_n

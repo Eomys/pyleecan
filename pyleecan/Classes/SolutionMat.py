@@ -163,8 +163,8 @@ class SolutionMat(Solution):
             SolutionMat_dict["indice"] = None
         else:
             SolutionMat_dict["indice"] = self.indice.tolist()
-        SolutionMat_dict["axis"] = self.axis
-        # The class name is added to the dict fordeserialisation purpose
+        SolutionMat_dict["axis"] = self.axis.copy() if self.axis is not None else None
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SolutionMat_dict["__class__"] = "SolutionMat"
         return SolutionMat_dict

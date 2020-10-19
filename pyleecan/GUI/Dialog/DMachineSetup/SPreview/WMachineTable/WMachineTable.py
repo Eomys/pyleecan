@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem
+from PySide2.QtWidgets import QWidget, QTableWidgetItem
 from ......GUI.Dialog.DMachineSetup.SPreview.WMachineTable.Ui_WMachineTable import (
     Ui_WMachineTable,
 )

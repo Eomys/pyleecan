@@ -229,7 +229,7 @@ class Slot19(Slot):
         Slot19_dict["H0"] = self.H0
         Slot19_dict["W1"] = self.W1
         Slot19_dict["Wx_is_rad"] = self.Wx_is_rad
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Slot19_dict["__class__"] = "Slot19"
         return Slot19_dict

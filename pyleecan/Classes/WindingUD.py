@@ -172,7 +172,7 @@ class WindingUD(Winding):
             WindingUD_dict["user_wind_mat"] = None
         else:
             WindingUD_dict["user_wind_mat"] = self.user_wind_mat.tolist()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         WindingUD_dict["__class__"] = "WindingUD"
         return WindingUD_dict
