@@ -38,7 +38,7 @@ def test_FEMM_periodicity():
         Id_ref=Id_ref,
         Iq_ref=Iq_ref,
         Na_tot=252 * 8,
-        Nt_tot=10*8,
+        Nt_tot=20*8,
         N0=1000,
     )
 
@@ -107,15 +107,15 @@ def test_FEMM_periodicity():
     #     linestyle_list=["-", "dotted"],
     #     )  
 
-    # out.plot_A_time(
-    #     "mag.Phi_wind_stator",
-    #     is_fft=False,
-    #     index_list=[0],
-    #     data_list=[out2.mag.Phi_wind_stator],
-    #     legend_list=["Periodic", "Full"],
-    #     save_path=join(save_path, "test_FEMM_periodicity_Phi_wind_stator_time.png"),
-    #     linestyle_list=["-", "dotted"],
-    #     )
+    out.plot_A_time(
+        "mag.Phi_wind_stator",
+        is_fft=False,
+        index_list=[0],
+        data_list=[out2.mag.Phi_wind_stator],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "test_FEMM_periodicity_Phi_wind_stator_time.png"),
+        linestyle_list=["-", "dotted"],
+        )
     
     return out, out2
 
@@ -123,6 +123,7 @@ def test_FEMM_periodicity():
 if __name__ == "__main__":
     out, out2 = test_FEMM_periodicity()
     
+    #%%
     out.plot_A_time(
         "mag.Tem",
         is_fft=True,
@@ -131,3 +132,13 @@ if __name__ == "__main__":
         # save_path=join(save_path, "test_FEMM_periodicity_Tem_time.png"),
         # linestyle_list=["-", "dotted"],
         )  
+    #%%
+    out.plot_A_time(
+        "mag.Phi_wind_stator",
+        is_fft=True,
+        index_list=[0,1,2],
+        # data_list=[out2.mag.Phi_wind_stator],
+        # legend_list=["Periodic", "Full"],
+        # save_path=join(save_path, "test_FEMM_periodicity_Phi_wind_stator_time.png"),
+        # linestyle_list=["-", "dotted"],
+        )

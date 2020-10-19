@@ -187,6 +187,9 @@ def plot_A_time(
     )
 
     if is_fft:
+        # Extract the fields
+        Xdatas = []
+        Ydatas = []
         if "dB" in unit:
             unit_str = (
                 "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
@@ -237,8 +240,8 @@ def plot_A_time(
             xticks = None
 
         plot_A_2D(
-            freqs,
-            Ydata,
+            Xdatas,
+            Ydatas,
             legend_list=legend_list,
             color_list=color_list,
             linestyle_list=linestyle_list,
