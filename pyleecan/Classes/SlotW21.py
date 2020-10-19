@@ -66,6 +66,11 @@ try:
 except ImportError as error:
     build_geometry_wind = error
 
+try:
+    from ..Methods.Slot.SlotW21.get_H1 import get_H1
+except ImportError as error:
+    get_H1 = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -189,6 +194,15 @@ class SlotW21(SlotWind):
         )
     else:
         build_geometry_wind = build_geometry_wind
+    # cf Methods.Slot.SlotW21.get_H1
+    if isinstance(get_H1, ImportError):
+        get_H1 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotW21 method get_H1: " + str(get_H1))
+            )
+        )
+    else:
+        get_H1 = get_H1
     # save and copy methods are available in all object
     save = save
     copy = copy

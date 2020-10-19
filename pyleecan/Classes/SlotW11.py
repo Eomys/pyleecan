@@ -61,6 +61,11 @@ try:
 except ImportError as error:
     comp_surface_wind = error
 
+try:
+    from ..Methods.Slot.SlotW11.get_H1 import get_H1
+except ImportError as error:
+    get_H1 = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -171,6 +176,15 @@ class SlotW11(SlotWind):
         )
     else:
         comp_surface_wind = comp_surface_wind
+    # cf Methods.Slot.SlotW11.get_H1
+    if isinstance(get_H1, ImportError):
+        get_H1 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotW11 method get_H1: " + str(get_H1))
+            )
+        )
+    else:
+        get_H1 = get_H1
     # save and copy methods are available in all object
     save = save
     copy = copy

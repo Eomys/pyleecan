@@ -8002,7 +8002,8 @@
             "comp_height_wind",
             "comp_surface",
             "comp_surface_wind",
-            "get_surface_wind"
+            "get_surface_wind",
+            "get_H1"
         ],
         "mother": "SlotWind",
         "name": "SlotW10",
@@ -8097,7 +8098,8 @@
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_H1"
         ],
         "mother": "SlotWind",
         "name": "SlotW11",
@@ -8269,7 +8271,8 @@
             "comp_height_wind",
             "comp_surface",
             "comp_surface_wind",
-            "get_surface_wind"
+            "get_surface_wind",
+            "get_H1"
         ],
         "mother": "SlotWind",
         "name": "SlotW13",
@@ -8621,7 +8624,8 @@
             "comp_height_wind",
             "comp_surface",
             "comp_surface_wind",
-            "build_geometry_wind"
+            "build_geometry_wind",
+            "get_H1"
         ],
         "mother": "SlotWind",
         "name": "SlotW21",
