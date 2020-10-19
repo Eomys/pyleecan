@@ -148,27 +148,34 @@ def plot_A_space(
         title = "Comparison of " + title
 
     # Extract the fields
+    Xdatas = []
+    Ydatas = []
     if list_str is not None:
-        results = data.compare_along(
-            a_str,
-            t_str,
-            list_str + str(index_list),
-            data_list=data_list,
-            unit=unit,
-            is_norm=is_norm,
-        )
+        for d in data_list2:
+            results = data.get_along(
+                a_str,
+                t_str,
+                list_str + str(index_list),
+                unit=unit,
+                is_norm=is_norm,
+            )
+            Xdatas.append(results["angle"])
+            Ydatas.append(results[data.symbol])
     else:
-        results = data.compare_along(
-            a_str, t_str, data_list=data_list, unit=unit, is_norm=is_norm
-        )
-    angle = results["angle"]
+        for d in data_list2:
+            results = data.compare_along(
+                a_str, t_str, data_list=data_list, unit=unit, is_norm=is_norm
+            )
+            Xdatas.append(results["angle"])
+            Ydatas.append(results[data.symbol])
+    
+    # Nicely spaced ticks if angle in degrees
+    angle = Xdatas[0]
     if is_deg and round(np_max(angle) / 6) % 5 == 0:
         xticks = [i * round(np_max(angle) / 6) for i in range(7)]
     else:
         xticks = None
-    Ydatas = [results[data.symbol]] + [
-        results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
-    ]
+        
     Ydata = []
     for d in Ydatas:
         if d.ndim != 1:
@@ -182,7 +189,7 @@ def plot_A_space(
 
     # Plot the original graph
     ax = plot_A_2D(
-        angle,
+        Xdatas,
         Ydata,
         legend_list=legends,
         color_list=color_list,
@@ -218,41 +225,45 @@ def plot_A_space(
         if is_spaceorder:
             order_max = r_max / data.normalizations.get("space_order")
             xlabel = "Space order []"
-            results = data.compare_magnitude_along(
-                "wavenumber=[0," + str(order_max) + "]{space_order}",
-                t_str,
-                data_list=data_list,
-                unit=unit,
-                is_norm=False,
-            )
+            Xdatas = []
+            Ydatas = []
+            for d in data_list2:
+                results = d.get_magnitude_along(
+                    "wavenumber=[0," + str(order_max) + "]{space_order}",
+                    t_str,
+                    unit=unit,
+                    is_norm=False,
+                )
+                Xdatas.append(results["wavenumber"])
+                Ydatas.append(results[data.symbol])
 
         else:
             xlabel = "Wavenumber []"
-            results = data.compare_magnitude_along(
-                "wavenumber=[0," + str(r_max) + "]",
-                t_str,
-                data_list=data_list,
-                unit=unit,
-                is_norm=False,
-            )
-        wavenumber = results["wavenumber"]
-        Ydata = [results[data.symbol]] + [
-            results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
-        ]
+            for d in data_list2:
+                results = d.get_magnitude_along(
+                    "wavenumber=[0," + str(order_max) + "]",
+                    t_str,
+                    unit=unit,
+                    is_norm=False,
+                )
+                Xdatas.append(results["wavenumber"])
+                Ydatas.append(results[data.symbol])
+                
+        wavenumber = Xdatas[0]
 
         if is_auto_ticks:
             indices = [0]
             for i in range(len(Ydata)):
                 indices += list(
-                    set([ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01])
+                    set([ind for ind, y in enumerate(Ydatas[i]) if abs(y) > abs(0.01 * np_max(y))])
                 )
             xticks = wavenumber[indices]
         else:
             xticks = None
 
         plot_A_2D(
-            wavenumber,
-            Ydata,
+            Xdatas,
+            Ydatas,
             legend_list=legend_list,
             color_list=color_list,
             linestyle_list=linestyle_list,
