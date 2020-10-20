@@ -7,6 +7,7 @@ from scipy.optimize import fsolve
 from ....Classes.Segment import Segment
 from ....Classes.SurfLine import SurfLine
 from ....Classes.Arc1 import Arc1
+from ....Methods import ParentMissingError
 
 
 def build_geometry(self, alpha=0, delta=0, is_simplified=False):
@@ -33,10 +34,13 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
 
     surf_list = self.surf_list
 
-    if self.get_is_stator():
-        st = "_Stator"
-    else:
-        st = "_Rotor"
+    try:
+        if self.get_is_stator():
+            st = "_Stator"
+        else:
+            st = "_Rotor"
+    except ParentMissingError:
+        st = "_None"
 
     # Update surface labels
     hole_id = 0

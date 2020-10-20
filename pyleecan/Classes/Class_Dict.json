@@ -2310,7 +2310,7 @@
                 "max": "",
                 "min": "",
                 "name": "magnet_dict",
-                "type": "dict",
+                "type": "{Magnet}",
                 "unit": "",
                 "value": ""
             }
