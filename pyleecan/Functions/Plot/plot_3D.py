@@ -10,7 +10,7 @@ COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 
 
-def plot_A_3D(
+def plot_3D(
     Xdata,
     Ydata,
     Zdata,
