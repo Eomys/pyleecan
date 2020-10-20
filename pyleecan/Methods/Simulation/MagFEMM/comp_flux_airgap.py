@@ -61,4 +61,7 @@ def comp_flux_airgap(self, output):
         femm.opendocument(self.import_file)
 
     # Solve for all time step and store all the results in output
-    self.solve_FEMM(femm, output, sym)
+    if self.nb_worker > 1:
+        self.solve_FEMM_parallel(femm, output, sym)
+    else:
+        self.solve_FEMM(femm, output, sym)
