@@ -49,8 +49,8 @@ def solve_FEMM_parallel(self, femm, output, sym):
         """
         # Opening femm
         femm = FEMMHandler()
-        femm.openfemm()
-        femm.main_minimize()
+        femm.openfemm(1)
+        # femm.main_minimize()
         femm.opendocument(filename)
 
         # Creating returned variables
@@ -136,8 +136,12 @@ def solve_FEMM_parallel(self, femm, output, sym):
                 if ii == start_t:
                     meshFEMM = [tmpmeshFEMM]
                     groups = [tmpgroups]
-                    B_elem = np.zeros([Nt_comp, meshFEMM[0].cell["triangle"].nb_cell, 3])
-                    H_elem = np.zeros([Nt_comp, meshFEMM[0].cell["triangle"].nb_cell, 3])
+                    B_elem = np.zeros(
+                        [Nt_comp, meshFEMM[0].cell["triangle"].nb_cell, 3]
+                    )
+                    H_elem = np.zeros(
+                        [Nt_comp, meshFEMM[0].cell["triangle"].nb_cell, 3]
+                    )
                     mu_elem = np.zeros([Nt_comp, meshFEMM[0].cell["triangle"].nb_cell])
 
                 B_elem[ii, :, 0:2] = tmpB
@@ -176,8 +180,9 @@ def solve_FEMM_parallel(self, femm, output, sym):
     _, is_antiper_t = Time_comp.get_periodicity()
 
     # Number of time steps
-    Nt_comp= Time_comp.get_length(
-        is_oneperiod=True, is_antiperiod=is_antiper_t and self.is_periodicity_t,
+    Nt_comp = Time_comp.get_length(
+        is_oneperiod=True,
+        is_antiperiod=is_antiper_t and self.is_periodicity_t,
     )
 
     # Loading parameters for readibility
@@ -248,7 +253,7 @@ def solve_FEMM_parallel(self, femm, output, sym):
     roll_id = int(self.angle_stator * Na_comp / (2 * pi))
     Br = roll(Br, roll_id, axis=1)
     Bt = roll(Bt, roll_id, axis=1)
-    
+
     # Store the results
     sym_dict = dict()  # Define the periodicity
     if self.is_periodicity_t:
@@ -289,7 +294,7 @@ def solve_FEMM_parallel(self, femm, output, sym):
         axes=[Time_comp_Tem],
         symmetries=sym_dict_Tem,
         values=Tem,
-    )    
+    )
 
     output.mag.Tem_av = mean(Tem)
     output.mag.Tem_rip_pp = abs(np_max(Tem) - np_min(Tem))  # [N.m]

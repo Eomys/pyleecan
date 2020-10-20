@@ -21,13 +21,13 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.long
 @pytest.mark.validation
 @pytest.mark.FEMM
-def test_E_IPMSM_FL_002():
+def test_EEC_FEMM_IPMSM():
     """Validation of the PMSM Electrical Equivalent Circuit with the Prius machine
     Compute Torque from EEC results and compare with Yang et al, 2013
     """
 
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
-    simu = Simu1(name="E_IPMSM_FL_002", machine=IPMSM_A)
+    simu = Simu1(name="EEC_FEMM_IPMSM", machine=IPMSM_A)
 
     # Definition of the input
     simu.input = InputElec(N0=2000, Nt_tot=10, Na_tot=2048)
@@ -51,7 +51,11 @@ def test_E_IPMSM_FL_002():
     simu.run()
 
     # Definition of the magnetic simulation (FEMM)
-    simu2.mag = MagFEMM(type_BH_stator=0, type_BH_rotor=0, is_periodicity_a=True,)
+    simu2.mag = MagFEMM(
+        type_BH_stator=0,
+        type_BH_rotor=0,
+        is_periodicity_a=True,
+    )
 
     out2 = Output(simu=simu2)
     simu2.run()
@@ -59,16 +63,16 @@ def test_E_IPMSM_FL_002():
     out.plot_A_time(
         "elec.Is",
         index_list=[0, 1, 2],
-        save_path=join(save_path, "test_E_IPMSM_FL_002_currents.png"),
+        save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
     )
 
     # from Yang et al, 2013
-    assert_almost_equal(out.elec.Tem_av_ref, 81.98, decimal=1)
-    assert_almost_equal(out2.mag.Tem_av, 81.91, decimal=1)
+    assert_almost_equal(out.elec.Tem_av_ref, 81.81, decimal=1)
+    assert_almost_equal(out2.mag.Tem_av, 81.70, decimal=1)
 
     return out, out2
 
 
 # To run it without pytest
 if __name__ == "__main__":
-    out, out2 = test_E_IPMSM_FL_002()
+    out, out2 = test_EEC_FEMM_IPMSM()

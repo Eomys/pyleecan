@@ -22,15 +22,18 @@ import pytest
 
 @pytest.mark.FEMM
 @pytest.mark.long
-def test_IPMSM_torque_current_angle():
-    
+def test_EM_FEMM_IPMSM_varload():
+
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
     # Initialization of the Simulation
-    simu = Simu1(name="test_IPMSM_torque_current_angle", machine=IPMSM_A)
+    simu = Simu1(name="EM_FEMM_IPMSM_varload", machine=IPMSM_A)
 
     # Definition of the magnetic simulation (FEMM with symmetry and sliding band)
-    simu.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True,)
+    simu.mag = MagFEMM(
+        is_periodicity_a=True,
+        is_periodicity_t=True,
+    )
     # Run only Magnetic module
     simu.elec = None
     simu.force = None
@@ -38,28 +41,29 @@ def test_IPMSM_torque_current_angle():
 
     # Definition of a sinusoidal current
     simu.input = InputCurrent()
-    I0_rms = 250/sqrt(2)
-    Phi0 = 140*pi/180  # Maximum Torque Per Amp
-    
-    Id_ref = (I0_rms*exp(1j*Phi0)).real
-    Iq_ref = (I0_rms*exp(1j*Phi0)).imag
-    
+    I0_rms = 250 / sqrt(2)
+    Phi0 = 140 * pi / 180  # Maximum Torque Per Amp
+
+    Id_ref = (I0_rms * exp(1j * Phi0)).real
+    Iq_ref = (I0_rms * exp(1j * Phi0)).imag
+
     simu.input.Id_ref = Id_ref  # [Arms]
     simu.input.Iq_ref = Iq_ref  # [Arms]
-    
-    
-    Tem_av_ref = array([79, 125, 160, 192, 237, 281, 319, 343, 353, 332, 266, 164, 22]) # Yang et al, 2013
-    Phi0_ref = linspace(60 * pi / 180, 180 * pi / 180, Tem_av_ref.size)
-    
-    # Choose which operating points to run
-    step = 2 # step=1 to do all OP
-             # step=2 to do 1 OP out of 2 (fastest)    
-    I_simu = arange(0,Tem_av_ref.size, step) 
-    N_simu = I_simu.size
-    
-    I0_rms = 250/sqrt(2)
 
-    simu.input.Nt_tot = 8*5  # Number of time step
+    Tem_av_ref = array(
+        [79, 125, 160, 192, 237, 281, 319, 343, 353, 332, 266, 164, 22]
+    )  # Yang et al, 2013
+    Phi0_ref = linspace(60 * pi / 180, 180 * pi / 180, Tem_av_ref.size)
+
+    # Choose which operating points to run
+    step = 2  # step=1 to do all OP
+    # step=2 to do 1 OP out of 2 (fastest)
+    I_simu = arange(0, Tem_av_ref.size, step)
+    N_simu = I_simu.size
+
+    I0_rms = 250 / sqrt(2)
+
+    simu.input.Nt_tot = 8 * 5  # Number of time step
     simu.input.Na_tot = 2048  # Spatial discretization
     simu.input.N0 = 2000  # Rotor speed [rpm]
 
@@ -73,10 +77,10 @@ def test_IPMSM_torque_current_angle():
     # Set I0 = 250/sqrt(2) [Arms] for all simulation
     OP_matrix[:, 1] = I0_rms * ones((N_simu))
     # Set Phi0 from 60° to 180°
-    OP_matrix[:,2] = Phi0_ref[I_simu]
+    OP_matrix[:, 2] = Phi0_ref[I_simu]
     # Set reference torque from Yang et al, 2013
-    OP_matrix[:,3] = Tem_av_ref[I_simu]
-    
+    OP_matrix[:, 3] = Tem_av_ref[I_simu]
+
     varload.OP_matrix = OP_matrix
     print(OP_matrix)
 
@@ -92,10 +96,10 @@ def test_IPMSM_torque_current_angle():
     print(Xout["Phi0"].result)
 
     fig = Xout.plot_multi("Phi0", "Tem_av")
-    fig.savefig(join(save_path, "test_IPMSM_A_Tem.png"))
+    fig.savefig(join(save_path, "EM_FEMM_IPMSM_varload_Tem.png"))
 
     fig = Xout.plot_multi("Id", "Iq")
-    fig.savefig(join(save_path, "test_IPMSM_A_Id_Iq.png"))
+    fig.savefig(join(save_path, "EM_FEMM_IPMSM_varload_Id_Iq.png"))
 
     curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
@@ -109,9 +113,10 @@ def test_IPMSM_torque_current_angle():
         title="Electrical torque vs current angle",
     )
     fig = plt.gcf()
-    fig.savefig(join(save_path, "test_IPMSM_torque_validation.png"))
-    
+    fig.savefig(join(save_path, "EM_FEMM_IPMSM_varload_torque_validation.png"))
+
     return Xout
-    
+
+
 if __name__ == "__main__":
-    Xout = test_IPMSM_torque_current_angle()
+    Xout = test_EM_FEMM_IPMSM_varload()

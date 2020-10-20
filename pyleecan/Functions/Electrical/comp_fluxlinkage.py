@@ -27,7 +27,7 @@ def comp_fluxlinkage(obj, output):
     zp = output.simu.machine.stator.get_pole_pair_number()
     Nt_tot = obj.Nt_tot
     rot_dir = output.get_rot_dir()
-    
+
     # Get save path
     str_EEC = "EEC"
 
@@ -36,15 +36,15 @@ def comp_fluxlinkage(obj, output):
     save_dir = join(path_res, "Femm")
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
-        
-    if output.simu.machine.name not in [None, ""]:
-        file_name = output.simu.machine.name + "_" + str_EEC +".fem"
-    elif output.simu.name not in [None, ""]:
-        file_name = output.simu.name + "_" + str_EEC +".fem"
-    else:  # Default name
-        file_name = "FEMM_"+ str_EEC +".fem"
 
-    path_save = join(save_dir, file_name)       
+    if output.simu.machine.name not in [None, ""]:
+        file_name = output.simu.machine.name + "_" + str_EEC + ".fem"
+    elif output.simu.name not in [None, ""]:
+        file_name = output.simu.name + "_" + str_EEC + ".fem"
+    else:  # Default name
+        file_name = "FEMM_" + str_EEC + ".fem"
+
+    path_save = join(save_dir, file_name)
 
     # Set the symmetry factor according to the machine
     if obj.is_periodicity_a:
@@ -99,7 +99,7 @@ def comp_fluxlinkage(obj, output):
 
     # Solve for all time step and store all the results in output
     Phi_wind = obj.solve_FEMM(femm, output, sym, FEMM_dict)
-    
+
     # Close FEMM after simulation
     femm.closefemm()
 

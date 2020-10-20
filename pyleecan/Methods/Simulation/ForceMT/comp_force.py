@@ -51,7 +51,9 @@ def comp_force(self, output):
 
     # Load magnetic flux
     Brphiz = output.mag.B.get_rphiz_along(
-        "time=axis_data", "angle=axis_data", axis_data={"time":time, "angle":angle},
+        "time=axis_data",
+        "angle=axis_data",
+        axis_data={"time": time, "angle": angle},
     )
     Br = Brphiz["radial"]
     Bt = Brphiz["tangential"]

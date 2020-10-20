@@ -22,10 +22,10 @@ IPMSM_xxx = load(join(DATA_DIR, "Machine", "IPMSM_xxx.json"))
 @pytest.mark.validation
 @pytest.mark.FEMM
 @pytest.mark.long
-def test_import_FEMM_file():
+def test_FEMM_import_model():
     """Test to compute a simulation with/without reusing femm file"""
     # First simulation creating femm file
-    simu = Simu1(name="EM_IPMSM_FL_001", machine=IPMSM_xxx)
+    simu = Simu1(name="FEMM_import_model", machine=IPMSM_xxx)
 
     # Initialization of the simulation starting point
     simu.input = InputCurrent()
@@ -47,7 +47,11 @@ def test_import_FEMM_file():
     simu.input.N0 = 3000  # Rotor speed [rpm]
 
     # Definition of the magnetic simulation
-    simu.mag = MagFEMM(type_BH_stator=2, type_BH_rotor=2, is_periodicity_a=True,)
+    simu.mag = MagFEMM(
+        type_BH_stator=2,
+        type_BH_rotor=2,
+        is_periodicity_a=True,
+    )
     out = simu.run()
 
     # Second simulation, importing femm file and FEMM_dict
@@ -75,7 +79,7 @@ def test_import_FEMM_file():
     )
 
     fig = plt.gcf()
-    fig.savefig(join(save_path, "test_import_FEMM_file.png"))
+    fig.savefig(join(save_path, "FEMM_import_model_B.png"))
 
     assert_array_almost_equal(
         out.mag.B.components["tangential"].values,
