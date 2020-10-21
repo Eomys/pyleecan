@@ -8,16 +8,31 @@ from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Methods.Slot.SlotW15 import S15InnerError
 
 # For AlmostEqual
 DELTA = 1e-4
 
 slotW15_test = list()
+slotW15_wrong_test = list()
 
 # Outward Slot
 lam = LamSlot(is_internal=False, Rint=0.1325)
 lam.slot = SlotW15(H0=5e-3, H1=5e-3, H2=20e-3, R1=4.5e-3, R2=4e-3, W0=5e-3, W3=10e-3)
 slotW15_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 4.1010919e-4,
+        "Aw": 0.10268530,
+        "SW_exp": 3.8506988e-4,
+        "H_exp": 0.03,
+    }
+)
+
+# Internal Slot
+lam = LamSlot(is_internal=True, Rint=0.1325)
+lam.slot = SlotW15(H0=5e-3, H1=5e-3, H2=20e-3, R1=4.5e-3, R2=4e-3, W0=5e-3, W3=10e-3)
+slotW15_wrong_test.append(
     {
         "test_obj": lam,
         "S_exp": 4.1010919e-4,
@@ -90,3 +105,11 @@ class Test_SlotW15_meth(object):
         b = test_dict["Aw"]
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", slotW15_wrong_test)
+    def test_comp_point_coordinate_error(self, test_dict):
+        """Check that the error is well raised"""
+        test_obj = test_dict["test_obj"]
+
+        with pytest.raises(S15InnerError) as context:
+            test_obj.slot._comp_point_coordinate()
