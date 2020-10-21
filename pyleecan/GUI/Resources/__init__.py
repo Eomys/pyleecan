@@ -20,4 +20,5 @@ pixmap_dict = {
     "IPMSM": ":/images/images/MachineSetup/IPMSM.png",
     "BPMSM": ":/images/images/MachineSetup/BPMSM.png",
     "WRSM": ":/images/images/MachineSetup/WRSM.png",
+    "delete_36": "images/icon/delete_36.png",
 }

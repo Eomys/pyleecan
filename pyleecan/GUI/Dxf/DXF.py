@@ -1,5 +1,5 @@
 from .Ui_DXF import Ui_DXF
-from PyQt5.QtWidgets import (
+from PySide2.QtWidgets import (
     QWidget,
     QGraphicsScene,
     QTableWidgetItem,
@@ -7,70 +7,160 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QLineEdit,
 )
-from PyQt5.QtCore import pyqtSlot, QSize
-import PyQt5.QtCore as QtCore
-from PyQt5.QtGui import QIcon, QPixmap
-from .DXFGraphicsView import DXFGraphicsView
+from PySide2.QtCore import Signal, QSize
+import PySide2.QtCore as QtCore
+from PySide2.QtGui import QIcon, QPixmap
 from ...definitions import GUI_DIR
 
 from ...Classes.HoleUD import HoleUD
 from ...Classes.Magnet import Magnet
 from math import pi
 from cmath import phase
-
-
+from ...GUI.Tools.MPLCanvas import MPLCanvas2
+from numpy import array
 from matplotlib.patches import Patch
 from matplotlib.pyplot import axis, legend
 
 from ...Functions.init_fig import init_fig
 from ...definitions import config_dict
+from ezdxf import readfile
+from pyleecan.GUI.Dxf.dxf_to_pyleecan_list import dxf_to_pyleecan_list
+from pyleecan.GUI.Resources import pixmap_dict
 
 MAGNET_COLOR = config_dict["PLOT"]["COLOR_DICT"]["MAGNET_COLOR"]
 
+LINE_LIST = list()
+SELECTED_LIST = list()
+
 
 class DXF(Ui_DXF, QWidget):
-    def __init__(self, doc=None):
+    def __init__(self, dxf_path=None):
         QWidget.__init__(self)
         self.setupUi(self)
 
-        self.delete_icon = QPixmap(GUI_DIR + "/Resources/images/icon/delete_36.png")
+        self.delete_icon = QPixmap(pixmap_dict["delete_36"])
 
-        self.doc_name = doc
-        if doc is not None:
+        # Initialize the graph
+        self.w_viewer.setParent(None)
+        self.w_viewer = MPLCanvas2(self)
+        self.w_viewer.draw()
+        self.main_layout.removeWidget(self.w_viewer)
+        self.main_layout.insertWidget(0, self.w_viewer)
+
+        # Load the DXF file if provided
+        self.dxf_path = dxf_path
+        if dxf_path is not None:
             self.open_document()
 
-        self.nrows = 0
-
-        # Only select dxf files
+        # Setup Path selector for DXF files
         self.w_path_selector.obj = self
-        self.w_path_selector.param_name = "doc_name"
-        self.w_path_selector.verbose_name = "File"
-        # self.w_path_selector.extension = ".DXF" # <--- TODO fix the bug
+        self.w_path_selector.param_name = "dxf_path"
+        self.w_path_selector.verbose_name = "DXF File"
+        self.w_path_selector.extension = "DXF file (*.dxf)"
+        self.w_path_selector.set_path_txt(self.dxf_path)
 
-        self.le_center_x.resize(20, self.le_center_x.height())
-        self.le_center_y.resize(20, self.le_center_y.height())
-
-        # Format w_surface_list (QTableWidget)
+        # Format w_surface_list table (QTableWidget)
         self.w_surface_list.setColumnCount(3)
         self.w_surface_list.horizontalHeader().hide()
         self.w_surface_list.verticalHeader().hide()
         self.w_surface_list.setColumnWidth(2, 24)
+        self.nrows = 0
 
         # Connect signals to slot
         self.w_path_selector.pathChanged.connect(self.open_document)
-        self.viewer.surface_added.connect(self.new_surface)
         self.b_save.pressed.connect(self.save)
         self.b_plot.pressed.connect(self.plot)
-
         self.w_surface_list.currentCellChanged.connect(self.highlight_surface)
+
+        # Display the GUI
         self.show()
 
-    @pyqtSlot()
     def open_document(self):
         """Open a new dxf in the viewer"""
-        self.viewer.open_doc(self.doc_name)
 
-    @pyqtSlot(dict)
+        document = readfile(self.dxf_path)
+        # Model Space
+        modelspace = document.modelspace()
+        # Create pyleecan objects
+        LINE_LIST = dxf_to_pyleecan_list(modelspace)
+        print(len(LINE_LIST))
+        SELECTED_LIST = [False for line in LINE_LIST]
+
+        self.update_graph()
+
+    def update_graph(self):
+        # self.w_viewer.refresh_fig()
+        print("Bla " + str(len(LINE_LIST)))
+        fig, axes = self.w_viewer.fig, self.w_viewer.axes
+        axes.set_axis_off()
+
+        # Draw the lines in the correct color
+        for ii, line in enumerate(LINE_LIST):
+            point_list = array(line.discretize(20))
+            if SELECTED_LIST[ii]:
+                color = "r"
+            else:
+                color = "k"
+            axes.plot(point_list.real, point_list.imag, color)
+
+        # Setup interaction with graph
+        def set_cursor(event):
+            X = event.xdata  # X position of the click
+            Y = event.ydata  # Y position of the click
+            # Get closer pyleecan object
+            Z = X + 1j * Y
+            min_dist = float("inf")
+            closest_id = -1
+            for ii, line in enumerate(LINE_LIST):
+                line_dist = line.comp_distance(Z)
+
+                if line_dist < min_dist:
+                    closest_id = ii
+                    min_dist = line_dist
+            print("Debug")
+            print(len(SELECTED_LIST))
+            print(len(LINE_LIST))
+            print(closest_id)
+            SELECTED_LIST[closest_id] = not SELECTED_LIST[closest_id]
+            self.update_graph()
+
+        def zoom_fun(event):
+            base_scale = 0.3
+            # get the current x and y limits
+            ax = self.w_viewer.axes
+            cur_xlim = ax.get_xlim()
+            cur_ylim = ax.get_ylim()
+            cur_xrange = (cur_xlim[1] - cur_xlim[0]) * 0.5
+            cur_yrange = (cur_ylim[1] - cur_ylim[0]) * 0.5
+            xdata = event.xdata  # get event x location
+            ydata = event.ydata  # get event y location
+            if event.button == "down":
+                # deal with zoom in
+                scale_factor = 1 / base_scale
+            elif event.button == "up":
+                # deal with zoom out
+                scale_factor = base_scale
+            else:
+                # deal with something that should never happen
+                scale_factor = 1
+            # set new limits
+            ax.set_xlim(
+                [xdata - cur_xrange * scale_factor, xdata + cur_xrange * scale_factor]
+            )
+            ax.set_ylim(
+                [ydata - cur_yrange * scale_factor, ydata + cur_yrange * scale_factor]
+            )
+            self.w_viewer.draw()  # force re-draw
+
+        # Connect the cursor fonction to click on graph
+        self.w_viewer.mpl_connect("button_press_event", set_cursor)
+
+        # attach the call back
+        self.w_viewer.mpl_connect("scroll_event", zoom_fun)
+
+        axes.axis("equal")
+        self.w_viewer.draw()
+
     def new_surface(self, element):
         """Add the new surface in the QTableWidget"""
         nrows = self.w_surface_list.rowCount()
@@ -100,7 +190,6 @@ class DXF(Ui_DXF, QWidget):
 
         self.w_surface_list.setCurrentCell(nrows, 0)
 
-    @pyqtSlot(str)
     def edit_surface_name(self, name):
         """Edit a surface name from the QTableWidget"""
         # Get current row
@@ -108,13 +197,12 @@ class DXF(Ui_DXF, QWidget):
         # Edit corresponding surface
         self.viewer.surface_list[nrow]["name"] = name
 
-    @pyqtSlot()
     def plot(self):
         """Plot every selected surfaces"""
         # TODO plot with pyleecan graphic chart hole and magnet
-        Zh = self.le_zh.value()
-        angle = float(self.le_axe_angle.value())
-        center = float(self.le_center_x.value()) + float(self.le_center_y.value()) * 1j
+        Zh = self.si_zh.value()
+        angle = float(self.lf_axe_angle.value())
+        center = float(self.lf_center_x.value()) + float(self.lf_center_y.value()) * 1j
         surf_list = [e["surface"].copy() for e in self.viewer.surface_list]
         for i, surf in enumerate(surf_list):
             # Translate and rotate
@@ -166,9 +254,9 @@ class DXF(Ui_DXF, QWidget):
         # Zh = 8
         # angle = pi / 8
         # center = 0 + 0j
-        Zh = self.le_zh.value()
-        angle = float(self.le_axe_angle.value())
-        center = float(self.le_center_x.value()) + float(self.le_center_y.value()) * 1j
+        Zh = self.si_zh.value()
+        angle = float(self.lf_axe_angle.value())
+        center = float(self.lf_center_x.value()) + float(self.lf_center_y.value()) * 1j
         surf_list = [e["surface"].copy() for e in self.viewer.surface_list]
         for i, surf in enumerate(surf_list):
             # Translate and rotate
