@@ -27,7 +27,7 @@ def plot_2D(
     is_logscale_y=False,
     is_disp_title=True,
     is_grid=True,
-    type="curve",
+    type_plot="curve",
     is_fund=False,
     fund_harm=None,
     x_min=None,
@@ -36,6 +36,7 @@ def plot_2D(
     y_max=None,
     xticks=None,
     save_path=None,
+    barwidth=100,
 ):
     """Plots a 2D graph (curve, bargraph or barchart) comparing fields in Ydatas
 
@@ -69,7 +70,7 @@ def plot_2D(
         boolean indicating if the title must be displayed
     is_grid : bool
         boolean indicating if the grid must be displayed
-    type : str
+    type_plot : str
         type of 2D graph : "curve", "bargraph", "barchart" or "quiver"
     is_fund : bool
         boolean indicating if the bar corresponding to the fundamental must be displayed in red
@@ -120,7 +121,7 @@ def plot_2D(
         no_legend = False
 
     # Plot
-    if type == "curve":
+    if type_plot == "curve":
         for i in range(ndatas):
             ax.plot(
                 Xdatas[i_Xdatas[i]],
@@ -132,11 +133,11 @@ def plot_2D(
             )
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
-    elif type == "bargraph":
+    elif type_plot == "bargraph":
         positions = range(-ndatas + 1, ndatas, 2)
         for i in range(ndatas):
             # width = (Xdatas[i_Xdatas[i]][1] - Xdatas[i_Xdatas[i]][0]) / ndatas
-            width = Xdatas[i_Xdatas[i]][-1] / 100
+            width = Xdatas[i_Xdatas[i]][-1] / barwidth
             barlist = ax.bar(
                 Xdatas[i_Xdatas[i]] + positions[i] * width / (2 * ndatas),
                 Ydatas[i],
@@ -153,7 +154,7 @@ def plot_2D(
                 barlist[imax].set_edgecolor("k")
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
-    elif type == "barchart":
+    elif type_plot == "barchart":
         for i in range(ndatas):
             if i == 0:
                 ax.bar(
@@ -178,7 +179,7 @@ def plot_2D(
             [str(f) for f in Xdatas[i_Xdatas[i]]],
             rotation=90,
         )
-    elif type == "quiver":
+    elif type_plot == "quiver":
         for i in range(ndatas):
             x = [e[0] for e in Xdatas[i_Xdatas[i]]]
             y = [e[1] for e in Xdatas[i_Xdatas[i]]]

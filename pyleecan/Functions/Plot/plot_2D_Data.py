@@ -2,7 +2,7 @@
 
 from ..init_fig import init_fig
 from .plot_2D import plot_2D
-from . import unit_dict, norm_dict, axes_dict, fft_dict, ifft_dict
+from . import unit_dict, norm_dict, axes_dict
 from ...definitions import config_dict
 from numpy import squeeze, split, array, where, max as np_max
 
@@ -21,6 +21,8 @@ def plot_2D_Data(
     mag_max=None,
     is_auto_ticks=True,
     fig=None,
+    barwidth=100,
+    type_plot=None,
 ):
     """Plots a field as a function of time
 
@@ -57,7 +59,6 @@ def plot_2D_Data(
     if len(args) == 1 and type(args[0]) == tuple:
         args = args[0]  # if called from another script with *args
 
-    args_str = [arg.split("{")[0] for arg in args]
 
     # Set plot
     is_show_fig = True if fig is None else False
@@ -85,9 +86,9 @@ def plot_2D_Data(
         else:
             ylabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
         if data_list == []:
-            title1 = "FFT of " + data.name.lower()
+            title1 = "FFT of " + data.name.lower() + " "
         else:
-            title1 = "Comparison of " + data.name.lower() + " FFT"
+            title1 = "Comparison of " + data.name.lower() + " FFT "
     else:
         if data_list == []:
             # title = data.name.capitalize() + " for " + ', '.join(args_str)
@@ -212,20 +213,12 @@ def plot_2D_Data(
                 ]
                 colors += [phase_colors[i * n_phase + j] for j in range(n_phase)]
                 linestyle_list += [line_styles[i] for j in range(n_phase)]
-            # try:
-            #     if axis.is_components:
-            #         is_components = True
-            #         n_phase = len(axis.values)
-            #         legends += [
-            #             legend_list[i] + ": " + axis.values.tolist()[j]
-            #             for j in range(n_phase)
-            #         ]
-            #         colors += [phase_colors[i * n_phase + j] for j in range(n_phase)]
-            # except:
-            #     is_components = False
+
         if not is_overlay:
             legends += [legend_list[i]]
             colors += [curve_colors[i]]
+            linestyle_list += [line_styles[i]]
+            
     if color_list == []:
         color_list = colors
 
@@ -256,6 +249,10 @@ def plot_2D_Data(
             xticks = freqs[indices]
         else:
             xticks = None
+            
+        # Force bargraph for fft if type_graph not specified
+        if type_plot is None:
+            type_plot = "bargraph"
 
         plot_2D(
             Xdatas,
@@ -266,13 +263,19 @@ def plot_2D_Data(
             title=title,
             xlabel=xlabel,
             ylabel=ylabel,
-            type="bargraph",
+            type_plot=type_plot,
             y_max=mag_max,
             xticks=xticks,
             save_path=save_path,
+            barwidth=barwidth,
         )
 
     else:
+        
+        # Force curve plot if type_plot not specified
+        if type_plot is None:
+            type_plot = "curve"
+            
         plot_2D(
             Xdatas,
             Ydatas,
@@ -282,6 +285,7 @@ def plot_2D_Data(
             title=title,
             xlabel=xlabel,
             ylabel=ylabel,
+            type_plot=type_plot,
             y_min=y_min,
             y_max=y_max,
             xticks=xticks,
