@@ -159,14 +159,30 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_A_time(
+
+        # out.plot_A_time(
+        #     "mag.B",
+        #     is_fft=True,
+        #     freq_max=freq_max,
+        #     data_list=[out2.mag.B],
+        #     legend_list=["Reference", "Periodic"],
+        #     is_auto_ticks=False,
+        #     save_path=join(save_path, "test_default_proj_Br_dataobj_period.png"),
+        # )
+        out.plot_2D_Data(
             "mag.B",
-            is_fft=True,
-            freq_max=freq_max,
+            "time",
+            "angle[0]{°}",
             data_list=[out2.mag.B],
             legend_list=["Reference", "Periodic"],
-            is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_period.png"),
+        )
+        out.plot_2D_Data(
+            "mag.B",
+            "freqs=[0," + str(freq_max) + "]",
+            data_list=[out2.mag.B],
+            legend_list=["Reference", "Periodic"],
+            save_path=join(save_path, "test_default_proj_Br_dataobj_period_fft.png"),
         )
 
         out3 = Output(simu=simu)
@@ -282,12 +298,22 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_A_time(
+        # out.plot_A_time(
+        #     "mag.B",
+        #     data_list=[out5.mag.B],
+        #     legend_list=["Br", "0.2sin(375t-1.5)"],
+        #     is_auto_ticks=False,
+        #     save_path=join(save_path, "test_default_proj_Br_compare.png"),
+        # )
+
+        out.plot_2D_Data(
             "mag.B",
+            "time",
+            "angle[0]{°}",
             data_list=[out5.mag.B],
             legend_list=["Br", "0.2sin(375t-1.5)"],
-            is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_compare.png"),
+            is_auto_ticks=False,
         )
 
     def test_default_proj_Br_cfft2(self, import_data):

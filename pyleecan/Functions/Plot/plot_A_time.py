@@ -3,8 +3,9 @@
 from ..init_fig import init_fig
 from .plot_A_2D import plot_A_2D
 from ...definitions import config_dict
-from numpy import squeeze, split, where,array, max as np_max
+from numpy import squeeze, split, where, array, max as np_max
 from itertools import repeat
+
 
 def plot_A_time(
     data,
@@ -29,10 +30,10 @@ def plot_A_time(
     subplot_index=None,
 ):
     """Plots a field as a function of time
-    
+
     /!\ If relevant /!\ :
         - any change in Function.Plot.plot_A_time should be added in Method.Output.Output.plot.plot_A_time
-        - any change in plot_A_time that is applicable to plot_A_space should be implemented in both   
+        - any change in plot_A_time that is applicable to plot_A_space should be implemented in both
 
     Parameters
     ----------
@@ -112,7 +113,7 @@ def plot_A_time(
         color_list = colors
     if linestyle_list == []:
         linestyle_list = linestyles
-        
+
     xlabel = "Time [s]"
     if unit == "SI":
         unit = data.unit
@@ -125,14 +126,14 @@ def plot_A_time(
     if alpha != None:
         alpha_str = "angle=" + str(alpha)
     else:
-        alpha_str = "angle[" + str(alpha_index) + "]"        
-        
+        alpha_str = "angle[" + str(alpha_index) + "]"
+
     # Title string
     if list_str is not None:
         title = data.name + " over time for " + list_str + str(index_list)
     else:
-        title = data.name + " over time for " + alpha_str            
- 
+        title = data.name + " over time for " + alpha_str
+
     if data_list != []:
         title = "Comparison of " + title
 
@@ -157,11 +158,11 @@ def plot_A_time(
             )
             Xdatas.append(results["time"])
             Ydatas.append(results[data.symbol])
-            
+
     Ydata = []
     for d in Ydatas:
         if d.ndim != 1:
-            axis_index = where(array(d.shape)==len(index_list))[0]
+            axis_index = where(array(d.shape) == len(index_list))[0]
             if axis_index.size > 1:
                 print("WARNING, several axes with same dimensions")
             Ydata += split(d, len(index_list), axis=axis_index[0])
@@ -218,7 +219,7 @@ def plot_A_time(
                 )
                 Xdatas.append(results["freqs"])
                 Ydatas.append(results[data.symbol])
-    
+
         else:
             xlabel = "Frequency [Hz]"
             for d in data_list2:
@@ -230,11 +231,13 @@ def plot_A_time(
                 )
                 Xdatas.append(results["freqs"])
                 Ydatas.append(results[data.symbol])
-                
+
         freqs = Xdatas[0]
-    
+
         if is_auto_ticks:
-            indices = [ind for ind, y in enumerate(Ydatas[0]) if abs(y) > abs(0.01 * np_max(y))]
+            indices = [
+                ind for ind, y in enumerate(Ydatas[0]) if abs(y) > abs(0.01 * np_max(y))
+            ]
             xticks = freqs[indices]
         else:
             xticks = None

@@ -3,7 +3,7 @@
 from ..init_fig import init_fig
 from .plot_A_2D import plot_A_2D
 from ...definitions import config_dict
-from numpy import squeeze, split, max as np_max, where,array
+from numpy import squeeze, split, max as np_max, where, array
 from itertools import repeat
 
 
@@ -32,10 +32,10 @@ def plot_A_space(
     subplot_index=None,
 ):
     """Plots a field as a function of space (angle)
-    
+
     /!\ If relevant /!\ :
         - any change in Function.Plot.plot_A_space should be added in Method.Output.Output.plot.plot_A_space
-        - any change in plot_A_space that is applicable to plot_A_time should be implemented in both      
+        - any change in plot_A_space that is applicable to plot_A_time should be implemented in both
 
     Parameters
     ----------
@@ -137,13 +137,13 @@ def plot_A_space(
         t_str = "time=" + str(t)
     else:
         t_str = "time[" + str(t_index) + "]"
-        
+
     # Title string
     if list_str is not None:
         title = data.name + " over space for " + list_str + str(index_list)
     else:
-        title = data.name + " over space for " + t_str            
- 
+        title = data.name + " over space for " + t_str
+
     if data_list != []:
         title = "Comparison of " + title
 
@@ -168,18 +168,18 @@ def plot_A_space(
             )
             Xdatas.append(results["angle"])
             Ydatas.append(results[data.symbol])
-    
+
     # Nicely spaced ticks if angle in degrees
     angle = Xdatas[0]
     if is_deg and round(np_max(angle) / 6) % 5 == 0:
         xticks = [i * round(np_max(angle) / 6) for i in range(7)]
     else:
         xticks = None
-        
+
     Ydata = []
     for d in Ydatas:
         if d.ndim != 1:
-            axis_index = where(array(d.shape)==len(index_list))[0]
+            axis_index = where(array(d.shape) == len(index_list))[0]
             if axis_index.size > 1:
                 print("WARNING, several axes with same dimensions")
             Ydata += split(d, len(index_list), axis=axis_index[0])
@@ -248,11 +248,13 @@ def plot_A_space(
                 )
                 Xdatas.append(results["wavenumber"])
                 Ydatas.append(results[data.symbol])
-                
+
         wavenumber = Xdatas[0]
 
         if is_auto_ticks:
-            indices = [ind for ind, y in enumerate(Ydatas[0]) if abs(y) > abs(0.01 * np_max(y))]
+            indices = [
+                ind for ind, y in enumerate(Ydatas[0]) if abs(y) > abs(0.01 * np_max(y))
+            ]
             xticks = wavenumber[indices]
         else:
             xticks = None

@@ -60,9 +60,17 @@ def test_EEC_FEMM_IPMSM():
     out2 = Output(simu=simu2)
     simu2.run()
 
-    out.plot_A_time(
+    # out.plot_A_time(
+    #     "elec.Is",
+    #     index_list=[0, 1, 2],
+    #     save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
+    # )
+
+    # Plot 3-phase current function of time
+    out.plot_2D_Data(
         "elec.Is",
-        index_list=[0, 1, 2],
+        "time",
+        "phase",
         save_path=join(save_path, "EEC_FEMM_IPMSM_currents.png"),
     )
 

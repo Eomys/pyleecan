@@ -5,7 +5,6 @@ from .....Functions.init_fig import init_fig
 from SciDataTool import VectorField
 
 
-
 def plot_2D_Data(
     self,
     Data_str,
@@ -23,6 +22,7 @@ def plot_2D_Data(
     is_auto_ticks=True,
     barwidth=100,
     type_plot=None,
+    fund_harm=None,
 ):
     """Plots a field as a function of time
 
@@ -47,7 +47,7 @@ def plot_2D_Data(
     color_list : list
         list of colors to use for each Data object
     save_path : str
-        path and name of the png file to save
+        full path of the png file where the figure is saved if save_path is not None
     y_min : float
         minimum value for the y-axis
     y_max : float
@@ -56,12 +56,17 @@ def plot_2D_Data(
         maximum alue for the y-axis of the fft
     is_auto_ticks : bool
         in fft, adjust ticks to freqs (deactivate if too close)
+    barwidth : float
+        barwidth scaling factor, only if type_plot = "bargraph"
+    type_plot : str
+        type of 2D graph : "curve", "bargraph", "barchart" or "quiver"
+    fund_harm : float
+        frequency/order/wavenumber of the fundamental harmonic that must be displayed in red in the fft
     """
 
     # Get Data object names
     phys = getattr(self, Data_str.split(".")[0])
-    data = getattr(phys, Data_str.split(".")[1])    
-    
+    data = getattr(phys, Data_str.split(".")[1])
 
     # Call the plot function
     if isinstance(data, VectorField):
@@ -69,12 +74,22 @@ def plot_2D_Data(
             component_list = data.components.keys()
         for i, comp in enumerate(component_list):
             (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
-            
+
             if save_path is not None:
-                save_path_comp=save_path.split(".")[0]  + "_" + comp + "." + save_path.split(".")[1]
-            else:                
-                save_path_comp=None
-                
+                save_path_comp = (
+                    save_path.split(".")[0] + "_" + comp + "." + save_path.split(".")[1]
+                )
+            else:
+                save_path_comp = None
+
+            if fund_harm is None:
+                # if fund_harm is None:
+                #     mag_max = max(Ydatas[i])
+                #     imax = int(where(Ydatas[i] == mag_max)[0])
+                # else:
+                #     imax = argmin(abs(Xdatas[i] - fund_harm))
+                pass  # Call method to calculate fundharm function of simu and machine
+
             plot_2D_Data_fct(
                 data.components[comp],
                 args,
@@ -90,6 +105,7 @@ def plot_2D_Data(
                 fig=fig,
                 barwidth=barwidth,
                 type_plot=type_plot,
+                fund_harm=fund_harm,
             )
             fig.show()
 
@@ -111,6 +127,6 @@ def plot_2D_Data(
             fig=fig,
             barwidth=barwidth,
             type_plot=type_plot,
+            fund_harm=fund_harm,
         )
         fig.show()
-

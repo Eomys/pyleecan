@@ -23,6 +23,8 @@ def plot_2D_Data(
     fig=None,
     barwidth=100,
     type_plot=None,
+    is_fund=False,
+    fund_harm=None,
 ):
     """Plots a field as a function of time
 
@@ -43,7 +45,7 @@ def plot_2D_Data(
     color_list : list
         list of colors to use for each Data object
     save_path : str
-        path and name of the png file to save
+        full path of the png file where the figure is saved if save_path is not None
     y_min : float
         minimum value for the y-axis
     y_max : float
@@ -54,11 +56,17 @@ def plot_2D_Data(
         in fft, adjust ticks to freqs (deactivate if too close)
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
+    barwidth : float
+        barwidth scaling factor, only if type_plot = "bargraph"
+    type_plot : str
+        type of 2D graph : "curve", "bargraph", "barchart" or "quiver"
+    fund_harm : float
+        frequency/order/wavenumber of the fundamental harmonic that must be displayed in red in the fft
+
     """
 
     if len(args) == 1 and type(args[0]) == tuple:
         args = args[0]  # if called from another script with *args
-
 
     # Set plot
     is_show_fig = True if fig is None else False
@@ -218,7 +226,7 @@ def plot_2D_Data(
             legends += [legend_list[i]]
             colors += [curve_colors[i]]
             linestyle_list += [line_styles[i]]
-            
+
     if color_list == []:
         color_list = colors
 
@@ -249,7 +257,7 @@ def plot_2D_Data(
             xticks = freqs[indices]
         else:
             xticks = None
-            
+
         # Force bargraph for fft if type_graph not specified
         if type_plot is None:
             type_plot = "bargraph"
@@ -268,14 +276,15 @@ def plot_2D_Data(
             xticks=xticks,
             save_path=save_path,
             barwidth=barwidth,
+            fund_harm=fund_harm,
         )
 
     else:
-        
+
         # Force curve plot if type_plot not specified
         if type_plot is None:
             type_plot = "curve"
-            
+
         plot_2D(
             Xdatas,
             Ydatas,

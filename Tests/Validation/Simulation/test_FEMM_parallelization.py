@@ -21,7 +21,7 @@ from pyleecan.definitions import DATA_DIR
 @pytest.mark.FEMM
 def test_FEMM_parallelization_mag():
     """test parallelization of FEMM to get B, Tem, PhiWind """
-    
+
     IPMSM_A = load(join(DATA_DIR, "Machine", "IPMSM_A.json"))
 
     simu = Simu1(name="FEMM_parallelization_mag", machine=IPMSM_A)
@@ -33,7 +33,7 @@ def test_FEMM_parallelization_mag():
     simu.input.Nt_tot = 16  # Number of time step
     simu.input.Na_tot = 1024  # Spatial discretization
     simu.input.N0 = 2000  # Rotor speed [rpm]
-    
+
     # Definition of the magnetic simulation
     simu.mag = MagFEMM(
         type_BH_stator=2,
@@ -57,52 +57,40 @@ def test_FEMM_parallelization_mag():
         )
     )
     # Plot the result by comparing the two simulation
-    plt.close("all")
-    out.plot_A_space(
+    out.plot_2D_Data(
         "mag.B",
+        "angle",
+        "time[0]",
         data_list=[out2.mag.B],
         legend_list=["Serial", "Parallelization"],
-        color_list=["b", "r"],
-        linestyle_list=["-", "dotted"],
-        t_index=0,
+        save_path=join(save_path, "FEMM_parallelization_mag_B_t0.png"),
     )
 
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "FEMM_parallelization_mag_B_t0.png"))
-    
-    out.plot_A_space(
+    out.plot_2D_Data(
         "mag.B",
+        "angle",
+        "time[0]",
         data_list=[out2.mag.B],
         legend_list=["Serial", "Parallelization"],
-        color_list=["b", "r"],
-        linestyle_list=["-", "dotted"],
-        t_index=1,
+        save_path=join(save_path, "FEMM_parallelization_mag_B_t1.png"),
     )
 
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "FEMM_parallelization_mag_B_t1.png"))
-    
-    out.plot_A_time(
+    out.plot_2D_Data(
         "mag.Tem",
+        "time",
         data_list=[out2.mag.Tem],
-        legend_list=["Serial", "Parallelization"],
-        color_list=["b", "r"],
-        linestyle_list=["-", "dotted"],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "FEMM_parallelization_mag_Tem.png"),
     )
 
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "FEMM_parallelization_mag_Tem.png"))
-    
-    out.plot_A_time(
+    out.plot_2D_Data(
         "mag.Phi_wind_stator",
+        "time",
+        "phase",
         data_list=[out2.mag.Phi_wind_stator],
-        legend_list=["Serial", "Parallelization"],
-        color_list=["b", "r"],
-        linestyle_list=["-", "dotted"],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "FEMM_parallelization_mag_Phi_wind_stator.png"),
     )
-
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "FEMM_parallelization_mag_Phi_wind_stator.png"))
 
     assert_allclose(
         out.mag.B.components["tangential"].values,
@@ -119,7 +107,7 @@ def test_FEMM_parallelization_mag():
     )
 
     assert_allclose(out.mag.Tem.values, out2.mag.Tem.values, rtol=1e-5, atol=1e-5)
-    
+
     return out, out2
 
 
@@ -127,8 +115,7 @@ def test_FEMM_parallelization_mag():
 @pytest.mark.validation
 @pytest.mark.FEMM
 def test_FEMM_parallelization_meshsolution():
-    """ test parallelization of FEMM to get meshsolution 
-    """
+    """test parallelization of FEMM to get meshsolution"""
 
     SPMSM_003 = load(join(DATA_DIR, "Machine", "SPMSM_003.json"))
     simu = Simu1(name="FEMM_parallelization_meshsolution", machine=SPMSM_003)
@@ -179,29 +166,43 @@ def test_FEMM_parallelization_meshsolution():
     # %%
     # Plots solution computed without parallelization
     out.mag.meshsolution.plot_mesh(
-        save_path=join(save_path, "FEMM_parallelization_meshsolution_mesh_not_parallel.png")
+        save_path=join(
+            save_path, "FEMM_parallelization_meshsolution_mesh_not_parallel.png"
+        )
     )
 
     out.mag.meshsolution.plot_mesh(
         group_names="stator",
-        save_path=join(save_path, "FEMM_parallelization_meshsolution_mesh_stator_not_parallel.png"),
+        save_path=join(
+            save_path, "FEMM_parallelization_meshsolution_mesh_stator_not_parallel.png"
+        ),
     )
 
     out.mag.meshsolution.plot_mesh(
         group_names=["stator", "/", "airgap", "stator_windings"],
         save_path=join(
-            save_path, "FEMM_parallelization_meshsolution_mesh_stator_interface_not_parallel.png"
+            save_path,
+            "FEMM_parallelization_meshsolution_mesh_stator_interface_not_parallel.png",
         ),
     )
 
     out.mag.meshsolution.plot_contour(
-        label="\mu", save_path=join(save_path, "FEMM_parallelization_meshsolution_mu_not_parallel.png")
+        label="\mu",
+        save_path=join(
+            save_path, "FEMM_parallelization_meshsolution_mu_not_parallel.png"
+        ),
     )
     out.mag.meshsolution.plot_contour(
-        label="B", save_path=join(save_path, "FEMM_parallelization_meshsolution_B_not_parallel.png")
+        label="B",
+        save_path=join(
+            save_path, "FEMM_parallelization_meshsolution_B_not_parallel.png"
+        ),
     )
     out.mag.meshsolution.plot_contour(
-        label="H", save_path=join(save_path, "FEMM_parallelization_meshsolution_H_not_parallel.png")
+        label="H",
+        save_path=join(
+            save_path, "FEMM_parallelization_meshsolution_H_not_parallel.png"
+        ),
     )
 
     # %%
@@ -212,28 +213,36 @@ def test_FEMM_parallelization_meshsolution():
 
     out2.mag.meshsolution.plot_mesh(
         group_names="stator",
-        save_path=join(save_path, "FEMM_parallelization_meshsolution_mesh_stator_parallel.png"),
+        save_path=join(
+            save_path, "FEMM_parallelization_meshsolution_mesh_stator_parallel.png"
+        ),
     )
 
     out2.mag.meshsolution.plot_mesh(
         group_names=["stator", "/", "airgap", "stator_windings"],
-        save_path=join(save_path, "FEMM_parallelization_meshsolution_mesh_stator_interface_parallel.png"),
+        save_path=join(
+            save_path,
+            "FEMM_parallelization_meshsolution_mesh_stator_interface_parallel.png",
+        ),
     )
 
     out2.mag.meshsolution.plot_contour(
-        label="\mu", save_path=join(save_path, "FEMM_parallelization_meshsolution_mu_parallel.png")
+        label="\mu",
+        save_path=join(save_path, "FEMM_parallelization_meshsolution_mu_parallel.png"),
     )
     out2.mag.meshsolution.plot_contour(
-        label="B", save_path=join(save_path, "FEMM_parallelization_meshsolution_B_parallel.png")
+        label="B",
+        save_path=join(save_path, "FEMM_parallelization_meshsolution_B_parallel.png"),
     )
     out2.mag.meshsolution.plot_contour(
-        label="H", save_path=join(save_path, "FEMM_parallelization_meshsolution_H_parallel.png")
+        label="H",
+        save_path=join(save_path, "FEMM_parallelization_meshsolution_H_parallel.png"),
     )
-    
+
     return out, out2
 
 
 if __name__ == "__main__":
 
     out, out2 = test_FEMM_parallelization_mag()
-    out3, out4 =  test_FEMM_parallelization_meshsolution()
+    out3, out4 = test_FEMM_parallelization_meshsolution()
