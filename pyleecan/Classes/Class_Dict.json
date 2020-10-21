@@ -3823,7 +3823,8 @@
             "get_material_list",
             "get_polar_eq",
             "plot",
-            "plot_anim_rotor"
+            "plot_anim_rotor",
+            "get_pole_pair_number"
         ],
         "mother": "",
         "name": "Machine",
@@ -6805,7 +6806,8 @@
             "getter.get_path_result",
             "getter.get_machine_periodicity",
             "getter.get_rot_dir",
-            "plot.plot_2D_Data"
+            "plot.plot_2D_Data",
+            "getter.get_fund_harm"
         ],
         "mother": "",
         "name": "Output",

@@ -71,6 +71,10 @@ def plot_2D(
         type of 2D graph : "curve", "bargraph", "barchart" or "quiver"
     fund_harm : float
         frequency/order/wavenumber of the fundamental harmonic that must be displayed in red in the fft
+    x_min : float
+        minimum value for the x-axis
+    x_max : float
+        maximum value for the x-axis
     y_min : float
         minimum value for the y-axis
     y_max : float

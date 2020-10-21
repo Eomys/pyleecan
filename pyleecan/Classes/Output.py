@@ -60,6 +60,11 @@ try:
 except ImportError as error:
     plot_2D_Data = error
 
+try:
+    from ..Methods.Output.Output.getter.get_fund_harm import get_fund_harm
+except ImportError as error:
+    get_fund_harm = error
+
 
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
@@ -165,6 +170,17 @@ class Output(FrozenClass):
         )
     else:
         plot_2D_Data = plot_2D_Data
+    # cf Methods.Output.Output.getter.get_fund_harm
+    if isinstance(get_fund_harm, ImportError):
+        get_fund_harm = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method get_fund_harm: " + str(get_fund_harm)
+                )
+            )
+        )
+    else:
+        get_fund_harm = get_fund_harm
     # save and copy methods are available in all object
     save = save
     copy = copy

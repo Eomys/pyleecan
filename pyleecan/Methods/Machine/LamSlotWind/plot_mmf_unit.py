@@ -30,7 +30,7 @@ def plot_mmf_unit(self, fig=None):
     Phase = Data1D(
         name="phase",
         unit="",
-        values=gen_name(qs, is_add_phase=True),
+        values=gen_name(qs),
         is_components=True,
     )
     Angle = mmf_u.axes[1]

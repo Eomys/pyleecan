@@ -9,22 +9,26 @@ from numpy import squeeze, split, array, where, max as np_max
 
 def plot_2D_Data(
     data,
-    *args,
+    *arg_list,
     is_norm=False,
     unit="SI",
     data_list=[],
     legend_list=[],
     color_list=[],
     save_path=None,
+    x_min=None,
+    x_max=None,
     y_min=None,
     y_max=None,
-    mag_max=None,
+    is_logscale_x=False,
+    is_logscale_y=False,
+    is_disp_title=True,
+    is_grid=True,
     is_auto_ticks=True,
     fig=None,
     barwidth=100,
     type_plot=None,
-    is_fund=False,
-    fund_harm=None,
+    fund_harm_dict=None,
 ):
     """Plots a field as a function of time
 
@@ -32,7 +36,7 @@ def plot_2D_Data(
     ----------
     data : Data
         a Data object
-    *args : list of str
+    *arg_list : list of str
         arguments to specify which axes to plot
     is_norm : bool
         boolean indicating if the field must be normalized
@@ -46,12 +50,22 @@ def plot_2D_Data(
         list of colors to use for each Data object
     save_path : str
         full path of the png file where the figure is saved if save_path is not None
+    x_min : float
+        minimum value for the x-axis
+    x_max : float
+        maximum value for the x-axis
     y_min : float
         minimum value for the y-axis
     y_max : float
         maximum value for the y-axis
-    mag_max : float
-        maximum alue for the y-axis of the fft
+    is_logscale_x : bool
+        boolean indicating if the x-axis must be set in logarithmic scale
+    is_logscale_y : bool
+        boolean indicating if the y-axis must be set in logarithmic scale
+    is_disp_title : bool
+        boolean indicating if the title must be displayed
+    is_grid : bool
+        boolean indicating if the grid must be displayed
     is_auto_ticks : bool
         in fft, adjust ticks to freqs (deactivate if too close)
     fig : Matplotlib.figure.Figure
@@ -60,17 +74,19 @@ def plot_2D_Data(
         barwidth scaling factor, only if type_plot = "bargraph"
     type_plot : str
         type of 2D graph : "curve", "bargraph", "barchart" or "quiver"
-    fund_harm : float
-        frequency/order/wavenumber of the fundamental harmonic that must be displayed in red in the fft
+    fund_harm_dict : dict
+        Dict containing axis name as key and frequency/order/wavenumber of fundamental harmonic as value to display fundamental harmonic in red in the fft
 
     """
-
-    if len(args) == 1 and type(args[0]) == tuple:
-        args = args[0]  # if called from another script with *args
+    # Extract arg_list it the function called from another script with *arg_list
+    if len(arg_list) == 1 and type(arg_list[0]) == tuple:
+        arg_list = arg_list[0]
 
     # Set plot
     is_show_fig = True if fig is None else False
     (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
+
+    # Get colors and line_styles from config_dict
     curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
     phase_colors = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
     line_styles = config_dict["PLOT"]["LINE_STYLE"]
@@ -79,9 +95,9 @@ def plot_2D_Data(
     if unit == "SI":
         unit = data.unit
 
-    # Detect fft
+    # Detect if is fft, build first title part and ylabel
     is_fft = False
-    if any("wavenumber" in s for s in args) or any("freqs" in s for s in args):
+    if any("wavenumber" in s for s in arg_list) or any("freqs" in s for s in arg_list):
         is_fft = True
         if "dB" in unit:
             unit_str = (
@@ -99,10 +115,10 @@ def plot_2D_Data(
             title1 = "Comparison of " + data.name.lower() + " FFT "
     else:
         if data_list == []:
-            # title = data.name.capitalize() + " for " + ', '.join(args_str)
+            # title = data.name.capitalize() + " for " + ', '.join(arg_list_str)
             title1 = data.name.capitalize() + " "
         else:
-            # title = data.name.capitalize() + " for " + ', '.join(args_str)
+            # title = data.name.capitalize() + " for " + ', '.join(arg_list_str)
             title1 = "Comparison of " + data.name.lower() + " "
         if is_norm:
             ylabel = (
@@ -117,24 +133,28 @@ def plot_2D_Data(
     data_list2 = [data] + data_list
     for i, d in enumerate(data_list2):
         if is_fft:
-            result = d.get_magnitude_along(args, unit=unit, is_norm=is_norm)
+            result = d.get_magnitude_along(arg_list, unit=unit, is_norm=is_norm)
             if i == 0:
                 axes_list = result.pop("axes_list")
                 axes_dict_other = result.pop("axes_dict_other")
             Ydatas.append(result.pop(d.symbol))
             Xdatas.append(result[list(result)[0]])
         else:
-            result = d.get_along(args, unit=unit, is_norm=is_norm)
+            result = d.get_along(arg_list, unit=unit, is_norm=is_norm)
             if i == 0:
                 axes_list = result.pop("axes_list")
                 axes_dict_other = result.pop("axes_dict_other")
             Ydatas.append(result.pop(d.symbol))
             Xdatas.append(result[list(result)[0]])
 
-    # Build labels and titles
+    # Find name of main axis
+    main_axis = min(axes_list, key=lambda x: x.values.size)
+
+    # Build xlabel and title parts 2 and 3
     title2 = ""
     title3 = " for "
     for axis in axes_list:
+        # Title part 2
         if axis.extension in [
             "whole",
             "interval",
@@ -170,7 +190,18 @@ def plot_2D_Data(
                 unit = norm_dict[axis.unit]
             else:
                 unit = axis.unit
-            title3 += axis.name + "=" + str(result[axis.name]) + " " + unit + ", "
+            
+            if result[axis.name].size >1:
+                axis_str = result[axis.name].astype(
+                str
+            )  # TODO: smart conversion of float to str
+                axis_str = "[" + ",".join(axis_str) +"]"
+            else:
+                axis_str = str(result[axis.name][0])
+                
+            title3 += axis.name + "=" + axis_str + " " + unit + ", "
+
+    # Title part 4 containing axes that are here but not involved in requested axes
     title4 = ""
     for axis_name in axes_dict_other:
         title4 += (
@@ -185,10 +216,13 @@ def plot_2D_Data(
     if title3 == " for " and title4 == "":
         title3 = ""
 
+    # Concatenate all title parts
     title = title1 + title2 + title3 + title4
+
+    # Remove last coma due to title3 or title4
     title = title.rstrip(", ")
 
-    # Build legends and colors
+    # Detect how many curves are overlaid, build legend and color lists
     if legend_list == [] and data_list != []:
         legend_list = [d.name for d in data_list2]
     elif legend_list == []:
@@ -201,7 +235,7 @@ def plot_2D_Data(
         for axis in axes_list:
             if axis.extension == "list":
                 is_overlay = True
-                n_phase = len(axis.values)
+                n_curves = len(axis.values)
                 if axis.unit == "SI":
                     unit = unit_dict[axis.name]
                 elif axis.unit in norm_dict:
@@ -217,34 +251,35 @@ def plot_2D_Data(
                     + str(axis.values.tolist()[j])
                     + " "
                     + unit
-                    for j in range(n_phase)
+                    for j in range(n_curves)
                 ]
-                colors += [phase_colors[i * n_phase + j] for j in range(n_phase)]
-                linestyle_list += [line_styles[i] for j in range(n_phase)]
+                colors += [phase_colors[i * n_curves + j] for j in range(n_curves)]
+                linestyle_list += [line_styles[i] for j in range(n_curves)]
 
         if not is_overlay:
             legends += [legend_list[i]]
             colors += [curve_colors[i]]
             linestyle_list += [line_styles[i]]
 
+    # Set colors_list to colors taht has just been built
     if color_list == []:
         color_list = colors
 
-    # Split phases
+    # Split Ydatas if the plot overlays several curves
     if is_overlay:
         Ydata = []
         for d in Ydatas:
             if d.ndim != 1:
-                axis_index = where(array(d.shape) == n_phase)[0]
+                axis_index = where(array(d.shape) == n_curves)[0]
                 if axis_index.size > 1:
                     print("WARNING, several axes with same dimensions")
-                Ydata += split(d, n_phase, axis=axis_index[0])
+                Ydata += split(d, n_curves, axis=axis_index[0])
             else:
                 Ydata += [d]
         Ydatas = [squeeze(d) for d in Ydata]
         Xdata = []
         for i in range(len(data_list2)):
-            Xdata += [Xdatas[i] for x in range(n_phase)]
+            Xdata += [Xdatas[i] for x in range(n_curves)]
         Xdatas = Xdata
 
     # Call generic plot function
@@ -262,6 +297,15 @@ def plot_2D_Data(
         if type_plot is None:
             type_plot = "bargraph"
 
+        # Option to draw fundamental harmonic in red
+        if fund_harm_dict is not None:
+            # Activate the option only if main axis is in dict and there is no plot overlay
+            if main_axis.name in fund_harm_dict and not is_overlay:
+                fund_harm = fund_harm_dict[main_axis.name]
+            else:
+                # Deactivate the option
+                fund_harm = None
+
         plot_2D(
             Xdatas,
             Ydatas,
@@ -272,7 +316,14 @@ def plot_2D_Data(
             xlabel=xlabel,
             ylabel=ylabel,
             type_plot=type_plot,
-            y_max=mag_max,
+            x_min=x_min,
+            x_max=x_max,
+            y_min=y_min,
+            y_max=y_max,
+            is_logscale_x=is_logscale_x,
+            is_logscale_y=is_logscale_y,
+            is_disp_title=is_disp_title,
+            is_grid=is_grid,
             xticks=xticks,
             save_path=save_path,
             barwidth=barwidth,
@@ -295,8 +346,14 @@ def plot_2D_Data(
             xlabel=xlabel,
             ylabel=ylabel,
             type_plot=type_plot,
+            x_min=x_min,
+            x_max=x_max,
             y_min=y_min,
             y_max=y_max,
+            is_logscale_x=is_logscale_x,
+            is_logscale_y=is_logscale_y,
+            is_disp_title=is_disp_title,
+            is_grid=is_grid,
             xticks=xticks,
             linestyle_list=linestyle_list,
             save_path=save_path,

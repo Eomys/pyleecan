@@ -136,7 +136,6 @@ def test_Magnetic_AGSF():
         "force.P",
         "wavenumber=[0," + str(r_max) + "]",
         "time[0]",
-        fund_harm=0,
         save_path=join(save_path, "test_FM_SynRM_FL_001_plot_force_space_fft2.png"),
     )
 

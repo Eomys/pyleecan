@@ -8,7 +8,7 @@ from SciDataTool import VectorField
 def plot_2D_Data(
     self,
     Data_str,
-    *args,
+    *arg_list,
     is_norm=False,
     unit="SI",
     data_list=[],
@@ -16,13 +16,18 @@ def plot_2D_Data(
     legend_list=[],
     color_list=[],
     save_path=None,
+    x_min=None,
+    x_max=None,
     y_min=None,
     y_max=None,
-    mag_max=None,
+    is_logscale_x=False,
+    is_logscale_y=False,
+    is_disp_title=True,
+    is_grid=True,
     is_auto_ticks=True,
     barwidth=100,
     type_plot=None,
-    fund_harm=None,
+    fund_harm_dict=None,
 ):
     """Plots a field as a function of time
 
@@ -32,7 +37,7 @@ def plot_2D_Data(
         an Output object
     Data_str : str
         name of the Data Object to plot (e.g. "mag.Br")
-    *args : list of str
+    *arg_list : list of str
         arguments to specify which axes to plot
     is_norm : bool
         boolean indicating if the field must be normalized
@@ -48,25 +53,40 @@ def plot_2D_Data(
         list of colors to use for each Data object
     save_path : str
         full path of the png file where the figure is saved if save_path is not None
+    x_min : float
+        minimum value for the x-axis
+    x_max : float
+        maximum value for the x-axis
     y_min : float
         minimum value for the y-axis
     y_max : float
         maximum value for the y-axis
-    mag_max : float
-        maximum alue for the y-axis of the fft
+    is_logscale_x : bool
+        boolean indicating if the x-axis must be set in logarithmic scale
+    is_logscale_y : bool
+        boolean indicating if the y-axis must be set in logarithmic scale
+    is_disp_title : bool
+        boolean indicating if the title must be displayed
+    is_grid : bool
+        boolean indicating if the grid must be displayed
     is_auto_ticks : bool
         in fft, adjust ticks to freqs (deactivate if too close)
     barwidth : float
         barwidth scaling factor, only if type_plot = "bargraph"
     type_plot : str
         type of 2D graph : "curve", "bargraph", "barchart" or "quiver"
-    fund_harm : float
-        frequency/order/wavenumber of the fundamental harmonic that must be displayed in red in the fft
+    fund_harm_dict : dict
+        Dict containing axis name as key and frequency/order/wavenumber of fundamental harmonic as value to display fundamental harmonic in red in the fft
+
     """
 
     # Get Data object names
     phys = getattr(self, Data_str.split(".")[0])
     data = getattr(phys, Data_str.split(".")[1])
+
+    # Get fundamental harmonic properties from Output
+    if fund_harm_dict is None:
+        fund_harm_dict = self.get_fund_harm(Data_str.split(".")[1])
 
     # Call the plot function
     if isinstance(data, VectorField):
@@ -82,30 +102,28 @@ def plot_2D_Data(
             else:
                 save_path_comp = None
 
-            if fund_harm is None:
-                # if fund_harm is None:
-                #     mag_max = max(Ydatas[i])
-                #     imax = int(where(Ydatas[i] == mag_max)[0])
-                # else:
-                #     imax = argmin(abs(Xdatas[i] - fund_harm))
-                pass  # Call method to calculate fundharm function of simu and machine
-
             plot_2D_Data_fct(
                 data.components[comp],
-                args,
+                arg_list,
                 is_norm=is_norm,
                 unit=unit,
                 data_list=[dat.components[comp] for dat in data_list],
                 legend_list=legend_list,
                 color_list=color_list,
                 save_path=save_path_comp,
+                x_min=x_min,
+                x_max=x_max,
                 y_min=y_min,
                 y_max=y_max,
+                is_logscale_x=is_logscale_x,
+                is_logscale_y=is_logscale_y,
+                is_disp_title=is_disp_title,
+                is_grid=is_grid,
                 is_auto_ticks=is_auto_ticks,
                 fig=fig,
                 barwidth=barwidth,
                 type_plot=type_plot,
-                fund_harm=fund_harm,
+                fund_harm_dict=fund_harm_dict,
             )
             fig.show()
 
@@ -113,20 +131,25 @@ def plot_2D_Data(
         (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
         plot_2D_Data_fct(
             data,
-            args,
+            arg_list,
             is_norm=is_norm,
             unit=unit,
             data_list=data_list,
             legend_list=legend_list,
             color_list=color_list,
             save_path=save_path,
+            x_min=x_min,
+            x_max=x_max,
             y_min=y_min,
             y_max=y_max,
-            mag_max=mag_max,
+            is_logscale_x=is_logscale_x,
+            is_logscale_y=is_logscale_y,
+            is_disp_title=is_disp_title,
+            is_grid=is_grid,
             is_auto_ticks=is_auto_ticks,
             fig=fig,
             barwidth=barwidth,
             type_plot=type_plot,
-            fund_harm=fund_harm,
+            fund_harm_dict=fund_harm_dict,
         )
         fig.show()

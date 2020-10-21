@@ -310,7 +310,7 @@ def solve_FEMM_parallel(self, femm, output, sym):
         Phase = Data1D(
             name="phase",
             unit="",
-            values=gen_name(qs, is_add_phase=True),
+            values=gen_name(qs),
             is_components=True,
         )
         output.mag.Phi_wind_stator = DataTime(
