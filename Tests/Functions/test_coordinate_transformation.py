@@ -43,5 +43,4 @@ def test_coordinate_transformation_Ok():
     assert_array_almost_equal(ab2dq(X_ab, th_90), X_dq90)
     assert_array_almost_equal(ab2dq(X_ab, th_180), X_dq180)
 
-    print(len(X_ab_wrong.shape))
     assert_array_almost_equal(ab2dq(X_ab_wrong, th_90), X_dq90_wrong)
