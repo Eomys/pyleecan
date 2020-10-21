@@ -4,6 +4,8 @@ from ..init_fig import init_fig
 from .plot_A_2D import plot_A_2D
 from ...definitions import config_dict
 
+from numpy import max as np_max
+
 
 def plot_A_fft_time(
     data,
@@ -88,46 +90,45 @@ def plot_A_fft_time(
         ylabel = "Magnitude " + unit_str
     else:
         ylabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
-
+        
+    Xdatas = []
+    Ydatas = []
     if is_elecorder:
         elec_max = freq_max / data.normalizations.get("elec_order")
         xlabel = "Electrical order []"
-        results = data.compare_magnitude_along(
-            "freqs=[0," + str(elec_max) + "]{elec_order}",
-            alpha_str,
-            data_list=data_list,
-            unit=unit,
-            is_norm=False,
-        )
+        for d in data_list2:
+            results = d.get_magnitude_along(
+                "freqs=[0," + str(elec_max) + "]{elec_order}",
+                alpha_str,
+                unit=unit,
+                is_norm=False,
+            )
+            Xdatas.append(results["freqs"])
+            Ydatas.append(results[data.symbol])
 
     else:
         xlabel = "Frequency [Hz]"
-        results = data.compare_magnitude_along(
-            "freqs=[0," + str(freq_max) + "]",
-            alpha_str,
-            data_list=data_list,
-            unit=unit,
-            is_norm=False,
-        )
-
-    freqs = results["freqs"]
-    Ydata = [results[data.symbol]] + [
-        results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
-    ]
+        for d in data_list2:
+            results = d.get_magnitude_along(
+                "freqs=[0," + str(freq_max) + "]",
+                alpha_str,
+                unit=unit,
+                is_norm=False,
+            )
+            Xdatas.append(results["freqs"])
+            Ydatas.append(results[data.symbol])
+            
+    freqs = Xdatas[0]
 
     if is_auto_ticks:
-        indices = [0]
-        for i in range(len(Ydata)):
-            indices += list(
-                set([ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01])
-            )
+        indices = [ind for ind, y in enumerate(Ydatas[0]) if abs(y) > abs(0.01 * np_max(y))]
         xticks = freqs[indices]
     else:
         xticks = None
 
     plot_A_2D(
-        freqs,
-        Ydata,
+        Xdatas,
+        Ydatas,
         legend_list=legend_list,
         color_list=color_list,
         fig=fig,

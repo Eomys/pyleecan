@@ -70,6 +70,8 @@ def plot_A_space(
         list of legends to use for each Data object (including reference one) instead of data.name
     color_list : list
         list of colors to use for each Data object
+    linestyle_list : list
+        list of linestyle to use for each Data object (ex: "-", "dotted")
     save_path : str
         path and name of the png file to save
     y_min : float

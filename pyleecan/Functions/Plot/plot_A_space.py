@@ -3,7 +3,7 @@
 from ..init_fig import init_fig
 from .plot_A_2D import plot_A_2D
 from ...definitions import config_dict
-from numpy import squeeze, split, max as np_max
+from numpy import squeeze, split, max as np_max, where,array
 from itertools import repeat
 
 
@@ -32,6 +32,10 @@ def plot_A_space(
     subplot_index=None,
 ):
     """Plots a field as a function of space (angle)
+    
+    /!\ If relevant /!\ :
+        - any change in Function.Plot.plot_A_space should be added in Method.Output.Output.plot.plot_A_space
+        - any change in plot_A_space that is applicable to plot_A_time should be implemented in both      
 
     Parameters
     ----------
@@ -63,6 +67,8 @@ def plot_A_space(
         list of legends to use for each Data object (including reference one) instead of data.name
     color_list : list
         list of colors to use for each Data object
+    linestyle_list : list
+        list of linestyle to use for each Data object (ex: "-", "dotted")
     save_path : str
         path and name of the png file to save
     y_min : float
@@ -131,44 +137,59 @@ def plot_A_space(
         t_str = "time=" + str(t)
     else:
         t_str = "time[" + str(t_index) + "]"
-    if data_list == []:
-        title = data.name + " over space at " + t_str
+        
+    # Title string
+    if list_str is not None:
+        title = data.name + " over space for " + list_str + str(index_list)
     else:
-        title = "Comparison of " + data.name + " over space at " + t_str
+        title = data.name + " over space for " + t_str            
+ 
+    if data_list != []:
+        title = "Comparison of " + title
 
     # Extract the fields
+    Xdatas = []
+    Ydatas = []
     if list_str is not None:
-        results = data.compare_along(
-            a_str,
-            t_str,
-            list_str + str(index_list),
-            data_list=data_list,
-            unit=unit,
-            is_norm=is_norm,
-        )
+        for d in data_list2:
+            results = data.get_along(
+                a_str,
+                t_str,
+                list_str + str(index_list),
+                unit=unit,
+                is_norm=is_norm,
+            )
+            Xdatas.append(results["angle"])
+            Ydatas.append(results[data.symbol])
     else:
-        results = data.compare_along(
-            a_str, t_str, data_list=data_list, unit=unit, is_norm=is_norm
-        )
-    angle = results["angle"]
+        for d in data_list2:
+            results = data.compare_along(
+                a_str, t_str, data_list=data_list, unit=unit, is_norm=is_norm
+            )
+            Xdatas.append(results["angle"])
+            Ydatas.append(results[data.symbol])
+    
+    # Nicely spaced ticks if angle in degrees
+    angle = Xdatas[0]
     if is_deg and round(np_max(angle) / 6) % 5 == 0:
         xticks = [i * round(np_max(angle) / 6) for i in range(7)]
     else:
         xticks = None
-    Ydatas = [results[data.symbol]] + [
-        results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
-    ]
+        
     Ydata = []
     for d in Ydatas:
         if d.ndim != 1:
-            Ydata += split(d, len(index_list))
+            axis_index = where(array(d.shape)==len(index_list))[0]
+            if axis_index.size > 1:
+                print("WARNING, several axes with same dimensions")
+            Ydata += split(d, len(index_list), axis=axis_index[0])
         else:
             Ydata += [d]
     Ydata = [squeeze(d) for d in Ydata]
 
     # Plot the original graph
     ax = plot_A_2D(
-        angle,
+        Xdatas,
         Ydata,
         legend_list=legends,
         color_list=color_list,
@@ -201,44 +222,44 @@ def plot_A_space(
             ylabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
         legend_list = [legend_list[0]] + [legend_list[-1]]
 
+        Xdatas = []
+        Ydatas = []
         if is_spaceorder:
             order_max = r_max / data.normalizations.get("space_order")
             xlabel = "Space order []"
-            results = data.compare_magnitude_along(
-                "wavenumber=[0," + str(order_max) + "]{space_order}",
-                t_str,
-                data_list=data_list,
-                unit=unit,
-                is_norm=False,
-            )
+            for d in data_list2:
+                results = d.get_magnitude_along(
+                    "wavenumber=[0," + str(order_max) + "]{space_order}",
+                    t_str,
+                    unit=unit,
+                    is_norm=False,
+                )
+                Xdatas.append(results["wavenumber"])
+                Ydatas.append(results[data.symbol])
 
         else:
             xlabel = "Wavenumber []"
-            results = data.compare_magnitude_along(
-                "wavenumber=[0," + str(r_max) + "]",
-                t_str,
-                data_list=data_list,
-                unit=unit,
-                is_norm=False,
-            )
-        wavenumber = results["wavenumber"]
-        Ydata = [results[data.symbol]] + [
-            results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
-        ]
+            for d in data_list2:
+                results = d.get_magnitude_along(
+                    "wavenumber=[0," + str(r_max) + "]",
+                    t_str,
+                    unit=unit,
+                    is_norm=False,
+                )
+                Xdatas.append(results["wavenumber"])
+                Ydatas.append(results[data.symbol])
+                
+        wavenumber = Xdatas[0]
 
         if is_auto_ticks:
-            indices = [0]
-            for i in range(len(Ydata)):
-                indices += list(
-                    set([ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01])
-                )
+            indices = [ind for ind, y in enumerate(Ydatas[0]) if abs(y) > abs(0.01 * np_max(y))]
             xticks = wavenumber[indices]
         else:
             xticks = None
 
         plot_A_2D(
-            wavenumber,
-            Ydata,
+            Xdatas,
+            Ydatas,
             legend_list=legend_list,
             color_list=color_list,
             linestyle_list=linestyle_list,

@@ -3,8 +3,8 @@
 from ..init_fig import init_fig
 from .plot_A_2D import plot_A_2D
 from ...definitions import config_dict
-from numpy import squeeze, split
-
+from numpy import squeeze, split, where,array, max as np_max
+from itertools import repeat
 
 def plot_A_time(
     data,
@@ -19,6 +19,7 @@ def plot_A_time(
     data_list=[],
     legend_list=[],
     color_list=[],
+    linestyle_list=[],
     save_path=None,
     y_min=None,
     y_max=None,
@@ -28,6 +29,10 @@ def plot_A_time(
     subplot_index=None,
 ):
     """Plots a field as a function of time
+    
+    /!\ If relevant /!\ :
+        - any change in Function.Plot.plot_A_time should be added in Method.Output.Output.plot.plot_A_time
+        - any change in plot_A_time that is applicable to plot_A_space should be implemented in both   
 
     Parameters
     ----------
@@ -55,6 +60,8 @@ def plot_A_time(
         list of legends to use for each Data object (including reference one) instead of data.name
     color_list : list
         list of colors to use for each Data object
+    linestyle_list : list
+        list of linestyle to use for each Data object (ex: "-", "dotted")
     save_path : str
         path and name of the png file to save
     y_min : float
@@ -79,6 +86,7 @@ def plot_A_time(
     phase_colors = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"]
     legends = []
     colors = []
+    linestyles = []
     n_phase = len(index_list)
     list_str = None
     for i, d in enumerate(data_list2):
@@ -92,15 +100,19 @@ def plot_A_time(
                         for j in index_list
                     ]
                     colors += [phase_colors[i * n_phase + j] for j in range(n_phase)]
+                    linestyles += list(repeat("-", n_phase))
                     list_str = axis.name
             except:
                 is_components = False
         if not is_components:
             legends += [legend_list[i]]
             colors += [curve_colors[i]]
+            linestyles.append("-")
     if color_list == []:
         color_list = colors
-
+    if linestyle_list == []:
+        linestyle_list = linestyles
+        
     xlabel = "Time [s]"
     if unit == "SI":
         unit = data.unit
@@ -113,44 +125,57 @@ def plot_A_time(
     if alpha != None:
         alpha_str = "angle=" + str(alpha)
     else:
-        alpha_str = "angle[" + str(alpha_index) + "]"
-    if data_list == []:
-        title = data.name + " over time at " + alpha_str
+        alpha_str = "angle[" + str(alpha_index) + "]"        
+        
+    # Title string
+    if list_str is not None:
+        title = data.name + " over time for " + list_str + str(index_list)
     else:
-        title = "Comparison of " + data.name + " over space at " + alpha_str
+        title = data.name + " over time for " + alpha_str            
+ 
+    if data_list != []:
+        title = "Comparison of " + title
 
     # Extract the fields
+    Xdatas = []
+    Ydatas = []
     if list_str is not None:
-        results = data.compare_along(
-            "time",
-            alpha_str,
-            list_str + str(index_list),
-            data_list=data_list,
-            unit=unit,
-            is_norm=is_norm,
-        )
+        for d in data_list2:
+            results = data.get_along(
+                alpha_str,
+                "time",
+                list_str + str(index_list),
+                unit=unit,
+                is_norm=is_norm,
+            )
+            Xdatas.append(results["time"])
+            Ydatas.append(results[data.symbol])
     else:
-        results = data.compare_along(
-            "time", alpha_str, data_list=data_list, unit=unit, is_norm=is_norm
-        )
-    time = results["time"]
-    Ydatas = [results[data.symbol]] + [
-        results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
-    ]
+        for d in data_list2:
+            results = data.compare_along(
+                alpha_str, "time", data_list=data_list, unit=unit, is_norm=is_norm
+            )
+            Xdatas.append(results["time"])
+            Ydatas.append(results[data.symbol])
+            
     Ydata = []
     for d in Ydatas:
         if d.ndim != 1:
-            Ydata += split(d, len(index_list))
+            axis_index = where(array(d.shape)==len(index_list))[0]
+            if axis_index.size > 1:
+                print("WARNING, several axes with same dimensions")
+            Ydata += split(d, len(index_list), axis=axis_index[0])
         else:
             Ydata += [d]
     Ydata = [squeeze(d) for d in Ydata]
 
     # Plot the original graph
     plot_A_2D(
-        time,
+        Xdatas,
         Ydata,
         legend_list=legends,
         color_list=color_list,
+        linestyle_list=linestyle_list,
         fig=fig,
         title=title,
         xlabel=xlabel,
@@ -162,6 +187,9 @@ def plot_A_time(
     )
 
     if is_fft:
+        # Extract the fields
+        Xdatas = []
+        Ydatas = []
         if "dB" in unit:
             unit_str = (
                 "[" + unit + " re. " + str(data.normalizations["ref"]) + data.unit + "]"
@@ -181,44 +209,42 @@ def plot_A_time(
         if is_elecorder:
             elec_max = freq_max / data.normalizations.get("elec_order")
             xlabel = "Electrical order []"
-            results = data.compare_magnitude_along(
-                "freqs=[0," + str(elec_max) + "]{elec_order}",
-                alpha_str,
-                data_list=data_list,
-                unit=unit,
-                is_norm=False,
-            )
-
+            for d in data_list2:
+                results = d.get_magnitude_along(
+                    "freqs=[0," + str(elec_max) + "]{elec_order}",
+                    alpha_str,
+                    unit=unit,
+                    is_norm=False,
+                )
+                Xdatas.append(results["freqs"])
+                Ydatas.append(results[data.symbol])
+    
         else:
             xlabel = "Frequency [Hz]"
-            results = data.compare_magnitude_along(
-                "freqs=[0," + str(freq_max) + "]",
-                alpha_str,
-                data_list=data_list,
-                unit=unit,
-                is_norm=False,
-            )
-
-        freqs = results["freqs"]
-        Ydata = [results[data.symbol]] + [
-            results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
-        ]
-
-        if is_auto_ticks:
-            indices = [0]
-            for i in range(len(Ydata)):
-                indices += list(
-                    set([ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01])
+            for d in data_list2:
+                results = d.get_magnitude_along(
+                    "freqs=[0," + str(freq_max) + "]",
+                    alpha_str,
+                    unit=unit,
+                    is_norm=False,
                 )
+                Xdatas.append(results["freqs"])
+                Ydatas.append(results[data.symbol])
+                
+        freqs = Xdatas[0]
+    
+        if is_auto_ticks:
+            indices = [ind for ind, y in enumerate(Ydatas[0]) if abs(y) > abs(0.01 * np_max(y))]
             xticks = freqs[indices]
         else:
             xticks = None
 
         plot_A_2D(
-            freqs,
-            Ydata,
+            Xdatas,
+            Ydatas,
             legend_list=legend_list,
             color_list=color_list,
+            linestyle_list=linestyle_list,
             fig=fig,
             title=title,
             xlabel=xlabel,

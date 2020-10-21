@@ -4253,7 +4253,9 @@
             "solve_FEMM",
             "get_meshsolution",
             "get_path_save_fem",
-            "build_meshsolution"
+            "build_meshsolution",
+            "solve_FEMM_parallel",
+            "get_meshsolution_parallel"
         ],
         "mother": "Magnetics",
         "name": "MagFEMM",
@@ -4383,6 +4385,15 @@
                 "min": "",
                 "name": "is_close_femm",
                 "type": "bool",
+                "unit": "",
+                "value": 1
+            },
+            {
+                "desc": "To run FEMM in parallel (the parallelization is on the time loop)",
+                "max": "",
+                "min": "",
+                "name": "nb_worker",
+                "type": "int",
                 "unit": "",
                 "value": 1
             }
