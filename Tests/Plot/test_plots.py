@@ -159,21 +159,13 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-
-        # out.plot_A_time(
-        #     "mag.B",
-        #     is_fft=True,
-        #     freq_max=freq_max,
-        #     data_list=[out2.mag.B],
-        #     legend_list=["Reference", "Periodic"],
-        #     is_auto_ticks=False,
-        #     save_path=join(save_path, "test_default_proj_Br_dataobj_period.png"),
-        # )
+        
         out.plot_2D_Data(
             "mag.B",
             "time",
             "angle[0]{°}",
             data_list=[out2.mag.B],
+            is_auto_ticks=False,
             legend_list=["Reference", "Periodic"],
             save_path=join(save_path, "test_default_proj_Br_dataobj_period.png"),
         )
@@ -229,17 +221,33 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (Data1D / DataLinspace)
         plt.close("all")
-        out.plot_A_space(
+        # out.plot_A_space(
+        #     "mag.B",
+        #     is_fft=True,
+        #     is_spaceorder=True,
+        #     r_max=r_max,
+        #     data_list=[out3.mag.B],
+        #     legend_list=["Reference", "Linspace"],
+        #     is_auto_ticks=False,
+        #     save_path=join(save_path, "test_default_proj_Br_dataobj_linspace.png"),
+        # )
+        out.plot_2D_Data(
             "mag.B",
-            is_fft=True,
-            is_spaceorder=True,
-            r_max=r_max,
+            "angle",
             data_list=[out3.mag.B],
             legend_list=["Reference", "Linspace"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_linspace.png"),
-        )
-
+            )
+        out.plot_2D_Data(
+            "mag.B",
+            "wavenumber=[0,100]{space_order}",
+            data_list=[out3.mag.B],
+            legend_list=["Reference", "Linspace"],
+            is_auto_ticks=False,
+            save_path=join(save_path, "test_default_proj_Br_dataobj_linspace_fft.png"),
+            )
+            
         simu4 = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
         simu4.input = InputFlux(B=B_FT, time=time, angle=angle)
         simu4.mag = None
@@ -252,15 +260,24 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (direct / ifft)
         plt.close("all")
-        out.plot_A_space(
+        
+        out.plot_2D_Data(
             "mag.B",
-            is_fft=True,
-            r_max=r_max,
+            "angle",
             data_list=[out4.mag.B],
             legend_list=["Reference", "Inverse FFT"],
             is_auto_ticks=False,
             save_path=join(save_path, "test_default_proj_Br_dataobj_ift.png"),
-        )
+            )
+        out.plot_2D_Data(
+            "mag.B",
+            "wavenumber=[0,100]",
+            data_list=[out4.mag.B],
+            legend_list=["Reference", "Inverse FFT"],
+            is_auto_ticks=False,
+            save_path=join(save_path, "test_default_proj_Br_dataobj_ift_fft.png"),
+            )
+
 
         out5 = Output(simu=simu)
 
@@ -298,13 +315,6 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        # out.plot_A_time(
-        #     "mag.B",
-        #     data_list=[out5.mag.B],
-        #     legend_list=["Br", "0.2sin(375t-1.5)"],
-        #     is_auto_ticks=False,
-        #     save_path=join(save_path, "test_default_proj_Br_compare.png"),
-        # )
 
         out.plot_2D_Data(
             "mag.B",

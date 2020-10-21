@@ -48,18 +48,16 @@ def test_FEMM_periodicity():
 
     # Definition of the magnetic simulation: no periodicity
     simu2 = simu.copy()
-    # simu2.mag = MagFEMM(is_periodicity_a=False, is_periodicity_t=False)
-    # simu2.force = ForceMT(is_periodicity_a=False, is_periodicity_t=False)
-
-    simu2.mag = MagFEMM(is_periodicity_a=True, is_periodicity_t=True)
-    simu2.force = ForceMT(is_periodicity_a=True, is_periodicity_t=True)
+    simu2.mag = MagFEMM(is_periodicity_a=False, is_periodicity_t=False)
+    simu2.force = ForceMT(is_periodicity_a=False, is_periodicity_t=False)
 
     # Run simulations
     out = Output(simu=simu)
     simu.run()
-
-    out2 = Output(simu=simu2)
-    simu2.run()
+    
+    out2=None
+    # out2 = Output(simu=simu2)
+    # simu2.run()
 
     # # Plot the result
     # out.plot_2D_Data(
@@ -126,7 +124,7 @@ def test_FEMM_periodicity():
     # out.plot_2D_Data(
     #     "mag.Phi_wind_stator",
     #     "time",
-    #     "phase",
+    #     "phase[0,1,2]",
     #     data_list=[out2.mag.Phi_wind_stator],
     #     legend_list=["Periodic", "Full"],
     #     save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
@@ -139,39 +137,17 @@ def test_FEMM_periodicity():
 if __name__ == "__main__":
 
     out, out2 = test_FEMM_periodicity()
-
-    #%%
+    
     out.plot_2D_Data(
         "mag.Phi_wind_stator",
         "time",
-        "phase[0]",
+        "phase[0,1,2]",
         data_list=[out2.mag.Phi_wind_stator],
         legend_list=["Periodic", "Full"],
         save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
     )
-    # #%%
-    # out.plot_2D_Data(
-    #     "mag.B",
-    #     "angle[smallestperiod]{rad}",
-    #     "time[0,1]",
-    #     # data_list=[out2.mag.B],
-    #     # legend_list=["Periodic", "Full"],
-    #     # save_path=join(save_path, "FEMM_periodicity_B_time.png"),
-    # )
-    # #%%
-    # out.plot_2D_Data(
-    #     "mag.Phi_wind_stator",
-    #     "freqs=[0,500]",
-    #     "phase[0]",
-    #     # data_list=[out2.mag.Phi_wind_stator],
-    #     # legend_list=["Periodic", "Full"],
-    #     # save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
-    # )
     
     out.plot_2D_Data(
         "mag.B",
-        "wavenumber=[0,100]",
-        # data_list=[out2.mag.B],
-        # legend_list=["Periodic", "Full"],
-        # save_path=join(save_path, "FEMM_periodicity_B_space_fft.png"),
+        "wavenumber=[0,100]{space_order}",
     )

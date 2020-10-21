@@ -25,18 +25,15 @@ def get_fund_harm(self, data_str):
         f_elec = self.simu.input.comp_felec()
 
         if data_str == "B":
-            fund_harm["time"] = f_elec
-            fund_harm["angle"] = p
+            fund_harm["freqs"] = f_elec
+            fund_harm["wavenumber"] = p
         elif data_str == "P":
-            fund_harm["time"] = 2 * f_elec
-            fund_harm["angle"] = 2 * p
+            fund_harm["freqs"] = 2 * f_elec
+            fund_harm["wavenumber"] = 2 * p
         elif data_str in ["Is", "Phi_wind_stator"]:
-            fund_harm["time"] = f_elec
+            fund_harm["freqs"] = f_elec
 
     else:
         fund_harm = None
-        self.get_logger().warning(
-            "WARNING, cannot calculate fundamental harmonic for " + data_str
-        )
 
     return fund_harm

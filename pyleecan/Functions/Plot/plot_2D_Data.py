@@ -137,6 +137,7 @@ def plot_2D_Data(
             if i == 0:
                 axes_list = result.pop("axes_list")
                 axes_dict_other = result.pop("axes_dict_other")
+                result_0 = result
             Ydatas.append(result.pop(d.symbol))
             Xdatas.append(result[list(result)[0]])
         else:
@@ -144,11 +145,12 @@ def plot_2D_Data(
             if i == 0:
                 axes_list = result.pop("axes_list")
                 axes_dict_other = result.pop("axes_dict_other")
+                result_0 = result
             Ydatas.append(result.pop(d.symbol))
             Xdatas.append(result[list(result)[0]])
 
-    # Find name of main axis
-    main_axis = min(axes_list, key=lambda x: x.values.size)
+    # Find main axis as the axis with the most values
+    main_axis = axes_list[0] #max(axes_list, key=lambda x: x.values.size)
 
     # Build xlabel and title parts 2 and 3
     title2 = ""
@@ -191,13 +193,14 @@ def plot_2D_Data(
             else:
                 unit = axis.unit
             
-            if result[axis.name].size >1:
-                axis_str = result[axis.name].astype(
-                str
-            )  # TODO: smart conversion of float to str
-                axis_str = "[" + ",".join(axis_str) +"]"
-            else:
-                axis_str = str(result[axis.name][0])
+            # if result[axis.name].size >1:
+            #     axis_str = result[axis.name].astype(
+            #     str
+            # )  
+            #     axis_str = "[" + ",".join(axis_str) +"]"
+            # else:
+            #     axis_str = str(result[axis.name][0])
+            axis_str = str(result_0[axis.name]) # TODO: smart conversion of float to str
                 
             title3 += axis.name + "=" + axis_str + " " + unit + ", "
 
@@ -224,9 +227,11 @@ def plot_2D_Data(
 
     # Detect how many curves are overlaid, build legend and color lists
     if legend_list == [] and data_list != []:
-        legend_list = [d.name for d in data_list2]
+        legend_list = ["[" + d.name + "] " for d in data_list2]
     elif legend_list == []:
         legend_list = ["" for d in data_list2]
+    else:
+        legend_list = ["[" + leg + "] " for leg in legend_list]        
     legends = []
     colors = []
     linestyle_list = []
@@ -243,9 +248,7 @@ def plot_2D_Data(
                 else:
                     unit = axis.unit
                 legends += [
-                    "["
-                    + legend_list[i]
-                    + "] "
+                    legend_list[i]
                     + axis.name
                     + "= "
                     + str(axis.values.tolist()[j])
@@ -298,7 +301,9 @@ def plot_2D_Data(
             type_plot = "bargraph"
 
         # Option to draw fundamental harmonic in red
-        if fund_harm_dict is not None:
+        if fund_harm_dict is None:
+            fund_harm = None
+        else:
             # Activate the option only if main axis is in dict and there is no plot overlay
             if main_axis.name in fund_harm_dict and not is_overlay:
                 fund_harm = fund_harm_dict[main_axis.name]

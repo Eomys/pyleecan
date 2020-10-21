@@ -70,16 +70,11 @@ def test_FEMM_import_model():
 
     # Plot the result by comparing the two simulation
     plt.close("all")
-    out.plot_A_space(
-        "mag.B",
-        data_list=[out2.mag.B],
+    out.plot_2D_Data("mag.B", "angle", 
+        data_list=[out2.mag.B], 
         legend_list=["Creating .fem", "Importing .fem"],
-        color_list=["b", "r"],
-        linestyle_list=["-", "dotted"],
-    )
-
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "FEMM_import_model_B.png"))
+        save_path=join(save_path, "FEMM_import_model_B.png"))
+    
 
     assert_array_almost_equal(
         out.mag.B.components["tangential"].values,

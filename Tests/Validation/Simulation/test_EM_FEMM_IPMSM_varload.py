@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 sys.path.insert(0, normpath(abspath(join(dirname(__file__), "..", "..", ".."))))
 sys.path.insert(0, normpath(abspath(dirname(__file__))))
 
-from pyleecan.Functions.Plot.plot_A_2D import plot_A_2D
+from pyleecan.Functions.Plot.plot_2D import plot_2D
 from pyleecan.definitions import config_dict
 from pyleecan.Functions.load import load
 from pyleecan.definitions import DATA_DIR
@@ -103,7 +103,7 @@ def test_EM_FEMM_IPMSM_varload():
 
     curve_colors = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 
-    plot_A_2D(
+    plot_2D(
         array([x * 180 / pi for x in Xout.xoutput_dict["Phi0"].result]),
         [Xout.xoutput_dict["Tem_av"].result, Xout.xoutput_dict["Tem_av_ref"].result],
         color_list=curve_colors,
@@ -111,9 +111,8 @@ def test_EM_FEMM_IPMSM_varload():
         xlabel="Current angle [°]",
         ylabel="Electrical torque [N.m]",
         title="Electrical torque vs current angle",
-    )
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "EM_FEMM_IPMSM_varload_torque_validation.png"))
+        save_path=join(save_path, "EM_FEMM_IPMSM_varload_torque_validation.png"),
+    )    
 
     return Xout
 

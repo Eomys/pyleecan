@@ -78,11 +78,7 @@ def test_FEMM_import_dxf():
     out2 = simu2.run()
 
     # Plot/compare the flux
-    out.plot_A_space(
-        "mag.B",
-        data_list=[out2.mag.B],
-        color_list=["k", "r"],
+    out.plot_2D_Data("mag.B", "angle", 
+        data_list=[out2.mag.B], 
         legend_list=["Rotor from DXF", "Rotor from pyleecan"],
-    )
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "FEMM_import_dxf_B.png"))
+        save_path=join(save_path, "FEMM_import_dxf_B.png"))

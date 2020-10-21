@@ -157,6 +157,7 @@ def plot_2D(
             if fund_harm is not None:  # Find fundamental
                 imax = argmin(abs(Xdatas[i] - fund_harm))
                 barlist[imax].set_edgecolor("k")
+                barlist[imax].set_facecolor("k")
 
         if xticks is not None:
             ax.xaxis.set_ticks(xticks)
