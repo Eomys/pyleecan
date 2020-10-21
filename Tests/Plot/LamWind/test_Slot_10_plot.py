@@ -87,7 +87,7 @@ class Test_Slot_10_plot(object):
         test_obj.frame.mat_type.name = "M330_35A"
 
         test_obj.plot()
-        fig = plt.gcf() 
+        fig = plt.gcf()
         fig.savefig(join(save_path, "test_Lam_Wind_s10_1-Machine.png"))
         # Rotor + Stator + 2 for frame + 1 for Shaft
         assert len(fig.axes[0].patches) == 55
@@ -99,7 +99,7 @@ class Test_Slot_10_plot(object):
         # 2 for lam + Zs*4 for wind
         assert len(fig.axes[0].patches) == 26
         # Don't display the plot
-        assert(len(test_obj.rotor.plot(is_display=False)) == 26)
+        assert len(test_obj.rotor.plot(is_display=False)) == 26
 
         test_obj.stator.plot()
         fig = plt.gcf()

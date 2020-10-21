@@ -17,6 +17,7 @@ import pytest
 
 matlib_path = join(TEST_DATA_DIR, "Material")
 
+
 @pytest.mark.GUI
 class TestSaveEmit(object):
     """Test that the save_needed behave like it should"""
@@ -32,9 +33,8 @@ class TestSaveEmit(object):
 
         qtbot.addWidget(self.widget)
         yield qtbot
-        
+
         assert self.widget.qmessagebox_question is not None
-        
 
     def test_save_emit(self, setup_method):
         """Check that the Widget allow to update W0"""
