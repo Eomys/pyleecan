@@ -56,9 +56,61 @@ except ImportError as error:
     get_rot_dir = error
 
 try:
-    from ..Methods.Output.Output.plot.plot_2D_Data import plot_2D_Data
+    from ..Methods.Output.Output.plot.Magnetic.plot_B_space import plot_B_space
 except ImportError as error:
-    plot_2D_Data = error
+    plot_B_space = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_cfft2 import plot_A_cfft2
+except ImportError as error:
+    plot_A_cfft2 = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_fft_space import plot_A_fft_space
+except ImportError as error:
+    plot_A_fft_space = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_fft_time import plot_A_fft_time
+except ImportError as error:
+    plot_A_fft_time = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_fft2 import plot_A_fft2
+except ImportError as error:
+    plot_A_fft2 = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_quiver_2D import plot_A_quiver_2D
+except ImportError as error:
+    plot_A_quiver_2D = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_space import plot_A_space
+except ImportError as error:
+    plot_A_space = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_surf import plot_A_surf
+except ImportError as error:
+    plot_A_surf = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_time import plot_A_time
+except ImportError as error:
+    plot_A_time = error
+
+try:
+    from ..Methods.Output.Output.plot.plot_A_time_space import plot_A_time_space
+except ImportError as error:
+    plot_A_time_space = error
+
+try:
+    from ..Methods.Output.Output.plot.Structural.plot_force_space import (
+        plot_force_space,
+    )
+except ImportError as error:
+    plot_force_space = error
 
 
 from ._check import InitUnKnowClassError
@@ -154,17 +206,122 @@ class Output(FrozenClass):
         )
     else:
         get_rot_dir = get_rot_dir
-    # cf Methods.Output.Output.plot.plot_2D_Data
-    if isinstance(plot_2D_Data, ImportError):
-        plot_2D_Data = property(
+    # cf Methods.Output.Output.plot.Magnetic.plot_B_space
+    if isinstance(plot_B_space, ImportError):
+        plot_B_space = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use Output method plot_2D_Data: " + str(plot_2D_Data)
+                    "Can't use Output method plot_B_space: " + str(plot_B_space)
                 )
             )
         )
     else:
-        plot_2D_Data = plot_2D_Data
+        plot_B_space = plot_B_space
+    # cf Methods.Output.Output.plot.plot_A_cfft2
+    if isinstance(plot_A_cfft2, ImportError):
+        plot_A_cfft2 = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_cfft2: " + str(plot_A_cfft2)
+                )
+            )
+        )
+    else:
+        plot_A_cfft2 = plot_A_cfft2
+    # cf Methods.Output.Output.plot.plot_A_fft_space
+    if isinstance(plot_A_fft_space, ImportError):
+        plot_A_fft_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_fft_space: " + str(plot_A_fft_space)
+                )
+            )
+        )
+    else:
+        plot_A_fft_space = plot_A_fft_space
+    # cf Methods.Output.Output.plot.plot_A_fft_time
+    if isinstance(plot_A_fft_time, ImportError):
+        plot_A_fft_time = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_fft_time: " + str(plot_A_fft_time)
+                )
+            )
+        )
+    else:
+        plot_A_fft_time = plot_A_fft_time
+    # cf Methods.Output.Output.plot.plot_A_fft2
+    if isinstance(plot_A_fft2, ImportError):
+        plot_A_fft2 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method plot_A_fft2: " + str(plot_A_fft2))
+            )
+        )
+    else:
+        plot_A_fft2 = plot_A_fft2
+    # cf Methods.Output.Output.plot.plot_A_quiver_2D
+    if isinstance(plot_A_quiver_2D, ImportError):
+        plot_A_quiver_2D = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_quiver_2D: " + str(plot_A_quiver_2D)
+                )
+            )
+        )
+    else:
+        plot_A_quiver_2D = plot_A_quiver_2D
+    # cf Methods.Output.Output.plot.plot_A_space
+    if isinstance(plot_A_space, ImportError):
+        plot_A_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_space: " + str(plot_A_space)
+                )
+            )
+        )
+    else:
+        plot_A_space = plot_A_space
+    # cf Methods.Output.Output.plot.plot_A_surf
+    if isinstance(plot_A_surf, ImportError):
+        plot_A_surf = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method plot_A_surf: " + str(plot_A_surf))
+            )
+        )
+    else:
+        plot_A_surf = plot_A_surf
+    # cf Methods.Output.Output.plot.plot_A_time
+    if isinstance(plot_A_time, ImportError):
+        plot_A_time = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Output method plot_A_time: " + str(plot_A_time))
+            )
+        )
+    else:
+        plot_A_time = plot_A_time
+    # cf Methods.Output.Output.plot.plot_A_time_space
+    if isinstance(plot_A_time_space, ImportError):
+        plot_A_time_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_A_time_space: "
+                    + str(plot_A_time_space)
+                )
+            )
+        )
+    else:
+        plot_A_time_space = plot_A_time_space
+    # cf Methods.Output.Output.plot.Structural.plot_force_space
+    if isinstance(plot_force_space, ImportError):
+        plot_force_space = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_force_space: " + str(plot_force_space)
+                )
+            )
+        )
+    else:
+        plot_force_space = plot_force_space
     # save and copy methods are available in all object
     save = save
     copy = copy

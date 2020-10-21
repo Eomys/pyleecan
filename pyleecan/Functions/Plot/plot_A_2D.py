@@ -11,7 +11,7 @@ from ...definitions import config_dict
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 
 
-def plot_2D(
+def plot_A_2D(
     Xdatas,
     Ydatas,
     legend_list=[""],
