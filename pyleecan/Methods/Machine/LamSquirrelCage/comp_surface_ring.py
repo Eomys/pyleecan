@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from numpy import pi
-
-
 def comp_surface_ring(self):
     """Computation of the ring cross-section surface area
 
