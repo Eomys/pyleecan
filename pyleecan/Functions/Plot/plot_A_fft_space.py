@@ -4,6 +4,8 @@ from ..init_fig import init_fig
 from .plot_A_2D import plot_A_2D
 from ...definitions import config_dict
 
+from numpy import max as np_max
+
 
 def plot_A_fft_space(
     data,
@@ -91,44 +93,44 @@ def plot_A_fft_space(
     else:
         ylabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
 
+    Xdatas = []
+    Ydatas = []
     if is_spaceorder:
         order_max = r_max / data.normalizations.get("space_order")
         xlabel = "Space order []"
-        results = data.compare_magnitude_along(
-            "wavenumber=[0," + str(order_max) + "]{space_order}",
-            t_str,
-            data_list=data_list,
-            unit=unit,
-            is_norm=False,
-        )
+        for d in data_list2:
+            results = d.get_magnitude_along(
+                "wavenumber=[0," + str(order_max) + "]{space_order}",
+                t_str,
+                unit=unit,
+                is_norm=False,
+            )
+            Xdatas.append(results["wavenumber"])
+            Ydatas.append(results[data.symbol])
 
     else:
         xlabel = "Wavenumber []"
-        results = data.compare_magnitude_along(
-            "wavenumber=[0," + str(r_max) + "]",
-            t_str,
-            data_list=data_list,
-            unit=unit,
-            is_norm=False,
-        )
-    wavenumber = results["wavenumber"]
-    Ydata = [results[data.symbol]] + [
-        results[d.symbol + "_" + str(i)] for i, d in enumerate(data_list)
-    ]
+        for d in data_list2:
+            results = d.get_magnitude_along(
+                "wavenumber=[0," + str(r_max) + "]",
+                t_str,
+                unit=unit,
+                is_norm=False,
+            )
+            Xdatas.append(results["wavenumber"])
+            Ydatas.append(results[data.symbol])
+            
+    wavenumber = Xdatas[0]
 
     if is_auto_ticks:
-        indices = [0]
-        for i in range(len(Ydata)):
-            indices += list(
-                set([ind for ind, y in enumerate(Ydata[i]) if abs(y) > 0.01])
-            )
+        indices = [ind for ind, y in enumerate(Ydatas[0]) if abs(y) > abs(0.01 * np_max(y))]
         xticks = wavenumber[indices]
     else:
         xticks = None
 
     plot_A_2D(
-        wavenumber,
-        Ydata,
+        Xdatas,
+        Ydatas,
         legend_list=legend_list,
         color_list=color_list,
         fig=fig,
