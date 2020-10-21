@@ -60,6 +60,11 @@ try:
 except ImportError as error:
     plot_2D_Data = error
 
+try:
+    from ..Methods.Output.Output.plot.plot_3D_Data import plot_3D_Data
+except ImportError as error:
+    plot_3D_Data = error
+
 
 from ._check import InitUnKnowClassError
 from .Simulation import Simulation
@@ -165,6 +170,17 @@ class Output(FrozenClass):
         )
     else:
         plot_2D_Data = plot_2D_Data
+    # cf Methods.Output.Output.plot.plot_3D_Data
+    if isinstance(plot_3D_Data, ImportError):
+        plot_3D_Data = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Output method plot_3D_Data: " + str(plot_3D_Data)
+                )
+            )
+        )
+    else:
+        plot_3D_Data = plot_3D_Data
     # save and copy methods are available in all object
     save = save
     copy = copy

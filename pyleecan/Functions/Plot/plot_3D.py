@@ -8,13 +8,13 @@ from ...definitions import config_dict
 
 COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
 FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
+COLORMAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
 
 
 def plot_3D(
     Xdata,
     Ydata,
     Zdata,
-    colormap="RdBu",
     x_min=None,
     x_max=None,
     y_min=None,
@@ -129,7 +129,7 @@ def plot_3D(
         if is_logscale_z:
             ax.zscale("log")
     elif type == "surf":
-        ax.plot_surface(Xdata, Ydata, Zdata, cmap=colormap)
+        ax.plot_surface(Xdata, Ydata, Zdata, cmap=COLORMAP)
         ax.set_xlim3d(x_max, x_min)
         ax.set_ylim3d(y_min, y_max)
         ax.set_zlim3d(z_min, z_max)
@@ -152,7 +152,7 @@ def plot_3D(
         if is_logscale_z:
             ax.zscale("log")
     elif type == "pcolor":
-        c = ax.pcolormesh(Xdata, Ydata, Zdata, cmap=colormap, vmin=z_min, vmax=z_max)
+        c = ax.pcolormesh(Xdata, Ydata, Zdata, cmap=COLORMAP, vmin=z_min, vmax=z_max)
         clb = fig.colorbar(c, ax=ax)
         clb.ax.set_title(zlabel, fontsize=18, fontname=FONT_NAME)
         clb.ax.tick_params(labelsize=18)
@@ -164,7 +164,7 @@ def plot_3D(
             ax.yaxis.set_ticks(yticks)
     elif type == "scatter":
         c = ax.scatter(
-            Xdata, Ydata, c=Zdata, marker="s", cmap=colormap, vmin=z_min, vmax=z_max
+            Xdata, Ydata, c=Zdata, marker="s", cmap=COLORMAP, vmin=z_min, vmax=z_max
         )
         clb = fig.colorbar(c, ax=ax)
         clb.ax.set_title(zlabel, fontsize=18, fontname=FONT_NAME)

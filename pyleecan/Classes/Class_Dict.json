@@ -6794,7 +6794,8 @@
             "getter.get_path_result",
             "getter.get_machine_periodicity",
             "getter.get_rot_dir",
-            "plot.plot_2D_Data"
+            "plot.plot_2D_Data",
+            "plot.plot_3D_Data"
         ],
         "mother": "",
         "name": "Output",

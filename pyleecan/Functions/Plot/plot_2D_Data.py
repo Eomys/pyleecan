@@ -22,7 +22,7 @@ def plot_2D_Data(
     is_auto_ticks=True,
     fig=None,
 ):
-    """Plots a field as a function of time
+    """Plots a field as a function of one axis
 
     Parameters
     ----------
@@ -56,8 +56,6 @@ def plot_2D_Data(
 
     if len(args) == 1 and type(args[0]) == tuple:
         args = args[0]  # if called from another script with *args
-
-    args_str = [arg.split("{")[0] for arg in args]
 
     # Set plot
     is_show_fig = True if fig is None else False
@@ -109,18 +107,13 @@ def plot_2D_Data(
     for i, d in enumerate(data_list2):
         if is_fft:
             result = d.get_magnitude_along(args, unit=unit, is_norm=is_norm)
-            if i == 0:
-                axes_list = result.pop("axes_list")
-                axes_dict_other = result.pop("axes_dict_other")
-            Ydatas.append(result.pop(d.symbol))
-            Xdatas.append(result[list(result)[0]])
         else:
             result = d.get_along(args, unit=unit, is_norm=is_norm)
-            if i == 0:
-                axes_list = result.pop("axes_list")
-                axes_dict_other = result.pop("axes_dict_other")
-            Ydatas.append(result.pop(d.symbol))
-            Xdatas.append(result[list(result)[0]])
+        if i == 0:
+            axes_list = result.pop("axes_list")
+            axes_dict_other = result.pop("axes_dict_other")
+        Ydatas.append(result.pop(d.symbol))
+        Xdatas.append(result[list(result)[0]])
 
     # Build labels and titles
     title2 = ""
@@ -212,17 +205,6 @@ def plot_2D_Data(
                 ]
                 colors += [phase_colors[i * n_phase + j] for j in range(n_phase)]
                 linestyle_list += [line_styles[i] for j in range(n_phase)]
-            # try:
-            #     if axis.is_components:
-            #         is_components = True
-            #         n_phase = len(axis.values)
-            #         legends += [
-            #             legend_list[i] + ": " + axis.values.tolist()[j]
-            #             for j in range(n_phase)
-            #         ]
-            #         colors += [phase_colors[i * n_phase + j] for j in range(n_phase)]
-            # except:
-            #     is_components = False
         if not is_overlay:
             legends += [legend_list[i]]
             colors += [curve_colors[i]]

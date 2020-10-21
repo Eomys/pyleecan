@@ -9,17 +9,19 @@ def plot_2D_Data(
     self,
     Data_str,
     *args,
+    component_list=None,
     is_norm=False,
     unit="SI",
-    data_list=[],
-    component_list=None,
-    legend_list=[],
-    color_list=[],
     save_path=None,
+    x_min=None,
+    x_max=None,
     y_min=None,
     y_max=None,
-    mag_max=None,
+    z_min=None,
+    z_max=None,
     is_auto_ticks=True,
+    is_2D_view=False,
+    fig=None,
 ):
     """Plots a field as a function of time
 
@@ -70,16 +72,18 @@ def plot_2D_Data(
                 args,
                 is_norm=is_norm,
                 unit=unit,
-                data_list=[dat.components[comp] for dat in data_list],
-                legend_list=legend_list,
-                color_list=color_list,
                 save_path=save_path.split(".")[0]
                 + "_"
                 + comp
                 + save_path.split(".")[1],
+                x_min=x_min,
+                x_max=x_max,
                 y_min=y_min,
                 y_max=y_max,
+                z_min=z_min,
+                z_max=z_max,
                 is_auto_ticks=is_auto_ticks,
+                is_2D_view=is_2D_view,
                 fig=fig,
             )
 
@@ -90,14 +94,15 @@ def plot_2D_Data(
             args,
             is_norm=is_norm,
             unit=unit,
-            data_list=data_list,
-            legend_list=legend_list,
-            color_list=color_list,
             save_path=save_path,
+            x_min=x_min,
+            x_max=x_max,
             y_min=y_min,
             y_max=y_max,
-            mag_max=mag_max,
+            z_min=z_min,
+            z_max=z_max,
             is_auto_ticks=is_auto_ticks,
+            is_2D_view=is_2D_view,
             fig=fig,
         )
 
