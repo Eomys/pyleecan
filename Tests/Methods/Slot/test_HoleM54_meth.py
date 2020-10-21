@@ -76,3 +76,9 @@ class Test_HoleM54_meth(object):
         assert type(result[0].line_list[1]) == Arc3
         assert type(result[0].line_list[2]) == Arc1
         assert type(result[0].line_list[3]) == Arc3
+
+        # is_stator to True
+
+        test_obj.is_stator = True
+        result = test_obj.hole[0].build_geometry()
+        assert result[0].label == "Hole_Stator_R0_T0_S0"
