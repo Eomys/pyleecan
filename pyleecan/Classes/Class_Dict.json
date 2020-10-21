@@ -7660,7 +7660,7 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -8001,7 +8001,9 @@
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind",
+            "get_H1"
         ],
         "mother": "SlotWind",
         "name": "SlotW10",
@@ -8090,13 +8092,14 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_H1"
         ],
         "mother": "SlotWind",
         "name": "SlotW11",
@@ -8193,7 +8196,7 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -8267,7 +8270,9 @@
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind",
+            "get_H1"
         ],
         "mother": "SlotWind",
         "name": "SlotW13",
@@ -8365,7 +8370,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -8442,7 +8447,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -8536,7 +8541,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -8612,13 +8617,15 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "build_geometry_wind",
+            "get_H1"
         ],
         "mother": "SlotWind",
         "name": "SlotW21",
@@ -8706,13 +8713,14 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "build_geometry_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW22",
@@ -8781,7 +8789,8 @@
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW23",
@@ -8895,7 +8904,8 @@
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW24",
@@ -8945,7 +8955,8 @@
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW25",
@@ -9007,7 +9018,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -9084,7 +9095,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -9188,7 +9199,7 @@
         "methods": [
             "_comp_point_coordinate",
             "build_geometry",
-            "build_geometry_wind",
+            "get_surface_wind",
             "check",
             "comp_angle_opening",
             "comp_height",
@@ -9270,7 +9281,8 @@
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW29",
@@ -9356,7 +9368,8 @@
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW60",
@@ -9460,7 +9473,8 @@
             "comp_height",
             "comp_height_wind",
             "comp_surface",
-            "comp_surface_wind"
+            "comp_surface_wind",
+            "get_surface_wind"
         ],
         "mother": "SlotWind",
         "name": "SlotW61",
@@ -9585,7 +9599,8 @@
             "comp_height_wind",
             "comp_radius_mid_wind",
             "comp_surface_wind",
-            "plot_wind"
+            "plot_wind",
+            "build_geometry_wind"
         ],
         "mother": "Slot",
         "name": "SlotWind",
