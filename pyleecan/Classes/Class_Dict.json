@@ -342,7 +342,7 @@
                 "name": "interpolation",
                 "type": "Interpolation",
                 "unit": "",
-                "value": null
+                "value": -1
             }
         ]
     },
@@ -7223,7 +7223,8 @@
             "jacobian",
             "grad_shape_function",
             "get_real_point",
-            "get_ref_point"
+            "get_ref_point",
+            "is_inside"
         ],
         "mother": "RefCell",
         "name": "RefTriangle3",
