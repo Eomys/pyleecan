@@ -169,3 +169,31 @@ class TestPHoleM58(object):
 
         assert self.widget.w_mat_1.c_mat_type.currentText() == "Magnet1"
         assert self.test_obj.hole[0].magnet_0.mat_type.name == "Magnet1"
+
+    def test_PHoleM58_None_Magnet(self):
+        """Check that you can create PHoleM58 with None for magnet_0"""
+        self.test_obj.hole.append(
+            HoleM58(
+                H0=0.10,
+                H1=0.11,
+                H2=0.12,
+                W0=0.13,
+                W1=0.14,
+                W2=0.15,
+                W3=0.17,
+                R0=0.19,
+                magnet_0=None,
+            )
+        )
+
+        self.matlib = MatLib()
+        self.matlib.dict_mat["RefMatLib"] = [
+            Material(name="Magnet1"),
+            Material(name="Magnet2"),
+            Material(name="Magnet3"),
+        ]
+
+        self.widget = PHoleM58(self.test_obj.hole[1], self.matlib)
+
+        assert self.widget.W1 == 0
+        assert self.widget.W2 == 0

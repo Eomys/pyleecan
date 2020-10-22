@@ -107,6 +107,8 @@ class Test_Segment_meth(object):
         segment = Segment(0, 10)
         with pytest.raises(NbPointSegmentDError):
             segment.discretize(-1)
+        with pytest.raises(NbPointSegmentDError):
+            segment.discretize("error ?")
 
     @pytest.mark.parametrize("test_dict", comp_length_test)
     def test_comp_length(self, test_dict):

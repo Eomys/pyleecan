@@ -20,7 +20,7 @@ from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.SurfLine import SurfLine
 
-from pyleecan.Methods import ParentMissingError
+from pyleecan.Methods import ParentMissingError, NotImplementedYetError
 
 from Tests import save_plot_path as save_path
 from Tests.Plot.LamWind import wind_mat
@@ -176,3 +176,7 @@ class Test_Slot_10_plot(object):
 
         lines = test_obj.stator.slot.build_geometry_half_tooth(is_top=False)
         assert len(lines) == 9
+
+        # Testing comp_angle_d_axis
+        test_obj.stator.winding = None
+        assert test_obj.stator.comp_angle_d_axis() == 0

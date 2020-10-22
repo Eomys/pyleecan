@@ -8,6 +8,7 @@ from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Methods.Slot.SlotW13.check import S13_H1rCheckError
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -130,3 +131,20 @@ class Test_SlotW13_meth(object):
         b = test_dict["Aw"]
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
+
+    def test_check(self):
+        """Check that the check function is raising error"""
+
+        test_obj = SlotW13(
+            H0=0.005,
+            H1=3,
+            H2=0.02,
+            W0=0.01,
+            W1=0.06,
+            W2=0.05,
+            W3=0.00015,
+            H1_is_rad=True,
+        )
+
+        with pytest.raises(S13_H1rCheckError) as context:
+            test_obj.check()

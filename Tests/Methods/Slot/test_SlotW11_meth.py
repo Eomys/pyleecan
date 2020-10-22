@@ -131,7 +131,7 @@ class Test_SlotW11_meth(object):
         assert abs((a - b) / a - 0) < DELTA, msg
 
     @pytest.mark.parametrize("test_dict", slotW11_H1_rad_test)
-    def test_comp_point_coordinate_error(self, test_dict):
+    def test_comp_point_coordinate_rad(self, test_dict):
         """Check that the error is well raised"""
         test_obj = test_dict["test_obj"]
         result = test_obj.slot._comp_point_coordinate()
@@ -148,6 +148,13 @@ class Test_SlotW11_meth(object):
             (0.13236408123052115 + 0.006j),
             1,
         ]
+
+    @pytest.mark.parametrize("test_dict", slotW11_H1_rad_test)
+    def test_comp_surface_rad(self, test_dict):
+        """Check that the error is well raised"""
+        test_obj = test_dict["test_obj"]
+        result = test_obj.slot.comp_surface()
+        assert result == 0.0003852019464390075
 
     def test_SlotW11_check(self):
         """Check if the error S11_H1rCheckError is correctly raised in the check method"""
