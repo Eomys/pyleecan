@@ -23,7 +23,7 @@ def get_Is(self):
         Phase = Data1D(
             name="phase",
             unit="",
-            values=gen_name(qs, is_add_phase=True),
+            values=gen_name(qs),
             is_components=True,
         )
         self.Is = DataTime(

@@ -66,9 +66,7 @@ def test_EM_IPMSM_FL_001():
 
     # Plot the result by comparing the two simulation
     plt.close("all")
-    out.plot_A_space(
-        "mag.B", data_list=[out2.mag.B], legend_list=["No symmetry", "1/4 symmetry"]
-    )
-
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "test_EM_IPMSM_FL_001_sym.png"))
+    out.plot_2D_Data("mag.B", "angle", 
+                     data_list=[out2.mag.B], 
+                     legend_list=["No symmetry", "1/4 symmetry"],
+                     save_path=join(save_path, "test_EM_IPMSM_FL_001_sym.png"))

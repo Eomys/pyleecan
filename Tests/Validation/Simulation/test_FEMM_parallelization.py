@@ -57,52 +57,40 @@ def test_FEMM_parallelization_mag():
         )
     )
     # Plot the result by comparing the two simulation
-    plt.close("all")
-    out.plot_A_space(
+    out.plot_2D_Data(
         "mag.B",
+        "angle",
+        "time[0]",
         data_list=[out2.mag.B],
         legend_list=["Serial", "Parallelization"],
-        color_list=["b", "r"],
-        linestyle_list=["-", "dotted"],
-        t_index=0,
+        save_path=join(save_path, "FEMM_parallelization_mag_B_t0.png"),
     )
 
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "FEMM_parallelization_mag_B_t0.png"))
-
-    out.plot_A_space(
+    out.plot_2D_Data(
         "mag.B",
+        "angle",
+        "time[0]",
         data_list=[out2.mag.B],
         legend_list=["Serial", "Parallelization"],
-        color_list=["b", "r"],
-        linestyle_list=["-", "dotted"],
-        t_index=1,
+        save_path=join(save_path, "FEMM_parallelization_mag_B_t1.png"),
     )
 
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "FEMM_parallelization_mag_B_t1.png"))
-
-    out.plot_A_time(
+    out.plot_2D_Data(
         "mag.Tem",
+        "time",
         data_list=[out2.mag.Tem],
-        legend_list=["Serial", "Parallelization"],
-        color_list=["b", "r"],
-        linestyle_list=["-", "dotted"],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "FEMM_parallelization_mag_Tem.png"),
     )
 
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "FEMM_parallelization_mag_Tem.png"))
-
-    out.plot_A_time(
+    out.plot_2D_Data(
         "mag.Phi_wind_stator",
+        "time",
+        "phase",
         data_list=[out2.mag.Phi_wind_stator],
-        legend_list=["Serial", "Parallelization"],
-        color_list=["b", "r"],
-        linestyle_list=["-", "dotted"],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "FEMM_parallelization_mag_Phi_wind_stator.png"),
     )
-
-    fig = plt.gcf()
-    fig.savefig(join(save_path, "FEMM_parallelization_mag_Phi_wind_stator.png"))
 
     assert_allclose(
         out.mag.B.components["tangential"].values,
