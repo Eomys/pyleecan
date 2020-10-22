@@ -149,11 +149,11 @@ if __name__ == "__main__":
 
     out.plot_A_time_space("mag.B")
 
-    out.plot_3D_Data("mag.B", "time", "angle", components=["radial"], is_2D_view=True)
+    out.plot_3D_Data("mag.B", "time", "angle", component_list=["radial"], is_2D_view=True)
 
-    # out.plot_3D_Data("mag.B", "freqs","wavenumber", components=['radial'], is_2D_view=True)
+    out.plot_3D_Data("mag.B", "freqs","wavenumber", component_list=['radial'], is_2D_view=True)
 
-    # out.plot_3D_Data("mag.B", "freqs","wavenumber", components=['radial'], is_2D_view=False)
+    out.plot_3D_Data("mag.B", "freqs","wavenumber", component_list=['radial'], is_2D_view=False)
 
     # out.plot_2D_Data(
     #     "mag.B",

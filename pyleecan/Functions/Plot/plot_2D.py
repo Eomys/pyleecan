@@ -8,6 +8,11 @@ from numpy import argmin, abs, squeeze, split, ndarray
 from ...Functions.init_fig import init_subplot, init_fig
 from ...definitions import config_dict
 
+# Import values from config dict
+FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
+FONT_SIZE_TITLE = config_dict["PLOT"]["FONT_SIZE_TITLE"]
+FONT_SIZE_LABEL = config_dict["PLOT"]["FONT_SIZE_LABEL"]
+FONT_SIZE_LEGEND = config_dict["PLOT"]["FONT_SIZE_LEGEND"]
 
 def plot_2D(
     Xdatas,
@@ -86,12 +91,6 @@ def plot_2D(
     barwidth : float
         barwidth scaling factor, only if type_plot = "bargraph"
     """
-
-    # Import values from config dict
-    FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
-    FONT_SIZE_TITLE = config_dict["PLOT"]["FONT_SIZE_TITLE"]
-    FONT_SIZE_LABEL = config_dict["PLOT"]["FONT_SIZE_LABEL"]
-    FONT_SIZE_LEGEND = config_dict["PLOT"]["FONT_SIZE_LEGEND"]
 
     # Set figure/subplot
     is_show_fig = True if fig is None else False

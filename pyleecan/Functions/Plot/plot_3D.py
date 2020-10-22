@@ -6,9 +6,13 @@ import mpl_toolkits.mplot3d.art3d as art3d
 from ...Functions.init_fig import init_subplot
 from ...definitions import config_dict
 
+# Import values from config dict
 COLORS = config_dict["PLOT"]["COLOR_DICT"]["CURVE_COLORS"]
-FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
 COLORMAP = config_dict["PLOT"]["COLOR_DICT"]["COLOR_MAP"]
+FONT_NAME = config_dict["PLOT"]["FONT_NAME"]
+FONT_SIZE_TITLE = config_dict["PLOT"]["FONT_SIZE_TITLE"]
+FONT_SIZE_LABEL = config_dict["PLOT"]["FONT_SIZE_LABEL"]
+FONT_SIZE_LEGEND = config_dict["PLOT"]["FONT_SIZE_LEGEND"]
 
 
 def plot_3D(
@@ -85,7 +89,7 @@ def plot_3D(
     type : str
         type of 3D graph : "stem", "surf", "pcolor" or "scatter"
     """
-
+    
     # Set figure/subplot
     is_show_fig = True if fig is None else False
     is_3d = False
