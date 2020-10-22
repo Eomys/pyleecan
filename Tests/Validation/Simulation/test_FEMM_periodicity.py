@@ -124,7 +124,7 @@ def test_FEMM_periodicity():
     # out.plot_2D_Data(
     #     "mag.Phi_wind_stator",
     #     "time",
-    #     "phase[0,1,2]",
+    #     "phase",
     #     data_list=[out2.mag.Phi_wind_stator],
     #     legend_list=["Periodic", "Full"],
     #     save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
@@ -138,16 +138,18 @@ if __name__ == "__main__":
 
     out, out2 = test_FEMM_periodicity()
     
-    out.plot_2D_Data(
-        "mag.Phi_wind_stator",
-        "time",
-        "phase[0,1,2]",
-        data_list=[out2.mag.Phi_wind_stator],
-        legend_list=["Periodic", "Full"],
-        save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
-    )
+    # out.plot_2D_Data(
+    #     "mag.Phi_wind_stator",
+    #     "time",
+    #     "phase",
+    #     # data_list=[out2.mag.Phi_wind_stator],
+    #     # legend_list=["Periodic", "Full"],
+    #     # save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
+    # )
     
-    out.plot_2D_Data(
-        "mag.B",
-        "wavenumber=[0,100]{space_order}",
-    )
+    # out.plot_3D_Data("mag.B", "time","angle", components=['radial'], is_2D_view=True)
+    
+    # out.plot_2D_Data(
+    #     "mag.B",
+    #     "wavenumber=[0,100]{space_order}",
+    # )
