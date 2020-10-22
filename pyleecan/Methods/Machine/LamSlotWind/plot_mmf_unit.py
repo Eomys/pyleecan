@@ -43,7 +43,7 @@ def plot_mmf_unit(self, fig=None):
     plot_2D_Data(
         WF,     
         "angle",
-        "phase[0,1,2]",
+        "phase",
         data_list=[mmf_u],
         fig=fig,
         color_list=color_list,
