@@ -119,11 +119,13 @@ def plot_A_fft_space(
             )
             Xdatas.append(results["wavenumber"])
             Ydatas.append(results[data.symbol])
-            
+
     wavenumber = Xdatas[0]
 
     if is_auto_ticks:
-        indices = [ind for ind, y in enumerate(Ydatas[0]) if abs(y) > abs(0.01 * np_max(y))]
+        indices = [
+            ind for ind, y in enumerate(Ydatas[0]) if abs(y) > abs(0.01 * np_max(y))
+        ]
         xticks = wavenumber[indices]
     else:
         xticks = None

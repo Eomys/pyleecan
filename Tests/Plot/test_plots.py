@@ -1,3 +1,7 @@
+from os import chdir
+
+chdir("../..")
+
 from numpy import linspace, sin, squeeze
 from os.path import join
 import matplotlib.pyplot as plt
@@ -19,7 +23,7 @@ from pyleecan.definitions import DATA_DIR
 from os.path import isfile
 
 
-@pytest.fixture(scope="module")
+# @pytest.fixture(scope="module")
 def import_data():
     SCIM_006 = load(join(DATA_DIR, "Machine", "SCIM_006.json"))
 
@@ -89,358 +93,379 @@ def import_data():
     return data
 
 
-@pytest.mark.validation
-@pytest.mark.PLOT
-class Test_plots(object):
-    def test_default_proj_Br_time_space(self, import_data):
-        SCIM_006 = import_data["SCIM_006"]
-        simu = import_data["simu"]
-        time = import_data["time"]
-        Time = import_data["Time"]
-        angle = import_data["angle"]
-        Angle = import_data["Angle"]
-        Br = import_data["Br"]
-        flux = import_data["flux"]
-        B = import_data["B"]
-        flux_FT = import_data["flux_FT"]
-        freqs = import_data["freqs"]
-        Freqs = import_data["Freqs"]
-        Wavenumber = import_data["Wavenumber"]
-        wavenumber = import_data["wavenumber"]
-        Br_FT = import_data["Br_FT"]
-        B_FT = import_data["B_FT"]
-        freq_max = import_data["freq_max"]
-        r_max = import_data["r_max"]
+# @pytest.mark.validation
+# @pytest.mark.PLOT
+# class Test_plots(object):
+#     def test_default_proj_Br_time_space(self, import_data):
+import_data = import_data()
+SCIM_006 = import_data["SCIM_006"]
+simu = import_data["simu"]
+time = import_data["time"]
+Time = import_data["Time"]
+angle = import_data["angle"]
+Angle = import_data["Angle"]
+Br = import_data["Br"]
+flux = import_data["flux"]
+B = import_data["B"]
+flux_FT = import_data["flux_FT"]
+freqs = import_data["freqs"]
+Freqs = import_data["Freqs"]
+Wavenumber = import_data["Wavenumber"]
+wavenumber = import_data["wavenumber"]
+Br_FT = import_data["Br_FT"]
+B_FT = import_data["B_FT"]
+freq_max = import_data["freq_max"]
+r_max = import_data["r_max"]
 
-        time_arr = squeeze(time.get_data())
-        angle_arr = squeeze(angle.get_data())
-        flux_arr = flux.get_data()
+time_arr = squeeze(time.get_data())
+angle_arr = squeeze(angle.get_data())
+flux_arr = flux.get_data()
 
-        simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.mag = None
-        simu.force = None
-        simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle)
-        out = Output(simu=simu)
-        simu.run()
+simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
+simu.mag = None
+simu.force = None
+simu.struct = None
+simu.input = InputFlux(B=B, time=time, angle=angle)
+out = Output(simu=simu)
+simu.run()
 
-        out2 = Output(simu=simu)
+out2 = Output(simu=simu)
 
-        # Reduce to 1/3 period
-        Br_reduced = flux_arr[0:672, 0:672]
-        time_reduced = time_arr[0:672]
-        angle_reduced = angle_arr[0:672]
+# Reduce to 1/3 period
+Br_reduced = flux_arr[0:672, 0:672]
+time_reduced = time_arr[0:672]
+angle_reduced = angle_arr[0:672]
 
-        # Build the data objects
-        Time2 = Data1D(
-            name="time",
-            unit="s",
-            symmetries={"time": {"period": 3}},
-            values=time_reduced,
-        )
-        Angle2 = Data1D(
-            name="angle",
-            unit="rad",
-            symmetries={"angle": {"period": 3}},
-            values=angle_reduced,
-        )
-        Br2 = DataTime(
-            symbol="B_r",
-            name="Airgap radial flux density",
-            unit="T",
-            symmetries={"time": {"period": 3}, "angle": {"period": 3}},
-            axes=[Time2, Angle2],
-            normalizations={},
-            values=Br_reduced,
-        )
-        out2.mag.B = VectorField(
-            name="Airgap flux density", symbol="B", components={"radial": Br2}
-        )
+# Build the data objects
+Time2 = Data1D(
+    name="time",
+    unit="s",
+    symmetries={"time": {"period": 3}},
+    values=time_reduced,
+)
+Angle2 = Data1D(
+    name="angle",
+    unit="rad",
+    symmetries={"angle": {"period": 3}},
+    values=angle_reduced,
+)
+Br2 = DataTime(
+    symbol="B_r",
+    name="Airgap radial flux density",
+    unit="T",
+    symmetries={"time": {"period": 3}, "angle": {"period": 3}},
+    axes=[Time2, Angle2],
+    normalizations={},
+    values=Br_reduced,
+)
+out2.mag.B = VectorField(
+    name="Airgap flux density", symbol="B", components={"radial": Br2}
+)
 
-        # Plot the result by comparing the two simulation (sym / no sym)
-        plt.close("all")
-        out.plot_A_time(
-            "mag.B",
-            is_fft=True,
-            freq_max=freq_max,
-            data_list=[out2.mag.B],
-            legend_list=["Reference", "Periodic"],
-            is_auto_ticks=False,
-            save_path=join(save_path, "test_default_proj_Br_dataobj_period.png"),
-        )
+# Plot the result by comparing the two simulation (sym / no sym)
+plt.close("all")
+# out.plot_2D_Data(
+#     "mag.B",
+#     "time",
+#     "angle[0]{°}",
+#     data_list=[out2.mag.B],
+#     legend_list=["Reference", "Periodic"],
+#     is_auto_ticks=False,
+#     save_path=join(save_path, "test_default_proj_Br_period.png"),
+# )
+# out.plot_2D_Data(
+#     "mag.B",
+#     "freqs=[0," + str(freq_max) + "]",
+#     data_list=[out2.mag.B],
+#     legend_list=["Reference", "Periodic"],
+#     is_auto_ticks=False,
+#     save_path=join(save_path, "test_default_proj_Br_period_fft.png"),
+# )
 
-        out3 = Output(simu=simu)
+out3 = Output(simu=simu)
 
-        # Get linspace data
-        t0 = time_arr[0]
-        tf = time_arr[-1]
-        deltat = time_arr[1] - time_arr[0]
-        a0 = angle_arr[0]
-        deltaa = angle_arr[1] - angle_arr[0]
-        Na = len(angle_arr)
+# Get linspace data
+t0 = time_arr[0]
+tf = time_arr[-1]
+deltat = time_arr[1] - time_arr[0]
+a0 = angle_arr[0]
+deltaa = angle_arr[1] - angle_arr[0]
+Na = len(angle_arr)
 
-        # Build the data objects
-        Time3 = DataLinspace(
-            name="time",
-            unit="s",
-            symmetries={},
-            initial=t0,
-            final=tf + deltat,
-            step=deltat,
-            include_endpoint=False,
-        )
-        Angle3 = DataLinspace(
-            name="angle",
-            unit="rad",
-            symmetries={},
-            initial=a0,
-            step=deltaa,
-            number=Na,
-            include_endpoint=False,
-        )
-        Br3 = DataTime(
-            symbol="B_r",
-            name="Airgap radial flux density",
-            unit="T",
-            symmetries={},
-            axes=[Time3, Angle3],
-            normalizations={"space_order": 3},
-            values=flux_arr,
-        )
-        out3.mag.B = VectorField(
-            name="Airgap flux density", symbol="B", components={"radial": Br3}
-        )
+# Build the data objects
+Time3 = DataLinspace(
+    name="time",
+    unit="s",
+    symmetries={},
+    initial=t0,
+    final=tf + deltat,
+    step=deltat,
+    include_endpoint=False,
+)
+Angle3 = DataLinspace(
+    name="angle",
+    unit="rad",
+    symmetries={},
+    initial=a0,
+    step=deltaa,
+    number=Na,
+    include_endpoint=False,
+)
+Br3 = DataTime(
+    symbol="B_r",
+    name="Airgap radial flux density",
+    unit="T",
+    symmetries={},
+    axes=[Time3, Angle3],
+    normalizations={"space_order": 3},
+    values=flux_arr,
+)
+out3.mag.B = VectorField(
+    name="Airgap flux density", symbol="B", components={"radial": Br3}
+)
 
-        # Plot the result by comparing the two simulation (Data1D / DataLinspace)
-        plt.close("all")
-        out.plot_A_space(
-            "mag.B",
-            is_fft=True,
-            is_spaceorder=True,
-            r_max=r_max,
-            data_list=[out3.mag.B],
-            legend_list=["Reference", "Linspace"],
-            is_auto_ticks=False,
-            save_path=join(save_path, "test_default_proj_Br_dataobj_linspace.png"),
-        )
+# Plot the result by comparing the two simulation (Data1D / DataLinspace)
+plt.close("all")
+#%%
+# out.plot_2D_Data(
+#     "mag.B",
+#     "angle{°}",
+#     "time[0]",
+#     data_list=[out3.mag.B],
+#     legend_list=["Reference", "Linspace"],
+#     is_auto_ticks=False,
+#     save_path=join(save_path, "test_default_proj_Br_linspace.png"),
+# )
+# #%%
+# out.plot_2D_Data(
+#     "mag.B",
+#     "wavenumber=[0," + str(r_max) + "]{space_order}",
+#     data_list=[out3.mag.B],
+#     legend_list=["Reference", "Linspace"],
+#     is_auto_ticks=False,
+#     save_path=join(save_path, "test_default_proj_Br_linspace_fft.png"),
+# )
 
-        simu4 = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu4.input = InputFlux(B=B_FT, time=time, angle=angle)
-        simu4.mag = None
-        simu4.force = None
-        simu4.struct = None
-        simu4.input = InputFlux(B=B, time=time, angle=angle)
-        out4 = Output(simu=simu4)
-        simu4.run()
-        out4.post.legend_name = "Inverse FT"
+#     simu4 = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
+#     simu4.input = InputFlux(B=B_FT, time=time, angle=angle)
+#     simu4.mag = None
+#     simu4.force = None
+#     simu4.struct = None
+#     simu4.input = InputFlux(B=B, time=time, angle=angle)
+#     out4 = Output(simu=simu4)
+#     simu4.run()
+#     out4.post.legend_name = "Inverse FT"
 
-        # Plot the result by comparing the two simulation (direct / ifft)
-        plt.close("all")
-        out.plot_A_space(
-            "mag.B",
-            is_fft=True,
-            r_max=r_max,
-            data_list=[out4.mag.B],
-            legend_list=["Reference", "Inverse FFT"],
-            is_auto_ticks=False,
-            save_path=join(save_path, "test_default_proj_Br_dataobj_ift.png"),
-        )
+#     # Plot the result by comparing the two simulation (direct / ifft)
+#     plt.close("all")
+#     out.plot_A_space(
+#         "mag.B",
+#         is_fft=True,
+#         r_max=r_max,
+#         data_list=[out4.mag.B],
+#         legend_list=["Reference", "Inverse FFT"],
+#         is_auto_ticks=False,
+#         save_path=join(save_path, "test_default_proj_Br_dataobj_ift.png"),
+#     )
 
-        out5 = Output(simu=simu)
+#     out5 = Output(simu=simu)
 
-        # Get linspace data
-        t0 = 0.01
-        tf = 0.04
-        Nt = 3000
-        time5 = linspace(0.01, 0.04, 3000, endpoint=True)
+#     # Get linspace data
+#     t0 = 0.01
+#     tf = 0.04
+#     Nt = 3000
+#     time5 = linspace(0.01, 0.04, 3000, endpoint=True)
 
-        # Compute sine function
-        Br5 = 0.2 * sin(375 * time5 - 1.5)
+#     # Compute sine function
+#     Br5 = 0.2 * sin(375 * time5 - 1.5)
 
-        # Build the data objects
-        Time5 = DataLinspace(
-            name="time",
-            unit="s",
-            symmetries={},
-            initial=t0,
-            final=tf,
-            number=Nt,
-            include_endpoint=True,
-        )
-        flux5 = DataTime(
-            symbol="B_r",
-            name="Airgap radial flux density",
-            unit="T",
-            symmetries={},
-            axes=[Time5],
-            normalizations={},
-            values=Br5,
-        )
-        out5.mag.B = VectorField(
-            name="Airgap flux density", symbol="B", components={"radial": flux5}
-        )
+#     # Build the data objects
+#     Time5 = DataLinspace(
+#         name="time",
+#         unit="s",
+#         symmetries={},
+#         initial=t0,
+#         final=tf,
+#         number=Nt,
+#         include_endpoint=True,
+#     )
+#     flux5 = DataTime(
+#         symbol="B_r",
+#         name="Airgap radial flux density",
+#         unit="T",
+#         symmetries={},
+#         axes=[Time5],
+#         normalizations={},
+#         values=Br5,
+#     )
+#     out5.mag.B = VectorField(
+#         name="Airgap flux density", symbol="B", components={"radial": flux5}
+#     )
 
-        # Plot the result by comparing the two simulation (sym / no sym)
-        plt.close("all")
-        out.plot_A_time(
-            "mag.B",
-            data_list=[out5.mag.B],
-            legend_list=["Br", "0.2sin(375t-1.5)"],
-            is_auto_ticks=False,
-            save_path=join(save_path, "test_default_proj_Br_compare.png"),
-        )
+#     # Plot the result by comparing the two simulation (sym / no sym)
+#     plt.close("all")
+#     out.plot_A_time(
+#         "mag.B",
+#         data_list=[out5.mag.B],
+#         legend_list=["Br", "0.2sin(375t-1.5)"],
+#         is_auto_ticks=False,
+#         save_path=join(save_path, "test_default_proj_Br_compare.png"),
+#     )
 
-    def test_default_proj_Br_cfft2(self, import_data):
-        SCIM_006 = import_data["SCIM_006"]
-        simu = import_data["simu"]
-        time = import_data["time"]
-        Time = import_data["Time"]
-        angle = import_data["angle"]
-        Angle = import_data["Angle"]
-        Br = import_data["Br"]
-        flux = import_data["flux"]
-        B = import_data["B"]
-        flux_FT = import_data["flux_FT"]
-        freqs = import_data["freqs"]
-        Freqs = import_data["Freqs"]
-        Wavenumber = import_data["Wavenumber"]
-        wavenumber = import_data["wavenumber"]
-        Br_FT = import_data["Br_FT"]
-        B_FT = import_data["B_FT"]
-        freq_max = import_data["freq_max"]
-        r_max = import_data["r_max"]
+# def test_default_proj_Br_cfft2(self, import_data):
+SCIM_006 = import_data["SCIM_006"]
+simu = import_data["simu"]
+time = import_data["time"]
+Time = import_data["Time"]
+angle = import_data["angle"]
+Angle = import_data["Angle"]
+Br = import_data["Br"]
+flux = import_data["flux"]
+B = import_data["B"]
+flux_FT = import_data["flux_FT"]
+freqs = import_data["freqs"]
+Freqs = import_data["Freqs"]
+Wavenumber = import_data["Wavenumber"]
+wavenumber = import_data["wavenumber"]
+Br_FT = import_data["Br_FT"]
+B_FT = import_data["B_FT"]
+freq_max = import_data["freq_max"]
+r_max = import_data["r_max"]
 
-        N_stem = 100
+N_stem = 100
 
-        simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.input = InputFlux(B=B, time=time, angle=angle)
-        simu.mag = None
-        simu.force = None
-        simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle)
-        out = Output(simu=simu)
-        simu.run()
+simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
+simu.input = InputFlux(B=B, time=time, angle=angle)
+simu.mag = None
+simu.force = None
+simu.struct = None
+simu.input = InputFlux(B=B, time=time, angle=angle)
+out = Output(simu=simu)
+simu.run()
 
-        # Plot the result by comparing the two simulation (sym / no sym)
-        plt.close("all")
-        out.plot_A_cfft2(
-            "mag.B",
-            freq_max=freq_max,
-            r_max=r_max,
-            N_stem=N_stem,
-            save_path=join(save_path, "test_default_proj_Br_dataobj_cfft2.png"),
-        )
+# Plot the result by comparing the two simulation (sym / no sym)
+plt.close("all")
+#%%
+out.plot_3D_Data(
+    "mag.B",
+    "freqs=[0," + str(freq_max) + "]",
+    "wavenumber=[-" + str(r_max) + "," + str(r_max) + "]",
+    # save_path=join(save_path, "test_default_proj_Br_dataobj_cfft2.png"),
+)
+#%%
+# def test_default_proj_surf(self, import_data):
+SCIM_006 = import_data["SCIM_006"]
+simu = import_data["simu"]
+time = import_data["time"]
+Time = import_data["Time"]
+angle = import_data["angle"]
+Angle = import_data["Angle"]
+Br = import_data["Br"]
+flux = import_data["flux"]
+B = import_data["B"]
+flux_FT = import_data["flux_FT"]
+freqs = import_data["freqs"]
+Freqs = import_data["Freqs"]
+Wavenumber = import_data["Wavenumber"]
+wavenumber = import_data["wavenumber"]
+Br_FT = import_data["Br_FT"]
+B_FT = import_data["B_FT"]
+freq_max = import_data["freq_max"]
+r_max = import_data["r_max"]
 
-    def test_default_proj_surf(self, import_data):
-        SCIM_006 = import_data["SCIM_006"]
-        simu = import_data["simu"]
-        time = import_data["time"]
-        Time = import_data["Time"]
-        angle = import_data["angle"]
-        Angle = import_data["Angle"]
-        Br = import_data["Br"]
-        flux = import_data["flux"]
-        B = import_data["B"]
-        flux_FT = import_data["flux_FT"]
-        freqs = import_data["freqs"]
-        Freqs = import_data["Freqs"]
-        Wavenumber = import_data["Wavenumber"]
-        wavenumber = import_data["wavenumber"]
-        Br_FT = import_data["Br_FT"]
-        B_FT = import_data["B_FT"]
-        freq_max = import_data["freq_max"]
-        r_max = import_data["r_max"]
+simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
+simu.input = InputFlux(B=B_FT, time=time, angle=angle)
+simu.mag = None
+simu.force = None
+simu.struct = None
+simu.input = InputFlux(B=B, time=time, angle=angle)
+out = Output(simu=simu)
+simu.run()
 
-        simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.input = InputFlux(B=B_FT, time=time, angle=angle)
-        simu.mag = None
-        simu.force = None
-        simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle)
-        out = Output(simu=simu)
-        simu.run()
+# Plot the result by comparing the two simulation (sym / no sym)
+plt.close("all")
+out.plot_3D_Data(
+    "mag.B",
+    "angle{°}",
+    "time",
+    is_2D_view=True,
+    # save_path=join(save_path, "test_default_proj_Br_surf_dataobj.png"),
+)
 
-        # Plot the result by comparing the two simulation (sym / no sym)
-        plt.close("all")
-        out.plot_A_surf(
-            "mag.B",
-            t_max=0.06,
-            save_path=join(save_path, "test_default_proj_Br_surf_dataobj.png"),
-        )
+# def test_default_proj_fft2(self, import_data):
+SCIM_006 = import_data["SCIM_006"]
+simu = import_data["simu"]
+time = import_data["time"]
+Time = import_data["Time"]
+angle = import_data["angle"]
+Angle = import_data["Angle"]
+Br = import_data["Br"]
+flux = import_data["flux"]
+B = import_data["B"]
+flux_FT = import_data["flux_FT"]
+freqs = import_data["freqs"]
+Freqs = import_data["Freqs"]
+Wavenumber = import_data["Wavenumber"]
+wavenumber = import_data["wavenumber"]
+Br_FT = import_data["Br_FT"]
+B_FT = import_data["B_FT"]
+freq_max = import_data["freq_max"]
+r_max = import_data["r_max"]
 
-    def test_default_proj_fft2(self, import_data):
-        SCIM_006 = import_data["SCIM_006"]
-        simu = import_data["simu"]
-        time = import_data["time"]
-        Time = import_data["Time"]
-        angle = import_data["angle"]
-        Angle = import_data["Angle"]
-        Br = import_data["Br"]
-        flux = import_data["flux"]
-        B = import_data["B"]
-        flux_FT = import_data["flux_FT"]
-        freqs = import_data["freqs"]
-        Freqs = import_data["Freqs"]
-        Wavenumber = import_data["Wavenumber"]
-        wavenumber = import_data["wavenumber"]
-        Br_FT = import_data["Br_FT"]
-        B_FT = import_data["B_FT"]
-        freq_max = import_data["freq_max"]
-        r_max = import_data["r_max"]
+simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
+simu.input = InputFlux(B=B_FT, time=time, angle=angle)
+simu.mag = None
+simu.force = None
+simu.struct = None
+simu.input = InputFlux(B=B, time=time, angle=angle)
+out = Output(simu=simu)
+simu.run()
 
-        simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.input = InputFlux(B=B_FT, time=time, angle=angle)
-        simu.mag = None
-        simu.force = None
-        simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle)
-        out = Output(simu=simu)
-        simu.run()
+# Plot the result by comparing the two simulation (sym / no sym)
+plt.close("all")
+out.plot_3D_Data(
+    "mag.B",
+    "freqs=[0,500]",
+    "wavenumber=[-20,20]",
+    is_2D_view=True,
+    # save_path=join(save_path, "test_default_proj_Br_fft2_dataobj.png"),
+)
 
-        # Plot the result by comparing the two simulation (sym / no sym)
-        plt.close("all")
-        out.plot_A_fft2(
-            "mag.B",
-            freq_max=500,
-            r_max=20,
-            save_path=join(save_path, "test_default_proj_Br_fft2_dataobj.png"),
-        )
+# def test_default_proj_time_space(self, import_data):
+#     SCIM_006 = import_data["SCIM_006"]
+#     simu = import_data["simu"]
+#     time = import_data["time"]
+#     Time = import_data["Time"]
+#     angle = import_data["angle"]
+#     Angle = import_data["Angle"]
+#     Br = import_data["Br"]
+#     flux = import_data["flux"]
+#     B = import_data["B"]
+#     flux_FT = import_data["flux_FT"]
+#     freqs = import_data["freqs"]
+#     Freqs = import_data["Freqs"]
+#     Wavenumber = import_data["Wavenumber"]
+#     wavenumber = import_data["wavenumber"]
+#     Br_FT = import_data["Br_FT"]
+#     B_FT = import_data["B_FT"]
+#     freq_max = import_data["freq_max"]
+#     r_max = import_data["r_max"]
 
-    def test_default_proj_time_space(self, import_data):
-        SCIM_006 = import_data["SCIM_006"]
-        simu = import_data["simu"]
-        time = import_data["time"]
-        Time = import_data["Time"]
-        angle = import_data["angle"]
-        Angle = import_data["Angle"]
-        Br = import_data["Br"]
-        flux = import_data["flux"]
-        B = import_data["B"]
-        flux_FT = import_data["flux_FT"]
-        freqs = import_data["freqs"]
-        Freqs = import_data["Freqs"]
-        Wavenumber = import_data["Wavenumber"]
-        wavenumber = import_data["wavenumber"]
-        Br_FT = import_data["Br_FT"]
-        B_FT = import_data["B_FT"]
-        freq_max = import_data["freq_max"]
-        r_max = import_data["r_max"]
+#     simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
+#     simu.input = InputFlux(B=B, time=time, angle=angle)
+#     simu.mag = None
+#     simu.force = None
+#     simu.struct = None
+#     simu.input = InputFlux(B=B, time=time, angle=angle)
+#     out = Output(simu=simu)
+#     simu.run()
 
-        simu = Simu1(name="EM_SCIM_NL_006", machine=SCIM_006)
-        simu.input = InputFlux(B=B, time=time, angle=angle)
-        simu.mag = None
-        simu.force = None
-        simu.struct = None
-        simu.input = InputFlux(B=B, time=time, angle=angle)
-        out = Output(simu=simu)
-        simu.run()
-
-        # Plot the result by comparing the two simulation (sym / no sym)
-        plt.close("all")
-        out.plot_A_time_space(
-            "mag.B",
-            freq_max=freq_max,
-            r_max=r_max,
-            is_auto_ticks=False,
-            save_path=join(save_path, "test_default_proj_Br_time_space_dataobj.png"),
-        )
+#     # Plot the result by comparing the two simulation (sym / no sym)
+#     plt.close("all")
+#     out.plot_A_time_space(
+#         "mag.B",
+#         freq_max=freq_max,
+#         r_max=r_max,
+#         is_auto_ticks=False,
+#         save_path=join(save_path, "test_default_proj_Br_time_space_dataobj.png"),
+#     )

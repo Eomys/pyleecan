@@ -90,7 +90,7 @@ def plot_A_fft_time(
         ylabel = "Magnitude " + unit_str
     else:
         ylabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
-        
+
     Xdatas = []
     Ydatas = []
     if is_elecorder:
@@ -117,11 +117,13 @@ def plot_A_fft_time(
             )
             Xdatas.append(results["freqs"])
             Ydatas.append(results[data.symbol])
-            
+
     freqs = Xdatas[0]
 
     if is_auto_ticks:
-        indices = [ind for ind, y in enumerate(Ydatas[0]) if abs(y) > abs(0.01 * np_max(y))]
+        indices = [
+            ind for ind, y in enumerate(Ydatas[0]) if abs(y) > abs(0.01 * np_max(y))
+        ]
         xticks = freqs[indices]
     else:
         xticks = None

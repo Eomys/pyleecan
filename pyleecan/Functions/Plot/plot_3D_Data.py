@@ -21,6 +21,7 @@ def plot_3D_Data(
     z_max=None,
     is_auto_ticks=True,
     is_2D_view=False,
+    N_stem=100,
     fig=None,
 ):
     """Plots a field as a function of two axes
@@ -80,7 +81,7 @@ def plot_3D_Data(
             zlabel = "Magnitude " + unit_str
         else:
             zlabel = r"$|\widehat{" + data.symbol + "}|$ " + unit_str
-        title1 = "FFT2 of " + data.name.lower()
+        title1 = "FFT2 of " + data.name.lower() + " "
     else:
         if is_norm:
             zlabel = (
@@ -88,22 +89,33 @@ def plot_3D_Data(
             )
         else:
             zlabel = r"$" + data.symbol + "\, [" + unit + "]$"
-        title1 = "Surface plot of " + data.name.capitalize() + " "
+        title1 = "Surface plot of " + data.name.lower() + " "
 
     # Extract field and axes
     if is_fft:
-        result = data.get_magnitude_along(args, unit=unit, is_norm=is_norm)
+        if is_2D_view:
+            result = data.get_magnitude_along(args, unit=unit, is_norm=is_norm)
+        else:
+            result = data.get_harmonics(
+                N_stem, args, unit=unit, is_norm=is_norm, is_flat=True
+            )
     else:
-        result = data.get_magnitude_along(args, unit=unit, is_norm=is_norm)
+        result = data.get_along(args, unit=unit, is_norm=is_norm)
     axes_list = result["axes_list"]
     axes_dict_other = result["axes_dict_other"]
     Xdata = result[axes_list[0].name]
     Ydata = result[axes_list[1].name]
     Zdata = result[data.symbol]
-    Y_map, X_map = meshgrid(Ydata, Xdata)
-    X_flat = X_map.flatten()
-    Y_flat = Y_map.flatten()
-    Z_flat = Zdata.flatten()
+    if is_fft and not is_2D_view:
+        X_flat = Xdata
+        Y_flat = Ydata
+        Z_flat = Zdata
+
+    else:
+        Y_map, X_map = meshgrid(Ydata, Xdata)
+        X_flat = X_map.flatten()
+        Y_flat = Y_map.flatten()
+        Z_flat = Zdata.flatten()
     if x_min is None:
         x_min = np_min(Xdata)
     if x_max is None:
@@ -224,7 +236,7 @@ def plot_3D_Data(
                 fig=fig,
                 x_min=x_min,
                 x_max=x_max,
-                y_min=-y_max,
+                y_min=y_max,
                 y_max=y_min,
                 z_min=z_min,
                 z_max=z_max,

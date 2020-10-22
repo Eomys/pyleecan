@@ -20,6 +20,8 @@ def plot_2D_Data(
     y_max=None,
     mag_max=None,
     is_auto_ticks=True,
+    barwidth=100,
+    type_plot=None,
 ):
     """Plots a field as a function of time
 
@@ -65,6 +67,14 @@ def plot_2D_Data(
             component_list = data.components.keys()
         for i, comp in enumerate(component_list):
             (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
+
+            if save_path is not None:
+                save_path_comp = (
+                    save_path.split(".")[0] + "_" + comp + "." + save_path.split(".")[1]
+                )
+            else:
+                save_path_comp = None
+
             plot_2D_Data_fct(
                 data.components[comp],
                 args,
@@ -73,15 +83,15 @@ def plot_2D_Data(
                 data_list=[dat.components[comp] for dat in data_list],
                 legend_list=legend_list,
                 color_list=color_list,
-                save_path=save_path.split(".")[0]
-                + "_"
-                + comp
-                + save_path.split(".")[1],
+                save_path=save_path_comp,
                 y_min=y_min,
                 y_max=y_max,
                 is_auto_ticks=is_auto_ticks,
                 fig=fig,
+                barwidth=barwidth,
+                type_plot=type_plot,
             )
+            fig.show()
 
     else:
         (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
@@ -99,6 +109,7 @@ def plot_2D_Data(
             mag_max=mag_max,
             is_auto_ticks=is_auto_ticks,
             fig=fig,
+            barwidth=barwidth,
+            type_plot=type_plot,
         )
-
-    fig.show()
+        fig.show()

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from .....Functions.Plot.plot_2D_Data import plot_2D_Data as plot_2D_Data_fct
+from .....Functions.Plot.plot_3D_Data import plot_3D_Data as plot_3D_Data_fct
 from .....Functions.init_fig import init_fig
 from SciDataTool import VectorField
 
 
-def plot_2D_Data(
+def plot_3D_Data(
     self,
     Data_str,
     *args,
@@ -21,6 +21,7 @@ def plot_2D_Data(
     z_max=None,
     is_auto_ticks=True,
     is_2D_view=False,
+    N_stem=100,
     fig=None,
 ):
     """Plots a field as a function of time
@@ -67,15 +68,20 @@ def plot_2D_Data(
             component_list = data.components.keys()
         for i, comp in enumerate(component_list):
             (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
-            plot_2D_Data_fct(
+
+            if save_path is not None:
+                save_path_comp = (
+                    save_path.split(".")[0] + "_" + comp + "." + save_path.split(".")[1]
+                )
+            else:
+                save_path_comp = None
+
+            plot_3D_Data_fct(
                 data.components[comp],
                 args,
                 is_norm=is_norm,
                 unit=unit,
-                save_path=save_path.split(".")[0]
-                + "_"
-                + comp
-                + save_path.split(".")[1],
+                save_path=save_path_comp,
                 x_min=x_min,
                 x_max=x_max,
                 y_min=y_min,
@@ -84,12 +90,13 @@ def plot_2D_Data(
                 z_max=z_max,
                 is_auto_ticks=is_auto_ticks,
                 is_2D_view=is_2D_view,
+                N_stem=N_stem,
                 fig=fig,
             )
 
     else:
         (fig, axes, patch_leg, label_leg) = init_fig(None, shape="rectangle")
-        plot_2D_Data_fct(
+        plot_3D_Data_fct(
             data,
             args,
             is_norm=is_norm,
@@ -103,6 +110,7 @@ def plot_2D_Data(
             z_max=z_max,
             is_auto_ticks=is_auto_ticks,
             is_2D_view=is_2D_view,
+            N_stem=N_stem,
             fig=fig,
         )
 
