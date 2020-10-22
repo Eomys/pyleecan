@@ -20,6 +20,8 @@ from pyleecan.Classes.WindingDW2L import WindingDW2L
 from pyleecan.Classes.SlotW10 import SlotW10
 from pyleecan.Classes.SurfLine import SurfLine
 
+from pyleecan.Methods import ParentMissingError
+
 from Tests import save_plot_path as save_path
 from Tests.Plot.LamWind import wind_mat
 
@@ -144,3 +146,33 @@ class Test_Slot_10_plot(object):
             mid = line.get_middle()
             plt.text(mid.real, mid.imag, str(mesh_dict[line.label]))
         fig.savefig(join(save_path, "test_Lam_Wind_s10_Tooth_out.png"))
+
+        slot = SlotW10(
+            Zs=6,
+            W0=50e-3,
+            W1=80e-3,
+            W2=50e-3,
+            H0=15e-3,
+            H1=25e-3,
+            H2=140e-3,
+            H1_is_rad=False,
+        )
+
+        with pytest.raises(ParentMissingError) as context:
+            slot.get_surface_tooth()
+
+        test_obj.rotor.comp_wind_function(alpha_mmf0=1)
+
+        test_obj.stator.slot = SlotW10(
+            Zs=6,
+            W0=50e-1,
+            W1=80e-1,
+            W2=50e-1,
+            H0=15e-1,
+            H1=25e-1,
+            H2=140e-1,
+            H1_is_rad=False,
+        )
+
+        lines = test_obj.stator.slot.build_geometry_half_tooth(is_top=False)
+        assert len(lines) == 9

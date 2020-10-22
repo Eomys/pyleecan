@@ -12,6 +12,8 @@ from pyleecan.Classes.SlotMPolar import SlotMPolar
 from numpy import pi, exp, angle, array
 from pyleecan.Methods.Machine.Magnet.comp_surface import comp_surface
 
+from pyleecan.Methods import ParentMissingError
+
 Mag11_test = list()
 # Internal Slot surface
 lam = LamSlotMag(is_internal=True, Rext=0.5)
@@ -156,3 +158,9 @@ class Test_Magnet_Type_11_meth(object):
             a = result[i].end
             b = curve_list[i].end
             assert abs((a - b) / a - 0) < DELTA
+
+    def test_comp_point_coordinate_error(self):
+        """check that comp_point_coordinate is correct (throwing error)"""
+        magnet = MagnetType11(Wmag=pi / 10, Hmag=0.2)
+        with pytest.raises(ParentMissingError) as context:
+            magnet._comp_point_coordinate()

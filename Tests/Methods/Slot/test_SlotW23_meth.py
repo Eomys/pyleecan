@@ -133,3 +133,28 @@ class Test_SlotW23_meth(object):
         b = test_dict["Aw"]
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
+
+    def test_comp_point_coordinate(self):
+        """Check that comp_point_coordinate can compute W1 and W2 if cstt_tooth is true correct"""
+        lam = LamSlot(is_internal=False, Rint=0.1325)
+        lam.slot = SlotW23(
+            H0=1e-3,
+            H1=pi / 4,
+            H1_is_rad=True,
+            H2=30e-3,
+            W0=12e-3,
+            W1=14e-3,
+            W2=12e-3,
+            is_cstt_tooth=True,
+        )
+        result = lam.slot._comp_point_coordinate()
+        assert result == [
+            (0.13236408123052115 - 0.006j),
+            (0.13336305542848736 - 0.006045283018867925j),
+            (0.9187612188259356 - 0.07510509283990814j),
+            (0.948647059768688 - 0.0777197651223379j),
+            (0.948647059768688 + 0.0777197651223379j),
+            (0.9187612188259356 + 0.07510509283990814j),
+            (0.13336305542848736 + 0.006045283018867925j),
+            (0.13236408123052115 + 0.006j),
+        ]

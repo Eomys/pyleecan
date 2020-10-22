@@ -12,6 +12,7 @@ from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Methods.Slot.SlotW11.check import S11_H1rCheckError
 
 # For AlmostEqual
 DELTA = 1e-6
@@ -147,3 +148,20 @@ class Test_SlotW11_meth(object):
             (0.13236408123052115 + 0.006j),
             1,
         ]
+
+    def test_SlotW11_check(self):
+        """Check if the error S11_H1rCheckError is correctly raised in the check method"""
+        lam = LamSlot(is_internal=False, Rint=0.1325)
+        lam.slot = SlotW11(
+            H0=1e-3,
+            H1=3,
+            H2=30e-3,
+            W0=12e-3,
+            W1=14e-3,
+            W2=12e-3,
+            R1=5e-3,
+            H1_is_rad=True,
+        )
+
+        with pytest.raises(S11_H1rCheckError) as context:
+            lam.slot.check()

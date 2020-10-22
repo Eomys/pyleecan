@@ -1035,3 +1035,37 @@ def test_distance(test_dict):
         "Wrong distance: returned " + str(result) + ", expected: " + str(test_dict["D"])
     )
     assert result == pytest.approx(test_dict["D"], abs=DELTA), msg
+
+
+"""Tests of the function is_on_line from Arc meth"""
+
+is_on_line_list = list()
+
+# 1
+is_on_line_list.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1 - 2j,  # First point of cutting line
+        "result": False,
+    }
+)
+
+# 2
+is_on_line_list.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1j + exp(1j * 5 * pi / 4),  # First point of cutting line
+        "result": True,
+    }
+)
+
+
+@pytest.mark.parametrize("test_dict", is_on_line_list)
+def test_is_on_line(test_dict):
+    """Check the comp_distance method"""
+    arc_obj = test_dict["arc"]
+
+    # Check center
+    result = arc_obj.is_on_line(test_dict["Z"])
+
+    assert result == test_dict["result"]
