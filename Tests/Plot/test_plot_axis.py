@@ -285,7 +285,7 @@ def test_axis_LamWind(CURVE_COLORS):
 
     plt.close("all")
     out.plot_2D_Data("mag.B", "angle{rad}")
-    
+
     fig = plt.gcf()
     Br = out.mag.B.get_rad_along("time", "angle")
     fig.axes[0].plot(d_angle, max(max(Br)), "rx")

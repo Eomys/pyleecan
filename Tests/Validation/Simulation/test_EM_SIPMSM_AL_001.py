@@ -109,8 +109,10 @@ def test_Magnetic_FEMM_sym():
     # Plot the result by comparing the two simulation (no sym / MANATEE SDM)
     plt.close("all")
 
-    out.plot_2D_Data("mag.B", "angle", 
-             data_list=[out3.mag.B], 
-             legend_list=["No symmetry", "MANATEE SDM"],
-             save_path=join(save_path, "test_EM_SIPMSM_AL_001_SDM.png"))
-
+    out.plot_2D_Data(
+        "mag.B",
+        "angle",
+        data_list=[out3.mag.B],
+        legend_list=["No symmetry", "MANATEE SDM"],
+        save_path=join(save_path, "test_EM_SIPMSM_AL_001_SDM.png"),
+    )

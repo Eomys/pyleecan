@@ -103,9 +103,11 @@ def test_Magnetic_FEMM_sym():
     simu_load.run()
 
     plt.close("all")
-    
-    out.plot_2D_Data("mag.B", "angle", 
-        data_list=[out3.mag.B], 
-        legend_list=["Symmetry", "MANATEE SDM"],
-        save_path=join(save_path, "test_EM_SPMSM_NL_001_SDM.png"))
 
+    out.plot_2D_Data(
+        "mag.B",
+        "angle",
+        data_list=[out3.mag.B],
+        legend_list=["Symmetry", "MANATEE SDM"],
+        save_path=join(save_path, "test_EM_SPMSM_NL_001_SDM.png"),
+    )

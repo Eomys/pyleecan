@@ -41,14 +41,14 @@ def plot_mmf_unit(self, fig=None):
 
     color_list = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][: qs + 1]
     plot_2D_Data(
-        WF,     
+        WF,
         "angle",
         "phase",
         data_list=[mmf_u],
         fig=fig,
         color_list=color_list,
     )
-    
+
     plot_2D_Data(
         WF,
         "wavenumber=[0,100]",

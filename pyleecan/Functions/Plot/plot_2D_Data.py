@@ -150,7 +150,7 @@ def plot_2D_Data(
             Xdatas.append(result[list(result)[0]])
 
     # Find main axis as the axis with the most values
-    main_axis = axes_list[0] #max(axes_list, key=lambda x: x.values.size)
+    main_axis = axes_list[0]  # max(axes_list, key=lambda x: x.values.size)
 
     # Build xlabel and title parts 2 and 3
     title2 = ""
@@ -192,16 +192,18 @@ def plot_2D_Data(
                 unit = norm_dict[axis.unit]
             else:
                 unit = axis.unit
-            
+
             # if result[axis.name].size >1:
             #     axis_str = result[axis.name].astype(
             #     str
-            # )  
+            # )
             #     axis_str = "[" + ",".join(axis_str) +"]"
             # else:
             #     axis_str = str(result[axis.name][0])
-            axis_str = str(result_0[axis.name]) # TODO: smart conversion of float to str
-                
+            axis_str = str(
+                result_0[axis.name]
+            )  # TODO: smart conversion of float to str
+
             title3 += axis.name + "=" + axis_str + " " + unit + ", "
 
     # Title part 4 containing axes that are here but not involved in requested axes
@@ -231,7 +233,7 @@ def plot_2D_Data(
     elif legend_list == []:
         legend_list = ["" for d in data_list2]
     else:
-        legend_list = ["[" + leg + "] " for leg in legend_list]        
+        legend_list = ["[" + leg + "] " for leg in legend_list]
     legends = []
     colors = []
     linestyle_list = []

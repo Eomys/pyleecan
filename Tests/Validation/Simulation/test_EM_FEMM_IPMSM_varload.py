@@ -112,7 +112,7 @@ def test_EM_FEMM_IPMSM_varload():
         ylabel="Electrical torque [N.m]",
         title="Electrical torque vs current angle",
         save_path=join(save_path, "EM_FEMM_IPMSM_varload_torque_validation.png"),
-    )    
+    )
 
     return Xout
 

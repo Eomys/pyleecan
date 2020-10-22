@@ -54,8 +54,8 @@ def test_FEMM_periodicity():
     # Run simulations
     out = Output(simu=simu)
     simu.run()
-    
-    out2=None
+
+    out2 = None
     # out2 = Output(simu=simu2)
     # simu2.run()
 
@@ -137,18 +137,24 @@ def test_FEMM_periodicity():
 if __name__ == "__main__":
 
     out, out2 = test_FEMM_periodicity()
-    
-    # out.plot_2D_Data(
-    #     "mag.Phi_wind_stator",
-    #     "time",
-    #     "phase",
-    #     # data_list=[out2.mag.Phi_wind_stator],
-    #     # legend_list=["Periodic", "Full"],
-    #     # save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
-    # )
-    
-    # out.plot_3D_Data("mag.B", "time","angle", components=['radial'], is_2D_view=True)
-    
+
+    out.plot_2D_Data(
+        "mag.Phi_wind_stator",
+        "time",
+        "phase",
+        # data_list=[out2.mag.Phi_wind_stator],
+        # legend_list=["Periodic", "Full"],
+        # save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
+    )
+
+    out.plot_A_time_space("mag.B")
+
+    out.plot_3D_Data("mag.B", "time", "angle", components=["radial"], is_2D_view=True)
+
+    # out.plot_3D_Data("mag.B", "freqs","wavenumber", components=['radial'], is_2D_view=True)
+
+    # out.plot_3D_Data("mag.B", "freqs","wavenumber", components=['radial'], is_2D_view=False)
+
     # out.plot_2D_Data(
     #     "mag.B",
     #     "wavenumber=[0,100]{space_order}",

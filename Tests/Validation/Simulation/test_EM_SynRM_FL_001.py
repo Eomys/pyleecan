@@ -128,9 +128,9 @@ def test_Magnetic_Phi0():
         title="Electrical torque vs current angle",
         save_path=join(save_path, "test_SynRM_Syr-e.png"),
     )
-    
+
     return Xout
-   
+
 
 if __name__ == "__main__":
     Xout = test_Magnetic_Phi0()
