@@ -221,16 +221,6 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (Data1D / DataLinspace)
         plt.close("all")
-        # out.plot_A_space(
-        #     "mag.B",
-        #     is_fft=True,
-        #     is_spaceorder=True,
-        #     r_max=r_max,
-        #     data_list=[out3.mag.B],
-        #     legend_list=["Reference", "Linspace"],
-        #     is_auto_ticks=False,
-        #     save_path=join(save_path, "test_default_proj_Br_dataobj_linspace.png"),
-        # )
         out.plot_2D_Data(
             "mag.B",
             "angle",
@@ -241,7 +231,7 @@ class Test_plots(object):
         )
         out.plot_2D_Data(
             "mag.B",
-            "wavenumber=[0,100]{space_order}",
+            "wavenumber->space_order=[0,100]",
             data_list=[out3.mag.B],
             legend_list=["Reference", "Linspace"],
             is_auto_ticks=False,
