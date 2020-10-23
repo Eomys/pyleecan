@@ -101,7 +101,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
 
 def set_label(surf_list, Nrad, Ntan, st):
     """Set the normalized label"""
-    
+
     index = 0
     for ii in range(Nrad):
         for jj in range(Ntan):
