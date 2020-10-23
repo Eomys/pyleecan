@@ -116,7 +116,7 @@ class LossModelWinding(LossModel):
         LossModelWinding_dict = super(LossModelWinding, self).as_dict()
         LossModelWinding_dict["temperature"] = self.temperature
         LossModelWinding_dict["lam"] = self.lam
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelWinding_dict["__class__"] = "LossModelWinding"
         return LossModelWinding_dict

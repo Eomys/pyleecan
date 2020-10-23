@@ -95,7 +95,7 @@ class LossModel(FrozenClass):
 
         LossModel_dict = dict()
         LossModel_dict["name"] = self.name
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         LossModel_dict["__class__"] = "LossModel"
         return LossModel_dict
 

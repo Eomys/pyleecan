@@ -123,10 +123,12 @@ class OutLoss(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutLoss_dict = dict()
-        OutLoss_dict["losses"] = self.losses
-        OutLoss_dict["meshsolutions"] = self.meshsolutions
+        OutLoss_dict["losses"] = self.losses.copy() if self.losses is not None else None
+        OutLoss_dict["meshsolutions"] = (
+            self.meshsolutions.copy() if self.meshsolutions is not None else None
+        )
         OutLoss_dict["logger_name"] = self.logger_name
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         OutLoss_dict["__class__"] = "OutLoss"
         return OutLoss_dict
 

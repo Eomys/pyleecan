@@ -203,7 +203,7 @@ class LossModelBertotti(LossModel):
         LossModelBertotti_dict["alpha_ex"] = self.alpha_ex
         LossModelBertotti_dict["group"] = self.group
         LossModelBertotti_dict["lam"] = self.lam
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LossModelBertotti_dict["__class__"] = "LossModelBertotti"
         return LossModelBertotti_dict

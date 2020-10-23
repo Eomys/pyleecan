@@ -103,7 +103,7 @@ class Loss(FrozenClass):
             Loss_dict["models"] = list()
             for obj in self.models:
                 Loss_dict["models"].append(obj.as_dict())
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Loss_dict["__class__"] = "Loss"
         return Loss_dict
 
