@@ -75,6 +75,7 @@ M_test.append(
         "test_obj": test_obj,
         "Mfra": 4000 * pi * (0.114 ** 2 - 0.104 ** 2),
         "Msha": 5000 * 1.2 * pi * 0.021 ** 2,
+        "result_comp_surface": 0.015821060603478196,
     }
 )
 M_test[-1]["rotor"] = {
@@ -108,6 +109,7 @@ M_test.append(
         "test_obj": IPMSM_A,
         "Mfra": 0,
         "Msha": 7650 * 0.1 * pi * (0.11064 / 2) ** 2,
+        "result_comp_surface": 0.010592626073992478,
     }  # No frame
 )
 M_test[-1]["rotor"] = {"Slam": 0.0082186, "Svent": 0, "Smag": 0.0189 * 0.0065 * 2 * 8}
@@ -155,7 +157,7 @@ def test_comp_surface_rotor(test_dict):
     test_dict["test_obj"].rotor.is_internal = False
     result = test_dict["test_obj"].rotor.comp_surfaces()
 
-    assert result["Syoke"] != a
+    assert result["Syoke"] == test_dict["result_comp_surface"]
     test_dict["test_obj"].rotor.is_internal = True
 
 

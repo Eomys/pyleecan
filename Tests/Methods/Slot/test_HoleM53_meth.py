@@ -213,11 +213,16 @@ class Test_HoleM53_meth(object):
             test_obj.hole[0].build_geometry()
 
     @pytest.mark.parametrize("test_dict", HoleM53_test_error)
-    def test_build_geometry_blank(self, test_dict):
+    def test_build_geometry_Z11_Z1(self, test_dict):
         """Check nothing it's just for the coverage"""
 
         test_obj = test_dict["test_obj"]
+        test_obj.hole[0] = HoleM53(
+            Zh=8, H0=0.02, H1=0.001, H2=0.01, H3=0.003, W1=0.005, W2=0, W3=0.01, W4=0.78
+        )
+        lst_pattern = test_obj.hole[0].build_geometry()
 
+        # Z11 = Zlist[0]
         test_obj.hole[0] = HoleM53(
             Zh=8,
             H0=0.00000000000000000000002,
@@ -229,7 +234,9 @@ class Test_HoleM53_meth(object):
             W3=0.01,
             W4=2.28,
         )
-        test_obj.hole[0].build_geometry()
+        lst1 = test_obj.hole[0].build_geometry()
+
+        # Z1 = Zlist[0]
         test_obj.hole[0] = HoleM53(
             Zh=8,
             H0=0.00000000000000000000002,
@@ -241,6 +248,7 @@ class Test_HoleM53_meth(object):
             W3=0.01,
             W4=4.78,
         )
-        test_obj.hole[0].build_geometry()
+        lst2 = test_obj.hole[0].build_geometry()
 
-        assert True
+        assert len(lst1) != len(lst_pattern)
+        assert len(lst2) != len(lst_pattern)

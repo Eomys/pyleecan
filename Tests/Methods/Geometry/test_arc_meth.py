@@ -1041,7 +1041,7 @@ def test_distance(test_dict):
 
 is_on_line_list = list()
 
-# 1
+# 1  Check not on the circle
 is_on_line_list.append(
     {
         "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
@@ -1050,7 +1050,7 @@ is_on_line_list.append(
     }
 )
 
-# 2
+# 2  Check on the circle
 is_on_line_list.append(
     {
         "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
@@ -1059,13 +1059,49 @@ is_on_line_list.append(
     }
 )
 
+# 3 Check on the beg of the arc
+is_on_line_list.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -2j,  # First point of cutting line
+        "result": True,
+    }
+)
+
+# 4 Check on the end of the arc
+is_on_line_list.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1 -1j,  # First point of cutting line
+        "result": True,
+    }
+)
+
+# 5 Check above the arc
+is_on_line_list.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1j,  # First point of cutting line
+        "result": False,
+    }
+)
+
+# 6 Check beneath the arc
+is_on_line_list.append(
+    {
+        "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
+        "Z": -1-2j,  # First point of cutting line
+        "result": False,
+    }
+)
+
 
 @pytest.mark.parametrize("test_dict", is_on_line_list)
 def test_is_on_line(test_dict):
-    """Check the comp_distance method"""
+    """Check is_on_line method"""
     arc_obj = test_dict["arc"]
 
-    # Check center
+    # Check on the circle
     result = arc_obj.is_on_line(test_dict["Z"])
 
     assert result == test_dict["result"]

@@ -198,11 +198,12 @@ class Test_HoleM51_meth(object):
             a[5].line_list[2]
 
     @pytest.mark.parametrize("test_dict", HoleM51_test)
-    def test_build_geometry_blank(self, test_dict):
-        """Check nothing it's just for the coverage"""
+    def test_build_geometry_Z6(self, test_dict):
+        """Check if Z6 is different between Zint[0].real > 0 or Zint[1].real > 0"""
 
         test_obj = test_dict["test_obj"]
 
+        # Zint[1].real > 0
         test_obj.hole[0] = HoleM51(
             Zh=8,
             W0=0.016,
@@ -217,6 +218,24 @@ class Test_HoleM51_meth(object):
             H1=0.0015,
             H2=0.1055,
         )
-        test_obj.hole[0].build_geometry()
+        lst = test_obj.hole[0].build_geometry()
 
-        assert True
+        # Zint[0].real > 0
+        test_obj.hole[0] = HoleM51(
+            Zh=8,
+            W0=0.016,
+            W1=pi / 65,
+            W2=0.004,
+            W3=0.01,
+            W4=0.002,
+            W5=0.01,
+            W6=0.002,
+            W7=0.01,
+            H0=0.01096,
+            H1=0.0015,
+            H2=0.0055,
+        )
+        lst2 = test_obj.hole[0].build_geometry()
+
+        assert len(lst) == 7
+        assert lst[0].line_list[1].begin != lst2[0].line_list[1].begin
