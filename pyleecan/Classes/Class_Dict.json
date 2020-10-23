@@ -3573,7 +3573,8 @@
             "comp_length_ring",
             "plot",
             "comp_number_phase_eq",
-            "comp_periodicity"
+            "comp_periodicity",
+            "comp_surface_ring"
         ],
         "mother": "LamSlotWind",
         "name": "LamSquirrelCage",
