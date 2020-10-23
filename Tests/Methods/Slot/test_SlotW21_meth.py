@@ -209,7 +209,7 @@ class Test_SlowW21_meth(object):
         curve_list.append(Segment(Z4, Z3))
         point_ref = (Z3 + Ztan1 + Ztan2 + Z4) / 4
         surface = SurfLine(
-            line_list=curve_list, point_ref=point_ref, label="WindS_R0_T0_S0"
+            line_list=curve_list, point_ref=point_ref, label="Wind_Stator_R0_T0_S0"
         )
         expected.append(surface)
 
@@ -221,7 +221,7 @@ class Test_SlowW21_meth(object):
         curve_list.append(Segment(Ztan2, Ztan1))
         point_ref = (Z5 + Ztan1 + Ztan2 + Z6) / 4
         surface = SurfLine(
-            line_list=curve_list, point_ref=point_ref, label="WindS_R0_T1_S0"
+            line_list=curve_list, point_ref=point_ref, label="Wind_Stator_R0_T1_S0"
         )
         expected.append(surface)
 
