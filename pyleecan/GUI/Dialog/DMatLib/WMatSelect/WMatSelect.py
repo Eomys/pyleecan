@@ -1,8 +1,8 @@
 from .....GUI.Dialog.DMatLib.WMatSelect.Ui_WMatSelect import Ui_WMatSelect
 from .....GUI.Dialog.DMatLib.DMatLib import DMatLib
-from PyQt5.QtWidgets import QWidget, QMessageBox, QDialog
+from PySide2.QtWidgets import QWidget, QMessageBox, QDialog
 from .....Classes.Material import Material
-from PyQt5.QtCore import pyqtSignal
+from PySide2.QtCore import Signal
 
 
 class WMatSelect(Ui_WMatSelect, QWidget):
@@ -14,7 +14,7 @@ class WMatSelect(Ui_WMatSelect, QWidget):
     """
 
     # Signal to W_MachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
 
     def __init__(self, parent=None):
         """

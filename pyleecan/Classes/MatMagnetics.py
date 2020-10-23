@@ -183,7 +183,7 @@ class MatMagnetics(FrozenClass):
             MatMagnetics_dict["LossData"] = None
         else:
             MatMagnetics_dict["LossData"] = self.LossData.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         MatMagnetics_dict["__class__"] = "MatMagnetics"
         return MatMagnetics_dict
 

@@ -131,7 +131,7 @@ class Interpolation(FrozenClass):
             Interpolation_dict["scalar_product"] = None
         else:
             Interpolation_dict["scalar_product"] = self.scalar_product.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Interpolation_dict["__class__"] = "Interpolation"
         return Interpolation_dict
 

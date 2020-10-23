@@ -83,7 +83,7 @@ class SlotMag(Slot):
         # Get the properties inherited from Slot
         SlotMag_dict = super(SlotMag, self).as_dict()
         SlotMag_dict["W3"] = self.W3
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotMag_dict["__class__"] = "SlotMag"
         return SlotMag_dict

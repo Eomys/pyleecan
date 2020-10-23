@@ -32,11 +32,6 @@ except ImportError as error:
     comp_phasor_angle = error
 
 try:
-    from ..Methods.Machine.Winding.comp_resistance_norm import comp_resistance_norm
-except ImportError as error:
-    comp_resistance_norm = error
-
-try:
     from ..Methods.Machine.Winding.comp_winding_factor import comp_winding_factor
 except ImportError as error:
     comp_winding_factor = error
@@ -88,18 +83,6 @@ class Winding(FrozenClass):
         )
     else:
         comp_phasor_angle = comp_phasor_angle
-    # cf Methods.Machine.Winding.comp_resistance_norm
-    if isinstance(comp_resistance_norm, ImportError):
-        comp_resistance_norm = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use Winding method comp_resistance_norm: "
-                    + str(comp_resistance_norm)
-                )
-            )
-        )
-    else:
-        comp_resistance_norm = comp_resistance_norm
     # cf Methods.Machine.Winding.comp_winding_factor
     if isinstance(comp_winding_factor, ImportError):
         comp_winding_factor = property(
@@ -256,7 +239,7 @@ class Winding(FrozenClass):
             Winding_dict["conductor"] = None
         else:
             Winding_dict["conductor"] = self.conductor.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Winding_dict["__class__"] = "Winding"
         return Winding_dict
 

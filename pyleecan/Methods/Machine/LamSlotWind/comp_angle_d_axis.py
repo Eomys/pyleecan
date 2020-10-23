@@ -1,4 +1,5 @@
-from numpy import pi, argmax, cos, abs as np_abs, angle as np_angle
+from numpy import pi, argmax, cos, abs as np_abs, angle as np_angle, squeeze
+import matplotlib.pyplot as plt
 
 
 def comp_angle_d_axis(self):
@@ -16,12 +17,18 @@ def comp_angle_d_axis(self):
         angle between the X axis and the first d+ axis
     """
 
-    MMF = self.comp_mmf_unit()
+    if self.winding is None:
+        return 0
+
     p = self.get_pole_pair_number()
 
-    # Get the unit mmf FFT and angle values
-    results = MMF.get_along("angle")
-    angle_rotor = results["angle"]
+    MMF = self.comp_mmf_unit(Nt=1, Na=400 * p)
+
+    # Get angle values
+    results1 = MMF.get_along("angle[oneperiod]")
+    angle_stator = results1["angle"]
+
+    # Get the unit mmf FFT and wavenumbers
     results = MMF.get_along("wavenumber")
     wavenumber = results["wavenumber"]
     mmf_ft = results[MMF.symbol]
@@ -30,10 +37,17 @@ def comp_angle_d_axis(self):
     indr_fund = np_abs(wavenumber - p).argmin()
     phimax = np_angle(mmf_ft[indr_fund])
     magmax = np_abs(mmf_ft[indr_fund])
-    mmf_waveform = magmax * cos(p * angle_rotor + phimax)
-    ind_max = argmax(mmf_waveform)
-    d_angle = angle_rotor[ind_max]
 
-    # Get the first angle according to symmetry
-    (sym, _) = self.comp_sym()
-    return d_angle % (2 * pi / sym)
+    # Reconstruct fundamental MMF wave
+    mmf_waveform = magmax * cos(p * angle_stator + phimax)
+
+    # Get the first angle where mmf is max
+    d_angle = angle_stator[argmax(mmf_waveform)]
+
+    # fig, ax = plt.subplots()
+    # ax.plot(angle_stator, squeeze(MMF.get_along("angle[oneperiod]")[MMF.symbol]), "k")
+    # ax.plot(angle_stator, mmf_waveform, "r")
+    # ax.plot([d_angle, d_angle], [-magmax, magmax], "--k")
+    # plt.show()
+
+    return d_angle

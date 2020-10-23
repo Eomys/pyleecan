@@ -61,6 +61,11 @@ try:
 except ImportError as error:
     comp_surface_wind = error
 
+try:
+    from ..Methods.Slot.SlotW25.get_surface_wind import get_surface_wind
+except ImportError as error:
+    get_surface_wind = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -171,6 +176,18 @@ class SlotW25(SlotWind):
         )
     else:
         comp_surface_wind = comp_surface_wind
+    # cf Methods.Slot.SlotW25.get_surface_wind
+    if isinstance(get_surface_wind, ImportError):
+        get_surface_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW25 method get_surface_wind: "
+                    + str(get_surface_wind)
+                )
+            )
+        )
+    else:
+        get_surface_wind = get_surface_wind
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -262,7 +279,7 @@ class SlotW25(SlotWind):
         SlotW25_dict["H2"] = self.H2
         SlotW25_dict["W4"] = self.W4
         SlotW25_dict["H1"] = self.H1
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotW25_dict["__class__"] = "SlotW25"
         return SlotW25_dict

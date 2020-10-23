@@ -239,7 +239,7 @@ class VarSimu(FrozenClass):
             VarSimu_dict["postproc_list"] = list()
             for obj in self.postproc_list:
                 VarSimu_dict["postproc_list"].append(obj.as_dict())
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         VarSimu_dict["__class__"] = "VarSimu"
         return VarSimu_dict
 

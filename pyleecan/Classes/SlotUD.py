@@ -114,9 +114,11 @@ class SlotUD(Slot):
 
         # Get the properties inherited from Slot
         SlotUD_dict = super(SlotUD, self).as_dict()
-        SlotUD_dict["point_list"] = self.point_list
+        SlotUD_dict["point_list"] = (
+            self.point_list.copy() if self.point_list is not None else None
+        )
         SlotUD_dict["is_sym"] = self.is_sym
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotUD_dict["__class__"] = "SlotUD"
         return SlotUD_dict

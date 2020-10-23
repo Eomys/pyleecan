@@ -194,7 +194,7 @@ class Mode(SolutionMat):
         Mode_dict["nat_freq"] = self.nat_freq
         Mode_dict["order_circ"] = self.order_circ
         Mode_dict["order_long"] = self.order_long
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Mode_dict["__class__"] = "Mode"
         return Mode_dict

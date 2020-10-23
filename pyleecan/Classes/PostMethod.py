@@ -91,7 +91,7 @@ class PostMethod(Post):
 
         # Get the properties inherited from Post
         PostMethod_dict = super(PostMethod, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         PostMethod_dict["__class__"] = "PostMethod"
         return PostMethod_dict

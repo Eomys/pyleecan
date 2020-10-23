@@ -208,7 +208,7 @@ class Simu1(Simulation):
             Simu1_dict["loss"] = None
         else:
             Simu1_dict["loss"] = self.loss.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Simu1_dict["__class__"] = "Simu1"
         return Simu1_dict

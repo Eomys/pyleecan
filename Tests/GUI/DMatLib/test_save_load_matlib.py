@@ -5,10 +5,10 @@ from os import listdir, mkdir, remove
 from os.path import abspath, basename, isdir, isfile, join
 from shutil import copyfile, rmtree
 
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtTest import QTest
-from PyQt5.QtWidgets import QDialogButtonBox
+from PySide2 import QtWidgets
+from PySide2.QtCore import Qt
+from PySide2.QtTest import QTest
+from PySide2.QtWidgets import QDialogButtonBox
 
 from pyleecan.Functions.load import load
 from pyleecan.GUI.Dialog.DMachineSetup.DMachineSetup import DMachineSetup
@@ -41,7 +41,10 @@ class Testsave_load_matlib(object):
     def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test Save/Load MatLib")
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
     def teardown_class(cls):

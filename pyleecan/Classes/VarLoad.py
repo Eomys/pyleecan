@@ -172,7 +172,7 @@ class VarLoad(VarSimu):
 
         # Get the properties inherited from VarSimu
         VarLoad_dict = super(VarLoad, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VarLoad_dict["__class__"] = "VarLoad"
         return VarLoad_dict

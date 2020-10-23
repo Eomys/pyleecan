@@ -121,7 +121,7 @@ class Structural(FrozenClass):
             Structural_dict["force"] = None
         else:
             Structural_dict["force"] = self.force.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Structural_dict["__class__"] = "Structural"
         return Structural_dict
 

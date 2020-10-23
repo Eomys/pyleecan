@@ -209,7 +209,7 @@ class VentilationTrap(Hole):
         VentilationTrap_dict["H0"] = self.H0
         VentilationTrap_dict["W1"] = self.W1
         VentilationTrap_dict["W2"] = self.W2
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         VentilationTrap_dict["__class__"] = "VentilationTrap"
         return VentilationTrap_dict

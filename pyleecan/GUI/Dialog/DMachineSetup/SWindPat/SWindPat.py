@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .....Classes.Winding import Winding
 from .....Classes.WindingCW1L import WindingCW1L
@@ -10,7 +10,7 @@ from .....Classes.WindingCW2LR import WindingCW2LR
 from .....Classes.WindingCW2LT import WindingCW2LT
 from .....Classes.WindingDW1L import WindingDW1L
 from .....Classes.WindingDW2L import WindingDW2L
-from .....Functions.Winding.comp_wind_sym import comp_wind_sym
+from .....Functions.Winding.comp_wind_periodicity import comp_wind_periodicity
 from .....GUI.Dialog.DMachineSetup.SWindPat.Gen_SWindPat import Gen_SWindPat
 from .....GUI.Resources import pixmap_dict
 from .....Methods.Machine.Winding import WindingError
@@ -23,7 +23,7 @@ class SWindPat(Gen_SWindPat, QWidget):
     """Step to define the winding pattern"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
     # Information for DMachineSetup nav
     step_name = "Winding Pattern"
 
@@ -269,7 +269,7 @@ class SWindPat(Gen_SWindPat, QWidget):
 
         try:
             wind_mat = wind.comp_connection_mat(self.obj.slot.Zs)
-            Nperw = str(comp_wind_sym(wind_mat)[0])
+            Nperw = str(comp_wind_periodicity(wind_mat)[0])
         except Exception:  # Unable to compution the connection matrix
             Nperw = "?"
 

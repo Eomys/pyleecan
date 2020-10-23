@@ -232,7 +232,7 @@ class PolarArc(Surface):
         PolarArc_dict = super(PolarArc, self).as_dict()
         PolarArc_dict["angle"] = self.angle
         PolarArc_dict["height"] = self.height
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         PolarArc_dict["__class__"] = "PolarArc"
         return PolarArc_dict

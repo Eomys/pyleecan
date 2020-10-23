@@ -76,6 +76,11 @@ try:
 except ImportError as error:
     comp_width_opening = error
 
+try:
+    from ..Methods.Slot.Slot.get_name_lam import get_name_lam
+except ImportError as error:
+    get_name_lam = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -207,6 +212,15 @@ class Slot(FrozenClass):
         )
     else:
         comp_width_opening = comp_width_opening
+    # cf Methods.Slot.Slot.get_name_lam
+    if isinstance(get_name_lam, ImportError):
+        get_name_lam = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use Slot method get_name_lam: " + str(get_name_lam))
+            )
+        )
+    else:
+        get_name_lam = get_name_lam
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -263,7 +277,7 @@ class Slot(FrozenClass):
 
         Slot_dict = dict()
         Slot_dict["Zs"] = self.Zs
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Slot_dict["__class__"] = "Slot"
         return Slot_dict
 

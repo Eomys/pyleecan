@@ -1,4 +1,4 @@
-from numpy import arcsin, exp, tan
+from numpy import arcsin, exp
 
 
 def _comp_point_coordinate(self):
@@ -17,10 +17,7 @@ def _comp_point_coordinate(self):
     """
     Rbo = self.get_Rbo()
 
-    if self.H1_is_rad:  # H1 in rad
-        H1 = ((self.W1 - self.W0) / 2.0) * tan(self.H1)  # convertion to m
-    else:  # H1 in m
-        H1 = self.H1
+    H1 = self.get_H1()
 
     # alpha is the angle to rotate Z0 so ||Z1,Z10|| = W0
     alpha = float(arcsin(self.W0 / (2 * Rbo)))

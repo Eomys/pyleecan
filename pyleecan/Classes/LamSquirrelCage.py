@@ -44,9 +44,14 @@ except ImportError as error:
     comp_number_phase_eq = error
 
 try:
-    from ..Methods.Machine.LamSquirrelCage.comp_sym import comp_sym
+    from ..Methods.Machine.LamSquirrelCage.comp_periodicity import comp_periodicity
 except ImportError as error:
-    comp_sym = error
+    comp_periodicity = error
+
+try:
+    from ..Methods.Machine.LamSquirrelCage.comp_surface_ring import comp_surface_ring
+except ImportError as error:
+    comp_surface_ring = error
 
 
 from ._check import InitUnKnowClassError
@@ -117,17 +122,30 @@ class LamSquirrelCage(LamSlotWind):
         )
     else:
         comp_number_phase_eq = comp_number_phase_eq
-    # cf Methods.Machine.LamSquirrelCage.comp_sym
-    if isinstance(comp_sym, ImportError):
-        comp_sym = property(
+    # cf Methods.Machine.LamSquirrelCage.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use LamSquirrelCage method comp_sym: " + str(comp_sym)
+                    "Can't use LamSquirrelCage method comp_periodicity: "
+                    + str(comp_periodicity)
                 )
             )
         )
     else:
-        comp_sym = comp_sym
+        comp_periodicity = comp_periodicity
+    # cf Methods.Machine.LamSquirrelCage.comp_surface_ring
+    if isinstance(comp_surface_ring, ImportError):
+        comp_surface_ring = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use LamSquirrelCage method comp_surface_ring: "
+                    + str(comp_surface_ring)
+                )
+            )
+        )
+    else:
+        comp_surface_ring = comp_surface_ring
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -272,7 +290,7 @@ class LamSquirrelCage(LamSlotWind):
             LamSquirrelCage_dict["ring_mat"] = None
         else:
             LamSquirrelCage_dict["ring_mat"] = self.ring_mat.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         LamSquirrelCage_dict["__class__"] = "LamSquirrelCage"
         return LamSquirrelCage_dict

@@ -235,7 +235,7 @@ class Trapeze(Surface):
         Trapeze_dict["height"] = self.height
         Trapeze_dict["W2"] = self.W2
         Trapeze_dict["W1"] = self.W1
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Trapeze_dict["__class__"] = "Trapeze"
         return Trapeze_dict

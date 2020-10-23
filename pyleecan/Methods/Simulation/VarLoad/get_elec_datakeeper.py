@@ -18,13 +18,13 @@ def get_elec_datakeeper(self):
     # Save Id
     dk_list.append(
         DataKeeper(
-            name="Id", symbol="Id", unit="A", keeper=lambda output: output.elec.Id_ref
+            name="Id", symbol="Id", unit="A", keeper="lambda output: output.elec.Id_ref"
         )
     )
     # Save Iq
     dk_list.append(
         DataKeeper(
-            name="Iq", symbol="Iq", unit="A", keeper=lambda output: output.elec.Iq_ref
+            name="Iq", symbol="Iq", unit="A", keeper="lambda output: output.elec.Iq_ref"
         )
     )
 

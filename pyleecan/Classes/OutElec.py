@@ -83,7 +83,6 @@ class OutElec(FrozenClass):
         Ir=None,
         angle_rotor=None,
         N0=None,
-        rot_dir=-1,
         angle_rotor_initial=0,
         logger_name="Pyleecan.OutElec",
         mmf_unit=None,
@@ -126,8 +125,6 @@ class OutElec(FrozenClass):
                 angle_rotor = init_dict["angle_rotor"]
             if "N0" in list(init_dict.keys()):
                 N0 = init_dict["N0"]
-            if "rot_dir" in list(init_dict.keys()):
-                rot_dir = init_dict["rot_dir"]
             if "angle_rotor_initial" in list(init_dict.keys()):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
             if "logger_name" in list(init_dict.keys()):
@@ -160,7 +157,6 @@ class OutElec(FrozenClass):
         self.Ir = Ir
         self.angle_rotor = angle_rotor
         self.N0 = N0
-        self.rot_dir = rot_dir
         self.angle_rotor_initial = angle_rotor_initial
         self.logger_name = logger_name
         self.mmf_unit = mmf_unit
@@ -185,20 +181,8 @@ class OutElec(FrozenClass):
             OutElec_str += "parent = None " + linesep
         else:
             OutElec_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutElec_str += (
-            "time = "
-            + linesep
-            + str(self.time).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
-        OutElec_str += (
-            "angle = "
-            + linesep
-            + str(self.angle).replace(linesep, linesep + "\t")
-            + linesep
-            + linesep
-        )
+        OutElec_str += "time = " + str(self.time) + linesep + linesep
+        OutElec_str += "angle = " + str(self.angle) + linesep + linesep
         OutElec_str += "Is = " + str(self.Is) + linesep + linesep
         OutElec_str += "Ir = " + str(self.Ir) + linesep + linesep
         OutElec_str += (
@@ -209,7 +193,6 @@ class OutElec(FrozenClass):
             + linesep
         )
         OutElec_str += "N0 = " + str(self.N0) + linesep
-        OutElec_str += "rot_dir = " + str(self.rot_dir) + linesep
         OutElec_str += (
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         )
@@ -231,9 +214,9 @@ class OutElec(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if not array_equal(other.time, self.time):
+        if other.time != self.time:
             return False
-        if not array_equal(other.angle, self.angle):
+        if other.angle != self.angle:
             return False
         if other.Is != self.Is:
             return False
@@ -242,8 +225,6 @@ class OutElec(FrozenClass):
         if not array_equal(other.angle_rotor, self.angle_rotor):
             return False
         if other.N0 != self.N0:
-            return False
-        if other.rot_dir != self.rot_dir:
             return False
         if other.angle_rotor_initial != self.angle_rotor_initial:
             return False
@@ -278,11 +259,11 @@ class OutElec(FrozenClass):
         if self.time is None:
             OutElec_dict["time"] = None
         else:
-            OutElec_dict["time"] = self.time.tolist()
+            OutElec_dict["time"] = self.time.as_dict()
         if self.angle is None:
             OutElec_dict["angle"] = None
         else:
-            OutElec_dict["angle"] = self.angle.tolist()
+            OutElec_dict["angle"] = self.angle.as_dict()
         if self.Is is None:
             OutElec_dict["Is"] = None
         else:
@@ -296,7 +277,6 @@ class OutElec(FrozenClass):
         else:
             OutElec_dict["angle_rotor"] = self.angle_rotor.tolist()
         OutElec_dict["N0"] = self.N0
-        OutElec_dict["rot_dir"] = self.rot_dir
         OutElec_dict["angle_rotor_initial"] = self.angle_rotor_initial
         OutElec_dict["logger_name"] = self.logger_name
         if self.mmf_unit is None:
@@ -315,7 +295,7 @@ class OutElec(FrozenClass):
             OutElec_dict["Us"] = None
         else:
             OutElec_dict["Us"] = self.Us.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         OutElec_dict["__class__"] = "OutElec"
         return OutElec_dict
 
@@ -328,7 +308,6 @@ class OutElec(FrozenClass):
         self.Ir = None
         self.angle_rotor = None
         self.N0 = None
-        self.rot_dir = None
         self.angle_rotor_initial = None
         self.logger_name = None
         self.mmf_unit = None
@@ -348,14 +327,16 @@ class OutElec(FrozenClass):
 
     def _set_time(self, value):
         """setter of time"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("time", value, "ndarray")
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "time"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("time", value, "Data")
         self._time = value
 
     time = property(
@@ -363,7 +344,7 @@ class OutElec(FrozenClass):
         fset=_set_time,
         doc=u"""Electrical time vector (no symmetry)
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
@@ -373,14 +354,16 @@ class OutElec(FrozenClass):
 
     def _set_angle(self, value):
         """setter of angle"""
-        if type(value) is int and value == -1:
-            value = array([])
-        elif type(value) is list:
-            try:
-                value = array(value)
-            except:
-                pass
-        check_var("angle", value, "ndarray")
+        if isinstance(value, str):  # Load from file
+            value = load_init_dict(value)[1]
+        if isinstance(value, dict) and "__class__" in value:
+            class_obj = import_class(
+                "SciDataTool.Classes", value.get("__class__"), "angle"
+            )
+            value = class_obj(init_dict=value)
+        elif type(value) is int and value == -1:  # Default constructor
+            value = Data()
+        check_var("angle", value, "Data")
         self._angle = value
 
     angle = property(
@@ -388,7 +371,7 @@ class OutElec(FrozenClass):
         fset=_set_angle,
         doc=u"""Electrical position vector (no symmetry)
 
-        :Type: ndarray
+        :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
@@ -486,26 +469,6 @@ class OutElec(FrozenClass):
         doc=u"""Rotor speed
 
         :Type: float
-        """,
-    )
-
-    def _get_rot_dir(self):
-        """getter of rot_dir"""
-        return self._rot_dir
-
-    def _set_rot_dir(self, value):
-        """setter of rot_dir"""
-        check_var("rot_dir", value, "float", Vmin=-1, Vmax=1)
-        self._rot_dir = value
-
-    rot_dir = property(
-        fget=_get_rot_dir,
-        fset=_set_rot_dir,
-        doc=u"""Rotation direction of the rotor 1 trigo, -1 clockwise
-
-        :Type: float
-        :min: -1
-        :max: 1
         """,
     )
 

@@ -217,7 +217,7 @@ class Test_SloyW10_meth(object):
         point_ref = (Z7 + Ztan1 + Ztan2 + Z6) / 4
 
         surface = SurfLine(
-            line_list=curve_list, point_ref=point_ref, label="WindS_R0_T0_S0"
+            line_list=curve_list, point_ref=point_ref, label="Wind_Stator_R0_T0_S0"
         )
         expected.append(surface)
 
@@ -229,7 +229,7 @@ class Test_SloyW10_meth(object):
         curve_list.append(Segment(Ztan2, Ztan1))
         point_ref = (Z4 + Ztan1 + Ztan2 + Z5) / 4
         surface = SurfLine(
-            line_list=curve_list, point_ref=point_ref, label="WindS_R0_T1_S0"
+            line_list=curve_list, point_ref=point_ref, label="Wind_Stator_R0_T1_S0"
         )
         expected.append(surface)
 

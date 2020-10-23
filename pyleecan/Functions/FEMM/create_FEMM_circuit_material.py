@@ -52,9 +52,9 @@ def create_FEMM_circuit_material(
 
     # Decode the label
     st = label.split("_")
-    Nrad_id = int(st[1][1:])  # zone radial coordinate
-    Ntan_id = int(st[2][1:])  # zone tangential coordinate
-    Zs_id = int(st[3][1:])  # Zone slot number coordinate
+    Nrad_id = int(st[2][1:])  # zone radial coordinate
+    Ntan_id = int(st[3][1:])  # zone tangential coordinate
+    Zs_id = int(st[4][1:])  # Zone slot number coordinate
     # Get the phase value in the correct slot zone
     q_id = get_phase_id(wind_mat, Nrad_id, Ntan_id, Zs_id)
     s = sign(wind_mat[Nrad_id, Ntan_id, Zs_id, q_id])

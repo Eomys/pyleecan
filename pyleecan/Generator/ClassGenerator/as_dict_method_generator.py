@@ -25,7 +25,7 @@ def generate_as_dict(gen_dict, class_dict):
     var_str = ""  # For the creation of the return dict (in as_dict)
 
     for prop in class_dict["properties"]:
-        if prop["type"] in PYTHON_TYPE:
+        if prop["type"] in PYTHON_TYPE and prop["type"] not in ["dict", "list"]:
             # Add => "class_name ["var_name"] = self.var_name" to var_str
             var_str += (
                 TAB2
@@ -35,6 +35,19 @@ def generate_as_dict(gen_dict, class_dict):
                 + '"] = self.'
                 + prop["name"]
                 + "\n"
+            )
+        elif prop["type"] in ["dict", "list"]:
+            # Add => "class_name_dict["var_name"] = self.var_name.copy()" to var_str
+            var_str += (
+                TAB2
+                + class_name
+                + '_dict["'
+                + prop["name"]
+                + '"] = self.'
+                + prop["name"]
+                + ".copy() if self."
+                + prop["name"]
+                + " is not None else None\n"
             )
         elif prop["type"] == "ndarray":
             # Add => "class_name ["var_name"] = self.var_name.tolist()" to
@@ -108,20 +121,18 @@ def generate_as_dict(gen_dict, class_dict):
         elif prop["type"] == "function":
             # Add => "class_name ["var_name"] = self._var_name" to
             # var_str
-            var_str += TAB2 + "if self." + prop["name"] + " is None:\n"
-            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
-            var_str += TAB2 + "else:\n"
+            var_str += TAB2 + "if self._" + prop["name"] + "_str is not None:\n"
             var_str += (
                 TAB3
                 + class_name
                 + '_dict["'
                 + prop["name"]
-                + '"] = [dumps(self._'
+                + '"] = self._'
                 + prop["name"]
-                + "[0]).decode('ISO-8859-2'), self._"
-                + prop["name"]
-                + "[1]]\n"
+                + "_str\n"
             )
+            var_str += TAB2 + "else:\n"
+            var_str += TAB3 + class_name + '_dict["' + prop["name"] + '"] = None\n'
         elif (
             "." in prop["type"] and not "SciDataTool" in prop["type"]
         ):  # Type from external package
@@ -181,7 +192,7 @@ def generate_as_dict(gen_dict, class_dict):
 
     dict_str += var_str
     dict_str += (
-        TAB2 + "# The class name is added to the dict for" + "deserialisation purpose\n"
+        TAB2 + "# The class name is added to the dict for deserialisation purpose\n"
     )
     if class_dict["mother"] != "":
         dict_str += TAB2 + "# Overwrite the mother class name\n"

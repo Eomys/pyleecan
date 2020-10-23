@@ -22,9 +22,9 @@ except ImportError as error:
     gen_input = error
 
 try:
-    from ..Methods.Simulation.Input.comp_time import comp_time
+    from ..Methods.Simulation.Input.comp_axes import comp_axes
 except ImportError as error:
-    comp_time = error
+    comp_axes = error
 
 
 from ..Classes.ImportMatrixVal import ImportMatrixVal
@@ -49,15 +49,15 @@ class Input(FrozenClass):
         )
     else:
         gen_input = gen_input
-    # cf Methods.Simulation.Input.comp_time
-    if isinstance(comp_time, ImportError):
-        comp_time = property(
+    # cf Methods.Simulation.Input.comp_axes
+    if isinstance(comp_axes, ImportError):
+        comp_axes = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Input method comp_time: " + str(comp_time))
+                ImportError("Can't use Input method comp_axes: " + str(comp_axes))
             )
         )
     else:
-        comp_time = comp_time
+        comp_axes = comp_axes
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -165,7 +165,7 @@ class Input(FrozenClass):
         Input_dict["Nt_tot"] = self.Nt_tot
         Input_dict["Nrev"] = self.Nrev
         Input_dict["Na_tot"] = self.Na_tot
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Input_dict["__class__"] = "Input"
         return Input_dict
 

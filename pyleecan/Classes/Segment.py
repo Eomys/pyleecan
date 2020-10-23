@@ -308,7 +308,7 @@ class Segment(Line):
         Segment_dict = super(Segment, self).as_dict()
         Segment_dict["begin"] = self.begin
         Segment_dict["end"] = self.end
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         Segment_dict["__class__"] = "Segment"
         return Segment_dict

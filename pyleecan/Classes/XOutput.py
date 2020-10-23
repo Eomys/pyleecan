@@ -524,7 +524,7 @@ class XOutput(Output):
             for key, obj in self.xoutput_dict.items():
                 XOutput_dict["xoutput_dict"][key] = obj.as_dict()
         XOutput_dict["nb_simu"] = self.nb_simu
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         XOutput_dict["__class__"] = "XOutput"
         return XOutput_dict

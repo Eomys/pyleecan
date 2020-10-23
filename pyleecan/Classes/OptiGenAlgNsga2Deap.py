@@ -49,7 +49,11 @@ except ImportError as error:
     delete_toolbox = error
 
 
-from inspect import getsource
+from ntpath import basename
+from os.path import isfile
+from ._check import CheckTypeError
+import numpy as np
+import random
 from cloudpickle import dumps, loads
 from ._check import CheckTypeError
 
@@ -249,7 +253,7 @@ class OptiGenAlgNsga2Deap(OptiGenAlg):
                 "__repr__": str(self._toolbox.__repr__()),
                 "serialized": dumps(self._toolbox).decode("ISO-8859-2"),
             }
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         OptiGenAlgNsga2Deap_dict["__class__"] = "OptiGenAlgNsga2Deap"
         return OptiGenAlgNsga2Deap_dict

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from ....Classes.OutMag import OutMag
+from ....Classes.Simulation import Simulation
 from ....Methods.Simulation.Input import InputError
 from numpy import ndarray
 
@@ -15,38 +16,25 @@ def gen_input(self):
     """
 
     output = OutMag()
-    # Load and check time
-    if self.time is None:
-        raise InputError("ERROR: InFlux.time missing")
-    output.time = self.time.get_data()
 
-    if (
-        not isinstance(output.time, ndarray)
-        or len(output.time.shape) > 2
-        or (len(output.time.shape) == 2 and output.time.shape[0] != 1)
-    ):
-        # time should be a vector
+    # get the simulation
+    if isinstance(self.parent, Simulation):
+        simu = self.parent
+    elif isinstance(self.parent.parent, Simulation):
+        simu = self.parent.parent
+    else:
         raise InputError(
-            "ERROR: InFlux.time should be a vector, "
-            + str(output.time.shape)
-            + " shape found"
+            "ERROR: InputCurrent object should be inside a Simulation object"
         )
 
-    # Load and check angle
-    if self.angle is None:
-        raise InputError("ERROR: InFlux.angle missing")
-    output.angle = self.angle.get_data()
-    if (
-        not isinstance(output.angle, ndarray)
-        or len(output.angle.shape) > 2
-        or (len(output.angle.shape) == 2 and output.angle.shape[0] != 1)
-    ):
-        # angle should be a vector
-        raise InputError(
-            "ERROR: InFlux.angle should be a vector, "
-            + str(output.angle.shape)
-            + " shape found"
-        )
+    # Set discretization
+    if self.OP is None:
+        N0 = None  # N0 can be None if time isn't
+    else:
+        N0 = self.OP.N0
+    Time, Angle = self.comp_axes(simu.machine, N0)
+    output.time = Time
+    output.angle = Angle
 
     if self.B is None:
         raise InputError("ERROR: InFlux.B missing")

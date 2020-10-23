@@ -27,9 +27,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotW21.build_geometry_wind import build_geometry_wind
+    from ..Methods.Slot.SlotW21.get_surface_wind import get_surface_wind
 except ImportError as error:
-    build_geometry_wind = error
+    get_surface_wind = error
 
 try:
     from ..Methods.Slot.SlotW21.check import check
@@ -60,6 +60,16 @@ try:
     from ..Methods.Slot.SlotW21.comp_surface_wind import comp_surface_wind
 except ImportError as error:
     comp_surface_wind = error
+
+try:
+    from ..Methods.Slot.SlotW21.build_geometry_wind import build_geometry_wind
+except ImportError as error:
+    build_geometry_wind = error
+
+try:
+    from ..Methods.Slot.SlotW21.get_H1 import get_H1
+except ImportError as error:
+    get_H1 = error
 
 
 from ._check import InitUnKnowClassError
@@ -95,18 +105,18 @@ class SlotW21(SlotWind):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW21.build_geometry_wind
-    if isinstance(build_geometry_wind, ImportError):
-        build_geometry_wind = property(
+    # cf Methods.Slot.SlotW21.get_surface_wind
+    if isinstance(get_surface_wind, ImportError):
+        get_surface_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW21 method build_geometry_wind: "
-                    + str(build_geometry_wind)
+                    "Can't use SlotW21 method get_surface_wind: "
+                    + str(get_surface_wind)
                 )
             )
         )
     else:
-        build_geometry_wind = build_geometry_wind
+        get_surface_wind = get_surface_wind
     # cf Methods.Slot.SlotW21.check
     if isinstance(check, ImportError):
         check = property(
@@ -172,6 +182,27 @@ class SlotW21(SlotWind):
         )
     else:
         comp_surface_wind = comp_surface_wind
+    # cf Methods.Slot.SlotW21.build_geometry_wind
+    if isinstance(build_geometry_wind, ImportError):
+        build_geometry_wind = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use SlotW21 method build_geometry_wind: "
+                    + str(build_geometry_wind)
+                )
+            )
+        )
+    else:
+        build_geometry_wind = build_geometry_wind
+    # cf Methods.Slot.SlotW21.get_H1
+    if isinstance(get_H1, ImportError):
+        get_H1 = property(
+            fget=lambda x: raise_(
+                ImportError("Can't use SlotW21 method get_H1: " + str(get_H1))
+            )
+        )
+    else:
+        get_H1 = get_H1
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -287,7 +318,7 @@ class SlotW21(SlotWind):
         SlotW21_dict["W1"] = self.W1
         SlotW21_dict["H2"] = self.H2
         SlotW21_dict["W2"] = self.W2
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotW21_dict["__class__"] = "SlotW21"
         return SlotW21_dict

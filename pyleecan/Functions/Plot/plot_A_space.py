@@ -78,6 +78,7 @@ def plot_A_space(
     """
 
     # Set plot
+    is_show_fig = True if fig is None else False
     (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     data_list2 = [data] + data_list
     if legend_list == []:
@@ -100,7 +101,7 @@ def plot_A_space(
                         for j in index_list
                     ]
                     colors += [phase_colors[i * n_phase + j] for j in range(n_phase)]
-                    linestyles += list(repeat("-", len(n_phase)))
+                    linestyles += list(repeat("-", n_phase))
                     list_str = axis.name
             except:
                 is_components = False
@@ -252,5 +253,8 @@ def plot_A_space(
             xticks=xticks,
             save_path=save_path,
         )
+
+    if is_show_fig:
+        fig.show()
 
     return ax

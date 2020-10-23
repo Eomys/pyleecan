@@ -2,8 +2,8 @@
 
 import sys
 
-from PyQt5 import QtWidgets
-from PyQt5.QtTest import QTest
+from PySide2 import QtWidgets
+from PySide2.QtTest import QTest
 
 from pyleecan.Classes.LamSlotMag import LamSlotMag
 from pyleecan.Classes.LamSlotWind import LamSlotWind
@@ -62,7 +62,10 @@ class TestSMagnet_surface(object):
     def setup_class(cls):
         """Start the app for the test"""
         print("\nStart Test SMagnet_surface")
-        cls.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            cls.app = QtWidgets.QApplication(sys.argv)
+        else:
+            cls.app = QtWidgets.QApplication.instance()
 
     @classmethod
     def teardown_class(cls):

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import QMessageBox, QWidget
+from PySide2.QtCore import Signal
+from PySide2.QtWidgets import QMessageBox, QWidget
 
 from .......Classes.VentilationCirc import VentilationCirc
 from .......Classes.VentilationPolar import VentilationPolar
@@ -27,7 +27,7 @@ class WVent(Ui_WVent, QWidget):
     """Widget to setup a Ventilation in the list"""
 
     # Signal to DMachineSetup to know that the save popup is needed
-    saveNeeded = pyqtSignal()
+    saveNeeded = Signal()
 
     def __init__(self, lam, index):
         """Initialize the widget according the current lamination

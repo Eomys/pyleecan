@@ -1,11 +1,10 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-time,s,Electrical time vector (no symmetry),Nt_tot,ndarray,None,,,,Output,,get_Nr,VERSION,1,Gather the electric module outputs
-angle,rad,Electrical position vector (no symmetry),Na_tot,ndarray,None,,,,,,get_Is,,,
+time,s,Electrical time vector (no symmetry),Nt_tot,SciDataTool.Classes.DataND.Data,None,,,,Output,,get_Nr,VERSION,1,Gather the electric module outputs
+angle,rad,Electrical position vector (no symmetry),Na_tot,SciDataTool.Classes.DataND.Data,None,,,,,,get_Is,,,
 Is,A,Stator currents as a function of time (each column correspond to one phase),"(qs, Nt_tot)",SciDataTool.Classes.DataND.DataND,None,,,,,,get_Us,,,
 Ir,A,Rotor currents as a function of time (each column correspond to one phase),"(qs, Nt_tot)",SciDataTool.Classes.DataND.DataND,None,,,,,,,,,
 angle_rotor,rad,Rotor angular position as a function of time (if None computed according to Nr),Nt_tot,ndarray,None,,,,,,,,,
 N0,rpm,Rotor speed,1,float,None,,,,,,,,,
-rot_dir,-,"Rotation direction of the rotor 1 trigo, -1 clockwise",,float,-1,-1,1,,,,,,,
 angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.OutElec,,,,,,,,,
 mmf_unit,-,Unit magnetomotive force,"(Nt_tot, Na_tot)",SciDataTool.Classes.DataND.DataND,None,,,,,,,,,

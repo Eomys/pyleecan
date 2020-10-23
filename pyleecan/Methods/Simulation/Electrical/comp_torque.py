@@ -14,12 +14,12 @@ def comp_torque(self, output):
         an Output object
     """
 
-    zp = output.simu.machine.stator.get_pole_pair_number()
-    felec = output.elec.felec
-    omega = 2 * pi * felec / zp
+    N0 = output.elec.N0
+    omega = 2 * pi * N0 / 60
 
     P = output.elec.Pem_av_ref
-    losses = output.elec.Pj_losses
+    losses = output.elec.Pj_losses  # TODO update since there may also be other losses
+
     Tem_av_ref = (P - losses) / omega
 
     output.elec.Tem_av_ref = Tem_av_ref

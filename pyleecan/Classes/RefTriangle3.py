@@ -41,6 +41,11 @@ try:
 except ImportError as error:
     get_ref_point = error
 
+try:
+    from ..Methods.Mesh.RefTriangle3.is_inside import is_inside
+except ImportError as error:
+    is_inside = error
+
 
 from ._check import InitUnKnowClassError
 
@@ -107,6 +112,17 @@ class RefTriangle3(RefCell):
         )
     else:
         get_ref_point = get_ref_point
+    # cf Methods.Mesh.RefTriangle3.is_inside
+    if isinstance(is_inside, ImportError):
+        is_inside = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use RefTriangle3 method is_inside: " + str(is_inside)
+                )
+            )
+        )
+    else:
+        is_inside = is_inside
     # save and copy methods are available in all object
     save = save
     copy = copy
@@ -161,7 +177,7 @@ class RefTriangle3(RefCell):
 
         # Get the properties inherited from RefCell
         RefTriangle3_dict = super(RefTriangle3, self).as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         RefTriangle3_dict["__class__"] = "RefTriangle3"
         return RefTriangle3_dict

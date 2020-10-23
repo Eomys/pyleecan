@@ -188,7 +188,7 @@ class MachineSyRM(MachineSync):
             MachineSyRM_dict["stator"] = None
         else:
             MachineSyRM_dict["stator"] = self.stator.as_dict()
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         MachineSyRM_dict["__class__"] = "MachineSyRM"
         return MachineSyRM_dict

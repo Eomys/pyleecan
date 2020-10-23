@@ -114,7 +114,7 @@ class BoreFlower(Bore):
         BoreFlower_dict["N"] = self.N
         BoreFlower_dict["Rarc"] = self.Rarc
         BoreFlower_dict["alpha"] = self.alpha
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         BoreFlower_dict["__class__"] = "BoreFlower"
         return BoreFlower_dict

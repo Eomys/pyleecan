@@ -1,14 +1,14 @@
 from ....GUI.Tools.WPathSelector.Ui_WPathSelector import Ui_WPathSelector
-from PyQt5.QtWidgets import QWidget, QMessageBox, QDialog, QFileDialog
+from PySide2.QtWidgets import QWidget, QMessageBox, QDialog, QFileDialog
 from os.path import isfile, isdir
-from PyQt5.QtCore import pyqtSignal
+from PySide2.QtCore import Signal
 from ....definitions import config_dict
 
 
 class WPathSelector(Ui_WPathSelector, QWidget):
     """Widget to select the path to a file or a folder"""
 
-    pathChanged = pyqtSignal()  # Changed and correct
+    pathChanged = Signal()  # Changed and correct
 
     def __init__(self, parent=None):
         """Create the widget

@@ -42,6 +42,7 @@ def get_field(self, args=None):
         )
     else:
         for comp in self.field.components:
+            along_arg = list()
             for axis in self.field.components[comp].axes:
                 if axis.name in args:
                     if isinstance(args[axis.name], int):

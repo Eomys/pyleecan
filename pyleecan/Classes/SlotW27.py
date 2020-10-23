@@ -27,9 +27,9 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Slot.SlotW27.build_geometry_wind import build_geometry_wind
+    from ..Methods.Slot.SlotW27.get_surface_wind import get_surface_wind
 except ImportError as error:
-    build_geometry_wind = error
+    get_surface_wind = error
 
 try:
     from ..Methods.Slot.SlotW27.check import check
@@ -95,18 +95,18 @@ class SlotW27(SlotWind):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Slot.SlotW27.build_geometry_wind
-    if isinstance(build_geometry_wind, ImportError):
-        build_geometry_wind = property(
+    # cf Methods.Slot.SlotW27.get_surface_wind
+    if isinstance(get_surface_wind, ImportError):
+        get_surface_wind = property(
             fget=lambda x: raise_(
                 ImportError(
-                    "Can't use SlotW27 method build_geometry_wind: "
-                    + str(build_geometry_wind)
+                    "Can't use SlotW27 method get_surface_wind: "
+                    + str(get_surface_wind)
                 )
             )
         )
     else:
-        build_geometry_wind = build_geometry_wind
+        get_surface_wind = get_surface_wind
     # cf Methods.Slot.SlotW27.check
     if isinstance(check, ImportError):
         check = property(
@@ -295,7 +295,7 @@ class SlotW27(SlotWind):
         SlotW27_dict["W2"] = self.W2
         SlotW27_dict["W3"] = self.W3
         SlotW27_dict["is_trap_wind"] = self.is_trap_wind
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         # Overwrite the mother class name
         SlotW27_dict["__class__"] = "SlotW27"
         return SlotW27_dict

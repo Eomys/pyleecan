@@ -61,9 +61,9 @@ except ImportError as error:
     comp_Rgap_mec = error
 
 try:
-    from ..Methods.Machine.Machine.comp_sym import comp_sym
+    from ..Methods.Machine.Machine.comp_periodicity import comp_periodicity
 except ImportError as error:
-    comp_sym = error
+    comp_periodicity = error
 
 try:
     from ..Methods.Machine.Machine.comp_width_airgap_mag import comp_width_airgap_mag
@@ -193,15 +193,18 @@ class Machine(FrozenClass):
         )
     else:
         comp_Rgap_mec = comp_Rgap_mec
-    # cf Methods.Machine.Machine.comp_sym
-    if isinstance(comp_sym, ImportError):
-        comp_sym = property(
+    # cf Methods.Machine.Machine.comp_periodicity
+    if isinstance(comp_periodicity, ImportError):
+        comp_periodicity = property(
             fget=lambda x: raise_(
-                ImportError("Can't use Machine method comp_sym: " + str(comp_sym))
+                ImportError(
+                    "Can't use Machine method comp_periodicity: "
+                    + str(comp_periodicity)
+                )
             )
         )
     else:
-        comp_sym = comp_sym
+        comp_periodicity = comp_periodicity
     # cf Methods.Machine.Machine.comp_width_airgap_mag
     if isinstance(comp_width_airgap_mag, ImportError):
         comp_width_airgap_mag = property(
@@ -384,7 +387,7 @@ class Machine(FrozenClass):
         Machine_dict["desc"] = self.desc
         Machine_dict["type_machine"] = self.type_machine
         Machine_dict["logger_name"] = self.logger_name
-        # The class name is added to the dict fordeserialisation purpose
+        # The class name is added to the dict for deserialisation purpose
         Machine_dict["__class__"] = "Machine"
         return Machine_dict
 

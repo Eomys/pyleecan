@@ -48,9 +48,12 @@ def plot_A_fft2(
         colormap prescribed by user
     save_path : str
         path and name of the png file to save
+    fig : Matplotlib.figure.Figure
+        existing figure to use if None create a new one
     """
 
     # Set plot
+    is_show_fig = True if fig is None else False
     (fig, axes, patch_leg, label_leg) = init_fig(fig, shape="rectangle")
     title = "FFT2 of " + data.name
     if colormap is None:
@@ -156,3 +159,6 @@ def plot_A_fft2(
             type="scatter",
             save_path=save_path,
         )
+
+    if is_show_fig:
+        fig.show()
