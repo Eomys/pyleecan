@@ -32,9 +32,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     """
 
     if self.get_is_stator():  # check if the slot is on the stator
-        st = "S"
+        st = "_Stator"
     else:
-        st = "R"
+        st = "_Rotor"
     Rbo = self.get_Rbo()
 
     # "Tooth" angle (P1',0,P1)
@@ -122,7 +122,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     curve_list = set_name_line(curve_list, "magnet_1_line")
     point_ref = (Z2 + Z3 + Z6 + Z7) / 4
     S2 = SurfLine(
-        line_list=curve_list, label="Magnet" + st + "_N_R0_T0_S0", point_ref=point_ref,
+        line_list=curve_list,
+        label="Magnet" + st + "_N_R0_T0_S0",
+        point_ref=point_ref,
     )
 
     # Air surface with magnet_0 and W1 > 0
@@ -166,7 +168,9 @@ def build_geometry(self, alpha=0, delta=0, is_simplified=False):
     # initiating the label of the line on the magnet surface
     curve_list = set_name_line(curve_list, "magnet_2_line")
     S5 = SurfLine(
-        line_list=curve_list, label="Magnet" + st + "_N_R0_T1_S0", point_ref=point_ref,
+        line_list=curve_list,
+        label="Magnet" + st + "_N_R0_T1_S0",
+        point_ref=point_ref,
     )
 
     # Air surface with magnet_1 and W1 > 0
