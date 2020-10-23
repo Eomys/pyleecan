@@ -127,18 +127,32 @@ class TestPWSlot15(object):
         """Check that the check is working correctly"""
 
         self.test_obj = LamSlotWind(Rint=92.5e-3, Rext=0.2, is_internal=False)
-        self.test_obj.slot = SlotW15( H0=None, H1=0.11, H2=0.12, W0=0.13, W3=0.14, R1=0.15, R2=0.16)
+        self.test_obj.slot = SlotW15(
+            H0=None, H1=0.11, H2=0.12, W0=0.13, W3=0.14, R1=0.15, R2=0.16
+        )
         self.widget = PWSlot15(self.test_obj)
         assert self.widget.check(self.test_obj) == "PWSlot15 check"
-        self.test_obj.slot = SlotW15( H0=0.10, H1=None, H2=0.12, W0=0.13, W3=0.14, R1=0.15, R2=0.16)
+        self.test_obj.slot = SlotW15(
+            H0=0.10, H1=None, H2=0.12, W0=0.13, W3=0.14, R1=0.15, R2=0.16
+        )
         assert self.widget.check(self.test_obj) == "PWSlot15 check"
-        self.test_obj.slot = SlotW15( H0=0.10, H1=0.11, H2=None, W0=0.13, W3=0.14, R1=0.15, R2=0.16)
+        self.test_obj.slot = SlotW15(
+            H0=0.10, H1=0.11, H2=None, W0=0.13, W3=0.14, R1=0.15, R2=0.16
+        )
         assert self.widget.check(self.test_obj) == "PWSlot15 check"
-        self.test_obj.slot = SlotW15( H0=0.10, H1=0.11, H2=0.12, W0=None, W3=0.14, R1=0.15, R2=0.16)
+        self.test_obj.slot = SlotW15(
+            H0=0.10, H1=0.11, H2=0.12, W0=None, W3=0.14, R1=0.15, R2=0.16
+        )
         assert self.widget.check(self.test_obj) == "PWSlot15 check"
-        self.test_obj.slot = SlotW15( H0=0.10, H1=0.11, H2=0.12, W0=0.13, W3=None, R1=0.15, R2=0.16)
+        self.test_obj.slot = SlotW15(
+            H0=0.10, H1=0.11, H2=0.12, W0=0.13, W3=None, R1=0.15, R2=0.16
+        )
         assert self.widget.check(self.test_obj) == "PWSlot15 check"
-        self.test_obj.slot = SlotW15( H0=0.10, H1=0.11, H2=0.12, W0=0.13, W3=0.14, R1=None, R2=0.16)
+        self.test_obj.slot = SlotW15(
+            H0=0.10, H1=0.11, H2=0.12, W0=0.13, W3=0.14, R1=None, R2=0.16
+        )
         assert self.widget.check(self.test_obj) == "PWSlot15 check"
-        self.test_obj.slot = SlotW15( H0=0.10, H1=0.11, H2=0.12, W0=0.13, W3=0.14, R1=0.15, R2=None)
+        self.test_obj.slot = SlotW15(
+            H0=0.10, H1=0.11, H2=0.12, W0=0.13, W3=0.14, R1=0.15, R2=None
+        )
         assert self.widget.check(self.test_obj) == "PWSlot15 check"

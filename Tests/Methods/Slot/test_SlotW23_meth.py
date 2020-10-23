@@ -8,6 +8,7 @@ from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.SlotWind.comp_surface_wind import comp_surface_wind
+from pyleecan.Methods.Slot.SlotW23.check import S23_H1rCheckError
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -158,3 +159,11 @@ class Test_SlotW23_meth(object):
             (0.13336305542848736 + 0.006045283018867925j),
             (0.13236408123052115 + 0.006j),
         ]
+
+    def test_check_error(self):
+        """Check that the check method is correctly raising an error"""
+        lam = LamSlot(is_internal=True, Rext=0.1325)
+        lam.slot = SlotW23(Zs=69, H2=0.0015, W3=12e-3, H1_is_rad=True, H1=3.14)
+
+        with pytest.raises(S23_H1rCheckError) as context:
+            lam.slot.check()

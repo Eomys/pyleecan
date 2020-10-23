@@ -151,10 +151,17 @@ class Test_SlotW11_meth(object):
 
     @pytest.mark.parametrize("test_dict", slotW11_H1_rad_test)
     def test_comp_surface_rad(self, test_dict):
-        """Check that the error is well raised"""
+        """Check that the value is correct when rad is True """
         test_obj = test_dict["test_obj"]
         result = test_obj.slot.comp_surface()
         assert result == 0.0003852019464390075
+
+    @pytest.mark.parametrize("test_dict", slotW11_H1_rad_test)
+    def test_comp_height(self, test_dict):
+        """Check that the value is correct when rad is True """
+        test_obj = test_dict["test_obj"]
+        result = test_obj.slot.comp_height()
+        assert result == 0.03086864182318949
 
     def test_SlotW11_check(self):
         """Check if the error S11_H1rCheckError is correctly raised in the check method"""
