@@ -268,3 +268,11 @@ def test_comp_mass(test_dict):
     b = test_dict["Mmach"]
     msg = "Mmach, Return " + str(a) + " expected " + str(b)
     assert a == pytest.approx(b, rel=DELTA), msg
+
+
+def test_comp_mass_shaft_none():
+    """Check that the compytation of the mass is correct even if there is no shaft"""
+    test_obj.shaft = None
+    result = test_obj.comp_masses()
+
+    assert result["Msha"] == 0

@@ -174,3 +174,15 @@ class Test_Hole_50_plot(object):
         bf = BoreFlower(N=8, Rarc=0.05, alpha=pi / 8)
         with pytest.raises(ParentMissingError) as context:
             bf.get_bore_line()
+
+    def test_plot_stator_true(self, machine):
+        """Test if the plot is right with a stator LamHole"""
+        machine.rotor = LamHole(
+            is_internal=True, Rint=0.021, Rext=0.075, is_stator=True, L1=0.7
+        )
+        machine.plot()
+
+        # The rotor will be blue
+
+        fig = plt.gcf()
+        fig.savefig(join(save_path, "test_Lam_Hole_s50_stator_true.png"))

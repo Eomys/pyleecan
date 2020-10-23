@@ -5,6 +5,8 @@ from pyleecan.Classes.Segment import Segment
 from mock import MagicMock
 from numpy import pi
 
+from pyleecan.definitions import config_dict
+
 
 @pytest.mark.METHODS
 class Test_Trapeze_meth(object):
@@ -41,3 +43,10 @@ class Test_Trapeze_meth(object):
             assert type(line) in [Segment]
             cpt_Segment += 1
         assert cpt_Segment == 4
+
+    def test_get_patches(self):
+        """Check that you get the correct color to draw the Polygon"""
+        surface = Trapeze(point_ref=1j, label="test", height=6, W2=6, W1=3)
+        result = surface.get_patches(is_edge_only=True)
+        assert result[0].get_facecolor() == (0.0, 0.0, 0.0, 0.0)
+        assert result[0].get_edgecolor() == (1.0, 0.0, 0.0, 1.0)

@@ -4,6 +4,7 @@ from pyleecan.Classes.Arc1 import Arc1
 from pyleecan.Classes.Segment import Segment
 from numpy import pi
 from mock import MagicMock
+from pyleecan.definitions import config_dict
 
 import pytest
 
@@ -84,3 +85,10 @@ class Test_PolarArc_meth(object):
         length = surface.comp_length()
         expected = 1
         assert round(abs(abs(length - expected) - 0), 7) == 0
+
+    def test_get_patches(self):
+        """Check that you get the correct color to draw the Polygon"""
+        surface = PolarArc(label="test", point_ref=1000, angle=pi / 4, height=2)
+        result = surface.get_patches(is_edge_only=True)
+        assert result[0].get_facecolor() == (0.0, 0.0, 0.0, 0.0)
+        assert result[0].get_edgecolor() == (1.0, 0.0, 0.0, 1.0)
