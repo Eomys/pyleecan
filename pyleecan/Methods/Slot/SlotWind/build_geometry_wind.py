@@ -89,7 +89,7 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
             surf_list.append(surf.copy())
 
     # Set all label
-    set_label(surf_list, Nrad, Ntan, self.get_is_stator())
+    set_label(surf_list, Nrad, Ntan, self.get_name_lam())
 
     # Apply transformation
     for surf in surf_list:
@@ -99,12 +99,9 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
     return surf_list
 
 
-def set_label(surf_list, Nrad, Ntan, is_stator):
+def set_label(surf_list, Nrad, Ntan, st):
     """Set the normalized label"""
-
-    # get the name of the lamination
-    st = self.get_name_lam()
-
+    
     index = 0
     for ii in range(Nrad):
         for jj in range(Ntan):
