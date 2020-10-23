@@ -7560,7 +7560,8 @@
             "get_surface_tooth",
             "is_outwards",
             "plot",
-            "comp_width_opening"
+            "comp_width_opening",
+            "get_name_lam"
         ],
         "mother": "",
         "name": "Slot",
