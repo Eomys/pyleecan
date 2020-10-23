@@ -38,11 +38,8 @@ def build_geometry_wind(self, Nrad, Ntan, is_simplified=False, alpha=0, delta=0)
         )
     self.check()
 
-    # check if the slot is on the stator for the label
-    if self.get_is_stator():
-        st = "S"
-    else:
-        st = "R"
+    # get the name of the lamination
+    st = self.get_name_lam()
 
     [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, Z10] = self._comp_point_coordinate()
 
