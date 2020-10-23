@@ -156,15 +156,15 @@ class PWSlot14(Gen_PWSlot14, QWidget):
 
         # Check that everything is set
         if lam.slot.W0 is None:
-            return translate("You must set W0 !", "PWSlot14")
+            return translate("You must set W0 !", "PWSlot14 check")
         elif lam.slot.W3 is None:
-            return translate("You must set W3 !", "PWSlot14")
+            return translate("You must set W3 !", "PWSlot14 check")
         elif lam.slot.H0 is None:
-            return translate("You must set H0 !", "PWSlot14")
+            return translate("You must set H0 !", "PWSlot14 check")
         elif lam.slot.H1 is None:
-            return translate("You must set H1 !", "PWSlot14")
+            return translate("You must set H1 !", "PWSlot14 check")
         elif lam.slot.H3 is None:
-            return translate("You must set H3 !", "PWSlot14")
+            return translate("You must set H3 !", "PWSlot14 check")
 
         # Check that everything is set right
         # Constraints
