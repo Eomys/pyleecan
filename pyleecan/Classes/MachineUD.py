@@ -22,11 +22,6 @@ except ImportError as error:
     build_geometry = error
 
 try:
-    from ..Methods.Machine.MachineUD.get_lam_list import get_lam_list
-except ImportError as error:
-    get_lam_list = error
-
-try:
     from ..Methods.Machine.MachineUD.plot import plot
 except ImportError as error:
     plot = error
@@ -60,17 +55,6 @@ class MachineUD(Machine):
         )
     else:
         build_geometry = build_geometry
-    # cf Methods.Machine.MachineUD.get_lam_list
-    if isinstance(get_lam_list, ImportError):
-        get_lam_list = property(
-            fget=lambda x: raise_(
-                ImportError(
-                    "Can't use MachineUD method get_lam_list: " + str(get_lam_list)
-                )
-            )
-        )
-    else:
-        get_lam_list = get_lam_list
     # cf Methods.Machine.MachineUD.plot
     if isinstance(plot, ImportError):
         plot = property(

@@ -3824,7 +3824,8 @@
             "get_material_list",
             "get_polar_eq",
             "plot",
-            "plot_anim_rotor"
+            "plot_anim_rotor",
+            "get_lam_list"
         ],
         "mother": "",
         "name": "Machine",
@@ -3924,8 +3925,7 @@
         "is_internal": false,
         "methods": [
             "check",
-            "get_machine_type",
-            "get_lam_list"
+            "get_machine_type"
         ],
         "mother": "MachineAsync",
         "name": "MachineDFIM",
@@ -3964,8 +3964,7 @@
         "is_internal": false,
         "methods": [
             "check",
-            "get_machine_type",
-            "get_lam_list"
+            "get_machine_type"
         ],
         "mother": "MachineSync",
         "name": "MachineIPMSM",
@@ -4024,7 +4023,6 @@
         "is_internal": false,
         "methods": [
             "check",
-            "get_lam_list",
             "get_machine_type"
         ],
         "mother": "MachineSync",
@@ -4064,7 +4062,6 @@
         "is_internal": false,
         "methods": [
             "check",
-            "get_lam_list",
             "get_machine_type"
         ],
         "mother": "MachineSync",
@@ -4104,7 +4101,6 @@
         "is_internal": false,
         "methods": [
             "check",
-            "get_lam_list",
             "get_machine_type"
         ],
         "mother": "MachineSync",
@@ -4169,7 +4165,6 @@
         "is_internal": false,
         "methods": [
             "build_geometry",
-            "get_lam_list",
             "plot",
             "is_synchronous"
         ],
@@ -4210,7 +4205,6 @@
         "is_internal": false,
         "methods": [
             "check",
-            "get_lam_list",
             "get_machine_type"
         ],
         "mother": "MachineSync",
