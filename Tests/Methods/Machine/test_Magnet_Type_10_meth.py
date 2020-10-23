@@ -15,13 +15,23 @@ Mag10_test = list()
 lam = LamSlotMag(is_internal=True, Rext=0.1325)
 lam.slot = SlotMFlat(H0=5e-3, W0=10e-3, Zs=12)
 lam.slot.magnet = [MagnetType10(Hmag=5e-3, Wmag=10e-3)]
-Mag10_test.append({"test_obj": lam, "S_exp": 5e-5, "Ao": 0.078449, "H_exp": 5e-3})
+Mag10_test.append(
+    {"test_obj": lam, "S_exp": 5e-5, "Ao": 0.078449, "H_exp": 5e-3, "Rmec": 0.1325}
+)
 
 # Outward Slot
 lam = LamSlotMag(is_internal=False, Rint=0.1325)
 lam.slot = SlotMFlat(H0=5e-3, W0=10e-3, Zs=12)
 lam.slot.magnet = [MagnetType10(Hmag=5e-3, Wmag=10e-3)]
-Mag10_test.append({"test_obj": lam, "S_exp": 5e-5, "Ao": 0.072745, "H_exp": 5e-3})
+Mag10_test.append(
+    {
+        "test_obj": lam,
+        "S_exp": 5e-5,
+        "Ao": 0.072745,
+        "H_exp": 5e-3,
+        "Rmec": 0.1324056630650208,
+    }
+)
 
 # For AlmostEqual
 DELTA = 1e-4
@@ -68,6 +78,14 @@ class Test_Magnet_Type_10_meth(object):
         b = test_dict["Ao"]
         msg = "Return " + str(a) + " expected " + str(b)
         assert abs((a - b) / a - 0) < DELTA, msg
+
+    @pytest.mark.parametrize("test_dict", Mag10_test)
+    def test_comp_radius_mec(self, test_dict):
+        """Check that the computation of the opening angle is correct"""
+        test_obj = test_dict["test_obj"]
+        result = test_obj.comp_radius_mec()
+
+        assert result == test_dict["Rmec"]
 
     def test_build_geometry_in(self):
         """check that curve_list is correct (inwards magnet)"""

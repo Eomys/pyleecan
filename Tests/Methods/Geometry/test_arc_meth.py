@@ -1072,7 +1072,7 @@ is_on_line_list.append(
 is_on_line_list.append(
     {
         "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
-        "Z": -1 -1j,  # First point of cutting line
+        "Z": -1 - 1j,  # First point of cutting line
         "result": True,
     }
 )
@@ -1090,7 +1090,7 @@ is_on_line_list.append(
 is_on_line_list.append(
     {
         "arc": Arc1(begin=-2j, end=-1 - 1j, radius=-1, is_trigo_direction=False),
-        "Z": -1-2j,  # First point of cutting line
+        "Z": -1 - 2j,  # First point of cutting line
         "result": False,
     }
 )
@@ -1101,7 +1101,6 @@ def test_is_on_line(test_dict):
     """Check is_on_line method"""
     arc_obj = test_dict["arc"]
 
-    # Check on the circle
     result = arc_obj.is_on_line(test_dict["Z"])
 
     assert result == test_dict["result"]

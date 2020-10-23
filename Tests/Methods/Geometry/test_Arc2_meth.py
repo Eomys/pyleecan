@@ -351,6 +351,9 @@ class Test_Arc2_meth(object):
         arc = Arc2(0, 1, 0)
         with pytest.raises(AngleArc2Error):
             arc.check()
+        arc = Arc2(0, 1, 2 * pi)
+        with pytest.raises(AngleArc2Error):
+            arc.check()
 
     @pytest.mark.parametrize("test_dict", discretize_test)
     def test_dicretize(self, test_dict):

@@ -18,6 +18,8 @@ from pyleecan.Classes.HoleM50 import HoleM50
 from pyleecan.Classes.BoreFlower import BoreFlower
 from Tests import save_plot_path as save_path
 
+from pyleecan.Methods import ParentMissingError
+
 
 """unittest for Machine with Hole 50 plot"""
 
@@ -166,3 +168,9 @@ class Test_Hole_50_plot(object):
         fig.savefig(join(save_path, "test_Lam_Hole_s50_RotorNNN.png"))
         # 2 for lam + 1*8 for holes + 16 vents
         assert len(fig.axes[0].patches) == 26
+
+    def test_get_bore_line(self):
+        """Test get_bore_line can return an error if the parent is missing"""
+        bf = BoreFlower(N=8, Rarc=0.05, alpha=pi / 8)
+        with pytest.raises(ParentMissingError) as context:
+            bf.get_bore_line()

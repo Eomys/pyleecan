@@ -727,6 +727,12 @@ class Test_Arc1_meth(object):
         )
         assert abs(abs(result - test_dict["expect"]) - 0) < 1e-6, msg
 
+    def test_get_middle_zero(self):
+        """Checking that get_middle() can return 0"""
+        arc = Arc1(begin=0, end=-0.0000000001j, is_trigo_direction=True, radius=1)
+        result = arc.get_middle()
+        assert result == 0
+
     @pytest.mark.parametrize("test_dict", comp_rotate_test)
     def test_rotate(self, test_dict):
         """Check that you can rotate the arc1"""
