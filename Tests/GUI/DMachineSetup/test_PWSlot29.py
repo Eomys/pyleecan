@@ -114,3 +114,20 @@ class TestPWSlot29(object):
         )
         self.widget = PWSlot29(self.test_obj)
         assert self.widget.w_out.out_slot_height.text() == "Slot height: 0.3506 m"
+
+    def test_check(self):
+        """Check that the check is working correctly"""
+        self.test_obj = LamSlotWind(Rint=0.1, Rext=0.2)
+        self.test_obj.slot = SlotW29(H0=0.10, H1=0.11, H2=0.12, W0=0.13, W1=None, W2=0.15)
+        self.widget = PWSlot29(self.test_obj)
+        assert self.widget.check(self.test_obj) == "PWSlot29 check"
+        self.test_obj.slot = SlotW29(H0=0.10, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=None)
+        assert self.widget.check(self.test_obj) == "PWSlot29 check"
+        self.test_obj.slot = SlotW29(H0=None, H1=0.11, H2=0.12, W0=0.13, W1=0.14, W2=0.15)
+        assert self.widget.check(self.test_obj) == "PWSlot29 check"
+        self.test_obj.slot = SlotW29(H0=0.10, H1=None, H2=0.12, W0=0.13, W1=0.14, W2=0.15)
+        assert self.widget.check(self.test_obj) == "PWSlot29 check"
+        self.test_obj.slot = SlotW29(H0=0.10, H1=0.11, H2=None, W0=0.13, W1=0.14, W2=0.15)
+        assert self.widget.check(self.test_obj) == "PWSlot29 check"
+        self.test_obj.slot = SlotW29(H0=0.10, H1=0.11, H2=0.12, W0=None, W1=0.14, W2=0.15)
+        assert self.widget.check(self.test_obj) == "PWSlot29 check"
