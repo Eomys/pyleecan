@@ -95,6 +95,11 @@ try:
 except ImportError as error:
     plot_anim_rotor = error
 
+try:
+    from ..Methods.Machine.Machine.get_lam_list import get_lam_list
+except ImportError as error:
+    get_lam_list = error
+
 
 from ._check import InitUnKnowClassError
 from .Frame import Frame
@@ -272,6 +277,17 @@ class Machine(FrozenClass):
         )
     else:
         plot_anim_rotor = plot_anim_rotor
+    # cf Methods.Machine.Machine.get_lam_list
+    if isinstance(get_lam_list, ImportError):
+        get_lam_list = property(
+            fget=lambda x: raise_(
+                ImportError(
+                    "Can't use Machine method get_lam_list: " + str(get_lam_list)
+                )
+            )
+        )
+    else:
+        get_lam_list = get_lam_list
     # save and copy methods are available in all object
     save = save
     copy = copy
