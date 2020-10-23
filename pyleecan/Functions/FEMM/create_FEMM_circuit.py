@@ -2,7 +2,7 @@
 
 from numpy import linalg as LA, pi, sign, sqrt
 
-
+# TODO: function seems to be unused, remove ?
 def create_FEMM_circuit(femm, label, is_eddies, lam, I, is_mmf, j_t0, materials):
     """Set in FEMM circuits property
 
