@@ -32,7 +32,9 @@ def comp_time_angle(self, output):
     )
 
     if is_periodicity_t != self.is_periodicity_t:
-        Nt_tot = Time.get_length(is_oneperiod=False)
+        # Remove time periodicity in Magnetic model
+        self.is_periodicity_t = False
+        Nt_tot = Time.get_length(is_oneperiod=False)        
         self.get_logger().warning(
             "WARNING: In Magnetic model, Nt_tot="
             + str(Nt_tot)
@@ -54,6 +56,8 @@ def comp_time_angle(self, output):
     )
 
     if is_periodicity_a != self.is_periodicity_a:
+        # Remove time periodicity in Magnetic model
+        self.is_periodicity_a = False
         Na_tot = Angle.get_length(is_oneperiod=False)
         self.get_logger().warning(
             "WARNING: In Magnetic model, Na_tot="
