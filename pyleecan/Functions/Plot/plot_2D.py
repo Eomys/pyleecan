@@ -14,6 +14,7 @@ FONT_SIZE_TITLE = config_dict["PLOT"]["FONT_SIZE_TITLE"]
 FONT_SIZE_LABEL = config_dict["PLOT"]["FONT_SIZE_LABEL"]
 FONT_SIZE_LEGEND = config_dict["PLOT"]["FONT_SIZE_LEGEND"]
 
+
 def plot_2D(
     Xdatas,
     Ydatas,

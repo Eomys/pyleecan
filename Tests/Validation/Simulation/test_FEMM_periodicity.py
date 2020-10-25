@@ -136,7 +136,7 @@ def test_FEMM_periodicity():
 if __name__ == "__main__":
 
     out, out2 = test_FEMM_periodicity()
-    
+
     #%%
     # out.plot_A_time_space("mag.B")
 
@@ -149,13 +149,12 @@ if __name__ == "__main__":
     #     # save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
     # )
 
-
     # out.plot_3D_Data("mag.B", "time", "angle", component_list=["radial"], is_2D_view=True)
-    
-    # out.plot_3D_Data("mag.B", 
-    #                 "time", 
-    #                 "angle", 
-    #                 component_list=["radial"],                     
+
+    # out.plot_3D_Data("mag.B",
+    #                 "time",
+    #                 "angle",
+    #                 component_list=["radial"],
     #                 is_2D_view=False)
 
     # out.plot_3D_Data("mag.B", "freqs>0","wavenumber>0", component_list=['radial'], is_2D_view=True)
@@ -166,13 +165,13 @@ if __name__ == "__main__":
     #     "mag.B",
     #     "angle",
     # )
-    
+
     # out.plot_2D_Data(
     #     "mag.B",
     #     "wavenumber",
     #     "freqs[0]"
     # )
-    
+
     # out.plot_3D_Data(
     #         "mag.B",
     #         "freqs=[0,"+str(freq_max)+"]",

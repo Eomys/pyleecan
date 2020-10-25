@@ -89,7 +89,7 @@ def plot_3D(
     type : str
         type of 3D graph : "stem", "surf", "pcolor" or "scatter"
     """
-    
+
     # Set figure/subplot
     is_show_fig = True if fig is None else False
     is_3d = False
