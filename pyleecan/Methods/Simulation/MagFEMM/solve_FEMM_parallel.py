@@ -16,16 +16,23 @@ from ....Functions.FEMM.update_FEMM_simulation import update_FEMM_simulation
 from ....Functions.Winding.gen_phase_list import gen_name
 
 
-def solve_FEMM_parallel(self, femm, output, sym):
+def solve_FEMM_parallel(self, femm, output, sym, Time_Tem):
     """
-    Compute magnetic flux density in the airgap
+    Same as solve_FEMM including parallelization on several workers
+    /!\ Any changes in solve_FEMM must be also made in solve_FEMM_parallel
 
     Parameters
     ----------
     self: MagFEMM
+        A MagFEMM object
     femm: FEMMHandler
         Object to handle FEMM
     output: Output
+        An Output object
+    sym: int
+        Spatial symmetry factor
+    Time_Tem: Data
+        Axis (Data object) for torque storage
     """
 
     # The following function must be in solve_FEMM_parallel to access
@@ -156,19 +163,15 @@ def solve_FEMM_parallel(self, femm, output, sym):
             else:
                 return B_elem, H_elem, mu_elem
 
-    # %%
-    # solve_FEMM_parallel
-
-    # Get axes
     # Get time and angular axes
-    Angle_comp, Time_comp = self.get_axes(output)
-    _, Time_comp_Tem = self.get_axes(output, is_remove_apert=True)
+    Angle = output.mag.Angle
+    Time = output.mag.Time
 
     # Check if the angular axis is anti-periodic
-    _, is_antiper_a = Angle_comp.get_periodicity()
+    _, is_antiper_a = Angle.get_periodicity()
 
     # Import angular vector from Data object
-    angle = Angle_comp.get_values(
+    angle = Angle.get_values(
         is_oneperiod=self.is_periodicity_a,
         is_antiperiod=is_antiper_a and self.is_periodicity_a,
     )
@@ -177,10 +180,10 @@ def solve_FEMM_parallel(self, femm, output, sym):
     Na_comp = angle.size
 
     # Check if the angular axis is anti-periodic
-    _, is_antiper_t = Time_comp.get_periodicity()
+    _, is_antiper_t = Time.get_periodicity()
 
     # Number of time steps
-    Nt_comp = Time_comp.get_length(
+    Nt_comp = Time.get_length(
         is_oneperiod=True,
         is_antiperiod=is_antiper_t and self.is_periodicity_t,
     )
@@ -259,14 +262,14 @@ def solve_FEMM_parallel(self, femm, output, sym):
         name="Airgap radial flux density",
         unit="T",
         symbol="B_r",
-        axes=[Time_comp, Angle_comp],
+        axes=[Time, Angle],
         values=Br,
     )
     Bt_data = DataTime(
         name="Airgap tangential flux density",
         unit="T",
         symbol="B_t",
-        axes=[Time_comp, Angle_comp],
+        axes=[Time, Angle],
         values=Bt,
     )
     output.mag.B = VectorField(
@@ -279,7 +282,7 @@ def solve_FEMM_parallel(self, femm, output, sym):
         name="Electromagnetic torque",
         unit="Nm",
         symbol="T_{em}",
-        axes=[Time_comp_Tem],
+        axes=[Time_Tem],
         values=Tem,
     )
 
@@ -304,7 +307,7 @@ def solve_FEMM_parallel(self, femm, output, sym):
             name="Stator Winding Flux",
             unit="Wb",
             symbol="Phi_{wind}",
-            axes=[Time_comp, Phase],
+            axes=[Time, Phase],
             values=Phi_wind_stator,
         )
 
@@ -318,7 +321,7 @@ def solve_FEMM_parallel(self, femm, output, sym):
         meshFEMM = results[0][3]
         groups = results[0][4]
         output.mag.meshsolution = self.build_meshsolution(
-            Nt_comp, meshFEMM, Time_comp, B_elem, H_elem, mu_elem, groups
+            Nt_comp, meshFEMM, Time, B_elem, H_elem, mu_elem, groups
         )
 
     if self.is_save_FEA:

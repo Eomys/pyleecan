@@ -26,11 +26,6 @@ try:
 except ImportError as error:
     run = error
 
-try:
-    from ..Methods.Simulation.Force.get_axes import get_axes
-except ImportError as error:
-    get_axes = error
-
 
 from ._check import InitUnKnowClassError
 
@@ -61,15 +56,6 @@ class Force(FrozenClass):
         )
     else:
         run = run
-    # cf Methods.Simulation.Force.get_axes
-    if isinstance(get_axes, ImportError):
-        get_axes = property(
-            fget=lambda x: raise_(
-                ImportError("Can't use Force method get_axes: " + str(get_axes))
-            )
-        )
-    else:
-        get_axes = get_axes
     # save and copy methods are available in all object
     save = save
     copy = copy

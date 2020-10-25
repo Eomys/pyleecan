@@ -1230,8 +1230,7 @@
         "is_internal": false,
         "methods": [
             "comp_time_angle",
-            "run",
-            "get_axes"
+            "run"
         ],
         "mother": "",
         "name": "Force",
@@ -4256,7 +4255,8 @@
             "get_path_save_fem",
             "build_meshsolution",
             "solve_FEMM_parallel",
-            "get_meshsolution_parallel"
+            "get_meshsolution_parallel",
+            "comp_time_angle"
         ],
         "mother": "Magnetics",
         "name": "MagFEMM",
@@ -4776,8 +4776,7 @@
         "methods": [
             "run",
             "comp_time_angle",
-            "comp_emf",
-            "get_axes"
+            "comp_emf"
         ],
         "mother": "",
         "name": "Magnetics",

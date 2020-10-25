@@ -14,36 +14,23 @@ def comp_force(self, output):
         an Output object (to update)
     """
 
-    # Get time and angular axes without anti-periodicity in axes
-    Angle_comp, Time_comp = self.get_axes(
-        output, is_remove_apera=True, is_remove_apert=True
-    )
-    # Check if the angular axis is anti-periodic
-    _, is_antiper_a = Angle_comp.get_periodicity()
+    # Get time and angular axes
+    Angle = output.force.Angle
+    Time = output.force.Time
 
-    # Import angular vector from Data object
-    angle = Angle_comp.get_values(
+    # Import angular vector from Angle Data object
+    _, is_antiper_a = Angle.get_periodicity()
+    angle = Angle.get_values(
         is_oneperiod=self.is_periodicity_a,
         is_antiperiod=is_antiper_a and self.is_periodicity_a,
     )
 
-    # Check if the angular axis is anti-periodic
-    _, is_antiper_t = Time_comp.get_periodicity()
-
-    time = Time_comp.get_values(
+    # Import time vector from Time Data object
+    _, is_antiper_t = Time.get_periodicity()
+    time = Time.get_values(
         is_oneperiod=self.is_periodicity_t,
         is_antiperiod=is_antiper_t and self.is_periodicity_t,
     )
-
-    # Initialize list of axes and symmetry dict for VectorField P
-    axes_list = list(output.mag.B.get_axes())
-
-    # Update axes and symmetry lists by removing anti-periodicity
-    for ii, axe in enumerate(axes_list):
-        if axe.name == Angle_comp.name:
-            axes_list[ii] = Angle_comp
-        if axe.name == Time_comp.name:
-            axes_list[ii] = Time_comp
 
     # Load magnetic flux
     Brphiz = output.mag.B.get_rphiz_along(
@@ -63,7 +50,18 @@ def comp_force(self, output):
     Ptan = Br * Bt / mu_0
     Pz = Br * Bz / mu_0
 
-    # Store the results
+    # Store Maxwell Stress tensor P in VectorField
+    # Build axes list
+    axes_list = list()
+    for axe in output.mag.B.get_axes():
+        if axe.name == Angle.name:
+            axes_list.append(Angle)
+        elif axe.name == Time.name:
+            axes_list.append(Time)
+        else:
+            axes_list.append(axe)
+
+    # Build components list
     components = {}
     if not np_all((Prad == 0)):
         Prad_data = DataTime(
@@ -92,6 +90,8 @@ def comp_force(self, output):
             values=Pz,
         )
         components["axial"] = Pz_data
+
+    # Store components in VectorField
     output.force.P = VectorField(
         name="Magnetic airgap surface force", symbol="P", components=components
     )

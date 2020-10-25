@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-from SciDataTool import Data1D, DataTime
-from ....Functions.Winding.gen_phase_list import gen_name
 from ....Functions.Plot.plot_2D_Data import plot_2D_Data
 from ....definitions import config_dict
 
 
-def plot_mmf_unit(self, fig=None):
+def plot_mmf_unit(self, r_max=100, fig=None):
     """Plot the winding unit mmf as a function of space
     Parameters
     ----------
@@ -18,41 +16,25 @@ def plot_mmf_unit(self, fig=None):
     """
 
     # Compute the winding function and mmf
-    wf = self.comp_wind_function()
+    wf = self.comp_wind_function(per_a=1)
     qs = self.winding.qs
-    mmf_u = self.comp_mmf_unit(Nt=1, Na=wf.shape[1])
-
-    # Create a Data object
-    Phase = Data1D(
-        name="phase",
-        unit="",
-        values=gen_name(qs),
-        is_components=True,
-    )
-    Angle = mmf_u.axes[1]
-    WF = DataTime(
-        name="Winding Functions",
-        unit="p.u.",
-        symbol="Magnitude",
-        axes=[Phase, Angle],
-        values=wf,
-    )
+    MMF_U, WF = self.comp_mmf_unit(Nt=1, Na=wf.shape[1])
 
     color_list = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][: qs + 1]
     plot_2D_Data(
         WF,
         "angle",
         "phase",
-        data_list=[mmf_u],
+        data_list=[MMF_U],
         fig=fig,
         color_list=color_list,
     )
 
     plot_2D_Data(
         WF,
-        "wavenumber=[0,100]",
+        "wavenumber=[0," + str(r_max) + "]",
         "phase[0]",
-        data_list=[mmf_u],
+        data_list=[MMF_U],
         fig=fig,
         color_list=color_list,
     )
