@@ -28,7 +28,10 @@ def comp_axes(self, machine, N0=None):
     """
 
     # Time axis
-    norm_time = {"elec_order": self.comp_felec(), "mech_order": self.comp_felec(),}
+    norm_time = {
+        "elec_order": self.comp_felec(),
+        "mech_order": self.comp_felec(),
+    }
     if self.time is None:
         if N0 is None:
             raise InputError("ERROR: time and N0 can't be both None")
@@ -65,6 +68,8 @@ def comp_axes(self, machine, N0=None):
         # Load angle data
         angle = self.angle.get_data()
         self.Na_tot = len(angle)
-        Angle = Data1D(name="angle", unit="rad", values=angle, normalizations=norm_space)
+        Angle = Data1D(
+            name="angle", unit="rad", values=angle, normalizations=norm_space
+        )
 
     return Time, Angle

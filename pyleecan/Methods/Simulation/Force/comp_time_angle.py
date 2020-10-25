@@ -12,5 +12,5 @@ def comp_time_angle(self, output):
         an Output object (to update)
     """
 
-    output.force.time = output.mag.time
-    output.force.angle = output.mag.angle
+    output.force.Time = output.mag.Time
+    output.force.Angle = output.mag.Angle

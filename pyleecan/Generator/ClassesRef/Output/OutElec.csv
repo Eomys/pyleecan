@@ -1,6 +1,6 @@
 Variable name,Unit,Description (EN),Size,Type,Default value,Minimum value,Maximum value,,Package,Inherit,Methods,Constant Name,Constant Value,Class description
-time,s,Electrical time vector (no symmetry),Nt_tot,SciDataTool.Classes.DataND.Data,None,,,,Output,,get_Nr,VERSION,1,Gather the electric module outputs
-angle,rad,Electrical position vector (no symmetry),Na_tot,SciDataTool.Classes.DataND.Data,None,,,,,,get_Is,,,
+Time,s,Electrical time Data object,Nt_tot,SciDataTool.Classes.DataND.Data,None,,,,Output,,get_Nr,VERSION,1,Gather the electric module outputs
+Angle,rad,Electrical position Data object,Na_tot,SciDataTool.Classes.DataND.Data,None,,,,,,get_Is,,,
 Is,A,Stator currents as a function of time (each column correspond to one phase),"(qs, Nt_tot)",SciDataTool.Classes.DataND.DataND,None,,,,,,get_Us,,,
 Ir,A,Rotor currents as a function of time (each column correspond to one phase),"(qs, Nt_tot)",SciDataTool.Classes.DataND.DataND,None,,,,,,,,,
 angle_rotor,rad,Rotor angular position as a function of time (if None computed according to Nr),Nt_tot,ndarray,None,,,,,,,,,
@@ -9,7 +9,7 @@ angle_rotor_initial,,Initial angular position of the rotor at t=0,,float,0,,,,,,
 logger_name,-,Name of the logger to use,0,str,Pyleecan.OutElec,,,,,,,,,
 mmf_unit,-,Unit magnetomotive force,"(Nt_tot, Na_tot)",SciDataTool.Classes.DataND.DataND,None,,,,,,,,,
 Tem_av_ref,N.m,Theorical Average Electromagnetic torque,,float,None,,,,,,,,,
-Id_ref,A,d-axis current magnitude,1,float,None,,,,,,,,,
+Id_ref,A,Electrical time vector (no symmetry),1,float,None,,,,,,,,,
 Iq_ref,A,q-axis current magnitude,1,float,None,,,,,,,,,
 felec,Hz,Electrical Frequency,1,float,None,,,,,,,,,
 Ud_ref,V,d-axis voltage magnitude,1,float,None,,,,,,,,,

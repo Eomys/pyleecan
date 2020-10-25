@@ -45,17 +45,17 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
             return self.parent.parent.parent.elec.mmf_unit
 
     # Define the space dicretization
-    if Na is None and is_out and self.parent.parent.parent.elec.angle is not None:
+    if Na is None and is_out and self.parent.parent.parent.elec.Angle is not None:
         # Use Electrical module discretization
-        angle = self.parent.parent.parent.elec.angle
+        angle = self.parent.parent.parent.elec.Angle.get_values()
         Na = angle.size
     else:
         angle = linspace(0, 2 * pi / per_a, Na, endpoint=False)
 
     # Define the time dicretization
-    if Nt is None and is_out and self.parent.parent.parent.elec.time is not None:
+    if Nt is None and is_out and self.parent.parent.parent.elec.Time is not None:
         # Use Electrical module discretization
-        time = self.parent.parent.parent.elec.time
+        time = self.parent.parent.parent.elec.Time.get_values(is_oneperiod=True)
         freq = self.parent.parent.parent.elec.felec
         Nt = time.size
     else:

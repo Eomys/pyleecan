@@ -77,8 +77,8 @@ class OutElec(FrozenClass):
 
     def __init__(
         self,
-        time=None,
-        angle=None,
+        Time=None,
+        Angle=None,
         Is=None,
         Ir=None,
         angle_rotor=None,
@@ -113,10 +113,10 @@ class OutElec(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "time" in list(init_dict.keys()):
-                time = init_dict["time"]
-            if "angle" in list(init_dict.keys()):
-                angle = init_dict["angle"]
+            if "Time" in list(init_dict.keys()):
+                Time = init_dict["Time"]
+            if "Angle" in list(init_dict.keys()):
+                Angle = init_dict["Angle"]
             if "Is" in list(init_dict.keys()):
                 Is = init_dict["Is"]
             if "Ir" in list(init_dict.keys()):
@@ -151,8 +151,8 @@ class OutElec(FrozenClass):
                 Us = init_dict["Us"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.time = time
-        self.angle = angle
+        self.Time = Time
+        self.Angle = Angle
         self.Is = Is
         self.Ir = Ir
         self.angle_rotor = angle_rotor
@@ -181,8 +181,8 @@ class OutElec(FrozenClass):
             OutElec_str += "parent = None " + linesep
         else:
             OutElec_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutElec_str += "time = " + str(self.time) + linesep + linesep
-        OutElec_str += "angle = " + str(self.angle) + linesep + linesep
+        OutElec_str += "Time = " + str(self.Time) + linesep + linesep
+        OutElec_str += "Angle = " + str(self.Angle) + linesep + linesep
         OutElec_str += "Is = " + str(self.Is) + linesep + linesep
         OutElec_str += "Ir = " + str(self.Ir) + linesep + linesep
         OutElec_str += (
@@ -214,9 +214,9 @@ class OutElec(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.time != self.time:
+        if other.Time != self.Time:
             return False
-        if other.angle != self.angle:
+        if other.Angle != self.Angle:
             return False
         if other.Is != self.Is:
             return False
@@ -256,14 +256,14 @@ class OutElec(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutElec_dict = dict()
-        if self.time is None:
-            OutElec_dict["time"] = None
+        if self.Time is None:
+            OutElec_dict["Time"] = None
         else:
-            OutElec_dict["time"] = self.time.as_dict()
-        if self.angle is None:
-            OutElec_dict["angle"] = None
+            OutElec_dict["Time"] = self.Time.as_dict()
+        if self.Angle is None:
+            OutElec_dict["Angle"] = None
         else:
-            OutElec_dict["angle"] = self.angle.as_dict()
+            OutElec_dict["Angle"] = self.Angle.as_dict()
         if self.Is is None:
             OutElec_dict["Is"] = None
         else:
@@ -302,8 +302,8 @@ class OutElec(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.time = None
-        self.angle = None
+        self.Time = None
+        self.Angle = None
         self.Is = None
         self.Ir = None
         self.angle_rotor = None
@@ -321,55 +321,55 @@ class OutElec(FrozenClass):
         self.Pem_av_ref = None
         self.Us = None
 
-    def _get_time(self):
-        """getter of time"""
-        return self._time
+    def _get_Time(self):
+        """getter of Time"""
+        return self._Time
 
-    def _set_time(self, value):
-        """setter of time"""
+    def _set_Time(self, value):
+        """setter of Time"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "time"
+                "SciDataTool.Classes", value.get("__class__"), "Time"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Data()
-        check_var("time", value, "Data")
-        self._time = value
+        check_var("Time", value, "Data")
+        self._Time = value
 
-    time = property(
-        fget=_get_time,
-        fset=_set_time,
-        doc=u"""Electrical time vector (no symmetry)
+    Time = property(
+        fget=_get_Time,
+        fset=_set_Time,
+        doc=u"""Electrical time Data object
 
         :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
-    def _get_angle(self):
-        """getter of angle"""
-        return self._angle
+    def _get_Angle(self):
+        """getter of Angle"""
+        return self._Angle
 
-    def _set_angle(self, value):
-        """setter of angle"""
+    def _set_Angle(self, value):
+        """setter of Angle"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "angle"
+                "SciDataTool.Classes", value.get("__class__"), "Angle"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Data()
-        check_var("angle", value, "Data")
-        self._angle = value
+        check_var("Angle", value, "Data")
+        self._Angle = value
 
-    angle = property(
-        fget=_get_angle,
-        fset=_set_angle,
-        doc=u"""Electrical position vector (no symmetry)
+    Angle = property(
+        fget=_get_Angle,
+        fset=_set_Angle,
+        doc=u"""Electrical position Data object
 
         :Type: SciDataTool.Classes.DataND.Data
         """,
@@ -565,7 +565,7 @@ class OutElec(FrozenClass):
     Id_ref = property(
         fget=_get_Id_ref,
         fset=_set_Id_ref,
-        doc=u"""d-axis current magnitude
+        doc=u"""Electrical time vector (no symmetry)
 
         :Type: float
         """,

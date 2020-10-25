@@ -30,12 +30,12 @@ class OutForce(FrozenClass):
 
     def __init__(
         self,
-        time=None,
-        angle=None,
+        Time=None,
+        Angle=None,
         Nt_tot=None,
         Na_tot=None,
         P=None,
-        logger_name="Pyleecan.OutStruct",
+        logger_name="Pyleecan.OutForce",
         init_dict=None,
         init_str=None,
     ):
@@ -54,10 +54,10 @@ class OutForce(FrozenClass):
         if init_dict is not None:  # Initialisation by dict
             assert type(init_dict) is dict
             # Overwrite default value with init_dict content
-            if "time" in list(init_dict.keys()):
-                time = init_dict["time"]
-            if "angle" in list(init_dict.keys()):
-                angle = init_dict["angle"]
+            if "Time" in list(init_dict.keys()):
+                Time = init_dict["Time"]
+            if "Angle" in list(init_dict.keys()):
+                Angle = init_dict["Angle"]
             if "Nt_tot" in list(init_dict.keys()):
                 Nt_tot = init_dict["Nt_tot"]
             if "Na_tot" in list(init_dict.keys()):
@@ -68,8 +68,8 @@ class OutForce(FrozenClass):
                 logger_name = init_dict["logger_name"]
         # Set the properties (value check and convertion are done in setter)
         self.parent = None
-        self.time = time
-        self.angle = angle
+        self.Time = Time
+        self.Angle = Angle
         self.Nt_tot = Nt_tot
         self.Na_tot = Na_tot
         self.P = P
@@ -86,8 +86,8 @@ class OutForce(FrozenClass):
             OutForce_str += "parent = None " + linesep
         else:
             OutForce_str += "parent = " + str(type(self.parent)) + " object" + linesep
-        OutForce_str += "time = " + str(self.time) + linesep + linesep
-        OutForce_str += "angle = " + str(self.angle) + linesep + linesep
+        OutForce_str += "Time = " + str(self.Time) + linesep + linesep
+        OutForce_str += "Angle = " + str(self.Angle) + linesep + linesep
         OutForce_str += "Nt_tot = " + str(self.Nt_tot) + linesep
         OutForce_str += "Na_tot = " + str(self.Na_tot) + linesep
         OutForce_str += "P = " + str(self.P) + linesep + linesep
@@ -99,9 +99,9 @@ class OutForce(FrozenClass):
 
         if type(other) != type(self):
             return False
-        if other.time != self.time:
+        if other.Time != self.Time:
             return False
-        if other.angle != self.angle:
+        if other.Angle != self.Angle:
             return False
         if other.Nt_tot != self.Nt_tot:
             return False
@@ -117,14 +117,14 @@ class OutForce(FrozenClass):
         """Convert this object in a json seriable dict (can be use in __init__)"""
 
         OutForce_dict = dict()
-        if self.time is None:
-            OutForce_dict["time"] = None
+        if self.Time is None:
+            OutForce_dict["Time"] = None
         else:
-            OutForce_dict["time"] = self.time.as_dict()
-        if self.angle is None:
-            OutForce_dict["angle"] = None
+            OutForce_dict["Time"] = self.Time.as_dict()
+        if self.Angle is None:
+            OutForce_dict["Angle"] = None
         else:
-            OutForce_dict["angle"] = self.angle.as_dict()
+            OutForce_dict["Angle"] = self.Angle.as_dict()
         OutForce_dict["Nt_tot"] = self.Nt_tot
         OutForce_dict["Na_tot"] = self.Na_tot
         if self.P is None:
@@ -139,62 +139,62 @@ class OutForce(FrozenClass):
     def _set_None(self):
         """Set all the properties to None (except pyleecan object)"""
 
-        self.time = None
-        self.angle = None
+        self.Time = None
+        self.Angle = None
         self.Nt_tot = None
         self.Na_tot = None
         self.P = None
         self.logger_name = None
 
-    def _get_time(self):
-        """getter of time"""
-        return self._time
+    def _get_Time(self):
+        """getter of Time"""
+        return self._Time
 
-    def _set_time(self, value):
-        """setter of time"""
+    def _set_Time(self, value):
+        """setter of Time"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "time"
+                "SciDataTool.Classes", value.get("__class__"), "Time"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Data()
-        check_var("time", value, "Data")
-        self._time = value
+        check_var("Time", value, "Data")
+        self._Time = value
 
-    time = property(
-        fget=_get_time,
-        fset=_set_time,
-        doc=u"""Structural time vector (no symmetry)
+    Time = property(
+        fget=_get_Time,
+        fset=_set_Time,
+        doc=u"""Force time Data object
 
         :Type: SciDataTool.Classes.DataND.Data
         """,
     )
 
-    def _get_angle(self):
-        """getter of angle"""
-        return self._angle
+    def _get_Angle(self):
+        """getter of Angle"""
+        return self._Angle
 
-    def _set_angle(self, value):
-        """setter of angle"""
+    def _set_Angle(self, value):
+        """setter of Angle"""
         if isinstance(value, str):  # Load from file
             value = load_init_dict(value)[1]
         if isinstance(value, dict) and "__class__" in value:
             class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "angle"
+                "SciDataTool.Classes", value.get("__class__"), "Angle"
             )
             value = class_obj(init_dict=value)
         elif type(value) is int and value == -1:  # Default constructor
             value = Data()
-        check_var("angle", value, "Data")
-        self._angle = value
+        check_var("Angle", value, "Data")
+        self._Angle = value
 
-    angle = property(
-        fget=_get_angle,
-        fset=_set_angle,
-        doc=u"""Structural position vector (no symmetry)
+    Angle = property(
+        fget=_get_Angle,
+        fset=_set_Angle,
+        doc=u"""Force position Data object
 
         :Type: SciDataTool.Classes.DataND.Data
         """,

@@ -16,9 +16,9 @@ def get_axes(self, output, is_remove_apera=False, is_remove_apert=False):
 
     Returns
     -------
-    Time_comp : Data
+    Time : Data
         a Data object such as Data1D or DataLinspace
-    Angle_comp : Data
+    Angle : Data
         a Data object such as Data1D or DataLinspace
 
     """
@@ -36,14 +36,14 @@ def get_axes(self, output, is_remove_apera=False, is_remove_apert=False):
         try:
             # Reduce angle axis to the machine periodicity
             per_a = per_a * 2 if is_antiper_a else per_a
-            Angle_comp = output.mag.angle.get_axis_periodic(
+            Angle = output.mag.Angle.get_axis_periodic(
                 per_a, is_antiper_a and not is_remove_apera
             )
 
         except AxisError:
-            Angle_comp = output.mag.angle
+            Angle = output.mag.Angle
             self.is_periodicity_a = False
-            Na_tot = Angle_comp.get_length(is_oneperiod=False)
+            Na_tot = Angle.get_length(is_oneperiod=False)
             self.get_logger().warning(
                 "WARNING: In Magnetic model, Na_tot="
                 + str(Na_tot)
@@ -53,21 +53,21 @@ def get_axes(self, output, is_remove_apera=False, is_remove_apert=False):
             )
     else:
         # Return full axis
-        Angle_comp = output.mag.angle
+        Angle = output.mag.Angle
 
     if self.is_periodicity_t:
         try:
             # Reduce time axis to the machine periodicity
             per_t = per_t * 2 if is_antiper_t else per_t
-            Time_comp = output.mag.time.get_axis_periodic(
+            Time = output.mag.Time.get_axis_periodic(
                 per_t, is_antiper_t and not is_remove_apert
             )
 
         except AxisError:
             # Disable periodicity
-            Time_comp = output.mag.time
+            Time = output.mag.Time
             self.is_periodicity_t = False
-            Nt_tot = Time_comp.get_length(is_oneperiod=False)
+            Nt_tot = Time.get_length(is_oneperiod=False)
             self.get_logger().warning(
                 "WARNING: In Magnetic model, Nt_tot="
                 + str(Nt_tot)
@@ -77,6 +77,6 @@ def get_axes(self, output, is_remove_apera=False, is_remove_apert=False):
             )
     else:
         # Return full axis
-        Time_comp = output.mag.time
+        Time = output.mag.Time
 
-    return Angle_comp, Time_comp
+    return Angle, Time

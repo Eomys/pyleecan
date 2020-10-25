@@ -9,7 +9,7 @@ def get_Is(self):
     if self.Is is None:
         # Generate current according to Id/Iq
         Isdq = array([self.Id_ref, self.Iq_ref])
-        time = self.time.get_values(is_oneperiod=True)
+        time = self.Time.get_values(is_oneperiod=True)
         qs = self.parent.simu.machine.stator.winding.qs
         felec = self.felec
 
@@ -19,7 +19,6 @@ def get_Is(self):
         # Get stator current function of time
         Is = dq2n(Isdq, 2 * pi * felec * time, n=qs, rot_dir=rot_dir, is_n_rms=False)
 
-        Time = self.time
         Phase = Data1D(
             name="phase",
             unit="",
@@ -30,7 +29,7 @@ def get_Is(self):
             name="Stator current",
             unit="A",
             symbol="Is",
-            axes=[Phase, Time],
+            axes=[Phase, self.Time.copy()],
             values=transpose(Is),
         )
     return self.Is
