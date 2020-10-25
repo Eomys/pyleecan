@@ -2,6 +2,9 @@ from ...Classes.Arc import Arc
 from ...Classes.Arc2 import Arc2
 from ...Classes.MachineSIPMSM import MachineSIPMSM
 
+from ...Functions.GMSH.get_sliding_band import get_sliding_band
+from ...Functions.GMSH.get_boundary_condition import get_boundary_condition
+
 import sys
 import gmsh
 import cmath
@@ -107,7 +110,7 @@ def _find_lines_from_point(d={}, ptag=-1):
     return lines
 
 
-def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0):
+def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=None):
     """Draw a new line and add it to GMSH dictionary if it does not exist
 
         Parameters
@@ -181,6 +184,7 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0):
             nline = len(d[idx]) - 2
             d[idx].update({nline: {'tag': ltag,
                                'n_elements': n_elements,
+                               'bc_name': bc,
                                'begin': {'tag': btag, 'coord': complex(bx, by)},
                                'end': {'tag': etag, 'coord': complex(ex, ey)},
                                'cent': {'tag': ctag, 'coord': complex(cx, cy)}}})
@@ -219,6 +223,127 @@ def _add_line_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0):
             nline = len(d[idx]) - 2
             d[idx].update({nline: {'tag': ltag,
                                'n_elements': n_elements,
+                               'bc_name': bc,
+                               'begin': {'tag': btag, 'coord': complex(bx, by)},
+                               'end': {'tag': etag, 'coord': complex(ex, ey)}}})
+
+    return None
+
+
+def _add_agline_to_dict(geo, line, d={}, idx=0, mesh_size=1e-2, n_elements=0, bc=None):
+    """Draw a new Air Gap line and add it to GMSH dictionary if it does not exist
+
+        Parameters
+        ----------
+        geo : Model
+            GMSH Model objet
+        line : Object
+            Line Object
+        d : Dictionary
+            GMSH dictionary
+        idx : int
+            Surface index it belongs to
+        mesh_size : float
+            Points mesh size
+        n_elements : int
+            Number of elements on the line for meshing control
+
+        Returns
+        -------
+        None
+        """
+
+    dlines = list()
+    ltag = None
+    btag, bx, by = _find_point_tag(d, line.get_begin())
+    etag, ex, ey = _find_point_tag(d, line.get_end())
+    if btag is None:
+        btag = geo.addPoint(bx, by, 0, meshSize=mesh_size, tag=-1)
+    else:
+        dlines.extend(_find_lines_from_point(d, btag))
+    if etag is None:
+        etag = geo.addPoint(ex, ey, 0, meshSize=mesh_size, tag=-1)
+    else:
+        dlines.extend(_find_lines_from_point(d, etag))
+    if isinstance(line, Arc):
+        ctag, cx, cy = _find_point_tag(d, line.get_center())
+        if ctag is None:
+            ctag = geo.addPoint(cx, cy, 0, meshSize=mesh_size, tag=-1)
+        else:
+            dlines.extend(_find_lines_from_point(d, ctag))
+        if len(dlines) > 0:
+            for iline in dlines:
+                p = _find_points_from_line(d, iline)
+                if p[0] == btag and p[1] == etag and p[2] == ctag:
+                    ltag = iline
+                    break
+                elif p[0] == etag and p[1] == btag and p[2] == ctag:
+                    ltag = -iline
+                    break
+                else:
+                    pass
+            if ltag is None:
+                ltag = geo.addCircleArc(btag, ctag, etag, tag=-1)
+                if n_elements > 0:
+                    geo.mesh.setTransfiniteCurve(ltag, n_elements + 1, "Progression")
+        else:
+            ltag = geo.addCircleArc(btag, ctag, etag, tag=-1)
+            if n_elements > 0:
+                geo.mesh.setTransfiniteCurve(ltag, n_elements + 1, "Progression")
+
+        # To avoid fill the dictionary with repeated lines
+        repeated = False
+        for lid, lvalues in d[idx].items():
+            if type(lvalues) is not dict:
+                continue
+            else:
+                if lvalues['tag'] == ltag:
+                    repeated = True
+
+        if not repeated:
+            nline = len(d[idx]) - 2
+            d[idx].update({nline: {'tag': ltag,
+                               'n_elements': n_elements,
+                               'bc_name': bc,
+                               'begin': {'tag': btag, 'coord': complex(bx, by)},
+                               'end': {'tag': etag, 'coord': complex(ex, ey)},
+                               'cent': {'tag': ctag, 'coord': complex(cx, cy)}}})
+
+    else:
+        if len(dlines) > 0:
+            for iline in dlines:
+                p = _find_points_from_line(d, iline)
+                if p[0] == btag and p[1] == etag:
+                    ltag = iline
+                    break
+                elif p[0] == etag and p[1] == btag:
+                    ltag = -iline
+                    break
+                else:
+                    pass
+            if ltag is None:
+                ltag = geo.addLine(btag, etag, tag=-1)
+                if n_elements > 0:
+                    geo.mesh.setTransfiniteCurve(ltag, n_elements + 1, "Progression")
+        else:
+            ltag = geo.addLine(btag, etag, tag=-1)
+            if n_elements > 0:
+                geo.mesh.setTransfiniteCurve(ltag, n_elements + 1, "Progression")
+
+        # To avoid fill the dictionary with repeated lines
+        repeated = False
+        for lid, lvalues in d[idx].items():
+            if type(lvalues) is not dict:
+                continue
+            else:
+                if lvalues['tag'] == ltag:
+                    repeated = True
+
+        if not repeated:
+            nline = len(d[idx]) - 2
+            d[idx].update({nline: {'tag': ltag,
+                               'n_elements': n_elements,
+                               'bc_name': bc,
                                'begin': {'tag': btag, 'coord': complex(bx, by)},
                                'end': {'tag': etag, 'coord': complex(ex, ey)}}})
 
@@ -292,6 +417,8 @@ def draw_GMSH(
     rotor_list.extend(machine.rotor.build_geometry(sym=sym))
     stator_list = list()
     stator_list.extend(machine.stator.build_geometry(sym=sym))
+
+
     oo = factory.addPoint(0, 0, 0, 0, tag=-1)
 
     gmsh_dict = {
@@ -302,6 +429,7 @@ def draw_GMSH(
             1: {
                 "tag": 0,
                 "n_elements": 1,
+                "bc_name": None,
                 "begin": {"tag": oo, "coord": complex(0.0, 0.0)},
                 "end": {"tag": None, "coord": None},
                 "cent": {"tag": None, "coord": None},
@@ -328,6 +456,7 @@ def draw_GMSH(
             if sym == 1 and line.label == "Lamination_Rotor_Yoke_Radius_Int":
                 continue
             n_elem = mesh_dict.get(line.label)
+            bc_name = get_boundary_condition(line, machine)
             if (
                 isinstance(line, Arc)
                 and abs(line.get_angle() * 180.0 / cmath.pi) >= 180.0
@@ -365,6 +494,7 @@ def draw_GMSH(
                         d=gmsh_dict,
                         idx=nsurf,
                         n_elements=n_elem,
+                        bc=bc_name,
                     )
                     _add_line_to_dict(
                         geo=factory,
@@ -372,6 +502,7 @@ def draw_GMSH(
                         d=gmsh_dict,
                         idx=nsurf,
                         n_elements=n_elem,
+                        bc=bc_name,
                     )
                 else:
                     _add_line_to_dict(
@@ -380,6 +511,7 @@ def draw_GMSH(
                         d=gmsh_dict,
                         idx=nsurf,
                         mesh_size=mesh_size,
+                        bc=bc_name,
                     )
                     _add_line_to_dict(
                         geo=factory,
@@ -387,6 +519,7 @@ def draw_GMSH(
                         d=gmsh_dict,
                         idx=nsurf,
                         mesh_size=mesh_size,
+                        bc=bc_name,
                     )
             elif isinstance(line, Arc) and (abs(line.get_angle()*180.0/cmath.pi) <= tol):
                 # Don't draw anything, this is a circle and usually is repeated ?
@@ -399,6 +532,7 @@ def draw_GMSH(
                         d=gmsh_dict,
                         idx=nsurf,
                         n_elements=n_elem,
+                        bc=bc_name,
                     )
                 else:
                     _add_line_to_dict(
@@ -407,6 +541,7 @@ def draw_GMSH(
                         d=gmsh_dict,
                         idx=nsurf,
                         mesh_size=mesh_size,
+                        bc=bc_name,
                     )
 
     lam_and_holes = list()
@@ -449,10 +584,31 @@ def draw_GMSH(
     gmsh_dict[lam_rotor_surf_id]["tag"] = factory.addPlaneSurface(lam_and_holes, tag=-1)
     pg = model.addPhysicalGroup(2, [gmsh_dict[lam_rotor_surf_id]["tag"]])
     model.setPhysicalName(2, pg, gmsh_dict[lam_rotor_surf_id]["label"])
+    rotor_cloops = lam_and_holes
+
+    rotor_dict = gmsh_dict.copy()
+
+    gmsh_dict = {
+        0: {
+            "tag": 0,
+            "label": "origin",
+            "with_holes": False,
+            1: {
+                "tag": 0,
+                "n_elements": 1,
+                "bc_name": None,
+                "begin": {"tag": oo, "coord": complex(0.0, 0.0)},
+                "end": {"tag": None, "coord": None},
+                "cent": {"tag": None, "coord": None},
+            },
+        }
+    }
+
 
     # Default rotor mesh element size
     mesh_size = machine.stator.Rext / 100.0
-    nsurf = 0
+    #nsurf = 0
+    stator_cloops = []
     for surf in stator_list:
         nsurf += 1
         gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
@@ -504,6 +660,7 @@ def draw_GMSH(
                         d=gmsh_dict,
                         idx=nsurf,
                         n_elements=n_elem,
+                        bc=bc_name,
                     )
                     _add_line_to_dict(
                         geo=factory,
@@ -511,6 +668,7 @@ def draw_GMSH(
                         d=gmsh_dict,
                         idx=nsurf,
                         n_elements=n_elem,
+                        bc=bc_name,
                     )
                 else:
                     _add_line_to_dict(
@@ -519,6 +677,7 @@ def draw_GMSH(
                         d=gmsh_dict,
                         idx=nsurf,
                         mesh_size=mesh_size,
+                        bc=bc_name,
                     )
                     _add_line_to_dict(
                         geo=factory,
@@ -526,6 +685,7 @@ def draw_GMSH(
                         d=gmsh_dict,
                         idx=nsurf,
                         mesh_size=mesh_size,
+                        bc=bc_name,
                     )
             else:
                 if n_elem is not None:
@@ -535,6 +695,7 @@ def draw_GMSH(
                         d=gmsh_dict,
                         idx=nsurf,
                         n_elements=n_elem,
+                        bc=bc_name,
                     )
                 else:
                     _add_line_to_dict(
@@ -543,6 +704,7 @@ def draw_GMSH(
                         d=gmsh_dict,
                         idx=nsurf,
                         mesh_size=mesh_size,
+                        bc=bc_name,
                     )
 
     for s_id, s_data in gmsh_dict.items():
@@ -554,6 +716,7 @@ def draw_GMSH(
                 continue
             lloop.extend([lvalues["tag"]])
         cloop = factory.addCurveLoop(lloop)
+        stator_cloops.append(cloop)
         # Winding surfaces are created
         if s_data['label'].find('Lamination_Stator') != -1:
             s_data['tag'] = factory.addPlaneSurface([cloop], tag=-1)
@@ -566,6 +729,129 @@ def draw_GMSH(
                 pg = model.addPhysicalGroup(2, [s_data["tag"]])
                 model.setPhysicalName(2, pg, s_data["label"])
 
+    stator_dict = gmsh_dict.copy()
+
+    gmsh_dict.update(rotor_dict)
+
+    if is_sliding_band:
+        sb_list = get_sliding_band(sym=sym, machine=machine)
+    else:
+        sb_list = []
+
+
+    # Default sliding mesh element size
+    mesh_size = 2.0 * cmath.pi * machine.rotor.Rext / 360.0
+    #nsurf = 0
+    for surf in sb_list:
+        nsurf += 1
+        gmsh_dict.update({nsurf: {"tag": None, "label": surf.label}})
+        for line in surf.get_lines():
+            n_elem = mesh_dict.get(line.label)
+            # Gmsh built-in engine does not allow arcs larger than 180deg
+            # so arcs are split into two
+            if (
+                        isinstance(line, Arc)
+                    and abs(line.get_angle() * 180.0 / cmath.pi) == 180.0
+            ):
+                if line.is_trigo_direction == True:
+                    arc1 = Arc2(
+                        begin=line.get_begin(),
+                        center=line.get_center(),
+                        angle=cmath.pi / 2.0,
+                        label=line.label,
+                    )
+                    arc2 = Arc2(
+                        begin=arc1.get_end(),
+                        center=line.get_center(),
+                        angle=cmath.pi / 2.0,
+                        label=line.label,
+                    )
+                else:
+                    arc1 = Arc2(
+                        begin=line.get_begin(),
+                        center=line.get_center(),
+                        angle=-cmath.pi / 2.0,
+                        label=line.label,
+                    )
+                    arc2 = Arc2(
+                        begin=arc1.get_end(),
+                        center=line.get_center(),
+                        angle=-cmath.pi / 2.0,
+                        label=line.label,
+                    )
+                if n_elem is not None:
+                    _add_agline_to_dict(
+                        geo=factory,
+                        line=arc1,
+                        d=gmsh_dict,
+                        idx=nsurf,
+                        n_elements=n_elem,
+                        bc=line.label,
+                    )
+                    _add_agline_to_dict(
+                        geo=factory,
+                        line=arc2,
+                        d=gmsh_dict,
+                        idx=nsurf,
+                        n_elements=n_elem,
+                        bc=line.label,
+                    )
+                else:
+                    _add_agline_to_dict(
+                        geo=factory,
+                        line=arc1,
+                        d=gmsh_dict,
+                        idx=nsurf,
+                        mesh_size=mesh_size,
+                        bc=line.label,
+                    )
+                    _add_agline_to_dict(
+                        geo=factory,
+                        line=arc2,
+                        d=gmsh_dict,
+                        idx=nsurf,
+                        mesh_size=mesh_size,
+                        bc=line.label,
+                    )
+            else:
+                if n_elem is not None:
+                    _add_agline_to_dict(
+                        geo=factory,
+                        line=line,
+                        d=gmsh_dict,
+                        idx=nsurf,
+                        n_elements=n_elem,
+                        bc=line.label,
+                    )
+                else:
+                    _add_agline_to_dict(
+                        geo=factory,
+                        line=line,
+                        d=gmsh_dict,
+                        idx=nsurf,
+                        mesh_size=mesh_size,
+                        bc=line.label,
+                    )
+
+
+    for s_id, s_data in gmsh_dict.items():
+        lloop = []
+        if s_id == 0:
+            continue
+        for lid, lvalues in s_data.items():
+            if s_data['label'].find('Airgap') != -1 or s_data['label'].find('SlidingBand') != -1:
+                if type(lvalues) is not dict:
+                    continue
+                lloop.extend([lvalues["tag"]])
+            else:
+                continue
+
+        if lloop:
+            cloop = factory.addCurveLoop(lloop)
+            s_data["tag"] = factory.addPlaneSurface([cloop], tag=-1)
+            pg = model.addPhysicalGroup(2, [s_data["tag"]])
+            model.setPhysicalName(2, pg, s_data["label"])
+
     factory.synchronize()
     gmsh.model.mesh.generate(2)
 
@@ -574,4 +860,7 @@ def draw_GMSH(
     #gmsh.fltk.run()      # Uncomment to launch Gmsh GUI
     gmsh.finalize()
 
+
     return gmsh_dict
+
+

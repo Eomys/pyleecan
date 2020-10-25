@@ -1,5 +1,6 @@
 import pytest
 import sys
+import json
 
 from os import makedirs
 from os.path import join
@@ -12,8 +13,8 @@ from pyleecan.Functions.GMSH.draw_GMSH import draw_GMSH
 
 
 @pytest.mark.long
-@pytest.mark.GMSH
-def test_gmsh_2d():
+@pytest.mark.GMSH_IPM
+def test_gmsh_ipm():
     """Check generation of the 2D mesh with gmsh
     """
     # Import the machine from a script
@@ -38,16 +39,75 @@ def test_gmsh_2d():
         "surface_line_5": 5,
         "Lamination_Stator_Bore_Radius_Int": 10,
         "Lamination_Stator_Yoke_Side": 30,
+        "int_airgap_arc": 120,
+        "int_sb_arc": 120,
+        "ext_airgap_arc": 120,
+        "ext_sb_arc": 120,
     }
 
-    draw_GMSH(
+    gmsh_dict = draw_GMSH(
         output=myResults,
-        sym=2,
+        sym=8,
         is_lam_only_S=False,
         is_lam_only_R=False,
         user_mesh_dict=mesh_dict,
-        path_save=join(save_path, "GSMH_model.msh"),
+        is_sliding_band=True,
+        path_save=join(save_path, "GSMH_model_ipm.msh"),
     )
 
+    with open("gmsh_test_ipm.json", "w") as fw:
+        json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
+
+
+
+
+@pytest.mark.long
+@pytest.mark.GMSH_SPM
+def test_gmsh_spm():
+    # Import the machine from a script
+    PMSM_A = load(join(DATA_DIR, "Machine", "SPMSM_001.json"))
+    save_path = join(save_plot_path, "GMSH")
+    makedirs(save_path)
+    # Plot the machine
+    # im = PMSM_A.plot()
+
+    # Create the Simulation
+    mySimu = Simu1(name="EM_SPMSM_AL_001", machine=PMSM_A)
+    myResults = Output(simu=mySimu)
+
+    mesh_dict = {
+        "Lamination_Rotor_Bore_Radius_Ext": 180,
+        "surface_line_0": 5,
+        "surface_line_1": 10,
+        "surface_line_2": 5,
+        "surface_line_3": 5,
+        "surface_line_4": 10,
+        "surface_line_5": 5,
+        "Lamination_Stator_Bore_Radius_Int": 10,
+        "Lamination_Stator_Yoke_Side": 30,
+        "int_airgap_arc": 120,
+        "int_sb_arc": 120,
+        "ext_airgap_arc": 120,
+        "ext_sb_arc": 120,
+    }
+
+    gmsh_dict = draw_GMSH(
+        output=myResults,
+        sym=4,
+        is_lam_only_S=False,
+        is_lam_only_R=False,
+        user_mesh_dict=mesh_dict,
+        is_sliding_band=True,
+        path_save=join(save_path, "GSMH_model_spm.msh")
+    )
+
+    with open("gmsh_test_spm.json", "w") as fw:
+        json.dump(gmsh_dict, fw, default=encode_complex, indent=4)
+
+
+def encode_complex(z):
+    if isinstance(z, complex):
+        return (z.real, z.imag)
+
 if __name__ == '__main__':
-    sys.exit(test_gmsh_2d())
+    sys.exit(test_gmsh_ipm())
