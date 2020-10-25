@@ -148,7 +148,6 @@ class Test_plots(object):
             symbol="B_r",
             name="Airgap radial flux density",
             unit="T",
-            symmetries={"time": {"period": 3}, "angle": {"period": 3}},
             axes=[Time2, Angle2],
             normalizations={},
             values=Br_reduced,
@@ -212,7 +211,6 @@ class Test_plots(object):
             unit="T",
             symmetries={},
             axes=[Time3, Angle3],
-            normalizations={"space_order": 3},
             values=flux_arr,
         )
         out3.mag.B = VectorField(
@@ -293,7 +291,6 @@ class Test_plots(object):
             symbol="B_r",
             name="Airgap radial flux density",
             unit="T",
-            symmetries={},
             axes=[Time5],
             normalizations={},
             values=Br5,

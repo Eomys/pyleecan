@@ -306,8 +306,8 @@ def plot_2D_Data(
         if fund_harm_dict is None:
             fund_harm = None
         else:
-            # Activate the option only if main axis is in dict and there is no plot overlay
-            if main_axis.name in fund_harm_dict and not is_overlay:
+            # Activate the option only if main axis is in dict and only one Data is plotted
+            if main_axis.name in fund_harm_dict and len(Ydatas) == 1:
                 fund_harm = fund_harm_dict[main_axis.name]
             else:
                 # Deactivate the option

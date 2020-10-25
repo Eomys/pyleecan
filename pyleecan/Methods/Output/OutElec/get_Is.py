@@ -31,7 +31,6 @@ def get_Is(self):
             unit="A",
             symbol="Is",
             axes=[Phase, Time],
-            symmetries=self.time.symmetries,
             values=transpose(Is),
         )
     return self.Is

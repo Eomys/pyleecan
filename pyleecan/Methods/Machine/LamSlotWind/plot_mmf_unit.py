@@ -36,7 +36,6 @@ def plot_mmf_unit(self, fig=None):
         symbol="Magnitude",
         axes=[Phase, Angle],
         values=wf,
-        symmetries=mmf_u.symmetries,
     )
 
     color_list = config_dict["PLOT"]["COLOR_DICT"]["PHASE_COLORS"][: qs + 1]

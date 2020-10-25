@@ -26,7 +26,6 @@ def get_Us(self):
             unit="V",
             symbol="Us",
             axes=[Phase, self.time],
-            symmetries=self.time.symmetries,
             values=transpose(Us),
         )
     return self.Us
