@@ -55,80 +55,79 @@ def test_FEMM_periodicity():
     out = Output(simu=simu)
     simu.run()
 
-    out2 = None
-    # out2 = Output(simu=simu2)
-    # simu2.run()
+    out2 = Output(simu=simu2)
+    simu2.run()
 
-    # # Plot the result
-    # out.plot_2D_Data(
-    #     "mag.B",
-    #     "time",
-    #     "angle[0]{°}",
-    #     data_list=[out2.mag.B],
-    #     legend_list=["Periodic", "Full"],
-    #     save_path=join(save_path, "FEMM_periodicity_B_time.png"),
-    # )
+    # Plot the result
+    out.plot_2D_Data(
+        "mag.B",
+        "time",
+        "angle[0]{°}",
+        data_list=[out2.mag.B],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "FEMM_periodicity_B_time.png"),
+    )
 
-    # out.plot_2D_Data(
-    #     "mag.B",
-    #     "angle",
-    #     "time[0]",
-    #     data_list=[out2.mag.B],
-    #     legend_list=["Periodic", "Full"],
-    #     save_path=join(save_path, "FEMM_periodicity_B_space.png"),
-    # )
+    out.plot_2D_Data(
+        "mag.B",
+        "angle",
+        "time[0]",
+        data_list=[out2.mag.B],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "FEMM_periodicity_B_space.png"),
+    )
 
-    # out.plot_2D_Data(
-    #     "mag.B",
-    #     "wavenumber=[0,100]",
-    #     data_list=[out2.mag.B],
-    #     legend_list=["Periodic", "Full"],
-    #     save_path=join(save_path, "FEMM_periodicity_B_space_fft.png"),
-    # )
+    out.plot_2D_Data(
+        "mag.B",
+        "wavenumber=[0,100]",
+        data_list=[out2.mag.B],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "FEMM_periodicity_B_space_fft.png"),
+    )
 
-    # out.plot_2D_Data(
-    #     "force.P",
-    #     "time",
-    #     "angle[0]{°}",
-    #     data_list=[out2.force.P],
-    #     legend_list=["Periodic", "Full"],
-    #     save_path=join(save_path, "FEMM_periodicity_P_time.png"),
-    # )
+    out.plot_2D_Data(
+        "force.P",
+        "time",
+        "angle[0]{°}",
+        data_list=[out2.force.P],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "FEMM_periodicity_P_time.png"),
+    )
 
-    # out.plot_2D_Data(
-    #     "force.P",
-    #     "angle",
-    #     "time[0]",
-    #     data_list=[out2.force.P],
-    #     legend_list=["Periodic", "Full"],
-    #     save_path=join(save_path, "FEMM_periodicity_P_space.png"),
-    # )
+    out.plot_2D_Data(
+        "force.P",
+        "angle",
+        "time[0]",
+        data_list=[out2.force.P],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "FEMM_periodicity_P_space.png"),
+    )
 
-    # out.plot_2D_Data(
-    #     "force.P",
-    #     "wavenumber=[0,100]",
-    #     "time[0]",
-    #     data_list=[out2.force.P],
-    #     legend_list=["Periodic", "Full"],
-    #     save_path=join(save_path, "FEMM_periodicity_P_space_fft.png"),
-    # )
+    out.plot_2D_Data(
+        "force.P",
+        "wavenumber=[0,100]",
+        "time[0]",
+        data_list=[out2.force.P],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "FEMM_periodicity_P_space_fft.png"),
+    )
 
-    # out.plot_2D_Data(
-    #     "mag.Tem",
-    #     "time",
-    #     data_list=[out2.mag.Tem],
-    #     legend_list=["Periodic", "Full"],
-    #     save_path=join(save_path, "FEMM_periodicity_Tem_time.png"),
-    # )
+    out.plot_2D_Data(
+        "mag.Tem",
+        "time",
+        data_list=[out2.mag.Tem],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "FEMM_periodicity_Tem_time.png"),
+    )
 
-    # out.plot_2D_Data(
-    #     "mag.Phi_wind_stator",
-    #     "time",
-    #     "phase",
-    #     data_list=[out2.mag.Phi_wind_stator],
-    #     legend_list=["Periodic", "Full"],
-    #     save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
-    # )
+    out.plot_2D_Data(
+        "mag.Phi_wind_stator",
+        "time",
+        "phase",
+        data_list=[out2.mag.Phi_wind_stator],
+        legend_list=["Periodic", "Full"],
+        save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
+    )
 
     return out, out2
 
@@ -137,25 +136,48 @@ def test_FEMM_periodicity():
 if __name__ == "__main__":
 
     out, out2 = test_FEMM_periodicity()
+    
+    #%%
+    # out.plot_A_time_space("mag.B")
 
-    out.plot_2D_Data(
-        "mag.Phi_wind_stator",
-        "time",
-        "phase",
-        # data_list=[out2.mag.Phi_wind_stator],
-        # legend_list=["Periodic", "Full"],
-        # save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
-    )
+    # out.plot_2D_Data(
+    #     "mag.Phi_wind_stator",
+    #     "time",
+    #     "phase",
+    #     # data_list=[out2.mag.Phi_wind_stator],
+    #     # legend_list=["Periodic", "Full"],
+    #     # save_path=join(save_path, "FEMM_periodicity_Phi_wind_stator_time.png"),
+    # )
 
-    out.plot_A_time_space("mag.B")
 
-    out.plot_3D_Data("mag.B", "time", "angle", component_list=["radial"], is_2D_view=True)
+    # out.plot_3D_Data("mag.B", "time", "angle", component_list=["radial"], is_2D_view=True)
+    
+    # out.plot_3D_Data("mag.B", 
+    #                 "time", 
+    #                 "angle", 
+    #                 component_list=["radial"],                     
+    #                 is_2D_view=False)
 
-    out.plot_3D_Data("mag.B", "freqs","wavenumber", component_list=['radial'], is_2D_view=True)
+    # out.plot_3D_Data("mag.B", "freqs>0","wavenumber>0", component_list=['radial'], is_2D_view=True)
 
-    out.plot_3D_Data("mag.B", "freqs","wavenumber", component_list=['radial'], is_2D_view=False)
+    # out.plot_3D_Data("mag.B", "freqs","wavenumber", component_list=['radial'], is_2D_view=False)
 
     # out.plot_2D_Data(
     #     "mag.B",
-    #     "wavenumber=[0,100]{space_order}",
+    #     "angle",
     # )
+    
+    # out.plot_2D_Data(
+    #     "mag.B",
+    #     "wavenumber",
+    #     "freqs[0]"
+    # )
+    
+    # out.plot_3D_Data(
+    #         "mag.B",
+    #         "freqs=[0,"+str(freq_max)+"]",
+    #         "wavenumber=[-"+ str(r_max) + "," +str(r_max)+"]",
+    #         N_stem=100,
+    #         # save_path=join(save_path, "test_default_proj_Br_dataobj_cfft2.png"),
+    #         is_2D_view = True,
+    #     )

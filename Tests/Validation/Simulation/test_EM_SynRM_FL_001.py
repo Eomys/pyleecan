@@ -30,7 +30,6 @@ def test_Magnetic_Phi0():
     Nt_tot = 3  # Number of time step for each current angle Phi0
     Imax = 28.6878 / sqrt(2)  # RMS stator current magnitude [A]
     # to have one torque ripple period since torque ripple appears at multiple of 6*felec
-    Nrev = 1 / 6
     p = SynRM_001.stator.get_pole_pair_number()
     N0 = 60 * felec / p
 

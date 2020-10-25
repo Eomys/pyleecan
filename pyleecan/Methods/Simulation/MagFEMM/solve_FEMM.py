@@ -142,23 +142,11 @@ def solve_FEMM(self, femm, output, sym):
     Br = roll(Br, roll_id, axis=1)
     Bt = roll(Bt, roll_id, axis=1)
 
-    # Store the results
-    sym_dict = dict()  # Define the periodicity
-    if self.is_periodicity_t:
-        sym_dict.update(Time_comp.symmetries)
-    if self.is_periodicity_a:
-        sym_dict.update(Angle_comp.symmetries)
-
-    sym_dict_Tem = dict()
-    if self.is_periodicity_t:
-        sym_dict_Tem.update(Time_comp_Tem.symmetries)
-
     Br_data = DataTime(
         name="Airgap radial flux density",
         unit="T",
         symbol="B_r",
         axes=[Time_comp, Angle_comp],
-        symmetries=sym_dict,
         values=Br,
     )
     Bt_data = DataTime(
@@ -166,7 +154,6 @@ def solve_FEMM(self, femm, output, sym):
         unit="T",
         symbol="B_t",
         axes=[Time_comp, Angle_comp],
-        symmetries=sym_dict,
         values=Bt,
     )
     output.mag.B = VectorField(
@@ -180,7 +167,6 @@ def solve_FEMM(self, femm, output, sym):
         unit="Nm",
         symbol="T_{em}",
         axes=[Time_comp_Tem],
-        symmetries=sym_dict_Tem,
         values=Tem,
     )
     output.mag.Tem_av = mean(Tem)
@@ -206,7 +192,6 @@ def solve_FEMM(self, femm, output, sym):
             unit="Wb",
             symbol="Phi_{wind}",
             axes=[Time_comp, Phase],
-            symmetries=sym_dict,
             values=Phi_wind_stator,
         )
 

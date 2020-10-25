@@ -1,5 +1,5 @@
-from numpy import pi, array, all as np_all
-from SciDataTool import Data1D, DataTime, VectorField
+from numpy import pi, all as np_all
+from SciDataTool import DataTime, VectorField
 
 
 def comp_force(self, output):
@@ -37,7 +37,6 @@ def comp_force(self, output):
 
     # Initialize list of axes and symmetry dict for VectorField P
     axes_list = list(output.mag.B.get_axes())
-    sym_dict = dict()
 
     # Update axes and symmetry lists by removing anti-periodicity
     for ii, axe in enumerate(axes_list):
@@ -45,9 +44,6 @@ def comp_force(self, output):
             axes_list[ii] = Angle_comp
         if axe.name == Time_comp.name:
             axes_list[ii] = Time_comp
-
-        if axes_list[ii].symmetries:
-            sym_dict.update(axes_list[ii].symmetries)
 
     # Load magnetic flux
     Brphiz = output.mag.B.get_rphiz_along(
@@ -75,7 +71,6 @@ def comp_force(self, output):
             unit="N/m2",
             symbol="P_r",
             axes=axes_list,
-            symmetries=sym_dict,
             values=Prad,
         )
         components["radial"] = Prad_data
@@ -85,7 +80,6 @@ def comp_force(self, output):
             unit="N/m2",
             symbol="P_t",
             axes=axes_list,
-            symmetries=sym_dict,
             values=Ptan,
         )
         components["tangential"] = Ptan_data
@@ -95,7 +89,6 @@ def comp_force(self, output):
             unit="N/m2",
             symbol="P_z",
             axes=axes_list,
-            symmetries=sym_dict,
             values=Pz,
         )
         components["axial"] = Pz_data

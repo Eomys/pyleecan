@@ -36,22 +36,26 @@ def plot_3D_Data(
         boolean indicating if the field must be normalized
     unit : str
         unit in which to plot the field
-    data_list : list
-        list of Data objects to compare
-    legend_list : list
-        list of legends to use for each Data object (including reference one) instead of data.name
-    color_list : list
-        list of colors to use for each Data object
-    save_path : str
+    save_path : str    
         path and name of the png file to save
+    x_min : float
+        minimum value for the x-axis
+    x_max : float
+        maximum value for the x-axis
     y_min : float
         minimum value for the y-axis
     y_max : float
         maximum value for the y-axis
-    mag_max : float
-        maximum alue for the y-axis of the fft
+    z_min : float
+        minimum value for the z-axis
+    z_max : float
+        maximum value for the z-axis
     is_auto_ticks : bool
         in fft, adjust ticks to freqs (deactivate if too close)
+    is_2D_view : bool
+        True to plot Data in xy plane and put z as colormap   
+    N_stem : int
+        number of harmonics to plot (only for stem plots)
     fig : Matplotlib.figure.Figure
         existing figure to use if None create a new one
     """

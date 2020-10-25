@@ -93,7 +93,6 @@ def plot_A_time_space(
         A_t_s,
         z_max=z_max,
         z_min=-z_max,
-        colormap=colormap,
         xlabel=xlabel,
         ylabel=ylabel,
         zlabel=zlabel,

@@ -346,16 +346,16 @@ class Test_plots(object):
         out = Output(simu=simu)
         simu.run()
 
-        # Plot the result by comparing the two simulation (sym / no sym)
+        # Plot the 2D FFT of flux density as stem plot
         plt.close("all")
-        out.plot_A_cfft2(
+        out.plot_3D_Data(
             "mag.B",
-            freq_max=freq_max,
-            r_max=r_max,
+            "freqs=[0,"+str(freq_max)+"]",
+            "wavenumber=[-"+ str(r_max) + "," +str(r_max)+"]",
             N_stem=N_stem,
             save_path=join(save_path, "test_default_proj_Br_dataobj_cfft2.png"),
         )
-
+        
     def test_default_proj_surf(self, import_data):
         SCIM_006 = import_data["SCIM_006"]
         simu = import_data["simu"]
@@ -387,11 +387,12 @@ class Test_plots(object):
 
         # Plot the result by comparing the two simulation (sym / no sym)
         plt.close("all")
-        out.plot_A_surf(
-            "mag.B",
-            t_max=0.06,
-            save_path=join(save_path, "test_default_proj_Br_surf_dataobj.png"),
-        )
+        out.plot_3D_Data("mag.B", 
+                         "time=[0,0.06]", 
+                         "angle", 
+                         component_list=["radial"], 
+                         save_path=join(save_path, "test_default_proj_Br_surf_dataobj.png"),
+                         is_2D_view=False)
 
     def test_default_proj_fft2(self, import_data):
         SCIM_006 = import_data["SCIM_006"]
@@ -421,13 +422,16 @@ class Test_plots(object):
         simu.input = InputFlux(B=B, time=time, angle=angle)
         out = Output(simu=simu)
         simu.run()
-
-        # Plot the result by comparing the two simulation (sym / no sym)
+        
+        # Plot the 2D FFT of flux density as 2D scatter plot with colormap
         plt.close("all")
-        out.plot_A_fft2(
+        freq_max=500,
+        r_max=20,
+        out.plot_3D_Data(
             "mag.B",
-            freq_max=500,
-            r_max=20,
+            "freqs=[0,"+str(freq_max)+"]",
+            "wavenumber=[-"+ str(r_max) + "," +str(r_max)+"]",
+            is_2D_view = True,
             save_path=join(save_path, "test_default_proj_Br_fft2_dataobj.png"),
         )
 
