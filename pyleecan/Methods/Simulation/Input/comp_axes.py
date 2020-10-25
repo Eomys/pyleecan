@@ -28,6 +28,7 @@ def comp_axes(self, machine, N0=None):
     """
 
     # Time axis
+    norm_time = {"elec_order": self.comp_felec(), "mech_order": self.comp_felec(),}
     if self.time is None:
         if N0 is None:
             raise InputError("ERROR: time and N0 can't be both None")
@@ -39,14 +40,16 @@ def comp_axes(self, machine, N0=None):
             final=60 / N0 * self.Nrev,
             number=self.Nt_tot,
             include_endpoint=False,
+            normalizations=norm_time,
         )
     else:
         # Load and check time
         time = self.time.get_data()
         self.Nt_tot = len(time)
-        Time = Data1D(name="time", unit="s", values=time)
+        Time = Data1D(name="time", unit="s", values=time, normalizations=norm_time)
 
     # Angle axis
+    norm_space = {"space_order": machine.get_pole_pair_number()}
     if self.angle is None:
         # Create angle vector as a linspace
         Angle = DataLinspace(
@@ -56,11 +59,12 @@ def comp_axes(self, machine, N0=None):
             final=2 * pi,
             number=self.Na_tot,
             include_endpoint=False,
+            normalizations=norm_space,
         )
     else:
         # Load angle data
         angle = self.angle.get_data()
         self.Na_tot = len(angle)
-        Angle = Data1D(name="angle", unit="rad", values=angle)
+        Angle = Data1D(name="angle", unit="rad", values=angle, normalizations=norm_space)
 
     return Time, Angle

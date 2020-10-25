@@ -82,6 +82,7 @@ def comp_mmf_unit(self, Na=None, Nt=None, freq=1):
         final=2 * pi / per_a,
         number=Na,
         include_endpoint=False,
+        normalizations={"space_order": self.get_pole_pair_number()},
     )
     MMF = DataTime(
         name="Unit MMF",

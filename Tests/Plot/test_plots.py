@@ -56,13 +56,12 @@ def import_data():
     data["time"] = ImportMatlab(mat_file_time, var_name="timec")
     data["Time"] = ImportData(field=data["time"], unit="s", name="time")
     data["angle"] = ImportMatlab(mat_file_angle, var_name="alpha_radc")
-    data["Angle"] = ImportData(field=data["angle"], unit="rad", name="angle")
+    data["Angle"] = ImportData(field=data["angle"], unit="rad", name="angle",normalizations={"space_order": 3})
     data["Br"] = ImportData(
         axes=[data["Time"], data["Angle"]],
         field=data["flux"],
         unit="T",
-        name="Airgap radial flux density",
-        normalizations={"space_order": 3},
+        name="Airgap radial flux density",        
         symbol="B_{rad}",
     )
     data["B"] = ImportVectorField(components={"radial": data["Br"]})
@@ -149,7 +148,6 @@ class Test_plots(object):
             name="Airgap radial flux density",
             unit="T",
             axes=[Time2, Angle2],
-            normalizations={},
             values=Br_reduced,
         )
         out2.mag.B = VectorField(
@@ -292,7 +290,6 @@ class Test_plots(object):
             name="Airgap radial flux density",
             unit="T",
             axes=[Time5],
-            normalizations={},
             values=Br5,
         )
         out5.mag.B = VectorField(
