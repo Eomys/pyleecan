@@ -6127,15 +6127,6 @@
                 "value": "Pyleecan.OutElec"
             },
             {
-                "desc": "Unit magnetomotive force",
-                "max": "",
-                "min": "",
-                "name": "mmf_unit",
-                "type": "SciDataTool.Classes.DataND.DataND",
-                "unit": "-",
-                "value": "None"
-            },
-            {
                 "desc": "Theorical Average Electromagnetic torque",
                 "max": "",
                 "min": "",
@@ -6251,24 +6242,6 @@
                 "type": "SciDataTool.Classes.DataND.Data",
                 "unit": "rad",
                 "value": "None"
-            },
-            {
-                "desc": "Length of the time vector",
-                "max": "",
-                "min": "",
-                "name": "Nt_tot",
-                "type": "int",
-                "unit": "-",
-                "value": null
-            },
-            {
-                "desc": "Length of the angle vector",
-                "max": "",
-                "min": "",
-                "name": "Na_tot",
-                "type": "int",
-                "unit": "-",
-                "value": null
             },
             {
                 "desc": "Air-gap surface force",

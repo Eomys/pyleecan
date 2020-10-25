@@ -32,8 +32,6 @@ class OutForce(FrozenClass):
         self,
         Time=None,
         Angle=None,
-        Nt_tot=None,
-        Na_tot=None,
         P=None,
         logger_name="Pyleecan.OutForce",
         init_dict=None,
@@ -58,10 +56,6 @@ class OutForce(FrozenClass):
                 Time = init_dict["Time"]
             if "Angle" in list(init_dict.keys()):
                 Angle = init_dict["Angle"]
-            if "Nt_tot" in list(init_dict.keys()):
-                Nt_tot = init_dict["Nt_tot"]
-            if "Na_tot" in list(init_dict.keys()):
-                Na_tot = init_dict["Na_tot"]
             if "P" in list(init_dict.keys()):
                 P = init_dict["P"]
             if "logger_name" in list(init_dict.keys()):
@@ -70,8 +64,6 @@ class OutForce(FrozenClass):
         self.parent = None
         self.Time = Time
         self.Angle = Angle
-        self.Nt_tot = Nt_tot
-        self.Na_tot = Na_tot
         self.P = P
         self.logger_name = logger_name
 
@@ -88,8 +80,6 @@ class OutForce(FrozenClass):
             OutForce_str += "parent = " + str(type(self.parent)) + " object" + linesep
         OutForce_str += "Time = " + str(self.Time) + linesep + linesep
         OutForce_str += "Angle = " + str(self.Angle) + linesep + linesep
-        OutForce_str += "Nt_tot = " + str(self.Nt_tot) + linesep
-        OutForce_str += "Na_tot = " + str(self.Na_tot) + linesep
         OutForce_str += "P = " + str(self.P) + linesep + linesep
         OutForce_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
         return OutForce_str
@@ -102,10 +92,6 @@ class OutForce(FrozenClass):
         if other.Time != self.Time:
             return False
         if other.Angle != self.Angle:
-            return False
-        if other.Nt_tot != self.Nt_tot:
-            return False
-        if other.Na_tot != self.Na_tot:
             return False
         if other.P != self.P:
             return False
@@ -125,8 +111,6 @@ class OutForce(FrozenClass):
             OutForce_dict["Angle"] = None
         else:
             OutForce_dict["Angle"] = self.Angle.as_dict()
-        OutForce_dict["Nt_tot"] = self.Nt_tot
-        OutForce_dict["Na_tot"] = self.Na_tot
         if self.P is None:
             OutForce_dict["P"] = None
         else:
@@ -141,8 +125,6 @@ class OutForce(FrozenClass):
 
         self.Time = None
         self.Angle = None
-        self.Nt_tot = None
-        self.Na_tot = None
         self.P = None
         self.logger_name = None
 
@@ -197,42 +179,6 @@ class OutForce(FrozenClass):
         doc=u"""Force position Data object
 
         :Type: SciDataTool.Classes.DataND.Data
-        """,
-    )
-
-    def _get_Nt_tot(self):
-        """getter of Nt_tot"""
-        return self._Nt_tot
-
-    def _set_Nt_tot(self, value):
-        """setter of Nt_tot"""
-        check_var("Nt_tot", value, "int")
-        self._Nt_tot = value
-
-    Nt_tot = property(
-        fget=_get_Nt_tot,
-        fset=_set_Nt_tot,
-        doc=u"""Length of the time vector
-
-        :Type: int
-        """,
-    )
-
-    def _get_Na_tot(self):
-        """getter of Na_tot"""
-        return self._Na_tot
-
-    def _set_Na_tot(self, value):
-        """setter of Na_tot"""
-        check_var("Na_tot", value, "int")
-        self._Na_tot = value
-
-    Na_tot = property(
-        fget=_get_Na_tot,
-        fset=_set_Na_tot,
-        doc=u"""Length of the angle vector
-
-        :Type: int
         """,
     )
 

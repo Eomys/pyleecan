@@ -85,7 +85,6 @@ class OutElec(FrozenClass):
         N0=None,
         angle_rotor_initial=0,
         logger_name="Pyleecan.OutElec",
-        mmf_unit=None,
         Tem_av_ref=None,
         Id_ref=None,
         Iq_ref=None,
@@ -129,8 +128,6 @@ class OutElec(FrozenClass):
                 angle_rotor_initial = init_dict["angle_rotor_initial"]
             if "logger_name" in list(init_dict.keys()):
                 logger_name = init_dict["logger_name"]
-            if "mmf_unit" in list(init_dict.keys()):
-                mmf_unit = init_dict["mmf_unit"]
             if "Tem_av_ref" in list(init_dict.keys()):
                 Tem_av_ref = init_dict["Tem_av_ref"]
             if "Id_ref" in list(init_dict.keys()):
@@ -159,7 +156,6 @@ class OutElec(FrozenClass):
         self.N0 = N0
         self.angle_rotor_initial = angle_rotor_initial
         self.logger_name = logger_name
-        self.mmf_unit = mmf_unit
         self.Tem_av_ref = Tem_av_ref
         self.Id_ref = Id_ref
         self.Iq_ref = Iq_ref
@@ -197,7 +193,6 @@ class OutElec(FrozenClass):
             "angle_rotor_initial = " + str(self.angle_rotor_initial) + linesep
         )
         OutElec_str += 'logger_name = "' + str(self.logger_name) + '"' + linesep
-        OutElec_str += "mmf_unit = " + str(self.mmf_unit) + linesep + linesep
         OutElec_str += "Tem_av_ref = " + str(self.Tem_av_ref) + linesep
         OutElec_str += "Id_ref = " + str(self.Id_ref) + linesep
         OutElec_str += "Iq_ref = " + str(self.Iq_ref) + linesep
@@ -229,8 +224,6 @@ class OutElec(FrozenClass):
         if other.angle_rotor_initial != self.angle_rotor_initial:
             return False
         if other.logger_name != self.logger_name:
-            return False
-        if other.mmf_unit != self.mmf_unit:
             return False
         if other.Tem_av_ref != self.Tem_av_ref:
             return False
@@ -279,10 +272,6 @@ class OutElec(FrozenClass):
         OutElec_dict["N0"] = self.N0
         OutElec_dict["angle_rotor_initial"] = self.angle_rotor_initial
         OutElec_dict["logger_name"] = self.logger_name
-        if self.mmf_unit is None:
-            OutElec_dict["mmf_unit"] = None
-        else:
-            OutElec_dict["mmf_unit"] = self.mmf_unit.as_dict()
         OutElec_dict["Tem_av_ref"] = self.Tem_av_ref
         OutElec_dict["Id_ref"] = self.Id_ref
         OutElec_dict["Iq_ref"] = self.Iq_ref
@@ -310,7 +299,6 @@ class OutElec(FrozenClass):
         self.N0 = None
         self.angle_rotor_initial = None
         self.logger_name = None
-        self.mmf_unit = None
         self.Tem_av_ref = None
         self.Id_ref = None
         self.Iq_ref = None
@@ -505,33 +493,6 @@ class OutElec(FrozenClass):
         doc=u"""Name of the logger to use
 
         :Type: str
-        """,
-    )
-
-    def _get_mmf_unit(self):
-        """getter of mmf_unit"""
-        return self._mmf_unit
-
-    def _set_mmf_unit(self, value):
-        """setter of mmf_unit"""
-        if isinstance(value, str):  # Load from file
-            value = load_init_dict(value)[1]
-        if isinstance(value, dict) and "__class__" in value:
-            class_obj = import_class(
-                "SciDataTool.Classes", value.get("__class__"), "mmf_unit"
-            )
-            value = class_obj(init_dict=value)
-        elif type(value) is int and value == -1:  # Default constructor
-            value = DataND()
-        check_var("mmf_unit", value, "DataND")
-        self._mmf_unit = value
-
-    mmf_unit = property(
-        fget=_get_mmf_unit,
-        fset=_set_mmf_unit,
-        doc=u"""Unit magnetomotive force
-
-        :Type: SciDataTool.Classes.DataND.DataND
         """,
     )
 
