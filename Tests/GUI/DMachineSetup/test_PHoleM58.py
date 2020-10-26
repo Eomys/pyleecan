@@ -197,3 +197,4 @@ class TestPHoleM58(object):
 
         assert self.widget.W1 == 0
         assert self.widget.W2 == 0
+        assert self.widget.w_mat_1.isHidden()

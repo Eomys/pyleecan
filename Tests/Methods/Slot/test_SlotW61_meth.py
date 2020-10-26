@@ -8,6 +8,9 @@ from pyleecan.Methods.Slot.Slot.comp_height import comp_height
 from pyleecan.Methods.Slot.Slot.comp_surface import comp_surface
 from pyleecan.Methods.Slot.Slot.comp_angle_opening import comp_angle_opening
 from pyleecan.Methods.Slot.SlotW61.build_geometry_wind import S61_WindError
+from pyleecan.Methods.Slot.SlotW61.check import S61_InnerCheckError
+from pyleecan.Methods.Slot.SlotW61.check import S61_WindWError
+
 
 # For AlmostEqual
 DELTA = 1e-5
@@ -151,3 +154,24 @@ class Test_SlotW61_meth(object):
 
         with pytest.raises(S61_WindError) as context:
             test_obj.slot.build_geometry_wind(Nrad=0, Ntan=0)
+
+    @pytest.mark.parametrize("test_dict", slotW61_test)
+    def test_check_Inner_error(self, test_dict):
+        """Check that the ERROR is raised"""
+
+        test_obj = test_dict["test_obj"]
+
+        test_obj.is_internal = False
+        with pytest.raises(S61_InnerCheckError) as context:
+            test_obj.slot.check()
+
+    @pytest.mark.parametrize("test_dict", slotW61_test)
+    def test_check_Wind_error(self, test_dict):
+        """Check that the ERROR is raised"""
+
+        test_obj = test_dict["test_obj"]
+
+        test_obj.slot.W3 = 50
+        test_obj.is_internal = True
+        with pytest.raises(S61_WindWError) as context:
+            test_obj.slot.check()
